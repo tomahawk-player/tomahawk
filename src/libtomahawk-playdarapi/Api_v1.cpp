@@ -42,14 +42,14 @@ using namespace Tomahawk;
 using namespace TomahawkUtils;
 
 Api_v1::Api_v1( QxtAbstractWebSessionManager* sm, QObject* parent )
-    : QxtWebSlotService(sm, parent)
+    : QxtWebSlotService( sm, parent )
     , m_api_v1_5( new Api_v1_5( this ) )
 {
 }
 
 Api_v1::~Api_v1()
 {
-  delete m_api_v1_5;
+    delete m_api_v1_5;
 }
 
 void
@@ -79,7 +79,9 @@ Api_v1::auth_1( QxtWebRequestEvent* event, QString arg )
         QString authPage = RESPATH "www/auth.html";
         QHash< QString, QString > args;
         if ( urlHasQueryItem( event->url, "receiverurl" ) )
+        {
             args[ "url" ] = urlQueryItemValue( event->url, "receiverurl" ).toUtf8();
+        }
 
         args[ "formtoken" ] = formToken;
         args[ "website" ] = urlQueryItemValue( event->url, "website" ).toUtf8();
@@ -105,13 +107,17 @@ Api_v1::auth_2( QxtWebRequestEvent* event, QString arg )
     QStringList pieces = params.split( '&' );
     QHash< QString, QString > queryItems;
 
-    foreach ( const QString& part, pieces )
+    foreach ( const QString & part, pieces )
     {
         QStringList keyval = part.split( '=' );
         if ( keyval.size() == 2 )
+        {
             queryItems.insert( keyval.first(), keyval.last() );
+        }
         else
+        {
             tDebug( LOGVERBOSE ) << "Failed parsing url parameters:" << part;
+        }
     }
 
     tDebug( LOGVERBOSE ) << "has query items:" << pieces;
@@ -159,7 +165,7 @@ Api_v1::auth_2( QxtWebRequestEvent* event, QString arg )
     }
 
     DatabaseCommand_AddClientAuth* dbcmd = new DatabaseCommand_AddClientAuth( authtoken, website, name, event->headers.key( "ua" ) );
-    Database::instance()->enqueue( Tomahawk::dbcmd_ptr(dbcmd) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( dbcmd ) );
 }
 
 
@@ -174,20 +180,30 @@ Api_v1::api( QxtWebRequestEvent* event, const QString& version, const QString& m
 {
     tDebug( LOGVERBOSE ) << "HTTP" << event->url.toString();
 
-    if ( version.isEmpty() ) {
-      // We dealing with API 1.0
+    if ( version.isEmpty() )
+    {
+        // We dealing with API 1.0
 
-      const QUrl& url = event->url;
-      if ( urlHasQueryItem( url, "method" ) )
-      {
-          const QString method = urlQueryItemValue( url, "method" );
+        const QUrl& url = event->url;
+        if ( urlHasQueryItem( url, "method" ) )
+        {
+            const QString method = urlQueryItemValue( url, "method" );
 
-          if ( method == "stat" )        return stat( event );
-          if ( method == "resolve" )     return resolve( event );
-          if ( method == "get_results" ) return get_results( event );
-      }
+            if ( method == "stat" )
+            {
+                return stat( event );
+            }
+            if ( method == "resolve" )
+            {
+                return resolve( event );
+            }
+            if ( method == "get_results" )
+            {
+                return get_results( event );
+            }
+        }
 
-      send404( event );
+        send404( event );
     }
     else if ( version == "1.5" )
     {
@@ -195,28 +211,28 @@ Api_v1::api( QxtWebRequestEvent* event, const QString& version, const QString& m
         {
             if ( !QMetaObject::invokeMethod( m_api_v1_5, method.toLatin1().constData(), Q_ARG( QxtWebRequestEvent*, event ), Q_ARG( QString, arg1 ), Q_ARG( QString, arg2 ), Q_ARG( QString, arg3 ) ) )
             {
-                apiCallFailed(event, method);
+                apiCallFailed( event, method );
             }
         }
         else if ( !arg2.isEmpty() )
         {
             if ( !QMetaObject::invokeMethod( m_api_v1_5, method.toLatin1().constData(), Q_ARG( QxtWebRequestEvent*, event ), Q_ARG( QString, arg1 ), Q_ARG( QString, arg2 ) ) )
             {
-                apiCallFailed(event, method);
+                apiCallFailed( event, method );
             }
         }
         else if ( !arg1.isEmpty() )
         {
             if ( !QMetaObject::invokeMethod( m_api_v1_5, method.toLatin1().constData(), Q_ARG( QxtWebRequestEvent*, event ), Q_ARG( QString, arg1 ) ) )
             {
-                apiCallFailed(event, method);
+                apiCallFailed( event, method );
             }
         }
         else
         {
             if ( !QMetaObject::invokeMethod( m_api_v1_5, method.toLatin1().constData(), Q_ARG( QxtWebRequestEvent*, event ) ) )
             {
-                apiCallFailed(event, method);
+                apiCallFailed( event, method );
             }
         }
     }
@@ -243,7 +259,7 @@ Api_v1::sid( QxtWebRequestEvent* event, QString unused )
     }
 
     boost::function< void ( QSharedPointer< QIODevice >& ) > callback =
-            boost::bind( &Api_v1::processSid, this, event, rp, _1 );
+        boost::bind( &Api_v1::processSid, this, event, rp, _1 );
     Tomahawk::UrlHandler::getIODeviceForUrl( rp, rp->url(), callback );
 }
 
@@ -262,7 +278,9 @@ Api_v1::processSid( QxtWebRequestEvent* event, Tomahawk::result_ptr& rp, QShared
     e->streaming = iodev->isSequential();
     e->contentType = rp->mimetype().toLatin1();
     if ( rp->size() > 0 )
+    {
         e->headers.insert( "Content-Length", QString::number( rp->size() ) );
+    }
 
     postEvent( e );
 }
@@ -281,7 +299,7 @@ Api_v1::send404( QxtWebRequestEvent* event )
 void
 Api_v1::sendPlain404( QxtWebRequestEvent* event, const QString& message, const QString& statusmessage )
 {
-    QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, message.toUtf8() );
+    QxtWebPageEvent* e = new QxtWebPageEvent( event->sessionID, event->requestID, message.toUtf8() );
     e->contentType = "text/plain";
     e->status = 404;
     e->statusMessage = statusmessage.toLatin1().constData();
@@ -296,14 +314,16 @@ Api_v1::stat( QxtWebRequestEvent* event )
     m_storedEvent = event;
 
     if ( !event->content.isNull() )
+    {
         tDebug( LOGVERBOSE ) << "BODY:" << event->content->readAll();
+    }
 
     if ( urlHasQueryItem( event->url, "auth" ) )
     {
         // check for auth status
         DatabaseCommand_ClientAuthValid* dbcmd = new DatabaseCommand_ClientAuthValid( urlQueryItemValue( event->url, "auth" ) );
         connect( dbcmd, SIGNAL( authValid( QString, QString, bool ) ), this, SLOT( statResult( QString, QString, bool ) ) );
-        Database::instance()->enqueue( Tomahawk::dbcmd_ptr(dbcmd) );
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr( dbcmd ) );
     }
     else
     {
@@ -320,7 +340,9 @@ Api_v1::statResult( const QString& clientToken, const QString& name, bool valid 
 
     Q_ASSERT( m_storedEvent );
     if ( !m_storedEvent )
+    {
         return;
+    }
 
     QVariantMap m;
     m.insert( "name", "playdar" );
@@ -337,7 +359,7 @@ void
 Api_v1::resolve( QxtWebRequestEvent* event )
 {
     if ( !urlHasQueryItem( event->url, "artist" ) ||
-         !urlHasQueryItem( event->url, "track" ) )
+            !urlHasQueryItem( event->url, "track" ) )
     {
         tDebug( LOGVERBOSE ) << "Malformed HTTP resolve request";
         return send404( event );
@@ -348,7 +370,7 @@ Api_v1::resolve( QxtWebRequestEvent* event )
     const QString album = urlQueryItemValue( event->url, "album" );
 
     if ( artist.trimmed().isEmpty() ||
-         track.trimmed().isEmpty() )
+            track.trimmed().isEmpty() )
     {
         tDebug( LOGVERBOSE ) << "Malformed HTTP resolve request";
         return send404( event );
@@ -356,9 +378,13 @@ Api_v1::resolve( QxtWebRequestEvent* event )
 
     QString qid;
     if ( urlHasQueryItem( event->url, "qid" ) )
+    {
         qid = urlQueryItemValue( event->url, "qid" );
+    }
     else
+    {
         qid = uuid();
+    }
 
     query_ptr qry = Query::get( artist, track, album, qid, false );
     if ( qry.isNull() )
@@ -392,11 +418,17 @@ Api_v1::staticdata( QxtWebRequestEvent* event, const QString& file )
         QxtWebPageEvent* e = new QxtWebPageEvent( event->sessionID, event->requestID, data );
 
         if ( file.endsWith( ".png" ) )
+        {
             e->contentType = "image/png";
+        }
         if ( file.endsWith( ".css" ) )
+        {
             e->contentType = "text/css";
+        }
         if ( file.endsWith( ".js" ) )
+        {
             e->contentType = "application/javascript";
+        }
 
         postEvent( e );
     }
@@ -441,10 +473,12 @@ Api_v1::get_results( QxtWebRequestEvent* event )
     r.insert( "query", qry->toVariant() );
 
     QVariantList res;
-    foreach( const result_ptr& rp, qry->results() )
+    foreach( const result_ptr & rp, qry->results() )
     {
         if ( rp->isOnline() )
+        {
             res << rp->toVariant();
+        }
     }
     r.insert( "results", res );
 
@@ -462,7 +496,7 @@ Api_v1::sendJSON( const QVariantMap& m, QxtWebRequestEvent* event )
     if ( urlHasQueryItem( event->url, "jsonp" ) && !urlQueryItemValue( event->url, "jsonp" ).isEmpty() )
     {
         ctype = "text/javascript; charset=utf-8";
-        body.prepend( QString("%1( ").arg( urlQueryItemValue( event->url, "jsonp" ) ).toLatin1() );
+        body.prepend( QString( "%1( " ).arg( urlQueryItemValue( event->url, "jsonp" ) ).toLatin1() );
         body.append( " );" );
     }
     else
@@ -470,7 +504,7 @@ Api_v1::sendJSON( const QVariantMap& m, QxtWebRequestEvent* event )
         ctype = "appplication/json; charset=utf-8";
     }
 
-    QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, body );
+    QxtWebPageEvent* e = new QxtWebPageEvent( event->sessionID, event->requestID, body );
     e->contentType = ctype;
     e->headers.insert( "Content-Length", QString::number( body.length() ) );
     e->headers.insert( "Access-Control-Allow-Origin", "*" );
@@ -485,19 +519,23 @@ void
 Api_v1::sendWebpageWithArgs( QxtWebRequestEvent* event, const QString& filenameSource, const QHash< QString, QString >& args )
 {
     if ( !QFile::exists( filenameSource ) )
+    {
         qWarning() << "Passed invalid file for html source:" << filenameSource;
+    }
 
     QFile f( filenameSource );
     f.open( QIODevice::ReadOnly );
     QByteArray html = f.readAll();
 
-    foreach( const QString& param, args.keys() )
+    foreach( const QString & param, args.keys() )
     {
         html.replace( QString( "<%%1%>" ).arg( param.toUpper() ), args.value( param ).toUtf8() );
     }
     // workaround for receiverurl
     if ( !args.keys().contains( "URL" ) )
+    {
         html.replace( QString( "<%URL%>" ).toLatin1(), QByteArray() );
+    }
 
 
     QxtWebPageEvent* e = new QxtWebPageEvent( event->sessionID, event->requestID, html );
@@ -522,7 +560,7 @@ Api_v1::apiCallFailed( QxtWebRequestEvent* event, const QString& method )
 void
 Api_v1::sendJsonOk( QxtWebRequestEvent* event )
 {
-    QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, "{ \"result\": \"ok\" }" );
+    QxtWebPageEvent* e = new QxtWebPageEvent( event->sessionID, event->requestID, "{ \"result\": \"ok\" }" );
     e->headers.insert( "Access-Control-Allow-Origin", "*" );
     e->contentType = "application/json";
     postEvent( e );
@@ -532,7 +570,7 @@ Api_v1::sendJsonOk( QxtWebRequestEvent* event )
 void
 Api_v1::sendJsonError( QxtWebRequestEvent* event, const QString& message )
 {
-    QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, QString( "{ \"result\": \"error\", \"error\": \"%1\" }" ).arg( message ).toUtf8().constData() );
+    QxtWebPageEvent* e = new QxtWebPageEvent( event->sessionID, event->requestID, QString( "{ \"result\": \"error\", \"error\": \"%1\" }" ).arg( message ).toUtf8().constData() );
     e->headers.insert( "Access-Control-Allow-Origin", "*" );
     e->contentType = "application/json";
     e->status = 500;

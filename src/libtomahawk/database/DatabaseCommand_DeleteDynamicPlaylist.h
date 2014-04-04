@@ -28,18 +28,24 @@ namespace Tomahawk
 class DatabaseCommand_DeleteDynamicPlaylist : public DatabaseCommand_DeletePlaylist
 {
     Q_OBJECT
-public:
+  public:
     explicit DatabaseCommand_DeleteDynamicPlaylist( QObject* parent = 0 )
-    : DatabaseCommand_DeletePlaylist( parent )
+        : DatabaseCommand_DeletePlaylist( parent )
     {}
 
     explicit DatabaseCommand_DeleteDynamicPlaylist( const Tomahawk::source_ptr& source, const QString& playlistguid );
 
-    QString commandname() const { return "deletedynamicplaylist"; }
+    QString commandname() const
+    {
+        return "deletedynamicplaylist";
+    }
 
     virtual void exec( DatabaseImpl* lib );
     virtual void postCommitHook();
-    virtual bool doesMutates() const { return true; }
+    virtual bool doesMutates() const
+    {
+        return true;
+    }
 
 };
 

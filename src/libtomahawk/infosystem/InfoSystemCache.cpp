@@ -21,7 +21,7 @@
 
 
 #ifndef ENABLE_HEADLESS
-    #include <QDesktopServices>
+#include <QDesktopServices>
 #endif
 
 #include "InfoSystemCache.h"
@@ -67,9 +67,9 @@ InfoSystemCache::pruneTimerFired()
 
     for ( int i = InfoNoInfo; i <= InfoLastInfo; i++ )
     {
-        InfoType type = (InfoType)(i);
+        InfoType type = ( InfoType )( i );
         QHash< QString, QString > fileLocationHash = m_fileLocationCache[type];
-        const QString cacheDirName = m_cacheBaseDir + QString::number( (int)type );
+        const QString cacheDirName = m_cacheBaseDir + QString::number( ( int )type );
         QFileInfoList fileList = QDir( cacheDirName ).entryInfoList( QDir::Files | QDir::NoDotAndDotDot );
         foreach ( QFileInfo file, fileList )
         {
@@ -77,12 +77,18 @@ InfoSystemCache::pruneTimerFired()
             if ( file.suffix().toLongLong() < currentMSecsSinceEpoch )
             {
                 if ( !QFile::remove( file.canonicalFilePath() ) )
+                {
                     tLog() << "Failed to remove stale cache file" << file.canonicalFilePath();
+                }
                 else
+                {
                     qDebug() << "Removed stale cache file" << file.canonicalFilePath();
+                }
             }
             if ( fileLocationHash.contains( baseName ) )
+            {
                 fileLocationHash.remove( baseName );
+            }
         }
         m_fileLocationCache[type] = fileLocationHash;
     }
@@ -106,7 +112,7 @@ InfoSystemCache::getCachedInfoSlot( Tomahawk::InfoSystem::InfoStringHash criteri
             return;
         }
 
-        const QString cacheDir = m_cacheBaseDir + QString::number( (int)requestData.type );
+        const QString cacheDir = m_cacheBaseDir + QString::number( ( int )requestData.type );
         QDir dir( cacheDir );
         if ( !dir.exists() )
         {
@@ -140,9 +146,13 @@ InfoSystemCache::getCachedInfoSlot( Tomahawk::InfoSystem::InfoStringHash criteri
     if ( currMaxAge < QDateTime::currentMSecsSinceEpoch() )
     {
         if ( !QFile::remove( file.canonicalFilePath() ) )
+        {
             tLog() << "Failed to remove stale cache file" << file.canonicalFilePath();
+        }
         else
+        {
             qDebug() << "Removed stale cache file" << file.canonicalFilePath();
+        }
 
         fileLocationHash.remove( criteriaHashVal );
         m_fileLocationCache[ requestData.type ] = fileLocationHash;
@@ -183,7 +193,7 @@ InfoSystemCache::getCachedInfoSlot( Tomahawk::InfoSystem::InfoStringHash criteri
 
 
 void
-InfoSystemCache::notInCache( QObject *receiver, Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
+InfoSystemCache::notInCache( QObject* receiver, Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     QMetaObject::invokeMethod( receiver, "notInCacheSlot", Q_ARG( Tomahawk::InfoSystem::InfoStringHash, criteria ), Q_ARG( Tomahawk::InfoSystem::InfoRequestData, requestData ) );
 }
@@ -195,7 +205,7 @@ InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria,
     //qDebug() << Q_FUNC_INFO;
     const QString criteriaHashVal = criteriaMd5( criteria );
     const QString criteriaHashValWithType = criteriaMd5( criteria, type );
-    const QString cacheDir = m_cacheBaseDir + QString::number( (int)type );
+    const QString cacheDir = m_cacheBaseDir + QString::number( ( int )type );
     const QString settingsFilePath( cacheDir + '/' + criteriaHashVal + '.' + QString::number( QDateTime::currentMSecsSinceEpoch() + maxAge ) );
 
     QHash< QString, QString > fileLocationHash = m_fileLocationCache[ type ];
@@ -232,7 +242,9 @@ InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria,
     QStringList keys = criteria.keys();
     cachedSettings.beginGroup( "criteria" );
     for( int i = 0; i < criteria.size(); i++ )
+    {
         cachedSettings.setValue( keys.at( i ), criteria[keys.at( i )] );
+    }
     cachedSettings.endGroup();
     cachedSettings.setValue( "data", output );
 
@@ -243,7 +255,7 @@ InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria,
 
 
 const QString
-InfoSystemCache::criteriaMd5( const Tomahawk::InfoSystem::InfoStringHash &criteria, Tomahawk::InfoSystem::InfoType type ) const
+InfoSystemCache::criteriaMd5( const Tomahawk::InfoSystem::InfoStringHash& criteria, Tomahawk::InfoSystem::InfoType type ) const
 {
     QCryptographicHash md5( QCryptographicHash::Md5 );
     QStringList keys = criteria.keys();
@@ -254,7 +266,9 @@ InfoSystemCache::criteriaMd5( const Tomahawk::InfoSystem::InfoStringHash &criter
         md5.addData( criteria[key].toUtf8() );
     }
     if ( type != Tomahawk::InfoSystem::InfoNoInfo && type != Tomahawk::InfoSystem::InfoLastInfo )
-        md5.addData( QString::number( (int)type ).toUtf8() );
+    {
+        md5.addData( QString::number( ( int )type ).toUtf8() );
+    }
     return md5.result().toHex();
 }
 

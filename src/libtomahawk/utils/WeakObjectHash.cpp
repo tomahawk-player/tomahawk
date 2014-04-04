@@ -19,7 +19,7 @@
 #include "WeakObjectHash.h"
 
 
-Tomahawk::Utils::WeakObjectHashPrivate::WeakObjectHashPrivate(Tomahawk::Utils::WeakObjectHashBase *parent)
+Tomahawk::Utils::WeakObjectHashPrivate::WeakObjectHashPrivate( Tomahawk::Utils::WeakObjectHashBase* parent )
     : QObject( 0 )
     , m_parent( parent )
 {

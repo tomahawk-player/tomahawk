@@ -38,7 +38,9 @@ DatabaseCommand_LoadTrackAttributes::exec( DatabaseImpl* dbi )
 {
     Q_ASSERT( m_track );
     if ( m_track->trackId() == 0 )
+    {
         return;
+    }
 
     TomahawkSqlQuery query = dbi->newquery();
 

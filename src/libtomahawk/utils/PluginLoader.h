@@ -36,7 +36,7 @@ namespace Utils
 
 class DLLEXPORT PluginLoader
 {
-public:
+  public:
     PluginLoader( const QString& type );
     virtual ~PluginLoader();
 
@@ -47,7 +47,7 @@ public:
         const QHash< QString, QObject* > plugins = loadPlugins();
 
         QHash< QString, T* > tPlugins;
-        foreach ( QObject* plugin, plugins.values() )
+        foreach ( QObject * plugin, plugins.values() )
         {
             T* tPlugin = qobject_cast< T* >( plugin );
             if ( tPlugin )
@@ -65,7 +65,7 @@ public:
     }
     const QHash< QString, QObject* > loadPlugins() const;
 
-private:
+  private:
     const QStringList pluginFilenames( const QString& name = "*" ) const;
     const QStringList pluginPaths( const QString& name = "*" ) const;
 

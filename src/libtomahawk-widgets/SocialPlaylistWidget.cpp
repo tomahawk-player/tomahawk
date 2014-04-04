@@ -64,11 +64,11 @@ SocialPlaylistWidget::SocialPlaylistWidget ( QWidget* parent )
     TomahawkUtils::unmarginLayout( ui->verticalLayout_3->layout() );
     TomahawkUtils::unmarginLayout( ui->verticalLayout_4->layout() );
 
-//     ui->mostPlayedPlaylists->setItemDelegate( new PlaylistDelegate() );
-//     ui->mostPlayedPlaylists->setModel( model );
-//     ui->mostPlayedPlaylists->overlay()->resize( 380, 86 );
+    //     ui->mostPlayedPlaylists->setItemDelegate( new PlaylistDelegate() );
+    //     ui->mostPlayedPlaylists->setModel( model );
+    //     ui->mostPlayedPlaylists->overlay()->resize( 380, 86 );
 
-//     connect( model, SIGNAL( emptinessChanged( bool) ), this, SLOT( updatePlaylists() ) );
+    //     connect( model, SIGNAL( emptinessChanged( bool) ), this, SLOT( updatePlaylists() ) );
 
     m_topForeignTracksModel = new PlaylistModel( ui->newTracksView );
     ui->newTracksView->setPlaylistModel( m_topForeignTracksModel );
@@ -78,16 +78,16 @@ SocialPlaylistWidget::SocialPlaylistWidget ( QWidget* parent )
     m_popularNewAlbumsModel = new PlayableModel( ui->newAlbumsView );
     ui->newAlbumsView->setPlayableModel( m_popularNewAlbumsModel );
     // TODO run the genericselect command
-//     m_recentAlbumsModel->addFilteredCollection( collection_ptr(), 20, DatabaseCommand_AllAlbums::ModificationTime );
-/*
-    m_timer = new QTimer( this );
-    connect( m_timer, SIGNAL( timeout() ), SLOT( checkQueries() ) );
+    //     m_recentAlbumsModel->addFilteredCollection( collection_ptr(), 20, DatabaseCommand_AllAlbums::ModificationTime );
+    /*
+        m_timer = new QTimer( this );
+        connect( m_timer, SIGNAL( timeout() ), SLOT( checkQueries() ) );
 
-    connect( SourceList::instance(), SIGNAL( ready() ), SLOT( updateRecentTracks() ) );
-    connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
-    connect( ui->playlistWidget, SIGNAL( activated( QModelIndex ) ), SLOT( onPlaylistActivated( QModelIndex ) ) );
-    connect( AudioEngine::instance() ,SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ), this, SLOT( updatePlaylists() ), Qt::QueuedConnection );
-*/
+        connect( SourceList::instance(), SIGNAL( ready() ), SLOT( updateRecentTracks() ) );
+        connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
+        connect( ui->playlistWidget, SIGNAL( activated( QModelIndex ) ), SLOT( onPlaylistActivated( QModelIndex ) ) );
+        connect( AudioEngine::instance() ,SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ), this, SLOT( updatePlaylists() ), Qt::QueuedConnection );
+    */
     fetchFromDB();
 }
 
@@ -105,9 +105,9 @@ SocialPlaylistWidget::fetchFromDB()
     connect( albumsCmd.data(), SIGNAL( albums( QList<Tomahawk::album_ptr> ) ), this, SLOT( popularAlbumsFetched( QList<Tomahawk::album_ptr> ) ) );
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( albumsCmd ) );
 
-//     QSharedPointer<DatabaseCommand_GenericSelect> plCmd = QSharedPointer<DatabaseCommand_GenericSelect>( new DatabaseCommand_GenericSelect( s_mostPlayedPlaylistsQuery, DatabaseCommand_GenericSelect::, 30, 0 ) );
-//     connect( albumsCmd.data(), SIGNAL( albums( QList<Tomahawk::album_ptr> ) ), this, SLOT( popularAlbumsFetched( QList<Tomahawk::album_ptr> ) ) );
-//     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( albumsCmd ) );
+    //     QSharedPointer<DatabaseCommand_GenericSelect> plCmd = QSharedPointer<DatabaseCommand_GenericSelect>( new DatabaseCommand_GenericSelect( s_mostPlayedPlaylistsQuery, DatabaseCommand_GenericSelect::, 30, 0 ) );
+    //     connect( albumsCmd.data(), SIGNAL( albums( QList<Tomahawk::album_ptr> ) ), this, SLOT( popularAlbumsFetched( QList<Tomahawk::album_ptr> ) ) );
+    //     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( albumsCmd ) );
 
     QSharedPointer<DatabaseCommand_GenericSelect> trackCmd = QSharedPointer<DatabaseCommand_GenericSelect>( new DatabaseCommand_GenericSelect( s_topForeignTracksQuery, DatabaseCommand_GenericSelect::Track, 50, 0 ) );
     connect( trackCmd.data(), SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( topForeignTracksFetched( QList<Tomahawk::query_ptr> ) ) );

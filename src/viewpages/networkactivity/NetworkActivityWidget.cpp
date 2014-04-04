@@ -247,8 +247,8 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     connect( d->worker, SIGNAL( trendingTracks( QList<Tomahawk::track_ptr> ) ),
              SLOT( trendingTracks( QList<Tomahawk::track_ptr> ) ),
              Qt::QueuedConnection );
-    connect( d->worker, SIGNAL( hotPlaylists(QList<Tomahawk::playlist_ptr>) ),
-             SLOT(hotPlaylists(QList<Tomahawk::playlist_ptr>)),
+    connect( d->worker, SIGNAL( hotPlaylists( QList<Tomahawk::playlist_ptr> ) ),
+             SLOT( hotPlaylists( QList<Tomahawk::playlist_ptr> ) ),
              Qt::QueuedConnection );
     connect( d->worker, SIGNAL( trendingArtists( QList< Tomahawk::artist_ptr > ) ),
              SLOT( trendingArtists( QList< Tomahawk::artist_ptr > ) ),
@@ -282,10 +282,14 @@ NetworkActivityWidget::isBeingPlayed() const
     Q_D( const NetworkActivityWidget );
 
     if ( AudioEngine::instance()->currentTrackPlaylist() == d->ui->tracksViewLeft->playlistInterface() )
+    {
         return true;
+    }
 
     if ( AudioEngine::instance()->currentTrackPlaylist() == d->ui->trendingTracksView->playlistInterface() )
+    {
         return true;
+    }
 
     return false;
 }
@@ -297,10 +301,14 @@ NetworkActivityWidget::jumpToCurrentTrack()
     Q_D( NetworkActivityWidget );
 
     if ( d->ui->tracksViewLeft->model() && d->ui->tracksViewLeft->jumpToCurrentTrack() )
+    {
         return true;
+    }
 
     if ( d->ui->trendingTracksView->model() && d->ui->trendingTracksView->jumpToCurrentTrack() )
+    {
         return true;
+    }
 
     return false;
 }
@@ -402,9 +410,13 @@ NetworkActivityWidget::leftCrumbIndexChanged( const QModelIndex& index )
 
     QStandardItem* item = d->crumbModelLeft->itemFromIndex( d->sortedProxy->mapToSource( index ) );
     if ( !item )
+    {
         return;
+    }
     if ( !item->data( Breadcrumb::DefaultRole ).isValid() )
+    {
         return;
+    }
 
     int chartId = item->data( Breadcrumb::DefaultRole ).toInt();
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Showing chart" << chartId;

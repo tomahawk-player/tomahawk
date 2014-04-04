@@ -26,7 +26,7 @@
 
 class PlaylistModelPrivate : public PlayableModelPrivate
 {
-public:
+  public:
     PlaylistModelPrivate( PlaylistModel* q )
         : PlayableModelPrivate( q, false )
         , isTemporary( false )
@@ -39,7 +39,7 @@ public:
 
     Q_DECLARE_PUBLIC( PlaylistModel )
 
-private:
+  private:
     Tomahawk::playlist_ptr playlist;
     bool isTemporary;
     bool changesOngoing;

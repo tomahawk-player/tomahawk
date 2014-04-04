@@ -32,16 +32,16 @@ class QBoxLayout;
 class DLLEXPORT BasicHeader : public QWidget
 {
     Q_OBJECT
-public:
+  public:
     explicit BasicHeader( QWidget* parent = 0 );
     virtual ~BasicHeader();
 
-public slots:
+  public slots:
     virtual void setCaption( const QString& s );
     virtual void setDescription( const QString& s );
     virtual void setPixmap( const QPixmap& p );
 
-protected:
+  protected:
     virtual void paintEvent( QPaintEvent* event );
 
     QLabel* m_imageLabel;

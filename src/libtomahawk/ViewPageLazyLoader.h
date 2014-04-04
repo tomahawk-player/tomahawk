@@ -29,7 +29,7 @@ namespace Tomahawk
 template <class T>
 class ViewPageLazyLoader : public ViewPagePlugin
 {
-public:
+  public:
     ViewPageLazyLoader<T>()
         : m_widget( 0 )
     {
@@ -39,14 +39,18 @@ public:
     virtual ~ViewPageLazyLoader()
     {
         if ( !m_widget.isNull() )
+        {
             delete m_widget.data();
+        }
     }
 
 
     virtual T* widget()
     {
         if ( m_widget.isNull() )
+        {
             m_widget = new T();
+        }
 
         return m_widget.data();
     }
@@ -55,7 +59,9 @@ public:
     virtual playlistinterface_ptr playlistInterface() const
     {
         if ( !m_widget.isNull() )
+        {
             return m_widget->playlistInterface();
+        }
 
         return playlistinterface_ptr();
     }
@@ -64,7 +70,9 @@ public:
     virtual bool isBeingPlayed() const
     {
         if ( !m_widget.isNull() && m_widget->isBeingPlayed() )
+        {
             return true;
+        }
 
         return false;
     }
@@ -73,12 +81,14 @@ public:
     virtual bool jumpToCurrentTrack()
     {
         if ( !m_widget.isNull() && m_widget->jumpToCurrentTrack() )
+        {
             return true;
+        }
 
         return false;
     }
 
-protected:
+  protected:
     QPointer<T> m_widget;
 };
 

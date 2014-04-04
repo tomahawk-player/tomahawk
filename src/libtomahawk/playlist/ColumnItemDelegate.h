@@ -24,7 +24,8 @@
 #include "DllMacro.h"
 #include "Typedefs.h"
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 class PixmapDelegateFader;
 }
 
@@ -33,24 +34,24 @@ class TreeProxyModel;
 
 class DLLEXPORT ColumnItemDelegate : public QStyledItemDelegate
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     ColumnItemDelegate( ColumnView* parent, TreeProxyModel* proxy );
 
     virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
-public slots:
+  public slots:
     void resetHoverIndex();
 
-protected:
+  protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
 
-private slots:
+  private slots:
     void doUpdateIndex( const QPersistentModelIndex& index );
 
-private:
+  private:
     ColumnView* m_view;
     TreeProxyModel* m_model;
 

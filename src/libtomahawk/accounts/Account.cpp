@@ -143,7 +143,9 @@ Account::loadFromConfig( const QString& accountId )
     m_accountId = accountId;
 
     if ( AccountManager::instance()->configStorageForAccount( m_accountId ) != 0 ) //could be 0 if we are installing the account right now
+    {
         AccountManager::instance()->configStorageForAccount( m_accountId )->load( m_accountId, m_cfg );
+    }
 }
 
 
@@ -160,13 +162,21 @@ Account::setTypes( AccountTypes types )
     QMutexLocker locker( &m_mutex );
     m_cfg.types = QStringList();
     if ( types & InfoType )
+    {
         m_cfg.types << "InfoType";
+    }
     if ( types & SipType )
+    {
         m_cfg.types << "SipType";
+    }
     if ( types & ResolverType )
+    {
         m_cfg.types << "ResolverType";
+    }
     if ( types & StatusPushType )
+    {
         m_cfg.types << "StatusPushType";
+    }
     syncConfig();
 }
 
@@ -177,13 +187,21 @@ Account::types() const
     QMutexLocker locker( &m_mutex );
     AccountTypes types;
     if ( m_cfg.types.contains( "InfoType" ) )
+    {
         types |= InfoType;
+    }
     if ( m_cfg.types.contains( "SipType" ) )
+    {
         types |= SipType;
+    }
     if ( m_cfg.types.contains( "ResolverType" ) )
+    {
         types |= ResolverType;
+    }
     if ( m_cfg.types.contains( "StatusPushType" ) )
+    {
         types |= StatusPushType;
+    }
 
     return types;
 }

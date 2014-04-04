@@ -41,9 +41,9 @@ typedef boost::function<Tomahawk::ExternalResolver*( QString, QStringList )> Res
 
 class DLLEXPORT Pipeline : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     static Pipeline* instance();
 
     explicit Pipeline( QObject* parent = 0 );
@@ -73,7 +73,7 @@ public:
 
     bool isResolving( const query_ptr& q ) const;
 
-public slots:
+  public slots:
     void resolve( const query_ptr& q, bool prioritized = true, bool temporaryQuery = false );
     void resolve( const QList<query_ptr>& qlist, bool prioritized = true, bool temporaryQuery = false );
     void resolve( QID qid, bool prioritized = true, bool temporaryQuery = false );
@@ -82,7 +82,7 @@ public slots:
     void stop();
     void databaseReady();
 
-signals:
+  signals:
     void running();
     void idle();
     void resolving( const Tomahawk::query_ptr& query );
@@ -90,10 +90,10 @@ signals:
     void resolverAdded( Tomahawk::Resolver* );
     void resolverRemoved( Tomahawk::Resolver* );
 
-protected:
+  protected:
     QScopedPointer<PipelinePrivate> d_ptr;
 
-private slots:
+  private slots:
     void timeoutShunt( const query_ptr& q );
     void shunt( const query_ptr& q );
     void shuntNext();
@@ -101,7 +101,7 @@ private slots:
     void onTemporaryQueryTimer();
     void onResultUrlCheckerDone();
 
-private:
+  private:
     Q_DECLARE_PRIVATE( Pipeline )
 
     void addResultsToQuery( const query_ptr& query, const QList< result_ptr >& results );

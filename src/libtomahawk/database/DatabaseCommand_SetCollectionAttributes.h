@@ -33,8 +33,9 @@ class DatabaseCommand_SetCollectionAttributes : public DatabaseCommandLoggable
     Q_PROPERTY( int           type                   READ type        WRITE setType )
     Q_PROPERTY( bool          del                    READ del         WRITE setDel )
 
-public:
-    enum AttributeType {
+  public:
+    enum AttributeType
+    {
         EchonestSongCatalog = 0,
         EchonestArtistCatalog = 1
     };
@@ -44,20 +45,44 @@ public:
     DatabaseCommand_SetCollectionAttributes( AttributeType type, bool toDelete );
     DatabaseCommand_SetCollectionAttributes() : m_delete( false ) {} // JSON
     virtual void exec( DatabaseImpl* lib );
-    virtual bool doesMutates() const { return true; }
+    virtual bool doesMutates() const
+    {
+        return true;
+    }
     virtual void postCommitHook();
 
-    virtual QString commandname() const { return "setcollectionattributes"; }
+    virtual QString commandname() const
+    {
+        return "setcollectionattributes";
+    }
 
-    void setId( const QByteArray& id ) { m_id = id; }
-    QByteArray id() const { return m_id; }
+    void setId( const QByteArray& id )
+    {
+        m_id = id;
+    }
+    QByteArray id() const
+    {
+        return m_id;
+    }
 
-    void setType( int type ) { m_type = (AttributeType)type; }
-    int type() const { return (int)m_type; }
+    void setType( int type )
+    {
+        m_type = ( AttributeType )type;
+    }
+    int type() const
+    {
+        return ( int )m_type;
+    }
 
-    void setDel( bool del ) { m_delete = del; }
-    bool del() const { return m_delete; }
-private:
+    void setDel( bool del )
+    {
+        m_delete = del;
+    }
+    bool del() const
+    {
+        return m_delete;
+    }
+  private:
     bool m_delete;
     AttributeType m_type;
     QByteArray m_id;

@@ -39,7 +39,9 @@ QPointer< TomahawkUtils::SharedTimeLine >
 PixmapDelegateFader::stlInstance()
 {
     if ( s_stlInstance.isNull() )
+    {
         s_stlInstance = QPointer< TomahawkUtils::SharedTimeLine> ( new TomahawkUtils::SharedTimeLine() );
+    }
 
     return s_stlInstance;
 }
@@ -106,9 +108,13 @@ void
 PixmapDelegateFader::init()
 {
     if ( m_currentReference.isNull() )
+    {
         m_defaultImage = true;
+    }
     else
+    {
         m_defaultImage = false;
+    }
 
     m_startFrame = 0;
     m_fadePct = 100;
@@ -119,7 +125,9 @@ PixmapDelegateFader::init()
 
     setSize( m_size );
     if ( m_defaultImage )
+    {
         return;
+    }
 
     stlInstance().data()->setUpdateInterval( 20 );
     m_startFrame = stlInstance().data()->currentFrame();
@@ -138,20 +146,32 @@ PixmapDelegateFader::setSize( const QSize& size )
     {
         // No cover loaded yet, use default and don't fade in
         if ( !m_album.isNull() )
+        {
             m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, m_mode, m_size );
+        }
         else if ( !m_artist.isNull() )
+        {
             m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, m_mode, m_size );
+        }
         else if ( !m_track.isNull() )
+        {
             m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, m_mode, m_size );
+        }
     }
     else
     {
         if ( !m_album.isNull() )
+        {
             m_currentReference = TomahawkUtils::createRoundedImage( m_album->cover( m_size ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 );
+        }
         else if ( !m_artist.isNull() )
+        {
             m_currentReference = TomahawkUtils::createRoundedImage( m_artist->cover( m_size ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 );
+        }
         else if ( !m_track.isNull() )
+        {
             m_currentReference = TomahawkUtils::createRoundedImage( m_track->track()->cover( m_size ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 );
+        }
     }
 
     emit repaintRequest();
@@ -162,7 +182,9 @@ void
 PixmapDelegateFader::albumChanged()
 {
     if ( m_album.isNull() )
+    {
         return;
+    }
 
     QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, m_album->cover( m_size ) ) );
 }
@@ -172,7 +194,9 @@ void
 PixmapDelegateFader::artistChanged()
 {
     if ( m_artist.isNull() )
+    {
         return;
+    }
 
     QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, m_artist->cover( m_size ) ) );
 }
@@ -182,7 +206,9 @@ void
 PixmapDelegateFader::trackChanged()
 {
     if ( m_track.isNull() )
+    {
         return;
+    }
 
     connect( m_track->track().data(), SIGNAL( updated() ), SLOT( trackChanged() ), Qt::UniqueConnection );
     connect( m_track->track().data(), SIGNAL( coverChanged() ), SLOT( trackChanged() ), Qt::UniqueConnection );
@@ -194,13 +220,17 @@ void
 PixmapDelegateFader::setPixmap( const QPixmap& pixmap )
 {
     if ( pixmap.isNull() )
+    {
         return;
+    }
 
     m_defaultImage = false;
     const qint64 newImageMd5 = pixmap.cacheKey();
 
     if ( m_oldImageMd5 == newImageMd5 )
+    {
         return;
+    }
     m_oldImageMd5 = newImageMd5;
 
     if ( m_connectedToStl )
@@ -223,12 +253,16 @@ PixmapDelegateFader::setPixmap( const QPixmap& pixmap )
 void
 PixmapDelegateFader::onAnimationStep( int step )
 {
-    m_fadePct = (float)( step - m_startFrame ) / 10.0;
+    m_fadePct = ( float )( step - m_startFrame ) / 10.0;
     if ( m_fadePct > 100.0 )
+    {
         m_fadePct = 100.0;
+    }
 
     if ( m_fadePct == 100.0 )
+    {
         QTimer::singleShot( 0, this, SLOT( onAnimationFinished() ) );
+    }
 
     const qreal opacity = m_fadePct / 100.0;
     const qreal oldOpacity =  ( 100.0 - m_fadePct ) / 100.0;
@@ -305,7 +339,9 @@ PixmapDelegateFader::onAnimationFinished()
     disconnect( stlInstance().data(), SIGNAL( frameChanged( int ) ), this, SLOT( onAnimationStep( int ) ) );
 
     if ( !m_pixmapQueue.isEmpty() )
+    {
         QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, m_pixmapQueue.dequeue() ) );
+    }
 }
 
 

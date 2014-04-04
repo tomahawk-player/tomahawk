@@ -34,7 +34,7 @@ PlaylistTypeSelectorDlg::PlaylistTypeSelectorDlg( QWidget* parent, Qt::WindowFla
     ui->setupUi( this );
 
 #ifdef Q_WS_MAC
-//    ui->
+    //    ui->
     ui->verticalLayout->setContentsMargins( 4, 0, 4, 4 );
 
     setSizeGripEnabled( false );
@@ -51,9 +51,9 @@ PlaylistTypeSelectorDlg::PlaylistTypeSelectorDlg( QWidget* parent, Qt::WindowFla
     m_isAutoPlaylist = false;
 
     connect( ui->manualPlaylistButton, SIGNAL( clicked() ),
-             this, SLOT( createNormalPlaylist() ));
+             this, SLOT( createNormalPlaylist() ) );
     connect( ui->autoPlaylistButton, SIGNAL( clicked() ),
-             this, SLOT( createAutomaticPlaylist() ));
+             this, SLOT( createAutomaticPlaylist() ) );
 }
 
 

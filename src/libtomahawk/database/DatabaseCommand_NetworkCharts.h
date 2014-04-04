@@ -33,23 +33,32 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCommand_NetworkCharts : public DatabaseCommand
 {
-Q_OBJECT
-public:
+    Q_OBJECT
+  public:
     explicit DatabaseCommand_NetworkCharts( QObject* parent = 0 );
     explicit DatabaseCommand_NetworkCharts( const QDateTime& from, const QDateTime& to, QObject* parent = 0 );
     virtual ~DatabaseCommand_NetworkCharts();
 
     virtual void exec( DatabaseImpl* );
 
-    virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "networkcharts"; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
+    virtual QString commandname() const
+    {
+        return "networkcharts";
+    }
 
-    void setLimit( unsigned int amount ) { m_amount = amount; }
+    void setLimit( unsigned int amount )
+    {
+        m_amount = amount;
+    }
 
-signals:
+  signals:
     void done( const QList<Tomahawk::track_ptr>& tracks );
 
-private:
+  private:
     unsigned int m_amount;
     QDateTime m_from;
     QDateTime m_to;

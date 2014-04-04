@@ -31,7 +31,9 @@ ZeroconfFactory::ZeroconfFactory()
 {
 #ifndef ENABLE_HEADLESS
     if ( s_icon == 0 )
+    {
         s_icon = new QPixmap( ":/zeroconf-account/zeroconf-icon.png" );
+    }
 #endif
 }
 
@@ -84,7 +86,9 @@ void
 ZeroconfAccount::authenticate()
 {
     if ( !isAuthenticated() )
+    {
         sipPlugin()->connectPlugin();
+    }
 }
 
 
@@ -92,7 +96,9 @@ void
 ZeroconfAccount::deauthenticate()
 {
     if ( isAuthenticated() && !m_sipPlugin.isNull() )
+    {
         m_sipPlugin->disconnectPlugin();
+    }
 }
 
 
@@ -107,7 +113,9 @@ Account::ConnectionState
 ZeroconfAccount::connectionState() const
 {
     if ( m_sipPlugin.isNull() )
+    {
         return Disconnected;
+    }
 
     // TODO can we get called before sipPlugin()?
     return m_sipPlugin->connectionState();
@@ -117,9 +125,12 @@ ZeroconfAccount::connectionState() const
 SipPlugin*
 ZeroconfAccount::sipPlugin( bool create )
 {
-    if ( m_sipPlugin.isNull() ) {
+    if ( m_sipPlugin.isNull() )
+    {
         if ( !create )
+        {
             return 0;
+        }
 
         m_sipPlugin = QPointer< ZeroconfPlugin >( new ZeroconfPlugin( this ) );
     }

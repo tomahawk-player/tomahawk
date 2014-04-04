@@ -21,13 +21,16 @@
 
 #include "AclRequest.h"
 
-namespace Tomahawk {
-namespace Network {
-namespace ACL {
+namespace Tomahawk
+{
+namespace Network
+{
+namespace ACL
+{
 
 class AclRequestPrivate
 {
-public:
+  public:
     AclRequestPrivate( AclRequest* q, const QString& _nodeid, const QString& _username, Tomahawk::ACLStatus::Type _status )
         : q_ptr( q )
         , nodeid( _nodeid )
@@ -42,7 +45,7 @@ public:
 
     AclRequest* q_ptr;
     Q_DECLARE_PUBLIC( AclRequest )
-private:
+  private:
     QString nodeid;
     QString username;
     Tomahawk::ACLStatus::Type status;

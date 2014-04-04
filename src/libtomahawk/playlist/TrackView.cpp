@@ -38,8 +38,8 @@
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "collection/Collection.h"
-    #include "utils/PixmapDelegateFader.h"
+#include "collection/Collection.h"
+#include "utils/PixmapDelegateFader.h"
 #endif
 
 #include <QKeyEvent>
@@ -120,7 +120,9 @@ QString
 TrackView::guid() const
 {
     if ( m_guid.isEmpty() )
+    {
         return QString();
+    }
 
     return QString( "%1/%2" ).arg( m_guid ).arg( m_proxyModel->columnCount() );
 }
@@ -130,7 +132,9 @@ void
 TrackView::setGuid( const QString& newguid )
 {
     if ( newguid == m_guid )
+    {
         return;
+    }
 
     if ( !newguid.isEmpty() )
     {
@@ -192,7 +196,9 @@ void
 TrackView::setPlaylistItemDelegate( PlaylistItemDelegate* delegate )
 {
     if ( m_delegate )
+    {
         delete m_delegate;
+    }
 
     m_delegate = delegate;
     QTreeView::setItemDelegate( delegate );
@@ -221,7 +227,7 @@ TrackView::setPlayableModel( PlayableModel* model )
         case PlayableProxyModel::Large:
             setHeaderHidden( true );
             setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-        break;
+            break;
 
         default:
             setHeaderHidden( false );
@@ -252,7 +258,9 @@ void
 TrackView::onModelEmptyCheck()
 {
     if ( !m_proxyModel->rowCount( QModelIndex() ) )
+    {
         QTreeView::setAlternatingRowColors( false );
+    }
 }
 
 
@@ -260,10 +268,14 @@ void
 TrackView::onViewChanged()
 {
     if ( m_proxyModel->style() != PlayableProxyModel::Short && m_proxyModel->style() != PlayableProxyModel::Large ) // eventual FIXME?
+    {
         return;
+    }
 
     if ( m_timer.isActive() )
+    {
         m_timer.stop();
+    }
 
     m_timer.start();
 }
@@ -273,22 +285,32 @@ void
 TrackView::onScrollTimeout()
 {
     if ( m_timer.isActive() )
+    {
         m_timer.stop();
+    }
 
     QModelIndex left = indexAt( viewport()->rect().topLeft() );
     while ( left.isValid() && left.parent().isValid() )
+    {
         left = left.parent();
+    }
 
     QModelIndex right = indexAt( viewport()->rect().bottomLeft() );
     while ( right.isValid() && right.parent().isValid() )
+    {
         right = right.parent();
+    }
 
     int max = m_proxyModel->playlistInterface()->trackCount();
     if ( right.isValid() )
+    {
         max = right.row();
+    }
 
     if ( !max )
+    {
         return;
+    }
 
     for ( int i = left.row(); i <= max; i++ )
     {
@@ -301,7 +323,9 @@ void
 TrackView::startPlayingFromStart()
 {
     if ( m_proxyModel->rowCount() == 0 )
+    {
         return;
+    }
 
     const QModelIndex index = m_proxyModel->index( 0, 0 );
     startAutoPlay( index );
@@ -315,7 +339,9 @@ TrackView::autoPlayResolveFinished( const query_ptr& query, int row )
     Q_ASSERT( row >= 0 );
 
     if ( query.isNull() || row < 0  || query != m_autoPlaying )
+    {
         return;
+    }
 
     const QModelIndex index = m_proxyModel->index( row, 0 );
     if ( query->playable() )
@@ -327,7 +353,9 @@ TrackView::autoPlayResolveFinished( const query_ptr& query, int row )
     // Try the next one..
     const QModelIndex sib = index.sibling( index.row() + 1, index.column() );
     if ( sib.isValid() )
+    {
         startAutoPlay( sib );
+    }
 }
 
 
@@ -337,7 +365,9 @@ TrackView::currentChanged( const QModelIndex& current, const QModelIndex& previo
     QTreeView::currentChanged( current, previous );
 
     if ( !m_updateContextView )
+    {
         return;
+    }
 
     PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
     if ( item )
@@ -351,7 +381,9 @@ void
 TrackView::onItemActivated( const QModelIndex& index )
 {
     if ( !index.isValid() )
+    {
         return;
+    }
 
     tryToPlayItem( index );
     emit itemActivated( index );
@@ -362,7 +394,9 @@ void
 TrackView::startAutoPlay( const QModelIndex& index )
 {
     if ( tryToPlayItem( index ) )
+    {
         return;
+    }
 
     // item isn't playable but still resolving
     PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
@@ -377,7 +411,9 @@ TrackView::startAutoPlay( const QModelIndex& index )
     // not playable at all, try next
     const QModelIndex sib = index.sibling( index.row() + 1, index.column() );
     if ( sib.isValid() )
+    {
         startAutoPlay( sib );
+    }
 }
 
 
@@ -403,7 +439,9 @@ TrackView::keyPressEvent( QKeyEvent* event )
     QTreeView::keyPressEvent( event );
 
     if ( !model() )
+    {
         return;
+    }
 
     if ( event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return )
     {
@@ -440,7 +478,7 @@ TrackView::resizeEvent( QResizeEvent* event )
     int sortSection = m_header->sortIndicatorSection();
     Qt::SortOrder sortOrder = m_header->sortIndicatorOrder();
 
-//    tDebug() << Q_FUNC_INFO << width();
+    //    tDebug() << Q_FUNC_INFO << width();
 
     if ( m_header->checkState() && sortSection >= 0 )
     {
@@ -449,7 +487,9 @@ TrackView::resizeEvent( QResizeEvent* event )
     }
 
     if ( !model() )
+    {
         return;
+    }
 
     if ( model()->columnCount() == 1 )
     {
@@ -614,7 +654,9 @@ void
 TrackView::onFilterChanged( const QString& )
 {
     if ( selectedIndexes().count() )
+    {
         scrollTo( selectedIndexes().at( 0 ), QAbstractItemView::PositionAtCenter );
+    }
 
     if ( !filter().isEmpty() && !proxyModel()->playlistInterface()->trackCount() && model()->trackCount() )
     {
@@ -641,7 +683,7 @@ TrackView::startDrag( Qt::DropActions supportedActions )
 {
     QList<QPersistentModelIndex> pindexes;
     QModelIndexList indexes;
-    foreach( const QModelIndex& idx, selectedIndexes() )
+    foreach( const QModelIndex & idx, selectedIndexes() )
     {
         if ( ( m_proxyModel->flags( idx ) & Qt::ItemIsDragEnabled ) )
         {
@@ -651,12 +693,16 @@ TrackView::startDrag( Qt::DropActions supportedActions )
     }
 
     if ( indexes.count() == 0 )
+    {
         return;
+    }
 
     tDebug() << "Dragging" << indexes.count() << "indexes";
     QMimeData* data = m_proxyModel->mimeData( indexes );
     if ( !data )
+    {
         return;
+    }
 
     QDrag* drag = new QDrag( this );
     drag->setMimeData( data );
@@ -685,19 +731,25 @@ TrackView::onCustomContextMenu( const QPoint& pos )
     setContextMenuIndex( idx );
 
     if ( !idx.isValid() )
+    {
         return;
+    }
 
     if ( model() && !model()->isReadOnly() )
+    {
         m_contextMenu->setSupportedActions( m_contextMenu->supportedActions() | ContextMenu::ActionDelete );
+    }
     if ( model() && qobject_cast< InboxModel* >( model() ) )
         m_contextMenu->setSupportedActions( m_contextMenu->supportedActions() | ContextMenu::ActionMarkListened
-                                                                              | ContextMenu::ActionDelete );
+                                            | ContextMenu::ActionDelete );
 
     QList<query_ptr> queries;
-    foreach ( const QModelIndex& index, selectedIndexes() )
+    foreach ( const QModelIndex & index, selectedIndexes() )
     {
         if ( index.column() )
+        {
             continue;
+        }
 
         PlayableItem* item = proxyModel()->itemFromIndex( proxyModel()->mapToSource( index ) );
         if ( item && !item->query().isNull() )
@@ -800,7 +852,9 @@ void
 TrackView::verifySize()
 {
     if ( !autoResize() || !m_proxyModel || !m_proxyModel->rowCount() )
+    {
         return;
+    }
 
     unsigned int height = 0;
     for ( int i = 0; i < m_proxyModel->rowCount(); i++ )
@@ -818,7 +872,9 @@ TrackView::setAutoResize( bool b )
     m_autoResize = b;
 
     if ( m_autoResize )
+    {
         setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    }
 }
 
 

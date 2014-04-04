@@ -38,20 +38,23 @@ class EchonestSteerer : public QWidget
     Q_OBJECT
     Q_PROPERTY( qreal opacity READ opacity WRITE setOpacity )
 
-public:
+  public:
     EchonestSteerer( QWidget*  parent = 0 );
 
-    virtual void paintEvent(QPaintEvent* );
+    virtual void paintEvent( QPaintEvent* );
 
-public slots:
+  public slots:
     void applySteering();
     void resetSteering( bool automatic = false );
 
     void fadeIn();
     void fadeOut();
-    qreal opacity() const { return m_opacity; }
+    qreal opacity() const
+    {
+        return m_opacity;
+    }
     void setOpacity( qreal opacity );
-signals:
+  signals:
     void steerField( const QString& field );
     void steerDescription( const QString& desc );
     void reset();
@@ -60,12 +63,12 @@ signals:
 
     // interface to DynamicWidget
     void steeringChanged();
-private slots:
+  private slots:
     void changed();
 
     void resizeFrame( int );
 
-private:
+  private:
     QToolButton* initButton( QWidget* parent );
 
     QHBoxLayout* m_layout;

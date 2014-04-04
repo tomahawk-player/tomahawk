@@ -30,19 +30,25 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCommand_CreatePlaylist : public DatabaseCommandLoggable
 {
-Q_OBJECT
-Q_PROPERTY( QVariant playlist READ playlistV WRITE setPlaylistV )
+    Q_OBJECT
+    Q_PROPERTY( QVariant playlist READ playlistV WRITE setPlaylistV )
 
-public:
+  public:
     explicit DatabaseCommand_CreatePlaylist( QObject* parent = 0 );
     explicit DatabaseCommand_CreatePlaylist( const Tomahawk::source_ptr& author, const Tomahawk::playlist_ptr& playlist );
     virtual ~DatabaseCommand_CreatePlaylist();
 
-    QString commandname() const { return "createplaylist"; }
+    QString commandname() const
+    {
+        return "createplaylist";
+    }
 
     virtual void exec( DatabaseImpl* lib );
     virtual void postCommitHook();
-    virtual bool doesMutates() const { return true; }
+    virtual bool doesMutates() const
+    {
+        return true;
+    }
 
     QVariant playlistV() const;
 
@@ -51,16 +57,19 @@ public:
         m_v = v;
     }
 
-protected:
+  protected:
     void createPlaylist( DatabaseImpl* lib, bool dynamic = false );
 
-    virtual bool report() { return m_report; }
+    virtual bool report()
+    {
+        return m_report;
+    }
 
     void setPlaylist( const Tomahawk::playlist_ptr& playlist );
 
     QVariant m_v;
 
-private:
+  private:
     Tomahawk::playlist_ptr m_playlist;
     bool m_report; // call Playlist::reportCreated?
 };

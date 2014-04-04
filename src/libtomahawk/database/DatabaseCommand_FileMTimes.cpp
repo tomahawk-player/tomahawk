@@ -55,19 +55,23 @@ DatabaseCommand_FileMtimes::execSelect( DatabaseImpl* dbi )
         }
     }
     else if( m_prefixes.isEmpty() )
+    {
         execSelectPath( dbi, m_prefix, mtimes );
+    }
     else
     {
         if( !m_prefix.isEmpty() )
+        {
             execSelectPath( dbi, m_prefix, mtimes );
+        }
         foreach( QString path, m_prefixes )
-            execSelectPath( dbi, path, mtimes );
+        execSelectPath( dbi, path, mtimes );
     }
     emit done( mtimes );
 }
 
 void
-DatabaseCommand_FileMtimes::execSelectPath( DatabaseImpl *dbi, const QDir& path, QMap<QString, QMap< unsigned int, unsigned int > > &mtimes )
+DatabaseCommand_FileMtimes::execSelectPath( DatabaseImpl* dbi, const QDir& path, QMap<QString, QMap< unsigned int, unsigned int > >& mtimes )
 {
     TomahawkSqlQuery query = dbi->newquery();
     query.prepare( QString( "SELECT url, id, mtime "

@@ -27,7 +27,7 @@
 
 
 void
-DatabaseCommand_ImportPlaylist::exec( DatabaseImpl * dbi )
+DatabaseCommand_ImportPlaylist::exec( DatabaseImpl* dbi )
 {
     /*
     qDebug() << "Importing playlist of" << m_playlist->length() << "tracks";

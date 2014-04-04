@@ -37,17 +37,32 @@ class ACCOUNTDLLEXPORT ZeroconfFactory : public AccountFactory
     Q_OBJECT
     Q_INTERFACES( Tomahawk::Accounts::AccountFactory )
 
-public:
+  public:
     ZeroconfFactory();
     virtual ~ZeroconfFactory();
 
-    virtual QString factoryId() const { return "zeroconfaccount"; }
-    virtual QString prettyName() const { return tr( "Local Network" ); }
-    QString description() const { return tr( "Automatically connect to Tomahawks on the local network" ); }
-    virtual bool isUnique() const { return true; }
-    AccountTypes types() const { return AccountTypes( SipType ); };
+    virtual QString factoryId() const
+    {
+        return "zeroconfaccount";
+    }
+    virtual QString prettyName() const
+    {
+        return tr( "Local Network" );
+    }
+    QString description() const
+    {
+        return tr( "Automatically connect to Tomahawks on the local network" );
+    }
+    virtual bool isUnique() const
+    {
+        return true;
+    }
+    AccountTypes types() const
+    {
+        return AccountTypes( SipType );
+    };
 #ifndef ENABLE_HEADLESS
-virtual QPixmap icon() const;
+    virtual QPixmap icon() const;
 #endif
 
 
@@ -57,8 +72,8 @@ virtual QPixmap icon() const;
 class ACCOUNTDLLEXPORT ZeroconfAccount : public Account
 {
     Q_OBJECT
-public:
-    ZeroconfAccount( const QString &accountId );
+  public:
+    ZeroconfAccount( const QString& accountId );
     virtual ~ZeroconfAccount();
 
     QPixmap icon() const;
@@ -68,13 +83,22 @@ public:
     bool isAuthenticated() const;
     ConnectionState connectionState() const;
 
-    virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() { return Tomahawk::InfoSystem::InfoPluginPtr(); }
+    virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin()
+    {
+        return Tomahawk::InfoSystem::InfoPluginPtr();
+    }
     SipPlugin* sipPlugin( bool create = true );
 
-    AccountConfigWidget* configurationWidget() { return 0; }
-    QWidget* aclWidget() { return 0; }
+    AccountConfigWidget* configurationWidget()
+    {
+        return 0;
+    }
+    QWidget* aclWidget()
+    {
+        return 0;
+    }
 
-private:
+  private:
     QPointer< ZeroconfPlugin > m_sipPlugin;
 };
 

@@ -26,8 +26,8 @@
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "collection/Collection.h"
-    #include "Source.h"
+#include "collection/Collection.h"
+#include "Source.h"
 #endif
 
 

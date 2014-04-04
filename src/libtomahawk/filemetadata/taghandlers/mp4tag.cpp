@@ -21,13 +21,13 @@
 namespace Tomahawk
 {
 
-MP4Tag::MP4Tag( TagLib::Tag *tag, TagLib::MP4::Tag *mp4Tag )
+MP4Tag::MP4Tag( TagLib::Tag* tag, TagLib::MP4::Tag* mp4Tag )
     : Tag( tag )
     , m_mp4Tag( mp4Tag )
 {
     TagLib::MP4::ItemListMap map = m_mp4Tag->itemListMap();
     for( TagLib::MP4::ItemListMap::ConstIterator it = map.begin();
-         it != map.end(); ++it )
+            it != map.end(); ++it )
     {
         TagLib::String key = it->first;
         QString val = TStringToQString( it->second.toStringList().toString( '\n' ) );

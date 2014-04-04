@@ -41,15 +41,16 @@ class DLLEXPORT AccountManager : public QObject
 {
     Q_OBJECT
 
-public:
-    enum DisconnectReason {
+  public:
+    enum DisconnectReason
+    {
         Disconnected,
         Disabled
     };
 
     static AccountManager* instance();
 
-    explicit AccountManager( QObject *parent );
+    explicit AccountManager( QObject* parent );
     virtual ~AccountManager();
 
     void loadFromConfig();
@@ -58,7 +59,10 @@ public:
     void enableAccount( Account* account );
     void disableAccount( Account* account );
 
-    QList< AccountFactory* > factories() const { return m_accountFactories.values(); }
+    QList< AccountFactory* > factories() const
+    {
+        return m_accountFactories.values();
+    }
     bool hasPluginWithFactory( const QString& factory ) const;
     AccountFactory* factoryForAccount( Account* account ) const;
 
@@ -66,8 +70,14 @@ public:
     void hookupAndEnable( Account* account, bool startup = false ); /// Hook up signals and start the plugin
     void removeAccount( Account* account );
 
-    QList< Account* > accounts() const { return m_accounts; }
-    QList< Account* > accounts( Tomahawk::Accounts::AccountType type ) const { return m_accountsByAccountType[ type ]; }
+    QList< Account* > accounts() const
+    {
+        return m_accounts;
+    }
+    QList< Account* > accounts( Tomahawk::Accounts::AccountType type ) const
+    {
+        return m_accountsByAccountType[ type ];
+    }
 
     QList< Account* > accountsFromFactory( Tomahawk::Accounts::AccountFactory* factory ) const;
 
@@ -90,20 +100,32 @@ public:
 
     Account* zeroconfAccount() const;
 
-    bool isConnected() const { return m_connected; }        //for use by TomahawkApp during startup
-    bool isReadyForSip() const { return m_readyForSip; }    //for use by TomahawkApp during startup
-    bool isReady() const { return m_completelyReady; }
+    bool isConnected() const
+    {
+        return m_connected;    //for use by TomahawkApp during startup
+    }
+    bool isReadyForSip() const
+    {
+        return m_readyForSip;    //for use by TomahawkApp during startup
+    }
+    bool isReady() const
+    {
+        return m_completelyReady;
+    }
 
-    CredentialsManager* credentialsManager() const { return m_creds; }
+    CredentialsManager* credentialsManager() const
+    {
+        return m_creds;
+    }
     ConfigStorage* configStorageForAccount( const QString& accountId );
     ConfigStorage* localConfigStorage();
 
-public slots:
+  public slots:
     void connectAll();
     void disconnectAll();
     void toggleAccountsConnected();
 
-signals:
+  signals:
     void readyForFactories(); //this happens first, right before loading accounts from config
     void readyForSip();       //then this, so TomahawkApp can call initSIP if Servent is ready
     void ready();             //finally, when everything is done
@@ -117,7 +139,7 @@ signals:
 
     void stateChanged( Account* p, Accounts::Account::ConnectionState state );
 
-private slots:
+  private slots:
     void init();
     void onStateChanged( Tomahawk::Accounts::Account::ConnectionState state );
     void onError( int code, const QString& msg );
@@ -125,7 +147,7 @@ private slots:
 
     void onSettingsChanged();
 
-private:
+  private:
     void loadPluginFactories();
     QString factoryFromId( const QString& accountId ) const;
 

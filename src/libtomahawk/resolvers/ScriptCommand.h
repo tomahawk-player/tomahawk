@@ -23,14 +23,14 @@
 
 class ScriptCommand : public QObject
 {
-public:
+  public:
     explicit ScriptCommand( QObject* parent = 0 ) : QObject( parent ) {}
     virtual ~ScriptCommand() {}
 
-signals:
+  signals:
     virtual void done() = 0;
 
-protected:
+  protected:
     friend class ScriptCommandQueue;
     virtual void exec() = 0;
     virtual void reportFailure() = 0;

@@ -27,17 +27,23 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCommand_SourceOffline : public DatabaseCommand
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit DatabaseCommand_SourceOffline( int id );
 
-    virtual QString commandname() const { return "sourceoffline"; }
+    virtual QString commandname() const
+    {
+        return "sourceoffline";
+    }
 
-    bool doesMutates() const { return true; }
+    bool doesMutates() const
+    {
+        return true;
+    }
     void exec( DatabaseImpl* lib );
 
-private:
+  private:
     int m_id;
 };
 

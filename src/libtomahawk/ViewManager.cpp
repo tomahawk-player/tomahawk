@@ -106,7 +106,7 @@ ViewManager::ViewManager( QObject* parent )
     m_superCollectionView->view()->proxyModel()->setStyle( PlayableProxyModel::Collection );
     m_superCollectionModel = new TreeModel( m_superCollectionView );
     m_superCollectionView->view()->setTreeModel( m_superCollectionModel );
-//    m_superCollectionView->proxyModel()->setShowOfflineResults( false );
+    //    m_superCollectionView->proxyModel()->setShowOfflineResults( false );
 
     m_stack->setContentsMargins( 0, 0, 0, 0 );
     m_widget->setContentsMargins( 0, 0, 0, 0 );
@@ -119,9 +119,9 @@ ViewManager::ViewManager( QObject* parent )
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
     connect( m_infobar, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
 
-/*    connect( m_infobar, SIGNAL( flatMode() ), SLOT( setTableMode() ) );
-    connect( m_infobar, SIGNAL( artistMode() ), SLOT( setTreeMode() ) );
-    connect( m_infobar, SIGNAL( albumMode() ), SLOT( setAlbumMode() ) );*/
+    /*    connect( m_infobar, SIGNAL( flatMode() ), SLOT( setTableMode() ) );
+        connect( m_infobar, SIGNAL( artistMode() ), SLOT( setTreeMode() ) );
+        connect( m_infobar, SIGNAL( albumMode() ), SLOT( setAlbumMode() ) );*/
 }
 
 
@@ -184,12 +184,14 @@ ViewManager::playlistForPage( ViewPage* page ) const
 {
     playlist_ptr p;
     if ( dynamic_cast< PlaylistView* >( page ) && dynamic_cast< PlaylistView* >( page )->playlistModel() &&
-        !dynamic_cast< PlaylistView* >( page )->playlistModel()->playlist().isNull() )
+            !dynamic_cast< PlaylistView* >( page )->playlistModel()->playlist().isNull() )
     {
         p = dynamic_cast< PlaylistView* >( page )->playlistModel()->playlist();
     }
     else if ( dynamic_cast< DynamicWidget* >( page ) )
+    {
         p = dynamic_cast< DynamicWidget* >( page )->playlist();
+    }
 
     return p;
 }
@@ -199,7 +201,9 @@ Tomahawk::ViewPage*
 ViewManager::show( const Tomahawk::playlist_ptr& playlist )
 {
     if ( !playlist->loaded() )
+    {
         playlist->loadRevision();
+    }
 
     FlexibleView* view;
 
@@ -223,17 +227,17 @@ ViewManager::show( const Tomahawk::dynplaylist_ptr& playlist )
 {
     if ( !m_dynamicWidgets.contains( playlist ) || m_dynamicWidgets.value( playlist ).isNull() )
     {
-       m_dynamicWidgets[ playlist ] = new Tomahawk::DynamicWidget( playlist, m_stack );
+        m_dynamicWidgets[ playlist ] = new Tomahawk::DynamicWidget( playlist, m_stack );
 
-       playlist->resolve();
+        playlist->resolve();
     }
 
     setPage( m_dynamicWidgets.value( playlist ).data() );
 
-/*    if ( playlist->mode() == Tomahawk::OnDemand )
-        hideQueue();
-    else
-        showQueue();*/
+    /*    if ( playlist->mode() == Tomahawk::OnDemand )
+            hideQueue();
+        else
+            showQueue();*/
 
     return m_dynamicWidgets.value( playlist ).data();
 }
@@ -315,7 +319,9 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
         setPage( view );
 
         if ( !collection.isNull() )
+        {
             view->setEmptyTip( collection->emptyText() );
+        }
 
         m_collectionViews.insert( collection, view );
     }
@@ -362,14 +368,16 @@ Tomahawk::ViewPage*
 ViewManager::showSuperCollection()
 {
     if ( m_superCollections.isEmpty() )
+    {
         m_superCollectionModel->addAllCollections();
+    }
 
-    foreach( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
+    foreach( const Tomahawk::source_ptr & source, SourceList::instance()->sources() )
     {
         if ( !m_superCollections.contains( source->dbCollection() ) )
         {
             m_superCollections.append( source->dbCollection() );
-//            m_superAlbumModel->addCollection( source->collection() );
+            //            m_superAlbumModel->addCollection( source->collection() );
         }
     }
 
@@ -393,7 +401,9 @@ ViewManager::playlistInterfaceChanged( Tomahawk::playlistinterface_ptr interface
     {
         pl = dynamicPlaylistForInterface( interface );
         if ( !pl.isNull() )
+        {
             TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( pl->guid(), pl->author()->id() );
+        }
     }
 }
 
@@ -453,7 +463,7 @@ ViewManager::showRecentPlaysPage()
 }
 
 
-Tomahawk::ViewPage *
+Tomahawk::ViewPage*
 ViewManager::showInboxPage()
 {
     if ( !m_inboxWidget )
@@ -461,9 +471,9 @@ ViewManager::showInboxPage()
         TrackView* inboxView = new InboxView( m_widget );
 
         PlaylistLargeItemDelegate* delegate =
-                new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::Inbox,
-                                               inboxView,
-                                               inboxView->proxyModel() );
+            new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::Inbox,
+                                           inboxView,
+                                           inboxView->proxyModel() );
         inboxView->setPlaylistItemDelegate( delegate );
 
         inboxView->proxyModel()->setStyle( PlayableProxyModel::Large );
@@ -498,7 +508,9 @@ void
 ViewManager::applyFilter()
 {
     if ( m_currentPage )
+    {
         m_currentPage->setFilter( m_filter );
+    }
 }
 
 
@@ -506,7 +518,9 @@ void
 ViewManager::historyBack()
 {
     if ( !m_pageHistoryBack.count() )
+    {
         return;
+    }
 
     ViewPage* page = m_pageHistoryBack.takeLast();
 
@@ -525,7 +539,9 @@ void
 ViewManager::historyForward()
 {
     if ( !m_pageHistoryFwd.count() )
+    {
         return;
+    }
 
     ViewPage* page = m_pageHistoryFwd.takeLast();
 
@@ -561,7 +577,9 @@ void
 ViewManager::destroyPage( ViewPage* page )
 {
     if ( !page )
+    {
         return;
+    }
 
     tDebug() << Q_FUNC_INFO << "Deleting page:" << page->title();
 
@@ -591,7 +609,9 @@ bool
 ViewManager::destroyCurrentPage()
 {
     if ( !currentPage() || !currentPage()->isTemporaryPage() )
+    {
         return false;
+    }
 
     destroyPage( currentPage() );
     return true;
@@ -602,9 +622,13 @@ void
 ViewManager::setPage( ViewPage* page, bool trackHistory )
 {
     if ( !page )
+    {
         return;
+    }
     if ( page == m_currentPage )
+    {
         return;
+    }
 
     if ( m_stack->indexOf( page->widget() ) < 0 )
     {
@@ -625,44 +649,64 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
     emit viewPageActivated( page );
 
     if ( page->isTemporaryPage() )
+    {
         emit tempPageActivated( page );
+    }
 
     if ( AudioEngine::instance()->state() == AudioEngine::Stopped )
+    {
         AudioEngine::instance()->setPlaylist( page->playlistInterface() );
+    }
 
     // UGH!
     if ( QObject* obj = dynamic_cast< QObject* >( currentPage() ) )
     {
         // if the signal exists (just to hide the qobject runtime warning...)
         if( obj->metaObject()->indexOfSignal( "descriptionChanged(QString)" ) > -1 )
+        {
             connect( obj, SIGNAL( descriptionChanged( QString ) ), m_infobar, SLOT( setDescription( QString ) ), Qt::UniqueConnection );
+        }
 
         if( obj->metaObject()->indexOfSignal( "descriptionChanged(Tomahawk::artist_ptr)" ) > -1 )
+        {
             connect( obj, SIGNAL( descriptionChanged( Tomahawk::artist_ptr ) ), m_infobar, SLOT( setDescription( Tomahawk::artist_ptr ) ), Qt::UniqueConnection );
+        }
 
         if( obj->metaObject()->indexOfSignal( "descriptionChanged(Tomahawk::album_ptr)" ) > -1 )
+        {
             connect( obj, SIGNAL( descriptionChanged( Tomahawk::album_ptr ) ), m_infobar, SLOT( setDescription( Tomahawk::album_ptr ) ), Qt::UniqueConnection );
+        }
 
         if( obj->metaObject()->indexOfSignal( "longDescriptionChanged(QString)" ) > -1 )
+        {
             connect( obj, SIGNAL( longDescriptionChanged( QString ) ), m_infobar, SLOT( setLongDescription( QString ) ), Qt::UniqueConnection );
+        }
 
         if( obj->metaObject()->indexOfSignal( "nameChanged(QString)" ) > -1 )
+        {
             connect( obj, SIGNAL( nameChanged( QString ) ), m_infobar, SLOT( setCaption( QString ) ), Qt::UniqueConnection );
+        }
 
         if( obj->metaObject()->indexOfSignal( "pixmapChanged(QPixmap)" ) > -1 )
+        {
             connect( obj, SIGNAL( pixmapChanged( QPixmap ) ), m_infobar, SLOT( setPixmap( QPixmap ) ), Qt::UniqueConnection );
+        }
 
         if( obj->metaObject()->indexOfSignal( "destroyed(QWidget*)" ) > -1 )
+        {
             connect( obj, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ), Qt::UniqueConnection );
+        }
     }
 
-    QWidget *previousPage = m_stack->currentWidget();
+    QWidget* previousPage = m_stack->currentWidget();
 
     m_stack->setCurrentWidget( page->widget() );
 
     //This should save the CPU cycles, especially with pages like the visualizer
     if ( previousPage && previousPage != page->widget() )
+    {
         previousPage->hide();
+    }
 
     updateView();
 }
@@ -683,10 +727,10 @@ ViewManager::updateView()
         m_infobar->setFilter( currentPage()->filter() );
     }
 
-/*    if ( currentPage()->queueVisible() )
-        showQueue();
-    else
-        hideQueue();*/
+    /*    if ( currentPage()->queueVisible() )
+            showQueue();
+        else
+            hideQueue();*/
 
     emit filterAvailable( currentPage()->showFilter() );
 
@@ -724,7 +768,9 @@ ViewManager::onWidgetDestroyed( QWidget* widget )
     {
         ViewPage* page = p.at( i );
         if ( page->widget() != widget )
+        {
             continue;
+        }
 
         if ( !playlistForInterface( page->playlistInterface() ).isNull() )
         {
@@ -751,14 +797,14 @@ ViewManager::onWidgetDestroyed( QWidget* widget )
 
 
 ViewPage*
-ViewManager::pageForDynPlaylist(const dynplaylist_ptr& pl) const
+ViewManager::pageForDynPlaylist( const dynplaylist_ptr& pl ) const
 {
     return m_dynamicWidgets.value( pl ).data();
 }
 
 
 ViewPage*
-ViewManager::pageForPlaylist(const playlist_ptr& pl) const
+ViewManager::pageForPlaylist( const playlist_ptr& pl ) const
 {
     return m_playlistViews.value( pl ).data();
 }
@@ -773,9 +819,13 @@ ViewManager::pageForInterface( Tomahawk::playlistinterface_ptr interface ) const
     {
         ViewPage* page = pages.at( i );
         if ( page->playlistInterface() == interface )
+        {
             return page;
+        }
         if ( page->playlistInterface() && page->playlistInterface()->hasChildInterface( interface ) )
+        {
             return page;
+        }
     }
 
     return 0;
@@ -786,9 +836,13 @@ Tomahawk::playlistinterface_ptr
 ViewManager::currentPlaylistInterface() const
 {
     if ( currentPage() )
+    {
         return currentPage()->playlistInterface();
+    }
     else
+    {
         return Tomahawk::playlistinterface_ptr();
+    }
 }
 
 
@@ -833,7 +887,7 @@ bool
 ViewManager::isSuperCollectionVisible() const
 {
     return ( currentPage() != 0 &&
-           ( currentPage()->playlistInterface() == m_superCollectionView->playlistInterface() ) );
+             ( currentPage()->playlistInterface() == m_superCollectionView->playlistInterface() ) );
 }
 
 
@@ -881,10 +935,14 @@ ViewPage*
 ViewManager::dynamicPageWidget( const QString& pageName ) const
 {
     if ( m_dynamicPages.contains( pageName ) )
+    {
         return m_dynamicPages.value( pageName );
+    }
 
     if ( m_dynamicPagePlugins.contains( pageName ) )
+    {
         return m_dynamicPagePlugins.value( pageName ).data();
+    }
 
     return 0;
 }
@@ -933,8 +991,8 @@ ViewManager::showDynamicPage( const QString& pageName )
     {
         if ( !m_dynamicPagesInstanceLoaders.contains( pageName ) )
         {
-           Q_ASSERT_X( false, Q_FUNC_INFO, QString("Trying to show a page that does not exist and does not have a registered loader: %d" ).arg( pageName ).toStdString().c_str() );
-           return 0;
+            Q_ASSERT_X( false, Q_FUNC_INFO, QString( "Trying to show a page that does not exist and does not have a registered loader: %d" ).arg( pageName ).toStdString().c_str() );
+            return 0;
         }
 
         ViewPage* viewPage = m_dynamicPagesInstanceLoaders.value( pageName )();

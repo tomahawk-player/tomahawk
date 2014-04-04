@@ -31,14 +31,17 @@
 
 class DLLEXPORT SourceList : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     static SourceList* instance();
 
     explicit SourceList( QObject* parent = 0 );
 
-    bool isReady() const { return m_isReady; }
+    bool isReady() const
+    {
+        return m_isReady;
+    }
 
     const Tomahawk::source_ptr& getLocal() const;
     void setLocal( const Tomahawk::source_ptr& localSrc );
@@ -57,7 +60,7 @@ public:
     Tomahawk::source_ptr get( const QString& username, const QString& friendlyName = QString(), bool autoCreate = false );
     Tomahawk::source_ptr get( int id ) const;
 
-public slots:
+  public slots:
     // called by the playlist creation dbcmds
     void createPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
     void createDynamicPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
@@ -65,7 +68,7 @@ public slots:
     void onResolverAdded( Tomahawk::Resolver* resolver );
     void onResolverRemoved( Tomahawk::Resolver* resolver );
 
-signals:
+  signals:
     void ready();
 
     void sourceAdded( const Tomahawk::source_ptr& );
@@ -77,7 +80,7 @@ signals:
     void sourceLatchedOn( const Tomahawk::source_ptr& from, const Tomahawk::source_ptr& to );
     void sourceLatchedOff( const Tomahawk::source_ptr& from, const Tomahawk::source_ptr& to );
 
-private slots:
+  private slots:
     void setSources( const QList<Tomahawk::source_ptr>& sources );
     void sourceSynced();
 
@@ -87,7 +90,7 @@ private slots:
     void addScriptCollection( const Tomahawk::collection_ptr& collection );
     void removeScriptCollection( const Tomahawk::collection_ptr& collection );
 
-private:
+  private:
     void add( const Tomahawk::source_ptr& source );
 
     QMap< QString, Tomahawk::source_ptr > m_sources;

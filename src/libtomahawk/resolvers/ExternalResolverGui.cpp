@@ -31,8 +31,8 @@
 #include <QUiLoader>
 #include <QBoxLayout>
 
-Tomahawk::ExternalResolverGui::ExternalResolverGui(const QString& filePath)
-    : Tomahawk::ExternalResolver(filePath)
+Tomahawk::ExternalResolverGui::ExternalResolverGui( const QString& filePath )
+    : Tomahawk::ExternalResolver( filePath )
 {
 }
 
@@ -41,12 +41,14 @@ QVariant
 Tomahawk::ExternalResolverGui::configMsgFromWidget( QWidget* w )
 {
     if( !w )
+    {
         return QVariant();
+    }
 
     // generate a qvariantmap of all the widgets in the hierarchy, and for each one include the list of properties and values
     QVariantMap widgetMap;
     addChildProperties( w, widgetMap );
-//     qDebug() << "Generated widget variant:" << widgetMap;
+    //     qDebug() << "Generated widget variant:" << widgetMap;
     return widgetMap;
 }
 
@@ -57,11 +59,13 @@ Tomahawk::ExternalResolverGui::addChildProperties( QObject* widget, QVariantMap&
     // recursively add all properties of this widget to the map, then repeat on all children.
     // bare QWidgets are boring---so skip them! They have no input that the user can set.
     if( !widget || !widget->isWidgetType() )
+    {
         return;
+    }
 
     if( qstrcmp( widget->metaObject()->className(), "QWidget" ) != 0 )
     {
-//         qDebug() << "Adding properties for this:" << widget->metaObject()->className();
+        //         qDebug() << "Adding properties for this:" << widget->metaObject()->className();
         // add this widget's properties
         QVariantMap props;
         for( int i = 0; i < widget->metaObject()->propertyCount(); i++ )
@@ -70,15 +74,17 @@ Tomahawk::ExternalResolverGui::addChildProperties( QObject* widget, QVariantMap&
             QVariant val = widget->property( prop.toLatin1() );
             // clean up for QJson....
             if( val.canConvert< QPixmap >() || val.canConvert< QImage >() || val.canConvert< QIcon >() )
+            {
                 continue;
+            }
             props[ prop ] = val.toString();
-//             qDebug() << QString( "%1: %2" ).arg( prop ).arg( props[ prop ].toString() );
+            //             qDebug() << QString( "%1: %2" ).arg( prop ).arg( props[ prop ].toString() );
         }
         m[ widget->objectName() ] = props;
     }
     // and recurse
-    foreach( QObject* child, widget->children() )
-        addChildProperties( child, m );
+    foreach( QObject * child, widget->children() )
+    addChildProperties( child, m );
 }
 
 
@@ -86,7 +92,9 @@ AccountConfigWidget*
 Tomahawk::ExternalResolverGui::widgetFromData( QByteArray& data, QWidget* parent )
 {
     if( data.isEmpty() )
+    {
         return 0;
+    }
 
     AccountConfigWidget* configWidget = new AccountConfigWidget( parent );
 
@@ -113,10 +121,12 @@ Tomahawk::ExternalResolverGui::fixDataImagePaths( const QByteArray& data, bool c
 {
     // with a list of images and image data, write each to a temp file, replace the path in the .ui file with the temp file path
     QString uiFile = QString::fromUtf8( data );
-    foreach( const QString& filename, images.keys() )
+    foreach( const QString & filename, images.keys() )
     {
         if( !uiFile.contains( filename ) ) // make sure the image is used
+        {
             continue;
+        }
 
         QString fullPath = QDir::tempPath() + "/" + filename;
         QFile imgF( fullPath );
@@ -127,7 +137,7 @@ Tomahawk::ExternalResolverGui::fixDataImagePaths( const QByteArray& data, bool c
         }
         QByteArray data = images[ filename ].toByteArray();
 
-//        qDebug() << "expanding data:" << data << compressed;
+        //        qDebug() << "expanding data:" << data << compressed;
         data = compressed ? qUncompress( QByteArray::fromBase64( data ) ) : QByteArray::fromBase64( data );
         imgF.write( data );
         imgF.close();

@@ -40,7 +40,7 @@ using namespace Tomahawk;
 void
 DirLister::go()
 {
-    foreach ( const QString& dir, m_dirs )
+    foreach ( const QString & dir, m_dirs )
     {
         m_opcount++;
         QMetaObject::invokeMethod( this, "scanDir", Qt::QueuedConnection, Q_ARG( QDir, QDir( dir, 0 ) ), Q_ARG( int, 0 ) );
@@ -55,7 +55,9 @@ DirLister::scanDir( QDir dir, int depth )
     {
         m_opcount--;
         if ( m_opcount == 0 )
+        {
             emit finished();
+        }
 
         return;
     }
@@ -67,7 +69,9 @@ DirLister::scanDir( QDir dir, int depth )
 
         m_opcount--;
         if ( m_opcount == 0 )
+        {
             emit finished();
+        }
 
         return;
     }
@@ -78,13 +82,13 @@ DirLister::scanDir( QDir dir, int depth )
     dir.setSorting( QDir::Name );
     filteredEntries = dir.entryInfoList();
 
-    foreach ( const QFileInfo& di, filteredEntries )
-        emit fileToScan( di );
+    foreach ( const QFileInfo & di, filteredEntries )
+    emit fileToScan( di );
 
     dir.setFilter( QDir::Dirs | QDir::Readable | QDir::NoDotAndDotDot );
     filteredEntries = dir.entryInfoList();
 
-    foreach ( const QFileInfo& di, filteredEntries )
+    foreach ( const QFileInfo & di, filteredEntries )
     {
         const QString canonical = di.canonicalFilePath();
         m_opcount++;
@@ -100,7 +104,7 @@ DirLister::scanDir( QDir dir, int depth )
 }
 
 
-DirListerThreadController::DirListerThreadController( QObject *parent )
+DirListerThreadController::DirListerThreadController( QObject* parent )
     : QThread( parent )
 {
     tDebug() << Q_FUNC_INFO;
@@ -128,7 +132,9 @@ DirListerThreadController::run()
 
     exec();
     if ( !m_dirLister.isNull() )
+    {
         delete m_dirLister.data();
+    }
 }
 
 
@@ -187,9 +193,9 @@ MusicScanner::startScan()
     //FIXME: For multiple collection support make sure the right prefix gets passed in...or not...
     //bear in mind that simply passing in the top-level of a defined collection means it will not return items that need
     //to be removed that aren't in that root any longer -- might have to do the filtering in setMTimes based on strings
-    DatabaseCommand_FileMtimes *cmd = new DatabaseCommand_FileMtimes();
+    DatabaseCommand_FileMtimes* cmd = new DatabaseCommand_FileMtimes();
     connect( cmd, SIGNAL( done( QMap< QString, QMap< unsigned int, unsigned int > > ) ),
-                    SLOT( setFileMtimes( QMap< QString, QMap< unsigned int, unsigned int > > ) ) );
+             SLOT( setFileMtimes( QMap< QString, QMap< unsigned int, unsigned int > > ) ) );
 
     Database::instance()->enqueue( dbcmd_ptr( cmd ) );
     return;
@@ -211,7 +217,7 @@ MusicScanner::scan()
     tDebug( LOGEXTRA ) << "Num saved file mtimes from last scan:" << m_filemtimes.size();
 
     connect( this, SIGNAL( batchReady( QVariantList, QVariantList ) ),
-                     SLOT( commitBatch( QVariantList, QVariantList ) ), Qt::DirectConnection );
+             SLOT( commitBatch( QVariantList, QVariantList ) ), Qt::DirectConnection );
 
     if ( m_scanMode == MusicScanner::FileScan )
     {
@@ -233,7 +239,9 @@ MusicScanner::scanFilePaths()
     {
         QFileInfo fi( path );
         if ( fi.exists() && fi.isReadable() )
+        {
             scanFile( fi );
+        }
     }
 
     QMetaObject::invokeMethod( this, "postOps", Qt::QueuedConnection );
@@ -248,17 +256,19 @@ MusicScanner::postOps()
     if ( m_scanMode == MusicScanner::DirScan )
     {
         // any remaining stuff that wasnt emitted as a batch:
-        foreach( const QString& key, m_filemtimes.keys() )
+        foreach( const QString & key, m_filemtimes.keys() )
         {
             if ( !m_filemtimes[ key ].keys().isEmpty() )
+            {
                 m_filesToDelete << m_filemtimes[ key ].keys().first();
+            }
         }
     }
 
     tDebug( LOGINFO ) << "Scanning complete, saving to database. ( deleted" << m_filesToDelete.count() << "- scanned" << m_scanned << "- skipped" << m_skipped << ")";
     tDebug( LOGEXTRA ) << "Skipped the following files (no tags / no valid audio):";
-    foreach ( const QString& s, m_skippedFiles )
-        tDebug( LOGEXTRA ) << s;
+    foreach ( const QString & s, m_skippedFiles )
+    tDebug( LOGEXTRA ) << s;
 
     if ( m_filesToDelete.length() || m_scannedfiles.length() )
     {
@@ -269,7 +279,9 @@ MusicScanner::postOps()
     }
 
     if ( !m_cmdQueue )
+    {
         cleanup();
+    }
 }
 
 
@@ -323,7 +335,9 @@ MusicScanner::commandFinished()
     tDebug() << Q_FUNC_INFO << m_cmdQueue;
 
     if ( --m_cmdQueue == 0 )
+    {
         cleanup();
+    }
 }
 
 
@@ -340,17 +354,21 @@ MusicScanner::scanFile( const QFileInfo& fi )
         }
 
         if ( !m_filemtimes.value( "file://" + fi.canonicalFilePath() ).keys().isEmpty() )
+        {
             m_filesToDelete << m_filemtimes.value( "file://" + fi.canonicalFilePath() ).keys().first();
+        }
         m_filemtimes.remove( "file://" + fi.canonicalFilePath() );
     }
 
     //tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Scanning file:" << fi.canonicalFilePath();
     QVariant m = readFile( fi );
     if ( m.toMap().isEmpty() )
+    {
         return;
+    }
 
     m_scannedfiles << m;
-    if ( m_batchsize != 0 && (quint32)m_scannedfiles.length() >= m_batchsize )
+    if ( m_batchsize != 0 && ( quint32 )m_scannedfiles.length() >= m_batchsize )
     {
         emit batchReady( m_scannedfiles, m_filesToDelete );
         m_scannedfiles.clear();
@@ -371,16 +389,20 @@ MusicScanner::readFile( const QFileInfo& fi )
 
     if ( m_scanned )
         if ( m_scanned % 3 == 0 )
+        {
             SourceList::instance()->getLocal()->scanningProgress( m_scanned );
+        }
     if ( m_scanned % 100 == 0 )
+    {
         tDebug( LOGINFO ) << "Scan progress:" << m_scanned << fi.canonicalFilePath();
+    }
 
-    #ifdef COMPLEX_TAGLIB_FILENAME
-        const wchar_t *encodedName = reinterpret_cast< const wchar_t * >( fi.canonicalFilePath().utf16() );
-    #else
-        QByteArray fileName = QFile::encodeName( fi.canonicalFilePath() );
-        const char *encodedName = fileName.constData();
-    #endif
+#ifdef COMPLEX_TAGLIB_FILENAME
+    const wchar_t* encodedName = reinterpret_cast< const wchar_t* >( fi.canonicalFilePath().utf16() );
+#else
+    QByteArray fileName = QFile::encodeName( fi.canonicalFilePath() );
+    const char* encodedName = fileName.constData();
+#endif
 
     TagLib::FileRef f( encodedName );
     if ( f.isNull() || !f.tag() )
@@ -396,7 +418,7 @@ MusicScanner::readFile( const QFileInfo& fi )
     Tag* tag = Tag::fromFile( f );
     if ( f.audioProperties() )
     {
-        TagLib::AudioProperties *properties = f.audioProperties();
+        TagLib::AudioProperties* properties = f.audioProperties();
         duration = properties->length();
         bitrate = properties->bitrate();
     }
@@ -422,7 +444,7 @@ MusicScanner::readFile( const QFileInfo& fi )
     QVariantMap m;
     m["url"]          = url.arg( fi.canonicalFilePath() );
     m["mtime"]        = fi.lastModified().toUTC().toTime_t();
-    m["size"]         = (unsigned int)fi.size();
+    m["size"]         = ( unsigned int )fi.size();
     m["mimetype"]     = mimetype;
     m["duration"]     = duration;
     m["bitrate"]      = bitrate;

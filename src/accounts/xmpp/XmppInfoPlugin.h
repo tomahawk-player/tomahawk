@@ -26,40 +26,42 @@
 
 class XmppSipPlugin;
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
-    namespace InfoSystem {
+namespace InfoSystem
+{
 
-        class XmppInfoPlugin  : public InfoPlugin
-        {
-            Q_OBJECT
+class XmppInfoPlugin  : public InfoPlugin
+{
+    Q_OBJECT
 
-        public:
-            XmppInfoPlugin(XmppSipPlugin* parent);
-            virtual ~XmppInfoPlugin();
+  public:
+    XmppInfoPlugin( XmppSipPlugin* parent );
+    virtual ~XmppInfoPlugin();
 
-        signals:
-            void publishTune( QUrl url, Tomahawk::InfoSystem::InfoStringHash trackInfo );
+  signals:
+    void publishTune( QUrl url, Tomahawk::InfoSystem::InfoStringHash trackInfo );
 
-        public slots:
-            void notInCacheSlot( const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
+  public slots:
+    void notInCacheSlot( const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
 
-        protected slots:
-            void init();
-            void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData );
-            void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
+  protected slots:
+    void init();
+    void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData );
+    void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
 
-        private slots:
-            void audioStarted( const Tomahawk::InfoSystem::PushInfoPair& pushInfoPair );
-            void audioStopped();
-            void audioPaused();
+  private slots:
+    void audioStarted( const Tomahawk::InfoSystem::PushInfoPair& pushInfoPair );
+    void audioStopped();
+    void audioPaused();
 
-        private:
-            QPointer< XmppSipPlugin > m_sipPlugin;
-            QTimer m_pauseTimer;
-        };
+  private:
+    QPointer< XmppSipPlugin > m_sipPlugin;
+    QTimer m_pauseTimer;
+};
 
-    }
+}
 
 }
 

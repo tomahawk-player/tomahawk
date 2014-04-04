@@ -43,31 +43,31 @@ class Account;
 class DLLEXPORT AccountDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
-public:
-    AccountDelegate( QObject* parent = 0);
+  public:
+    AccountDelegate( QObject* parent = 0 );
 
     virtual void paint ( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     virtual QSize sizeHint ( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
-public slots:
+  public slots:
     void startInstalling( const QPersistentModelIndex& idx );
     void doneInstalling ( const QPersistentModelIndex& idx );
     void errorInstalling ( const QPersistentModelIndex& idx );
 
     void doUpdateIndex( const QPersistentModelIndex& idx );
 
-protected:
+  protected:
     virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
 
-signals:
+  signals:
     void update( const QModelIndex& idx );
     void openConfig( Tomahawk::Accounts::Account* );
     void openConfig( Tomahawk::Accounts::AccountFactory* );
 
-private slots:
+  private slots:
     void doUpdateIndexWithAccount( Tomahawk::Accounts::Account* account );
 
-private:
+  private:
     void drawRoundedButton( QPainter* painter, const QRect& buttonRect, bool red = false ) const;
     // Returns new left edge
     int drawStatus( QPainter* painter, const QPointF& rightTopEdge, Account* acct, bool drawText = false ) const;
@@ -76,7 +76,7 @@ private:
     // returns new left edge
     int drawAccountList( QPainter* painter, QStyleOptionViewItemV4& option, const QList< Account* > accounts, int rightEdge ) const;
 
-    QRect checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx ) const;
+    QRect checkRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const;
 
     int m_hoveringOver;
     QPersistentModelIndex m_hoveringItem, m_configPressed;

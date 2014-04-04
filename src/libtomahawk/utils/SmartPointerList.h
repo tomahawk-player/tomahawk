@@ -29,11 +29,11 @@ class DLLEXPORT SmartPointerListDaddy : public QObject
     Q_OBJECT
     QList<QObject*>& m_list;
 
-public:
+  public:
     SmartPointerListDaddy( QList<QObject*>* list ) : m_list( *list )
     {}
 
-private slots:
+  private slots:
     void onDestroyed()
     {
         m_list.removeAll( sender() );
@@ -65,8 +65,8 @@ template <class T> class SmartPointerList : private QList<T*>
 {
     class SmartPointerListDaddy* m_daddy;
 
-public:
-    SmartPointerList() : m_daddy( new SmartPointerListDaddy( (QList<QObject*>*)this ) )
+  public:
+    SmartPointerList() : m_daddy( new SmartPointerListDaddy( ( QList<QObject*>* )this ) )
     {}
 
     ~SmartPointerList()
@@ -75,26 +75,33 @@ public:
     }
 
     SmartPointerList( const SmartPointerList<T>& that )
-            : QList<T*>()
-            , m_daddy( new SmartPointerListDaddy( (QList<QObject*>*)this ) )
+        : QList<T*>()
+        , m_daddy( new SmartPointerListDaddy( ( QList<QObject*>* )this ) )
     {
         QListIterator<T*> i( that );
-        while (i.hasNext())
+        while ( i.hasNext() )
+        {
             append( i.next() );
+        }
     }
 
     SmartPointerList& operator=( const SmartPointerList<T>& that )
     {
-        QListIterator<T*> i( *this);
-        while (i.hasNext())
+        QListIterator<T*> i( *this );
+        while ( i.hasNext() )
+        {
             QObject::disconnect( m_daddy, 0, i.next(), 0 );
+        }
 
         QList<T*>::operator=( that );
 
-        if (this != &that) {
+        if ( this != &that )
+        {
             QListIterator<T*> i( that );
-            while (i.hasNext())
-                m_daddy->connect( i.next(), SIGNAL(destroyed()), SLOT(onDestroyed()) );
+            while ( i.hasNext() )
+            {
+                m_daddy->connect( i.next(), SIGNAL( destroyed() ), SLOT( onDestroyed() ) );
+            }
         }
 
         return *this;
@@ -103,13 +110,13 @@ public:
     // keep same function names as Qt
     void append( T* o )
     {
-        m_daddy->connect( o, SIGNAL(destroyed()), SLOT(onDestroyed()) );
+        m_daddy->connect( o, SIGNAL( destroyed() ), SLOT( onDestroyed() ) );
         QList<T*>::append( o );
     }
 
     void prepend( T* o )
     {
-        m_daddy->connect( o, SIGNAL(destroyed()), SLOT(onDestroyed()) );
+        m_daddy->connect( o, SIGNAL( destroyed() ), SLOT( onDestroyed() ) );
         QList<T*>::prepend( o );
     }
 
@@ -128,16 +135,20 @@ public:
     {
         SmartPointerList<T> copy = *this;
         QListIterator<T*> i( that );
-        while (i.hasNext())
+        while ( i.hasNext() )
+        {
             copy.append( i.next() );
+        }
         return copy;
     }
 
     SmartPointerList& operator+=( const SmartPointerList that )
     {
         QListIterator<T*> i( that );
-        while (i.hasNext())
+        while ( i.hasNext() )
+        {
             append( i.next() );
+        }
         return *this;
     }
 
@@ -159,12 +170,18 @@ public:
     void replace( int i, T* o )
     {
         QList<T*>::replace( i, o );
-        m_daddy->connect( o, SIGNAL(destroyed()), SLOT(onDestroyed()) );
+        m_daddy->connect( o, SIGNAL( destroyed() ), SLOT( onDestroyed() ) );
     }
 
     /** this is a "safe" class. We always bounds check */
-    inline T* operator[]( int index ) const { return QList<T*>::value( index ); }
-    inline T* at( int index ) const { return QList<T*>::value( index ); }
+    inline T* operator[]( int index ) const
+    {
+        return QList<T*>::value( index );
+    }
+    inline T* at( int index ) const
+    {
+        return QList<T*>::value( index );
+    }
 
     // make public safe functions again
     using QList<T*>::back;
@@ -190,11 +207,17 @@ public:
     using QList<T*>::swap;
     using QList<T*>::value;
     using QList<T*>::operator!=;
-//     using QList<T*>::operator==;
+    //     using QList<T*>::operator==;
 
     // can't use using directive here since we only want the const versions
-    typename QList<T*>::const_iterator begin() const { return QList<T*>::constBegin(); }
-    typename QList<T*>::const_iterator end() const { return QList<T*>::constEnd(); }
+    typename QList<T*>::const_iterator begin() const
+    {
+        return QList<T*>::constBegin();
+    }
+    typename QList<T*>::const_iterator end() const
+    {
+        return QList<T*>::constEnd();
+    }
 
     // it can lead to poor performance situations if we don't disconnect
     // but I think it's not worth making this class more complicated for such

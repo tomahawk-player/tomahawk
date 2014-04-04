@@ -23,9 +23,9 @@
 namespace TomahawkUtils
 {
 #ifdef Q_OS_MAC
-    const qreal DpiScaler::s_baseDpi = 72.;
+const qreal DpiScaler::s_baseDpi = 72.;
 #else
-    const qreal DpiScaler::s_baseDpi = 96.;
+const qreal DpiScaler::s_baseDpi = 96.;
 #endif
 
 DpiScaler::DpiScaler( const QPaintDevice* that )
@@ -142,9 +142,13 @@ DpiScaler::ratioX( const QPaintDevice* pd )
 
     //if the error is less than 1%, we trust that the logical DPI setting has the best value
     if ( qAbs( ratioFromFH / ratioYFromDpi - 1 ) < 0.01 )
+    {
         return pd->logicalDpiX() / s_baseDpi;
+    }
     else
+    {
         return ratioFromFH;
+    }
 }
 
 
@@ -156,9 +160,13 @@ DpiScaler::ratioY( const QPaintDevice* pd )
 
     //if the error is less than 1%, we trust that the logical DPI setting has the best value
     if ( qAbs( ratioFromFH / ratioYFromDpi - 1 ) < 0.01 )
+    {
         return ratioYFromDpi;
+    }
     else
+    {
         return ratioFromFH;
+    }
 }
 
 
@@ -180,7 +188,7 @@ DpiScaler::ratioFromFontHeight()
 
     qreal baseFontHeight = baseFontSize * basePpp; //we assume a minimum font size of 7pt
 
-    qreal ratioFromFontHeights = qMax( fH / baseFontHeight, static_cast<qreal>(1.) );
+    qreal ratioFromFontHeights = qMax( fH / baseFontHeight, static_cast<qreal>( 1. ) );
     return ratioFromFontHeights;
 }
 

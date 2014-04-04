@@ -38,19 +38,37 @@ class QWidget;
 
 class DLLEXPORT ScriptResolver : public Tomahawk::ExternalResolverGui
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit ScriptResolver( const QString& exe );
     virtual ~ScriptResolver();
     static ExternalResolver* factory( const QString& exe, const QStringList& );
 
-    virtual QString name() const              { return m_name; }
-    virtual QPixmap icon() const              { return m_icon; }
-    virtual unsigned int weight() const       { return m_weight; }
-    virtual unsigned int preference() const   { return m_preference; }
-    virtual unsigned int timeout() const      { return m_timeout; }
-    virtual Capabilities capabilities() const { return m_capabilities; }
+    virtual QString name() const
+    {
+        return m_name;
+    }
+    virtual QPixmap icon() const
+    {
+        return m_icon;
+    }
+    virtual unsigned int weight() const
+    {
+        return m_weight;
+    }
+    virtual unsigned int preference() const
+    {
+        return m_preference;
+    }
+    virtual unsigned int timeout() const
+    {
+        return m_timeout;
+    }
+    virtual Capabilities capabilities() const
+    {
+        return m_capabilities;
+    }
 
     virtual void setIcon( const QPixmap& icon );
 
@@ -64,13 +82,16 @@ public:
 
     void sendMessage( const QVariantMap& map );
 
-    virtual bool canParseUrl( const QString&, UrlType ) { return false; }
+    virtual bool canParseUrl( const QString&, UrlType )
+    {
+        return false;
+    }
 
-signals:
+  signals:
     void terminated();
     void customMessage( const QString& msgType, const QVariantMap& msg );
 
-public slots:
+  public slots:
     virtual void stop();
     virtual void resolve( const Tomahawk::query_ptr& query );
     virtual void start();
@@ -79,15 +100,15 @@ public slots:
     virtual void artists( const Tomahawk::collection_ptr& ) {}
     virtual void albums( const Tomahawk::collection_ptr&, const Tomahawk::artist_ptr& ) {}
     virtual void tracks( const Tomahawk::collection_ptr&, const Tomahawk::album_ptr& ) {}
-    virtual void lookupUrl( const QString&  ) {}
+    virtual void lookupUrl( const QString& ) {}
 
 
-private slots:
+  private slots:
     void readStderr();
     void readStdout();
     void cmdExited( int code, QProcess::ExitStatus status );
 
-private:
+  private:
     void sendConfig();
 
     void handleMsg( const QByteArray& msg );

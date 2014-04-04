@@ -57,9 +57,13 @@ DatabaseCommand_LoadFiles::exec( DatabaseImpl* dbi )
     Q_ASSERT( !m_single || resultList.size() <= 1 );
 
     if ( m_single && !resultList.isEmpty() )
+    {
         emit result( resultList.first() );
+    }
     else
+    {
         emit results( resultList );
+    }
 }
 
 }

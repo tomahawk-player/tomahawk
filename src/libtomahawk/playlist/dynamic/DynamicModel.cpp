@@ -66,13 +66,17 @@ DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist, bool load
 
     m_deduper.clear();
     if ( m_playlist->mode() == OnDemand )
+    {
         setFilterUnresolvable( true );
+    }
 
     connect( m_playlist->generator().data(), SIGNAL( nextTrackGenerated( Tomahawk::query_ptr ) ), this, SLOT( newTrackGenerated( Tomahawk::query_ptr ) ) );
     PlaylistModel::loadPlaylist( m_playlist, m_playlist->mode() == Static );
 
     if ( m_playlist->mode() == OnDemand && oldCount != rowCount( QModelIndex() ) )
+    {
         emit itemCountChanged( rowCount( QModelIndex() ) );
+    }
 }
 
 
@@ -80,9 +84,13 @@ QString
 DynamicModel::description() const
 {
     if ( !m_playlist.isNull() && !m_playlist->generator().isNull() )
+    {
         return m_playlist->generator()->sentenceSummary();
+    }
     else
+    {
         return QString();
+    }
 }
 
 
@@ -106,7 +114,9 @@ DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
         for ( int i = 0; i < m_deduper.size(); i++ )
         {
             if ( m_deduper[ i ].first == query->track()->track() && m_deduper[ i ].second == query->track()->artist() )
+            {
                 isDuplicate = true;
+            }
         }
         if ( isDuplicate )
         {
@@ -132,7 +142,9 @@ DynamicModel::stopOnDemand( bool stopPlaying )
 {
     m_onDemandRunning = false;
     if ( stopPlaying )
+    {
         AudioEngine::instance()->stop();
+    }
 
     disconnect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
 }
@@ -142,9 +154,13 @@ void
 DynamicModel::changeStation()
 {
     if ( m_onDemandRunning )
+    {
         m_changeOnNext = true;
+    }
     else // if we're not running, just start
+    {
         m_playlist->generator()->startOnDemand();
+    }
 }
 
 
@@ -157,7 +173,9 @@ DynamicModel::trackResolveFinished( bool success )
 
     tDebug() << "Got resolveFinished in DynamicModel" << q->track()->toString();
     if ( !m_waitingFor.contains( q ) )
+    {
         return;
+    }
 
     if ( !q->playable() )
     {
@@ -165,10 +183,13 @@ DynamicModel::trackResolveFinished( bool success )
         m_currentAttempts++;
 
         int curAttempts = m_startingAfterFailed ? m_currentAttempts - 20 : m_currentAttempts; // if we just failed, m_currentAttempts includes those failures
-        if( curAttempts < 20 ) {
+        if( curAttempts < 20 )
+        {
             qDebug() << "FETCHING MORE!";
             m_playlist->generator()->fetchNext();
-        } else {
+        }
+        else
+        {
             m_startingAfterFailed = true;
             emit trackGenerationFailure( tr( "Could not find a playable track.\n\nPlease change the filters or try again." ) );
         }
@@ -177,7 +198,8 @@ DynamicModel::trackResolveFinished( bool success )
     {
         qDebug() << "Got successful resolved track:" << q->track()->toString() << m_lastResolvedRow << m_currentAttempts;
 
-        if ( m_currentAttempts > 0 ) {
+        if ( m_currentAttempts > 0 )
+        {
             qDebug() << "EMITTING AN ASK FOR COLLAPSE:" << m_lastResolvedRow << m_currentAttempts;
             emit collapseFromTo( m_lastResolvedRow, m_currentAttempts );
         }
@@ -195,13 +217,15 @@ DynamicModel::newTrackLoading()
 {
     qDebug() << "Got NEW TRACK LOADING signal";
     if ( m_changeOnNext )
-    { // reset instead of getting the next one
+    {
+        // reset instead of getting the next one
         m_lastResolvedRow = rowCount( QModelIndex() );
         m_searchingForNext = true;
         m_playlist->generator()->startOnDemand();
     }
     else if ( m_onDemandRunning && m_currentAttempts == 0 && !m_searchingForNext )
-    { // if we're in dynamic mode and we're also currently idle
+    {
+        // if we're in dynamic mode and we're also currently idle
         m_lastResolvedRow = rowCount( QModelIndex() );
         m_searchingForNext = true;
         qDebug() << "IDLE fetching new track!";
@@ -214,7 +238,8 @@ void
 DynamicModel::tracksGenerated( const QList< query_ptr > entries, int limitResolvedTo )
 {
     if ( m_filterUnresolvable && m_playlist->mode() == OnDemand )
-    { // wait till we get them resolved (for previewing stations)
+    {
+        // wait till we get them resolved (for previewing stations)
         m_limitResolvedTo = limitResolvedTo;
         filterUnresolved( entries );
     }
@@ -228,7 +253,9 @@ DynamicModel::tracksGenerated( const QList< query_ptr > entries, int limitResolv
         }
     }
     if ( m_playlist->mode() == OnDemand && entries.isEmpty() )
+    {
         emit trackGenerationFailure( tr( "Failed to generate preview with the desired filters" ) );
+    }
 }
 
 
@@ -237,8 +264,8 @@ DynamicModel::filterUnresolved( const QList< query_ptr >& entries )
 {
     m_toResolveList = entries;
 
-    foreach ( const query_ptr& q, entries )
-        connect( q.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( filteringTrackResolved( bool ) ) );
+    foreach ( const query_ptr & q, entries )
+    connect( q.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( filteringTrackResolved( bool ) ) );
 
     Pipeline::instance()->resolve( entries, true );
 }
@@ -262,7 +289,7 @@ DynamicModel::filteringTrackResolved( bool successful )
     }
 
     query_ptr realptr;
-    foreach ( const query_ptr& qptr, m_toResolveList )
+    foreach ( const query_ptr & qptr, m_toResolveList )
     {
         if ( qptr.data() == q )
         {
@@ -271,7 +298,9 @@ DynamicModel::filteringTrackResolved( bool successful )
         }
     }
     if( realptr.isNull() ) // we already finished
+    {
         return;
+    }
 
     m_toResolveList.removeAll( realptr );
 
@@ -287,7 +316,8 @@ DynamicModel::filteringTrackResolved( bool successful )
         }
 
         if ( m_toResolveList.isEmpty() || m_resolvedList.size() == m_limitResolvedTo )
-        { // done
+        {
+            // done
             m_toResolveList.clear();
             m_resolvedList.clear();
 
@@ -299,7 +329,9 @@ DynamicModel::filteringTrackResolved( bool successful )
     }
 
     if ( m_toResolveList.isEmpty() && rowCount( QModelIndex() ) == 0 ) // we failed
+    {
         emit trackGenerationFailure( tr( "Could not find a playable track.\n\nPlease change the filters or try again." ) );
+    }
 }
 
 
@@ -307,10 +339,12 @@ void
 DynamicModel::addToPlaylist( const QList< query_ptr >& entries, bool clearFirst )
 {
     if ( clearFirst )
+    {
         clear();
+    }
 
-    foreach ( const query_ptr& q, entries )
-        m_deduper.append( QPair< QString, QString >( q->track()->track(), q->track()->artist() ) );
+    foreach ( const query_ptr & q, entries )
+    m_deduper.append( QPair< QString, QString >( q->track()->track(), q->track()->artist() ) );
 
     if ( m_playlist->author()->isLocal() && m_playlist->mode() == Static )
     {
@@ -330,21 +364,28 @@ void
 DynamicModel::removeIndex( const QModelIndex& idx, bool moreToCome )
 {
     if ( m_playlist->mode() == Static && isReadOnly() )
+    {
         return;
+    }
 
     qDebug() << Q_FUNC_INFO << "DYNAMIC MODEL REMOVIN!" << moreToCome << ( idx == index( rowCount( QModelIndex() ) - 1, 0, QModelIndex() ) );
     if ( m_playlist->mode() == OnDemand )
     {
         if ( !moreToCome && idx == index( rowCount( QModelIndex() ) - 1, 0, QModelIndex() ) )
-        { // if the user is manually removing the last one, re-add as we're a station
+        {
+            // if the user is manually removing the last one, re-add as we're a station
             newTrackLoading();
         }
         PlayableModel::removeIndex( idx );
     }
     else
+    {
         PlaylistModel::removeIndex( idx, moreToCome );
+    }
     // don't call onPlaylistChanged.
 
     if( !moreToCome )
+    {
         m_lastResolvedRow = rowCount( QModelIndex() );
+    }
 }

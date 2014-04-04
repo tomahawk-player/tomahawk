@@ -63,7 +63,9 @@ album_ptr
 Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCreate )
 {
     if ( !Database::instance() || !Database::instance()->impl() )
+    {
         return album_ptr();
+    }
 
     QMutexLocker lock( &s_nameCacheMutex );
     const QString key = albumCacheKey( artist, name );
@@ -71,7 +73,9 @@ Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCr
     {
         album_wptr album = s_albumsByName.value( key );
         if ( album )
+        {
             return album.toStrongRef();
+        }
     }
 
     album_ptr album = album_ptr( new Album( name, artist ), &Album::deleteLater );
@@ -93,7 +97,9 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
         s_idMutex.unlock();
 
         if ( album )
+        {
             return album;
+        }
     }
     s_idMutex.unlock();
 
@@ -103,7 +109,9 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
     {
         album_wptr album = s_albumsByName.value( key );
         if ( album )
+        {
             return album;
+        }
     }
 
     album_ptr a = album_ptr( new Album( id, name, artist ), &Album::deleteLater );
@@ -213,7 +221,9 @@ Album::id() const
         d->waitingForId = false;
 
         if ( d->id > 0 )
+        {
             s_albumsById.insert( d->id, d->ownRef.toStrongRef() );
+        }
 
         s_idMutex.unlock();
     }
@@ -251,7 +261,9 @@ Album::cover( const QSize& size, bool forceLoad ) const
     if ( !d->coverLoaded && !d->coverLoading )
     {
         if ( !forceLoad )
+        {
             return QPixmap();
+        }
 
         Tomahawk::InfoSystem::InfoStringHash trackInfo;
         trackInfo["artist"] = d->artist->name();
@@ -264,12 +276,12 @@ Album::cover( const QSize& size, bool forceLoad ) const
         requestData.customData = QVariantMap();
 
         connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-                SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-                SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
+                 SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+                 SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 
         connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-                SIGNAL( finished( QString ) ),
-                SLOT( infoSystemFinished( QString ) ) );
+                 SIGNAL( finished( QString ) ),
+                 SLOT( infoSystemFinished( QString ) ) );
 
         Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
@@ -300,9 +312,13 @@ Album::cover( const QSize& size, bool forceLoad ) const
     }
 
     if ( d->cover )
+    {
         return *d->cover;
+    }
     else
+    {
         return QPixmap();
+    }
 }
 
 bool
@@ -318,7 +334,7 @@ Album::infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData,
 {
     Q_D( Album );
     if ( requestData.caller != infoid() ||
-         requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
+            requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
     {
         return;
     }
@@ -347,7 +363,9 @@ Album::infoSystemFinished( const QString& target )
 {
     Q_D( Album );
     if ( target != infoid() )
+    {
         return;
+    }
 
     disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
                 this, SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
@@ -370,7 +388,7 @@ Album::playlistInterface( ModelMode mode, const Tomahawk::collection_ptr& collec
     {
         pli = Tomahawk::playlistinterface_ptr( new Tomahawk::AlbumPlaylistInterface( this, mode, collection ) );
         connect( pli.data(), SIGNAL( tracksLoaded( Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
-                               SLOT( onTracksLoaded( Tomahawk::ModelMode, Tomahawk::collection_ptr ) ) );
+                 SLOT( onTracksLoaded( Tomahawk::ModelMode, Tomahawk::collection_ptr ) ) );
 
         d->playlistInterface[ mode ][ collection ] = pli;
     }
@@ -407,7 +425,9 @@ Album::infoid() const
 {
     Q_D( const Album );
     if ( d->uuid.isEmpty() )
+    {
         d->uuid = uuid();
+    }
 
     return d->uuid;
 }

@@ -36,7 +36,9 @@ bool
 AccountModelFactoryProxy::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
 {
     if ( !m_filterEnabled )
+    {
         return true;
+    }
 
     const QModelIndex idx = sourceModel()->index( sourceRow, 0, sourceParent );
 
@@ -45,12 +47,16 @@ AccountModelFactoryProxy::filterAcceptsRow( int sourceRow, const QModelIndex& so
     if( rowType == Tomahawk::Accounts::AccountModel::TopLevelFactory )
     {
         if ( idx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
-             .value< QList< Tomahawk::Accounts::Account* > >().isEmpty() )
+                .value< QList< Tomahawk::Accounts::Account* > >().isEmpty() )
+        {
             return false;
+        }
 
         Tomahawk::Accounts::AccountFactory* factory = qobject_cast< Tomahawk::Accounts::AccountFactory* >( idx.data( Tomahawk::Accounts::AccountModel::AccountData ).value< QObject* >() );
         if ( factory && factory->factoryId() == "twitteraccount" )
+        {
             return false;
+        }
     }
 
     return rowType == m_filterRowType;
@@ -69,9 +75,13 @@ void
 AccountModelFactoryProxy::setFilterRowType( AccountModel::RowType rowType )
 {
     if( rowType == m_filterRowType )
+    {
         return;
+    }
 
     m_filterRowType = rowType;
     if( m_filterEnabled )
+    {
         invalidate();
+    }
 }

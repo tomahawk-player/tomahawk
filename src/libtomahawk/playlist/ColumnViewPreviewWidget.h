@@ -33,22 +33,22 @@ class ScrollingLabel;
 
 class DLLEXPORT ColumnViewPreviewWidget : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit ColumnViewPreviewWidget( ColumnView* parent );
     ~ColumnViewPreviewWidget();
 
     QSize minimumSize() const;
 
-public slots:
+  public slots:
     void setQuery( const Tomahawk::query_ptr& query );
 
-private slots:
+  private slots:
     void onCoverUpdated();
     void onArtistClicked();
 
-private:
+  private:
     Tomahawk::query_ptr m_query;
 
     PlayableCover* m_cover;

@@ -108,15 +108,15 @@ ModeHeader::switchTo( int buttonIndex )
 {
     switch ( buttonIndex )
     {
-    case 0:
-        m_radioNormal->click();
-        break;
-    case 1:
-        m_radioDetailed->click();
-        break;
-    case 2:
-        m_radioCloud->click();
-        break;
+        case 0:
+            m_radioNormal->click();
+            break;
+        case 1:
+            m_radioDetailed->click();
+            break;
+        case 2:
+            m_radioCloud->click();
+            break;
     }
 }
 
@@ -128,7 +128,7 @@ ModeHeader::changeEvent( QEvent* e )
     switch ( e->type() )
     {
         case QEvent::LanguageChange:
-//            ui->retranslateUi( this );
+            //            ui->retranslateUi( this );
             break;
 
         default:

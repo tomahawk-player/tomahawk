@@ -44,7 +44,7 @@ DatabaseCommand_DeletePlaylist::exec( DatabaseImpl* lib )
     TomahawkSqlQuery cre = lib->newquery();
 
     QString sql = QString( "DELETE FROM playlist WHERE guid = :id AND source %1" )
-                  .arg( source()->isLocal() ? "IS NULL" : QString("= %1").arg( source()->id() ) );
+                  .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) );
     cre.prepare( sql );
     cre.bindValue( ":id", m_playlistguid );
 
@@ -65,8 +65,12 @@ DatabaseCommand_DeletePlaylist::postCommitHook()
     playlist_ptr playlist = source()->dbCollection()->playlist( m_playlistguid );
     Q_ASSERT( !playlist.isNull() );
     if ( playlist )
+    {
         playlist->reportDeleted( playlist );
+    }
 
     if( source()->isLocal() )
+    {
         Servent::instance()->triggerDBSync();
+    }
 }

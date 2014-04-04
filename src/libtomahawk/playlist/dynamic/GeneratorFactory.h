@@ -36,7 +36,7 @@ namespace Tomahawk
   */
 class DLLEXPORT GeneratorFactoryInterface
 {
-public:
+  public:
     GeneratorFactoryInterface() {}
 
     virtual ~GeneratorFactoryInterface() {}
@@ -56,7 +56,7 @@ public:
  */
 class DLLEXPORT GeneratorFactory
 {
-public:
+  public:
     static geninterface_ptr create( const QString& type );
     // only used when loading from dbcmd
     static dyncontrol_ptr createControl( const QString& generatorType, const QString& controlType = QString() );
@@ -65,7 +65,7 @@ public:
     static QStringList types();
     static QStringList typeSelectors( const QString& type );
 
-private:
+  private:
     static QHash<QString, GeneratorFactoryInterface*> s_factories;
 
 };

@@ -28,9 +28,11 @@
 
 #define ACCOUNTMODELNODE_DEBUG 0
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
-namespace Accounts {
+namespace Accounts
+{
 
 /**
  * Node for account tree.
@@ -50,8 +52,10 @@ namespace Accounts {
  *
  */
 
-struct AccountModelNode {
-    enum NodeType {
+struct AccountModelNode
+{
+    enum NodeType
+    {
         FactoryType,
         UniqueFactoryType,
         AtticaType,
@@ -82,10 +86,12 @@ struct AccountModelNode {
         factory = fac;
 
         if ( fac->isUnique() )
+        {
             type = UniqueFactoryType;
+        }
 
         // Initialize factory nodes with their children
-        foreach ( Account* acct,  AccountManager::instance()->accounts() )
+        foreach ( Account * acct,  AccountManager::instance()->accounts() )
         {
             if ( AccountManager::instance()->factoryForAccount( acct ) == fac )
             {
@@ -105,7 +111,7 @@ struct AccountModelNode {
 #if ACCOUNTMODELNODE_DEBUG
         qDebug() << "Creating attica model node for resolver:" << cnt.id();
 #endif
-        foreach ( Account* acct, AccountManager::instance()->accounts( Accounts::ResolverType ) )
+        foreach ( Account * acct, AccountManager::instance()->accounts( Accounts::ResolverType ) )
         {
 #if ACCOUNTMODELNODE_DEBUG
             qDebug() << "Checking account:" << acct->accountFriendlyName() << qobject_cast< AtticaResolverAccount* >( acct );

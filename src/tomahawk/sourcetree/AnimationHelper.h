@@ -31,8 +31,8 @@ class AnimationHelper: public QObject
     Q_OBJECT
     Q_PROPERTY( QSize size READ size WRITE setSize NOTIFY sizeChanged )
 
-public:
-    AnimationHelper( const QModelIndex& index, QObject *parent = 0 );
+  public:
+    AnimationHelper( const QModelIndex& index, QObject* parent = 0 );
 
     QSize originalSize() const;
     QSize size() const;
@@ -48,17 +48,17 @@ public:
     bool partlyExpanded();
     bool fullyExpanded();
 
-signals:
+  signals:
     void sizeChanged();
-    void finished( const QModelIndex& index);
+    void finished( const QModelIndex& index );
 
-private slots:
+  private slots:
     void expandTimeout();
     void collapseTimeout();
     void expandAnimationFinished();
     void collapseAnimationFinished();
 
-private:
+  private:
     QModelIndex m_index;
     QSize m_size;
     QSize m_targetSize;
@@ -69,8 +69,8 @@ private:
 
     bool m_fullyExpanded;
 
-    QPropertyAnimation *m_expandAnimation;
-    QPropertyAnimation *m_collapseAnimation;
+    QPropertyAnimation* m_expandAnimation;
+    QPropertyAnimation* m_collapseAnimation;
 };
 
 #endif // ANIMATIONHELPER_H

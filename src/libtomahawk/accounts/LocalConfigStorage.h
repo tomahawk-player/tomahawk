@@ -30,7 +30,7 @@ namespace Accounts
 class LocalConfigStorage : public ConfigStorage
 {
     Q_OBJECT
-public:
+  public:
     explicit LocalConfigStorage( QObject* parent = 0 );
 
     virtual void init();
@@ -51,10 +51,10 @@ public:
     static QString credentialsServiceName();
 #endif
 
-private slots:
+  private slots:
     void onCredentialsManagerReady( const QString& service );
 
-private:
+  private:
     static const QString s_credentialsServiceName;
     QStringList m_accountIds;
 

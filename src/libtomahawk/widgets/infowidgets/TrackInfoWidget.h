@@ -45,40 +45,61 @@ class QScrollArea;
 
 namespace Ui
 {
-    class TrackInfoWidget;
+class TrackInfoWidget;
 }
 
 class DLLEXPORT TrackInfoWidget : public QWidget, public Tomahawk::ViewPage
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* parent = 0 );
     ~TrackInfoWidget();
 
-    Tomahawk::query_ptr query() const { return m_query; }
+    Tomahawk::query_ptr query() const
+    {
+        return m_query;
+    }
 
-    virtual QWidget* widget() { return this; }
+    virtual QWidget* widget()
+    {
+        return this;
+    }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 
-    virtual QString title() const { return m_title; }
-    virtual QString description() const { return QString(); }
-    virtual QString longDescription() const { return QString(); }
+    virtual QString title() const
+    {
+        return m_title;
+    }
+    virtual QString description() const
+    {
+        return QString();
+    }
+    virtual QString longDescription() const
+    {
+        return QString();
+    }
     virtual QPixmap pixmap() const;
 
     virtual bool isBeingPlayed() const;
-    virtual bool isTemporaryPage() const { return true; }
-    virtual bool showInfoBar() const { return false; }
+    virtual bool isTemporaryPage() const
+    {
+        return true;
+    }
+    virtual bool showInfoBar() const
+    {
+        return false;
+    }
 
     virtual bool jumpToCurrentTrack();
 
-public slots:
+  public slots:
     void load( const Tomahawk::query_ptr& query );
 
-protected:
+  protected:
     void changeEvent( QEvent* e );
 
-private slots:
+  private slots:
     void onCoverUpdated();
     void onStatsLoaded();
     void onSimilarArtistsLoaded();
@@ -88,8 +109,8 @@ private slots:
     void onArtistClicked();
     void onAlbumClicked();
 
-private:
-    Ui::TrackInfoWidget *ui;
+  private:
+    Ui::TrackInfoWidget* ui;
     QScrollArea* m_scrollArea;
 
     Tomahawk::query_ptr m_query;

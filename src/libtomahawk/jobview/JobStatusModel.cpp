@@ -86,7 +86,9 @@ JobStatusSortModel::lessThan( const QModelIndex& left, const QModelIndex& right 
     const int rightSort = right.data( JobStatusModel::SortRole ).toInt();
 
     if ( leftSort == rightSort )
+    {
         return left.data( JobStatusModel::AgeRole ).toUInt() > right.data( JobStatusModel::AgeRole ).toUInt();
+    }
 
     return leftSort < rightSort;
 }
@@ -109,7 +111,7 @@ JobStatusModel::~JobStatusModel()
 void
 JobStatusModel::addJob( JobStatusItem* item )
 {
-//    tLog() << Q_FUNC_INFO << "current jobs of item type: " << m_jobTypeCount[ item->type() ] << ", current queue size of item type: " << m_jobQueue[ item->type() ].size();
+    //    tLog() << Q_FUNC_INFO << "current jobs of item type: " << m_jobTypeCount[ item->type() ] << ", current queue size of item type: " << m_jobQueue[ item->type() ].size();
     if ( item->concurrentJobLimit() > 0 )
     {
         if ( m_jobTypeCount[ item->type() ] >= item->concurrentJobLimit() )
@@ -122,7 +124,7 @@ JobStatusModel::addJob( JobStatusItem* item )
         m_jobTypeCount[ item->type() ] = currentJobCount;
     }
 
-//    tLog() << Q_FUNC_INFO << "new current jobs of item type: " << m_jobTypeCount[ item->type() ];
+    //    tLog() << Q_FUNC_INFO << "new current jobs of item type: " << m_jobTypeCount[ item->type() ];
 
     connect( item, SIGNAL( statusChanged() ), SLOT( itemUpdated() ) );
     connect( item, SIGNAL( finished() ), SLOT( itemFinished() ) );
@@ -132,7 +134,7 @@ JobStatusModel::addJob( JobStatusItem* item )
         if ( m_collapseCount.contains( item->type() ) )
         {
             m_collapseCount[ item->type() ].append( item );
-//             qDebug() << "Adding item:" << item << "TO COLLAPSE ONLY";
+            //             qDebug() << "Adding item:" << item << "TO COLLAPSE ONLY";
             return; // we're done, no new rows
         }
         else
@@ -141,7 +143,7 @@ JobStatusModel::addJob( JobStatusItem* item )
         }
 
     }
-//    tLog() << Q_FUNC_INFO << "Adding item:" << item;
+    //    tLog() << Q_FUNC_INFO << "Adding item:" << item;
 
     int currentEndRow = m_items.count();
     beginInsertRows( QModelIndex(), currentEndRow, currentEndRow );
@@ -150,7 +152,7 @@ JobStatusModel::addJob( JobStatusItem* item )
 
     if ( item->hasCustomDelegate() )
     {
-//        tLog() << Q_FUNC_INFO << "job has custom delegate";
+        //        tLog() << Q_FUNC_INFO << "job has custom delegate";
         emit customDelegateJobInserted( currentEndRow, item );
     }
 
@@ -171,7 +173,9 @@ QVariant
 JobStatusModel::data( const QModelIndex& index, int role ) const
 {
     if ( !hasIndex( index.row(), index.column(), index.parent() ) )
+    {
         return QVariant();
+    }
 
     JobStatusItem* item = m_items[ index.row() ];
 
@@ -185,17 +189,25 @@ JobStatusModel::data( const QModelIndex& index, int role ) const
         case Qt::DisplayRole:
         {
             if ( m_collapseCount.contains( item->type() ) )
+            {
                 return m_collapseCount[ item->type() ].last()->mainText();
+            }
             else
+            {
                 return item->mainText();
+            }
         }
 
         case RightColumnRole:
         {
             if ( m_collapseCount.contains( item->type() ) )
+            {
                 return m_collapseCount[ item->type() ].count();
+            }
             else
+            {
                 return item->rightColumnText();
+            }
         }
 
         case AllowMultiLineRole:
@@ -229,39 +241,43 @@ JobStatusModel::rowCount( const QModelIndex& parent ) const
 void
 JobStatusModel::itemFinished()
 {
-//    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
+    //    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
     JobStatusItem* item = qobject_cast< JobStatusItem* >( sender() );
     Q_ASSERT( item );
 
-//     tDebug() << "Got item finished:" << item->type() << item->mainText() << item;
+    //     tDebug() << "Got item finished:" << item->type() << item->mainText() << item;
     if ( !m_items.contains( item ) && !m_collapseCount.contains( item->type() ) )
+    {
         return;
+    }
 
-//     foreach( JobStatusItem* item, m_items )
-//     {
-//         qDebug() << "ITEM #:" << item;
-//     }
-//     foreach( const QString& str, m_collapseCount.keys() )
-//     {
-//         tDebug() << "\t" << str;
-//         foreach( JobStatusItem* chain, m_collapseCount[ str ] )
-//             qDebug() << "\t\t" << chain;
-//     }
+    //     foreach( JobStatusItem* item, m_items )
+    //     {
+    //         qDebug() << "ITEM #:" << item;
+    //     }
+    //     foreach( const QString& str, m_collapseCount.keys() )
+    //     {
+    //         tDebug() << "\t" << str;
+    //         foreach( JobStatusItem* chain, m_collapseCount[ str ] )
+    //             qDebug() << "\t\t" << chain;
+    //     }
     if ( m_collapseCount.contains( item->type() ) )
     {
         const int indexOf = m_items.indexOf( m_collapseCount[ item->type() ].first() );
-//         tDebug() << "index in main list of collapsed irst item:" << indexOf;
+        //         tDebug() << "index in main list of collapsed irst item:" << indexOf;
         if ( m_collapseCount[ item->type() ].first() == item &&
-             m_items.contains( m_collapseCount[ item->type() ].first() ) && m_collapseCount[ item->type() ].size() > 1 )
+                m_items.contains( m_collapseCount[ item->type() ].first() ) && m_collapseCount[ item->type() ].size() > 1 )
         {
             // the placeholder we use that links m_items and m_collapsecount is done, so choose another one
             m_items.replace( m_items.indexOf( m_collapseCount[ item->type() ].first() ), m_collapseCount[ item->type() ][ 1 ] );
-//             qDebug() << "Replaced" << m_collapseCount[ item->type() ].first() << "with:" << m_collapseCount[ item->type() ][ 1 ] << m_items;
+            //             qDebug() << "Replaced" << m_collapseCount[ item->type() ].first() << "with:" << m_collapseCount[ item->type() ][ 1 ] << m_items;
         }
         m_collapseCount[ item->type() ].removeAll( item );
-//         tDebug() << "New collapse count list:" << m_collapseCount[ item->type() ];
+        //         tDebug() << "New collapse count list:" << m_collapseCount[ item->type() ];
         if ( m_collapseCount[ item->type() ].isEmpty() )
+        {
             m_collapseCount.remove( item->type() );
+        }
         else
         {
             // One less to count, but item is still there
@@ -274,7 +290,7 @@ JobStatusModel::itemFinished()
 
     // Remove row completely
     const int idx = m_items.indexOf( item );
-//     tDebug() << "Got index of item:" << idx;
+    //     tDebug() << "Got index of item:" << idx;
     Q_ASSERT( idx >= 0 );
 
     beginRemoveRows( QModelIndex(), idx, idx );
@@ -282,11 +298,13 @@ JobStatusModel::itemFinished()
     endRemoveRows();
 
     if ( item->customDelegate() )
+    {
         emit customDelegateJobRemoved( idx );
+    }
 
     emit refreshDelegates();
 
-//    tLog() << Q_FUNC_INFO << "current jobs of item type: " << m_jobTypeCount[ item->type() ] << ", current queue size of item type: " << m_jobQueue[ item->type() ].size();
+    //    tLog() << Q_FUNC_INFO << "current jobs of item type: " << m_jobTypeCount[ item->type() ] << ", current queue size of item type: " << m_jobQueue[ item->type() ].size();
     if ( item->concurrentJobLimit() > 0 )
     {
         int currentJobs = m_jobTypeCount[ item->type() ];
@@ -307,12 +325,14 @@ JobStatusModel::itemFinished()
 void
 JobStatusModel::itemUpdated()
 {
-//    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
+    //    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
     JobStatusItem* item = qobject_cast< JobStatusItem* >( sender() );
     Q_ASSERT( item );
 
     if ( m_collapseCount.contains( item->type() ) )
+    {
         item = m_collapseCount[ item->type() ].first();
+    }
 
     const QModelIndex idx = index( m_items.indexOf( item ), 0, QModelIndex() );
     emit dataChanged( idx, idx );

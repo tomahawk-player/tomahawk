@@ -39,13 +39,17 @@ BinaryExtractWorker::run()
     // We unzip directly to the target location, just like normal attica resolvers
     Q_ASSERT( m_receiver );
     if ( !m_receiver )
+    {
         return;
+    }
 
     const QString resolverId = m_receiver->property( "resolverid" ).toString();
 
     Q_ASSERT( !resolverId.isEmpty() );
     if ( resolverId.isEmpty() )
+    {
         return;
+    }
 
     const QDir resolverPath( extractScriptPayload( m_zipFileName, resolverId ) );
 
@@ -58,7 +62,9 @@ BinaryExtractWorker::run()
     qDebug() << "Found executables in unzipped binary resolver dir:" << files;
     Q_ASSERT( files.size() == 1 );
     if ( files.size() < 1 )
+    {
         return;
+    }
 
     const QString resolverToUse = resolverPath.absoluteFilePath( files.first() );
 

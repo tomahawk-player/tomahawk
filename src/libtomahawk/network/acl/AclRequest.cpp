@@ -18,9 +18,12 @@
 
 #include "AclRequest_p.h"
 
-namespace Tomahawk {
-namespace Network {
-namespace ACL {
+namespace Tomahawk
+{
+namespace Network
+{
+namespace ACL
+{
 
 
 AclRequest::AclRequest( const QString& nodeid, const QString& username, Tomahawk::ACLStatus::Type defaultStatus )

@@ -28,17 +28,18 @@
 #include <QStyleOptionButton>
 #include <QPixmap>
 
-namespace {
-    // Width to height ratio (70x20)
-    const qreal ASPECT_RATIO = 3.5;
-    // Knob is originally 32x20
-    const qreal KNOB_ASPECT_RATIO = 1.6;
+namespace
+{
+// Width to height ratio (70x20)
+const qreal ASPECT_RATIO = 3.5;
+// Knob is originally 32x20
+const qreal KNOB_ASPECT_RATIO = 1.6;
 
-    // Markers for when to show text, and when to snap to either end during a drag
-    const qreal LEFT_THRESHOLD = 0.3;
-    const qreal RIGHT_THRESHOLD = 0.7;
+// Markers for when to show text, and when to snap to either end during a drag
+const qreal LEFT_THRESHOLD = 0.3;
+const qreal RIGHT_THRESHOLD = 0.7;
 
-    const int ROUNDING_RADIUS = 4;
+const int ROUNDING_RADIUS = 4;
 }
 
 SlideSwitchButton::SlideSwitchButton( QWidget* parent )
@@ -109,9 +110,13 @@ void
 SlideSwitchButton::mousePressEvent( QMouseEvent* e )
 {
     if ( m_knob.rect().translated( m_knobX * ( width() - m_knob.width() ), 0 ).contains( e->pos() ) )
+    {
         m_mouseDownPos = e->pos();
+    }
     else
+    {
         m_mouseDownPos = QPoint();
+    }
 
     QPushButton::mousePressEvent( e );
 }
@@ -131,9 +136,13 @@ SlideSwitchButton::mouseReleaseEvent( QMouseEvent* e )
     }
 
     if ( m_knobX < LEFT_THRESHOLD )
+    {
         setChecked( false );
+    }
     else if ( m_knobX > RIGHT_THRESHOLD )
+    {
         setChecked( true );
+    }
 
     QPropertyAnimation* dragEndAnimation = new QPropertyAnimation( this, "knobX" );
     dragEndAnimation->setDuration( 50 );
@@ -148,7 +157,9 @@ void
 SlideSwitchButton::mouseMoveEvent( QMouseEvent* e )
 {
     if ( m_mouseDownPos.isNull() )
+    {
         return;
+    }
 
     e->accept();
 
@@ -158,9 +169,11 @@ SlideSwitchButton::mouseMoveEvent( QMouseEvent* e )
     const int newX = ( knobStart + delta );
 
     if ( newX < 0 || newX > rightEdge ) // out of bounds
+    {
         return;
+    }
 
-    m_knobX = newX / (qreal)rightEdge;
+    m_knobX = newX / ( qreal )rightEdge;
     repaint();
 }
 
@@ -202,13 +215,19 @@ SlideSwitchButton::paintEvent( QPaintEvent* event )
 #endif
 
     if ( LEFT_THRESHOLD < m_knobX && m_knobX < RIGHT_THRESHOLD )
+    {
         return;
+    }
 
     //let's draw some text...
     if ( m_baseColorTop == m_backUncheckedColorTop )
+    {
         painter.setPen( m_textColor );
+    }
     else
+    {
         painter.setPen( Qt::white );
+    }
 
     painter.setFont( m_textFont );
     const QRectF textRect( m_knobX < LEFT_THRESHOLD ? m_knob.width() : 0, 0, width() - m_knob.width(), height() );
@@ -219,7 +238,9 @@ void
 SlideSwitchButton::onCheckedStateChanged()
 {
     if ( !m_knobAnimation.isNull() )
+    {
         m_knobAnimation.data()->stop();
+    }
 
     m_knobAnimation = QPointer<QPropertyAnimation>( new QPropertyAnimation( this, "knobX" ) );
     m_knobAnimation.data()->setDuration( 50 );
@@ -237,9 +258,13 @@ SlideSwitchButton::setBackChecked( bool state )
     if ( state != m_backChecked )
     {
         if ( !m_backTopAnimation.isNull() )
+        {
             m_backTopAnimation.data()->stop();
+        }
         if ( !m_backBottomAnimation.isNull() )
+        {
             m_backBottomAnimation.data()->stop();
+        }
 
         m_backChecked = state;
         m_backTopAnimation = QPointer<QPropertyAnimation>( new QPropertyAnimation( this, "baseColorTop" ) );
@@ -283,7 +308,7 @@ SlideSwitchButton::createKnob()
     p.setBrush( gradient );
     p.setPen( QColor( 152, 152, 152 ) );
 
-    p.drawRoundedRect( m_knob.rect(), ROUNDING_RADIUS-1, ROUNDING_RADIUS-1 );
+    p.drawRoundedRect( m_knob.rect(), ROUNDING_RADIUS - 1, ROUNDING_RADIUS - 1 );
 }
 
 QSize
@@ -294,7 +319,7 @@ SlideSwitchButton::minimumSizeHint() const
 
 
 void
-SlideSwitchButton::setKnobX(qreal x)
+SlideSwitchButton::setKnobX( qreal x )
 {
     m_knobX = x;
     repaint();
@@ -309,7 +334,7 @@ SlideSwitchButton::knobX() const
 
 
 void
-SlideSwitchButton::setBaseColorTop(const QColor& color)
+SlideSwitchButton::setBaseColorTop( const QColor& color )
 {
     m_baseColorTop = color;
     repaint();
@@ -324,7 +349,7 @@ SlideSwitchButton::baseColorTop() const
 
 
 void
-SlideSwitchButton::setBaseColorBottom(const QColor& color)
+SlideSwitchButton::setBaseColorBottom( const QColor& color )
 {
     m_baseColorBottom = color;
 }

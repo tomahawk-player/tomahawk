@@ -30,17 +30,20 @@ class LatchedStatusManager;
 class LatchedStatusItem : public JobStatusItem
 {
     Q_OBJECT
-public:
+  public:
     explicit LatchedStatusItem( const Tomahawk::source_ptr& from, const Tomahawk::source_ptr& to, LatchedStatusManager* );
     virtual ~LatchedStatusItem();
 
-    virtual QString rightColumnText() const { return QString(); }
+    virtual QString rightColumnText() const
+    {
+        return QString();
+    }
     virtual QString mainText() const;
     virtual QPixmap icon() const;
     virtual QString type() const;
 
     void stop();
-private:
+  private:
     Tomahawk::source_ptr m_from, m_to;
     QString m_text;
     LatchedStatusManager* m_parent;
@@ -49,18 +52,18 @@ private:
 class LatchedStatusManager : public QObject
 {
     Q_OBJECT
-public:
+  public:
     explicit LatchedStatusManager( QObject* parent = 0 );
     virtual ~LatchedStatusManager() {}
 
     QPixmap pixmap() const;
 
-private slots:
+  private slots:
     void latchedOn( const Tomahawk::source_ptr&, const Tomahawk::source_ptr& );
     void latchedOff( const Tomahawk::source_ptr&, const Tomahawk::source_ptr& );
     void sourceOffline();
 
-private:
+  private:
     QHash< QString, QPointer< LatchedStatusItem > > m_jobs;
 };
 

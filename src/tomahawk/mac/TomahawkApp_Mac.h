@@ -25,24 +25,26 @@
 class QString;
 class QObject;
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
 class MacShortcutHandler;
 
 /// Interface between cocoa and tomahawk
-class PlatformInterface {
- public:
-  // Called when the application should show itself.
-  virtual void activate() = 0;
-  virtual bool loadUrl( const QString& url ) = 0;
+class PlatformInterface
+{
+  public:
+    // Called when the application should show itself.
+    virtual void activate() = 0;
+    virtual bool loadUrl( const QString& url ) = 0;
 
-  virtual ~PlatformInterface() {}
+    virtual ~PlatformInterface() {}
 };
 
 void macMain();
-void setShortcutHandler(Tomahawk::MacShortcutHandler* engine);
+void setShortcutHandler( Tomahawk::MacShortcutHandler* engine );
 // used for opening files with tomahawk
-void setApplicationHandler(PlatformInterface* handler);
+void setApplicationHandler( PlatformInterface* handler );
 void checkForUpdates();
 
 // Pass in a QObject with slots "fullScreenEntered() and fullScreenExited() in order to be notified

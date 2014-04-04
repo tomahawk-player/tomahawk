@@ -27,9 +27,11 @@
 #include <QSet>
 
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
-namespace Accounts {
+namespace Accounts
+{
 
 struct AccountModelNode;
 
@@ -37,8 +39,9 @@ class DLLEXPORT AccountModel : public QAbstractListModel
 {
     Q_OBJECT
 
-public:
-    enum Roles {
+  public:
+    enum Roles
+    {
         RowTypeRole = Qt::UserRole + 1, // RowType enum
 
         // Used by top-level accounts
@@ -68,14 +71,16 @@ public:
         ChildrenOfFactoryRole = Qt::UserRole + 31
     };
 
-    enum RowType {
+    enum RowType
+    {
         TopLevelFactory,
         TopLevelAccount,
         UniqueFactory,
         CustomAccount
     };
 
-    enum ItemState {
+    enum ItemState
+    {
         Uninstalled = 0, // Attica resolver states
         Installing,
         Installed,
@@ -89,9 +94,9 @@ public:
 
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
+    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
 
-signals:
+  signals:
     void createAccount( Tomahawk::Accounts::AccountFactory* factory );
     void scrollTo( const QModelIndex& idx );
 
@@ -99,7 +104,7 @@ signals:
     void doneInstalling( const QPersistentModelIndex& idx );
     void errorInstalling( const QPersistentModelIndex& idx );
 
-private slots:
+  private slots:
     void init();
 
     void atticaLoaded();
@@ -112,7 +117,7 @@ private slots:
     void onStartedInstalling( const QString& resolverId );
     void onFinishedInstalling( const QString& resolverId );
     void resolverInstallFailed( const QString& resolverId );
-private:
+  private:
     QModelIndex indexForAtticaId( const QString& resolverId ) const;
 
     bool m_waitingForAtticaLoaded;

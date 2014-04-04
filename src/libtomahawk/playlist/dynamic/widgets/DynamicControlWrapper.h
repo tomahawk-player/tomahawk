@@ -41,12 +41,12 @@ namespace Tomahawk
 class DynamicControlWrapper : public QObject
 {
     Q_OBJECT
-public:
+  public:
     explicit DynamicControlWrapper( const dyncontrol_ptr& control, QGridLayout* layout, int row, QWidget* parent = 0 );
     virtual ~DynamicControlWrapper();
 
-//     virtual void enterEvent(QEvent* );
-//     virtual void leaveEvent(QEvent* );
+    //     virtual void enterEvent(QEvent* );
+    //     virtual void leaveEvent(QEvent* );
 
     dyncontrol_ptr control() const;
 
@@ -55,15 +55,15 @@ public:
 
     static QToolButton* initButton( QWidget* parent );
     static QWidget* createDummy( QWidget* fromW, QWidget* parent );
-signals:
+  signals:
     void collapse();
     void removeControl();
     void changed();
 
-private slots:
+  private slots:
     void typeSelectorChanged( const QString& selectedType, bool firstLoad = false );
 
-private:
+  private:
     QWidget* m_parent;
     int m_row;
     QStackedLayout* m_plusL;

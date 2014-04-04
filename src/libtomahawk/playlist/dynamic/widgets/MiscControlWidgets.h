@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -25,22 +25,25 @@ class QLabel;
 class QSlider;
 namespace Tomahawk
 {
-    
+
 class LabeledSlider : public QWidget
 {
     Q_OBJECT
-public:
+  public:
     explicit LabeledSlider( const QString& leftT, const QString& rightT, QWidget* parent = 0 );
-    
-    QSlider* slider() { return m_slider; }
-    
-private:
+
+    QSlider* slider()
+    {
+        return m_slider;
+    }
+
+  private:
     QSlider* m_slider;
     QLabel* m_leftLabel;
     QLabel* m_rightLabel;
 };
-    
-    
+
+
 }
 
 #endif

@@ -26,7 +26,7 @@
 class PlaylistItem : public SourceTreeItem
 {
     Q_OBJECT
-public:
+  public:
     PlaylistItem( SourcesModel* model, SourceTreeItem* parent, const Tomahawk::playlist_ptr& pl, int index = -1 );
 
     virtual QString text() const;
@@ -36,7 +36,7 @@ public:
     virtual DropTypes supportedDropTypes( const QMimeData* data ) const;
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action );
     virtual QIcon icon() const;
-    virtual bool setData(const QVariant& v, bool role);
+    virtual bool setData( const QVariant& v, bool role );
     virtual int peerSortValue() const;
     virtual int IDValue() const;
     virtual bool isBeingPlayed() const;
@@ -50,21 +50,21 @@ public:
     void setSubscribed( bool subscribed );
     bool collaborative() const;
 
-public slots:
+  public slots:
     virtual void activate();
     virtual void doubleClicked();
 
-protected:
+  protected:
     void setLoaded( bool loaded );
 
-private slots:
+  private slots:
     void onPlaylistLoaded( Tomahawk::PlaylistRevision revision );
     void onPlaylistChanged();
     void parsedDroppedTracks( const QList<Tomahawk::query_ptr>& tracks );
 
     void onUpdated();
 
-private:
+  private:
     bool createOverlay();
 
     bool m_canSubscribe, m_showSubscribed;
@@ -73,13 +73,13 @@ private:
     QPixmap m_subscribedOnIcon, m_subscribedOffIcon;
     QList<Tomahawk::PlaylistUpdaterInterface*> m_overlaidUpdaters;
 };
-Q_DECLARE_OPERATORS_FOR_FLAGS(PlaylistItem::DropTypes)
+Q_DECLARE_OPERATORS_FOR_FLAGS( PlaylistItem::DropTypes )
 
 // can be a station or an auto playlist
 class DynamicPlaylistItem : public PlaylistItem
 {
     Q_OBJECT
-public:
+  public:
     DynamicPlaylistItem( SourcesModel* model, SourceTreeItem* parent, const Tomahawk::dynplaylist_ptr& pl, int index = -1 );
     virtual ~DynamicPlaylistItem();
 
@@ -94,10 +94,10 @@ public:
     virtual SourceTreeItem* activateCurrent();
     virtual bool isBeingPlayed() const;
 
-private slots:
+  private slots:
     void onDynamicPlaylistLoaded( Tomahawk::DynamicPlaylistRevision revision );
 
-private:
+  private:
     void checkReparentHackNeeded( const Tomahawk::DynamicPlaylistRevision& rev );
 
     Tomahawk::dynplaylist_ptr m_dynplaylist;

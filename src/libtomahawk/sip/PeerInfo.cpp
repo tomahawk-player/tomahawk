@@ -42,7 +42,7 @@ QHash< SipPlugin*, peerinfo_ptr > PeerInfo::s_selfPeersBySipPlugin = QHash< SipP
 inline QString
 peerCacheKey( SipPlugin* plugin, const QString& peerId )
 {
-    return QString( "%1\t\t%2" ).arg( (quintptr) plugin ).arg( peerId );
+    return QString( "%1\t\t%2" ).arg( ( quintptr ) plugin ).arg( peerId );
 }
 
 
@@ -64,7 +64,7 @@ PeerInfo::getSelf( SipPlugin* parent, PeerInfo::GetOptions options )
     selfPeer->setWeakRef( selfPeer.toWeakRef() );
     selfPeer->setContactId( "localpeer" );
 
-//     parent->setSelfPeer( selfPeer );
+    //     parent->setSelfPeer( selfPeer );
     s_selfPeersBySipPlugin.insert( parent, selfPeer );
 
     return selfPeer;
@@ -108,7 +108,9 @@ PeerInfo::getAll()
     foreach ( Tomahawk::peerinfo_wptr wptr, PeerInfoPrivate::s_peersByCacheKey.hash().values() )
     {
         if ( !wptr.isNull() )
+        {
             strongRefs << wptr.toStrongRef();
+        }
     }
     return strongRefs;
 }
@@ -214,7 +216,7 @@ PeerInfo::sendLocalSipInfos( const QList<SipInfo>& sipInfos )
 const QString
 PeerInfo::debugName() const
 {
-    return QString("%1 : %2").arg( sipPlugin()->account()->accountFriendlyName() ).arg( id() );
+    return QString( "%1 : %2" ).arg( sipPlugin()->account()->accountFriendlyName() ).arg( id() );
 }
 
 
@@ -329,7 +331,9 @@ PeerInfo::setAvatar( const QPixmap& avatar )
     // Check if the avatar is different by comparing a hash of the first 4096 bytes
     const QByteArray hash = QCryptographicHash::hash( ba.left( 4096 ), QCryptographicHash::Sha1 );
     if ( d->avatarHash == hash )
+    {
         return;
+    }
 
     d->avatarHash = hash;
     d->avatarBuffer = ba;
@@ -354,17 +358,23 @@ PeerInfo::avatar( TomahawkUtils::ImageMode style, const QSize& size ) const
         tDebug() << "Avatar for:" << id();
         Q_ASSERT( !contactId().isEmpty() );
         if ( d->avatarBuffer.isEmpty() && !contactId().isEmpty() )
+        {
             d->avatarBuffer = TomahawkUtils::Cache::instance()->getData( "Sources", contactId() ).toByteArray();
+        }
 
         d->avatar = new QPixmap();
         if ( !d->avatarBuffer.isEmpty() )
+        {
             d->avatar->loadFromData( d->avatarBuffer );
+        }
 
         d->avatarBuffer.clear();
     }
 
     if ( style == TomahawkUtils::RoundedCorners && d->avatar && !d->avatar->isNull() && !d->fancyAvatar )
+    {
         d->fancyAvatar = new QPixmap( TomahawkUtils::createRoundedImage( QPixmap( *d->avatar ), QSize( 0, 0 ) ) );
+    }
 
     QPixmap pixmap;
     if ( style == TomahawkUtils::RoundedCorners && d->fancyAvatar )

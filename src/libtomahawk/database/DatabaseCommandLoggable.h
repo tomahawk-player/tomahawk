@@ -29,10 +29,10 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCommandLoggable : public DatabaseCommand
 {
-Q_OBJECT
-Q_PROPERTY(QString command READ commandname)
+    Q_OBJECT
+    Q_PROPERTY( QString command READ commandname )
 
-public:
+  public:
 
     explicit DatabaseCommandLoggable( QObject* parent = 0 )
         : DatabaseCommand( parent )
@@ -42,7 +42,10 @@ public:
         : DatabaseCommand( s, parent )
     {}
 
-    virtual bool loggable() const { return true; }
+    virtual bool loggable() const
+    {
+        return true;
+    }
 };
 
 }

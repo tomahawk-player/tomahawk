@@ -29,10 +29,12 @@
 #include <QQueue>
 #include <QVariant>
 
-namespace Tomahawk {
-    namespace Accounts {
-        class SpotifyAccount;
-    }
+namespace Tomahawk
+{
+namespace Accounts
+{
+class SpotifyAccount;
+}
 }
 
 class DLLEXPORT SpotifyPlaylistUpdater : public Tomahawk::PlaylistUpdaterInterface
@@ -40,7 +42,7 @@ class DLLEXPORT SpotifyPlaylistUpdater : public Tomahawk::PlaylistUpdaterInterfa
     Q_OBJECT
 
     friend class Tomahawk::Accounts::SpotifyAccount;
-public:
+  public:
     SpotifyPlaylistUpdater( Tomahawk::Accounts::SpotifyAccount* acct, const QString& revid, const QString& spotifyId, const Tomahawk::playlist_ptr& pl );
 
     virtual ~SpotifyPlaylistUpdater();
@@ -49,7 +51,10 @@ public:
     virtual void updateNow() {}
 
 #ifndef ENABLE_HEADLESS
-    virtual QWidget* configurationWidget() const { return 0; }
+    virtual QWidget* configurationWidget() const
+    {
+        return 0;
+    }
     virtual QPixmap typeIcon() const;
 #endif
 
@@ -64,7 +69,10 @@ public:
     bool canSubscribe() const;
     void setCanSubscribe( bool canSub );
     void setSubscribers( int numSubscribers );
-    int subscribers() const { return m_subscribers; }
+    int subscribers() const
+    {
+        return m_subscribers;
+    }
     // Collaborative actions
 
     void setOwner( bool owner );
@@ -72,27 +80,33 @@ public:
     bool collaborative() const;
     void setCollaborative( bool collaborative );
 
-    QString spotifyId() const { return m_spotifyId; }
+    QString spotifyId() const
+    {
+        return m_spotifyId;
+    }
 
-    virtual bool hasCustomDeleter() const { return true; }
+    virtual bool hasCustomDeleter() const
+    {
+        return true;
+    }
     virtual Tomahawk::PlaylistDeleteQuestions deleteQuestions() const;
     virtual void setQuestionResults( const QMap< int, bool > results );
 
     void remove( bool askToDeletePlaylist = true );
 
-public slots:
+  public slots:
     /// Spotify callbacks when we are directly instructed from the resolver
     void spotifyTracksAdded( const QVariantList& tracks, const QString& startPosId, const QString& newRev, const QString& oldRev );
     void spotifyTracksRemoved( const QVariantList& tracks, const QString& newRev, const QString& oldRev );
     void spotifyTracksMoved( const QVariantList& tracks, const QString& newStartPos, const QString& newRev, const QString& oldRev );
     void spotifyPlaylistRenamed( const QString& title, const QString& newRev, const QString& oldRev  );
 
-    void tomahawkTracksInserted( const QList<Tomahawk::plentry_ptr>& ,int );
+    void tomahawkTracksInserted( const QList<Tomahawk::plentry_ptr>&, int );
     void tomahawkTracksRemoved( const QList<Tomahawk::query_ptr>& );
-    void tomahawkTracksMoved( const QList<Tomahawk::plentry_ptr>& ,int );
+    void tomahawkTracksMoved( const QList<Tomahawk::plentry_ptr>&, int );
     void tomahawkPlaylistRenamed( const QString&, const QString& );
 
-private slots:
+  private slots:
     // SpotifyResolver message handlers, all take msgtype, msg as argument
     void onTracksInsertedReturn( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
     void onTracksRemovedReturn( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
@@ -102,7 +116,7 @@ private slots:
 
     void playlistRevisionLoaded();
 
-private:
+  private:
     void init();
     void saveToSettings();
 
@@ -135,13 +149,16 @@ private:
 
 class DLLEXPORT SpotifyUpdaterFactory : public Tomahawk::PlaylistUpdaterFactory
 {
-public:
+  public:
     SpotifyUpdaterFactory()  {}
 
     virtual Tomahawk::PlaylistUpdaterInterface* create( const Tomahawk::playlist_ptr& pl, const QVariantHash& settings );
-    virtual QString type() const { return "spotify"; }
+    virtual QString type() const
+    {
+        return "spotify";
+    }
 
-private:
+  private:
     QPointer<Tomahawk::Accounts::SpotifyAccount> m_account;
 };
 

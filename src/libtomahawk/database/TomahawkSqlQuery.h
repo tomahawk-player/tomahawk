@@ -31,7 +31,7 @@
 class DLLEXPORT TomahawkSqlQuery : public QSqlQuery
 {
 
-public:
+  public:
     TomahawkSqlQuery();
     TomahawkSqlQuery( const QSqlDatabase& db );
 
@@ -43,7 +43,7 @@ public:
 
     bool commitTransaction();
 
-private:
+  private:
     bool isBusyError( const QSqlError& error ) const;
 
     void showError();

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -28,23 +28,26 @@ class Portfwd;
 
 class PortFwdWorker : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit PortFwdWorker( unsigned int port );
     ~PortFwdWorker();
 
-    unsigned int externalPort() const { return m_externalPort; }
+    unsigned int externalPort() const
+    {
+        return m_externalPort;
+    }
 
     void unregister();
-    
-signals:
+
+  signals:
     void externalAddressDetected( QHostAddress ha, unsigned int port );
 
-public slots:
+  public slots:
     void work();
 
-private:
+  private:
     Portfwd* m_portfwd;
     QHostAddress m_externalAddress;
     unsigned int m_externalPort, m_port;
@@ -53,21 +56,21 @@ private:
 
 class PortFwdThread : public QThread
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit PortFwdThread( unsigned int port );
     ~PortFwdThread();
 
     QPointer< PortFwdWorker > worker() const;
 
-signals:
+  signals:
     void externalAddressDetected( QHostAddress ha, unsigned int port );
-    
-protected:
+
+  protected:
     void run();
 
-private:
+  private:
     QPointer< PortFwdWorker > m_worker;
     unsigned int m_port;
 };

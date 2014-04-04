@@ -42,38 +42,38 @@ class QRect;
 
 namespace TomahawkUtils
 {
-    DLLEXPORT void drawQueryBackground( QPainter* p, const QRect& r );
-    DLLEXPORT QWidget* tomahawkWindow();
-    /// Platform-specific bringing tomahawk mainwindow to front, b/c qt's activate() and such don't seem to work well enough for us
-    DLLEXPORT void bringToFront();
+DLLEXPORT void drawQueryBackground( QPainter* p, const QRect& r );
+DLLEXPORT QWidget* tomahawkWindow();
+/// Platform-specific bringing tomahawk mainwindow to front, b/c qt's activate() and such don't seem to work well enough for us
+DLLEXPORT void bringToFront();
 
-    DLLEXPORT void openUrl( const QUrl& url );
+DLLEXPORT void openUrl( const QUrl& url );
 
-    DLLEXPORT QPixmap createRoundedImage( const QPixmap& avatar, const QSize& size, float frameWidthPct = 0.20 );
+DLLEXPORT QPixmap createRoundedImage( const QPixmap& avatar, const QSize& size, float frameWidthPct = 0.20 );
 
-    DLLEXPORT QColor alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity );
-    DLLEXPORT QPixmap createDragPixmap( MediaType type, int itemCount = 1 );
+DLLEXPORT QColor alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity );
+DLLEXPORT QPixmap createDragPixmap( MediaType type, int itemCount = 1 );
 
-    DLLEXPORT void drawShadowText( QPainter* p, const QRect& rect, const QString& text, const QTextOption& textOption );
-    DLLEXPORT void drawBackgroundAndNumbers( QPainter* p, const QString& text, const QRect& rect );
+DLLEXPORT void drawShadowText( QPainter* p, const QRect& rect, const QString& text, const QTextOption& textOption );
+DLLEXPORT void drawBackgroundAndNumbers( QPainter* p, const QString& text, const QRect& rect );
 
-    DLLEXPORT void unmarginLayout( QLayout* layout );
+DLLEXPORT void unmarginLayout( QLayout* layout );
 
-    DLLEXPORT void setDefaultFontSize( int points );
-    DLLEXPORT int defaultFontSize();
-    DLLEXPORT int defaultFontHeight();
-    DLLEXPORT QSize defaultIconSize();
+DLLEXPORT void setDefaultFontSize( int points );
+DLLEXPORT int defaultFontSize();
+DLLEXPORT int defaultFontHeight();
+DLLEXPORT QSize defaultIconSize();
 
-    DLLEXPORT void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item );
+DLLEXPORT void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item );
 
-    DLLEXPORT void drawRoundedButton( QPainter* painter, const QRect& btnRect, const QColor& color, const QColor &gradient1bottom = QColor(), const QColor& gradient2top = QColor(), const QColor& gradient2bottom = QColor() );
+DLLEXPORT void drawRoundedButton( QPainter* painter, const QRect& btnRect, const QColor& color, const QColor& gradient1bottom = QColor(), const QColor& gradient2top = QColor(), const QColor& gradient2bottom = QColor() );
 
-    DLLEXPORT QPixmap defaultPixmap( ImageType type, ImageMode mode = TomahawkUtils::Original, const QSize& size = QSize( 0, 0 ) );
-    DLLEXPORT QPixmap createTiledPixmap( int width, int height, const QImage& src );
-    DLLEXPORT QPixmap addDropShadow( const QPixmap& sourceImage, const QSize& targetSize );
-    DLLEXPORT QPixmap squareCenterPixmap( const QPixmap& sourceImage );
+DLLEXPORT QPixmap defaultPixmap( ImageType type, ImageMode mode = TomahawkUtils::Original, const QSize& size = QSize( 0, 0 ) );
+DLLEXPORT QPixmap createTiledPixmap( int width, int height, const QImage& src );
+DLLEXPORT QPixmap addDropShadow( const QPixmap& sourceImage, const QSize& targetSize );
+DLLEXPORT QPixmap squareCenterPixmap( const QPixmap& sourceImage );
 
-    DLLEXPORT void drawCompositedPopup( QWidget* widget, const QPainterPath& outline, const QColor& lineColor, const QBrush& backgroundBrush, qreal opacity );
+DLLEXPORT void drawCompositedPopup( QWidget* widget, const QPainterPath& outline, const QColor& lineColor, const QBrush& backgroundBrush, qreal opacity );
 }
 
 #endif // TOMAHAWKUTILSGUI_H

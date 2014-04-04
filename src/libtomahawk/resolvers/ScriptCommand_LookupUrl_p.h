@@ -25,7 +25,7 @@
 
 class ScriptCommand_LookupUrlPrivate
 {
-public:
+  public:
     ScriptCommand_LookupUrlPrivate( ScriptCommand_LookupUrl* q, Tomahawk::ExternalResolver* _resolver, const QString& _url )
         : q_ptr ( q )
         , url( _url )
@@ -35,7 +35,7 @@ public:
     ScriptCommand_LookupUrl* q_ptr;
     Q_DECLARE_PUBLIC ( ScriptCommand_LookupUrl )
 
-private:
+  private:
     QString url;
     Tomahawk::ExternalResolver* resolver;
 };

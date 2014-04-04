@@ -75,23 +75,23 @@ MprisPlugin::init()
 
     // Listen to volume changes
     connect( AudioEngine::instance(), SIGNAL( volumeChanged( int ) ),
-                                        SLOT( onVolumeChanged( int ) ) );
+             SLOT( onVolumeChanged( int ) ) );
 
     // When the playlist changes, signals for several properties are sent
     connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ),
-                                        SLOT( onPlaylistChanged( Tomahawk::playlistinterface_ptr ) ) );
+             SLOT( onPlaylistChanged( Tomahawk::playlistinterface_ptr ) ) );
 
     // When a track is added or removed, CanGoNext updated signal is sent
     Tomahawk::playlistinterface_ptr playlist = AudioEngine::instance()->playlist();
     if ( !playlist.isNull() )
     {
         connect( playlist.data(), SIGNAL( itemCountChanged( unsigned int ) ),
-                                    SLOT( onTrackCountChanged( unsigned int ) ) );
+                 SLOT( onTrackCountChanged( unsigned int ) ) );
     }
 
     // Connect to AudioEngine's seeked signal
     connect( AudioEngine::instance(), SIGNAL( seeked( qint64 ) ),
-                                        SLOT( onSeeked( qint64 ) ) );
+             SLOT( onSeeked( qint64 ) ) );
 }
 
 
@@ -205,7 +205,9 @@ MprisPlugin::canSeek() const
 {
     Tomahawk::playlistinterface_ptr p = AudioEngine::instance()->playlist();
     if ( p.isNull() )
+    {
         return false;
+    }
     return p->seekRestrictions() != PlaylistModes::NoSeek;
 
 }
@@ -216,7 +218,9 @@ MprisPlugin::loopStatus() const
 {
     Tomahawk::playlistinterface_ptr p = AudioEngine::instance()->playlist();
     if ( p.isNull() )
+    {
         return "None";
+    }
     PlaylistModes::RepeatMode mode = p->repeatMode();
     switch( mode )
     {
@@ -243,13 +247,21 @@ MprisPlugin::setLoopStatus( const QString& value )
 {
     Tomahawk::playlistinterface_ptr p = AudioEngine::instance()->playlist();
     if ( p.isNull() )
+    {
         return;
+    }
     if ( value == "Track" )
+    {
         p->setRepeatMode( PlaylistModes::RepeatOne );
+    }
     else if ( value == "Playlist" )
+    {
         p->setRepeatMode( PlaylistModes::RepeatAll );
+    }
     else if ( value == "None" )
+    {
         p->setRepeatMode( PlaylistModes::NoRepeat );
+    }
 }
 
 
@@ -267,8 +279,8 @@ MprisPlugin::metadata() const
     Tomahawk::result_ptr track = AudioEngine::instance()->currentTrack();
     if ( track )
     {
-        metadataMap.insert( "mpris:trackid", QVariant::fromValue(QDBusObjectPath(QString( "/track/" ) + track->id().replace( "-", "" ))) );
-        metadataMap.insert( "mpris:length", static_cast<qlonglong>(track->track()->duration()) * 1000000 );
+        metadataMap.insert( "mpris:trackid", QVariant::fromValue( QDBusObjectPath( QString( "/track/" ) + track->id().replace( "-", "" ) ) ) );
+        metadataMap.insert( "mpris:length", static_cast<qlonglong>( track->track()->duration() ) * 1000000 );
         metadataMap.insert( "xesam:album", track->track()->album() );
         metadataMap.insert( "xesam:artist", QStringList( track->track()->artist() ) );
         metadataMap.insert( "xesam:title", track->track()->track() );
@@ -278,7 +290,9 @@ MprisPlugin::metadata() const
         {
             QFile coverFile( m_coverTempFile );
             if ( coverFile.exists() && coverFile.fileName().contains( track->track()->artist() + "_" + track->track()->album() + "_tomahawk_cover.png" ) )
+            {
                 metadataMap.insert( "mpris:artUrl", QString( QUrl::fromLocalFile( m_coverTempFile ).toEncoded() ) );
+            }
         }
     }
 
@@ -304,7 +318,7 @@ qlonglong
 MprisPlugin::position() const
 {
     // Convert Tomahawk's milliseconds to microseconds
-    return (qlonglong) ( AudioEngine::instance()->currentTime() * 1000 );
+    return ( qlonglong ) ( AudioEngine::instance()->currentTime() * 1000 );
 }
 
 
@@ -327,7 +341,9 @@ MprisPlugin::shuffle() const
 {
     Tomahawk::playlistinterface_ptr p = AudioEngine::instance()->playlist();
     if ( p.isNull() )
+    {
         return false;
+    }
     return p->shuffled();
 }
 
@@ -337,7 +353,9 @@ MprisPlugin::setShuffle( bool value )
 {
     Tomahawk::playlistinterface_ptr p = AudioEngine::instance()->playlist();
     if ( p.isNull() )
+    {
         return;
+    }
     return p->setShuffled( value );
 }
 
@@ -345,7 +363,7 @@ MprisPlugin::setShuffle( bool value )
 double
 MprisPlugin::volume() const
 {
-    return static_cast<double>(AudioEngine::instance()->volume()) / 100.0;
+    return static_cast<double>( AudioEngine::instance()->volume() ) / 100.0;
 }
 
 
@@ -402,16 +420,24 @@ void
 MprisPlugin::Seek( qlonglong Offset )
 {
     if ( !canSeek() )
+    {
         return;
+    }
 
     qlonglong seekTime = position() + Offset;
     if ( seekTime < 0 )
+    {
         AudioEngine::instance()->seek( 0 );
-    else if ( seekTime > AudioEngine::instance()->currentTrackTotalTime()*1000 )
+    }
+    else if ( seekTime > AudioEngine::instance()->currentTrackTotalTime() * 1000 )
+    {
         Next();
+    }
     // seekTime is in microseconds, but we work internally in milliseconds
     else
-        AudioEngine::instance()->seek( (qint64) ( seekTime / 1000 ) );
+    {
+        AudioEngine::instance()->seek( ( qint64 ) ( seekTime / 1000 ) );
+    }
 
 }
 
@@ -420,15 +446,21 @@ void
 MprisPlugin::SetPosition( const QDBusObjectPath& TrackId, qlonglong Position )
 {
     if ( !canSeek() )
+    {
         return;
+    }
 
     if ( TrackId.path() != QString( "/track/" ) + AudioEngine::instance()->currentTrack()->id().replace( "-", "" ) )
+    {
         return;
+    }
 
-    if ( ( Position < 0) || ( Position > AudioEngine::instance()->currentTrackTotalTime()*1000 )  )
+    if ( ( Position < 0 ) || ( Position > AudioEngine::instance()->currentTrackTotalTime() * 1000 )  )
+    {
         return;
+    }
 
-    AudioEngine::instance()->seek( (qint64) (Position / 1000 ) );
+    AudioEngine::instance()->seek( ( qint64 ) ( Position / 1000 ) );
 
 }
 
@@ -449,28 +481,30 @@ MprisPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
     switch ( pushData.type )
     {
         case InfoNowPlaying:
-          isPlayingInfo = true;
-          audioStarted( pushData.infoPair.second );
-          break;
+            isPlayingInfo = true;
+            audioStarted( pushData.infoPair.second );
+            break;
         case InfoNowPaused:
-          isPlayingInfo = true;
-          audioPaused();
-          break;
+            isPlayingInfo = true;
+            audioPaused();
+            break;
         case InfoNowResumed:
-          isPlayingInfo = true;
-          audioResumed( pushData.infoPair.second );
-          break;
+            isPlayingInfo = true;
+            audioResumed( pushData.infoPair.second );
+            break;
         case InfoNowStopped:
-          isPlayingInfo = true;
-          audioStopped();
-          break;
+            isPlayingInfo = true;
+            audioStopped();
+            break;
 
         default:
-          break;
+            break;
     }
 
     if ( isPlayingInfo )
+    {
         notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "PlaybackStatus" );
+    }
 }
 
 
@@ -487,21 +521,29 @@ void
 MprisPlugin::audioStarted( const QVariant& input )
 {
     if ( !input.canConvert< QVariantMap >() )
+    {
         return;
+    }
 
     QVariantMap map = input.toMap();
 
     if ( !map.contains( "trackinfo" ) || !map[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+    {
         return;
+    }
 
     InfoStringHash hash = map[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) )
+    {
         return;
+    }
 
     m_playbackStatus = "Playing";
 
     if ( map.contains( "coveruri" ) )
+    {
         m_coverTempFile = map[ "coveruri" ].toString();
+    }
 
     notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "Metadata" );
 }
@@ -550,7 +592,7 @@ MprisPlugin::onPlaylistChanged( Tomahawk::playlistinterface_ptr playlist )
 
     if ( !playlist.isNull() )
         connect( playlist.data(), SIGNAL( itemCountChanged( unsigned int ) ),
-            SLOT( onTrackCountChanged( unsigned int ) ) );
+                 SLOT( onTrackCountChanged( unsigned int ) ) );
 
     // Notify relevant changes
     notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "LoopStatus" );
@@ -572,7 +614,7 @@ MprisPlugin::onTrackCountChanged( unsigned int tracks )
 void
 MprisPlugin::onSeeked( qint64 ms )
 {
-    qlonglong us = (qlonglong) ( ms*1000 );
+    qlonglong us = ( qlonglong ) ( ms * 1000 );
     emit Seeked( us );
 }
 
@@ -581,15 +623,15 @@ void
 MprisPlugin::notifyPropertyChanged( const QString& interface, const QString& propertyName )
 {
     QDBusMessage signal = QDBusMessage::createSignal(
-        "/org/mpris/MediaPlayer2",
-        "org.freedesktop.DBus.Properties",
-        "PropertiesChanged" );
+                              "/org/mpris/MediaPlayer2",
+                              "org.freedesktop.DBus.Properties",
+                              "PropertiesChanged" );
     signal << interface;
     QVariantMap changedProps;
-    changedProps.insert(propertyName, property(propertyName.toLatin1()));
+    changedProps.insert( propertyName, property( propertyName.toLatin1() ) );
     signal << changedProps;
     signal << QStringList();
-    QDBusConnection::sessionBus().send(signal);
+    QDBusConnection::sessionBus().send( signal );
 }
 
 } //ns InfoSystem

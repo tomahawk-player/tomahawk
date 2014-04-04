@@ -31,21 +31,27 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCommand_TrackStats : public DatabaseCommand
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit DatabaseCommand_TrackStats( const trackdata_ptr& track, QObject* parent = 0 );
     explicit DatabaseCommand_TrackStats( const artist_ptr& artist, QObject* parent = 0 );
 
     virtual void exec( DatabaseImpl* lib );
-    virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "trackstats"; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
+    virtual QString commandname() const
+    {
+        return "trackstats";
+    }
 
-signals:
+  signals:
     void trackStats( unsigned int totalPlays, unsigned int chartPosition );
     void done( const QList< PlaybackLog >& playbackData );
 
-private:
+  private:
     trackdata_ptr m_track;
     artist_ptr m_artist;
 };

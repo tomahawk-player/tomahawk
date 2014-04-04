@@ -25,9 +25,9 @@
 
 class CONFIGSTORAGEDLLEXPORT TelepathyConfigStorageConfigWidgetPlugin : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     virtual ~TelepathyConfigStorageConfigWidgetPlugin();
 
     virtual QWidget* configWidget() = 0;

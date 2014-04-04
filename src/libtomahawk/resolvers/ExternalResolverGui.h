@@ -38,18 +38,18 @@ namespace Tomahawk
  */
 class DLLEXPORT ExternalResolverGui : public ExternalResolver
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     ExternalResolverGui( const QString& filePath );
     virtual AccountConfigWidget* configUI() const = 0;
 
-protected:
+  protected:
     AccountConfigWidget* widgetFromData( QByteArray& data, QWidget* parent = 0 );
     QVariant configMsgFromWidget( QWidget* w );
     QByteArray fixDataImagePaths( const QByteArray& data, bool compressed, const QVariantMap& images );
 
-private:
+  private:
     void addChildProperties( QObject* parent, QVariantMap& m );
 };
 

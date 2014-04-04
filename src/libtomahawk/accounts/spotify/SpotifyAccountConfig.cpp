@@ -35,7 +35,7 @@ bool InfoSorter( const SpotifyPlaylistInfo* left, const SpotifyPlaylistInfo* rig
     return left->name < right->name;
 }
 
-SpotifyAccountConfig::SpotifyAccountConfig( SpotifyAccount *account )
+SpotifyAccountConfig::SpotifyAccountConfig( SpotifyAccount* account )
     : AccountConfigWidget( 0 )
     , m_ui( new Ui::SpotifyConfig )
     , m_loggedInUser( 0 )
@@ -62,7 +62,7 @@ SpotifyAccountConfig::SpotifyAccountConfig( SpotifyAccount *account )
 
 
 void
-SpotifyAccountConfig::showEvent( QShowEvent *event )
+SpotifyAccountConfig::showEvent( QShowEvent* event )
 {
     Q_UNUSED( event );
 
@@ -86,11 +86,15 @@ SpotifyAccountConfig::loadFromConfig()
     {
         qDebug() << "Loading spotify config widget with logged in username:" << username;
         if ( !username.isEmpty() )
+        {
             m_verifiedUsername = username;
+        }
         showLoggedIn();
     }
     else
+    {
         showLoggedOut();
+    }
 }
 
 void
@@ -160,25 +164,29 @@ SpotifyAccountConfig::persitentPrivacy() const
 
 
 void
-SpotifyAccountConfig::setPlaylists( const QList<SpotifyPlaylistInfo *>& playlists )
+SpotifyAccountConfig::setPlaylists( const QList<SpotifyPlaylistInfo*>& playlists )
 {
     // User always has at least 1 playlist (starred tracks)
     if ( !playlists.isEmpty() )
+    {
         m_playlistsLoading->fadeOut();
+    }
 
     m_ui->playlistList->clear();
 
-    QList<SpotifyPlaylistInfo *> myList = playlists;
+    QList<SpotifyPlaylistInfo*> myList = playlists;
     qSort( myList.begin(), myList.end(), InfoSorter );
 
-    foreach ( SpotifyPlaylistInfo* pl, myList )
+    foreach ( SpotifyPlaylistInfo * pl, myList )
     {
         bool starContainer = ( pl->starContainer || pl->name == "Starred Tracks" );
         QListWidgetItem* item = new QListWidgetItem( pl->name, m_ui->playlistList );
         item->setData( Qt::UserRole, QVariant::fromValue< SpotifyPlaylistInfo* >( pl ) );
-        item->setData( Qt::UserRole+2, starContainer );
+        item->setData( Qt::UserRole + 2, starContainer );
         if( loveSync() &&  starContainer )
-            item->setHidden(true);
+        {
+            item->setHidden( true );
+        }
         item->setFlags( Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled );
         item->setCheckState( pl->sync ? Qt::Checked : Qt::Unchecked );
     }
@@ -240,8 +248,10 @@ SpotifyAccountConfig::showStarredPlaylist( bool hide )
     for ( int i = 0; i < m_ui->playlistList->count(); i++ )
     {
         QListWidgetItem* item = m_ui->playlistList->item( i );
-        if ( item->data( Qt::UserRole+2 ).toBool() )
+        if ( item->data( Qt::UserRole + 2 ).toBool() )
+        {
             item->setHidden( hide );
+        }
     }
 }
 void
@@ -286,7 +296,9 @@ SpotifyAccountConfig::showLoggedOut()
     m_ui->usernameLabel->show();
 
     if ( m_loggedInUser )
+    {
         m_loggedInUser->hide();
+    }
 
     m_ui->loginButton->setText( tr( "Log In" ) );
     m_ui->loginButton->setEnabled( true );

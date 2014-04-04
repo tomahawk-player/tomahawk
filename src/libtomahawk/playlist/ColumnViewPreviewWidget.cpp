@@ -268,7 +268,9 @@ void
 ColumnViewPreviewWidget::onArtistClicked()
 {
     if ( !m_query->track()->artistPtr().isNull() )
+    {
         ViewManager::instance()->show( m_query->track()->artistPtr() );
+    }
 }
 
 

@@ -35,23 +35,32 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCommand_PlaybackCharts : public DatabaseCommand
 {
-Q_OBJECT
-public:
+    Q_OBJECT
+  public:
     explicit DatabaseCommand_PlaybackCharts( const Tomahawk::source_ptr& source, QObject* parent = 0 );
     virtual ~DatabaseCommand_PlaybackCharts();
 
     virtual void exec( DatabaseImpl* );
 
-    virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "playbackcharts"; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
+    virtual QString commandname() const
+    {
+        return "playbackcharts";
+    }
 
-    void setLimit( unsigned int amount ) { m_amount = amount; }
+    void setLimit( unsigned int amount )
+    {
+        m_amount = amount;
+    }
 
-signals:
+  signals:
     void artists( const QList<Tomahawk::artist_ptr>& );
     void done();
 
-private:
+  private:
     unsigned int m_amount;
 };
 

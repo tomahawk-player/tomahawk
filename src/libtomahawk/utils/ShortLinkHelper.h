@@ -26,38 +26,40 @@
 #include "DllMacro.h"
 #include "Typedefs.h"
 
-namespace Tomahawk {
-namespace Utils {
+namespace Tomahawk
+{
+namespace Utils
+{
 
 class ShortLinkHelperPrivate;
 
 class DLLEXPORT ShortLinkHelper : public QObject
 {
     Q_OBJECT
-public:
-    explicit ShortLinkHelper( QObject *parent = 0 );
+  public:
+    explicit ShortLinkHelper( QObject* parent = 0 );
     virtual ~ShortLinkHelper();
 
     QString hostname() const;
 
-public slots:
+  public slots:
     void shortLink( const Tomahawk::playlist_ptr& playlist );
-    void shortenLink( const QUrl& url, const QVariant &callbackObj = QVariant() );
+    void shortenLink( const QUrl& url, const QVariant& callbackObj = QVariant() );
 
-signals:
+  signals:
     void shortLinkReady( const Tomahawk::playlist_ptr& playlist, const QUrl& shortUrl );
     void shortLinkReady( const QUrl& longUrl, const QUrl& shortUrl, const QVariant& callbackObj );
     void done();
 
-protected:
+  protected:
     QScopedPointer<ShortLinkHelperPrivate> d_ptr;
 
-private slots:
+  private slots:
     void shortLinkRequestFinished( const Tomahawk::playlist_ptr& playlist );
     void shortenLinkRequestFinished();
     void shortenLinkRequestError( QNetworkReply::NetworkError );
 
-private:
+  private:
     Q_DECLARE_PRIVATE( ShortLinkHelper )
 };
 

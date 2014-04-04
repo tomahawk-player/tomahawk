@@ -19,24 +19,27 @@
 
 #include "CountryUtils.h"
 
-QString Tomahawk::CountryUtils::fullCountryFromCode(const QString& countryCode)
+QString Tomahawk::CountryUtils::fullCountryFromCode( const QString& countryCode )
 {
     ushort uc1 = countryCode[0].toUpper().unicode();
     ushort uc2 = countryCode[1].toUpper().unicode();
-    ushort uc3 = QChar('\0').unicode(); // No, not dealign with LatinAmericaAndTheCaribbean for convenience
+    ushort uc3 = QChar( '\0' ).unicode(); // No, not dealign with LatinAmericaAndTheCaribbean for convenience
 
-    const unsigned char *c = country_code_list;
-    for (; *c != 0; c += 3) {
-        if (uc1 == c[0] && uc2 == c[1] && uc3 == c[2])
+    const unsigned char* c = country_code_list;
+    for ( ; *c != 0; c += 3 )
+    {
+        if ( uc1 == c[0] && uc2 == c[1] && uc3 == c[2] )
         {
-            uint country = (uint)((c - country_code_list)/3);
+            uint country = ( uint )( ( c - country_code_list ) / 3 );
 
-            if (country > uint(QLocale::LastCountry))
-                return QLatin1String("Unknown");
+            if ( country > uint( QLocale::LastCountry ) )
+            {
+                return QLatin1String( "Unknown" );
+            }
 
-            return QString(country_name_list + country_name_index[country]);
+            return QString( country_name_list + country_name_index[country] );
         }
     }
 
-    return QString("Unknown");
+    return QString( "Unknown" );
 }

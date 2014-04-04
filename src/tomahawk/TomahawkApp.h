@@ -50,17 +50,17 @@ class SplashWidget;
 
 namespace Tomahawk
 {
-    class ShortcutHandler;
-    class Database;
-    namespace InfoSystem
-    {
-        class InfoSystem;
-    }
+class ShortcutHandler;
+class Database;
+namespace InfoSystem
+{
+class InfoSystem;
+}
 
-    namespace Accounts
-    {
-        class AccountManager;
-    }
+namespace Accounts
+{
+class AccountManager;
+}
 }
 
 #ifdef LIBLASTFM_FOUND
@@ -78,10 +78,10 @@ class TomahawkWindow;
 // (eg, library, pipeline, friends list)
 class TomahawkApp : public TOMAHAWK_APPLICATION, public Tomahawk::PlatformInterface
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
-    TomahawkApp( int& argc, char *argv[] );
+  public:
+    TomahawkApp( int& argc, char* argv[] );
     virtual ~TomahawkApp();
 
     void init();
@@ -98,14 +98,14 @@ public:
     // reimplemented from QApplication/QCoreApplication
     virtual bool notify( QObject* receiver, QEvent* e );
 
-signals:
+  signals:
     void tomahawkLoaded();
 
-public slots:
+  public slots:
     virtual void activate();
     void instanceStarted( KDSingleApplicationGuard::Instance );
 
-private slots:
+  private slots:
     void playlistRemoved( const Tomahawk::playlist_ptr& playlist );
     void initServent();
     void initSIP();
@@ -126,7 +126,7 @@ private slots:
 
     void ipDetectionFailed( QNetworkReply::NetworkError error, QString errorString );
 
-private:
+  private:
     void registerMetaTypes();
 
     void printHelp();

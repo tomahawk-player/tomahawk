@@ -30,11 +30,14 @@ namespace TomahawkUtils
 
 class ScopedDeleter
 {
-public:
+  public:
     ScopedDeleter( QObject* o ) : m_o( o ) {}
-    ~ScopedDeleter() { m_o->deleteLater(); }
+    ~ScopedDeleter()
+    {
+        m_o->deleteLater();
+    }
 
-private:
+  private:
     QObject* m_o;
 };
 
@@ -42,14 +45,14 @@ private:
 class BinaryExtractWorker : public QThread
 {
     Q_OBJECT
-public:
+  public:
     BinaryExtractWorker( const QString& zipFilename, QObject* receiver ) : m_zipFileName( zipFilename ), m_receiver( receiver ) {}
     virtual ~BinaryExtractWorker() {}
 
-protected:
+  protected:
     virtual void run();
 
-private:
+  private:
     QString m_zipFileName;
     QObject* m_receiver;
 };

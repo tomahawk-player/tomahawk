@@ -51,8 +51,8 @@ SpotifyParser::SpotifyParser( const QStringList& Urls, bool createNewPlaylist, Q
     , m_browseJob( 0 )
     , m_subscribers( 0 )
 {
-    foreach ( const QString& url, Urls )
-        lookupUrl( url );
+    foreach ( const QString & url, Urls )
+    lookupUrl( url );
 }
 
 
@@ -96,7 +96,7 @@ SpotifyParser::lookupUrl( const QString& rawLink )
 
     if( isHttp.indexIn( link, 0 ) != -1 )
     {
-        link = "spotify"+isHttp.cap( 3 ).replace( "/", ":" );
+        link = "spotify" + isHttp.cap( 3 ).replace( "/", ":" );
     }
 
     // TODO: Ignoring search and user querys atm
@@ -120,14 +120,20 @@ SpotifyParser::lookupUrl( const QString& rawLink )
     else if ( link.contains( "playlist" ) ||  link.contains( "album" ) || link.contains( "artist" ) )
     {
         if( !m_createNewPlaylist )
+        {
             m_trackMode = true;
+        }
         else
+        {
             m_trackMode = false;
+        }
 
         lookupSpotifyBrowse( link );
     }
     else
-        return; // Not valid spotify item
+    {
+        return;    // Not valid spotify item
+    }
 }
 
 
@@ -140,8 +146,8 @@ SpotifyParser::lookupSpotifyBrowse( const QString& link )
     m_browseUri = link;
 
     if ( m_browseUri.contains( "playlist" ) &&
-         Tomahawk::Accounts::SpotifyAccount::instance() != 0 &&
-         Tomahawk::Accounts::SpotifyAccount::instance()->loggedIn() )
+            Tomahawk::Accounts::SpotifyAccount::instance() != 0 &&
+            Tomahawk::Accounts::SpotifyAccount::instance()->loggedIn() )
     {
         // Do a playlist lookup locally
         // Running resolver, so do the lookup through that
@@ -151,8 +157,8 @@ SpotifyParser::lookupSpotifyBrowse( const QString& link )
         message[ "id" ] = m_browseUri;
 
         QMetaObject::invokeMethod( Tomahawk::Accounts::SpotifyAccount::instance(), "sendMessage", Qt::QueuedConnection, Q_ARG( QVariantMap, message ),
-                                                                                                                        Q_ARG( QObject*, this ),
-                                                                                                                        Q_ARG( QString, "playlistListingResult" ) );
+                                   Q_ARG( QObject*, this ),
+                                   Q_ARG( QString, "playlistListingResult" ) );
 
         return;
     }
@@ -160,21 +166,31 @@ SpotifyParser::lookupSpotifyBrowse( const QString& link )
     DropJob::DropType type;
 
     if ( m_browseUri.contains( "spotify:user" ) )
+    {
         type = DropJob::Playlist;
+    }
     if ( m_browseUri.contains( "spotify:artist" ) )
+    {
         type = DropJob::Artist;
+    }
     if ( m_browseUri.contains( "spotify:album" ) )
+    {
         type = DropJob::Album;
+    }
     if ( m_browseUri.contains( "spotify:track" ) )
+    {
         type = DropJob::Track;
+    }
 
     QUrl url;
 
     if ( type != DropJob::Artist )
-         url = QUrl( QString( SPOTIFY_PLAYLIST_API_URL "/browse/%1" ).arg( m_browseUri ) );
+    {
+        url = QUrl( QString( SPOTIFY_PLAYLIST_API_URL "/browse/%1" ).arg( m_browseUri ) );
+    }
     else
-         url = QUrl( QString( SPOTIFY_PLAYLIST_API_URL "/browse/%1/%2" ).arg( m_browseUri )
-                                                                        .arg ( m_limit ) );
+        url = QUrl( QString( SPOTIFY_PLAYLIST_API_URL "/browse/%1/%2" ).arg( m_browseUri )
+                    .arg ( m_limit ) );
 
     NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( QNetworkRequest( url ) ) );
     connect( reply, SIGNAL( finished() ), SLOT( spotifyBrowseFinished() ) );
@@ -192,7 +208,9 @@ void
 SpotifyParser::lookupTrack( const QString& link )
 {
     if ( !link.contains( "track" ) ) // we only support track links atm
+    {
         return;
+    }
 
     // we need Spotify URIs such as spotify:track:XXXXXX, so if we by chance get a http://open.spotify.com url, convert it
     QString uri = link;
@@ -246,7 +264,9 @@ SpotifyParser::spotifyBrowseFinished()
             m_single = false;
 
             if ( res.value( "type" ).toString() == "playlist" )
+            {
                 m_creator = resultResponse.value( "creator" ).toString();
+            }
 
             // TODO for now only take the first artist
             foreach ( QVariant result, resultResponse.value( "result" ).toList() )
@@ -267,7 +287,9 @@ SpotifyParser::spotifyBrowseFinished()
 
                 Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album, uuid(), m_trackMode );
                 if ( q.isNull() )
+                {
                     continue;
+                }
 
                 tLog() << "Setting resulthint to " << trackResult.value( "trackuri" );
                 q->setResultHint( trackResult.value( "trackuri" ).toString() );
@@ -284,9 +306,13 @@ SpotifyParser::spotifyBrowseFinished()
     }
 
     if ( m_trackMode )
+    {
         checkTrackFinished();
+    }
     else
+    {
         checkBrowseFinished();
+    }
 }
 
 
@@ -324,9 +350,13 @@ SpotifyParser::spotifyTrackLookupFinished()
         title = t.value( "name", QString() ).toString();
         // TODO for now only take the first artist
         if ( t.contains( "artists" ) && t[ "artists" ].canConvert< QVariantList >() && t[ "artists" ].toList().size() > 0 )
+        {
             artist = t[ "artists" ].toList().first().toMap().value( "name", QString() ).toString();
+        }
         if ( t.contains( "album" ) && t[ "album" ].canConvert< QVariantMap >() )
+        {
             album = t[ "album" ].toMap().value( "name", QString() ).toString();
+        }
 
         if ( title.isEmpty() && artist.isEmpty() ) // don't have enough...
         {
@@ -348,9 +378,13 @@ SpotifyParser::spotifyTrackLookupFinished()
     }
 
     if ( m_trackMode )
+    {
         checkTrackFinished();
+    }
     else
+    {
         checkBrowseFinished();
+    }
 }
 
 
@@ -368,13 +402,15 @@ SpotifyParser::playlistListingResult( const QString& msgType, const QVariantMap&
     m_subscribers = msg.value( "subscribers" ).toInt();
 
     const QVariantList tracks = msg.value( "tracks" ).toList();
-    foreach ( const QVariant& blob, tracks )
+    foreach ( const QVariant & blob, tracks )
     {
         QVariantMap trackMap = blob.toMap();
         const query_ptr q = Query::get( trackMap.value( "artist" ).toString(), trackMap.value( "track" ).toString(), trackMap.value( "album" ).toString(), uuid(), false );
 
         if ( q.isNull() )
+        {
             continue;
+        }
 
         const QString id = trackMap.value( "id" ).toString();
         if( !id.isEmpty() )
@@ -397,7 +433,9 @@ SpotifyParser::checkBrowseFinished()
     if ( m_queries.isEmpty() ) // we're done
     {
         if ( m_browseJob )
+        {
             m_browseJob->setFinished();
+        }
 
         if ( m_createNewPlaylist && !m_tracks.isEmpty() )
         {
@@ -419,26 +457,30 @@ SpotifyParser::checkBrowseFinished()
             else
             {
                 m_playlist = Playlist::create( SourceList::instance()->getLocal(),
-                                       uuid(),
-                                       m_title,
-                                       m_info,
-                                       spotifyUsername == m_creator ? QString() : m_creator,
-                                       false,
-                                       m_tracks );
+                                               uuid(),
+                                               m_title,
+                                               m_info,
+                                               spotifyUsername == m_creator ? QString() : m_creator,
+                                               false,
+                                               m_tracks );
 
                 connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistCreated() ) );
 
                 if ( spotifyAccountLoggedIn )
                 {
                     SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater(
-                                                        Accounts::SpotifyAccount::instance(), m_playlist->currentrevision(), m_browseUri, m_playlist );
+                        Accounts::SpotifyAccount::instance(), m_playlist->currentrevision(), m_browseUri, m_playlist );
 
 
                     // If the user isnt dropping a playlist the he owns, its subscribeable
                     if ( !m_browseUri.contains( spotifyUsername ) )
+                    {
                         updater->setCanSubscribe( true );
+                    }
                     else
+                    {
                         updater->setOwner( true );
+                    }
 
                     updater->setCollaborative( m_collaborative );
                     updater->setSubscribers( m_subscribers );
@@ -447,16 +489,22 @@ SpotifyParser::checkBrowseFinished()
                     Accounts::SpotifyAccount::instance()->registerUpdaterForPlaylist( m_browseUri, updater );
                     // On default, set the playlist as subscribed
                     if( !updater->owner() )
+                    {
                         Accounts::SpotifyAccount::instance()->setSubscribedForPlaylist( m_playlist, true );
+                    }
 
                 }
             }
             return;
         }
         else if ( m_single && !m_tracks.isEmpty() )
+        {
             emit track( m_tracks.first() );
+        }
         else if ( !m_single && !m_tracks.isEmpty() )
+        {
             emit tracks( m_tracks );
+        }
 
         deleteLater();
     }
@@ -470,12 +518,18 @@ SpotifyParser::checkTrackFinished()
     if ( m_queries.isEmpty() ) // we're done
     {
         if ( m_browseJob )
+        {
             m_browseJob->setFinished();
+        }
 
         if ( m_single && !m_tracks.isEmpty() )
+        {
             emit track( m_tracks.first() );
+        }
         else if ( !m_single && !m_tracks.isEmpty() )
+        {
             emit tracks( m_tracks );
+        }
 
         deleteLater();
     }
@@ -495,7 +549,9 @@ QPixmap
 SpotifyParser::pixmap() const
 {
     if ( !s_pixmap )
+    {
         s_pixmap = new QPixmap( RESPATH "images/spotify-logo.png" );
+    }
 
     return *s_pixmap;
 }

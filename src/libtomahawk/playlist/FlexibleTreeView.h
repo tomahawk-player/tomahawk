@@ -37,31 +37,46 @@ class FilterHeader;
 
 class DLLEXPORT FlexibleTreeView : public QWidget, public Tomahawk::ViewPage
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     enum FlexibleTreeViewMode
     { Columns = 0, Albums = 1, Flat = 2 };
 
     explicit FlexibleTreeView( QWidget* parent = 0, QWidget* extraHeader = 0 );
     ~FlexibleTreeView();
 
-    virtual QWidget* widget() { return this; }
+    virtual QWidget* widget()
+    {
+        return this;
+    }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 
     virtual QString title() const;
     virtual QString description() const;
     virtual QPixmap pixmap() const;
 
-    virtual bool showInfoBar() const { return false; }
+    virtual bool showInfoBar() const
+    {
+        return false;
+    }
     virtual bool jumpToCurrentTrack();
     virtual bool isTemporaryPage() const;
     virtual bool isBeingPlayed() const;
     void setTemporaryPage( bool b );
 
-    ColumnView* columnView() const { return m_columnView; }
-    TreeView* treeView() const { return m_treeView; }
-    TrackView* trackView() const { return m_trackView; }
+    ColumnView* columnView() const
+    {
+        return m_columnView;
+    }
+    TreeView* treeView() const
+    {
+        return m_treeView;
+    }
+    TrackView* trackView() const
+    {
+        return m_trackView;
+    }
 
     void setGuid( const QString& guid );
 
@@ -74,20 +89,20 @@ public:
     void setPixmap( const QPixmap& pixmap );
     void setEmptyTip( const QString& tip );
 
-public slots:
+  public slots:
     void setCurrentMode( FlexibleTreeViewMode mode );
     virtual bool setFilter( const QString& pattern );
     void restoreViewMode(); //ViewManager calls this on every show
 
-signals:
+  signals:
     void modeChanged( FlexibleTreeViewMode mode );
     void destroyed( QWidget* widget );
 
-private slots:
+  private slots:
     void onModelChanged();
     void onWidgetDestroyed( QWidget* widget );
 
-private:
+  private:
     FilterHeader* m_header;
     ModeHeader* m_modeHeader;
     QPixmap m_pixmap;

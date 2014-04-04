@@ -28,7 +28,7 @@ class QAction;
 class TemporaryPageItem : public SourceTreeItem
 {
     Q_OBJECT
-public:
+  public:
     TemporaryPageItem( SourcesModel* model, SourceTreeItem* parent, Tomahawk::ViewPage* page, int sortValue );
     virtual ~TemporaryPageItem();
 
@@ -43,17 +43,17 @@ public:
     Tomahawk::ViewPage* page() const;
     virtual bool isBeingPlayed() const;
 
-public slots:
+  public slots:
     void removeFromList();
 
-signals:
+  signals:
     bool removed();
 
-private slots:
+  private slots:
     void linkActionTriggered( QAction* );
     void pageDestroyed();
 
-private:
+  private:
     Tomahawk::ViewPage* m_page;
     QIcon m_icon;
     int m_sortValue;

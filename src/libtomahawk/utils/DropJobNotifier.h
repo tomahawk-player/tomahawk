@@ -38,7 +38,7 @@ namespace Tomahawk
 class DLLEXPORT DropJobNotifier : public JobStatusItem
 {
     Q_OBJECT
-public:
+  public:
     DropJobNotifier( QPixmap pixmap, QString service, DropJob::DropType type, NetworkReply* job );
 
     // No QNetworkReply, needs manual finished call
@@ -48,13 +48,19 @@ public:
     virtual QString rightColumnText() const;
     virtual QString mainText() const;
     virtual QPixmap icon() const;
-    virtual QString type() const { return m_type; }
-    virtual bool collapseItem() const { return true; }
+    virtual QString type() const
+    {
+        return m_type;
+    }
+    virtual bool collapseItem() const
+    {
+        return true;
+    }
 
-public slots:
+  public slots:
     void setFinished();
 
-private:
+  private:
     void init( DropJob::DropType type );
 
     QString m_type;

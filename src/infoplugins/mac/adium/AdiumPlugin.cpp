@@ -35,13 +35,13 @@
 QString adium_beforeStatus;
 QString adium_afterStatus;
 
-static void setStatus(const QString &status)
+static void setStatus( const QString& status )
 {
     // The command that updates the status
     QString scriptqstr;
-    scriptqstr.append(adium_beforeStatus);
-    scriptqstr.append(status);
-    scriptqstr.append(adium_afterStatus);
+    scriptqstr.append( adium_beforeStatus );
+    scriptqstr.append( status );
+    scriptqstr.append( adium_afterStatus );
 
     const char* scriptstr = scriptqstr.toUtf8();
     script( scriptstr );
@@ -59,21 +59,21 @@ AdiumPlugin::AdiumPlugin()
     qDebug() << Q_FUNC_INFO;
 
     adium_beforeStatus = "if appIsRunning(\"Adium\") then\n";
-    adium_beforeStatus.append("tell application \"Adium\"\n");
-    adium_beforeStatus.append("set the status message of every account to \"");
+    adium_beforeStatus.append( "tell application \"Adium\"\n" );
+    adium_beforeStatus.append( "set the status message of every account to \"" );
 
-    adium_afterStatus.append("\"\nend tell\n");
-    adium_afterStatus.append("end if\n");
-    adium_afterStatus.append("on appIsRunning(appName)\n");
-    adium_afterStatus.append("tell application \"System Events\" to (name of processes) contains appName\n");
-    adium_afterStatus.append("end appIsRunning\n");
+    adium_afterStatus.append( "\"\nend tell\n" );
+    adium_afterStatus.append( "end if\n" );
+    adium_afterStatus.append( "on appIsRunning(appName)\n" );
+    adium_afterStatus.append( "tell application \"System Events\" to (name of processes) contains appName\n" );
+    adium_afterStatus.append( "end appIsRunning\n" );
 
     m_supportedPushTypes << InfoNowPlaying << InfoNowPaused << InfoNowResumed << InfoNowStopped;
 
     m_active = TomahawkSettings::instance()->nowPlayingEnabled();
 
     connect( TomahawkSettings::instance(), SIGNAL( changed() ),
-                                             SLOT( settingsChanged() ), Qt::QueuedConnection );
+             SLOT( settingsChanged() ), Qt::QueuedConnection );
 
     m_pauseTimer = new QTimer( this );
     m_pauseTimer->setSingleShot( true );
@@ -86,7 +86,9 @@ AdiumPlugin::~AdiumPlugin()
 {
     qDebug() << Q_FUNC_INFO;
     if( m_active )
-      setStatus( "" );
+    {
+        setStatus( "" );
+    }
 }
 
 
@@ -111,25 +113,27 @@ AdiumPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
     qDebug() << Q_FUNC_INFO;
 
     if( !m_active )
+    {
         return;
+    }
 
     switch ( pushData.type )
     {
         case InfoNowPlaying:
-          audioStarted( pushData.infoPair );
-          break;
+            audioStarted( pushData.infoPair );
+            break;
         case InfoNowPaused:
-          audioPaused();
-          return;
+            audioPaused();
+            return;
         case InfoNowResumed:
-          audioResumed( pushData.infoPair );
-          break;
+            audioResumed( pushData.infoPair );
+            break;
         case InfoNowStopped:
-          audioStopped();
-          break;
+            audioStopped();
+            break;
 
         default:
-          return;
+            return;
     }
 
     // Stop the pause timer always, unless pausing of course
@@ -142,20 +146,28 @@ void
 AdiumPlugin::audioStarted( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair )
 {
     if ( !pushInfoPair.second.canConvert< QVariantMap >() )
+    {
         return;
+    }
 
     QVariantMap map = pushInfoPair.second.toMap();
 
     if ( map.contains( "private" ) && map[ "private" ] == TomahawkSettings::FullyPrivate )
+    {
         return;
+    }
 
     if ( !map.contains( "trackinfo" ) || !map[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+    {
         return;
+    }
 
     InfoStringHash hash = map[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
 
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) )
+    {
         return;
+    }
 
     m_currentTitle = hash["title"];
     m_currentArtist = hash["artist"];
@@ -165,11 +177,13 @@ AdiumPlugin::audioStarted( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair
 
     QUrl shortUrl = m_currentLongUrl;
     if ( pushInfoPair.first.contains( "shortUrl" ) )
+    {
         shortUrl = pushInfoPair.first[ "shortUrl" ].toUrl();
+    }
 
     QString nowPlaying = "";
     nowPlaying.append( m_currentArtist );
-    nowPlaying.append(" - ");
+    nowPlaying.append( " - " );
     nowPlaying.append( m_currentTitle );
     nowPlaying.replace( "\"", "\\\"" );  // Escape quotes, or Applescript gets confused
 
@@ -187,7 +201,7 @@ AdiumPlugin::audioStarted( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair
 }
 
 void
-AdiumPlugin::audioFinished( const QVariant &input )
+AdiumPlugin::audioFinished( const QVariant& input )
 {
     //qDebug() << Q_FUNC_INFO;
 }

@@ -44,7 +44,7 @@
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "collection/Collection.h"
+#include "collection/Collection.h"
 #endif
 
 #include <boost/concept_check.hpp>
@@ -111,9 +111,13 @@ Database::Database( const QString& dbname, QObject* parent )
     registerCommand<DatabaseCommand_ShareTrack>();
 
     if ( MAX_WORKER_THREADS < DEFAULT_WORKER_THREADS )
+    {
         m_maxConcurrentThreads = MAX_WORKER_THREADS;
+    }
     else
+    {
         m_maxConcurrentThreads = qBound( DEFAULT_WORKER_THREADS, QThread::idealThreadCount(), MAX_WORKER_THREADS );
+    }
 
     tDebug() << Q_FUNC_INFO << "Using" << m_maxConcurrentThreads << "database worker threads";
 
@@ -142,11 +146,15 @@ Database::~Database()
     delete m_idWorker;
 
     if ( m_workerRW )
+    {
         m_workerRW.data()->quit();
+    }
     foreach ( QPointer< DatabaseWorkerThread > workerThread, m_workerThreads )
     {
         if ( workerThread && workerThread.data()->worker() )
+        {
             workerThread.data()->quit();
+        }
     }
 
     if ( m_workerRW )
@@ -187,7 +195,7 @@ Database::enqueue( const QList< Tomahawk::dbcmd_ptr >& lc )
         return;
     }
 
-    foreach ( const Tomahawk::dbcmd_ptr& cmd, lc )
+    foreach ( const Tomahawk::dbcmd_ptr & cmd, lc )
     {
         DatabaseCommandFactory* factory = commandFactoryByCommandName( cmd->commandname() );
         if ( factory )
@@ -198,7 +206,9 @@ Database::enqueue( const QList< Tomahawk::dbcmd_ptr >& lc )
 
     tDebug( LOGVERBOSE ) << "Enqueueing" << lc.count() << "commands to rw thread";
     if ( m_workerRW && m_workerRW.data()->worker() )
+    {
         m_workerRW.data()->worker().data()->enqueue( lc );
+    }
 }
 
 
@@ -222,7 +232,9 @@ Database::enqueue( const Tomahawk::dbcmd_ptr& lc )
     {
         tDebug( LOGVERBOSE ) << "Enqueueing command to rw thread:" << lc->commandname();
         if ( m_workerRW && m_workerRW.data()->worker() )
+        {
             m_workerRW.data()->worker().data()->enqueue( lc );
+        }
     }
     else
     {
@@ -242,8 +254,10 @@ Database::enqueue( const Tomahawk::dbcmd_ptr& lc )
             busyThreads++;
 
             if ( ( !happyWorker && workerThread && workerThread.data()->worker() ) ||
-                 ( workerThread && workerThread.data()->worker() && workerThread.data()->worker().data()->outstandingJobs() < happyWorker.data()->outstandingJobs() ) )
+                    ( workerThread && workerThread.data()->worker() && workerThread.data()->worker().data()->outstandingJobs() < happyWorker.data()->outstandingJobs() ) )
+            {
                 happyWorker = workerThread.data()->worker();
+            }
         }
 
         tDebug( LOGVERBOSE ) << "Enqueueing command to thread:" << happyWorker << busyThreads << lc->commandname();
@@ -274,7 +288,9 @@ void
 Database::markAsReady()
 {
     if ( m_ready )
+    {
         return;
+    }
 
     tLog() << Q_FUNC_INFO << "Database is ready now!";
     m_ready = true;
@@ -305,7 +321,7 @@ Database::registerCommand( DatabaseCommandFactory* commandFactory )
 
 
 DatabaseCommandFactory*
-Database::commandFactoryByClassName(const QString& className)
+Database::commandFactoryByClassName( const QString& className )
 {
     const QString commandName = m_commandNameClassNameMapping.key( className );
     return commandFactoryByCommandName( commandName );
@@ -313,7 +329,7 @@ Database::commandFactoryByClassName(const QString& className)
 
 
 DatabaseCommandFactory*
-Database::commandFactoryByCommandName(const QString& commandName )
+Database::commandFactoryByCommandName( const QString& commandName )
 {
     return m_commandFactories.value( commandName );
 }
@@ -327,8 +343,8 @@ Database::createCommandInstance( const QString& commandName )
 
     if( !factory )
     {
-         tLog() << "Unknown database command" << commandName;
-         return dbcmd_ptr();
+        tLog() << "Unknown database command" << commandName;
+        return dbcmd_ptr();
     }
 
     return factory->newInstance();
@@ -336,13 +352,15 @@ Database::createCommandInstance( const QString& commandName )
 
 
 dbcmd_ptr
-Database::createCommandInstance(const QVariant& op, const source_ptr& source)
+Database::createCommandInstance( const QVariant& op, const source_ptr& source )
 {
     const QString commandName = op.toMap().value( "command" ).toString();
 
     dbcmd_ptr command = createCommandInstance( commandName );
     if ( command.isNull() )
+    {
         return command;
+    }
 
     command->setSource( source );
     QJson::QObjectHelper::qvariant2qobject( op.toMap(), command.data() );

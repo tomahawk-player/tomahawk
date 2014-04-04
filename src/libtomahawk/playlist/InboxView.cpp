@@ -23,8 +23,8 @@
 #include "ContextMenu.h"
 #include "utils/Logger.h"
 
-InboxView::InboxView(QWidget *parent) :
-    TrackView(parent)
+InboxView::InboxView( QWidget* parent ) :
+    TrackView( parent )
 {
 }
 
@@ -50,10 +50,12 @@ InboxView::onMenuTriggered( int action )
         if ( inboxModel != 0 )
         {
             QModelIndexList sourceIndexes;
-            foreach ( const QModelIndex& index, selectedIndexes() )
+            foreach ( const QModelIndex & index, selectedIndexes() )
             {
                 if ( index.column() )
+                {
                     continue;
+                }
 
                 sourceIndexes << proxyModel()->mapToSource( index );
             }
@@ -61,5 +63,7 @@ InboxView::onMenuTriggered( int action )
         }
     }
     else
+    {
         TrackView::onMenuTriggered( action );
+    }
 }

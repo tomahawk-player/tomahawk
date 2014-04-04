@@ -51,7 +51,7 @@ FlexibleView::FlexibleView( QWidget* parent, QWidget* extraHeader )
 {
     qRegisterMetaType< FlexibleViewMode >( "FlexibleViewMode" );
 
-//    m_trackView->setPlaylistInterface( m_playlistInterface );
+    //    m_trackView->setPlaylistInterface( m_playlistInterface );
     m_detailedView->setPlaylistInterface( m_trackView->proxyModel()->playlistInterface() );
     m_gridView->setPlaylistInterface( m_trackView->proxyModel()->playlistInterface() );
 
@@ -81,7 +81,9 @@ FlexibleView::FlexibleView( QWidget* parent, QWidget* extraHeader )
     layout()->addWidget( m_header );
     layout()->addWidget( m_modeHeader );
     if ( extraHeader )
+    {
         layout()->addWidget( extraHeader );
+    }
     layout()->addWidget( lineBelow );
     layout()->addWidget( lineBelow2 );
     layout()->addWidget( m_stack );
@@ -123,7 +125,7 @@ FlexibleView::setTrackView( TrackView* view )
         delete m_trackView;
     }
 
-//    view->setPlaylistInterface( m_playlistInterface );
+    //    view->setPlaylistInterface( m_playlistInterface );
 
     m_trackView = view;
     m_stack->addWidget( view );
@@ -315,9 +317,13 @@ FlexibleView::onModelChanged()
     m_header->setDescription( m_model->description() );
 
     if ( m_model->isReadOnly() )
+    {
         setEmptyTip( tr( "This playlist is currently empty." ) );
+    }
     else
+    {
         setEmptyTip( tr( "This playlist is currently empty. Add some tracks to it and enjoy the music!" ) );
+    }
 }
 
 
@@ -347,13 +353,19 @@ bool
 FlexibleView::isBeingPlayed() const
 {
     if ( !playlistInterface() )
+    {
         return false;
+    }
 
     if ( playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+    {
         return true;
+    }
 
     if ( playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
+    {
         return true;
+    }
 
     return false;
 }

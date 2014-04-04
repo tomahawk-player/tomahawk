@@ -32,7 +32,7 @@
 #include "Track.h"
 
 #ifdef LIBLASTFM_FOUND
-    #include <lastfm/ws.h>
+#include <lastfm/ws.h>
 #endif
 
 #include <quazip/quazip.h>
@@ -55,21 +55,21 @@
 #include <QTranslator>
 
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-    #include <QUrlQuery>
+#include <QUrlQuery>
 #endif
 
 #ifdef Q_OS_WIN
-    #include <windows.h>
-    #include <shlobj.h>
+#include <windows.h>
+#include <shlobj.h>
 #endif
 
 #ifdef Q_WS_MAC
-    #include <Carbon/Carbon.h>
-    #include <sys/sysctl.h>
+#include <Carbon/Carbon.h>
+#include <sys/sysctl.h>
 #endif
 
 #ifdef QCA2_FOUND
-    #include <QtCrypto>
+#include <QtCrypto>
 #endif
 
 #include "Logger.h"
@@ -100,7 +100,7 @@ headless()
 void
 setHeadless( bool headless )
 {
-    tLog() << Q_FUNC_INFO << "headless is" << (headless? "true" : "false");
+    tLog() << Q_FUNC_INFO << "headless is" << ( headless ? "true" : "false" );
     s_headless = headless;
 }
 
@@ -110,7 +110,9 @@ appFriendlyVersion()
 {
     QStringList l = QString( TOMAHAWK_VERSION ).split( ".", QString::SkipEmptyParts );
     while ( l.count() > 3 )
+    {
         l.removeLast();
+    }
 
     return l.join( "." );
 }
@@ -168,25 +170,25 @@ appDataDir()
 {
     QString path;
 
-    #ifdef Q_OS_WIN
-        if ( ( QSysInfo::WindowsVersion & QSysInfo::WV_DOS_based ) == 0 )
+#ifdef Q_OS_WIN
+    if ( ( QSysInfo::WindowsVersion & QSysInfo::WV_DOS_based ) == 0 )
+    {
+        // Use this for non-DOS-based Windowses
+        char acPath[MAX_PATH];
+        HRESULT h = SHGetFolderPathA( NULL, CSIDL_LOCAL_APPDATA | CSIDL_FLAG_CREATE,
+                                      NULL, 0, acPath );
+        if ( h == S_OK )
         {
-            // Use this for non-DOS-based Windowses
-            char acPath[MAX_PATH];
-            HRESULT h = SHGetFolderPathA( NULL, CSIDL_LOCAL_APPDATA | CSIDL_FLAG_CREATE,
-                                          NULL, 0, acPath );
-            if ( h == S_OK )
-            {
-                path = QString::fromLocal8Bit( acPath );
-            }
+            path = QString::fromLocal8Bit( acPath );
         }
-    #elif defined(Q_OS_MAC)
-        path = appSupportFolderPath();
-    #elif defined(Q_OS_LINUX)
-        path = QDir::home().filePath( ".local/share" );
-    #else
-        path = QCoreApplication::applicationDirPath();
-    #endif
+    }
+#elif defined(Q_OS_MAC)
+    path = appSupportFolderPath();
+#elif defined(Q_OS_LINUX)
+    path = QDir::home().filePath( ".local/share" );
+#else
+    path = QCoreApplication::applicationDirPath();
+#endif
 
     path += "/" + QCoreApplication::organizationName();
     QDir d( path );
@@ -220,8 +222,8 @@ timeToString( int seconds )
     }
 
     return QString( "%1%2:%3" ).arg( hrs > 0 ? hrs  < 10 ? "0" + QString::number( hrs ) + ":" : QString::number( hrs ) + ":" : "" )
-                               .arg( mins < 10 ? "0" + QString::number( mins ) : QString::number( mins ) )
-                               .arg( secs < 10 ? "0" + QString::number( secs ) : QString::number( secs ) );
+           .arg( mins < 10 ? "0" + QString::number( mins ) : QString::number( mins ) )
+           .arg( secs < 10 ? "0" + QString::number( secs ) : QString::number( secs ) );
 }
 
 
@@ -229,7 +231,9 @@ QString
 ageToString( const QDateTime& time, bool appendAgoString )
 {
     if ( time.toTime_t() == 0 )
+    {
         return QString();
+    }
 
     QDateTime now = QDateTime::currentDateTime();
     int mins = time.secsTo( now ) / 60;
@@ -244,49 +248,73 @@ ageToString( const QDateTime& time, bool appendAgoString )
         if ( years )
         {
             if ( appendAgoString )
+            {
                 return QObject::tr( "%n year(s) ago", "", years );
+            }
             else
+            {
                 return QObject::tr( "%n year(s)", "", years );
+            }
         }
 
         if ( months )
         {
             if ( appendAgoString )
+            {
                 return QObject::tr( "%n month(s) ago", "", months );
+            }
             else
+            {
                 return QObject::tr( "%n month(s)", "", months );
+            }
         }
 
         if ( weeks )
         {
             if ( appendAgoString )
+            {
                 return QObject::tr( "%n week(s) ago", "", weeks );
+            }
             else
+            {
                 return QObject::tr( "%n week(s)", "", weeks );
+            }
         }
 
         if ( days )
         {
             if ( appendAgoString )
+            {
                 return QObject::tr( "%n day(s) ago", "", days );
+            }
             else if ( hours >= 24 )
+            {
                 return QObject::tr( "%n day(s)", "", days );
+            }
         }
 
         if ( hours )
         {
             if ( appendAgoString )
+            {
                 return QObject::tr( "%n hour(s) ago", "", hours );
+            }
             else
+            {
                 return QObject::tr( "%n hour(s)", "", hours );
+            }
         }
 
         if ( mins > 1 )
         {
             if ( appendAgoString )
+            {
                 return QObject::tr( "%1 minutes ago" ).arg( mins );
+            }
             else
+            {
                 return QObject::tr( "%1 minutes" ).arg( mins );
+            }
         }
     }
 
@@ -298,7 +326,9 @@ QString
 filesizeToString( unsigned int size )
 {
     if ( size == 0 )
+    {
         return QString();
+    }
 
     int kb = size / 1024;
     int mb = kb / 1024;
@@ -312,7 +342,9 @@ filesizeToString( unsigned int size )
         return QString( "%1 Kb" ).arg( kb );
     }
     else
+    {
         return QString::number( size );
+    }
 }
 
 
@@ -348,11 +380,11 @@ extensionToMimetype( const QString& extension )
 void
 msleep( unsigned int ms )
 {
-  #ifdef WIN32
+#ifdef WIN32
     Sleep( ms );
-  #else
+#else
     ::usleep( ms * 1000 );
-  #endif
+#endif
 }
 
 
@@ -364,9 +396,13 @@ levenshtein( const QString& source, const QString& target )
     const int m = target.length();
 
     if ( n == 0 )
+    {
         return m;
+    }
     if ( m == 0 )
+    {
         return n;
+    }
 
     // Good form to declare a TYPEDEF
     typedef QVector< QVector<int> > Tmatrix;
@@ -384,9 +420,13 @@ levenshtein( const QString& source, const QString& target )
 
     // Step 2
     for ( int i = 0; i <= n; i++ )
+    {
         matrix[i][0] = i;
+    }
     for ( int j = 0; j <= m; j++ )
+    {
         matrix[0][j] = j;
+    }
 
     // Step 3
     for ( int i = 1; i <= n; i++ )
@@ -401,9 +441,13 @@ levenshtein( const QString& source, const QString& target )
             // Step 5
             int cost;
             if ( s_i == t_j )
+            {
                 cost = 0;
+            }
             else
+            {
                 cost = 1;
+            }
 
             // Step 6
             const int above = matrix[i - 1][j];
@@ -412,7 +456,9 @@ levenshtein( const QString& source, const QString& target )
 
             int cell = ( ( ( left + 1 ) > ( diag + cost ) ) ? diag + cost : left + 1 );
             if ( above + 1 < cell )
+            {
                 cell = above + 1;
+            }
 
             // Step 6A: Cover transposition, in addition to deletion,
             // insertion and substitution. This step is taken from:
@@ -423,9 +469,18 @@ levenshtein( const QString& source, const QString& target )
             {
                 int trans = matrix[i - 2][j - 2] + 1;
 
-                if ( source[ i - 2 ] != t_j ) trans++;
-                if ( s_i != target[ j - 2 ] ) trans++;
-                if ( cell > trans ) cell = trans;
+                if ( source[ i - 2 ] != t_j )
+                {
+                    trans++;
+                }
+                if ( s_i != target[ j - 2 ] )
+                {
+                    trans++;
+                }
+                if ( cell > trans )
+                {
+                    cell = trans;
+                }
             }
             matrix[i][j] = cell;
         }
@@ -440,25 +495,33 @@ bool
 newerVersion( const QString& oldVersion, const QString& newVersion )
 {
     if ( oldVersion.isEmpty() || newVersion.isEmpty() )
+    {
         return false;
+    }
 
     QStringList oldVList = oldVersion.split( ".", QString::SkipEmptyParts );
     QStringList newVList = newVersion.split( ".", QString::SkipEmptyParts );
 
     int i = 0;
-    foreach ( const QString& nvPart, newVList )
+    foreach ( const QString & nvPart, newVList )
     {
         if ( i + 1 > oldVList.count() )
+        {
             return true;
+        }
 
         int nviPart = nvPart.toInt();
         int oviPart = oldVList.at( i++ ).toInt();
 
         if ( nviPart > oviPart )
+        {
             return true;
+        }
 
         if ( nviPart < oviPart )
+        {
             return false;
+        }
     }
 
     return false;
@@ -472,17 +535,19 @@ mergePlaylistChanges( const QList< Tomahawk::query_ptr >& orig, const QList< Tom
     QList< Tomahawk::query_ptr > tosave = newTracks;
     changed = false;
 
-    foreach ( const Tomahawk::query_ptr& newquery, newTracks )
+    foreach ( const Tomahawk::query_ptr & newquery, newTracks )
     {
-        foreach ( const Tomahawk::query_ptr& oldq, orig )
+        foreach ( const Tomahawk::query_ptr & oldq, orig )
         {
             if ( newquery->queryTrack()->track() == oldq->queryTrack()->track() &&
-                newquery->queryTrack()->artist() == oldq->queryTrack()->artist() &&
-                newquery->queryTrack()->album() == oldq->queryTrack()->album() )
+                    newquery->queryTrack()->artist() == oldq->queryTrack()->artist() &&
+                    newquery->queryTrack()->album() == oldq->queryTrack()->album() )
             {
                 sameCount++;
                 if ( tosave.contains( newquery ) )
+                {
                     tosave.replace( tosave.indexOf( newquery ), oldq );
+                }
 
                 break;
             }
@@ -491,7 +556,9 @@ mergePlaylistChanges( const QList< Tomahawk::query_ptr >& orig, const QList< Tom
 
     // No work to be done if all are the same
     if ( orig.size() == newTracks.size() && sameCount == orig.size() )
+    {
         return orig;
+    }
 
     changed = true;
     return tosave;
@@ -508,7 +575,7 @@ removeDirectory( const QString& dir )
     bool has_err = false;
     if ( aDir.exists() )
     {
-        foreach ( const QFileInfo& entry, aDir.entryInfoList( QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::NoSymLinks ) )
+        foreach ( const QFileInfo & entry, aDir.entryInfoList( QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::NoSymLinks ) )
         {
             QString path = entry.absoluteFilePath();
             if ( entry.isDir() )
@@ -572,7 +639,7 @@ isRtmpResult( const QString& url )
 void
 crash()
 {
-    volatile int* a = (int*)(NULL);
+    volatile int* a = ( int* )( NULL );
     *a = 1;
 }
 
@@ -586,7 +653,9 @@ installTranslator( QObject* parent )
     QString locale = QLocale::system().name();
 #endif
     if ( locale == "C" )
+    {
         locale = "en";
+    }
 
     // Tomahawk translations
     QTranslator* translator = new QTranslator( parent );
@@ -646,7 +715,7 @@ verifyFile( const QString& filePath, const QString& signature )
     const QString pubkeyData = QString::fromUtf8( f.readAll() );
     QCA::ConvertResult conversionResult;
     QCA::PublicKey publicKey = QCA::PublicKey::fromPEM( pubkeyData, &conversionResult );
-    if ( QCA::ConvertGood != conversionResult)
+    if ( QCA::ConvertGood != conversionResult )
     {
         qWarning() << "Public key reading/loading failed! Tried to load public key:" << pubkeyData;
         return false;
@@ -698,7 +767,7 @@ extractScriptPayload( const QString& filename, const QString& resolverId, const 
     // uses QuaZip to extract the temporary zip file to the user's tomahawk data/resolvers directory
     QDir resolverDir = appDataDir();
     if ( !resolverDir.mkpath( QString( "%1/%2" ).arg( dirName )
-                                                .arg( resolverId ) ) )
+                              .arg( resolverId ) ) )
     {
         tLog() << "Failed to mkdir resolver save dir:" << TomahawkUtils::appDataDir().absoluteFilePath( QString( "%1/%2" ).arg( dirName ).arg( resolverId ) );
         return QString();
@@ -773,7 +842,8 @@ unzipFileInFolder( const QString& zipFileName, const QDir& folder )
         out.close();
         fileInZip.close();
 
-    } while ( zipFile.goToNextFile() );
+    }
+    while ( zipFile.goToNextFile() );
 
     return true;
 }
@@ -804,10 +874,14 @@ compareVersionStrings( const QString& first, const QString& second )
     const int depth = qMax( a.count(), b.count() );
 
     while ( a.count() < depth )
+    {
         a.append( "0" );
+    }
 
     while ( b.count() < depth )
+    {
         b.append( "0" );
+    }
 
     int verdict = 0;
     for ( int i = 0; i < depth; ++i )
@@ -834,7 +908,9 @@ compareVersionStrings( const QString& first, const QString& second )
         {
             verdict = a.at( i ).compare( b.at( i ) );
             if ( verdict != 0 )
+            {
                 break;
+            }
         }
     }
 
@@ -913,7 +989,7 @@ QByteArray
 encodedQuery( const QUrl& url )
 {
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-    return url.query(QUrl::FullyEncoded).toUtf8();
+    return url.query( QUrl::FullyEncoded ).toUtf8();
 #else
     return url.encodedQuery();
 #endif

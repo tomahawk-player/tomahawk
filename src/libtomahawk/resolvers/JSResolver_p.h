@@ -29,7 +29,7 @@
 class JSResolverPrivate
 {
     friend class ::JSResolverHelper;
-public:
+  public:
     JSResolverPrivate( JSResolver* q, const QString& scriptPath, const QStringList& additionalScriptPaths )
         : q_ptr ( q )
         , ready( false )
@@ -42,7 +42,7 @@ public:
     JSResolver* q_ptr;
     Q_DECLARE_PUBLIC ( JSResolver )
 
-private:
+  private:
     ScriptEngine* engine;
 
     QString name;

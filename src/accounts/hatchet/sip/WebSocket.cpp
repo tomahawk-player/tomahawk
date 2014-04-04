@@ -34,8 +34,8 @@ WebSocket::WebSocket( const QString& url, const QString& authorizationHeader )
 {
     tLog() << Q_FUNC_INFO << "WebSocket constructing";
     m_client = std::unique_ptr< hatchet_client >( new hatchet_client() );
-    m_client->set_message_handler( std::bind(&onMessage, this, std::placeholders::_1, std::placeholders::_2 ) );
-    m_client->set_close_handler( std::bind(&onClose, this, std::placeholders::_1 ) );
+    m_client->set_message_handler( std::bind( &onMessage, this, std::placeholders::_1, std::placeholders::_2 ) );
+    m_client->set_close_handler( std::bind( &onClose, this, std::placeholders::_1 ) );
     m_client->register_ostream( &m_outputStream );
 
     m_connectionTimer.setSingleShot( true );
@@ -61,7 +61,7 @@ WebSocket::~WebSocket()
 
 
 void
-WebSocket::setUrl( const QString &url )
+WebSocket::setUrl( const QString& url )
 {
     tLog() << Q_FUNC_INFO << "Setting url to" << url;
     if ( m_url == url )
@@ -78,7 +78,7 @@ WebSocket::setUrl( const QString &url )
 
 
 void
-WebSocket::setAuthorizationHeader( const QString &authorizationHeader )
+WebSocket::setAuthorizationHeader( const QString& authorizationHeader )
 {
     tLog() << Q_FUNC_INFO << "Setting authorization header";
     if ( m_authorizationHeader == authorizationHeader )
@@ -116,7 +116,7 @@ WebSocket::connectWs()
 
     tLog() << Q_FUNC_INFO << "Establishing new connection";
     m_socket = QPointer< QSslSocket >( new QSslSocket( nullptr ) );
-    m_socket->addCaCertificate( QSslCertificate::fromPath( ":/hatchet-account/startcomroot.pem").first() );
+    m_socket->addCaCertificate( QSslCertificate::fromPath( ":/hatchet-account/startcomroot.pem" ).first() );
     QObject::connect( m_socket, SIGNAL( stateChanged( QAbstractSocket::SocketState ) ), SLOT( socketStateChanged( QAbstractSocket::SocketState ) ) );
     QObject::connect( m_socket, SIGNAL( sslErrors( const QList< QSslError >& ) ), SLOT( sslErrors( const QList< QSslError >& ) ) );
     QObject::connect( m_socket, SIGNAL( encrypted() ), SLOT( encrypted() ) );
@@ -127,7 +127,7 @@ WebSocket::connectWs()
 
 
 void
-WebSocket::disconnectWs( websocketpp::close::status::value status, const QString &reason )
+WebSocket::disconnectWs( websocketpp::close::status::value status, const QString& reason )
 {
     tLog() << Q_FUNC_INFO << "Disconnecting";
     m_disconnecting = true;
@@ -169,7 +169,9 @@ WebSocket::cleanup()
     m_outputStream.seekp( std::ios_base::end );
     m_queuedMessagesToSend.empty();
     if ( m_connection )
+    {
         m_connection.reset();
+    }
 
     emit disconnected();
 }
@@ -194,7 +196,9 @@ WebSocket::socketStateChanged( QAbstractSocket::SocketState state )
             break;
         case QAbstractSocket::UnconnectedState:
             if ( m_lastSocketState == QAbstractSocket::UnconnectedState )
+            {
                 return;
+            }
             tLog() << Q_FUNC_INFO << "Socket now unconnected, cleaning up and emitting disconnected";
             m_socket->deleteLater();
             m_lastSocketState = QAbstractSocket::UnconnectedState;
@@ -225,8 +229,8 @@ WebSocket::encrypted()
     tLog() << Q_FUNC_INFO << "Encrypted connection to Dreamcatcher established";
     error_code ec;
 
-    QUrl url(m_url);
-    websocketpp::uri_ptr uri(new websocketpp::uri(false, url.host().toStdString(), url.port(), "/"));
+    QUrl url( m_url );
+    websocketpp::uri_ptr uri( new websocketpp::uri( false, url.host().toStdString(), url.port(), "/" ) );
 
     m_connection = m_client->get_connection( uri, ec );
     if ( !m_connection || ec.value() != 0 )
@@ -249,12 +253,14 @@ void
 WebSocket::readOutput()
 {
     if ( !m_connection )
+    {
         return;
+    }
 
     std::string outputString = m_outputStream.str();
     if ( outputString.size() > 0 )
     {
-        m_outputStream.str("");
+        m_outputStream.str( "" );
 
         qint64 sizeWritten = m_socket->write( outputString.data(), outputString.size() );
         tDebug() << Q_FUNC_INFO << "Got " << outputString.size() << "from outstream, wrote" << sizeWritten << "bytes to the socket";
@@ -327,7 +333,7 @@ WebSocket::socketReadyRead()
 
 
 void
-WebSocket::encodeMessage( const QByteArray &bytes )
+WebSocket::encodeMessage( const QByteArray& bytes )
 {
     if ( !m_connection )
     {
@@ -358,7 +364,7 @@ onMessage( WebSocket* ws, websocketpp::connection_hdl, hatchet_client::message_p
 }
 
 void
-onClose( WebSocket *ws, websocketpp::connection_hdl )
+onClose( WebSocket* ws, websocketpp::connection_hdl )
 {
     tDebug() << Q_FUNC_INFO << "Handling message";
     QMetaObject::invokeMethod( ws, "disconnectSocket", Qt::QueuedConnection );

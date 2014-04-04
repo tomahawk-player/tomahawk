@@ -28,16 +28,22 @@
 
 class DLLEXPORT WebContext : public Tomahawk::ContextPage
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     WebContext();
     ~WebContext();
 
-    QGraphicsWebView* webView() const { return m_webView; }
-    virtual QGraphicsWidget* widget() { return m_webView; }
+    QGraphicsWebView* webView() const
+    {
+        return m_webView;
+    }
+    virtual QGraphicsWidget* widget()
+    {
+        return m_webView;
+    }
 
-private:
+  private:
     QGraphicsWebView* m_webView;
     Tomahawk::query_ptr m_query;
 };

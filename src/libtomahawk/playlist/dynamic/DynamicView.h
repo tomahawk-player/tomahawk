@@ -37,7 +37,7 @@ class DynamicModel;
 class DynamicView : public PlaylistView
 {
     Q_OBJECT
-public:
+  public:
     explicit DynamicView( QWidget* parent = 0 );
     virtual ~DynamicView();
 
@@ -50,7 +50,7 @@ public:
 
     virtual void paintEvent( QPaintEvent* event );
 
-public slots:
+  public slots:
     void showMessageTimeout( const QString& title, const QString& body );
     void showMessage( const QString& message );
 
@@ -60,12 +60,12 @@ public slots:
     // optionally you can specify how  many rows are past the block of collapsed rows
     void collapseEntries( int startRow, int num, int numToKeep = 1 );
 
-private slots:
+  private slots:
     void onTrackCountChanged( unsigned int );
     void checkForOverflow();
     void animFinished();
 
-private:
+  private:
     QPixmap backgroundBetween( QRect rect, int rowStart );
 
     DynamicModel* m_model;

@@ -55,9 +55,13 @@ void
 TopTracksContext::setArtist( const Tomahawk::artist_ptr& artist )
 {
     if ( artist.isNull() )
+    {
         return;
+    }
     if ( !m_artist.isNull() && m_artist->name() == artist->name() )
+    {
         return;
+    }
 
     if ( !m_artist.isNull() )
     {
@@ -68,7 +72,7 @@ TopTracksContext::setArtist( const Tomahawk::artist_ptr& artist )
     m_artist = artist;
 
     connect( m_artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
-                                SLOT( onTracksFound( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode ) ) );
+             SLOT( onTracksFound( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode ) ) );
 
     m_topHitsModel->clear();
     onTracksFound( m_artist->tracks(), Mixed );
@@ -79,7 +83,9 @@ void
 TopTracksContext::setAlbum( const Tomahawk::album_ptr& album )
 {
     if ( album.isNull() )
+    {
         return;
+    }
 
     setArtist( album->artist() );
 }
@@ -89,7 +95,9 @@ void
 TopTracksContext::setQuery( const Tomahawk::query_ptr& query )
 {
     if ( query.isNull() )
+    {
         return;
+    }
 
     setArtist( query->track()->artistPtr() );
 }

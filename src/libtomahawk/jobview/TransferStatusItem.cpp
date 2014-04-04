@@ -29,13 +29,13 @@
 #include "Track.h"
 
 #ifndef ENABLE_HEADLESS
-    #include "JobStatusModel.h"
-    #include "JobStatusView.h"
+#include "JobStatusModel.h"
+#include "JobStatusView.h"
 #endif
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "collection/Collection.h"
+#include "collection/Collection.h"
 #endif
 
 
@@ -44,9 +44,13 @@ TransferStatusItem::TransferStatusItem( TransferStatusManager* p, StreamConnecti
     , m_stream( QPointer< StreamConnection >( sc ) )
 {
     if ( m_stream.data()->type() == StreamConnection::RECEIVING )
+    {
         m_type = "receive";
+    }
     else
+    {
         m_type = "send";
+    }
 
     connect( m_stream.data(), SIGNAL( updated() ), SLOT( onTransferUpdate() ) );
     connect( Servent::instance(), SIGNAL( streamFinished( StreamConnection* ) ), SLOT( streamFinished( StreamConnection* ) ) );
@@ -61,23 +65,31 @@ QString
 TransferStatusItem::mainText() const
 {
     if ( m_stream.isNull() )
+    {
         return QString();
+    }
 
     if ( m_stream.data()->source().isNull() && !m_stream.data()->track().isNull() )
+    {
         return QString( "%1" ).arg( QString( "%1 - %2" ).arg( m_stream.data()->track()->track()->artist() ).arg( m_stream.data()->track()->track()->track() ) );
+    }
     else if ( !m_stream.data()->source().isNull() && !m_stream.data()->track().isNull() )
         return QString( "%1 %2 %3" ).arg( QString( "%1 - %2" ).arg( m_stream.data()->track()->track()->artist() ).arg( m_stream.data()->track()->track()->track() ) )
-                                .arg( m_stream.data()->type() == StreamConnection::RECEIVING ? tr( "from", "streaming artist - track from friend" ) : tr( "to", "streaming artist - track to friend" ) )
-                                .arg( m_stream.data()->source()->friendlyName() );
+               .arg( m_stream.data()->type() == StreamConnection::RECEIVING ? tr( "from", "streaming artist - track from friend" ) : tr( "to", "streaming artist - track to friend" ) )
+               .arg( m_stream.data()->source()->friendlyName() );
     else
+    {
         return QString();
+    }
 }
 
 QString
 TransferStatusItem::rightColumnText() const
 {
     if ( m_stream.isNull() )
+    {
         return QString();
+    }
 
     return QString( "%1 kB/s" ).arg( m_stream.data()->transferRate() / 1000 );
 }
@@ -86,19 +98,27 @@ void
 TransferStatusItem::streamFinished( StreamConnection* sc )
 {
     if ( m_stream.data() == sc )
+    {
         emit finished();
+    }
 }
 
 QPixmap
 TransferStatusItem::icon() const
 {
     if ( m_stream.isNull() )
+    {
         return QPixmap();
+    }
 
     if ( m_stream.data()->type() == StreamConnection::SENDING )
+    {
         return m_parent->txPixmap();
+    }
     else
+    {
         return m_parent->rxPixmap();
+    }
 }
 
 

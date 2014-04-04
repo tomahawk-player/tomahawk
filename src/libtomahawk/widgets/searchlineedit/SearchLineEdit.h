@@ -38,16 +38,16 @@ class DLLEXPORT SearchLineEdit : public LineEdit
 {
     Q_OBJECT
 
-public:
-    SearchLineEdit(QWidget *parent = 0);
+  public:
+    SearchLineEdit( QWidget* parent = 0 );
 
-    ClearButton *clearButton() const;
-    SearchButton *searchButton() const;
+    ClearButton* clearButton() const;
+    SearchButton* searchButton() const;
 
-private:
+  private:
     void init();
-    ClearButton *m_clearButton;
-    SearchButton *m_searchButton;
+    ClearButton* m_clearButton;
+    SearchButton* m_searchButton;
 };
 
 #endif // SEARCHLINEEDIT_H

@@ -36,15 +36,16 @@ class ACCOUNTDLLEXPORT HatchetSipPlugin : public SipPlugin
 {
     Q_OBJECT
 
-    enum SipState {
+    enum SipState
+    {
         AcquiringVersion,
         Registering,
         Connected,
         Closed
     };
 
-public:
-    HatchetSipPlugin( Tomahawk::Accounts::Account *account );
+  public:
+    HatchetSipPlugin( Tomahawk::Accounts::Account* account );
 
     virtual ~HatchetSipPlugin();
 
@@ -52,28 +53,31 @@ public:
 
     virtual void sendSipInfos( const Tomahawk::peerinfo_ptr& receiver, const QList< SipInfo >& infos );
 
-public slots:
+  public slots:
     virtual void connectPlugin();
     void disconnectPlugin();
     void checkSettings() {}
     void configurationChanged() {}
-    bool addContact( const QString&, AddContactOptions, const QString& ) { return false; }
+    bool addContact( const QString&, AddContactOptions, const QString& )
+    {
+        return false;
+    }
     void sendMsg( const QString&, const SipInfo& ) {}
     void webSocketConnected();
     void webSocketDisconnected();
 
-signals:
+  signals:
     void connectWebSocket() const;
     void disconnectWebSocket() const;
     void rawBytes( QByteArray bytes ) const;
 
-private slots:
+  private slots:
     void dbSyncTriggered();
     void messageReceived( const QByteArray& msg );
     void connectWebSocket();
     void oplogFetched( const QString& sinceguid, const QString& lastguid, const QList< dbop_ptr > ops );
 
-private:
+  private:
     bool sendBytes( const QVariantMap& jsonMap ) const;
     bool checkKeys( QStringList keys, const QVariantMap& map ) const;
     void newPeer( const QVariantMap& valMap );

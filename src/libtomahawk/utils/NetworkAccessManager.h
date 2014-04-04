@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
@@ -33,30 +33,30 @@ namespace Tomahawk
 {
 namespace Utils
 {
-    DLLEXPORT QNetworkAccessManager* nam();
-    DLLEXPORT void setNam( QNetworkAccessManager* nam, bool noMutexLocker = false );
+DLLEXPORT QNetworkAccessManager* nam();
+DLLEXPORT void setNam( QNetworkAccessManager* nam, bool noMutexLocker = false );
 
-    // Proxy settings
-    DLLEXPORT bool proxyDns();
-    DLLEXPORT void setProxyDns( bool proxyDns );
+// Proxy settings
+DLLEXPORT bool proxyDns();
+DLLEXPORT void setProxyDns( bool proxyDns );
 
-    DLLEXPORT QNetworkProxy::ProxyType proxyType();
-    DLLEXPORT void setProxyType( QNetworkProxy::ProxyType proxyType );
+DLLEXPORT QNetworkProxy::ProxyType proxyType();
+DLLEXPORT void setProxyType( QNetworkProxy::ProxyType proxyType );
 
-    DLLEXPORT QString proxyHost();
-    DLLEXPORT void setProxyHost( const QString& proxyHost );
+DLLEXPORT QString proxyHost();
+DLLEXPORT void setProxyHost( const QString& proxyHost );
 
-    DLLEXPORT qulonglong proxyPort();
-    DLLEXPORT void setProxyPort( qulonglong proxyPort );
+DLLEXPORT qulonglong proxyPort();
+DLLEXPORT void setProxyPort( qulonglong proxyPort );
 
-    DLLEXPORT QString proxyUsername();
-    DLLEXPORT void setProxyUsername( const QString& proxyUsername );
+DLLEXPORT QString proxyUsername();
+DLLEXPORT void setProxyUsername( const QString& proxyUsername );
 
-    DLLEXPORT QString proxyPassword();
-    DLLEXPORT void setProxyPassword( const QString& proxyPassword );
+DLLEXPORT QString proxyPassword();
+DLLEXPORT void setProxyPassword( const QString& proxyPassword );
 
-    DLLEXPORT QString proxyNoProxyHosts();
-    DLLEXPORT void setProxyNoProxyHosts( const QString& proxyNoProxyHosts );
+DLLEXPORT QString proxyNoProxyHosts();
+DLLEXPORT void setProxyNoProxyHosts( const QString& proxyNoProxyHosts );
 }
 }
 

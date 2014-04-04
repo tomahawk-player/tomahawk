@@ -36,7 +36,7 @@ class DatabaseImpl;
 class DLLEXPORT IdThreadWorker : public QThread
 {
     Q_OBJECT
-public:
+  public:
     explicit IdThreadWorker( Database* db );
     virtual ~IdThreadWorker();
 
@@ -47,7 +47,7 @@ public:
     static void getAlbumId( const album_ptr& album, bool autoCreate = false );
     static void getTrackId( const trackdata_ptr& trackData, bool autoCreate = false );
 
-private:
+  private:
     Database* m_db;
     DatabaseImpl* m_impl;
     bool m_stop;

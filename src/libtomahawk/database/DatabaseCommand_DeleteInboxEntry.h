@@ -28,19 +28,31 @@ namespace Tomahawk
 class DatabaseCommand_DeleteInboxEntry : public DatabaseCommand
 {
     Q_OBJECT
-public:
-    explicit DatabaseCommand_DeleteInboxEntry( const Tomahawk::query_ptr& query, QObject *parent = 0 );
+  public:
+    explicit DatabaseCommand_DeleteInboxEntry( const Tomahawk::query_ptr& query, QObject* parent = 0 );
 
     virtual void exec( DatabaseImpl* dbi );
-    virtual bool doesMutates() const { return true; }
-    virtual bool groupable() const { return true; }
-    virtual bool localOnly() const { return true; }
-    virtual QString commandname() const { return "deleteinboxentry"; }
+    virtual bool doesMutates() const
+    {
+        return true;
+    }
+    virtual bool groupable() const
+    {
+        return true;
+    }
+    virtual bool localOnly() const
+    {
+        return true;
+    }
+    virtual QString commandname() const
+    {
+        return "deleteinboxentry";
+    }
 
-signals:
+  signals:
     void done();
 
-private:
+  private:
     Tomahawk::query_ptr m_query;
 };
 

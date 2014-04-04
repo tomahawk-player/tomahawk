@@ -32,19 +32,25 @@ class DatabaseImpl;
 class DLLEXPORT DatabaseCommand_AddClientAuth : public DatabaseCommand
 {
     Q_OBJECT
-public:
+  public:
     explicit DatabaseCommand_AddClientAuth( QObject* parent = 0 )
-            : DatabaseCommand( parent )
+        : DatabaseCommand( parent )
     {}
 
     explicit DatabaseCommand_AddClientAuth( const QString& clientToken, const QString& website, const QString& name, const QString& userAgent, QObject* parent = 0 );
 
-    QString commandname() const { return "addclientauth"; }
+    QString commandname() const
+    {
+        return "addclientauth";
+    }
 
     virtual void exec( DatabaseImpl* lib );
-    virtual bool doesMutates() const { return true; }
+    virtual bool doesMutates() const
+    {
+        return true;
+    }
 
-private:
+  private:
     QString m_clientToken, m_website, m_name, m_userAgent;
 };
 

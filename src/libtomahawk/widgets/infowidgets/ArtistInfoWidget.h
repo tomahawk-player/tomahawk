@@ -44,16 +44,16 @@ class StatsGauge;
 
 namespace Ui
 {
-    class ArtistInfoWidget;
+class ArtistInfoWidget;
 }
 
 class MetaArtistInfoInterface;
 
 class DLLEXPORT ArtistInfoWidget : public QWidget, public Tomahawk::ViewPage
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget* parent = 0 );
     ~ArtistInfoWidget();
 
@@ -67,31 +67,52 @@ public:
      */
     void load( const Tomahawk::artist_ptr& artist );
 
-    Tomahawk::artist_ptr artist() const { return m_artist; }
+    Tomahawk::artist_ptr artist() const
+    {
+        return m_artist;
+    }
 
-    virtual QWidget* widget() { return this; }
+    virtual QWidget* widget()
+    {
+        return this;
+    }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 
-    virtual QString title() const { return m_title; }
-    virtual QString description() const { return m_description; }
-    virtual QString longDescription() const { return m_longDescription; }
+    virtual QString title() const
+    {
+        return m_title;
+    }
+    virtual QString description() const
+    {
+        return m_description;
+    }
+    virtual QString longDescription() const
+    {
+        return m_longDescription;
+    }
     virtual QPixmap pixmap() const;
 
-    virtual bool isTemporaryPage() const { return true; }
-    virtual bool showInfoBar() const { return false; }
+    virtual bool isTemporaryPage() const
+    {
+        return true;
+    }
+    virtual bool showInfoBar() const
+    {
+        return false;
+    }
 
     virtual bool jumpToCurrentTrack();
     virtual bool isBeingPlayed() const;
 
-signals:
+  signals:
     void longDescriptionChanged( const QString& description );
     void descriptionChanged( const QString& description );
     void pixmapChanged( const QPixmap& pixmap );
 
-protected:
+  protected:
     void changeEvent( QEvent* e );
 
-private slots:
+  private slots:
     void onArtistStatsLoaded();
     void onArtistImageUpdated();
     void onBiographyLoaded();
@@ -102,8 +123,8 @@ private slots:
 
     void onBiographyLinkClicked( const QUrl& url );
 
-private:
-    Ui::ArtistInfoWidget *ui;
+  private:
+    Ui::ArtistInfoWidget* ui;
 
     Tomahawk::artist_ptr m_artist;
 

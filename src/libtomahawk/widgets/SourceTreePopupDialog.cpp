@@ -31,7 +31,7 @@
 #include <QTimer>
 
 #ifdef QT_MAC_USE_COCOA
-    #include "SourceTreePopupDialog_mac.h"
+#include "SourceTreePopupDialog_mac.h"
 #endif
 
 #include "utils/TomahawkStyle.h"
@@ -103,24 +103,24 @@ SourceTreePopupDialog::SourceTreePopupDialog()
     m_title->setVisible( false );
     m_separatorLine->setVisible( false );
 
-/*
-    m_buttons->button( QDialogButtonBox::Ok )->setStyleSheet(
-                       "QPushButton { \
-                            background-color: #F15C5E; \
-                            border-style: solid; \
-                            border-width: 1px; \
-                            border-radius: 10px; \
-                            border-color: #B64547; \
-                            padding: 2px; \
-                        } \
-                        QPushButton:pressed { \
-                            border-style: solid; \
-                            border-width: 1px; \
-                            border-radius: 10px; \
-                            border-color: #B64547; \
-                            background-color: #D35052; \
-                            border-style: flat; \
-                        }" );*/
+    /*
+        m_buttons->button( QDialogButtonBox::Ok )->setStyleSheet(
+                           "QPushButton { \
+                                background-color: #F15C5E; \
+                                border-style: solid; \
+                                border-width: 1px; \
+                                border-radius: 10px; \
+                                border-color: #B64547; \
+                                padding: 2px; \
+                            } \
+                            QPushButton:pressed { \
+                                border-style: solid; \
+                                border-width: 1px; \
+                                border-radius: 10px; \
+                                border-color: #B64547; \
+                                background-color: #D35052; \
+                                border-style: flat; \
+                            }" );*/
     setFixedHeight( 80 );
 }
 
@@ -154,7 +154,9 @@ void
 SourceTreePopupDialog::setOkButtonText( const QString& text )
 {
     if ( m_buttons && m_buttons->button( QDialogButtonBox::Ok ) )
+    {
         m_buttons->button( QDialogButtonBox::Ok )->setText( text );
+    }
 }
 
 
@@ -167,7 +169,7 @@ SourceTreePopupDialog::setExtraQuestions( const Tomahawk::PlaylistDeleteQuestion
     m_questions = questions;
 
     int baseHeight = 80;
-    foreach ( const Tomahawk::PlaylistDeleteQuestion& question, m_questions )
+    foreach ( const Tomahawk::PlaylistDeleteQuestion & question, m_questions )
     {
         QCheckBox* cb = new QCheckBox( question.first, this );
         cb->setLayoutDirection( Qt::RightToLeft );
@@ -268,7 +270,7 @@ SourceTreePopupDialog::onRejected()
 void
 SourceTreePopupDialog::calculateResults()
 {
-    foreach ( const QCheckBox* b, m_questionCheckboxes )
+    foreach ( const QCheckBox * b, m_questionCheckboxes )
     {
         if ( b->property( "data" ).toInt() != 0 )
         {
@@ -283,7 +285,9 @@ SourceTreePopupDialog::clearQuestionWidgets()
 {
     while ( QLayoutItem* item = m_questionsLayout->takeAt( 0 ) )
         if ( QWidget* widget = item->widget() )
+        {
             delete widget;
+        }
     m_questionCheckboxes.clear();
 
     setFixedHeight( 80 );

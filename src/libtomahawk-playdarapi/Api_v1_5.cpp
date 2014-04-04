@@ -40,7 +40,7 @@ Api_v1_5::Api_v1_5( Api_v1* parent )
 void
 Api_v1_5::ping( QxtWebRequestEvent* event )
 {
-    QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, "pong" );
+    QxtWebPageEvent* e = new QxtWebPageEvent( event->sessionID, event->requestID, "pong" );
     e->headers.insert( "Access-Control-Allow-Origin", "*" );
     e->contentType = "text/plain";
     m_service->postEvent( e );
@@ -50,7 +50,7 @@ Api_v1_5::ping( QxtWebRequestEvent* event )
 void
 Api_v1_5::playback( QxtWebRequestEvent* event, const QString& command )
 {
-    if ( command == "next")
+    if ( command == "next" )
     {
         JSON_REPLY( QMetaObject::invokeMethod( AudioEngine::instance(), "next", Qt::QueuedConnection ) , "Skipping to the next track failed." );
     }
@@ -110,7 +110,7 @@ Api_v1_5::playback( QxtWebRequestEvent* event, const QString& command )
             Q_ASSERT( ok );
         }
 
-        QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, json );
+        QxtWebPageEvent* e = new QxtWebPageEvent( event->sessionID, event->requestID, json );
         e->headers.insert( "Access-Control-Allow-Origin", "*" );
         e->contentType = "application/json";
         m_service->postEvent( e );
@@ -118,7 +118,7 @@ Api_v1_5::playback( QxtWebRequestEvent* event, const QString& command )
     else if ( command == "volume" )
     {
         QByteArray json = QString( "{ \"result\": \"ok\", \"volume\": %1}" ).arg( AudioEngine::instance()->volume() ).toUtf8();
-        QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, json );
+        QxtWebPageEvent* e = new QxtWebPageEvent( event->sessionID, event->requestID, json );
         e->headers.insert( "Access-Control-Allow-Origin", "*" );
         e->contentType = "application/json";
         m_service->postEvent( e );

@@ -29,7 +29,7 @@ namespace Tomahawk
 
 class AlbumPrivate
 {
-public:
+  public:
     AlbumPrivate( Album* q, unsigned int _id, const QString& _name, const Tomahawk::artist_ptr& _artist )
         : q_ptr( q )
         , waitingForId( false )
@@ -58,7 +58,7 @@ public:
     Album* q_ptr;
     Q_DECLARE_PUBLIC( Album )
 
-private:
+  private:
     mutable bool waitingForId;
     mutable QFuture<unsigned int> idFuture;
     mutable unsigned int id;

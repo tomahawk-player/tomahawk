@@ -135,19 +135,23 @@ void
 JobStatusView::customDelegateJobInserted( int row, JobStatusItem* item )
 {
     if ( !item )
+    {
         return;
+    }
 
     item->createDelegate( m_view );
     m_view->setItemDelegateForRow( row, item->customDelegate() );
     ACLJobDelegate* delegate = qobject_cast< ACLJobDelegate* >( item->customDelegate() );
     if ( delegate )
     {
-        connect( delegate, SIGNAL( update( const QModelIndex& ) ), m_view, SLOT( update( const QModelIndex & ) ) );
+        connect( delegate, SIGNAL( update( const QModelIndex& ) ), m_view, SLOT( update( const QModelIndex& ) ) );
         connect( delegate, SIGNAL( aclResult( Tomahawk::ACLStatus::Type ) ), item, SLOT( aclResult( Tomahawk::ACLStatus::Type ) ) );
         delegate->emitSizeHintChanged( m_model->index( row, 0 ) );
     }
     else
+    {
         tLog() << Q_FUNC_INFO << "delegate was not properly found!";
+    }
 
     checkCount();
 }
@@ -176,9 +180,13 @@ JobStatusView::refreshDelegates()
         }
         JobStatusItem* item = itemVar.value< JobStatusItem* >();
         if ( item->hasCustomDelegate() )
+        {
             m_view->setItemDelegateForRow( i, item->customDelegate() );
+        }
         else
+        {
             m_view->setItemDelegateForRow( i, m_view->itemDelegate() );
+        }
     }
 
     checkCount();
@@ -190,9 +198,13 @@ JobStatusView::checkCount()
 {
     m_cachedHeight = -1;
     if ( m_view->model()->rowCount() == 0 && !isHidden() )
+    {
         emit hideWidget();
+    }
     else
+    {
         emit sizeHintChanged( sizeHint() );
+    }
 }
 
 
@@ -200,7 +212,9 @@ QSize
 JobStatusView::sizeHint() const
 {
     if ( m_cachedHeight >= 0 )
+    {
         return QSize( 0, m_cachedHeight );
+    }
 
     unsigned int y = 0;
     y += m_view->contentsMargins().top() + m_view->contentsMargins().bottom();

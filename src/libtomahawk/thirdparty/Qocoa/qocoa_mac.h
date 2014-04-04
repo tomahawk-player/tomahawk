@@ -28,32 +28,34 @@ THE SOFTWARE.
 #include <QVBoxLayout>
 #include <QMacCocoaViewContainer>
 
-static inline NSString* fromQString(const QString &string)
+static inline NSString* fromQString( const QString& string )
 {
     const QByteArray utf8 = string.toUtf8();
     const char* cString = utf8.constData();
     return [[[NSString alloc] initWithUTF8String:cString] autorelease];
 }
 
-static inline QString toQString(NSString *string)
+static inline QString toQString( NSString* string )
 {
-    if (!string)
+    if ( !string )
+    {
         return QString();
-    return QString::fromUtf8([string UTF8String]);
+    }
+    return QString::fromUtf8( [string UTF8String] );
 }
 
-static inline NSImage* fromQPixmap(const QPixmap &pixmap)
+static inline NSImage* fromQPixmap( const QPixmap& pixmap )
 {
     CGImageRef cgImage = pixmap.toMacCGImageRef();
     return [[[NSImage alloc] initWithCGImage:cgImage size:NSZeroSize] autorelease];
 }
 
-static inline void setupLayout(void *cocoaView, QWidget *parent)
+static inline void setupLayout( void* cocoaView, QWidget* parent )
 {
-    parent->setAttribute(Qt::WA_NativeWindow);
-    QVBoxLayout *layout = new QVBoxLayout(parent);
-    layout->setMargin(0);
-    layout->addWidget(new QMacCocoaViewContainer(cocoaView, parent));
+    parent->setAttribute( Qt::WA_NativeWindow );
+    QVBoxLayout* layout = new QVBoxLayout( parent );
+    layout->setMargin( 0 );
+    layout->addWidget( new QMacCocoaViewContainer( cocoaView, parent ) );
 }
 
 #endif

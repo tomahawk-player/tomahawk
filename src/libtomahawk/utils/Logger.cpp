@@ -46,36 +46,44 @@ namespace Logger
 {
 
 static void
-log( const char *msg, unsigned int debugLevel, bool toDisk = true )
+log( const char* msg, unsigned int debugLevel, bool toDisk = true )
 {
     if ( s_threshold < 0 )
     {
         if ( qApp->arguments().contains( "--verbose" ) )
+        {
             s_threshold = LOGTHIRDPARTY;
+        }
         else
-            #ifdef QT_NO_DEBUG
+#ifdef QT_NO_DEBUG
             s_threshold = RELEASE_LEVEL_THRESHOLD;
-            #else
+#else
             s_threshold = DEBUG_LEVEL_THRESHOLD;
-            #endif
+#endif
     }
 
     if ( debugLevel > LOGTHIRDPARTY )
+    {
         toDisk = false;
+    }
 
-    #ifdef LOG_SQL_QUERIES
+#ifdef LOG_SQL_QUERIES
     if ( debugLevel == LOGSQL )
+    {
         toDisk = true;
-    #endif
+    }
+#endif
 
-    if ( toDisk || (int)debugLevel <= s_threshold )
+    if ( toDisk || ( int )debugLevel <= s_threshold )
     {
         QMutexLocker lock( &s_mutex );
 
-        #ifdef LOG_SQL_QUERIES
+#ifdef LOG_SQL_QUERIES
         if ( debugLevel == LOGSQL )
+        {
             logfile << "TSQLQUERY: ";
-        #endif
+        }
+#endif
 
         logfile << QDate::currentDate().toString().toUtf8().data()
                 << " - "
@@ -86,7 +94,7 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
         logfile.flush();
     }
 
-    if ( debugLevel <= LOGEXTRA || (int)debugLevel <= s_threshold )
+    if ( debugLevel <= LOGEXTRA || ( int )debugLevel <= s_threshold )
     {
         QMutexLocker lock( &s_mutex );
 

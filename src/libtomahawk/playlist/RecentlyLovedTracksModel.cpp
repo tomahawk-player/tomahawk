@@ -46,7 +46,7 @@ RecentlyLovedTracksModel::loadTracks()
                        "FROM social_attributes, track, artist "
                        "WHERE social_attributes.id = track.id AND artist.id = track.artist AND social_attributes.k = 'Love' AND social_attributes.v = 'true' "
                        "ORDER BY social_attributes.timestamp DESC LIMIT %1" )
-                .arg( d->limit );
+              .arg( d->limit );
     }
     else
     {
@@ -54,8 +54,8 @@ RecentlyLovedTracksModel::loadTracks()
                        "FROM social_attributes, track, artist "
                        "WHERE social_attributes.id = track.id AND artist.id = track.artist AND social_attributes.k = 'Love' AND social_attributes.v = 'true' AND social_attributes.source %1 "
                        "ORDER BY social_attributes.timestamp DESC "
-                       )
-                .arg( d->source->isLocal() ? "IS NULL" : QString( "= %1" ).arg( d->source->id() ) );
+                     )
+              .arg( d->source->isLocal() ? "IS NULL" : QString( "= %1" ).arg( d->source->id() ) );
     }
 
     Tomahawk::DatabaseCommand_GenericSelect* cmd = new Tomahawk::DatabaseCommand_GenericSelect( sql, Tomahawk::DatabaseCommand_GenericSelect::Track, -1, 0 );

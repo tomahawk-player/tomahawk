@@ -74,11 +74,15 @@ BufferIODevice::seek( qint64 pos )
     qDebug() << Q_FUNC_INFO << pos << d->size;
 
     if ( pos >= d->size )
+    {
         return false;
+    }
 
     int block = blockForPos( pos );
     if ( isBlockEmpty( block ) )
+    {
         emit blockRequest( block );
+    }
 
     d->pos = pos;
     qDebug() << "Finished seeking";
@@ -121,7 +125,9 @@ BufferIODevice::addData( int block, const QByteArray& ba )
         QMutexLocker lock( &d->mut );
 
         while ( d->buffer.count() <= block )
+        {
             d->buffer << QByteArray();
+        }
 
         d->buffer.replace( block, ba );
     }
@@ -154,16 +160,18 @@ qint64
 BufferIODevice::readData( char* data, qint64 maxSize )
 {
     Q_D( BufferIODevice );
-//    qDebug() << Q_FUNC_INFO << m_pos << maxSize << 1;
+    //    qDebug() << Q_FUNC_INFO << m_pos << maxSize << 1;
 
     if ( atEnd() )
+    {
         return 0;
+    }
 
     QByteArray ba;
     ba.append( getData( d->pos, maxSize ) );
     d->pos += ba.count();
 
-//    qDebug() << Q_FUNC_INFO << maxSize << ba.count() << 2;
+    //    qDebug() << Q_FUNC_INFO << maxSize << ba.count() << 2;
     memcpy( data, ba.data(), ba.count() );
 
     return ba.count();
@@ -194,7 +202,7 @@ bool
 BufferIODevice::atEnd() const
 {
     Q_D( const BufferIODevice );
-//    qDebug() << Q_FUNC_INFO << ( m_size <= m_pos );
+    //    qDebug() << Q_FUNC_INFO << ( m_size <= m_pos );
     return ( d->size <= d->pos );
 }
 
@@ -260,16 +268,20 @@ BufferIODevice::nextEmptyBlock() const
     Q_D( const BufferIODevice );
 
     int i = 0;
-    foreach( const QByteArray& ba, d->buffer )
+    foreach( const QByteArray & ba, d->buffer )
     {
         if ( ba.isEmpty() )
+        {
             return i;
+        }
 
         i++;
     }
 
     if ( i == maxBlocks() )
+    {
         return -1;
+    }
 
     return i;
 }
@@ -283,7 +295,9 @@ BufferIODevice::maxBlocks() const
     int i = d->size / BLOCKSIZE;
 
     if ( ( d->size % BLOCKSIZE ) > 0 )
+    {
         i++;
+    }
 
     return i;
 }
@@ -294,7 +308,9 @@ BufferIODevice::isBlockEmpty( int block ) const
 {
     Q_D( const BufferIODevice );
     if ( block >= d->buffer.count() )
+    {
         return true;
+    }
 
     return d->buffer.at( block ).isEmpty();
 }
@@ -304,7 +320,7 @@ QByteArray
 BufferIODevice::getData( qint64 pos, qint64 size )
 {
     Q_D( BufferIODevice );
-//    qDebug() << Q_FUNC_INFO << pos << size << 1;
+    //    qDebug() << Q_FUNC_INFO << pos << size << 1;
     QByteArray ba;
     int block = blockForPos( pos );
     int offset = offsetForPos( pos );
@@ -313,14 +329,18 @@ BufferIODevice::getData( qint64 pos, qint64 size )
     while( ba.count() < size )
     {
         if ( block > maxBlocks() )
+        {
             break;
+        }
 
         if ( isBlockEmpty( block ) )
+        {
             break;
+        }
 
         ba.append( d->buffer.at( block++ ).mid( offset ) );
     }
 
-//    qDebug() << Q_FUNC_INFO << pos << size << 2;
+    //    qDebug() << Q_FUNC_INFO << pos << size << 2;
     return ba.left( size );
 }

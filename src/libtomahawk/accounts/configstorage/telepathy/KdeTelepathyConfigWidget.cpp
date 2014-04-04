@@ -38,7 +38,7 @@ KdeTelepathyConfigWidget::configWidget()
         return 0;
     }
 
-   return proxy;
+    return proxy;
 }
 
 Q_EXPORT_PLUGIN2( TelepathyConfigStorageConfigWidgetPlugin, KdeTelepathyConfigWidget )

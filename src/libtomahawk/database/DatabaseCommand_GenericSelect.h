@@ -58,8 +58,9 @@ class DLLEXPORT DatabaseCommand_GenericSelect : public DatabaseCommand
 {
     Q_OBJECT
 
-public:
-    enum QueryType {
+  public:
+    enum QueryType
+    {
         Track,
         Artist,
         Album
@@ -68,17 +69,23 @@ public:
     explicit DatabaseCommand_GenericSelect( const QString& sqlSelect, QueryType type, int limitResults = -1, QObject* parent = 0 );
     explicit DatabaseCommand_GenericSelect( const QString& sqlSelect, QueryType type, bool rawData, QObject* parent = 0 );
     virtual void exec( DatabaseImpl* lib );
-    virtual bool doesMutates() const { return false; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
 
-    virtual QString commandname() const { return "genericselect"; }
+    virtual QString commandname() const
+    {
+        return "genericselect";
+    }
 
-signals:
+  signals:
     void tracks( const QList< Tomahawk::query_ptr >& tracks );
     void artists( const QList< Tomahawk::artist_ptr >& artists );
     void albums( const QList< Tomahawk::album_ptr >& albums );
 
     void rawData( const QList< QStringList >& data );
-private:
+  private:
     QString m_sqlSelect;
     QueryType m_queryType;
     int m_limit;
@@ -88,8 +95,8 @@ private:
 }
 
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    // Qt5 automatically generated this Metatype
-    Q_DECLARE_METATYPE(QList<QStringList>)
+// Qt5 automatically generated this Metatype
+Q_DECLARE_METATYPE( QList<QStringList> )
 #endif
 
 #endif // DATABASECOMMAND_GENERICSELECT_H

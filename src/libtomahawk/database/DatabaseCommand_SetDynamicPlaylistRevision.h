@@ -32,36 +32,45 @@ class DatabaseCommand_SetDynamicPlaylistRevision : public DatabaseCommand_SetPla
     Q_PROPERTY( int           mode               READ mode          WRITE setMode )
     Q_PROPERTY( QVariantList controls            READ controlsV     WRITE setControlsV )
 
-public:
+  public:
     explicit DatabaseCommand_SetDynamicPlaylistRevision( QObject* parent = 0 )
-    : DatabaseCommand_SetPlaylistRevision( parent )
+        : DatabaseCommand_SetPlaylistRevision( parent )
     {}
 
     explicit DatabaseCommand_SetDynamicPlaylistRevision( const source_ptr& s,
-                                                  const QString& playlistguid,
-                                                  const QString& newrev,
-                                                  const QString& oldrev,
-                                                  const QStringList& orderedguids,
-                                                  const QList<Tomahawk::plentry_ptr>& addedentries,
-                                                  const QList<plentry_ptr>& entries,
-                                                  const QString& type,
-                                                  GeneratorMode mode,
-                                                  const QList< dyncontrol_ptr >& controls );
+            const QString& playlistguid,
+            const QString& newrev,
+            const QString& oldrev,
+            const QStringList& orderedguids,
+            const QList<Tomahawk::plentry_ptr>& addedentries,
+            const QList<plentry_ptr>& entries,
+            const QString& type,
+            GeneratorMode mode,
+            const QList< dyncontrol_ptr >& controls );
 
     explicit DatabaseCommand_SetDynamicPlaylistRevision( const source_ptr& s,
-                                                  const QString& playlistguid,
-                                                  const QString& newrev,
-                                                  const QString& oldrev,
-                                                  const QString& type,
-                                                  GeneratorMode mode,
-                                                  const QList< dyncontrol_ptr >& controls );
+            const QString& playlistguid,
+            const QString& newrev,
+            const QString& oldrev,
+            const QString& type,
+            GeneratorMode mode,
+            const QList< dyncontrol_ptr >& controls );
 
-    QString commandname() const { return "setdynamicplaylistrevision"; }
+    QString commandname() const
+    {
+        return "setdynamicplaylistrevision";
+    }
 
     virtual void exec( DatabaseImpl* lib );
     virtual void postCommitHook();
-    virtual bool doesMutates() const { return true; }
-    virtual bool groupable() const { return true; }
+    virtual bool doesMutates() const
+    {
+        return true;
+    }
+    virtual bool groupable() const
+    {
+        return true;
+    }
 
     void setControlsV( const QVariantList& vlist )
     {
@@ -70,15 +79,27 @@ public:
 
     QVariantList controlsV();
 
-    QString type() const { return m_type; }
-    int mode() const { return (int)m_mode; }
+    QString type() const
+    {
+        return m_type;
+    }
+    int mode() const
+    {
+        return ( int )m_mode;
+    }
 
-    void setType( const QString& type ) { m_type = type; }
-    void setMode( int mode ) { m_mode = (GeneratorMode)mode; }
+    void setType( const QString& type )
+    {
+        m_type = type;
+    }
+    void setMode( int mode )
+    {
+        m_mode = ( GeneratorMode )mode;
+    }
 
     void setPlaylist( DynamicPlaylist* pl ); // raw pointer b/c we don't have the shared pointer from inside the shared pointer
 
-private:
+  private:
     QString m_type;
     GeneratorMode m_mode;
     QList< dyncontrol_ptr > m_controls;

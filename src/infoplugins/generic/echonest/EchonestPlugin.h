@@ -42,13 +42,13 @@ class INFOPLUGINDLLEXPORT EchonestPlugin : public InfoPlugin
     Q_OBJECT
     Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 
-public:
+  public:
     EchonestPlugin();
     virtual ~EchonestPlugin();
 
-protected slots:
+  protected slots:
     virtual void init();
-    
+
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
 
     virtual void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
@@ -62,19 +62,19 @@ protected slots:
         Q_UNUSED( requestData );
     }
 
-private:
-    void getSongProfile( const Tomahawk::InfoSystem::InfoRequestData &requestData, const QString &item = QString() );
-    void getArtistBiography( const Tomahawk::InfoSystem::InfoRequestData &requestData );
-    void getArtistFamiliarity( const Tomahawk::InfoSystem::InfoRequestData &requestData );
-    void getArtistHotttnesss( const Tomahawk::InfoSystem::InfoRequestData &requestData );
-    void getArtistTerms( const Tomahawk::InfoSystem::InfoRequestData &requestData );
-    void getMiscTopTerms( const Tomahawk::InfoSystem::InfoRequestData &requestData );
+  private:
+    void getSongProfile( const Tomahawk::InfoSystem::InfoRequestData& requestData, const QString& item = QString() );
+    void getArtistBiography( const Tomahawk::InfoSystem::InfoRequestData& requestData );
+    void getArtistFamiliarity( const Tomahawk::InfoSystem::InfoRequestData& requestData );
+    void getArtistHotttnesss( const Tomahawk::InfoSystem::InfoRequestData& requestData );
+    void getArtistTerms( const Tomahawk::InfoSystem::InfoRequestData& requestData );
+    void getMiscTopTerms( const Tomahawk::InfoSystem::InfoRequestData& requestData );
 
-    bool isValidArtistData( const Tomahawk::InfoSystem::InfoRequestData &requestData );
-    bool isValidTrackData( const Tomahawk::InfoSystem::InfoRequestData &requestData );
+    bool isValidArtistData( const Tomahawk::InfoSystem::InfoRequestData& requestData );
+    bool isValidTrackData( const Tomahawk::InfoSystem::InfoRequestData& requestData );
     Echonest::Artist artistFromReply( QNetworkReply* );
 
-private slots:
+  private slots:
     void getArtistBiographySlot();
     void getArtistFamiliaritySlot();
     void getArtistHotttnesssSlot();

@@ -98,10 +98,14 @@ void
 PlaylistEntry::onQueryResolved( bool hasResults )
 {
     if ( !hasResults )
+    {
         return;
+    }
 
     if ( resultHint().isEmpty() )
+    {
         setResultHint( hintFromQuery() );
+    }
 }
 
 
@@ -110,7 +114,9 @@ PlaylistEntry::setResultHint( const QString& s )
 {
     Q_D( PlaylistEntry );
     if ( d->resulthint == s )
+    {
         return;
+    }
 
     d->resulthint = s;
     emit resultChanged();
@@ -124,13 +130,17 @@ PlaylistEntry::hintFromQuery() const
 
     QString resultHint, foundResult;
     if ( !d->query->results().isEmpty() )
+    {
         foundResult = d->query->results().first()->url();
+    }
     else if ( !d->query->resultHint().isEmpty() )
+    {
         foundResult = d->query->resultHint();
+    }
 
     if ( foundResult.startsWith( "file://" ) ||
-        foundResult.startsWith( "servent://" ) || // Save resulthints for local files and peers automatically
-        ( TomahawkUtils::whitelistedHttpResultHint( foundResult ) && d->query->saveHTTPResultHint() ) )
+            foundResult.startsWith( "servent://" ) || // Save resulthints for local files and peers automatically
+            ( TomahawkUtils::whitelistedHttpResultHint( foundResult ) && d->query->saveHTTPResultHint() ) )
     {
         resultHint = foundResult;
     }

@@ -43,18 +43,18 @@ TomahawkXmppMessageFactory::~TomahawkXmppMessageFactory()
 
 QStringList TomahawkXmppMessageFactory::features() const
 {
-    return QStringList(TOMAHAWK_SIP_MESSAGE_NS);
+    return QStringList( TOMAHAWK_SIP_MESSAGE_NS );
 }
 
-bool TomahawkXmppMessageFactory::canParse(const QStringRef &name, const QStringRef &uri, const QXmlStreamAttributes &attributes)
+bool TomahawkXmppMessageFactory::canParse( const QStringRef& name, const QStringRef& uri, const QXmlStreamAttributes& attributes )
 {
-    Q_UNUSED(uri);
-    Q_UNUSED(attributes);
-    return name == QLatin1String("tomahawk") && uri == TOMAHAWK_SIP_MESSAGE_NS;
+    Q_UNUSED( uri );
+    Q_UNUSED( attributes );
+    return name == QLatin1String( "tomahawk" ) && uri == TOMAHAWK_SIP_MESSAGE_NS;
 }
 
-void TomahawkXmppMessageFactory::handleStartElement(const QStringRef &name, const QStringRef &uri,
-                                            const QXmlStreamAttributes &attributes)
+void TomahawkXmppMessageFactory::handleStartElement( const QStringRef& name, const QStringRef& uri,
+        const QXmlStreamAttributes& attributes )
 {
     m_depth++;
     if ( m_depth == 1 )
@@ -73,7 +73,7 @@ void TomahawkXmppMessageFactory::handleStartElement(const QStringRef &name, cons
             m_key = attributes.value( QLatin1String( "pwd" ) ).toString();
         }
     }
-    else if(m_depth == 3)
+    else if( m_depth == 3 )
     {
         if ( name == QLatin1String( "candidate" ) )
         {
@@ -88,14 +88,16 @@ void TomahawkXmppMessageFactory::handleStartElement(const QStringRef &name, cons
             m_sipInfos.append( info );
         }
     }
-    Q_UNUSED(uri);
-    Q_UNUSED(attributes);
+    Q_UNUSED( uri );
+    Q_UNUSED( attributes );
 }
 
-void TomahawkXmppMessageFactory::handleEndElement(const QStringRef &name, const QStringRef &uri)
+void TomahawkXmppMessageFactory::handleEndElement( const QStringRef& name, const QStringRef& uri )
 {
     if ( m_depth == 3 )
+    {
         m_state = AtTransport;
+    }
     else if ( m_depth == 2 )
     {
         m_state = AtNowhere;
@@ -110,12 +112,12 @@ void TomahawkXmppMessageFactory::handleEndElement(const QStringRef &name, const 
             m_sipInfos.append( info );
         }
     }
-    Q_UNUSED(name);
-    Q_UNUSED(uri);
+    Q_UNUSED( name );
+    Q_UNUSED( uri );
     m_depth--;
 }
 
-void TomahawkXmppMessageFactory::handleCharacterData(const QStringRef &text)
+void TomahawkXmppMessageFactory::handleCharacterData( const QStringRef& text )
 {
     /*if (m_state == AtUtc) {
         //m_utc = Util::fromStamp(text.toString());
@@ -125,12 +127,12 @@ void TomahawkXmppMessageFactory::handleCharacterData(const QStringRef &text)
         //QTime delta = QTime::fromString(str.mid(1), QLatin1String("hh:mm"));
         //m_tzo = multiple * (delta.hour() * 60 + delta.minute());
     }*/
-    Q_UNUSED(text);
+    Q_UNUSED( text );
 }
 
-void TomahawkXmppMessageFactory::serialize(Payload *extension, QXmlStreamWriter *writer)
+void TomahawkXmppMessageFactory::serialize( Payload* extension, QXmlStreamWriter* writer )
 {
-    TomahawkXmppMessage *sipMessage = se_cast<TomahawkXmppMessage*>(extension);
+    TomahawkXmppMessage* sipMessage = se_cast<TomahawkXmppMessage*>( extension );
 
     writer->writeStartElement( QLatin1String( "tomahawk" ) );
     writer->writeDefaultNamespace( TOMAHAWK_SIP_MESSAGE_NS );
@@ -160,7 +162,9 @@ void TomahawkXmppMessageFactory::serialize(Payload *extension, QXmlStreamWriter 
     foreach ( SipInfo info, sipInfos )
     {
         if ( info.isVisible() )
+        {
             serializeSipInfo( info, writer );
+        }
     }
 
     if ( lastInfo.isValid() )
@@ -183,7 +187,7 @@ TomahawkXmppMessageFactory::createPayload()
 }
 
 void
-TomahawkXmppMessageFactory::serializeSipInfo(SipInfo &info, QXmlStreamWriter *writer)
+TomahawkXmppMessageFactory::serializeSipInfo( SipInfo& info, QXmlStreamWriter* writer )
 {
     if ( info.isVisible() )
     {

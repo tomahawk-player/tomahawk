@@ -34,12 +34,12 @@
 #include <QMessageBox>
 
 ScriptEngine::ScriptEngine( JSResolver* parent )
-    : QWebPage( (QObject*) parent )
+    : QWebPage( ( QObject* ) parent )
     , m_parent( parent )
 {
     settings()->setAttribute( QWebSettings::OfflineStorageDatabaseEnabled, true );
     settings()->setOfflineStoragePath( TomahawkUtils::appDataDir().path() );
-    settings()->setAttribute(QWebSettings::LocalStorageEnabled, true );
+    settings()->setAttribute( QWebSettings::LocalStorageEnabled, true );
     settings()->setLocalStoragePath( TomahawkUtils::appDataDir().path() );
     settings()->setAttribute( QWebSettings::LocalStorageDatabaseEnabled, true );
     settings()->setAttribute( QWebSettings::LocalContentCanAccessFileUrls, true );
@@ -53,7 +53,7 @@ ScriptEngine::ScriptEngine( JSResolver* parent )
     tLog( LOGVERBOSE ) << "JSResolver Using header" << m_header;
 
     connect( networkAccessManager(), SIGNAL( sslErrors( QNetworkReply*, QList<QSslError> ) ),
-                                       SLOT( sslErrorHandler( QNetworkReply*, QList<QSslError> ) ) );
+             SLOT( sslErrorHandler( QNetworkReply*, QList<QSslError> ) ) );
 }
 
 
@@ -61,10 +61,10 @@ void
 ScriptEngine::javaScriptConsoleMessage( const QString& message, int lineNumber, const QString& sourceID )
 {
     tLog() << "JAVASCRIPT:" << QString( "%1:%2" ).arg( m_scriptPath ).arg( lineNumber ) << message << sourceID;
-    #ifdef QT_DEBUG
+#ifdef QT_DEBUG
     QFileInfo scriptPath( m_scriptPath );
     JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Resolver Error: %1:%2 %3" ).arg( scriptPath.fileName() ).arg( lineNumber ).arg( message ) ) );
-    #endif
+#endif
 }
 
 
@@ -78,16 +78,16 @@ ScriptEngine::sslErrorHandler( QNetworkReply* qnr, const QList<QSslError>& errli
 
     if ( !TomahawkSettings::instance()->isSslCertKnown( digest ) )
     {
-        foreach ( const QSslError& err, errlist )
-            tDebug() << Q_FUNC_INFO << "SSL error:" << err;
+        foreach ( const QSslError & err, errlist )
+        tDebug() << Q_FUNC_INFO << "SSL error:" << err;
 
         QMessageBox question( TomahawkUtils::tomahawkWindow() );
         question.setWindowTitle( tr( "SSL Error" ) );
         question.setText( tr( "You have asked Tomahawk to connect securely to <b>%1</b>, but we can't confirm that your connection is secure:<br><br>"
-                            "<b>%2</b><br><br>"
-                            "Do you want to trust this connection?" )
-                            .arg( qnr->url().host() )
-                            .arg( errlist.first().errorString() ) );
+                              "<b>%2</b><br><br>"
+                              "Do you want to trust this connection?" )
+                          .arg( qnr->url().host() )
+                          .arg( errlist.first().errorString() ) );
 
         question.setStandardButtons( QMessageBox::No );
         question.addButton( tr( "Trust certificate" ), QMessageBox::AcceptRole );
@@ -96,7 +96,9 @@ ScriptEngine::sslErrorHandler( QNetworkReply* qnr, const QList<QSslError>& errli
 
         //FIXME: discuss whether we want to store rejects, too (needs settings management to remove the decision?)
         if ( result == QMessageBox::AcceptRole )
+        {
             TomahawkSettings::instance()->setSslCertTrusted( digest, result == QMessageBox::AcceptRole );
+        }
     }
 
     if ( TomahawkSettings::instance()->isSslCertTrusted( digest ) )

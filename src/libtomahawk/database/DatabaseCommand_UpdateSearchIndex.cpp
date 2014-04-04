@@ -28,8 +28,8 @@
 #include "jobview/IndexingJobItem.h"
 
 #ifndef ENABLE_HEADLESS
-    #include "jobview/JobStatusView.h"
-    #include "jobview/JobStatusModel.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
 #endif
 
 #include "utils/Logger.h"

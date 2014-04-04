@@ -26,9 +26,9 @@
 namespace Tomahawk
 {
 
-RevisionQueueItem::RevisionQueueItem( const QString& nRev, const QString& oRev, const QList<plentry_ptr>& e, bool latest)
+RevisionQueueItem::RevisionQueueItem( const QString& nRev, const QString& oRev, const QList<plentry_ptr>& e, bool latest )
     : newRev( nRev )
-    , oldRev( oRev)
+    , oldRev( oRev )
     , entries( e )
     , applyToTip( latest )
 {

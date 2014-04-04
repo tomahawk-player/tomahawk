@@ -28,13 +28,16 @@
 
 class DLLEXPORT PlaylistView : public TrackView
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit PlaylistView( QWidget* parent = 0 );
     virtual ~PlaylistView();
 
-    PlaylistModel* playlistModel() const { return m_model; }
+    PlaylistModel* playlistModel() const
+    {
+        return m_model;
+    }
     virtual void setPlaylistModel( PlaylistModel* model );
     virtual void setModel( QAbstractItemModel* model );
 
@@ -43,22 +46,22 @@ public:
     virtual QPixmap pixmap() const;
     virtual bool isTemporaryPage() const;
 
-signals:
+  signals:
     void nameChanged( const QString& title );
     void destroyed( QWidget* widget );
     void modelChanged();
 
-protected:
+  protected:
     void keyPressEvent( QKeyEvent* event );
     bool eventFilter( QObject* obj, QEvent* event );
 
-private slots:
+  private slots:
     void onMenuTriggered( int action );
 
     void onDeleted();
     void onChanged();
 
-private:
+  private:
     PlaylistModel* m_model;
     QString m_customTitle;
     QString m_customDescripton;

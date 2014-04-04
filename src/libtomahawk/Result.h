@@ -43,15 +43,15 @@ class Resolver;
 
 class DLLEXPORT Result : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-friend class ::MetadataEditor;
-friend class DatabaseCommand_Resolve;
-friend class DatabaseCommand_AllTracks;
-friend class DatabaseCommand_AddFiles;
-friend class DatabaseCommand_LoadFile;
+    friend class ::MetadataEditor;
+    friend class DatabaseCommand_Resolve;
+    friend class DatabaseCommand_AllTracks;
+    friend class DatabaseCommand_AddFiles;
+    friend class DatabaseCommand_LoadFile;
 
-public:
+  public:
     static Tomahawk::result_ptr get( const QString& url );
     static bool isCached( const QString& url );
     virtual ~Result();
@@ -91,7 +91,10 @@ public:
 
     void setScore( float score );
     void setFileId( unsigned int id );
-    void setRID( RID id ) { m_rid = id; }
+    void setRID( RID id )
+    {
+        m_rid = id;
+    }
     void setCollection( const Tomahawk::collection_ptr& collection );
     void setFriendlySource( const QString& s );
     void setPurchaseUrl( const QString& u );
@@ -108,22 +111,22 @@ public:
 
     track_ptr track() const;
 
-public slots:
+  public slots:
     void deleteLater();
 
-signals:
+  signals:
     // emitted when the collection this result comes from is going offline/online:
     void statusChanged();
     void updated();
 
-private slots:
+  private slots:
     void onOffline();
     void onOnline();
 
     void onResolverRemoved( Tomahawk::Resolver* resolver );
     void doneEditing();
 
-private:
+  private:
     // private constructor
     explicit Result( const QString& url );
     explicit Result();

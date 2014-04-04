@@ -43,8 +43,8 @@ ViewHeader::ViewHeader( QAbstractItemView* parent )
     setDefaultAlignment( Qt::AlignLeft );
     setStretchLastSection( true );
 
-//    m_menu->addAction( tr( "Resize columns to fit window" ), this, SLOT( onToggleResizeColumns() ) );
-//    m_menu->addSeparator();
+    //    m_menu->addAction( tr( "Resize columns to fit window" ), this, SLOT( onToggleResizeColumns() ) );
+    //    m_menu->addSeparator();
 
     connect( m_sigmap, SIGNAL( mapped( int ) ), SLOT( toggleVisibility( int ) ) );
 }
@@ -67,7 +67,9 @@ ViewHeader::onSectionsChanged()
 {
     tDebug( LOGVERBOSE ) << "Saving columns state for view guid:" << m_guid;
     if ( !m_guid.isEmpty() )
+    {
         TomahawkSettings::instance()->setPlaylistColumnSizes( m_guid, saveState() );
+    }
 }
 
 
@@ -75,14 +77,18 @@ bool
 ViewHeader::checkState()
 {
     if ( !count() || m_init )
+    {
         return false;
+    }
 
     disconnect( this, SIGNAL( sectionMoved( int, int, int ) ), this, SLOT( onSectionsChanged() ) );
     disconnect( this, SIGNAL( sectionResized( int, int, int ) ), this, SLOT( onSectionsChanged() ) );
 
     QByteArray state;
     if ( !m_guid.isEmpty() )
+    {
         state = TomahawkSettings::instance()->playlistColumnSizes( m_guid );
+    }
 
     if ( !state.isEmpty() )
     {
@@ -95,11 +101,15 @@ ViewHeader::checkState()
         for ( int i = 0; i < count() - 1; i++ )
         {
             if ( isSectionHidden( i ) )
+            {
                 continue;
+            }
             if ( i >= m_columnWeights.count() )
+            {
                 break;
+            }
 
-            double nw = (double)m_parent->width() * m_columnWeights.at( i );
+            double nw = ( double )m_parent->width() * m_columnWeights.at( i );
             resizeSection( i, qMax( minimumSectionSize(), int( nw - 0.5 ) ) );
         }
     }
@@ -133,7 +143,9 @@ ViewHeader::contextMenuEvent( QContextMenuEvent* e )
     m_visActions.clear();
 
     for ( int i = 0; i < count(); i++ )
+    {
         addColumnToMenu( i );
+    }
 
     m_menu->popup( e->globalPos() );
 }
@@ -149,9 +161,13 @@ void
 ViewHeader::toggleVisibility( int index )
 {
     if ( isSectionHidden( index ) )
+    {
         showSection( index );
+    }
     else
+    {
         hideSection( index );
+    }
 }
 
 

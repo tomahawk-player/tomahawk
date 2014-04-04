@@ -34,7 +34,7 @@ class StationModelItem;
 class DynamicModel : public PlaylistModel
 {
     Q_OBJECT
-public:
+  public:
     DynamicModel( QObject* parent = 0 );
     virtual ~DynamicModel();
 
@@ -48,20 +48,35 @@ public:
 
     virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
 
-    bool searchingForNext() const { return m_searchingForNext; }
+    bool searchingForNext() const
+    {
+        return m_searchingForNext;
+    }
 
-    void setFilterUnresolvable( bool filter ) { m_filterUnresolvable = filter; }
-    bool filterUnresolvable() const { return m_filterUnresolvable; }
+    void setFilterUnresolvable( bool filter )
+    {
+        m_filterUnresolvable = filter;
+    }
+    bool filterUnresolvable() const
+    {
+        return m_filterUnresolvable;
+    }
 
     // a batchof static tracks wre generated
     void tracksGenerated( const QList< query_ptr > entries, int limitResolvedTo = -1 );
 
     using PlaylistModel::loadPlaylist;
 
-    bool ignoreRevision( const QString& revisionguid ) const { return waitForRevision( revisionguid ); }
-    void removeRevisionFromIgnore( const QString& revisionguid ) { removeFromWaitList( revisionguid ); }
+    bool ignoreRevision( const QString& revisionguid ) const
+    {
+        return waitForRevision( revisionguid );
+    }
+    void removeRevisionFromIgnore( const QString& revisionguid )
+    {
+        removeFromWaitList( revisionguid );
+    }
 
-signals:
+  signals:
     void collapseFromTo( int startRow, int num );
     void checkForOverflow();
 
@@ -69,7 +84,7 @@ signals:
 
     void tracksAdded();
 
-private slots:
+  private slots:
     void newTrackGenerated( const Tomahawk::query_ptr& query );
 
     void trackResolveFinished( bool );
@@ -77,7 +92,7 @@ private slots:
 
     void filteringTrackResolved( bool successful );
 
-private:
+  private:
     void filterUnresolved( const QList< query_ptr >& entries );
     void addToPlaylist( const QList< query_ptr >& entries, bool clearFirst );
 

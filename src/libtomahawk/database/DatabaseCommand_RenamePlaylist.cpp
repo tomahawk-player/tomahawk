@@ -45,7 +45,7 @@ DatabaseCommand_RenamePlaylist::exec( DatabaseImpl* lib )
     TomahawkSqlQuery cre = lib->newquery();
 
     QString sql = QString( "UPDATE playlist SET title = :title WHERE guid = :id AND source %1" )
-                     .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) );
+                  .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) );
 
     cre.prepare( sql );
     cre.bindValue( ":id", m_playlistguid );
@@ -63,11 +63,15 @@ DatabaseCommand_RenamePlaylist::postCommitHook()
     playlist_ptr playlist = Playlist::get( m_playlistguid );
     Q_ASSERT( !playlist.isNull() );
     if ( !playlist )
+    {
         return;
+    }
 
     tDebug() << "Renaming playlist" << playlist->title() << "to" << m_playlistTitle << m_playlistguid;
     playlist->setTitle( m_playlistTitle );
 
     if ( source()->isLocal() )
+    {
         Servent::instance()->triggerDBSync();
+    }
 }

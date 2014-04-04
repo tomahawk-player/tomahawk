@@ -34,9 +34,9 @@ class JSResolver;
 
 class DLLEXPORT JSResolverHelper : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     JSResolverHelper( const QString& scriptPath, JSResolver* parent );
     void setResolverConfig( const QVariantMap& config );
 
@@ -55,9 +55,9 @@ public:
     void customIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
                                 boost::function< void( QSharedPointer< QIODevice >& ) > callback ); // async
     void customUrlTranslator( const Tomahawk::result_ptr&, const QString& url,
-                                boost::function< void( const QString& ) > callback ); // async
+                              boost::function< void( const QString& ) > callback ); // async
 
-public slots:
+  public slots:
     QByteArray readRaw( const QString& fileName );
     QString readBase64( const QString& fileName );
     QString readCompressed( const QString& fileName );
@@ -67,7 +67,10 @@ public slots:
     QVariantMap resolverData();
 
     void log( const QString& message );
-    bool fakeEnv() { return false; }
+    bool fakeEnv()
+    {
+        return false;
+    }
 
     void addTrackResults( const QVariantMap& results );
 
@@ -79,11 +82,11 @@ public slots:
 
     void reportCapabilities( const QVariant& capabilities );
 
-private slots:
+  private slots:
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::ModelMode, const Tomahawk::collection_ptr& collection );
     void pltemplateTracksLoadedForUrl( const QString& url, const Tomahawk::playlisttemplate_ptr& pltemplate );
 
-private:
+  private:
     Tomahawk::query_ptr parseTrack( const QVariantMap& track );
     void returnStreamUrl( const QString& streamUrl, boost::function< void( QSharedPointer< QIODevice >& ) > callback );
     void returnUrlTranslation( const QString& streamUrl, boost::function< void( const QString& ) > callback );

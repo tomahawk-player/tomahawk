@@ -19,47 +19,51 @@
 #include "Closure.h"
 #include <QApplication>
 
-namespace _detail {
+namespace _detail
+{
 
-static bool on_this_thread(QObject* obj)
+static bool on_this_thread( QObject* obj )
 {
     return QCoreApplication::instance()->thread() == obj->thread();
 }
 
-Closure::Closure(QObject* sender,
-                 const char* signal,
-                 QObject* receiver,
-                 const char* slot,
-                 const ClosureArgumentWrapper* val0,
-                 const ClosureArgumentWrapper* val1,
-                 const ClosureArgumentWrapper* val2,
-                 const ClosureArgumentWrapper* val3)
-    : QObject(on_this_thread(receiver) ? receiver : 0),
-      callback_(NULL),
-      autoDelete_(true),
-      outOfThreadReceiver_(on_this_thread(receiver) ? 0 : receiver ),
-      val0_(val0),
-      val1_(val1),
-      val2_(val2),
-      val3_(val3) {
-  const QMetaObject* meta_receiver = receiver->metaObject();
+Closure::Closure( QObject* sender,
+                  const char* signal,
+                  QObject* receiver,
+                  const char* slot,
+                  const ClosureArgumentWrapper* val0,
+                  const ClosureArgumentWrapper* val1,
+                  const ClosureArgumentWrapper* val2,
+                  const ClosureArgumentWrapper* val3 )
+    : QObject( on_this_thread( receiver ) ? receiver : 0 ),
+      callback_( NULL ),
+      autoDelete_( true ),
+      outOfThreadReceiver_( on_this_thread( receiver ) ? 0 : receiver ),
+      val0_( val0 ),
+      val1_( val1 ),
+      val2_( val2 ),
+      val3_( val3 )
+{
+    const QMetaObject* meta_receiver = receiver->metaObject();
 
-  QByteArray normalised_slot = QMetaObject::normalizedSignature(slot + 1);
-  const int index = meta_receiver->indexOfSlot(normalised_slot.constData());
-  Q_ASSERT(index != -1);
-  slot_ = meta_receiver->method(index);
+    QByteArray normalised_slot = QMetaObject::normalizedSignature( slot + 1 );
+    const int index = meta_receiver->indexOfSlot( normalised_slot.constData() );
+    Q_ASSERT( index != -1 );
+    slot_ = meta_receiver->method( index );
 
-  Connect(sender, signal);
+    Connect( sender, signal );
 }
 
-Closure::Closure(QObject* sender,
-                 const char* signal,
-                 function<void()> callback)
-    : callback_(callback) {
-  Connect(sender, signal);
+Closure::Closure( QObject* sender,
+                  const char* signal,
+                  function<void()> callback )
+    : callback_( callback )
+{
+    Connect( sender, signal );
 }
 
-Closure::~Closure() {
+Closure::~Closure()
+{
 }
 
 
@@ -69,19 +73,23 @@ void Closure::forceInvoke()
 }
 
 
-void Closure::Connect(QObject* sender, const char* signal) {
-  if (!sender)
-      return;
+void Closure::Connect( QObject* sender, const char* signal )
+{
+    if ( !sender )
+    {
+        return;
+    }
 
-  bool success = connect(sender, signal, SLOT(Invoked()));
-  Q_ASSERT(success);
-  success = connect(sender, SIGNAL(destroyed()), SLOT(Cleanup()));
-  Q_ASSERT(success);
-  Q_UNUSED(success);
+    bool success = connect( sender, signal, SLOT( Invoked() ) );
+    Q_ASSERT( success );
+    success = connect( sender, SIGNAL( destroyed() ), SLOT( Cleanup() ) );
+    Q_ASSERT( success );
+    Q_UNUSED( success );
 }
 
 void
-Closure::Invoked() {
+Closure::Invoked()
+{
     if ( callback_ )
     {
         callback_();
@@ -97,7 +105,7 @@ Closure::Invoked() {
                 val0_ ? val0_->arg() : QGenericArgument(),
                 val1_ ? val1_->arg() : QGenericArgument(),
                 val2_ ? val2_->arg() : QGenericArgument(),
-                val3_ ? val3_->arg() : QGenericArgument());
+                val3_ ? val3_->arg() : QGenericArgument() );
         }
     }
 
@@ -107,15 +115,17 @@ Closure::Invoked() {
     }
 }
 
-void Closure::Cleanup() {
-  disconnect();
-  deleteLater();
+void Closure::Cleanup()
+{
+    disconnect();
+    deleteLater();
 }
 
 }  // namespace _detail
 
 _detail::Closure* NewClosure(
     QObject* sender, const char* signal,
-    QObject* receiver, const char* slot) {
-  return new _detail::Closure(sender, signal, receiver, slot);
+    QObject* receiver, const char* slot )
+{
+    return new _detail::Closure( sender, signal, receiver, slot );
 }

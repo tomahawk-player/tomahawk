@@ -29,12 +29,12 @@ namespace Tomahawk
 
 class DLLEXPORT TracksRequest
 {
-public:
+  public:
     virtual ~TracksRequest();
 
     virtual void enqueue() = 0;
 
-protected: //signals
+  protected: //signals
     virtual void tracks( const QList< Tomahawk::query_ptr >& ) = 0;
 };
 

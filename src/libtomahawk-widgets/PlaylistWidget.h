@@ -28,28 +28,31 @@
 
 namespace Tomahawk
 {
-  
+
 namespace Widgets
 {
 
 class TOMAHAWK_WIDGETS_EXPORT PlaylistWidget : public QListView
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     PlaylistWidget( QWidget* parent = 0 );
 
-    OverlayWidget* overlay() const { return m_overlay; }
+    OverlayWidget* overlay() const
+    {
+        return m_overlay;
+    }
 
     virtual void setModel( QAbstractItemModel* model );
 
-signals:
+  signals:
     void modelChanged();
 
-private slots:
+  private slots:
     void verifySize();
 
-private:
+  private:
     OverlayWidget* m_overlay;
 };
 

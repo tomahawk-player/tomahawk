@@ -21,8 +21,8 @@
 
 #include <QDebug>
 
-AnimationHelper::AnimationHelper( const QModelIndex& index, QObject *parent )
-    :QObject( parent )
+AnimationHelper::AnimationHelper( const QModelIndex& index, QObject* parent )
+    : QObject( parent )
     , m_index( index )
     , m_fullyExpanded( false )
     , m_expandAnimation( 0 )
@@ -59,7 +59,7 @@ AnimationHelper::initialize( const QSize& startValue, const QSize& endValue, int
     qDebug() << "starting animation" << startValue << endValue << duration;
     connect( m_expandAnimation, SIGNAL( finished() ), SLOT( expandAnimationFinished() ) );
 
-    m_collapseAnimation= new QPropertyAnimation( this, "size", this );
+    m_collapseAnimation = new QPropertyAnimation( this, "size", this );
     m_collapseAnimation->setStartValue( endValue );
     m_collapseAnimation->setEndValue( startValue );
     m_collapseAnimation->setDuration( duration );
@@ -102,7 +102,9 @@ AnimationHelper::collapse( bool immediately )
         m_collapseAnimation->start();
     }
     else
+    {
         m_collapseTimer.start();
+    }
 }
 
 
@@ -110,9 +112,9 @@ bool
 AnimationHelper::partlyExpanded()
 {
     return m_size != m_startSize;
-//    return m_fullyExpanded
-//            || ( m_expandAnimation->state() == QPropertyAnimation::Running && m_expandAnimation->currentTime() > 250 )
-//            || ( m_collapseAnimation->state() == QPropertyAnimation::Running && m_collapseAnimation->currentTime() < 100 );
+    //    return m_fullyExpanded
+    //            || ( m_expandAnimation->state() == QPropertyAnimation::Running && m_expandAnimation->currentTime() > 250 )
+    //            || ( m_collapseAnimation->state() == QPropertyAnimation::Running && m_collapseAnimation->currentTime() < 100 );
 }
 
 

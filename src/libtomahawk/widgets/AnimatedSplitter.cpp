@@ -86,7 +86,9 @@ AnimatedSplitter::changeSize( QWidget* child, const QSize& size )
             for ( int x = 0; x < count(); x++ )
             {
                 if ( x != i && x != wi )
+                {
                     j -= widget( x )->height();
+                }
             }
         }
         else if ( i == wi )
@@ -108,7 +110,7 @@ AnimatedSplitter::changeSize( QWidget* child, const QSize& size )
 void
 AnimatedSplitter::onResizeRequest( const QPoint& delta )
 {
-    AnimatedWidget* w = (AnimatedWidget*)(sender());
+    AnimatedWidget* w = ( AnimatedWidget* )( sender() );
     if ( indexOf( w ) > 0 )
     {
         int newheight = w->height() + delta.y();
@@ -117,43 +119,59 @@ AnimatedSplitter::onResizeRequest( const QPoint& delta )
             w->hide();
         }
         else
+        {
             changeSize( w, QSize( w->width(), newheight ) );
+        }
     }
     else
+    {
         Q_ASSERT( false );
+    }
 }
 
 
 void
 AnimatedSplitter::onShowRequest()
 {
-    AnimatedWidget* w = (AnimatedWidget*)(sender());
+    AnimatedWidget* w = ( AnimatedWidget* )( sender() );
     if ( indexOf( w ) > 0 )
+    {
         show( indexOf( w ) );
+    }
     else
+    {
         Q_ASSERT( false );
+    }
 }
 
 
 void
 AnimatedSplitter::onHideRequest()
 {
-    AnimatedWidget* w = (AnimatedWidget*)(sender());
+    AnimatedWidget* w = ( AnimatedWidget* )( sender() );
     if ( indexOf( w ) > 0 )
+    {
         hide( indexOf( w ) );
+    }
     else
+    {
         Q_ASSERT( false );
+    }
 }
 
 
 void
 AnimatedSplitter::onSizeChanged( const QSize& size )
 {
-    AnimatedWidget* w = (AnimatedWidget*)(sender());
+    AnimatedWidget* w = ( AnimatedWidget* )( sender() );
     if ( indexOf( w ) > 0 )
+    {
         changeSize( w, size );
+    }
     else
+    {
         Q_ASSERT( false );
+    }
 }
 
 
@@ -161,15 +179,21 @@ void
 AnimatedSplitter::setGreedyWidget( int index )
 {
     if( !widget( index ) )
+    {
         return;
+    }
 
     m_greedyIndex = index;
 
     QSizePolicy policy = widget( m_greedyIndex )->sizePolicy();
     if( orientation() == Qt::Horizontal )
+    {
         policy.setHorizontalStretch( 1 );
+    }
     else
+    {
         policy.setVerticalStretch( 1 );
+    }
 
     widget( m_greedyIndex )->setSizePolicy( policy );
 
@@ -205,13 +229,17 @@ void
 AnimatedWidget::onShown( QWidget* widget, bool animated )
 {
     if ( widget != this )
+    {
         return;
+    }
 
     m_animateForward = true;
     if ( animated )
     {
         if ( m_timeLine->state() == QTimeLine::Running )
+        {
             m_timeLine->stop();
+        }
 
         m_timeLine->setFrameRange( height(), sizeHint().height() );
         m_timeLine->setDirection( QTimeLine::Forward );
@@ -231,7 +259,9 @@ void
 AnimatedWidget::onHidden( QWidget* widget, bool animated )
 {
     if ( widget != this )
+    {
         return;
+    }
 
     m_animateForward = false;
     int minHeight = hiddenSize().height();
@@ -239,7 +269,9 @@ AnimatedWidget::onHidden( QWidget* widget, bool animated )
     if ( animated )
     {
         if ( m_timeLine->state() == QTimeLine::Running )
+        {
             m_timeLine->stop();
+        }
 
         m_timeLine->setFrameRange( minHeight, height() );
         m_timeLine->setDirection( QTimeLine::Backward );
@@ -277,7 +309,7 @@ AnimatedWidget::onAnimationFinished()
     {
         setFixedHeight( hiddenSize().height() );
     }
-    
+
     emit animationFinished();
 }
 

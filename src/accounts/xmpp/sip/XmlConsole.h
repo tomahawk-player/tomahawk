@@ -29,7 +29,8 @@
 #include <QDateTime>
 #include <QTextBlock>
 
-namespace Ui {
+namespace Ui
+{
 class XmlConsole;
 }
 
@@ -39,148 +40,162 @@ class ACCOUNTDLLEXPORT XmlConsole : public QWidget, public Jreen::XmlStreamHandl
 {
     Q_OBJECT
 
-public:
-	XmlConsole(Jreen::Client* client, QWidget *parent = 0);
-	~XmlConsole();
+  public:
+    XmlConsole( Jreen::Client* client, QWidget* parent = 0 );
+    ~XmlConsole();
 
-	virtual void handleStreamBegin();
-	virtual void handleStreamEnd();
-	virtual void handleIncomingData(const char *data, qint64 size);
-	virtual void handleOutgoingData(const char *data, qint64 size);
+    virtual void handleStreamBegin();
+    virtual void handleStreamEnd();
+    virtual void handleIncomingData( const char* data, qint64 size );
+    virtual void handleOutgoingData( const char* data, qint64 size );
 
-protected:
-	void changeEvent(QEvent *e);
-private:
-	void stackProcess(const QByteArray &data, bool incoming);
+  protected:
+    void changeEvent( QEvent* e );
+  private:
+    void stackProcess( const QByteArray& data, bool incoming );
 
-	struct XmlNode
-	{
-		enum Type
-		{
-			Iq = 1,
-			Presence = 2,
-			Message = 4,
-			Custom = 8
-		};
-		QDateTime time;
-		Type type;
-		bool incoming;
-		QSet<QString> xmlns;
-		Jreen::JID jid;
-		QSet<QString> attributes;
-		QTextBlock block;
-		int lineCount;
-	};
-	enum FilterType
-	{
-		Disabled = 0x10,
-		ByJid = 0x20,
-		ByXmlns = 0x30,
-		ByAllAttributes = 0x40
-	};
+    struct XmlNode
+    {
+        enum Type
+        {
+            Iq = 1,
+            Presence = 2,
+            Message = 4,
+            Custom = 8
+        };
+        QDateTime time;
+        Type type;
+        bool incoming;
+        QSet<QString> xmlns;
+        Jreen::JID jid;
+        QSet<QString> attributes;
+        QTextBlock block;
+        int lineCount;
+    };
+    enum FilterType
+    {
+        Disabled = 0x10,
+        ByJid = 0x20,
+        ByXmlns = 0x30,
+        ByAllAttributes = 0x40
+    };
 
-	enum State
-	{
-		WaitingForStanza,
-		ReadFeatures,
-		ReadStanza,
-		ReadCustom
-	};
+    enum State
+    {
+        WaitingForStanza,
+        ReadFeatures,
+        ReadStanza,
+        ReadCustom
+    };
 
-	struct StackToken
-	{
-		StackToken(QXmlStreamReader &reader)
-		{
-			type = reader.tokenType();
-			if (type == QXmlStreamReader::StartElement) {
-				QStringRef tmp = reader.name();
-				startTag.namePointer = new QString(*tmp.string());
-				startTag.name = new QStringRef(startTag.namePointer, tmp.position(), tmp.length());
-				tmp = reader.namespaceUri();
-				startTag.xmlnsPointer = new QString(*tmp.string());
-				startTag.xmlns = new QStringRef(startTag.xmlnsPointer, tmp.position(), tmp.length());
-				startTag.attributes = new QXmlStreamAttributes(reader.attributes());
-				startTag.empty = false;
-			} else if (type == QXmlStreamReader::Characters) {
-				QStringRef tmp = reader.text();
-				charachters.textPointer = new QString(*tmp.string());
-				charachters.text = new QStringRef(charachters.textPointer, tmp.position(), tmp.length());
-			} else if (type == QXmlStreamReader::EndElement) {
-				QStringRef tmp = reader.name();
-				endTag.namePointer = new QString(*tmp.string());
-				endTag.name = new QStringRef(endTag.namePointer, tmp.position(), tmp.length());
-			}
-		}
+    struct StackToken
+    {
+        StackToken( QXmlStreamReader& reader )
+        {
+            type = reader.tokenType();
+            if ( type == QXmlStreamReader::StartElement )
+            {
+                QStringRef tmp = reader.name();
+                startTag.namePointer = new QString( *tmp.string() );
+                startTag.name = new QStringRef( startTag.namePointer, tmp.position(), tmp.length() );
+                tmp = reader.namespaceUri();
+                startTag.xmlnsPointer = new QString( *tmp.string() );
+                startTag.xmlns = new QStringRef( startTag.xmlnsPointer, tmp.position(), tmp.length() );
+                startTag.attributes = new QXmlStreamAttributes( reader.attributes() );
+                startTag.empty = false;
+            }
+            else if ( type == QXmlStreamReader::Characters )
+            {
+                QStringRef tmp = reader.text();
+                charachters.textPointer = new QString( *tmp.string() );
+                charachters.text = new QStringRef( charachters.textPointer, tmp.position(), tmp.length() );
+            }
+            else if ( type == QXmlStreamReader::EndElement )
+            {
+                QStringRef tmp = reader.name();
+                endTag.namePointer = new QString( *tmp.string() );
+                endTag.name = new QStringRef( endTag.namePointer, tmp.position(), tmp.length() );
+            }
+        }
 
-		StackToken(const QString &name)
-		{
-			type = QXmlStreamReader::Characters;
-			charachters.textPointer = new QString(name);
-			charachters.text = new QStringRef(charachters.textPointer);
-		}
+        StackToken( const QString& name )
+        {
+            type = QXmlStreamReader::Characters;
+            charachters.textPointer = new QString( name );
+            charachters.text = new QStringRef( charachters.textPointer );
+        }
 
-		~StackToken()
-		{
-			if (type == QXmlStreamReader::StartElement) {
-				delete startTag.namePointer;
-				delete startTag.name;
-				delete startTag.xmlnsPointer;
-				delete startTag.xmlns;
-				delete startTag.attributes;
-			} else if (type == QXmlStreamReader::Characters) {
-				delete charachters.textPointer;
-				delete charachters.text;
-			} else if (type == QXmlStreamReader::EndElement) {
-				delete endTag.namePointer;
-				delete endTag.name;
-			}
-		}
+        ~StackToken()
+        {
+            if ( type == QXmlStreamReader::StartElement )
+            {
+                delete startTag.namePointer;
+                delete startTag.name;
+                delete startTag.xmlnsPointer;
+                delete startTag.xmlns;
+                delete startTag.attributes;
+            }
+            else if ( type == QXmlStreamReader::Characters )
+            {
+                delete charachters.textPointer;
+                delete charachters.text;
+            }
+            else if ( type == QXmlStreamReader::EndElement )
+            {
+                delete endTag.namePointer;
+                delete endTag.name;
+            }
+        }
 
-		QXmlStreamReader::TokenType type;
-		union {
-			struct {
-				QString *namePointer;
-				QStringRef *name;
-				QString *xmlnsPointer;
-				QStringRef *xmlns;
-				QXmlStreamAttributes *attributes;
-				bool empty;
-			} startTag;
-			struct {
-				QString *textPointer;
-				QStringRef *text;
-			} charachters;
-			struct {
-				QString *namePointer;
-				QStringRef *name;
-			} endTag;
-		};
-	};
+        QXmlStreamReader::TokenType type;
+        union
+        {
+            struct
+            {
+                QString* namePointer;
+                QStringRef* name;
+                QString* xmlnsPointer;
+                QStringRef* xmlns;
+                QXmlStreamAttributes* attributes;
+                bool empty;
+            } startTag;
+            struct
+            {
+                QString* textPointer;
+                QStringRef* text;
+            } charachters;
+            struct
+            {
+                QString* namePointer;
+                QStringRef* name;
+            } endTag;
+        };
+    };
 
-	struct StackEnvironment
-	{
-		QXmlStreamReader reader;
-		State state;
-		int depth;
-		QList<StackToken*> tokens;
-		QColor bodyColor;
-		QColor tagColor;
-		QColor attributeColor;
-		QColor paramColor;
-	};
+    struct StackEnvironment
+    {
+        QXmlStreamReader reader;
+        State state;
+        int depth;
+        QList<StackToken*> tokens;
+        QColor bodyColor;
+        QColor tagColor;
+        QColor attributeColor;
+        QColor paramColor;
+    };
 
-	Ui::XmlConsole *m_ui;
-	Jreen::Client *m_client;
-	QList<XmlNode> m_nodes;
-	StackEnvironment m_stackIncoming;
-	StackEnvironment m_stackOutgoing;
-	QColor m_stackBracketsColor;
-	int m_filter;
+    Ui::XmlConsole* m_ui;
+    Jreen::Client* m_client;
+    QList<XmlNode> m_nodes;
+    StackEnvironment m_stackIncoming;
+    StackEnvironment m_stackOutgoing;
+    QColor m_stackBracketsColor;
+    int m_filter;
 
-private slots:
-	void on_lineEdit_textChanged(const QString &);
-	void onActionGroupTriggered(QAction *action);
-	void on_saveButton_clicked();
+  private slots:
+    void on_lineEdit_textChanged( const QString& );
+    void onActionGroupTriggered( QAction* action );
+    void on_saveButton_clicked();
 };
 
 

@@ -35,67 +35,77 @@ const char* GnomeShortcutHandler::kGsdPath = "/org/gnome/SettingsDaemon/MediaKey
 const char* GnomeShortcutHandler::kGsdInterface = "org.gnome.SettingsDaemon.MediaKeys";
 
 
-GnomeShortcutHandler::GnomeShortcutHandler(QObject *parent) :
-    Tomahawk::ShortcutHandler(parent),
-    interface_(NULL)
+GnomeShortcutHandler::GnomeShortcutHandler( QObject* parent ) :
+    Tomahawk::ShortcutHandler( parent ),
+    interface_( NULL )
 {
 
 }
 
-bool GnomeShortcutHandler::DoRegister() {
-    tLog(LOGVERBOSE) << "registering for gnome media keys";
+bool GnomeShortcutHandler::DoRegister()
+{
+    tLog( LOGVERBOSE ) << "registering for gnome media keys";
 
     // Check if the GSD service is available
-    if (!QDBusConnection::sessionBus().interface()->isServiceRegistered(kGsdService)) {
-        tLog(LOGVERBOSE) << "gnome settings daemon not registered";
+    if ( !QDBusConnection::sessionBus().interface()->isServiceRegistered( kGsdService ) )
+    {
+        tLog( LOGVERBOSE ) << "gnome settings daemon not registered";
         return false;
     }
 
-    if (!interface_) {
+    if ( !interface_ )
+    {
         interface_ = new org::gnome::SettingsDaemon::MediaKeys(
-            kGsdService, kGsdPath, QDBusConnection::sessionBus(), this->parent());
+            kGsdService, kGsdPath, QDBusConnection::sessionBus(), this->parent() );
     }
 
     QDBusPendingReply<> reply = interface_->GrabMediaPlayerKeys(
-            QCoreApplication::applicationName(), 0);
+                                    QCoreApplication::applicationName(), 0 );
 
-    QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher(reply, this);
-    connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)),
-               this, SLOT(RegisterFinished(QDBusPendingCallWatcher*)));
+    QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher( reply, this );
+    connect( watcher, SIGNAL( finished( QDBusPendingCallWatcher* ) ),
+             this, SLOT( RegisterFinished( QDBusPendingCallWatcher* ) ) );
 
     return true;
 }
 
-void GnomeShortcutHandler::RegisterFinished(QDBusPendingCallWatcher* watcher) {
+void GnomeShortcutHandler::RegisterFinished( QDBusPendingCallWatcher* watcher )
+{
     QDBusMessage reply = watcher->reply();
     watcher->deleteLater();
 
-    if (reply.type() == QDBusMessage::ErrorMessage) {
-        tLog(LOGVERBOSE) << "Failed to grab media keys"
-               << reply.errorName() <<reply.errorMessage();
+    if ( reply.type() == QDBusMessage::ErrorMessage )
+    {
+        tLog( LOGVERBOSE ) << "Failed to grab media keys"
+                           << reply.errorName() << reply.errorMessage();
         return;
     }
 
-    connect(interface_, SIGNAL(MediaPlayerKeyPressed(QString,QString)),
-            this, SLOT(GnomeMediaKeyPressed(QString,QString)));
+    connect( interface_, SIGNAL( MediaPlayerKeyPressed( QString, QString ) ),
+             this, SLOT( GnomeMediaKeyPressed( QString, QString ) ) );
 
-    tLog(LOGVERBOSE) << "gnome media keys registered";
+    tLog( LOGVERBOSE ) << "gnome media keys registered";
 }
 
 void
 GnomeShortcutHandler::GnomeMediaKeyPressed( const QString& app, const QString& val )
 {
-    if (app != QCoreApplication::applicationName())
+    if ( app != QCoreApplication::applicationName() )
+    {
         return;
+    }
 
-    tLog(LOGVERBOSE) << "gnome media key " << val << " pressed";
-    if ( val == "Play" ) {
+    tLog( LOGVERBOSE ) << "gnome media key " << val << " pressed";
+    if ( val == "Play" )
+    {
         emit playPause();
     }
-    if ( val == "Next" ) {
+    if ( val == "Next" )
+    {
         emit next();
     }
-    if ( val == "Previous" ) {
+    if ( val == "Previous" )
+    {
         emit previous();
     }
 }

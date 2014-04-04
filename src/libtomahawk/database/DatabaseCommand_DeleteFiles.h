@@ -35,52 +35,76 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCommand_DeleteFiles : public DatabaseCommandLoggable
 {
-Q_OBJECT
-Q_PROPERTY( QVariantList ids READ ids WRITE setIds )
-Q_PROPERTY( bool deleteAll READ deleteAll WRITE setDeleteAll )
+    Q_OBJECT
+    Q_PROPERTY( QVariantList ids READ ids WRITE setIds )
+    Q_PROPERTY( bool deleteAll READ deleteAll WRITE setDeleteAll )
 
-public:
+  public:
     explicit DatabaseCommand_DeleteFiles( QObject* parent = 0 )
         : DatabaseCommandLoggable( parent )
     {}
 
     explicit DatabaseCommand_DeleteFiles( const Tomahawk::source_ptr& source, QObject* parent = 0 )
-    : DatabaseCommandLoggable( parent ), m_deleteAll( true )
+        : DatabaseCommandLoggable( parent ), m_deleteAll( true )
     {
         setSource( source );
     }
 
     explicit DatabaseCommand_DeleteFiles( const QDir& dir, const Tomahawk::source_ptr& source, QObject* parent = 0 )
-    : DatabaseCommandLoggable( parent ), m_dir( dir ), m_deleteAll( false )
+        : DatabaseCommandLoggable( parent ), m_dir( dir ), m_deleteAll( false )
     {
         setSource( source );
     }
 
     explicit DatabaseCommand_DeleteFiles( const QVariantList& ids, const Tomahawk::source_ptr& source, QObject* parent = 0 )
-    : DatabaseCommandLoggable( parent ), m_ids( ids ), m_deleteAll( false )
+        : DatabaseCommandLoggable( parent ), m_ids( ids ), m_deleteAll( false )
     {
         setSource( source );
     }
 
-    virtual QString commandname() const { return "deletefiles"; }
+    virtual QString commandname() const
+    {
+        return "deletefiles";
+    }
 
     virtual void exec( DatabaseImpl* );
-    virtual bool doesMutates() const { return true; }
-    virtual bool localOnly() const { return false; }
-    virtual bool groupable() const { return true; }
+    virtual bool doesMutates() const
+    {
+        return true;
+    }
+    virtual bool localOnly() const
+    {
+        return false;
+    }
+    virtual bool groupable() const
+    {
+        return true;
+    }
     virtual void postCommitHook();
 
-    QVariantList ids() const { return m_ids; }
-    void setIds( const QVariantList& i ) { m_ids = i; }
+    QVariantList ids() const
+    {
+        return m_ids;
+    }
+    void setIds( const QVariantList& i )
+    {
+        m_ids = i;
+    }
 
-    bool deleteAll() const { return m_deleteAll; }
-    void setDeleteAll( const bool deleteAll ) { m_deleteAll = deleteAll; }
+    bool deleteAll() const
+    {
+        return m_deleteAll;
+    }
+    void setDeleteAll( const bool deleteAll )
+    {
+        m_deleteAll = deleteAll;
+    }
 
-signals:
+  signals:
     void done( const QList<unsigned int>&, const Tomahawk::collection_ptr& );
     void notify( const QList<unsigned int>& ids );
 
-private:
+  private:
     QDir m_dir;
     QVariantList m_ids;
     QList<unsigned int> m_idList;

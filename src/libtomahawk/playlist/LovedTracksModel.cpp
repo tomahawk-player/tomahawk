@@ -33,14 +33,14 @@ LovedTracksModel::init()
 }
 
 
-LovedTracksModel::LovedTracksModel( QObject *parent )
+LovedTracksModel::LovedTracksModel( QObject* parent )
     : PlaylistModel( parent, new LovedTracksModelPrivate( this ) )
 {
     init();
 }
 
 
-LovedTracksModel::LovedTracksModel(QObject *parent, LovedTracksModelPrivate *d)
+LovedTracksModel::LovedTracksModel( QObject* parent, LovedTracksModelPrivate* d )
     : PlaylistModel( parent, d )
 {
     init();
@@ -88,8 +88,8 @@ LovedTracksModel::onSourcesReady()
 
     loadTracks();
 
-    foreach ( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
-        onSourceAdded( source );
+    foreach ( const Tomahawk::source_ptr & source, SourceList::instance()->sources() )
+    onSourceAdded( source );
 }
 
 
@@ -116,7 +116,7 @@ LovedTracksModel::tracksLoaded( QList< Tomahawk::query_ptr > newLoved )
     QList< Tomahawk::query_ptr > tracks;
 
     foreach ( const Tomahawk::plentry_ptr ple, playlistEntries() )
-        tracks << ple->query();
+    tracks << ple->query();
 
     bool changed = false;
     QList< Tomahawk::query_ptr > mergedTracks = TomahawkUtils::mergePlaylistChanges( tracks, newLoved, changed );
@@ -139,9 +139,13 @@ LovedTracksModel::setSource( const Tomahawk::source_ptr& source )
     if ( source.isNull() )
     {
         if ( SourceList::instance()->isReady() )
+        {
             onSourcesReady();
+        }
         else
+        {
             connect( SourceList::instance(), SIGNAL( ready() ), SLOT( onSourcesReady() ) );
+        }
 
         connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
     }

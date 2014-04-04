@@ -31,9 +31,9 @@
  */
 class DLLEXPORT TomahawkSettingsGui : public TomahawkSettings
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     static TomahawkSettingsGui* instanceGui();
 
     explicit TomahawkSettingsGui( QObject* parent = 0 );
@@ -51,7 +51,7 @@ public:
     static void registerCustomSettingsHandlers();
 };
 
-Q_DECLARE_METATYPE(AtticaManager::StateHash);
+Q_DECLARE_METATYPE( AtticaManager::StateHash );
 
 
 #endif

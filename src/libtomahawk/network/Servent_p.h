@@ -34,9 +34,9 @@
 
 class ServentPrivate : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     ServentPrivate( Servent* q )
         : q_ptr ( q )
         , port( 0 )
@@ -47,7 +47,7 @@ public:
     Servent* q_ptr;
     Q_DECLARE_PUBLIC ( Servent )
 
-private:
+  private:
     QMap< QString, QPointer< Connection > > offers;
     QMap< QString, QPair< Tomahawk::peerinfo_ptr, QString > > lazyoffers;
     QStringList connectedNodes;

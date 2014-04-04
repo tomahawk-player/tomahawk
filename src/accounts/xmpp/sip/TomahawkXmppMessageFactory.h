@@ -29,18 +29,18 @@
 
 class ACCOUNTDLLEXPORT TomahawkXmppMessageFactory : public Jreen::PayloadFactory<TomahawkXmppMessage>
 {
-public:
+  public:
     TomahawkXmppMessageFactory();
     virtual ~TomahawkXmppMessageFactory();
     QStringList features() const;
-    bool canParse(const QStringRef &name, const QStringRef &uri, const QXmlStreamAttributes &attributes);
-    void handleStartElement(const QStringRef &name, const QStringRef &uri, const QXmlStreamAttributes &attributes);
-    void handleEndElement(const QStringRef &name, const QStringRef &uri);
-    void handleCharacterData(const QStringRef &text);
-    void serialize(Jreen::Payload *extension, QXmlStreamWriter *writer);
+    bool canParse( const QStringRef& name, const QStringRef& uri, const QXmlStreamAttributes& attributes );
+    void handleStartElement( const QStringRef& name, const QStringRef& uri, const QXmlStreamAttributes& attributes );
+    void handleEndElement( const QStringRef& name, const QStringRef& uri );
+    void handleCharacterData( const QStringRef& text );
+    void serialize( Jreen::Payload* extension, QXmlStreamWriter* writer );
     Jreen::Payload::Ptr createPayload();
-private:
-    void serializeSipInfo(SipInfo& info, QXmlStreamWriter *writer);
+  private:
+    void serializeSipInfo( SipInfo& info, QXmlStreamWriter* writer );
 
     enum State { AtNowhere, AtTransport, AtCandidate } m_state;
 

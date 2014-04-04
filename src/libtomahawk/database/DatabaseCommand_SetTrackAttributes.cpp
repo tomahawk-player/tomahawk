@@ -53,9 +53,9 @@ DatabaseCommand_SetTrackAttributes::exec( DatabaseImpl* dbi )
     QString k;
     switch ( m_type )
     {
-    case EchonestCatalogId:
-        k = "echonestcatalogid";
-        break;
+        case EchonestCatalogId:
+            k = "echonestcatalogid";
+            break;
     }
 
     if ( m_delete && m_tracks.isEmpty() )
@@ -87,13 +87,17 @@ DatabaseCommand_SetTrackAttributes::exec( DatabaseImpl* dbi )
         delquery.exec();
 
         if ( m_delete )
-            continue; // stop at deleting, don't insert
+        {
+            continue;    // stop at deleting, don't insert
+        }
 
         insertquery.bindValue( 0, track.first );
         insertquery.bindValue( 1, k );
         insertquery.bindValue( 2, track.second );
         if ( !insertquery.exec() )
+        {
             tLog() << "Failed to insert track attribute:" << k << track.first << track.second;
+        }
 
     }
 }

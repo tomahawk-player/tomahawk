@@ -39,7 +39,7 @@ class DLLEXPORT ContextPage : public QObject
 {
     Q_OBJECT
 
-public:
+  public:
     ContextPage() {}
     virtual ~ContextPage() {}
 
@@ -48,16 +48,28 @@ public:
 
     virtual QString title() const = 0;
     virtual QString description() const = 0;
-    virtual QPixmap pixmap() const { return QPixmap( RESPATH "icons/tomahawk-icon-128x128.png" ); }
+    virtual QPixmap pixmap() const
+    {
+        return QPixmap( RESPATH "icons/tomahawk-icon-128x128.png" );
+    }
 
     virtual bool jumpToCurrentTrack() = 0;
 
-public slots:
-    virtual void setArtist( const Tomahawk::artist_ptr& artist ) { Q_UNUSED( artist ); }
-    virtual void setAlbum( const Tomahawk::album_ptr& album ) { Q_UNUSED( album ); }
-    virtual void setQuery( const Tomahawk::query_ptr& query ) { Q_UNUSED( query ); }
+  public slots:
+    virtual void setArtist( const Tomahawk::artist_ptr& artist )
+    {
+        Q_UNUSED( artist );
+    }
+    virtual void setAlbum( const Tomahawk::album_ptr& album )
+    {
+        Q_UNUSED( album );
+    }
+    virtual void setQuery( const Tomahawk::query_ptr& query )
+    {
+        Q_UNUSED( query );
+    }
 
-signals:
+  signals:
     void nameChanged( const QString& );
     void descriptionChanged( const QString& );
     void pixmapChanged( const QPixmap& );
@@ -69,23 +81,26 @@ class DLLEXPORT ContextProxyPage : public QGraphicsWidget
 {
     Q_OBJECT
 
-public:
+  public:
     ContextProxyPage() : QGraphicsWidget()
     {}
 
-    Tomahawk::ContextPage* page() const { return m_page; }
+    Tomahawk::ContextPage* page() const
+    {
+        return m_page;
+    }
     void setPage( Tomahawk::ContextPage* page );
 
     virtual bool eventFilter( QObject* watched, QEvent* event );
 
-signals:
+  signals:
     void focused();
 
-protected:
+  protected:
     virtual void paint( QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget );
     virtual bool sceneEvent( QEvent* event );
 
-private:
+  private:
     Tomahawk::ContextPage* m_page;
 };
 

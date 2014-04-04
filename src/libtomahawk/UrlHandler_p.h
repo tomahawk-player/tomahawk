@@ -27,7 +27,7 @@ class HttpIODeviceReadyHandler : public QObject
 {
     Q_OBJECT
 
-public:
+  public:
 
     NetworkReply* reply;
     IODeviceCallback callback;
@@ -40,7 +40,7 @@ public:
         // Do Nothing
     }
 
-public slots:
+  public slots:
 
     void called()
     {

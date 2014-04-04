@@ -37,32 +37,32 @@ class SocialWidget;
 
 namespace Ui
 {
-    class AudioControls;
+class AudioControls;
 }
 
 class AudioControls : public QWidget, private TomahawkUtils::DpiScaler
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     AudioControls( QWidget* parent = 0 );
     ~AudioControls();
 
-signals:
+  signals:
     void playPressed();
     void pausePressed();
 
-public slots:
+  public slots:
     void onRepeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void onShuffleModeChanged( bool enabled );
 
-protected:
+  protected:
     void changeEvent( QEvent* e );
     void dragEnterEvent ( QDragEnterEvent* );
     void dragMoveEvent ( QDragMoveEvent* );
     void dropEvent ( QDropEvent* );
 
-private slots:
+  private slots:
     void phononTickCheckTimeout();
 
     void onPlaybackStarted( const Tomahawk::result_ptr& result );
@@ -93,7 +93,7 @@ private slots:
 
     void onInfoSystemPushTypesUpdated( Tomahawk::InfoSystem::InfoTypeSet supportedTypes );
 
-private:
+  private:
     void setCover();
     void setSocialActions();
 

@@ -90,7 +90,7 @@ MetadataEditor::writeMetadata( bool closeDlg )
 
         bool changed = false;
         QByteArray fileName = QFile::encodeName( fi.canonicalFilePath() );
-        const char *encodedName = fileName.constData();
+        const char* encodedName = fileName.constData();
 
         TagLib::FileRef f( encodedName );
         Tomahawk::Tag* tag = Tomahawk::Tag::fromFile( f );
@@ -128,11 +128,13 @@ MetadataEditor::writeMetadata( bool closeDlg )
                 changed = true;
             }
             else
+            {
                 Q_ASSERT( false );
+            }
         }
 
         // FIXME: Ugly workaround for the min value of 0
-        if ( albumPos() != 0 && albumPos() != (int)m_result->track()->albumpos() )
+        if ( albumPos() != 0 && albumPos() != ( int )m_result->track()->albumpos() )
         {
             tag->setTrack( albumPos() );
             m_result->track()->setAlbumPos( albumPos() );
@@ -169,7 +171,9 @@ MetadataEditor::writeMetadata( bool closeDlg )
     if ( closeDlg )
     {
         if ( m_editFiles.count() )
+        {
             ScanManager::instance()->runFileScan( m_editFiles, false );
+        }
 
         close();
     }
@@ -180,7 +184,9 @@ void
 MetadataEditor::loadQuery( const Tomahawk::query_ptr& query )
 {
     if ( query.isNull() )
+    {
         return;
+    }
 
     if ( query->numResults() )
     {
@@ -210,7 +216,9 @@ MetadataEditor::loadQuery( const Tomahawk::query_ptr& query )
         m_index = m_interface->indexOfQuery( query );
 
         if ( m_index >= 0 )
+        {
             enablePushButtons();
+        }
     }
 }
 
@@ -219,7 +227,9 @@ void
 MetadataEditor::loadResult( const Tomahawk::result_ptr& result )
 {
     if ( result.isNull() )
+    {
         return;
+    }
 
     m_result = result;
     setEditable( result->collection() && result->collection()->source()->isLocal() );
@@ -236,7 +246,9 @@ MetadataEditor::loadResult( const Tomahawk::result_ptr& result )
     {
         QString furl = m_result->url();
         if ( furl.startsWith( "file://" ) )
+        {
             furl = furl.right( furl.length() - 7 );
+        }
 
         QFileInfo fi( furl );
         setFileName( fi.absoluteFilePath() );
@@ -250,7 +262,9 @@ MetadataEditor::loadResult( const Tomahawk::result_ptr& result )
         m_index = m_interface->indexOfResult( result );
 
         if ( m_index >= 0 )
+        {
             enablePushButtons();
+        }
     }
 }
 
@@ -259,14 +273,22 @@ void
 MetadataEditor::enablePushButtons()
 {
     if ( m_interface->siblingIndex( 1, m_index ) > 0 )
+    {
         ui->forwardPushButton->setEnabled( true );
+    }
     else
+    {
         ui->forwardPushButton->setEnabled( false );
+    }
 
     if ( m_interface->siblingIndex( -1, m_index ) > 0 )
+    {
         ui->previousPushButton->setEnabled( true );
+    }
     else
+    {
         ui->previousPushButton->setEnabled( false );
+    }
 }
 
 

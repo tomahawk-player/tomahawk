@@ -37,8 +37,8 @@
 
 class MsgProcessor : public QObject
 {
-Q_OBJECT
-public:
+    Q_OBJECT
+  public:
     enum Mode
     {
         NOTHING = 0,
@@ -49,21 +49,27 @@ public:
 
     explicit MsgProcessor( quint32 mode = NOTHING, quint32 t = 512 );
 
-    void setMode( quint32 m ) { m_mode = m ; }
+    void setMode( quint32 m )
+    {
+        m_mode = m ;
+    }
 
     static msg_ptr process( msg_ptr msg, quint32 mode, quint32 threshold );
 
-    int length() const { return m_msgs.length(); }
+    int length() const
+    {
+        return m_msgs.length();
+    }
 
-signals:
+  signals:
     void ready( msg_ptr );
     void empty();
 
-public slots:
+  public slots:
     void append( msg_ptr msg );
     void processed();
 
-private:
+  private:
     void handleProcessedMsg( msg_ptr msg );
 
     quint32 m_mode;

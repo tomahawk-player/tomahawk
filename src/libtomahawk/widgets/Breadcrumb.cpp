@@ -56,8 +56,8 @@ Breadcrumb::~Breadcrumb()
 void
 Breadcrumb::setModel( QAbstractItemModel* model )
 {
-    foreach ( BreadcrumbButton* b, m_buttons )
-        b->deleteLater();;
+    foreach ( BreadcrumbButton * b, m_buttons )
+    b->deleteLater();;
     m_buttons.clear();
 
     m_model = model;
@@ -74,8 +74,8 @@ Breadcrumb::setRootIcon( const QPixmap& pm )
     button->setFlat( true );
     button->setStyleSheet( "QPushButton{ background-color: transparent; border: none; width:36px; height:36px;}" );
     m_buttonlayout->insertWidget( 0, button );
-    m_buttonlayout->insertSpacing( 0,5 );
-    m_buttonlayout->insertSpacing( 2,5 );
+    m_buttonlayout->insertSpacing( 0, 5 );
+    m_buttonlayout->insertSpacing( 2, 5 );
 }
 
 
@@ -92,12 +92,12 @@ Breadcrumb::paintEvent( QPaintEvent* )
 void
 Breadcrumb::updateButtons( const QModelIndex& updateFrom )
 {
-//     qDebug() << "Updating buttons:" << updateFrom.data();
+    //     qDebug() << "Updating buttons:" << updateFrom.data();
     int cur = 0;
     QModelIndex idx = updateFrom;
     for ( int i = 0; i < m_buttons.count(); i++ )
     {
-//         qDebug() << "Checking if this breadcrumb item changed:" << m_buttons[ i ]->currentIndex().data() << updateFrom.data() << ( m_buttons[ i ]->currentIndex() != updateFrom);
+        //         qDebug() << "Checking if this breadcrumb item changed:" << m_buttons[ i ]->currentIndex().data() << updateFrom.data() << ( m_buttons[ i ]->currentIndex() != updateFrom);
         if ( m_buttons[ i ]->currentIndex() == updateFrom )
         {
             cur = i;
@@ -110,10 +110,10 @@ Breadcrumb::updateButtons( const QModelIndex& updateFrom )
 
     // Ok, changed all indices that are at cur or past it. lets update them
     // When we get to the "end" of the tree, the leaf node is the chart itself
-//     qDebug() << "DONE and beginning iteration:" << idx.data();
+    //     qDebug() << "DONE and beginning iteration:" << idx.data();
     while ( m_model->rowCount( idx ) > 0 )
     {
-//         qDebug() << "CHANGED AND iterating:" << idx.data();
+        //         qDebug() << "CHANGED AND iterating:" << idx.data();
         BreadcrumbButton* btn = 0;
         if ( m_buttons.size() <= cur )
         {

@@ -27,51 +27,54 @@
 #include <QTweetLib/qtweetstatus.h>
 #include <QTweetLib/qtweetnetbase.h>
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
-    namespace Accounts {
-        class TwitterAccount;
+namespace Accounts
+{
+class TwitterAccount;
+}
+
+namespace InfoSystem
+{
+
+class TwitterInfoPlugin  : public InfoPlugin
+{
+    Q_OBJECT
+
+  public:
+    TwitterInfoPlugin( Tomahawk::Accounts::TwitterAccount* account );
+    virtual ~TwitterInfoPlugin();
+
+  public slots:
+    void notInCacheSlot( const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
+    {
+        Q_UNUSED( criteria );
+        Q_UNUSED( requestData );
     }
-    
-    namespace InfoSystem {
 
-        class TwitterInfoPlugin  : public InfoPlugin
-        {
-            Q_OBJECT
-
-        public:
-            TwitterInfoPlugin( Tomahawk::Accounts::TwitterAccount* account );
-            virtual ~TwitterInfoPlugin();
-            
-        public slots:
-            void notInCacheSlot( const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
-            {
-                Q_UNUSED( criteria );
-                Q_UNUSED( requestData );
-            }
-
-        protected slots:
-            void init();
-            void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData );
-            void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
-            {
-                Q_UNUSED( requestData );
-            }
-
-        private slots:
-            void connectAuthVerifyReply( const QTweetUser &user );
-            void postLovedStatusUpdateReply( const QTweetStatus& status );
-            void postLovedStatusUpdateError( QTweetNetBase::ErrorCode code, const QString& errorMsg );
-            
-        private:
-            bool refreshTwitterAuth();
-            bool isValid() const;
-            
-            Tomahawk::Accounts::TwitterAccount* m_account;
-            QPointer< TomahawkOAuthTwitter > m_twitterAuth;
-        };
-
+  protected slots:
+    void init();
+    void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData );
+    void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
+    {
+        Q_UNUSED( requestData );
     }
+
+  private slots:
+    void connectAuthVerifyReply( const QTweetUser& user );
+    void postLovedStatusUpdateReply( const QTweetStatus& status );
+    void postLovedStatusUpdateError( QTweetNetBase::ErrorCode code, const QString& errorMsg );
+
+  private:
+    bool refreshTwitterAuth();
+    bool isValid() const;
+
+    Tomahawk::Accounts::TwitterAccount* m_account;
+    QPointer< TomahawkOAuthTwitter > m_twitterAuth;
+};
+
+}
 
 }
 

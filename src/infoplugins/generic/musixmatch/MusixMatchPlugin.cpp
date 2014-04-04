@@ -51,7 +51,9 @@ MusixMatchPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     tDebug() << Q_FUNC_INFO;
     if( !isValidTrackData( requestData ) || requestData.type != Tomahawk::InfoSystem::InfoTrackLyrics )
+    {
         return;
+    }
     InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
 
     QString artist = hash["artist"];
@@ -80,7 +82,7 @@ bool
 MusixMatchPlugin::isValidTrackData( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     tDebug() << Q_FUNC_INFO;
-    
+
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
         emit info( requestData, QVariant() );
@@ -111,18 +113,20 @@ MusixMatchPlugin::trackSearchSlot()
     tDebug() << Q_FUNC_INFO;
     QNetworkReply* oldReply = qobject_cast<QNetworkReply*>( sender() );
     if ( !oldReply )
-        return; //timeout will handle it
+    {
+        return;    //timeout will handle it
+    }
 
     QDomDocument doc;
-    doc.setContent(oldReply->readAll());
+    doc.setContent( oldReply->readAll() );
     qDebug() << doc.toString();
-    QDomNodeList domNodeList = doc.elementsByTagName("track_id");
+    QDomNodeList domNodeList = doc.elementsByTagName( "track_id" );
     if ( domNodeList.isEmpty() )
     {
         emit info( oldReply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
         return;
     }
-    QString track_id = domNodeList.at(0).toElement().text();
+    QString track_id = domNodeList.at( 0 ).toElement().text();
     QString requestString( "http://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=%1&format=xml&apikey=%2" );
     QUrl url( requestString );
 
@@ -141,7 +145,9 @@ MusixMatchPlugin::trackLyricsSlot()
     tDebug() << Q_FUNC_INFO;
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
     if ( !reply )
-        return; //timeout will handle it
+    {
+        return;    //timeout will handle it
+    }
 
     QDomDocument doc;
     doc.setContent( reply->readAll() );
@@ -151,7 +157,7 @@ MusixMatchPlugin::trackLyricsSlot()
         emit info( reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
         return;
     }
-    QString lyrics = domNodeList.at(0).toElement().text();
+    QString lyrics = domNodeList.at( 0 ).toElement().text();
     emit info( reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant( lyrics ) );
 }
 

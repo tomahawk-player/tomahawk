@@ -32,7 +32,7 @@
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "Query.h"
+#include "Query.h"
 #endif
 
 
@@ -55,26 +55,26 @@ ActionCollection::~ActionCollection()
 {
     s_instance = 0;
     foreach( QString key, m_actionCollection.keys() )
-        delete m_actionCollection[ key ];
+    delete m_actionCollection[ key ];
 }
 
 
 void
 ActionCollection::initActions()
 {
-    QAction *latchOn = new QAction( tr( "&Listen Along" ), this );
+    QAction* latchOn = new QAction( tr( "&Listen Along" ), this );
     latchOn->setIcon( ImageRegistry::instance()->icon( RESPATH "images/headphones.svg" ) );
     m_actionCollection[ "latchOn" ] = latchOn;
-    QAction *latchOff = new QAction( tr( "Stop &Listening Along" ), this );
+    QAction* latchOff = new QAction( tr( "Stop &Listening Along" ), this );
     latchOff->setIcon( ImageRegistry::instance()->icon( RESPATH "images/headphones-off.svg" ) );
     m_actionCollection[ "latchOff" ] = latchOff;
 
-    QAction *realtimeFollowingAlong = new QAction( tr( "&Follow in real-time" ), this );
+    QAction* realtimeFollowingAlong = new QAction( tr( "&Follow in real-time" ), this );
     realtimeFollowingAlong->setCheckable( true );
     m_actionCollection[ "realtimeFollowingAlong" ] = realtimeFollowingAlong;
 
     bool isPublic = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening;
-    QAction *privacyToggle = new QAction( ( isPublic ? tr( "&Listen Privately" ) : tr( "&Listen Publicly" ) ), this );
+    QAction* privacyToggle = new QAction( ( isPublic ? tr( "&Listen Privately" ) : tr( "&Listen Publicly" ) ), this );
     privacyToggle->setIcon( ImageRegistry::instance()->icon( RESPATH "images/private-listening.svg" ) );
     privacyToggle->setIconVisibleInMenu( isPublic );
     m_actionCollection[ "togglePrivacy" ] = privacyToggle;
@@ -102,7 +102,7 @@ ActionCollection::initActions()
     m_actionCollection[ "quit" ]->setMenuRole( QAction::QuitRole );
 
     // connect actions to AudioEngine
-    AudioEngine *ae = AudioEngine::instance();
+    AudioEngine* ae = AudioEngine::instance();
     connect( m_actionCollection[ "playPause" ],     SIGNAL( triggered() ), ae,   SLOT( playPause() ), Qt::UniqueConnection );
     connect( m_actionCollection[ "stop" ],          SIGNAL( triggered() ), ae,   SLOT( stop() ),      Qt::UniqueConnection );
     connect( m_actionCollection[ "previousTrack" ], SIGNAL( triggered() ), ae,   SLOT( previous() ),  Qt::UniqueConnection );
@@ -138,7 +138,7 @@ ActionCollection::initActions()
     m_actionCollection[ "legalInfo" ]->setMenuRole( QAction::ApplicationSpecificRole );
     m_actionCollection[ "openLogfile" ] = new QAction( tr( "&View Logfile" ), this );
     m_actionCollection[ "openLogfile" ]->setMenuRole( QAction::ApplicationSpecificRole );
-    #if defined( Q_OS_MAC ) && defined( HAVE_SPARKLE ) || defined( Q_OS_WIN )
+#if defined( Q_OS_MAC ) && defined( HAVE_SPARKLE ) || defined( Q_OS_WIN )
     m_actionCollection[ "checkForUpdates" ] = new QAction( tr( "Check For Updates..." ), this );
     m_actionCollection[ "checkForUpdates" ]->setMenuRole( QAction::ApplicationSpecificRole );
 #endif
@@ -147,7 +147,7 @@ ActionCollection::initActions()
 
 
 QMenuBar*
-ActionCollection::createMenuBar( QWidget *parent )
+ActionCollection::createMenuBar( QWidget* parent )
 {
     QMenuBar* menuBar = new QMenuBar( parent );
 
@@ -212,7 +212,7 @@ ActionCollection::createMenuBar( QWidget *parent )
 
 
 QMenu*
-ActionCollection::createCompactMenu( QWidget *parent )
+ActionCollection::createCompactMenu( QWidget* parent )
 {
     QMenu* compactMenu = new QMenu( tr( "Main Menu" ), parent );
 
@@ -273,7 +273,9 @@ ActionCollection::addAction( ActionCollection::ActionDestination category, QActi
     m_categoryActions[ category ] = actions;
 
     if ( notify )
+    {
         m_actionNotifiers[ action ] = notify;
+    }
 }
 
 
@@ -321,11 +323,15 @@ ActionCollection::togglePrivateListeningMode()
 {
     tDebug() << Q_FUNC_INFO;
     if ( TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening )
+    {
         TomahawkSettings::instance()->setPrivateListeningMode( TomahawkSettings::FullyPrivate );
+    }
     else
+    {
         TomahawkSettings::instance()->setPrivateListeningMode( TomahawkSettings::PublicListening );
+    }
 
-    QAction *privacyToggle = m_actionCollection[ "togglePrivacy" ];
+    QAction* privacyToggle = m_actionCollection[ "togglePrivacy" ];
     bool isPublic = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening;
     privacyToggle->setText( ( isPublic ? tr( "&Listen Privately" ) : tr( "&Listen Publicly" ) ) );
     privacyToggle->setIconVisibleInMenu( isPublic );

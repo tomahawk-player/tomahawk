@@ -30,40 +30,43 @@ class PlaylistView;
 
 namespace Ui
 {
-    class QueueView;
+class QueueView;
 }
 
 class DLLEXPORT QueueView : public AnimatedWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit QueueView( AnimatedSplitter* parent );
     ~QueueView();
 
     PlaylistView* queue() const;
 
-    QSize sizeHint() const { return QSize( 0, 200 ); }
+    QSize sizeHint() const
+    {
+        return QSize( 0, 200 );
+    }
 
-    virtual bool eventFilter( QObject* , QEvent* );
+    virtual bool eventFilter( QObject*, QEvent* );
 
-public slots:
+  public slots:
     virtual void onShown( QWidget*, bool animated );
     virtual void onHidden( QWidget*, bool animated );
 
     virtual void show();
     virtual void hide();
 
-protected:
+  protected:
     void changeEvent( QEvent* e );
 
-private slots:
+  private slots:
     void updateLabel();
     void onAnimationFinished();
 
     void restoreState();
 
-private:
+  private:
     void saveState();
 
     Ui::QueueView* ui;

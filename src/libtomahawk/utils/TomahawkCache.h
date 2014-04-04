@@ -35,10 +35,10 @@ namespace TomahawkUtils
  */
 struct CacheData
 {
-    CacheData(){}
+    CacheData() {}
     CacheData( qint64 maxAg, QVariant dat )
-    : maxAge( maxAg )
-    , data( dat )
+        : maxAge( maxAg )
+        , data( dat )
     {}
 
     qint64 maxAge; //!< milliseconds
@@ -56,9 +56,9 @@ struct CacheData
  */
 class DLLEXPORT Cache : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     static Cache* instance();
     virtual ~Cache();
 
@@ -79,10 +79,10 @@ public:
      */
     QVariant getData( const QString& identifier, const QString& key );
 
-private slots:
+  private slots:
     void pruneTimerFired();
 
-private:
+  private:
     Cache();
     static Cache* s_instance;
 
@@ -108,8 +108,8 @@ private:
 
 inline QDataStream& operator<< ( QDataStream& in, const TomahawkUtils::CacheData& data )
 {
-   in << data.data << data.maxAge;
-   return in;
+    in << data.data << data.maxAge;
+    return in;
 }
 
 inline QDataStream& operator>> ( QDataStream& out, TomahawkUtils::CacheData& data )

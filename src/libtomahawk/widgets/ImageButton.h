@@ -28,9 +28,9 @@
 
 class DLLEXPORT ImageButton : public QAbstractButton
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     /** this pixmap becomes the rest state pixmap and defines the size of the eventual widget */
     explicit ImageButton( QWidget* parent = 0 );
     explicit ImageButton( const QPixmap& pixmap, QWidget* parent = 0 );
@@ -44,12 +44,15 @@ public:
 
     void clear();
 
-    virtual QSize sizeHint() const { return m_sizeHint; }
+    virtual QSize sizeHint() const
+    {
+        return m_sizeHint;
+    }
 
-protected:
+  protected:
     virtual void paintEvent( QPaintEvent* event );
 
-private:
+  private:
     void init( const QPixmap& );
 
     QSize m_sizeHint;

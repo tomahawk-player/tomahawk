@@ -30,34 +30,37 @@ class StreamConnection;
 class TransferStatusManager : public QObject
 {
     Q_OBJECT
-public:
+  public:
     explicit TransferStatusManager( QObject* parent = 0 );
     virtual ~TransferStatusManager() {}
 
     QPixmap rxPixmap() const;
     QPixmap txPixmap() const;
 
-private slots:
+  private slots:
     void streamRegistered( StreamConnection* sc );
 };
 
 class TransferStatusItem : public JobStatusItem
 {
     Q_OBJECT
-public:
+  public:
     explicit TransferStatusItem( TransferStatusManager* p, StreamConnection* );
     virtual ~TransferStatusItem();
 
     virtual QString rightColumnText() const;
     virtual QString mainText() const;
     virtual QPixmap icon() const;
-    virtual QString type() const { return m_type; }
+    virtual QString type() const
+    {
+        return m_type;
+    }
 
-private slots:
+  private slots:
     void streamFinished( StreamConnection* sc );
     void onTransferUpdate();
 
-private:
+  private:
     TransferStatusManager* m_parent;
     QString m_type, m_main, m_right;
     QPointer< StreamConnection > m_stream;

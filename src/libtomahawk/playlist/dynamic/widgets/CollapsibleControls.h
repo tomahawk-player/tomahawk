@@ -40,7 +40,7 @@ class DynamicControlList;
 class CollapsibleControls : public QWidget
 {
     Q_OBJECT
-public:
+  public:
     CollapsibleControls( QWidget* parent );
     CollapsibleControls( const dynplaylist_ptr& playlist, bool isLocal, QWidget* parent = 0 );
     virtual ~CollapsibleControls();
@@ -49,17 +49,17 @@ public:
     QList< DynamicControlWrapper* > controls() const;
 
     virtual QSize sizeHint() const;
-signals:
+  signals:
     void controlsChanged( bool added );
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
 
-private slots:
+  private slots:
     void toggleCollapse();
 
     void onAnimationStep( int );
     void onAnimationFinished();
 
-private:
+  private:
     void init();
 
     dynplaylist_ptr m_dynplaylist;

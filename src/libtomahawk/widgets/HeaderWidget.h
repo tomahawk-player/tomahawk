@@ -31,9 +31,9 @@
  */
 class DLLEXPORT HeaderWidget : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     HeaderWidget( QWidget* parent = 0 );
     virtual ~HeaderWidget();
 

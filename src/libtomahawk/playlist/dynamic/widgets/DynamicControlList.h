@@ -44,25 +44,28 @@ class DynamicControlWrapper;
 class DynamicControlList : public QWidget
 {
     Q_OBJECT
-public:
+  public:
     DynamicControlList( QWidget* parent = 0 );
     explicit DynamicControlList( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, QWidget* parent = 0 );
     virtual ~DynamicControlList();
 
     void setControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls );
-    QList< DynamicControlWrapper* > controls() const { return m_controls; }
+    QList< DynamicControlWrapper* > controls() const
+    {
+        return m_controls;
+    }
 
-signals:
+  signals:
     void controlsChanged( bool added );
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
     void toggleCollapse();
 
-public slots:
+  public slots:
     void addNewControl();
     void removeControl();
     void controlChanged();
 
-private:
+  private:
     void init();
 
     geninterface_ptr m_generator;

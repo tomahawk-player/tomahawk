@@ -35,16 +35,16 @@ class ClearButton : public QAbstractButton
 {
     Q_OBJECT
 
-public:
-    ClearButton(QWidget *parent = 0);
+  public:
+    ClearButton( QWidget* parent = 0 );
 
-public slots:
-    void textChanged(const QString &text);
+  public slots:
+    void textChanged( const QString& text );
 
-protected:
-    void paintEvent(QPaintEvent *event);
+  protected:
+    void paintEvent( QPaintEvent* event );
 
-private:
+  private:
     QImage m_styleImage;
 };
 

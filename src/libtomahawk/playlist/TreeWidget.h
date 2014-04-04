@@ -28,7 +28,7 @@
 class DLLEXPORT TreeWidget : public QWidget, public Tomahawk::ViewPage
 {
     Q_OBJECT
-public:
+  public:
     explicit TreeWidget( QWidget* parent = 0 );
     virtual ~TreeWidget();
 
@@ -46,14 +46,14 @@ public:
 
     virtual bool showInfoBar() const;
 
-public slots:
+  public slots:
     virtual bool setFilter( const QString& filter );
 
-private slots:
+  private slots:
     void onModelChanged();
     void onRefreshClicked();
 
-private:
+  private:
     TreeView* m_view;
     ScriptCollectionHeader* m_header;
 };

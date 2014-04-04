@@ -40,7 +40,7 @@ class ACCOUNTDLLEXPORT ZeroconfPlugin : public SipPlugin
 {
     Q_OBJECT
 
-public:
+  public:
     ZeroconfPlugin( ZeroconfAccount* acc );
 
     virtual ~ZeroconfPlugin();
@@ -50,14 +50,17 @@ public:
     virtual const QString accountName() const;
     virtual const QString serviceName() const;
     virtual Account::ConnectionState connectionState() const;
-    virtual bool isValid() const { return true; }
+    virtual bool isValid() const
+    {
+        return true;
+    }
 #ifndef ENABLE_HEADLESS
     virtual QIcon icon() const;
 #endif
     virtual void checkSettings() {}
     virtual void configurationChanged() {}
 
-public slots:
+  public slots:
     void connectPlugin();
     void disconnectPlugin();
 
@@ -65,12 +68,15 @@ public slots:
 
     virtual void sendSipInfos( const Tomahawk::peerinfo_ptr& /* receiver */, const QList<SipInfo>& /* info */ ) {}
     void broadcastMsg( const QString& ) {}
-    bool addContact( const QString&, AddContactOptions, const QString& ) { return false; }
+    bool addContact( const QString&, AddContactOptions, const QString& )
+    {
+        return false;
+    }
 
-private slots:
+  private slots:
     void lanHostFound( const QString& host, int port, const QString& name, const QString& nodeid );
 
-private:
+  private:
     TomahawkZeroconf* m_zeroconf;
     Account::ConnectionState m_state;
     QVector<QStringList> m_cachedNodes;

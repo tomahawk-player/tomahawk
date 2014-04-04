@@ -27,16 +27,16 @@ class TopLovedTracksModelPrivate;
 
 class DLLEXPORT TopLovedTracksModel : public LovedTracksModel
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit TopLovedTracksModel( QObject* parent = 0 );
     virtual ~TopLovedTracksModel();
 
-protected slots:
+  protected slots:
     void loadTracks();
 
-private:
+  private:
     Q_DECLARE_PRIVATE( TopLovedTracksModel )
 };
 

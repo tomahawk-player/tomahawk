@@ -41,7 +41,7 @@ DatabaseCommand_CreatePlaylist::DatabaseCommand_CreatePlaylist( QObject* parent 
 
 
 DatabaseCommand_CreatePlaylist::DatabaseCommand_CreatePlaylist( const source_ptr& author,
-                                                                const playlist_ptr& playlist )
+        const playlist_ptr& playlist )
     : DatabaseCommandLoggable( author )
     , m_playlist( playlist )
     , m_report( false ) //this ctor used when creating locally, reporting done elsewhere
@@ -61,10 +61,14 @@ QVariant
 DatabaseCommand_CreatePlaylist::playlistV() const
 {
     if( m_v.isNull() )
-        return QJson::QObjectHelper::qobject2qvariant( (QObject*)m_playlist.data() );
+    {
+        return QJson::QObjectHelper::qobject2qvariant( ( QObject* )m_playlist.data() );
+    }
     else
+    {
         return m_v;
- }
+    }
+}
 
 
 void
@@ -73,10 +77,14 @@ DatabaseCommand_CreatePlaylist::postCommitHook()
     qDebug() << Q_FUNC_INFO;
 
     if ( source()->isLocal() )
+    {
         Servent::instance()->triggerDBSync();
+    }
 
     if ( m_report == false )
+    {
         return;
+    }
 
     tDebug() << Q_FUNC_INFO << "reporting...";
     if ( m_playlist.isNull() )
@@ -84,7 +92,7 @@ DatabaseCommand_CreatePlaylist::postCommitHook()
         QMetaObject::invokeMethod( SourceList::instance(),
                                    "createPlaylist",
                                    Qt::BlockingQueuedConnection,
-                                   QGenericArgument( "Tomahawk::source_ptr", (const void*)&source() ),
+                                   QGenericArgument( "Tomahawk::source_ptr", ( const void* )&source() ),
                                    Q_ARG( QVariant, m_v ) );
     }
     else
@@ -95,7 +103,7 @@ DatabaseCommand_CreatePlaylist::postCommitHook()
 
 
 void
-DatabaseCommand_CreatePlaylist::createPlaylist( DatabaseImpl* lib, bool dynamic)
+DatabaseCommand_CreatePlaylist::createPlaylist( DatabaseImpl* lib, bool dynamic )
 {
     Q_ASSERT( !( m_playlist.isNull() && m_v.isNull() ) );
     Q_ASSERT( !source().isNull() );
@@ -115,7 +123,7 @@ DatabaseCommand_CreatePlaylist::createPlaylist( DatabaseImpl* lib, bool dynamic)
     cre.prepare( "INSERT INTO playlist( guid, source, shared, title, info, creator, lastmodified, dynplaylist, createdOn ) "
                  "VALUES( :guid, :source, :shared, :title, :info, :creator, :lastmodified, :dynplaylist, :createdOn )" );
 
-    cre.bindValue( ":source", source()->isLocal() ? QVariant(QVariant::Int) : source()->id() );
+    cre.bindValue( ":source", source()->isLocal() ? QVariant( QVariant::Int ) : source()->id() );
     cre.bindValue( ":dynplaylist", dynamic );
     cre.bindValue( ":createdOn", now );
     if ( !m_playlist.isNull() )

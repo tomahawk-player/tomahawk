@@ -94,18 +94,18 @@ NewReleasesPlugin::init()
     QVariant data = TomahawkUtils::Cache::instance()->getData( "NewReleasesPlugin", "nr_sources" );
     if ( data.canConvert< QList< Tomahawk::InfoSystem::InfoStringHash > >() )
     {
-         const QList< Tomahawk::InfoSystem::InfoStringHash > sourceList = data.value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
-         foreach ( const Tomahawk::InfoSystem::InfoStringHash &sourceHash, sourceList )
-         {
-             bool ok;
-             qlonglong maxAge = getMaxAge( QString( sourceHash[ "nr_expires" ] ).toLongLong( &ok ) );
-             if ( !ok || maxAge <= 0 )
-             {
-                 // This source has expired.
-                 m_refetchSource << sourceHash[ "nr_source" ];
-             }
-             m_nrSources << sourceHash;
-         }
+        const QList< Tomahawk::InfoSystem::InfoStringHash > sourceList = data.value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
+        foreach ( const Tomahawk::InfoSystem::InfoStringHash & sourceHash, sourceList )
+        {
+            bool ok;
+            qlonglong maxAge = getMaxAge( QString( sourceHash[ "nr_expires" ] ).toLongLong( &ok ) );
+            if ( !ok || maxAge <= 0 )
+            {
+                // This source has expired.
+                m_refetchSource << sourceHash[ "nr_source" ];
+            }
+            m_nrSources << sourceHash;
+        }
     }
     else
     {
@@ -138,42 +138,42 @@ NewReleasesPlugin::getInfo( InfoRequestData requestData )
 
     switch( requestData.type )
     {
-    case InfoNewRelease:
-        /// We need something to check if the request is actually ment to go to this plugin
-        if ( !hash.contains( "nr_source" ) )
-        {
-            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Hash did not contain required param!";
-            dataError( requestData );
-            break;
-        }
-        else
-        {
-            foreach ( const Tomahawk::InfoSystem::InfoStringHash &sourceHash, m_nrSources )
+        case InfoNewRelease:
+            /// We need something to check if the request is actually ment to go to this plugin
+            if ( !hash.contains( "nr_source" ) )
             {
-                if ( sourceHash[ "nr_source" ] == hash[ "nr_source" ] )
-                {
-                    foundSource = true;
-                }
-            }
-
-            if ( !foundSource )
-            {
-                tDebug ( LOGVERBOSE ) << Q_FUNC_INFO << "Hash did not contain source " << hash["nr_source"];
-                dataError ( requestData );
+                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Hash did not contain required param!";
+                dataError( requestData );
                 break;
             }
+            else
+            {
+                foreach ( const Tomahawk::InfoSystem::InfoStringHash & sourceHash, m_nrSources )
+                {
+                    if ( sourceHash[ "nr_source" ] == hash[ "nr_source" ] )
+                    {
+                        foundSource = true;
+                    }
+                }
 
-        }
-        fetchNRFromCache( requestData );
-        break;
+                if ( !foundSource )
+                {
+                    tDebug ( LOGVERBOSE ) << Q_FUNC_INFO << "Hash did not contain source " << hash["nr_source"];
+                    dataError ( requestData );
+                    break;
+                }
 
-    case InfoNewReleaseCapabilities:
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Requesting InfoNewReleaseCapabilities from cache";
-        fetchNRCapabilitiesFromCache( requestData );
-        break;
+            }
+            fetchNRFromCache( requestData );
+            break;
 
-    default:
-        dataError( requestData );
+        case InfoNewReleaseCapabilities:
+            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Requesting InfoNewReleaseCapabilities from cache";
+            fetchNRCapabilitiesFromCache( requestData );
+            break;
+
+        default:
+            dataError( requestData );
     }
 }
 
@@ -244,7 +244,7 @@ NewReleasesPlugin::fetchNRCapabilitiesFromCache( InfoRequestData requestData )
     }
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Fetching fetchNRCapabilitiesFromCache";
-    emit getCachedInfo ( criteria, Q_INT64_C(172800000) /* 2 days */, requestData );
+    emit getCachedInfo ( criteria, Q_INT64_C( 172800000 ) /* 2 days */, requestData );
 }
 
 
@@ -316,7 +316,7 @@ NewReleasesPlugin::nrSourcesList()
             return;
         }
 
-        foreach ( const QVariant &rsource, sources )
+        foreach ( const QVariant & rsource, sources )
         {
 
             /**
@@ -335,7 +335,7 @@ NewReleasesPlugin::nrSourcesList()
             {
                 for ( int i = 0; i < m_nrSources.size(); i++ )
                 {
-                    const Tomahawk::InfoSystem::InfoStringHash &hash = m_nrSources.at( i );
+                    const Tomahawk::InfoSystem::InfoStringHash& hash = m_nrSources.at( i );
                     if ( hash[ "nr_source" ] == source )
                     {
                         tDebug() << Q_FUNC_INFO  << "Removing invalid source" << source;
@@ -356,13 +356,13 @@ NewReleasesPlugin::nrSourcesList()
             const QString headerExpiration = reply->rawHeader( QString( tmpSource ).toLocal8Bit() );
 
             const qlonglong maxAge = getMaxAge( headerExpiration.toLocal8Bit() );
-            const qlonglong expires = headerExpiration.toLongLong(&ok);
+            const qlonglong expires = headerExpiration.toLongLong( &ok );
             Tomahawk::InfoSystem::InfoStringHash source_expire;
 
             if ( ok )
             {
                 source_expire[ "nr_source" ] = source;
-                source_expire[ "nr_expires" ] = QString::number(expires);
+                source_expire[ "nr_expires" ] = QString::number( expires );
                 m_nrSources << source_expire;
             }
 
@@ -469,7 +469,7 @@ NewReleasesPlugin::nrList()
         {
             // Itunes has geographic-area based releases. So we build a breadcrumb of
             // iTunes - Country - Featured/Just Released/New Releases - Genre
-            foreach ( const QVariant &nrObj, res.values() )
+            foreach ( const QVariant & nrObj, res.values() )
             {
                 if ( !nrObj.toMap().isEmpty() )
                 {
@@ -483,7 +483,9 @@ NewReleasesPlugin::nrList()
 
                     // We only have albums in newReleases
                     if ( type != "Albums" || name.isEmpty() )
+                    {
                         continue;
+                    }
 
                     QString extra;
                     if ( !geo.isEmpty() )
@@ -491,7 +493,8 @@ NewReleasesPlugin::nrList()
                         if ( !m_cachedCountries.contains( geo ) )
                         {
                             extra = Tomahawk::CountryUtils::fullCountryFromCode( geo );
-                            if ( extra.isEmpty() || extra.isNull() ){
+                            if ( extra.isEmpty() || extra.isNull() )
+                            {
                                 qWarning() << "Geo string seems to be off!" << geo;
                                 continue;
                             }
@@ -523,10 +526,12 @@ NewReleasesPlugin::nrList()
                     /**
                      * If this item has expired, set it to 0.
                      */
-                    nr[ "expires" ] = ( ok ? QString::number (expires ) : QString::number( 0 ) );
+                    nr[ "expires" ] = ( ok ? QString::number ( expires ) : QString::number( 0 ) );
 
                     if ( isDefault )
+                    {
                         nr[ "default" ] = "true";
+                    }
 
 
                     QList< Tomahawk::InfoSystem::InfoStringHash > extraTypeData = extraType[ nrExtraType ][ extra ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
@@ -543,7 +548,7 @@ NewReleasesPlugin::nrList()
                 }
             }
 
-            foreach ( const QString& nr, extraType.keys() )
+            foreach ( const QString & nr, extraType.keys() )
             {
                 newreleases[ nr ] = extraType[ nr ];
             }
@@ -556,7 +561,7 @@ NewReleasesPlugin::nrList()
         }
         else
         {
-            foreach ( const QVariant &nrObj, res.values() )
+            foreach ( const QVariant & nrObj, res.values() )
             {
                 if ( !nrObj.toMap().isEmpty() )
                 {
@@ -581,7 +586,9 @@ NewReleasesPlugin::nrList()
                             extraType[ extra ][ type ] = QVariant::fromValue< QList< Tomahawk::InfoSystem::InfoStringHash > >( extraTypeData );
                         }
                         else
+                        {
                             albumNRs.append( nr );
+                        }
                     }
                     else
                     {
@@ -591,14 +598,16 @@ NewReleasesPlugin::nrList()
 
                 }
 
-                foreach ( const QString& c, extraType.keys() )
+                foreach ( const QString & c, extraType.keys() )
                 {
                     newreleases[ c ] = extraType[ c ];
                 }
             }
 
             if ( !albumNRs.isEmpty() )
+            {
                 newreleases.insert ( tr ( "Albums" ), QVariant::fromValue< QList< Tomahawk::InfoSystem::InfoStringHash > >( albumNRs ) );
+            }
 
             /// @note For displaying purposes, upper the first letter
             /// @note Remeber to lower it when fetching this!
@@ -629,14 +638,14 @@ NewReleasesPlugin::nrList()
             /**
              * We can cache it the lot for 2 days, it will be checked on next request
              */
-            emit updateCache( criteria, Q_INT64_C(172800000) /* 2 days */, request.type, m_allNRsMap );
+            emit updateCache( criteria, Q_INT64_C( 172800000 ) /* 2 days */, request.type, m_allNRsMap );
         }
         m_cachedRequests.clear();
     }
 }
 
 qlonglong
-NewReleasesPlugin::getMaxAge( const QByteArray &rawHeader ) const
+NewReleasesPlugin::getMaxAge( const QByteArray& rawHeader ) const
 {
     bool ok;
     qlonglong expires = QString( rawHeader ).toLongLong( &ok );
@@ -650,12 +659,12 @@ NewReleasesPlugin::getMaxAge( const QByteArray &rawHeader ) const
 qlonglong
 NewReleasesPlugin::getMaxAge( const qlonglong expires ) const
 {
-    qlonglong currentEpoch = QDateTime::currentMSecsSinceEpoch()/1000;
-    qlonglong expiresInSeconds = expires-currentEpoch;
+    qlonglong currentEpoch = QDateTime::currentMSecsSinceEpoch() / 1000;
+    qlonglong expiresInSeconds = expires - currentEpoch;
 
     if ( expiresInSeconds > 0 )
     {
-        return ( qlonglong )expiresInSeconds*1000;
+        return ( qlonglong )expiresInSeconds * 1000;
     }
     return 0;
 }
@@ -722,10 +731,12 @@ NewReleasesPlugin::nrReturned()
         /**
          * If the item has expired, cache it for one hour and try and refetch later
          */
-        emit updateCache( criteria, (maxAge == Q_INT64_C(0) ? (3600000) /* One hour */ : maxAge), requestData.type, returnedData );
+        emit updateCache( criteria, ( maxAge == Q_INT64_C( 0 ) ? ( 3600000 ) /* One hour */ : maxAge ), requestData.type, returnedData );
     }
     else
+    {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Network error in fetching newrelease:" << reply->url().toString();
+    }
 }
 
 Q_EXPORT_PLUGIN2( Tomahawk::InfoSystem::InfoPlugin, Tomahawk::InfoSystem::NewReleasesPlugin )

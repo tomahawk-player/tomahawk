@@ -22,7 +22,7 @@
 #include "utils/DpiScaler.h"
 #include "utils/ImageRegistry.h"
 
-Tomahawk::ViewPagePlugin::ViewPagePlugin(QObject* parent)
+Tomahawk::ViewPagePlugin::ViewPagePlugin( QObject* parent )
     : QObject( parent )
 {
 

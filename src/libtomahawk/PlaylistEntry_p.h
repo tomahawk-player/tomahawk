@@ -29,7 +29,7 @@ namespace Tomahawk
 
 class PlaylistEntryPrivate
 {
-public:
+  public:
     PlaylistEntryPrivate( PlaylistEntry* q )
         : q_ptr( q )
     {
@@ -37,7 +37,7 @@ public:
 
     Q_DECLARE_PUBLIC( PlaylistEntry )
     PlaylistEntry* q_ptr;
-private:
+  private:
     QString guid;
     Tomahawk::query_ptr query;
     QString annotation;

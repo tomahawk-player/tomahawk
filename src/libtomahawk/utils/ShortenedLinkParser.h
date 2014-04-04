@@ -28,7 +28,7 @@
 #include <QStringList>
 
 #ifndef ENABLE_HEADLESS
-    #include <QPixmap>
+#include <QPixmap>
 #endif
 
 class NetworkReply;
@@ -48,19 +48,19 @@ class DLLEXPORT ShortenedLinkParser : public QObject
 {
     Q_OBJECT
 
-public:
+  public:
     explicit ShortenedLinkParser( const QStringList& urls, QObject* parent = 0 );
     virtual ~ShortenedLinkParser();
 
     static bool handlesUrl( const QString& url );
 
-public slots:
+  public slots:
     void lookupFinished( const QUrl& url );
 
-signals:
+  signals:
     void urls( const QStringList& urls );
 
-private:
+  private:
     void lookupUrl( const QString& url );
     void checkFinished();
 

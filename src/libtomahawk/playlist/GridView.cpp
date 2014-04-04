@@ -110,7 +110,9 @@ GridView::setProxyModel( PlayableProxyModel* model )
     connect( proxyModel(), SIGNAL( modelReset() ), SLOT( layoutItems() ), Qt::QueuedConnection );
 
     if ( m_delegate )
+    {
         delete m_delegate;
+    }
 
     m_delegate = new GridItemDelegate( this, m_proxyModel );
     connect( m_delegate, SIGNAL( startedPlaying( QPersistentModelIndex ) ), this, SLOT( onDelegatePlaying( QPersistentModelIndex ) ) );
@@ -163,7 +165,9 @@ GridView::currentChanged( const QModelIndex& current, const QModelIndex& previou
     if ( item )
     {
         if ( !item->album().isNull() )
+        {
             ViewManager::instance()->context()->setAlbum( item->album() );
+        }
     }
 }
 
@@ -174,15 +178,21 @@ GridView::onItemActivated( const QModelIndex& index )
     PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
     if ( item )
     {
-//        qDebug() << "Result activated:" << item->album()->tracks().first()->toString() << item->album()->tracks().first()->results().first()->url();
-//        APP->audioEngine()->playItem( item->album().data(), item->album()->tracks().first()->results().first() );
+        //        qDebug() << "Result activated:" << item->album()->tracks().first()->toString() << item->album()->tracks().first()->results().first()->url();
+        //        APP->audioEngine()->playItem( item->album().data(), item->album()->tracks().first()->results().first() );
 
         if ( !item->album().isNull() )
+        {
             ViewManager::instance()->show( item->album() );
+        }
         else if ( !item->artist().isNull() )
+        {
             ViewManager::instance()->show( item->artist() );
+        }
         else if ( !item->query().isNull() )
+        {
             ViewManager::instance()->show( item->query() );
+        }
     }
 }
 
@@ -208,7 +218,9 @@ void
 GridView::paintEvent( QPaintEvent* event )
 {
     if ( !autoFitItems() || m_inited || !m_proxyModel->rowCount() )
+    {
         QListView::paintEvent( event );
+    }
 }
 
 
@@ -228,7 +240,7 @@ void GridView::wheelEvent( QWheelEvent* e )
     //HACK: Workaround for QTBUG-7232: Smooth scrolling (scroll per pixel) in ItemViews
     //      does not work as expected.
     verticalScrollBar()->setSingleStep( delegate()->itemSize().height() / 8 );
-                                     // ^ scroll step is 1/8 of the estimated row height
+    // ^ scroll step is 1/8 of the estimated row height
 #endif
 
     QListView::wheelEvent( e );
@@ -239,25 +251,31 @@ void
 GridView::verifySize()
 {
     if ( !autoResize() || !m_model )
+    {
         return;
+    }
 
     int scrollbar = verticalScrollBar()->rect().width();
 
     if ( rect().width() - contentsRect().width() > scrollbar ) //HACK: if the contentsRect includes the scrollbar
-        scrollbar = 0; //don't count it any more
+    {
+        scrollbar = 0;    //don't count it any more
+    }
 
     const int rectWidth = contentsRect().width() - scrollbar - 3;
     const int itemWidth = 160;
     const int itemsPerRow = qMax( 1, qFloor( rectWidth / itemWidth ) );
 
     const int overlapRows = m_model->rowCount( QModelIndex() ) % itemsPerRow;
-    const int rows = qMax( 1.0, floor( (double)m_model->rowCount( QModelIndex() ) / (double)itemsPerRow ) );
+    const int rows = qMax( 1.0, floor( ( double )m_model->rowCount( QModelIndex() ) / ( double )itemsPerRow ) );
     const int newHeight = rows * m_delegate->itemSize().height();
 
     m_proxyModel->setMaxVisibleItems( m_model->rowCount( QModelIndex() ) - overlapRows );
 
     if ( newHeight > 0 )
+    {
         setFixedHeight( newHeight );
+    }
 }
 
 
@@ -272,7 +290,9 @@ void
 GridView::onDelegateStopped( const QPersistentModelIndex& index )
 {
     if ( m_playing == index )
+    {
         m_playing = QPersistentModelIndex();
+    }
 }
 
 
@@ -284,7 +304,9 @@ GridView::layoutItems()
         int scrollbar = verticalScrollBar()->rect().width();
 
         if ( rect().width() - contentsRect().width() >= scrollbar ) //HACK: if the contentsRect includes the scrollbar
-            scrollbar = 0; //don't count it any more
+        {
+            scrollbar = 0;    //don't count it any more
+        }
 
         const int rectWidth = contentsRect().width() - scrollbar - 3;
         const int itemWidth = 160;
@@ -310,7 +332,9 @@ void
 GridView::onFilterChanged( const QString& )
 {
     if ( selectedIndexes().count() )
+    {
         scrollTo( selectedIndexes().at( 0 ), QAbstractItemView::PositionAtCenter );
+    }
 }
 
 
@@ -319,7 +343,7 @@ GridView::startDrag( Qt::DropActions supportedActions )
 {
     QList<QPersistentModelIndex> pindexes;
     QModelIndexList indexes;
-    foreach( const QModelIndex& idx, selectedIndexes() )
+    foreach( const QModelIndex & idx, selectedIndexes() )
     {
         if ( ( m_proxyModel->flags( idx ) & Qt::ItemIsDragEnabled ) )
         {
@@ -329,12 +353,16 @@ GridView::startDrag( Qt::DropActions supportedActions )
     }
 
     if ( indexes.count() == 0 )
+    {
         return;
+    }
 
     qDebug() << "Dragging" << indexes.count() << "indexes";
     QMimeData* data = m_proxyModel->mimeData( indexes );
     if ( !data )
+    {
         return;
+    }
 
     QDrag* drag = new QDrag( this );
     drag->setMimeData( data );
@@ -356,25 +384,35 @@ GridView::onCustomContextMenu( const QPoint& pos )
     m_contextMenuIndex = idx;
 
     if ( !idx.isValid() )
+    {
         return;
+    }
 
     QList<query_ptr> queries;
     QList<artist_ptr> artists;
     QList<album_ptr> albums;
 
-    foreach ( const QModelIndex& index, selectedIndexes() )
+    foreach ( const QModelIndex & index, selectedIndexes() )
     {
         if ( index.column() || selectedIndexes().contains( index.parent() ) )
+        {
             continue;
+        }
 
         PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
 
         if ( item && !item->query().isNull() )
+        {
             queries << item->query();
+        }
         else if ( item && !item->artist().isNull() )
+        {
             artists << item->artist();
+        }
         else if ( item && !item->album().isNull() )
+        {
             albums << item->album();
+        }
     }
 
     m_contextMenu->setQueries( queries );
@@ -398,7 +436,9 @@ bool
 GridView::jumpToCurrentTrack()
 {
     if ( !m_playing.isValid() )
+    {
         return false;
+    }
 
     scrollTo( m_playing, QListView::PositionAtCenter );
 
@@ -410,7 +450,9 @@ QRect
 GridView::currentTrackRect() const
 {
     if ( !m_playing.isValid() )
+    {
         return QRect();
+    }
 
     return visualRect( m_playing );
 }

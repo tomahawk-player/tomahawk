@@ -39,12 +39,12 @@ class QueryPrivate;
 
 class DLLEXPORT Query : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-friend class DatabaseCommand_LoadPlaylistEntries;
-friend class Pipeline;
+    friend class DatabaseCommand_LoadPlaylistEntries;
+    friend class Pipeline;
 
-public:
+  public:
     static query_ptr get( const QString& artist, const QString& title, const QString& album, const QID& qid = QString(), bool autoResolve = true );
     static query_ptr get( const Tomahawk::track_ptr& track, const QID& qid = QString() );
     static query_ptr get( const QString& query, const QID& qid );
@@ -94,7 +94,7 @@ public:
     /// sorter for list of results
     static bool resultSorter( const result_ptr& left, const result_ptr& right );
 
-signals:
+  signals:
     void resultsAdded( const QList<Tomahawk::result_ptr>& );
     void resultsRemoved( const Tomahawk::result_ptr& );
 
@@ -106,7 +106,7 @@ signals:
     void playableStateChanged( bool state );
     void resolvingFinished( bool hasResults );
 
-public slots:
+  public slots:
     /// (indirectly) called by resolver plugins when results are found
     void addResults( const QList< Tomahawk::result_ptr >& );
     void removeResult( const Tomahawk::result_ptr& );
@@ -117,14 +117,14 @@ public slots:
     void onResolvingFinished();
     void onResolverAdded();
 
-protected:
+  protected:
     QScopedPointer<QueryPrivate> d_ptr;
 
-private slots:
+  private slots:
     void onResultStatusChanged();
     void refreshResults();
 
-private:
+  private:
     Query();
     explicit Query( const track_ptr& track, const QID& qid, bool autoResolve );
     explicit Query( const QString& query, const QID& qid );

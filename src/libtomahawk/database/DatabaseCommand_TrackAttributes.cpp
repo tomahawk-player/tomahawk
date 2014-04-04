@@ -56,7 +56,9 @@ void DatabaseCommand_TrackAttributes::exec( DatabaseImpl* lib )
             query.bindValue( 0, id );
             query.bindValue( 1, k );
             if ( query.exec() )
+            {
                 results.append( QPair< QID, QString >( id, query.value( 0 ).toString() ) );
+            }
         }
     }
     else

@@ -43,30 +43,42 @@ DatabaseCommand_SetCollectionAttributes::DatabaseCommand_SetCollectionAttributes
 
 
 void
-DatabaseCommand_SetCollectionAttributes::exec( DatabaseImpl *lib )
+DatabaseCommand_SetCollectionAttributes::exec( DatabaseImpl* lib )
 {
     TomahawkSqlQuery query = lib->newquery();
 
     QString sourceStr;
     if ( source().isNull() )
+    {
         setSource( SourceList::instance()->getLocal() );
+    }
 
     if ( source().isNull() || source()->isLocal() )
+    {
         sourceStr = "NULL";
+    }
     else
+    {
         sourceStr = QString( "%1" ).arg( source()->id() );
+    }
 
     QString typeStr;
     if ( m_type == EchonestSongCatalog )
+    {
         typeStr = "echonest_song";
+    }
     else if ( m_type == EchonestArtistCatalog )
+    {
         typeStr = "echonest_artist";
+    }
 
     TomahawkSqlQuery delQuery = lib->newquery();
-    delQuery.exec( QString( "DELETE FROM collection_attributes WHERE id %1" ).arg( source()->isLocal() ? QString("IS NULL") : QString( "= %1" ).arg( source()->id() )));
+    delQuery.exec( QString( "DELETE FROM collection_attributes WHERE id %1" ).arg( source()->isLocal() ? QString( "IS NULL" ) : QString( "= %1" ).arg( source()->id() ) ) );
 
     if ( m_delete )
+    {
         return;
+    }
 
     QString queryStr = QString( "INSERT INTO collection_attributes ( id, k, v ) VALUES( %1, \"%2\", \"%3\" )" ).arg( sourceStr ).arg( typeStr ).arg( QString::fromUtf8( m_id ) );
     qDebug() << "Doing query:" << queryStr;
@@ -77,11 +89,15 @@ void
 DatabaseCommand_SetCollectionAttributes::postCommitHook()
 {
     if ( m_type == EchonestSongCatalog ||
-         m_type == EchonestArtistCatalog )
+            m_type == EchonestArtistCatalog )
+    {
         Tomahawk::EchonestCatalogSynchronizer::instance()->knownCatalogsChanged();
+    }
 
     if ( source()->isLocal() )
+    {
         Servent::instance()->triggerDBSync();
+    }
 }
 
 }

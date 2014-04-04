@@ -34,24 +34,30 @@ class DatabaseCommand_LoadDynamicPlaylistEntries : public DatabaseCommand_LoadPl
 {
     Q_OBJECT
 
-public:
+  public:
     explicit DatabaseCommand_LoadDynamicPlaylistEntries( QString revision_guid, QObject* parent = 0 )
-    : DatabaseCommand_LoadPlaylistEntries( revision_guid, parent )
+        : DatabaseCommand_LoadPlaylistEntries( revision_guid, parent )
     {
-//        qDebug() << "loaded with:" << revision_guid << guid();
+        //        qDebug() << "loaded with:" << revision_guid << guid();
     }
 
     virtual void exec( DatabaseImpl* );
-    virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "loaddynamicplaylist"; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
+    virtual QString commandname() const
+    {
+        return "loaddynamicplaylist";
+    }
 
-signals:
+  signals:
     // used if loading an ondemand playlist
     void done( QString,
-                     bool,
-                     QString,
-                     QList< QVariantMap>,
-                     bool );
+               bool,
+               QString,
+               QList< QVariantMap>,
+               bool );
     // used when loading a static playlist
     void done( QString,
                QList< QString >,
@@ -62,7 +68,7 @@ signals:
                QMap< QString, Tomahawk::plentry_ptr >,
                bool );
 
-private:
+  private:
 };
 
 }

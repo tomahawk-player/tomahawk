@@ -27,14 +27,20 @@ namespace Tomahawk
 class DatabaseCommand_LoadInboxEntries : public DatabaseCommand
 {
     Q_OBJECT
-public:
+  public:
     explicit DatabaseCommand_LoadInboxEntries( QObject* parent = 0 );
 
     virtual void exec( DatabaseImpl* );
-    virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "loadinboxentries"; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
+    virtual QString commandname() const
+    {
+        return "loadinboxentries";
+    }
 
-signals:
+  signals:
     void tracks( QList< Tomahawk::query_ptr > );
 };
 

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -21,17 +21,18 @@
 
 #include <QObject>
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 /**
   Base class for various shortcut plugins on different platforms
   */
 class ShortcutHandler : public QObject
 {
     Q_OBJECT
-public:
+  public:
     virtual ~ShortcutHandler();
 
-signals:
+  signals:
     // add more as needed
     void playPause();
     void pause();
@@ -42,8 +43,8 @@ signals:
     void volumeUp();
     void volumeDown();
     void mute();
-protected:
-    explicit ShortcutHandler( QObject *parent = 0 );
+  protected:
+    explicit ShortcutHandler( QObject* parent = 0 );
 
 };
 

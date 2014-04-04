@@ -42,21 +42,21 @@ CrashReporter::CrashReporter( const QUrl& url, const QStringList& args )
     ui.progressBar->setValue( 0 );
     ui.progressLabel->setPalette( Qt::gray );
 
-  #ifdef Q_OS_MAC
+#ifdef Q_OS_MAC
     QFont f = ui.bottomLabel->font();
     f.setPointSize( 10 );
     ui.bottomLabel->setFont( f );
     f.setPointSize( 11 );
     ui.progressLabel->setFont( f );
     ui.progressLabel->setIndent( 3 );
-  #else
+#else
     ui.vboxLayout->setSpacing( 16 );
     ui.hboxLayout1->setSpacing( 16 );
     ui.progressBar->setTextVisible( false );
     ui.progressLabel->setIndent( 1 );
     ui.bottomLabel->setDisabled( true );
     ui.bottomLabel->setIndent( 1 );
-  #endif //Q_OS_MAC
+#endif //Q_OS_MAC
 
     m_request = new QNetworkRequest( m_url );
 
@@ -115,14 +115,14 @@ CrashReporter::send()
     {
         body += "--thkboundary\r\n";
         body += "Content-Disposition: form-data; name=\"" +
-                           pair.first  + "\"\r\n\r\n" +
-                           pair.second + "\r\n";
+                pair.first  + "\"\r\n\r\n" +
+                pair.second + "\r\n";
     }
 
     // add minidump file
     body += "--thkboundary\r\n";
     body += "Content-Disposition: form-data; name=\"upload_file_minidump\"; filename=\""
-          + QFileInfo( m_minidump ).fileName() + "\"\r\n";
+            + QFileInfo( m_minidump ).fileName() + "\"\r\n";
     body += "Content-Type: application/octet-stream\r\n";
     body += "\r\n";
     body += contents( m_minidump );
@@ -179,7 +179,9 @@ CrashReporter::onDone()
         onFail( m_reply->error(), m_reply->errorString() );
     }
     else
+    {
         ui.progressLabel->setText( tr( "Sent! <b>Many thanks</b>." ) );
+    }
 }
 
 

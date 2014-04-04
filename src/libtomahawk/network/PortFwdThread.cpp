@@ -57,7 +57,9 @@ PortFwdThread::run()
     }
 
     if ( m_worker )
+    {
         delete m_worker.data();
+    }
 }
 
 
@@ -97,8 +99,14 @@ PortFwdWorker::work()
 
     foreach ( QHostAddress ha, QNetworkInterface::allAddresses() )
     {
-        if( ha.toString() == "127.0.0.1" ) continue;
-        if( ha.toString().contains( ":" ) ) continue; //ipv6
+        if( ha.toString() == "127.0.0.1" )
+        {
+            continue;
+        }
+        if( ha.toString().contains( ":" ) )
+        {
+            continue;    //ipv6
+        }
 
         m_portfwd->addBlockedDevice( ha.toString().toStdString() );
     }
@@ -130,14 +138,18 @@ PortFwdWorker::work()
                 qDebug() << "Max downstream" << m_portfwd->max_downstream_bps() << "bps";
                 break;
             }
-            tryport = qAbs( 10000 + 50000 * (float)qrand() / RAND_MAX );
+            tryport = qAbs( 10000 + 50000 * ( float )qrand() / RAND_MAX );
         }
     }
     else
+    {
         tDebug() << "No UPNP Gateway device found?";
+    }
 
     if ( !m_externalPort )
+    {
         tDebug() << "Could not setup fwd for port:" << m_port;
+    }
 
     emit externalAddressDetected( m_externalAddress, m_externalPort );
 }

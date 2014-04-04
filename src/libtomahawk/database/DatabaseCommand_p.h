@@ -28,7 +28,7 @@ namespace Tomahawk
 
 class DatabaseCommandPrivate
 {
-public:
+  public:
     explicit DatabaseCommandPrivate( DatabaseCommand* q )
         : q_ptr( q )
         , state( DatabaseCommand::PENDING )
@@ -45,7 +45,7 @@ public:
     Q_DECLARE_PUBLIC( DatabaseCommand )
     DatabaseCommand* q_ptr;
 
-private:
+  private:
     Tomahawk::source_ptr source;
     DatabaseCommand::State state;
     mutable QString guid;

@@ -24,7 +24,7 @@
 class ScriptCollectionItem : public SourceTreeItem
 {
     Q_OBJECT
-public:
+  public:
     explicit ScriptCollectionItem( SourcesModel* model,
                                    SourceTreeItem* parent,
                                    const Tomahawk::collection_ptr& collection );
@@ -38,7 +38,7 @@ public:
 
     virtual Tomahawk::collection_ptr collection() const;
 
-private:
+  private:
     QIcon m_icon;
     QString m_text;
 

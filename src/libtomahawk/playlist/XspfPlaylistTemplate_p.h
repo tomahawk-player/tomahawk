@@ -29,7 +29,7 @@ namespace Tomahawk
 
 class XspfPlaylistTemplatePrivate: public PlaylistTemplatePrivate
 {
-public:
+  public:
     XspfPlaylistTemplatePrivate( XspfPlaylistTemplate* q, const QString& _url, const source_ptr& source, const QString& guid )
         : PlaylistTemplatePrivate( q, source, guid, QString(), QString(), QString(), false, QList<query_ptr>() )
         , url( _url )
@@ -39,7 +39,7 @@ public:
 
     Q_DECLARE_PUBLIC( XspfPlaylistTemplate )
 
-private:
+  private:
     QString url;
     QSharedPointer<XSPFLoader> xspfLoader;
 };

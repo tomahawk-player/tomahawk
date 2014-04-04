@@ -21,13 +21,13 @@
 namespace Tomahawk
 {
 
-OggTag::OggTag( TagLib::Tag *tag, TagLib::Ogg::XiphComment *xiphComment )
+OggTag::OggTag( TagLib::Tag* tag, TagLib::Ogg::XiphComment* xiphComment )
     : Tag( tag )
     , m_xiphComment( xiphComment )
 {
     TagLib::Ogg::FieldListMap map = m_xiphComment->fieldListMap();
     for( TagLib::Ogg::FieldListMap::ConstIterator it = map.begin();
-         it != map.end(); ++it )
+            it != map.end(); ++it )
     {
         TagLib::String key = it->first;
         QString val = TStringToQString( it->second.toString( '\n' ) );

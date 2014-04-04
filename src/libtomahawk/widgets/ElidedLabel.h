@@ -31,7 +31,7 @@ class DLLEXPORT ElidedLabel : public QFrame
     Q_PROPERTY( Qt::Alignment alignment READ alignment WRITE setAlignment )
     Q_PROPERTY( Qt::TextElideMode elideMode READ elideMode WRITE setElideMode )
 
-public:
+  public:
     explicit ElidedLabel( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
     explicit ElidedLabel( const QString& text, QWidget* parent = 0, Qt::WindowFlags flags = 0 );
     virtual ~ElidedLabel();
@@ -55,21 +55,24 @@ public:
     void init( const QString& txt = QString() );
     void updateLabel();
 
-public slots:
+  public slots:
     void setText( const QString& text );
-    void setWordWrap( bool b ) { m_multiLine = b; }
+    void setWordWrap( bool b )
+    {
+        m_multiLine = b;
+    }
 
-signals:
+  signals:
     void clicked();
     void textChanged( const QString& text );
 
-protected:
+  protected:
     virtual void changeEvent( QEvent* event );
     virtual void mousePressEvent( QMouseEvent* event );
     virtual void mouseReleaseEvent( QMouseEvent* event );
     virtual void paintEvent( QPaintEvent* event );
 
-private:
+  private:
     QTime m_time;
     QString m_text;
     Qt::Alignment m_align;

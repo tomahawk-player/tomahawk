@@ -33,10 +33,11 @@ class QStyledItemDelegate;
 
 class DLLEXPORT JobStatusView : public AnimatedWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
-    static JobStatusView* instance() {
+  public:
+    static JobStatusView* instance()
+    {
         return s_instance;
     }
 
@@ -52,15 +53,18 @@ public:
 
     void setModel( JobStatusSortModel* model );
 
-    JobStatusSortModel* model() { return m_model; }
+    JobStatusSortModel* model()
+    {
+        return m_model;
+    }
 
-private slots:
+  private slots:
     void checkCount();
     void customDelegateJobInserted( int row, JobStatusItem* item );
     void customDelegateJobRemoved( int row );
     void refreshDelegates();
 
-private:
+  private:
     QListView* m_view;
     JobStatusSortModel* m_model;
     AnimatedSplitter* m_parent;

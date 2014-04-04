@@ -48,7 +48,7 @@ AccountWidget::AccountWidget( QWidget* parent )
     : QWidget( parent )
     , TomahawkUtils::DpiScaler( this )
 {
-    QHBoxLayout *mainLayout = new QHBoxLayout( this );
+    QHBoxLayout* mainLayout = new QHBoxLayout( this );
     TomahawkUtils::unmarginLayout( mainLayout );
     setLayout( mainLayout );
     setContentsMargins( 0, scaledY( 8 ), 0, scaledY( 8 ) );
@@ -79,26 +79,26 @@ AccountWidget::AccountWidget( QWidget* parent )
 
     m_spinnerWidget = new QWidget( idContainer );
     QSize spinnerSize = 16 > TomahawkUtils::defaultFontHeight()  ?
-                            QSize( 16, 16 ) :
-                            QSize( TomahawkUtils::defaultFontHeight(),
-                                   TomahawkUtils::defaultFontHeight() );
+                        QSize( 16, 16 ) :
+                        QSize( TomahawkUtils::defaultFontHeight(),
+                               TomahawkUtils::defaultFontHeight() );
     m_spinnerWidget->setFixedSize( spinnerSize );
     idContLayout->addWidget( m_spinnerWidget );
     m_spinnerWidget->setContentsMargins( 0, 1, 0, 0 );
     m_spinner = new AnimatedSpinner( m_spinnerWidget->size() - QSize( 2, 2 ), m_spinnerWidget );
 
     idContainer->setStyleSheet( QString( "QFrame {"
-                                "border: 1px solid #e9e9e9;"
-                                "border-radius: %1px;"
-                                "background: #e9e9e9;"
-                                "}" ).arg( idContainer->sizeHint().height() / 2 + 1 ) );
+                                         "border: 1px solid #e9e9e9;"
+                                         "border-radius: %1px;"
+                                         "background: #e9e9e9;"
+                                         "}" ).arg( idContainer->sizeHint().height() / 2 + 1 ) );
     idContainer->setMinimumHeight( spinnerSize.height() + 6 /*margins*/ );
 
     m_statusToggle = new SlideSwitchButton( this );
     m_statusToggle->setContentsMargins( 0, 0, 0, 0 );
     m_statusToggle->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Expanding );
     m_statusToggle->setFixedSize( m_statusToggle->sizeHint() );
-    QHBoxLayout *statusToggleLayout = new QHBoxLayout( this );
+    QHBoxLayout* statusToggleLayout = new QHBoxLayout( this );
     vLayout->addLayout( statusToggleLayout, 0, 1, 1, 1 );
     statusToggleLayout->addStretch();
     statusToggleLayout->addWidget( m_statusToggle );
@@ -153,8 +153,8 @@ void
 AccountWidget::update( const QPersistentModelIndex& idx, int accountIdx )
 {
     Tomahawk::Accounts::Account* account =
-            idx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
-            .value< QList< Tomahawk::Accounts::Account* > >().at( accountIdx );
+        idx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
+        .value< QList< Tomahawk::Accounts::Account* > >().at( accountIdx );
 
     if ( account )
     {
@@ -172,9 +172,9 @@ AccountWidget::update( const QPersistentModelIndex& idx, int accountIdx )
 
         //we already know it's a factory because of the FactoryProxy
         Tomahawk::Accounts::AccountFactory* fac =
-                qobject_cast< Tomahawk::Accounts::AccountFactory* >(
-                    idx.data( Tomahawk::Accounts::AccountModel::AccountData )
-                        .value< QObject* >() );
+            qobject_cast< Tomahawk::Accounts::AccountFactory* >(
+                idx.data( Tomahawk::Accounts::AccountModel::AccountData )
+                .value< QObject* >() );
         if ( fac->factoryId() == "twitteraccount" )
         {
             m_inviteContainer->setVisible( false );
@@ -186,7 +186,9 @@ AccountWidget::update( const QPersistentModelIndex& idx, int accountIdx )
             case Tomahawk::Accounts::Account::Connected:
             {
                 if ( account->enabled() )
+                {
                     m_statusToggle->setChecked( true );
+                }
                 else
                     tDebug() << "AccountWidget warning:" << account->accountFriendlyName()
                              << "is Connected but Disabled!";
@@ -210,7 +212,9 @@ AccountWidget::update( const QPersistentModelIndex& idx, int accountIdx )
             case Tomahawk::Accounts::Account::Disconnected:
             {
                 if ( !account->enabled() )
+                {
                     m_statusToggle->setChecked( false );
+                }
                 else
                     tDebug() << "AccountWidget warning:" << account->accountFriendlyName()
                              << "is Disconnected but Enabled!";
@@ -253,8 +257,8 @@ void
 AccountWidget::changeAccountConnectionState( bool connected )
 {
     Tomahawk::Accounts::Account* account =
-            m_myFactoryIdx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
-            .value< QList< Tomahawk::Accounts::Account* > >().at( m_myAccountIdx );
+        m_myFactoryIdx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
+        .value< QList< Tomahawk::Accounts::Account* > >().at( m_myAccountIdx );
 
     if ( account )
     {
@@ -274,13 +278,15 @@ void
 AccountWidget::sendInvite()
 {
     Tomahawk::Accounts::Account* account =
-            m_myFactoryIdx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
-            .value< QList< Tomahawk::Accounts::Account* > >().at( m_myAccountIdx );
+        m_myFactoryIdx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
+        .value< QList< Tomahawk::Accounts::Account* > >().at( m_myAccountIdx );
 
     if ( account )
     {
         if ( !m_inviteEdit->text().isEmpty() )
+        {
             account->sipPlugin()->addContact( m_inviteEdit->text(), SipPlugin::SendInvite );
+        }
 
         m_inviteButton->setEnabled( false );
         m_inviteEdit->setEnabled( false );
@@ -326,8 +332,8 @@ AccountWidget::setupConnections( const QPersistentModelIndex& idx, int accountId
     m_myAccountIdx = accountIdx;
 
     Tomahawk::Accounts::Account* account =
-            idx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
-            .value< QList< Tomahawk::Accounts::Account* > >().at( accountIdx );
+        idx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
+        .value< QList< Tomahawk::Accounts::Account* > >().at( accountIdx );
 
     if ( account )
     {

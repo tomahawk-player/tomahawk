@@ -33,12 +33,14 @@
 
 using namespace Tomahawk;
 
-namespace {
-    enum QueryType {
-        ArtistType,
-        AlbumType,
-        TrackType
-    };
+namespace
+{
+enum QueryType
+{
+    ArtistType,
+    AlbumType,
+    TrackType
+};
 }
 
 
@@ -144,16 +146,16 @@ IdThreadWorker::getTrackId( const trackdata_ptr& track, bool autoCreate )
     QueueItem* item = internalGet( artist_ptr(), album_ptr(), track, autoCreate, TrackType );
     track->setIdFuture( item->promise.future() );
 
-    #if ID_THREAD_DEBUG
+#if ID_THREAD_DEBUG
     tDebug() << "QUEUEING TRACK:" << track->toString();
-    #endif
+#endif
     s_mutex.lock();
     s_workQueue.enqueue( item );
     s_mutex.unlock();
     s_waitCond.wakeOne();
-    #if ID_THREAD_DEBUG
+#if ID_THREAD_DEBUG
     tDebug() << "DONE WOKE UP THREAD:" << track->toString();
-    #endif
+#endif
 }
 
 

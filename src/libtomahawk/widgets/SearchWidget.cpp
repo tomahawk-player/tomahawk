@@ -149,7 +149,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
     m_resultsModel->startLoading();
     m_queries << Tomahawk::Query::get( search, uuid() );
 
-    foreach ( const Tomahawk::query_ptr& query, m_queries )
+    foreach ( const Tomahawk::query_ptr & query, m_queries )
     {
         connect( query.data(), SIGNAL( artistsAdded( QList<Tomahawk::artist_ptr> ) ), SLOT( onArtistsFound( QList<Tomahawk::artist_ptr> ) ) );
         connect( query.data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr> ) ), SLOT( onAlbumsFound( QList<Tomahawk::album_ptr> ) ) );
@@ -202,10 +202,12 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
 {
     QList<Tomahawk::artist_ptr> artists;
     QList<Tomahawk::album_ptr> albums;
-    foreach( const Tomahawk::result_ptr& result, results )
+    foreach( const Tomahawk::result_ptr & result, results )
     {
         if ( !result->collection().isNull() && !result->isOnline() )
+        {
             continue;
+        }
 
         QList< Tomahawk::result_ptr > rl;
         rl << result;
@@ -227,17 +229,19 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
 void
 SearchWidget::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums )
 {
-    foreach ( const Tomahawk::album_ptr& album, albums )
+    foreach ( const Tomahawk::album_ptr & album, albums )
     {
         int distance = TomahawkUtils::levenshtein( m_search, album->name() );
         int maxlen = qMax( m_search.length(), album->name().length() );
-        float score = (float)( maxlen - distance ) / maxlen;
+        float score = ( float )( maxlen - distance ) / maxlen;
 
         if ( score <= 0.1 )
+        {
             continue;
+        }
 
         m_albums.insert( score, album );
-//        tDebug() << Q_FUNC_INFO << "found album:" << album->name() << "score:" << score;
+        //        tDebug() << Q_FUNC_INFO << "found album:" << album->name() << "score:" << score;
     }
 
     updateAlbums();
@@ -247,17 +251,19 @@ SearchWidget::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums )
 void
 SearchWidget::onArtistsFound( const QList<Tomahawk::artist_ptr>& artists )
 {
-    foreach ( const Tomahawk::artist_ptr& artist, artists )
+    foreach ( const Tomahawk::artist_ptr & artist, artists )
     {
         int distance = TomahawkUtils::levenshtein( m_search, artist->name() );
         int maxlen = qMax( m_search.length(), artist->name().length() );
-        float score = (float)( maxlen - distance ) / maxlen;
+        float score = ( float )( maxlen - distance ) / maxlen;
 
         if ( score <= 0.1 )
+        {
             continue;
+        }
 
         m_artists.insert( score, artist );
-//        tDebug() << Q_FUNC_INFO << "found artist:" << artist->name() << "score:" << score;
+        //        tDebug() << Q_FUNC_INFO << "found artist:" << artist->name() << "score:" << score;
     }
 
     updateArtists();
@@ -318,19 +324,31 @@ bool
 SearchWidget::isBeingPlayed() const
 {
     if ( ui->resultsView->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+    {
         return true;
+    }
     if ( ui->resultsView->playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
+    {
         return true;
+    }
 
     if ( ui->albumView->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+    {
         return true;
+    }
     if ( ui->albumView->playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
+    {
         return true;
+    }
 
     if ( ui->artistView->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+    {
         return true;
+    }
     if ( ui->artistView->playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
+    {
         return true;
+    }
 
     return false;
 }

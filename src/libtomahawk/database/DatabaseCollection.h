@@ -34,16 +34,19 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCollection : public Tomahawk::Collection
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit DatabaseCollection( const Tomahawk::source_ptr& source, QObject* parent = 0 );
     ~DatabaseCollection()
     {
         qDebug() << Q_FUNC_INFO;
     }
 
-    virtual BackendType backendType() const { return DatabaseCollectionType; }
+    virtual BackendType backendType() const
+    {
+        return DatabaseCollectionType;
+    }
 
     virtual void loadPlaylists();
     virtual void loadAutoPlaylists();
@@ -59,11 +62,11 @@ public:
 
     virtual int trackCount() const;
 
-public slots:
+  public slots:
     virtual void addTracks( const QList<QVariant>& newitems );
     virtual void removeTracks( const QDir& dir );
 
-private slots:
+  private slots:
     void stationCreated( const Tomahawk::source_ptr& source, const QVariantList& data );
     void autoPlaylistCreated( const Tomahawk::source_ptr& source, const QVariantList& data );
 };

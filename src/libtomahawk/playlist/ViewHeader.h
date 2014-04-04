@@ -26,31 +26,37 @@
 
 class DLLEXPORT ViewHeader : public QHeaderView
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit ViewHeader( QAbstractItemView* parent = 0 );
     ~ViewHeader();
 
     int visibleSectionCount() const;
 
-    void setDefaultColumnWeights( QList<double> weights ) { m_columnWeights = weights; }
+    void setDefaultColumnWeights( QList<double> weights )
+    {
+        m_columnWeights = weights;
+    }
 
-    QString guid() const { return m_guid; }
+    QString guid() const
+    {
+        return m_guid;
+    }
     void setGuid( const QString& guid );
 
-public slots:
+  public slots:
     void toggleVisibility( int index );
     bool checkState();
 
-protected:
+  protected:
     void contextMenuEvent( QContextMenuEvent* e );
 
-private slots:
+  private slots:
     virtual void onSectionsChanged();
     void onToggleResizeColumns();
 
-private:
+  private:
     void addColumnToMenu( int index );
 
     QAbstractItemView* m_parent;

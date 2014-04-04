@@ -31,7 +31,7 @@ class BreakPad : public google_breakpad::ExceptionHandler
     const char* m_productName; // yes! It MUST be const char[]
     const char* m_crashReporter; // again, const char[]
 
-public:
+  public:
     BreakPad( const QString& dump_write_dirpath, bool active );
 
     ~BreakPad()
@@ -40,11 +40,23 @@ public:
     static void setActive( bool enabled );
     static bool isActive();
 
-    void setProductName( const char* s ) { m_productName = s; };
-    const char* productName() const { return m_productName; }
+    void setProductName( const char* s )
+    {
+        m_productName = s;
+    };
+    const char* productName() const
+    {
+        return m_productName;
+    }
 
-    void setCrashReporter( const char* s ) { m_crashReporter = s; };
-    const char* crashReporter() const { return m_crashReporter; }
+    void setCrashReporter( const char* s )
+    {
+        m_crashReporter = s;
+    };
+    const char* crashReporter() const
+    {
+        return m_crashReporter;
+    }
 };
 
 #undef char

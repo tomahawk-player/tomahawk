@@ -28,13 +28,13 @@
 class DLLEXPORT InboxModel : public PlaylistModel
 {
     Q_OBJECT
-public:
+  public:
     explicit InboxModel( QObject* parent = 0 );
     virtual ~InboxModel();
 
     virtual int unlistenedCount() const;
 
-public slots:
+  public slots:
     /**
      * Reimplemented from PlaylistModel, all track insertions/appends go through this method.
      * On top of PlaylistModel functionality, adds deduplication/grouping of equivalent tracks
@@ -42,7 +42,7 @@ public slots:
      */
     virtual void insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int row = 0, const QList< Tomahawk::PlaybackLog >& logs = QList< Tomahawk::PlaybackLog >() );
 
-    virtual void removeIndex( const QModelIndex &index, bool moreToCome );
+    virtual void removeIndex( const QModelIndex& index, bool moreToCome );
 
     virtual void clear();
 
@@ -56,7 +56,7 @@ public slots:
     virtual void markAsListened( const QModelIndexList& indexes );
 
 
-private slots:
+  private slots:
     void loadTracks();
 
     void tracksLoaded( QList< Tomahawk::query_ptr > );
@@ -64,9 +64,9 @@ private slots:
     void onDbcmdCreated( const Tomahawk::dbcmd_ptr& cmd );
     void onDbcmdCommitted( const Tomahawk::dbcmd_ptr& cmd );
 
-private:
+  private:
     static QList< Tomahawk::SocialAction > mergeSocialActions( QList< Tomahawk::SocialAction > first,
-                                                               QList< Tomahawk::SocialAction > second );
+            QList< Tomahawk::SocialAction > second );
 };
 
 #endif // INBOXMODEL_H

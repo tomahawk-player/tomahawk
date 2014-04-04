@@ -33,21 +33,29 @@ namespace Tomahawk
 
 class DLLEXPORT SourcePlaylistInterface : public Tomahawk::PlaylistInterface
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     SourcePlaylistInterface( Tomahawk::Source* source, Tomahawk::PlaylistModes::LatchMode latchMode = PlaylistModes::StayOnSong );
     virtual ~SourcePlaylistInterface();
 
     QList<Tomahawk::query_ptr> tracks() const;
 
-    virtual int trackCount() const { return 1; }
+    virtual int trackCount() const
+    {
+        return 1;
+    }
 
     virtual void setCurrentIndex( qint64 index );
     virtual Tomahawk::result_ptr resultAt( qint64 index ) const;
     virtual Tomahawk::query_ptr queryAt( qint64 index ) const;
     virtual qint64 indexOfResult( const Tomahawk::result_ptr& result ) const;
-    virtual qint64 indexOfQuery( const Tomahawk::query_ptr& query ) const { Q_UNUSED( query ); Q_ASSERT( false ); return -1; }
+    virtual qint64 indexOfQuery( const Tomahawk::query_ptr& query ) const
+    {
+        Q_UNUSED( query );
+        Q_ASSERT( false );
+        return -1;
+    }
 
     virtual qint64 siblingIndex( int itemsAway, qint64 rootIndex = -1 ) const;
     virtual bool sourceValid() const;
@@ -55,30 +63,55 @@ public:
     virtual Tomahawk::result_ptr nextResult() const;
     virtual Tomahawk::result_ptr currentItem() const;
 
-    virtual PlaylistModes::RepeatMode repeatMode() const { return PlaylistModes::NoRepeat; }
-    virtual PlaylistModes::SeekRestrictions seekRestrictions() const { return PlaylistModes::NoSeek; }
-    virtual PlaylistModes::SkipRestrictions skipRestrictions() const { return PlaylistModes::NoSkipBackwards; }
-    virtual PlaylistModes::RetryMode retryMode() const { return PlaylistModes::Retry; }
-    virtual quint32 retryInterval() const { return 5000; }
+    virtual PlaylistModes::RepeatMode repeatMode() const
+    {
+        return PlaylistModes::NoRepeat;
+    }
+    virtual PlaylistModes::SeekRestrictions seekRestrictions() const
+    {
+        return PlaylistModes::NoSeek;
+    }
+    virtual PlaylistModes::SkipRestrictions skipRestrictions() const
+    {
+        return PlaylistModes::NoSkipBackwards;
+    }
+    virtual PlaylistModes::RetryMode retryMode() const
+    {
+        return PlaylistModes::Retry;
+    }
+    virtual quint32 retryInterval() const
+    {
+        return 5000;
+    }
 
-    virtual void setLatchMode( PlaylistModes::LatchMode latchMode ) { m_latchMode = latchMode; emit latchModeChanged( latchMode ); }
+    virtual void setLatchMode( PlaylistModes::LatchMode latchMode )
+    {
+        m_latchMode = latchMode;
+        emit latchModeChanged( latchMode );
+    }
 
-    virtual bool shuffled() const { return false; }
+    virtual bool shuffled() const
+    {
+        return false;
+    }
 
     virtual QPointer< Tomahawk::Source > source() const;
 
     virtual void reset();
 
-public slots:
+  public slots:
     virtual void setRepeatMode( PlaylistModes::RepeatMode ) {}
     virtual void setShuffled( bool ) {}
-    virtual void audioPaused() { setLatchMode( PlaylistModes::StayOnSong ); }
+    virtual void audioPaused()
+    {
+        setLatchMode( PlaylistModes::StayOnSong );
+    }
 
-private slots:
+  private slots:
     void onSourcePlaybackStarted( const Tomahawk::track_ptr& track );
     void resolvingFinished( bool hasResults );
 
-private:
+  private:
     QPointer< Tomahawk::Source > m_source;
     mutable Tomahawk::result_ptr m_currentItem;
     mutable bool m_gotNextItem;

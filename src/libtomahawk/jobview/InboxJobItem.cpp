@@ -31,7 +31,7 @@
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "Source.h"
+#include "Source.h"
 #endif
 
 
@@ -63,16 +63,16 @@ InboxJobItem::mainText() const
 {
     switch ( m_side )
     {
-    case Sending:
-        return tr( "Sent %1 by %2 to %3." )
-                .arg( m_track->track() )
-                .arg( m_track->artist() )
-                .arg( m_prettyName );
-    case Receiving:
-        return tr( "%1 sent you %2 by %3." )
-                .arg( m_prettyName )
-                .arg( m_track->track() )
-                .arg( m_track->artist() );
+        case Sending:
+            return tr( "Sent %1 by %2 to %3." )
+                   .arg( m_track->track() )
+                   .arg( m_track->artist() )
+                   .arg( m_prettyName );
+        case Receiving:
+            return tr( "%1 sent you %2 by %3." )
+                   .arg( m_prettyName )
+                   .arg( m_track->track() )
+                   .arg( m_track->artist() );
     }
     return QString();
 }
@@ -83,10 +83,10 @@ InboxJobItem::icon() const
 {
     switch ( m_side )
     {
-    case Sending:
-        return TomahawkUtils::defaultPixmap( TomahawkUtils::Outbox, TomahawkUtils::Original, QSize( 64, 64 ) );
-    case Receiving:
-        return TomahawkUtils::defaultPixmap( TomahawkUtils::Inbox, TomahawkUtils::Original, QSize( 64, 64 ) );
+        case Sending:
+            return TomahawkUtils::defaultPixmap( TomahawkUtils::Outbox, TomahawkUtils::Original, QSize( 64, 64 ) );
+        case Receiving:
+            return TomahawkUtils::defaultPixmap( TomahawkUtils::Inbox, TomahawkUtils::Original, QSize( 64, 64 ) );
     }
     return QPixmap();
 }

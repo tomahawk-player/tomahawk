@@ -36,15 +36,15 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCommand_DirMtimes : public DatabaseCommand
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit DatabaseCommand_DirMtimes( const QString& prefix = QString(), QObject* parent = 0 )
         : DatabaseCommand( parent ), m_prefix( prefix ), m_update( false )
     {}
 
     explicit DatabaseCommand_DirMtimes( const QStringList& prefixes, QObject* parent = 0 )
-    : DatabaseCommand( parent ), m_prefixes( prefixes ), m_update( false )
+        : DatabaseCommand( parent ), m_prefixes( prefixes ), m_update( false )
     {}
 
     explicit DatabaseCommand_DirMtimes( QMap<QString, unsigned int> tosave, QObject* parent = 0 )
@@ -52,16 +52,22 @@ public:
     {}
 
     virtual void exec( DatabaseImpl* );
-    virtual bool doesMutates() const { return m_update; }
-    virtual QString commandname() const { return "dirmtimes"; }
+    virtual bool doesMutates() const
+    {
+        return m_update;
+    }
+    virtual QString commandname() const
+    {
+        return "dirmtimes";
+    }
 
-signals:
+  signals:
     void done( const QMap<QString, unsigned int>& );
 
-public slots:
+  public slots:
 
-private:
-    void execSelectPath( DatabaseImpl *dbi, const QDir& path, QMap<QString, unsigned int> &mtimes );
+  private:
+    void execSelectPath( DatabaseImpl* dbi, const QDir& path, QMap<QString, unsigned int>& mtimes );
 
     void execSelect( DatabaseImpl* dbi );
     void execUpdate( DatabaseImpl* dbi );

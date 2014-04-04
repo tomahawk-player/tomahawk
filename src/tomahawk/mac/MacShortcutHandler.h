@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -23,14 +23,15 @@
 
 #include <QObject>
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
 
 class MacShortcutHandler : public ShortcutHandler
 {
     Q_OBJECT
-public:
-    explicit MacShortcutHandler(QObject *parent = 0);
+  public:
+    explicit MacShortcutHandler( QObject* parent = 0 );
 
     void macMediaKeyPressed( int key );
 };

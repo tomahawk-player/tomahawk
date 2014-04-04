@@ -31,8 +31,8 @@
 #include "ClearButton.h"
 #include "SearchButton.h"
 
-SearchLineEdit::SearchLineEdit(QWidget *parent)
-    : LineEdit(parent)
+SearchLineEdit::SearchLineEdit( QWidget* parent )
+    : LineEdit( parent )
 {
     init();
 }
@@ -40,30 +40,30 @@ SearchLineEdit::SearchLineEdit(QWidget *parent)
 void SearchLineEdit::init()
 {
     // search button on the left
-    m_searchButton = new SearchButton(this);
-    addWidget(m_searchButton, LeftSide);
+    m_searchButton = new SearchButton( this );
+    addWidget( m_searchButton, LeftSide );
 
     // clear button on the right
-    m_clearButton = new ClearButton(this);
-    connect(m_clearButton, SIGNAL(clicked()),
-            this, SLOT(clear()));
-    connect(this, SIGNAL(textChanged(const QString&)),
-            m_clearButton, SLOT(textChanged(const QString&)));
-    addWidget(m_clearButton, RightSide);
+    m_clearButton = new ClearButton( this );
+    connect( m_clearButton, SIGNAL( clicked() ),
+             this, SLOT( clear() ) );
+    connect( this, SIGNAL( textChanged( const QString& ) ),
+             m_clearButton, SLOT( textChanged( const QString& ) ) );
+    addWidget( m_clearButton, RightSide );
     m_clearButton->hide();
 
-    setWidgetSpacing(5);
+    setWidgetSpacing( 5 );
 
     updateTextMargins();
-    setInactiveText(tr("Search"));
+    setInactiveText( tr( "Search" ) );
 }
 
-ClearButton *SearchLineEdit::clearButton() const
+ClearButton* SearchLineEdit::clearButton() const
 {
     return m_clearButton;
 }
 
-SearchButton *SearchLineEdit::searchButton() const
+SearchButton* SearchLineEdit::searchButton() const
 {
     return m_searchButton;
 }

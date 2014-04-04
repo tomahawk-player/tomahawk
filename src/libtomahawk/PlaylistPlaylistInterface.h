@@ -36,9 +36,9 @@ namespace Tomahawk
 
 class DLLEXPORT PlaylistPlaylistInterface : public Tomahawk::PlaylistInterface
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     PlaylistPlaylistInterface( Tomahawk::Playlist* playlist );
     virtual ~PlaylistPlaylistInterface();
 
@@ -46,23 +46,59 @@ public:
 
     virtual int trackCount() const;
 
-    virtual void setCurrentIndex( qint64 index ) { Q_UNUSED( index ); }
-    virtual Tomahawk::result_ptr resultAt( qint64 index ) const { Q_UNUSED( index ); Q_ASSERT( false ); return Tomahawk::result_ptr(); }
-    virtual Tomahawk::query_ptr queryAt( qint64 index ) const { Q_UNUSED( index ); Q_ASSERT( false ); return Tomahawk::query_ptr(); }
-    virtual qint64 indexOfResult( const Tomahawk::result_ptr& result ) const { Q_UNUSED( result ); Q_ASSERT( false ); return -1; }
-    virtual qint64 indexOfQuery( const Tomahawk::query_ptr& query ) const { Q_UNUSED( query ); Q_ASSERT( false ); return -1; }
+    virtual void setCurrentIndex( qint64 index )
+    {
+        Q_UNUSED( index );
+    }
+    virtual Tomahawk::result_ptr resultAt( qint64 index ) const
+    {
+        Q_UNUSED( index );
+        Q_ASSERT( false );
+        return Tomahawk::result_ptr();
+    }
+    virtual Tomahawk::query_ptr queryAt( qint64 index ) const
+    {
+        Q_UNUSED( index );
+        Q_ASSERT( false );
+        return Tomahawk::query_ptr();
+    }
+    virtual qint64 indexOfResult( const Tomahawk::result_ptr& result ) const
+    {
+        Q_UNUSED( result );
+        Q_ASSERT( false );
+        return -1;
+    }
+    virtual qint64 indexOfQuery( const Tomahawk::query_ptr& query ) const
+    {
+        Q_UNUSED( query );
+        Q_ASSERT( false );
+        return -1;
+    }
 
-    virtual Tomahawk::result_ptr currentItem() const { return m_currentItem; }
-    virtual qint64 siblingIndex( int /*itemsAway*/, qint64 rootIndex = -1 ) const { Q_UNUSED( rootIndex ); return -1; }
+    virtual Tomahawk::result_ptr currentItem() const
+    {
+        return m_currentItem;
+    }
+    virtual qint64 siblingIndex( int /*itemsAway*/, qint64 rootIndex = -1 ) const
+    {
+        Q_UNUSED( rootIndex );
+        return -1;
+    }
 
-    virtual PlaylistModes::RepeatMode repeatMode() const { return PlaylistModes::NoRepeat; }
-    virtual bool shuffled() const { return false; }
+    virtual PlaylistModes::RepeatMode repeatMode() const
+    {
+        return PlaylistModes::NoRepeat;
+    }
+    virtual bool shuffled() const
+    {
+        return false;
+    }
 
-public slots:
+  public slots:
     virtual void setRepeatMode( PlaylistModes::RepeatMode ) {}
     virtual void setShuffled( bool ) {}
 
-private:
+  private:
     PlaylistPlaylistInterface();
     Q_DISABLE_COPY( PlaylistPlaylistInterface )
 

@@ -105,20 +105,25 @@ DynamicControlList::init()
 void
 DynamicControlList::setControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls )
 {
-    if( m_controls.size() == controls.size() && controls.size() > 0 ) { // check if we're setting the same controls we already have, and exit if we are
+    if( m_controls.size() == controls.size() && controls.size() > 0 )   // check if we're setting the same controls we already have, and exit if we are
+    {
         bool different = false;
-        for( int i = 0; i < m_controls.size(); i++ ) {
-            if( m_controls.value( i )->control().data() != controls.value( i ).data() ) {
+        for( int i = 0; i < m_controls.size(); i++ )
+        {
+            if( m_controls.value( i )->control().data() != controls.value( i ).data() )
+            {
                 different = true;
                 break;
             }
         }
-        if( !different ) { // no work to do
+        if( !different )   // no work to do
+        {
             return;
         }
     }
 
-    if( !m_controls.isEmpty() ) {
+    if( !m_controls.isEmpty() )
+    {
         qDeleteAll( m_controls );
         m_controls.clear();
     }
@@ -126,15 +131,18 @@ DynamicControlList::setControls( const geninterface_ptr& generator, const QList<
     m_layout->removeItem( m_collapseLayout );
 
     m_generator = generator;
-    if( controls.isEmpty() ) {
+    if( controls.isEmpty() )
+    {
         qDebug() << "CREATING DEFAULT CONTROL";
         DynamicControlWrapper* ctrlW = new DynamicControlWrapper( generator->createControl(), m_layout, m_controls.size(), this );
         connect( ctrlW, SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
         connect( ctrlW, SIGNAL( changed() ), this, SLOT( controlChanged() ) );
         m_controls << ctrlW;
-    } else
+    }
+    else
     {
-        foreach( const dyncontrol_ptr& control, controls ) {
+        foreach( const dyncontrol_ptr & control, controls )
+        {
             DynamicControlWrapper* ctrlW = new DynamicControlWrapper( control, m_layout, m_controls.size(), this );
             connect( ctrlW, SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
             connect( ctrlW, SIGNAL( changed() ), this, SLOT( controlChanged() ) );
@@ -179,11 +187,11 @@ DynamicControlList::removeControl()
 void
 DynamicControlList::controlChanged()
 {
-    Q_ASSERT( sender() && qobject_cast<DynamicControlWrapper*>(sender()) );
-    DynamicControlWrapper* widget = qobject_cast<DynamicControlWrapper*>(sender());
+    Q_ASSERT( sender() && qobject_cast<DynamicControlWrapper*>( sender() ) );
+    DynamicControlWrapper* widget = qobject_cast<DynamicControlWrapper*>( sender() );
 
     qDebug() << "control changed!";
-    foreach( DynamicControlWrapper* c, m_controls )
-        qDebug() << c->control()->id() << c->control()->selectedType() << c->control()->match() << c->control()->input();
+    foreach( DynamicControlWrapper * c, m_controls )
+    qDebug() << c->control()->id() << c->control()->selectedType() << c->control()->match() << c->control()->input();
     emit controlChanged( widget->control() );
 }

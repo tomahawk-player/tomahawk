@@ -29,17 +29,26 @@ class QTimer;
 class DLLEXPORT ErrorStatusMessage : public JobStatusItem
 {
     Q_OBJECT
-public:
+  public:
     explicit ErrorStatusMessage( const QString& errorMessage, int defaultTimeoutSecs = 8 );
 
-    QString type() const { return "errormessage"; }
-    QString rightColumnText() const { return QString(); }
+    QString type() const
+    {
+        return "errormessage";
+    }
+    QString rightColumnText() const
+    {
+        return QString();
+    }
 
     QPixmap icon() const;
     QString mainText() const;
 
-    bool allowMultiLine() const { return true; }
-private:
+    bool allowMultiLine() const
+    {
+        return true;
+    }
+  private:
     QString m_message;
     QTimer* m_timer;
 

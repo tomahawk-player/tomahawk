@@ -41,7 +41,7 @@
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "utils/PixmapDelegateFader.h"
+#include "utils/PixmapDelegateFader.h"
 #endif
 
 
@@ -82,7 +82,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
     if ( m_mode == Inbox )
     {
         QList< Tomahawk::SocialAction > socialActions = item->query()->queryTrack()->allSocialActions();
-        foreach ( const Tomahawk::SocialAction& sa, socialActions )
+        foreach ( const Tomahawk::SocialAction & sa, socialActions )
         {
             if ( sa.action.toString() == "Inbox" && sa.value.toBool() == false )
             {
@@ -96,7 +96,9 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
 
     if ( m_view->header()->visualIndex( index.column() ) > 0 )
+    {
         return;
+    }
 
     const track_ptr track = item->query()->track();
 
@@ -108,9 +110,13 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->playbackLog().timestamp ), true );
 
         if ( item->playbackLog().source->isLocal() )
+        {
             lowerText = QString( tr( "played %1 by you", "e.g. played 3 hours ago by you" ) ).arg( playtime );
+        }
         else
+        {
             lowerText = QString( tr( "played %1 by %2", "e.g. played 3 hours ago by SomeSource" ) ).arg( playtime ).arg( item->playbackLog().source->friendlyName() );
+        }
     }
 
     if ( m_mode == LatestAdditions && item->query()->numResults() )
@@ -120,9 +126,13 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
     }
 
     if ( m_mode == LovedTracks )
+    {
         lowerText = item->query()->queryTrack()->socialActionDescription( "Love", Track::Detailed );
+    }
     else if ( m_mode == Inbox )
+    {
         lowerText = item->query()->queryTrack()->socialActionDescription( "Inbox", Track::Detailed );
+    }
 
     painter->save();
     {
@@ -130,7 +140,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
         // Paint Now Playing Speaker Icon
         if ( item->isPlaying() ||
-             ( m_mode == Inbox && isUnlistened ) )
+                ( m_mode == Inbox && isUnlistened ) )
         {
             const int pixMargin = 4;
             const int pixHeight = r.height() - pixMargin * 2;
@@ -180,10 +190,10 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
         painter->setFont( m_smallFont );
         QTextDocument textDoc;
-//        if ( track->album().isEmpty() )
-            textDoc.setHtml( tr( "<b>%1</b>", "e.g. by SomeArtist" ).arg( track->artist() ) );
-/*        else
-            textDoc.setHtml( tr( "by <b>%1</b> on <b>%2</b>", "e.g. by SomeArtist on SomeAlbum" ).arg( track->artist() ).arg( track->album() ) );*/
+        //        if ( track->album().isEmpty() )
+        textDoc.setHtml( tr( "<b>%1</b>", "e.g. by SomeArtist" ).arg( track->artist() ) );
+        /*        else
+                    textDoc.setHtml( tr( "by <b>%1</b> on <b>%2</b>", "e.g. by SomeArtist on SomeAlbum" ).arg( track->artist() ).arg( track->album() ) );*/
         textDoc.setDocumentMargin( 0 );
         textDoc.setDefaultFont( painter->font() );
         textDoc.setDefaultTextOption( m_topOption );
@@ -194,13 +204,19 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
             //HACK: adjust small text shade based on a guess if normal text is darker or lighter
             //      than normal background.
             if ( opt.palette.text().color().lightness() < opt.palette.base().color().lightness() )
+            {
                 painter->setPen( mid.darker( 140 ) );
+            }
             else
+            {
                 painter->setPen( mid.lighter( 140 ) );
+            }
         }
 
         if ( textDoc.idealWidth() <= leftRect.width() )
+        {
             drawRichText( painter, opt, leftRect.adjusted( 0, QFontMetrics( bigBoldFont ).height() + 1, 0, 0 ), Qt::AlignTop, textDoc );
+        }
 
         //TODO: replace usage of lowerText which is not drawn any more with appropriate loveBox/sentBox style boxes
         textDoc.setHtml( lowerText );
@@ -209,9 +225,11 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         textDoc.setDefaultTextOption( m_bottomOption );
 
         if ( textDoc.idealWidth() > leftRect.width() )
+        {
             textDoc.setHtml( item->query()->queryTrack()->socialActionDescription( "Love", Track::Short ) );
+        }
 
-//        drawRichText( painter, opt, leftRect, Qt::AlignBottom, textDoc );
+        //        drawRichText( painter, opt, leftRect, Qt::AlignBottom, textDoc );
 
         leftRect = rightRect.adjusted( -128, 4, 0, -4 );
         leftRect.setWidth( 96 );
@@ -219,11 +237,13 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         {
             QDateTime earliestTimestamp = QDateTime::currentDateTime();
             QList< Tomahawk::source_ptr > sources;
-            foreach ( const Tomahawk::SocialAction& sa, item->query()->queryTrack()->socialActions( "Inbox", QVariant() /*neither true nor false!*/, true ) )
+            foreach ( const Tomahawk::SocialAction & sa, item->query()->queryTrack()->socialActions( "Inbox", QVariant() /*neither true nor false!*/, true ) )
             {
                 QDateTime saTimestamp = QDateTime::fromTime_t( sa.timestamp.toInt() );
                 if ( saTimestamp < earliestTimestamp && saTimestamp.toTime_t() > 0 )
+                {
                     earliestTimestamp = saTimestamp;
+                }
 
                 sources << sa.source;
             }

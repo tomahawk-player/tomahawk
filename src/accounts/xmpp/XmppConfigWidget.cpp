@@ -35,7 +35,7 @@ namespace Tomahawk
 namespace Accounts
 {
 
-XmppConfigWidget::XmppConfigWidget( XmppAccount* account, QWidget *parent )
+XmppConfigWidget::XmppConfigWidget( XmppAccount* account, QWidget* parent )
     : AccountConfigWidget( parent )
     , m_ui( new Ui::XmppConfigWidget )
     , m_account( account )
@@ -47,8 +47,8 @@ XmppConfigWidget::XmppConfigWidget( XmppAccount* account, QWidget *parent )
     m_ui->xmppPassword->setText( account->credentials().contains( "password" ) ? account->credentials()[ "password" ].toString() : QString() );
     m_ui->xmppServer->setText( account->configuration().contains( "server" ) ? account->configuration()[ "server" ].toString() : QString() );
     m_ui->xmppPort->setValue( account->configuration().contains( "port" ) ? account->configuration()[ "port" ].toInt() : 5222 );
-    m_ui->xmppPublishTracksCheckbox->setChecked( account->configuration().contains( "publishtracks" ) ? account->configuration()[ "publishtracks" ].toBool() : true);
-    m_ui->xmppEnforceSecureCheckbox->setChecked( account->configuration().contains( "enforcesecure" ) ? account->configuration()[ "enforcesecure" ].toBool() : false);
+    m_ui->xmppPublishTracksCheckbox->setChecked( account->configuration().contains( "publishtracks" ) ? account->configuration()[ "publishtracks" ].toBool() : true );
+    m_ui->xmppEnforceSecureCheckbox->setChecked( account->configuration().contains( "enforcesecure" ) ? account->configuration()[ "enforcesecure" ].toBool() : false );
     m_ui->jidExistsLabel->hide();
     m_ui->xmppConfigFrame->hide();
 
@@ -71,7 +71,7 @@ XmppConfigWidget::XmppConfigWidget( XmppAccount* account, QWidget *parent )
         m_ui->xmppBlurb->hide();
         m_ui->xmppConfigFrame->show();
         m_ui->xmppConfigLabel->setText( tr( "Account provided by %1." )
-            .arg( cs->prettyName() ) );
+                                        .arg( cs->prettyName() ) );
         m_ui->xmppConfigIcon->setPixmap( cs->icon().scaled( TomahawkUtils::defaultIconSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
         m_ui->xmppConfigLaunchDialog->setIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::Configure ) );
         connect( m_ui->xmppConfigLaunchDialog, SIGNAL( clicked() ),
@@ -108,7 +108,7 @@ XmppConfigWidget::saveConfig()
 
     m_account->setAccountFriendlyName( m_ui->xmppUsername->text() );
     m_account->setCredentials( credentials );
-    m_account->setConfiguration( configuration);
+    m_account->setConfiguration( configuration );
     m_account->sync();
 
     static_cast< XmppSipPlugin* >( m_account->sipPlugin() )->checkSettings();
@@ -116,23 +116,25 @@ XmppConfigWidget::saveConfig()
 
 
 void
-XmppConfigWidget::onCheckJidExists( const QString &jid )
+XmppConfigWidget::onCheckJidExists( const QString& jid )
 {
     QList< Tomahawk::Accounts::Account* > accounts = Tomahawk::Accounts::AccountManager::instance()->accounts( Tomahawk::Accounts::SipType );
-    foreach( Tomahawk::Accounts::Account* account, accounts )
+    foreach( Tomahawk::Accounts::Account * account, accounts )
     {
         if ( account->accountId() == m_account->accountId() )
+        {
             continue;
+        }
 
         QString savedUsername = account->credentials()[ "username" ].toString();
-        QStringList savedSplitUsername = account->credentials()[ "username" ].toString().split("@");
+        QStringList savedSplitUsername = account->credentials()[ "username" ].toString().split( "@" );
         QString savedServer = account->configuration()[ "server" ].toString();
         int savedPort = account->configuration()[ "port" ].toInt();
 
         if ( ( savedUsername == jid || savedSplitUsername.contains( jid ) ) &&
-               savedServer == m_ui->xmppServer->text() &&
-               savedPort == m_ui->xmppPort->value() &&
-               !jid.trimmed().isEmpty() )
+                savedServer == m_ui->xmppServer->text() &&
+                savedPort == m_ui->xmppPort->value() &&
+                !jid.trimmed().isEmpty() )
         {
             m_ui->jidExistsLabel->show();
             // the already jid exists

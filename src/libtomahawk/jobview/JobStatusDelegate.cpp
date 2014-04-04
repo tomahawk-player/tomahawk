@@ -56,12 +56,14 @@ JobStatusDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     opt.state &= ~QStyle::State_MouseOver;
     QApplication::style()->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, painter, opt.widget );
 
-//     painter->drawLine( opt.rect.topLeft(), opt.rect.topRight() );
+    //     painter->drawLine( opt.rect.topLeft(), opt.rect.topRight() );
 
     painter->setRenderHint( QPainter::Antialiasing );
     QRect iconRect( ICON_PADDING, ICON_PADDING + opt.rect.y(), ROW_HEIGHT - 2 * ICON_PADDING, ROW_HEIGHT - 2 * ICON_PADDING );
     if ( allowMultiLine )
-        iconRect.moveTop( opt.rect.top() + opt.rect.height() / 2 - iconRect.height() / 2);
+    {
+        iconRect.moveTop( opt.rect.top() + opt.rect.height() / 2 - iconRect.height() / 2 );
+    }
     QPixmap p = index.data( Qt::DecorationRole ).value< QPixmap >();
     if ( !p.isNull() )
     {
@@ -85,9 +87,13 @@ JobStatusDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     QString mainText = index.data( Qt::DisplayRole ).toString();
     QTextOption to( Qt::AlignLeft | Qt::AlignVCenter );
     if ( !allowMultiLine )
+    {
         mainText = fm.elidedText( mainText, Qt::ElideRight, mainW );
+    }
     else
+    {
         to.setWrapMode( QTextOption::WrapAtWordBoundaryOrAnywhere );
+    }
 
     painter->drawText( QRect( iconRect.right() + 4 * PADDING, PADDING + opt.rect.y(), mainW, opt.rect.height() - 2 * PADDING ), mainText, to );
 }
@@ -99,9 +105,13 @@ JobStatusDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelInd
     const bool allowMultiLine = index.data( JobStatusModel::AllowMultiLineRole ).toBool();
 
     if ( !allowMultiLine )
+    {
         return QSize( QStyledItemDelegate::sizeHint( option, index ).width(), ROW_HEIGHT );
+    }
     else if ( m_cachedMultiLineHeights.contains( index ) )
+    {
         return QSize( QStyledItemDelegate::sizeHint( option, index ).width(), m_cachedMultiLineHeights[ index ] );
+    }
 
     // Don't elide, but stretch across as many rows as required
     QStyleOptionViewItemV4 opt = option;

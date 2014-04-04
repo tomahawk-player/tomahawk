@@ -40,15 +40,15 @@ class INFOPLUGINDLLEXPORT MusixMatchPlugin : public InfoPlugin
     Q_OBJECT
     Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 
-public:
+  public:
     MusixMatchPlugin();
     virtual ~MusixMatchPlugin();
 
-public slots:
+  public slots:
     void trackSearchSlot();
     void trackLyricsSlot();
 
-protected slots:
+  protected slots:
     virtual void init() {}
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
 
@@ -57,15 +57,15 @@ protected slots:
         Q_UNUSED( pushData );
     }
 
-virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
+    virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
     {
         Q_UNUSED( criteria );
         Q_UNUSED( requestData );
     }
-    
-private:
+
+  private:
     bool isValidTrackData( Tomahawk::InfoSystem::InfoRequestData requestData );
-    
+
     QString m_apiKey;
 };
 

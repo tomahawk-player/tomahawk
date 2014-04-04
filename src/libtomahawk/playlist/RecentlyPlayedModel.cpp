@@ -61,7 +61,7 @@ RecentlyPlayedModel::loadHistory()
     cmd->setLimit( m_limit );
 
     connect( cmd, SIGNAL( tracks( QList<Tomahawk::track_ptr>, QList<Tomahawk::PlaybackLog> ) ),
-                    SLOT( appendTracks( QList<Tomahawk::track_ptr>, QList<Tomahawk::PlaybackLog> ) ), Qt::QueuedConnection );
+             SLOT( appendTracks( QList<Tomahawk::track_ptr>, QList<Tomahawk::PlaybackLog> ) ), Qt::QueuedConnection );
 
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
@@ -74,8 +74,8 @@ RecentlyPlayedModel::onSourcesReady()
 
     loadHistory();
 
-    foreach ( const source_ptr& source, SourceList::instance()->sources() )
-        onSourceAdded( source );
+    foreach ( const source_ptr & source, SourceList::instance()->sources() )
+    onSourceAdded( source );
 }
 
 
@@ -86,9 +86,13 @@ RecentlyPlayedModel::setSource( const Tomahawk::source_ptr& source )
     if ( source.isNull() )
     {
         if ( SourceList::instance()->isReady() )
+        {
             onSourcesReady();
+        }
         else
+        {
             connect( SourceList::instance(), SIGNAL( ready() ), SLOT( onSourcesReady() ) );
+        }
 
         connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
     }
@@ -104,7 +108,7 @@ void
 RecentlyPlayedModel::onSourceAdded( const Tomahawk::source_ptr& source )
 {
     connect( source.data(), SIGNAL( playbackFinished( Tomahawk::track_ptr, Tomahawk::PlaybackLog ) ),
-                              SLOT( onPlaybackFinished( Tomahawk::track_ptr, Tomahawk::PlaybackLog ) ), Qt::UniqueConnection );
+             SLOT( onPlaybackFinished( Tomahawk::track_ptr, Tomahawk::PlaybackLog ) ), Qt::UniqueConnection );
 }
 
 
@@ -117,11 +121,15 @@ RecentlyPlayedModel::onPlaybackFinished( const Tomahawk::track_ptr& track, const
     {
         PlayableItem* oldestItem = itemFromIndex( index( count - 1, 0, QModelIndex() ) );
         if ( oldestItem->playbackLog().timestamp >= log.timestamp )
+        {
             return;
+        }
 
         PlayableItem* youngestItem = itemFromIndex( index( 0, 0, QModelIndex() ) );
         if ( youngestItem->playbackLog().timestamp <= log.timestamp )
+        {
             insertQuery( track->toQuery(), 0, log );
+        }
         else
         {
             for ( int i = 0; i < count - 1; i++ )
@@ -138,10 +146,14 @@ RecentlyPlayedModel::onPlaybackFinished( const Tomahawk::track_ptr& track, const
         }
     }
     else
+    {
         insertQuery( track->toQuery(), 0, log );
+    }
 
-    if ( trackCount() > (int)m_limit )
+    if ( trackCount() > ( int )m_limit )
+    {
         remove( m_limit );
+    }
 
     ensureResolved();
 }

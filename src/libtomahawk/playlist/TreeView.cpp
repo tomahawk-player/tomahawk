@@ -150,12 +150,12 @@ TreeView::setTreeModel( TreeModel* model )
     connect( model, SIGNAL( changed() ), this, SIGNAL( modelChanged() ) );
     emit modelChanged();
 
-/*    setColumnHidden( PlayableModel::Score, true ); // Hide score column per default
-    setColumnHidden( PlayableModel::Origin, true ); // Hide origin column per default
-    setColumnHidden( PlayableModel::Composer, true ); //Hide composer column per default
+    /*    setColumnHidden( PlayableModel::Score, true ); // Hide score column per default
+        setColumnHidden( PlayableModel::Origin, true ); // Hide origin column per default
+        setColumnHidden( PlayableModel::Composer, true ); //Hide composer column per default
 
-    setGuid( QString( "collectionview/%1" ).arg( model->columnCount() ) );
-    sortByColumn( PlayableModel::Artist, Qt::AscendingOrder );*/
+        setGuid( QString( "collectionview/%1" ).arg( model->columnCount() ) );
+        sortByColumn( PlayableModel::Artist, Qt::AscendingOrder );*/
 }
 
 
@@ -171,7 +171,9 @@ void
 TreeView::onViewChanged()
 {
     if ( m_timer.isActive() )
+    {
         m_timer.stop();
+    }
 
     m_timer.start();
 }
@@ -181,22 +183,32 @@ void
 TreeView::onScrollTimeout()
 {
     if ( m_timer.isActive() )
+    {
         m_timer.stop();
+    }
 
     QModelIndex left = indexAt( viewport()->rect().topLeft() );
     while ( left.isValid() && left.parent().isValid() )
+    {
         left = left.parent();
+    }
 
     QModelIndex right = indexAt( viewport()->rect().bottomLeft() );
     while ( right.isValid() && right.parent().isValid() )
+    {
         right = right.parent();
+    }
 
     int max = m_proxyModel->playlistInterface()->trackCount();
     if ( right.isValid() )
+    {
         max = right.row() + 1;
+    }
 
     if ( !max )
+    {
         return;
+    }
 
     for ( int i = left.row(); i < max; i++ )
     {
@@ -211,19 +223,29 @@ TreeView::currentChanged( const QModelIndex& current, const QModelIndex& previou
     QTreeView::currentChanged( current, previous );
 
     if ( !m_updateContextView )
+    {
         return;
+    }
 
     PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
     if ( item )
     {
         if ( !item->result().isNull() )
+        {
             ViewManager::instance()->context()->setQuery( item->result()->toQuery() );
+        }
         else if ( !item->artist().isNull() )
+        {
             ViewManager::instance()->context()->setArtist( item->artist() );
+        }
         else if ( !item->album().isNull() )
+        {
             ViewManager::instance()->context()->setAlbum( item->album() );
+        }
         else if ( !item->query().isNull() )
+        {
             ViewManager::instance()->context()->setQuery( item->query() );
+        }
     }
 }
 
@@ -234,15 +256,15 @@ TreeView::onItemActivated( const QModelIndex& index )
     PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
     if ( item )
     {
-/*        if ( !item->artist().isNull() )
-        {
-            ViewManager::instance()->show( item->artist() );
-        }
-        else if ( !item->album().isNull() )
-        {
-            ViewManager::instance()->show( item->album() );
-        }
-        else */ if ( !item->result().isNull() && item->result()->isOnline() )
+        /*        if ( !item->artist().isNull() )
+                {
+                    ViewManager::instance()->show( item->artist() );
+                }
+                else if ( !item->album().isNull() )
+                {
+                    ViewManager::instance()->show( item->album() );
+                }
+                else */ if ( !item->result().isNull() && item->result()->isOnline() )
         {
             AudioEngine::instance()->playItem( m_proxyModel->playlistInterface(), item->result() );
         }
@@ -260,7 +282,9 @@ TreeView::keyPressEvent( QKeyEvent* event )
     QTreeView::keyPressEvent( event );
 
     if ( !model() )
+    {
         return;
+    }
 
     if ( event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return )
     {
@@ -276,7 +300,9 @@ TreeView::resizeEvent( QResizeEvent* event )
     m_header->checkState();
 
     if ( !model() )
+    {
         return;
+    }
 
     if ( model()->columnCount( QModelIndex() ) == 1 )
     {
@@ -299,7 +325,9 @@ void
 TreeView::onFilterChangeFinished()
 {
     if ( selectedIndexes().count() )
+    {
         scrollTo( selectedIndexes().at( 0 ), QAbstractItemView::PositionAtCenter );
+    }
 
     if ( !proxyModel()->filter().isEmpty() && !proxyModel()->playlistInterface()->trackCount() && model()->trackCount() )
     {
@@ -334,7 +362,7 @@ TreeView::startDrag( Qt::DropActions supportedActions )
 {
     QList<QPersistentModelIndex> pindexes;
     QModelIndexList indexes;
-    foreach( const QModelIndex& idx, selectedIndexes() )
+    foreach( const QModelIndex & idx, selectedIndexes() )
     {
         if ( ( m_proxyModel->flags( idx ) & Qt::ItemIsDragEnabled ) )
         {
@@ -344,23 +372,33 @@ TreeView::startDrag( Qt::DropActions supportedActions )
     }
 
     if ( indexes.count() == 0 )
+    {
         return;
+    }
 
     tDebug( LOGVERBOSE ) << "Dragging" << indexes.count() << "indexes";
     QMimeData* data = m_proxyModel->mimeData( indexes );
     if ( !data )
+    {
         return;
+    }
 
     QDrag* drag = new QDrag( this );
     drag->setMimeData( data );
 
     QPixmap p;
     if ( data->hasFormat( "application/tomahawk.metadata.artist" ) )
+    {
         p = TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeArtist, indexes.count() );
+    }
     else if ( data->hasFormat( "application/tomahawk.metadata.album" ) )
+    {
         p = TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeAlbum, indexes.count() );
+    }
     else
+    {
         p = TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeTrack, indexes.count() );
+    }
 
     drag->setPixmap( p );
     drag->setHotSpot( QPoint( -20, -20 ) );
@@ -379,27 +417,39 @@ TreeView::onCustomContextMenu( const QPoint& pos )
     m_contextMenuIndex = idx;
 
     if ( !idx.isValid() )
+    {
         return;
+    }
 
     QList<query_ptr> queries;
     QList<artist_ptr> artists;
     QList<album_ptr> albums;
 
-    foreach ( const QModelIndex& index, selectedIndexes() )
+    foreach ( const QModelIndex & index, selectedIndexes() )
     {
         if ( index.column() || selectedIndexes().contains( index.parent() ) )
+        {
             continue;
+        }
 
         PlayableItem* item = m_proxyModel->itemFromIndex( m_proxyModel->mapToSource( index ) );
 
         if ( item && !item->result().isNull() )
+        {
             queries << item->result()->toQuery();
+        }
         else if ( item && !item->query().isNull() )
+        {
             queries << item->query();
+        }
         if ( item && !item->artist().isNull() )
+        {
             artists << item->artist();
+        }
         if ( item && !item->album().isNull() )
+        {
             albums << item->album();
+        }
     }
 
     m_contextMenu->setQueries( queries );
@@ -430,7 +480,9 @@ bool
 TreeView::jumpToCurrentTrack()
 {
     if ( !m_proxyModel || !m_proxyModel->sourceModel() )
+    {
         return false;
+    }
 
     scrollTo( m_proxyModel->currentIndex(), QAbstractItemView::PositionAtCenter );
     return true;

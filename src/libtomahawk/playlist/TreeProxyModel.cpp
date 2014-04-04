@@ -66,19 +66,29 @@ void
 TreeProxyModel::onRowsInserted( const QModelIndex& parent, int /* start */, int /* end */ )
 {
     if ( m_filter.isEmpty() )
+    {
         return;
+    }
     if ( sender() != m_model )
+    {
         return;
+    }
 
     PlayableItem* pi = m_model->itemFromIndex( m_model->index( parent.row(), 0, parent.parent() ) );
     if ( pi->artist().isNull() )
+    {
         return;
+    }
 
     Tomahawk::AlbumsRequest* cmd = 0;
     if ( !m_model->collection().isNull() )
+    {
         cmd = m_model->collection()->requestAlbums( pi->artist() );
+    }
     else
+    {
         cmd = new Tomahawk::DatabaseCommand_AllAlbums( Tomahawk::collection_ptr(), pi->artist() );
+    }
 
     cmd->setFilter( m_filter );
 
@@ -125,9 +135,13 @@ TreeProxyModel::setFilter( const QString& pattern )
     {
         Tomahawk::ArtistsRequest* cmd = 0;
         if ( !m_model->collection().isNull() )
+        {
             cmd = m_model->collection()->requestArtists();
+        }
         else
-            cmd = new Tomahawk::DatabaseCommand_AllArtists(); //for SuperCollection, TODO: replace with a proper proxy-ArtistsRequest
+        {
+            cmd = new Tomahawk::DatabaseCommand_AllArtists();    //for SuperCollection, TODO: replace with a proper proxy-ArtistsRequest
+        }
 
         cmd->setFilter( pattern );
         m_artistsFilterCmd = cmd;
@@ -154,7 +168,7 @@ TreeProxyModel::onFilterArtists( const QList<Tomahawk::artist_ptr>& artists )
     m_artistsFilter = artists;
     m_artistsFilterCmd = 0;
 
-    foreach ( const Tomahawk::artist_ptr& artist, artists )
+    foreach ( const Tomahawk::artist_ptr & artist, artists )
     {
         QModelIndex idx = m_model->indexFromArtist( artist );
         if ( m_model->rowCount( idx ) )
@@ -173,15 +187,17 @@ TreeProxyModel::onFilterArtists( const QList<Tomahawk::artist_ptr>& artists )
     }
 
     if ( finished )
+    {
         filterFinished();
+    }
 }
 
 
 void
 TreeProxyModel::onFilterAlbums( const QList<Tomahawk::album_ptr>& albums )
 {
-    foreach ( const Tomahawk::album_ptr& album, albums )
-        m_albumsFilter << album->id();
+    foreach ( const Tomahawk::album_ptr & album, albums )
+    m_albumsFilter << album->id();
 
     filterFinished();
 }
@@ -207,13 +223,15 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
     if ( m_model->mode() == Tomahawk::DatabaseMode && !item->query().isNull() )
     {
         QList< Tomahawk::query_ptr > rl = m_cache.values( sourceParent );
-        foreach ( const Tomahawk::query_ptr& cachedQuery, rl )
+        foreach ( const Tomahawk::query_ptr & cachedQuery, rl )
         {
             if ( cachedQuery.isNull() )
+            {
                 continue;
+            }
 
             if ( cachedQuery->track()->track() == item->query()->track()->track() &&
-               ( cachedQuery->track()->albumpos() == item->query()->track()->albumpos() || cachedQuery->track()->albumpos() == 0 ) )
+                    ( cachedQuery->track()->albumpos() == item->query()->track()->albumpos() || cachedQuery->track()->albumpos() == 0 ) )
             {
                 return ( cachedQuery.data() == item->query().data() );
             }
@@ -222,7 +240,9 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
         for ( int i = 0; i < sourceModel()->rowCount( sourceParent ); i++ )
         {
             if ( i == sourceRow )
+            {
                 continue;
+            }
 
             PlayableItem* ti = sourceModel()->itemFromIndex( sourceModel()->index( i, 0, sourceParent ) );
 
@@ -231,15 +251,19 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
                 if ( ti->query()->track()->albumpos() == item->query()->track()->albumpos() || ti->query()->track()->albumpos() == 0 || item->query()->track()->albumpos() == 0 )
                 {
                     if ( item->result().isNull() )
+                    {
                         return false;
+                    }
 
                     if ( !ti->result().isNull() )
                     {
                         if ( !item->result()->isOnline() && ti->result()->isOnline() )
+                        {
                             return false;
+                        }
 
                         if ( ( item->result()->collection().isNull() || !item->result()->collection()->source()->isLocal() ) &&
-                             !ti->result()->collection().isNull() && ti->result()->collection()->source()->isLocal() )
+                                !ti->result()->collection().isNull() && ti->result()->collection()->source()->isLocal() )
                         {
                             return false;
                         }
@@ -251,20 +275,26 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
 
     bool accepted = false;
     if ( m_filter.isEmpty() )
+    {
         accepted = true;
+    }
     else if ( !item->artist().isNull() )
+    {
         accepted = m_artistsFilter.contains( item->artist() );
+    }
     else if ( !item->album().isNull() )
+    {
         accepted = m_albumsFilter.contains( item->album()->id() );
+    }
 
     if ( !accepted )
     {
         QStringList sl = m_filter.split( " ", QString::SkipEmptyParts );
-        foreach( const QString& s, sl )
+        foreach( const QString & s, sl )
         {
             if ( !item->name().contains( s, Qt::CaseInsensitive ) &&
-                 !item->albumName().contains( s, Qt::CaseInsensitive ) &&
-                 !item->artistName().contains( s, Qt::CaseInsensitive ) )
+                    !item->albumName().contains( s, Qt::CaseInsensitive ) &&
+                    !item->artistName().contains( s, Qt::CaseInsensitive ) )
             {
                 return false;
             }
@@ -283,14 +313,18 @@ TreeProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) co
     PlayableItem* p2 = sourceModel()->itemFromIndex( right );
 
     if ( !p1 )
+    {
         return true;
+    }
     if ( !p2 )
+    {
         return false;
+    }
 
-/*    if ( !p1->result().isNull() && p2->result().isNull() )
-        return true;
-    if ( p1->result().isNull() && !p2->result().isNull() )
-        return false;*/
+    /*    if ( !p1->result().isNull() && p2->result().isNull() )
+            return true;
+        if ( p1->result().isNull() && !p2->result().isNull() )
+            return false;*/
 
     unsigned int albumpos1 = 0;
     unsigned int albumpos2 = 0;
@@ -309,19 +343,27 @@ TreeProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) co
     if ( !p1->result().isNull() )
     {
         if ( albumpos1 == 0 )
+        {
             albumpos1 = p1->result()->track()->albumpos();
+        }
         if ( discnumber1 == 0 )
+        {
             discnumber1 = p1->result()->track()->discnumber();
+        }
     }
     if ( !p2->result().isNull() )
     {
         if ( albumpos2 == 0 )
+        {
             albumpos2 = p2->result()->track()->albumpos();
+        }
         if ( discnumber2 == 0 )
+        {
             discnumber2 = p2->result()->track()->discnumber();
+        }
     }
-    discnumber1 = qMax( 1, (int)discnumber1 );
-    discnumber2 = qMax( 1, (int)discnumber2 );
+    discnumber1 = qMax( 1, ( int )discnumber1 );
+    discnumber2 = qMax( 1, ( int )discnumber2 );
 
     if ( discnumber1 != discnumber2 )
     {
@@ -330,13 +372,17 @@ TreeProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) co
     else
     {
         if ( albumpos1 != albumpos2 )
+        {
             return albumpos1 < albumpos2;
+        }
     }
 
     const QString& lefts = textForItem( p1 );
     const QString& rights = textForItem( p2 );
     if ( lefts == rights )
-        return (qint64)&p1 < (qint64)&p2;
+    {
+        return ( qint64 )&p1 < ( qint64 )&p2;
+    }
 
     return QString::localeAwareCompare( lefts, rights ) < 0;
 }
@@ -346,7 +392,9 @@ QString
 TreeProxyModel::textForItem( PlayableItem* item ) const
 {
     if ( !item )
+    {
         return QString();
+    }
 
     if ( !item->artist().isNull() )
     {

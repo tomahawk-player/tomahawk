@@ -42,7 +42,7 @@ class QAction;
 class DLLEXPORT QToolbarTabDialog : public QObject
 {
     Q_OBJECT
-public:
+  public:
     QToolbarTabDialog();
     virtual ~QToolbarTabDialog();
 
@@ -50,18 +50,18 @@ public:
      * If the given widget has a QSizePolicy of Fixed in either direction, the dialog will not be resizable in that
      * direction.
      */
-    void addTab(QWidget* page, const QPixmap& icon, const QString& label, const QString& tooltip = QString());
+    void addTab( QWidget* page, const QPixmap& icon, const QString& label, const QString& tooltip = QString() );
 
-    void setCurrentIndex(int index);
+    void setCurrentIndex( int index );
 
     void show();
     void hide();
 
-Q_SIGNALS:
+  Q_SIGNALS:
     void accepted();
     void rejected();
 
-private:
+  private:
     QScopedPointer<QToolbarTabDialogPrivate> pimpl;
 
     friend class ::QToolbarTabDialogPrivate;

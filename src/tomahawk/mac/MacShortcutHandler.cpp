@@ -24,8 +24,8 @@
 
 using namespace Tomahawk;
 
-MacShortcutHandler::MacShortcutHandler(QObject *parent) :
-    Tomahawk::ShortcutHandler(parent)
+MacShortcutHandler::MacShortcutHandler( QObject* parent ) :
+    Tomahawk::ShortcutHandler( parent )
 {
 
 }
@@ -33,20 +33,21 @@ MacShortcutHandler::MacShortcutHandler(QObject *parent) :
 void
 MacShortcutHandler::macMediaKeyPressed( int key )
 {
-    switch (key) {
-      case NX_KEYTYPE_PLAY:
-        qDebug() << "emitting PlayPause pressed";
-        emit playPause();
-        break;
-      case NX_KEYTYPE_FAST:
-      case NX_KEYTYPE_NEXT:
-        qDebug() << "emitting next pressed";
-        emit next();
-        break;
-      case NX_KEYTYPE_REWIND:
-      case NX_KEYTYPE_PREVIOUS:
-        qDebug() << "emitting prev pressed";
-        emit previous();
-        break;
+    switch ( key )
+    {
+        case NX_KEYTYPE_PLAY:
+            qDebug() << "emitting PlayPause pressed";
+            emit playPause();
+            break;
+        case NX_KEYTYPE_FAST:
+        case NX_KEYTYPE_NEXT:
+            qDebug() << "emitting next pressed";
+            emit next();
+            break;
+        case NX_KEYTYPE_REWIND:
+        case NX_KEYTYPE_PREVIOUS:
+            qDebug() << "emitting prev pressed";
+            emit previous();
+            break;
     }
 }

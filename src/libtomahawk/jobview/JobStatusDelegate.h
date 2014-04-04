@@ -28,14 +28,14 @@ class JobStatusDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 
-public:
+  public:
     explicit JobStatusDelegate ( QObject* parent = 0 );
     virtual ~JobStatusDelegate();
 
     virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
-private:
+  private:
     mutable QHash< QPersistentModelIndex, int > m_cachedMultiLineHeights;
     QListView* m_parentView;
 };

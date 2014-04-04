@@ -51,7 +51,7 @@ TopLovedTracksModel::loadTracks()
                        "WHERE social_attributes.id = track.id AND artist.id = track.artist AND social_attributes.k = 'Love' AND social_attributes.v = 'true' "
                        "GROUP BY track.id "
                        "ORDER BY counter DESC, social_attributes.timestamp DESC LIMIT %1" )
-                .arg( d->limit );
+              .arg( d->limit );
     }
     else
     {
@@ -60,8 +60,8 @@ TopLovedTracksModel::loadTracks()
                        "WHERE social_attributes.id = track.id AND artist.id = track.artist AND social_attributes.k = 'Love' AND social_attributes.v = 'true' AND social_attributes.source %1 "
                        "GROUP BY track.id "
                        "ORDER BY counter DESC, social_attributes.timestamp DESC "
-                       )
-                .arg( d->source->isLocal() ? "IS NULL" : QString( "= %1" ).arg( d->source->id() ) );
+                     )
+              .arg( d->source->isLocal() ? "IS NULL" : QString( "= %1" ).arg( d->source->id() ) );
     }
 
     DatabaseCommand_GenericSelect* cmd = new DatabaseCommand_GenericSelect( sql, DatabaseCommand_GenericSelect::Track, -1, 0 );

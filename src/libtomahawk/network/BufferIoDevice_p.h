@@ -26,7 +26,7 @@
 
 class BufferIODevicePrivate
 {
-public:
+  public:
     BufferIODevicePrivate( BufferIODevice* q, unsigned int size = 0 )
         : q_ptr ( q )
         , size( size )
@@ -38,7 +38,7 @@ public:
     BufferIODevice* q_ptr;
     Q_DECLARE_PUBLIC ( BufferIODevice )
 
-private:
+  private:
     QList<QByteArray> buffer;
     mutable QMutex mut;
     unsigned int size;

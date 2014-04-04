@@ -30,9 +30,9 @@
 
 class DLLEXPORT PlayableItem : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     ~PlayableItem();
 
     explicit PlayableItem( PlayableItem* parent = 0 );
@@ -42,23 +42,57 @@ public:
     explicit PlayableItem( const Tomahawk::query_ptr& query, PlayableItem* parent = 0, int row = -1 );
     explicit PlayableItem( const Tomahawk::plentry_ptr& entry, PlayableItem* parent = 0, int row = -1 );
 
-    const Tomahawk::artist_ptr& artist() const { return m_artist; }
-    const Tomahawk::album_ptr& album() const { return m_album; }
-    const Tomahawk::query_ptr& query() const { return m_query; }
-    const Tomahawk::plentry_ptr& entry() const { return m_entry; }
+    const Tomahawk::artist_ptr& artist() const
+    {
+        return m_artist;
+    }
+    const Tomahawk::album_ptr& album() const
+    {
+        return m_album;
+    }
+    const Tomahawk::query_ptr& query() const
+    {
+        return m_query;
+    }
+    const Tomahawk::plentry_ptr& entry() const
+    {
+        return m_entry;
+    }
     const Tomahawk::result_ptr& result() const;
 
     Tomahawk::PlaybackLog playbackLog() const;
     void setPlaybackLog( const Tomahawk::PlaybackLog& log );
 
-    PlayableItem* parent() const { return m_parent; }
-    void forceUpdate() { emit dataChanged(); }
+    PlayableItem* parent() const
+    {
+        return m_parent;
+    }
+    void forceUpdate()
+    {
+        emit dataChanged();
+    }
 
-    bool isPlaying() const { return m_isPlaying; }
-    void setIsPlaying( bool b ) { m_isPlaying = b; emit dataChanged(); }
-    bool fetchingMore() const { return m_fetchingMore; }
-    void setFetchingMore( bool b ) { m_fetchingMore = b; }
-    void requestRepaint() { emit dataChanged(); }
+    bool isPlaying() const
+    {
+        return m_isPlaying;
+    }
+    void setIsPlaying( bool b )
+    {
+        m_isPlaying = b;
+        emit dataChanged();
+    }
+    bool fetchingMore() const
+    {
+        return m_fetchingMore;
+    }
+    void setFetchingMore( bool b )
+    {
+        m_fetchingMore = b;
+    }
+    void requestRepaint()
+    {
+        emit dataChanged();
+    }
 
     QString name() const;
     QString artistName() const;
@@ -68,13 +102,13 @@ public:
 
     QPersistentModelIndex index;
 
-signals:
+  signals:
     void dataChanged();
 
-private slots:
+  private slots:
     void onResultsChanged();
 
-private:
+  private:
     void init( PlayableItem* parent, int row = -1 );
 
     Tomahawk::artist_ptr m_artist;

@@ -29,15 +29,15 @@
 class UnstyledFrame : public QWidget
 {
     Q_OBJECT
-public:
+  public:
     explicit UnstyledFrame( QWidget* parent = 0 );
 
     void setFrameColor( const QColor& color );
 
-protected:
+  protected:
     void paintEvent( QPaintEvent* event );
 
-private:
+  private:
     QColor m_frameColor;
 };
 

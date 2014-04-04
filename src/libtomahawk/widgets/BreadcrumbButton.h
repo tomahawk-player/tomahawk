@@ -26,7 +26,8 @@ class ComboBox;
 class BreadcrumbArrow;
 class QPaintEvent;
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
 class Breadcrumb;
 class BreadcrumbModel;
@@ -34,7 +35,7 @@ class BreadcrumbModel;
 class BreadcrumbButton : public QWidget
 {
     Q_OBJECT
-public:
+  public:
     explicit BreadcrumbButton( Breadcrumb* parent, QAbstractItemModel* model );
 
     void setParentIndex( const QModelIndex& idx );
@@ -44,18 +45,18 @@ public:
     // a manua;l selection
     QModelIndex currentIndex() const;
 
-protected:
+  protected:
     virtual void paintEvent( QPaintEvent* );
     virtual QSize sizeHint() const;
 
-signals:
+  signals:
     // Some combobox value is changed
     void currentIndexChanged( const QModelIndex& childSelected );
 
-private slots:
+  private slots:
     void comboboxActivated( int );
 
-private:
+  private:
     bool hasChildren() const;
 
     Breadcrumb* m_breadcrumb;

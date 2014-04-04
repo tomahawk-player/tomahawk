@@ -28,10 +28,10 @@ namespace Tomahawk
 {
 
 DatabaseCommand_AddClientAuth::DatabaseCommand_AddClientAuth( const QString& clientToken,
-                                                              const QString& website,
-                                                              const QString& name,
-                                                              const QString& userAgent,
-                                                              QObject* parent )
+        const QString& website,
+        const QString& name,
+        const QString& userAgent,
+        QObject* parent )
     : DatabaseCommand( parent )
     , m_clientToken( clientToken )
     , m_website( website )

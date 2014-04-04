@@ -32,7 +32,7 @@ AccountListView::wheelEvent( QWheelEvent* e )
     //HACK: Workaround for QTBUG-7232: Smooth scrolling (scroll per pixel) in ItemViews
     //      does not work as expected.
     verticalScrollBar()->setSingleStep( ACCOUNT_DELEGATE_ROW_HEIGHT_MULTIPLIER * fontMetrics().height() / 8 );
-                                     // ^ scroll step is 1/8 of the estimated row height
+    // ^ scroll step is 1/8 of the estimated row height
 #endif
 
     QListView::wheelEvent( e );

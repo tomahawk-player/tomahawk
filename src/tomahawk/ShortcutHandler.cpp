@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -20,12 +20,12 @@
 
 using namespace Tomahawk;
 
-ShortcutHandler::ShortcutHandler( QObject *parent )
+ShortcutHandler::ShortcutHandler( QObject* parent )
     : QObject( parent )
 {
 
 }
 
- ShortcutHandler::~ShortcutHandler()
- {
- }
+ShortcutHandler::~ShortcutHandler()
+{
+}

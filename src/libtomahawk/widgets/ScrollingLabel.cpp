@@ -23,7 +23,7 @@
 #include <QPainter>
 
 
-ScrollingLabel::ScrollingLabel( QWidget* parent)
+ScrollingLabel::ScrollingLabel( QWidget* parent )
     : QLabel( parent )
     , m_isMouseOver( false )
     , m_scrollPos( 0 )
@@ -62,7 +62,9 @@ ScrollingLabel::updateText()
         m_timer.start();
     }
     else
+    {
         m_staticText.setText( text() );
+    }
 
     m_staticText.prepare( QTransform(), font() );
     m_wholeTextSize = QSize( fontMetrics().width( m_staticText.text() ),
@@ -77,7 +79,7 @@ ScrollingLabel::paintEvent( QPaintEvent* )
 
     if ( m_scrollEnabled )
     {
-        m_buffer.fill( qRgba(0, 0, 0, 0) );
+        m_buffer.fill( qRgba( 0, 0, 0, 0 ) );
         QPainter pb( &m_buffer );
         pb.setPen( p.pen() );
         pb.setFont( p.font() );
@@ -100,7 +102,9 @@ ScrollingLabel::paintEvent( QPaintEvent* )
         pb.setClipRect( 0, 0, s.scaledX( 15 ), height() );
         //initial situation: don't apply alpha channel in the left half of the image at all; apply it more and more until scrollPos gets positive
         if ( m_scrollPos < 0 )
-            pb.setOpacity( (qreal)( qMax( -s.scaledX( 8 ), m_scrollPos ) + s.scaledX( 8 ) ) / s.scaledX( 8 ) );
+        {
+            pb.setOpacity( ( qreal )( qMax( -s.scaledX( 8 ), m_scrollPos ) + s.scaledX( 8 ) ) / s.scaledX( 8 ) );
+        }
         pb.drawImage( 0, 0, m_alphaChannel );
 
         //pb.end();
@@ -150,23 +154,33 @@ ScrollingLabel::resizeEvent( QResizeEvent* )
     if ( width() >  64 )
     {
         //create first scanline
-        QRgb* scanline1 = (QRgb*)m_alphaChannel.scanLine( 0 );
+        QRgb* scanline1 = ( QRgb* )m_alphaChannel.scanLine( 0 );
         for ( int x = 1; x < 16; ++x )
+        {
             scanline1[ x - 1 ] = scanline1[ width() - x ] = qRgba( 0, 0, 0, x << 4 );
+        }
         for ( int x = 15; x < width() - 15; ++x )
+        {
             scanline1[ x ] = qRgb( 0, 0, 0 );
+        }
         //copy scanline to the other ones
         for ( int y = 1; y < height(); ++y )
-            memcpy( m_alphaChannel.scanLine( y ), (uchar*)scanline1, width() * 4 );
+        {
+            memcpy( m_alphaChannel.scanLine( y ), ( uchar* )scanline1, width() * 4 );
+        }
     }
     else
+    {
         m_alphaChannel.fill( qRgb( 0, 0, 0 ) );
+    }
 
 
     //Update scrolling state
     bool newScrollEnabled = ( m_singleTextWidth > width() - indent() );
     if( newScrollEnabled != m_scrollEnabled )
+    {
         updateText();
+    }
 }
 
 

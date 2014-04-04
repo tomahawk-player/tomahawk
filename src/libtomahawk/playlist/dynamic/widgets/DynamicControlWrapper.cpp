@@ -34,13 +34,13 @@ using namespace Tomahawk;
 
 
 DynamicControlWrapper::DynamicControlWrapper( const Tomahawk::dyncontrol_ptr& control, QGridLayout* layout, int row, QWidget* parent )
-     : QObject( parent )
-     , m_parent( parent )
-     , m_row( row )
-     , m_minusButton( 0 )
-     , m_control( control )
-     , m_typeSelector( 0 )
-     , m_layout( QPointer< QGridLayout >( layout ) )
+    : QObject( parent )
+    , m_parent( parent )
+    , m_row( row )
+    , m_minusButton( 0 )
+    , m_control( control )
+    , m_typeSelector( 0 )
+    , m_layout( QPointer< QGridLayout >( layout ) )
 {
     m_typeSelector = new QComboBox( m_parent );
 
@@ -57,14 +57,15 @@ DynamicControlWrapper::DynamicControlWrapper( const Tomahawk::dyncontrol_ptr& co
     m_plusL->addWidget( m_minusButton );
     m_plusL->addWidget( createDummy( m_minusButton, m_parent ) ); // :-(
 
-    connect( m_typeSelector, SIGNAL( activated( QString) ), SLOT( typeSelectorChanged( QString ) ) );
+    connect( m_typeSelector, SIGNAL( activated( QString ) ), SLOT( typeSelectorChanged( QString ) ) );
     connect( m_control.data(), SIGNAL( changed() ), this, SIGNAL( changed() ) );
 
     m_layout.data()->addWidget( m_typeSelector, row, 0, Qt::AlignLeft );
 
-    if( !control.isNull() ) {
-        foreach( const QString& type, control->typeSelectors() )
-            m_typeSelector->addItem( type );
+    if( !control.isNull() )
+    {
+        foreach( const QString & type, control->typeSelectors() )
+        m_typeSelector->addItem( type );
     }
 
     typeSelectorChanged( m_control.isNull() ? "" : m_control->selectedType(), true );
@@ -82,9 +83,13 @@ DynamicControlWrapper::~DynamicControlWrapper()
     removeFromLayout();
 
     if( !m_entryWidget.isNull() )
+    {
         m_control->inputField()->setParent( 0 );
+    }
     if( !m_matchSelector.isNull() )
+    {
         m_control->matchSelector()->setParent( 0 );
+    }
 
     delete m_typeSelector;
     delete m_minusButton;
@@ -102,12 +107,18 @@ void
 DynamicControlWrapper::removeFromLayout()
 {
     if( m_layout.isNull() )
+    {
         return;
+    }
 
     if( !m_matchSelector.isNull() )
+    {
         m_layout.data()->removeWidget( m_matchSelector.data() );
+    }
     if( !m_entryWidget.isNull() )
+    {
         m_layout.data()->removeWidget( m_entryWidget.data() );
+    }
     m_layout.data()->removeWidget( m_typeSelector );
     m_layout.data()->removeItem( m_plusL );
 }
@@ -148,20 +159,26 @@ DynamicControlWrapper::typeSelectorChanged( const QString& type, bool firstLoad 
     m_layout.data()->removeWidget( m_entryWidget.data() );
 
     if( m_control->selectedType() != type && !firstLoad )
+    {
         m_control->setSelectedType( type );
+    }
 
 
     int idx = m_typeSelector->findText( type );
     if( idx > -1 )
+    {
         m_typeSelector->setCurrentIndex( idx );
+    }
 
 
-    if( m_control->matchSelector() ) {
+    if( m_control->matchSelector() )
+    {
         m_matchSelector = QPointer<QWidget>( m_control->matchSelector() );
         m_layout.data()->addWidget( m_matchSelector.data(), m_row, 1, Qt::AlignCenter );
         m_matchSelector.data()->show();
     }
-    if( m_control->inputField() ) {
+    if( m_control->inputField() )
+    {
         m_entryWidget = QPointer<QWidget>( m_control->inputField() );
         m_layout.data()->addWidget( m_entryWidget.data(), m_row, 2 );
         m_entryWidget.data()->show();

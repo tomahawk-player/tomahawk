@@ -30,30 +30,33 @@
  */
 class DLLEXPORT HeaderLabel : public QLabel
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     HeaderLabel( QWidget* parent );
     ~HeaderLabel();
 
-    QSize minimumSizeHint() const { return sizeHint(); }
+    QSize minimumSizeHint() const
+    {
+        return sizeHint();
+    }
     QSize sizeHint() const;
 
     static int defaultFontSize();
 
-signals:
+  signals:
     void clicked();
     void resized( const QPoint& delta );
 
-protected:
-//    void changeEvent( QEvent* e );
+  protected:
+    //    void changeEvent( QEvent* e );
     void paintEvent( QPaintEvent* event );
 
     void mousePressEvent( QMouseEvent* event );
     void mouseReleaseEvent( QMouseEvent* event );
     void mouseMoveEvent( QMouseEvent* event );
 
-private:
+  private:
     QWidget* m_parent;
     QTime m_time;
 

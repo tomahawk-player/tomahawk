@@ -82,7 +82,9 @@ ImageRegistry::pixmap( const QString& image, const QSize& size, TomahawkUtils::I
         pixmap = p;
     }
     else
+    {
         pixmap = QPixmap( image );
+    }
 
     if ( !pixmap.isNull() )
     {
@@ -97,7 +99,9 @@ ImageRegistry::pixmap( const QString& image, const QSize& size, TomahawkUtils::I
         }
 
         if ( !size.isNull() && pixmap.size() != size )
+        {
             pixmap = pixmap.scaled( size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
+        }
 
         putInCache( image, size, mode, pixmap );
     }
@@ -122,10 +126,10 @@ ImageRegistry::putInCache( const QString& image, const QSize& size, TomahawkUtil
         {
             subsubcache = subcache.value( mode );
 
-/*            if ( subsubcache.contains( size.width() * size.height() ) )
-            {
-                Q_ASSERT( false );
-            }*/
+            /*            if ( subsubcache.contains( size.width() * size.height() ) )
+                        {
+                            Q_ASSERT( false );
+                        }*/
         }
     }
 

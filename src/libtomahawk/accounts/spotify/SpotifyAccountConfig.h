@@ -31,7 +31,7 @@ class QShowEvent;
 
 namespace Ui
 {
-    class SpotifyConfig;
+class SpotifyConfig;
 }
 
 namespace Tomahawk
@@ -45,7 +45,7 @@ struct SpotifyPlaylistInfo;
 class SpotifyAccountConfig : public AccountConfigWidget
 {
     Q_OBJECT
-public:
+  public:
     explicit SpotifyAccountConfig( SpotifyAccount* account );
 
     QString username() const;
@@ -62,23 +62,26 @@ public:
 
     void loginResponse( bool success, const QString& msg, const QString& username );
 
-    bool loggedInManually() const { return m_loggedInManually; }
+    bool loggedInManually() const
+    {
+        return m_loggedInManually;
+    }
 
-signals:
+  signals:
     void login( const QString& username, const QString& pw );
     void logout();
     void updatePrivacy( bool );
 
-protected:
+  protected:
     void showEvent( QShowEvent* event );
 
-private slots:
+  private slots:
     void doLogin();
     void resetLoginButton();
     void selectAllPlaylists();
     void showStarredPlaylist( bool );
 
-private:
+  private:
     void showLoggedIn();
     void showLoggedOut();
 

@@ -30,18 +30,18 @@
 class ContainedMenuButton : public QToolButton
 {
     Q_OBJECT
-public:
-    explicit ContainedMenuButton( QWidget *parent = 0 );
+  public:
+    explicit ContainedMenuButton( QWidget* parent = 0 );
 
-    void setMenu( QMenu *menu );
-    QMenu *menu() const;
+    void setMenu( QMenu* menu );
+    QMenu* menu() const;
 
-protected:
-    void mousePressEvent( QMouseEvent *event );
-private slots:
+  protected:
+    void mousePressEvent( QMouseEvent* event );
+  private slots:
     void menuHidden();
-private:
-    QMenu *m_menu;
+  private:
+    QMenu* m_menu;
 };
 
 #endif // CONTAINEDMENUBUTTON_H

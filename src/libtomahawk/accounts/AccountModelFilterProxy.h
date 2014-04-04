@@ -24,37 +24,39 @@
 
 #include <QSortFilterProxyModel>
 
-namespace Tomahawk {
-namespace Accounts {
+namespace Tomahawk
+{
+namespace Accounts
+{
 
 class DLLEXPORT AccountModelFilterProxy : public QSortFilterProxyModel
 {
     Q_OBJECT
-public:
+  public:
     AccountModelFilterProxy( QObject* parent = 0 );
 
     void setFilterType( Tomahawk::Accounts::AccountType type );
 
     virtual void setSourceModel( QAbstractItemModel* sourceModel );
 
-signals:
+  signals:
     void scrollTo( const QModelIndex& idx );
 
     void startInstalling( const QPersistentModelIndex& idx );
     void doneInstalling( const QPersistentModelIndex& idx );
     void errorInstalling( const QPersistentModelIndex& idx );
 
-protected:
+  protected:
     virtual bool filterAcceptsRow ( int sourceRow, const QModelIndex& sourceParent ) const;
 
-private slots:
+  private slots:
     void onScrollTo( const QModelIndex& idx );
 
     void onStartInstalling( const QPersistentModelIndex& idx );
     void onDoneInstalling( const QPersistentModelIndex& idx );
     void onErrorInstalling( const QPersistentModelIndex& idx );
 
-private:
+  private:
     Tomahawk::Accounts::AccountType m_filterType;
 };
 

@@ -28,17 +28,17 @@
 class XSPFGenerator : public QObject
 {
     Q_OBJECT
-public:
+  public:
     explicit XSPFGenerator( const Tomahawk::playlist_ptr& pl, QObject* parent = 0 );
     virtual ~XSPFGenerator();
 
-signals:
+  signals:
     void generated( const QByteArray& xspf );
 
-private slots:
+  private slots:
     void generate();
 
-private:
+  private:
     Tomahawk::playlist_ptr m_playlist;
 };
 

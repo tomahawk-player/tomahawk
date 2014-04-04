@@ -40,7 +40,7 @@ ScriptCollectionHeader::ScriptCollectionHeader( QWidget* parent )
     descLayout->addStretch();
 
     m_refreshButton->setIcon( ImageRegistry::instance()->pixmap( RESPATH "images/refresh.svg", QSize( m_descriptionLabel->fontMetrics().height(),
-                                                                                                    m_descriptionLabel->fontMetrics().height() ), TomahawkUtils::DropShadow ) );
+                              m_descriptionLabel->fontMetrics().height() ), TomahawkUtils::DropShadow ) );
     m_refreshButton->setFixedSize( m_descriptionLabel->fontMetrics().height() + m_descriptionLabel->margin() * 2,
                                    m_descriptionLabel->fontMetrics().height() + m_descriptionLabel->margin() * 2 );
 

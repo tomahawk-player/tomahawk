@@ -104,7 +104,9 @@ QueryLabel::text() const
     QString text;
 
     if ( m_result.isNull() && m_query.isNull() && m_artist.isNull() && m_album.isNull() )
+    {
         return m_text;
+    }
 
     if ( !m_result.isNull() )
     {
@@ -153,12 +155,18 @@ QString
 QueryLabel::track() const
 {
     if ( m_result.isNull() && m_query.isNull() )
+    {
         return QString();
+    }
 
     if ( !m_result.isNull() )
+    {
         return m_result->track()->track();
+    }
     else
+    {
         return m_query->track()->track();
+    }
 }
 
 
@@ -197,12 +205,16 @@ void
 QueryLabel::setResult( const Tomahawk::result_ptr& result )
 {
     if ( result.isNull() )
+    {
         return;
+    }
 
     if ( !m_text.isEmpty() && contentsMargins().left() != 0 ) // FIXME: hacky
+    {
         m_textMargins = contentsMargins();
+    }
 
-    setContentsMargins( BOXMARGIN * 2, BOXMARGIN / 2, BOXMARGIN * 2, BOXMARGIN / 2);
+    setContentsMargins( BOXMARGIN * 2, BOXMARGIN / 2, BOXMARGIN * 2, BOXMARGIN / 2 );
 
     if ( m_result.isNull() || m_result.data() != result.data() )
     {
@@ -219,7 +231,9 @@ void
 QueryLabel::setQuery( const Tomahawk::query_ptr& query )
 {
     if ( query.isNull() )
+    {
         return;
+    }
 
     setContentsMargins( BOXMARGIN * 2, BOXMARGIN / 2, BOXMARGIN * 2, BOXMARGIN / 2 );
 
@@ -554,7 +568,7 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
     int x = event->x();
 
     if ( event->buttons() & Qt::LeftButton &&
-       ( m_dragPos - event->pos() ).manhattanLength() >= QApplication::startDragDistance() )
+            ( m_dragPos - event->pos() ).manhattanLength() >= QApplication::startDragDistance() )
     {
         startDrag();
         leaveEvent( 0 );
@@ -627,11 +641,17 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
         hoverArea.setRight( width() - 1 );
 
         if ( m_type & Artist )
+        {
             m_hoverType = Artist;
+        }
         else if ( m_type & Album )
+        {
             m_hoverType = Album;
+        }
         else if ( m_type & Track )
+        {
             m_hoverType = Track;
+        }
     }
 
     if ( hoverArea.width() )
@@ -641,9 +661,13 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
     }
 
     if ( m_hoverType != None )
+    {
         setCursor( Qt::PointingHandCursor );
+    }
     else
+    {
         setCursor( Qt::ArrowCursor );
+    }
 
     if ( hoverArea != m_hoverArea )
     {
@@ -667,9 +691,11 @@ void
 QueryLabel::startDrag()
 {
     if ( m_query.isNull() && m_album.isNull() && m_artist.isNull() )
+    {
         return;
+    }
 
-    QDrag *drag = new QDrag( this );
+    QDrag* drag = new QDrag( this );
     QByteArray data;
     QDataStream dataStream( &data, QIODevice::WriteOnly );
     QMimeData* mimeData = new QMimeData();
@@ -677,35 +703,35 @@ QueryLabel::startDrag()
 
     switch( m_hoverType )
     {
-            case Artist:
-            {
-                dataStream << artist()->name();
-                mimeData->setData( "application/tomahawk.metadata.artist", data );
-                drag->setPixmap( TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeArtist ) );
-                break;
-            }
-            case Album:
-            {
-                dataStream << artist()->name();
-                dataStream << album()->name();
-                mimeData->setData( "application/tomahawk.metadata.album", data );
-                drag->setPixmap( TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeAlbum ) );
-                break;
-            }
+        case Artist:
+        {
+            dataStream << artist()->name();
+            mimeData->setData( "application/tomahawk.metadata.artist", data );
+            drag->setPixmap( TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeArtist ) );
+            break;
+        }
+        case Album:
+        {
+            dataStream << artist()->name();
+            dataStream << album()->name();
+            mimeData->setData( "application/tomahawk.metadata.album", data );
+            drag->setPixmap( TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeAlbum ) );
+            break;
+        }
 
-            default:
-            {
-                dataStream << qlonglong( &m_query );
-                mimeData->setData( "application/tomahawk.query.list", data );
-                drag->setPixmap( TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeTrack ) );
-                break;
-            }
+        default:
+        {
+            dataStream << qlonglong( &m_query );
+            mimeData->setData( "application/tomahawk.query.list", data );
+            drag->setPixmap( TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeTrack ) );
+            break;
+        }
     }
 
     drag->setMimeData( mimeData );
 
-//    QPoint hotSpot = event->pos() - child->pos();
-//    drag->setHotSpot( hotSpot );
+    //    QPoint hotSpot = event->pos() - child->pos();
+    //    drag->setHotSpot( hotSpot );
 
     drag->exec( Qt::CopyAction );
 }
@@ -716,7 +742,9 @@ QueryLabel::smartAppend( QString& text, const QString& appendage ) const
 {
     QString s;
     if ( !text.isEmpty() )
+    {
         s = DASH;
+    }
 
     text += s + appendage;
     return text;

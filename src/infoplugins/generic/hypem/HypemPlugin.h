@@ -41,25 +41,32 @@ class INFOPLUGINDLLEXPORT HypemPlugin : public InfoPlugin
     Q_OBJECT
     Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 
-public:
+  public:
     HypemPlugin();
     virtual ~HypemPlugin();
 
-    enum ChartType {
+    enum ChartType
+    {
         None =      0x00,
         Track =     0x01,
         Album =     0x02,
         Artist =    0x04
 
     };
-    void setChartType( ChartType type ) { m_chartType = type; }
-    ChartType chartType() const { return m_chartType; }
+    void setChartType( ChartType type )
+    {
+        m_chartType = type;
+    }
+    ChartType chartType() const
+    {
+        return m_chartType;
+    }
 
-public slots:
+  public slots:
     void chartReturned();
     void chartTypes();
 
-protected slots:
+  protected slots:
     virtual void init();
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
@@ -69,7 +76,7 @@ protected slots:
     }
 
 
-private:
+  private:
     void fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData );
     void dataError( Tomahawk::InfoSystem::InfoRequestData requestData );

@@ -27,24 +27,24 @@ class QPainter;
 class ConfigDelegateBase : public QStyledItemDelegate
 {
     Q_OBJECT
-public:
-  ConfigDelegateBase( QObject* parent = 0 );
-  virtual QSize sizeHint ( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+  public:
+    ConfigDelegateBase( QObject* parent = 0 );
+    virtual QSize sizeHint ( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
-  virtual bool editorEvent ( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
+    virtual bool editorEvent ( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
 
-  // if you want to use a checkbox, you need to have this say where to paint it
-  virtual QRect checkRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx, int role ) const = 0;
-  // if you want to use a config wrench, you need to have this say where to paint it
-  virtual QRect configRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const = 0;
+    // if you want to use a checkbox, you need to have this say where to paint it
+    virtual QRect checkRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx, int role ) const = 0;
+    // if you want to use a config wrench, you need to have this say where to paint it
+    virtual QRect configRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const = 0;
 
-  virtual QList<int> extraCheckRoles() const;
-signals:
+    virtual QList<int> extraCheckRoles() const;
+  signals:
     void configPressed( const QModelIndex& idx );
 
-protected:
+  protected:
 
-private:
+  private:
     QModelIndex m_configPressed;
 };
 

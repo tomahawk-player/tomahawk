@@ -37,15 +37,18 @@
  */
 class DLLEXPORT TomahawkSettings : public QSettings
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     static TomahawkSettings* instance();
 
     explicit TomahawkSettings( QObject* parent = 0 );
     virtual ~TomahawkSettings();
 
-    void applyChanges() { emit changed(); }
+    void applyChanges()
+    {
+        emit changed();
+    }
 
     /// General settings
     virtual QString storageCacheLocation() const;
@@ -225,14 +228,14 @@ public:
     void setLastChartIds( const QMap<QString, QVariant>& ids );
     QMap<QString, QVariant> lastChartIds();
 
-signals:
+  signals:
     void changed();
     void recentlyPlayedPlaylistAdded( const QString& playlistId, int sourceId  );
 
-private slots:
+  private slots:
     void updateIndex();
 
-private:
+  private:
     void doInitialSetup();
     void createLastFmAccount();
     void createSpotifyAccount();

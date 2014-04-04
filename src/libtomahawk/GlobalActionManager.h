@@ -35,7 +35,7 @@
 class DLLEXPORT GlobalActionManager : public QObject
 {
     Q_OBJECT
-public:
+  public:
     static GlobalActionManager* instance();
     virtual ~GlobalActionManager();
 
@@ -46,7 +46,7 @@ public:
 
     QUrl openLink( const QString& title, const QString& artist, const QString& album ) const;
 
-public slots:
+  public slots:
 
 #ifndef ENABLE_HEADLESS
 
@@ -76,7 +76,7 @@ public slots:
     void handlePlayTrack( const Tomahawk::query_ptr& qry );
 #endif
 
-private slots:
+  private slots:
     void informationForUrl( const QString& url, const QSharedPointer<QObject>& information );
     void copyToClipboardReady( const QUrl& longUrl, const QUrl& shortUrl, const QVariant& callbackObj );
 
@@ -92,7 +92,7 @@ private slots:
     void playNow( const Tomahawk::query_ptr& );
 #endif
 
-private:
+  private:
     explicit GlobalActionManager( QObject* parent = 0 );
 
     /// handle opening of urls

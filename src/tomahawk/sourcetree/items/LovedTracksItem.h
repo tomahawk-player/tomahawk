@@ -29,7 +29,7 @@ class LovedTracksItem : public SourceTreeItem
 {
     Q_OBJECT
 
-public:
+  public:
     LovedTracksItem( SourcesModel* model, SourceTreeItem* parent );
     virtual ~LovedTracksItem();
 
@@ -46,10 +46,10 @@ public:
 
     virtual bool isBeingPlayed() const;
 
-private slots:
+  private slots:
     void loveDroppedTracks( QList< Tomahawk::query_ptr > qrys );
 
-private:
+  private:
     Tomahawk::ViewPage* m_lovedTracksPage;
     int m_sortValue;
 };

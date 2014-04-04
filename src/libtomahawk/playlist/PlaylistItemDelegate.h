@@ -32,37 +32,41 @@ class PlayableItem;
 class PlayableProxyModel;
 class TrackView;
 
-namespace Tomahawk {
-    class PixmapDelegateFader;
+namespace Tomahawk
+{
+class PixmapDelegateFader;
 }
 
 class DLLEXPORT PlaylistItemDelegate : public QStyledItemDelegate
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     PlaylistItemDelegate( TrackView* parent, PlayableProxyModel* proxy );
 
     void updateRowSize( const QModelIndex& index );
 
     virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
-public slots:
+  public slots:
     void resetHoverIndex();
 
-signals:
+  signals:
     void updateIndex( const QModelIndex& idx );
 
-private slots:
+  private slots:
     void doUpdateIndex( const QPersistentModelIndex& index );
 
-protected:
+  protected:
     void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const;
 
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
 
-    QPersistentModelIndex hoveringOver() const { return m_hoveringOver; }
+    QPersistentModelIndex hoveringOver() const
+    {
+        return m_hoveringOver;
+    }
 
     QRect drawInfoButton( QPainter* painter, const QRect& rect, const QModelIndex& index, float height ) const;
     QRect drawSourceIcon( QPainter* painter, const QRect& rect, PlayableItem* item, float height ) const;
@@ -103,10 +107,10 @@ protected:
     QFontMetrics m_smallBoldFontMetrics;
     QFontMetrics m_bigBoldFontMetrics;
 
-protected slots:
+  protected slots:
     virtual void modelChanged();
 
-private:
+  private:
     mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_pixmaps;
     mutable QHash< QPersistentModelIndex, QRect > m_infoButtonRects;
     mutable QHash< QPersistentModelIndex, QRect > m_loveButtonRects;

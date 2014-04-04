@@ -31,18 +31,24 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCommand_addSource : public DatabaseCommand
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit DatabaseCommand_addSource( const QString& username, const QString& fname, QObject* parent = 0 );
     virtual void exec( DatabaseImpl* lib );
-    virtual bool doesMutates() const { return true; }
-    virtual QString commandname() const { return "addsource"; }
+    virtual bool doesMutates() const
+    {
+        return true;
+    }
+    virtual QString commandname() const
+    {
+        return "addsource";
+    }
 
-signals:
+  signals:
     void done( unsigned int, const QString& );
 
-private:
+  private:
     QString m_username, m_fname;
 };
 

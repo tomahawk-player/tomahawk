@@ -48,7 +48,9 @@ DropJobNotifier::DropJobNotifier( QPixmap servicePixmap, QString service, DropJo
     init( type );
 
     if ( m_service.isEmpty() )
+    {
         m_service = "DropJob";
+    }
 
     connect( job, SIGNAL( finished() ), this, SLOT( setFinished() ) );
 }
@@ -72,16 +74,24 @@ void
 DropJobNotifier::init( DropJob::DropType type )
 {
     if ( type == DropJob::Playlist )
+    {
         m_type = tr( "playlist" );
+    }
 
     if ( type == DropJob::Artist )
+    {
         m_type = tr( "artist" );
+    }
 
     if ( type == DropJob::Track )
+    {
         m_type = tr( "track" );
+    }
 
     if ( type == DropJob::Album )
+    {
         m_type = tr( "album" );
+    }
 }
 
 
@@ -109,7 +119,7 @@ DropJobNotifier::mainText() const
     else
     {
         return tr( "Parsing %1 %2" ).arg( m_service )
-                                    .arg( m_type );
+               .arg( m_type );
     }
 }
 

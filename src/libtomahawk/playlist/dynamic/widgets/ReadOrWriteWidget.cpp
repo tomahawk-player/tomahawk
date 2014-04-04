@@ -24,7 +24,7 @@
 #include "utils/Logger.h"
 
 
-ReadOrWriteWidget::ReadOrWriteWidget( QWidget* writableWidget, bool writable, QWidget* parent)
+ReadOrWriteWidget::ReadOrWriteWidget( QWidget* writableWidget, bool writable, QWidget* parent )
     : QWidget( parent )
     , m_writableWidget( writableWidget )
     , m_label( 0 )
@@ -35,7 +35,9 @@ ReadOrWriteWidget::ReadOrWriteWidget( QWidget* writableWidget, bool writable, QW
 
     m_layout = new QStackedLayout( this );
     if( writableWidget )
+    {
         m_layout->addWidget( writableWidget );
+    }
 
     m_layout->addWidget( m_label );
 
@@ -53,16 +55,21 @@ ReadOrWriteWidget::setWritable( bool write )
 {
     m_writable = write;
     if( m_writableWidget && write )
+    {
         m_layout->setCurrentWidget( m_writableWidget );
+    }
     else
+    {
         m_layout->setCurrentWidget( m_label );
+    }
 }
 
 
 void
 ReadOrWriteWidget::setWritableWidget( QWidget* w )
 {
-    if( m_writableWidget ) {
+    if( m_writableWidget )
+    {
         m_layout->removeWidget( m_writableWidget );
     }
 
@@ -102,9 +109,12 @@ ReadOrWriteWidget::setLabel( const QString& label )
 QSize
 ReadOrWriteWidget::sizeHint() const
 {
-    if( m_writableWidget ) {
+    if( m_writableWidget )
+    {
         return m_writableWidget->sizeHint();
-    } else {
+    }
+    else
+    {
         return m_label->sizeHint();
     }
 }

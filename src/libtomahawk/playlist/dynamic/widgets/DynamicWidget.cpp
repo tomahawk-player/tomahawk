@@ -123,16 +123,17 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     // special case: if we have launched multiple setRevision calls, and the number of controls is different, it means that we're getting an intermediate setRevision
     //  called after the user has already created more revisions. ignore in that case.
     if ( m_playlist.data() == playlist.data() && m_seqRevLaunched > 0
-        && m_controls->controls().size() != playlist->generator()->controls().size() // different number of controls
-        && qAbs( m_playlist->generator()->controls().size() - playlist->generator()->controls().size() ) < m_seqRevLaunched )
-    { // difference in controls has to be less than how many revisions we launched
+            && m_controls->controls().size() != playlist->generator()->controls().size() // different number of controls
+            && qAbs( m_playlist->generator()->controls().size() - playlist->generator()->controls().size() ) < m_seqRevLaunched )
+    {
+        // difference in controls has to be less than how many revisions we launched
         return;
     }
     m_seqRevLaunched = 0;
 
     // if we're being told to load the same dynamic playlist over again, only do it if the controls have a different number
     if ( !m_playlist.isNull() && ( m_playlist.data() == playlist.data() ) // same playlist pointer
-        && m_playlist->generator()->controls().size() == playlist->generator()->controls().size() )
+            && m_playlist->generator()->controls().size() == playlist->generator()->controls().size() )
     {
         // we can skip our work. just let the dynamiccontrollist show the difference
         m_controls->setControls( m_playlist, m_playlist->author()->isLocal() );
@@ -140,9 +141,13 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
         m_playlist = playlist;
 
         if ( !m_runningOnDemand )
+        {
             m_model->loadPlaylist( m_playlist );
+        }
         else if ( !m_controlsChanged ) // if the controls changed, we already dealt with that and don't want to change station yet
+        {
             m_model->changeStation();
+        }
         m_controlsChanged = false;
 
         return;
@@ -151,7 +156,7 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     if ( !m_playlist.isNull() )
     {
         disconnect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
-        disconnect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision) ), this, SLOT(onRevisionLoaded( Tomahawk::DynamicPlaylistRevision) ) );
+        disconnect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );
         disconnect( m_playlist->generator().data(), SIGNAL( error( QString, QString ) ), this, SLOT( generatorError( QString, QString ) ) );
         disconnect( m_playlist.data(), SIGNAL( deleted( Tomahawk::dynplaylist_ptr ) ), this, SLOT( onDeleted() ) );
         disconnect( m_playlist.data(), SIGNAL( changed() ), this, SLOT( onChanged() ) );
@@ -166,9 +171,13 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
 
 
     if ( !m_playlist->author()->isLocal() )  // hide controls, as we show the description in the summary
-            m_layout->removeWidget( m_controls );
+    {
+        m_layout->removeWidget( m_controls );
+    }
     else if ( m_layout->indexOf( m_controls ) == -1 )
+    {
         m_layout->insertWidget( 0, m_controls );
+    }
 
     connect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
     connect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );
@@ -177,10 +186,14 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     connect( m_playlist.data(), SIGNAL( changed() ), this, SLOT( onChanged() ) );
 
     if ( m_playlist->mode() == OnDemand && !m_playlist->generator()->controls().isEmpty() )
+    {
         showPreview();
+    }
 
     if ( !m_playlist.isNull() )
+    {
         m_controls->setControls( m_playlist, m_playlist->author()->isLocal() );
+    }
 }
 
 
@@ -221,7 +234,7 @@ DynamicWidget::sizeHint() const
 
 
 void
-DynamicWidget::resizeEvent(QResizeEvent* )
+DynamicWidget::resizeEvent( QResizeEvent* )
 {
     layoutFloatingWidgets();
 }
@@ -251,7 +264,9 @@ void
 DynamicWidget::playlistChanged( Tomahawk::playlistinterface_ptr pl )
 {
     if ( pl == m_view->proxyModel()->playlistInterface() ) // same playlist
+    {
         m_activePlaylist = true;
+    }
     else
     {
         m_activePlaylist = false;
@@ -266,10 +281,12 @@ DynamicWidget::playlistChanged( Tomahawk::playlistinterface_ptr pl )
 
 
 void
-DynamicWidget::showEvent(QShowEvent* )
+DynamicWidget::showEvent( QShowEvent* )
 {
     if ( !m_playlist.isNull() && !m_runningOnDemand )
+    {
         m_setup->fadeIn();
+    }
 }
 
 
@@ -298,7 +315,7 @@ void
 DynamicWidget::trackStarted()
 {
     if ( m_activePlaylist && !m_playlist.isNull() &&
-        m_playlist->mode() == OnDemand && !m_runningOnDemand )
+            m_playlist->mode() == OnDemand && !m_runningOnDemand )
     {
 
         startStation();
@@ -310,7 +327,9 @@ void
 DynamicWidget::tracksAdded()
 {
     if ( m_playlist->mode() == OnDemand && m_runningOnDemand && m_setup->isVisible() )
+    {
         m_setup->fadeOut();
+    }
 }
 
 
@@ -377,7 +396,9 @@ DynamicWidget::tracksGenerated( const QList< query_ptr >& queries )
     }
 
     if ( m_playlist->mode() != OnDemand )
+    {
         m_loading->fadeOut();
+    }
     m_model->tracksGenerated( queries, limit );
 }
 
@@ -391,12 +412,16 @@ DynamicWidget::controlsChanged( bool added )
     m_controlsChanged = true;
 
     if ( !m_playlist->author()->isLocal() )
+    {
         return;
+    }
     m_playlist->createNewRevision();
     m_seqRevLaunched++;
 
     if ( !added )
+    {
         showPreview();
+    }
 
     emit descriptionChanged( m_playlist->generator()->sentenceSummary() );
 }
@@ -407,7 +432,9 @@ DynamicWidget::controlChanged( const Tomahawk::dyncontrol_ptr& control )
 {
     Q_UNUSED( control );
     if ( !m_playlist->author()->isLocal() )
+    {
         return;
+    }
     m_playlist->createNewRevision();
     m_seqRevLaunched++;
 
@@ -434,7 +461,9 @@ DynamicWidget::steeringChanged()
         }
     }
     if ( !playing.isValid() )
+    {
         return;
+    }
 
     const int upcoming = m_view->proxyModel()->rowCount( QModelIndex() ) - 1 - playing.row();
     tDebug() << "Removing tracks after current in station, found" << upcoming;
@@ -475,7 +504,9 @@ DynamicWidget::generatorError( const QString& title, const QString& content )
         m_view->showMessage( tr( "Station ran out of tracks!\n\nTry tweaking the filters for a new set of songs to play." ) );
     }
     else
+    {
         m_view->showMessageTimeout( title, content );
+    }
 }
 
 
@@ -527,7 +558,9 @@ DynamicWidget::pixmap() const
                                              TomahawkUtils::Original,
                                              TomahawkUtils::DpiScaler::scaled( this, 80, 80 ) );
     else
+    {
         return QPixmap();
+    }
 }
 
 
@@ -550,6 +583,8 @@ void
 DynamicWidget::onChanged()
 {
     if ( !m_playlist.isNull() &&
-         ViewManager::instance()->currentPage() == this )
-         emit nameChanged( m_playlist->title() );
+            ViewManager::instance()->currentPage() == this )
+    {
+        emit nameChanged( m_playlist->title() );
+    }
 }

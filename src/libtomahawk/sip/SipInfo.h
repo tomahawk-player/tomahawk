@@ -27,13 +27,13 @@ class SipInfoPrivate;
 
 class DLLEXPORT SipInfo : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     SipInfo();
-    SipInfo(const SipInfo& other);
+    SipInfo( const SipInfo& other );
     virtual ~SipInfo();
-    SipInfo& operator=(const SipInfo& info);
+    SipInfo& operator=( const SipInfo& info );
 
     void clear();
     bool isValid() const;
@@ -59,11 +59,11 @@ public:
 
     const QString debugString() const;
 
-private:
+  private:
     QSharedDataPointer<SipInfoPrivate> d;
 };
 
-DLLEXPORT QDebug operator<<( QDebug dbg, const SipInfo &info );
+DLLEXPORT QDebug operator<<( QDebug dbg, const SipInfo& info );
 DLLEXPORT bool operator==( const SipInfo& one, const SipInfo& two );
 
 #endif // SIPINFO_H

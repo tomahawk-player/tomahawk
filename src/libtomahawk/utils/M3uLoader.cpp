@@ -63,8 +63,8 @@ M3uLoader::~M3uLoader()
 void
 M3uLoader::parse()
 {
-    foreach ( const QString& url, m_urls )
-        parseM3u( url );
+    foreach ( const QString & url, m_urls )
+    parseM3u( url );
 }
 
 
@@ -72,15 +72,19 @@ void
 M3uLoader::getTags( const QFileInfo& info )
 {
     QByteArray fileName = QFile::encodeName( info.canonicalFilePath() );
-    const char *encodedName = fileName.constData();
+    const char* encodedName = fileName.constData();
 
     TagLib::FileRef f( encodedName );
     if( f.isNull() )
+    {
         return;
+    }
 
-    TagLib::Tag *tag = f.tag();
+    TagLib::Tag* tag = f.tag();
     if( !tag )
+    {
         return;
+    }
 
     QString artist = TStringToQString( tag->artist() ).trimmed();
     QString album  = TStringToQString( tag->album() ).trimmed();
@@ -153,7 +157,9 @@ M3uLoader::parseM3u( const QString& fileLink )
         /// But the notion that users does not tag by a common rule. that seems hard
         /// So ignore that for now
         if ( line.contains( "EXT" ) )
+        {
             continue;
+        }
 
         parseLine( line, file );
 
@@ -164,8 +170,8 @@ M3uLoader::parseM3u( const QString& fileLink )
         if ( !singleLine.isEmpty() )
         {
             QStringList m3uList = singleLine.split( "\r" );
-            foreach( const QString& line, m3uList )
-                parseLine( line, file );
+            foreach( const QString & line, m3uList )
+            parseLine( line, file );
         }
 
         if ( m_tracks.isEmpty() )
@@ -179,17 +185,19 @@ M3uLoader::parseM3u( const QString& fileLink )
     {
         m_title = QUrl::fromPercentEncoding( fileInfo.baseName().toUtf8() );
         m_playlist = Playlist::create( SourceList::instance()->getLocal(),
-                                        uuid(),
-                                        m_title,
-                                        m_info,
-                                        m_creator,
-                                        false,
-                                        m_tracks );
+                                       uuid(),
+                                       m_title,
+                                       m_info,
+                                       m_creator,
+                                       false,
+                                       m_tracks );
 
         connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistCreated() ) );
     }
     else
+    {
         emit tracks( m_tracks );
+    }
     m_tracks.clear();
 }
 

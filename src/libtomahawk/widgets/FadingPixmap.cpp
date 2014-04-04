@@ -33,7 +33,9 @@ QPointer< TomahawkUtils::SharedTimeLine >
 FadingPixmap::stlInstance()
 {
     if ( s_stlInstance.isNull() )
+    {
         s_stlInstance = QPointer< TomahawkUtils::SharedTimeLine> ( new TomahawkUtils::SharedTimeLine() );
+    }
 
     return s_stlInstance;
 }
@@ -46,7 +48,7 @@ FadingPixmap::FadingPixmap( QWidget* parent )
     , m_startFrame( 0 )
     , m_isDefault( false )
 {
-//    setCursor( Qt::PointingHandCursor );
+    //    setCursor( Qt::PointingHandCursor );
 }
 
 
@@ -58,14 +60,18 @@ FadingPixmap::~FadingPixmap()
 void
 FadingPixmap::onAnimationStep( int frame )
 {
-    m_fadePct = (float)( frame - m_startFrame ) / 10.0;
+    m_fadePct = ( float )( frame - m_startFrame ) / 10.0;
     if ( m_fadePct > 100.0 )
+    {
         m_fadePct = 100.0;
+    }
 
     repaint();
 
     if ( m_fadePct == 100.0 )
+    {
         QTimer::singleShot( 0, this, SLOT( onAnimationFinished() ) );
+    }
 }
 
 
@@ -80,7 +86,9 @@ FadingPixmap::onAnimationFinished()
     disconnect( stlInstance().data(), SIGNAL( frameChanged( int ) ), this, SLOT( onAnimationStep( int ) ) );
 
     if ( m_pixmapQueue.count() )
+    {
         QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, m_pixmapQueue.takeFirst() ), Q_ARG( bool, false ) );
+    }
 }
 
 
@@ -92,12 +100,16 @@ FadingPixmap::setPixmap( const QPixmap& pixmap, bool isDefault )
         m_pixmapQueue.clear();
         m_pixmapQueue << pixmap;
         if ( m_isDefault )
+        {
             QTimer::singleShot( 0, this, SLOT( onAnimationFinished() ) );
+        }
         return;
     }
 
     if ( m_isDefault && isDefault )
+    {
         return;
+    }
 
     QByteArray ba;
     QBuffer buffer( &ba );
@@ -105,7 +117,9 @@ FadingPixmap::setPixmap( const QPixmap& pixmap, bool isDefault )
     pixmap.save( &buffer, "PNG" );
     QString newImageMd5 = TomahawkUtils::md5( buffer.data() );
     if ( m_oldImageMd5 == newImageMd5 )
+    {
         return;
+    }
 
     m_oldImageMd5 = newImageMd5;
     m_oldPixmap = m_pixmap;

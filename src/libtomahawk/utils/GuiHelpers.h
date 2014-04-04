@@ -22,17 +22,19 @@
 #include "DllMacro.h"
 
 class QWidget;
-namespace Tomahawk {
-    namespace Accounts {
-        class AccountFactory;
-        class Account;
-    }
+namespace Tomahawk
+{
+namespace Accounts
+{
+class AccountFactory;
+class Account;
+}
 }
 
 namespace TomahawkUtils
 {
-    DLLEXPORT void createAccountFromFactory( Tomahawk::Accounts::AccountFactory*, QWidget* parent );
-    DLLEXPORT void openAccountConfig( Tomahawk::Accounts::Account*, QWidget* parent, bool showDelete = false );
+DLLEXPORT void createAccountFromFactory( Tomahawk::Accounts::AccountFactory*, QWidget* parent );
+DLLEXPORT void openAccountConfig( Tomahawk::Accounts::Account*, QWidget* parent, bool showDelete = false );
 }
 
 #endif

@@ -28,10 +28,10 @@
     QObject* receiver;
     QString path;
 }
-- (void)setReceiver:(QObject*)receiver;
-- (void)setMoveTo:(QString)path;
-- (void)moveFinished;
-- (void)moveFailedWithError:(NSError *)error;
+- ( void )setReceiver:( QObject* )receiver;
+- ( void )setMoveTo:( QString )path;
+- ( void )moveFinished;
+- ( void )moveFailedWithError:( NSError* )error;
 @end
 
 #endif // TOMAHAWKUTILS_MAC_H

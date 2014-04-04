@@ -94,7 +94,9 @@ InfoSystem*
 InfoSystem::instance()
 {
     if ( !s_instance )
+    {
         s_instance = new InfoSystem( 0 );
+    }
 
     return s_instance;
 }
@@ -152,7 +154,9 @@ InfoSystem::init()
 {
     // tDebug() << Q_FUNC_INFO;
     if ( m_inited )
+    {
         return;
+    }
 
     if ( !m_infoSystemCacheThreadController->cache() || !m_infoSystemWorkerThreadController->worker() )
     {
@@ -338,7 +342,9 @@ QPointer< QThread >
 InfoSystem::workerThread() const
 {
     if ( m_infoSystemWorkerThreadController->isRunning() && m_infoSystemWorkerThreadController->worker() )
+    {
         return QPointer< QThread >( m_infoSystemWorkerThreadController->worker()->thread() );
+    }
 
     return QPointer< QThread >();
 }
@@ -363,7 +369,9 @@ InfoSystemCacheThread::InfoSystemCacheThread::run()
     m_cache = QPointer< InfoSystemCache >( new InfoSystemCache() );
     exec();
     if ( !m_cache.isNull() )
+    {
         delete m_cache.data();
+    }
 }
 
 
@@ -371,7 +379,9 @@ InfoSystemCache*
 InfoSystemCacheThread::cache() const
 {
     if ( m_cache.isNull() )
+    {
         return 0;
+    }
     return m_cache.data();
 }
 
@@ -395,7 +405,9 @@ InfoSystemWorkerThread::InfoSystemWorkerThread::run()
     m_worker = QPointer< InfoSystemWorker >( new InfoSystemWorker() );
     exec();
     if ( !m_worker.isNull() )
+    {
         delete m_worker.data();
+    }
 }
 
 
@@ -403,7 +415,9 @@ InfoSystemWorker*
 InfoSystemWorkerThread::worker() const
 {
     if ( m_worker.isNull() )
+    {
         return 0;
+    }
     return m_worker.data();
 }
 

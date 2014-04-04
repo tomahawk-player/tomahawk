@@ -36,31 +36,31 @@ class NetworkActivityWorkerPrivate;
 class NetworkActivityWorker : public QObject
 {
     Q_OBJECT
-public:
-    explicit NetworkActivityWorker( QObject *parent = 0 );
+  public:
+    explicit NetworkActivityWorker( QObject* parent = 0 );
     virtual ~NetworkActivityWorker();
 
-public slots:
+  public slots:
     void run();
 
-signals:
+  signals:
     void trendingArtists( const QList< Tomahawk::artist_ptr >& artists );
     void trendingTracks( const QList<Tomahawk::track_ptr>& tracks );
     void hotPlaylists( const QList<Tomahawk::playlist_ptr>& playlists );
     void finished();
 
-protected:
+  protected:
     QScopedPointer<NetworkActivityWorkerPrivate> d_ptr;
 
-private slots:
+  private slots:
     void allPlaylistsReceived( const QHash< Tomahawk::playlist_ptr, QStringList >& playlists );
     void allSourcesReceived( const QList< Tomahawk::source_ptr >& sources );
     void playlistLoaded( Tomahawk::PlaylistRevision );
     void playtime( const Tomahawk::playlist_ptr& playlist , uint playtime );
-    void trendingArtistsReceived( const QList< QPair< double,Tomahawk::artist_ptr > >& tracks );
-    void trendingTracksReceived( const QList< QPair< double,Tomahawk::track_ptr > >& tracks );
+    void trendingArtistsReceived( const QList< QPair< double, Tomahawk::artist_ptr > >& tracks );
+    void trendingTracksReceived( const QList< QPair< double, Tomahawk::track_ptr > >& tracks );
 
-private:
+  private:
     Q_DECLARE_PRIVATE( NetworkActivityWorker )
 
     void checkDone();

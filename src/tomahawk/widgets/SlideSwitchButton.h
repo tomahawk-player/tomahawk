@@ -36,7 +36,7 @@ class SlideSwitchButton : public QPushButton
     Q_PROPERTY( qreal knobX READ knobX WRITE setKnobX )
     Q_PROPERTY( QColor baseColorTop READ baseColorTop WRITE setBaseColorTop )
     Q_PROPERTY( QColor baseColorBottom READ baseColorBottom WRITE setBaseColorBottom )
-public:
+  public:
     explicit SlideSwitchButton( QWidget* parent = 0 );
     explicit SlideSwitchButton( const QString& checkedText,
                                 const QString& uncheckedText,
@@ -61,16 +61,16 @@ public:
     void setBaseColorBottom( const QColor& color );
     QColor baseColorBottom() const;
 
-protected:
+  protected:
     void paintEvent( QPaintEvent* event );
 
     virtual void mousePressEvent( QMouseEvent* e );
     virtual void mouseReleaseEvent( QMouseEvent* e );
-    virtual void mouseMoveEvent(QMouseEvent* e);
-private slots:
+    virtual void mouseMoveEvent( QMouseEvent* e );
+  private slots:
     void onCheckedStateChanged();
 
-private:
+  private:
     void createKnob();
 
     QPixmap m_knob;

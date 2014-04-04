@@ -76,7 +76,9 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
     if ( m_view->header()->visualIndex( index.column() ) > 0 )
+    {
         return;
+    }
 
     const track_ptr& track = item->query()->track();
     QString lowerText;

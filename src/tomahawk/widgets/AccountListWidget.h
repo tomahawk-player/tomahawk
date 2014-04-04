@@ -31,10 +31,10 @@ class QPushButton;
 class AccountListWidget : public QWidget, private TomahawkUtils::DpiScaler
 {
     Q_OBJECT
-public:
-    explicit AccountListWidget( AccountModelFactoryProxy *model, QWidget* parent = 0 );
+  public:
+    explicit AccountListWidget( AccountModelFactoryProxy* model, QWidget* parent = 0 );
 
-private slots:
+  private slots:
     void updateEntries( const QModelIndex& topLeft, const QModelIndex& bottomRight );
     void updateEntry( const QPersistentModelIndex& idx );
     void loadAllEntries();
@@ -43,7 +43,7 @@ private slots:
     void toggleOnlineStateForAll();
     void updateToggleOnlineStateButton();
 
-private:
+  private:
     QHash< QPersistentModelIndex, QList< AccountWidget* > > m_entries;
     AccountModelFactoryProxy* m_model;
     QVBoxLayout* m_layout;

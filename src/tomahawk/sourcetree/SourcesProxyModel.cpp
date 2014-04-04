@@ -42,11 +42,17 @@ SourcesProxyModel::SourcesProxyModel( SourcesModel* model, QObject* parent )
     connect( model, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( onModelChanged() ) );
 
     if ( model && model->metaObject()->indexOfSignal( "toggleExpandRequest(QPersistentModelIndex)" ) > -1 )
+    {
         connect( model, SIGNAL( toggleExpandRequest( QPersistentModelIndex ) ), this, SLOT( toggleExpandRequested( QPersistentModelIndex ) ), Qt::QueuedConnection );
+    }
     if ( model && model->metaObject()->indexOfSignal( "expandRequest(QPersistentModelIndex)" ) > -1 )
+    {
         connect( model, SIGNAL( expandRequest( QPersistentModelIndex ) ), this, SLOT( expandRequested( QPersistentModelIndex ) ), Qt::QueuedConnection );
+    }
     if ( model && model->metaObject()->indexOfSignal( "selectRequest(QPersistentModelIndex)" ) > -1 )
+    {
         connect( model, SIGNAL( selectRequest( QPersistentModelIndex ) ), this, SLOT( selectRequested( QPersistentModelIndex ) ), Qt::QueuedConnection );
+    }
 }
 
 
@@ -65,20 +71,30 @@ SourcesProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePar
     SourceTreeItem* item = m_model->data( sourceModel()->index( sourceRow, 0, sourceParent ), SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
 
     if ( item && item->type() != SourcesModel::Divider && item->parent()->parent() == 0 && !item->children().count() )
+    {
         return false;
+    }
 
     if ( !m_filtered )
+    {
         return true;
+    }
 
     SourceItem* sti = qobject_cast< SourceItem* >( item );
     if ( sti )
     {
         if ( sti->source().isNull() || sti->source()->isOnline() )
+        {
             return true;
+        }
         else if ( m_model->sourcesWithViewPage().contains( sti->source() ) )
+        {
             return true;
+        }
         else
+        {
             return false;
+        }
     }
 
     // accept rows that aren't sources
@@ -111,15 +127,21 @@ bool
 SourcesProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
 {
     if ( m_model->data( left, SourcesModel::SortRole ) != m_model->data( right, SourcesModel::SortRole ) )
+    {
         return ( m_model->data( left, SourcesModel::SortRole ).toInt() < m_model->data( right, SourcesModel::SortRole ).toInt() );
+    }
 
     const QString& lefts = left.data().toString().toLower();
     const QString& rights = right.data().toString().toLower();
 
     if ( lefts == rights )
+    {
         return ( m_model->data( left, SourcesModel::IDRole ).toInt() < m_model->data( right, SourcesModel::IDRole ).toInt() );
+    }
     else
+    {
         return QString::localeAwareCompare( lefts, rights ) < 0;
+    }
 }
 
 

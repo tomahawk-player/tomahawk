@@ -32,7 +32,7 @@
 
 class PlayableModelPrivate
 {
-public:
+  public:
     PlayableModelPrivate( PlayableModel* q, bool _loading )
         : q_ptr( q )
         , rootItem( new PlayableItem( 0 ) )
@@ -44,7 +44,7 @@ public:
     PlayableModel* q_ptr;
     Q_DECLARE_PUBLIC( PlayableModel )
 
-private:
+  private:
     PlayableItem* rootItem;
     QPersistentModelIndex currentIndex;
     Tomahawk::QID currentUuid;

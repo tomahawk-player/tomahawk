@@ -76,7 +76,9 @@ HeaderLabel::mouseReleaseEvent( QMouseEvent* event )
     QFrame::mouseReleaseEvent( event );
 
     if ( !m_moved && m_time.elapsed() < qApp->doubleClickInterval() )
+    {
         emit clicked();
+    }
 
     m_pressed = false;
     m_moved = false;

@@ -32,37 +32,47 @@ void
 DatabaseCommand_DirMtimes::exec( DatabaseImpl* dbi )
 {
     if( m_update )
+    {
         execUpdate( dbi );
+    }
     else
+    {
         execSelect( dbi );
+    }
 }
 
 
 void
 DatabaseCommand_DirMtimes::execSelect( DatabaseImpl* dbi )
 {
-    QMap<QString,unsigned int> mtimes;
+    QMap<QString, unsigned int> mtimes;
     TomahawkSqlQuery query = dbi->newquery();
     if( m_prefix.isEmpty() && m_prefixes.isEmpty() )
     {
         query.exec( "SELECT name, mtime FROM dirs_scanned" );
         while( query.next() )
+        {
             mtimes.insert( query.value( 0 ).toString(), query.value( 1 ).toUInt() );
+        }
     }
     else if( m_prefixes.isEmpty() )
+    {
         execSelectPath( dbi, m_prefix, mtimes );
+    }
     else
     {
         if( !m_prefix.isEmpty() )
+        {
             execSelectPath( dbi, m_prefix, mtimes );
+        }
         foreach( QString path, m_prefixes )
-            execSelectPath( dbi, path, mtimes );
+        execSelectPath( dbi, path, mtimes );
     }
     emit done( mtimes );
 }
 
 void
-DatabaseCommand_DirMtimes::execSelectPath( DatabaseImpl *dbi, const QDir& path, QMap<QString, unsigned int> &mtimes )
+DatabaseCommand_DirMtimes::execSelectPath( DatabaseImpl* dbi, const QDir& path, QMap<QString, unsigned int>& mtimes )
 {
     TomahawkSqlQuery query = dbi->newquery();
     query.prepare( QString( "SELECT name, mtime "
@@ -73,7 +83,9 @@ DatabaseCommand_DirMtimes::execSelectPath( DatabaseImpl *dbi, const QDir& path, 
     query.exec();
 
     while( query.next() )
+    {
         mtimes.insert( query.value( 0 ).toString(), query.value( 1 ).toUInt() );
+    }
 }
 
 
@@ -85,7 +97,7 @@ DatabaseCommand_DirMtimes::execUpdate( DatabaseImpl* dbi )
     query.exec( "DELETE FROM dirs_scanned" );
     query.prepare( "INSERT INTO dirs_scanned(name, mtime) VALUES(?, ?)" );
 
-    foreach( const QString& k, m_tosave.keys() )
+    foreach( const QString & k, m_tosave.keys() )
     {
         query.bindValue( 0, k );
         query.bindValue( 1, m_tosave.value( k ) );

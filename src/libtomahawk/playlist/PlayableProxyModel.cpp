@@ -75,7 +75,9 @@ PlayableProxyModel::guid() const
         return m_model->guid();
     }
     else
+    {
         return QString();
+    }
 }
 
 
@@ -134,10 +136,14 @@ PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePa
 {
     PlayableItem* pi = itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
     if ( !pi )
+    {
         return false;
+    }
 
     if ( m_maxVisibleItems > 0 && sourceRow > m_maxVisibleItems - 1 )
+    {
         return false;
+    }
 
     if ( m_hideDupeItems )
     {
@@ -145,14 +151,18 @@ PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePa
         {
             PlayableItem* di = itemFromIndex( sourceModel()->index( i, 0, sourceParent ) );
             if ( !di )
+            {
                 continue;
+            }
 
             bool b = ( pi->query() && pi->query()->equals( di->query() ) ) ||
                      ( pi->album() && pi->album() == di->album() ) ||
                      ( pi->artist() && pi->artist()->name() == di->artist()->name() );
 
             if ( b && filterAcceptsRow( i, sourceParent ) )
+            {
                 return false;
+            }
         }
     }
 
@@ -160,21 +170,27 @@ PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePa
     {
         Tomahawk::result_ptr r;
         if ( pi->query()->numResults() )
+        {
             r = pi->query()->results().first();
+        }
 
         if ( !m_showOfflineResults && ( r.isNull() || !r->isOnline() ) )
+        {
             return false;
+        }
 
         if ( filterRegExp().isEmpty() )
+        {
             return true;
+        }
 
         QStringList sl = filterRegExp().pattern().split( " ", QString::SkipEmptyParts );
         foreach( QString s, sl )
         {
             s = s.toLower();
             if ( !pi->query()->track()->artist().toLower().contains( s ) &&
-                 !pi->query()->track()->album().toLower().contains( s ) &&
-                 !pi->query()->track()->track().toLower().contains( s ) )
+                    !pi->query()->track()->album().toLower().contains( s ) &&
+                    !pi->query()->track()->track().toLower().contains( s ) )
             {
                 return false;
             }
@@ -187,7 +203,7 @@ PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePa
         QStringList sl = filterRegExp().pattern().split( " ", QString::SkipEmptyParts );
 
         bool found = true;
-        foreach( const QString& s, sl )
+        foreach( const QString & s, sl )
         {
             if ( !al->name().contains( s, Qt::CaseInsensitive ) && !al->artist()->name().contains( s, Qt::CaseInsensitive ) )
             {
@@ -204,7 +220,7 @@ PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePa
         QStringList sl = filterRegExp().pattern().split( " ", QString::SkipEmptyParts );
 
         bool found = true;
-        foreach( const QString& s, sl )
+        foreach( const QString & s, sl )
         {
             if ( !ar->name().contains( s, Qt::CaseInsensitive ) && !ar->artist()->name().contains( s, Qt::CaseInsensitive ) )
             {
@@ -223,9 +239,13 @@ void
 PlayableProxyModel::removeIndex( const QModelIndex& index )
 {
     if ( !sourceModel() )
+    {
         return;
+    }
     if ( !index.isValid() )
+    {
         return;
+    }
 
     sourceModel()->removeIndex( mapToSource( index ) );
 }
@@ -235,13 +255,17 @@ void
 PlayableProxyModel::removeIndexes( const QModelIndexList& indexes )
 {
     if ( !sourceModel() )
+    {
         return;
+    }
 
     QList<QPersistentModelIndex> pil;
-    foreach ( const QModelIndex& idx, indexes )
+    foreach ( const QModelIndex & idx, indexes )
     {
         if ( idx.isValid() )
+        {
             pil << mapToSource( idx );
+        }
     }
 
     sourceModel()->removeIndexes( pil );
@@ -252,13 +276,17 @@ void
 PlayableProxyModel::removeIndexes( const QList< QPersistentModelIndex >& indexes )
 {
     if ( !sourceModel() )
+    {
         return;
+    }
 
     QList<QPersistentModelIndex> pil;
-    foreach ( const QPersistentModelIndex& idx, indexes )
+    foreach ( const QPersistentModelIndex & idx, indexes )
     {
         if ( idx.isValid() )
+        {
             pil << mapToSource( idx );
+        }
     }
 
     sourceModel()->removeIndexes( pil );
@@ -285,7 +313,9 @@ void
 PlayableProxyModel::setMaxVisibleItems( int items )
 {
     if ( m_maxVisibleItems == items )
+    {
         return;
+    }
 
     m_maxVisibleItems = items;
     invalidateFilter();
@@ -343,8 +373,8 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
     // This makes it a stable sorter and prevents items from randomly jumping about.
     if ( id1 == id2 )
     {
-        id1 = (qint64)&q1;
-        id2 = (qint64)&q2;
+        id1 = ( qint64 )&q1;
+        id2 = ( qint64 )&q2;
     }
 
     if ( column == PlayableModel::Artist ) // sort by artist
@@ -356,7 +386,9 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
                 if ( discnumber1 == discnumber2 )
                 {
                     if ( albumpos1 == albumpos2 )
+                    {
                         return id1 < id2;
+                    }
 
                     return albumpos1 < albumpos2;
                 }
@@ -378,7 +410,9 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
                 if ( discnumber1 == discnumber2 )
                 {
                     if ( albumpos1 == albumpos2 )
+                    {
                         return id1 < id2;
+                    }
 
                     return albumpos1 < albumpos2;
                 }
@@ -398,7 +432,9 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
             if ( discnumber1 == discnumber2 )
             {
                 if ( albumpos1 == albumpos2 )
+                {
                     return id1 < id2;
+                }
 
                 return albumpos1 < albumpos2;
             }
@@ -411,49 +447,63 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
     else if ( column == PlayableModel::Bitrate ) // sort by bitrate
     {
         if ( bitrate1 == bitrate2 )
+        {
             return id1 < id2;
+        }
 
         return bitrate1 < bitrate2;
     }
     else if ( column == PlayableModel::Duration ) // sort by duration
     {
         if ( duration1 == duration2 )
+        {
             return id1 < id2;
+        }
 
         return duration1 < duration2;
     }
     else if ( column == PlayableModel::Age ) // sort by mtime
     {
         if ( mtime1 == mtime2 )
+        {
             return id1 < id2;
+        }
 
         return mtime1 < mtime2;
     }
     else if ( column == PlayableModel::Year ) // sort by release year
     {
         if ( year1 == year2 )
+        {
             return id1 < id2;
+        }
 
         return year1 < year2;
     }
     else if ( column == PlayableModel::Filesize ) // sort by file size
     {
         if ( size1 == size2 )
+        {
             return id1 < id2;
+        }
 
         return size1 < size2;
     }
     else if ( column == PlayableModel::Score ) // sort by file score
     {
         if ( score1 == score2 )
+        {
             return id1 < id2;
+        }
 
         return score1 < score2;
     }
     else if ( column == PlayableModel::Origin ) // sort by file origin
     {
         if ( origin1 == origin2 )
+        {
             return id1 < id2;
+        }
 
         return origin1 < origin2;
     }
@@ -466,14 +516,18 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
         else
         {
             if ( albumpos1 != albumpos2 )
+            {
                 return albumpos1 < albumpos2;
+            }
         }
     }
 
     const QString& lefts = t1->track();
     const QString& rights = t2->track();
     if ( lefts == rights )
+    {
         return id1 < id2;
+    }
 
     return QString::localeAwareCompare( lefts, rights ) < 0;
 }
@@ -486,9 +540,13 @@ PlayableProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right 
     PlayableItem* p2 = itemFromIndex( right );
 
     if ( !p1 )
+    {
         return true;
+    }
     if ( !p2 )
+    {
         return false;
+    }
 
     if ( p1->query() && p2->query() )
     {
@@ -527,18 +585,26 @@ QVariant
 PlayableProxyModel::data( const QModelIndex& index, int role ) const
 {
     if ( role == StyleRole )
+    {
         return m_style;
+    }
 
     if ( !sourceModel() )
+    {
         return QVariant();
+    }
     if ( !m_headerStyle.contains( m_style ) )
+    {
         return QVariant();
+    }
     if ( index.column() < 0 || index.column() >= m_headerStyle[ m_style ].count() )
+    {
         return QVariant();
+    }
 
     PlayableModel::Columns col = m_headerStyle[ m_style ].at( index.column() );
     QModelIndex sourceIdx = mapToSource( index );
-    QModelIndex idx = sourceModel()->index( sourceIdx.row(), (int)col, sourceIdx.parent() );
+    QModelIndex idx = sourceModel()->index( sourceIdx.row(), ( int )col, sourceIdx.parent() );
 
     return idx.data( role );
 }
@@ -548,17 +614,23 @@ QVariant
 PlayableProxyModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     if ( !sourceModel() )
+    {
         return QVariant();
+    }
     if ( !m_headerStyle.contains( m_style ) )
+    {
         return QVariant();
+    }
 
     if ( section < m_headerStyle[ m_style ].count() )
     {
         PlayableModel::Columns col = m_headerStyle[ m_style ].at( section );
-        return sourceModel()->headerData( (int)col, orientation, role );
+        return sourceModel()->headerData( ( int )col, orientation, role );
     }
     else
+    {
         return sourceModel()->headerData( 255, orientation, role );
+    }
 }
 
 
@@ -592,11 +664,15 @@ void
 PlayableProxyModel::updateDetailedInfo( const QModelIndex& index )
 {
     if ( style() != PlayableProxyModel::Short && style() != PlayableProxyModel::Large )
+    {
         return;
+    }
 
     PlayableItem* item = itemFromIndex( mapToSource( index ) );
     if ( item->query().isNull() )
+    {
         return;
+    }
 
     if ( style() == PlayableProxyModel::Short || style() == PlayableProxyModel::Large )
     {

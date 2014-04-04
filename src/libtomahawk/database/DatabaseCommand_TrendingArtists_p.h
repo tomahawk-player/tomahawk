@@ -28,7 +28,7 @@ namespace Tomahawk
 
 class DatabaseCommand_TrendingArtistsPrivate: DatabaseCommandPrivate
 {
-public:
+  public:
     DatabaseCommand_TrendingArtistsPrivate( DatabaseCommand_TrendingArtists* q )
         : DatabaseCommandPrivate( q )
         , amount( 0 )
@@ -37,7 +37,7 @@ public:
 
     Q_DECLARE_PUBLIC( DatabaseCommand_TrendingArtists )
 
-private:
+  private:
     uint amount;
 };
 

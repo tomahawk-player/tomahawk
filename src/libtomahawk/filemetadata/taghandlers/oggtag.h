@@ -27,15 +27,24 @@ namespace Tomahawk
 
 class DLLEXPORT OggTag : public Tag
 {
-public:
-    OggTag( TagLib::Tag *, TagLib::Ogg::XiphComment * );
+  public:
+    OggTag( TagLib::Tag*, TagLib::Ogg::XiphComment* );
 
-    virtual QString albumArtist() const { return m_albumArtist; }
-    virtual QString composer() const { return m_composer; }
-    virtual unsigned int discNumber() const { return m_discNumber; }
+    virtual QString albumArtist() const
+    {
+        return m_albumArtist;
+    }
+    virtual QString composer() const
+    {
+        return m_composer;
+    }
+    virtual unsigned int discNumber() const
+    {
+        return m_discNumber;
+    }
 
-private:
-    TagLib::Ogg::XiphComment *m_xiphComment;
+  private:
+    TagLib::Ogg::XiphComment* m_xiphComment;
 };
 
 }

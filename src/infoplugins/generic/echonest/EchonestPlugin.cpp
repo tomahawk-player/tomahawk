@@ -83,25 +83,27 @@ EchonestPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 
 
 void
-EchonestPlugin::getSongProfile( const Tomahawk::InfoSystem::InfoRequestData &requestData, const QString &item )
+EchonestPlugin::getSongProfile( const Tomahawk::InfoSystem::InfoRequestData& requestData, const QString& item )
 {
     //WARNING: Totally not implemented yet
     Q_UNUSED( item );
 
     if( !isValidTrackData( requestData ) )
+    {
         return;
+    }
 
-//     Track track( input.toString() );
-//     Artist artist( customData.input()->property("artistName").toString() );
-//     reply->setProperty("artist", QVariant::fromValue<Artist>(artist));
-//     reply->setProperty( "input", input );
-//     m_replyMap[reply] = customData;
-//     connect(reply, SIGNAL(finished()), SLOT(getArtistBiographySlot()));
+    //     Track track( input.toString() );
+    //     Artist artist( customData.input()->property("artistName").toString() );
+    //     reply->setProperty("artist", QVariant::fromValue<Artist>(artist));
+    //     reply->setProperty( "input", input );
+    //     m_replyMap[reply] = customData;
+    //     connect(reply, SIGNAL(finished()), SLOT(getArtistBiographySlot()));
 }
 
 
 void
-EchonestPlugin::getArtistBiography( const Tomahawk::InfoSystem::InfoRequestData &requestData )
+EchonestPlugin::getArtistBiography( const Tomahawk::InfoSystem::InfoRequestData& requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
@@ -114,7 +116,7 @@ EchonestPlugin::getArtistBiography( const Tomahawk::InfoSystem::InfoRequestData 
     }
 
     Echonest::Artist artist( hash["artist"] );
-    QNetworkReply *reply = artist.fetchBiographies();
+    QNetworkReply* reply = artist.fetchBiographies();
     reply->setProperty( "artist", QVariant::fromValue< Echonest::Artist >( artist ) );
     reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
     connect( reply, SIGNAL( finished() ), SLOT( getArtistBiographySlot() ) );
@@ -122,10 +124,12 @@ EchonestPlugin::getArtistBiography( const Tomahawk::InfoSystem::InfoRequestData 
 
 
 void
-EchonestPlugin::getArtistFamiliarity( const Tomahawk::InfoSystem::InfoRequestData &requestData )
+EchonestPlugin::getArtistFamiliarity( const Tomahawk::InfoSystem::InfoRequestData& requestData )
 {
     if( !isValidArtistData( requestData ) )
+    {
         return;
+    }
 
     qDebug() << "Fetching artist familiarity!" << requestData.input;
     Echonest::Artist artist( requestData.input.toString() );
@@ -137,10 +141,12 @@ EchonestPlugin::getArtistFamiliarity( const Tomahawk::InfoSystem::InfoRequestDat
 
 
 void
-EchonestPlugin::getArtistHotttnesss( const Tomahawk::InfoSystem::InfoRequestData &requestData )
+EchonestPlugin::getArtistHotttnesss( const Tomahawk::InfoSystem::InfoRequestData& requestData )
 {
     if( !isValidArtistData( requestData ) )
+    {
         return;
+    }
 
     Echonest::Artist artist( requestData.input.toString() );
     QNetworkReply* reply = artist.fetchHotttnesss();
@@ -151,10 +157,12 @@ EchonestPlugin::getArtistHotttnesss( const Tomahawk::InfoSystem::InfoRequestData
 
 
 void
-EchonestPlugin::getArtistTerms( const Tomahawk::InfoSystem::InfoRequestData &requestData )
+EchonestPlugin::getArtistTerms( const Tomahawk::InfoSystem::InfoRequestData& requestData )
 {
     if( !isValidArtistData( requestData ) )
+    {
         return;
+    }
 
     Echonest::Artist artist( requestData.input.toString() );
     QNetworkReply* reply = artist.fetchTerms( Echonest::Artist::Weight );
@@ -165,7 +173,7 @@ EchonestPlugin::getArtistTerms( const Tomahawk::InfoSystem::InfoRequestData &req
 
 
 void
-EchonestPlugin::getMiscTopTerms( const Tomahawk::InfoSystem::InfoRequestData &requestData )
+EchonestPlugin::getMiscTopTerms( const Tomahawk::InfoSystem::InfoRequestData& requestData )
 {
     QNetworkReply* reply = Echonest::Artist::topTerms( 20 );
     reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
@@ -180,7 +188,7 @@ EchonestPlugin::getArtistBiographySlot()
     Echonest::Artist artist = artistFromReply( reply );
     Echonest::BiographyList biographies = artist.biographies();
     QVariantMap biographyMap;
-    Q_FOREACH( const Echonest::Biography& biography, biographies )
+    Q_FOREACH( const Echonest::Biography & biography, biographies )
     {
         QVariantHash siteData;
         siteData[ "site" ] = biography.site();
@@ -227,7 +235,8 @@ EchonestPlugin::getArtistTermsSlot()
     Echonest::Artist artist = artistFromReply( reply );
     Echonest::TermList terms = artist.terms();
     QVariantMap termsMap;
-    Q_FOREACH( const Echonest::Term& term, terms ) {
+    Q_FOREACH( const Echonest::Term & term, terms )
+    {
         QVariantHash termHash;
         termHash[ "weight" ] = QString::number( term.weight() );
         termHash[ "frequency" ] = QString::number( term.frequency() );
@@ -245,7 +254,8 @@ EchonestPlugin::getMiscTopSlot()
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
     Echonest::TermList terms = Echonest::Artist::parseTopTerms( reply );
     QVariantMap termsMap;
-    Q_FOREACH( const Echonest::Term& term, terms ) {
+    Q_FOREACH( const Echonest::Term & term, terms )
+    {
         QVariantHash termHash;
         termHash[ "weight" ] = QString::number( term.weight() );
         termHash[ "frequency" ] = QString::number( term.frequency() );
@@ -258,7 +268,7 @@ EchonestPlugin::getMiscTopSlot()
 
 
 bool
-EchonestPlugin::isValidArtistData( const Tomahawk::InfoSystem::InfoRequestData &requestData )
+EchonestPlugin::isValidArtistData( const Tomahawk::InfoSystem::InfoRequestData& requestData )
 {
     if ( requestData.input.isNull() || !requestData.input.isValid() || !requestData.input.canConvert< QString >() )
     {
@@ -276,7 +286,7 @@ EchonestPlugin::isValidArtistData( const Tomahawk::InfoSystem::InfoRequestData &
 
 
 bool
-EchonestPlugin::isValidTrackData( const Tomahawk::InfoSystem::InfoRequestData &requestData )
+EchonestPlugin::isValidTrackData( const Tomahawk::InfoSystem::InfoRequestData& requestData )
 {
     if ( requestData.input.isNull() || !requestData.input.isValid() || !requestData.input.canConvert< QString >() )
     {
@@ -301,10 +311,13 @@ EchonestPlugin::isValidTrackData( const Tomahawk::InfoSystem::InfoRequestData &r
 Echonest::Artist
 EchonestPlugin::artistFromReply( QNetworkReply* reply )
 {
-    Echonest::Artist artist = reply->property("artist").value<Echonest::Artist>();
-    try {
+    Echonest::Artist artist = reply->property( "artist" ).value<Echonest::Artist>();
+    try
+    {
         artist.parseProfile( reply );
-    } catch( const Echonest::ParseError& e ) {
+    }
+    catch( const Echonest::ParseError& e )
+    {
         qWarning() << "Caught parser error from echonest!" << e.what();
     }
     return artist;

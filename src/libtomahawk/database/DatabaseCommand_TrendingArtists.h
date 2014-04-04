@@ -23,28 +23,35 @@
 #include "Artist.h"
 #include "DatabaseCommand.h"
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
 class DatabaseCommand_TrendingArtistsPrivate;
 
 class DLLEXPORT DatabaseCommand_TrendingArtists : public Tomahawk::DatabaseCommand
 {
     Q_OBJECT
-public:
+  public:
     explicit DatabaseCommand_TrendingArtists( QObject* parent = 0 );
     virtual ~DatabaseCommand_TrendingArtists();
 
     virtual void exec( DatabaseImpl* );
 
-    virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "trendingartists"; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
+    virtual QString commandname() const
+    {
+        return "trendingartists";
+    }
 
     void setLimit( unsigned int amount );
 
-signals:
+  signals:
     void done( const QList<QPair< double, Tomahawk::artist_ptr > >& artists );
 
-private:
+  private:
     Q_DECLARE_PRIVATE( DatabaseCommand_TrendingArtists )
 
 };

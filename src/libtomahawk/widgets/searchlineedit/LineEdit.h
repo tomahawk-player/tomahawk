@@ -48,42 +48,43 @@ class SideWidget;
 class DLLEXPORT LineEdit : public QLineEdit
 {
     Q_OBJECT
-    Q_PROPERTY(QString inactiveText READ inactiveText WRITE setInactiveText)
+    Q_PROPERTY( QString inactiveText READ inactiveText WRITE setInactiveText )
 
-public:
-    enum WidgetPosition {
+  public:
+    enum WidgetPosition
+    {
         LeftSide,
         RightSide
     };
 
-    LineEdit(QWidget *parent = 0);
-    LineEdit(const QString &contents, QWidget *parent = 0);
+    LineEdit( QWidget* parent = 0 );
+    LineEdit( const QString& contents, QWidget* parent = 0 );
 
-    void addWidget(QWidget *widget, WidgetPosition position);
-    void removeWidget(QWidget *widget);
-    void setWidgetSpacing(int spacing);
+    void addWidget( QWidget* widget, WidgetPosition position );
+    void removeWidget( QWidget* widget );
+    void setWidgetSpacing( int spacing );
     int widgetSpacing() const;
-    int textMargin(WidgetPosition position) const;
+    int textMargin( WidgetPosition position ) const;
     QString inactiveText() const;
-    void setInactiveText(const QString &text);
+    void setInactiveText( const QString& text );
 
-    void paintEvent(QPaintEvent *event);
+    void paintEvent( QPaintEvent* event );
 
-protected:
-    void resizeEvent(QResizeEvent *event);
-    bool event(QEvent *event);
+  protected:
+    void resizeEvent( QResizeEvent* event );
+    bool event( QEvent* event );
 
-protected slots:
+  protected slots:
     void updateTextMargins();
 
-private:
+  private:
     void init();
     void updateSideWidgetLocations();
 
-    SideWidget *m_leftWidget;
-    SideWidget *m_rightWidget;
-    QHBoxLayout *m_leftLayout;
-    QHBoxLayout *m_rightLayout;
+    SideWidget* m_leftWidget;
+    SideWidget* m_rightWidget;
+    QHBoxLayout* m_leftLayout;
+    QHBoxLayout* m_rightLayout;
     QString m_inactiveText;
 };
 

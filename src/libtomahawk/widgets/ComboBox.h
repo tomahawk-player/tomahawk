@@ -30,15 +30,15 @@
  */
 class DLLEXPORT ComboBox : public QComboBox
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     ComboBox( QWidget* parent = 0 );
     virtual ~ComboBox();
 
     virtual QSize sizeHint() const;
 
-protected:
+  protected:
     virtual void paintEvent( QPaintEvent* );
 };
 

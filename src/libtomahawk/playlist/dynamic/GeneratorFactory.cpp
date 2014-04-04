@@ -31,10 +31,14 @@ geninterface_ptr
 GeneratorFactory::create ( const QString& type )
 {
     if( type.isEmpty() && !s_factories.isEmpty() ) // default, return first
+    {
         return geninterface_ptr( s_factories.begin().value()->create() );
+    }
 
     if( !s_factories.contains( type ) )
+    {
         return geninterface_ptr();
+    }
 
     return geninterface_ptr( s_factories.value( type )->create() );
 }
@@ -44,7 +48,9 @@ dyncontrol_ptr
 GeneratorFactory::createControl( const QString& generatorType, const QString& controlType )
 {
     if( generatorType.isEmpty() || !s_factories.contains( generatorType ) )
+    {
         return dyncontrol_ptr();
+    }
 
     return s_factories.value( generatorType )->createControl( controlType );
 }
@@ -68,7 +74,9 @@ QStringList
 GeneratorFactory::typeSelectors( const QString& type )
 {
     if( !s_factories.contains( type ) )
+    {
         return QStringList();
+    }
 
     return s_factories.value( type )->typeSelectors();
 }

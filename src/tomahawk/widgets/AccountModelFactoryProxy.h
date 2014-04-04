@@ -28,17 +28,17 @@
 class AccountModelFactoryProxy : public QSortFilterProxyModel
 {
     Q_OBJECT
-public:
+  public:
     explicit AccountModelFactoryProxy( QObject* parent = 0 );
-    
+
     void setFilterEnabled( bool enabled );
 
     void setFilterRowType( Tomahawk::Accounts::AccountModel::RowType rowType );
 
-protected:
+  protected:
     virtual bool filterAcceptsRow ( int sourceRow, const QModelIndex& sourceParent ) const;
 
-private:
+  private:
     bool m_filterEnabled;
     Tomahawk::Accounts::AccountModel::RowType m_filterRowType;
 };

@@ -16,9 +16,9 @@
 
 class AudioEnginePrivate : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     AudioEnginePrivate( AudioEngine* q )
         : q_ptr ( q )
     {
@@ -27,11 +27,11 @@ public:
     Q_DECLARE_PUBLIC ( AudioEngine )
 
 
-public slots:
+  public slots:
     void onStateChanged( Phonon::State newState, Phonon::State oldState );
     void onAudioDataArrived( QMap< Phonon::AudioDataOutput::Channel, QVector< qint16 > > data );
 
-private:
+  private:
     QSharedPointer<QIODevice> input;
 
     Tomahawk::query_ptr stopAfterTrack;

@@ -57,7 +57,9 @@ void DatabaseCommand_LoadInboxEntries::exec( DatabaseImpl* dbi )
 
         Tomahawk::query_ptr query = Tomahawk::Query::get( artist, track, QString() );
         if ( query.isNull() )
+        {
             continue;
+        }
 
         int sourceId = sqlQuery.value( 2 ).toInt();
         bool unlistened = sqlQuery.value( 3 ).toBool();

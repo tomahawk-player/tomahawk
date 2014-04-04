@@ -25,7 +25,7 @@
 
 class ConnectionManagerPrivate
 {
-public:
+  public:
     ConnectionManagerPrivate( ConnectionManager* q, const QString& _nodeid )
         : q_ptr ( q )
         , nodeid( _nodeid )
@@ -34,7 +34,7 @@ public:
     ConnectionManager* q_ptr;
     Q_DECLARE_PUBLIC ( ConnectionManager )
 
-private:
+  private:
     // We just keep this for debug purposes and only during connection attempts.
     Tomahawk::peerinfo_ptr currentPeerInfo;
     QString nodeid;

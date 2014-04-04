@@ -67,7 +67,9 @@ GoogleWrapperSip::showAddFriendDialog()
     QString id = QInputDialog::getText( TomahawkUtils::tomahawkWindow(), tr( "Add Friend" ),
                                         tr( "Enter Google Address:" ), QLineEdit::Normal, "", &ok );
     if ( !ok )
+    {
         return;
+    }
 
     qDebug() << "Attempting to add google contact to roster:" << id;
     addContact( id, SendInvite );
@@ -111,7 +113,9 @@ GoogleWrapper::sipPlugin( bool create )
     if ( m_xmppSipPlugin.isNull() )
     {
         if ( !create )
+        {
             return 0;
+        }
 
         m_xmppSipPlugin = QPointer< XmppSipPlugin >( new GoogleWrapperSip( const_cast< GoogleWrapper* >( this ) ) );
 

@@ -40,13 +40,19 @@ namespace Accounts
 
 class CredentialsStorageKey
 {
-public:
-    explicit CredentialsStorageKey( const QString &service, const QString &key );
+  public:
+    explicit CredentialsStorageKey( const QString& service, const QString& key );
     bool operator ==( const CredentialsStorageKey& other ) const;
     bool operator !=( const CredentialsStorageKey& other ) const;
-    QString service() const { return m_service; }
-    QString key() const { return m_key; }
-private:
+    QString service() const
+    {
+        return m_service;
+    }
+    QString key() const
+    {
+        return m_key;
+    }
+  private:
     QString m_service;
     QString m_key;
 };
@@ -60,9 +66,9 @@ private:
 class DLLEXPORT CredentialsManager : public QObject
 {
     Q_OBJECT
-public:
+  public:
     explicit CredentialsManager( QObject* parent = 0 );
-    
+
     void addService( const QString& service, const QStringList& accountIds );
 
     QStringList keys( const QString& service ) const;
@@ -72,19 +78,19 @@ public:
     void setCredentials( const QString& serviceName, const QString& key, const QVariantHash& value );
     void setCredentials( const QString& serviceName, const QString& key, const QString& value );
 
-signals:
+  signals:
     void serviceReady( const QString& service );
 
-private slots:
+  private slots:
     void loadCredentials( const QString& service );
 
     void keychainJobFinished( QKeychain::Job* );
 
-protected:
+  protected:
     QVariant credentials( const CredentialsStorageKey& key ) const;
     void setCredentials( const CredentialsStorageKey& key, const QVariant& value, bool tryToWriteAsString = false );
 
-private:
+  private:
     QHash< QString, QStringList > m_services;
     QHash< CredentialsStorageKey, QVariant > m_credentials;
     QHash< QString, QList< QKeychain::ReadPasswordJob* > > m_readJobs;

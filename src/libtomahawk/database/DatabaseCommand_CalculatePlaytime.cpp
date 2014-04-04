@@ -22,13 +22,14 @@
 #include "Source.h"
 #include "Track.h"
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
 DatabaseCommand_CalculatePlaytime::DatabaseCommand_CalculatePlaytime( const playlist_ptr& playlist, QDateTime from, QDateTime to, QObject* parent )
     : DatabaseCommand( parent, new DatabaseCommand_CalculatePlaytimePrivate( this , from, to ) )
 {
     Q_D( DatabaseCommand_CalculatePlaytime );
-    foreach( const plentry_ptr& entry, playlist->entries() )
+    foreach( const plentry_ptr & entry, playlist->entries() )
     {
         d->trackIds.append( QString::number( entry->query()->track()->trackId() ) );
     }
@@ -55,14 +56,14 @@ DatabaseCommand_CalculatePlaytime::DatabaseCommand_CalculatePlaytime( const QLis
     : DatabaseCommand( parent, new DatabaseCommand_CalculatePlaytimePrivate( this , from, to ) )
 {
     Q_D( DatabaseCommand_CalculatePlaytime );
-    foreach ( const track_ptr& track, tracks )
+    foreach ( const track_ptr & track, tracks )
     {
         d->trackIds.append( QString::number( track->trackId() ) );
     }
 }
 
 
-DatabaseCommand_CalculatePlaytime::DatabaseCommand_CalculatePlaytime( const query_ptr& query, QDateTime from, QDateTime to, QObject* parent)
+DatabaseCommand_CalculatePlaytime::DatabaseCommand_CalculatePlaytime( const query_ptr& query, QDateTime from, QDateTime to, QObject* parent )
     : DatabaseCommand( parent, new DatabaseCommand_CalculatePlaytimePrivate( this , from, to ) )
 {
     Q_D( DatabaseCommand_CalculatePlaytime );
@@ -70,11 +71,11 @@ DatabaseCommand_CalculatePlaytime::DatabaseCommand_CalculatePlaytime( const quer
 }
 
 
-DatabaseCommand_CalculatePlaytime::DatabaseCommand_CalculatePlaytime( const QList<query_ptr>& queries, QDateTime from, QDateTime to, QObject* parent)
+DatabaseCommand_CalculatePlaytime::DatabaseCommand_CalculatePlaytime( const QList<query_ptr>& queries, QDateTime from, QDateTime to, QObject* parent )
     : DatabaseCommand( parent, new DatabaseCommand_CalculatePlaytimePrivate( this , from, to ) )
 {
     Q_D( DatabaseCommand_CalculatePlaytime );
-    foreach ( const query_ptr& query, queries )
+    foreach ( const query_ptr & query, queries )
     {
         d->trackIds.append( QString::number( query->track()->trackId() ) );
     }
@@ -86,7 +87,7 @@ DatabaseCommand_CalculatePlaytime::~DatabaseCommand_CalculatePlaytime()
 }
 
 void
-DatabaseCommand_CalculatePlaytime::exec( DatabaseImpl *dbi )
+DatabaseCommand_CalculatePlaytime::exec( DatabaseImpl* dbi )
 {
     Q_D( DatabaseCommand_CalculatePlaytime );
 
@@ -95,10 +96,10 @@ DatabaseCommand_CalculatePlaytime::exec( DatabaseImpl *dbi )
     if ( d->plEntryIds.isEmpty() )
     {
         sql = QString(
-                    " SELECT SUM(pl.secs_played) "
-                    " FROM playback_log pl "
-                    " WHERE track in ( %1 ) AND playtime >= %2 AND playtime <= %3 "
-                    ).arg( d->trackIds.join(", ") ).arg( d->from.toTime_t() ).arg( d->to.toTime_t() );
+                  " SELECT SUM(pl.secs_played) "
+                  " FROM playback_log pl "
+                  " WHERE track in ( %1 ) AND playtime >= %2 AND playtime <= %3 "
+              ).arg( d->trackIds.join( ", " ) ).arg( d->from.toTime_t() ).arg( d->to.toTime_t() );
     }
     else
     {
@@ -109,17 +110,17 @@ DatabaseCommand_CalculatePlaytime::exec( DatabaseImpl *dbi )
             iter.setValue( QString( "'%1'" ).arg( iter.next() ) );
         }
         sql = QString(
-                    " SELECT SUM(pl.secs_played) "
-                    " FROM playlist_item pi "
-                    " JOIN track t ON pi.trackname = t.name "
-                    " JOIN artist a ON a.name = pi.artistname AND t.artist = a.id "
-                    " JOIN playback_log pl ON pl.track = t.id "
-                    " WHERE pi.guid IN (%1) "
-                    " AND pl.playtime >= %2 AND pl.playtime <= %3 "
-                    )
-                .arg( d->plEntryIds.join(", ") )
-                .arg( d->from.toTime_t() )
-                .arg( d->to.toTime_t() );
+                  " SELECT SUM(pl.secs_played) "
+                  " FROM playlist_item pi "
+                  " JOIN track t ON pi.trackname = t.name "
+                  " JOIN artist a ON a.name = pi.artistname AND t.artist = a.id "
+                  " JOIN playback_log pl ON pl.track = t.id "
+                  " WHERE pi.guid IN (%1) "
+                  " AND pl.playtime >= %2 AND pl.playtime <= %3 "
+              )
+              .arg( d->plEntryIds.join( ", " ) )
+              .arg( d->from.toTime_t() )
+              .arg( d->to.toTime_t() );
 
     }
 

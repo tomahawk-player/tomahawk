@@ -30,13 +30,14 @@
 
 class PlayableProxyModel;
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
 class DLLEXPORT PlayableProxyModelPlaylistInterface : public Tomahawk::PlaylistInterface
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit PlayableProxyModelPlaylistInterface( PlayableProxyModel* proxyModel );
     virtual ~PlayableProxyModelPlaylistInterface();
 
@@ -55,17 +56,31 @@ public:
 
     virtual QString filter() const;
 
-    virtual PlaylistModes::RepeatMode repeatMode() const { return m_repeatMode; }
-    virtual bool shuffled() const { return m_shuffled; }
+    virtual PlaylistModes::RepeatMode repeatMode() const
+    {
+        return m_repeatMode;
+    }
+    virtual bool shuffled() const
+    {
+        return m_shuffled;
+    }
 
-public slots:
-    virtual void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode ) { m_repeatMode = mode; emit repeatModeChanged( mode ); }
-    virtual void setShuffled( bool enabled ) { m_shuffled = enabled; emit shuffleModeChanged( enabled ); }
+  public slots:
+    virtual void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode )
+    {
+        m_repeatMode = mode;
+        emit repeatModeChanged( mode );
+    }
+    virtual void setShuffled( bool enabled )
+    {
+        m_shuffled = enabled;
+        emit shuffleModeChanged( enabled );
+    }
 
-private slots:
+  private slots:
     void onCurrentIndexChanged();
 
-protected:
+  protected:
     QPointer< PlayableProxyModel > m_proxyModel;
 
     PlaylistModes::RepeatMode m_repeatMode;

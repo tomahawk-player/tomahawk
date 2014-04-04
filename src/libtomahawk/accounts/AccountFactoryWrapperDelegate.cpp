@@ -42,13 +42,13 @@ AccountFactoryWrapperDelegate::AccountFactoryWrapperDelegate( QObject* parent )
 
 
 void
-AccountFactoryWrapperDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+AccountFactoryWrapperDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     QStyleOptionViewItemV4 opt = option;
     initStyleOption( &opt, index );
 
     const int center = opt.rect.height() / 2 + opt.rect.top();
-    const int topIcon = center - ICON_SIZE/2;
+    const int topIcon = center - ICON_SIZE / 2;
 
     // draw the background
     const QWidget* w = opt.widget;
@@ -59,7 +59,7 @@ AccountFactoryWrapperDelegate::paint(QPainter* painter, const QStyleOptionViewIt
     Q_ASSERT( acc );
 
     // Checkbox on left edge, then text
-    const QRect checkRect( PADDING/4, PADDING/4 + opt.rect.top(), opt.rect.height() - PADDING/4, opt.rect.height() - PADDING/4 );
+    const QRect checkRect( PADDING / 4, PADDING / 4 + opt.rect.top(), opt.rect.height() - PADDING / 4, opt.rect.height() - PADDING / 4 );
     m_cachedCheckRects[ index ] = checkRect;
     QStyleOptionViewItemV4 opt2 = opt;
     opt2.rect = checkRect;
@@ -74,7 +74,7 @@ AccountFactoryWrapperDelegate::paint(QPainter* painter, const QStyleOptionViewIt
     painter->drawPixmap( pmRect, TomahawkUtils::defaultPixmap( TomahawkUtils::ListRemove, TomahawkUtils::Original, pmRect.size() ) );
     m_cachedButtonRects[ index ] = pmRect;
 
-    const QRect confRect( pmRect.left() - PADDING - CONFIG_WRENCH_SIZE, center - CONFIG_WRENCH_SIZE/2, CONFIG_WRENCH_SIZE, CONFIG_WRENCH_SIZE );
+    const QRect confRect( pmRect.left() - PADDING - CONFIG_WRENCH_SIZE, center - CONFIG_WRENCH_SIZE / 2, CONFIG_WRENCH_SIZE, CONFIG_WRENCH_SIZE );
 
     QStyleOptionToolButton topt;
     topt.rect = confRect;
@@ -88,7 +88,9 @@ AccountFactoryWrapperDelegate::paint(QPainter* painter, const QStyleOptionViewIt
     bool pressed = ( m_configPressed == opt.index );
     topt.state = pressed ? QStyle::State_On : QStyle::State_Raised;
     if( opt.state & QStyle::State_MouseOver || pressed )
+    {
         topt.state |= QStyle::State_HasFocus;
+    }
     style->drawComplexControl( QStyle::CC_ToolButton, &topt, painter, w );
     m_cachedConfigRects[ index ] = confRect;
 
@@ -116,12 +118,12 @@ AccountFactoryWrapperDelegate::paint(QPainter* painter, const QStyleOptionViewIt
     painter->drawPixmap( connectIconRect, p );
 
     int width = painter->fontMetrics().width( statusText );
-    painter->drawText( QRect( connectIconRect.left() - PADDING - width, center - painter->fontMetrics().height()/2, width, painter->fontMetrics().height() ), statusText );
+    painter->drawText( QRect( connectIconRect.left() - PADDING - width, center - painter->fontMetrics().height() / 2, width, painter->fontMetrics().height() ), statusText );
 
 }
 
 QSize
-AccountFactoryWrapperDelegate::sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const
+AccountFactoryWrapperDelegate::sizeHint( const QStyleOptionViewItem&, const QModelIndex& ) const
 {
     return QSize( 200, ACCOUNT_ROW_HEIGHT );
 }
@@ -131,10 +133,12 @@ bool
 AccountFactoryWrapperDelegate::editorEvent( QEvent* event, QAbstractItemModel*, const QStyleOptionViewItem&, const QModelIndex& index )
 {
     if ( event->type() != QEvent::MouseButtonPress &&
-        event->type() != QEvent::MouseButtonRelease &&
-        event->type() != QEvent::MouseButtonDblClick &&
-        event->type() != QEvent::MouseMove )
+            event->type() != QEvent::MouseButtonRelease &&
+            event->type() != QEvent::MouseButtonDblClick &&
+            event->type() != QEvent::MouseMove )
+    {
         return false;
+    }
 
     if ( event->type() == QEvent::MouseButtonPress )
     {
@@ -150,11 +154,14 @@ AccountFactoryWrapperDelegate::editorEvent( QEvent* event, QAbstractItemModel*, 
 
             return true;
         }
-    } else if ( event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonDblClick )
+    }
+    else if ( event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonDblClick )
     {
         QMouseEvent* me = static_cast< QMouseEvent* >( event );
         if ( m_configPressed.isValid() )
+        {
             emit update( m_configPressed );
+        }
 
         m_configPressed = QModelIndex();
         Account* acct = qobject_cast< Account* >( index.data( AccountFactoryWrapper::AccountRole ).value< QObject* >() );
@@ -163,7 +170,8 @@ AccountFactoryWrapperDelegate::editorEvent( QEvent* event, QAbstractItemModel*, 
         {
             // Check box for this row
             // eat the double click events inside the check rect
-            if( event->type() == QEvent::MouseButtonDblClick ) {
+            if( event->type() == QEvent::MouseButtonDblClick )
+            {
                 return true;
             }
 

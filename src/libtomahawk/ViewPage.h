@@ -36,8 +36,9 @@ namespace Tomahawk
 
 class DLLEXPORT ViewPage
 {
-public:
-    enum DescriptionType {
+  public:
+    enum DescriptionType
+    {
         TextType = 0,
         ArtistType = 1,
         AlbumType = 2
@@ -51,19 +52,46 @@ public:
 
     virtual QString title() const = 0;
 
-    virtual DescriptionType descriptionType() { return TextType; }
+    virtual DescriptionType descriptionType()
+    {
+        return TextType;
+    }
     virtual QString description() const = 0;
-    virtual Tomahawk::artist_ptr descriptionArtist() const { return Tomahawk::artist_ptr(); }
-    virtual Tomahawk::album_ptr descriptionAlbum() const { return Tomahawk::album_ptr(); }
+    virtual Tomahawk::artist_ptr descriptionArtist() const
+    {
+        return Tomahawk::artist_ptr();
+    }
+    virtual Tomahawk::album_ptr descriptionAlbum() const
+    {
+        return Tomahawk::album_ptr();
+    }
 
-    virtual QString longDescription() const { return QString(); }
-    virtual QPixmap pixmap() const { return QPixmap( RESPATH "icons/tomahawk-icon-128x128.png" ); }
+    virtual QString longDescription() const
+    {
+        return QString();
+    }
+    virtual QPixmap pixmap() const
+    {
+        return QPixmap( RESPATH "icons/tomahawk-icon-128x128.png" );
+    }
 
-    virtual bool showInfoBar() const { return true; }
-    virtual bool showFilter() const { return false; }
-    virtual bool queueVisible() const { return true; }
+    virtual bool showInfoBar() const
+    {
+        return true;
+    }
+    virtual bool showFilter() const
+    {
+        return false;
+    }
+    virtual bool queueVisible() const
+    {
+        return true;
+    }
 
-    virtual QString filter() const { return m_filter; }
+    virtual QString filter() const
+    {
+        return m_filter;
+    }
     virtual bool setFilter( const QString& filter );
 
     virtual bool willAcceptDrag( const QMimeData* data ) const;
@@ -71,10 +99,19 @@ public:
 
     virtual bool jumpToCurrentTrack() = 0;
 
-    virtual bool isTemporaryPage() const { return false; }
-    virtual bool isBeingPlayed() const { return false; }
+    virtual bool isTemporaryPage() const
+    {
+        return false;
+    }
+    virtual bool isBeingPlayed() const
+    {
+        return false;
+    }
 
-    virtual QList<PlaylistUpdaterInterface*> updaters() const { return QList<PlaylistUpdaterInterface*>(); }
+    virtual QList<PlaylistUpdaterInterface*> updaters() const
+    {
+        return QList<PlaylistUpdaterInterface*>();
+    }
 
     /** subclasses implementing ViewPage can emit the following signals:
      * nameChanged( const QString& )
@@ -88,7 +125,7 @@ public:
      * See DynamicWidget for an example
      */
 
-private:
+  private:
     QString m_filter;
 };
 

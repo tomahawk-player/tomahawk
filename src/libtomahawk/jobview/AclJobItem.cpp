@@ -52,7 +52,9 @@ ACLJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 {
     ACLJobItem* item = dynamic_cast< ACLJobItem* >( index.data( JobStatusModel::JobDataRole ).value< JobStatusItem* >() );
     if ( !item )
+    {
         return;
+    }
     //tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     QStyleOptionViewItemV4 opt = option;
     initStyleOption( &opt, index );
@@ -67,13 +69,13 @@ ACLJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     QString mainText = QString( tr( "Allow %1 to\nconnect and stream from you?" ) ).arg( item->username() );
     //tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Displaying text:" << mainText;
 
-    const QRect rRect( opt.rect.left() + PADDING, opt.rect.top() + 4*PADDING, opt.rect.width() - 2*PADDING, opt.rect.height() - 2*PADDING );
+    const QRect rRect( opt.rect.left() + PADDING, opt.rect.top() + 4 * PADDING, opt.rect.width() - 2 * PADDING, opt.rect.height() - 2 * PADDING );
     painter->drawText( rRect, Qt::AlignHCenter, mainText );
 
     //tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Using rect " << rRect << ", opt rect is " << opt.rect;
 
     int totalwidth = opt.rect.width();
-    int thirds = totalwidth/3;
+    int thirds = totalwidth / 3;
     QRect allowBtnRect;
     QRect denyBtnRect;
     painter->setPen( Qt::white );
@@ -115,9 +117,13 @@ ACLJobDelegate::drawRoundedButton( QPainter* painter, const QRect& btnRect, bool
 {
     //FIXME const colors
     if ( !red )
+    {
         TomahawkUtils::drawRoundedButton( painter, btnRect, QColor( 54, 127, 211 ), QColor( 43, 104, 182 ), QColor( 34, 85, 159 ), QColor( 35, 79, 147 ) );
+    }
     else
+    {
         TomahawkUtils::drawRoundedButton( painter, btnRect, QColor( 206, 63, 63 ), QColor( 170, 52, 52 ), QColor( 150, 50, 50 ), QColor( 130, 40, 40 ) );
+    }
 }
 
 
@@ -128,10 +134,12 @@ ACLJobDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
     Q_UNUSED( model )
     //tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( event->type() != QEvent::MouseButtonPress &&
-         event->type() != QEvent::MouseButtonRelease &&
-         event->type() != QEvent::MouseButtonDblClick &&
-         event->type() != QEvent::MouseMove )
+            event->type() != QEvent::MouseButtonRelease &&
+            event->type() != QEvent::MouseButtonDblClick &&
+            event->type() != QEvent::MouseMove )
+    {
         return false;
+    }
 
     if ( event->type() == QEvent::MouseMove )
     {
@@ -146,9 +154,13 @@ ACLJobDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
     {
         QMouseEvent* me = static_cast< QMouseEvent* >( event );
         if ( m_savedAcceptRect.contains( me->pos() ) )
+        {
             emit aclResult( Tomahawk::ACLStatus::Stream );
+        }
         else if ( m_savedDenyRect.contains( me->pos() ) )
+        {
             emit aclResult( Tomahawk::ACLStatus::Deny );
+        }
         return true;
     }
 
@@ -157,7 +169,7 @@ ACLJobDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
 
 
 
-ACLJobItem::ACLJobItem( ACLRegistry::User user, const QString &username )
+ACLJobItem::ACLJobItem( ACLRegistry::User user, const QString& username )
     : m_delegate( 0 )
     , m_user( user )
     , m_username( username )
@@ -178,7 +190,9 @@ ACLJobItem::createDelegate( QObject* parent )
     tLog() << Q_FUNC_INFO;
 
     if ( m_delegate )
+    {
         return;
+    }
 
     m_delegate = new ACLJobDelegate( parent );
 

@@ -29,61 +29,75 @@ THE SOFTWARE.
 
 class QButtonPrivate : public QObject
 {
-public:
-    QButtonPrivate(QButton *button, QAbstractButton *abstractButton)
-        : QObject(button), abstractButton(abstractButton) {}
+  public:
+    QButtonPrivate( QButton* button, QAbstractButton* abstractButton )
+        : QObject( button ), abstractButton( abstractButton ) {}
     QPointer<QAbstractButton> abstractButton;
 };
 
-QButton::QButton(QWidget *parent, BezelStyle) : QWidget(parent)
+QButton::QButton( QWidget* parent, BezelStyle ) : QWidget( parent )
 {
-    QAbstractButton *button = 0;
-    if (qobject_cast<QToolBar*>(parent))
-        button = new QToolButton(this);
+    QAbstractButton* button = 0;
+    if ( qobject_cast<QToolBar*>( parent ) )
+    {
+        button = new QToolButton( this );
+    }
     else
-        button = new QPushButton(this);
-    connect(button, SIGNAL(clicked()),
-            this, SIGNAL(clicked()));
-    pimpl = new QButtonPrivate(this, button);
+    {
+        button = new QPushButton( this );
+    }
+    connect( button, SIGNAL( clicked() ),
+             this, SIGNAL( clicked() ) );
+    pimpl = new QButtonPrivate( this, button );
 
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setMargin(0);
-    layout->addWidget(button);
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    layout->setMargin( 0 );
+    layout->addWidget( button );
 }
 
-void QButton::setText(const QString &text)
+void QButton::setText( const QString& text )
 {
-    Q_ASSERT(pimpl);
-    if (pimpl)
-        pimpl->abstractButton->setText(text);
+    Q_ASSERT( pimpl );
+    if ( pimpl )
+    {
+        pimpl->abstractButton->setText( text );
+    }
 }
 
-void QButton::setImage(const QPixmap &image)
+void QButton::setImage( const QPixmap& image )
 {
-    Q_ASSERT(pimpl);
-    if (pimpl)
-        pimpl->abstractButton->setIcon(image);
+    Q_ASSERT( pimpl );
+    if ( pimpl )
+    {
+        pimpl->abstractButton->setIcon( image );
+    }
 }
 
-void QButton::setChecked(bool checked)
+void QButton::setChecked( bool checked )
 {
-    Q_ASSERT(pimpl);
-    if (pimpl)
-        pimpl->abstractButton->setChecked(checked);
+    Q_ASSERT( pimpl );
+    if ( pimpl )
+    {
+        pimpl->abstractButton->setChecked( checked );
+    }
 }
 
-void QButton::setCheckable(bool checkable)
+void QButton::setCheckable( bool checkable )
 {
-    Q_ASSERT(pimpl);
-    if (pimpl)
-        pimpl->abstractButton->setCheckable(checkable);
+    Q_ASSERT( pimpl );
+    if ( pimpl )
+    {
+        pimpl->abstractButton->setCheckable( checkable );
+    }
 }
 
 bool QButton::isChecked()
 {
-    Q_ASSERT(pimpl);
-    if (!pimpl)
+    Q_ASSERT( pimpl );
+    if ( !pimpl )
+    {
         return false;
+    }
 
     return pimpl->abstractButton->isChecked();
 }

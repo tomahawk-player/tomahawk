@@ -55,7 +55,7 @@ LocalConfigStorage::init()
     connect( cm, SIGNAL( serviceReady( QString ) ),
              this, SLOT( onCredentialsManagerReady( QString ) ) );
     AccountManager::instance()->credentialsManager()->addService( s_credentialsServiceName,
-                                                                  m_accountIds );
+            m_accountIds );
 
     tDebug() << Q_FUNC_INFO << "LOADING ALL CREDENTIALS FOR SERVICE" << s_credentialsServiceName << m_accountIds;
 }
@@ -72,7 +72,9 @@ void
 LocalConfigStorage::onCredentialsManagerReady( const QString& service )
 {
     if ( service != s_credentialsServiceName )
+    {
         return;
+    }
 
     //no need to listen for it any more
     disconnect( this, SLOT( onCredentialsManagerReady( QString ) ) );
@@ -98,7 +100,7 @@ LocalConfigStorage::priority() const
 
 
 void
-LocalConfigStorage::deduplicateFrom( const ConfigStorage* other)
+LocalConfigStorage::deduplicateFrom( const ConfigStorage* other )
 {
     Q_UNUSED( other )
     // I'm priority 0 so I don't have to deduplicate anything
@@ -123,7 +125,9 @@ LocalConfigStorage::save( const QString& accountId, const Account::Configuration
     c->setCredentials( s_credentialsServiceName, accountId, cfg.credentials );
 
     if ( !m_accountIds.contains( accountId ) )
+    {
         m_accountIds.append( accountId );
+    }
 }
 
 
@@ -143,7 +147,9 @@ LocalConfigStorage::load( const QString& accountId, Account::Configuration& cfg 
     CredentialsManager* c = AccountManager::instance()->credentialsManager();
     QVariant credentials = c->credentials( s_credentialsServiceName, accountId );
     if ( credentials.type() == QVariant::Hash )
+    {
         cfg.credentials = credentials.toHash();
+    }
 }
 
 

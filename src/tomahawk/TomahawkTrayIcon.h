@@ -30,16 +30,16 @@ class TomahawkTrayIcon : public QSystemTrayIcon
 {
     Q_OBJECT
 
-public:
+  public:
     TomahawkTrayIcon( QObject* parent );
     virtual bool event( QEvent* e );
 
     void setShowHideWindow( bool show = true );
 
-public slots:
+  public slots:
     void setResult( const Tomahawk::result_ptr& result );
 
-private slots:
+  private slots:
     void onAnimationTimer();
     void onActivated( QSystemTrayIcon::ActivationReason reason );
     void showWindow();
@@ -56,7 +56,7 @@ private slots:
 
     void menuAboutToShow();
 
-private:
+  private:
     void refreshToolTip();
     ~TomahawkTrayIcon();
 

@@ -25,7 +25,7 @@
 
 class PlaydarApiPrivate
 {
-public:
+  public:
     PlaydarApiPrivate( PlaydarApi* q )
         : q_ptr( q )
     {
@@ -34,7 +34,7 @@ public:
     PlaydarApi* q_ptr;
     Q_DECLARE_PUBLIC( PlaydarApi )
 
-private:
+  private:
     QScopedPointer< Api_v1 > instance;
     QScopedPointer< QxtHttpServerConnector > connector;
     QScopedPointer< QxtHttpSessionManager > session;

@@ -29,7 +29,7 @@
 
 class ControlConnectionPrivate
 {
-public:
+  public:
     ControlConnectionPrivate( ControlConnection* q )
         : q_ptr ( q )
         , dbsyncconn( 0 )
@@ -41,7 +41,7 @@ public:
     ControlConnection* q_ptr;
     Q_DECLARE_PUBLIC ( ControlConnection )
 
-private:
+  private:
 
     Tomahawk::source_ptr source;
     /**

@@ -52,7 +52,7 @@ HistoryItem::tempPageActivated( Tomahawk::ViewPage* v )
     {
         latest = children().last()->IDValue();
 
-        foreach ( TemporaryPageItem* page, m_tempItems )
+        foreach ( TemporaryPageItem * page, m_tempItems )
         {
             if ( page->page() == v )
             {
@@ -63,7 +63,7 @@ HistoryItem::tempPageActivated( Tomahawk::ViewPage* v )
     }
 
     // Only keep a certain amount of temporary pages at once
-    while ( MAX_HISTORY_ITEMS > 0 && m_tempItems.size() > (int)MAX_HISTORY_ITEMS - 1 )
+    while ( MAX_HISTORY_ITEMS > 0 && m_tempItems.size() > ( int )MAX_HISTORY_ITEMS - 1 )
     {
         TemporaryPageItem* item = m_tempItems.takeFirst();
         QTimer::singleShot( 0, item, SLOT( removeFromList() ) );

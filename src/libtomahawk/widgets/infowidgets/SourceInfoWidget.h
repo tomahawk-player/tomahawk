@@ -34,36 +34,51 @@ class RecentlyPlayedModel;
 
 namespace Ui
 {
-    class SourceInfoWidget;
+class SourceInfoWidget;
 }
 
 class DLLEXPORT SourceInfoWidget : public QWidget, public Tomahawk::ViewPage
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget* parent = 0 );
     ~SourceInfoWidget();
 
-    virtual QWidget* widget() { return this; }
-    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return Tomahawk::playlistinterface_ptr(); }
+    virtual QWidget* widget()
+    {
+        return this;
+    }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const
+    {
+        return Tomahawk::playlistinterface_ptr();
+    }
 
-    virtual QString title() const { return m_title; }
-    virtual QString description() const { return m_description; }
+    virtual QString title() const
+    {
+        return m_title;
+    }
+    virtual QString description() const
+    {
+        return m_description;
+    }
     virtual QPixmap pixmap() const;
 
-    virtual bool jumpToCurrentTrack() { return false; }
+    virtual bool jumpToCurrentTrack()
+    {
+        return false;
+    }
 
-protected:
+  protected:
     void changeEvent( QEvent* e );
 
-private slots:
+  private slots:
     void loadRecentAdditions();
 
     void onCollectionChanged();
 
-private:
-    Ui::SourceInfoWidget *ui;
+  private:
+    Ui::SourceInfoWidget* ui;
 
     RecentlyAddedModel* m_recentTracksModel;
     RecentlyPlayedModel* m_historyModel;

@@ -22,8 +22,8 @@
 #include "ViewManager.h"
 
 ScriptCollectionItem::ScriptCollectionItem( SourcesModel* model,
-                                            SourceTreeItem* parent,
-                                            const Tomahawk::collection_ptr& collection )
+        SourceTreeItem* parent,
+        const Tomahawk::collection_ptr& collection )
     : SourceTreeItem( model, parent, SourcesModel::ScriptCollection )
     , m_collection( collection )
     , m_page( 0 )
@@ -72,15 +72,21 @@ ScriptCollectionItem::isBeingPlayed() const
     if ( m_page )
     {
         if ( m_page->isBeingPlayed() )
+        {
             return true;
+        }
 
         if ( !m_page->playlistInterface().isNull() &&
-             m_page->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+                m_page->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+        {
             return true;
+        }
 
         if ( !m_page->playlistInterface().isNull() &&
-             m_page->playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
+                m_page->playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
+        {
             return true;
+        }
     }
     return false;
 }

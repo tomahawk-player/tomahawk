@@ -53,9 +53,9 @@ DynamicSetupWidget::DynamicSetupWidget( const Tomahawk::dynplaylist_ptr& playlis
     m_headerText = new QLabel( tr( "Type:" ), this );
     m_layout->addWidget( m_headerText );
 
-    QComboBox * genCombo = new QComboBox( this );
-    foreach( const QString& type, GeneratorFactory::types() )
-        genCombo->addItem( type );
+    QComboBox* genCombo = new QComboBox( this );
+    foreach( const QString & type, GeneratorFactory::types() )
+    genCombo->addItem( type );
     m_generatorCombo = new ReadOrWriteWidget( genCombo, m_playlist->author()->isLocal(), this );
     m_generatorCombo->setLabel( playlist->generator()->type().replace( 0, 1, playlist->generator()->type().at( 0 ).toUpper() ) );
 
@@ -68,27 +68,38 @@ DynamicSetupWidget::DynamicSetupWidget( const Tomahawk::dynplaylist_ptr& playlis
     m_generateButton->setAttribute( Qt::WA_LayoutUsesWidgetRect );
     connect( m_generateButton, SIGNAL( clicked( bool ) ), this, SLOT( generatePressed( bool ) ) );
     if( m_playlist->mode() == OnDemand )
+    {
         m_generateButton->hide();
+    }
     else
+    {
         m_layout->addWidget( m_generateButton );
+    }
 
     m_genNumber = new QSpinBox( this );
     m_genNumber->setValue( 15 );
     m_genNumber->setMinimum( 0 );
     if( m_playlist->mode() == OnDemand )
+    {
         m_genNumber->hide();
+    }
     else
+    {
         m_layout->addWidget( m_genNumber );
+    }
 
     if( m_playlist->mode() == Static )
+    {
         m_layout->addSpacing( 30 );
+    }
 
     m_logo = new QLabel( this );
-    if( !m_playlist->generator()->logo().isNull() ) {
+    if( !m_playlist->generator()->logo().isNull() )
+    {
         QPixmap p = m_playlist->generator()->logo().scaledToHeight( 22, Qt::SmoothTransformation );
         m_logo->setPixmap( p );
     }
-    m_layout->addWidget(m_logo);
+    m_layout->addWidget( m_logo );
 
     setLayout( m_layout );
 
@@ -146,7 +157,9 @@ DynamicSetupWidget::setOpacity( qreal opacity )
     m_opacity = opacity;
 
     if( m_opacity == 0 )
+    {
         hide();
+    }
     repaint();
 }
 

@@ -59,7 +59,9 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
     }
 
     if ( !m_collection.isNull() )
+    {
         sourceToken = QString( "AND file.source %1" ).arg( m_collection->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( m_collection->source()->id() ) );
+    }
 
     QString albumToken;
     if ( m_album )
@@ -70,31 +72,33 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
             albumToken = QString( "AND album.id IS NULL" );
         }
         else
+        {
             albumToken = QString( "AND album.id = %1" ).arg( m_album->id() );
+        }
     }
 
     QString sql = QString(
-            "SELECT file.id, artist.name, album.name, track.name, composer.name, file.size, "   //0
-                   "file.duration, file.bitrate, file.url, file.source, file.mtime, "           //6
-                   "file.mimetype, file_join.discnumber, file_join.albumpos, artist.id, "       //11
-                   "album.id, track.id, composer.id "                                           //15
-            "FROM file, artist, track, file_join "
-            "LEFT OUTER JOIN album "
-            "ON file_join.album = album.id "
-            "LEFT OUTER JOIN artist AS composer "
-            "ON file_join.composer = composer.id "
-            "WHERE file.id = file_join.file "
-            "AND file_join.artist = artist.id "
-            "AND file_join.track = track.id "
-            "%1 "
-            "%2 %3 "
-            "%4 %5 %6"
-            ).arg( sourceToken )
-             .arg( !m_artist ? QString() : QString( "AND artist.id = %1" ).arg( m_artist->id() ) )
-             .arg( !m_album ? QString() : albumToken )
-             .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( m_orderToken ) : QString() )
-             .arg( m_sortDescending ? "DESC" : QString() )
-             .arg( m_amount > 0 ? QString( "LIMIT 0, %1" ).arg( m_amount ) : QString() );
+                      "SELECT file.id, artist.name, album.name, track.name, composer.name, file.size, "   //0
+                      "file.duration, file.bitrate, file.url, file.source, file.mtime, "           //6
+                      "file.mimetype, file_join.discnumber, file_join.albumpos, artist.id, "       //11
+                      "album.id, track.id, composer.id "                                           //15
+                      "FROM file, artist, track, file_join "
+                      "LEFT OUTER JOIN album "
+                      "ON file_join.album = album.id "
+                      "LEFT OUTER JOIN artist AS composer "
+                      "ON file_join.composer = composer.id "
+                      "WHERE file.id = file_join.file "
+                      "AND file_join.artist = artist.id "
+                      "AND file_join.track = track.id "
+                      "%1 "
+                      "%2 %3 "
+                      "%4 %5 %6"
+                  ).arg( sourceToken )
+                  .arg( !m_artist ? QString() : QString( "AND artist.id = %1" ).arg( m_artist->id() ) )
+                  .arg( !m_album ? QString() : albumToken )
+                  .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( m_orderToken ) : QString() )
+                  .arg( m_sortDescending ? "DESC" : QString() )
+                  .arg( m_amount > 0 ? QString( "LIMIT 0, %1" ).arg( m_amount ) : QString() );
 
     query.prepare( sql );
     query.exec();
@@ -109,7 +113,9 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
             continue;
         }
         if ( !s->isLocal() )
+        {
             url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
+        }
 
         QString artist, track, album, composer;
         artist = query.value( 1 ).toString();

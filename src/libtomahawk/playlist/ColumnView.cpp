@@ -147,12 +147,12 @@ ColumnView::setTreeModel( TreeModel* model )
     connect( model, SIGNAL( changed() ), this, SIGNAL( modelChanged() ) );
     emit modelChanged();
 
-/*    setColumnHidden( PlayableModel::Score, true ); // Hide score column per default
-    setColumnHidden( PlayableModel::Origin, true ); // Hide origin column per default
-    setColumnHidden( PlayableModel::Composer, true ); //Hide composer column per default
+    /*    setColumnHidden( PlayableModel::Score, true ); // Hide score column per default
+        setColumnHidden( PlayableModel::Origin, true ); // Hide origin column per default
+        setColumnHidden( PlayableModel::Composer, true ); //Hide composer column per default
 
-    setGuid( QString( "columnview/%1" ).arg( model->columnCount() ) );
-    sortByColumn( PlayableModel::Artist, Qt::AscendingOrder );*/
+        setGuid( QString( "columnview/%1" ).arg( model->columnCount() ) );
+        sortByColumn( PlayableModel::Artist, Qt::AscendingOrder );*/
 
     QList< int > widths;
     int baseUnit = m_previewWidget->minimumSize().width() + 32;
@@ -181,7 +181,9 @@ void
 ColumnView::onViewChanged()
 {
     if ( m_timer.isActive() )
+    {
         m_timer.stop();
+    }
 
     m_timer.start();
 }
@@ -191,22 +193,32 @@ void
 ColumnView::onScrollTimeout()
 {
     if ( m_timer.isActive() )
+    {
         m_timer.stop();
+    }
 
     QModelIndex left = indexAt( viewport()->rect().topLeft() );
     while ( left.isValid() && left.parent().isValid() )
+    {
         left = left.parent();
+    }
 
     QModelIndex right = indexAt( viewport()->rect().bottomLeft() );
     while ( right.isValid() && right.parent().isValid() )
+    {
         right = right.parent();
+    }
 
     int max = m_proxyModel->playlistInterface()->trackCount();
     if ( right.isValid() )
+    {
         max = right.row() + 1;
+    }
 
     if ( !max )
+    {
         return;
+    }
 
     for ( int i = left.row(); i < max; i++ )
     {
@@ -221,19 +233,29 @@ ColumnView::currentChanged( const QModelIndex& current, const QModelIndex& previ
     QColumnView::currentChanged( current, previous );
 
     if ( !m_updateContextView )
+    {
         return;
+    }
 
     PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
     if ( item )
     {
         if ( !item->result().isNull() )
+        {
             ViewManager::instance()->context()->setQuery( item->result()->toQuery() );
+        }
         else if ( !item->artist().isNull() )
+        {
             ViewManager::instance()->context()->setArtist( item->artist() );
+        }
         else if ( !item->album().isNull() )
+        {
             ViewManager::instance()->context()->setAlbum( item->album() );
+        }
         else if ( !item->query().isNull() )
+        {
             ViewManager::instance()->context()->setQuery( item->query() );
+        }
     }
 }
 
@@ -270,7 +292,9 @@ ColumnView::keyPressEvent( QKeyEvent* event )
     QColumnView::keyPressEvent( event );
 
     if ( !model() )
+    {
         return;
+    }
 
     if ( event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return )
     {
@@ -300,7 +324,9 @@ void
 ColumnView::onFilterChangeFinished()
 {
     if ( selectedIndexes().count() )
+    {
         scrollTo( selectedIndexes().at( 0 ), QAbstractItemView::PositionAtCenter );
+    }
 
     if ( !proxyModel()->filter().isEmpty() && !proxyModel()->playlistInterface()->trackCount() && model()->trackCount() )
     {
@@ -335,7 +361,7 @@ ColumnView::startDrag( Qt::DropActions supportedActions )
 {
     QList<QPersistentModelIndex> pindexes;
     QModelIndexList indexes;
-    foreach( const QModelIndex& idx, selectedIndexes() )
+    foreach( const QModelIndex & idx, selectedIndexes() )
     {
         if ( ( m_proxyModel->flags( idx ) & Qt::ItemIsDragEnabled ) )
         {
@@ -345,23 +371,33 @@ ColumnView::startDrag( Qt::DropActions supportedActions )
     }
 
     if ( indexes.count() == 0 )
+    {
         return;
+    }
 
     tDebug( LOGVERBOSE ) << "Dragging" << indexes.count() << "indexes";
     QMimeData* data = m_proxyModel->mimeData( indexes );
     if ( !data )
+    {
         return;
+    }
 
     QDrag* drag = new QDrag( this );
     drag->setMimeData( data );
 
     QPixmap p;
     if ( data->hasFormat( "application/tomahawk.metadata.artist" ) )
+    {
         p = TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeArtist, indexes.count() );
+    }
     else if ( data->hasFormat( "application/tomahawk.metadata.album" ) )
+    {
         p = TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeAlbum, indexes.count() );
+    }
     else
+    {
         p = TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeTrack, indexes.count() );
+    }
 
     drag->setPixmap( p );
     drag->setHotSpot( QPoint( -20, -20 ) );
@@ -380,7 +416,9 @@ ColumnView::onCustomContextMenu( const QPoint& pos )
     m_contextMenuIndex = idx;
 
     if ( !idx.isValid() )
+    {
         return;
+    }
 
     QList<query_ptr> queries;
     QList<artist_ptr> artists;
@@ -393,21 +431,31 @@ ColumnView::onCustomContextMenu( const QPoint& pos )
         indexes << idx;
     }
 
-    foreach ( const QModelIndex& index, indexes )
+    foreach ( const QModelIndex & index, indexes )
     {
         if ( index.column() || indexes.contains( index.parent() ) )
+        {
             continue;
+        }
 
         PlayableItem* item = m_proxyModel->itemFromIndex( m_proxyModel->mapToSource( index ) );
 
         if ( item && !item->result().isNull() )
+        {
             queries << item->result()->toQuery();
+        }
         else if ( item && !item->query().isNull() )
+        {
             queries << item->query();
+        }
         if ( item && !item->artist().isNull() )
+        {
             artists << item->artist();
+        }
         if ( item && !item->album().isNull() )
+        {
             albums << item->album();
+        }
     }
 
     m_contextMenu->setQueries( queries );
@@ -438,7 +486,9 @@ bool
 ColumnView::jumpToCurrentTrack()
 {
     if ( !m_proxyModel || !m_proxyModel->sourceModel() )
+    {
         return false;
+    }
 
     scrollTo( m_proxyModel->currentIndex(), QAbstractItemView::PositionAtCenter );
     return true;
@@ -460,9 +510,9 @@ ColumnView::guid() const
 void
 ColumnView::fixScrollBars()
 {
-    foreach ( QObject* widget, children() )
+    foreach ( QObject * widget, children() )
     {
-        foreach ( QObject* view, widget->children() )
+        foreach ( QObject * view, widget->children() )
         {
             QScrollBar* sb = qobject_cast< QScrollBar* >( view );
             if ( sb && sb->orientation() == Qt::Horizontal )
@@ -470,9 +520,9 @@ ColumnView::fixScrollBars()
                 sb->setSingleStep( 6 );
             }
 
-            foreach ( QObject* subviews, view->children() )
+            foreach ( QObject * subviews, view->children() )
             {
-                foreach ( QObject* scrollbar, subviews->children() )
+                foreach ( QObject * scrollbar, subviews->children() )
                 {
                     QScrollBar* sb = qobject_cast< QScrollBar* >( scrollbar );
                     if ( sb && sb->orientation() == Qt::Vertical )

@@ -68,7 +68,7 @@ DiscogsPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
             criteria["artist"] = hash["artist"];
             criteria["album"] = hash["album"];
 
-            emit getCachedInfo( criteria, Q_INT64_C(2419200000), requestData );
+            emit getCachedInfo( criteria, Q_INT64_C( 2419200000 ), requestData );
 
             break;
         }
@@ -114,7 +114,7 @@ DiscogsPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requestD
 
 
 void
-DiscogsPlugin::albumSearchSlot( const InfoRequestData &requestData, QNetworkReply *reply )
+DiscogsPlugin::albumSearchSlot( const InfoRequestData& requestData, QNetworkReply* reply )
 {
     QJson::Parser p;
     QVariantMap results = p.parse( reply ).toMap();
@@ -169,11 +169,13 @@ DiscogsPlugin::albumInfoSlot( const InfoRequestData& requestData, QNetworkReply*
     }
 
     QStringList trackNameList;
-    foreach ( const QVariant& v, release[ "tracklist" ].toList() )
+    foreach ( const QVariant & v, release[ "tracklist" ].toList() )
     {
         const QVariantMap track = v.toMap();
         if ( track.contains( "title" ) )
+        {
             trackNameList << track[ "title" ].toString();
+        }
     }
 
     QVariantMap returnedData;
@@ -185,7 +187,7 @@ DiscogsPlugin::albumInfoSlot( const InfoRequestData& requestData, QNetworkReply*
     criteria["artist"] = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>()["artist"];
     criteria["album"] = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>()["album"];
 
-    emit updateCache( criteria, Q_INT64_C(0), requestData.type, returnedData );
+    emit updateCache( criteria, Q_INT64_C( 0 ), requestData.type, returnedData );
 }
 
 

@@ -42,12 +42,13 @@ class DLLEXPORT ACLRegistry : public QObject
 {
     Q_OBJECT
 
-public:
+  public:
 
     static ACLRegistry* instance();
     static void setInstance( ACLRegistry* instance );
 
-    struct User {
+    struct User
+    {
         QString uuid;
         QString friendlyName;
         QStringList knownDbids;
@@ -60,10 +61,10 @@ public:
             , knownDbids()
             , knownAccountIds()
             , acl( Tomahawk::ACLStatus::NotFound )
-            {}
+        {}
 
         ~User()
-            {}
+        {}
 
         User( QString p_uuid, QString p_friendlyName, QStringList p_knownDbids, QStringList p_knownAccountIds, Tomahawk::ACLStatus::Type p_acl )
             : uuid( p_uuid )
@@ -71,18 +72,18 @@ public:
             , knownDbids( p_knownDbids )
             , knownAccountIds( p_knownAccountIds )
             , acl( p_acl )
-            {}
+        {}
 
-        User( const User &other )
+        User( const User& other )
             : uuid( other.uuid )
             , friendlyName( other.friendlyName )
             , knownDbids( other.knownDbids )
             , knownAccountIds( other.knownAccountIds )
             , acl( other.acl )
-            {}
+        {}
     };
 
-    ACLRegistry( QObject *parent = 0 );
+    ACLRegistry( QObject* parent = 0 );
     virtual ~ACLRegistry();
 
     /**
@@ -96,10 +97,10 @@ public:
      */
     virtual void isAuthorizedRequest( const Tomahawk::Network::ACL::aclrequest_ptr& request );
 
-signals:
+  signals:
     void aclResult( QString nodeid, QString username, Tomahawk::ACLStatus::Type peerStatus );
 
-public slots:
+  public slots:
     /**
      * @brief Checks if peer is authorized; optionally, can authorize peer with given type if not found
      *
@@ -108,10 +109,10 @@ public slots:
      * @param username If not empty, will store the given username along with the new ACL value. Defaults to QString().
      * @return Tomahawk::ACLStatus::Type
      **/
-    virtual Tomahawk::ACLStatus::Type isAuthorizedUser( const QString &dbid, const QString &username, Tomahawk::ACLStatus::Type globalType = Tomahawk::ACLStatus::NotFound, bool skipEmission = false ) = 0;
+    virtual Tomahawk::ACLStatus::Type isAuthorizedUser( const QString& dbid, const QString& username, Tomahawk::ACLStatus::Type globalType = Tomahawk::ACLStatus::NotFound, bool skipEmission = false ) = 0;
     virtual void wipeEntries();
 
-protected:
+  protected:
     /**
      * @brief Saves the cache.
      *
@@ -124,10 +125,10 @@ protected:
 
     static ACLRegistry* s_instance;
 
-private slots:
+  private slots:
     void aclResultForRequest( QString nodeid, QString username, Tomahawk::ACLStatus::Type peerStatus );
 
-private:
+  private:
     Tomahawk::Utils::WeakObjectList<Tomahawk::Network::ACL::AclRequest> m_aclRequests;
 };
 

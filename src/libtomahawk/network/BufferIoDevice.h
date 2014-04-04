@@ -26,9 +26,9 @@ class BufferIODevicePrivate;
 
 class BufferIODevice : public QIODevice
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit BufferIODevice( unsigned int size = 0, QObject* parent = 0 );
     ~BufferIODevice();
 
@@ -58,14 +58,14 @@ public:
     int nextEmptyBlock() const;
     bool isBlockEmpty( int block ) const;
 
-signals:
+  signals:
     void blockRequest( int block );
 
-protected:
+  protected:
     virtual qint64 readData( char* data, qint64 maxSize );
     virtual qint64 writeData( const char* data, qint64 maxSize );
 
-private:
+  private:
     int blockForPos( qint64 pos ) const;
     int offsetForPos( qint64 pos ) const;
     QByteArray getData( qint64 pos, qint64 size );

@@ -1,6 +1,7 @@
 #include "XspfPlaylistTemplate_p.h"
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
 XspfPlaylistTemplate::XspfPlaylistTemplate( const QString& _url, const source_ptr& source, const QString& guid )
     : PlaylistTemplate( new XspfPlaylistTemplatePrivate( this, _url, source, guid ) )

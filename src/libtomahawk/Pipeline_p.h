@@ -31,7 +31,7 @@ namespace Tomahawk
 
 class PipelinePrivate
 {
-public:
+  public:
     PipelinePrivate( Pipeline* q )
         : q_ptr( q )
         , running( false )
@@ -41,7 +41,7 @@ public:
     Pipeline* q_ptr;
     Q_DECLARE_PUBLIC( Pipeline )
 
-private:
+  private:
     QList< Resolver* > resolvers;
     QList< QPointer<Tomahawk::ExternalResolver> > scriptResolvers;
     QList< ResolverFactoryFunc > resolverFactories;

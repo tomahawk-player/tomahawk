@@ -41,21 +41,28 @@ class INFOPLUGINDLLEXPORT ChartsPlugin : public InfoPlugin
     Q_OBJECT
     Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 
-public:
+  public:
     ChartsPlugin();
     virtual ~ChartsPlugin();
 
-    enum ChartType {
+    enum ChartType
+    {
         None =      0x00,
         Track =     0x01,
         Album =     0x02,
         Artist =    0x04
     };
 
-    void setChartType( ChartType type ) { m_chartType = type; }
-    ChartType chartType() const { return m_chartType; }
+    void setChartType( ChartType type )
+    {
+        m_chartType = type;
+    }
+    ChartType chartType() const
+    {
+        return m_chartType;
+    }
 
-protected slots:
+  protected slots:
     virtual void init();
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
@@ -80,7 +87,7 @@ protected slots:
      */
     void chartReturned();
 
-private:
+  private:
     /**
      * Fetch list of chart sources (e.g., itunes, billboard)
      * Populates the m_chartResources member.
@@ -104,7 +111,7 @@ private:
 
     QString countryName( const QString& cc );
 
-    qlonglong getMaxAge( const QByteArray &rawHeader ) const;
+    qlonglong getMaxAge( const QByteArray& rawHeader ) const;
     qlonglong getMaxAge( const qlonglong expires ) const;
 
     QVariantMap m_allChartsMap;

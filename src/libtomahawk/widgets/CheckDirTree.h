@@ -29,7 +29,7 @@ class DLLEXPORT CheckDirModel : public QFileSystemModel
 {
     Q_OBJECT
 
-public:
+  public:
     CheckDirModel( QWidget* parent = 0 );
     virtual ~CheckDirModel();
 
@@ -41,14 +41,14 @@ public:
     Qt::CheckState getCheck( const QModelIndex& index );
 
     void cleanup();
-signals:
-    void dataChangedByUser( const QModelIndex & index );
+  signals:
+    void dataChangedByUser( const QModelIndex& index );
 
-private slots:
+  private slots:
     void getFileInfoResult();
     void volumeShowFinished();
     void processErrorOutput();
-private:
+  private:
     QHash<QPersistentModelIndex, Qt::CheckState> m_checkTable;
 
     bool m_shownVolumes;
@@ -61,7 +61,7 @@ class DLLEXPORT CheckDirTree : public QTreeView
 {
     Q_OBJECT
 
-public:
+  public:
     CheckDirTree( QWidget* parent );
 
     void checkPath( const QString& path, Qt::CheckState state );
@@ -71,16 +71,16 @@ public:
     QStringList getCheckedPaths();
 
     void cleanup();
-signals:
+  signals:
     void changed();
 
-private slots:
+  private slots:
     void onCollapse( const QModelIndex& idx );
     void onExpand( const QModelIndex& idx );
     void updateNode( const QModelIndex& idx );
 
     void modelReset();
-private:
+  private:
     CheckDirModel m_dirModel;
     QSet<qint64> m_expandedSet;
 

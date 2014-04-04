@@ -33,18 +33,27 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCommand_LoadPlaylistEntries : public DatabaseCommand
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit DatabaseCommand_LoadPlaylistEntries( QString revision_guid, QObject* parent = 0 );
 
     virtual void exec( DatabaseImpl* );
-    virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "loadplaylistentries"; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
+    virtual QString commandname() const
+    {
+        return "loadplaylistentries";
+    }
 
-    QString revisionGuid() const { return m_revguid; }
+    QString revisionGuid() const
+    {
+        return m_revguid;
+    }
 
-signals:
+  signals:
     void done( const QString& rev,
                const QList<QString>& orderedguid,
                const QList<QString>& oldorderedguid,
@@ -52,7 +61,7 @@ signals:
                const QMap< QString, Tomahawk::plentry_ptr >& added,
                bool applied );
 
-protected:
+  protected:
     void generateEntries( DatabaseImpl* dbi );
 
     QStringList m_guids;
@@ -60,7 +69,7 @@ protected:
     bool m_islatest;
     QStringList m_oldentries;
 
-private:
+  private:
     QString m_revguid;
 };
 

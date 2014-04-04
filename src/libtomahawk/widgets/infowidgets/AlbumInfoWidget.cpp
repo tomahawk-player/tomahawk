@@ -198,13 +198,19 @@ AlbumInfoWidget::isBeingPlayed() const
     //tDebug() << Q_FUNC_INFO << "tracksView playlistInterface = " << ui->tracksView->playlistInterface()->id();
 
     if ( ui->albums && ui->albums->isBeingPlayed() )
+    {
         return true;
+    }
 
     if ( ui->albums && ui->albums->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+    {
         return true;
+    }
 
     if ( ui->tracks && ui->tracks->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+    {
         return true;
+    }
 
     return false;
 }
@@ -251,10 +257,12 @@ AlbumInfoWidget::loadAlbums( bool autoRefetch )
     m_albumsModel->clear();
 
     connect( m_album->artist().data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ),
-                                         SLOT( gotAlbums( QList<Tomahawk::album_ptr> ) ) );
+             SLOT( gotAlbums( QList<Tomahawk::album_ptr> ) ) );
 
     if ( !m_album->artist()->albums( Mixed ).isEmpty() )
+    {
         gotAlbums( m_album->artist()->albums( Mixed ) );
+    }
 }
 
 
@@ -262,7 +270,9 @@ void
 AlbumInfoWidget::onAlbumImageUpdated()
 {
     if ( m_album->cover( QSize( 0, 0 ) ).isNull() )
+    {
         return;
+    }
 
     m_pixmap = m_album->cover( QSize( 0, 0 ) );
     emit pixmapChanged( m_pixmap );
@@ -276,7 +286,9 @@ AlbumInfoWidget::gotAlbums( const QList<Tomahawk::album_ptr>& albums )
 {
     QList<Tomahawk::album_ptr> al = albums;
     if ( al.contains( m_album ) )
+    {
         al.removeAll( m_album );
+    }
 
     m_albumsModel->appendAlbums( al );
 }
@@ -309,7 +321,11 @@ QPixmap
 AlbumInfoWidget::pixmap() const
 {
     if ( m_pixmap.isNull() )
+    {
         return Tomahawk::ViewPage::pixmap();
+    }
     else
+    {
         return m_pixmap;
+    }
 }

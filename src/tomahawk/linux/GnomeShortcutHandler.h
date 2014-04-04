@@ -24,25 +24,26 @@
 
 #include <QObject>
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
 
 class GnomeShortcutHandler : public ShortcutHandler
 {
     Q_OBJECT
-public:
-    explicit GnomeShortcutHandler(QObject *parent = 0);
+  public:
+    explicit GnomeShortcutHandler( QObject* parent = 0 );
     bool DoRegister();
 
     static const char* kGsdService;
     static const char* kGsdPath;
     static const char* kGsdInterface;
 
-public slots:
-    void RegisterFinished(QDBusPendingCallWatcher* watcher);
+  public slots:
+    void RegisterFinished( QDBusPendingCallWatcher* watcher );
     void GnomeMediaKeyPressed( const QString& application, const QString& key );
 
-private:
+  private:
     org::gnome::SettingsDaemon::MediaKeys* interface_;
 
 };

@@ -32,34 +32,49 @@ namespace Tomahawk
 class DLLEXPORT XspfUpdater : public PlaylistUpdaterInterface
 {
     Q_OBJECT
-public:
+  public:
     XspfUpdater( const playlist_ptr& pl, int interval /* ms */, bool autoUpdate, const QString& xspfUrl );
 
     virtual ~XspfUpdater();
 
-    virtual QString type() const { return "xspf"; }
+    virtual QString type() const
+    {
+        return "xspf";
+    }
 
 #ifndef ENABLE_HEADLESS
     virtual QWidget* configurationWidget() const;
 #endif
 
-    bool autoUpdate() const { return m_autoUpdate; }
+    bool autoUpdate() const
+    {
+        return m_autoUpdate;
+    }
 
     void setInterval( int intervalMsecs ) ;
-    int intervalMsecs() const { return m_timer->interval(); }
+    int intervalMsecs() const
+    {
+        return m_timer->interval();
+    }
 
-    bool canSubscribe() const { return true; }
-    bool subscribed() const { return m_autoUpdate; }
+    bool canSubscribe() const
+    {
+        return true;
+    }
+    bool subscribed() const
+    {
+        return m_autoUpdate;
+    }
     void setSubscribed( bool subscribed );
 
-public slots:
+  public slots:
     void updateNow();
     void setAutoUpdate( bool autoUpdate );
 
-private slots:
-    void playlistLoaded( const QList<Tomahawk::query_ptr> & );
+  private slots:
+    void playlistLoaded( const QList<Tomahawk::query_ptr>& );
 
-private:
+  private:
     QTimer* m_timer;
     bool m_autoUpdate;
     QString m_url;
@@ -71,10 +86,13 @@ private:
 
 class DLLEXPORT XspfUpdaterFactory : public PlaylistUpdaterFactory
 {
-public:
+  public:
     XspfUpdaterFactory() {}
 
-    virtual QString type() const { return "xspf"; }
+    virtual QString type() const
+    {
+        return "xspf";
+    }
     virtual PlaylistUpdaterInterface* create( const playlist_ptr& pl, const QVariantHash& settings );
 };
 

@@ -28,7 +28,7 @@
 class GroupItem : public SourceTreeItem
 {
     Q_OBJECT
-public:
+  public:
     // takes 2 function pointers: show: called when wanting to show the desired view page. get: called to get the view page from ViewManager if it exists
     GroupItem( SourcesModel* model, SourceTreeItem* parent, const QString& text, int peerSortValue = 0 );
     virtual ~GroupItem();
@@ -41,16 +41,16 @@ public:
     void checkExpandedState();
     void setDefaultExpanded( bool b );
 
-public slots:
+  public slots:
     virtual void activate();
 
-signals:
+  signals:
     void activated();
 
-private slots:
+  private slots:
     void requestExpanding();
 
-private:
+  private:
     QString m_text;
     bool m_defaultExpanded;
 };

@@ -71,12 +71,12 @@ BasicHeader::BasicHeader( QWidget* parent )
     m_descriptionLabel->setPalette( pal );
 
     QFont font = m_captionLabel->font();
-    
+
     int captionFontSize = TomahawkUtils::defaultFontSize() + 6;
     font.setPointSize( captionFontSize );
     font.setBold( true );
     font.setFamily( "Titillium Web" );
-    
+
     m_captionLabel->setFont( font );
     m_captionLabel->setElideMode( Qt::ElideRight );
     m_captionLabel->setAlignment( Qt::AlignTop | Qt::AlignLeft );
@@ -93,13 +93,13 @@ BasicHeader::BasicHeader( QWidget* parent )
     m_descriptionLabel->setMinimumHeight( QFontMetrics( font ).height() + 2 * m_descriptionLabel->margin() );
     m_descriptionLabel->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
 
-/*    QGraphicsDropShadowEffect* effect = new QGraphicsDropShadowEffect();
-    effect->setBlurRadius( 4 );
-    effect->setXOffset( 0 );
-    effect->setYOffset( 0 );
-    effect->setColor( Qt::white );
-    m_captionLabel->setGraphicsEffect( effect );*/
-//    m_descriptionLabel->setGraphicsEffect( effect );
+    /*    QGraphicsDropShadowEffect* effect = new QGraphicsDropShadowEffect();
+        effect->setBlurRadius( 4 );
+        effect->setXOffset( 0 );
+        effect->setYOffset( 0 );
+        effect->setColor( Qt::white );
+        m_captionLabel->setGraphicsEffect( effect );*/
+    //    m_descriptionLabel->setGraphicsEffect( effect );
 
     QFrame* lineAbove = new QFrame( this );
     lineAbove->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
@@ -164,14 +164,14 @@ BasicHeader::paintEvent( QPaintEvent* event )
 {
     QWidget::paintEvent( event );
 
-/*    QPainter painter( this );
-    painter.setRenderHint( QPainter::Antialiasing );
+    /*    QPainter painter( this );
+        painter.setRenderHint( QPainter::Antialiasing );
 
-    QLinearGradient gradient( QPoint( 0, 0 ), QPoint( 0, 1 ) );
-    gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
-    gradient.setColorAt( 0.0, TomahawkStyle::HEADER_LOWER );
-    gradient.setColorAt( 1.0, TomahawkStyle::HEADER_UPPER );
+        QLinearGradient gradient( QPoint( 0, 0 ), QPoint( 0, 1 ) );
+        gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
+        gradient.setColorAt( 0.0, TomahawkStyle::HEADER_LOWER );
+        gradient.setColorAt( 1.0, TomahawkStyle::HEADER_UPPER );
 
-    painter.setBrush( gradient );
-    painter.fillRect( rect(), gradient );*/
+        painter.setBrush( gradient );
+        painter.fillRect( rect(), gradient );*/
 }

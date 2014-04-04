@@ -60,9 +60,13 @@ ResolverAccountFactory::createAccount( const QString& accountId )
     // If it's an attica resolver, return it instead so we get an icon
     const bool isFromAttica = TomahawkSettings::instance()->value( QString( "accounts/%1/atticaresolver" ).arg( accountId ), false ).toBool();
     if ( isFromAttica )
+    {
         return new AtticaResolverAccount( accountId );
+    }
     else
+    {
         return new ResolverAccount( accountId );
+    }
 }
 
 
@@ -106,19 +110,19 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
         {
             QString uniqueName = uuid();
             QDir dir( TomahawkUtils::extractScriptPayload( pathInfo.filePath(),
-                                                           uniqueName,
-                                                           MANUALRESOLVERS_DIR ) );
+                      uniqueName,
+                      MANUALRESOLVERS_DIR ) );
             if ( !( dir.exists() && dir.isReadable() ) ) //decompression fubar
             {
                 JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
-                                        tr( "Resolver installation error: cannot open bundle." ) ) );
+                            tr( "Resolver installation error: cannot open bundle." ) ) );
                 return 0;
             }
 
             if ( !dir.cd( "content" ) ) //more fubar
             {
                 JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
-                                        tr( "Resolver installation error: incomplete bundle." ) ) );
+                            tr( "Resolver installation error: incomplete bundle." ) ) );
                 return 0;
             }
 
@@ -131,7 +135,9 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
             {
                 dir.cdUp();
                 if ( !dir.cdUp() ) //we're in MANUALRESOLVERS_DIR
+                {
                     return 0;
+                }
 
                 QString name = configuration[ "pluginName" ].toString();
 
@@ -148,7 +154,9 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
                 configuration[ "bundleDir" ] = name;
 
                 if ( !dir.cd( QString( "%1/content" ).arg( name ) ) ) //should work if it worked once
+                {
                     return 0;
+                }
             }
 
             expandPaths( dir, configuration );
@@ -157,7 +165,7 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
             if ( realPath.isEmpty() )
             {
                 JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
-                                        tr( "Resolver installation error: bad metadata in bundle." ) ) );
+                            tr( "Resolver installation error: bad metadata in bundle." ) ) );
                 return 0;
             }
         }
@@ -186,16 +194,20 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
             myPlatform = "osx";
 #elif defined( Q_OS_LINUX )
             if ( __WORDSIZE == 32 )
+            {
                 myPlatform = "linux-x86";
+            }
             else if ( __WORDSIZE == 64 )
+            {
                 myPlatform = "linux-x64";
+            }
 #endif
 
             if ( !myPlatform.contains( platform ) )
             {
                 tDebug() << "Wrong resolver platform.";
                 JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
-                                        tr( "Resolver installation error: platform mismatch." ) ) );
+                            tr( "Resolver installation error: platform mismatch." ) ) );
                 return 0;
             }
         }
@@ -208,8 +220,8 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
             if ( TomahawkUtils::compareVersionStrings( thVer, requiredVer ) < 0 )
             {
                 JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
-                                        tr( "Resolver installation error: Tomahawk %1 or newer is required." )
-                                        .arg( requiredVer ) ) );
+                            tr( "Resolver installation error: Tomahawk %1 or newer is required." )
+                            .arg( requiredVer ) ) );
                 return 0;
             }
         }
@@ -250,15 +262,25 @@ ResolverAccountFactory::metadataFromJsonFile( const QString& path )
                 }
             }
             if ( !variant[ "version" ].isNull() )
+            {
                 result[ "version" ] = variant[ "version" ];
+            }
             if ( !variant[ "revision" ].isNull() )
+            {
                 result[ "revision" ] = variant[ "revision" ];
+            }
             if ( !variant[ "timestamp" ].isNull() )
+            {
                 result[ "timestamp" ] = variant[ "timestamp" ];
+            }
             if ( !variant[ "tomahawkVersion" ].isNull() )
+            {
                 result[ "tomahawkVersion" ] = variant[ "tomahawkVersion" ];
+            }
             if ( !variant[ "platform" ].isNull() )
+            {
                 result[ "platform" ] = variant[ "platform" ];
+            }
         }
     }
     return result;
@@ -307,7 +329,9 @@ ResolverAccount::ResolverAccount( const QString& accountId, const QString& path,
 
     //just init so this account is tracked by LCS, we'll sync later
     if ( !AccountManager::instance()->configStorageForAccount( accountId ) )
+    {
         AccountManager::instance()->localConfigStorage()->save( accountId, Account::Configuration() );
+    }
 
     init( path );
 
@@ -318,7 +342,9 @@ ResolverAccount::ResolverAccount( const QString& accountId, const QString& path,
 ResolverAccount::~ResolverAccount()
 {
     if ( m_resolver.isNull() )
+    {
         return;
+    }
 
     Pipeline::instance()->removeScriptResolver( m_resolver.data()->filePath() );
     delete m_resolver.data();
@@ -349,7 +375,9 @@ ResolverAccount::hookupResolver()
     QString mainScriptPath = configuration().value( "path" ).toString();
     QStringList additionalPaths;
     if ( configuration().contains( "scripts" ) )
+    {
         additionalPaths = configuration().value( "scripts" ).toStringList();
+    }
 
     Tomahawk::ExternalResolver* er = Pipeline::instance()->addScriptResolver( mainScriptPath, additionalPaths );
     m_resolver = QPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( er ) );
@@ -366,12 +394,16 @@ void
 ResolverAccount::authenticate()
 {
     if ( m_resolver.isNull() )
+    {
         return;
+    }
 
     tDebug() << Q_FUNC_INFO << "Authenticating/starting resolver, exists?" << m_resolver.data()->name();
 
     if ( !m_resolver.data()->running() )
+    {
         m_resolver.data()->start();
+    }
 
     emit connectionStateChanged( connectionState() );
 }
@@ -388,7 +420,9 @@ void
 ResolverAccount::deauthenticate()
 {
     if ( !m_resolver.isNull() && m_resolver.data()->running() )
+    {
         m_resolver.data()->stop();
+    }
 
     emit connectionStateChanged( connectionState() );
 
@@ -399,9 +433,13 @@ Account::ConnectionState
 ResolverAccount::connectionState() const
 {
     if ( !m_resolver.isNull() && m_resolver.data()->running() )
+    {
         return Connected;
+    }
     else
+    {
         return Disconnected;
+    }
 }
 
 
@@ -409,7 +447,9 @@ AccountConfigWidget*
 ResolverAccount::configurationWidget()
 {
     if ( m_resolver.isNull() )
+    {
         return 0;
+    }
 
     return m_resolver.data()->configUI();
 }
@@ -419,7 +459,7 @@ QString
 ResolverAccount::errorMessage() const
 {
     // TODO
-//     return m_resolver->error();
+    //     return m_resolver->error();
     return QString();
 }
 
@@ -437,7 +477,9 @@ ResolverAccount::saveConfig()
 {
     Account::saveConfig();
     if ( !m_resolver.isNull() )
+    {
         m_resolver.data()->saveConfig();
+    }
 }
 
 
@@ -445,7 +487,9 @@ QString
 ResolverAccount::path() const
 {
     if ( m_resolver.isNull() )
+    {
         return QString();
+    }
 
     return m_resolver.data()->filePath();
 }
@@ -463,7 +507,9 @@ QPixmap
 ResolverAccount::icon() const
 {
     if ( m_resolver.isNull() )
+    {
         return QPixmap();
+    }
 
     return m_resolver.data()->icon();
 }
@@ -489,7 +535,9 @@ ResolverAccount::version() const
     QString versionString = configuration().value( "version" ).toString();
     QString build = configuration().value( "revision" ).toString();
     if ( !build.isEmpty() )
+    {
         return versionString + "-" + build;
+    }
     return versionString;
 }
 
@@ -499,7 +547,9 @@ ResolverAccount::removeBundle()
 {
     QString bundleDir = configuration()[ "bundleDir" ].toString();
     if ( bundleDir.isEmpty() )
+    {
         return;
+    }
 
     QString expectedPath = TomahawkUtils::appDataDir().absoluteFilePath( QString( "%1/%2" ).arg( MANUALRESOLVERS_DIR ).arg( bundleDir ) );
     QFileInfo fi( expectedPath );
@@ -548,9 +598,13 @@ AtticaResolverAccount::init()
     connect( AtticaManager::instance(), SIGNAL( resolverIconUpdated( QString ) ), this, SLOT( resolverIconUpdated( QString ) ) );
 
     if ( AtticaManager::instance()->resolversLoaded() )
+    {
         loadIcon();
+    }
     else
+    {
         connect( AtticaManager::instance(), SIGNAL( resolversLoaded( Attica::Content::List ) ), this, SLOT( loadIcon() ) );
+    }
 
 
 }
@@ -560,11 +614,15 @@ void
 AtticaResolverAccount::loadIcon()
 {
     if ( m_resolver.isNull() )
+    {
         return;
+    }
 
     m_icon = AtticaManager::instance()->iconForResolver( AtticaManager::instance()->resolverForId( m_atticaId ) );
     if ( !m_icon.isNull() )
+    {
         m_resolver.data()->setIcon( m_icon );
+    }
 }
 
 
@@ -592,5 +650,7 @@ void
 AtticaResolverAccount::resolverIconUpdated( const QString& resolver )
 {
     if ( m_atticaId == resolver )
+    {
         loadIcon();
+    }
 }

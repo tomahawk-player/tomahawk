@@ -47,7 +47,9 @@ DatabaseCommand_LogPlayback::postCommitHook()
 
     track_ptr track = Track::get( m_artist, m_track, QString() );
     if ( !track )
+    {
         return;
+    }
 
     if ( m_action == Finished )
     {
@@ -78,14 +80,22 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
 
     unsigned int pt = m_playtime;
     if ( m_playtime == 0 )
+    {
         m_playtime = QDateTime::currentDateTimeUtc().toTime_t();
+    }
 
     if ( m_action != Finished )
+    {
         return;
+    }
     if ( m_secsPlayed < FINISHED_THRESHOLD && m_trackDuration > 0 )
+    {
         return;
+    }
     if ( m_artist.isEmpty() || m_track.isEmpty() )
+    {
         return;
+    }
 
     QVariant srcid = source()->isLocal() ? QVariant( QVariant::Int ) : source()->id();
     TomahawkSqlQuery query = dbi->newquery();
@@ -101,7 +111,7 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
         }
     }
 
-//    tDebug() << "Logging playback of" << m_artist << "-" << m_track << "for source" << srcid << "- timestamp:" << m_playtime;
+    //    tDebug() << "Logging playback of" << m_artist << "-" << m_track << "for source" << srcid << "- timestamp:" << m_playtime;
 
     query.prepare( "INSERT INTO playback_log(source, track, playtime, secs_played) VALUES (?, ?, ?, ?)" );
     query.bindValue( 0, srcid );
@@ -109,11 +119,15 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
     // If there's no artist, because it's a resolver result with bad metadata for example, don't save it
     int artid = dbi->artistId( m_artist, true );
     if( artid < 1 )
+    {
         return;
+    }
 
     int trkid = dbi->trackId( artid, m_track, true );
     if( trkid < 1 )
+    {
         return;
+    }
 
     query.bindValue( 1, trkid );
     query.bindValue( 2, m_playtime );
@@ -127,7 +141,9 @@ bool
 DatabaseCommand_LogPlayback::localOnly() const
 {
     if ( m_action == Finished )
+    {
         return m_secsPlayed < SUBMISSION_THRESHOLD;
+    }
 
     return false;
 }

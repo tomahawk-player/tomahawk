@@ -35,14 +35,14 @@ class SideWidget : public QWidget
 {
     Q_OBJECT
 
-signals:
+  signals:
     void sizeHintChanged();
 
-public:
-    SideWidget(QWidget *parent = 0);
+  public:
+    SideWidget( QWidget* parent = 0 );
 
-protected:
-    bool event(QEvent *event);
+  protected:
+    bool event( QEvent* event );
 
 };
 

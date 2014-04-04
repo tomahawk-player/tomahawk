@@ -33,9 +33,9 @@
  */
 class DLLEXPORT XSPFLoader : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     enum XSPFErrorCode { ParseError, InvalidTrackError, FetchError };
     explicit XSPFLoader( bool autoCreate = true, bool autoUpdate = false, QObject* parent = 0, const QString& guid = QString() );
 
@@ -54,27 +54,27 @@ public:
 
     static QString errorToString( XSPFErrorCode error );
 
-signals:
+  signals:
     void error( XSPFLoader::XSPFErrorCode error );
     void ok( const Tomahawk::playlist_ptr& );
     void track( const Tomahawk::query_ptr& track );
     void tracks( const QList< Tomahawk::query_ptr > tracks );
 
-public slots:
+  public slots:
     void load( const QUrl& url );
     void load( QFile& file );
 
-private slots:
+  private slots:
     void networkLoadFinished();
     void networkError( QNetworkReply::NetworkError e );
 
-private:
+  private:
     void reportError();
     void gotBody();
 
     bool m_autoCreate, m_autoUpdate, m_autoResolve, m_autoDelete;
     QString m_guid;
-    QString m_NS,m_overrideTitle;
+    QString m_NS, m_overrideTitle;
     QList< Tomahawk::query_ptr > m_entries;
     QString m_title, m_info, m_creator, m_errorTitle;
 

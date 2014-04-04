@@ -33,7 +33,7 @@
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "PlaylistInterface.h"
+#include "PlaylistInterface.h"
 #endif
 
 
@@ -67,9 +67,9 @@ ContextWidget::ContextWidget( QWidget* parent )
     m_views << ttc;
     m_views << rac;
     m_views << wiki;
-/*    m_views << lastfm;*/
+    /*    m_views << lastfm;*/
 
-    foreach ( ContextPage* view, m_views )
+    foreach ( ContextPage * view, m_views )
     {
         ContextProxyPage* page = new ContextProxyPage();
         page->setPage( view );
@@ -148,7 +148,9 @@ ContextWidget::layoutViews( bool animate )
     float opacity;
 
     if ( m_currentView > 0 )
+    {
         firstPos = smallViewWidth;
+    }
 
     if ( m_currentView + maxVisible >= m_pages.count() )
     {
@@ -202,7 +204,7 @@ ContextWidget::onPageFocused()
     ContextProxyPage* widget = qobject_cast< ContextProxyPage* >( sender() );
 
     int i = 0;
-    foreach ( ContextProxyPage* view, m_pages )
+    foreach ( ContextProxyPage * view, m_pages )
     {
         if ( view == widget )
         {
@@ -219,7 +221,7 @@ ContextWidget::onPageFocused()
 void
 ContextWidget::fadeOut( bool animate )
 {
-    foreach ( QGraphicsWidget* view, m_pages )
+    foreach ( QGraphicsWidget * view, m_pages )
     {
         if ( animate )
         {
@@ -229,7 +231,9 @@ ContextWidget::fadeOut( bool animate )
             animation->start();
         }
         else
+        {
             view->setOpacity( 0.0 );
+        }
     }
 }
 
@@ -238,12 +242,14 @@ void
 ContextWidget::setArtist( const Tomahawk::artist_ptr& artist )
 {
     if ( artist.isNull() )
+    {
         return;
+    }
 
     m_artist = artist;
     if ( height() > m_minHeight )
     {
-        foreach ( ContextProxyPage* proxy, m_pages )
+        foreach ( ContextProxyPage * proxy, m_pages )
         {
             proxy->page()->setArtist( artist );
         }
@@ -257,12 +263,14 @@ void
 ContextWidget::setAlbum( const Tomahawk::album_ptr& album )
 {
     if ( album.isNull() )
+    {
         return;
+    }
 
     m_album = album;
     if ( height() > m_minHeight )
     {
-        foreach ( ContextProxyPage* proxy, m_pages )
+        foreach ( ContextProxyPage * proxy, m_pages )
         {
             proxy->page()->setAlbum( album );
         }
@@ -276,14 +284,18 @@ void
 ContextWidget::setQuery( const Tomahawk::query_ptr& query, bool force )
 {
     if ( query.isNull() )
+    {
         return;
+    }
     if ( !force && !m_query.isNull() && query->track()->artist() == m_query->track()->artist() )
+    {
         return;
+    }
 
     m_query = query;
     if ( height() > m_minHeight )
     {
-        foreach ( ContextProxyPage* proxy, m_pages )
+        foreach ( ContextProxyPage * proxy, m_pages )
         {
             proxy->page()->setQuery( query );
         }

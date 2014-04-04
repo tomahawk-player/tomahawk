@@ -109,10 +109,14 @@ void
 SocialWidget::show( int timeoutSecs )
 {
     if ( !isEnabled() )
+    {
         return;
+    }
 
     if ( timeoutSecs > 0 )
+    {
         m_timer.start( timeoutSecs * 1000 );
+    }
 
     QWidget::show();
 }
@@ -122,7 +126,9 @@ void
 SocialWidget::hide()
 {
     if ( !isEnabled() )
+    {
         return;
+    }
 
     QWidget::hide();
 }
@@ -132,7 +138,9 @@ bool
 SocialWidget::shown() const
 {
     if ( !isEnabled() )
+    {
         return false;
+    }
 
     return isVisible();
 }
@@ -166,9 +174,13 @@ SocialWidget::onShortLinkReady( const QUrl& longUrl, const QUrl& shortUrl, const
     Q_UNUSED( callbackObj );
 
     if ( m_query->track()->album().isEmpty() )
+    {
         ui->textEdit->setText( tr( "Listening to \"%1\" by %2. %3" ).arg( m_query->track()->track() ).arg( m_query->track()->artist() ).arg( shortUrl.toString() ) );
+    }
     else
+    {
         ui->textEdit->setText( tr( "Listening to \"%1\" by %2 on \"%3\". %4" ).arg( m_query->track()->track() ).arg( m_query->track()->artist() ).arg( m_query->track()->album() ).arg( shortUrl.toString() ) );
+    }
 }
 
 
@@ -229,7 +241,9 @@ unsigned int
 SocialWidget::charsAvailable() const
 {
     if ( ui->twitterButton->isChecked() )
+    {
         return 140;
+    }
 
     return 420; // facebook max length
 }

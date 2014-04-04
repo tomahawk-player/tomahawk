@@ -60,7 +60,7 @@ RecentlyAddedModel::loadHistory()
     cmd->setSortDescending( true );
 
     connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
-                    SLOT( appendQueries( QList<Tomahawk::query_ptr> ) ), Qt::QueuedConnection );
+             SLOT( appendQueries( QList<Tomahawk::query_ptr> ) ), Qt::QueuedConnection );
 
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
@@ -73,8 +73,8 @@ RecentlyAddedModel::onSourcesReady()
 
     loadHistory();
 
-    foreach ( const source_ptr& source, SourceList::instance()->sources() )
-        onSourceAdded( source );
+    foreach ( const source_ptr & source, SourceList::instance()->sources() )
+    onSourceAdded( source );
 }
 
 
@@ -86,9 +86,13 @@ RecentlyAddedModel::setSource( const Tomahawk::source_ptr& source )
     if ( source.isNull() )
     {
         if ( SourceList::instance()->isReady() )
+        {
             onSourcesReady();
+        }
         else
+        {
             connect( SourceList::instance(), SIGNAL( ready() ), SLOT( onSourcesReady() ) );
+        }
 
         connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
     }

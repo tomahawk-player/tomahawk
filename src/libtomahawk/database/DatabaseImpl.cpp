@@ -115,7 +115,7 @@ Tomahawk::DatabaseImpl::init()
 
     TomahawkSqlQuery query = newquery();
 
-     // make sqlite behave how we want:
+    // make sqlite behave how we want:
     query.exec( "PRAGMA foreign_keys = ON" );
 }
 
@@ -124,19 +124,19 @@ Tomahawk::DatabaseImpl::~DatabaseImpl()
 {
     tDebug() << "Shutting down database connection.";
 
-/*
-#ifdef TOMAHAWK_QUERY_ANALYZE
-    TomahawkSqlQuery q = newquery();
+    /*
+    #ifdef TOMAHAWK_QUERY_ANALYZE
+        TomahawkSqlQuery q = newquery();
 
-    q.exec( "ANALYZE" );
-    q.exec( "SELECT * FROM sqlite_stat1" );
-    while ( q.next() )
-    {
-        tLog( LOGSQL ) << q.value( 0 ).toString() << q.value( 1 ).toString() << q.value( 2 ).toString();
-    }
+        q.exec( "ANALYZE" );
+        q.exec( "SELECT * FROM sqlite_stat1" );
+        while ( q.next() )
+        {
+            tLog( LOGSQL ) << q.value( 0 ).toString() << q.value( 1 ).toString() << q.value( 2 ).toString();
+        }
 
-#endif
-*/
+    #endif
+    */
 }
 
 
@@ -215,11 +215,13 @@ Tomahawk::DatabaseImpl::updateSchema( int oldVersion )
         QStringList statements = sql.split( ";", QString::SkipEmptyParts );
         m_db.transaction();
 
-        foreach ( const QString& sl, statements )
+        foreach ( const QString & sl, statements )
         {
             QString s( sl.trimmed() );
             if ( s.length() == 0 )
+            {
                 continue;
+            }
 
             tLog() << "Executing:" << s;
             TomahawkSqlQuery query = newquery();
@@ -242,7 +244,7 @@ Tomahawk::DatabaseImpl::updateSchema( int oldVersion )
             QFile script( path );
             if ( !script.exists() || !script.open( QIODevice::ReadOnly ) )
             {
-                tLog() << "Failed to find or open upgrade script from" << (cur-1) << "to" << cur << " (" << path << ")! Aborting upgrade...";
+                tLog() << "Failed to find or open upgrade script from" << ( cur - 1 ) << "to" << cur << " (" << path << ")! Aborting upgrade...";
                 return false;
             }
 
@@ -253,7 +255,9 @@ Tomahawk::DatabaseImpl::updateSchema( int oldVersion )
                 QString sql = statements.at( i );
                 QString clean = cleanSql( sql ).trimmed();
                 if ( clean.isEmpty() )
+                {
                     continue;
+                }
 
                 tLog() << "Executing upgrade statement:" << clean;
                 TomahawkSqlQuery q = newquery();
@@ -261,7 +265,7 @@ Tomahawk::DatabaseImpl::updateSchema( int oldVersion )
 
                 //Report to splash screen
                 emit schemaUpdateStatus( QString( "%1/%2" ).arg( QString::number( i + 1 ) )
-                                                           .arg( QString::number( statements.count() ) ) );
+                                         .arg( QString::number( statements.count() ) ) );
             }
         }
         m_db.commit();
@@ -303,9 +307,13 @@ Tomahawk::DatabaseImpl::file( int fid )
         QString url = query.value( 0 ).toString();
         Tomahawk::source_ptr s = SourceList::instance()->get( query.value( 15 ).toUInt() );
         if ( !s )
+        {
             return r;
+        }
         if ( !s->isLocal() )
+        {
             url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
+        }
 
         r = Tomahawk::Result::get( url );
 
@@ -329,7 +337,9 @@ int
 Tomahawk::DatabaseImpl::artistId( const QString& name_orig, bool autoCreate )
 {
     if ( m_lastart == name_orig )
+    {
         return m_lastartid;
+    }
 
     int id = 0;
     QString sortname = Tomahawk::DatabaseImpl::sortname( name_orig );
@@ -423,7 +433,9 @@ Tomahawk::DatabaseImpl::albumId( int artistid, const QString& name_orig, bool au
     }
 
     if ( m_lastartid == artistid && m_lastalb == name_orig )
+    {
         return m_lastalbid;
+    }
 
     int id = 0;
     QString sortname = Tomahawk::DatabaseImpl::sortname( name_orig );
@@ -475,15 +487,17 @@ Tomahawk::DatabaseImpl::search( const Tomahawk::query_ptr& query, uint limit )
     QMap< int, float > resultsmap = m_fuzzyIndex->search( query );
     foreach ( int i, resultsmap.keys() )
     {
-        resultslist << QPair<int, float>( i, (float)resultsmap.value( i ) );
+        resultslist << QPair<int, float>( i, ( float )resultsmap.value( i ) );
     }
     qSort( resultslist.begin(), resultslist.end(), Tomahawk::DatabaseImpl::scorepairSorter );
 
     if ( !limit )
+    {
         return resultslist;
+    }
 
     QList< QPair<int, float> > resultscapped;
-    for ( int i = 0; i < (int)limit && i < resultsmap.count(); i++ )
+    for ( int i = 0; i < ( int )limit && i < resultsmap.count(); i++ )
     {
         resultscapped << resultslist.at( i );
     }
@@ -500,15 +514,17 @@ Tomahawk::DatabaseImpl::searchAlbum( const Tomahawk::query_ptr& query, uint limi
     QMap< int, float > resultsmap = m_fuzzyIndex->searchAlbum( query );
     foreach ( int i, resultsmap.keys() )
     {
-        resultslist << QPair<int, float>( i, (float)resultsmap.value( i ) );
+        resultslist << QPair<int, float>( i, ( float )resultsmap.value( i ) );
     }
     qSort( resultslist.begin(), resultslist.end(), Tomahawk::DatabaseImpl::scorepairSorter );
 
     if ( !limit )
+    {
         return resultslist;
+    }
 
     QList< QPair<int, float> > resultscapped;
-    for ( int i = 0; i < (int)limit && i < resultsmap.count(); i++ )
+    for ( int i = 0; i < ( int )limit && i < resultsmap.count(); i++ )
     {
         resultscapped << resultslist.at( i );
     }
@@ -525,11 +541,13 @@ Tomahawk::DatabaseImpl::getTrackFids( int tid )
     TomahawkSqlQuery query = newquery();
     query.exec( QString( "SELECT file.id FROM file, file_join "
                          "WHERE file_join.file=file.id "
-                         "AND file_join.track = %1 ").arg( tid ) );
+                         "AND file_join.track = %1 " ).arg( tid ) );
     query.exec();
 
     while( query.next() )
+    {
         ret.append( query.value( 0 ).toInt() );
+    }
 
     return ret;
 }
@@ -557,7 +575,9 @@ Tomahawk::DatabaseImpl::artist( int id )
 
     QVariantMap m;
     if( !query.next() )
+    {
         return m;
+    }
 
     m["id"] = query.value( 0 );
     m["name"] = query.value( 1 );
@@ -574,7 +594,9 @@ Tomahawk::DatabaseImpl::track( int id )
 
     QVariantMap m;
     if( !query.next() )
+    {
         return m;
+    }
 
     m["id"] = query.value( 0 );
     m["artist"] = query.value( 1 );
@@ -592,7 +614,9 @@ Tomahawk::DatabaseImpl::album( int id )
 
     QVariantMap m;
     if( !query.next() )
+    {
         return m;
+    }
 
     m["id"] = query.value( 0 );
     m["artist"] = query.value( 1 );
@@ -618,7 +642,9 @@ Tomahawk::DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         fileUrl = parts.at( 1 );
 
         if ( s.isNull() )
+        {
             return res;
+        }
     }
     else if ( url.contains( "file://" ) )
     {
@@ -644,7 +670,9 @@ Tomahawk::DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         checker->deleteLater();
 
         if ( checker->validResults().isEmpty() )
+        {
             res = result_ptr();
+        }
 
         return res;
     }
@@ -657,29 +685,29 @@ Tomahawk::DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
     bool searchlocal = s->isLocal();
 
     QString sql = QString( "SELECT "
-                            "url, mtime, size, md5, mimetype, duration, bitrate, "  //0
-                            "file_join.artist, file_join.album, file_join.track, "  //7
-                            "file_join.composer, "                                  //10
-                            "artist.name as artname, "                              //11
-                            "album.name as albname, "                               //12
-                            "track.name as trkname, "                               //13
-                            "composer.name as cmpname, "                            //14
-                            "file.source, "                                         //15
-                            "file_join.albumpos, "                                  //16
-                            "file_join.discnumber, "                                //17
-                            "artist.id as artid, "                                  //18
-                            "album.id as albid, "                                   //19
-                            "composer.id as cmpid "                                 //20
-                            "FROM file, file_join, artist, track "
-                            "LEFT JOIN album ON album.id = file_join.album "
-                            "LEFT JOIN artist AS composer on composer.id = file_join.composer "
-                            "WHERE "
-                            "artist.id = file_join.artist AND "
-                            "track.id = file_join.track AND "
-                            "file.source %1 AND "
-                            "file_join.file = file.id AND "
-                            "file.url = ?"
-        ).arg( searchlocal ? "IS NULL" : QString( "= %1" ).arg( s->id() ) );
+                           "url, mtime, size, md5, mimetype, duration, bitrate, "  //0
+                           "file_join.artist, file_join.album, file_join.track, "  //7
+                           "file_join.composer, "                                  //10
+                           "artist.name as artname, "                              //11
+                           "album.name as albname, "                               //12
+                           "track.name as trkname, "                               //13
+                           "composer.name as cmpname, "                            //14
+                           "file.source, "                                         //15
+                           "file_join.albumpos, "                                  //16
+                           "file_join.discnumber, "                                //17
+                           "artist.id as artid, "                                  //18
+                           "album.id as albid, "                                   //19
+                           "composer.id as cmpid "                                 //20
+                           "FROM file, file_join, artist, track "
+                           "LEFT JOIN album ON album.id = file_join.album "
+                           "LEFT JOIN artist AS composer on composer.id = file_join.composer "
+                           "WHERE "
+                           "artist.id = file_join.artist AND "
+                           "track.id = file_join.track AND "
+                           "file.source %1 AND "
+                           "file_join.file = file.id AND "
+                           "file.url = ?"
+                         ).arg( searchlocal ? "IS NULL" : QString( "= %1" ).arg( s->id() ) );
 
     query.prepare( sql );
     query.bindValue( 0, fileUrl );
@@ -690,9 +718,13 @@ Tomahawk::DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         QString url = query.value( 0 ).toString();
         Tomahawk::source_ptr s = SourceList::instance()->get( query.value( 15 ).toUInt() );
         if ( !s )
+        {
             return res;
+        }
         if ( !s->isLocal() )
+        {
             url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
+        }
 
         res = Tomahawk::Result::get( url );
 
@@ -746,10 +778,14 @@ Tomahawk::DatabaseImpl::openDatabase( const QString& dbname, bool checkSchema )
             }
         }
         else
+        {
             version = CURRENT_SCHEMA_VERSION;
+        }
 
         if ( version < 0 || version == CURRENT_SCHEMA_VERSION )
+        {
             m_db = db;
+        }
     }
 
     if ( version > 0 && version != CURRENT_SCHEMA_VERSION )
@@ -768,7 +804,9 @@ Tomahawk::DatabaseImpl::openDatabase( const QString& dbname, bool checkSchema )
             m_db = QSqlDatabase::addDatabase( "QSQLITE", connName );
             m_db.setDatabaseName( dbname );
             if ( !m_db.open() )
+            {
                 throw "db moving failed";
+            }
 
             schemaUpdated = updateSchema( version );
             if ( !schemaUpdated )
@@ -780,7 +818,7 @@ Tomahawk::DatabaseImpl::openDatabase( const QString& dbname, bool checkSchema )
     }
     else if ( version < 0 )
     {
-            schemaUpdated = updateSchema( 0 );
+        schemaUpdated = updateSchema( 0 );
     }
 
     return schemaUpdated;

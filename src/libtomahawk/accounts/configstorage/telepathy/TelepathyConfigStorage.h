@@ -42,7 +42,7 @@ class CONFIGSTORAGEDLLEXPORT TelepathyConfigStorage : public ConfigStorage
 {
     Q_OBJECT
     Q_INTERFACES( Tomahawk::Accounts::ConfigStorage )
-public:
+  public:
     explicit TelepathyConfigStorage( QObject* parent = 0 );
 
     void init();
@@ -63,11 +63,11 @@ public:
     virtual void load( const QString& accountId, Account::Configuration& cfg ) const;
     virtual void remove( const QString& accountId );
 
-private slots:
+  private slots:
     void onTpAccountManagerReady( Tp::PendingOperation* op );
     void onCredentialsManagerReady( const QString& service );
 
-private:
+  private:
     void loadConfigWidgetPlugins();
 
     QString telepathyPathToAccountId( const QString& objectPath, const QString& telepathyServiceName );

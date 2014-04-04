@@ -35,9 +35,9 @@ class Servent;
 
 class DLLEXPORT Connection : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
 
     Connection( Servent* parent );
     virtual ~Connection();
@@ -86,7 +86,7 @@ public:
     const QHostAddress peerIpAddress() const;
 
     QString bareName() const;
-signals:
+  signals:
     /**
      * Emitted if the authentication of this connection finally failed.
      */
@@ -112,21 +112,21 @@ signals:
     void socketClosed();
     void socketErrored( QAbstractSocket::SocketError );
 
-protected:
+  protected:
     virtual void setup() = 0;
 
-protected slots:
+  protected slots:
     virtual void handleMsg( msg_ptr msg ) = 0;
     virtual void authCheckTimeout();
 
-public slots:
+  public slots:
     virtual void start( QTcpSocket* sock );
     void sendMsg( QVariant );
     void sendMsg( msg_ptr );
 
     void shutdown( bool waitUntilSentAll = false );
 
-private slots:
+  private slots:
     void handleIncomingQueueEmpty();
     void sendMsg_now( msg_ptr );
     void socketDisconnected();
@@ -138,7 +138,7 @@ private slots:
     void bytesWritten( qint64 );
     void calcStats();
 
-private:
+  private:
     Q_DECLARE_PRIVATE( Connection )
     ConnectionPrivate* d_ptr;
 

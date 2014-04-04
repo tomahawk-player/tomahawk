@@ -39,9 +39,9 @@ class OverlayWidget;
 
 class DLLEXPORT TrackView : public QTreeView, public Tomahawk::ViewPage
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit TrackView( QWidget* parent = 0 );
     ~TrackView();
 
@@ -53,17 +53,41 @@ public:
     virtual void setModel( QAbstractItemModel* model );
     void setProxyModel( PlayableProxyModel* model );
 
-    virtual PlayableModel* model() const { return m_model; }
-    PlayableProxyModel* proxyModel() const { return m_proxyModel; }
-    PlaylistItemDelegate* delegate() const { return m_delegate; }
-    ViewHeader* header() const { return m_header; }
-    OverlayWidget* overlay() const { return m_overlay; }
-    Tomahawk::ContextMenu* contextMenu() const { return m_contextMenu; }
-    AnimatedSpinner* loadingSpinner() const { return m_loadingSpinner; }
+    virtual PlayableModel* model() const
+    {
+        return m_model;
+    }
+    PlayableProxyModel* proxyModel() const
+    {
+        return m_proxyModel;
+    }
+    PlaylistItemDelegate* delegate() const
+    {
+        return m_delegate;
+    }
+    ViewHeader* header() const
+    {
+        return m_header;
+    }
+    OverlayWidget* overlay() const
+    {
+        return m_overlay;
+    }
+    Tomahawk::ContextMenu* contextMenu() const
+    {
+        return m_contextMenu;
+    }
+    AnimatedSpinner* loadingSpinner() const
+    {
+        return m_loadingSpinner;
+    }
 
     void setEmptyTip( const QString& tip );
 
-    virtual QWidget* widget() { return this; }
+    virtual QWidget* widget()
+    {
+        return this;
+    }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
     void setPlaylistInterface( const Tomahawk::playlistinterface_ptr& playlistInterface );
 
@@ -71,17 +95,35 @@ public:
     virtual QString description() const;
     virtual QPixmap pixmap() const;
 
-    virtual bool showFilter() const { return true; }
+    virtual bool showFilter() const
+    {
+        return true;
+    }
     virtual bool setFilter( const QString& filter );
     virtual bool jumpToCurrentTrack();
 
-    QModelIndex contextMenuIndex() const { return m_contextMenuIndex; }
-    void setContextMenuIndex( const QModelIndex& idx ) { m_contextMenuIndex = idx; }
+    QModelIndex contextMenuIndex() const
+    {
+        return m_contextMenuIndex;
+    }
+    void setContextMenuIndex( const QModelIndex& idx )
+    {
+        m_contextMenuIndex = idx;
+    }
 
-    bool updatesContextView() const { return m_updateContextView; }
-    void setUpdatesContextView( bool b ) { m_updateContextView = b; }
+    bool updatesContextView() const
+    {
+        return m_updateContextView;
+    }
+    void setUpdatesContextView( bool b )
+    {
+        m_updateContextView = b;
+    }
 
-    bool autoResize() const { return m_autoResize; }
+    bool autoResize() const
+    {
+        return m_autoResize;
+    }
     void setAutoResize( bool b );
 
     void setAlternatingRowColors( bool enable );
@@ -89,7 +131,7 @@ public:
     // Starts playing from the beginning if resolved, or waits until a track is playable
     void startPlayingFromStart();
 
-public slots:
+  public slots:
     virtual void onItemActivated( const QModelIndex& index );
 
     virtual void deleteSelectedItems();
@@ -100,11 +142,11 @@ public slots:
     void onViewChanged();
     void onScrollTimeout();
 
-signals:
+  signals:
     void itemActivated( const QModelIndex& index );
     void modelChanged();
 
-protected:
+  protected:
     virtual void resizeEvent( QResizeEvent* event );
 
     virtual void startDrag( Qt::DropActions supportedActions );
@@ -118,10 +160,10 @@ protected:
     virtual void keyPressEvent( QKeyEvent* event );
     virtual void wheelEvent( QWheelEvent* event );
 
-protected slots:
+  protected slots:
     virtual void currentChanged( const QModelIndex& current, const QModelIndex& previous );
 
-private slots:
+  private slots:
     void onItemResized( const QModelIndex& index );
     void onFilterChanged( const QString& filter );
     void onModelFilling();
@@ -133,7 +175,7 @@ private slots:
 
     void verifySize();
 
-private:
+  private:
     void startAutoPlay( const QModelIndex& index );
     bool tryToPlayItem( const QModelIndex& index );
     void updateHoverIndex( const QPoint& pos );

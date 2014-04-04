@@ -21,15 +21,15 @@
 #include "utils/Logger.h"
 
 #ifdef Q_OS_MAC
-    #include "TomahawkSettings.h"
+#include "TomahawkSettings.h"
 #else
-    #if QT_VERSION < QT_VERSION_CHECK(5,0,0)
-        #include <qtkeychain/keychain.h>
-    #else
-        #include <qt5keychain/keychain.h>
-    #endif
-    #include <qjson/serializer.h>
-    #include <qjson/parser.h>
+#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
+#include <qtkeychain/keychain.h>
+#else
+#include <qt5keychain/keychain.h>
+#endif
+#include <qjson/serializer.h>
+#include <qjson/parser.h>
 #endif
 
 #include <QStringList>
@@ -79,14 +79,16 @@ void
 CredentialsManager::addService( const QString& service , const QStringList& accountIds )
 {
     if ( m_services.contains( service ) )
+    {
         m_services.remove( service );
+    }
     m_services.insert( service, accountIds );
     loadCredentials( service );
 }
 
 
 void
-CredentialsManager::loadCredentials( const QString &service )
+CredentialsManager::loadCredentials( const QString& service )
 {
     const QStringList& accountIds = m_services.value( service );
     tDebug() << Q_FUNC_INFO << "keys for service" << service << ":" << accountIds;
@@ -118,7 +120,7 @@ CredentialsManager::loadCredentials( const QString &service )
         j->setInsecureFallback( true );
 #endif
         connect( j, SIGNAL( finished( QKeychain::Job* ) ),
-                    SLOT( keychainJobFinished( QKeychain::Job* ) ) );
+                 SLOT( keychainJobFinished( QKeychain::Job* ) ) );
         m_readJobs[ service ] << j;
         j->start();
         tDebug()  << "Launching QtKeychain readJob for" << key;
@@ -137,10 +139,12 @@ QStringList
 CredentialsManager::keys( const QString& service ) const
 {
     QStringList keys;
-    foreach ( const CredentialsStorageKey& k, m_credentials.keys() )
+    foreach ( const CredentialsStorageKey & k, m_credentials.keys() )
     {
         if ( k.service() == service )
+        {
             keys << k.key();
+        }
     }
     tDebug() << Q_FUNC_INFO << "Returning list of keys for service" << service
              << ":" << keys;
@@ -177,11 +181,13 @@ CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QV
 
     QKeychain::Job* j;
     if ( value.isNull() ||
-         ( value.type() == QVariant::Hash && value.toHash().isEmpty() ) ||
-         ( value.type() == QVariant::String && value.toString().isEmpty() ) )
+            ( value.type() == QVariant::Hash && value.toHash().isEmpty() ) ||
+            ( value.type() == QVariant::String && value.toString().isEmpty() ) )
     {
         if ( !m_credentials.contains( csKey ) ) //if we don't have any credentials for this key, we bail
+        {
             return;
+        }
 
         m_credentials.remove( csKey );
 
@@ -198,7 +204,9 @@ CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QV
     else
     {
         if ( value == m_credentials.value( csKey ) ) //if the credentials haven't actually changed, we bail
+        {
             return;
+        }
 
         m_credentials.insert( csKey, value );
 
@@ -286,7 +294,7 @@ CredentialsManager::keychainJobFinished( QKeychain::Job* j )
             QVariantMap map = creds.toMap();
             QVariantHash hash;
             for ( QVariantMap::const_iterator it = map.constBegin();
-                  it != map.constEnd(); ++it )
+                    it != map.constEnd(); ++it )
             {
                 hash.insert( it.key(), it.value() );
             }

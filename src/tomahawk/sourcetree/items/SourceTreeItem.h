@@ -29,7 +29,7 @@ class QMimeData;
 class SourceTreeItem : public QObject
 {
     Q_OBJECT
-public:
+  public:
     enum DropType
     {
         DropTypesNone =         0x00,
@@ -78,11 +78,11 @@ public:
     void beginRowsRemoved( int from, int to );
     void endRowsRemoved();
 
-public slots:
+  public slots:
     virtual void activate() {}
     virtual void doubleClicked() {}
 
-signals:
+  signals:
     void updated();
     void selectRequest( SourceTreeItem* );
     void expandRequest( SourceTreeItem* );
@@ -94,14 +94,14 @@ signals:
     void beginChildRowsRemoved( int fromRow, int toRow );
     void childRowsRemoved();
 
-protected:
+  protected:
     void setRowType( SourcesModel::RowType t );
     void setParentItem( SourceTreeItem* item );
 
-private slots:
+  private slots:
     void checkPlayingStatus();
 
-private:
+  private:
     SourcesModel::RowType m_type;
 
     SourceTreeItem* m_parent;

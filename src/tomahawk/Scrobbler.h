@@ -33,11 +33,11 @@
 class Scrobbler : public QObject
 {
     Q_OBJECT
-public:
+  public:
     Scrobbler( QObject* parent = 0 );
     virtual ~Scrobbler();
 
-public slots:
+  public slots:
     void trackStarted( const Tomahawk::result_ptr& );
     void trackPaused();
     void trackResumed();
@@ -47,7 +47,7 @@ public slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
 
-private:
+  private:
     void scrobble();
 
     bool m_reachedScrobblePoint;

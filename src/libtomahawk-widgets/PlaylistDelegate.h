@@ -32,12 +32,12 @@ namespace Widgets
 
 class TOMAHAWK_WIDGETS_EXPORT PlaylistDelegate : public QStyledItemDelegate
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     PlaylistDelegate();
 
-protected:
+  protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 };

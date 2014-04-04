@@ -34,9 +34,9 @@
 
 #include <qjson/serializer.h>
 #if QT_VERSION < QT_VERSION_CHECK(5,0,0)
-    #include <qtkeychain/keychain.h>
+#include <qtkeychain/keychain.h>
 #else
-    #include <qt5keychain/keychain.h>
+#include <qt5keychain/keychain.h>
 #endif
 #include <QDir>
 
@@ -46,10 +46,10 @@ TomahawkSettings* TomahawkSettings::s_instance = 0;
 
 
 inline QDataStream&
-operator<<(QDataStream& out, const SerializedUpdaters& updaters)
+operator<<( QDataStream& out, const SerializedUpdaters& updaters )
 {
     out <<  TOMAHAWK_SETTINGS_VERSION;
-    out << (quint32)updaters.count();
+    out << ( quint32 )updaters.count();
     SerializedUpdaters::const_iterator iter = updaters.begin();
     int count = 0;
     for ( ; iter != updaters.end(); ++iter )
@@ -63,7 +63,7 @@ operator<<(QDataStream& out, const SerializedUpdaters& updaters)
 
 
 inline QDataStream&
-operator>>(QDataStream& in, SerializedUpdaters& updaters)
+operator>>( QDataStream& in, SerializedUpdaters& updaters )
 {
     quint32 count = 0, version = 0;
     in >> version;
@@ -95,10 +95,10 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
 {
     s_instance = this;
 
-    #ifdef Q_OS_LINUX
-        QFile file( fileName() );
-        file.setPermissions( file.permissions() & ~( QFile::ReadGroup | QFile::WriteGroup | QFile::ExeGroup | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther ) );
-    #endif
+#ifdef Q_OS_LINUX
+    QFile file( fileName() );
+    file.setPermissions( file.permissions() & ~( QFile::ReadGroup | QFile::WriteGroup | QFile::ExeGroup | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther ) );
+#endif
 
     if ( !contains( "configversion" ) )
     {
@@ -111,13 +111,13 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
                  << "new:" << TOMAHAWK_SETTINGS_VERSION
                  << "Doing upgrade, if any, and backing up";
 
-//         QString newname = QString( "%1.v%2" ).arg( dbname ).arg( version );
+        //         QString newname = QString( "%1.v%2" ).arg( dbname ).arg( version );
         if ( format() == IniFormat ||
-             ( format() == NativeFormat
+                ( format() == NativeFormat
 #ifdef Q_OS_WIN
-               && false
+                  && false
 #endif
-             ) )
+                ) )
         {
             qDebug() << "Backing up old ini-style config file";
             const QString path = fileName();
@@ -138,18 +138,26 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
 
     // Ensure last.fm and spotify accounts always exist
     QString spotifyAcct, lastfmAcct;
-    foreach ( const QString& acct, value( "accounts/allaccounts" ).toStringList() )
+    foreach ( const QString & acct, value( "accounts/allaccounts" ).toStringList() )
     {
         if ( acct.startsWith( "lastfmaccount_" ) )
+        {
             lastfmAcct = acct;
+        }
         else if ( acct.startsWith( "spotifyaccount_" ) )
+        {
             spotifyAcct = acct;
+        }
     }
 
     if ( spotifyAcct.isEmpty() )
+    {
         createSpotifyAccount();
+    }
     if ( lastfmAcct.isEmpty() )
+    {
         createLastFmAccount();
+    }
 }
 
 
@@ -214,7 +222,8 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
     if ( oldVersion == 1 )
     {
         qDebug() << "Migrating config from version 1 to 2: script resolver config name";
-        if( contains( "script/resolvers" ) ) {
+        if( contains( "script/resolvers" ) )
+        {
             setValue( "script/loadedresolvers", value( "script/resolvers" ) );
             remove( "script/resolvers" );
         }
@@ -228,7 +237,9 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         {
             QString sipName = "sipjabber";
             if ( value( "jabber/username" ).toString().contains( "@gmail" ) )
+            {
                 sipName = "sipgoogle";
+            }
 
             setValue( QString( "%1_legacy/username" ).arg( sipName ), value( "jabber/username" ) );
             setValue( QString( "%1_legacy/password" ).arg( sipName ), value( "jabber/password" ) );
@@ -275,15 +286,17 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 
             QDir resolverDir = TomahawkUtils::appDataDir();
             if ( !resolverDir.cd( QString( "atticaresolvers" ) ) )
+            {
                 return;
+            }
 
             QStringList toremove;
             QStringList resolvers = resolverDir.entryList( QDir::Dirs | QDir::NoDotAndDotDot );
             QStringList listedResolvers = value( "script/resolvers" ).toStringList();
             QStringList enabledResolvers = value( "script/loadedresolvers" ).toStringList();
-            foreach ( const QString& resolver, resolvers )
+            foreach ( const QString & resolver, resolvers )
             {
-                foreach ( const QString& r, listedResolvers )
+                foreach ( const QString & r, listedResolvers )
                 {
                     if ( r.contains( resolver ) )
                     {
@@ -291,7 +304,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
                         listedResolvers.removeAll( r );
                     }
                 }
-                foreach ( const QString& r, enabledResolvers )
+                foreach ( const QString & r, enabledResolvers )
                 {
                     if ( r.contains( resolver ) )
                     {
@@ -319,7 +332,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         const QStringList enabledSip = enabledSipPlugins();
 
         QStringList accounts;
-        foreach ( const QString& sipPlugin, allSip )
+        foreach ( const QString & sipPlugin, allSip )
         {
             const QStringList parts = sipPlugin.split( "_" );
             Q_ASSERT( parts.size() == 2 );
@@ -331,7 +344,9 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             QString rawpluginname = pluginName;
             rawpluginname.replace( "sip", "" );
             if ( rawpluginname.contains( "jabber" ) )
+            {
                 rawpluginname.replace( "jabber", "xmpp" );
+            }
 
             QString accountKey = QString( "%1account_%2" ).arg( rawpluginname ).arg( pluginId );
 
@@ -354,9 +369,11 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             {
                 // Only port twitter plugin if there's a valid twitter config
                 if ( value( sipPlugin + "/oauthtokensecret" ).toString().isEmpty() &&
-                     value( sipPlugin + "/oauthtoken" ).toString().isEmpty() &&
-                     value( sipPlugin + "/screenname" ).toString().isEmpty() )
+                        value( sipPlugin + "/oauthtoken" ).toString().isEmpty() &&
+                        value( sipPlugin + "/screenname" ).toString().isEmpty() )
+                {
                     continue;
+                }
 
                 QVariantHash credentials;
                 credentials[ "oauthtoken" ] = value( sipPlugin + "/oauthtoken" );
@@ -397,11 +414,13 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         const QStringList allResolvers = value( "script/resolvers" ).toStringList();
         const QStringList enabledResolvers = value( "script/loadedresolvers" ).toStringList();
 
-        foreach ( const QString& resolver, allResolvers )
+        foreach ( const QString & resolver, allResolvers )
         {
             // We handle last.fm resolvers differently.
             if ( resolver.contains( "lastfm" ) )
+            {
                 continue;
+            }
 
             const QString accountKey = QString( "resolveraccount_%1" ).arg( QUuid::createUuid().toString().mid( 1, 8 ) );
             accounts << accountKey;
@@ -437,7 +456,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         const bool scrobble = value( "lastfm/enablescrobbling", false ).toBool();
         beginGroup( "accounts/" + accountKey );
         bool hasLastFmEnabled = false;
-        foreach ( const QString& r, enabledResolvers )
+        foreach ( const QString & r, enabledResolvers )
         {
             if ( r.contains( "lastfm" ) )
             {
@@ -470,7 +489,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         // Upgrade spotify resolver to standalone account, if one exists
         beginGroup( "accounts" );
         QStringList allAccounts = value( "allaccounts" ).toStringList();
-        foreach ( const QString& account, allAccounts )
+        foreach ( const QString & account, allAccounts )
         {
             if ( account.startsWith( "resolveraccount_" ) && value( QString( "%1/accountfriendlyname" ).arg( account ) ).toString().endsWith( "spotify_tomahawkresolver" ) )
             {
@@ -505,12 +524,12 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
     {
         // Some users got duplicate accounts for some reason, so make them unique if we can
         QSet< QString > uniqueFriendlyNames;
-        beginGroup("accounts");
+        beginGroup( "accounts" );
         const QStringList accounts = childGroups();
         QStringList allAccounts = value( "allaccounts" ).toStringList();
 
-//        qDebug() << "Got accounts to migrate:" << accounts;
-        foreach ( const QString& account, accounts )
+        //        qDebug() << "Got accounts to migrate:" << accounts;
+        foreach ( const QString & account, accounts )
         {
             if ( !allAccounts.contains( account ) ) // orphan
             {
@@ -544,16 +563,18 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         const QStringList playlists = childGroups();
 
         SerializedUpdaters updaters;
-        foreach ( const QString& playlist, playlists )
+        foreach ( const QString & playlist, playlists )
         {
             beginGroup( playlist );
             const QString type = value( "type" ).toString();
 
             QVariantHash extraData;
-            foreach ( const QString& key, childKeys() )
+            foreach ( const QString & key, childKeys() )
             {
                 if ( key == "type" )
+                {
                     continue;
+                }
 
                 extraData[ key ] = value( key );
             }
@@ -575,7 +596,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         // is like the last.fm account and always exists
         QStringList allAccounts = value( "accounts/allaccounts" ).toStringList();
         QString acct;
-        foreach ( const QString& account, allAccounts )
+        foreach ( const QString & account, allAccounts )
         {
             if ( account.startsWith( "spotifyaccount_" ) )
             {
@@ -588,8 +609,8 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         {
             beginGroup( "accounts/" + acct );
             QVariantHash conf = value( "configuration" ).toHash();
-            foreach ( const QString& key, conf.keys() )
-                qDebug() << key << conf[ key ].toString();
+            foreach ( const QString & key, conf.keys() )
+            qDebug() << key << conf[ key ].toString();
             endGroup();
         }
         else
@@ -604,7 +625,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         if ( cacheDir.cd( "atticacache" ) )
         {
             QStringList files = cacheDir.entryList( QStringList() << "*.png" );
-            foreach ( const QString& file, files )
+            foreach ( const QString & file, files )
             {
                 const bool removed = cacheDir.remove( file );
                 tDebug() << "Tried to remove cached image, succeeded?" << removed << cacheDir.filePath( file );
@@ -627,7 +648,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         tDebug() << "About to move these accounts to QtKeychain:" << accounts;
 
         //Move storage of Credentials from QSettings to QtKeychain
-        foreach ( const QString& account, accounts )
+        foreach ( const QString & account, accounts )
         {
             tDebug() << "beginGroup" << QString( "accounts/%1" ).arg( account );
             beginGroup( QString( "accounts/%1" ).arg( account ) );
@@ -710,7 +731,7 @@ TomahawkSettings::scannerPaths() const
     QString musicLocation;
 
 #if defined(Q_OS_LINUX)
-    musicLocation = QDir::homePath() + QLatin1String("/Music");
+    musicLocation = QDir::homePath() + QLatin1String( "/Music" );
 #endif
 
     return value( "scanner/paths", musicLocation ).toStringList();
@@ -810,7 +831,7 @@ TomahawkSettings::songChangeNotificationEnabled() const
 
 
 void
-TomahawkSettings::setSongChangeNotificationEnabled(bool enable)
+TomahawkSettings::setSongChangeNotificationEnabled( bool enable )
 {
     setValue( "ui/songChangeNotification", enable );
 }
@@ -947,14 +968,16 @@ TomahawkSettings::aclEntries() const
 {
     QVariant retVal = value( "acl/entries", QVariantList() );
     if ( retVal.isValid() && retVal.canConvert< QVariantList >() )
+    {
         return retVal.toList();
+    }
 
     return QVariantList();
 }
 
 
 void
-TomahawkSettings::setAclEntries( const QVariantList &entries )
+TomahawkSettings::setAclEntries( const QVariantList& entries )
 {
     tDebug() << "Setting entries";
     setValue( "acl/entries", entries );
@@ -1116,7 +1139,9 @@ void
 TomahawkSettings::setPlaylistColumnSizes( const QString& playlistid, const QByteArray& state )
 {
     if ( playlistid.isEmpty() )
+    {
         return;
+    }
 
     setValue( QString( "ui/playlist/%1/columnSizes" ).arg( playlistid ), state );
 }
@@ -1130,7 +1155,7 @@ TomahawkSettings::shuffleState( const QString& playlistid ) const
 
 
 void
-TomahawkSettings::setShuffleState( const QString& playlistid, bool state)
+TomahawkSettings::setShuffleState( const QString& playlistid, bool state )
 {
     setValue( QString( "ui/playlist/%1/shuffleState" ).arg( playlistid ), state );
 }
@@ -1161,14 +1186,14 @@ TomahawkSettings::setQueueState( const QVariant& state )
 void
 TomahawkSettings::setRepeatMode( const QString& playlistid, Tomahawk::PlaylistModes::RepeatMode mode )
 {
-    setValue( QString( "ui/playlist/%1/repeatMode" ).arg( playlistid ), (int)mode );
+    setValue( QString( "ui/playlist/%1/repeatMode" ).arg( playlistid ), ( int )mode );
 }
 
 
 Tomahawk::PlaylistModes::RepeatMode
 TomahawkSettings::repeatMode( const QString& playlistid )
 {
-    return (PlaylistModes::RepeatMode)value( QString( "ui/playlist/%1/repeatMode" ).arg( playlistid ) ).toInt();
+    return ( PlaylistModes::RepeatMode )value( QString( "ui/playlist/%1/repeatMode" ).arg( playlistid ) ).toInt();
 }
 
 
@@ -1177,8 +1202,10 @@ TomahawkSettings::recentlyPlayedPlaylistGuids( unsigned int amount ) const
 {
     QStringList p = value( "playlists/recentlyPlayed" ).toStringList();
 
-    while ( amount && p.count() > (int)amount )
+    while ( amount && p.count() > ( int )amount )
+    {
         p.removeAt( 0 );
+    }
 
     return p;
 }
@@ -1266,7 +1293,9 @@ TomahawkSettings::addSipPlugin( const QString& pluginId, bool enable )
     setSipPlugins( list );
 
     if ( enable )
+    {
         enableSipPlugin( pluginId );
+    }
 }
 
 
@@ -1278,7 +1307,9 @@ TomahawkSettings::removeSipPlugin( const QString& pluginId )
     setSipPlugins( list );
 
     if( enabledSipPlugins().contains( pluginId ) )
+    {
         disableSipPlugin( pluginId );
+    }
 }
 
 
@@ -1328,7 +1359,7 @@ TomahawkSettings::externalAddressMode()
         remove( "network/prefer-static-host-and-port" );
         setValue( "network/external-address-mode", Tomahawk::Network::ExternalAddress::Static );
     }
-    return (Tomahawk::Network::ExternalAddress::Mode) value( "network/external-address-mode", Tomahawk::Network::ExternalAddress::Upnp ).toInt();
+    return ( Tomahawk::Network::ExternalAddress::Mode ) value( "network/external-address-mode", Tomahawk::Network::ExternalAddress::Upnp ).toInt();
 }
 
 
@@ -1347,7 +1378,7 @@ TomahawkSettings::externalHostname() const
 
 
 void
-TomahawkSettings::setExternalHostname(const QString& externalHostname)
+TomahawkSettings::setExternalHostname( const QString& externalHostname )
 {
     setValue( "network/external-hostname", externalHostname );
 }
@@ -1368,12 +1399,16 @@ TomahawkSettings::externalPort() const
 
 
 void
-TomahawkSettings::setExternalPort(int externalPort)
+TomahawkSettings::setExternalPort( int externalPort )
 {
     if ( externalPort == 0 )
-        setValue( "network/external-port", 50210);
+    {
+        setValue( "network/external-port", 50210 );
+    }
     else
-        setValue( "network/external-port", externalPort);
+    {
+        setValue( "network/external-port", externalPort );
+    }
 }
 
 
@@ -1501,9 +1536,13 @@ QString
 TomahawkSettings::importXspfPath() const
 {
     if ( contains( "importXspfPath" ) )
+    {
         return value( "importXspfPath" ).toString();
+    }
     else
+    {
         return QDir::homePath();
+    }
 }
 
 
@@ -1529,13 +1568,15 @@ TomahawkSettings::setPlaylistUpdaters( const SerializedUpdaters& updaters )
 
 
 void
-TomahawkSettings::setLastChartIds( const QMap<QString, QVariant>& ids ){
+TomahawkSettings::setLastChartIds( const QMap<QString, QVariant>& ids )
+{
 
     setValue( "chartIds", QVariant::fromValue<QMap<QString, QVariant> >( ids ) );
 }
 
 
-QMap<QString, QVariant> TomahawkSettings::lastChartIds(){
+QMap<QString, QVariant> TomahawkSettings::lastChartIds()
+{
 
     return value( "chartIds" ).value<QMap<QString, QVariant> >();
 }

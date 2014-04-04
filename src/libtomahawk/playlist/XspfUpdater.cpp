@@ -36,7 +36,7 @@
 using namespace Tomahawk;
 
 PlaylistUpdaterInterface*
-XspfUpdaterFactory::create( const playlist_ptr &pl, const QVariantHash& settings )
+XspfUpdaterFactory::create( const playlist_ptr& pl, const QVariantHash& settings )
 {
     const bool autoUpdate = settings.value( "autoupdate" ).toBool();
     const int interval = settings.value( "interval" ).toInt();
@@ -125,18 +125,22 @@ XspfUpdater::playlistLoaded( const QList<Tomahawk::query_ptr>& newEntries )
     {
         const QString newTitle = loader->title();
         if ( newTitle != playlist()->title() )
+        {
             playlist()->rename( newTitle );
+        }
     }
 
     QList< query_ptr > tracks;
     foreach ( const plentry_ptr ple, playlist()->entries() )
-        tracks << ple->query();
+    tracks << ple->query();
 
     bool changed = false;
     QList< query_ptr > mergedTracks = TomahawkUtils::mergePlaylistChanges( tracks, newEntries, changed );
 
     if ( !changed )
+    {
         return;
+    }
 
     QList<Tomahawk::plentry_ptr> el = playlist()->entriesFromQueries( mergedTracks, true );
     playlist()->createNewRevision( uuid(), playlist()->currentrevision(), el );
@@ -149,9 +153,13 @@ XspfUpdater::setAutoUpdate( bool autoUpdate )
     m_autoUpdate = autoUpdate;
 
     if ( m_autoUpdate )
+    {
         m_timer->start();
+    }
     else
+    {
         m_timer->stop();
+    }
 
     QVariantHash s = settings();
     s[ "autoupdate" ] = m_autoUpdate;
@@ -159,7 +167,9 @@ XspfUpdater::setAutoUpdate( bool autoUpdate )
 
     // Update immediately as well
     if ( m_autoUpdate )
+    {
         QTimer::singleShot( 0, this, SLOT( updateNow() ) );
+    }
 
     emit changed();
 }
@@ -172,7 +182,9 @@ XspfUpdater::setInterval( int intervalMsecs )
     saveSettings( s );
 
     if ( !m_timer )
+    {
         m_timer = new QTimer( this );
+    }
 
     m_timer->setInterval( intervalMsecs );
 }

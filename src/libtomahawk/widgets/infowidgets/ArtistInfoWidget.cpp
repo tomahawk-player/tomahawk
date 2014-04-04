@@ -84,9 +84,9 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         ui->relatedArtists->setEmptyTip( tr( "Sorry, we could not find any related artists!" ) );
 
         ui->relatedArtists->setAutoFitItems( true );
-    /*    ui->relatedArtists->setWrapping( false );
-        ui->relatedArtists->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-        ui->relatedArtists->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );*/
+        /*    ui->relatedArtists->setWrapping( false );
+            ui->relatedArtists->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+            ui->relatedArtists->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );*/
         ui->relatedArtists->delegate()->setItemSize( QSize( 170, 170 ) );
 
         TomahawkStyle::stylePageFrame( ui->relatedArtists );
@@ -97,8 +97,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     {
         ui->albums->setAutoResize( true );
         ui->albums->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    /*    ui->albums->setWrapping( false );
-        ui->albums->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );*/
+        /*    ui->albums->setWrapping( false );
+            ui->albums->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );*/
         ui->albums->delegate()->setItemSize( QSize( 170, 170 ) );
         ui->albums->proxyModel()->setHideDupeItems( true );
 
@@ -243,19 +243,29 @@ bool
 ArtistInfoWidget::isBeingPlayed() const
 {
     if ( ui->albums && ui->albums->isBeingPlayed() )
+    {
         return true;
+    }
 
     if ( ui->relatedArtists && ui->relatedArtists->isBeingPlayed() )
+    {
         return true;
+    }
 
     if ( ui->albums && ui->albums->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+    {
         return true;
+    }
 
     if ( ui->relatedArtists && ui->relatedArtists->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+    {
         return true;
+    }
 
     if ( ui->topHits && ui->topHits->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+    {
         return true;
+    }
 
     return false;
 }
@@ -265,19 +275,29 @@ bool
 ArtistInfoWidget::jumpToCurrentTrack()
 {
     if ( ui->albums && ui->albums->jumpToCurrentTrack() )
+    {
         return true;
+    }
 
     if ( ui->relatedArtists && ui->relatedArtists->jumpToCurrentTrack() )
+    {
         return true;
+    }
 
     if ( ui->topHits && ui->topHits->jumpToCurrentTrack() )
+    {
         return true;
+    }
 
     if ( ui->albums && ui->albums->jumpToCurrentTrack() )
+    {
         return true;
+    }
 
     if ( ui->relatedArtists && ui->relatedArtists->jumpToCurrentTrack() )
+    {
         return true;
+    }
 
     return false;
 }
@@ -305,25 +325,33 @@ ArtistInfoWidget::load( const artist_ptr& artist )
     connect( m_artist.data(), SIGNAL( similarArtistsLoaded() ), SLOT( onSimilarArtistsLoaded() ) );
     connect( m_artist.data(), SIGNAL( updated() ), SLOT( onArtistImageUpdated() ) );
     connect( m_artist.data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ),
-                                SLOT( onAlbumsFound( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ) );
+             SLOT( onAlbumsFound( QList<Tomahawk::album_ptr>, Tomahawk::ModelMode ) ) );
     connect( m_artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
-                                SLOT( onTracksFound( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode ) ) );
+             SLOT( onTracksFound( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode ) ) );
 
     ui->cover->setArtist( artist );
 
     m_topHitsModel->startLoading();
 
     if ( !m_artist->albums( Mixed ).isEmpty() )
+    {
         onAlbumsFound( m_artist->albums( Mixed ), Mixed );
+    }
 
     if ( !m_artist->tracks().isEmpty() )
+    {
         onTracksFound( m_artist->tracks(), Mixed );
+    }
 
     if ( !m_artist->similarArtists().isEmpty() )
+    {
         onSimilarArtistsLoaded();
+    }
 
     if ( !m_artist->biography().isEmpty() )
+    {
         onBiographyLoaded();
+    }
 
     onArtistImageUpdated();
 }
@@ -368,8 +396,8 @@ ArtistInfoWidget::onBiographyLoaded()
 void
 ArtistInfoWidget::onArtistStatsLoaded()
 {
-/*    m_playStatsGauge->setValue( m_artist->playbackCount( SourceList::instance()->getLocal() ) );
-    m_playStatsGauge->setMaximum( SourceList::instance()->getLocal()->playbackCount() ); */
+    /*    m_playStatsGauge->setValue( m_artist->playbackCount( SourceList::instance()->getLocal() ) );
+        m_playStatsGauge->setMaximum( SourceList::instance()->getLocal()->playbackCount() ); */
 
     m_playStatsGauge->setMaximum( m_artist->chartCount() );
     m_playStatsGauge->setValue( m_artist->chartPosition() );
@@ -380,7 +408,9 @@ void
 ArtistInfoWidget::onArtistImageUpdated()
 {
     if ( m_artist->cover( QSize( 0, 0 ) ).isNull() )
+    {
         return;
+    }
 
     m_pixmap = m_artist->cover( QSize( 0, 0 ) );
     emit pixmapChanged( m_pixmap );
@@ -425,7 +455,11 @@ QPixmap
 ArtistInfoWidget::pixmap() const
 {
     if ( m_pixmap.isNull() )
+    {
         return Tomahawk::ViewPage::pixmap();
+    }
     else
+    {
         return m_pixmap;
+    }
 }

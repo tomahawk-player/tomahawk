@@ -38,7 +38,7 @@ XSPFGenerator::XSPFGenerator( const playlist_ptr& pl, QObject* parent )
     : QObject( parent )
     , m_playlist( pl )
 {
-     QTimer::singleShot( 0, this, SLOT( generate() ) );
+    QTimer::singleShot( 0, this, SLOT( generate() ) );
 }
 
 
@@ -66,7 +66,7 @@ XSPFGenerator::generate()
     w.writeTextElement( "date", QDateTime::fromTime_t( m_playlist->createdOn() ).toString( Qt::ISODate ) );
 
     w.writeStartElement( "trackList" );
-    foreach ( const plentry_ptr& q, m_playlist->entries() )
+    foreach ( const plentry_ptr & q, m_playlist->entries() )
     {
         w.writeStartElement( "track" );
         w.writeTextElement( "title", q->query()->queryTrack()->track() );

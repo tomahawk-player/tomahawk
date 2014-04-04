@@ -29,21 +29,24 @@ class QTimeLine;
 
 class DLLEXPORT SeekSlider : public QSlider, private TomahawkUtils::DpiScaler
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     SeekSlider( QWidget* parent = 0 );
     ~SeekSlider();
 
-    void setTimeLine( QTimeLine* timeline ) { m_timeLine = timeline; }
+    void setTimeLine( QTimeLine* timeline )
+    {
+        m_timeLine = timeline;
+    }
 
-public slots:
+  public slots:
     void setValue( int value );
-    
-protected:
+
+  protected:
     void mousePressEvent( QMouseEvent* event );
 
-private:
+  private:
     QTimeLine* m_timeLine;
 };
 

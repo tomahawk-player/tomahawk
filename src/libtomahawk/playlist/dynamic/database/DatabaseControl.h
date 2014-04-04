@@ -26,55 +26,55 @@
 namespace Tomahawk
 {
 
-    class DatabaseControl : public DynamicControl
-    {
-        Q_OBJECT
-    public:
-        virtual QWidget* inputField();
-        virtual QWidget* matchSelector();
+class DatabaseControl : public DynamicControl
+{
+    Q_OBJECT
+  public:
+    virtual QWidget* inputField();
+    virtual QWidget* matchSelector();
 
-        virtual QString input() const;
-        virtual QString match() const;
-        virtual QString matchString() const;
-        virtual QString summary() const;
+    virtual QString input() const;
+    virtual QString match() const;
+    virtual QString matchString() const;
+    virtual QString summary() const;
 
-        virtual void setInput(const QString& input);
-        virtual void setMatch(const QString& match);
+    virtual void setInput( const QString& input );
+    virtual void setMatch( const QString& match );
 
-        /// DO NOT USE IF YOU ARE NOT A DBCMD
-        DatabaseControl( const QString& type, const QStringList& typeSelectors, QObject* parent = 0 );
-        DatabaseControl( const QString& sql, const QString& summary, const QStringList& typeSelectors, QObject* parent = 0 );
+    /// DO NOT USE IF YOU ARE NOT A DBCMD
+    DatabaseControl( const QString& type, const QStringList& typeSelectors, QObject* parent = 0 );
+    DatabaseControl( const QString& sql, const QString& summary, const QStringList& typeSelectors, QObject* parent = 0 );
 
-        QString sql() const;
+    QString sql() const;
 
-    public slots:
-        virtual void setSelectedType ( const QString& type );
+  public slots:
+    virtual void setSelectedType ( const QString& type );
 
-    private slots:
-        void updateData();
-        void editingFinished();
-        void editTimerFired();
+  private slots:
+    void updateData();
+    void editingFinished();
+    void editTimerFired();
 
-    private:
-        void updateWidgets();
-        void updateWidgetsFromData();
+  private:
+    void updateWidgets();
+    void updateWidgetsFromData();
 
-        // utility
-        void calculateSummary();
+    // utility
+    void calculateSummary();
 
-        QPointer< QWidget > m_input;
-        QPointer< QWidget > m_match;
-        QString m_matchData;
-        QString m_matchString;
-        QString m_summary;
+    QPointer< QWidget > m_input;
+    QPointer< QWidget > m_match;
+    QString m_matchData;
+    QString m_matchString;
+    QString m_summary;
 
-        QTimer m_editingTimer;
-        QTimer m_delayedEditTimer;
+    QTimer m_editingTimer;
+    QTimer m_delayedEditTimer;
 
-        // SQL control
-        QString m_sql;
-        QString m_sqlSummary;
-    };
+    // SQL control
+    QString m_sql;
+    QString m_sqlSummary;
+};
 
 };
 

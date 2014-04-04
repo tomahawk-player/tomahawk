@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -31,26 +31,38 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCommand_DeletePlaylist : public DatabaseCommandLoggable
 {
-Q_OBJECT
-Q_PROPERTY( QString playlistguid READ playlistguid WRITE setPlaylistguid )
+    Q_OBJECT
+    Q_PROPERTY( QString playlistguid READ playlistguid WRITE setPlaylistguid )
 
-public:
+  public:
     explicit DatabaseCommand_DeletePlaylist( QObject* parent = 0 )
-            : DatabaseCommandLoggable( parent )
+        : DatabaseCommandLoggable( parent )
     {}
 
     explicit DatabaseCommand_DeletePlaylist( const Tomahawk::source_ptr& source, const QString& playlistguid );
 
-    QString commandname() const { return "deleteplaylist"; }
+    QString commandname() const
+    {
+        return "deleteplaylist";
+    }
 
     virtual void exec( DatabaseImpl* lib );
     virtual void postCommitHook();
-    virtual bool doesMutates() const { return true; }
+    virtual bool doesMutates() const
+    {
+        return true;
+    }
 
-    QString playlistguid() const { return m_playlistguid; }
-    void setPlaylistguid( const QString& s ) { m_playlistguid = s; }
+    QString playlistguid() const
+    {
+        return m_playlistguid;
+    }
+    void setPlaylistguid( const QString& s )
+    {
+        m_playlistguid = s;
+    }
 
-protected:
+  protected:
     QString m_playlistguid;
 };
 

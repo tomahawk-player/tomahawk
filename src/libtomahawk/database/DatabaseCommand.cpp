@@ -109,14 +109,16 @@ DatabaseCommand::guid() const
 {
     Q_D( const DatabaseCommand );
     if( d->guid.isEmpty() )
+    {
         d->guid = uuid();
+    }
 
     return d->guid;
 }
 
 
 void
-DatabaseCommand::setGuid( const QString& g)
+DatabaseCommand::setGuid( const QString& g )
 {
     Q_D( DatabaseCommand );
     d->guid = g;
@@ -164,7 +166,7 @@ DatabaseCommand::setWeakRef( QWeakPointer< DatabaseCommand > weakRef )
     d->ownRef = weakRef;
 }
 
-DatabaseCommand::DatabaseCommand( QObject* parent, DatabaseCommandPrivate* d)
+DatabaseCommand::DatabaseCommand( QObject* parent, DatabaseCommandPrivate* d )
     : QObject( parent )
     , d_ptr( d )
 {

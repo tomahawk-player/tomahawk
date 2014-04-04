@@ -18,8 +18,10 @@
 
 #include "WeakObjectList.h"
 
-namespace Tomahawk {
-namespace Utils {
+namespace Tomahawk
+{
+namespace Utils
+{
 
 
 void

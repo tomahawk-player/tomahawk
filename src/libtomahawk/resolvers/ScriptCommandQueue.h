@@ -30,18 +30,18 @@
 class ScriptCommandQueue : public QObject
 {
     Q_OBJECT
-public:
+  public:
     explicit ScriptCommandQueue( QObject* parent = 0 );
     virtual ~ScriptCommandQueue() {}
 
     void enqueue( const QSharedPointer< ScriptCommand >& req );
 
-private slots:
+  private slots:
     void nextCommand();
     void onCommandDone();
     void onTimeout();
 
-private:
+  private:
     QQueue< QSharedPointer< ScriptCommand > > m_queue;
     QTimer* m_timer;
     QMutex m_mutex;

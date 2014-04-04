@@ -34,7 +34,7 @@ using namespace Tomahawk;
 DatabaseCommand_LoadAllPlaylists::DatabaseCommand_LoadAllPlaylists( const source_ptr& s, QObject* parent )
     : DatabaseCommand( parent, new DatabaseCommand_LoadAllPlaylistsPrivate( this, s ) )
 {
-    qRegisterMetaType< QHash< Tomahawk::playlist_ptr, QStringList > >("QHash< Tomahawk::playlist_ptr, QStringList >");
+    qRegisterMetaType< QHash< Tomahawk::playlist_ptr, QStringList > >( "QHash< Tomahawk::playlist_ptr, QStringList >" );
 }
 
 
@@ -48,15 +48,17 @@ DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
 
     switch ( d->sortOrder )
     {
-    case 0:
-        break;
+        case 0:
+            break;
 
-    case ModificationTime:
+        case ModificationTime:
             orderToken = "ORDER BY playlist.createdOn";
     }
 
     if ( !source().isNull() )
+    {
         sourceToken = QString( "AND source %1 " ).arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) );
+    }
 
     QString trackIdJoin;
     QString trackIdFields;
@@ -72,14 +74,14 @@ DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
                          " WHERE ( ( dynplaylist = 'false' ) OR ( dynplaylist = 0 ) ) "
                          " %1 "
                          " %2 %3 %4 "
-                         )
+                       )
                 .arg( sourceToken )
                 .arg( orderToken )
                 .arg( d->sortDescending ? "DESC" : QString() )
                 .arg( d->limitAmount > 0 ? QString( "LIMIT 0, %1" ).arg( d->limitAmount ) : QString() )
                 .arg( trackIdJoin )
                 .arg( trackIdFields )
-                );
+              );
 
     QList<playlist_ptr> plists;
     QHash<playlist_ptr, QStringList> phash;
@@ -87,14 +89,14 @@ DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
     while ( query.next() )
     {
         playlist_ptr p( new Playlist( source(),                  //src
-                                      query.value(6).toString(), //current rev
-                                      query.value(1).toString(), //title
-                                      query.value(2).toString(), //info
-                                      query.value(3).toString(), //creator
-                                      query.value(7).toInt(),    //lastmod / createdOn
-                                      query.value(5).toBool(),   //shared
-                                      query.value(4).toInt(),    //lastmod
-                                      query.value(0).toString()  //GUID
+                                      query.value( 6 ).toString(), //current rev
+                                      query.value( 1 ).toString(), //title
+                                      query.value( 2 ).toString(), //info
+                                      query.value( 3 ).toString(), //creator
+                                      query.value( 7 ).toInt(),  //lastmod / createdOn
+                                      query.value( 5 ).toBool(), //shared
+                                      query.value( 4 ).toInt(),  //lastmod
+                                      query.value( 0 ).toString() //GUID
                                     ), &QObject::deleteLater );
         p->setWeakSelf( p.toWeakRef() );
         plists.append( p );

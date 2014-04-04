@@ -57,7 +57,7 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     m_loveTrackAction = new QAction( this );
     m_stopContinueAfterTrackAction = new QAction( this );
 
-    ActionCollection *ac = ActionCollection::instance();
+    ActionCollection* ac = ActionCollection::instance();
     m_contextMenu->addAction( ac->getAction( "playPause" ) );
     m_contextMenu->addAction( ac->getAction( "stop" ) );
     m_contextMenu->addSeparator();
@@ -164,7 +164,9 @@ TomahawkTrayIcon::setResult( const Tomahawk::result_ptr& result )
     refreshToolTip();
 
     if ( result )
+    {
         connect( result->track().data(), SIGNAL( socialActionsLoaded() ), SLOT( onSocialActionsLoaded() ), Qt::UniqueConnection );
+    }
 
     onSocialActionsLoaded();
     onStopContinueAfterTrackChanged();
@@ -175,20 +177,24 @@ void
 TomahawkTrayIcon::onStopContinueAfterTrackChanged()
 {
     if ( m_currentTrack && AudioEngine::instance()->stopAfterTrack() && m_currentTrack->track()->equals( AudioEngine::instance()->stopAfterTrack()->track() ) )
+    {
         m_stopContinueAfterTrackAction->setText( tr( "&Continue Playback after current Track" ) );
+    }
     else
+    {
         m_stopContinueAfterTrackAction->setText( tr( "&Stop Playback after current Track" ) );
+    }
 }
 
 
 void
 TomahawkTrayIcon::refreshToolTip()
 {
-    #ifdef Q_WS_MAC
+#ifdef Q_WS_MAC
     // causes issues with OS X menubar, also none
     // of the other OS X menubar icons have a tooltip
     return;
-    #endif
+#endif
 
     QString tip;
     if ( !m_currentTrack.isNull() )
@@ -200,10 +206,10 @@ TomahawkTrayIcon::refreshToolTip()
         tip = tr( "Currently not playing." );
     }
 
-    #ifdef Q_OS_WIN
-        // Good old crappy Win32
-        tip.replace( "&", "&&&" );
-    #endif
+#ifdef Q_OS_WIN
+    // Good old crappy Win32
+    tip.replace( "&", "&&&" );
+#endif
 
     setToolTip( tip );
 }
@@ -212,11 +218,11 @@ TomahawkTrayIcon::refreshToolTip()
 void
 TomahawkTrayIcon::onAnimationTimer()
 {
-/*    m_currentAnimationFrame++;
-    if( m_currentAnimationFrame >= m_animationPixmaps.count() )
-        m_currentAnimationFrame = 0;
+    /*    m_currentAnimationFrame++;
+        if( m_currentAnimationFrame >= m_animationPixmaps.count() )
+            m_currentAnimationFrame = 0;
 
-    setIcon( m_animationPixmaps.at( m_currentAnimationFrame ) );*/
+        setIcon( m_animationPixmaps.at( m_currentAnimationFrame ) );*/
 }
 
 
@@ -232,7 +238,7 @@ TomahawkTrayIcon::onActivated( QSystemTrayIcon::ActivationReason reason )
         case QSystemTrayIcon::Trigger:
         {
             TomahawkWindow* mainwindow = APP->mainWindow();
-            if (mainwindow->isActiveWindow())
+            if ( mainwindow->isActiveWindow() )
             {
                 mainwindow->hide();
             }
@@ -294,7 +300,9 @@ void
 TomahawkTrayIcon::loveTrackTriggered()
 {
     if ( !m_currentTrack )
+    {
         return;
+    }
 
     m_currentTrack->track()->setLoved( !m_currentTrack->track()->loved() );
 }
@@ -304,12 +312,18 @@ void
 TomahawkTrayIcon::stopContinueAfterTrackActionTriggered()
 {
     if ( !m_currentTrack )
+    {
         return;
+    }
 
     if ( !AudioEngine::instance()->stopAfterTrack() || !m_currentTrack->track()->equals( AudioEngine::instance()->stopAfterTrack()->track() ) )
+    {
         AudioEngine::instance()->setStopAfterTrack( m_currentTrack->toQuery() );
+    }
     else
+    {
         AudioEngine::instance()->setStopAfterTrack( Tomahawk::query_ptr() );
+    }
 }
 
 
@@ -320,7 +334,9 @@ TomahawkTrayIcon::onSocialActionsLoaded()
     m_loveTrackAction->setIcon( QIcon( RESPATH "images/loved.svg" ) );
 
     if ( !m_currentTrack )
+    {
         return;
+    }
 
     if ( m_currentTrack->track()->loved() )
     {
@@ -337,7 +353,7 @@ TomahawkTrayIcon::event( QEvent* e )
     // on X11. Let's make it adjust the volume.
     if ( e->type() == QEvent::Wheel )
     {
-        if ( ((QWheelEvent*)e)->delta() > 0 )
+        if ( ( ( QWheelEvent* )e )->delta() > 0 )
         {
             AudioEngine::instance()->raiseVolume();
         }

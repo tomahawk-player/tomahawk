@@ -61,7 +61,9 @@ ScriptResolver::ScriptResolver( const QString& exe )
     startProcess();
 
     if ( !Tomahawk::Utils::nam() )
+    {
         return;
+    }
 
     // set the name to the binary, if we launch properly we'll get the name the resolver reports
     m_name = QFileInfo( filePath() ).baseName();
@@ -95,7 +97,9 @@ ScriptResolver::~ScriptResolver()
     }
 
     if ( !m_configWidget.isNull() )
+    {
         delete m_configWidget.data();
+    }
 }
 
 
@@ -122,9 +126,13 @@ ScriptResolver::start()
 {
     m_stopped = false;
     if ( m_ready )
+    {
         Tomahawk::Pipeline::instance()->addResolver( this );
+    }
     else if ( !m_configSent )
+    {
         sendConfig();
+    }
     // else, we've sent our config msg so are waiting for the resolver to react
 }
 
@@ -154,8 +162,8 @@ ScriptResolver::sendConfig()
 
     // QJson sucks
     QVariantList hosts;
-    foreach ( const QString& host, factory->noProxyHosts() )
-        hosts << host;
+    foreach ( const QString & host, factory->noProxyHosts() )
+    hosts << host;
     m.insert( "noproxyhosts", hosts );
 
     QByteArray data = m_serializer.serialize( m );
@@ -205,10 +213,12 @@ ScriptResolver::readStdout()
     if ( m_msgsize == 0 )
     {
         if ( m_proc.bytesAvailable() < 4 )
+        {
             return;
+        }
 
         quint32 len_nbo;
-        m_proc.read( (char*) &len_nbo, 4 );
+        m_proc.read( ( char* ) &len_nbo, 4 );
         m_msgsize = qFromBigEndian( len_nbo );
     }
 
@@ -217,14 +227,16 @@ ScriptResolver::readStdout()
         m_msg.append( m_proc.read( m_msgsize - m_msg.length() ) );
     }
 
-    if ( m_msgsize == (quint32) m_msg.length() )
+    if ( m_msgsize == ( quint32 ) m_msg.length() )
     {
         handleMsg( m_msg );
         m_msgsize = 0;
         m_msg.clear();
 
         if ( m_proc.bytesAvailable() )
+        {
             QTimer::singleShot( 0, this, SLOT( readStdout() ) );
+        }
     }
 }
 
@@ -232,13 +244,15 @@ ScriptResolver::readStdout()
 void
 ScriptResolver::sendMsg( const QByteArray& msg )
 {
-//     qDebug() << Q_FUNC_INFO << m_ready << msg << msg.length();
+    //     qDebug() << Q_FUNC_INFO << m_ready << msg << msg.length();
     if ( !m_proc.isOpen() )
+    {
         return;
+    }
 
     quint32 len;
-    qToBigEndian( msg.length(), (uchar*) &len );
-    m_proc.write( (const char*) &len, 4 );
+    qToBigEndian( msg.length(), ( uchar* ) &len );
+    m_proc.write( ( const char* ) &len, 4 );
     m_proc.write( msg );
 }
 
@@ -246,17 +260,19 @@ ScriptResolver::sendMsg( const QByteArray& msg )
 void
 ScriptResolver::handleMsg( const QByteArray& msg )
 {
-//    qDebug() << Q_FUNC_INFO << msg.size() << QString::fromAscii( msg );
+    //    qDebug() << Q_FUNC_INFO << msg.size() << QString::fromAscii( msg );
 
     // Might be called from waitForFinished() in ~ScriptResolver, no database in that case, abort.
     if ( m_deleting )
+    {
         return;
+    }
 
     bool ok;
     QVariant v = m_parser.parse( msg, &ok );
     if ( !ok || v.type() != QVariant::Map )
     {
-        Q_ASSERT(false);
+        Q_ASSERT( false );
         return;
     }
     QVariantMap m = v.toMap();
@@ -278,18 +294,22 @@ ScriptResolver::handleMsg( const QByteArray& msg )
         QList< Tomahawk::result_ptr > results;
         const QVariantList reslist = m.value( "results" ).toList();
 
-        foreach( const QVariant& rv, reslist )
+        foreach( const QVariant & rv, reslist )
         {
             QVariantMap m = rv.toMap();
             tDebug( LOGVERBOSE ) << "Found result:" << m;
 
             Tomahawk::result_ptr rp = Tomahawk::Result::get( m.value( "url" ).toString() );
             if ( !rp )
+            {
                 continue;
+            }
 
             Tomahawk::track_ptr track = Tomahawk::Track::get( m.value( "artist" ).toString(), m.value( "track" ).toString(), m.value( "album" ).toString(), m.value( "duration" ).toUInt(), QString(), m.value( "albumpos" ).toUInt(), m.value( "discnumber" ).toUInt() );
             if ( !track )
+            {
                 continue;
+            }
 
             rp->setTrack( track );
             rp->setBitrate( m.value( "bitrate" ).toUInt() );
@@ -304,7 +324,7 @@ ScriptResolver::handleMsg( const QByteArray& msg )
             {
                 QVariantMap attr;
                 attr[ "releaseyear" ] = m.value( "year" );
-//                rp->track()->setAttributes( attr );
+                //                rp->track()->setAttributes( attr );
             }
 
             rp->setMimetype( m.value( "mimetype" ).toString() );
@@ -379,7 +399,9 @@ ScriptResolver::resolve( const Tomahawk::query_ptr& query )
         m.insert( "qid", query->id() );
 
         if ( !query->resultHint().isEmpty() )
+        {
             m.insert( "resultHint", query->resultHint() );
+        }
     }
 
     const QByteArray msg = m_serializer.serialize( QVariant( m ) );
@@ -390,7 +412,7 @@ ScriptResolver::resolve( const Tomahawk::query_ptr& query )
 void
 ScriptResolver::doSetup( const QVariantMap& m )
 {
-//    qDebug() << Q_FUNC_INFO << m;
+    //    qDebug() << Q_FUNC_INFO << m;
 
     m_name    = m.value( "name" ).toString();
     m_weight  = m.value( "weight", 0 ).toUInt();
@@ -400,15 +422,23 @@ ScriptResolver::doSetup( const QVariantMap& m )
     bool ok = 0;
     int intCap = m.value( "capabilities" ).toInt( &ok );
     if ( !ok )
+    {
         m_capabilities = NullCapability;
+    }
     else
+    {
         m_capabilities = static_cast< Capabilities >( intCap );
+    }
 
     QByteArray icoData = m.value( "icon" ).toByteArray();
     if( compressed )
+    {
         icoData = qUncompress( QByteArray::fromBase64( icoData ) );
+    }
     else
+    {
         icoData = QByteArray::fromBase64( icoData );
+    }
     QPixmap ico;
     ico.loadFromData( icoData );
 
@@ -433,7 +463,9 @@ ScriptResolver::doSetup( const QVariantMap& m )
     m_num_restarts = 0;
 
     if ( !m_stopped )
+    {
         Tomahawk::Pipeline::instance()->addResolver( this );
+    }
 
     emit changed();
 }
@@ -447,12 +479,18 @@ ScriptResolver::setupConfWidget( const QVariantMap& m )
 
     QByteArray uiData = m[ "widget" ].toByteArray();
     if( compressed )
+    {
         uiData = qUncompress( QByteArray::fromBase64( uiData ) );
+    }
     else
+    {
         uiData = QByteArray::fromBase64( uiData );
+    }
 
     if ( m.contains( "images" ) )
+    {
         uiData = fixDataImagePaths( uiData, compressed, m[ "images" ].toMap() );
+    }
     m_configWidget = QPointer< AccountConfigWidget >( widgetFromData( uiData, 0 ) );
 
     emit changed();
@@ -463,7 +501,9 @@ void
 ScriptResolver::startProcess()
 {
     if ( !QFile::exists( filePath() ) )
+    {
         m_error = Tomahawk::ExternalResolver::FileNotFound;
+    }
     else
     {
         m_error = Tomahawk::ExternalResolver::NoError;
@@ -484,20 +524,20 @@ ScriptResolver::startProcess()
         DWORD dwSize = MAX_PATH;
 
         wchar_t path[MAX_PATH] = { 0 };
-        wchar_t *ext = (wchar_t *) ("." + fi.suffix()).utf16();
+        wchar_t* ext = ( wchar_t* ) ( "." + fi.suffix() ).utf16();
 
         HRESULT hr = AssocQueryStringW(
-                (ASSOCF) 0,
-                ASSOCSTR_EXECUTABLE,
-                ext,
-                L"open",
-                path,
-                &dwSize
-        );
+                         ( ASSOCF ) 0,
+                         ASSOCSTR_EXECUTABLE,
+                         ext,
+                         L"open",
+                         path,
+                         &dwSize
+                     );
 
         if ( ! FAILED( hr ) )
         {
-            interpreter = QString( "\"%1\"" ).arg(QString::fromUtf16((const ushort *) path));
+            interpreter = QString( "\"%1\"" ).arg( QString::fromUtf16( ( const ushort* ) path ) );
         }
     }
 #endif // Q_OS_WIN
@@ -512,7 +552,9 @@ ScriptResolver::startProcess()
         m_proc.start( runPath );
     }
     else
+    {
         m_proc.start( interpreter, QStringList() << filePath() );
+    }
 
     sendConfig();
 }
@@ -544,9 +586,13 @@ AccountConfigWidget*
 ScriptResolver::configUI() const
 {
     if ( m_configWidget.isNull() )
+    {
         return 0;
+    }
     else
+    {
         return m_configWidget.data();
+    }
 }
 
 
@@ -555,7 +601,7 @@ ScriptResolver::stop()
 {
     m_stopped = true;
 
-    foreach ( const Tomahawk::collection_ptr& collection, m_collections )
+    foreach ( const Tomahawk::collection_ptr & collection, m_collections )
     {
         emit collectionRemoved( collection );
     }

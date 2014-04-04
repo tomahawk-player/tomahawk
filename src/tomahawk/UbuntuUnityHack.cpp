@@ -24,60 +24,66 @@ const char* UbuntuUnityHack::kGSettingsFileName     = "gsettings";
 const char* UbuntuUnityHack::kUnityPanel            = "com.canonical.Unity.Panel";
 const char* UbuntuUnityHack::kUnitySystrayWhitelist = "systray-whitelist";
 
-UbuntuUnityHack::UbuntuUnityHack(QObject* parent)
-  : QObject(parent)
+UbuntuUnityHack::UbuntuUnityHack( QObject* parent )
+    : QObject( parent )
 {
-  // Get the systray whitelist from gsettings.  If this fails we're probably
-  // not running on a system with unity
-  QProcess* get = new QProcess(this);
-  connect(get, SIGNAL(finished(int)), SLOT(GetFinished(int)));
-  connect(get, SIGNAL(error(QProcess::ProcessError)), SLOT(GetError()));
-  get->start(kGSettingsFileName, QStringList()
-             << "get" << kUnityPanel << kUnitySystrayWhitelist);
+    // Get the systray whitelist from gsettings.  If this fails we're probably
+    // not running on a system with unity
+    QProcess* get = new QProcess( this );
+    connect( get, SIGNAL( finished( int ) ), SLOT( GetFinished( int ) ) );
+    connect( get, SIGNAL( error( QProcess::ProcessError ) ), SLOT( GetError() ) );
+    get->start( kGSettingsFileName, QStringList()
+                << "get" << kUnityPanel << kUnitySystrayWhitelist );
 }
 
-void UbuntuUnityHack::GetError() {
-  QProcess* get = qobject_cast<QProcess*>(sender());
-  if (!get) {
-    return;
-  }
+void UbuntuUnityHack::GetError()
+{
+    QProcess* get = qobject_cast<QProcess*>( sender() );
+    if ( !get )
+    {
+        return;
+    }
 
-  get->deleteLater();
+    get->deleteLater();
 }
 
-void UbuntuUnityHack::GetFinished(int exit_code) {
-  QProcess* get = qobject_cast<QProcess*>(sender());
-  if (!get) {
-    return;
-  }
+void UbuntuUnityHack::GetFinished( int exit_code )
+{
+    QProcess* get = qobject_cast<QProcess*>( sender() );
+    if ( !get )
+    {
+        return;
+    }
 
-  get->deleteLater();
+    get->deleteLater();
 
-  if (exit_code != 0) {
-    // Probably not running in Unity.
-    return;
-  }
+    if ( exit_code != 0 )
+    {
+        // Probably not running in Unity.
+        return;
+    }
 
-  QByteArray whitelist = get->readAllStandardOutput();
+    QByteArray whitelist = get->readAllStandardOutput();
 
-  tDebug() << "Unity whitelist is" << whitelist;
+    tDebug() << "Unity whitelist is" << whitelist;
 
-  int index = whitelist.lastIndexOf(']');
-  if (index == -1 || whitelist.contains("'tomahawk'")) {
-    return;
-  }
+    int index = whitelist.lastIndexOf( ']' );
+    if ( index == -1 || whitelist.contains( "'tomahawk'" ) )
+    {
+        return;
+    }
 
-  whitelist = whitelist.left(index) + QString(", 'tomahawk'").toUtf8() +
-              whitelist.mid(index);
+    whitelist = whitelist.left( index ) + QString( ", 'tomahawk'" ).toUtf8() +
+                whitelist.mid( index );
 
-  tLog() << "Setting unity whitelist to" << whitelist;
+    tLog() << "Setting unity whitelist to" << whitelist;
 
-  QProcess* set = new QProcess(this);
-  connect(set, SIGNAL(finished(int)), set, SLOT(deleteLater()));
-  set->start(kGSettingsFileName, QStringList()
-             << "set" << kUnityPanel << kUnitySystrayWhitelist << whitelist);
+    QProcess* set = new QProcess( this );
+    connect( set, SIGNAL( finished( int ) ), set, SLOT( deleteLater() ) );
+    set->start( kGSettingsFileName, QStringList()
+                << "set" << kUnityPanel << kUnitySystrayWhitelist << whitelist );
 
-  tLog() << "Tomahawk has added itself to the Unity system tray" <<
-                "whitelist, but this won't take effect until the next time" <<
-                "you log out and log back in.";
+    tLog() << "Tomahawk has added itself to the Unity system tray" <<
+           "whitelist, but this won't take effect until the next time" <<
+           "you log out and log back in.";
 }

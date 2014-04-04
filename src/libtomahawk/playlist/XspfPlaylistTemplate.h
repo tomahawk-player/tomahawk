@@ -22,7 +22,8 @@
 
 #include "playlist/PlaylistTemplate.h"
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
 class XspfPlaylistTemplatePrivate;
 
@@ -37,7 +38,7 @@ class XspfPlaylistTemplatePrivate;
 class XspfPlaylistTemplate : public Tomahawk::PlaylistTemplate
 {
     Q_OBJECT
-public:
+  public:
     XspfPlaylistTemplate( const QString& _url, const source_ptr& source, const QString& guid );
     virtual ~XspfPlaylistTemplate();
 
@@ -50,13 +51,13 @@ public:
      */
     void load();
 
-signals:
+  signals:
     void tracksLoaded( const QList< Tomahawk::query_ptr >& tracks );
 
-private slots:
+  private slots:
     void xspfTracksLoaded( const QList< Tomahawk::query_ptr >& tracks );
 
-private:
+  private:
     Q_DECLARE_PRIVATE( XspfPlaylistTemplate )
 };
 

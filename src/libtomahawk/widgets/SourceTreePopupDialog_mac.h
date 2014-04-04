@@ -23,7 +23,8 @@
 
 class QWidget;
 
-namespace SourceTreePopupHelper {
+namespace SourceTreePopupHelper
+{
 
 void DLLEXPORT clearBackground( QWidget* widget );
 

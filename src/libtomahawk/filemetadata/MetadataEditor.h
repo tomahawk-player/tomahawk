@@ -33,27 +33,45 @@ class QString;
 
 class MetadataEditor : public QDialog
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     MetadataEditor( const Tomahawk::query_ptr& query, const Tomahawk::playlistinterface_ptr& plInterface, QWidget* parent = 0 );
     MetadataEditor( const Tomahawk::result_ptr& result, const Tomahawk::playlistinterface_ptr& plInterface, QWidget* parent = 0 );
     ~MetadataEditor() {};
 
     void init( const Tomahawk::playlistinterface_ptr& plInterface );
 
-protected:
-    QString title() const { return ui->titleLineEdit->text(); }
-    QString artist() const { return ui->artistLineEdit->text(); }
-    QString album() const { return ui->albumLineEdit->text(); }
-    int albumPos() const { return ui->albumPosSpinBox->value(); }
-    int year() const { return ui->yearSpinBox->value(); }
-    int bitrate() const { return ui->bitrateSpinBox->value(); }
+  protected:
+    QString title() const
+    {
+        return ui->titleLineEdit->text();
+    }
+    QString artist() const
+    {
+        return ui->artistLineEdit->text();
+    }
+    QString album() const
+    {
+        return ui->albumLineEdit->text();
+    }
+    int albumPos() const
+    {
+        return ui->albumPosSpinBox->value();
+    }
+    int year() const
+    {
+        return ui->yearSpinBox->value();
+    }
+    int bitrate() const
+    {
+        return ui->bitrateSpinBox->value();
+    }
 
     void loadResult( const Tomahawk::result_ptr& result );
     void loadQuery( const Tomahawk::query_ptr& query );
 
-private slots:
+  private slots:
     void writeMetadata( bool closeDlg = false );
     void enablePushButtons();
     void loadNextQuery();
@@ -74,7 +92,7 @@ private slots:
 
     void setEditable( bool editable );
 
-private:
+  private:
     void setWindowTitle( const QString& title );
 
     Ui::MetadataEditor* ui;

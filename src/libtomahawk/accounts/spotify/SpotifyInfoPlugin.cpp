@@ -50,13 +50,15 @@ void
 SpotifyInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 {
     if ( m_account.isNull() || !m_account.data()->loggedIn() )
+    {
         return;
+    }
 
     switch ( pushData.type )
     {
         case InfoLove:
         case InfoUnLove:
-            sendLoveSong(pushData.type, pushData.infoPair.second);
+            sendLoveSong( pushData.type, pushData.infoPair.second );
             break;
 
         default:
@@ -69,10 +71,14 @@ SpotifyInfoPlugin::sendLoveSong( const InfoType type, QVariant input )
 {
 
     if ( m_account.isNull() || !m_account.data()->loggedIn() )
+    {
         return;
+    }
 
     if( !m_account.data()->loveSync() )
+    {
         return;
+    }
 
     if ( !input.toMap().contains( "trackinfo" ) || !input.toMap()[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
@@ -82,7 +88,9 @@ SpotifyInfoPlugin::sendLoveSong( const InfoType type, QVariant input )
 
     InfoStringHash hash = input.toMap()[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) )
+    {
         return;
+    }
 
     if ( type == Tomahawk::InfoSystem::InfoLove )
     {
@@ -99,32 +107,34 @@ SpotifyInfoPlugin::getInfo( InfoRequestData requestData )
 {
     switch ( requestData.type )
     {
-    case InfoAlbumSongs:
-    {
-        if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+        case InfoAlbumSongs:
         {
-            dataError( requestData );
+            if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+            {
+                dataError( requestData );
+                return;
+            }
+
+            InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
+            if ( !hash.contains( "album" ) )
+            {
+                dataError( requestData );
+                return;
+            }
+
+            Tomahawk::InfoSystem::InfoStringHash criteria;
+            criteria[ "album" ] = hash[ "album" ];
+            if ( hash.contains( "artist" ) )
+            {
+                criteria["artist"] = hash["artist"];
+            }
+
+            emit getCachedInfo( criteria, Q_INT64_C( 2419200000 ), requestData );
+
             return;
         }
-
-        InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
-        if ( !hash.contains( "album" ) )
-        {
+        default:
             dataError( requestData );
-            return;
-        }
-
-        Tomahawk::InfoSystem::InfoStringHash criteria;
-        criteria[ "album" ] = hash[ "album" ];
-        if ( hash.contains( "artist" ) )
-            criteria["artist"] = hash["artist"];
-
-        emit getCachedInfo( criteria, Q_INT64_C(2419200000), requestData );
-
-        return;
-    }
-    default:
-        dataError( requestData );
     }
 }
 
@@ -134,41 +144,41 @@ SpotifyInfoPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requ
 {
     switch ( requestData.type )
     {
-    case InfoAlbumSongs:
-    {
-        const QString album = criteria[ "album" ];
-        const QString artist = criteria[ "artist" ];
-
-        if ( m_account.isNull() || !m_account.data()->loggedIn() )
+        case InfoAlbumSongs:
         {
-            // No running spotify account, use our webservice
-            QUrl lookupUrl( "http://ws.spotify.com/search/1/album.json" );
-            TomahawkUtils::urlAddQueryItem( lookupUrl, "q", QString( "%1 %2" ).arg( artist ).arg( album ) );
+            const QString album = criteria[ "album" ];
+            const QString artist = criteria[ "artist" ];
 
-            QNetworkReply * reply = Tomahawk::Utils::nam()->get( QNetworkRequest( lookupUrl ) );
-            NewClosure( reply, SIGNAL( finished() ), this, SLOT( albumIdLookupFinished( QNetworkReply*, Tomahawk::InfoSystem::InfoRequestData ) ), reply, requestData );
+            if ( m_account.isNull() || !m_account.data()->loggedIn() )
+            {
+                // No running spotify account, use our webservice
+                QUrl lookupUrl( "http://ws.spotify.com/search/1/album.json" );
+                TomahawkUtils::urlAddQueryItem( lookupUrl, "q", QString( "%1 %2" ).arg( artist ).arg( album ) );
+
+                QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( lookupUrl ) );
+                NewClosure( reply, SIGNAL( finished() ), this, SLOT( albumIdLookupFinished( QNetworkReply*, Tomahawk::InfoSystem::InfoRequestData ) ), reply, requestData );
+            }
+            else
+            {
+                // Running resolver, so do the lookup through that
+                tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Doing album lookup through spotify:" << album << artist;
+                QVariantMap message;
+                message[ "_msgtype" ] = "albumListing";
+                message[ "artist" ] = artist;
+                message[ "album" ] = album;
+
+                QMetaObject::invokeMethod( m_account.data(), "sendMessage", Qt::QueuedConnection, Q_ARG( QVariantMap, message ),
+                                           Q_ARG( QObject*, this ),
+                                           Q_ARG( QString, "albumListingResult" ),
+                                           Q_ARG( QVariant, QVariant::fromValue< InfoRequestData >( requestData ) ) );
+            }
+            break;
         }
-        else
+        default:
         {
-            // Running resolver, so do the lookup through that
-            tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Doing album lookup through spotify:" << album << artist;
-            QVariantMap message;
-            message[ "_msgtype" ] = "albumListing";
-            message[ "artist" ] = artist;
-            message[ "album" ] = album;
-
-            QMetaObject::invokeMethod( m_account.data(), "sendMessage", Qt::QueuedConnection, Q_ARG( QVariantMap, message ),
-                                                                                              Q_ARG( QObject*, this ),
-                                                                                              Q_ARG( QString, "albumListingResult" ),
-                                                                                              Q_ARG( QVariant, QVariant::fromValue< InfoRequestData >( requestData ) ) );
+            Q_ASSERT( false );
+            break;
         }
-        break;
-    }
-    default:
-    {
-        Q_ASSERT( false );
-        break;
-    }
     }
 }
 
@@ -189,7 +199,9 @@ SpotifyInfoPlugin::albumListingResult( const QString& msgType, const QVariantMap
     {
         const QVariantMap trackData = track.toMap();
         if ( trackData.contains( "track" ) && !trackData[ "track" ].toString().isEmpty() )
+        {
             trackNameList << trackData[ "track" ].toString();
+        }
     }
 
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Successfully got album listing from spotify resolver";
@@ -235,7 +247,7 @@ SpotifyInfoPlugin::albumIdLookupFinished( QNetworkReply* reply, const InfoReques
         QUrl lookupUrl( QString( "http://spotikea.tomahawk-player.org/browse/%1" ).arg( id ) );
 
 
-        QNetworkReply * reply = Tomahawk::Utils::nam()->get( QNetworkRequest( lookupUrl ) );
+        QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( lookupUrl ) );
         NewClosure( reply, SIGNAL( finished() ), this, SLOT( albumContentsLookupFinished( QNetworkReply*, Tomahawk::InfoSystem::InfoRequestData ) ), reply, requestData );
     }
     else
@@ -273,19 +285,25 @@ SpotifyInfoPlugin::albumContentsLookupFinished( QNetworkReply* reply, const Info
         const QVariantList albumTracks = album.value( "result" ).toList();
         QStringList trackNameList;
 
-        foreach ( const QVariant& track, albumTracks )
+        foreach ( const QVariant & track, albumTracks )
         {
             const QVariantMap trackMap = track.toMap();
             if ( trackMap.contains( "title" ) )
+            {
                 trackNameList << trackMap.value( "title" ).toString();
+            }
         }
 
         tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Successfully got album listing from spotikea service!";
 
         if ( trackNameList.isEmpty() )
+        {
             dataError( requestData );
+        }
         else
+        {
             trackListResult( trackNameList, requestData );
+        }
     }
     else
     {
@@ -312,5 +330,5 @@ SpotifyInfoPlugin::trackListResult( const QStringList& trackNameList, const Info
     criteria["artist"] = requestData.input.value< InfoStringHash>()["artist"];
     criteria["album"] = requestData.input.value< InfoStringHash>()["album"];
 
-    emit updateCache( criteria, Q_INT64_C(0), requestData.type, returnedData );
+    emit updateCache( criteria, Q_INT64_C( 0 ), requestData.type, returnedData );
 }

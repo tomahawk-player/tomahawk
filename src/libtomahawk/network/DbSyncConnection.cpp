@@ -78,7 +78,9 @@ void
 DBSyncConnection::changeState( DBSyncConnectionState newstate )
 {
     if ( m_state == SHUTDOWN )
+    {
         return;
+    }
 
     DBSyncConnectionState s = m_state;
     m_state = newstate;
@@ -100,7 +102,9 @@ DBSyncConnection::trigger()
 {
     // if we're still setting up the connection, do nothing - we sync on first connect anyway:
     if ( !isRunning() )
+    {
         return;
+    }
 
     QMetaObject::invokeMethod( this, "sendMsg", Qt::QueuedConnection,
                                Q_ARG( msg_ptr, Msg::factory( "{\"method\":\"trigger\"}", Msg::JSON ) ) );
@@ -131,7 +135,7 @@ DBSyncConnection::check()
         tDebug( LOGVERBOSE ) << "Fetching lastCmdGuid from database!";
         DatabaseCommand_CollectionStats* cmd_them = new DatabaseCommand_CollectionStats( m_source );
         connect( cmd_them, SIGNAL( done( QVariantMap ) ), SLOT( gotThem( QVariantMap ) ) );
-        Database::instance()->enqueue( dbcmd_ptr(cmd_them) );
+        Database::instance()->enqueue( dbcmd_ptr( cmd_them ) );
     }
     else
     {
@@ -168,21 +172,23 @@ DBSyncConnection::handleMsg( msg_ptr msg )
     Q_ASSERT( !msg->is( Msg::COMPRESSED ) );
 
     if ( m_state == FETCHING )
+    {
         changeState( PARSING );
+    }
 
     // "everything is synced" indicated by non-json msg containing "ok":
     if ( !msg->is( Msg::JSON ) &&
-         msg->is( Msg::DBOP ) &&
-         msg->payload() == "ok" )
+            msg->is( Msg::DBOP ) &&
+            msg->payload() == "ok" )
     {
         changeState( SYNCED );
 
         // calc the collection stats, to updates the "X tracks" in the sidebar etc
         // this is done automatically if you run a dbcmd to add files.
         DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( m_source );
-        connect( cmd,           SIGNAL( done( const QVariantMap & ) ),
+        connect( cmd,           SIGNAL( done( const QVariantMap& ) ),
                  m_source.data(), SLOT( setStats( const QVariantMap& ) ), Qt::QueuedConnection );
-        Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
         return;
     }
 
@@ -253,7 +259,7 @@ DBSyncConnection::sendOps()
 
     DatabaseCommand_loadOps* cmd = new DatabaseCommand_loadOps( src, m_uscache.value( "lastop" ).toString() );
     connect( cmd, SIGNAL( done( QString, QString, QList< dbop_ptr > ) ),
-                    SLOT( sendOpsData( QString, QString, QList< dbop_ptr > ) ) );
+             SLOT( sendOpsData( QString, QString, QList< dbop_ptr > ) ) );
 
     m_uscache.clear();
 
@@ -265,7 +271,9 @@ void
 DBSyncConnection::sendOpsData( QString sinceguid, QString lastguid, QList< dbop_ptr > ops )
 {
     if ( m_lastSentOp == lastguid )
+    {
         ops.clear();
+    }
 
     m_lastSentOp = lastguid;
     if ( ops.length() == 0 )
@@ -283,9 +291,13 @@ DBSyncConnection::sendOpsData( QString sinceguid, QString lastguid, QList< dbop_
         quint8 flags = Msg::JSON | Msg::DBOP;
 
         if ( ops.at( i )->compressed )
+        {
             flags |= Msg::COMPRESSED;
+        }
         if ( i != ops.length() - 1 )
+        {
             flags |= Msg::FRAGMENT;
+        }
 
         sendMsg( Msg::factory( ops.at( i )->payload, flags ) );
     }

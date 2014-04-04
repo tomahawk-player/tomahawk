@@ -30,21 +30,25 @@ DatabaseCommand_CollectionAttributes::DatabaseCommand_CollectionAttributes( Data
 }
 
 void
-DatabaseCommand_CollectionAttributes::exec( DatabaseImpl *lib )
+DatabaseCommand_CollectionAttributes::exec( DatabaseImpl* lib )
 {
     TomahawkSqlQuery query = lib->newquery();
 
-//    QString sourceStr;
-//    if ( source().isNull() )
-//        sourceStr = "id IS NULL";
-//    else
-//        sourceStr = QString( "id == %1" ).arg( source()->id() );
+    //    QString sourceStr;
+    //    if ( source().isNull() )
+    //        sourceStr = "id IS NULL";
+    //    else
+    //        sourceStr = QString( "id == %1" ).arg( source()->id() );
 
     QString typeStr;
     if ( m_type == DatabaseCommand_SetCollectionAttributes::EchonestSongCatalog )
+    {
         typeStr = "echonest_song";
+    }
     else if ( m_type == DatabaseCommand_SetCollectionAttributes::EchonestArtistCatalog )
+    {
         typeStr = "echonest_artist";
+    }
 
     QString queryStr = QString( "SELECT id, v FROM collection_attributes WHERE k = \"%1\"" ).arg( typeStr );
     qDebug() << "Doing queryL" << queryStr;

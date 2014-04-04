@@ -61,7 +61,9 @@ InfoSystemWorker::~InfoSystemWorker()
     Q_FOREACH( InfoPluginPtr plugin, m_plugins )
     {
         if( plugin )
+        {
             delete plugin.data();
+        }
     }
     tDebug() << Q_FUNC_INFO << " finished";
 }
@@ -110,25 +112,25 @@ InfoSystemWorker::addInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
 
     connect(
         plugin.data(),
-            SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-            this,
-            SLOT( infoSlot( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-            Qt::QueuedConnection
+        SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+        this,
+        SLOT( infoSlot( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+        Qt::QueuedConnection
     );
 
     connect(
         plugin.data(),
-            SIGNAL( getCachedInfo( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) ),
-            m_cache,
-            SLOT( getCachedInfoSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) ),
-            Qt::QueuedConnection
+        SIGNAL( getCachedInfo( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) ),
+        m_cache,
+        SLOT( getCachedInfoSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoRequestData ) ),
+        Qt::QueuedConnection
     );
     connect(
         plugin.data(),
-            SIGNAL( updateCache( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
-            m_cache,
-            SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
-            Qt::QueuedConnection
+        SIGNAL( updateCache( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
+        m_cache,
+        SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
+        Qt::QueuedConnection
     );
 
     QMetaObject::invokeMethod( plugin.data(), "init", Qt::QueuedConnection );
@@ -152,7 +154,9 @@ InfoSystemWorker::removeInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
     foreach ( InfoPluginPtr ptr, m_plugins )
     {
         if ( ptr == plugin )
+        {
             break;
+        }
 
         tDebug() << Q_FUNC_INFO << "This plugin does not exist in the infosystem.";
         return;
@@ -168,7 +172,7 @@ void
 InfoSystemWorker::loadInfoPlugins()
 {
     QHash< QString, QObject* > plugins = Tomahawk::Utils::PluginLoader( "infoplugin" ).loadPlugins();
-    foreach ( QObject* plugin, plugins.values() )
+    foreach ( QObject * plugin, plugins.values() )
     {
         InfoPlugin* infoPlugin = qobject_cast< InfoPlugin* >( plugin );
         if ( infoPlugin )
@@ -186,22 +190,22 @@ InfoSystemWorker::loadInfoPlugins()
 
 
 void
-InfoSystemWorker::registerInfoTypes( const InfoPluginPtr &plugin, const QSet< InfoType >& getTypes, const QSet< InfoType >& pushTypes )
+InfoSystemWorker::registerInfoTypes( const InfoPluginPtr& plugin, const QSet< InfoType >& getTypes, const QSet< InfoType >& pushTypes )
 {
     Q_FOREACH( InfoType type, getTypes )
-        m_infoGetMap[type].append( plugin );
+    m_infoGetMap[type].append( plugin );
     Q_FOREACH( InfoType type, pushTypes )
-        m_infoPushMap[type].append( plugin );
+    m_infoPushMap[type].append( plugin );
 }
 
 
 void
-InfoSystemWorker::deregisterInfoTypes( const InfoPluginPtr &plugin, const QSet< InfoType >& getTypes, const QSet< InfoType >& pushTypes )
+InfoSystemWorker::deregisterInfoTypes( const InfoPluginPtr& plugin, const QSet< InfoType >& getTypes, const QSet< InfoType >& pushTypes )
 {
     Q_FOREACH( InfoType type, getTypes )
-        m_infoGetMap[type].removeOne( plugin );
+    m_infoGetMap[type].removeOne( plugin );
     Q_FOREACH( InfoType type, pushTypes )
-        m_infoPushMap[type].removeOne( plugin );
+    m_infoPushMap[type].removeOne( plugin );
 }
 
 
@@ -212,7 +216,7 @@ InfoSystemWorker::determineOrderedMatches( const InfoType type ) const
     //probably need to support ordering based on the data source
     QList< InfoPluginPtr > providers;
     Q_FOREACH( InfoPluginPtr ptr, m_infoGetMap[type] )
-        providers << ptr;
+    providers << ptr;
     return providers;
 }
 
@@ -231,24 +235,32 @@ InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     }
 
     if ( !requestData.allSources )
+    {
         providers = QList< InfoPluginPtr >( providers.mid( 0, 1 ) );
+    }
 
     bool foundOne = false;
     foreach ( InfoPluginPtr ptr, providers )
     {
         if ( !ptr )
+        {
             continue;
+        }
 
         foundOne = true;
 
         if ( requestData.allSources || m_savedRequestMap.contains( requestData.requestId ) )
         {
             if ( m_savedRequestMap.contains( requestData.requestId ) )
+            {
                 tDebug() << Q_FUNC_INFO << "Warning: reassigning requestId because it already exists";
+            }
             requestData.internalId = TomahawkUtils::infosystemRequestId();
         }
         else
+        {
             requestData.internalId = requestData.requestId;
+        }
 
         quint64 requestId = requestData.internalId;
         m_requestSatisfiedMap[ requestId ] = false;
@@ -257,9 +269,9 @@ InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
             qint64 currMs = QDateTime::currentMSecsSinceEpoch();
             m_timeRequestMapper.insert( currMs + requestData.timeoutMillis, requestId );
         }
-    //    qDebug() << "Assigning request with requestId" << requestId << "and type" << requestData.type;
+        //    qDebug() << "Assigning request with requestId" << requestId << "and type" << requestData.type;
         m_dataTracker[ requestData.caller ][ requestData.type ] = m_dataTracker[ requestData.caller ][ requestData.type ] + 1;
-    //    qDebug() << "Current count in dataTracker for target" << requestData.caller << "and type" << requestData.type << "is" << m_dataTracker[ requestData.caller ][ requestData.type ];
+        //    qDebug() << "Current count in dataTracker for target" << requestData.caller << "and type" << requestData.type << "is" << m_dataTracker[ requestData.caller ][ requestData.type ];
 
         InfoRequestData* data = new InfoRequestData;
         data->caller = requestData.caller;
@@ -299,7 +311,9 @@ InfoSystemWorker::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
     Q_FOREACH( InfoPluginPtr ptr, m_infoPushMap[ pushData.type ] )
     {
         if( ptr )
+        {
             QMetaObject::invokeMethod( ptr.data(), "pushInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPushData, pushData ) );
+        }
     }
 }
 
@@ -326,7 +340,9 @@ InfoSystemWorker::getShortUrl( Tomahawk::InfoSystem::InfoPushData pushData )
     title = hash[ "title" ];
     artist = hash[ "artist" ];
     if( hash.contains( "album" ) )
+    {
         album = hash[ "album" ];
+    }
 
     QUrl longUrl = GlobalActionManager::instance()->openLink( title, artist, album );
 
@@ -347,7 +363,9 @@ InfoSystemWorker::shortLinkReady( QUrl longUrl, QUrl shortUrl, QVariant callback
     tDebug() << Q_FUNC_INFO << "long url = " << longUrl << ", shortUrl = " << shortUrl;
     m_shortLinksWaiting--;
     if ( !m_shortLinksWaiting )
+    {
         disconnect( GlobalActionManager::instance(), SIGNAL( shortLinkReady( QUrl, QUrl, QVariant ) ) );
+    }
 
     if ( !callbackObj.isValid() )
     {
@@ -373,18 +391,18 @@ InfoSystemWorker::shortLinkReady( QUrl longUrl, QUrl shortUrl, QVariant callback
 void
 InfoSystemWorker::infoSlot( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
-//    qDebug() << Q_FUNC_INFO << "with requestId" << requestId;
+    //    qDebug() << Q_FUNC_INFO << "with requestId" << requestId;
 
     quint64 requestId = requestData.internalId;
 
     if ( m_dataTracker[ requestData.caller ][ requestData.type ] == 0 )
     {
-//        qDebug() << Q_FUNC_INFO << "Caller was not waiting for that type of data!";
+        //        qDebug() << Q_FUNC_INFO << "Caller was not waiting for that type of data!";
         return;
     }
     if ( !m_requestSatisfiedMap.contains( requestId ) || m_requestSatisfiedMap[ requestId ] )
     {
-//        qDebug() << Q_FUNC_INFO << "Request was already taken care of!";
+        //        qDebug() << Q_FUNC_INFO << "Request was already taken care of!";
         return;
     }
 
@@ -392,7 +410,7 @@ InfoSystemWorker::infoSlot( Tomahawk::InfoSystem::InfoRequestData requestData, Q
     emit info( requestData, output );
 
     m_dataTracker[ requestData.caller ][ requestData.type ] = m_dataTracker[ requestData.caller ][ requestData.type ] - 1;
-//    qDebug() << "Current count in dataTracker for target" << requestData.caller << "and type" << requestData.type << "is" << m_dataTracker[ requestData.caller ][ requestData.type ];
+    //    qDebug() << "Current count in dataTracker for target" << requestData.caller << "and type" << requestData.type << "is" << m_dataTracker[ requestData.caller ][ requestData.type ];
     delete m_savedRequestMap[ requestId ];
     m_savedRequestMap.remove( requestId );
     checkFinished( requestData );
@@ -400,17 +418,21 @@ InfoSystemWorker::infoSlot( Tomahawk::InfoSystem::InfoRequestData requestData, Q
 
 
 void
-InfoSystemWorker::checkFinished( const Tomahawk::InfoSystem::InfoRequestData &requestData )
+InfoSystemWorker::checkFinished( const Tomahawk::InfoSystem::InfoRequestData& requestData )
 {
     if ( m_dataTracker[ requestData.caller ][ requestData.type ] == 0 )
+    {
         emit finished( requestData.caller, requestData.type );
+    }
 
     Q_FOREACH( InfoType testtype, m_dataTracker[ requestData.caller ].keys() )
     {
         if ( m_dataTracker[ requestData.caller ][ testtype ] != 0 )
+        {
             return;
+        }
     }
-//    qDebug() << "Emitting finished with target" << target;
+    //    qDebug() << "Emitting finished with target" << target;
     emit finished( requestData.caller );
 }
 
@@ -427,16 +449,18 @@ InfoSystemWorker::checkTimeoutsTimerFired()
             {
                 if ( m_requestSatisfiedMap[ requestId ] )
                 {
-//                    qDebug() << Q_FUNC_INFO << "Removing mapping of" << requestId << "which expired at time" << time << "and was already satisfied";
+                    //                    qDebug() << Q_FUNC_INFO << "Removing mapping of" << requestId << "which expired at time" << time << "and was already satisfied";
                     m_timeRequestMapper.remove( time, requestId );
                     if ( !m_timeRequestMapper.count( time ) )
+                    {
                         m_timeRequestMapper.remove( time );
+                    }
                     continue;
                 }
 
                 //doh, timed out
-//                qDebug() << Q_FUNC_INFO << "Doh, timed out for requestId" << requestId;
-                InfoRequestData *savedData = m_savedRequestMap[ requestId ];
+                //                qDebug() << Q_FUNC_INFO << "Doh, timed out for requestId" << requestId;
+                InfoRequestData* savedData = m_savedRequestMap[ requestId ];
 
                 InfoRequestData returnData;
                 returnData.caller = savedData->caller;
@@ -449,12 +473,14 @@ InfoSystemWorker::checkTimeoutsTimerFired()
                 m_savedRequestMap.remove( requestId );
 
                 m_dataTracker[ returnData.caller ][ returnData.type ] = m_dataTracker[ returnData.caller ][ returnData.type ] - 1;
-//                qDebug() << "Current count in dataTracker for target" << returnData.caller << "is" << m_dataTracker[ returnData.caller ][ returnData.type ];
+                //                qDebug() << "Current count in dataTracker for target" << returnData.caller << "is" << m_dataTracker[ returnData.caller ][ returnData.type ];
 
                 m_requestSatisfiedMap[ requestId ] = true;
                 m_timeRequestMapper.remove( time, requestId );
                 if ( !m_timeRequestMapper.count( time ) )
+                {
                     m_timeRequestMapper.remove( time );
+                }
 
                 checkFinished( returnData );
             }

@@ -42,18 +42,21 @@
 #include "utils/AnimatedSpinner.h"
 #include "utils/Logger.h"
 
-namespace {
-    static const int FADE_DURATION = 200;
+namespace
+{
+static const int FADE_DURATION = 200;
 };
 
 
 GridItemDelegate::GridItemDelegate( QAbstractItemView* parent, PlayableProxyModel* proxy )
-    : QStyledItemDelegate( (QObject*)parent )
+    : QStyledItemDelegate( ( QObject* )parent )
     , m_view( parent )
     , m_model( proxy )
 {
     if ( m_view && m_view->metaObject()->indexOfSignal( "modelChanged()" ) > -1 )
+    {
         connect( m_view, SIGNAL( modelChanged() ), this, SLOT( modelChanged() ) );
+    }
 
     connect( this, SIGNAL( updateIndex( QModelIndex ) ), parent, SLOT( update( QModelIndex ) ) );
 
@@ -75,7 +78,9 @@ GridItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelInde
         return size;
     }
     else
+    {
         return m_itemSize;
+    }
 }
 
 
@@ -84,7 +89,9 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
 {
     PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
     if ( !item || !index.isValid() )
+    {
         return;
+    }
 
     QStyleOptionViewItemV4 opt = option;
     initStyleOption( &opt, QModelIndex() );
@@ -97,7 +104,9 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         top = item->album()->name();
 
         if ( !item->album()->artist().isNull() )
+        {
             bottom = item->album()->artist()->name();
+        }
     }
     else if ( !item->artist().isNull() )
     {
@@ -132,12 +141,14 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         }
 
         NewClosure( m_covers[ index ], SIGNAL( repaintRequest() ),
-                    const_cast<GridItemDelegate*>(this), SLOT( doUpdateIndex( QPersistentModelIndex ) ), QPersistentModelIndex( index ) )->setAutoDelete( false );
+                    const_cast<GridItemDelegate*>( this ), SLOT( doUpdateIndex( QPersistentModelIndex ) ), QPersistentModelIndex( index ) )->setAutoDelete( false );
     }
 
     QSharedPointer< Tomahawk::PixmapDelegateFader > fader = m_covers[ index ];
     if ( fader->size() != r.size() )
+    {
         fader->setSize( r.size() );
+    }
 
     const QPixmap cover = fader->currentPixmap();
     painter->drawPixmap( r, cover );
@@ -194,7 +205,9 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QRect textRect = option.rect.adjusted( 6, option.rect.height() - frameHeight, -6, -6 );
     bool oneLiner = false;
     if ( bottom.isEmpty() )
+    {
         oneLiner = true;
+    }
 
     painter->setFont( boldFont );
     if ( oneLiner )
@@ -242,7 +255,7 @@ GridItemDelegate::onPlayClicked( const QPersistentModelIndex& index )
     spinner->fadeIn();
 
     QPoint pos = m_view->visualRect( index ).center() - QPoint( ( spinner->width() ) / 2 - 1,
-                                                                ( spinner->height() ) / 2 - 1 );
+                 ( spinner->height() ) / 2 - 1 );
 
     spinner->move( pos );
     spinner->setFocusPolicy( Qt::NoFocus );
@@ -253,16 +266,22 @@ GridItemDelegate::onPlayClicked( const QPersistentModelIndex& index )
     PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
 
     NewClosure(  AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ),
-                const_cast<GridItemDelegate*>(this), SLOT( onPlaybackStarted( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
+                 const_cast<GridItemDelegate*>( this ), SLOT( onPlaybackStarted( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
 
     if ( item )
     {
         if ( !item->query().isNull() )
+        {
             AudioEngine::instance()->playItem( m_model->playlistInterface(), item->query() );
+        }
         else if ( !item->album().isNull() )
+        {
             AudioEngine::instance()->playItem( item->album() );
+        }
         else if ( !item->artist().isNull() )
+        {
             AudioEngine::instance()->playItem( item->artist() );
+        }
     }
 }
 
@@ -274,10 +293,12 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
     Q_UNUSED( option );
 
     if ( event->type() != QEvent::MouseButtonRelease &&
-         event->type() != QEvent::MouseMove &&
-         event->type() != QEvent::MouseButtonPress &&
-         event->type() != QEvent::Leave )
+            event->type() != QEvent::MouseMove &&
+            event->type() != QEvent::MouseButtonPress &&
+            event->type() != QEvent::Leave )
+    {
         return false;
+    }
 
     bool hoveringArtist = false;
     if ( m_artistNameRects.contains( index ) )
@@ -290,20 +311,26 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
     if ( event->type() == QEvent::MouseMove )
     {
         if ( hoveringArtist )
+        {
             m_view->setCursor( Qt::PointingHandCursor );
+        }
         else
+        {
             m_view->setCursor( Qt::ArrowCursor );
+        }
 
-        foreach ( const QModelIndex& idx, m_playButton.keys() )
+        foreach ( const QModelIndex & idx, m_playButton.keys() )
         {
             if ( index != idx )
+            {
                 m_playButton.take( idx )->deleteLater();
+            }
         }
 
         if ( !m_playButton.contains( index ) && !m_spinner.contains( index ) && !m_pauseButton.contains( index ) )
         {
-            foreach ( ImageButton* button, m_playButton )
-                button->deleteLater();
+            foreach ( ImageButton * button, m_playButton )
+            button->deleteLater();
             m_playButton.clear();
 
             ImageButton* button = new ImageButton( m_view );
@@ -317,7 +344,7 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
             button->show();
 
             NewClosure( button, SIGNAL( clicked( bool ) ),
-                        const_cast<GridItemDelegate*>(this), SLOT( onPlayClicked( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
+                        const_cast<GridItemDelegate*>( this ), SLOT( onPlayClicked( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
 
             m_playButton[ index ] = button;
         }
@@ -327,9 +354,13 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
             emit updateIndex( m_hoveringOver );
 
             if ( hoveringArtist )
+            {
                 m_hoveringOver = index;
+            }
             else
+            {
                 m_hoveringOver = QPersistentModelIndex();
+            }
 
             emit updateIndex( index );
         }
@@ -375,12 +406,18 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
         {
             PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
             if ( !item )
+            {
                 return false;
+            }
 
             if ( item->query() )
+            {
                 ViewManager::instance()->show( item->query()->track()->artistPtr() );
+            }
             else if ( item->album() && item->album()->artist() )
+            {
                 ViewManager::instance()->show( item->album()->artist() );
+            }
 
             event->accept();
             return true;
@@ -407,7 +444,9 @@ GridItemDelegate::modelChanged()
     clearButtons();
 
     if ( GridView* view = qobject_cast< GridView* >( m_view ) )
+    {
         m_model = view->proxyModel();
+    }
 
     connect( m_model->playlistInterface().data(), SIGNAL( currentIndexChanged() ), SLOT( onCurrentIndexChanged() ), Qt::UniqueConnection );
 }
@@ -417,7 +456,9 @@ void
 GridItemDelegate::doUpdateIndex( const QPersistentModelIndex& idx )
 {
     if ( !idx.isValid() )
+    {
         return;
+    }
     emit updateIndex( idx );
 }
 
@@ -425,17 +466,17 @@ GridItemDelegate::doUpdateIndex( const QPersistentModelIndex& idx )
 void
 GridItemDelegate::onViewChanged()
 {
-    foreach ( const QPersistentModelIndex& index, m_spinner.keys() )
+    foreach ( const QPersistentModelIndex & index, m_spinner.keys() )
     {
         QRect rect = m_view->visualRect( index );
         m_spinner.value( index )->move( rect.center() - QPoint( 23, 23 ) );
     }
-    foreach ( const QPersistentModelIndex& index, m_playButton.keys() )
+    foreach ( const QPersistentModelIndex & index, m_playButton.keys() )
     {
         QRect rect = m_view->visualRect( index );
         m_playButton.value( index )->move( rect.center() - QPoint( 23, 23 ) );
     }
-    foreach ( const QPersistentModelIndex& index, m_pauseButton.keys() )
+    foreach ( const QPersistentModelIndex & index, m_pauseButton.keys() )
     {
         QRect rect = m_view->visualRect( index );
         m_pauseButton.value( index )->move( rect.center() - QPoint( 23, 23 ) );
@@ -479,7 +520,9 @@ GridItemDelegate::updatePlayPauseButton( ImageButton* button, bool setState )
         }
 
         if ( setState )
+        {
             button->setProperty( "paused", !button->property( "paused" ).toBool() );
+        }
     }
 }
 
@@ -497,7 +540,7 @@ GridItemDelegate::onPlaybackStarted( const QPersistentModelIndex& index )
 {
     if( m_spinner.contains( index ) )
     {
-        LoadingSpinner* spinner = static_cast<LoadingSpinner*>(m_spinner[ index ]);
+        LoadingSpinner* spinner = static_cast<LoadingSpinner*>( m_spinner[ index ] );
         spinner->fadeOut();
     }
 
@@ -511,14 +554,14 @@ GridItemDelegate::onPlaybackStarted( const QPersistentModelIndex& index )
 void
 GridItemDelegate::clearButtons()
 {
-    foreach ( ImageButton* button, m_playButton )
-        button->deleteLater();
+    foreach ( ImageButton * button, m_playButton )
+    button->deleteLater();
     m_playButton.clear();
-    foreach ( ImageButton* button, m_pauseButton )
-        button->deleteLater();
+    foreach ( ImageButton * button, m_pauseButton )
+    button->deleteLater();
     m_pauseButton.clear();
-    foreach ( QWidget* widget, m_spinner )
-        widget->deleteLater();
+    foreach ( QWidget * widget, m_spinner )
+    widget->deleteLater();
     m_spinner.clear();
 }
 
@@ -532,15 +575,17 @@ GridItemDelegate::onCurrentIndexChanged()
         onPlaybackStarted( m_model->currentIndex() );
     }
     else
+    {
         onPlaybackFinished();
+    }
 }
 
 
 void
 GridItemDelegate::resetHoverIndex()
 {
-    foreach ( ImageButton* button, m_playButton )
-        button->deleteLater();
+    foreach ( ImageButton * button, m_playButton )
+    button->deleteLater();
     m_playButton.clear();
 
     QModelIndex idx = m_hoveringOver;
@@ -622,5 +667,7 @@ GridItemDelegate::eventFilter( QObject* obj, QEvent* event )
         return true;
     }
     else
+    {
         return QObject::eventFilter( obj, event );
+    }
 }

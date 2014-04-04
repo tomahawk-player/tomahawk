@@ -41,29 +41,32 @@ class DynamicSetupWidget : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY( qreal opacity READ opacity WRITE setOpacity )
-public:
+  public:
     DynamicSetupWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget* parent = 0 );
     virtual ~DynamicSetupWidget();
 
     void setPlaylist( const dynplaylist_ptr& playlist );
 
-    qreal opacity() const { return m_opacity; }
+    qreal opacity() const
+    {
+        return m_opacity;
+    }
     void setOpacity( qreal opacity );
 
     virtual void paintEvent( QPaintEvent* );
 
-public slots:
+  public slots:
     void fadeIn();
     void fadeOut();
 
-signals:
+  signals:
     void generatePressed( int num );
     void typeChanged( const QString& playlistType );
 
-private slots:
+  private slots:
     void generatePressed( bool );
 
-private:
+  private:
     dynplaylist_ptr m_playlist;
 
     QLabel* m_headerText;

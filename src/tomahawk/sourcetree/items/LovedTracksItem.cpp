@@ -54,9 +54,13 @@ LovedTracksItem::text() const
     SourceItem* par = dynamic_cast< SourceItem* >( parent() );
 
     if ( !par )
+    {
         return QString( tr( "Top Loved Tracks" ) );
+    }
     else
+    {
         return QString( tr( "Loved Tracks" ) );
+    }
 }
 
 
@@ -91,9 +95,13 @@ LovedTracksItem::activate()
         else
         {
             if ( par->source()->isLocal() )
+            {
                 raModel->setDescription( tr( "All of your loved tracks" ) );
+            }
             else
+            {
                 raModel->setDescription( tr( "All of %1's loved tracks" ).arg( par->source()->friendlyName() ) );
+            }
 
             pv->setGuid( QString( "lovedtracks/%1" ).arg( par->source()->nodeId() ) );
         }
@@ -120,8 +128,10 @@ SourceTreeItem::DropTypes
 LovedTracksItem::supportedDropTypes( const QMimeData* data ) const
 {
     if ( data->hasFormat( "application/tomahawk.result.list" ) ||
-         data->hasFormat( "application/tomahawk.query.list" ) )
+            data->hasFormat( "application/tomahawk.query.list" ) )
+    {
         return DropTypeThisTrack;
+    }
 
     return DropTypesNone;
 }
@@ -134,9 +144,11 @@ LovedTracksItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 
     QList< Tomahawk::query_ptr > queries;
     if ( !DropJob::acceptsMimeData( data, DropJob::Track ) )
+    {
         return false;
+    }
 
-    DropJob *dj = new DropJob();
+    DropJob* dj = new DropJob();
     dj->setDropTypes( DropJob::Track );
     dj->setDropAction( DropJob::Append );
 
@@ -156,7 +168,7 @@ LovedTracksItem::peerSortValue() const
 
 
 void
-LovedTracksItem::setSortValue(int value)
+LovedTracksItem::setSortValue( int value )
 {
     m_sortValue = value;
 }
@@ -166,7 +178,7 @@ void
 LovedTracksItem::loveDroppedTracks( QList< Tomahawk::query_ptr > qrys )
 {
     foreach( Tomahawk::query_ptr qry, qrys )
-        qry->track()->setLoved( true );
+    qry->track()->setLoved( true );
 }
 
 

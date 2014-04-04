@@ -27,15 +27,24 @@ namespace Tomahawk
 
 class DLLEXPORT MP4Tag : public Tag
 {
-public:
-    MP4Tag( TagLib::Tag *, TagLib::MP4::Tag * );
+  public:
+    MP4Tag( TagLib::Tag*, TagLib::MP4::Tag* );
 
-    virtual QString albumArtist() const { return m_albumArtist; }
-    virtual QString composer() const { return m_composer; }
-    virtual unsigned int discNumber() const { return m_discNumber; }
+    virtual QString albumArtist() const
+    {
+        return m_albumArtist;
+    }
+    virtual QString composer() const
+    {
+        return m_composer;
+    }
+    virtual unsigned int discNumber() const
+    {
+        return m_discNumber;
+    }
 
-private:
-    TagLib::MP4::Tag *m_mp4Tag;
+  private:
+    TagLib::MP4::Tag* m_mp4Tag;
 };
 
 }

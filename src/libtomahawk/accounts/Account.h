@@ -68,7 +68,7 @@ class DLLEXPORT Account : public QObject
 {
     Q_OBJECT
 
-public:
+  public:
     struct Configuration
     {
         QString accountFriendlyName;
@@ -85,57 +85,136 @@ public:
     explicit Account( const QString& accountId );
     virtual ~Account();
 
-    QString accountServiceName() const { QMutexLocker locker( &m_mutex ); return m_accountServiceName; } // e.g. "Twitter", "Last.fm"
-    QString accountFriendlyName() const { QMutexLocker locker( &m_mutex ); return m_cfg.accountFriendlyName; } // e.g. screen name on the service, JID, etc.
-    bool enabled() const { QMutexLocker locker( &m_mutex ); return m_cfg.enabled; }
-    QString accountId() const { QMutexLocker locker( &m_mutex ); return m_accountId; }
+    QString accountServiceName() const
+    {
+        QMutexLocker locker( &m_mutex );    // e.g. "Twitter", "Last.fm"
+        return m_accountServiceName;
+    }
+    QString accountFriendlyName() const
+    {
+        QMutexLocker locker( &m_mutex );    // e.g. screen name on the service, JID, etc.
+        return m_cfg.accountFriendlyName;
+    }
+    bool enabled() const
+    {
+        QMutexLocker locker( &m_mutex );
+        return m_cfg.enabled;
+    }
+    QString accountId() const
+    {
+        QMutexLocker locker( &m_mutex );
+        return m_accountId;
+    }
 
-    QVariantHash configuration() const { QMutexLocker locker( &m_mutex ); return m_cfg.configuration; }
+    QVariantHash configuration() const
+    {
+        QMutexLocker locker( &m_mutex );
+        return m_cfg.configuration;
+    }
 
     /**
      * Configuration widgets can have a "dataError( bool )" signal to enable/disable the OK button in their wrapper dialogs.
      */
 #ifndef ENABLE_HEADLESS
     virtual AccountConfigWidget* configurationWidget() = 0;
-    virtual QWidget* aboutWidget() { return 0; }
+    virtual QWidget* aboutWidget()
+    {
+        return 0;
+    }
     virtual QWidget* aclWidget() = 0;
     virtual QPixmap icon() const = 0;
 #endif
-    virtual QString description() const { return QString(); }
-    virtual QString author() const { return QString(); }
-    virtual QString version() const { return QString(); }
+    virtual QString description() const
+    {
+        return QString();
+    }
+    virtual QString author() const
+    {
+        return QString();
+    }
+    virtual QString version() const
+    {
+        return QString();
+    }
 
     virtual void saveConfig() {} // called when the widget has been edited. save values from config widget, call sync() to write to disk account generic settings
 
-    QVariantHash credentials() const { QMutexLocker locker( &m_mutex ); return m_cfg.credentials; }
+    QVariantHash credentials() const
+    {
+        QMutexLocker locker( &m_mutex );
+        return m_cfg.credentials;
+    }
 
-    QVariantMap acl() const { QMutexLocker locker( &m_mutex ); return m_cfg.acl; }
+    QVariantMap acl() const
+    {
+        QMutexLocker locker( &m_mutex );
+        return m_cfg.acl;
+    }
 
     virtual ConnectionState connectionState() const = 0;
     virtual bool isAuthenticated() const = 0;
 
-    virtual QString errorMessage() const { QMutexLocker locker( &m_mutex ); return m_cachedError; }
+    virtual QString errorMessage() const
+    {
+        QMutexLocker locker( &m_mutex );
+        return m_cachedError;
+    }
 
     virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() = 0;
     virtual SipPlugin* sipPlugin( bool create = true ) = 0;
 
     // Some accounts cannot be enabled if authentication fails. Return true after failing to authenticate
     // if this is the case, and the account will not be enabled
-    virtual bool preventEnabling() const { return false; }
+    virtual bool preventEnabling() const
+    {
+        return false;
+    }
 
     AccountTypes types() const;
 
-    void setAccountServiceName( const QString &serviceName ) { QMutexLocker locker( &m_mutex ); m_accountServiceName = serviceName; }
-    void setAccountFriendlyName( const QString &friendlyName )  { QMutexLocker locker( &m_mutex ); m_cfg.accountFriendlyName = friendlyName; }
-    void setEnabled( bool enabled ) { QMutexLocker locker( &m_mutex ); m_cfg.enabled = enabled; }
-    void setAccountId( const QString &accountId )  { QMutexLocker locker( &m_mutex ); m_accountId = accountId; }
-    void setCredentials( const QVariantHash &credentialHash ) { QMutexLocker locker( &m_mutex ); m_cfg.credentials = credentialHash; }
-    void setConfiguration( const QVariantHash &configuration ) { QMutexLocker locker( &m_mutex ); m_cfg.configuration = configuration; }
-    void setAcl( const QVariantMap &acl ) { QMutexLocker locker( &m_mutex ); m_cfg.acl = acl; }
+    void setAccountServiceName( const QString& serviceName )
+    {
+        QMutexLocker locker( &m_mutex );
+        m_accountServiceName = serviceName;
+    }
+    void setAccountFriendlyName( const QString& friendlyName )
+    {
+        QMutexLocker locker( &m_mutex );
+        m_cfg.accountFriendlyName = friendlyName;
+    }
+    void setEnabled( bool enabled )
+    {
+        QMutexLocker locker( &m_mutex );
+        m_cfg.enabled = enabled;
+    }
+    void setAccountId( const QString& accountId )
+    {
+        QMutexLocker locker( &m_mutex );
+        m_accountId = accountId;
+    }
+    void setCredentials( const QVariantHash& credentialHash )
+    {
+        QMutexLocker locker( &m_mutex );
+        m_cfg.credentials = credentialHash;
+    }
+    void setConfiguration( const QVariantHash& configuration )
+    {
+        QMutexLocker locker( &m_mutex );
+        m_cfg.configuration = configuration;
+    }
+    void setAcl( const QVariantMap& acl )
+    {
+        QMutexLocker locker( &m_mutex );
+        m_cfg.acl = acl;
+    }
 
     void setTypes( AccountTypes types );
 
-    void sync() { QMutexLocker locker( &m_mutex ); syncConfig(); }
+    void sync()
+    {
+        QMutexLocker locker( &m_mutex );
+        syncConfig();
+    }
 
     /**
      * Removes all the settings held in the config file for this account instance
@@ -144,25 +223,25 @@ public:
      */
     virtual void removeFromConfig();
 
-public slots:
+  public slots:
     virtual void authenticate() = 0;
     virtual void deauthenticate() = 0;
 
-signals:
+  signals:
     void error( int errorId, const QString& errorStr );
     void connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState state );
 
     void configurationChanged();
 
-protected:
-    virtual void loadFromConfig( const QString &accountId );
+  protected:
+    virtual void loadFromConfig( const QString& accountId );
     virtual void syncConfig();
 
-private slots:
+  private slots:
     void onConnectionStateChanged( Tomahawk::Accounts::Account::ConnectionState );
     void onError( int, const QString& );
 
-private:
+  private:
     QString m_accountServiceName;
     QString m_cachedError;
     QString m_accountId;
@@ -175,7 +254,7 @@ private:
 class DLLEXPORT AccountFactory : public QObject
 {
     Q_OBJECT
-public:
+  public:
     AccountFactory() {}
     virtual ~AccountFactory() {}
 
@@ -186,10 +265,19 @@ public:
     // description to be shown when user views a list of account types
     virtual QString description() const = 0;
     // if the user can create multiple
-    virtual bool isUnique() const { return false; }
+    virtual bool isUnique() const
+    {
+        return false;
+    }
 
-    virtual QPixmap icon() const { return QPixmap(); }
-    virtual bool allowUserCreation() const { return true; }
+    virtual QPixmap icon() const
+    {
+        return QPixmap();
+    }
+    virtual bool allowUserCreation() const
+    {
+        return true;
+    }
 
     // What are the supported types for accounts this factory creates?
     virtual AccountTypes types() const = 0;
@@ -197,8 +285,14 @@ public:
     virtual Account* createAccount( const QString& accountId = QString() ) = 0;
 
     /// If this resolver type accepts this path on disk (For general and special resolver accounts)
-    virtual bool acceptsPath( const QString& ) const { return false; }
-    virtual Account* createFromPath( const QString& ) { return 0; }
+    virtual bool acceptsPath( const QString& ) const
+    {
+        return false;
+    }
+    virtual Account* createFromPath( const QString& )
+    {
+        return 0;
+    }
 };
 
 };

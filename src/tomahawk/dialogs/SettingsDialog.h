@@ -58,52 +58,52 @@ class AccountModelFilterProxy;
 
 class HostDialog : public QDialog
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit HostDialog( QWidget* parent = 0 );
     ~HostDialog() {}
 
     void saveSettings();
 
-private slots:
+  private slots:
     void toggleAutoDetectIp( bool checked );
 
-private:
+  private:
     Ui::HostDialog* ui;
 };
 
 class ProxyDialog : public QDialog
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit ProxyDialog( QWidget* parent = 0 );
     ~ProxyDialog() {}
 
     void saveSettings();
 
-private:
+  private:
     Ui::ProxyDialog* ui;
 };
 
 class SettingsDialog : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit SettingsDialog( QObject* parent = 0 );
     ~SettingsDialog();
 
     void show();
 
-signals:
+  signals:
     void finished( bool saved );
 
-protected:
+  protected:
     void changeEvent( QEvent* e );
 
-private slots:
+  private slots:
     void toggleRemoteMode();
     void toggleProxyEnabled();
     void showStaticHostSettings();
@@ -128,7 +128,7 @@ private slots:
     void saveSettings();
     void onRejected();
 
-private:
+  private:
     Ui_Settings_Accounts* m_accountsWidgetUi;
     QWidget* m_accountsWidget;
 

@@ -44,7 +44,7 @@ RecentlyPlayedPlaylistsModel::RecentlyPlayedPlaylistsModel( QObject* parent )
 
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), this, SLOT( onSourceAdded( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
     connect( TomahawkSettings::instance(), SIGNAL( recentlyPlayedPlaylistAdded( QString, int ) ), this, SLOT( plAdded( QString, int ) ) );
-    connect( AudioEngine::instance(),SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ), this, SLOT( playlistChanged( Tomahawk::playlistinterface_ptr ) ), Qt::QueuedConnection );
+    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ), this, SLOT( playlistChanged( Tomahawk::playlistinterface_ptr ) ), Qt::QueuedConnection );
 
     emit emptinessChanged( m_recplaylists.isEmpty() );
 }
@@ -53,9 +53,11 @@ RecentlyPlayedPlaylistsModel::RecentlyPlayedPlaylistsModel( QObject* parent )
 void
 RecentlyPlayedPlaylistsModel::loadFromSettings()
 {
-//    qDebug() << Q_FUNC_INFO;
+    //    qDebug() << Q_FUNC_INFO;
     if ( !m_waitingForSome )
+    {
         return;
+    }
 
     beginResetModel();
     m_recplaylists.clear();
@@ -65,13 +67,17 @@ RecentlyPlayedPlaylistsModel::loadFromSettings()
 
     for( int i = playlist_guids.size() - 1; i >= 0; i-- )
     {
-//        qDebug() << "loading playlist" << playlist_guids[i];
+        //        qDebug() << "loading playlist" << playlist_guids[i];
 
         playlist_ptr pl = m_cached.value( playlist_guids[i], Tomahawk::playlist_ptr() );
         if ( !pl )
+        {
             pl = Tomahawk::Playlist::get( playlist_guids[i] );
+        }
         if ( !pl )
+        {
             pl = Tomahawk::DynamicPlaylist::get( playlist_guids[i] );
+        }
 
         if ( pl )
         {
@@ -80,13 +86,20 @@ RecentlyPlayedPlaylistsModel::loadFromSettings()
             if ( !m_cached.contains( playlist_guids[i] ) )
             {
                 if ( pl.dynamicCast< DynamicPlaylist >().isNull() )
-                    connect( pl.data(), SIGNAL(revisionLoaded(Tomahawk::PlaylistRevision)), this, SLOT(playlistRevisionLoaded()) );
+                {
+                    connect( pl.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistRevisionLoaded() ) );
+                }
                 else
-                    connect( pl.data(), SIGNAL(dynamicRevisionLoaded(Tomahawk::DynamicPlaylistRevision)), this, SLOT(playlistRevisionLoaded()) );
+                {
+                    connect( pl.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( playlistRevisionLoaded() ) );
+                }
                 m_cached[playlist_guids[i]] = pl;
             }
-        } else
+        }
+        else
+        {
             m_waitingForSome = true;
+        }
     }
     endResetModel();
 
@@ -98,60 +111,73 @@ QVariant
 RecentlyPlayedPlaylistsModel::data( const QModelIndex& index, int role ) const
 {
     if ( !index.isValid() || !hasIndex( index.row(), index.column(), index.parent() ) )
+    {
         return QVariant();
+    }
 
     playlist_ptr pl = m_recplaylists[index.row()];
     switch( role )
     {
-    case Qt::DisplayRole:
-        return pl->title();
-    case PlaylistRole:
-        return QVariant::fromValue< Tomahawk::playlist_ptr >( pl );
-    case ArtistRole:
-    {
-        if ( m_artists.value( pl ).isEmpty() )
+        case Qt::DisplayRole:
+            return pl->title();
+        case PlaylistRole:
+            return QVariant::fromValue< Tomahawk::playlist_ptr >( pl );
+        case ArtistRole:
         {
-            QStringList artists;
-
-            foreach ( const Tomahawk::plentry_ptr& entry, pl->entries() )
+            if ( m_artists.value( pl ).isEmpty() )
             {
-                if ( !artists.contains( entry->query()->track()->artist() ) )
-                    artists << entry->query()->track()->artist();
+                QStringList artists;
+
+                foreach ( const Tomahawk::plentry_ptr & entry, pl->entries() )
+                {
+                    if ( !artists.contains( entry->query()->track()->artist() ) )
+                    {
+                        artists << entry->query()->track()->artist();
+                    }
+                }
+
+                m_artists[pl] = artists.join( ", " );
             }
 
-            m_artists[pl] = artists.join( ", " );
+            return m_artists[pl];
         }
-
-        return m_artists[pl];
-    }
-    case PlaylistTypeRole:
-    {
-        if ( !pl.dynamicCast< Tomahawk::DynamicPlaylist >().isNull() )
+        case PlaylistTypeRole:
+        {
+            if ( !pl.dynamicCast< Tomahawk::DynamicPlaylist >().isNull() )
+            {
+                dynplaylist_ptr dynp = pl.dynamicCast< Tomahawk::DynamicPlaylist >();
+                if ( dynp->mode() == Static )
+                {
+                    return AutoPlaylist;
+                }
+                else if ( dynp->mode() == OnDemand )
+                {
+                    return Station;
+                }
+            }
+            else
+            {
+                return StaticPlaylist;
+            }
+        }
+        case DynamicPlaylistRole:
         {
             dynplaylist_ptr dynp = pl.dynamicCast< Tomahawk::DynamicPlaylist >();
-            if ( dynp->mode() == Static )
-                return AutoPlaylist;
-            else if ( dynp->mode() == OnDemand )
-                return Station;
-        } else
-        {
-            return StaticPlaylist;
+            return QVariant::fromValue< Tomahawk::dynplaylist_ptr >( dynp );
         }
-    }
-    case DynamicPlaylistRole:
-    {
-        dynplaylist_ptr dynp = pl.dynamicCast< Tomahawk::DynamicPlaylist >();
-        return QVariant::fromValue< Tomahawk::dynplaylist_ptr >( dynp );
-    }
-    case TrackCountRole:
-    {
-        if ( !pl.dynamicCast< Tomahawk::DynamicPlaylist >().isNull() && pl.dynamicCast< Tomahawk::DynamicPlaylist >()->mode() == OnDemand )
-            return QString( QChar( 0x221E ) );
-        else
-            return pl->entries().count();
-    }
-    default:
-        return QVariant();
+        case TrackCountRole:
+        {
+            if ( !pl.dynamicCast< Tomahawk::DynamicPlaylist >().isNull() && pl.dynamicCast< Tomahawk::DynamicPlaylist >()->mode() == OnDemand )
+            {
+                return QString( QChar( 0x221E ) );
+            }
+            else
+            {
+                return pl->entries().count();
+            }
+        }
+        default:
+            return QVariant();
     }
 }
 
@@ -177,12 +203,12 @@ void
 RecentlyPlayedPlaylistsModel::onSourceAdded( const Tomahawk::source_ptr& source )
 {
     connect( source.data(), SIGNAL( online() ),
-                              SLOT( sourceOnline() ) );
+             SLOT( sourceOnline() ) );
 
     connect( source->dbCollection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ),
-                                              SLOT( loadFromSettings() ) );
+             SLOT( loadFromSettings() ) );
     connect( source->dbCollection().data(), SIGNAL( playlistsDeleted( QList<Tomahawk::playlist_ptr> ) ),
-                                              SLOT( onPlaylistsRemoved( QList<Tomahawk::playlist_ptr> ) ) );
+             SLOT( onPlaylistsRemoved( QList<Tomahawk::playlist_ptr> ) ) );
 }
 
 
@@ -206,7 +232,7 @@ RecentlyPlayedPlaylistsModel::sourceOnline()
 void
 RecentlyPlayedPlaylistsModel::onPlaylistsRemoved( QList< playlist_ptr > playlists )
 {
-    foreach ( const playlist_ptr& pl, playlists )
+    foreach ( const playlist_ptr & pl, playlists )
     {
         if ( m_recplaylists.contains( pl ) )
         {
@@ -237,7 +263,9 @@ RecentlyPlayedPlaylistsModel::plAdded( const QString& plguid, int sourceId )
     Q_UNUSED( sourceId );
     const playlist_ptr& pl = Playlist::get( plguid );
     if ( !pl )
+    {
         return;
+    }
 
     onPlaylistsRemoved( QList< playlist_ptr >() << pl );
 
@@ -254,16 +282,20 @@ RecentlyPlayedPlaylistsModel::playlistChanged( Tomahawk::playlistinterface_ptr p
 {
     // ARG
     if ( !pli )
+    {
         return;
+    }
 
-    if ( Playlist *pl = dynamic_cast< Playlist* >( pli.data() ) )
+    if ( Playlist* pl = dynamic_cast< Playlist* >( pli.data() ) )
     {
         // look for it, qsharedpointer fail
         playlist_ptr ptr;
-        foreach ( const playlist_ptr& test, m_recplaylists )
+        foreach ( const playlist_ptr & test, m_recplaylists )
         {
             if ( test.data() == pl )
+            {
                 ptr = test;
+            }
         }
 
         if ( ptr && m_artists.contains( ptr ) )

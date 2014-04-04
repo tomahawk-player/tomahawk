@@ -33,7 +33,7 @@ class ContextWidget;
 
 namespace Ui
 {
-    class InfoBar;
+class InfoBar;
 }
 
 namespace Tomahawk
@@ -43,13 +43,13 @@ class PlaylistUpdaterInterface;
 
 class DLLEXPORT InfoBar : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     InfoBar( QWidget* parent = 0 );
     ~InfoBar();
 
-public slots:
+  public slots:
     void setCaption( const QString& s );
 
     void setDescription( const QString& s );
@@ -64,18 +64,18 @@ public slots:
     void setFilterAvailable( bool b );
 
     void setUpdaters( const QList<Tomahawk::PlaylistUpdaterInterface*>& updaters );
-signals:
+  signals:
     void filterTextChanged( const QString& filter );
 
-protected:
+  protected:
     void changeEvent( QEvent* event );
     void paintEvent( QPaintEvent* event );
 
-private slots:
+  private slots:
     void onFilterEdited();
     void artistClicked();
 
-private:
+  private:
     Ui::InfoBar* ui;
 
     QPalette m_whitePal;

@@ -46,7 +46,9 @@ DatabaseCommand_LoadAllStations::exec( DatabaseImpl* dbi )
     }
 
     if ( !source().isNull() )
+    {
         sourceToken = QString( "AND source %1 " ).arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) );
+    }
 
 
     query.exec( QString( "SELECT playlist.guid as guid, title, info, creator, createdOn, lastmodified, shared, currentrevision, dynamic_playlist.pltype, dynamic_playlist.plmode "
@@ -55,26 +57,26 @@ DatabaseCommand_LoadAllStations::exec( DatabaseImpl* dbi )
                          "%2"
                          "%3 %4 %5"
                        )
-                       .arg( OnDemand )
-                       .arg( sourceToken )
-                       .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( orderToken ) : QString() )
-                       .arg( m_sortDescending ? "DESC" : QString() )
-                       .arg( m_limitAmount > 0 ? QString( "LIMIT 0, %1" ).arg( m_limitAmount ) : QString() ) );
+                .arg( OnDemand )
+                .arg( sourceToken )
+                .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( orderToken ) : QString() )
+                .arg( m_sortDescending ? "DESC" : QString() )
+                .arg( m_limitAmount > 0 ? QString( "LIMIT 0, %1" ).arg( m_limitAmount ) : QString() ) );
 
     QList<dynplaylist_ptr> plists;
     while ( query.next() )
     {
-            QVariantList data = QVariantList()  <<      query.value(7).toString()  //current rev
-                                                <<      query.value(1).toString()  //title
-                                                <<      query.value(2).toString()  //info
-                                                <<      query.value(3).toString()  //creator
-                                                <<      query.value(4).toString()  //createdOn
-                                                <<      query.value(8).toString()  // dynamic type
-                                                <<      static_cast<GeneratorMode>(query.value(9).toInt())  // dynamic mode
-                                                <<      query.value(6).toBool()    //shared
-                                                <<      query.value(5).toInt()     //lastmod
-                                                <<      query.value(0).toString();  //GUID
-            emit stationLoaded( source(), data );
+        QVariantList data = QVariantList()  <<      query.value( 7 ).toString() //current rev
+                            <<      query.value( 1 ).toString() //title
+                            <<      query.value( 2 ).toString() //info
+                            <<      query.value( 3 ).toString() //creator
+                            <<      query.value( 4 ).toString() //createdOn
+                            <<      query.value( 8 ).toString() // dynamic type
+                            <<      static_cast<GeneratorMode>( query.value( 9 ).toInt() ) // dynamic mode
+                            <<      query.value( 6 ).toBool()  //shared
+                            <<      query.value( 5 ).toInt()   //lastmod
+                            <<      query.value( 0 ).toString(); //GUID
+        emit stationLoaded( source(), data );
     }
 
     emit done();

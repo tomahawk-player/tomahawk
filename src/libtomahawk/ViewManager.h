@@ -63,25 +63,40 @@ class InboxModel;
 
 namespace Tomahawk
 {
-    class DynamicWidget;
+class DynamicWidget;
 }
 
 class DLLEXPORT ViewManager : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     static ViewManager* instance();
 
     explicit ViewManager( QObject* parent = 0 );
     virtual ~ViewManager();
 
-    QWidget* widget() const { return m_widget; }
-    InfoBar* infobar() const { return m_infobar; }
-    ContextWidget* context() const { return m_contextWidget; }
+    QWidget* widget() const
+    {
+        return m_widget;
+    }
+    InfoBar* infobar() const
+    {
+        return m_infobar;
+    }
+    ContextWidget* context() const
+    {
+        return m_contextWidget;
+    }
 
-    PlaylistView* queue() const { return m_queue->queue(); }
-    void setQueue( QueueView* queue ) { m_queue = queue; }
+    PlaylistView* queue() const
+    {
+        return m_queue->queue();
+    }
+    void setQueue( QueueView* queue )
+    {
+        m_queue = queue;
+    }
 
     bool isSuperCollectionVisible() const;
     bool isNewPlaylistPageVisible() const;
@@ -118,7 +133,7 @@ public:
 
     void addDynamicPage( Tomahawk::ViewPagePlugin* viewPage, const QString& pageName = QString() );
 
-signals:
+  signals:
     void filterAvailable( bool b );
 
     void playClicked();
@@ -137,14 +152,14 @@ signals:
 
     void viewPageAdded( const QString& pageName, Tomahawk::ViewPage* page, int sortValue );
 
-public slots:
+  public slots:
     Tomahawk::ViewPage* showSuperCollection();
     Tomahawk::ViewPage* showWhatsHotPage();
     Tomahawk::ViewPage* showNewReleasesPage();
     Tomahawk::ViewPage* showRecentPlaysPage();
     Tomahawk::ViewPage* showInboxPage();
 
-//    void addDynamicPage( const QString& pageName, const QString& text, const QIcon& icon, boost::function< Tomahawk::ViewPage*() > instanceLoader, int sortValue = 0 );
+    //    void addDynamicPage( const QString& pageName, const QString& text, const QIcon& icon, boost::function< Tomahawk::ViewPage*() > instanceLoader, int sortValue = 0 );
     Tomahawk::ViewPage* showDynamicPage( const QString& pageName );
 
     void showCurrentTrack();
@@ -166,18 +181,24 @@ public slots:
     void destroyPage( Tomahawk::ViewPage* page );
     bool destroyCurrentPage();
 
-    void showQueue() { emit showQueueRequested(); }
-    void hideQueue() { emit hideQueueRequested(); }
+    void showQueue()
+    {
+        emit showQueueRequested();
+    }
+    void hideQueue()
+    {
+        emit hideQueueRequested();
+    }
 
     void playlistInterfaceChanged( Tomahawk::playlistinterface_ptr );
 
-private slots:
+  private slots:
     void setFilter( const QString& filter );
     void applyFilter();
 
     void onWidgetDestroyed( QWidget* widget );
 
-private:
+  private:
     void setPage( Tomahawk::ViewPage* page, bool trackHistory = true );
     void updateView();
 

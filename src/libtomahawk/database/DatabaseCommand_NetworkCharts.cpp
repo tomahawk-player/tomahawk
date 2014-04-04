@@ -24,14 +24,14 @@
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "Source.h"
+#include "Source.h"
 #endif
 
 
 namespace Tomahawk
 {
 
-DatabaseCommand_NetworkCharts::DatabaseCommand_NetworkCharts( const QDateTime &from, const QDateTime &to, QObject *parent )
+DatabaseCommand_NetworkCharts::DatabaseCommand_NetworkCharts( const QDateTime& from, const QDateTime& to, QObject* parent )
     : DatabaseCommand( parent )
     , m_amount( 0 )
     , m_from( from )
@@ -39,7 +39,7 @@ DatabaseCommand_NetworkCharts::DatabaseCommand_NetworkCharts( const QDateTime &f
 {
 }
 
-DatabaseCommand_NetworkCharts::DatabaseCommand_NetworkCharts( QObject *parent )
+DatabaseCommand_NetworkCharts::DatabaseCommand_NetworkCharts( QObject* parent )
     : DatabaseCommand( parent )
     , m_amount( 0 )
 {
@@ -50,7 +50,7 @@ DatabaseCommand_NetworkCharts::~DatabaseCommand_NetworkCharts()
 }
 
 void
-DatabaseCommand_NetworkCharts::exec( DatabaseImpl * dbi )
+DatabaseCommand_NetworkCharts::exec( DatabaseImpl* dbi )
 {
     TomahawkSqlQuery query = dbi->newquery();
 
@@ -63,19 +63,19 @@ DatabaseCommand_NetworkCharts::exec( DatabaseImpl * dbi )
     if ( m_from.isValid() && m_to.isValid() )
     {
         timespan = QString(
-                    " AND playback_log.playtime >= %1 AND playback_log.playtime <= %2 "
-                    ).arg( m_from.toTime_t() ).arg( m_to.toTime_t() );
+                       " AND playback_log.playtime >= %1 AND playback_log.playtime <= %2 "
+                   ).arg( m_from.toTime_t() ).arg( m_to.toTime_t() );
     }
 
     QString sql = QString(
-                "SELECT COUNT(*) as counter, track.name, artist.name "
-                " FROM playback_log, track, artist "
-                " WHERE track.id = playback_log.track AND artist.id = track.artist "
-                " AND playback_log.source IS NOT NULL %1 " // exclude self
-                " GROUP BY playback_log.track "
-                " ORDER BY counter DESC "
-                " %2"
-                ).arg( timespan ).arg( limit );
+                      "SELECT COUNT(*) as counter, track.name, artist.name "
+                      " FROM playback_log, track, artist "
+                      " WHERE track.id = playback_log.track AND artist.id = track.artist "
+                      " AND playback_log.source IS NOT NULL %1 " // exclude self
+                      " GROUP BY playback_log.track "
+                      " ORDER BY counter DESC "
+                      " %2"
+                  ).arg( timespan ).arg( limit );
 
     query.prepare( sql );
     query.exec();
@@ -83,11 +83,13 @@ DatabaseCommand_NetworkCharts::exec( DatabaseImpl * dbi )
     QList<Tomahawk::track_ptr> tracks;
     while ( query.next() )
     {
-            Tomahawk::track_ptr track = Tomahawk::Track::get( query.value( 2 ).toString(), query.value( 1 ).toString() );
-            if ( !track )
-                continue;
+        Tomahawk::track_ptr track = Tomahawk::Track::get( query.value( 2 ).toString(), query.value( 1 ).toString() );
+        if ( !track )
+        {
+            continue;
+        }
 
-            tracks << track;
+        tracks << track;
     }
 
     emit done( tracks );

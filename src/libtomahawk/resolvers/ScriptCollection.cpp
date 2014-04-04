@@ -65,7 +65,7 @@ ScriptCollection::prettyName() const
 {
     return tr( "%1 Collection",
                "Name of a collection based on a resolver, e.g. Subsonic Collection" )
-               .arg( m_servicePrettyName );
+           .arg( m_servicePrettyName );
 }
 
 
@@ -88,7 +88,9 @@ QIcon
 ScriptCollection::icon() const
 {
     if( !m_icon.isNull() )
+    {
         return m_icon;
+    }
 
     return m_resolver->icon();
 }
@@ -138,7 +140,9 @@ ScriptCollection::requestArtists()
 {
     Tomahawk::collection_ptr thisCollection = m_resolver->collections().value( name() );
     if ( thisCollection->name() != this->name() )
+    {
         return 0;
+    }
 
     Tomahawk::ArtistsRequest* cmd = new ScriptCommand_AllArtists( thisCollection );
 
@@ -151,7 +155,9 @@ ScriptCollection::requestAlbums( const Tomahawk::artist_ptr& artist )
 {
     Tomahawk::collection_ptr thisCollection = m_resolver->collections().value( name() );
     if ( thisCollection->name() != this->name() )
+    {
         return 0;
+    }
 
     Tomahawk::AlbumsRequest* cmd = new ScriptCommand_AllAlbums( thisCollection, artist );
 
@@ -164,7 +170,9 @@ ScriptCollection::requestTracks( const Tomahawk::album_ptr& album )
 {
     Tomahawk::collection_ptr thisCollection = m_resolver->collections().value( name() );
     if ( thisCollection->name() != this->name() )
+    {
         return 0;
+    }
 
     Tomahawk::TracksRequest* cmd = new ScriptCommand_AllTracks( thisCollection, album );
 

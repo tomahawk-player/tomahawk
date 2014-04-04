@@ -29,9 +29,9 @@ namespace Tomahawk
 
 class DLLEXPORT ViewPagePlugin : public QObject, public ViewPage
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     ViewPagePlugin( QObject* parent = 0 );
     virtual ~ViewPagePlugin();
 
@@ -42,7 +42,7 @@ public:
     virtual QPixmap pixmap() const;
     virtual const QString pixmapPath() const;
 
-signals:
+  signals:
     void nameChanged( const QString& );
     void descriptionChanged( const QString& );
     void descriptionChanged( const Tomahawk::artist_ptr& artist );

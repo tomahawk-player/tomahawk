@@ -50,15 +50,15 @@ void
 AlbumModel::addCollection( const collection_ptr& collection, bool overwrite )
 {
     qDebug() << Q_FUNC_INFO << collection->name()
-                            << collection->source()->id()
-                            << collection->source()->nodeId();
+             << collection->source()->id()
+             << collection->source()->nodeId();
 
     DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( collection );
     m_overwriteOnAdd = overwrite;
     m_collection = collection;
 
     connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
-                    SLOT( addAlbums( QList<Tomahawk::album_ptr> ) ) );
+             SLOT( addAlbums( QList<Tomahawk::album_ptr> ) ) );
 
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 
@@ -69,7 +69,7 @@ AlbumModel::addCollection( const collection_ptr& collection, bool overwrite )
         connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ), Qt::UniqueConnection );
 
         QList<Tomahawk::source_ptr> sources = SourceList::instance()->sources();
-        foreach ( const source_ptr& source, sources )
+        foreach ( const source_ptr & source, sources )
         {
             connect( source->dbCollection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
         }
@@ -86,10 +86,10 @@ AlbumModel::addCollection( const collection_ptr& collection, bool overwrite )
 void
 AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned int amount, DatabaseCommand_AllAlbums::SortOrder order, bool overwrite )
 {
-/*    qDebug() << Q_FUNC_INFO << collection->name()
-                            << collection->source()->id()
-                            << collection->source()->nodeId()
-                            << amount << order;*/
+    /*    qDebug() << Q_FUNC_INFO << collection->name()
+                                << collection->source()->id()
+                                << collection->source()->nodeId()
+                                << amount << order;*/
 
     DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( collection );
     cmd->setLimit( amount );
@@ -99,14 +99,18 @@ AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned in
     m_collection = collection;
 
     connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
-                    SLOT( addAlbums( QList<Tomahawk::album_ptr> ) ) );
+             SLOT( addAlbums( QList<Tomahawk::album_ptr> ) ) );
 
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 
     if ( !collection.isNull() )
+    {
         setTitle( tr( "All albums from %1" ).arg( collection->source()->friendlyName() ) );
+    }
     else
+    {
         setTitle( tr( "All albums" ) );
+    }
 
     emit loadingStarted();
 }
@@ -118,15 +122,19 @@ AlbumModel::addAlbums( const QList<Tomahawk::album_ptr>& albums )
     emit loadingFinished();
 
     if ( m_overwriteOnAdd )
+    {
         clear();
+    }
 
     QList<Tomahawk::album_ptr> trimmedAlbums;
-    foreach ( const album_ptr& album, albums )
+    foreach ( const album_ptr & album, albums )
     {
         if ( !album.isNull() && album->name().length() )
         {
             if ( findItem( album ) || trimmedAlbums.contains( album ) )
+            {
                 continue;
+            }
             trimmedAlbums << album;
         }
     }
@@ -145,7 +153,7 @@ AlbumModel::addAlbums( const QList<Tomahawk::album_ptr>& albums )
     emit beginInsertRows( QModelIndex(), crows.first, crows.second );
 
     PlayableItem* albumitem;
-    foreach( const album_ptr& album, trimmedAlbums )
+    foreach( const album_ptr & album, trimmedAlbums )
     {
         albumitem = new PlayableItem( album, rootItem() );
         albumitem->index = createIndex( rootItem()->children.count() - 1, 0, albumitem );
@@ -164,15 +172,19 @@ AlbumModel::addArtists( const QList<Tomahawk::artist_ptr>& artists )
     emit loadingFinished();
 
     if ( m_overwriteOnAdd )
+    {
         clear();
+    }
 
     QList<Tomahawk::artist_ptr> trimmedArtists;
-    foreach ( const artist_ptr& artist, artists )
+    foreach ( const artist_ptr & artist, artists )
     {
         if ( !artist.isNull() && artist->name().length() )
         {
             if ( findItem( artist ) || trimmedArtists.contains( artist ) )
+            {
                 continue;
+            }
             trimmedArtists << artist;
         }
     }
@@ -191,7 +203,7 @@ AlbumModel::addArtists( const QList<Tomahawk::artist_ptr>& artists )
     emit beginInsertRows( QModelIndex(), crows.first, crows.second );
 
     PlayableItem* albumitem;
-    foreach ( const artist_ptr& artist, trimmedArtists )
+    foreach ( const artist_ptr & artist, trimmedArtists )
     {
         albumitem = new PlayableItem( artist, rootItem() );
         albumitem->index = createIndex( rootItem()->children.count() - 1, 0, albumitem );
@@ -210,7 +222,9 @@ AlbumModel::addQueries( const QList<Tomahawk::query_ptr>& queries )
     emit loadingFinished();
 
     if ( m_overwriteOnAdd )
+    {
         clear();
+    }
 
     int c = rowCount( QModelIndex() );
     QPair< int, int > crows;
@@ -220,7 +234,7 @@ AlbumModel::addQueries( const QList<Tomahawk::query_ptr>& queries )
     emit beginInsertRows( QModelIndex(), crows.first, crows.second );
 
     PlayableItem* albumitem;
-    foreach ( const query_ptr& query, queries )
+    foreach ( const query_ptr & query, queries )
     {
         albumitem = new PlayableItem( query, rootItem() );
         albumitem->index = createIndex( rootItem()->children.count() - 1, 0, albumitem );

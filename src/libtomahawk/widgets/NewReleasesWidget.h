@@ -43,14 +43,14 @@ class PlayableModel;
 class AnimatedSpinner;
 namespace Ui
 {
-    class NewReleasesWidget;
+class NewReleasesWidget;
 }
 
 namespace Tomahawk
 {
-    class ChartDataLoader;
-    class ChartsPlaylistInterface;
-    class ChartDataLoader;
+class ChartDataLoader;
+class ChartsPlaylistInterface;
+class ChartDataLoader;
 }
 
 /**
@@ -59,47 +59,59 @@ namespace Tomahawk
  */
 class DLLEXPORT NewReleasesWidget : public QWidget, public Tomahawk::ViewPage
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     NewReleasesWidget( QWidget* parent = 0 );
     ~NewReleasesWidget();
 
-    virtual QWidget* widget() { return this; }
+    virtual QWidget* widget()
+    {
+        return this;
+    }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 
-    virtual QString title() const { return tr( "New Releases" ); }
-    virtual QString description() const { return QString(); }
+    virtual QString title() const
+    {
+        return tr( "New Releases" );
+    }
+    virtual QString description() const
+    {
+        return QString();
+    }
 
-    virtual bool showInfoBar() const { return false; }
+    virtual bool showInfoBar() const
+    {
+        return false;
+    }
     virtual bool isBeingPlayed() const;
 
     virtual bool jumpToCurrentTrack();
 
-protected:
+  protected:
     void changeEvent( QEvent* e );
 
-signals:
+  signals:
     void destroyed( QWidget* widget );
 
-public slots:
+  public slots:
     void fetchData();
 
-private slots:
+  private slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
     void leftCrumbIndexChanged( QModelIndex );
 
     void newReleasesLoaded( Tomahawk::ChartDataLoader*, const QList< Tomahawk::album_ptr >& );
 
-private:
+  private:
     void setLeftViewArtists( TreeModel* artistModel );
     void setLeftViewAlbums( PlayableModel* albumModel );
     void setLeftViewTracks( PlaylistModel* trackModel );
 
 
-    QStandardItem* parseNode( QStandardItem* parentItem, const QString &label, const QVariant &data );
-    Ui::NewReleasesWidget *ui;
+    QStandardItem* parseNode( QStandardItem* parentItem, const QString& label, const QVariant& data );
+    Ui::NewReleasesWidget* ui;
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 
     QStandardItemModel* m_crumbModelLeft;

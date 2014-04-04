@@ -126,7 +126,9 @@ LastFmConfig::loadHistory()
         m_ui->importHistory->setText( tr( "Importing %1", "e.g. Importing 2012/01/01" ).arg( QDateTime::fromTime_t( m_lastTimeStamp ).toString( "MMMM d yyyy" ) ) );
     }
     else
+    {
         m_ui->importHistory->setText( tr( "Importing History..." ) );
+    }
 
     m_ui->importHistory->setEnabled( false );
     m_ui->progressBar->show();
@@ -152,15 +154,17 @@ LastFmConfig::onHistoryLoaded()
 
         foreach ( lastfm::XmlQuery e, lfm.children( "track" ) )
         {
-//            tDebug() << "Found:" << e.children( "artist" ).first()["name"].text() << e["name"].text() << e["date"].attribute( "uts" ).toUInt();
+            //            tDebug() << "Found:" << e.children( "artist" ).first()["name"].text() << e["name"].text() << e["date"].attribute( "uts" ).toUInt();
             Tomahawk::track_ptr track = Tomahawk::Track::get( e.children( "artist" ).first()["name"].text(), e["name"].text(), QString() );
             if ( !track )
+            {
                 continue;
+            }
 
             m_lastTimeStamp = e["date"].attribute( "uts" ).toUInt();
 
             DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( track, DatabaseCommand_LogPlayback::Finished, 0, m_lastTimeStamp );
-            Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
+            Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
         }
 
         if ( !lfm.children( "recenttracks" ).isEmpty() )
@@ -179,10 +183,14 @@ LastFmConfig::onHistoryLoaded()
                 loadHistory();
             }
             else
+            {
                 finished = true;
+            }
         }
         else
+        {
             finished = true;
+        }
     }
     catch( lastfm::ws::ParseError e )
     {
@@ -300,7 +308,9 @@ LastFmConfig::onLovedFinished( QNetworkReply* reply )
                 tDebug() << "Found:" << e.children( "artist" ).first()["name"].text() << e["name"].text() << e["date"].attribute( "uts" ).toUInt();
                 Tomahawk::track_ptr track = Tomahawk::Track::get( e.children( "artist" ).first()["name"].text(), e["name"].text(), QString() );
                 if ( track.isNull() )
+                {
                     continue;
+                }
 
                 m_lastfmLoved.insert( track );
             }
@@ -310,7 +320,9 @@ LastFmConfig::onLovedFinished( QNetworkReply* reply )
                 m_doneFetchingLoved = true;
 
                 if ( m_doneFetchingLocal )
+                {
                     syncLoved();
+                }
 
                 return;
             }
@@ -352,7 +364,9 @@ LastFmConfig::localLovedLoaded( DatabaseCommand_LoadSocialActions::TrackActions 
     m_doneFetchingLocal = true;
 
     if ( m_doneFetchingLoved )
+    {
         syncLoved();
+    }
 }
 
 
@@ -365,25 +379,27 @@ LastFmConfig::syncLoved()
 
     m_ui->progressBar->setValue( m_ui->progressBar->value() + 1 );
 
-    foreach ( const Tomahawk::track_ptr& lastfmLoved, m_lastfmLoved )
+    foreach ( const Tomahawk::track_ptr & lastfmLoved, m_lastfmLoved )
     {
         QSet< Tomahawk::track_ptr >::const_iterator iter = std::find_if( myLoved.begin(), myLoved.end(), boost::bind( &trackEquality, _1, boost::ref( lastfmLoved ) ) );
         if ( iter == myLoved.constEnd() )
         {
-//             qDebug() << "Found last.fm loved track that we didn't have loved locally:" << lastfmLoved->track() << lastfmLoved->artist();
+            //             qDebug() << "Found last.fm loved track that we didn't have loved locally:" << lastfmLoved->track() << lastfmLoved->artist();
             localToLove << lastfmLoved;
         }
     }
 
-    foreach ( const Tomahawk::track_ptr& localLoved, myLoved )
+    foreach ( const Tomahawk::track_ptr & localLoved, myLoved )
     {
         qDebug() << "CHECKING FOR LOCAL LOVED ON LAST.FM TOO:" << m_localLoved[ localLoved ].value.toString() << localLoved->track() << localLoved->artist();
         QSet< Tomahawk::track_ptr >::const_iterator iter = std::find_if( m_lastfmLoved.begin(), m_lastfmLoved.end(), boost::bind( &trackEquality, _1, boost::ref( localLoved ) ) );
 
-        qDebug() << "Result:" << (iter == m_lastfmLoved.constEnd());
+        qDebug() << "Result:" << ( iter == m_lastfmLoved.constEnd() );
         // If we unloved it locally, but it's still loved on last.fm, unlove it
         if ( m_localLoved[ localLoved ].value.toString() == "false" && iter != m_lastfmLoved.constEnd() )
+        {
             lastFmToUnlove << localLoved;
+        }
 
         // If we loved it locally but not loved on last.fm, love it
         if ( m_localLoved[ localLoved ].value.toString() == "true" && iter == m_lastfmLoved.constEnd() )
@@ -393,7 +409,7 @@ LastFmConfig::syncLoved()
         }
     }
 
-    foreach ( const Tomahawk::track_ptr& track, localToLove )
+    foreach ( const Tomahawk::track_ptr & track, localToLove )
     {
         // Don't use the infosystem as we don't want to tweet a few hundred times :)
         track->setLoved( true, false );
@@ -401,7 +417,7 @@ LastFmConfig::syncLoved()
 
     lastFmToLove.unite( lastFmToUnlove );
 
-    foreach ( const Tomahawk::track_ptr& track, lastFmToLove )
+    foreach ( const Tomahawk::track_ptr & track, lastFmToLove )
     {
         lastfm::MutableTrack lfmTrack;
         lfmTrack.stamp();
@@ -411,9 +427,13 @@ LastFmConfig::syncLoved()
         lfmTrack.setSource( lastfm::Track::Player );
 
         if ( lastFmToUnlove.contains( track ) )
+        {
             lfmTrack.unlove();
+        }
         else
+        {
             lfmTrack.love();
+        }
     }
 
     m_ui->progressBar->setValue( m_ui->progressBar->value() + 1 );

@@ -20,15 +20,15 @@
 
 namespace Tomahawk
 {
-    namespace Utils
-    {
-        class PluginLoader;
-    }
+namespace Utils
+{
+class PluginLoader;
+}
 }
 
 class PluginLoaderPrivate
 {
-public:
+  public:
     PluginLoaderPrivate( Tomahawk::Utils::PluginLoader* q )
         : q_ptr ( q )
     {

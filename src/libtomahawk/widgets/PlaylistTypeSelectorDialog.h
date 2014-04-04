@@ -25,28 +25,28 @@
 
 namespace Ui
 {
-    class PlaylistTypeSelectorDlg;
+class PlaylistTypeSelectorDlg;
 }
 
 class DLLEXPORT PlaylistTypeSelectorDlg : public QDialog
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     PlaylistTypeSelectorDlg( QWidget* parent = 0, Qt::WindowFlags = 0 );
     ~PlaylistTypeSelectorDlg();
     bool playlistTypeIsNormal() const;
     bool playlistTypeIsAuto() const;
     QString playlistName() const;
 
-private slots:
+  private slots:
     void createNormalPlaylist();
     void createAutomaticPlaylist();
 
-private:
+  private:
     bool m_isAutoPlaylist; // if not an auto playlist then its a normal playlist
 
-    Ui::PlaylistTypeSelectorDlg *ui;
+    Ui::PlaylistTypeSelectorDlg* ui;
 
 };
 

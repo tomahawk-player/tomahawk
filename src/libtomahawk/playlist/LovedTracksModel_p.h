@@ -28,7 +28,7 @@
 
 class LovedTracksModelPrivate : public PlaylistModelPrivate
 {
-public:
+  public:
     LovedTracksModelPrivate( LovedTracksModel* q )
         : PlaylistModelPrivate( q )
         , limit( defaultNumberOfLovedTracks )
@@ -38,7 +38,7 @@ public:
     Q_DECLARE_PUBLIC( LovedTracksModel )
     static const uint defaultNumberOfLovedTracks = 25;
 
-protected:
+  protected:
     uint limit;
     Tomahawk::source_ptr source;
     QTimer smoothingTimer;

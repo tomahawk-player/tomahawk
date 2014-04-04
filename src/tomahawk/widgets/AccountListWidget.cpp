@@ -61,7 +61,7 @@ AccountListWidget::AccountListWidget( AccountModelFactoryProxy* model, QWidget* 
     mainLayout->insertWidget( 0, separatorLine );
     mainLayout->addSpacing( scaledY( 6 ) );
 
-    QLabel *connectionsLabel = new QLabel( tr( "Connections" ).toUpper(), this );
+    QLabel* connectionsLabel = new QLabel( tr( "Connections" ).toUpper(), this );
     QFont clFont = connectionsLabel->font();
     clFont.setBold( true );
     connectionsLabel->setStyleSheet( "color: " + TomahawkStyle::GROUP_HEADER.name() );
@@ -74,7 +74,7 @@ AccountListWidget::AccountListWidget( AccountModelFactoryProxy* model, QWidget* 
     connect( m_toggleOnlineButton, SIGNAL( clicked() ),
              this, SLOT( toggleOnlineStateForAll() ) );
 
-    QHBoxLayout *headerLayout = new QHBoxLayout();
+    QHBoxLayout* headerLayout = new QHBoxLayout();
     headerLayout->addWidget( connectionsLabel );
     headerLayout->addSpacing( scaledX( 30 ) );
     headerLayout->addWidget( m_toggleOnlineButton );
@@ -92,7 +92,7 @@ AccountListWidget::updateEntries( const QModelIndex& topLeft, const QModelIndex&
         QPersistentModelIndex idx( m_model->index( row, 0 ) );
 
         int newCount = idx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
-                            .value< QList< Tomahawk::Accounts::Account* > >().count();
+                       .value< QList< Tomahawk::Accounts::Account* > >().count();
 
         if( m_entries.value( idx ).count() == newCount )
         {
@@ -122,7 +122,7 @@ AccountListWidget::loadAllEntries()
 {
     foreach ( QList< AccountWidget* > entry, m_entries )
     {
-        foreach ( AccountWidget* w, entry )
+        foreach ( AccountWidget * w, entry )
         {
             m_layout->removeWidget( w );
             w->deleteLater();
@@ -143,17 +143,19 @@ AccountListWidget::insertEntries(  const QModelIndex& parent, int start, int end
     {
         QPersistentModelIndex idx( m_model->index( i, 0, parent ) );
         int count = idx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
-                .value< QList< Tomahawk::Accounts::Account* > >().count();
+                    .value< QList< Tomahawk::Accounts::Account* > >().count();
 
         QList< AccountWidget* > entryAccounts;
         for ( int j = 0; j < count; ++j )
         {
-            AccountWidget *entry = new AccountWidget( this );
+            AccountWidget* entry = new AccountWidget( this );
             entryAccounts.append( entry );
         }
         m_entries.insert( idx, entryAccounts );
         for ( int j = 0; j < entryAccounts.length(); ++j )
-            m_layout->insertWidget( i+j, entryAccounts.at( j ) );
+        {
+            m_layout->insertWidget( i + j, entryAccounts.at( j ) );
+        }
 
         updateEntry( idx );
 
@@ -174,7 +176,7 @@ AccountListWidget::removeEntries( const QModelIndex& parent, int start, int end 
         if ( !idx.isValid() ) //means we just removed the last account for a factory
         {
             for ( QHash< QPersistentModelIndex, QList< AccountWidget* > >::iterator it = m_entries.begin();
-                  it != m_entries.end(); ++it )
+                    it != m_entries.end(); ++it )
             {
                 if ( !it.key().isValid() )
                 {
@@ -183,10 +185,10 @@ AccountListWidget::removeEntries( const QModelIndex& parent, int start, int end 
             }
         }
 
-        QList< AccountWidget* > &entryAccounts = m_entries[ idx ];
+        QList< AccountWidget* >& entryAccounts = m_entries[ idx ];
         for ( int j = 0; j < entryAccounts.count(); ++j )
         {
-            AccountWidget *a = entryAccounts.at( j );
+            AccountWidget* a = entryAccounts.at( j );
             m_layout->removeWidget( a );
             a->deleteLater();
         }
@@ -204,7 +206,7 @@ AccountListWidget::toggleOnlineStateForAll()
     bool newState = !m_toggleOnlineButtonState;
     foreach ( QList< AccountWidget* > awgts, m_entries )
     {
-        foreach ( AccountWidget* awgt, awgts )
+        foreach ( AccountWidget * awgt, awgts )
         {
             awgt->setConnectionState( newState );
         }
@@ -218,7 +220,7 @@ AccountListWidget::updateToggleOnlineStateButton()
     bool newState = false;
     foreach ( QList< AccountWidget* > awgts, m_entries )
     {
-        foreach ( AccountWidget* awgt, awgts )
+        foreach ( AccountWidget * awgt, awgts )
         {
             if ( awgt->connectionState() )
             {
@@ -227,21 +229,26 @@ AccountListWidget::updateToggleOnlineStateButton()
             }
         }
     }
-    end:;
+end:
+    ;
 
     if ( newState != m_toggleOnlineButtonState )
     {
         tDebug() << Q_FUNC_INFO;
         m_toggleOnlineButtonState = newState;
         if ( newState )
+        {
             Tomahawk::Accounts::AccountManager::instance()->connectAll();
+        }
         else
+        {
             Tomahawk::Accounts::AccountManager::instance()->disconnectAll();
+        }
     }
 
     m_toggleOnlineButton->setText( m_toggleOnlineButtonState ? tr( "Disconnect &All" )
-                                                             : tr( "Connect &All" ) );
+                                   : tr( "Connect &All" ) );
     m_toggleOnlineButton->setIcon( m_toggleOnlineButtonState ?
-                                        ImageRegistry::instance()->icon( RESPATH "images/account-online.svg" ) :
-                                        ImageRegistry::instance()->icon( RESPATH "images/account-offline.svg" ) );
+                                   ImageRegistry::instance()->icon( RESPATH "images/account-online.svg" ) :
+                                   ImageRegistry::instance()->icon( RESPATH "images/account-offline.svg" ) );
 }

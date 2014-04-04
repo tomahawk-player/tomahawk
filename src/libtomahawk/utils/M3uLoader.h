@@ -40,24 +40,24 @@ class DLLEXPORT M3uLoader : public QObject
 {
     Q_OBJECT
 
-public:
+  public:
     explicit M3uLoader( const QString& url, bool createNewPlaylist = false, QObject* parent = 0 );
     explicit M3uLoader( const QStringList& urls, bool createNewPlaylist = false, QObject* parent = 0 );
     virtual ~M3uLoader();
 
-public slots:
+  public slots:
     void parse();
-private slots:
+  private slots:
     void playlistCreated();
 
-signals:
+  signals:
     void track( const Tomahawk::query_ptr& track );
     void tracks( const QList< Tomahawk::query_ptr > tracks );
 
-private:
+  private:
     void parseM3u( const QString& track );
     void getTags( const QFileInfo& info );
-    void parseLine(const QString& line , const QFile &file);
+    void parseLine( const QString& line , const QFile& file );
     QList< query_ptr > m_tracks;
     QString m_title, m_info, m_creator;
     bool m_single;

@@ -26,16 +26,16 @@ class QTemporaryFile;
 class BinaryInstallerHelper : public QObject
 {
     Q_OBJECT
-public:
+  public:
     explicit BinaryInstallerHelper( QTemporaryFile* tempFile, const QString& resolverId, bool createAccount, AtticaManager* manager );
 
     virtual ~BinaryInstallerHelper();
 
-public slots:
+  public slots:
     void installSucceeded( const QString& path );
     void installFailed();
 
-private:
+  private:
     QTemporaryFile* m_tempFile;
     QString m_resolverId;
     bool m_createAccount;

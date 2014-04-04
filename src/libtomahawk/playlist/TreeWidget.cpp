@@ -92,7 +92,7 @@ TreeWidget::pixmap() const
 bool
 TreeWidget::showFilter() const
 {
-     return true;
+    return true;
 }
 
 
@@ -112,7 +112,9 @@ TreeWidget::onModelChanged()
     m_header->setDescription( m_view->model()->description() );
     m_header->setPixmap( m_view->model()->icon() );
     if ( !m_view->model()->collection().isNull() )
+    {
         m_header->setRefreshVisible( m_view->model()->collection()->backendType() != Tomahawk::Collection::DatabaseCollectionType );
+    }
 }
 
 
@@ -120,7 +122,9 @@ void
 TreeWidget::onRefreshClicked()
 {
     if ( m_view->model() && !m_view->model()->collection().isNull() )
+    {
         m_view->model()->reloadCollection();
+    }
 }
 
 

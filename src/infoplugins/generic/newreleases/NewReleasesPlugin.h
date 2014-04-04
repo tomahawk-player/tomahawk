@@ -43,11 +43,11 @@ class INFOPLUGINDLLEXPORT NewReleasesPlugin : public InfoPlugin
     Q_OBJECT
     Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 
-public:
+  public:
     NewReleasesPlugin();
     virtual ~NewReleasesPlugin();
 
-protected slots:
+  protected slots:
     virtual void init();
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
@@ -72,7 +72,7 @@ protected slots:
      */
     void nrReturned();
 
-private:
+  private:
     /**
      * Requests newrelease list for each source in m_chartSources
      */
@@ -86,7 +86,7 @@ private:
     void fetchNRCapabilitiesFromCache( Tomahawk::InfoSystem::InfoRequestData requestData );
     void dataError( Tomahawk::InfoSystem::InfoRequestData requestData );
 
-    qlonglong getMaxAge( const QByteArray &rawHeader ) const;
+    qlonglong getMaxAge( const QByteArray& rawHeader ) const;
     qlonglong getMaxAge( const qlonglong expires ) const;
 
     QList< Tomahawk::InfoSystem::InfoStringHash > m_nrSources;

@@ -44,34 +44,40 @@ class DLLEXPORT AnimatedSpinner : public QWidget
 {
     Q_OBJECT
 
-public:
+  public:
     explicit AnimatedSpinner( QWidget* parent = 0 ); // widget mode
     explicit AnimatedSpinner( const QSize& size, QWidget* parent = 0 );
     AnimatedSpinner( const QSize& size, bool autoStart ); // pixmap mode
 
     QSize sizeHint() const;
 
-    QPixmap pixmap() const { return m_pixmap; }
-    
-    void setAutoCenter( bool enabled ) { m_autoCenter = enabled; }
+    QPixmap pixmap() const
+    {
+        return m_pixmap;
+    }
 
-public slots:
+    void setAutoCenter( bool enabled )
+    {
+        m_autoCenter = enabled;
+    }
+
+  public slots:
     void fadeIn();
     void fadeOut();
 
-signals:
+  signals:
     void requestUpdate();
 
-protected:
-    void paintEvent(QPaintEvent *event);
+  protected:
+    void paintEvent( QPaintEvent* event );
 
-private slots:
+  private slots:
     void updatePixmap();
     void hideFinished();
 
     void frameChanged( int );
 
-private:
+  private:
     void init();
     void drawFrame( QPainter* p, const QRect& rect );
     int segmentCount() const;
@@ -97,13 +103,13 @@ class DLLEXPORT LoadingSpinner : public AnimatedSpinner
 {
     Q_OBJECT
 
-public:
+  public:
     explicit LoadingSpinner( QAbstractItemView* parent = 0 ); // widget mode
-    
-private slots:
+
+  private slots:
     void onViewModelChanged();
 
-private:
+  private:
     QAbstractItemView* m_parent;
 };
 

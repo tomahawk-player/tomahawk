@@ -47,9 +47,9 @@ namespace Tomahawk
  */
 class DLLEXPORT DatabaseCommand_LoadSocialActions : public DatabaseCommand
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     typedef QMap<Tomahawk::track_ptr, Tomahawk::SocialAction> TrackActions;
     /**
      * \brief Default constructor for DatabaseCommand_LoadSocialActions.
@@ -87,7 +87,10 @@ public:
      * \brief Returns the name of this database command.
      * \return QString containing the database command name 'loadsocialaction'.
      */
-    virtual QString commandname() const { return "loadsocialactions"; }
+    virtual QString commandname() const
+    {
+        return "loadsocialactions";
+    }
 
     /**
      * \brief Executes the database command.
@@ -100,16 +103,19 @@ public:
      */
     virtual void exec( DatabaseImpl* );
 
-    virtual bool doesMutates() const { return false; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
 
-signals:
+  signals:
     /**
      * All loaded social actions for each track found, for queries that generate all tracks
      * with matching actions.
      */
     void done( DatabaseCommand_LoadSocialActions::TrackActions actionsForTracks );
 
-private:
+  private:
     Tomahawk::trackdata_ptr m_track;
     QString m_actionOnly;
 

@@ -47,14 +47,14 @@ XSPFLoader::errorToString( XSPFErrorCode error )
 {
     switch ( error )
     {
-    case ParseError:
-        return tr( "Failed to parse contents of XSPF playlist" );
-    case InvalidTrackError:
-        return tr( "Some playlist entries were found without artist and track name, they will be omitted");
-    case FetchError:
-        return tr( "Failed to fetch the desired playlist from the network, or the desired file does not exist" );
-    default:
-        return QString();
+        case ParseError:
+            return tr( "Failed to parse contents of XSPF playlist" );
+        case InvalidTrackError:
+            return tr( "Some playlist entries were found without artist and track name, they will be omitted" );
+        case FetchError:
+            return tr( "Failed to fetch the desired playlist from the network, or the desired file does not exist" );
+        default:
+            return QString();
     }
 }
 
@@ -68,7 +68,7 @@ XSPFLoader::XSPFLoader( bool autoCreate, bool autoUpdate, QObject* parent, const
     , m_guid( guid )
     , m_NS( "http://xspf.org/ns/0/" )
 {
-    qRegisterMetaType< XSPFErrorCode >("XSPFErrorCode");
+    qRegisterMetaType< XSPFErrorCode >( "XSPFErrorCode" );
 
     if ( m_guid.isEmpty() )
     {
@@ -104,9 +104,9 @@ XSPFLoader::setAutoDelete( bool autoDelete )
 
 
 void
-XSPFLoader::setErrorTitle( const QString& error)
+XSPFLoader::setErrorTitle( const QString& error )
 {
-   m_errorTitle = error;
+    m_errorTitle = error;
 }
 
 
@@ -176,9 +176,13 @@ XSPFLoader::reportError()
 #ifndef ENABLE_HEADLESS
     const QString errorMsg = errorToString( FetchError );
     if ( !m_errorTitle.isEmpty() )
+    {
         JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( QString( "%1: %2" ).arg( m_errorTitle ).arg( errorMsg ) ) );
+    }
     else
+    {
         JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( errorMsg ) );
+    }
 #endif
     deleteLater();
 }
@@ -241,9 +245,13 @@ XSPFLoader::gotBody()
 
     m_title = origTitle;
     if ( m_title.isEmpty() )
+    {
         m_title = tr( "New Playlist" );
+    }
     if ( !m_overrideTitle.isEmpty() )
+    {
         m_title = m_overrideTitle;
+    }
 
     bool shownError = false;
     for ( unsigned int i = 0; i < tracklist.length(); i++ )
@@ -277,12 +285,16 @@ XSPFLoader::gotBody()
             else if ( n.namespaceURI() == m_NS && n.localName() == "url" )
             {
                 if ( !n.text().startsWith( "http" ) || TomahawkUtils::whitelistedHttpResultHint( n.text() ) )
+                {
                     url = n.text();
+                }
             }
             else if ( n.namespaceURI() == m_NS && n.localName() == "location" )
             {
                 if ( !n.text().startsWith( "http" ) || TomahawkUtils::whitelistedHttpResultHint( n.text() ) )
+                {
                     url = n.text();
+                }
             }
         }
 
@@ -299,7 +311,9 @@ XSPFLoader::gotBody()
         track_ptr t = Tomahawk::Track::get( artist, track, album, duration.toInt() / 1000 );
         query_ptr q = Tomahawk::Query::get( t );
         if ( q.isNull() )
+        {
             continue;
+        }
 
         if ( !url.isEmpty() )
         {
@@ -313,14 +327,18 @@ XSPFLoader::gotBody()
     if ( m_autoResolve )
     {
         for ( int i = m_entries.size() - 1; i >= 0; i-- )
+        {
             Pipeline::instance()->resolve( m_entries[ i ] );
+        }
     }
 
     if ( origTitle.isEmpty() && m_entries.isEmpty() )
     {
         emit error( ParseError );
         if ( m_autoCreate )
+        {
             deleteLater();
+        }
         return;
     }
 
@@ -331,9 +349,13 @@ XSPFLoader::gotBody()
     else
     {
         if ( !m_entries.isEmpty() )
+        {
             emit tracks( m_entries );
+        }
     }
 
     if ( m_autoDelete )
+    {
         deleteLater();
+    }
 }

@@ -30,27 +30,27 @@
 class AccountsToolButton : public QToolButton, private TomahawkUtils::DpiScaler
 {
     Q_OBJECT
-public:
+  public:
     explicit AccountsToolButton( QWidget* parent = 0 );
 
     QSize sizeHint() const;
 
-signals:
+  signals:
     void widthChanged();
 
-protected:
+  protected:
     void mousePressEvent( QMouseEvent* event );
     void paintEvent( QPaintEvent* event );
     void moveEvent( QMoveEvent* event );
 
-private slots:
+  private slots:
     void popupHidden();
     void updateIcons();
 
-private:
+  private:
     AccountsPopupWidget* m_popup;
-    Tomahawk::Accounts::AccountModel *m_model;
-    AccountModelFactoryProxy *m_proxy;
+    Tomahawk::Accounts::AccountModel* m_model;
+    AccountModelFactoryProxy* m_proxy;
 
     QList< QPixmap > m_factoryPixmaps;
 };

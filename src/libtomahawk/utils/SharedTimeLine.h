@@ -31,31 +31,40 @@ namespace TomahawkUtils
 
 class DLLEXPORT SharedTimeLine : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     SharedTimeLine();
 
     virtual ~SharedTimeLine() {}
 
-    int currentFrame() { return m_timeline.currentFrame(); }
+    int currentFrame()
+    {
+        return m_timeline.currentFrame();
+    }
 
-    void setUpdateInterval( int msec ) { if ( msec != m_timeline.updateInterval() ) m_timeline.setUpdateInterval( msec ); }
+    void setUpdateInterval( int msec )
+    {
+        if ( msec != m_timeline.updateInterval() )
+        {
+            m_timeline.setUpdateInterval( msec );
+        }
+    }
 
-signals:
+  signals:
     void frameChanged( int );
 
-protected slots:
+  protected slots:
     // Would be nice to ifdef this, but we would need CMake 2.8.11 for that as a requirement
-// #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    // #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     virtual void connectNotify( const QMetaMethod& signal );
     virtual void disconnectNotify( const QMetaMethod& signal );
-// #else
-    virtual void connectNotify( const char *signal );
-    virtual void disconnectNotify( const char *signal );
-// #endif
+    // #else
+    virtual void connectNotify( const char* signal );
+    virtual void disconnectNotify( const char* signal );
+    // #endif
 
-private:
+  private:
     int m_refcount;
     QTimeLine m_timeline;
 };

@@ -30,15 +30,15 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCommand_SetPlaylistRevision : public DatabaseCommandLoggable
 {
-Q_OBJECT
-Q_PROPERTY( QString playlistguid      READ playlistguid  WRITE setPlaylistguid )
-Q_PROPERTY( QString newrev            READ newrev        WRITE setNewrev )
-Q_PROPERTY( QString oldrev            READ oldrev        WRITE setOldrev )
-Q_PROPERTY( QVariantList orderedguids READ orderedguids  WRITE setOrderedguids )
-Q_PROPERTY( QVariantList addedentries READ addedentriesV WRITE setAddedentriesV )
-Q_PROPERTY( bool metadataUpdate       READ metadataUpdate WRITE setMetadataUpdate )
+    Q_OBJECT
+    Q_PROPERTY( QString playlistguid      READ playlistguid  WRITE setPlaylistguid )
+    Q_PROPERTY( QString newrev            READ newrev        WRITE setNewrev )
+    Q_PROPERTY( QString oldrev            READ oldrev        WRITE setOldrev )
+    Q_PROPERTY( QVariantList orderedguids READ orderedguids  WRITE setOrderedguids )
+    Q_PROPERTY( QVariantList addedentries READ addedentriesV WRITE setAddedentriesV )
+    Q_PROPERTY( bool metadataUpdate       READ metadataUpdate WRITE setMetadataUpdate )
 
-public:
+  public:
     explicit DatabaseCommand_SetPlaylistRevision( QObject* parent = 0 )
         : DatabaseCommandLoggable( parent )
         , m_applied( false )
@@ -48,49 +48,91 @@ public:
 
     // Constructor for inserting or removing entries
     DatabaseCommand_SetPlaylistRevision( const source_ptr& s,
-                                                  const QString& playlistguid,
-                                                  const QString& newrev,
-                                                  const QString& oldrev,
-                                                  const QStringList& orderedguids,
-                                                  const QList<Tomahawk::plentry_ptr>& addedentries,
-                                                  const QList<Tomahawk::plentry_ptr>& entries );
+                                         const QString& playlistguid,
+                                         const QString& newrev,
+                                         const QString& oldrev,
+                                         const QStringList& orderedguids,
+                                         const QList<Tomahawk::plentry_ptr>& addedentries,
+                                         const QList<Tomahawk::plentry_ptr>& entries );
 
     // constructor for updating metadata only
     DatabaseCommand_SetPlaylistRevision( const source_ptr& s,
-                                                  const QString& playlistguid,
-                                                  const QString& newrev,
-                                                  const QString& oldrev,
-                                                  const QStringList& orderedguids,
-                                                  const QList<Tomahawk::plentry_ptr>& entriesToUpdate );
+                                         const QString& playlistguid,
+                                         const QString& newrev,
+                                         const QString& oldrev,
+                                         const QStringList& orderedguids,
+                                         const QList<Tomahawk::plentry_ptr>& entriesToUpdate );
 
 
-    QString commandname() const { return "setplaylistrevision"; }
+    QString commandname() const
+    {
+        return "setplaylistrevision";
+    }
 
     virtual void exec( DatabaseImpl* lib );
     virtual void postCommitHook();
 
-    virtual bool doesMutates() const { return true; }
-    virtual bool localOnly() const { return m_localOnly; }
-    virtual bool groupable() const { return true; }
+    virtual bool doesMutates() const
+    {
+        return true;
+    }
+    virtual bool localOnly() const
+    {
+        return m_localOnly;
+    }
+    virtual bool groupable() const
+    {
+        return true;
+    }
 
     void setAddedentriesV( const QVariantList& vlist );
 
     QVariantList addedentriesV() const;
 
-    void setPlaylistguid( const QString& s ) { m_playlistguid = s; }
+    void setPlaylistguid( const QString& s )
+    {
+        m_playlistguid = s;
+    }
 
-    void setNewrev( const QString& s ) { m_newrev = s; }
-    void setOldrev( const QString& s ) { m_oldrev = s; }
-    QString newrev() const { return m_newrev; }
-    QString oldrev() const { return m_oldrev; }
-    QString playlistguid() const { return m_playlistguid; }
-    bool metadataUpdate() const { return m_metadataUpdate; }
-    void setMetadataUpdate( bool metadataUpdate ) { m_metadataUpdate = metadataUpdate; }
+    void setNewrev( const QString& s )
+    {
+        m_newrev = s;
+    }
+    void setOldrev( const QString& s )
+    {
+        m_oldrev = s;
+    }
+    QString newrev() const
+    {
+        return m_newrev;
+    }
+    QString oldrev() const
+    {
+        return m_oldrev;
+    }
+    QString playlistguid() const
+    {
+        return m_playlistguid;
+    }
+    bool metadataUpdate() const
+    {
+        return m_metadataUpdate;
+    }
+    void setMetadataUpdate( bool metadataUpdate )
+    {
+        m_metadataUpdate = metadataUpdate;
+    }
 
-    void setOrderedguids( const QVariantList& l ) { m_orderedguids = l; }
-    QVariantList orderedguids() const { return m_orderedguids; }
+    void setOrderedguids( const QVariantList& l )
+    {
+        m_orderedguids = l;
+    }
+    QVariantList orderedguids() const
+    {
+        return m_orderedguids;
+    }
 
-protected:
+  protected:
     bool m_failed;
     bool m_applied;
     QStringList m_previous_rev_orderedguids;
@@ -98,7 +140,7 @@ protected:
     QString m_newrev, m_oldrev;
     QMap<QString, Tomahawk::plentry_ptr> m_addedmap;
 
-private:
+  private:
     QVariantList m_orderedguids;
     QList<Tomahawk::plentry_ptr> m_addedentries, m_entries;
 

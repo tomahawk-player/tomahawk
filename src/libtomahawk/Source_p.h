@@ -30,7 +30,7 @@ namespace Tomahawk
 
 class SourcePrivate
 {
-public:
+  public:
     SourcePrivate( Source* q, int _id, const QString& _nodeid )
         : q_ptr ( q )
         , isLocal( false )
@@ -48,7 +48,7 @@ public:
     Source* q_ptr;
     Q_DECLARE_PUBLIC ( Source )
 
-private:
+  private:
     QList< QSharedPointer<Collection> > collections;
     QVariantMap stats;
 

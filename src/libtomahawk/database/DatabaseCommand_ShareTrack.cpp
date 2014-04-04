@@ -38,8 +38,8 @@ DatabaseCommand_ShareTrack::DatabaseCommand_ShareTrack( QObject* parent )
 
 
 DatabaseCommand_ShareTrack::DatabaseCommand_ShareTrack( const Tomahawk::trackdata_ptr& track,
-                                                        const QString& recipientDbid,
-                                                        QObject* parent )
+        const QString& recipientDbid,
+        QObject* parent )
     : DatabaseCommand_SocialAction( track, "Inbox", "", parent )
     , m_recipient( recipientDbid )
 {}
@@ -48,7 +48,7 @@ DatabaseCommand_ShareTrack::DatabaseCommand_ShareTrack( const Tomahawk::trackdat
 QString
 DatabaseCommand_ShareTrack::commandname() const
 {
-     return "sharetrack";
+    return "sharetrack";
 }
 
 
@@ -60,7 +60,9 @@ DatabaseCommand_ShareTrack::exec( DatabaseImpl* dbi )
     QString myDbid = SourceList::instance()->getLocal()->nodeId();
     QString sourceDbid = source()->nodeId();
     if ( myDbid != m_recipient || sourceDbid == m_recipient )
+    {
         return;
+    }
 
     setComment( "true" /*unlistened*/ );
 
@@ -72,7 +74,9 @@ void
 DatabaseCommand_ShareTrack::postCommitHook()
 {
     if ( source()->isLocal() )
+    {
         Servent::instance()->triggerDBSync();
+    }
 }
 
 
@@ -114,7 +118,7 @@ DatabaseCommand_ShareTrack::recipient() const
 void
 DatabaseCommand_ShareTrack::setRecipient( const QString& s )
 {
-     m_recipient = s;
+    m_recipient = s;
 }
 
 }

@@ -39,8 +39,8 @@ namespace Tomahawk
 class DLLEXPORT QNR_IODeviceStream : public Phonon::AbstractMediaStream
 {
     Q_OBJECT
-public:
-    explicit QNR_IODeviceStream( const QSharedPointer<QNetworkReply>& reply, QObject *parent = 0 );
+  public:
+    explicit QNR_IODeviceStream( const QSharedPointer<QNetworkReply>& reply, QObject* parent = 0 );
     ~QNR_IODeviceStream();
 
     virtual void enoughData();
@@ -48,11 +48,11 @@ public:
     virtual void reset();
     virtual void seekStream( qint64 offset );
 
-private slots:
+  private slots:
     void moreData();
     void readyRead();
 
-private:
+  private:
     QByteArray m_data;
     QSharedPointer<QNetworkReply> m_networkReply;
     qint64 m_pos;

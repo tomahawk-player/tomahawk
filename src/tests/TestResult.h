@@ -27,7 +27,7 @@ class TestResult : public QObject
 {
     Q_OBJECT
 
-private slots:
+  private slots:
     void testIsValid()
     {
         Tomahawk::result_ptr r = Tomahawk::Result::get( "/tmp/test.mp3" );

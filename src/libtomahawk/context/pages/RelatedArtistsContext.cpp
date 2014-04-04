@@ -59,9 +59,13 @@ void
 RelatedArtistsContext::setArtist( const Tomahawk::artist_ptr& artist )
 {
     if ( artist.isNull() )
+    {
         return;
+    }
     if ( !m_artist.isNull() && m_artist->name() == artist->name() )
+    {
         return;
+    }
 
     if ( !m_artist.isNull() )
     {
@@ -81,7 +85,9 @@ void
 RelatedArtistsContext::setQuery( const Tomahawk::query_ptr& query )
 {
     if ( query.isNull() )
+    {
         return;
+    }
 
     setArtist( query->track()->artistPtr() );
 }
@@ -91,7 +97,9 @@ void
 RelatedArtistsContext::setAlbum( const Tomahawk::album_ptr& album )
 {
     if ( album.isNull() )
+    {
         return;
+    }
 
     setArtist( album->artist() );
 }
@@ -100,7 +108,7 @@ RelatedArtistsContext::setAlbum( const Tomahawk::album_ptr& album )
 void
 RelatedArtistsContext::onSimilarArtistsLoaded()
 {
-    foreach ( const artist_ptr& artist, m_artist->similarArtists() )
+    foreach ( const artist_ptr & artist, m_artist->similarArtists() )
     {
         m_relatedModel->addArtists( artist );
     }

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
@@ -48,16 +48,22 @@ QList< QNetworkProxy >
 NetworkProxyFactory::queryProxy( const QNetworkProxyQuery& query )
 {
     //tDebug() << Q_FUNC_INFO << "query hostname is" << query.peerHostName() << ", proxy host is" << m_proxy.hostName();
-    
+
     QList< QNetworkProxy > proxies;
     QString hostname = query.peerHostName();
     s_noProxyHostsMutex.lock();
     if ( !hostname.isEmpty() && s_noProxyHosts.contains( hostname ) )
+    {
         proxies << QNetworkProxy::NoProxy << systemProxyForQuery( query );
+    }
     else if ( m_proxy.hostName().isEmpty() || proxyType() == QNetworkProxy::NoProxy )
+    {
         proxies << systemProxyForQuery( query );
+    }
     else
+    {
         proxies << m_proxy << systemProxyForQuery( query );
+    }
     s_noProxyHostsMutex.unlock();
     return proxies;
 }
@@ -68,15 +74,15 @@ NetworkProxyFactory::setNoProxyHosts( const QStringList& hosts )
 {
     QStringList newList;
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "No-proxy hosts:" << hosts;
-    foreach ( const QString& host, hosts )
+    foreach ( const QString & host, hosts )
     {
         QString munge = host.simplified();
         newList << munge;
         //TODO: wildcard support
     }
-    
+
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "New no-proxy hosts:" << newList;
-    
+
     s_noProxyHostsMutex.lock();
     s_noProxyHosts = newList;
     s_noProxyHostsMutex.unlock();
@@ -88,15 +94,19 @@ NetworkProxyFactory::setProxy( const QNetworkProxy& proxy, bool useProxyDns )
 {
     m_proxyChanged = false;
     if ( m_proxy != proxy )
+    {
         m_proxyChanged = true;
-    
+    }
+
     m_proxy = proxy;
     QFlags< QNetworkProxy::Capability > proxyCaps;
     proxyCaps |= QNetworkProxy::TunnelingCapability;
     proxyCaps |= QNetworkProxy::ListeningCapability;
     if ( useProxyDns )
+    {
         proxyCaps |= QNetworkProxy::HostNameLookupCapability;
-    
+    }
+
     m_proxy.setCapabilities( proxyCaps );
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Proxy using host" << proxy.hostName() << "and port" << proxy.port();
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "setting proxy to use proxy DNS?" << useProxyDns;
@@ -111,7 +121,7 @@ NetworkProxyFactory::operator=( const NetworkProxyFactory& rhs )
     {
         m_proxy = QNetworkProxy( rhs.m_proxy );
     }
-    
+
     return *this;
 }
 
@@ -120,8 +130,10 @@ bool NetworkProxyFactory::operator==( const NetworkProxyFactory& other ) const
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( m_proxy != other.m_proxy )
+    {
         return false;
-    
+    }
+
     return true;
 }
 
@@ -136,24 +148,28 @@ proxyFactory( bool makeClone, bool noMutexLocker )
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     QMutex otherMutex;
     QMutexLocker locker( noMutexLocker ? &otherMutex : &s_namAccessMutex );
-    
+
     if ( !makeClone )
     {
         if ( s_threadProxyFactoryHash.contains( QThread::currentThread() ) )
+        {
             return s_threadProxyFactoryHash[ QThread::currentThread() ];
+        }
     }
-    
+
     // create a new proxy factory for this thread
-    NetworkProxyFactory *newProxyFactory = new NetworkProxyFactory();
+    NetworkProxyFactory* newProxyFactory = new NetworkProxyFactory();
     if ( s_threadProxyFactoryHash.contains( QCoreApplication::instance()->thread() ) )
     {
-        NetworkProxyFactory *mainProxyFactory = s_threadProxyFactoryHash[ QCoreApplication::instance()->thread() ];
+        NetworkProxyFactory* mainProxyFactory = s_threadProxyFactoryHash[ QCoreApplication::instance()->thread() ];
         *newProxyFactory = *mainProxyFactory;
     }
-    
+
     if ( !makeClone )
+    {
         s_threadProxyFactoryHash[ QThread::currentThread() ] = newProxyFactory;
-    
+    }
+
     return newProxyFactory;
 }
 
@@ -166,23 +182,25 @@ setProxyFactory( NetworkProxyFactory* factory, bool noMutexLocker )
     // Don't lock if being called from setNam()
     QMutex otherMutex;
     QMutexLocker locker( noMutexLocker ? &otherMutex : &s_namAccessMutex );
-    
+
     if ( !s_threadProxyFactoryHash.contains( QCoreApplication::instance()->thread() ) )
+    {
         return;
-    
+    }
+
     if ( QThread::currentThread() == QCoreApplication::instance()->thread() )
     {
-        foreach ( QThread* thread, s_threadProxyFactoryHash.keys() )
+        foreach ( QThread * thread, s_threadProxyFactoryHash.keys() )
         {
             if ( thread != QThread::currentThread() )
             {
-                NetworkProxyFactory *currFactory = s_threadProxyFactoryHash[ thread ];
+                NetworkProxyFactory* currFactory = s_threadProxyFactoryHash[ thread ];
                 *currFactory = *factory;
             }
         }
         QNetworkProxyFactory::setApplicationProxyFactory( factory );
     }
-    
+
     *s_threadProxyFactoryHash[ QThread::currentThread() ] = *factory;
 }
 
@@ -196,7 +214,7 @@ nam()
         //tDebug() << Q_FUNC_INFO << "Found current thread in nam hash";
         return s_threadNamHash[ QThread::currentThread() ];
     }
-    
+
     if ( !s_threadNamHash.contains( QCoreApplication::instance()->thread() ) )
     {
         if ( QThread::currentThread() == QCoreApplication::instance()->thread() )
@@ -205,24 +223,26 @@ nam()
             return s_threadNamHash[ QThread::currentThread() ];
         }
         else
+        {
             return 0;
+        }
     }
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Found gui thread in nam hash";
-    
+
     // Create a nam for this thread based on the main thread's settings but with its own proxyfactory
-    QNetworkAccessManager *mainNam = s_threadNamHash[ QCoreApplication::instance()->thread() ];
+    QNetworkAccessManager* mainNam = s_threadNamHash[ QCoreApplication::instance()->thread() ];
     QNetworkAccessManager* newNam = new QNetworkAccessManager();
-    
+
     newNam->setConfiguration( QNetworkConfiguration( mainNam->configuration() ) );
     newNam->setNetworkAccessible( mainNam->networkAccessible() );
     newNam->setProxyFactory( proxyFactory( false, true ) );
-    
+
     s_threadNamHash[ QThread::currentThread() ] = newNam;
-    
+
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "created new nam for thread" << QThread::currentThread();
     //QNetworkProxy proxy = dynamic_cast< NetworkProxyFactory* >( newNam->proxyFactory() )->proxy();
     //tDebug() << Q_FUNC_INFO << "reply proxy properties:" << proxy.type() << proxy.hostName() << proxy.port();
-    
+
     return newNam;
 }
 
@@ -235,7 +255,7 @@ setNam( QNetworkAccessManager* nam, bool noMutexLocker )
     QMutex otherMutex;
     QMutexLocker locker( noMutexLocker ? &otherMutex : &s_namAccessMutex );
     if ( !s_threadNamHash.contains( QCoreApplication::instance()->thread() ) &&
-        QThread::currentThread() == QCoreApplication::instance()->thread() )
+            QThread::currentThread() == QCoreApplication::instance()->thread() )
     {
         tDebug( LOGVERBOSE ) << "creating initial gui thread (" << QCoreApplication::instance()->thread() << ") nam";
         // Should only get here on first initialization of the nam
@@ -255,7 +275,9 @@ setNam( QNetworkAccessManager* nam, bool noMutexLocker )
                 proxyFactory->setNoProxyHosts( proxyNoProxyHosts().split( ',', QString::SkipEmptyParts ) );
             }
             else
+            {
                 s_noProxyHostsMutex.unlock();
+            }
         }
 
         QNetworkProxyFactory::setApplicationProxyFactory( proxyFactory );
@@ -264,11 +286,13 @@ setNam( QNetworkAccessManager* nam, bool noMutexLocker )
         s_threadProxyFactoryHash[ QThread::currentThread() ] = proxyFactory;
         return;
     }
-    
+
     s_threadNamHash[ QThread::currentThread() ] = nam;
-    
+
     if ( QThread::currentThread() == QCoreApplication::instance()->thread() )
+    {
         setProxyFactory( dynamic_cast< NetworkProxyFactory* >( nam->proxyFactory() ), true );
+    }
 }
 
 

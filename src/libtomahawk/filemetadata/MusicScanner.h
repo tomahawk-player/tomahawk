@@ -44,9 +44,9 @@
 // finally, emit the list of new mtimes we observed.
 class DirLister : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
 
     DirLister( const QStringList& dirs )
         : QObject(), m_dirs( dirs ), m_opcount( 0 ), m_deleting( false )
@@ -59,18 +59,26 @@ public:
         qDebug() << Q_FUNC_INFO;
     }
 
-    bool isDeleting() { QMutexLocker locker( &m_deletingMutex ); return m_deleting; };
-    void setIsDeleting() { QMutexLocker locker( &m_deletingMutex ); m_deleting = true; };
+    bool isDeleting()
+    {
+        QMutexLocker locker( &m_deletingMutex );
+        return m_deleting;
+    };
+    void setIsDeleting()
+    {
+        QMutexLocker locker( &m_deletingMutex );
+        m_deleting = true;
+    };
 
-signals:
+  signals:
     void fileToScan( QFileInfo );
     void finished();
 
-private slots:
+  private slots:
     void go();
     void scanDir( QDir dir, int depth );
 
-private:
+  private:
     QStringList m_dirs;
 
     uint m_opcount;
@@ -82,39 +90,42 @@ class DirListerThreadController : public QThread
 {
     Q_OBJECT
 
-public:
+  public:
     DirListerThreadController( QObject* parent );
     virtual ~DirListerThreadController();
 
-    void setPaths( const QStringList& paths ) { m_paths = paths; }
+    void setPaths( const QStringList& paths )
+    {
+        m_paths = paths;
+    }
     void run();
 
-private:
+  private:
     QPointer< DirLister > m_dirLister;
     QStringList m_paths;
 };
 
 class MusicScanner : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     enum ScanMode { DirScan, FileScan };
     enum ScanType { None, Full, Normal, File };
 
     MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& paths, quint32 bs = 0 );
     ~MusicScanner();
 
-signals:
+  signals:
     //void fileScanned( QVariantMap );
     void finished();
     void batchReady( const QVariantList&, const QVariantList& );
 
-private:
+  private:
     QVariant readFile( const QFileInfo& fi );
     void executeCommand( Tomahawk::dbcmd_ptr cmd );
 
-private slots:
+  private slots:
     void postOps();
     void scanFile( const QFileInfo& fi );
     void setFileMtimes( const QMap< QString, QMap< unsigned int, unsigned int > >& m );
@@ -124,7 +135,7 @@ private slots:
     void commitBatch( const QVariantList& tracks, const QVariantList& deletethese );
     void commandFinished();
 
-private:
+  private:
     void scanFilePaths();
 
     MusicScanner::ScanMode m_scanMode;

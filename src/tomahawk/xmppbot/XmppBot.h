@@ -40,16 +40,16 @@ class XMPPBotClient
 {
     Q_OBJECT
 
-public:
-    XMPPBotClient(QObject* parent, gloox::JID &jid, std::string password, int port);
+  public:
+    XMPPBotClient( QObject* parent, gloox::JID& jid, std::string password, int port );
     virtual ~XMPPBotClient();
 
     void run();
 
-private slots:
+  private slots:
     void recvSlot();
 
-private:
+  private:
     QTimer m_timer;
 };
 
@@ -61,31 +61,31 @@ class XMPPBot
 {
     Q_OBJECT
 
-public:
-    XMPPBot(QObject *parent);
+  public:
+    XMPPBot( QObject* parent );
     virtual ~XMPPBot();
 
-public slots:
-    virtual void newTrackSlot(const Tomahawk::result_ptr &track);
-    virtual void infoReturnedSlot(QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, QVariantMap customData);
-    virtual void infoFinishedSlot(QString caller);
+  public slots:
+    virtual void newTrackSlot( const Tomahawk::result_ptr& track );
+    virtual void infoReturnedSlot( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, QVariantMap customData );
+    virtual void infoFinishedSlot( QString caller );
 
-protected:
+  protected:
     // ConnectionListener
     virtual void onConnect();
-    virtual void onDisconnect(gloox::ConnectionError e);
-    virtual bool onTLSConnect(const gloox::CertInfo &info);
+    virtual void onDisconnect( gloox::ConnectionError e );
+    virtual bool onTLSConnect( const gloox::CertInfo& info );
 
     // SubscriptionHandler
-    virtual void handleSubscription(const gloox::Subscription &subscription);
+    virtual void handleSubscription( const gloox::Subscription& subscription );
 
     // MessageHandler
-    virtual void handleMessage(const gloox::Message &msg, gloox::MessageSession *session = 0);
+    virtual void handleMessage( const gloox::Message& msg, gloox::MessageSession* session = 0 );
 
-private slots:
+  private slots:
     void onResultsAdded( const QList<Tomahawk::result_ptr>& result );
 
-private:
+  private:
     QPointer<XMPPBotClient> m_client;
     Tomahawk::result_ptr m_currTrack;
     Tomahawk::InfoSystem::InfoTypeMap m_currInfoMap;

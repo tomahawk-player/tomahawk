@@ -10,41 +10,42 @@ class QButtonPrivate;
 class DLLEXPORT QButton : public QWidget
 {
     Q_OBJECT
-public:
+  public:
     // Matches NSBezelStyle
-    enum BezelStyle {
-       Rounded           = 1,
-       RegularSquare     = 2,
-       Disclosure        = 5,
-       ShadowlessSquare  = 6,
-       Circular          = 7,
-       TexturedSquare    = 8,
-       HelpButton        = 9,
-       SmallSquare       = 10,
-       TexturedRounded   = 11,
-       RoundRect         = 12,
-       Recessed          = 13,
-       RoundedDisclosure = 14,
+    enum BezelStyle
+    {
+        Rounded           = 1,
+        RegularSquare     = 2,
+        Disclosure        = 5,
+        ShadowlessSquare  = 6,
+        Circular          = 7,
+        TexturedSquare    = 8,
+        HelpButton        = 9,
+        SmallSquare       = 10,
+        TexturedRounded   = 11,
+        RoundRect         = 12,
+        Recessed          = 13,
+        RoundedDisclosure = 14,
 #ifdef __MAC_10_7
-       Inline            = 15
+        Inline            = 15
 #endif
     };
 
-    explicit QButton(QWidget *parent, BezelStyle bezelStyle = Rounded);
+    explicit QButton( QWidget* parent, BezelStyle bezelStyle = Rounded );
 
-public slots:
-    void setText(const QString &text);
-    void setImage(const QPixmap &image);
-    void setChecked(bool checked);
+  public slots:
+    void setText( const QString& text );
+    void setImage( const QPixmap& image );
+    void setChecked( bool checked );
 
-public:
-    void setCheckable(bool checkable);
+  public:
+    void setCheckable( bool checkable );
     bool isChecked();
 
-signals:
-    void clicked(bool checked = false);
+  signals:
+    void clicked( bool checked = false );
 
-private:
+  private:
     friend class QButtonPrivate;
     QPointer<QButtonPrivate> pimpl;
 };

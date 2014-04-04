@@ -20,7 +20,7 @@
 
 #include "Source.h"
 
-Tomahawk::PlaylistTemplate::PlaylistTemplate(const Tomahawk::source_ptr& author, const QString &guid, const QString &title, const QString &info, const QString &creator, bool shared, const QList<Tomahawk::query_ptr> &queries)
+Tomahawk::PlaylistTemplate::PlaylistTemplate( const Tomahawk::source_ptr& author, const QString& guid, const QString& title, const QString& info, const QString& creator, bool shared, const QList<Tomahawk::query_ptr>& queries )
     : QObject( 0 )
     , d_ptr( new PlaylistTemplatePrivate( this, author, guid, title, info, creator, shared, queries ) )
 {

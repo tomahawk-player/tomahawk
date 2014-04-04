@@ -29,7 +29,7 @@
 class RecentlyPlayedPlaylistsModel : public QAbstractListModel
 {
     Q_OBJECT
-public:
+  public:
     enum ItemRoles
     { ArtistRole = Qt::UserRole, TrackCountRole, PlaylistRole, PlaylistTypeRole, DynamicPlaylistRole };
     enum PlaylistTypes
@@ -37,18 +37,21 @@ public:
 
     explicit RecentlyPlayedPlaylistsModel( QObject* parent = 0 );
 
-    void setMaxPlaylists( unsigned int max ) { m_maxPlaylists = max; }
+    void setMaxPlaylists( unsigned int max )
+    {
+        m_maxPlaylists = max;
+    }
 
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
 
-signals:
+  signals:
     void emptinessChanged( bool isEmpty );
 
-public slots:
+  public slots:
     void sourceOnline();
 
-private slots:
+  private slots:
     void playlistChanged( Tomahawk::playlistinterface_ptr );
     void onSourceAdded( const Tomahawk::source_ptr& source );
     void onPlaylistsRemoved( QList<Tomahawk::playlist_ptr> );
@@ -57,7 +60,7 @@ private slots:
     void plAdded( const QString& plguid, int sourceId );
     void playlistRevisionLoaded();
 
-private:
+  private:
     QList< Tomahawk::playlist_ptr > m_recplaylists;
     QHash< QString, Tomahawk::playlist_ptr > m_cached;
     mutable QHash< Tomahawk::playlist_ptr, QString > m_artists;

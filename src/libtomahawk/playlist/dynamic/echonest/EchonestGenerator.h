@@ -37,26 +37,26 @@ class EchonestSteerer;
 class CatalogManager : public QObject
 {
     Q_OBJECT
-public:
+  public:
     CatalogManager( QObject* parent );
 
     QHash< QString, QString > catalogs() const;
 
-signals:
-   void catalogsUpdated();
+  signals:
+    void catalogsUpdated();
 
-private slots:
+  private slots:
     void init();
     void doCatalogUpdate();
     void collectionAttributes( const PairList& );
 
-private:
+  private:
     QHash< QString, QString > m_catalogs;
 };
 
 class DLLEXPORT EchonestFactory : public GeneratorFactoryInterface
 {
-public:
+  public:
     EchonestFactory();
 
     virtual GeneratorInterface* create();
@@ -67,7 +67,7 @@ public:
 class DLLEXPORT EchonestGenerator : public GeneratorInterface
 {
     Q_OBJECT
-public:
+  public:
     explicit EchonestGenerator( QObject* parent = 0 );
     virtual ~EchonestGenerator();
 
@@ -77,8 +77,14 @@ public:
     virtual void startOnDemand();
     virtual void fetchNext( int rating = -1 );
     virtual QString sentenceSummary();
-    virtual bool onDemandSteerable() const { return false; }
-    virtual QWidget* steeringWidget() { return 0; }
+    virtual bool onDemandSteerable() const
+    {
+        return false;
+    }
+    virtual QWidget* steeringWidget()
+    {
+        return 0;
+    }
 
     static QStringList styles();
     static QStringList moods();
@@ -87,14 +93,14 @@ public:
     static QByteArray catalogId( const QString& collectionId );
 
     static void setupCatalogs();
-signals:
+  signals:
     void paramsGenerated( const Echonest::DynamicPlaylist::PlaylistParams& );
 
     void stylesSaved();
     void moodsSaved();
     void genresSaved();
 
-private slots:
+  private slots:
     void staticFinished();
     void dynamicStarted();
     void dynamicFetched();
@@ -112,7 +118,7 @@ private slots:
     void knownCatalogsChanged();
 
     void songLookupFinished();
-private:
+  private:
     // get result from signal paramsGenerated
     void getParams() throw( std::runtime_error );
 

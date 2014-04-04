@@ -48,7 +48,7 @@ DatabaseCollection::loadPlaylists()
     DatabaseCommand_LoadAllPlaylists* cmd = new DatabaseCommand_LoadAllPlaylists( source() );
 
     connect( cmd,  SIGNAL( done( const QList<Tomahawk::playlist_ptr>& ) ),
-                     SLOT( setPlaylists( const QList<Tomahawk::playlist_ptr>& ) ) );
+             SLOT( setPlaylists( const QList<Tomahawk::playlist_ptr>& ) ) );
 
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
@@ -60,7 +60,7 @@ DatabaseCollection::loadAutoPlaylists()
     DatabaseCommand_LoadAllAutoPlaylists* cmd = new DatabaseCommand_LoadAllAutoPlaylists( source() );
 
     connect( cmd, SIGNAL( autoPlaylistLoaded( Tomahawk::source_ptr, QVariantList ) ),
-                    SLOT( autoPlaylistCreated( const Tomahawk::source_ptr&, const QVariantList& ) ) );
+             SLOT( autoPlaylistCreated( const Tomahawk::source_ptr&, const QVariantList& ) ) );
 
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
@@ -140,7 +140,9 @@ DatabaseCollection::requestArtists()
     //FIXME: assuming there's only one dbcollection per source, and that this is the one
     Tomahawk::collection_ptr thisCollection = source()->dbCollection();
     if ( thisCollection->name() != this->name() )
+    {
         return 0;
+    }
 
     Tomahawk::ArtistsRequest* cmd = new DatabaseCommand_AllArtists( thisCollection );
 
@@ -154,7 +156,9 @@ DatabaseCollection::requestAlbums( const Tomahawk::artist_ptr& artist )
     //FIXME: assuming there's only one dbcollection per source, and that this is the one
     Tomahawk::collection_ptr thisCollection = source()->dbCollection();
     if ( thisCollection->name() != this->name() )
+    {
         return 0;
+    }
 
     Tomahawk::AlbumsRequest* cmd = new DatabaseCommand_AllAlbums( thisCollection, artist );
 
@@ -168,7 +172,9 @@ DatabaseCollection::requestTracks( const Tomahawk::album_ptr& album )
     //FIXME: assuming there's only one dbcollection per source, and that this is the one
     Tomahawk::collection_ptr thisCollection = source()->dbCollection();
     if ( thisCollection->name() != this->name() )
+    {
         return 0;
+    }
 
     DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( thisCollection );
     cmd->setAlbum( album->weakRef() );
@@ -195,7 +201,7 @@ DatabaseCollection::autoPlaylistCreated( const source_ptr& source, const QVarian
                                             data[3].toString(),  //creator
                                             data[4].toUInt(),  // createdOn
                                             data[5].toString(),  // dynamic type
-                                            static_cast<GeneratorMode>(data[6].toInt()),  // dynamic mode
+                                            static_cast<GeneratorMode>( data[6].toInt() ), // dynamic mode
                                             data[7].toBool(),    //shared
                                             data[8].toInt(),     //lastmod
                                             data[9].toString() ), &QObject::deleteLater );  //GUID
@@ -215,7 +221,7 @@ DatabaseCollection::stationCreated( const source_ptr& source, const QVariantList
                                             data[3].toString(),  //creator
                                             data[4].toUInt(),  // createdOn
                                             data[5].toString(),  // dynamic type
-                                            static_cast<GeneratorMode>(data[6].toInt()),  // dynamic mode
+                                            static_cast<GeneratorMode>( data[6].toInt() ), // dynamic mode
                                             data[7].toBool(),    //shared
                                             data[8].toInt(),     //lastmod
                                             data[9].toString() ), &QObject::deleteLater );  //GUID

@@ -84,9 +84,13 @@ PlaylistChartItemDelegate::sizeHint( const QStyleOptionViewItem& option, const Q
 
         default:
             if ( index.row() < 10 )
+            {
                 stretch = 3;
+            }
             else
+            {
                 stretch = 2;
+            }
     }
 
     int rowHeight = option.fontMetrics.height() + 8;
@@ -109,7 +113,9 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
 
     if ( m_view->header()->visualIndex( index.column() ) > 0 )
+    {
         return;
+    }
 
     const track_ptr track = item->query()->track();
     QPixmap avatar;
@@ -181,7 +187,7 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         if ( !m_pixmaps.contains( index ) )
         {
             m_pixmaps.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->query(), pixmapRect.size(), TomahawkUtils::Original, false ) ) );
-            _detail::Closure* closure = NewClosure( m_pixmaps[ index ], SIGNAL( repaintRequest() ), const_cast<PlaylistChartItemDelegate*>(this), SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), QPersistentModelIndex( index ) );
+            _detail::Closure* closure = NewClosure( m_pixmaps[ index ], SIGNAL( repaintRequest() ), const_cast<PlaylistChartItemDelegate*>( this ), SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), QPersistentModelIndex( index ) );
             closure->setAutoDelete( false );
         }
 
@@ -192,26 +198,26 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         QRect rightRect = r.adjusted( r.width() - durationFontMetrics.width( TomahawkUtils::timeToString( track->duration() ) ), 0, 0, 0 );
         QRect leftRect = r.adjusted( 0, 0, -( rightRect.width() + 8 ), 0 );
 
-/*        const int sourceIconSize = r.height();
+        /*        const int sourceIconSize = r.height();
 
-        if ( hoveringOver() == index && index.column() == 0 )
-        {
-            const QPixmap infoIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, QSize( sourceIconSize, sourceIconSize ) );
-            QRect arrowRect = QRect( rightRect.right() - sourceIconSize, r.center().y() - sourceIconSize / 2, infoIcon.width(), infoIcon.height() );
-            painter->drawPixmap( arrowRect, infoIcon );
+                if ( hoveringOver() == index && index.column() == 0 )
+                {
+                    const QPixmap infoIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, QSize( sourceIconSize, sourceIconSize ) );
+                    QRect arrowRect = QRect( rightRect.right() - sourceIconSize, r.center().y() - sourceIconSize / 2, infoIcon.width(), infoIcon.height() );
+                    painter->drawPixmap( arrowRect, infoIcon );
 
-            setInfoButtonRect( index, arrowRect );
-            rightRect.moveLeft( rightRect.left() - infoIcon.width() - 8 );
-            leftRect.adjust( 0, 0, -( infoIcon.width() + 8 ), 0 );
-        }
-        else if ( q->numResults() && !q->results().first()->sourceIcon( TomahawkUtils::RoundedCorners, QSize( sourceIconSize, sourceIconSize ) ).isNull() )
-        {
-            const QPixmap sourceIcon = q->results().first()->sourceIcon( TomahawkUtils::RoundedCorners, QSize( sourceIconSize, sourceIconSize ) );
-            painter->setOpacity( 0.8 );
-            painter->drawPixmap( QRect( rightRect.right() - sourceIconSize, r.center().y() - sourceIconSize / 2, sourceIcon.width(), sourceIcon.height() ), sourceIcon );
-            painter->setOpacity( 1.0 );
-            rightRect.moveLeft( rightRect.left() - sourceIcon.width() - 8 );
-        }*/
+                    setInfoButtonRect( index, arrowRect );
+                    rightRect.moveLeft( rightRect.left() - infoIcon.width() - 8 );
+                    leftRect.adjust( 0, 0, -( infoIcon.width() + 8 ), 0 );
+                }
+                else if ( q->numResults() && !q->results().first()->sourceIcon( TomahawkUtils::RoundedCorners, QSize( sourceIconSize, sourceIconSize ) ).isNull() )
+                {
+                    const QPixmap sourceIcon = q->results().first()->sourceIcon( TomahawkUtils::RoundedCorners, QSize( sourceIconSize, sourceIconSize ) );
+                    painter->setOpacity( 0.8 );
+                    painter->drawPixmap( QRect( rightRect.right() - sourceIconSize, r.center().y() - sourceIconSize / 2, sourceIcon.width(), sourceIcon.height() ), sourceIcon );
+                    painter->setOpacity( 1.0 );
+                    rightRect.moveLeft( rightRect.left() - sourceIcon.width() - 8 );
+                }*/
 
         painter->setFont( boldFont );
         QString text = painter->fontMetrics().elidedText( track->track(), Qt::ElideRight, leftRect.width() );
@@ -236,7 +242,9 @@ void
 PlaylistChartItemDelegate::doUpdateIndex( const QPersistentModelIndex& idx )
 {
     if ( idx.isValid() )
+    {
         emit updateIndex( idx );
+    }
 }
 
 

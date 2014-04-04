@@ -42,7 +42,9 @@ DatabaseCommand_SocialAction::postCommitHook()
 
     trackdata_ptr trackData = TrackData::get( 0, m_artist, m_title );
     if ( trackData )
+    {
         trackData->loadSocialActions( true );
+    }
 
     source()->reportSocialAttributesChanged( this );
 }
@@ -59,14 +61,20 @@ DatabaseCommand_SocialAction::exec( DatabaseImpl* dbi )
     QVariant srcid = source()->isLocal() ? QVariant( QVariant::Int ) : source()->id();
 
     if ( m_artist.isNull() || m_title.isEmpty() || m_action.isEmpty() )
+    {
         return;
+    }
 
     int artid = dbi->artistId( m_artist, true );
     if ( artid < 1 )
+    {
         return;
+    }
     int trkid = dbi->trackId( artid, m_title, true );
     if ( trkid < 1 )
+    {
         return;
+    }
 
     // update if it already exists
     TomahawkSqlQuery find = dbi->newquery();
@@ -77,11 +85,11 @@ DatabaseCommand_SocialAction::exec( DatabaseImpl* dbi )
     {
         // update
         query.prepare( QString( "UPDATE social_attributes SET v = '%1', timestamp = %2 WHERE social_attributes.id = %3 AND social_attributes.source %4 AND social_attributes.k = '%5'" )
-                               .arg( m_comment )
-                               .arg( m_timestamp )
-                               .arg( trkid )
-                               .arg( source()->isLocal() ? "IS NULL" : QString( "=%1" ).arg( source()->id() ) )
-                               .arg( m_action ) );
+                       .arg( m_comment )
+                       .arg( m_timestamp )
+                       .arg( trkid )
+                       .arg( source()->isLocal() ? "IS NULL" : QString( "=%1" ).arg( source()->id() ) )
+                       .arg( m_action ) );
     }
     else
     {

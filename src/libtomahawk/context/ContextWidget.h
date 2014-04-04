@@ -32,42 +32,42 @@ class QTimeLine;
 
 namespace Tomahawk
 {
-    class ContextPage;
-    class ContextProxyPage;
+class ContextPage;
+class ContextProxyPage;
 }
 
 namespace Ui
 {
-    class ContextWidget;
+class ContextWidget;
 }
 
 class DLLEXPORT ContextWidget : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     ContextWidget( QWidget* parent = 0 );
     ~ContextWidget();
 
-public slots:
+  public slots:
     void setArtist( const Tomahawk::artist_ptr& artist );
     void setAlbum( const Tomahawk::album_ptr& album );
     void setQuery( const Tomahawk::query_ptr& query, bool force = false );
 
     void toggleSize();
 
-private slots:
+  private slots:
     void onPageFocused();
 
     void onAnimationStep( int frame );
     void onAnimationFinished();
 
-protected:
+  protected:
     void paintEvent( QPaintEvent* e );
     void resizeEvent( QResizeEvent* e );
     void changeEvent( QEvent* e );
 
-private:
+  private:
     void fadeOut( bool animate );
 
     void layoutViews( bool animate = true );

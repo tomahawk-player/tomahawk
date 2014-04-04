@@ -32,54 +32,58 @@ THE SOFTWARE.
 class DLLEXPORT QSearchFieldPrivate : public QObject
 {
     Q_OBJECT
-public:
-    QSearchFieldPrivate(SearchLineEdit *lineEdit) : QObject( lineEdit ), lineEdit(lineEdit) {}
+  public:
+    QSearchFieldPrivate( SearchLineEdit* lineEdit ) : QObject( lineEdit ), lineEdit( lineEdit ) {}
     virtual ~QSearchFieldPrivate() {}
 
-    SearchLineEdit *lineEdit;
+    SearchLineEdit* lineEdit;
 };
 
-QSearchField::QSearchField(QWidget *parent) : QWidget(parent)
+QSearchField::QSearchField( QWidget* parent ) : QWidget( parent )
 {
-    SearchLineEdit *lineEdit = new SearchLineEdit(this);
-    connect(lineEdit, SIGNAL(textChanged(QString)),
-            this, SIGNAL(textChanged(QString)));
-    connect(lineEdit, SIGNAL(returnPressed()),
-            this, SIGNAL(returnPressed()));
+    SearchLineEdit* lineEdit = new SearchLineEdit( this );
+    connect( lineEdit, SIGNAL( textChanged( QString ) ),
+             this, SIGNAL( textChanged( QString ) ) );
+    connect( lineEdit, SIGNAL( returnPressed() ),
+             this, SIGNAL( returnPressed() ) );
 
     pimpl = QPointer< QSearchFieldPrivate>( new QSearchFieldPrivate( lineEdit ) );
 
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->addWidget(lineEdit);
-    TomahawkUtils::unmarginLayout(layout);
-    setContentsMargins(0, 0, 0, 0);
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    layout->addWidget( lineEdit );
+    TomahawkUtils::unmarginLayout( layout );
+    setContentsMargins( 0, 0, 0, 0 );
 
     lineEdit->setStyleSheet( "QLineEdit { border: 1px solid gray; border-radius: 6px; }" );
-    lineEdit->setMinimumHeight(27);
-    setFixedHeight(27);
+    lineEdit->setMinimumHeight( 27 );
+    setFixedHeight( 27 );
 
 #ifdef Q_WS_MAC
-    lineEdit->setContentsMargins(0, 0, 0, 0);
+    lineEdit->setContentsMargins( 0, 0, 0, 0 );
 #else
-    lineEdit->setContentsMargins(2, 2, 2, 2);
+    lineEdit->setContentsMargins( 2, 2, 2, 2 );
 #endif
 
 }
 
-void QSearchField::setText(const QString &text)
+void QSearchField::setText( const QString& text )
 {
     Q_ASSERT( !pimpl.isNull() );
     if ( pimpl.isNull() )
+    {
         return;
+    }
 
-    pimpl.data()->lineEdit->setText(text);
+    pimpl.data()->lineEdit->setText( text );
 }
 
-void QSearchField::setPlaceholderText(const QString& text)
+void QSearchField::setPlaceholderText( const QString& text )
 {
     Q_ASSERT( !pimpl.isNull() );
     if ( pimpl.isNull() )
+    {
         return;
+    }
 
     pimpl.data()->lineEdit->setInactiveText( text );
 }
@@ -88,7 +92,9 @@ void QSearchField::clear()
 {
     Q_ASSERT( !pimpl.isNull() );
     if ( pimpl.isNull() )
+    {
         return;
+    }
 
     pimpl.data()->lineEdit->clear();
 }
@@ -97,7 +103,9 @@ QString QSearchField::text() const
 {
     Q_ASSERT( !pimpl.isNull() );
     if ( pimpl.isNull() )
+    {
         return QString();
+    }
 
     return pimpl.data()->lineEdit->text();
 }
@@ -106,7 +114,9 @@ QString QSearchField::placeholderText() const
 {
     Q_ASSERT( !pimpl.isNull() );
     if ( pimpl.isNull() )
+    {
         return QString();
+    }
 
     return pimpl.data()->lineEdit->placeholderText();
 }
@@ -115,7 +125,9 @@ void QSearchField::selectAll()
 {
     Q_ASSERT( !pimpl.isNull() );
     if ( pimpl.isNull() )
+    {
         return;
+    }
 
     pimpl.data()->lineEdit->selectAll();
 }
@@ -124,30 +136,34 @@ void QSearchField::setFocus()
 {
     Q_ASSERT( !pimpl.isNull() );
     if ( pimpl.isNull() )
+    {
         return;
+    }
 
     pimpl.data()->lineEdit->setFocus();
 }
 
-void QSearchField::setFocus(Qt::FocusReason reason)
+void QSearchField::setFocus( Qt::FocusReason reason )
 {
     Q_ASSERT( !pimpl.isNull() );
     if ( pimpl.isNull() )
+    {
         return;
+    }
 
-    pimpl.data()->lineEdit->setFocus(reason);
+    pimpl.data()->lineEdit->setFocus( reason );
 }
 
 
-void QSearchField::resizeEvent(QResizeEvent* e)
+void QSearchField::resizeEvent( QResizeEvent* e )
 {
-    QWidget::resizeEvent(e);
+    QWidget::resizeEvent( e );
 }
 
 
-bool QSearchField::eventFilter(QObject *o, QEvent *e)
+bool QSearchField::eventFilter( QObject* o, QEvent* e )
 {
-    return QWidget::eventFilter(o, e);
+    return QWidget::eventFilter( o, e );
 }
 
 #include "qsearchfield.moc"

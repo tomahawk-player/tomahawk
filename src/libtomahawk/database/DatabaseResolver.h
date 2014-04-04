@@ -28,24 +28,30 @@
 
 class DLLEXPORT DatabaseResolver : public Tomahawk::Resolver
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit DatabaseResolver( int weight );
 
     virtual QString name() const;
-    virtual unsigned int weight() const { return m_weight; }
-    virtual unsigned int timeout() const { return 0; }
+    virtual unsigned int weight() const
+    {
+        return m_weight;
+    }
+    virtual unsigned int timeout() const
+    {
+        return 0;
+    }
 
-public slots:
+  public slots:
     virtual void resolve( const Tomahawk::query_ptr& query );
 
-private slots:
+  private slots:
     void gotResults( const Tomahawk::QID qid, QList< Tomahawk::result_ptr> results );
     void gotAlbums( const Tomahawk::QID qid, QList< Tomahawk::album_ptr> albums );
     void gotArtists( const Tomahawk::QID qid, QList< Tomahawk::artist_ptr> artists );
 
-private:
+  private:
     int m_weight;
 };
 

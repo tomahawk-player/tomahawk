@@ -59,21 +59,21 @@ class DLLEXPORT DynamicPlaylist : public Tomahawk::Playlist
     friend class DatabaseCommand_LoadAllSortedPlaylists;
     friend class DatabaseCollection; /// :-(
 
-public:
+  public:
     virtual ~DynamicPlaylist();
 
     static Tomahawk::dynplaylist_ptr get( const QString& guid );
 
     /// Generate an empty dynamic playlist with default generator
     static Tomahawk::dynplaylist_ptr create( const source_ptr& author,
-                                             const QString& guid,
-                                             const QString& title,
-                                             const QString& info,
-                                             const QString& creator,
-                                             GeneratorMode mode,
-                                             bool shared,
-                                             const QString& type = QString(),
-                                             bool autoLoad = true
+            const QString& guid,
+            const QString& title,
+            const QString& info,
+            const QString& creator,
+            GeneratorMode mode,
+            bool shared,
+            const QString& type = QString(),
+            bool autoLoad = true
                                            );
 
     static void remove( const dynplaylist_ptr& playlist );
@@ -98,18 +98,21 @@ public:
     // maybe friend QObjectHelper and make them private?
     explicit DynamicPlaylist( const source_ptr& author, const QString& type );
     void setMode( int mode );
-    void setType( const QString& /*type*/ ) { /** TODO */; }
+    void setType( const QString& /*type*/ )
+    {
+        /** TODO */;
+    }
     void setGenerator( const geninterface_ptr& gen_ptr );
     // </IGNORE>
 
-signals:
+  signals:
     /// emitted when the playlist revision changes (whenever the playlist changes)
     void dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision );
 
     void aboutToBeDeleted( const Tomahawk::dynplaylist_ptr& pl );
     void deleted( const Tomahawk::dynplaylist_ptr& pl );
 
-public slots:
+  public slots:
     // want to update the playlist from the model?
     // generate a newrev using uuid() and call this:
     // if this is a static playlist, pass it a new list of entries. implicitly sets mode to static
@@ -156,10 +159,10 @@ public slots:
 
     void setWeakSelf( QWeakPointer< DynamicPlaylist > self );
 
-protected:
+  protected:
     virtual void removeFromDatabase();
 
-private:
+  private:
     // called from loadAllPlaylists DB cmd via databasecollection (in GUI thread)
     explicit DynamicPlaylist( const source_ptr& src,
                               const QString& currentrevision,

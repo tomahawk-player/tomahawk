@@ -30,30 +30,36 @@
 
 class DLLEXPORT RecentlyPlayedModel : public PlaylistModel
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit RecentlyPlayedModel( QObject* parent = 0, unsigned int maxItems = 0 );
     ~RecentlyPlayedModel();
 
-    unsigned int limit() const { return m_limit; }
-    void setLimit( unsigned int limit ) { m_limit = limit; }
+    unsigned int limit() const
+    {
+        return m_limit;
+    }
+    void setLimit( unsigned int limit )
+    {
+        m_limit = limit;
+    }
 
     bool isTemporary() const;
 
-public slots:
+  public slots:
     void setSource( const Tomahawk::source_ptr& source );
     void setDateFrom( const QDate& date );
     void setDateTo( const QDate& date );
 
-private slots:
+  private slots:
     void onSourcesReady();
     void onSourceAdded( const Tomahawk::source_ptr& source );
 
     void onPlaybackFinished( const Tomahawk::track_ptr& track, const Tomahawk::PlaybackLog& log );
     void loadHistory();
 
-private:
+  private:
     Tomahawk::source_ptr m_source;
     unsigned int m_limit;
     QDate m_dateFrom;

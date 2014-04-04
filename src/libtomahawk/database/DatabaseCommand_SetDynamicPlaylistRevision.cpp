@@ -36,15 +36,15 @@ namespace Tomahawk
 {
 
 DatabaseCommand_SetDynamicPlaylistRevision::DatabaseCommand_SetDynamicPlaylistRevision( const Tomahawk::source_ptr& s,
-                                                                                const QString& playlistguid,
-                                                                                const QString& newrev,
-                                                                                const QString& oldrev,
-                                                                                const QStringList& orderedguids,
-                                                                                const QList< plentry_ptr >& addedentries,
-                                                                                const QList<plentry_ptr>& entries,
-                                                                                const QString& type,
-                                                                                GeneratorMode mode,
-                                                                                const QList< dyncontrol_ptr >& controls )
+        const QString& playlistguid,
+        const QString& newrev,
+        const QString& oldrev,
+        const QStringList& orderedguids,
+        const QList< plentry_ptr >& addedentries,
+        const QList<plentry_ptr>& entries,
+        const QString& type,
+        GeneratorMode mode,
+        const QList< dyncontrol_ptr >& controls )
     : DatabaseCommand_SetPlaylistRevision( s, playlistguid, newrev, oldrev, orderedguids, addedentries, entries )
     , m_type( type )
     , m_mode( mode )
@@ -56,12 +56,12 @@ DatabaseCommand_SetDynamicPlaylistRevision::DatabaseCommand_SetDynamicPlaylistRe
 
 
 DatabaseCommand_SetDynamicPlaylistRevision::DatabaseCommand_SetDynamicPlaylistRevision( const Tomahawk::source_ptr& s,
-                                                                                const QString& playlistguid,
-                                                                                const QString& newrev,
-                                                                                const QString& oldrev,
-                                                                                const QString& type,
-                                                                                GeneratorMode mode,
-                                                                                const QList< dyncontrol_ptr >& controls )
+        const QString& playlistguid,
+        const QString& newrev,
+        const QString& oldrev,
+        const QString& type,
+        GeneratorMode mode,
+        const QList< dyncontrol_ptr >& controls )
     : DatabaseCommand_SetPlaylistRevision( s, playlistguid, newrev, oldrev, QStringList(), QList< plentry_ptr >(), QList< plentry_ptr >() )
     , m_type( type )
     , m_mode( mode )
@@ -76,11 +76,13 @@ QVariantList
 DatabaseCommand_SetDynamicPlaylistRevision::controlsV()
 {
     if ( m_controls.isEmpty() )
+    {
         return m_controlsV;
+    }
 
     if ( !m_controls.isEmpty() && m_controlsV.isEmpty() )
     {
-        foreach ( const dyncontrol_ptr& control, m_controls )
+        foreach ( const dyncontrol_ptr & control, m_controls )
         {
             m_controlsV << QJson::QObjectHelper::qobject2qvariant( control.data() );
         }
@@ -101,8 +103,8 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
     }
 
     QStringList orderedentriesguids;
-    foreach( const QVariant& v, orderedguids() )
-        orderedentriesguids << v.toString();
+    foreach( const QVariant & v, orderedguids() )
+    orderedentriesguids << v.toString();
 
     Q_ASSERT( !source().isNull() );
     Q_ASSERT( !source()->dbCollection().isNull() );
@@ -112,10 +114,14 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
     DynamicPlaylist* rawPl = 0;
     dynplaylist_ptr playlist = source()->dbCollection()->autoPlaylist( playlistguid() );
     if ( !playlist )
+    {
         playlist = source()->dbCollection()->station( playlistguid() );
+    }
 
     if ( playlist )
+    {
         rawPl = playlist.data();
+    }
     else
     {
         // if it's neither an auto or station, it must not be auto-loaded, so we MUST have been told about it directly
@@ -124,54 +130,56 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
 
     if ( !rawPl )
     {
-        tLog() << "Got null playlist with guid:" << playlistguid() << "from source and collection:" << source()->friendlyName() << source()->dbCollection()->name() << "and mode is static?:" << (m_mode == Static);
-//        Q_ASSERT( false );
+        tLog() << "Got null playlist with guid:" << playlistguid() << "from source and collection:" << source()->friendlyName() << source()->dbCollection()->name() << "and mode is static?:" << ( m_mode == Static );
+        //        Q_ASSERT( false );
         return;
     }
 
     if ( !m_controlsV.isEmpty() && m_controls.isEmpty() )
     {
         QList<QVariantMap> controlMap;
-        foreach( const QVariant& v, m_controlsV )
-            controlMap << v.toMap();
+        foreach( const QVariant & v, m_controlsV )
+        controlMap << v.toMap();
 
         if ( m_mode == OnDemand )
             rawPl->setRevision(  newrev(),
-                                    true, // this *is* the newest revision so far
-                                    m_type,
-                                    controlMap,
-                                    m_applied );
+                                 true, // this *is* the newest revision so far
+                                 m_type,
+                                 controlMap,
+                                 m_applied );
         else
             rawPl->setRevision(  newrev(),
-                                    orderedentriesguids,
-                                    m_previous_rev_orderedguids,
-                                    m_type,
-                                    controlMap,
-                                    true, // this *is* the newest revision so far
-                                    m_addedmap,
-                                    m_applied );
+                                 orderedentriesguids,
+                                 m_previous_rev_orderedguids,
+                                 m_type,
+                                 controlMap,
+                                 true, // this *is* the newest revision so far
+                                 m_addedmap,
+                                 m_applied );
     }
     else
     {
         if ( m_mode == OnDemand )
             rawPl->setRevision(  newrev(),
-                                    true, // this *is* the newest revision so far
-                                    m_type,
-                                    m_controls,
-                                    m_applied );
+                                 true, // this *is* the newest revision so far
+                                 m_type,
+                                 m_controls,
+                                 m_applied );
         else
             rawPl->setRevision(  newrev(),
-                                    orderedentriesguids,
-                                    m_previous_rev_orderedguids,
-                                    m_type,
-                                    m_controls,
-                                    true, // this *is* the newest revision so far
-                                    m_addedmap,
-                                    m_applied );
+                                 orderedentriesguids,
+                                 m_previous_rev_orderedguids,
+                                 m_type,
+                                 m_controls,
+                                 true, // this *is* the newest revision so far
+                                 m_addedmap,
+                                 m_applied );
     }
 
     if ( source()->isLocal() )
+    {
         Servent::instance()->triggerDBSync();
+    }
 }
 
 
@@ -180,19 +188,21 @@ DatabaseCommand_SetDynamicPlaylistRevision::exec( DatabaseImpl* lib )
 {
     DatabaseCommand_SetPlaylistRevision::exec( lib );
     if ( m_failed )
+    {
         return;
+    }
 
     QVariantList newcontrols;
     if ( m_controlsV.isEmpty() && !m_controls.isEmpty() )
     {
-        foreach( const dyncontrol_ptr& control, m_controls )
+        foreach( const dyncontrol_ptr & control, m_controls )
         {
             newcontrols << control->id();
         }
     }
     else if( !m_controlsV.isEmpty() )
     {
-        foreach( const QVariant& v, m_controlsV )
+        foreach( const QVariant & v, m_controlsV )
         {
             newcontrols << v.toMap().value( "id" );
         }
@@ -208,7 +218,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::exec( DatabaseImpl* lib )
     query.prepare( sql );
     query.addBindValue( m_newrev );
     query.addBindValue( newcontrols_data );
-    query.addBindValue( QString::number( (int) m_mode ) );
+    query.addBindValue( QString::number( ( int ) m_mode ) );
     query.addBindValue( m_type );
     query.exec();
 
@@ -218,14 +228,16 @@ DatabaseCommand_SetDynamicPlaylistRevision::exec( DatabaseImpl* lib )
     delQuery.prepare( "DELETE FROM dynamic_playlist_controls WHERE playlist = ?" );
     delQuery.addBindValue( m_playlistguid );
     if ( !delQuery.exec() )
+    {
         tLog() << "Failed to delete controls from dynamic playlist controls table";
+    }
 
     TomahawkSqlQuery controlsQuery = lib->newquery();
     controlsQuery.prepare( "INSERT INTO dynamic_playlist_controls( id, playlist, selectedType, match, input ) "
-                            "VALUES( ?, ?, ?, ?, ? )" );
+                           "VALUES( ?, ?, ?, ?, ? )" );
     if ( m_controlsV.isEmpty() && !m_controls.isEmpty() )
     {
-        foreach ( const dyncontrol_ptr& control, m_controls )
+        foreach ( const dyncontrol_ptr & control, m_controls )
         {
             qDebug() << "inserting dynamic control:" << control->id() << m_playlistguid << control->selectedType() << control->match() << control->input();
             controlsQuery.addBindValue( control->id() );
@@ -239,7 +251,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::exec( DatabaseImpl* lib )
     }
     else
     {
-        foreach ( const QVariant& v, m_controlsV )
+        foreach ( const QVariant & v, m_controlsV )
         {
             QVariantMap control = v.toMap();
             qDebug() << "inserting dynamic control from JSON:" << control.value( "id" ) << m_playlistguid << control.value( "selectedType" ) << control.value( "match" ) << control.value( "input" );

@@ -52,18 +52,18 @@ class SourcePrivate;
 
 class DLLEXPORT Source : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-friend class ::DBSyncConnection;
-friend class ::ControlConnection;
-friend class DatabaseCommand_AddFiles;
-friend class DatabaseCommand_DeleteFiles;
-friend class DatabaseCommand_LoadAllSources;
-friend class DatabaseCommand_LogPlayback;
-friend class DatabaseCommand_SocialAction;
-friend class ::MusicScanner;
+    friend class ::DBSyncConnection;
+    friend class ::ControlConnection;
+    friend class DatabaseCommand_AddFiles;
+    friend class DatabaseCommand_DeleteFiles;
+    friend class DatabaseCommand_LoadAllSources;
+    friend class DatabaseCommand_LogPlayback;
+    friend class DatabaseCommand_SocialAction;
+    friend class ::MusicScanner;
 
-public:
+  public:
     explicit Source( int id, const QString& nodeId = QString() );
     virtual ~Source();
 
@@ -108,7 +108,7 @@ public:
 
     QSharedPointer<QMutexLocker> acquireLock();
 
-signals:
+  signals:
     void syncedWithDatabase();
     void synced();
 
@@ -131,11 +131,11 @@ signals:
     void latchedOn( const Tomahawk::source_ptr& to );
     void latchedOff( const Tomahawk::source_ptr& from );
 
-public slots:
+  public slots:
     void setStats( const QVariantMap& m );
     QString lastCmdGuid() const;
 
-private slots:
+  private slots:
     void setLastCmdGuid( const QString& guid );
     void dbLoaded( unsigned int id, const QString& fname );
     void updateIndexWhenSynced();
@@ -153,7 +153,7 @@ private slots:
     void executeCommands();
     void addCommand( const dbcmd_ptr& command );
 
-private:
+  private:
     Q_DECLARE_PRIVATE( Source )
     SourcePrivate* d_ptr;
 

@@ -26,7 +26,7 @@ class MsgPrivate
 {
     friend class MsgProcessor;
 
-public:
+  public:
     MsgPrivate( Msg* q, const QByteArray& ba, char f )
         : q_ptr ( q )
         , payload( ba )
@@ -38,18 +38,18 @@ public:
     }
 
     MsgPrivate( Msg* q, quint32 len, quint8 flags )
-        : q_ptr( q)
+        : q_ptr( q )
         , length( len )
         , flags( flags )
         , incomplete( true )
-        , json_parsed( false)
+        , json_parsed( false )
     {
     }
 
     Msg* q_ptr;
     Q_DECLARE_PUBLIC ( Msg )
 
-private:
+  private:
     QByteArray payload;
     quint32 length;
     char flags;

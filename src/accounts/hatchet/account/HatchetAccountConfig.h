@@ -26,23 +26,26 @@
 
 class QNetworkReply;
 
-namespace Ui {
-    class HatchetAccountConfig;
+namespace Ui
+{
+class HatchetAccountConfig;
 }
 
-namespace Tomahawk {
-namespace Accounts {
+namespace Tomahawk
+{
+namespace Accounts
+{
 
 class HatchetAccount;
 
 class HatchetAccountConfig : public AccountConfigWidget
 {
     Q_OBJECT
-public:
+  public:
     explicit HatchetAccountConfig( HatchetAccount* account );
     virtual ~HatchetAccountConfig();
 
-private slots:
+  private slots:
     void login();
 
     void fieldsChanged();
@@ -54,11 +57,11 @@ private slots:
 
     void authError( const QString& error, int statusCode, const QVariantMap& resp );
 
-protected:
+  protected:
     //virtual void changeEvent( QEvent* event );
     virtual void showEvent( QShowEvent* event );
 
-private:
+  private:
     Ui::HatchetAccountConfig* m_ui;
     HatchetAccount* m_account;
 };

@@ -31,7 +31,7 @@
 
 namespace Tomahawk
 {
-    class ContextMenu;
+class ContextMenu;
 };
 
 class AnimatedSpinner;
@@ -41,51 +41,84 @@ class GridPlaylistInterface;
 
 class DLLEXPORT GridView : public QListView, public Tomahawk::ViewPage
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit GridView( QWidget* parent = 0 );
     ~GridView();
 
     void setProxyModel( PlayableProxyModel* model );
 
-    PlayableModel* model() const { return m_model; }
-    PlayableProxyModel* proxyModel() const { return m_proxyModel; }
-    GridItemDelegate* delegate() const { return m_delegate; }
+    PlayableModel* model() const
+    {
+        return m_model;
+    }
+    PlayableProxyModel* proxyModel() const
+    {
+        return m_proxyModel;
+    }
+    GridItemDelegate* delegate() const
+    {
+        return m_delegate;
+    }
 
-    bool autoFitItems() const { return m_autoFitItems; }
-    void setAutoFitItems( bool b ) { m_autoFitItems = b; }
+    bool autoFitItems() const
+    {
+        return m_autoFitItems;
+    }
+    void setAutoFitItems( bool b )
+    {
+        m_autoFitItems = b;
+    }
 
-    bool autoResize() const { return m_autoResize; }
-    void setAutoResize( bool b ) { m_autoResize = b; }
+    bool autoResize() const
+    {
+        return m_autoResize;
+    }
+    void setAutoResize( bool b )
+    {
+        m_autoResize = b;
+    }
 
     void setPlayableModel( PlayableModel* model );
     void setModel( QAbstractItemModel* model );
 
     void setEmptyTip( const QString& tip );
 
-    virtual QWidget* widget() { return this; }
+    virtual QWidget* widget()
+    {
+        return this;
+    }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
     void setPlaylistInterface( const Tomahawk::playlistinterface_ptr& playlistInterface );
 
-    virtual QString title() const { return m_model->title(); }
-    virtual QString description() const { return m_model->description(); }
+    virtual QString title() const
+    {
+        return m_model->title();
+    }
+    virtual QString description() const
+    {
+        return m_model->description();
+    }
 
     virtual bool setFilter( const QString& filter );
     virtual bool jumpToCurrentTrack();
     QRect currentTrackRect() const;
 
-    virtual bool isBeingPlayed() const { return m_playing.isValid(); }
+    virtual bool isBeingPlayed() const
+    {
+        return m_playing.isValid();
+    }
 
-public slots:
+  public slots:
     void onItemActivated( const QModelIndex& index );
 
-signals:
+  signals:
     void modelChanged();
     void scrolledContents( int dx, int dy );
     void resized();
 
-protected:
+  protected:
     virtual void startDrag( Qt::DropActions supportedActions );
     virtual void scrollContentsBy( int dx, int dy );
 
@@ -94,10 +127,10 @@ protected:
     void resizeEvent( QResizeEvent* event );
     void wheelEvent( QWheelEvent* );
 
-protected slots:
+  protected slots:
     virtual void currentChanged( const QModelIndex& current, const QModelIndex& previous );
 
-private slots:
+  private slots:
     void onFilterChanged( const QString& filter );
     void onCustomContextMenu( const QPoint& pos );
 
@@ -107,7 +140,7 @@ private slots:
     void layoutItems();
     void verifySize();
 
-private:
+  private:
     PlayableModel* m_model;
     PlayableProxyModel* m_proxyModel;
     GridItemDelegate* m_delegate;

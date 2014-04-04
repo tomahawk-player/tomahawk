@@ -39,7 +39,7 @@ class PlaylistModel;
 
 namespace _detail
 {
-    class Closure;
+class Closure;
 }
 
 namespace Tomahawk
@@ -65,17 +65,17 @@ struct PlaylistRevision
 
 class DLLEXPORT PlaylistRemovalHandler : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
     friend class Playlist;
 
-public slots:
+  public slots:
     void remove( const playlist_ptr& playlist );
 
-signals:
+  signals:
     void aboutToBeDeletePlaylist( const Tomahawk::playlist_ptr& playlist );
 
-private:
+  private:
     PlaylistRemovalHandler();
 };
 
@@ -91,15 +91,15 @@ class DLLEXPORT Playlist : public QObject
     Q_PROPERTY( unsigned int createdon  READ createdOn          WRITE setCreatedOn )
     Q_PROPERTY( bool    shared          READ shared             WRITE setShared )
 
-friend class DatabaseCommand_LoadAllPlaylists;
-friend class DatabaseCommand_LoadAllSortedPlaylists;
-friend class DatabaseCommand_SetPlaylistRevision;
-friend class DatabaseCommand_CreatePlaylist;
-friend class DynamicPlaylist;
-friend class PlaylistRemovalHandler;
-friend class ::PlaylistModel;
+    friend class DatabaseCommand_LoadAllPlaylists;
+    friend class DatabaseCommand_LoadAllSortedPlaylists;
+    friend class DatabaseCommand_SetPlaylistRevision;
+    friend class DatabaseCommand_CreatePlaylist;
+    friend class DynamicPlaylist;
+    friend class PlaylistRemovalHandler;
+    friend class ::PlaylistModel;
 
-public:
+  public:
     virtual ~Playlist();
 
     static QSharedPointer<PlaylistRemovalHandler> removalHandler();
@@ -161,7 +161,7 @@ public:
 
     Tomahawk::playlistinterface_ptr playlistInterface();
 
-signals:
+  signals:
     /**
      * emitted when the playlist revision changes (whenever the playlist changes)
      */
@@ -202,7 +202,7 @@ signals:
      */
     void tracksMoved( const QList< Tomahawk::plentry_ptr >& tracks, int startPosition );
 
-public slots:
+  public slots:
     // want to update the playlist from the model?
     // generate a newrev using uuid() and call this:
     void createNewRevision( const QString& newrev, const QString& oldrev, const QList< plentry_ptr >& entries );
@@ -229,7 +229,7 @@ public slots:
 
     void setWeakSelf( QWeakPointer< Playlist > self );
 
-protected:
+  protected:
     // called from loadAllPlaylists DB cmd:
     explicit Playlist( const source_ptr& src,
                        const QString& currentrevision,
@@ -255,7 +255,7 @@ protected:
                        const QString& title,
                        const QString& info,
                        const QString& creator,
-                       bool shared);
+                       bool shared );
 
     QList< plentry_ptr > newEntries( const QList< plentry_ptr >& entries );
     PlaylistRevision setNewRevision( const QString& rev,
@@ -269,11 +269,11 @@ protected:
     Playlist( PlaylistPrivate* d );
 
     Tomahawk::PlaylistPrivate* d_ptr;
-private slots:
+  private slots:
     void onResultsChanged();
     void onResolvingFinished();
 
-private:
+  private:
     Playlist();
     void init();
 
@@ -289,8 +289,8 @@ private:
 Q_DECLARE_METATYPE( QSharedPointer< Tomahawk::Playlist > )
 
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    // Qt5 automatically generated this Metatype
-    Q_DECLARE_METATYPE( QList< QSharedPointer< Tomahawk::Query > > )
+// Qt5 automatically generated this Metatype
+Q_DECLARE_METATYPE( QList< QSharedPointer< Tomahawk::Query > > )
 #endif
 
 #endif // PLAYLIST_H

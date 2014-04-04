@@ -40,16 +40,16 @@ namespace Tomahawk
 namespace UrlHandler
 {
 
-    DLLEXPORT void getIODeviceForUrl( const Tomahawk::result_ptr&, const QString& url, boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
-    DLLEXPORT void registerIODeviceFactory( const QString& proto, IODeviceFactoryFunc fac );
-    DLLEXPORT void localFileIODeviceFactory( const Tomahawk::result_ptr& result, const QString& url,
-                                             boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
-    DLLEXPORT void httpIODeviceFactory( const Tomahawk::result_ptr& result, const QString& url,
-                                       boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
+DLLEXPORT void getIODeviceForUrl( const Tomahawk::result_ptr&, const QString& url, boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
+DLLEXPORT void registerIODeviceFactory( const QString& proto, IODeviceFactoryFunc fac );
+DLLEXPORT void localFileIODeviceFactory( const Tomahawk::result_ptr& result, const QString& url,
+        boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
+DLLEXPORT void httpIODeviceFactory( const Tomahawk::result_ptr& result, const QString& url,
+                                    boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
 
-    DLLEXPORT void getUrlTranslation( const Tomahawk::result_ptr& result, const QString& url,
-                                      boost::function< void ( const QString& ) > callback );
-    DLLEXPORT void registerUrlTranslator( const QString &proto, UrlTranslatorFunc fac );
+DLLEXPORT void getUrlTranslation( const Tomahawk::result_ptr& result, const QString& url,
+                                  boost::function< void ( const QString& ) > callback );
+DLLEXPORT void registerUrlTranslator( const QString& proto, UrlTranslatorFunc fac );
 
 } // namespace UrlHandler
 

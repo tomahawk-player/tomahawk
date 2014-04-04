@@ -2,7 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
- * 
+ *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
  *   the Free Software Foundation, either version 3 of the License, or
@@ -31,7 +31,7 @@
 
 namespace Ui
 {
-    class TwitterConfigWidget;
+class TwitterConfigWidget;
 }
 
 namespace Tomahawk
@@ -47,32 +47,32 @@ class ACCOUNTDLLEXPORT TwitterConfigWidget : public AccountConfigWidget
 {
     Q_OBJECT
 
-public:
-    explicit TwitterConfigWidget( TwitterAccount* account = 0, QWidget *parent = 0 );
+  public:
+    explicit TwitterConfigWidget( TwitterAccount* account = 0, QWidget* parent = 0 );
     virtual ~TwitterConfigWidget();
 
-signals:
+  signals:
     void twitterAuthed( bool authed );
 
     void sizeHintChanged();
 
-private slots:
+  private slots:
     void authDeauthTwitter();
     void startPostGotTomahawkStatus();
-    void authenticateVerifyReply( const QTweetUser &user );
-    void authenticateVerifyError( QTweetNetBase::ErrorCode code, const QString &errorMsg );
-    void postGotTomahawkStatusAuthVerifyReply( const QTweetUser &user );
-    void postGotTomahawkStatusUpdateReply( const QTweetStatus &status );
-    void postGotTomahawkDirectMessageReply( const QTweetDMStatus &status );
-    void postGotTomahawkStatusUpdateError( QTweetNetBase::ErrorCode, const QString &errorMsg );
+    void authenticateVerifyReply( const QTweetUser& user );
+    void authenticateVerifyError( QTweetNetBase::ErrorCode code, const QString& errorMsg );
+    void postGotTomahawkStatusAuthVerifyReply( const QTweetUser& user );
+    void postGotTomahawkStatusUpdateReply( const QTweetStatus& status );
+    void postGotTomahawkDirectMessageReply( const QTweetDMStatus& status );
+    void postGotTomahawkStatusUpdateError( QTweetNetBase::ErrorCode, const QString& errorMsg );
     void tweetComboBoxIndexChanged( int index );
 
-private:
+  private:
     void authenticateTwitter();
     void deauthenticateTwitter();
 
-    Ui::TwitterConfigWidget *m_ui;
-    TwitterAccount *m_account;
+    Ui::TwitterConfigWidget* m_ui;
+    TwitterAccount* m_account;
     QString m_postGTtype;
 };
 

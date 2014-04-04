@@ -27,7 +27,7 @@ namespace Tomahawk
 
 struct DLLEXPORT DynamicPlaylistRevision : PlaylistRevision
 {
-public:
+  public:
 
     QList< dyncontrol_ptr > controls;
     Tomahawk::GeneratorMode mode;

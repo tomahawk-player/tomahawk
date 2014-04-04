@@ -27,12 +27,12 @@ class QxtWebRequestEvent;
 class Api_v1_5 : public QObject
 {
     Q_OBJECT
-public:
+  public:
     Api_v1_5( Api_v1* parent = 0 );
 
-signals:
+  signals:
 
-public slots:
+  public slots:
     /**
      * Simple test to check for API 1.5 support.
      *
@@ -45,10 +45,10 @@ public slots:
      */
     void playback( QxtWebRequestEvent* event, const QString& command );
 
-protected:
+  protected:
     void jsonReply( QxtWebRequestEvent* event, const char* funcInfo, const QString& errorMessage, bool isError );
 
-private:
+  private:
     Api_v1* m_service;
 };
 

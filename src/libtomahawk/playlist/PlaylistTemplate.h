@@ -31,14 +31,14 @@ class PlaylistTemplatePrivate;
 class DLLEXPORT PlaylistTemplate : public QObject
 {
     Q_OBJECT
-public:
+  public:
     explicit PlaylistTemplate( const source_ptr& author,
                                const QString& guid,
                                const QString& title,
                                const QString& info,
                                const QString& creator,
                                bool shared,
-                               const QList<Tomahawk::query_ptr>& queries = QList<Tomahawk::query_ptr>());
+                               const QList<Tomahawk::query_ptr>& queries = QList<Tomahawk::query_ptr>() );
     virtual ~PlaylistTemplate();
 
     /**
@@ -48,11 +48,11 @@ public:
 
     virtual QList<Tomahawk::query_ptr> tracks() const;
 
-protected:
+  protected:
     PlaylistTemplate( PlaylistTemplatePrivate* d );
     PlaylistTemplatePrivate* d_ptr;
 
-private:
+  private:
     Q_DECLARE_PRIVATE( PlaylistTemplate )
 };
 

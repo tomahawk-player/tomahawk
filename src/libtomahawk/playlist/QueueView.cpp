@@ -54,7 +54,7 @@ QueueView::QueueView( AnimatedSplitter* parent )
     ui->queue->setPlaylistModel( queueModel );
     queueModel->setReadOnly( false );
 
-//    ui->queue->setEmptyTip( tr( "The queue is currently empty. Drop something to enqueue it!" ) );
+    //    ui->queue->setEmptyTip( tr( "The queue is currently empty. Drop something to enqueue it!" ) );
     ui->queue->setEmptyTip( QString() );
 
     connect( queueModel, SIGNAL( itemCountChanged( unsigned int ) ), SLOT( updateLabel() ) );
@@ -167,7 +167,9 @@ void
 QueueView::onShown( QWidget* widget, bool animated )
 {
     if ( widget != this )
+    {
         return;
+    }
 
     AnimatedWidget::onShown( widget, animated );
 }
@@ -177,7 +179,9 @@ void
 QueueView::onHidden( QWidget* widget, bool animated )
 {
     if ( widget != this )
+    {
         return;
+    }
 
     AnimatedWidget::onHidden( widget, animated );
 }
@@ -198,9 +202,13 @@ QueueView::updateLabel()
         const unsigned int c = queue()->model()->rowCount( QModelIndex() );
 
         if ( c )
+        {
             ui->toggleButton->setText( tr( "Open Queue - %n item(s)", "", c ) );
+        }
         else
+        {
             ui->toggleButton->setText( tr( "Open Queue" ) );
+        }
     }
     else
     {
@@ -215,7 +223,7 @@ QueueView::restoreState()
     QVariantList vl = TomahawkSettings::instance()->queueState().toList();
     QList< query_ptr > ql;
 
-    foreach ( const QVariant& v, vl )
+    foreach ( const QVariant & v, vl )
     {
         QVariantMap map = v.toMap();
         query_ptr q = Query::get( map["artist"].toString(), map["track"].toString(), map["album"].toString() );
@@ -234,7 +242,7 @@ void
 QueueView::saveState()
 {
     QVariantList vl;
-    foreach ( const query_ptr& query, queue()->model()->queries() )
+    foreach ( const query_ptr & query, queue()->model()->queries() )
     {
         vl << query->toVariant();
     }

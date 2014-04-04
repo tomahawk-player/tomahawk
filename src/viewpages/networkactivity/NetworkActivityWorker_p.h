@@ -32,7 +32,7 @@ namespace Widgets
 
 class NetworkActivityWorkerPrivate
 {
-public:
+  public:
     NetworkActivityWorkerPrivate( NetworkActivityWorker* q )
         : q_ptr( q )
         , trendingArtistsDone( false )
@@ -46,7 +46,7 @@ public:
 
     NetworkActivityWorker* q_ptr;
     Q_DECLARE_PUBLIC( NetworkActivityWorker )
-private:
+  private:
     bool trendingArtistsDone;
     bool trendingTracksDone;
 

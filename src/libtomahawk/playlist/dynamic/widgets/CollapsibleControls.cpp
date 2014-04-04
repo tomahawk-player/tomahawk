@@ -109,17 +109,25 @@ CollapsibleControls::init()
     m_expandL->addWidget( DynamicControlWrapper::createDummy( m_summaryExpand, this ) );
     m_summaryLayout->addLayout( m_expandL );
     if( m_isLocal )
+    {
         m_expandL->setCurrentIndex( 0 );
+    }
     else
+    {
         m_expandL->setCurrentIndex( 1 );
+    }
 
     m_layout->addWidget( m_summaryWidget );
     connect( m_summaryExpand, SIGNAL( clicked( bool ) ), this, SLOT( toggleCollapse() ) );
 
     if( m_isLocal )
+    {
         m_layout->setCurrentWidget( m_controls );
+    }
     else
+    {
         m_layout->setCurrentWidget( m_summary );
+    }
 
     connect( m_controls, SIGNAL( controlChanged( Tomahawk::dyncontrol_ptr ) ), SIGNAL( controlChanged( Tomahawk::dyncontrol_ptr ) ) );
     connect( m_controls, SIGNAL( controlsChanged( bool ) ), SIGNAL( controlsChanged( bool ) ) );
@@ -144,12 +152,15 @@ CollapsibleControls::setControls( const dynplaylist_ptr& playlist, bool isLocal 
     m_isLocal = isLocal;
     m_controls->setControls( m_dynplaylist->generator(), m_dynplaylist->generator()->controls() );
 
-    if( !m_isLocal ) {
+    if( !m_isLocal )
+    {
         m_expandL->setCurrentIndex( 1 );
         m_summary->setText( m_dynplaylist->generator()->sentenceSummary() );
         m_layout->setCurrentWidget( m_summaryWidget );
         setMaximumHeight( m_summaryWidget->sizeHint().height() );
-    } else {
+    }
+    else
+    {
         m_expandL->setCurrentIndex( 0  );
     }
 }
@@ -158,10 +169,11 @@ CollapsibleControls::setControls( const dynplaylist_ptr& playlist, bool isLocal 
 void
 CollapsibleControls::toggleCollapse()
 {
-//     qDebug() << "TOGGLING SIZEHINTS:" << m_controls->height() << m_summaryWidget->sizeHint();
+    //     qDebug() << "TOGGLING SIZEHINTS:" << m_controls->height() << m_summaryWidget->sizeHint();
     m_timeline->setEasingCurve( QEasingCurve::OutBack );
     m_timeline->setFrameRange( m_summaryWidget->sizeHint().height(), m_controls->height() );
-    if( m_layout->currentWidget() == m_controls ) {
+    if( m_layout->currentWidget() == m_controls )
+    {
         m_summary->setText( m_dynplaylist->generator()->sentenceSummary() );
         m_controls->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
 
@@ -169,7 +181,9 @@ CollapsibleControls::toggleCollapse()
         m_timeline->start();
 
         m_collapseAnimation = true;
-    } else {
+    }
+    else
+    {
         m_summaryWidget->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
         m_layout->setCurrentWidget( m_controls );
 
@@ -184,7 +198,7 @@ CollapsibleControls::toggleCollapse()
 void
 CollapsibleControls::onAnimationStep( int step )
 {
-//     qDebug() << "ANIMATION STEP:" << step;
+    //     qDebug() << "ANIMATION STEP:" << step;
     resize( width(), step );
     m_animHeight = step;
     setMaximumHeight( m_animHeight );
@@ -194,13 +208,16 @@ CollapsibleControls::onAnimationStep( int step )
 void
 CollapsibleControls::onAnimationFinished()
 {
-//     qDebug() << "ANIMATION DONE:" << m_animHeight;
+    //     qDebug() << "ANIMATION DONE:" << m_animHeight;
     setMaximumHeight( m_animHeight );
     m_animHeight = -1;
 
-    if( m_collapseAnimation ) {
+    if( m_collapseAnimation )
+    {
         m_layout->setCurrentWidget( m_summaryWidget );
-    } else {
+    }
+    else
+    {
         setMaximumHeight( QWIDGETSIZE_MAX );
     }
 }
@@ -209,9 +226,12 @@ CollapsibleControls::onAnimationFinished()
 QSize
 CollapsibleControls::sizeHint() const
 {
-    if( m_animHeight >= 0 ) {
+    if( m_animHeight >= 0 )
+    {
         return QSize( QWidget::sizeHint().width(), m_animHeight );
-    } else {
+    }
+    else
+    {
         return QWidget::sizeHint();
     }
 }

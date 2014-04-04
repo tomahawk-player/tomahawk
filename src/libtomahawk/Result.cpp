@@ -59,7 +59,7 @@ Result::get( const QString& url )
 {
     if ( url.trimmed().isEmpty() )
     {
-//        Q_ASSERT( false );
+        //        Q_ASSERT( false );
         return result_ptr();
     }
 
@@ -172,7 +172,9 @@ RID
 Result::id() const
 {
     if ( m_rid.isEmpty() )
+    {
         m_rid = uuid();
+    }
 
     return m_rid;
 }
@@ -224,7 +226,9 @@ Result::toVariant() const
     m.insert( "albumpos", m_track->albumpos() );
 
     if ( !m_track->composer().isEmpty() )
+    {
         m.insert( "composer", m_track->composer() );
+    }
 
     return m;
 }
@@ -234,12 +238,12 @@ QString
 Result::toString() const
 {
     return QString( "Result(%1, score: %2) %3 - %4%5 (%6)" )
-              .arg( id() )
-              .arg( score() )
-              .arg( track()->artist() )
-              .arg( track()->track() )
-              .arg( track()->album().isEmpty() ? "" : QString( " on %1" ).arg( track()->album() ) )
-              .arg( url() );
+           .arg( id() )
+           .arg( score() )
+           .arg( track()->artist() )
+           .arg( track()->track() )
+           .arg( track()->album().isEmpty() ? "" : QString( " on %1" ).arg( track()->album() ) )
+           .arg( url() );
 }
 
 
@@ -250,7 +254,9 @@ Result::toQuery()
     {
         query_ptr query = Tomahawk::Query::get( m_track );
         if ( !query )
+        {
             return query_ptr();
+        }
 
         m_query = query->weakRef();
 
@@ -289,19 +295,19 @@ Result::setCollection( const Tomahawk::collection_ptr& collection )
 }
 
 void
-Result::setFriendlySource(const QString &s)
+Result::setFriendlySource( const QString& s )
 {
     m_friendlySource = s;
 }
 
 void
-Result::setPurchaseUrl(const QString &u)
+Result::setPurchaseUrl( const QString& u )
 {
     m_purchaseUrl = u;
 }
 
 void
-Result::setLinkUrl(const QString &u)
+Result::setLinkUrl( const QString& u )
 {
     m_linkUrl = u;
 }
@@ -313,7 +319,7 @@ Result::setChecked( bool checked )
 }
 
 void
-Result::setMimetype( const QString &mimetype )
+Result::setMimetype( const QString& mimetype )
 {
     m_mimetype = mimetype;
 }
@@ -337,7 +343,7 @@ Result::setModificationTime( unsigned int modtime )
 }
 
 void
-Result::setTrack(const track_ptr &track)
+Result::setTrack( const track_ptr& track )
 {
     m_track = track;
 }
@@ -357,7 +363,9 @@ Result::friendlySource() const
         return m_friendlySource;
     }
     else
+    {
         return collection()->source()->friendlyName();
+    }
 }
 
 QString
@@ -392,7 +400,9 @@ Result::sourceIcon( TomahawkUtils::ImageMode style, const QSize& desiredSize ) c
             {
                 QPixmap pixmap = resolver->icon();
                 if ( !desiredSize.isEmpty() )
+                {
                     pixmap = pixmap.scaled( desiredSize, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+                }
 
                 switch ( style )
                 {
@@ -468,7 +478,9 @@ Tomahawk::Resolver*
 Result::resolvedBy() const
 {
     if ( m_resolvedBy.isNull() )
+    {
         return 0;
+    }
 
     return m_resolvedBy.data();
 }
@@ -484,7 +496,7 @@ Result::setResolvedBy( Tomahawk::Resolver* resolver )
 void
 Result::doneEditing()
 {
-//    m_query.clear();
+    //    m_query.clear();
     emit updated();
 }
 

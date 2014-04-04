@@ -23,7 +23,7 @@
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "Source.h"
+#include "Source.h"
 #endif
 
 
@@ -31,7 +31,7 @@ namespace Tomahawk
 {
 
 DatabaseCommand_DeleteInboxEntry::DatabaseCommand_DeleteInboxEntry( const Tomahawk::query_ptr& query,
-                                                                    QObject* parent )
+        QObject* parent )
     : DatabaseCommand( parent )
     , m_query( query )
 {
@@ -52,13 +52,13 @@ DatabaseCommand_DeleteInboxEntry::exec( DatabaseImpl* dbi )
     }
 
     query.prepare(
-                "DELETE FROM social_attributes "
-                "WHERE social_attributes.k = ? AND social_attributes.id = ( "
-                    "SELECT id FROM track "
-                    "WHERE track.name = ? AND track.artist = ( "
-                        "SELECT id FROM artist WHERE artist.name = ? "
-                    ") "
-                ")" );
+        "DELETE FROM social_attributes "
+        "WHERE social_attributes.k = ? AND social_attributes.id = ( "
+        "SELECT id FROM track "
+        "WHERE track.name = ? AND track.artist = ( "
+        "SELECT id FROM artist WHERE artist.name = ? "
+        ") "
+        ")" );
     query.addBindValue( "Inbox" );
     query.addBindValue( m_query->queryTrack()->track() );
     query.addBindValue( m_query->queryTrack()->artist() );

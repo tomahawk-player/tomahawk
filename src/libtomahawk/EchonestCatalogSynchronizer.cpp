@@ -42,12 +42,12 @@ using namespace Tomahawk;
 
 EchonestCatalogSynchronizer* EchonestCatalogSynchronizer::s_instance = 0;
 
-EchonestCatalogSynchronizer::EchonestCatalogSynchronizer( QObject *parent )
+EchonestCatalogSynchronizer::EchonestCatalogSynchronizer( QObject* parent )
     : QObject( parent )
 {
     m_syncing = TomahawkSettings::instance()->enableEchonestCatalogs();
 
-    qRegisterMetaType<QList<QStringList> >("QList<QStringList>");
+    qRegisterMetaType<QList<QStringList> >( "QList<QStringList>" );
 
     connect( TomahawkSettings::instance(), SIGNAL( changed() ), this, SLOT( checkSettingsChanged() ) );
     connect( SourceList::instance()->getLocal()->dbCollection().data(), SIGNAL( tracksAdded( QList<unsigned int> ) ), this, SLOT( tracksAdded( QList<unsigned int> ) ), Qt::QueuedConnection );
@@ -57,9 +57,13 @@ EchonestCatalogSynchronizer::EchonestCatalogSynchronizer( QObject *parent )
     const QByteArray song = TomahawkSettings::instance()->value( "collection/songCatalog" ).toByteArray();
 
     if ( !artist.isEmpty() )
+    {
         m_artistCatalog.setId( artist );
+    }
     if ( !song.isEmpty() )
+    {
         m_songCatalog.setId( song );
+    }
 
     // Sanity check
     if ( !song.isEmpty() && !m_syncing )
@@ -87,7 +91,8 @@ EchonestCatalogSynchronizer::checkSettingsChanged()
 
         tDebug() << "Echonest Catalog sync pref changed, uploading!!";
         uploadDb();
-    } else if ( !TomahawkSettings::instance()->enableEchonestCatalogs() && m_syncing )
+    }
+    else if ( !TomahawkSettings::instance()->enableEchonestCatalogs() && m_syncing )
     {
 
         tDebug() << "Found echonest change, doing catalog deletes!";
@@ -131,7 +136,8 @@ EchonestCatalogSynchronizer::catalogDeleted()
         m_songCatalog.parseDelete( r );
         // If we didn't throw, no errors, so clear our config
         TomahawkSettings::instance()->setValue( toDel, QString() );
-    } catch ( const Echonest::ParseError& e )
+    }
+    catch ( const Echonest::ParseError& e )
     {
         tLog() << "Error in libechonest parsing catalog delete:" << e.what();
     }
@@ -145,8 +151,8 @@ EchonestCatalogSynchronizer::uploadDb()
     QNetworkReply* r =  Echonest::Catalog::create( QString( "%1_song" ).arg( Database::instance()->impl()->dbid() ), Echonest::CatalogTypes::Song );
     connect( r, SIGNAL( finished() ), this, SLOT( songCreateFinished() ) );
 
-//     r =  Echonest::Catalog::create( QString( "%1_artist" ).arg( Database::instance()->dbid() ), Echonest::CatalogTypes::Artist );
-//     connect( r, SIGNAL( finished() ), this, SLOT( artistCreateFinished() ) );
+    //     r =  Echonest::Catalog::create( QString( "%1_artist" ).arg( Database::instance()->dbid() ), Echonest::CatalogTypes::Artist );
+    //     connect( r, SIGNAL( finished() ), this, SLOT( artistCreateFinished() ) );
 }
 
 
@@ -162,9 +168,10 @@ EchonestCatalogSynchronizer::songCreateFinished()
         m_songCatalog = Echonest::Catalog::parseCreate( r );
         TomahawkSettings::instance()->setValue( "collection/songCatalog", m_songCatalog.id() );
         Tomahawk::dbcmd_ptr cmd( new DatabaseCommand_SetCollectionAttributes( DatabaseCommand_SetCollectionAttributes::EchonestSongCatalog,
-                                                                                            m_songCatalog.id() ) );
+                                 m_songCatalog.id() ) );
         Database::instance()->enqueue( cmd );
-    } catch ( const Echonest::ParseError& e )
+    }
+    catch ( const Echonest::ParseError& e )
     {
         tLog() << "Echonest threw an exception parsing song catalog create:" << e.what();
         return;
@@ -177,7 +184,7 @@ EchonestCatalogSynchronizer::songCreateFinished()
                  "WHERE file.id = file_join.file "
                  "AND file_join.artist = artist.id "
                  "AND file_join.track = track.id "
-                 "AND file.source IS NULL");
+                 "AND file.source IS NULL" );
     DatabaseCommand_GenericSelect* cmd = new DatabaseCommand_GenericSelect( sql, DatabaseCommand_GenericSelect::Track, true );
     connect( cmd, SIGNAL( rawData( QList< QStringList > ) ), this, SLOT( rawTracksAdd( QList< QStringList > ) ) );
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
@@ -198,10 +205,10 @@ EchonestCatalogSynchronizer::artistCreateFinished()
         m_artistCatalog = Echonest::Catalog::parseCreate( r );
         TomahawkSettings::instance()->setValue( "collection/artistCatalog", m_artistCatalog.id() );
 
-//        Tomahawk::dbcmd_ptr cmd( new DatabaseCommand_SetCollectionAttributes( SourceList::instance()->getLocal(),
-//                                                                                            DatabaseCommand_SetCollectionAttributes::EchonestSongCatalog,
-//                                                                                            m_songCatalog.id() ) );
-//        Database::instance()->enqueue( cmd );
+    //        Tomahawk::dbcmd_ptr cmd( new DatabaseCommand_SetCollectionAttributes( SourceList::instance()->getLocal(),
+    //                                                                                            DatabaseCommand_SetCollectionAttributes::EchonestSongCatalog,
+    //                                                                                            m_songCatalog.id() ) );
+    //        Database::instance()->enqueue( cmd );
     } catch ( const Echonest::ParseError& e )
     {
         tLog() << "Echonest threw an exception parsing artist catalog create:" << e.what();
@@ -214,7 +221,7 @@ EchonestCatalogSynchronizer::rawTracksAdd( const QList< QStringList >& tracks )
 {
     tDebug() << "Got raw tracks, num:" << tracks.size();
 
-//     int limit = ( tracks.size() < 1000 ) ? tracks.size() : 1000;
+    //     int limit = ( tracks.size() < 1000 ) ? tracks.size() : 1000;
 
     int cur = 0;
     while ( cur < tracks.size() )
@@ -227,7 +234,9 @@ EchonestCatalogSynchronizer::rawTracksAdd( const QList< QStringList >& tracks )
         for ( int i = prev; i < cur; i++ )
         {
             if ( tracks[i][1].isEmpty() || tracks[i][2].isEmpty() )
+            {
                 continue;
+            }
             entries.append( entryFromTrack( tracks[i], Echonest::CatalogTypes::Update ) );
         }
         tDebug() << "Done queuing:" << entries.size() << "tracks";
@@ -242,7 +251,9 @@ void
 EchonestCatalogSynchronizer::doUploadJob()
 {
     if ( m_queuedUpdates.isEmpty() )
+    {
         return;
+    }
 
     Echonest::CatalogUpdateEntries entries = m_queuedUpdates.dequeue();
     tDebug() << "Updating number of entries:" << entries.count();
@@ -258,7 +269,7 @@ EchonestCatalogSynchronizer::entryFromTrack( const QStringList& track, Echonest:
     //qDebug() << "UPLOADING:" << track[0] << track[1] << track[2];
     Echonest::CatalogUpdateEntry entry;
     entry.setAction( action );
-    entry.setItemId(track[ 0 ].toLatin1() ); // track dbid
+    entry.setItemId( track[ 0 ].toLatin1() ); // track dbid
     entry.setSongName( escape( track[ 1 ] ) );
     entry.setArtistName( escape( track[ 2 ] ) );
     entry.setRelease( escape( track[ 3 ] ) );
@@ -278,7 +289,8 @@ EchonestCatalogSynchronizer::songUpdateFinished()
         QByteArray ticket = m_songCatalog.parseTicket( r );
         QNetworkReply* tJob = m_songCatalog.status( ticket );
         connect( tJob, SIGNAL( finished() ), this, SLOT( checkTicket() ) );
-    } catch ( const Echonest::ParseError& e )
+    }
+    catch ( const Echonest::ParseError& e )
     {
         tLog() << "Echonest threw an exception parsing catalog update finished:" << e.what();
     }
@@ -297,7 +309,8 @@ EchonestCatalogSynchronizer::checkTicket()
         Echonest::CatalogStatus status = m_songCatalog.parseStatus( r );
 
         tLog() << "Catalog status update:" << status.status << status.details << status.items;
-    } catch ( const Echonest::ParseError& e )
+    }
+    catch ( const Echonest::ParseError& e )
     {
         tLog() << "Echonest threw an exception parsing catalog create:" << e.what();
         return;
@@ -308,7 +321,9 @@ void
 EchonestCatalogSynchronizer::tracksAdded( const QList< unsigned int >& tracks )
 {
     if ( !m_syncing || m_songCatalog.id().isEmpty() || tracks.isEmpty() )
+    {
         return;
+    }
 
     qDebug() << Q_FUNC_INFO << "Got tracks added from db, fetching metadata" << tracks;
     // Get the result_ptrs from the tracks
@@ -324,10 +339,12 @@ EchonestCatalogSynchronizer::loadedResults( const QList<result_ptr>& results )
     QList< QStringList > rawTracks;
     qDebug() << Q_FUNC_INFO << "Got track metadata..." << results.size();
 
-    foreach( const result_ptr& result, results )
+    foreach( const result_ptr & result, results )
     {
         if ( result.isNull() )
+        {
             continue;
+        }
 
         qDebug() << "Metadata for item:" << result->fileId();
 
@@ -341,7 +358,9 @@ EchonestCatalogSynchronizer::tracksRemoved( const QList< unsigned int >& trackId
 {
 
     if ( !m_syncing || m_songCatalog.id().isEmpty() || trackIds.isEmpty() )
+    {
         return;
+    }
 
 
     Echonest::CatalogUpdateEntries entries;
@@ -359,7 +378,7 @@ EchonestCatalogSynchronizer::tracksRemoved( const QList< unsigned int >& trackId
 }
 
 QByteArray
-EchonestCatalogSynchronizer::escape( const QString &in ) const
+EchonestCatalogSynchronizer::escape( const QString& in ) const
 {
     // TODO echonest chokes on some chars in the output. But if we percent-encode those chars it works
     // We can't percent-encode the whole string, because then any UTF-8 chars that have been url-encoded, fail.

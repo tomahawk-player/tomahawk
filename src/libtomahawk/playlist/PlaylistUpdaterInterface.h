@@ -52,7 +52,7 @@ class PlaylistUpdaterFactory;
 class DLLEXPORT PlaylistUpdaterInterface : public QObject
 {
     Q_OBJECT
-public:
+  public:
     explicit PlaylistUpdaterInterface( const playlist_ptr& pl );
 
     virtual ~PlaylistUpdaterInterface();
@@ -66,48 +66,72 @@ public:
 
     // Small overlay over playlist icon in the sidebar to indicate that it has this updater type
     // Should be around 16x16 or something
-    virtual QPixmap typeIcon() const { return QPixmap(); }
+    virtual QPixmap typeIcon() const
+    {
+        return QPixmap();
+    }
 #endif
 
     void remove();
 
-    playlist_ptr playlist() const { return m_playlist; }
+    playlist_ptr playlist() const
+    {
+        return m_playlist;
+    }
 
     /// If you want to try to load updaters for a playlist
     static void loadForPlaylist( const playlist_ptr& pl );
 
     static void registerUpdaterFactory( PlaylistUpdaterFactory* f );
 
-    virtual bool sync() const { return false; }
+    virtual bool sync() const
+    {
+        return false;
+    }
     virtual void setSync( bool ) {}
 
-    virtual bool canSubscribe() const { return false; }
-    virtual bool subscribed() const { return false; }
+    virtual bool canSubscribe() const
+    {
+        return false;
+    }
+    virtual bool subscribed() const
+    {
+        return false;
+    }
     virtual void setSubscribed( bool ) {}
     virtual void setCollaborative( bool ) {}
-    virtual bool collaborative() const { return false; }
+    virtual bool collaborative() const
+    {
+        return false;
+    }
 
     // The int data value associated with each question must be unique across *all* playlist updaters,
     // as setQuestionResults is called with all questions from all updaters.
-    virtual bool hasCustomDeleter() const { return false; }
-    virtual PlaylistDeleteQuestions deleteQuestions() const { return PlaylistDeleteQuestions(); }
+    virtual bool hasCustomDeleter() const
+    {
+        return false;
+    }
+    virtual PlaylistDeleteQuestions deleteQuestions() const
+    {
+        return PlaylistDeleteQuestions();
+    }
     virtual void setQuestionResults( const QMap< int, bool > ) {}
 
-signals:
+  signals:
     void changed();
 
-public slots:
+  public slots:
     virtual void updateNow() {}
 
     void save();
 
-protected:
+  protected:
     virtual void aboutToDelete() {}
 
     QVariantHash settings() const;
     void saveSettings( const QVariantHash& settings );
 
-private:
+  private:
     playlist_ptr m_playlist;
     QVariantHash m_extraData;
 
@@ -117,7 +141,7 @@ private:
 
 class DLLEXPORT PlaylistUpdaterFactory
 {
-public:
+  public:
     PlaylistUpdaterFactory() {}
     virtual ~PlaylistUpdaterFactory() {}
 

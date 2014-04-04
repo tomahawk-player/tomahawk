@@ -68,9 +68,13 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
     }
 
     if ( m_query->isFullTextQuery() )
+    {
         fullTextResolve( lib );
+    }
     else
+    {
         resolve( lib );
+    }
 }
 
 
@@ -94,32 +98,34 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
 
     QStringList trksl;
     for ( int k = 0; k < tracks.count(); k++ )
+    {
         trksl.append( QString::number( tracks.at( k ).first ) );
+    }
 
     QString trksToken = QString( "file_join.track IN (%1)" ).arg( trksl.join( "," ) );
 
     QString sql = QString( "SELECT "
-                            "url, mtime, size, md5, mimetype, duration, bitrate, "  //0
-                            "file_join.artist, file_join.album, file_join.track, "  //7
-                            "file_join.composer, file_join.discnumber, "            //10
-                            "artist.name as artname, "                              //12
-                            "album.name as albname, "                               //13
-                            "track.name as trkname, "                               //14
-                            "composer.name as cmpname, "                            //15
-                            "file.source, "                                         //16
-                            "file_join.albumpos, "                                  //17
-                            "artist.id as artid, "                                  //18
-                            "album.id as albid, "                                   //19
-                            "composer.id as cmpid "                                 //20
-                            "FROM file, file_join, artist, track "
-                            "LEFT JOIN album ON album.id = file_join.album "
-                            "LEFT JOIN artist AS composer ON composer.id = file_join.composer "
-                            "WHERE "
-                            "artist.id = file_join.artist AND "
-                            "track.id = file_join.track AND "
-                            "file.id = file_join.file AND "
-                            "(%1)" )
-         .arg( trksToken );
+                           "url, mtime, size, md5, mimetype, duration, bitrate, "  //0
+                           "file_join.artist, file_join.album, file_join.track, "  //7
+                           "file_join.composer, file_join.discnumber, "            //10
+                           "artist.name as artname, "                              //12
+                           "album.name as albname, "                               //13
+                           "track.name as trkname, "                               //14
+                           "composer.name as cmpname, "                            //15
+                           "file.source, "                                         //16
+                           "file_join.albumpos, "                                  //17
+                           "artist.id as artid, "                                  //18
+                           "album.id as albid, "                                   //19
+                           "composer.id as cmpid "                                 //20
+                           "FROM file, file_join, artist, track "
+                           "LEFT JOIN album ON album.id = file_join.album "
+                           "LEFT JOIN artist AS composer ON composer.id = file_join.composer "
+                           "WHERE "
+                           "artist.id = file_join.artist AND "
+                           "track.id = file_join.track AND "
+                           "file.id = file_join.file AND "
+                           "(%1)" )
+                  .arg( trksToken );
 
     files_query.prepare( sql );
     files_query.exec();
@@ -134,7 +140,9 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
             continue;
         }
         if ( !s->isLocal() )
+        {
             url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
+        }
 
         Tomahawk::result_ptr result = Tomahawk::Result::get( url );
         if ( result->isValid() )
@@ -203,31 +211,33 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
 
     QStringList trksl;
     for ( int k = 0; k < trackPairs.count(); k++ )
+    {
         trksl.append( QString::number( trackPairs.at( k ).first ) );
+    }
 
     QString trksToken = QString( "file_join.track IN (%1)" ).arg( trksl.join( "," ) );
     QString sql = QString( "SELECT "
-                            "url, mtime, size, md5, mimetype, duration, bitrate, "  //0
-                            "file_join.artist, file_join.album, file_join.track, "  //7
-                            "file_join.composer, file_join.discnumber, "            //10
-                            "artist.name as artname, "                              //12
-                            "album.name as albname, "                               //13
-                            "track.name as trkname, "                               //14
-                            "composer.name as cmpname, "                            //15
-                            "file.source, "                                         //16
-                            "file_join.albumpos, "                                  //17
-                            "artist.id as artid, "                                  //18
-                            "album.id as albid, "                                   //19
-                            "composer.id as cmpid "                                 //20
-                            "FROM file, file_join, artist, track "
-                            "LEFT JOIN album ON album.id = file_join.album "
-                            "LEFT JOIN artist AS composer ON composer.id = file_join.composer "
-                            "WHERE "
-                            "artist.id = file_join.artist AND "
-                            "track.id = file_join.track AND "
-                            "file.id = file_join.file AND "
-                            "%1" )
-                        .arg( trksl.length() > 0 ? trksToken : QString( "0" ) );
+                           "url, mtime, size, md5, mimetype, duration, bitrate, "  //0
+                           "file_join.artist, file_join.album, file_join.track, "  //7
+                           "file_join.composer, file_join.discnumber, "            //10
+                           "artist.name as artname, "                              //12
+                           "album.name as albname, "                               //13
+                           "track.name as trkname, "                               //14
+                           "composer.name as cmpname, "                            //15
+                           "file.source, "                                         //16
+                           "file_join.albumpos, "                                  //17
+                           "artist.id as artid, "                                  //18
+                           "album.id as albid, "                                   //19
+                           "composer.id as cmpid "                                 //20
+                           "FROM file, file_join, artist, track "
+                           "LEFT JOIN album ON album.id = file_join.album "
+                           "LEFT JOIN artist AS composer ON composer.id = file_join.composer "
+                           "WHERE "
+                           "artist.id = file_join.artist AND "
+                           "track.id = file_join.track AND "
+                           "file.id = file_join.file AND "
+                           "%1" )
+                  .arg( trksl.length() > 0 ? trksToken : QString( "0" ) );
 
     files_query.prepare( sql );
     files_query.exec();
@@ -242,7 +252,9 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
             continue;
         }
         if ( !s->isLocal() )
+        {
             url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
+        }
 
         bool cached = Tomahawk::Result::isCached( url );
         Tomahawk::result_ptr result = Tomahawk::Result::get( url );
@@ -266,7 +278,7 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
 
         for ( int k = 0; k < trackPairs.count(); k++ )
         {
-            if ( trackPairs.at( k ).first == (int)track->trackId() )
+            if ( trackPairs.at( k ).first == ( int )track->trackId() )
             {
                 result->setScore( trackPairs.at( k ).second );
                 break;

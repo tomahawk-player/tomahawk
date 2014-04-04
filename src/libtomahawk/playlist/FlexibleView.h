@@ -34,31 +34,46 @@ class ModeHeader;
 
 class DLLEXPORT FlexibleView : public QWidget, public Tomahawk::ViewPage
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     enum FlexibleViewMode
     { Flat = 0, Detailed = 1, Grid = 2 };
 
     explicit FlexibleView( QWidget* parent = 0, QWidget* extraHeader = 0 );
     ~FlexibleView();
 
-    virtual QWidget* widget() { return this; }
+    virtual QWidget* widget()
+    {
+        return this;
+    }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 
     virtual QString title() const;
     virtual QString description() const;
     virtual QPixmap pixmap() const;
 
-    virtual bool showInfoBar() const { return false; }
+    virtual bool showInfoBar() const
+    {
+        return false;
+    }
     virtual bool jumpToCurrentTrack();
     virtual bool isTemporaryPage() const;
     virtual bool isBeingPlayed() const;
     void setTemporaryPage( bool b );
 
-    TrackView* trackView() const { return m_trackView; }
-    TrackView* detailedView() const { return m_detailedView; }
-    GridView* gridView() const { return m_gridView; }
+    TrackView* trackView() const
+    {
+        return m_trackView;
+    }
+    TrackView* detailedView() const
+    {
+        return m_detailedView;
+    }
+    GridView* gridView() const
+    {
+        return m_gridView;
+    }
 
     void setGuid( const QString& guid );
 
@@ -72,19 +87,19 @@ public:
     void setPixmap( const QPixmap& pixmap );
     void setEmptyTip( const QString& tip );
 
-public slots:
+  public slots:
     void setCurrentMode( FlexibleViewMode mode );
     virtual bool setFilter( const QString& pattern );
 
-signals:
+  signals:
     void modeChanged( FlexibleViewMode mode );
     void destroyed( QWidget* widget );
 
-private slots:
+  private slots:
     void onModelChanged();
     void onWidgetDestroyed( QWidget* widget );
 
-private:
+  private:
     FilterHeader* m_header;
     ModeHeader* m_modeHeader;
     QPixmap m_pixmap;

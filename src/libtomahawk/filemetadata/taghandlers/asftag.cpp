@@ -21,13 +21,13 @@
 namespace Tomahawk
 {
 
-ASFTag::ASFTag( TagLib::Tag *tag, TagLib::ASF::Tag *asfTag )
+ASFTag::ASFTag( TagLib::Tag* tag, TagLib::ASF::Tag* asfTag )
     : Tag( tag )
     , m_asfTag( asfTag )
 {
     TagLib::ASF::AttributeListMap map = m_asfTag->attributeListMap();
     for( TagLib::ASF::AttributeListMap::ConstIterator it = map.begin();
-         it != map.end(); ++it )
+            it != map.end(); ++it )
     {
         TagLib::String key = it->first;
         QString val = TStringToQString( it->second[ 0 ].toString() );

@@ -33,7 +33,7 @@
 #include <QSqlQuery>
 
 #ifndef QT_NO_DEBUG
-    //#define DEBUG_TIMING TRUE
+//#define DEBUG_TIMING TRUE
 #endif
 
 
@@ -56,7 +56,9 @@ DatabaseWorkerThread::run()
     exec();
     tDebug() << Q_FUNC_INFO << "DatabaseWorkerThread finishing...";
     if ( m_worker )
+    {
         delete m_worker.data();
+    }
 }
 
 
@@ -88,7 +90,7 @@ DatabaseWorker::~DatabaseWorker()
 
     if ( m_outstanding )
     {
-        foreach ( const Tomahawk::dbcmd_ptr& cmd, m_commands )
+        foreach ( const Tomahawk::dbcmd_ptr & cmd, m_commands )
         {
             tDebug() << "Outstanding db command to finish:" << cmd->guid() << cmd->commandname();
         }
@@ -104,7 +106,9 @@ DatabaseWorker::enqueue( const QList< Tomahawk::dbcmd_ptr >& cmds )
     m_commands << cmds;
 
     if ( m_outstanding == cmds.count() )
+    {
         QTimer::singleShot( 0, this, SLOT( doWork() ) );
+    }
 }
 
 
@@ -116,7 +120,9 @@ DatabaseWorker::enqueue( const Tomahawk::dbcmd_ptr& cmd )
     m_commands << cmd;
 
     if ( m_outstanding == 1 )
+    {
         QTimer::singleShot( 0, this, SLOT( doWork() ) );
+    }
 }
 
 
@@ -172,7 +178,7 @@ DatabaseWorker::doWork()
                     if ( cmd->source()->isLocal() && !cmd->localOnly() )
                     {
                         // save to op-log
-                        DatabaseCommandLoggable* command = (DatabaseCommandLoggable*)cmd.data();
+                        DatabaseCommandLoggable* command = ( DatabaseCommandLoggable* )cmd.data();
                         logOp( command );
                     }
                     else
@@ -209,7 +215,9 @@ DatabaseWorker::doWork()
                     }
                 }
                 else
+                {
                     finished = true;
+                }
             }
 
             if ( cmd->doesMutates() )
@@ -228,45 +236,51 @@ DatabaseWorker::doWork()
 #endif
 
             foreach ( Tomahawk::dbcmd_ptr c, cmdGroup )
-                c->postCommit();
+            c->postCommit();
 
 #ifdef DEBUG_TIMING
             tDebug() << "Post commit finished in" << timer.elapsed() - duration << "ms for" << cmd->commandname();
 #endif
         }
     }
-    catch ( const char * msg )
+    catch ( const char* msg )
     {
         tLog() << endl
-                 << "*ERROR* processing databasecommand:"
-                 << cmd->commandname()
-                 << msg
-                 << impl->database().lastError().databaseText()
-                 << impl->database().lastError().driverText()
-                 << endl;
+               << "*ERROR* processing databasecommand:"
+               << cmd->commandname()
+               << msg
+               << impl->database().lastError().databaseText()
+               << impl->database().lastError().driverText()
+               << endl;
 
         if ( cmd->doesMutates() )
+        {
             impl->database().rollback();
+        }
 
         Q_ASSERT( false );
     }
-    catch (...)
+    catch ( ... )
     {
         qDebug() << "Uncaught exception processing dbcmd";
         if ( cmd->doesMutates() )
+        {
             impl->database().rollback();
+        }
 
         Q_ASSERT( false );
         throw;
     }
 
     foreach ( Tomahawk::dbcmd_ptr c, cmdGroup )
-        c->emitFinished();
+    c->emitFinished();
 
     QMutexLocker lock( &m_mut );
     m_outstanding -= completed;
     if ( m_outstanding > 0 )
+    {
         QTimer::singleShot( 0, this, SLOT( doWork() ) );
+    }
 }
 
 
@@ -282,7 +296,7 @@ DatabaseWorker::logOp( DatabaseCommandLoggable* command )
     QVariantMap variant = QJson::QObjectHelper::qobject2qvariant( command );
     QByteArray ba = m_serializer.serialize( variant );
 
-//     qDebug() << "OP JSON:" << ba.isNull() << ba << "from:" << variant; // debug
+    //     qDebug() << "OP JSON:" << ba.isNull() << ba << "from:" << variant; // debug
 
     bool compressed = false;
     if ( ba.length() >= 512 )
@@ -302,7 +316,7 @@ DatabaseWorker::logOp( DatabaseCommandLoggable* command )
 
         TomahawkSqlQuery oplogdelquery = Database::instance()->impl()->newquery();
         oplogdelquery.prepare( QString( "DELETE FROM oplog WHERE source %1 AND singleton = 'true' AND command = ?" )
-                                  .arg( command->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( command->source()->id() ) ) );
+                               .arg( command->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( command->source()->id() ) ) );
 
         oplogdelquery.bindValue( 0, command->commandname() );
         oplogdelquery.exec();
@@ -313,7 +327,7 @@ DatabaseWorker::logOp( DatabaseCommandLoggable* command )
              << "guid:" << command->guid();
 
     oplogquery.bindValue( 0, command->source()->isLocal() ?
-                          QVariant(QVariant::Int) : command->source()->id() );
+                          QVariant( QVariant::Int ) : command->source()->id() );
     oplogquery.bindValue( 1, command->guid() );
     oplogquery.bindValue( 2, command->commandname() );
     oplogquery.bindValue( 3, command->singletonCmd() );

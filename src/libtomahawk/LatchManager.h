@@ -34,24 +34,25 @@ namespace Tomahawk
 class DLLEXPORT LatchManager : public QObject
 {
     Q_OBJECT
-public:
+  public:
     explicit LatchManager( QObject* parent = 0 );
     virtual ~LatchManager();
 
     bool isLatched( const source_ptr& src );
 
-public slots:
+  public slots:
     void latchRequest( const Tomahawk::source_ptr& source );
     void unlatchRequest( const Tomahawk::source_ptr& source );
     void catchUpRequest();
     void latchModeChangeRequest( const Tomahawk::source_ptr& source, bool realtime );
 
-private slots:
+  private slots:
     void playlistChanged( Tomahawk::playlistinterface_ptr );
     void audioPaused();
 
-private:
-    enum State {
+  private:
+    enum State
+    {
         NotLatched =  0,
         Latching,
         Latched

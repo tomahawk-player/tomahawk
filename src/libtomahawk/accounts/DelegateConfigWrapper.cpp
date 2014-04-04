@@ -45,7 +45,7 @@ DelegateConfigWrapper::DelegateConfigWrapper( AccountConfigWidget* conf, QWidget
 
     m_buttons = new QDialogButtonBox( buttons, Qt::Horizontal, this );
     m_okButton = m_buttons->button( QDialogButtonBox::Ok );
-    connect( m_buttons, SIGNAL( clicked( QAbstractButton*)  ), this, SLOT( closed( QAbstractButton* ) ) );
+    connect( m_buttons, SIGNAL( clicked( QAbstractButton* )  ), this, SLOT( closed( QAbstractButton* ) ) );
     connect( this, SIGNAL( rejected() ), this, SLOT( rejected() ) );
 
     if ( m_aboutW )
@@ -57,9 +57,13 @@ DelegateConfigWrapper::DelegateConfigWrapper( AccountConfigWidget* conf, QWidget
     QHBoxLayout* h = new QHBoxLayout( this );
     h->addWidget( m_buttons );
     if( m_widget && m_widget->layout() )
+    {
         h->setContentsMargins( m_widget->layout()->contentsMargins() );
+    }
     else if( m_widget )
+    {
         h->setContentsMargins( m_widget->contentsMargins() );
+    }
 
     v->addLayout( h );
 
@@ -71,7 +75,9 @@ DelegateConfigWrapper::DelegateConfigWrapper( AccountConfigWidget* conf, QWidget
     setMaximumSize( sizeHint() ); // to remove the resize grip on osx this is the only way
 
     if( conf->metaObject()->indexOfSignal( "sizeHintChanged()" ) > -1 )
+    {
         connect( conf, SIGNAL( sizeHintChanged() ), this, SLOT( updateSizeHint() ) );
+    }
 #else
     m_widget->setVisible( true );
 #endif
@@ -83,7 +89,9 @@ void
 DelegateConfigWrapper::setShowDelete( bool del )
 {
     if ( del )
+    {
         m_deleteButton = m_buttons->addButton( tr( "Delete Account" ), QDialogButtonBox::DestructiveRole );
+    }
 }
 
 
@@ -101,7 +109,9 @@ DelegateConfigWrapper::closed( QAbstractButton* b )
     QDialogButtonBox* buttons = qobject_cast< QDialogButtonBox* >( sender() );
 
     if ( buttons->standardButton( b ) == QDialogButtonBox::Help )
+    {
         return;
+    }
 
     int doneCode = 0;
 
@@ -111,7 +121,7 @@ DelegateConfigWrapper::closed( QAbstractButton* b )
         m_widget->checkForErrors();
         if( !m_widget->settingsValid() )
         {
-            foreach( const QString& error, m_widget->errors() )
+            foreach( const QString & error, m_widget->errors() )
             {
                 QMessageBox::warning( this, tr( "Config Error" ) , error );
             }

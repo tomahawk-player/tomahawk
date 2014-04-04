@@ -41,7 +41,7 @@
 #include "database/DatabaseCommand_SocialAction.h"
 
 #ifndef ENABLE_HEADLESS
-    #include "utils/TomahawkUtilsGui.h"
+#include "utils/TomahawkUtilsGui.h"
 #endif
 
 #include "utils/Logger.h"
@@ -58,7 +58,9 @@ Source::Source( int id, const QString& nodeId )
     d->scrubFriendlyName = qApp->arguments().contains( "--demo" );
 
     if ( id == 0 )
+    {
         d->isLocal = true;
+    }
 
     d->currentTrackTimer.setSingleShot( true );
     connect( &d->currentTrackTimer, SIGNAL( timeout() ), this, SLOT( trackTimerFired() ) );
@@ -105,7 +107,7 @@ Source::setControlConnection( ControlConnection* cc )
     if ( !d->cc.isNull() && d->cc->isReady() && d->cc->isRunning() )
     {
         const QString& nodeid = Database::instance()->impl()->dbid();
-        peerInfoDebug( (*cc->peerInfos().begin()) ) << Q_FUNC_INFO << "Comparing" << cc->id() << "and" << nodeid << "to detect duplicate connection, outbound:" << cc->outbound();
+        peerInfoDebug( ( *cc->peerInfos().begin() ) ) << Q_FUNC_INFO << "Comparing" << cc->id() << "and" << nodeid << "to detect duplicate connection, outbound:" << cc->outbound();
         // If our nodeid is "higher" than the other, we prefer inbound connection, else outbound.
         if ( ( cc->id() < nodeid && d->cc->outbound() ) || ( cc->id() > nodeid && !d->cc->outbound() ) )
         {
@@ -113,7 +115,7 @@ Source::setControlConnection( ControlConnection* cc )
             d->cc->unbindFromSource();
             // This ControlConnection is not needed anymore, get rid of it!
             // (But decouple the deletion it from the current activity)
-            QMetaObject::invokeMethod( d->cc.data(), "deleteLater", Qt::QueuedConnection);
+            QMetaObject::invokeMethod( d->cc.data(), "deleteLater", Qt::QueuedConnection );
             // Use new ControlConnection
             d->cc = cc;
             return true;
@@ -153,7 +155,7 @@ Source::dbCollection() const
     Q_D( const Source );
     if ( d->collections.length() )
     {
-        foreach ( const collection_ptr& collection, d->collections )
+        foreach ( const collection_ptr & collection, d->collections )
         {
             if ( collection->backendType() == Collection::DatabaseCollectionType )
             {
@@ -197,7 +199,7 @@ Source::friendlyName() const
     Q_D( const Source );
 
     QStringList candidateNames;
-    foreach ( const peerinfo_ptr& peerInfo, peerInfos() )
+    foreach ( const peerinfo_ptr & peerInfo, peerInfos() )
     {
         if ( !peerInfo.isNull() && !peerInfo->friendlyName().isEmpty() )
         {
@@ -208,7 +210,9 @@ Source::friendlyName() const
     if ( !candidateNames.isEmpty() )
     {
         if ( candidateNames.count() > 1 )
+        {
             qSort( candidateNames.begin(), candidateNames.end(), &Source::friendlyNamesLessThan );
+        }
 
         return candidateNames.first();
     }
@@ -265,16 +269,24 @@ Source::friendlyNamesLessThan( const QString& first, const QString& second )
         matchSecond = rx.exactMatch( second );
 
         if ( matchFirst == false && matchSecond == false )
+        {
             continue;
+        }
 
         if ( matchFirst == true && matchSecond == true )
+        {
             break;
+        }
 
         if ( matchFirst == true && matchSecond == false )
+        {
             return isPenalty ? false : true;
+        }
 
         if ( matchFirst == false && matchSecond == true )
+        {
             return isPenalty ? true : false;
+        }
     }
 
     return ( first.compare( second ) == -1 ) ? true : false;
@@ -287,7 +299,7 @@ Source::avatar( TomahawkUtils::ImageMode style, const QSize& size )
 {
     Q_D( Source );
 
-    foreach ( const peerinfo_ptr& peerInfo, peerInfos() )
+    foreach ( const peerinfo_ptr & peerInfo, peerInfos() )
     {
         if ( peerInfo && !peerInfo->avatar( style, size ).isNull() )
         {
@@ -298,9 +310,13 @@ Source::avatar( TomahawkUtils::ImageMode style, const QSize& size )
     if ( d->avatarLoaded )
     {
         if ( d->avatar )
+        {
             return *d->avatar;
+        }
         else
+        {
             return QPixmap();
+        }
     }
 
     // Try to get the avatar from the cache
@@ -364,7 +380,9 @@ Source::setDbFriendlyName( const QString& dbFriendlyName )
     Q_D( Source );
 
     if ( dbFriendlyName.isEmpty() )
+    {
         return;
+    }
 
     d->dbFriendlyName = dbFriendlyName;
 }
@@ -411,7 +429,9 @@ void
 Source::handleDisconnect( Tomahawk::Accounts::Account*, Tomahawk::Accounts::AccountManager::DisconnectReason reason )
 {
     if ( reason == Tomahawk::Accounts::AccountManager::Disabled )
+    {
         setOffline();
+    }
 }
 
 
@@ -422,7 +442,9 @@ Source::setOffline()
 
     qDebug() << Q_FUNC_INFO << friendlyName();
     if ( !d->online )
+    {
         return;
+    }
 
     d->online = false;
     emit offline();
@@ -446,7 +468,9 @@ Source::setOnline()
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << friendlyName();
     if ( d->online )
+    {
         return;
+    }
 
     d->online = true;
     emit online();
@@ -456,8 +480,8 @@ Source::setOnline()
         // ensure username is in the database
         DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( d->nodeId, dbFriendlyName() );
         connect( cmd, SIGNAL( done( unsigned int, QString ) ),
-                        SLOT( dbLoaded( unsigned int, const QString& ) ) );
-        Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
+                 SLOT( dbLoaded( unsigned int, const QString& ) ) );
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
     }
 }
 
@@ -480,9 +504,13 @@ Source::scanningProgress( unsigned int files )
     Q_D( Source );
 
     if ( files )
+    {
         d->textStatus = tr( "Scanning (%L1 tracks)" ).arg( files );
+    }
     else
+    {
         d->textStatus = tr( "Scanning" );
+    }
 
     emit stateChanged();
 }
@@ -504,7 +532,9 @@ Source::scanningFinished( bool updateGUI )
     emit stateChanged();
 
     if ( updateGUI )
+    {
         emit synced();
+    }
 }
 
 
@@ -605,7 +635,9 @@ Source::onPlaybackStarted( const Tomahawk::track_ptr& track, unsigned int durati
     d->currentTrackTimer.start( duration * 1000 + 900000 ); // duration comes in seconds
 
     if ( d->playlistInterface.isNull() )
+    {
         playlistInterface();
+    }
 
     emit playbackStarted( track );
     emit stateChanged();
@@ -700,9 +732,13 @@ Source::executeCommands()
         {
             cmdGroup << cmd;
             if ( !d->cmds.isEmpty() && d->cmds.first()->groupable() && d->cmds.first()->commandname() == cmd->commandname() )
+            {
                 cmd = d->cmds.takeFirst();
+            }
             else
+            {
                 break;
+            }
         }
 
         // return here when the last command finished
@@ -717,7 +753,7 @@ Source::executeCommands()
             Database::instance()->enqueue( cmd );
         }
 
-        int percentage = ( float( d->commandCount - d->cmds.count() ) / (float)d->commandCount ) * 100.0;
+        int percentage = ( float( d->commandCount - d->cmds.count() ) / ( float )d->commandCount ) * 100.0;
         d->textStatus = tr( "Saving (%1%)" ).arg( percentage );
         emit stateChanged();
     }
@@ -750,13 +786,17 @@ Source::reportSocialAttributesChanged( DatabaseCommand_SocialAction* action )
     {
         const source_ptr to = SourceList::instance()->get( action->comment() );
         if ( !to.isNull() )
+        {
             emit latchedOn( to );
+        }
     }
     else if ( action->action() == "latchOff" )
     {
         const source_ptr from = SourceList::instance()->get( action->comment() );
         if ( !from.isNull() )
+        {
             emit latchedOff( from );
+        }
     }
 }
 

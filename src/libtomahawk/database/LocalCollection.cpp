@@ -28,7 +28,7 @@
 #include <TomahawkSettings.h>
 
 #ifndef ENABLE_HEADLESS
-    #include "ViewManager.h"
+#include "ViewManager.h"
 #endif
 
 using namespace Tomahawk;

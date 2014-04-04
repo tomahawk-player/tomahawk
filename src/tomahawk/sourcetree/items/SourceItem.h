@@ -30,13 +30,13 @@ class CategoryItem;
 
 namespace Tomahawk
 {
-    class ViewPage;
+class ViewPage;
 }
 
 class SourceItem : public SourceTreeItem
 {
     Q_OBJECT
-public:
+  public:
     SourceItem( SourcesModel* model, SourceTreeItem* parent, const Tomahawk::source_ptr& source );
 
     virtual QString text() const;
@@ -61,10 +61,10 @@ public:
     virtual DropTypes supportedDropTypes( const QMimeData* data ) const;
     virtual Qt::ItemFlags flags() const;
 
-public slots:
+  public slots:
     virtual void activate();
 
-private slots:
+  private slots:
     void onPlaylistsAdded( const QList<Tomahawk::playlist_ptr>& playlists );
     void onPlaylistDeleted( const Tomahawk::playlist_ptr& playlists );
     void onAutoPlaylistsAdded( const QList<Tomahawk::dynplaylist_ptr>& playlists );
@@ -98,7 +98,7 @@ private slots:
 
     void onTracksDropped( const QList< Tomahawk::query_ptr >& queries );
 
-private:
+  private:
     void playlistsAddedInternal( SourceTreeItem* parent, const QList< Tomahawk::dynplaylist_ptr >& playlists );
     template< typename T >
     void playlistDeletedInternal( SourceTreeItem* parent, const T& playlists );

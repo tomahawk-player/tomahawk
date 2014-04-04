@@ -47,9 +47,9 @@ namespace Tomahawk
 
 class DLLEXPORT Collection : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     Collection( const source_ptr& source, const QString& name, QObject* parent = 0 );
     virtual ~Collection();
 
@@ -64,7 +64,10 @@ public:
     virtual QString prettyName() const;
     virtual QString description() const;
     virtual QString itemName() const;
-    virtual BackendType backendType() const { return NullCollectionType; }
+    virtual BackendType backendType() const
+    {
+        return NullCollectionType;
+    }
     virtual QIcon icon() const;
     virtual QPixmap bigIcon() const; //for the ViewPage header
     virtual QString emptyText() const;
@@ -86,9 +89,18 @@ public:
     virtual void addStation( const Tomahawk::dynplaylist_ptr& s );
     virtual void deleteStation( const Tomahawk::dynplaylist_ptr& s );
 
-    virtual QList< Tomahawk::playlist_ptr > playlists() { return m_playlists.values(); }
-    virtual QList< Tomahawk::dynplaylist_ptr > autoPlaylists() { return m_autoplaylists.values(); }
-    virtual QList< Tomahawk::dynplaylist_ptr > stations() { return m_stations.values(); }
+    virtual QList< Tomahawk::playlist_ptr > playlists()
+    {
+        return m_playlists.values();
+    }
+    virtual QList< Tomahawk::dynplaylist_ptr > autoPlaylists()
+    {
+        return m_autoplaylists.values();
+    }
+    virtual QList< Tomahawk::dynplaylist_ptr > stations()
+    {
+        return m_stations.values();
+    }
 
     // Async requests. Emit artists/albums/tracksResult in subclasses when finished.
     virtual Tomahawk::ArtistsRequest* requestArtists() = 0;
@@ -96,11 +108,14 @@ public:
     virtual Tomahawk::TracksRequest* requestTracks( const Tomahawk::album_ptr& album ) = 0;
 
     const source_ptr& source() const;
-    unsigned int lastmodified() const { return m_lastmodified; }
+    unsigned int lastmodified() const
+    {
+        return m_lastmodified;
+    }
 
     virtual int trackCount() const;
 
-signals:
+  signals:
     void tracksAdded( const QList<unsigned int>& fileids );
     void tracksRemoved( const QList<unsigned int>& fileids );
 
@@ -115,7 +130,7 @@ signals:
 
     void changed();
 
-public slots:
+  public slots:
     void setPlaylists( const QList<Tomahawk::playlist_ptr>& plists );
     void setAutoPlaylists( const QList< Tomahawk::dynplaylist_ptr >& autoplists );
     void setStations( const QList< Tomahawk::dynplaylist_ptr >& stations );
@@ -123,15 +138,15 @@ public slots:
     void setTracks( const QList<unsigned int>& fileids );
     void delTracks( const QList<unsigned int>& fileids );
 
-protected:
+  protected:
     QString m_name;
     unsigned int m_lastmodified; // unix time of last change to collection
 
-private slots:
+  private slots:
     void onSynced();
     void doLoadPlaylistUpdater( const playlist_ptr& p );
 
-private:
+  private:
     bool m_changed;
 
     source_ptr m_source;
@@ -149,7 +164,7 @@ private:
 
 inline uint qHash( const QSharedPointer<Tomahawk::Collection>& key )
 {
-    return qHash( (void *)key.data() );
+    return qHash( ( void* )key.data() );
 }
 
 #endif // TOMAHAWK_COLLECTION_H

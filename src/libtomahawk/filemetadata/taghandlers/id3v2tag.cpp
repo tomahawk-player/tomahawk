@@ -22,17 +22,17 @@
 namespace Tomahawk
 {
 
-ID3v2Tag::ID3v2Tag( TagLib::Tag *tag, TagLib::ID3v2::Tag *id3v2Tag )
+ID3v2Tag::ID3v2Tag( TagLib::Tag* tag, TagLib::ID3v2::Tag* id3v2Tag )
     : Tag( tag )
     , m_id3v2Tag( id3v2Tag )
 {
     TagLib::ID3v2::FrameList fList = m_id3v2Tag->frameList();
     for( TagLib::ID3v2::FrameList::ConstIterator it = fList.begin();
-         it != fList.end(); ++it )
+            it != fList.end(); ++it )
     {
-        TagLib::String frameId = TagLib::String( (*it)->frameID() );
-        TagLib::ID3v2::TextIdentificationFrame *frame =
-                dynamic_cast< TagLib::ID3v2::TextIdentificationFrame * >( *it );
+        TagLib::String frameId = TagLib::String( ( *it )->frameID() );
+        TagLib::ID3v2::TextIdentificationFrame* frame =
+            dynamic_cast< TagLib::ID3v2::TextIdentificationFrame* >( *it );
         if( frame )
         {
             QString val = TStringToQString( frame->fieldList().toString( '\n' ) );

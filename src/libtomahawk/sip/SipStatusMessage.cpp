@@ -98,12 +98,14 @@ SipStatusMessage::mainText() const
 
         default:
             tLog() << Q_FUNC_INFO << "Not all status types handled";
-            Q_ASSERT(false);
+            Q_ASSERT( false );
     }
 
     text = text.arg( d->contactId );
-    if(text.contains( "%2") )
+    if( text.contains( "%2" ) )
+    {
         text = text.arg( d->message );
+    }
 
     return text;
 }

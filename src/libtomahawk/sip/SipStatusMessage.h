@@ -30,7 +30,7 @@ class SipStatusMessagePrivate;
 class DLLEXPORT SipStatusMessage : public JobStatusItem
 {
     Q_OBJECT
-public:
+  public:
     enum SipStatusMessageType
     {
         SipInviteSuccess,
@@ -42,13 +42,19 @@ public:
 
     explicit SipStatusMessage( SipStatusMessageType statusMessageType, const QString& contactId, const QString& message = QString() );
 
-    QString type() const { return "sipstatusmessage"; }
+    QString type() const
+    {
+        return "sipstatusmessage";
+    }
 
     QPixmap icon() const;
     QString mainText() const;
 
-    bool allowMultiLine() const { return true; }
-private:
+    bool allowMultiLine() const
+    {
+        return true;
+    }
+  private:
     Q_DECLARE_PRIVATE( SipStatusMessage )
     SipStatusMessagePrivate* d_ptr;
 };

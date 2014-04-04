@@ -48,7 +48,7 @@ namespace Tomahawk
  */
 class DLLEXPORT ExternalResolver : public Resolver
 {
-Q_OBJECT
+    Q_OBJECT
 
     friend class ::ScriptCommandQueue;
     friend class ::ScriptCommand_AllArtists;
@@ -56,8 +56,9 @@ Q_OBJECT
     friend class ::ScriptCommand_AllTracks;
     friend class ::ScriptCommand_LookupUrl;
 
-public:
-    enum ErrorState {
+  public:
+    enum ErrorState
+    {
         NoError,
         FileNotFound,
         FailedToLoad
@@ -87,10 +88,18 @@ public:
 
     ExternalResolver( const QString& filePath )
         : m_commandQueue( new ScriptCommandQueue( this ) )
-    { m_filePath = filePath; }
+    {
+        m_filePath = filePath;
+    }
 
-    virtual QString filePath() const { return m_filePath; }
-    virtual QPixmap icon() const { return QPixmap(); }
+    virtual QString filePath() const
+    {
+        return m_filePath;
+    }
+    virtual QPixmap icon() const
+    {
+        return QPixmap();
+    }
     virtual void setIcon( const QPixmap& ) {}
 
     virtual void saveConfig() = 0;
@@ -99,19 +108,24 @@ public:
     virtual ErrorState error() const;
     virtual bool running() const = 0;
     virtual Capabilities capabilities() const = 0;
-    virtual QMap< QString, Tomahawk::collection_ptr > collections() { return m_collections; }
+    virtual QMap< QString, Tomahawk::collection_ptr > collections()
+    {
+        return m_collections;
+    }
 
     // UrlLookup, sync call
     virtual bool canParseUrl( const QString& url, UrlType type ) = 0;
 
     virtual void enqueue( const QSharedPointer< ScriptCommand >& req )
-    { m_commandQueue->enqueue( req ); }
+    {
+        m_commandQueue->enqueue( req );
+    }
 
-public slots:
+  public slots:
     virtual void start() = 0;
     virtual void stop() = 0;
 
-signals:
+  signals:
     void changed(); // if config widget was added/removed, name changed, etc
     void collectionAdded( const Tomahawk::collection_ptr& collection );
     void collectionRemoved( const Tomahawk::collection_ptr& collection );
@@ -121,8 +135,11 @@ signals:
     void tracksFound( const QList< Tomahawk::query_ptr >& );
     void informationFound( const QString&, const QSharedPointer<QObject>& );
 
-protected:
-    void setFilePath( const QString& path ) { m_filePath = path; }
+  protected:
+    void setFilePath( const QString& path )
+    {
+        m_filePath = path;
+    }
     QMap< QString, Tomahawk::collection_ptr > m_collections;
     ScriptCommandQueue* m_commandQueue;
 
@@ -134,7 +151,7 @@ protected:
     // UrlLookup
     virtual void lookupUrl( const QString& url ) = 0;
 
-private:
+  private:
     QString m_filePath;
 };
 

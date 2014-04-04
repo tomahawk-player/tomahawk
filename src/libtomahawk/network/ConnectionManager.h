@@ -36,7 +36,7 @@ class DLLEXPORT ConnectionManager : public QObject
 {
     Q_OBJECT
 
-public:
+  public:
     /**
      * Get the ConnectionManager responsible for the given nodeid, if there is none yet, create a new instance.
      */
@@ -59,13 +59,13 @@ public:
     QWeakPointer< ConnectionManager > weakRef() const;
     void setWeakRef( QWeakPointer< ConnectionManager > weakRef );
 
-private slots:
+  private slots:
     void authSuccessful();
     void authFailed();
     void socketConnected();
     void socketError( QAbstractSocket::SocketError error );
 
-private:
+  private:
     Q_DECLARE_PRIVATE( ConnectionManager )
     ConnectionManagerPrivate* d_ptr;
 
@@ -79,7 +79,7 @@ private:
     /**
      * Create a new ControlConnection for talking to a peer.
      */
-    void newControlConnection(const Tomahawk::peerinfo_ptr &peerInfo);
+    void newControlConnection( const Tomahawk::peerinfo_ptr& peerInfo );
 
     /**
      * Proxy handleSipInfoPrivate to hand over a strong reference to the connectionManager
@@ -100,7 +100,7 @@ private:
     /**
      * Try to connect to a peer with a given SipInfo.
      */
-    void connectToPeer(const Tomahawk::peerinfo_ptr& peerInfo , bool lock);
+    void connectToPeer( const Tomahawk::peerinfo_ptr& peerInfo , bool lock );
 
     /**
      * Look for existing connections and try to connect if there is none.

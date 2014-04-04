@@ -32,9 +32,9 @@ namespace Tomahawk
 
 class DLLEXPORT ContextMenu : public QMenu
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     enum MenuActions
     {
         ActionPlay =         1,
@@ -56,8 +56,14 @@ public:
     explicit ContextMenu( QWidget* parent = 0 );
     virtual ~ContextMenu();
 
-    int supportedActions() const { return m_supportedActions; }
-    void setSupportedActions( int actions ) { m_supportedActions = actions; }
+    int supportedActions() const
+    {
+        return m_supportedActions;
+    }
+    void setSupportedActions( int actions )
+    {
+        m_supportedActions = actions;
+    }
 
     void setPlaylistInterface( const Tomahawk::playlistinterface_ptr& plInterface );
 
@@ -74,10 +80,10 @@ public:
 
     unsigned int itemCount() const;
 
-signals:
+  signals:
     void triggered( int action );
 
-private slots:
+  private slots:
     void onTriggered( int action );
     void copyLink();
     void openPage( MenuActions action );
@@ -87,7 +93,7 @@ private slots:
 
     void onSocialActionsLoaded();
 
-private:
+  private:
     QSignalMapper* m_sigmap;
     QSignalMapper* m_playlists_sigmap;
     QSignalMapper* m_sources_sigmap;

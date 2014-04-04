@@ -24,7 +24,7 @@
 
 class RecentlyLovedTracksModelPrivate : public LovedTracksModelPrivate
 {
-public:
+  public:
     RecentlyLovedTracksModelPrivate( RecentlyLovedTracksModel* q )
         : LovedTracksModelPrivate( q )
     {

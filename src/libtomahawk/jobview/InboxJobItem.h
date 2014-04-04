@@ -29,7 +29,7 @@
 class DLLEXPORT InboxJobItem : public JobStatusItem
 {
     Q_OBJECT
-public:
+  public:
     enum Side
     {
         Sending = 0,
@@ -42,14 +42,23 @@ public:
                            QObject* parent = 0 );
     virtual ~InboxJobItem();
 
-    virtual QString rightColumnText() const { return QString(); }
+    virtual QString rightColumnText() const
+    {
+        return QString();
+    }
     virtual QString mainText() const;
     virtual QPixmap icon() const;
-    virtual QString type() const { return "inboxjob"; }
+    virtual QString type() const
+    {
+        return "inboxjob";
+    }
 
-    bool allowMultiLine() const { return true; }
+    bool allowMultiLine() const
+    {
+        return true;
+    }
 
-private:
+  private:
     Tomahawk::trackdata_ptr m_track;
     QString m_prettyName;
 

@@ -29,41 +29,46 @@
 
 class Ui_LastFmConfig;
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
-namespace Accounts {
+namespace Accounts
+{
 
 class LastFmAccount;
 
 class LastFmConfig : public AccountConfigWidget
 {
     Q_OBJECT
-public:
+  public:
     explicit LastFmConfig( LastFmAccount* account );
 
     QString username() const;
     QString password() const;
     bool scrobble() const;
 
-public slots:
+  public slots:
     void testLogin();
     void onLastFmFinished();
 
-private slots:
+  private slots:
     void enableButton();
 
     void loadHistory();
     void onHistoryLoaded();
 
-    void syncLovedTracks() { syncLovedTracks( 1 ); }
+    void syncLovedTracks()
+    {
+        syncLovedTracks( 1 );
+    }
     void syncLovedTracks( uint page );
     void onLovedFinished( QNetworkReply* reply );
     void localLovedLoaded( DatabaseCommand_LoadSocialActions::TrackActions );
 
-signals:
+  signals:
     void sizeHintChanged();
 
-private:
+  private:
     void syncLoved();
 
     LastFmAccount* m_account;

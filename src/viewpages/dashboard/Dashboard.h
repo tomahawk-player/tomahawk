@@ -42,7 +42,7 @@ class BasicHeader;
 
 namespace Ui
 {
-    class DashboardWidget;
+class DashboardWidget;
 }
 
 namespace Tomahawk
@@ -53,11 +53,11 @@ namespace Widgets
 
 class DashboardWidget : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
-friend class Dashboard;
+    friend class Dashboard;
 
-public:
+  public:
     DashboardWidget( QWidget* parent = 0 );
     virtual ~DashboardWidget();
 
@@ -65,20 +65,20 @@ public:
     virtual playlistinterface_ptr playlistInterface() const;
     virtual bool jumpToCurrentTrack();
 
-public slots:
+  public slots:
     void updatePlaylists();
     void updateRecentAdditions();
 
-private slots:
+  private slots:
     void onSourcesReady();
     void onSourceAdded( const Tomahawk::source_ptr& source );
     void onPlaylistActivated( const QModelIndex& );
 
-protected:
+  protected:
     void changeEvent( QEvent* e );
 
-private:
-    Ui::DashboardWidget *ui;
+  private:
+    Ui::DashboardWidget* ui;
 
     RecentlyPlayedModel* m_tracksModel;
     AlbumModel* m_recentAlbumsModel;
@@ -89,22 +89,40 @@ const QString DASHBOARD_VIEWPAGE_NAME = "dashboard";
 
 class TOMAHAWK_VIEWPAGE_EXPORT Dashboard : public Tomahawk::ViewPageLazyLoader< DashboardWidget >
 {
-Q_OBJECT
-Q_INTERFACES( Tomahawk::ViewPagePlugin )
-Q_PLUGIN_METADATA( IID "org.tomahawk-player.Player.ViewPagePlugin" )
+    Q_OBJECT
+    Q_INTERFACES( Tomahawk::ViewPagePlugin )
+    Q_PLUGIN_METADATA( IID "org.tomahawk-player.Player.ViewPagePlugin" )
 
-public:
+  public:
     Dashboard( QWidget* parent = 0 );
     virtual ~Dashboard();
 
-    virtual const QString defaultName() { return DASHBOARD_VIEWPAGE_NAME; }
-    virtual QString title() const { return tr( "Dashboard" ); }
-    virtual QString description() const { return tr( "An overview of your friends' recent activity" ); }
-    virtual const QString pixmapPath() const { return ( RESPATH "images/dashboard.svg" ); }
+    virtual const QString defaultName()
+    {
+        return DASHBOARD_VIEWPAGE_NAME;
+    }
+    virtual QString title() const
+    {
+        return tr( "Dashboard" );
+    }
+    virtual QString description() const
+    {
+        return tr( "An overview of your friends' recent activity" );
+    }
+    virtual const QString pixmapPath() const
+    {
+        return ( RESPATH "images/dashboard.svg" );
+    }
 
-    virtual int sortValue() { return 1; }
+    virtual int sortValue()
+    {
+        return 1;
+    }
 
-    virtual bool showInfoBar() const { return true; }
+    virtual bool showInfoBar() const
+    {
+        return true;
+    }
 };
 
 

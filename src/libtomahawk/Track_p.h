@@ -24,11 +24,12 @@
 
 #include "Track.h"
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
 class TrackPrivate
 {
-public:
+  public:
     TrackPrivate( Track* q, const QString& _album, int _duration, const QString& _composer, unsigned int _albumpos, unsigned int _discnumber )
         : q_ptr( q )
         , composer( _composer )
@@ -42,7 +43,7 @@ public:
     Track* q_ptr;
     Q_DECLARE_PUBLIC( Track )
 
-private:
+  private:
     QString composer;
     QString album;
     QString composerSortname;

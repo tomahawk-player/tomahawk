@@ -41,17 +41,23 @@ class QPixmap;
 class DLLEXPORT JobStatusItem : public QObject
 {
     Q_OBJECT
-public:
+  public:
     explicit JobStatusItem();
     virtual ~JobStatusItem();
 
     virtual QString type() const = 0;
-    virtual int weight() const { return 1; }
+    virtual int weight() const
+    {
+        return 1;
+    }
 
     /// Please cache this.
     virtual QPixmap icon() const = 0;
     virtual QString mainText() const = 0;
-    virtual QString rightColumnText() const { return QString(); };
+    virtual QString rightColumnText() const
+    {
+        return QString();
+    };
 
     /**
      * If collapse item is true, sending multiple items of the same type will "collapse" them into one
@@ -67,15 +73,18 @@ public:
     virtual void createDelegate( QObject* parent );
     virtual QStyledItemDelegate* customDelegate() const;
 
-    qint64 age() const { return m_createdOn; }
-signals:
+    qint64 age() const
+    {
+        return m_createdOn;
+    }
+  signals:
     /// Ask for an update
     void statusChanged();
 
     /// Job is finished, will be deleted by the model
     void finished();
 
-private:
+  private:
     qint64 m_createdOn;
 };
 

@@ -39,12 +39,12 @@ class ACLRegistryImpl : public ACLRegistry
 {
     Q_OBJECT
 
-public:
+  public:
 
-    ACLRegistryImpl( QObject *parent = 0 );
+    ACLRegistryImpl( QObject* parent = 0 );
     virtual ~ACLRegistryImpl();
 
-public slots:
+  public slots:
     /**
      * @brief Checks if peer is authorized; optionally, can authorize peer with given type if not found
      *
@@ -53,22 +53,22 @@ public slots:
      * @param username If not empty, will store the given username along with the new ACL value. Defaults to QString().
      * @return Tomahawk::ACLStatus::Type
      **/
-    virtual Tomahawk::ACLStatus::Type isAuthorizedUser( const QString &dbid, const QString &username, Tomahawk::ACLStatus::Type globalType = Tomahawk::ACLStatus::NotFound, bool skipEmission = false );
+    virtual Tomahawk::ACLStatus::Type isAuthorizedUser( const QString& dbid, const QString& username, Tomahawk::ACLStatus::Type globalType = Tomahawk::ACLStatus::NotFound, bool skipEmission = false );
     virtual void wipeEntries();
 
-protected:
+  protected:
     virtual void load();
     virtual void save();
 
 #ifndef ENABLE_HEADLESS
-    void getUserDecision( ACLRegistry::User user, const QString &username );
+    void getUserDecision( ACLRegistry::User user, const QString& username );
 
-private slots:
+  private slots:
     void userDecision( ACLRegistry::User user );
     void queueNextJob();
 #endif
 
-private:
+  private:
     QQueue< ACLJobItem* > m_jobQueue;
     int m_jobCount;
 };

@@ -42,15 +42,30 @@ class ACCOUNTDLLEXPORT TwitterAccountFactory : public AccountFactory
     Q_OBJECT
     Q_INTERFACES( Tomahawk::Accounts::AccountFactory )
 
-public:
+  public:
     TwitterAccountFactory() {}
     virtual ~TwitterAccountFactory() {}
 
-    QString prettyName() const { return "Twitter"; }
-    QString factoryId() const { return "twitteraccount"; }
-    QString description() const { return tr( "Send tweets from Tomahawk." ); }
-    QPixmap icon() const { return QPixmap( ":/twitter-account/twitter-icon.png" ); }
-    AccountTypes types() const { return AccountTypes( StatusPushType ); };
+    QString prettyName() const
+    {
+        return "Twitter";
+    }
+    QString factoryId() const
+    {
+        return "twitteraccount";
+    }
+    QString description() const
+    {
+        return tr( "Send tweets from Tomahawk." );
+    }
+    QPixmap icon() const
+    {
+        return QPixmap( ":/twitter-account/twitter-icon.png" );
+    }
+    AccountTypes types() const
+    {
+        return AccountTypes( StatusPushType );
+    };
     Account* createAccount( const QString& pluginId = QString() );
 };
 
@@ -58,43 +73,55 @@ class ACCOUNTDLLEXPORT TwitterAccount : public Account
 {
     Q_OBJECT
 
-public:
-    TwitterAccount( const QString &accountId );
+  public:
+    TwitterAccount( const QString& accountId );
     virtual ~TwitterAccount();
 
     QPixmap icon() const;
 
     void authenticate();
     void deauthenticate();
-    bool isAuthenticated() const { return m_isAuthenticated; }
+    bool isAuthenticated() const
+    {
+        return m_isAuthenticated;
+    }
 
     ConnectionState connectionState() const;
 
     Tomahawk::InfoSystem::InfoPluginPtr infoPlugin();
     SipPlugin* sipPlugin();
 
-    AccountConfigWidget* configurationWidget() { return m_configWidget.data(); }
-    QWidget* aclWidget() { return 0; }
+    AccountConfigWidget* configurationWidget()
+    {
+        return m_configWidget.data();
+    }
+    QWidget* aclWidget()
+    {
+        return 0;
+    }
 
     bool refreshTwitterAuth();
-    TomahawkOAuthTwitter* twitterAuth() const { return m_twitterAuth.data(); }
+    TomahawkOAuthTwitter* twitterAuth() const
+    {
+        return m_twitterAuth.data();
+    }
 
-signals:
-    void nowAuthenticated( const QPointer< TomahawkOAuthTwitter >&, const QTweetUser &user );
+  signals:
+    void nowAuthenticated( const QPointer< TomahawkOAuthTwitter >&, const QTweetUser& user );
     void nowDeauthenticated();
 
-private slots:
+  private slots:
     void authenticateSlot();
     void configDialogAuthedSignalSlot( bool authed );
-    void connectAuthVerifyReply( const QTweetUser &user );
+    void connectAuthVerifyReply( const QTweetUser& user );
 
-private:
+  private:
     QIcon m_icon;
     bool m_isAuthenticated;
     bool m_isAuthenticating;
     QPointer< TomahawkOAuthTwitter > m_twitterAuth;
     QPointer< TwitterConfigWidget > m_configWidget;
-//    QPointer< TwitterSipPlugin > m_twitterSipPlugin;
+    //    QPointer< TwitterSipPlugin > m_twitterSipPlugin;
     QPointer< Tomahawk::InfoSystem::TwitterInfoPlugin > m_twitterInfoPlugin;
 
     // for settings access

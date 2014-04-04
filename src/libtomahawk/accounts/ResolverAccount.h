@@ -27,35 +27,55 @@
 
 class QDir;
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
 class ExternalResolverGui;
 
-namespace Accounts {
+namespace Accounts
+{
 
 class DLLEXPORT ResolverAccountFactory : public AccountFactory
 {
     Q_OBJECT
-public:
+  public:
     ResolverAccountFactory() {}
     virtual ~ResolverAccountFactory() {}
 
     virtual Account* createAccount( const QString& accountId = QString() );
-    virtual QString factoryId() const  { return "resolveraccount"; }
-    virtual QString description() const { return QString(); }
-    virtual QString prettyName() const { return QString(); } // Internal, not displayed
-    AccountTypes types() const { return AccountTypes( ResolverType ); };
-    virtual bool allowUserCreation() const { return false; }
+    virtual QString factoryId() const
+    {
+        return "resolveraccount";
+    }
+    virtual QString description() const
+    {
+        return QString();
+    }
+    virtual QString prettyName() const
+    {
+        return QString();    // Internal, not displayed
+    }
+    AccountTypes types() const
+    {
+        return AccountTypes( ResolverType );
+    };
+    virtual bool allowUserCreation() const
+    {
+        return false;
+    }
 
     // Used to create a new resolver from a script on disk, either chosen by
     // the user, or installed from synchrotron
-    virtual bool acceptsPath( const QString&  ) const { return true; } // This is the catch-all filesystem account
+    virtual bool acceptsPath( const QString& ) const
+    {
+        return true;    // This is the catch-all filesystem account
+    }
     virtual Account* createFromPath( const QString& path );
 
     // Internal use
     static Account* createFromPath( const QString& path, const QString& factoryId, bool isAttica );
 
-private:
+  private:
     static QVariantHash metadataFromJsonFile( const QString& path );
     static void expandPaths( const QDir& contentDir, QVariantHash& configuration );
 };
@@ -68,7 +88,7 @@ private:
 class DLLEXPORT ResolverAccount : public Account
 {
     Q_OBJECT
-public:
+  public:
     // Loads from config. Must already exist.
     explicit ResolverAccount( const QString& accountId );
     virtual ~ResolverAccount();
@@ -92,23 +112,32 @@ public:
     virtual QString version() const;
 
     // Not relevant
-    virtual SipPlugin* sipPlugin( bool ) { return 0; }
-    virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() { return Tomahawk::InfoSystem::InfoPluginPtr(); }
-    virtual QWidget* aclWidget() { return 0; }
+    virtual SipPlugin* sipPlugin( bool )
+    {
+        return 0;
+    }
+    virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin()
+    {
+        return Tomahawk::InfoSystem::InfoPluginPtr();
+    }
+    virtual QWidget* aclWidget()
+    {
+        return 0;
+    }
 
     virtual void removeBundle();
 
-private slots:
+  private slots:
     void resolverChanged();
 
-protected:
+  protected:
     // Created by factory, when user installs a new resolver
     ResolverAccount( const QString& accountId, const QString& path, const QVariantHash& initialConfiguration = QVariantHash() );
     void hookupResolver();
 
     QPointer<ExternalResolverGui> m_resolver;
 
-private:
+  private:
     void init( const QString& path );
 
     friend class ResolverAccountFactory;
@@ -122,23 +151,26 @@ private:
 class DLLEXPORT AtticaResolverAccount : public ResolverAccount
 {
     Q_OBJECT
-public:
+  public:
     // Loads from config
     explicit AtticaResolverAccount( const QString& accountId );
     virtual ~AtticaResolverAccount();
 
     virtual QPixmap icon() const;
 
-    QString atticaId() const { return m_atticaId; }
+    QString atticaId() const
+    {
+        return m_atticaId;
+    }
 
     void setPath( const QString& path );
 
-private slots:
+  private slots:
     void resolverIconUpdated( const QString& );
 
     void loadIcon();
 
-private:
+  private:
     // Created by factory, when user installs a new resolver
     AtticaResolverAccount( const QString& accountId, const QString& path, const QString& atticaId, const QVariantHash& initialConfiguration = QVariantHash() );
 

@@ -31,8 +31,10 @@
 #include <attica/providermanager.h>
 #include <attica/content.h>
 
-namespace Tomahawk {
-namespace Accounts {
+namespace Tomahawk
+{
+namespace Accounts
+{
 class AtticaResolverAccount;
 }
 }
@@ -42,8 +44,9 @@ class BinaryInstallerHelper;
 class DLLEXPORT AtticaManager : public QObject
 {
     Q_OBJECT
-public:
-    enum ResolverState {
+  public:
+    enum ResolverState
+    {
         Uninstalled = 0,
         Installing,
         Installed,
@@ -52,7 +55,8 @@ public:
         Failed
     };
 
-    struct Resolver {
+    struct Resolver
+    {
         QString version, scriptPath;
         int userRating; // 0-100
         ResolverState state;
@@ -74,7 +78,9 @@ public:
     static AtticaManager* instance()
     {
         if ( !s_instance )
+        {
             s_instance = new AtticaManager();
+        }
 
         return s_instance;
     }
@@ -107,13 +113,13 @@ public:
 
     AtticaManager::Resolver resolverData( const QString& atticaId ) const;
 
-public slots:
+  public slots:
     void installResolver( const Attica::Content& resolver, bool autoCreateAccount = true );
     void installResolverWithHandler( const Attica::Content& resolver, Tomahawk::Accounts::AtticaResolverAccount* handler );
 
     void upgradeResolver( const Attica::Content& resolver );
 
-signals:
+  signals:
     void resolversLoaded( const Attica::Content::List& resolvers );
 
     void resolverStateChanged( const QString& resolverId );
@@ -125,7 +131,7 @@ signals:
 
     void startedInstalling( const QString& resolverId );
 
-private slots:
+  private slots:
     void providerFetched( QNetworkReply* reply );
     void providerError( QNetworkReply::NetworkError );
     void providerAdded( const Attica::Provider& );
@@ -141,7 +147,7 @@ private slots:
 
     void syncServerData();
 
-private:
+  private:
     void doResolverRemove( const QString& id ) const;
     void doInstallResolver(  const Attica::Content& resolver, bool autoCreate, Tomahawk::Accounts::AtticaResolverAccount* handler );
     void fetchMissingIcons();
@@ -164,12 +170,12 @@ private:
 class DLLEXPORT CustomAtticaAccount : public Tomahawk::Accounts::Account
 {
     Q_OBJECT
-public:
+  public:
     virtual ~CustomAtticaAccount() {}
 
     virtual Attica::Content atticaContent() const = 0;
 
-protected:
+  protected:
     // No, you can't.
     CustomAtticaAccount( const QString& id ) : Tomahawk::Accounts::Account( id ) {}
 };

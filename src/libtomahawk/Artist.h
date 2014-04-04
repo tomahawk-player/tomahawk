@@ -22,7 +22,7 @@
 
 #include <QtCore/QObject>
 #ifndef ENABLE_HEADLESS
-    #include <QtGui/QPixmap>
+#include <QtGui/QPixmap>
 #endif
 
 #include <QFuture>
@@ -39,9 +39,9 @@ class IdThreadWorker;
 
 class DLLEXPORT Artist : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     static artist_ptr get( const QString& name, bool autoCreate = false );
     static artist_ptr get( unsigned int id, const QString& name );
 
@@ -50,8 +50,14 @@ public:
     virtual ~Artist();
 
     unsigned int id() const;
-    QString name() const { return m_name; }
-    QString sortname() const { return m_sortname; }
+    QString name() const
+    {
+        return m_name;
+    }
+    QString sortname() const
+    {
+        return m_sortname;
+    }
 
     QList<album_ptr> albums( ModelMode mode = Mixed, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() ) const;
     QList<artist_ptr> similarArtists() const;
@@ -72,19 +78,28 @@ public:
 #ifndef ENABLE_HEADLESS
     QPixmap cover( const QSize& size, bool forceLoad = true ) const;
 #endif
-    bool coverLoaded() const { return m_coverLoaded; }
+    bool coverLoaded() const
+    {
+        return m_coverLoaded;
+    }
 
     Tomahawk::playlistinterface_ptr playlistInterface();
 
-    QWeakPointer< Tomahawk::Artist > weakRef() { return m_ownRef; }
-    void setWeakRef( QWeakPointer< Tomahawk::Artist > weakRef ) { m_ownRef = weakRef; }
+    QWeakPointer< Tomahawk::Artist > weakRef()
+    {
+        return m_ownRef;
+    }
+    void setWeakRef( QWeakPointer< Tomahawk::Artist > weakRef )
+    {
+        m_ownRef = weakRef;
+    }
 
     void loadId( bool autoCreate );
 
-public slots:
+  public slots:
     void deleteLater();
 
-signals:
+  signals:
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
     void albumsAdded( const QList<Tomahawk::album_ptr>& albums, Tomahawk::ModelMode mode );
 
@@ -94,7 +109,7 @@ signals:
     void biographyLoaded();
     void statsLoaded();
 
-private slots:
+  private slots:
     void onArtistStatsLoaded( unsigned int plays, unsigned int chartPos, unsigned int chartCount );
     void onTracksLoaded( Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
     void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, const QVariant& collectionIsNull = QVariant( false ) );
@@ -102,7 +117,7 @@ private slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
 
-private:
+  private:
     Artist();
     QString infoid() const;
 

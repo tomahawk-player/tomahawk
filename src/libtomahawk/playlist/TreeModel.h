@@ -40,13 +40,16 @@ class PlayableItem;
 
 class DLLEXPORT TreeModel : public PlayableModel
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit TreeModel( QObject* parent = 0 );
     virtual ~TreeModel();
 
-    virtual Tomahawk::ModelMode mode() const { return m_mode; }
+    virtual Tomahawk::ModelMode mode() const
+    {
+        return m_mode;
+    }
     virtual void setMode( Tomahawk::ModelMode mode );
 
     Tomahawk::collection_ptr collection() const;
@@ -69,18 +72,18 @@ public:
     virtual QModelIndex indexFromResult( const Tomahawk::result_ptr& result ) const;
     virtual QModelIndex indexFromQuery( const Tomahawk::query_ptr& query ) const;
 
-public slots:
+  public slots:
     void addAlbums( const QModelIndex& parent, const QList<Tomahawk::album_ptr>& albums );
     void reloadCollection();
 
-signals:
+  signals:
     void modeChanged( Tomahawk::ModelMode mode );
 
-protected:
+  protected:
     bool canFetchMore( const QModelIndex& parent ) const;
     void fetchMore( const QModelIndex& parent );
 
-private slots:
+  private slots:
     void onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists );
     void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, Tomahawk::ModelMode mode );
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QModelIndex& index );
@@ -89,7 +92,7 @@ private slots:
     void onSourceAdded( const Tomahawk::source_ptr& source );
     void onCollectionChanged();
 
-private:
+  private:
     Tomahawk::ModelMode m_mode;
     Tomahawk::collection_ptr m_collection;
 

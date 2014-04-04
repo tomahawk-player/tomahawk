@@ -33,7 +33,7 @@
 
 namespace Tomahawk
 {
-    class ContextMenu;
+class ContextMenu;
 };
 
 class ViewHeader;
@@ -44,20 +44,32 @@ class TreeItemDelegate;
 
 class DLLEXPORT TreeView : public QTreeView
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit TreeView( QWidget* parent = 0 );
     ~TreeView();
 
     virtual QString guid() const;
-    virtual void setGuid( const QString& guid ) { m_guid = guid; }
+    virtual void setGuid( const QString& guid )
+    {
+        m_guid = guid;
+    }
 
     void setProxyModel( TreeProxyModel* model );
 
-    TreeModel* model() const { return m_model; }
-    TreeProxyModel* proxyModel() const { return m_proxyModel; }
-    OverlayWidget* overlay() const { return m_overlay; }
+    TreeModel* model() const
+    {
+        return m_model;
+    }
+    TreeProxyModel* proxyModel() const
+    {
+        return m_proxyModel;
+    }
+    OverlayWidget* overlay() const
+    {
+        return m_overlay;
+    }
 
     void setModel( QAbstractItemModel* model );
     void setTreeModel( TreeModel* model );
@@ -66,26 +78,32 @@ public:
 
     virtual bool jumpToCurrentTrack();
 
-    bool updatesContextView() const { return m_updateContextView; }
-    void setUpdatesContextView( bool b ) { m_updateContextView = b; }
+    bool updatesContextView() const
+    {
+        return m_updateContextView;
+    }
+    void setUpdatesContextView( bool b )
+    {
+        m_updateContextView = b;
+    }
 
-public slots:
+  public slots:
     void onItemActivated( const QModelIndex& index );
 
-signals:
+  signals:
     void modelChanged();
 
-protected:
+  protected:
     virtual void startDrag( Qt::DropActions supportedActions );
     virtual void resizeEvent( QResizeEvent* event );
 
     virtual void keyPressEvent( QKeyEvent* event );
     virtual void wheelEvent( QWheelEvent* event );
 
-protected slots:
+  protected slots:
     virtual void currentChanged( const QModelIndex& current, const QModelIndex& previous );
 
-private slots:
+  private slots:
     void onFilterChangeFinished();
     void onFilteringStarted();
     void onViewChanged();
@@ -94,7 +112,7 @@ private slots:
     void onCustomContextMenu( const QPoint& pos );
     void onMenuTriggered( int action );
 
-private:
+  private:
     ViewHeader* m_header;
     OverlayWidget* m_overlay;
     TreeModel* m_model;

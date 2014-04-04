@@ -28,7 +28,7 @@ class CONFIGSTORAGETELEPATHYDLLEXPORT KdeTelepathyConfigWidget : public Telepath
     Q_OBJECT
     Q_INTERFACES( TelepathyConfigStorageConfigWidgetPlugin )
 
-public:
+  public:
     virtual QWidget* configWidget();
 };
 

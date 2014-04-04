@@ -39,23 +39,23 @@ WebSocketThreadController::~WebSocketThreadController()
 
 
 void
-WebSocketThreadController::setUrl( const QString &url )
+WebSocketThreadController::setUrl( const QString& url )
 {
     m_url = url;
     if ( m_webSocket )
     {
-        QMetaObject::invokeMethod( m_webSocket, "setUrl", Qt::QueuedConnection, Q_ARG( QString, url ));
+        QMetaObject::invokeMethod( m_webSocket, "setUrl", Qt::QueuedConnection, Q_ARG( QString, url ) );
     }
 }
 
 
 void
-WebSocketThreadController::setAuthorizationHeader( const QString &authorizationHeader )
+WebSocketThreadController::setAuthorizationHeader( const QString& authorizationHeader )
 {
     m_authorizationHeader = authorizationHeader;
     if ( m_webSocket )
     {
-        QMetaObject::invokeMethod( m_webSocket, "setAuthorizationHeader", Qt::QueuedConnection, Q_ARG( QString, authorizationHeader ));
+        QMetaObject::invokeMethod( m_webSocket, "setAuthorizationHeader", Qt::QueuedConnection, Q_ARG( QString, authorizationHeader ) );
     }
 }
 

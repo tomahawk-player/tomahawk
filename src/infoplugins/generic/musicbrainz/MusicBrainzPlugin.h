@@ -39,11 +39,11 @@ class INFOPLUGINDLLEXPORT MusicBrainzPlugin : public InfoPlugin
     Q_OBJECT
     Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 
-public:
+  public:
     MusicBrainzPlugin();
     virtual ~MusicBrainzPlugin();
 
-protected slots:
+  protected slots:
     virtual void init() {}
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     virtual void notInCacheSlot( InfoStringHash criteria, InfoRequestData requestData );
@@ -54,7 +54,7 @@ protected slots:
     }
 
 
-private slots:
+  private slots:
 
     void gotReleaseGroupsSlot();
     void gotReleasesSlot();

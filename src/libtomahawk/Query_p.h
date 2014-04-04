@@ -10,7 +10,7 @@ namespace Tomahawk
 
 class QueryPrivate
 {
-public:
+  public:
     QueryPrivate( Query* q )
         : q_ptr( q )
     {
@@ -33,7 +33,7 @@ public:
     Q_DECLARE_PUBLIC( Query )
     Query* q_ptr;
 
-private:
+  private:
     QList< Tomahawk::artist_ptr > artists;
     QList< Tomahawk::album_ptr > albums;
     QList< Tomahawk::result_ptr > results;

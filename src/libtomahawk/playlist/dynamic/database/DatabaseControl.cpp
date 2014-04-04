@@ -22,7 +22,7 @@
 using namespace Tomahawk;
 
 DatabaseControl::DatabaseControl( const QString& selectedType, const QStringList& typeSelectors, QObject* parent )
-: DynamicControl ( selectedType.isEmpty() ? "Artist" : selectedType, typeSelectors, parent )
+    : DynamicControl ( selectedType.isEmpty() ? "Artist" : selectedType, typeSelectors, parent )
 {
     setType( "database" );
 
@@ -88,11 +88,16 @@ void DatabaseControl::setMatch ( const QString& match )
 
 void DatabaseControl::setSelectedType ( const QString& type )
 {
-    if ( type != selectedType() ) {
+    if ( type != selectedType() )
+    {
         if ( !m_input.isNull() )
+        {
             delete m_input.data();
+        }
         if ( !m_match.isNull() )
+        {
             delete m_match.data();
+        }
 
         Tomahawk::DynamicControl::setSelectedType ( type );
         updateWidgets();
@@ -129,7 +134,9 @@ void DatabaseControl::updateWidgetsFromData()
 void DatabaseControl::calculateSummary()
 {
     if( !m_sqlSummary.isEmpty() )
+    {
         return;
+    }
 
 }
 
@@ -144,7 +151,9 @@ QString
 DatabaseControl::summary() const
 {
     if( !m_sqlSummary.isEmpty() )
+    {
         return m_sqlSummary;
+    }
 
     return m_summary;
 }

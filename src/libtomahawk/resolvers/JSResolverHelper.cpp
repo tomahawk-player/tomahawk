@@ -67,7 +67,7 @@ JSResolverHelper::readRaw( const QString& fileName )
     QFile file( absoluteFilePath );
     if ( !file.exists() )
     {
-        Q_ASSERT(false);
+        Q_ASSERT( false );
         return QByteArray();
     }
 
@@ -119,9 +119,9 @@ void
 JSResolverHelper::addTrackResults( const QVariantMap& results )
 {
     qDebug() << "Resolver reporting results:" << results;
-    QList< Tomahawk::result_ptr > tracks = m_resolver->parseResultVariantList( results.value("results").toList() );
+    QList< Tomahawk::result_ptr > tracks = m_resolver->parseResultVariantList( results.value( "results" ).toList() );
 
-    QString qid = results.value("qid").toString();
+    QString qid = results.value( "qid" ).toString();
 
     Tomahawk::Pipeline::instance()->reportResults( qid, tracks );
 }
@@ -133,10 +133,10 @@ JSResolverHelper::addArtistResults( const QVariantMap& results )
     qDebug() << "Resolver reporting artists:" << results;
     QList< Tomahawk::artist_ptr > artists = m_resolver->parseArtistVariantList( results.value( "artists" ).toList() );
 
-    QString qid = results.value("qid").toString();
+    QString qid = results.value( "qid" ).toString();
 
     Tomahawk::collection_ptr collection = Tomahawk::collection_ptr();
-    foreach ( const Tomahawk::collection_ptr& coll, m_resolver->collections() )
+    foreach ( const Tomahawk::collection_ptr & coll, m_resolver->collections() )
     {
         if ( coll->name() == qid )
         {
@@ -144,11 +144,13 @@ JSResolverHelper::addArtistResults( const QVariantMap& results )
         }
     }
     if ( collection.isNull() )
+    {
         return;
+    }
 
     tDebug() << Q_FUNC_INFO << "about to push" << artists.count() << "artists";
-    foreach( const Tomahawk::artist_ptr& artist, artists)
-        tDebug() << artist->name();
+    foreach( const Tomahawk::artist_ptr & artist, artists )
+    tDebug() << artist->name();
 
     emit m_resolver->artistsFound( artists );
 }
@@ -160,14 +162,16 @@ JSResolverHelper::addAlbumResults( const QVariantMap& results )
     qDebug() << "Resolver reporting albums:" << results;
     QString artistName = results.value( "artist" ).toString();
     if ( artistName.trimmed().isEmpty() )
+    {
         return;
+    }
     Tomahawk::artist_ptr artist = Tomahawk::Artist::get( artistName, false );
     QList< Tomahawk::album_ptr > albums = m_resolver->parseAlbumVariantList( artist, results.value( "albums" ).toList() );
 
-    QString qid = results.value("qid").toString();
+    QString qid = results.value( "qid" ).toString();
 
     Tomahawk::collection_ptr collection = Tomahawk::collection_ptr();
-    foreach ( const Tomahawk::collection_ptr& coll, m_resolver->collections() )
+    foreach ( const Tomahawk::collection_ptr & coll, m_resolver->collections() )
     {
         if ( coll->name() == qid )
         {
@@ -175,11 +179,13 @@ JSResolverHelper::addAlbumResults( const QVariantMap& results )
         }
     }
     if ( collection.isNull() )
+    {
         return;
+    }
 
     tDebug() << Q_FUNC_INFO << "about to push" << albums.count() << "albums";
-    foreach( const Tomahawk::album_ptr& album, albums)
-        tDebug() << album->name();
+    foreach( const Tomahawk::album_ptr & album, albums )
+    tDebug() << album->name();
 
     emit m_resolver->albumsFound( albums );
 }
@@ -191,20 +197,24 @@ JSResolverHelper::addAlbumTrackResults( const QVariantMap& results )
     qDebug() << "Resolver reporting album tracks:" << results;
     QString artistName = results.value( "artist" ).toString();
     if ( artistName.trimmed().isEmpty() )
+    {
         return;
+    }
     QString albumName = results.value( "album" ).toString();
     if ( albumName.trimmed().isEmpty() )
+    {
         return;
+    }
 
     Tomahawk::artist_ptr artist = Tomahawk::Artist::get( artistName, false );
     Tomahawk::album_ptr  album  = Tomahawk::Album::get( artist, albumName, false );
 
-    QList< Tomahawk::result_ptr > tracks = m_resolver->parseResultVariantList( results.value("results").toList() );
+    QList< Tomahawk::result_ptr > tracks = m_resolver->parseResultVariantList( results.value( "results" ).toList() );
 
-    QString qid = results.value("qid").toString();
+    QString qid = results.value( "qid" ).toString();
 
     Tomahawk::collection_ptr collection = Tomahawk::collection_ptr();
-    foreach ( const Tomahawk::collection_ptr& coll, m_resolver->collections() )
+    foreach ( const Tomahawk::collection_ptr & coll, m_resolver->collections() )
     {
         if ( coll->name() == qid )
         {
@@ -212,10 +222,12 @@ JSResolverHelper::addAlbumTrackResults( const QVariantMap& results )
         }
     }
     if ( collection.isNull() )
+    {
         return;
+    }
 
     QList< Tomahawk::query_ptr > queries;
-    foreach ( const Tomahawk::result_ptr& result, tracks )
+    foreach ( const Tomahawk::result_ptr & result, tracks )
     {
         result->setScore( 1.0 );
         queries.append( result->toQuery() );
@@ -378,20 +390,26 @@ JSResolverHelper::reportCapabilities( const QVariant& v )
     int intCap = v.toInt( &ok );
     Tomahawk::ExternalResolver::Capabilities capabilities;
     if ( !ok )
+    {
         capabilities = Tomahawk::ExternalResolver::NullCapability;
+    }
     else
+    {
         capabilities = static_cast< Tomahawk::ExternalResolver::Capabilities >( intCap );
+    }
 
     m_resolver->onCapabilitiesChanged( capabilities );
 }
 
 
 void
-JSResolverHelper::tracksAdded( const QList<query_ptr>&, const ModelMode, const collection_ptr&)
+JSResolverHelper::tracksAdded( const QList<query_ptr>&, const ModelMode, const collection_ptr& )
 {
     // Check if we still are actively waiting
     if ( m_pendingAlbum.isNull() || m_pendingUrl.isNull() )
+    {
         return;
+    }
 
     emit m_resolver->informationFound( m_pendingUrl, m_pendingAlbum.objectCast<QObject>() );
     m_pendingAlbum = album_ptr();
@@ -415,7 +433,7 @@ JSResolverHelper::setResolverConfig( const QVariantMap& config )
 
 
 QString
-JSResolverHelper::hmac( const QByteArray& key, const QByteArray &input )
+JSResolverHelper::hmac( const QByteArray& key, const QByteArray& input )
 {
 #ifdef QCA2_FOUND
     if ( !QCA::isSupported( "hmac(md5)" ) )
@@ -449,14 +467,14 @@ JSResolverHelper::md5( const QByteArray& input )
 
 void
 JSResolverHelper::addCustomUrlHandler( const QString& protocol,
-                                             const QString& callbackFuncName,
-                                             const QString& isAsynchronous )
+                                       const QString& callbackFuncName,
+                                       const QString& isAsynchronous )
 {
     m_urlCallbackIsAsync = ( isAsynchronous.toLower() == "true" ) ? true : false;
 
     boost::function< void( const Tomahawk::result_ptr&, const QString&,
                            boost::function< void( QSharedPointer< QIODevice >& ) > )> fac =
-            boost::bind( &JSResolverHelper::customIODeviceFactory, this, _1, _2, _3 );
+                               boost::bind( &JSResolverHelper::customIODeviceFactory, this, _1, _2, _3 );
     Tomahawk::UrlHandler::registerIODeviceFactory( protocol, fac );
 
     m_urlCallback = callbackFuncName;
@@ -465,14 +483,14 @@ JSResolverHelper::addCustomUrlHandler( const QString& protocol,
 
 void
 JSResolverHelper::addCustomUrlTranslator( const QString& protocol,
-                                             const QString& callbackFuncName,
-                                             const QString& isAsynchronous )
+        const QString& callbackFuncName,
+        const QString& isAsynchronous )
 {
     m_urlTranslatorIsAsync = ( isAsynchronous.toLower() == "true" ) ? true : false;
 
     boost::function< void( const Tomahawk::result_ptr&, const QString&,
                            boost::function< void( const QString& ) > )> fac =
-            boost::bind( &JSResolverHelper::customUrlTranslator, this, _1, _2, _3 );
+                               boost::bind( &JSResolverHelper::customUrlTranslator, this, _1, _2, _3 );
     Tomahawk::UrlHandler::registerUrlTranslator( protocol, fac );
 
     m_urlTranslator = callbackFuncName;
@@ -483,7 +501,9 @@ void
 JSResolverHelper::reportUrlTranslation( const QString& qid, const QString& streamUrl )
 {
     if ( !m_translatorCallbacks.contains( qid ) )
+    {
         return;
+    }
 
     boost::function< void( const QString& ) > callback = m_translatorCallbacks.take( qid );
 
@@ -507,7 +527,7 @@ JSResolverHelper::base64Decode( const QByteArray& input )
 
 void
 JSResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
-                                               boost::function< void( QSharedPointer< QIODevice >& ) > callback )
+        boost::function< void( QSharedPointer< QIODevice >& ) > callback )
 {
     //can be sync or async
     QString origResultUrl = QString( QUrl( url ).toEncoded() );
@@ -516,8 +536,8 @@ JSResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr&, const QStr
     {
         QString qid = uuid();
         QString getUrl = QString( "Tomahawk.resolver.instance.%1( '%2', '%3' );" ).arg( m_urlCallback )
-                                                                                  .arg( qid )
-                                                                                  .arg( origResultUrl );
+                         .arg( qid )
+                         .arg( origResultUrl );
 
         m_streamCallbacks.insert( qid, callback );
         m_resolver->d_func()->engine->mainFrame()->evaluateJavaScript( getUrl );
@@ -525,7 +545,7 @@ JSResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr&, const QStr
     else
     {
         QString getUrl = QString( "Tomahawk.resolver.instance.%1( '%2' );" ).arg( m_urlCallback )
-                                                                            .arg( origResultUrl );
+                         .arg( origResultUrl );
 
         QString urlStr = m_resolver->d_func()->engine->mainFrame()->evaluateJavaScript( getUrl ).toString();
 
@@ -535,7 +555,7 @@ JSResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr&, const QStr
 
 
 void
-JSResolverHelper::customUrlTranslator( const Tomahawk::result_ptr&, const QString& url, boost::function<void (const QString& )> callback )
+JSResolverHelper::customUrlTranslator( const Tomahawk::result_ptr&, const QString& url, boost::function<void ( const QString& )> callback )
 {
     //can be sync or async
     QString origResultUrl = QString( QUrl( url ).toEncoded() );
@@ -544,8 +564,8 @@ JSResolverHelper::customUrlTranslator( const Tomahawk::result_ptr&, const QStrin
     {
         QString qid = uuid();
         QString getUrl = QString( "Tomahawk.resolver.instance.%1( '%2', '%3' );" ).arg( m_urlTranslator )
-                                                                                  .arg( qid )
-                                                                                  .arg( origResultUrl );
+                         .arg( qid )
+                         .arg( origResultUrl );
 
         m_translatorCallbacks.insert( qid, callback );
         m_resolver->d_func()->engine->mainFrame()->evaluateJavaScript( getUrl );
@@ -553,7 +573,7 @@ JSResolverHelper::customUrlTranslator( const Tomahawk::result_ptr&, const QStrin
     else
     {
         QString getUrl = QString( "Tomahawk.resolver.instance.%1( '%2' );" ).arg( m_urlTranslator )
-                                                                            .arg( origResultUrl );
+                         .arg( origResultUrl );
 
         QString urlStr = m_resolver->d_func()->engine->mainFrame()->evaluateJavaScript( getUrl ).toString();
 
@@ -564,10 +584,12 @@ JSResolverHelper::customUrlTranslator( const Tomahawk::result_ptr&, const QStrin
 
 void
 JSResolverHelper::reportStreamUrl( const QString& qid,
-                                         const QString& streamUrl )
+                                   const QString& streamUrl )
 {
     if ( !m_streamCallbacks.contains( qid ) )
+    {
         return;
+    }
 
     boost::function< void( QSharedPointer< QIODevice >& ) > callback = m_streamCallbacks.take( qid );
 
@@ -597,7 +619,7 @@ JSResolverHelper::returnStreamUrl( const QString& streamUrl, boost::function< vo
 
 
 void
-JSResolverHelper::returnUrlTranslation( const QString& streamUrl, boost::function<void (const QString& )> callback )
+JSResolverHelper::returnUrlTranslation( const QString& streamUrl, boost::function<void ( const QString& )> callback )
 {
     if ( streamUrl.isEmpty() )
     {

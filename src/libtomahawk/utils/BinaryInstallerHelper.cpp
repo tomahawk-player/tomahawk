@@ -50,7 +50,9 @@ BinaryInstallerHelper::installSucceeded( const QString& path )
     qDebug() << Q_FUNC_INFO << "install of binary resolver succeeded, enabling: " << path;
 
     if ( m_manager.isNull() )
+    {
         return;
+    }
 
     if ( m_createAccount )
     {
@@ -75,7 +77,9 @@ void BinaryInstallerHelper::installFailed()
     qDebug() << Q_FUNC_INFO << "install failed";
 
     if ( m_manager.isNull() )
+    {
         return;
+    }
 
     m_manager.data()->resolverInstallationFailed( m_resolverId );
 

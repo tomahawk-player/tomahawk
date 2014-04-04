@@ -30,14 +30,14 @@
 
 namespace Ui
 {
-    class SocialWidget;
+class SocialWidget;
 }
 
 class SocialWidget : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     SocialWidget( QWidget* parent );
     ~SocialWidget();
 
@@ -50,26 +50,26 @@ public:
     bool shown() const;
     void close();
 
-signals:
+  signals:
     void hidden();
 
-public slots:
+  public slots:
     void show( int timeoutSecs = 0 );
     void hide();
 
-protected:
-//    void changeEvent( QEvent* e );
+  protected:
+    //    void changeEvent( QEvent* e );
     void paintEvent( QPaintEvent* event );
     bool eventFilter( QObject* object, QEvent* event );
 
-private slots:
+  private slots:
     void accept();
     void onChanged();
     void onShortLinkReady( const QUrl& longUrl, const QUrl& shortUrl, const QVariant& callbackObj );
 
     void onGeometryUpdate();
 
-private:
+  private:
     unsigned int charsAvailable() const;
 
     Ui::SocialWidget* ui;

@@ -1,20 +1,20 @@
-   /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- *
- *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
- *
- *   Tomahawk is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   Tomahawk is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
- */
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+*
+*   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
+*
+*   Tomahawk is free software: you can redistribute it and/or modify
+*   it under the terms of the GNU General Public License as published by
+*   the Free Software Foundation, either version 3 of the License, or
+*   (at your option) any later version.
+*
+*   Tomahawk is distributed in the hope that it will be useful,
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+*   GNU General Public License for more details.
+*
+*   You should have received a copy of the GNU General Public License
+*   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef TOMAHAWK_NETWORK_ACL_ACLREQUEST_H
 #define TOMAHAWK_NETWORK_ACL_ACLREQUEST_H
@@ -23,16 +23,19 @@
 
 #include <QObject>
 
-namespace Tomahawk {
-namespace Network {
-namespace ACL {
+namespace Tomahawk
+{
+namespace Network
+{
+namespace ACL
+{
 
 class AclRequestPrivate;
 
 class AclRequest : public QObject
 {
     Q_OBJECT
-public:
+  public:
     explicit AclRequest( const QString& nodeid, const QString& username, Tomahawk::ACLStatus::Type defaultStatus = Tomahawk::ACLStatus::NotFound );
     virtual ~AclRequest();
 
@@ -40,16 +43,16 @@ public:
     QString username() const;
     Tomahawk::ACLStatus::Type status() const;
 
-public slots:
+  public slots:
     void emitDecision( Tomahawk::ACLStatus::Type status );
 
-signals:
+  signals:
     void decision( Tomahawk::ACLStatus::Type status );
 
-protected:
+  protected:
     QScopedPointer<AclRequestPrivate> d_ptr;
 
-private:
+  private:
     Q_DECLARE_PRIVATE( AclRequest )
 };
 

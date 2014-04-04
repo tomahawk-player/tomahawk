@@ -24,7 +24,7 @@
 #include "utils/Logger.h"
 
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "Msg.h"
+#include "Msg.h"
 #endif
 
 void
@@ -36,13 +36,15 @@ QTcpSocketExtra::connectToHost( const QHostAddress& host, quint16 port, OpenMode
         return;
     }
 
-    QTcpSocket::connectToHost( host, port, openMode);
+    QTcpSocket::connectToHost( host, port, openMode );
     if ( m_connectTimeout > 0 )
+    {
         m_connectTimer->start( m_connectTimeout );
+    }
 }
 
 void
-QTcpSocketExtra::connectToHost(const QString& host, quint16 port, OpenMode openMode)
+QTcpSocketExtra::connectToHost( const QString& host, quint16 port, OpenMode openMode )
 {
     if ( m_connectTimer->isActive() == true )
     {
@@ -50,9 +52,11 @@ QTcpSocketExtra::connectToHost(const QString& host, quint16 port, OpenMode openM
         return;
     }
 
-    QTcpSocket::connectToHost( host, port, openMode);
+    QTcpSocket::connectToHost( host, port, openMode );
     if ( m_connectTimeout > 0 )
+    {
         m_connectTimer->start( m_connectTimeout );
+    }
 }
 
 void

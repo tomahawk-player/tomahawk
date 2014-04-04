@@ -36,15 +36,15 @@
 #include <QStackedWidget>
 #include <QToolButton>
 #ifdef Q_OS_WIN
-    #include <shobjidl.h>
+#include <shobjidl.h>
 #endif
 
 namespace Tomahawk
 {
-    namespace Accounts
-    {
-        class Account;
-    }
+namespace Accounts
+{
+class Account;
+}
 }
 
 class JobStatusSortModel;
@@ -63,15 +63,15 @@ class AccountsToolButton;
 
 namespace Ui
 {
-    class TomahawkWindow;
-    class GlobalSearchWidget;
+class TomahawkWindow;
+class GlobalSearchWidget;
 }
 
 class TomahawkWindow : public QMainWindow, private TomahawkUtils::DpiScaler
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     TomahawkWindow( QWidget* parent = 0 );
     ~TomahawkWindow();
 
@@ -80,7 +80,7 @@ public:
 
     void setWindowTitle( const QString& title );
 
-protected:
+  protected:
     void changeEvent( QEvent* e );
     void closeEvent( QCloseEvent* e );
     void showEvent( QShowEvent* e );
@@ -91,7 +91,7 @@ protected:
     bool winEvent( MSG* message, long* result );
 #endif
 
-public slots:
+  public slots:
     void createStation();
     void createPlaylist();
     void loadSpiff();
@@ -106,7 +106,7 @@ public slots:
     void fullScreenEntered();
     void fullScreenExited();
 
-private slots:
+  private slots:
     void onHistoryBackAvailable( bool avail );
     void onHistoryForwardAvailable( bool avail );
 
@@ -147,7 +147,7 @@ private slots:
     void updateWindowsLoveButton();
 #endif
 
-private:
+  private:
     void loadSettings();
     void saveSettings();
 
@@ -163,10 +163,10 @@ private:
 #ifdef Q_OS_WIN
     bool setupWindowsButtons();
     const unsigned int m_buttonCreatedID;
-    HICON thumbIcon(TomahawkUtils::ImageType type);
+    HICON thumbIcon( TomahawkUtils::ImageType type );
     ITaskbarList3* m_taskbarList;
     THUMBBUTTON m_thumbButtons[5];
-    enum TB_STATES{ TP_PREVIOUS = 0,TP_PLAY_PAUSE = 1,TP_NEXT = 2,TP_LOVE = 4 };
+    enum TB_STATES { TP_PREVIOUS = 0, TP_PLAY_PAUSE = 1, TP_NEXT = 2, TP_LOVE = 4 };
 #endif
 
     Ui::TomahawkWindow* ui;
@@ -181,15 +181,15 @@ private:
     JobStatusSortModel* m_jobsModel;
 
     // Menus and menu actions: Accounts menu
-    QMenuBar    *m_menuBar;
+    QMenuBar*    m_menuBar;
 #ifndef Q_OS_MAC
-    QAction     *m_compactMenuAction;
-    QMenu       *m_compactMainMenu;
+    QAction*     m_compactMenuAction;
+    QMenu*       m_compactMainMenu;
 #endif
-    AccountsToolButton *m_accountsButton;
-    QToolBar *m_toolbar;
-    QWidget *m_toolbarLeftBalancer;
-    QWidget *m_toolbarRightBalancer;
+    AccountsToolButton* m_accountsButton;
+    QToolBar* m_toolbar;
+    QWidget* m_toolbarLeftBalancer;
+    QWidget* m_toolbarRightBalancer;
 
     QAction* m_backAction;
     QAction* m_forwardAction;

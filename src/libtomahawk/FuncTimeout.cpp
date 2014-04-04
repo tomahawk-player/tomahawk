@@ -42,6 +42,8 @@ FuncTimeout::~FuncTimeout()
 void FuncTimeout::exec()
 {
     if( !m_watch.isNull() )
+    {
         m_func();
+    }
     this->deleteLater();
 }

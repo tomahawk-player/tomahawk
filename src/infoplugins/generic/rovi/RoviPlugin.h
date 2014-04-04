@@ -41,13 +41,13 @@ class INFOPLUGINDLLEXPORT RoviPlugin : public InfoPlugin
     Q_OBJECT
     Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 
-public:
+  public:
     RoviPlugin();
     virtual ~RoviPlugin();
 
-protected:
+  protected:
     virtual void init() {}
-    
+
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
 
     virtual void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
@@ -57,10 +57,10 @@ protected:
 
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
 
-private slots:
+  private slots:
     void albumLookupFinished();
     void albumLookupError( QNetworkReply::NetworkError );
-private:
+  private:
     QNetworkReply* makeRequest( QUrl url );
     QByteArray generateSig() const;
 

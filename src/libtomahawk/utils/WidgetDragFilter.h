@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -36,11 +36,11 @@ class QEvent;
 class DLLEXPORT WidgetDragFilter : public QObject
 {
     Q_OBJECT
-public:
-    explicit WidgetDragFilter(QObject* parent = 0);  
+  public:
+    explicit WidgetDragFilter( QObject* parent = 0 );
 
-    virtual bool eventFilter(QObject* , QEvent* );
-private:
+    virtual bool eventFilter( QObject*, QEvent* );
+  private:
     bool canDrag( QObject* obj, QMouseEvent* ev ) const;
 
     QPointer<QWidget> m_target; // in case it's deleted under us

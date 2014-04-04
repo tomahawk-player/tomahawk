@@ -29,7 +29,7 @@
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "PlaylistInterface.h"
+#include "PlaylistInterface.h"
 #endif
 
 
@@ -49,7 +49,7 @@ class INFOPLUGINDLLEXPORT MprisPlugin : public InfoPlugin
     Q_OBJECT
     Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 
-public:
+  public:
     MprisPlugin();
     virtual ~MprisPlugin();
 
@@ -129,7 +129,7 @@ public:
     double volume() const;
     void setVolume( double value );
 
-public slots:
+  public slots:
     virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
     {
         Q_UNUSED( criteria );
@@ -151,7 +151,7 @@ public slots:
     void SetPosition( const QDBusObjectPath& TrackId, qlonglong Position );
     void Stop();
 
-protected slots:
+  protected slots:
     virtual void init();
 
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
@@ -160,17 +160,17 @@ protected slots:
     }
     void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData );
 
-private slots:
+  private slots:
     void stateChanged( AudioState newState, AudioState oldState );
     void onVolumeChanged( int volume );
     void onPlaylistChanged( Tomahawk::playlistinterface_ptr );
     void onTrackCountChanged( unsigned int tracks );
     void onSeeked( qint64 ms );
 
-signals:
+  signals:
     void Seeked( qlonglong Position );
 
-private:
+  private:
     // Get Info
 
     // Push Info

@@ -28,7 +28,7 @@
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "Source.h"
+#include "Source.h"
 #endif
 
 
@@ -108,7 +108,9 @@ void
 OverlayWidget::show( int timeoutSecs )
 {
     if ( !isEnabled() )
+    {
         return;
+    }
 
     QPropertyAnimation* animation = new QPropertyAnimation( this, "opacity" );
     animation->setDuration( FADING_DURATION );
@@ -116,7 +118,9 @@ OverlayWidget::show( int timeoutSecs )
     animation->start();
 
     if ( timeoutSecs > 0 )
+    {
         m_timer.start( timeoutSecs * 1000 );
+    }
 }
 
 
@@ -124,7 +128,9 @@ void
 OverlayWidget::hide()
 {
     if ( !isEnabled() )
+    {
         return;
+    }
 
     QPropertyAnimation* animation = new QPropertyAnimation( this, "opacity" );
     animation->setDuration( FADING_DURATION );
@@ -137,7 +143,9 @@ bool
 OverlayWidget::shown() const
 {
     if ( !isEnabled() )
+    {
         return false;
+    }
 
     return m_opacity == OPACITY;
 }
@@ -147,11 +155,15 @@ void
 OverlayWidget::onViewChanged()
 {
     if ( !m_itemView )
+    {
         return;
+    }
 
     PlayableProxyModel* model = qobject_cast<PlayableProxyModel*>( m_itemView->model() );
     if ( !model )
+    {
         return;
+    }
 
     if ( m_text.isEmpty() || model->rowCount( QModelIndex() ) || model->isLoading() )
     {
@@ -168,7 +180,9 @@ void
 OverlayWidget::onViewModelChanged()
 {
     if ( !m_itemView )
+    {
         return;
+    }
 
     if ( m_itemView->model() )
     {
@@ -188,14 +202,16 @@ OverlayWidget::paintEvent( QPaintEvent* event )
     Q_UNUSED( event );
 
     {
-        QSize maxiSize = QSize( (double)m_parent->width() * 0.70, (double)m_parent->height() * 0.70 );
+        QSize maxiSize = QSize( ( double )m_parent->width() * 0.70, ( double )m_parent->height() * 0.70 );
         QSize prefSize = QSize( 380, 128 );
         int width = qMin( maxiSize.width(), prefSize.width() );
         int height = qMin( maxiSize.height(), prefSize.height() );
         QSize newSize = QSize( width, height );
 
         if ( newSize != size() )
+        {
             resize( newSize );
+        }
     }
 
     QPoint center( ( m_parent->width() - width() ) / 2, ( m_parent->height() - height() ) / 2 );
@@ -211,11 +227,11 @@ OverlayWidget::paintEvent( QPaintEvent* event )
     p.setRenderHint( QPainter::Antialiasing );
     p.setOpacity( m_opacity );
 
-/*    QPen pen( palette().dark().color(), .5 );
-    p.setPen( pen );
-    //FIXME const color
-    p.setBrush( QColor( 30, 30, 30, 255.0 * OPACITY ) );
-    p.drawRoundedRect( r, CORNER_ROUNDNESS, CORNER_ROUNDNESS );*/
+    /*    QPen pen( palette().dark().color(), .5 );
+        p.setPen( pen );
+        //FIXME const color
+        p.setBrush( QColor( 30, 30, 30, 255.0 * OPACITY ) );
+        p.drawRoundedRect( r, CORNER_ROUNDNESS, CORNER_ROUNDNESS );*/
 
     QTextOption to( Qt::AlignCenter );
     to.setWrapMode( QTextOption::WrapAtWordBoundaryOrAnywhere );
@@ -233,7 +249,9 @@ OverlayWidget::paintEvent( QPaintEvent* event )
     while ( textHeight > availHeight )
     {
         if ( f.pointSize() <= 4 ) // don't try harder
+        {
             break;
+        }
 
         f.setPointSize( f.pointSize() - 1 );
         fm = QFontMetricsF( f );

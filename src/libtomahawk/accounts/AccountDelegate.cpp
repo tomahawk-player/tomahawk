@@ -79,13 +79,17 @@ AccountDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex
         // Make more space for each account we have to show.
         AccountFactory* fac = qobject_cast< AccountFactory* >( index.data( AccountModel::AccountData ).value< QObject* >() );
         if ( fac->isUnique() )
+        {
             return QSize( 200, m_accountRowHeight );
+        }
 
         const QList< Account* > accts = index.data( AccountModel::ChildrenOfFactoryRole ).value< QList< Tomahawk::Accounts::Account* > >();
-        const QSize s = QSize( 200, m_accountRowHeight + 12 * accts.size()-1 );
+        const QSize s = QSize( 200, m_accountRowHeight + 12 * accts.size() - 1 );
 
         if ( s != m_sizeHints[ index ] )
-            const_cast< AccountDelegate* >( this )->sizeHintChanged( index ); // FU KTHBBQ
+        {
+            const_cast< AccountDelegate* >( this )->sizeHintChanged( index );    // FU KTHBBQ
+        }
 
         m_sizeHints[ index ] = s;
         return s;
@@ -109,7 +113,9 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     painter->setRenderHint( QPainter::Antialiasing );
 
     if ( m_model == 0 || m_model != index.model() )
+    {
         m_model = const_cast<QAbstractItemModel*>( index.model() );
+    }
 
     QFont titleFont = opt.font;
     titleFont.setBold( true );
@@ -163,11 +169,15 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
 
     // Pixmap
     QPixmap p = index.data( Qt::DecorationRole ).value< QPixmap >();
-    QRect pixmapRect( leftEdge + PADDING, center - ICONSIZE/2, ICONSIZE, ICONSIZE );
+    QRect pixmapRect( leftEdge + PADDING, center - ICONSIZE / 2, ICONSIZE, ICONSIZE );
     if ( p.isNull() ) // default image... TODO
+    {
         p = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, pixmapRect.size() );
+    }
     else
+    {
         p = p.scaled( pixmapRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
+    }
 
     painter->drawPixmap( pixmapRect, p );
 
@@ -177,7 +187,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     m_cachedConfigRects[ index ] = QRect();
     if ( hasConfigWrench )
     {
-        const QRect confRect = QRect( rightEdge - 2*PADDING - WRENCH_SIZE, center - WRENCH_SIZE / 2, WRENCH_SIZE, WRENCH_SIZE );
+        const QRect confRect = QRect( rightEdge - 2 * PADDING - WRENCH_SIZE, center - WRENCH_SIZE / 2, WRENCH_SIZE, WRENCH_SIZE );
         QStyleOptionToolButton topt;
         topt.rect = confRect;
         topt.pos = confRect.topLeft();
@@ -199,14 +209,14 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
 
         QRect btnRect;
         const QString btnText = tr( "Add Account" );
-        const int btnWidth = installMetrics.width( btnText ) + 2*PADDING;
+        const int btnWidth = installMetrics.width( btnText ) + 2 * PADDING;
 
         if ( accts.isEmpty() )
         {
             Q_ASSERT( !hasConfigWrench );
 
             // Draw button in center of row
-            btnRect= QRect( opt.rect.right() - PADDING - btnWidth, center - ( installMetrics.height() + 4 ) / 2, btnWidth, installMetrics.height() + 2*PADDING );
+            btnRect = QRect( opt.rect.right() - PADDING - btnWidth, center - ( installMetrics.height() + 4 ) / 2, btnWidth, installMetrics.height() + 2 * PADDING );
             rightEdge = btnRect.left();
         }
         else
@@ -216,7 +226,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
             rightEdge = drawAccountList( painter, opt, accts, rightEdge );
             painter->restore();
 
-            btnRect = QRect( opt.rect.right() - PADDING - btnWidth, opt.rect.bottom() - installMetrics.height() - 3*PADDING,  btnWidth, installMetrics.height() + 2*PADDING );
+            btnRect = QRect( opt.rect.right() - PADDING - btnWidth, opt.rect.bottom() - installMetrics.height() - 3 * PADDING,  btnWidth, installMetrics.height() + 2 * PADDING );
 #ifdef Q_WS_MAC
             btnRect.adjust( -4, 0, 4, 0 );
 #endif
@@ -243,25 +253,31 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
             Q_ASSERT( accts.size() == 1 );
 
             painter->setFont( installFont );
-            rightEdge = drawStatus( painter, QPointF( rightEdge - PADDING, center - painter->fontMetrics().height()/2 ), accts.first(), true );
+            rightEdge = drawStatus( painter, QPointF( rightEdge - PADDING, center - painter->fontMetrics().height() / 2 ), accts.first(), true );
         }
     }
     else if ( canDelete )
     {
         const QString btnText = tr( "Remove" );
-        const int btnWidth = installMetrics.width( btnText ) + 2*PADDING;
+        const int btnWidth = installMetrics.width( btnText ) + 2 * PADDING;
         QRect btnRect;
 
         if ( hasConfigWrench )
-            btnRect = QRect( opt.rect.right() - PADDING - btnWidth, opt.rect.bottom() - installMetrics.height() - 3*PADDING,  btnWidth, installMetrics.height() + 2*PADDING );
+        {
+            btnRect = QRect( opt.rect.right() - PADDING - btnWidth, opt.rect.bottom() - installMetrics.height() - 3 * PADDING,  btnWidth, installMetrics.height() + 2 * PADDING );
+        }
         else
-            btnRect = QRect( opt.rect.right() - PADDING - btnWidth, center - ( installMetrics.height() + 4 ) / 2, btnWidth, installMetrics.height() + 2*PADDING );
+        {
+            btnRect = QRect( opt.rect.right() - PADDING - btnWidth, center - ( installMetrics.height() + 4 ) / 2, btnWidth, installMetrics.height() + 2 * PADDING );
+        }
 
 #ifdef Q_WS_MAC
         btnRect.adjust( -4, 0, 4, 0 );
 
         if ( hasConfigWrench )
+        {
             btnRect.moveTop( btnRect.top() + 2 );
+        }
 #endif
         leftEdge = btnRect.left();
         m_cachedButtonRects[ index ] = btnRect;
@@ -308,7 +324,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
         //FIXME const color
         painter->setPen( QColor( Qt::gray ).darker( 150 ) );
         const int authorWidth = authorMetrics.width( author );
-        const QRect authorRect( textRect.left(),  textRect.bottom() + PADDING/2, authorWidth + 6, authorMetrics.height() );
+        const QRect authorRect( textRect.left(),  textRect.bottom() + PADDING / 2, authorWidth + 6, authorMetrics.height() );
         painter->drawText( authorRect, Qt::AlignLeft | Qt::AlignVCenter, author );
         painter->restore();
 
@@ -328,38 +344,50 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
         // rating stars
         const int rating = index.data( AccountModel::RatingRole ).toInt();
 
-//         int runningEdge = opt.rect.right() - 2*PADDING - ratingWidth;
+        //         int runningEdge = opt.rect.right() - 2*PADDING - ratingWidth;
         int runningEdge = textRect.left();
-//         int starsTop = opt.rect.bottom() - 3*PADDING - m_ratingStarNegative.height();
+        //         int starsTop = opt.rect.bottom() - 3*PADDING - m_ratingStarNegative.height();
         int starsTop = runningBottom + PADDING;
         for ( int i = 1; i < 6; i++ )
         {
             QRect r( runningEdge, starsTop, STAR_SIZE, STAR_SIZE );
-//             QRect r( runningEdge, opt.rect.top() + PADDING, m_ratingStarPositive.width(), m_ratingStarPositive.height() );
+            //             QRect r( runningEdge, opt.rect.top() + PADDING, m_ratingStarPositive.width(), m_ratingStarPositive.height() );
             if ( i == 1 )
+            {
                 m_cachedStarRects[ index ] = r;
+            }
 
             const bool userHasRated = index.data( AccountModel::UserHasRatedRole ).toBool();
             if ( !userHasRated && // Show on-hover animation if the user hasn't rated it yet, and is hovering over it
-                 m_hoveringOver > -1 &&
-                 m_hoveringItem == index )
+                    m_hoveringOver > -1 &&
+                    m_hoveringItem == index )
             {
                 if ( i <= m_hoveringOver ) // positive star
+                {
                     painter->drawPixmap( r, TomahawkUtils::defaultPixmap( TomahawkUtils::StarHovered, TomahawkUtils::Original, r.size() ) );
+                }
                 else
+                {
                     painter->drawPixmap( r, TomahawkUtils::defaultPixmap( TomahawkUtils::Unstarred, TomahawkUtils::Original, r.size() ) );
+                }
             }
             else
             {
                 if ( i <= rating ) // positive or rated star
                 {
                     if ( userHasRated )
+                    {
                         painter->drawPixmap( r, TomahawkUtils::defaultPixmap( TomahawkUtils::StarHovered, TomahawkUtils::Original, r.size() ) );
+                    }
                     else
+                    {
                         painter->drawPixmap( r, TomahawkUtils::defaultPixmap( TomahawkUtils::Starred, TomahawkUtils::Original, r.size() ) );
+                    }
                 }
                 else
+                {
                     painter->drawPixmap( r, TomahawkUtils::defaultPixmap( TomahawkUtils::Unstarred, TomahawkUtils::Original, r.size() ) );
+                }
             }
             runningEdge += STAR_SIZE + PADDING_BETWEEN_STARS;
         }
@@ -410,26 +438,28 @@ AccountDelegate::drawAccountList( QPainter* painter, QStyleOptionViewItemV4& opt
     if ( accts.size() % 2 == 1 )
     {
         // If there's an odd number, the center one is centered
-        current = mid - ((textHeight + PADDING/2) * (accts.size()/2) ) - textHeight / 2;
+        current = mid - ( ( textHeight + PADDING / 2 ) * ( accts.size() / 2 ) ) - textHeight / 2;
     }
     else
     {
         // Even number, center between the middle ones
-        current = mid - ((textHeight + PADDING/2) * (accts.size()/2) );
+        current = mid - ( ( textHeight + PADDING / 2 ) * ( accts.size() / 2 ) );
     }
 
     for ( int i = 0; i < accts.size(); i++ )
     {
         //FIXME: special case for twitter, remove for 0.8.0
         if ( accts.at( i )->accountServiceName() != "Twitter" )
-        // draw lightbulb and text
-            runningRightEdge = drawStatus( painter, QPointF( rightEdge - PADDING, current), accts.at( i ) );
+            // draw lightbulb and text
+        {
+            runningRightEdge = drawStatus( painter, QPointF( rightEdge - PADDING, current ), accts.at( i ) );
+        }
 
         const QString label = accts.at( i )->accountFriendlyName();
-        const QPoint textTopLeft( runningRightEdge - PADDING - painter->fontMetrics().width( label ), current);
+        const QPoint textTopLeft( runningRightEdge - PADDING - painter->fontMetrics().width( label ), current );
         painter->drawText( QRect( textTopLeft, QSize( painter->fontMetrics().width( label ) + 1, textHeight ) ), label );
 
-        current += textHeight + PADDING/2;
+        current += textHeight + PADDING / 2;
 
         leftOfAccounts = qMin( leftOfAccounts, textTopLeft.x() );
     }
@@ -442,10 +472,12 @@ bool
 AccountDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
 {
     if ( event->type() != QEvent::MouseButtonPress &&
-         event->type() != QEvent::MouseButtonRelease &&
-         event->type() != QEvent::MouseButtonDblClick &&
-         event->type() != QEvent::MouseMove )
+            event->type() != QEvent::MouseButtonRelease &&
+            event->type() != QEvent::MouseButtonDblClick &&
+            event->type() != QEvent::MouseMove )
+    {
         return false;
+    }
 
     if ( event->type() == QEvent::MouseButtonPress )
     {
@@ -457,7 +489,7 @@ AccountDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QS
 
             const AccountModel::RowType rowType = static_cast< AccountModel::RowType >( index.data( AccountModel::RowTypeRole ).toInt() );
             if ( rowType == AccountModel::TopLevelAccount ||
-                 rowType == AccountModel::CustomAccount )
+                    rowType == AccountModel::CustomAccount )
             {
                 Account* acct = qobject_cast< Account* >( index.data( AccountModel::AccountData ).value< QObject* >() );
                 Q_ASSERT( acct ); // Should not be showing a config wrench if there is no account!
@@ -480,11 +512,14 @@ AccountDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QS
             }
             return true;
         }
-    } else if ( event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonDblClick )
+    }
+    else if ( event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonDblClick )
     {
         QMouseEvent* me = static_cast< QMouseEvent* >( event );
         if ( m_configPressed.isValid() )
+        {
             emit update( m_configPressed );
+        }
 
         m_configPressed = QModelIndex();
 
@@ -493,7 +528,8 @@ AccountDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QS
             // Check box for this row
 
             // eat the double click events inside the check rect
-            if( event->type() == QEvent::MouseButtonDblClick ) {
+            if( event->type() == QEvent::MouseButtonDblClick )
+            {
                 return true;
             }
 
@@ -520,7 +556,7 @@ AccountDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QS
         {
             const int eachStar = starsWidth / 5;
             const int clickOffset = me->pos().x() - fullStars.x();
-            const int whichStar = (clickOffset / eachStar) + 1;
+            const int whichStar = ( clickOffset / eachStar ) + 1;
 
             if ( event->type() == QEvent::MouseButtonRelease )
             {
@@ -552,9 +588,13 @@ AccountDelegate::drawRoundedButton( QPainter* painter, const QRect& btnRect, boo
 {
     //FIXME const colors
     if ( !red )
-        TomahawkUtils::drawRoundedButton( painter, btnRect, QColor(54, 127, 211), QColor(43, 104, 182), QColor(34, 85, 159), QColor(35, 79, 147) );
+    {
+        TomahawkUtils::drawRoundedButton( painter, btnRect, QColor( 54, 127, 211 ), QColor( 43, 104, 182 ), QColor( 34, 85, 159 ), QColor( 35, 79, 147 ) );
+    }
     else
-        TomahawkUtils::drawRoundedButton( painter, btnRect, QColor(206, 63, 63), QColor(170, 52, 52), QColor(150, 50, 50), QColor(130, 40, 40) );
+    {
+        TomahawkUtils::drawRoundedButton( painter, btnRect, QColor( 206, 63, 63 ), QColor( 170, 52, 52 ), QColor( 150, 50, 50 ), QColor( 130, 40, 40 ) );
+    }
 }
 
 
@@ -589,7 +629,7 @@ AccountDelegate::drawStatus( QPainter* painter, const QPointF& rightTopEdge, Acc
         if ( !m_connectingSpinners.contains( acct ) )
         {
             AnimatedSpinner* anim = new AnimatedSpinner( connectIconRect.size(), true );
-            _detail::Closure* closure = new _detail::Closure( anim, SIGNAL( requestUpdate() ), const_cast<AccountDelegate*>(this), SLOT( doUpdateIndexWithAccount( Tomahawk::Accounts::Account* ) ), C_ARG( Tomahawk::Accounts::Account*, acct ) );
+            _detail::Closure* closure = new _detail::Closure( anim, SIGNAL( requestUpdate() ), const_cast<AccountDelegate*>( this ), SLOT( doUpdateIndexWithAccount( Tomahawk::Accounts::Account* ) ), C_ARG( Tomahawk::Accounts::Account*, acct ) );
             closure->setAutoDelete( false );
 
             m_connectingSpinners[ acct ] = anim;
@@ -601,7 +641,9 @@ AccountDelegate::drawStatus( QPainter* painter, const QPointF& rightTopEdge, Acc
     else
     {
         if ( m_connectingSpinners.contains( acct ) )
+        {
             delete m_connectingSpinners.take( acct );
+        }
 
         painter->drawPixmap( connectIconRect, p );
     }
@@ -646,7 +688,9 @@ AccountDelegate::drawConfigWrench ( QPainter* painter, QStyleOptionViewItemV4& o
     bool pressed = ( m_configPressed == opt.index );
     topt.state = pressed ? QStyle::State_On : QStyle::State_Raised;
     if( opt.state & QStyle::State_MouseOver || pressed )
+    {
         topt.state |= QStyle::State_HasFocus;
+    }
     style->drawComplexControl( QStyle::CC_ToolButton, &topt, painter, w );
 }
 
@@ -688,7 +732,9 @@ AccountDelegate::doneInstalling ( const QPersistentModelIndex& idx )
 {
     qDebug() << "STOP INSTALLING:" << idx.data( Qt::DisplayRole ).toString();
     if ( !m_loadingSpinners.contains( idx ) )
+    {
         return;
+    }
 
     delete m_loadingSpinners.take( idx );
 
@@ -721,7 +767,7 @@ AccountDelegate::doUpdateIndexWithAccount( Account* account )
         const QModelIndex index = m_model->index( i, 0, QModelIndex() );
         const AccountModel::RowType rowType = static_cast< AccountModel::RowType >( index.data( AccountModel::RowTypeRole ).toInt() );
         if ( rowType == AccountModel::TopLevelAccount ||
-            rowType == AccountModel::CustomAccount )
+                rowType == AccountModel::CustomAccount )
         {
             Account* acct = qobject_cast< Account* >( index.data( AccountModel::AccountData ).value< QObject* >() );
 

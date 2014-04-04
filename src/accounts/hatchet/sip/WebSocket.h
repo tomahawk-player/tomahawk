@@ -38,23 +38,23 @@ void onClose( WebSocket* ws, websocketpp::connection_hdl );
 class WebSocket : public QObject
 {
     Q_OBJECT
-public:
+  public:
     explicit WebSocket( const QString& url, const QString& authorizationHeader = QString() );
     virtual ~WebSocket();
 
-signals:
+  signals:
     void connected();
     void disconnected();
     void decodedMessage( QByteArray bytes );
 
-public slots:
+  public slots:
     void setUrl( const QString& url );
     void setAuthorizationHeader( const QString& authorizationHeader );
     void connectWs();
     void disconnectWs( websocketpp::close::status::value status = websocketpp::close::status::normal, const QString& reason = QString( "Disconnecting" ) );
     void encodeMessage( const QByteArray& bytes );
 
-private slots:
+  private slots:
     void socketStateChanged( QAbstractSocket::SocketState state );
     void sslErrors( const QList< QSslError >& errors );
     void disconnectSocket();
@@ -63,11 +63,11 @@ private slots:
     void readOutput();
     void socketReadyRead();
 
-private:
+  private:
     Q_DISABLE_COPY( WebSocket )
 
-    friend void onMessage( WebSocket *ws, websocketpp::connection_hdl, hatchet_client::message_ptr msg );
-    friend void onClose( WebSocket *ws, websocketpp::connection_hdl );
+    friend void onMessage( WebSocket* ws, websocketpp::connection_hdl, hatchet_client::message_ptr msg );
+    friend void onClose( WebSocket* ws, websocketpp::connection_hdl );
 
     bool m_disconnecting;
     QUrl m_url;

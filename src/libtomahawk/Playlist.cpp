@@ -85,7 +85,7 @@ Playlist::Playlist( const source_ptr& author,
                     const QString& title,
                     const QString& info,
                     const QString& creator,
-                    bool shared)
+                    bool shared )
     : QObject()
     , d_ptr( new PlaylistPrivate( this, author, guid, title, info, creator, shared, QList< Tomahawk::plentry_ptr >() ) )
 {
@@ -133,7 +133,7 @@ Playlist::create( const source_ptr& author,
                   const QList<Tomahawk::query_ptr>& queries )
 {
     QList< plentry_ptr > entries;
-    foreach( const Tomahawk::query_ptr& query, queries )
+    foreach( const Tomahawk::query_ptr & query, queries )
     {
         plentry_ptr p( new PlaylistEntry );
         p->setGuid( uuid() );
@@ -161,7 +161,7 @@ Playlist::create( const source_ptr& author,
 
     DatabaseCommand_CreatePlaylist* cmd = new DatabaseCommand_CreatePlaylist( author, playlist );
     connect( cmd, SIGNAL( finished() ), playlist.data(), SIGNAL( created() ) );
-    Database::instance()->enqueue( dbcmd_ptr(cmd) );
+    Database::instance()->enqueue( dbcmd_ptr( cmd ) );
     playlist->reportCreated( playlist );
 
     return playlist;
@@ -173,16 +173,22 @@ Playlist::get( const QString& guid )
 {
     playlist_ptr p;
 
-    foreach( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
+    foreach( const Tomahawk::source_ptr & source, SourceList::instance()->sources() )
     {
         p = source->dbCollection()->playlist( guid );
         if ( !p )
+        {
             p = source->dbCollection()->autoPlaylist( guid );
+        }
         if ( !p )
+        {
             p = source->dbCollection()->station( guid );
+        }
 
         if ( p )
+        {
             return p;
+        }
     }
 
     return p;
@@ -193,7 +199,7 @@ void
 Playlist::rename( const QString& title )
 {
     DatabaseCommand_RenamePlaylist* cmd = new DatabaseCommand_RenamePlaylist( author(), guid(), title );
-    Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 
@@ -203,7 +209,9 @@ Playlist::setTitle( const QString& title )
     Q_D( Playlist );
 
     if ( title == d->title )
+    {
         return;
+    }
 
     const QString oldTitle = d->title;
     d->title = title;
@@ -231,7 +239,7 @@ Playlist::reportDeleted( const Tomahawk::playlist_ptr& self )
     Q_ASSERT( self.data() == this );
     if ( !d->updaters.isEmpty() )
     {
-        foreach( PlaylistUpdaterInterface* updater, d->updaters )
+        foreach( PlaylistUpdaterInterface * updater, d->updaters )
         {
             updater->remove();
         }
@@ -274,10 +282,12 @@ bool
 Playlist::hasCustomDeleter() const
 {
     Q_D( const Playlist );
-    foreach ( PlaylistUpdaterInterface* updater, d->updaters )
+    foreach ( PlaylistUpdaterInterface * updater, d->updaters )
     {
         if ( updater->hasCustomDeleter() )
+        {
             return true;
+        }
     }
 
     return false;
@@ -287,11 +297,11 @@ Playlist::hasCustomDeleter() const
 void
 Playlist::loadRevision( const QString& rev )
 {
-//    qDebug() << Q_FUNC_INFO << currentrevision() << rev << m_title;
+    //    qDebug() << Q_FUNC_INFO << currentrevision() << rev << m_title;
 
     setBusy( true );
     DatabaseCommand_LoadPlaylistEntries* cmd =
-            new DatabaseCommand_LoadPlaylistEntries( rev.isEmpty() ? currentrevision() : rev );
+        new DatabaseCommand_LoadPlaylistEntries( rev.isEmpty() ? currentrevision() : rev );
 
     connect( cmd, SIGNAL( done( const QString&,
                                 const QList<QString>&,
@@ -299,12 +309,12 @@ Playlist::loadRevision( const QString& rev )
                                 bool,
                                 const QMap< QString, Tomahawk::plentry_ptr >&,
                                 bool ) ),
-                    SLOT( setRevision( const QString&,
-                                       const QList<QString>&,
-                                       const QList<QString>&,
-                                       bool,
-                                       const QMap< QString, Tomahawk::plentry_ptr >&,
-                                       bool ) ) );
+             SLOT( setRevision( const QString&,
+                                const QList<QString>&,
+                                const QList<QString>&,
+                                bool,
+                                const QMap< QString, Tomahawk::plentry_ptr >&,
+                                bool ) ) );
 
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
@@ -325,32 +335,34 @@ Playlist::createNewRevision( const QString& newrev, const QString& oldrev, const
     }
 
     if ( newrev != oldrev )
+    {
         setBusy( true );
+    }
 
     // calc list of newly added entries:
     QList<plentry_ptr> added = newEntries( entries );
     QStringList orderedguids;
     qDebug() << "Inserting ordered GUIDs:";
-    foreach( const plentry_ptr& p, entries )
+    foreach( const plentry_ptr & p, entries )
     {
         qDebug() << p->guid() << p->query()->track()->toString();
         orderedguids << p->guid();
     }
 
-    foreach( const plentry_ptr& p, added )
-        qDebug() << p->guid();
+    foreach( const plentry_ptr & p, added )
+    qDebug() << p->guid();
 
     // source making the change (local user in this case)
     source_ptr author = SourceList::instance()->getLocal();
     // command writes new rev to DB and calls setRevision, which emits our signal
     DatabaseCommand_SetPlaylistRevision* cmd =
-            new DatabaseCommand_SetPlaylistRevision( author,
-                                                     guid(),
-                                                     newrev,
-                                                     oldrev,
-                                                     orderedguids,
-                                                     added,
-                                                     entries );
+        new DatabaseCommand_SetPlaylistRevision( author,
+                guid(),
+                newrev,
+                oldrev,
+                orderedguids,
+                added,
+                entries );
 
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
@@ -370,22 +382,24 @@ Playlist::updateEntries( const QString& newrev, const QString& oldrev, const QLi
     }
 
     if ( newrev != oldrev )
+    {
         setBusy( true );
+    }
 
     QStringList orderedguids;
-    foreach( const plentry_ptr& p, d->entries )
+    foreach( const plentry_ptr & p, d->entries )
     {
         orderedguids << p->guid();
     }
 
     qDebug() << "Updating playlist metadata:" << entries;
     DatabaseCommand_SetPlaylistRevision* cmd =
-    new DatabaseCommand_SetPlaylistRevision( SourceList::instance()->getLocal(),
-                                             guid(),
-                                             newrev,
-                                             oldrev,
-                                             orderedguids,
-                                             entries );
+        new DatabaseCommand_SetPlaylistRevision( SourceList::instance()->getLocal(),
+                guid(),
+                newrev,
+                oldrev,
+                orderedguids,
+                entries );
 
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
@@ -411,7 +425,7 @@ Playlist::setRevision( const QString& rev,
                                    Q_ARG( QList<QString>, neworderedguids ),
                                    Q_ARG( QList<QString>, oldorderedguids ),
                                    Q_ARG( bool, is_newest_rev ),
-                                   QGenericArgument( "QMap< QString,Tomahawk::plentry_ptr >", (const void*)&addedmap ),
+                                   QGenericArgument( "QMap< QString,Tomahawk::plentry_ptr >", ( const void* )&addedmap ),
                                    Q_ARG( bool, applied )
                                  );
         return;
@@ -421,10 +435,12 @@ Playlist::setRevision( const QString& rev,
 
     Q_ASSERT( applied );
     if ( applied )
+    {
         d->currentrevision = rev;
+    }
     pr.applied = applied;
 
-    foreach( const plentry_ptr& entry, d->entries )
+    foreach( const plentry_ptr & entry, d->entries )
     {
         connect( entry.data(), SIGNAL( resultChanged() ), SLOT( onResultsChanged() ), Qt::UniqueConnection );
     }
@@ -439,7 +455,9 @@ Playlist::setRevision( const QString& rev,
         d->initEntries.clear();
     }
     else
+    {
         emit revisionLoaded( pr );
+    }
 
     checkRevisionQueue();
 }
@@ -459,7 +477,7 @@ Playlist::setNewRevision( const QString& rev,
     // build up correctly ordered new list of plentry_ptrs from
     // existing ones, and the ones that have been added
     QMap<QString, plentry_ptr> entriesmap;
-    foreach ( const plentry_ptr& p, d->entries )
+    foreach ( const plentry_ptr & p, d->entries )
     {
         entriesmap.insert( p->guid(), p );
     }
@@ -467,7 +485,7 @@ Playlist::setNewRevision( const QString& rev,
     // re-build m_entries from neworderedguids. plentries come either from the old m_entries OR addedmap.
     d->entries.clear();
 
-    foreach ( const QString& id, neworderedguids )
+    foreach ( const QString & id, neworderedguids )
     {
         if ( entriesmap.contains( id ) )
         {
@@ -486,7 +504,7 @@ Playlist::setNewRevision( const QString& rev,
             tDebug() << "m_entries" << d->entries;
 
             tLog() << "Playlist error for playlist with guid" << guid() << "from source" << author()->friendlyName();
-//             Q_ASSERT( false ); // XXX
+            //             Q_ASSERT( false ); // XXX
         }
     }
 
@@ -510,7 +528,7 @@ Playlist::removeFromDatabase()
 }
 
 
-Playlist::Playlist( PlaylistPrivate *d )
+Playlist::Playlist( PlaylistPrivate* d )
     : d_ptr( d )
 {
     init();
@@ -530,7 +548,7 @@ Playlist::resolve()
 {
     Q_D( Playlist );
     QList< query_ptr > qlist;
-    foreach( const plentry_ptr& p, d->entries )
+    foreach( const plentry_ptr & p, d->entries )
     {
         qlist << p->query();
     }
@@ -619,8 +637,10 @@ Playlist::insertEntries( const QList< query_ptr >& queries, const int position )
         return;
     }
 
-    for ( int i = toInsert.size()-1; i >= 0; --i )
-        entries.insert( position, toInsert.at(i) );
+    for ( int i = toInsert.size() - 1; i >= 0; --i )
+    {
+        entries.insert( position, toInsert.at( i ) );
+    }
 
     createNewRevision( uuid(), d->currentrevision, entries );
 
@@ -637,9 +657,11 @@ Playlist::entriesFromQueries( const QList<Tomahawk::query_ptr>& queries, bool cl
 {
     QList<plentry_ptr> el;
     if ( !clearFirst )
+    {
         el = entries();
+    }
 
-    foreach( const query_ptr& query, queries )
+    foreach( const query_ptr & query, queries )
     {
         plentry_ptr e( new PlaylistEntry() );
         e->setGuid( uuid() );
@@ -648,7 +670,9 @@ Playlist::entriesFromQueries( const QList<Tomahawk::query_ptr>& queries, bool cl
         e->setLastmodified( 0 );
         QString annotation = "";
         if ( !query->property( "annotation" ).toString().isEmpty() )
+        {
             annotation = query->property( "annotation" ).toString();
+        }
         e->setAnnotation( annotation ); // FIXME
         e->setQuery( query );
 
@@ -663,15 +687,17 @@ Playlist::newEntries( const QList< plentry_ptr >& entries )
 {
     Q_D( Playlist );
     QSet<QString> currentguids;
-    foreach( const plentry_ptr& p, d->entries )
-        currentguids.insert( p->guid() ); // could be cached as member?
+    foreach( const plentry_ptr & p, d->entries )
+    currentguids.insert( p->guid() ); // could be cached as member?
 
     // calc list of newly added entries:
     QList<plentry_ptr> added;
-    foreach( const plentry_ptr& p, entries )
+    foreach( const plentry_ptr & p, entries )
     {
         if ( !currentguids.contains( p->guid() ) )
+        {
             added << p;
+        }
     }
     return added;
 }
@@ -898,7 +924,7 @@ Playlist::setCreatedOn( uint createdOn )
 }
 
 
-QList<PlaylistUpdaterInterface *>
+QList<PlaylistUpdaterInterface*>
 Playlist::updaters() const
 {
     Q_D( const Playlist );

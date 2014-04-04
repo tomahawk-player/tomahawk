@@ -32,36 +32,36 @@
 
 namespace Logger
 {
-    class DLLEXPORT TLog : public QDebug
+class DLLEXPORT TLog : public QDebug
+{
+  public:
+    TLog( unsigned int debugLevel = 0 );
+    virtual ~TLog();
+
+  private:
+    QString m_msg;
+    unsigned int m_debugLevel;
+};
+
+class DLLEXPORT TDebug : public TLog
+{
+  public:
+    TDebug( unsigned int debugLevel = LOGDEBUG ) : TLog( debugLevel )
     {
-    public:
-        TLog( unsigned int debugLevel = 0 );
-        virtual ~TLog();
+    }
+};
 
-    private:
-        QString m_msg;
-        unsigned int m_debugLevel;
-    };
-
-    class DLLEXPORT TDebug : public TLog
+class DLLEXPORT TSqlLog : public TLog
+{
+  public:
+    TSqlLog() : TLog( LOGSQL )
     {
-    public:
-        TDebug( unsigned int debugLevel = LOGDEBUG ) : TLog( debugLevel )
-        {
-        }
-    };
+    }
+};
 
-    class DLLEXPORT TSqlLog : public TLog
-    {
-    public:
-        TSqlLog() : TLog( LOGSQL )
-        {
-        }
-    };
-
-    DLLEXPORT void TomahawkLogHandler( QtMsgType type, const char* msg );
-    DLLEXPORT void setupLogfile();
-    DLLEXPORT QString logFile();
+DLLEXPORT void TomahawkLogHandler( QtMsgType type, const char* msg );
+DLLEXPORT void setupLogfile();
+DLLEXPORT QString logFile();
 }
 
 #define tLog Logger::TLog

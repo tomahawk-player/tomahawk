@@ -44,7 +44,7 @@ MsgProcessor::append( msg_ptr msg )
     if( QThread::currentThread() != thread() )
     {
         qDebug() << "reinvoking msgprocessor::append in correct thread, ie not" << QThread::currentThread();
-        QMetaObject::invokeMethod( this, "append", Qt::QueuedConnection, Q_ARG(msg_ptr, msg) );
+        QMetaObject::invokeMethod( this, "append", Qt::QueuedConnection, Q_ARG( msg_ptr, msg ) );
         return;
     }
 
@@ -60,8 +60,8 @@ MsgProcessor::append( msg_ptr msg )
         return;
     }
 
-    QFuture<msg_ptr> fut = QtConcurrent::run(&MsgProcessor::process, msg, m_mode, m_threshold);
-    QFutureWatcher<msg_ptr> * watcher = new QFutureWatcher<msg_ptr>;
+    QFuture<msg_ptr> fut = QtConcurrent::run( &MsgProcessor::process, msg, m_mode, m_threshold );
+    QFutureWatcher<msg_ptr>* watcher = new QFutureWatcher<msg_ptr>;
     connect( watcher, SIGNAL( finished() ),
              this, SLOT( processed() ),
              Qt::QueuedConnection );
@@ -73,7 +73,7 @@ MsgProcessor::append( msg_ptr msg )
 void
 MsgProcessor::processed()
 {
-    QFutureWatcher<msg_ptr> * watcher = (QFutureWatcher<msg_ptr> *) sender();
+    QFutureWatcher<msg_ptr>* watcher = ( QFutureWatcher<msg_ptr>* ) sender();
     msg_ptr msg = watcher->result();
     watcher->deleteLater();
     handleProcessedMsg( msg );
@@ -112,20 +112,20 @@ msg_ptr
 MsgProcessor::process( msg_ptr msg, quint32 mode, quint32 threshold )
 {
     // uncompress if needed
-    if( (mode & UNCOMPRESS_ALL) && msg->is( Msg::COMPRESSED ) )
+    if( ( mode & UNCOMPRESS_ALL ) && msg->is( Msg::COMPRESSED ) )
     {
-//        qDebug() << "MsgProcessor::UNCOMPRESSING";
+        //        qDebug() << "MsgProcessor::UNCOMPRESSING";
         msg->d_func()->payload = qUncompress( msg->payload() );
         msg->d_func()->length  = msg->d_func()->payload.length();
         msg->d_func()->flags ^= Msg::COMPRESSED;
     }
 
     // parse json payload into qvariant if needed
-    if( (mode & PARSE_JSON) &&
-        msg->is( Msg::JSON ) &&
-        msg->d_func()->json_parsed == false )
+    if( ( mode & PARSE_JSON ) &&
+            msg->is( Msg::JSON ) &&
+            msg->d_func()->json_parsed == false )
     {
-//        qDebug() << "MsgProcessor::PARSING JSON";
+        //        qDebug() << "MsgProcessor::PARSING JSON";
         bool ok;
         QJson::Parser parser;
         msg->d_func()->json = parser.parse( msg->payload(), &ok );
@@ -133,11 +133,11 @@ MsgProcessor::process( msg_ptr msg, quint32 mode, quint32 threshold )
     }
 
     // compress if needed
-    if( (mode & COMPRESS_IF_LARGE) &&
-        !msg->is( Msg::COMPRESSED )
-        && msg->length() > threshold )
+    if( ( mode & COMPRESS_IF_LARGE ) &&
+            !msg->is( Msg::COMPRESSED )
+            && msg->length() > threshold )
     {
-//        qDebug() << "MsgProcessor::COMPRESSING";
+        //        qDebug() << "MsgProcessor::COMPRESSING";
         msg->d_func()->payload = qCompress( msg->payload(), 9 );
         msg->d_func()->length  = msg->d_func()->payload.length();
         msg->d_func()->flags |= Msg::COMPRESSED;

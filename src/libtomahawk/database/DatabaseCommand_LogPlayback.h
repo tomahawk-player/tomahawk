@@ -35,15 +35,15 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCommand_LogPlayback : public DatabaseCommandLoggable
 {
-Q_OBJECT
-Q_PROPERTY( QString artist READ artist WRITE setArtist )
-Q_PROPERTY( QString track READ track WRITE setTrack )
-Q_PROPERTY( unsigned int playtime READ playtime WRITE setPlaytime )
-Q_PROPERTY( unsigned int secsPlayed READ secsPlayed WRITE setSecsPlayed )
-Q_PROPERTY( unsigned int trackDuration READ trackDuration WRITE setTrackDuration )
-Q_PROPERTY( int action READ action WRITE setAction )
+    Q_OBJECT
+    Q_PROPERTY( QString artist READ artist WRITE setArtist )
+    Q_PROPERTY( QString track READ track WRITE setTrack )
+    Q_PROPERTY( unsigned int playtime READ playtime WRITE setPlaytime )
+    Q_PROPERTY( unsigned int secsPlayed READ secsPlayed WRITE setSecsPlayed )
+    Q_PROPERTY( unsigned int trackDuration READ trackDuration WRITE setTrackDuration )
+    Q_PROPERTY( int action READ action WRITE setAction )
 
-public:
+  public:
     enum Action
     {
         Started = 1,
@@ -64,39 +64,87 @@ public:
         setTrack( track->track() );
     }
 
-    virtual QString commandname() const { return "logplayback"; }
+    virtual QString commandname() const
+    {
+        return "logplayback";
+    }
 
     virtual void exec( DatabaseImpl* );
     virtual void postCommitHook();
 
-    virtual bool doesMutates() const { return true; }
-    virtual bool singletonCmd() const { return ( m_action == Started ); }
+    virtual bool doesMutates() const
+    {
+        return true;
+    }
+    virtual bool singletonCmd() const
+    {
+        return ( m_action == Started );
+    }
     virtual bool localOnly() const;
-    virtual bool groupable() const { return true; }
+    virtual bool groupable() const
+    {
+        return true;
+    }
 
-    QString artist() const { return m_artist; }
-    void setArtist( const QString& s ) { m_artist = s; }
+    QString artist() const
+    {
+        return m_artist;
+    }
+    void setArtist( const QString& s )
+    {
+        m_artist = s;
+    }
 
-    QString track() const { return m_track; }
-    void setTrack( const QString& s ) { m_track = s; }
+    QString track() const
+    {
+        return m_track;
+    }
+    void setTrack( const QString& s )
+    {
+        m_track = s;
+    }
 
-    unsigned int playtime() const { return m_playtime; }
-    void setPlaytime( unsigned int i ) { m_playtime = i; }
+    unsigned int playtime() const
+    {
+        return m_playtime;
+    }
+    void setPlaytime( unsigned int i )
+    {
+        m_playtime = i;
+    }
 
-    unsigned int secsPlayed() const { return m_secsPlayed; }
-    void setSecsPlayed( unsigned int i ) { m_secsPlayed = i; }
+    unsigned int secsPlayed() const
+    {
+        return m_secsPlayed;
+    }
+    void setSecsPlayed( unsigned int i )
+    {
+        m_secsPlayed = i;
+    }
 
-    unsigned int trackDuration() const { return m_trackDuration; }
-    void setTrackDuration( unsigned int trackDuration ) { m_trackDuration = trackDuration; }
+    unsigned int trackDuration() const
+    {
+        return m_trackDuration;
+    }
+    void setTrackDuration( unsigned int trackDuration )
+    {
+        m_trackDuration = trackDuration;
+    }
 
-    int action() const { return m_action; }
-    void setAction( int a ) { m_action = (Action)a; }
+    int action() const
+    {
+        return m_action;
+    }
+    void setAction( int a )
+    {
+        m_action = ( Action )a;
+    }
 
-signals:
+  signals:
     void trackPlaying( const Tomahawk::track_ptr& track, unsigned int duration );
     void trackPlayed( const Tomahawk::track_ptr& track, const Tomahawk::PlaybackLog& log );
 
-private:
+  private:
     QString m_artist;
     QString m_track;
     unsigned int m_secsPlayed;

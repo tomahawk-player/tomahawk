@@ -48,20 +48,20 @@ class DropJobNotifier;
 class DLLEXPORT GroovesharkParser : public QObject
 {
     Q_OBJECT
-public:
+  public:
     explicit GroovesharkParser( const QStringList& trackUrls, bool createNewPlaylist = false, QObject* parent = 0 );
     virtual ~GroovesharkParser();
-signals:
+  signals:
     void track( const Tomahawk::query_ptr& track );
     void tracks( const QList< Tomahawk::query_ptr > tracks );
     void playlist( const Tomahawk::query_ptr& playlist );
 
-private slots:
+  private slots:
     void groovesharkLookupFinished();
     void trackPageFetchFinished();
 
     void playlistCreated();
-private:
+  private:
     QPixmap pixmap() const;
 
     void lookupUrl( const QString& url );

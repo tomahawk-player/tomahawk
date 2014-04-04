@@ -168,7 +168,7 @@ LastFmInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 
 
 void
-LastFmInfoPlugin::nowPlaying( const QVariant &input )
+LastFmInfoPlugin::nowPlaying( const QVariant& input )
 {
     m_track = lastfm::MutableTrack();
     if ( !input.canConvert< QVariantMap >() )
@@ -179,20 +179,26 @@ LastFmInfoPlugin::nowPlaying( const QVariant &input )
 
     QVariantMap map = input.toMap();
     if ( map.contains( "private" ) && map[ "private" ] == TomahawkSettings::FullyPrivate )
+    {
         return;
+    }
 
     if ( !map.contains( "trackinfo" ) || !map[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() || !m_scrobbler )
     {
         tLog() << Q_FUNC_INFO << "LastFmInfoPlugin::nowPlaying no m_scrobbler, or cannot convert input!";
         if ( !m_scrobbler )
+        {
             tLog() << Q_FUNC_INFO << "No scrobbler!";
+        }
         return;
     }
 
     Tomahawk::InfoSystem::InfoStringHash hash = map[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
 
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) || !hash.contains( "duration" ) )
+    {
         return;
+    }
 
     m_track.stamp();
 
@@ -211,13 +217,17 @@ void
 LastFmInfoPlugin::scrobble()
 {
     if ( !m_scrobbler || m_track.isNull() )
+    {
         return;
+    }
 
     tLog() << Q_FUNC_INFO << "Scrobbling now:" << m_track.toString();
 
     // FIXME: workaround for the duration-less dilandau (and others) tracks
     if ( m_track.duration() == 0 )
+    {
         m_track.setDuration( 31 );
+    }
 
     m_scrobbler->cache( m_track );
     m_scrobbler->submit();
@@ -237,7 +247,9 @@ LastFmInfoPlugin::sendLoveSong( const InfoType type, QVariant input )
 
     InfoStringHash hash = input.toMap()[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) )
+    {
         return;
+    }
 
     lastfm::MutableTrack track;
     track.stamp();
@@ -278,7 +290,7 @@ LastFmInfoPlugin::fetchSimilarArtists( Tomahawk::InfoSystem::InfoRequestData req
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = hash["artist"];
 
-    emit getCachedInfo( criteria, Q_INT64_C(2419200000), requestData );
+    emit getCachedInfo( criteria, Q_INT64_C( 2419200000 ), requestData );
 }
 
 
@@ -301,7 +313,7 @@ LastFmInfoPlugin::fetchSimilarTracks( Tomahawk::InfoSystem::InfoRequestData requ
     criteria["artist"] = hash["artist"];
     criteria["track"] = hash["track"];
 
-    emit getCachedInfo( criteria, Q_INT64_C(2419200000), requestData );
+    emit getCachedInfo( criteria, Q_INT64_C( 2419200000 ), requestData );
 }
 
 
@@ -323,7 +335,7 @@ LastFmInfoPlugin::fetchTopTracks( Tomahawk::InfoSystem::InfoRequestData requestD
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = hash["artist"];
 
-    emit getCachedInfo( criteria, Q_INT64_C(2419200000), requestData );
+    emit getCachedInfo( criteria, Q_INT64_C( 2419200000 ), requestData );
 }
 
 
@@ -345,7 +357,7 @@ LastFmInfoPlugin::fetchArtistInfo( Tomahawk::InfoSystem::InfoRequestData request
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = hash["artist"];
 
-    emit getCachedInfo( criteria, Q_INT64_C(2419200000), requestData );
+    emit getCachedInfo( criteria, Q_INT64_C( 2419200000 ), requestData );
 }
 
 
@@ -363,11 +375,13 @@ LastFmInfoPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData 
     {
         dataError( requestData );
         return;
-    } else {
+    }
+    else
+    {
         criteria["chart_id"] = hash["chart_id"];
     }
 
-    emit getCachedInfo( criteria, Q_INT64_C(0), requestData );
+    emit getCachedInfo( criteria, Q_INT64_C( 0 ), requestData );
 }
 
 
@@ -382,7 +396,7 @@ LastFmInfoPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData 
     InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     Tomahawk::InfoSystem::InfoStringHash criteria;
 
-    emit getCachedInfo( criteria, Q_INT64_C(0), requestData );
+    emit getCachedInfo( criteria, Q_INT64_C( 0 ), requestData );
 }
 
 
@@ -405,7 +419,7 @@ LastFmInfoPlugin::fetchAlbumInfo( Tomahawk::InfoSystem::InfoRequestData requestD
     criteria["artist"] = hash["artist"];
     criteria["album"] = hash["album"];
 
-    emit getCachedInfo( criteria, Q_INT64_C(2419200000), requestData );
+    emit getCachedInfo( criteria, Q_INT64_C( 2419200000 ), requestData );
 }
 
 
@@ -424,7 +438,7 @@ LastFmInfoPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::In
     {
         case InfoChart:
         {
-             /// We need something to check if the request is actually ment to go to this plugin
+            /// We need something to check if the request is actually ment to go to this plugin
             if ( !hash.contains( "chart_source" ) )
             {
                 dataError( requestData );
@@ -560,10 +574,10 @@ LastFmInfoPlugin::similarArtistsReturned()
     QStringList al;
     QStringList sl;
 
-    foreach ( const QString& artist, similarArtists.values() )
-        al << artist;
+    foreach ( const QString & artist, similarArtists.values() )
+    al << artist;
     foreach ( int score, similarArtists.keys() )
-        sl << QString::number( score );
+    sl << QString::number( score );
 
     for ( int i = al.count() - 1; i >= 0; i-- )
     {
@@ -584,7 +598,7 @@ LastFmInfoPlugin::similarArtistsReturned()
         Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
         Tomahawk::InfoSystem::InfoStringHash criteria;
         criteria["artist"] = origData["artist"];
-        emit updateCache( criteria, Q_INT64_C(2419200000), requestData.type, returnedData );
+        emit updateCache( criteria, Q_INT64_C( 2419200000 ), requestData.type, returnedData );
     }
 }
 
@@ -610,7 +624,7 @@ LastFmInfoPlugin::similarTracksReturned()
         al << track.second;
     }
     foreach ( int score, similarTracks.keys() )
-        sl << QString::number( score );
+    sl << QString::number( score );
 
     for ( int i = tl.count() - 1; i >= 0; i-- )
     {
@@ -636,7 +650,7 @@ LastFmInfoPlugin::similarTracksReturned()
         Tomahawk::InfoSystem::InfoStringHash criteria;
         criteria["artist"] = origData["artist"];
         criteria["track"] = origData["track"];
-        emit updateCache( criteria, Q_INT64_C(2419200000), requestData.type, returnedData );
+        emit updateCache( criteria, Q_INT64_C( 2419200000 ), requestData.type, returnedData );
     }
 }
 
@@ -655,7 +669,7 @@ LastFmInfoPlugin::chartReturned()
     {
         QList<lastfm::Track> tracks = parseTrackList( reply );
         QList<InfoStringHash> top_tracks;
-        foreach( const lastfm::Track& t, tracks )
+        foreach( const lastfm::Track & t, tracks )
         {
             InfoStringHash pair;
             pair[ "artist" ] = t.artist().toString();
@@ -670,8 +684,8 @@ LastFmInfoPlugin::chartReturned()
     {
         QList<lastfm::Artist> list = lastfm::Artist::list( reply );
         QStringList al;
-        foreach ( const lastfm::Artist& a, list )
-            al << a.toString();
+        foreach ( const lastfm::Artist & a, list )
+        al << a.toString();
         returnedData["artists"] = al;
         returnedData["type"] = "artists";
     }
@@ -705,7 +719,7 @@ LastFmInfoPlugin::topTracksReturned()
     Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = origData["artist"];
-    emit updateCache( criteria, Q_INT64_C(0), requestData.type, returnedData );
+    emit updateCache( criteria, Q_INT64_C( 0 ), requestData.type, returnedData );
 }
 
 
@@ -733,10 +747,10 @@ LastFmInfoPlugin::artistInfoReturned()
 
             QString biography = lfm["artist"]["bio"]["content"].text().trimmed().replace( "User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.", "" );
             biography = biography.replace( tagRegExp, "<a href=\"tomahawk://view/tag?name=\\1\">" )
-                                 .replace( artistRegExp, "<a href=\"tomahawk://view/artist?name=\\1\">" )
-                                 .replace( albumRegExp, "<a href=\"tomahawk://view/album?artist=\\2&name=\\3\">" )
-                                 .replace( trackRegExp, "<a href=\"tomahawk://view/track?artist=\\2&album=\\3&name=\\4\">" )
-                                 .replace( "&album=_", "" );
+                        .replace( artistRegExp, "<a href=\"tomahawk://view/artist?name=\\1\">" )
+                        .replace( albumRegExp, "<a href=\"tomahawk://view/album?artist=\\2&name=\\3\">" )
+                        .replace( trackRegExp, "<a href=\"tomahawk://view/track?artist=\\2&album=\\3&name=\\4\">" )
+                        .replace( "&album=_", "" );
 
             QVariantHash siteData;
             siteData[ "site" ] = "last.fm";
@@ -747,7 +761,7 @@ LastFmInfoPlugin::artistInfoReturned()
             Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
             Tomahawk::InfoSystem::InfoStringHash criteria;
             criteria["artist"] = origData["artist"];
-            emit updateCache( criteria, Q_INT64_C(0), requestData.type, returnedData );
+            emit updateCache( criteria, Q_INT64_C( 0 ), requestData.type, returnedData );
         }
         emit info( requestData, returnedData );
     }
@@ -757,9 +771,13 @@ LastFmInfoPlugin::artistInfoReturned()
 
         QUrl imgurl = artist.imageUrl( lastfm::AbstractType::ExtraLargeImage );
         if ( !imgurl.isValid() )
+        {
             imgurl = artist.imageUrl( lastfm::AbstractType::MegaImage );
+        }
         if ( !imgurl.isValid() )
+        {
             imgurl = artist.imageUrl( lastfm::AbstractType::LargeImage );
+        }
 
         QNetworkRequest req( imgurl );
         QNetworkReply* newReply = Tomahawk::Utils::nam()->get( req );
@@ -782,9 +800,13 @@ LastFmInfoPlugin::albumInfoReturned()
         {
             QUrl imgurl = QUrl( lfm["album"]["image size=extralarge"].text() );
             if ( !imgurl.isValid() )
+            {
                 imgurl = QUrl( lfm["album"]["image size=mega"].text() );
+            }
             if ( !imgurl.isValid() )
+            {
                 imgurl = QUrl( lfm["album"]["image size=large"].text() );
+            }
 
             QNetworkRequest req( imgurl );
             QNetworkReply* newReply = Tomahawk::Utils::nam()->get( req );
@@ -813,10 +835,12 @@ LastFmInfoPlugin::coverArtReturned()
             return;
         }
 
-        foreach ( const QUrl& url, m_badUrls )
+        foreach ( const QUrl & url, m_badUrls )
         {
             if ( reply->url().toString().startsWith( url.toString() ) )
+            {
                 ba = QByteArray();
+            }
         }
 
         QVariantMap returnedData;
@@ -828,7 +852,7 @@ LastFmInfoPlugin::coverArtReturned()
         Tomahawk::InfoSystem::InfoStringHash criteria;
         criteria["artist"] = origData["artist"];
         criteria["album"] = origData["album"];
-        emit updateCache( criteria, Q_INT64_C(2419200000), requestData.type, returnedData );
+        emit updateCache( criteria, Q_INT64_C( 2419200000 ), requestData.type, returnedData );
     }
     else
     {
@@ -857,10 +881,12 @@ LastFmInfoPlugin::artistImagesReturned()
             emit info( reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
             return;
         }
-        foreach ( const QUrl& url, m_badUrls )
+        foreach ( const QUrl & url, m_badUrls )
         {
             if ( reply->url().toString().startsWith( url.toString() ) )
+            {
                 ba = QByteArray();
+            }
         }
 
         QVariantMap returnedData;
@@ -874,7 +900,7 @@ LastFmInfoPlugin::artistImagesReturned()
         Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
         Tomahawk::InfoSystem::InfoStringHash criteria;
         criteria["artist"] = origData["artist"];
-        emit updateCache( criteria, Q_INT64_C(2419200000), requestData.type, returnedData );
+        emit updateCache( criteria, Q_INT64_C( 2419200000 ), requestData.type, returnedData );
     }
     else
     {
@@ -899,10 +925,13 @@ void
 LastFmInfoPlugin::settingsChanged()
 {
     if ( m_account.isNull() )
+    {
         return;
+    }
 
     if ( !m_scrobbler && m_account.data()->scrobble() )
-    { // can simply create the scrobbler
+    {
+        // can simply create the scrobbler
         lastfm::ws::Username = m_account.data()->username();
         m_pw = m_account.data()->password();
 
@@ -914,7 +943,7 @@ LastFmInfoPlugin::settingsChanged()
         m_scrobbler = 0;
     }
     else if ( m_account.data()->username() != lastfm::ws::Username ||
-        m_account.data()->password() != m_pw )
+              m_account.data()->password() != m_pw )
     {
         qDebug() << "Last.fm credentials changed, re-creating scrobbler";
         lastfm::ws::Username = m_account.data()->username();
@@ -944,13 +973,15 @@ LastFmInfoPlugin::onAuthenticated()
 
     lastfm::XmlQuery lfm;
     lfm.parse( authJob->readAll() );
-    if ( authJob->error() == QNetworkReply::NoError && lfm.attribute("status") == "ok" )
+    if ( authJob->error() == QNetworkReply::NoError && lfm.attribute( "status" ) == "ok" )
     {
         lastfm::ws::SessionKey = lfm[ "session" ][ "key" ].text();
         m_account.data()->setSessionKey( lastfm::ws::SessionKey.toLatin1() );
 
         if ( m_account.data()->scrobble() )
+        {
             m_scrobbler = new lastfm::Audioscrobbler( "thk" );
+        }
     }
     else
     {
@@ -958,11 +989,17 @@ LastFmInfoPlugin::onAuthenticated()
 
         QString error = "Got error in Last.fm authentication job";
         if ( lfm.children( "error" ).size() > 0 )
+        {
             error += ": " + lfm.text();
+        }
         else if ( authJob->error() != QNetworkReply::NoError )
+        {
             error += ": " + authJob->errorString();
+        }
         else
+        {
             error += ".";
+        }
 
         tLog() << error.simplified();
     }
@@ -975,7 +1012,9 @@ void
 LastFmInfoPlugin::createScrobbler()
 {
     if ( m_account.isNull() || lastfm::ws::Username.isEmpty() )
+    {
         return;
+    }
 
     if ( m_account.data()->sessionKey().isEmpty() ) // no session key, so get one
     {

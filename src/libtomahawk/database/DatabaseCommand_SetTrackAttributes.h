@@ -30,8 +30,9 @@ namespace Tomahawk
 class DatabaseCommand_SetTrackAttributes : public DatabaseCommandLoggable
 {
     Q_OBJECT
-public:
-    enum AttributeType {
+  public:
+    enum AttributeType
+    {
         EchonestCatalogId = 0,
     };
 
@@ -42,15 +43,30 @@ public:
     DatabaseCommand_SetTrackAttributes() {} // JSON
 
     virtual void exec( DatabaseImpl* lib );
-    virtual bool doesMutates() const { return true; }
-    virtual bool loggable() const { return m_loggable; }
+    virtual bool doesMutates() const
+    {
+        return true;
+    }
+    virtual bool loggable() const
+    {
+        return m_loggable;
+    }
 
-    virtual QString commandname() const { return "settrackattributes"; }
+    virtual QString commandname() const
+    {
+        return "settrackattributes";
+    }
 
-    void setType( int type ) { m_type = (AttributeType)type; }
-    int type() const { return (int)m_type; }
+    void setType( int type )
+    {
+        m_type = ( AttributeType )type;
+    }
+    int type() const
+    {
+        return ( int )m_type;
+    }
 
-private:
+  private:
     bool m_loggable, m_delete;
 
     AttributeType m_type;

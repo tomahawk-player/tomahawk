@@ -38,24 +38,24 @@ class ExternalResolver;
 class DLLEXPORT ScriptCommand_LookupUrl : public ScriptCommand
 {
     Q_OBJECT
-public:
+  public:
     explicit ScriptCommand_LookupUrl( Tomahawk::ExternalResolver* resolver, const QString& url, QObject* parent = 0 );
     virtual ~ScriptCommand_LookupUrl();
 
     virtual void enqueue();
 
-signals:
+  signals:
     void information( const QString& url, const QSharedPointer<QObject>& variant );
     void done();
 
-protected:
+  protected:
     virtual void exec();
     virtual void reportFailure();
 
-private slots:
+  private slots:
     void onResolverDone( const QString& url, const QSharedPointer<QObject>& information );
 
-private:
+  private:
     Q_DECLARE_PRIVATE( ScriptCommand_LookupUrl )
     ScriptCommand_LookupUrlPrivate* d_ptr;
 };

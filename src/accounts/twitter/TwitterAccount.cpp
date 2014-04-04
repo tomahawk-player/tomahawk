@@ -46,7 +46,7 @@ TwitterAccountFactory::createAccount( const QString& accountId )
 }
 
 
-TwitterAccount::TwitterAccount( const QString &accountId )
+TwitterAccount::TwitterAccount( const QString& accountId )
     : Account( accountId )
     , m_isAuthenticated( false )
     , m_isAuthenticating( false )
@@ -78,7 +78,9 @@ TwitterAccount::configDialogAuthedSignalSlot( bool authed )
     tDebug() << Q_FUNC_INFO;
     m_isAuthenticated = authed;
     if ( !credentials()[ "username" ].toString().isEmpty() )
+    {
         setAccountFriendlyName( QString( "@%1" ).arg( credentials()[ "username" ].toString() ) );
+    }
     syncConfig();
     emit configurationChanged();
 }
@@ -87,24 +89,24 @@ TwitterAccount::configDialogAuthedSignalSlot( bool authed )
 Account::ConnectionState
 TwitterAccount::connectionState() const
 {
-//    if ( m_twitterSipPlugin.isNull() )
-        return Account::Disconnected;
+    //    if ( m_twitterSipPlugin.isNull() )
+    return Account::Disconnected;
 
-//    return m_twitterSipPlugin.data()->connectionState();
+    //    return m_twitterSipPlugin.data()->connectionState();
 }
 
 SipPlugin*
 TwitterAccount::sipPlugin()
 {
-//    if ( m_twitterSipPlugin.isNull() )
-//    {
-//        qDebug() << "CHECKING:" << configuration() << configuration()[ "cachedpeers" ];
-//        m_twitterSipPlugin = QPointer< TwitterSipPlugin >( new TwitterSipPlugin( this ) );
+    //    if ( m_twitterSipPlugin.isNull() )
+    //    {
+    //        qDebug() << "CHECKING:" << configuration() << configuration()[ "cachedpeers" ];
+    //        m_twitterSipPlugin = QPointer< TwitterSipPlugin >( new TwitterSipPlugin( this ) );
 
-//        connect( m_twitterSipPlugin.data(), SIGNAL( stateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), this, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) );
-//        return m_twitterSipPlugin.data();
-//    }
-//    return m_twitterSipPlugin.data();
+    //        connect( m_twitterSipPlugin.data(), SIGNAL( stateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), this, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) );
+    //        return m_twitterSipPlugin.data();
+    //    }
+    //    return m_twitterSipPlugin.data();
     return 0;
 }
 
@@ -113,7 +115,9 @@ Tomahawk::InfoSystem::InfoPluginPtr
 TwitterAccount::infoPlugin()
 {
     if ( m_twitterInfoPlugin.isNull() )
+    {
         m_twitterInfoPlugin = QPointer< Tomahawk::InfoSystem::TwitterInfoPlugin >( new Tomahawk::InfoSystem::TwitterInfoPlugin( this ) );
+    }
 
     return Tomahawk::InfoSystem::InfoPluginPtr( m_twitterInfoPlugin.data() );
 }
@@ -159,8 +163,8 @@ TwitterAccount::authenticateSlot()
     {
         m_isAuthenticating = true;
         tDebug() << Q_FUNC_INFO << "Verifying credentials";
-        QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
-        connect( credVerifier, SIGNAL( parsedUser( const QTweetUser & ) ), SLOT( connectAuthVerifyReply( const QTweetUser & ) ) );
+        QTweetAccountVerifyCredentials* credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
+        connect( credVerifier, SIGNAL( parsedUser( const QTweetUser& ) ), SLOT( connectAuthVerifyReply( const QTweetUser& ) ) );
         credVerifier->verify();
     }
 }
@@ -171,11 +175,13 @@ TwitterAccount::deauthenticate()
 {
     tDebug() << Q_FUNC_INFO;
 
-//    if ( m_twitterSipPlugin )
-//        sipPlugin()->disconnectPlugin();
+    //    if ( m_twitterSipPlugin )
+    //        sipPlugin()->disconnectPlugin();
 
     if ( m_twitterInfoPlugin )
+    {
         Tomahawk::InfoSystem::InfoSystem::instance()->removeInfoPlugin( m_twitterInfoPlugin.data() );
+    }
 
     m_isAuthenticated = false;
     m_isAuthenticating = false;
@@ -190,14 +196,18 @@ TwitterAccount::refreshTwitterAuth()
 {
     qDebug() << Q_FUNC_INFO << " begin";
     if( !m_twitterAuth.isNull() )
+    {
         delete m_twitterAuth.data();
+    }
 
     Q_ASSERT( TomahawkUtils::nam() != 0 );
     tDebug() << Q_FUNC_INFO << " with nam " << TomahawkUtils::nam();
     m_twitterAuth = QPointer< TomahawkOAuthTwitter >( new TomahawkOAuthTwitter( TomahawkUtils::nam(), this ) );
 
     if( m_twitterAuth.isNull() )
-      return false;
+    {
+        return false;
+    }
 
     m_twitterAuth.data()->setOAuthToken( credentials()[ "oauthtoken" ].toString().toLatin1() );
     m_twitterAuth.data()->setOAuthTokenSecret( credentials()[ "oauthtokensecret" ].toString().toLatin1() );
@@ -207,7 +217,7 @@ TwitterAccount::refreshTwitterAuth()
 
 
 void
-TwitterAccount::connectAuthVerifyReply( const QTweetUser &user )
+TwitterAccount::connectAuthVerifyReply( const QTweetUser& user )
 {
     m_isAuthenticating = false;
     if ( user.id() == 0 )
@@ -223,7 +233,7 @@ TwitterAccount::connectAuthVerifyReply( const QTweetUser &user )
         setConfiguration( config );
         sync();
 
-//        sipPlugin()->connectPlugin();
+        //        sipPlugin()->connectPlugin();
 
         m_isAuthenticated = true;
         emit nowAuthenticated( m_twitterAuth, user );
@@ -235,7 +245,9 @@ QPixmap
 TwitterAccount::icon() const
 {
     if ( connectionState() == Connected )
+    {
         return m_onlinePixmap;
+    }
     return m_offlinePixmap;
 }
 

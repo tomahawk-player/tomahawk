@@ -23,7 +23,7 @@
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "Source.h"
+#include "Source.h"
 #endif
 
 
@@ -31,8 +31,8 @@ namespace Tomahawk
 {
 
 DatabaseCommand_ModifyInboxEntry::DatabaseCommand_ModifyInboxEntry( const Tomahawk::query_ptr& query,
-                                                                    bool newValue,
-                                                                    QObject* parent )
+        bool newValue,
+        QObject* parent )
     : DatabaseCommand( parent )
     , m_query( query )
     , m_newValue( newValue )
@@ -54,14 +54,14 @@ DatabaseCommand_ModifyInboxEntry::exec( DatabaseImpl* dbi )
     }
 
     query.prepare(
-                "UPDATE social_attributes "
-                "SET v = ? "
-                "WHERE social_attributes.k = ? AND social_attributes.id = ( "
-                    "SELECT id FROM track "
-                    "WHERE track.name = ? AND track.artist = ( "
-                        "SELECT id FROM artist WHERE artist.name = ? "
-                    ") "
-                ")" );
+        "UPDATE social_attributes "
+        "SET v = ? "
+        "WHERE social_attributes.k = ? AND social_attributes.id = ( "
+        "SELECT id FROM track "
+        "WHERE track.name = ? AND track.artist = ( "
+        "SELECT id FROM artist WHERE artist.name = ? "
+        ") "
+        ")" );
     query.addBindValue( m_newValue );
     query.addBindValue( "Inbox" );
     query.addBindValue( m_query->queryTrack()->track() );

@@ -38,8 +38,9 @@ QNR_IODeviceStream::QNR_IODeviceStream( const QSharedPointer<QNetworkReply>& rep
     , m_pos( 0 )
     , m_timer( new QTimer( this ) )
 {
-    if ( !m_networkReply->isOpen() ) {
-        m_networkReply->open(QIODevice::ReadOnly);
+    if ( !m_networkReply->isOpen() )
+    {
+        m_networkReply->open( QIODevice::ReadOnly );
     }
 
     Q_ASSERT( m_networkReply->isOpen() );

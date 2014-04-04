@@ -70,7 +70,7 @@ FdoNotifyPlugin::FdoNotifyPlugin()
 
     // Query the window manager for its capabilties in styling notifications.
     notifications_interface = new org::freedesktop::Notifications( "org.freedesktop.Notifications", "/org/freedesktop/Notifications",
-                                                                   QDBusConnection::sessionBus(), this );
+            QDBusConnection::sessionBus(), this );
     QDBusPendingReply<QStringList> reply = notifications_interface->GetCapabilities();
 
     QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher( reply, this );
@@ -106,7 +106,9 @@ FdoNotifyPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "showing notification:" << TomahawkSettings::instance()->songChangeNotificationEnabled();
 
     if ( !TomahawkSettings::instance()->songChangeNotificationEnabled() )
+    {
         return;
+    }
 
     QVariant inputData = pushData.infoPair.second;
 
@@ -145,7 +147,7 @@ FdoNotifyPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 int
 FdoNotifyPlugin::getNotificationIconHeight()
 {
-     return 6 * TomahawkUtils::defaultFontHeight();
+    return 6 * TomahawkUtils::defaultFontHeight();
 }
 
 
@@ -172,22 +174,32 @@ void FdoNotifyPlugin::inboxReceived( const QVariant& input )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( !input.canConvert< QVariantMap >() )
+    {
         return;
+    }
 
     QVariantMap map = input.toMap();
 
     if ( !map.contains( "trackinfo" ) || !map[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+    {
         return;
+    }
     if ( !map.contains( "sourceinfo" ) || !map[ "sourceinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+    {
         return;
+    }
 
     InfoStringHash hash = map[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) )
+    {
         return;
+    }
 
     InfoStringHash src = map[ "sourceinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !src.contains( "friendlyname" ) )
+    {
         return;
+    }
 
     QString messageText;
     // If the window manager supports notification styling then use it.
@@ -195,10 +207,10 @@ void FdoNotifyPlugin::inboxReceived( const QVariant& input )
     {
         // Remark: If using xml-based markup in notifications, the supplied strings need to be escaped.
         messageText = tr( "%1 sent you\n%2%4 %3.", "%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist ('by' in english)" )
-                        .arg( Qt::escape( src["friendlyname"] ) )
-                        .arg( Qt::escape( hash[ "title" ] ) )
-                        .arg( Qt::escape( hash[ "artist" ] ) )
-                        .arg( QString( "\n<i>%1</i>" ).arg( tr( "by", "preposition to link track and artist" ) ) );
+                      .arg( Qt::escape( src["friendlyname"] ) )
+                      .arg( Qt::escape( hash[ "title" ] ) )
+                      .arg( Qt::escape( hash[ "artist" ] ) )
+                      .arg( QString( "\n<i>%1</i>" ).arg( tr( "by", "preposition to link track and artist" ) ) );
 
         // Dirty hack(TM) so that KNotify/QLabel recognizes the message as Rich Text
         messageText = QString( "<i></i>%1" ).arg( messageText );
@@ -206,9 +218,9 @@ void FdoNotifyPlugin::inboxReceived( const QVariant& input )
     else
     {
         messageText = tr( "%1 sent you \"%2\" by %3.", "%1 is a nickname, %2 is a title, %3 is an artist" )
-                        .arg( src["friendlyname"] )
-                        .arg( hash[ "title" ] )
-                        .arg( hash[ "artist" ] );
+                      .arg( src["friendlyname"] )
+                      .arg( hash[ "title" ] )
+                      .arg( hash[ "artist" ] );
     }
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "sending message" << messageText;
@@ -236,15 +248,21 @@ FdoNotifyPlugin::nowPlaying( const QVariant& input )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( !input.canConvert< QVariantMap >() )
+    {
         return;
+    }
 
     QVariantMap map = input.toMap();
     if ( !map.contains( "trackinfo" ) || !map[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+    {
         return;
+    }
 
     InfoStringHash hash = map[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) )
+    {
         return;
+    }
 
     QString messageText;
     // If the window manager supports notification styling then use it.
@@ -253,13 +271,15 @@ FdoNotifyPlugin::nowPlaying( const QVariant& input )
         // Remark: If using xml-based markup in notifications, the supplied strings need to be escaped.
         QString album;
         if ( !hash[ "album" ].isEmpty() )
+        {
             album = QString( "\n<i>%1</i> %2" ).arg( tr( "on", "'on' is followed by an album name" ) ).arg( Qt::escape( hash[ "album" ] ) );
+        }
 
         messageText = tr( "%1%4 %2%3.", "%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist ('by' in english)" )
-                        .arg( Qt::escape( hash[ "title" ] ) )
-                        .arg( Qt::escape( hash[ "artist" ] ) )
-                        .arg( album )
-                        .arg( QString( "\n<i>%1</i>" ).arg( tr( "by", "preposition to link track and artist" ) ) );
+                      .arg( Qt::escape( hash[ "title" ] ) )
+                      .arg( Qt::escape( hash[ "artist" ] ) )
+                      .arg( album )
+                      .arg( QString( "\n<i>%1</i>" ).arg( tr( "by", "preposition to link track and artist" ) ) );
 
         // Dirty hack(TM) so that KNotify/QLabel recognizes the message as Rich Text
         messageText = QString( "<i></i>%1" ).arg( messageText );
@@ -268,12 +288,14 @@ FdoNotifyPlugin::nowPlaying( const QVariant& input )
     {
         QString album;
         if ( !hash[ "album" ].isEmpty() )
+        {
             album = QString( " %1" ).arg( tr( "on \"%1\"", "%1 is an album name" ).arg( hash[ "album" ] ) );
+        }
 
         messageText = tr( "\"%1\" by %2%3.", "%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing" )
-                        .arg( hash[ "title" ] )
-                        .arg( hash[ "artist" ] )
-                        .arg( album );
+                      .arg( hash[ "title" ] )
+                      .arg( hash[ "artist" ] )
+                      .arg( album );
     }
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "sending message" << messageText;
@@ -284,23 +306,27 @@ FdoNotifyPlugin::nowPlaying( const QVariant& input )
     // If there is a cover availble use it, else use Tomahawk logo as default.
     QImage image;
     if ( map.contains( "coveruri" ) && map[ "coveruri" ].canConvert< QString >() )
+    {
         image = QImage( map[ "coveruri" ].toString(), "PNG" );
+    }
     else
+    {
         image = QImage( RESPATH "icons/tomahawk-icon-512x512.png" );
+    }
     // Convert image to QVariant and scale to a consistent size.
     hints[ "image_data" ] = ImageConverter::variantForImage( image.scaledToHeight( getNotificationIconHeight() ) );
 
 
     QDBusPendingReply<> reply = notifications_interface->Notify(
-        "Tomahawk",                  // app_name
-        m_nowPlayingId,              // notification_id
-        "",                          // app_icon
-        "Tomahawk - Now Playing",    // summary
-        messageText,                 // body
-        QStringList(),               // actions
-        hints,                       // hints
-        -1                           // expire_timeout
-    );
+                                    "Tomahawk",                  // app_name
+                                    m_nowPlayingId,              // notification_id
+                                    "",                          // app_icon
+                                    "Tomahawk - Now Playing",    // summary
+                                    messageText,                 // body
+                                    QStringList(),               // actions
+                                    hints,                       // hints
+                                    -1                           // expire_timeout
+                                );
 
     QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher( reply, this );
     connect( watcher, SIGNAL( finished( QDBusPendingCallWatcher* ) ), SLOT( dbusPlayingReplyReceived( QDBusPendingCallWatcher* ) ) );
@@ -319,13 +345,15 @@ FdoNotifyPlugin::dbusPlayingReplyReceived( QDBusPendingCallWatcher* watcher )
 
     if ( reply.type() == QDBusMessage::ErrorMessage )
     {
-        tLog(LOGVERBOSE) << "Failed to grab media keys" << reply.errorName() << reply.errorMessage();
+        tLog( LOGVERBOSE ) << "Failed to grab media keys" << reply.errorName() << reply.errorMessage();
         return;
     }
 
     const QVariantList& list = reply.arguments();
     if ( !list.isEmpty() )
+    {
         m_nowPlayingId = list.first().toInt();
+    }
 }
 
 } //ns InfoSystem

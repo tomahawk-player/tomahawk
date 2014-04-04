@@ -35,25 +35,25 @@ class SourceDelegate;
 
 namespace Tomahawk
 {
-    class LatchManager;
+class LatchManager;
 }
 
 class SourceTreeView : public QTreeView
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit SourceTreeView( QWidget* parent = 0 );
     ~SourceTreeView();
 
-public slots:
+  public slots:
     void showOfflineSources( bool offlineSourcesShown );
 
     void renamePlaylist();
 
-    void update( const QModelIndex &index );
+    void update( const QModelIndex& index );
 
-signals:
+  signals:
     void onOnline( const QModelIndex& index );
     void onOffline( const QModelIndex& index );
 
@@ -62,7 +62,7 @@ signals:
     void catchUpRequest();
     void latchModeChangeRequest( const Tomahawk::source_ptr& source, bool realtime );
 
-private slots:
+  private slots:
     void onItemExpanded( const QModelIndex& idx );
     void onItemActivated( const QModelIndex& index );
     void selectRequest( const QPersistentModelIndex& idx );
@@ -89,9 +89,9 @@ private slots:
 
     void shortLinkReady( const Tomahawk::playlist_ptr& playlist, const QUrl& shortUrl );
 
-protected:
+  protected:
     void drawRow( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-    void drawBranches( QPainter *painter, const QRect &rect, const QModelIndex &index ) const;
+    void drawBranches( QPainter* painter, const QRect& rect, const QModelIndex& index ) const;
 
     virtual void paintEvent( QPaintEvent* event );
 
@@ -101,7 +101,7 @@ protected:
     virtual void dropEvent( QDropEvent* event );
     virtual void keyPressEvent( QKeyEvent* event );
 
-private:
+  private:
     void setupMenus();
 
     template< typename T >

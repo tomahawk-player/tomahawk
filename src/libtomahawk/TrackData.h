@@ -40,9 +40,9 @@ class IdThreadWorker;
 
 class DLLEXPORT TrackData : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     enum DescriptionMode
     { Detailed = 0, Short = 1 };
 
@@ -55,16 +55,37 @@ public:
     QString toString() const;
     Tomahawk::query_ptr toQuery();
 
-    QString artistSortname() const { return m_artistSortname; }
-    QString trackSortname() const { return m_trackSortname; }
+    QString artistSortname() const
+    {
+        return m_artistSortname;
+    }
+    QString trackSortname() const
+    {
+        return m_trackSortname;
+    }
 
-    QWeakPointer< Tomahawk::TrackData > weakRef() { return m_ownRef; }
-    void setWeakRef( QWeakPointer< Tomahawk::TrackData > weakRef ) { m_ownRef = weakRef; }
+    QWeakPointer< Tomahawk::TrackData > weakRef()
+    {
+        return m_ownRef;
+    }
+    void setWeakRef( QWeakPointer< Tomahawk::TrackData > weakRef )
+    {
+        m_ownRef = weakRef;
+    }
 
-    QString artist() const { return m_artist; }
-    QString track() const { return m_track; }
+    QString artist() const
+    {
+        return m_artist;
+    }
+    QString track() const
+    {
+        return m_track;
+    }
 
-    int year() const { return m_year; }
+    int year() const
+    {
+        return m_year;
+    }
 
     void setLoved( bool loved );
     bool loved();
@@ -75,8 +96,15 @@ public:
     void loadId( bool autoCreate ) const;
 
     void loadAttributes();
-    QVariantMap attributes() const { return m_attributes; }
-    void setAttributes( const QVariantMap& map ) { m_attributes = map; updateAttributes(); }
+    QVariantMap attributes() const
+    {
+        return m_attributes;
+    }
+    void setAttributes( const QVariantMap& map )
+    {
+        m_attributes = map;
+        updateAttributes();
+    }
 
     void loadSocialActions( bool force = false );
     QList< Tomahawk::SocialAction > allSocialActions() const;
@@ -94,23 +122,23 @@ public:
     QList<Tomahawk::query_ptr> similarTracks() const;
     QStringList lyrics() const;
 
-public slots:
+  public slots:
     void deleteLater();
 
-signals:
+  signals:
     void attributesLoaded();
     void socialActionsLoaded();
     void statsLoaded();
     void similarTracksLoaded();
     void lyricsLoaded();
 
-private slots:
+  private slots:
     void onTrackStatsLoaded( unsigned int chartPos, unsigned int chartCount );
 
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
 
-private:
+  private:
     explicit TrackData( unsigned int id, const QString& artist, const QString& track );
 
     void setIdFuture( QFuture<unsigned int> future );

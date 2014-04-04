@@ -37,7 +37,9 @@ InboxModel::InboxModel( QObject* parent )
     : PlaylistModel( parent )
 {
     if ( SourceList::instance()->isReady() )
+    {
         loadTracks();
+    }
     else
         NewClosure( SourceList::instance(), SIGNAL( ready() ),
                     this, SLOT( loadTracks() ) );
@@ -45,8 +47,8 @@ InboxModel::InboxModel( QObject* parent )
     // Every time a ShareTrack dbcmd is created, we keep track of it until it's committed,
     // so we can react with post-commit changes in the UI
     Tomahawk::DatabaseCommandFactory* factory = Tomahawk::Database::instance()->commandFactory<Tomahawk::DatabaseCommand_ShareTrack>();
-    connect( factory, SIGNAL(created(Tomahawk::dbcmd_ptr)),
-             this, SLOT(onDbcmdCreated(Tomahawk::dbcmd_ptr)));
+    connect( factory, SIGNAL( created( Tomahawk::dbcmd_ptr ) ),
+             this, SLOT( onDbcmdCreated( Tomahawk::dbcmd_ptr ) ) );
 }
 
 
@@ -58,7 +60,7 @@ int
 InboxModel::unlistenedCount() const
 {
     int count = 0;
-    foreach ( const Tomahawk::plentry_ptr& plentry, playlistEntries() )
+    foreach ( const Tomahawk::plentry_ptr & plentry, playlistEntries() )
     {
         bool isUnlistened = true;
         foreach ( Tomahawk::SocialAction sa, plentry->query()->queryTrack()->allSocialActions() )
@@ -70,7 +72,9 @@ InboxModel::unlistenedCount() const
             }
         }
         if ( isUnlistened )
+        {
             count++;
+        }
     }
     return count;
 }
@@ -83,14 +87,14 @@ InboxModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int ro
 
     QList< Tomahawk::plentry_ptr > toInsert;
     for ( QList< Tomahawk::plentry_ptr >::const_iterator it = entries.constBegin();
-          it != entries.constEnd(); ++it )
+            it != entries.constEnd(); ++it )
     {
         Tomahawk::plentry_ptr entry = *it;
         for ( QList< Tomahawk::plentry_ptr >::iterator jt = toInsert.begin();
-              jt != toInsert.end(); ++jt  )
+                jt != toInsert.end(); ++jt  )
         {
             Tomahawk::plentry_ptr existingEntry = *jt;
-            if ( entry->query()->equals( existingEntry->query(), true /*ignoreCase*/) )
+            if ( entry->query()->equals( existingEntry->query(), true /*ignoreCase*/ ) )
             {
                 toInsert.erase( jt );
                 break;
@@ -108,10 +112,12 @@ InboxModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int ro
                 toInsert.removeAt( i );
 
                 dataChanged( index( playlistEntries().indexOf( plEntry ), 0, QModelIndex() ),
-                             index( playlistEntries().indexOf( plEntry ), columnCount() -1, QModelIndex() ) );
+                             index( playlistEntries().indexOf( plEntry ), columnCount() - 1, QModelIndex() ) );
             }
             else
+            {
                 ++i;
+            }
         }
     }
     changed();
@@ -147,8 +153,8 @@ InboxModel::showNotification( InboxJobItem::Side side,
                               const Tomahawk::trackdata_ptr& track )
 {
     JobStatusView::instance()->model()->addJob( new InboxJobItem( side,
-                                                                  src->friendlyName(),
-                                                                  track ) );
+            src->friendlyName(),
+            track ) );
 
     if ( side == InboxJobItem::Receiving )
     {
@@ -177,7 +183,9 @@ InboxModel::showNotification( InboxJobItem::Side side,
 {
     Tomahawk::source_ptr src = SourceList::instance()->get( dbid );
     if ( !src.isNull() )
+    {
         showNotification( side, src, track );
+    }
 }
 
 
@@ -214,7 +222,7 @@ InboxModel::tracksLoaded( QList< Tomahawk::query_ptr > incoming )
     QList< Tomahawk::query_ptr > tracks;
 
     foreach ( const Tomahawk::plentry_ptr ple, playlistEntries() )
-        tracks << ple->query();
+    tracks << ple->query();
 
     //We invert the result of the SQLite query.
     //NOTE: this operation relies on the fact that SQLite always seems to return the records in
@@ -223,7 +231,9 @@ InboxModel::tracksLoaded( QList< Tomahawk::query_ptr > incoming )
     //      but it should work for us as long as we stick with SQLite.  -- Teo
     QList< Tomahawk::query_ptr > newTracks;
     while ( !incoming.isEmpty() )
+    {
         newTracks.append( incoming.takeLast() );
+    }
 
     foreach ( Tomahawk::query_ptr newQuery, newTracks )
     {
@@ -261,14 +271,20 @@ InboxModel::onDbcmdCommitted( const Tomahawk::dbcmd_ptr& cmd )
     QString sourceDbid = c->source()->nodeId();
 
     if ( sourceDbid == c->recipient() ) // if I'm sending to myself, bail out
+    {
         return;
+    }
 
     if ( myDbid != c->recipient() && !c->source()->isLocal() ) // if I'm not the sender and not the receiver, bail out
+    {
         return;
+    }
 
     Tomahawk::trackdata_ptr td = Tomahawk::TrackData::get( 0, c->artist(), c->track() );
     if ( td.isNull() )
+    {
         return;
+    }
 
     if ( c->source()->isLocal() && sourceDbid != c->recipient() ) //if I just sent a track
     {

@@ -33,15 +33,16 @@ using namespace Tomahawk;
 
 class BreadcrumbArrow : public QWidget
 {
-public:
+  public:
     BreadcrumbArrow( QWidget* parent )
-        : QWidget(parent)
+        : QWidget( parent )
     {
         setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
     }
 
-protected:
-    virtual void paintEvent( QPaintEvent* ) {
+  protected:
+    virtual void paintEvent( QPaintEvent* )
+    {
         QPainter p( this );
         QStyleOption opt;
         opt.initFrom( this );
@@ -137,9 +138,13 @@ BreadcrumbButton::setParentIndex( const QModelIndex& idx )
         {
             list << idx.data().toString();
             if ( idx.data( Breadcrumb::DefaultRole ).toBool() )
+            {
                 defaultIndex = i;
+            }
             if ( idx.data( Breadcrumb::UserSelectedRole ).toBool() )
+            {
                 userSelected = i;
+            }
         }
     }
 
@@ -148,10 +153,14 @@ BreadcrumbButton::setParentIndex( const QModelIndex& idx )
         // Check if it's the same, Don't change if it is, as it'll cause flickering
         QStringList old;
         for ( int i = 0; i < m_combo->count(); i++ )
+        {
             old << m_combo->itemText( i );
+        }
 
         if ( list == old )
+        {
             return;
+        }
     }
 
     m_combo->hide();
@@ -159,9 +168,13 @@ BreadcrumbButton::setParentIndex( const QModelIndex& idx )
     m_combo->addItems( list );
 
     if ( userSelected > -1 )
+    {
         m_combo->setCurrentIndex( userSelected );
+    }
     else if ( defaultIndex > -1 )
+    {
         m_combo->setCurrentIndex( defaultIndex );
+    }
 
     m_curIndex = m_model->index( m_combo->currentIndex(), 0, m_parentIndex );
 

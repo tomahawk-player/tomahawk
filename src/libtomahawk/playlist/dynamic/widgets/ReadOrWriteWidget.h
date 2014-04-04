@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -31,25 +31,25 @@ class QLabel;
 class ReadOrWriteWidget : public QWidget
 {
     Q_OBJECT
-public:
+  public:
     explicit ReadOrWriteWidget( QWidget* writableWidget, bool writable, QWidget* parent = 0 );
-    
+
     void setWritable( bool write );
     bool writable() const;
-    
+
     void setWritableWidget( QWidget* w );
     QWidget* writableWidget() const;
-    
+
     void setLabel( const QString& label );
     QString label() const;
-    
+
     virtual QSize sizeHint() const;
-    
-private:
+
+  private:
     QWidget* m_writableWidget;
     QLabel* m_label;
     QStackedLayout* m_layout;
-    
+
     bool m_writable;
 };
 

@@ -31,50 +31,74 @@
 
 class DLLEXPORT WikipediaContext : public WebContext
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     WikipediaContext() : WebContext() {}
     ~WikipediaContext() {}
 
-    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return Tomahawk::playlistinterface_ptr(); }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const
+    {
+        return Tomahawk::playlistinterface_ptr();
+    }
 
-    virtual QString title() const { return tr( "Wikipedia" ); }
-    virtual QString description() const { return QString(); }
+    virtual QString title() const
+    {
+        return tr( "Wikipedia" );
+    }
+    virtual QString description() const
+    {
+        return QString();
+    }
 
-    virtual bool jumpToCurrentTrack() { return false; }
+    virtual bool jumpToCurrentTrack()
+    {
+        return false;
+    }
 
-public slots:
+  public slots:
     virtual void setArtist( const Tomahawk::artist_ptr& artist );
     virtual void setAlbum( const Tomahawk::album_ptr& album );
     virtual void setQuery( const Tomahawk::query_ptr& query );
 
-private:
+  private:
     Tomahawk::artist_ptr m_artist;
 };
 
 
 class DLLEXPORT LastfmContext : public WebContext
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     LastfmContext() : WebContext() {}
     ~LastfmContext() {}
 
-    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return Tomahawk::playlistinterface_ptr(); }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const
+    {
+        return Tomahawk::playlistinterface_ptr();
+    }
 
-    virtual QString title() const { return tr( "Last.fm" ); }
-    virtual QString description() const { return QString(); }
+    virtual QString title() const
+    {
+        return tr( "Last.fm" );
+    }
+    virtual QString description() const
+    {
+        return QString();
+    }
 
-    virtual bool jumpToCurrentTrack() { return false; }
+    virtual bool jumpToCurrentTrack()
+    {
+        return false;
+    }
 
-public slots:
+  public slots:
     virtual void setArtist( const Tomahawk::artist_ptr& artist );
     virtual void setAlbum( const Tomahawk::album_ptr& album );
     virtual void setQuery( const Tomahawk::query_ptr& query );
 
-private:
+  private:
     Tomahawk::artist_ptr m_artist;
 };
 

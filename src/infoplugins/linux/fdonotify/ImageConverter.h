@@ -1,7 +1,7 @@
 /*
    Copyright (C) 2009 by Aurélien Gâteau <aurelien.gateau@canonical.com>
    Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
-   
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2, or (at your option)
@@ -30,7 +30,7 @@ namespace ImageConverter
  * Returns a variant representing an image using the format describe in the
  * galago spec
  */
-QVariant variantForImage(const QImage &image);
+QVariant variantForImage( const QImage& image );
 
 } // namespace
 

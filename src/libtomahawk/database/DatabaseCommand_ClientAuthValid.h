@@ -30,23 +30,29 @@ namespace Tomahawk
 class DLLEXPORT DatabaseCommand_ClientAuthValid : public DatabaseCommand
 {
     Q_OBJECT
-public:
+  public:
     explicit DatabaseCommand_ClientAuthValid( QObject* parent = 0 )
-            : DatabaseCommand( parent )
+        : DatabaseCommand( parent )
     {}
 
     explicit DatabaseCommand_ClientAuthValid( const QString& clientToken, QObject* parent = 0 );
 
-    QString commandname() const { return "clientauthvalid"; }
+    QString commandname() const
+    {
+        return "clientauthvalid";
+    }
 
     virtual void exec( DatabaseImpl* lib );
-    virtual bool doesMutates() const { return false; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
 
-signals:
+  signals:
     // if auth is invalid name is empty
     void authValid( const QString& clientToken, const QString& name, bool valid );
 
-private:
+  private:
     QString m_clientToken;
 };
 

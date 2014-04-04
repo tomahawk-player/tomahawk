@@ -29,16 +29,16 @@ class PlaydarApiPrivate;
 class TOMAHAWK_PLAYDARAPI_EXPORT PlaydarApi : public QObject
 {
     Q_OBJECT
-public:
-    explicit PlaydarApi( QHostAddress ha, qint16 port, QObject *parent = 0 );
+  public:
+    explicit PlaydarApi( QHostAddress ha, qint16 port, QObject* parent = 0 );
     virtual ~PlaydarApi();
 
     void start();
-    
-protected:
+
+  protected:
     QScopedPointer<PlaydarApiPrivate> d_ptr;
 
-private:
+  private:
     Q_DECLARE_PRIVATE( PlaydarApi )
 };
 

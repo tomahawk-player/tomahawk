@@ -47,19 +47,19 @@ class StreamConnection;
 
 namespace boost
 {
-    template <class T> class function;
+template <class T> class function;
 } // boost
 
 class ServentPrivate;
 
 class DLLEXPORT Servent : public QTcpServer
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     static Servent* instance();
     static bool isValidExternalIP( const QHostAddress& addr );
-    static SipInfo getSipInfoForOldVersions( const QList<SipInfo> &sipInfos );
+    static SipInfo getSipInfoForOldVersions( const QList<SipInfo>& sipInfos );
 
     explicit Servent( QObject* parent = 0 );
     virtual ~Servent();
@@ -67,10 +67,10 @@ public:
     bool startListening( QHostAddress ha, bool upnp, int port, Tomahawk::Network::ExternalAddress::Mode mode, int defaultPort, bool autoDetectExternalIp = false, const QString& externalHost = "", int externalPort = -1 );
 
     // creates new token that allows a controlconnection to be set up
-    QString createConnectionKey( const QString& name = "", const QString &nodeid = "", const QString &key = "", bool onceOnly = true );
+    QString createConnectionKey( const QString& name = "", const QString& nodeid = "", const QString& key = "", bool onceOnly = true );
 
     void registerOffer( const QString& key, Connection* conn );
-    void registerLazyOffer( const QString& key, const Tomahawk::peerinfo_ptr& peerInfo, const QString &nodeid , const int timeout );
+    void registerLazyOffer( const QString& key, const Tomahawk::peerinfo_ptr& peerInfo, const QString& nodeid , const int timeout );
 
     void registerControlConnection( ControlConnection* conn );
     void unregisterControlConnection( ControlConnection* conn );
@@ -78,14 +78,14 @@ public:
     ControlConnection* lookupControlConnection( const QString& nodeid );
 
     void remoteIODeviceFactory( const Tomahawk::result_ptr& result, const QString& url,
-                                    boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
+                                boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
 
     // you may call this method as often as you like for the same peerInfo, dupe checking is done inside
     void registerPeer( const Tomahawk::peerinfo_ptr& peerInfo );
     void handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo );
 
     void initiateConnection( const SipInfo& sipInfo, Connection* conn );
-    void reverseOfferRequest( ControlConnection* orig_conn, const QString &theirdbid, const QString& key, const QString& theirkey );
+    void reverseOfferRequest( ControlConnection* orig_conn, const QString& theirdbid, const QString& key, const QString& theirkey );
 
     bool visibleExternally() const;
 
@@ -125,10 +125,10 @@ public:
 
     bool isReady() const;
 
-    QList<SipInfo> getLocalSipInfos(const QString& nodeid, const QString &key);
+    QList<SipInfo> getLocalSipInfos( const QString& nodeid, const QString& key );
 
     void queueForAclResult( const QString& username, const QSet<Tomahawk::peerinfo_ptr>& peerInfos );
-signals:
+  signals:
     void dbSyncTriggered();
 
     /**
@@ -142,14 +142,14 @@ signals:
     void streamFinished( StreamConnection* );
     void ready();
 
-protected:
+  protected:
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     virtual void incomingConnection( qintptr sd );
 #else
     virtual void incomingConnection( int sd );
 #endif
 
-public slots:
+  public slots:
     void setExternalAddress( QHostAddress ha, unsigned int port );
 
     void createParallelConnection( Connection* orig_conn, Connection* new_conn, const QString& key );
@@ -162,16 +162,16 @@ public slots:
 
     void onSipInfoChanged();
 
-private slots:
+  private slots:
     void deleteLazyOffer( const QString& key );
     void readyRead();
     void socketError( QAbstractSocket::SocketError e );
-    void checkACLResult( const QString &nodeid, const QString &username, Tomahawk::ACLStatus::Type peerStatus );
+    void checkACLResult( const QString& nodeid, const QString& username, Tomahawk::ACLStatus::Type peerStatus );
     void ipDetected();
 
-    Connection* claimOffer( ControlConnection* cc, const QString &nodeid, const QString &key, const QHostAddress peer = QHostAddress::Any );
+    Connection* claimOffer( ControlConnection* cc, const QString& nodeid, const QString& key, const QHostAddress peer = QHostAddress::Any );
 
-private:
+  private:
     Q_DECLARE_PRIVATE( Servent )
     ServentPrivate* d_ptr;
 

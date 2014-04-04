@@ -27,19 +27,31 @@ namespace Tomahawk
 class DatabaseCommand_ModifyInboxEntry : public DatabaseCommand
 {
     Q_OBJECT
-public:
-    explicit DatabaseCommand_ModifyInboxEntry( const Tomahawk::query_ptr& query, bool newValue, QObject *parent = 0 );
+  public:
+    explicit DatabaseCommand_ModifyInboxEntry( const Tomahawk::query_ptr& query, bool newValue, QObject* parent = 0 );
 
     virtual void exec( DatabaseImpl* dbi );
-    virtual bool doesMutates() const { return true; }
-    virtual bool groupable() const { return true; }
-    virtual bool localOnly() const { return true; }
-    virtual QString commandname() const { return "modifyinboxentry"; }
+    virtual bool doesMutates() const
+    {
+        return true;
+    }
+    virtual bool groupable() const
+    {
+        return true;
+    }
+    virtual bool localOnly() const
+    {
+        return true;
+    }
+    virtual QString commandname() const
+    {
+        return "modifyinboxentry";
+    }
 
-signals:
+  signals:
     void done();
 
-private:
+  private:
     Tomahawk::query_ptr m_query;
     bool m_newValue;
 };

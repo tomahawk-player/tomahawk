@@ -40,17 +40,17 @@ namespace Tomahawk
 
 class DLLEXPORT FuncTimeout : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     FuncTimeout( int ms, boost::function<void()> func, QObject* besafe );
 
     ~FuncTimeout();
 
-public slots:
+  public slots:
     void exec();
 
-private:
+  private:
     boost::function<void()> m_func;
     QPointer< QObject > m_watch;
 };

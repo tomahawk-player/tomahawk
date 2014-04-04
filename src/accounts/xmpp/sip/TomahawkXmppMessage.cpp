@@ -27,7 +27,7 @@ TomahawkXmppMessage::TomahawkXmppMessage()
 {
 }
 
-TomahawkXmppMessage::TomahawkXmppMessage( const QList<SipInfo> &sipInfos )
+TomahawkXmppMessage::TomahawkXmppMessage( const QList<SipInfo>& sipInfos )
     : m_sipInfos( sipInfos )
 {
 }
@@ -47,16 +47,24 @@ const QString
 TomahawkXmppMessage::key() const
 {
     if ( m_sipInfos.isEmpty() )
+    {
         return QString();
+    }
     else
+    {
         return m_sipInfos.first().key();
+    }
 }
 
 const QString
 TomahawkXmppMessage::uniqname() const
 {
     if ( m_sipInfos.isEmpty() )
+    {
         return QString();
+    }
     else
+    {
         return m_sipInfos.first().nodeId();
+    }
 }

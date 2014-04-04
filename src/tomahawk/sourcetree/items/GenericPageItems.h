@@ -28,7 +28,7 @@
 class GenericPageItem : public SourceTreeItem
 {
     Q_OBJECT
-public:
+  public:
     // takes 2 function pointers: show: called when wanting to show the desired view page. get: called to get the view page from ViewManager if it exists
     GenericPageItem( SourcesModel* model, SourceTreeItem* parent, const QString& text, const QIcon& icon, boost::function<Tomahawk::ViewPage*()> show, boost::function<Tomahawk::ViewPage*()> get );
     virtual ~GenericPageItem();
@@ -44,10 +44,10 @@ public:
     void setText( const QString& text );
     void setSortValue( int value );
 
-signals:
+  signals:
     void activated();
 
-private:
+  private:
     QIcon m_icon;
     QString m_text;
     int m_sortValue;

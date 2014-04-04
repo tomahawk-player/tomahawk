@@ -92,7 +92,9 @@ OverlayButton::show( int timeoutSecs )
     animation->start();
 
     if( timeoutSecs > 0 )
+    {
         m_timer.start( timeoutSecs * 1000 );
+    }
 }
 
 
@@ -110,7 +112,9 @@ bool
 OverlayButton::shown() const
 {
     if ( !isEnabled() )
+    {
         return false;
+    }
 
     return m_opacity == OPACITY;
 }
@@ -124,7 +128,9 @@ OverlayButton::paintEvent( QPaintEvent* event )
     int scrollBarWidth = 0;
     QAbstractScrollArea* scrollArea = qobject_cast<QAbstractScrollArea*>( m_parent );
     if ( scrollArea && scrollArea->verticalScrollBar()->isVisible() )
+    {
         scrollBarWidth = scrollArea->verticalScrollBar()->width();
+    }
 
     QPoint corner( m_parent->contentsRect().width() - width() - scrollBarWidth - 12, m_parent->height() - height() - 12 );
     move( corner );

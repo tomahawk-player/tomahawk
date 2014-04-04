@@ -40,41 +40,47 @@ class MusicScannerThreadController : public QThread
 {
     Q_OBJECT
 
-public:
+  public:
     MusicScannerThreadController( QObject* parent );
     virtual ~MusicScannerThreadController();
 
-    void setScanMode( MusicScanner::ScanMode mode ) { m_mode = mode; }
-    void setPaths( const QStringList& paths ) { m_paths = paths; }
+    void setScanMode( MusicScanner::ScanMode mode )
+    {
+        m_mode = mode;
+    }
+    void setPaths( const QStringList& paths )
+    {
+        m_paths = paths;
+    }
     void run();
 
-private:
+  private:
     QPointer< MusicScanner > m_musicScanner;
     MusicScanner::ScanMode m_mode;
     QStringList m_paths;
-    quint32 m_bs; 
+    quint32 m_bs;
 };
 
 
 class DLLEXPORT ScanManager : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     static ScanManager* instance();
 
     explicit ScanManager( QObject* parent = 0 );
     virtual ~ScanManager();
 
-signals:
+  signals:
     void finished();
 
-public slots:
+  public slots:
     void runFileScan( const QStringList& paths = QStringList(), bool updateGUI = true );
     void runFullRescan();
     void runNormalScan( bool manualFull = false );
 
-private slots:
+  private slots:
     void runStartupScan();
     void runScan();
 
@@ -86,7 +92,7 @@ private slots:
     void fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned int > >& mtimes );
     void filesDeleted();
 
-private:
+  private:
     static ScanManager* s_instance;
 
     MusicScanner::ScanMode m_currScanMode;

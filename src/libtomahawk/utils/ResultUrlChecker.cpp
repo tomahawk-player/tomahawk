@@ -49,12 +49,14 @@ ResultUrlChecker::~ResultUrlChecker()
 void
 ResultUrlChecker::check()
 {
-    foreach ( const result_ptr& result, m_results )
+    foreach ( const result_ptr & result, m_results )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Checking http url:" << result->url();
         QUrl url = QUrl::fromUserInput( result->url() );
         if ( url.isEmpty() || !url.toString().startsWith( "http" ) )
+        {
             continue;
+        }
 
         NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->head( QNetworkRequest( url ) ) );
         m_replies.insert( reply, result );
@@ -70,7 +72,9 @@ ResultUrlChecker::headFinished()
     r->deleteLater();
 
     if ( !m_replies.contains( r ) )
+    {
         return;
+    }
 
     result_ptr result = m_replies.value( r );
     m_replies.remove( r );
@@ -81,8 +85,12 @@ ResultUrlChecker::headFinished()
         m_validResults << result;
     }
     else
+    {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Found invalid http url:" << result->url() << r->reply()->error();
+    }
 
     if ( m_replies.isEmpty() )
+    {
         emit done();
+    }
 }

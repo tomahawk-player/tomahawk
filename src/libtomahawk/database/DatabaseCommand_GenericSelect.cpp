@@ -94,7 +94,9 @@ DatabaseCommand_GenericSelect::exec( DatabaseImpl* dbi )
 
             qry = Tomahawk::Query::get( artist, track, QString() );
             if ( qry.isNull() )
+            {
                 continue;
+            }
         }
         else if ( m_queryType == Artist )
         {
@@ -125,27 +127,39 @@ DatabaseCommand_GenericSelect::exec( DatabaseImpl* dbi )
         if ( m_queryType == Track )
         {
             if ( !extraData.isEmpty() )
+            {
                 qry->setProperty( "data", extraData );
+            }
             queries << qry;
         }
         else if ( m_queryType == Artist )
         {
             if ( !extraData.isEmpty() )
+            {
                 artist->setProperty( "data", extraData );
+            }
             arts << artist;
         }
         else if ( m_queryType == Album )
         {
             if ( !extraData.isEmpty() )
+            {
                 album->setProperty( "data", extraData );
+            }
             albs << album;
         }
     }
 
     if ( m_queryType == Track )
+    {
         emit tracks( queries );
+    }
     else if ( m_queryType == Artist )
+    {
         emit artists( arts );
+    }
     else if ( m_queryType == Album )
+    {
         emit albums( albs );
+    }
 }

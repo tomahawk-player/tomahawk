@@ -52,9 +52,9 @@ ResolverConfigDelegate::paint( QPainter* painter, const QStyleOptionViewItem& op
     path.setItalic( true );
     path.setPointSize( path.pointSize() - 1 );
 
-    const bool error =  (Tomahawk::ExternalResolver::ErrorState)index.data( ResolversModel::ErrorState ).toInt() != Tomahawk::ExternalResolver::NoError;
-    const bool fileNotFound = (Tomahawk::ExternalResolver::ErrorState)index.data( ResolversModel::ErrorState ).toInt() == Tomahawk::ExternalResolver::FileNotFound;
-    const bool failedToLoad = (Tomahawk::ExternalResolver::ErrorState)index.data( ResolversModel::ErrorState ).toInt() == Tomahawk::ExternalResolver::FailedToLoad;
+    const bool error =  ( Tomahawk::ExternalResolver::ErrorState )index.data( ResolversModel::ErrorState ).toInt() != Tomahawk::ExternalResolver::NoError;
+    const bool fileNotFound = ( Tomahawk::ExternalResolver::ErrorState )index.data( ResolversModel::ErrorState ).toInt() == Tomahawk::ExternalResolver::FileNotFound;
+    const bool failedToLoad = ( Tomahawk::ExternalResolver::ErrorState )index.data( ResolversModel::ErrorState ).toInt() == Tomahawk::ExternalResolver::FailedToLoad;
 
     QFontMetrics bfm( name );
     QFontMetrics sfm( path );
@@ -68,7 +68,8 @@ ResolverConfigDelegate::paint( QPainter* painter, const QStyleOptionViewItem& op
     QRect confRect = QRect( rightSplit - ICONSIZE - 2 * PADDING, 2 * PADDING + top, ICONSIZE, ICONSIZE );
 
     // if the Resolver.has a config widget, paint it first (right-aligned)
-    if( index.data( ResolversModel::HasConfig ).toBool() ) {
+    if( index.data( ResolversModel::HasConfig ).toBool() )
+    {
         QStyleOptionToolButton topt;
         topt.rect = confRect;
         topt.pos = confRect.topLeft();
@@ -88,10 +89,12 @@ ResolverConfigDelegate::paint( QPainter* painter, const QStyleOptionViewItem& op
     QRect textRect = itemRect.adjusted( PADDING, PADDING, -PADDING, -PADDING );
 
     if( index.data( ResolversModel::HasConfig ).toBool() )
+    {
         textRect.setRight( confRect.topLeft().x() - PADDING );
+    }
 
     textRect.setBottom( itemRect.height() / 2 + top  );
-    QString nameStr = bfm.elidedText( index.data( ResolversModel::ResolverName ).toString(),Qt::ElideRight, textRect.width() );
+    QString nameStr = bfm.elidedText( index.data( ResolversModel::ResolverName ).toString(), Qt::ElideRight, textRect.width() );
     painter->drawText( textRect, nameStr );
     painter->restore();
 
@@ -102,14 +105,18 @@ ResolverConfigDelegate::paint( QPainter* painter, const QStyleOptionViewItem& op
     {
         //FIXME const color
         painter->setPen( QColor( Qt::red ).lighter( 150 ) );
-    } else {
+    }
+    else
+    {
         //FIXME const color
         painter->setPen( Qt::gray );
     }
 
-    if( fileNotFound ) {
+    if( fileNotFound )
+    {
         pathStr = tr( "Not found: %1" ).arg( pathStr );
-    } else if ( failedToLoad )
+    }
+    else if ( failedToLoad )
     {
         pathStr = tr( "Failed to load: %1" ).arg( pathStr );
     }
@@ -134,7 +141,7 @@ ResolverConfigDelegate::configRectForIndex( const QStyleOptionViewItem& option, 
 }
 
 QRect
-ResolverConfigDelegate::checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx, int role ) const
+ResolverConfigDelegate::checkRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx, int role ) const
 {
     Q_UNUSED( role );
 
@@ -143,7 +150,7 @@ ResolverConfigDelegate::checkRectForIndex( const QStyleOptionViewItem &option, c
     QRect itemRect = opt.rect;
     int top = itemRect.top();
 
-    QRect checkRect = QRect(2 * PADDING, 2 * PADDING + top, ICONSIZE, ICONSIZE );
+    QRect checkRect = QRect( 2 * PADDING, 2 * PADDING + top, ICONSIZE, ICONSIZE );
     return checkRect;
 }
 

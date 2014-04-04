@@ -40,9 +40,11 @@ using namespace Tomahawk;
 ShortenedLinkParser::ShortenedLinkParser ( const QStringList& urls, QObject* parent )
     : QObject( parent )
 {
-    foreach ( const QString& url, urls )
-        if ( handlesUrl( url ) )
-            lookupUrl( url ) ;
+    foreach ( const QString & url, urls )
+    if ( handlesUrl( url ) )
+    {
+        lookupUrl( url ) ;
+    }
 }
 
 
@@ -77,7 +79,9 @@ ShortenedLinkParser::lookupUrl( const QString& url )
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Looking up..." << url;
     QString cleaned = url;
     if ( cleaned.contains( "/#/s/" ) )
+    {
         cleaned.replace( "/#", "" );
+    }
 
     NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( QNetworkRequest( QUrl( cleaned ) ) ) );
 
@@ -105,7 +109,9 @@ ShortenedLinkParser::lookupFinished( const QUrl& url )
 
 #ifndef ENABLE_HEADLESS
     if ( r->reply()->error() != QNetworkReply::NoError )
+    {
         JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Network error parsing shortened link!" ) ) );
+    }
 #endif
 
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Got an un-shortened url:" << r->reply()->url().toString();

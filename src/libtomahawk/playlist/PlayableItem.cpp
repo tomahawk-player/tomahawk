@@ -37,7 +37,9 @@ PlayableItem::~PlayableItem()
     // from the list when they get deleted and the qDeleteAll iterator
     // will fail badly!
     for ( int i = children.count() - 1; i >= 0; i-- )
+    {
         delete children.at( i );
+    }
 
     if ( m_parent && index.isValid() )
     {
@@ -79,16 +81,16 @@ PlayableItem::PlayableItem( const Tomahawk::result_ptr& result, PlayableItem* pa
     init( parent, row );
 
     connect( result->track().data(), SIGNAL( socialActionsLoaded() ),
-                                     SIGNAL( dataChanged() ) );
+             SIGNAL( dataChanged() ) );
 
     connect( result->track().data(), SIGNAL( attributesLoaded() ),
-                                     SIGNAL( dataChanged() ) );
+             SIGNAL( dataChanged() ) );
 
     connect( result->track().data(), SIGNAL( updated() ),
-                                     SIGNAL( dataChanged() ) );
+             SIGNAL( dataChanged() ) );
 
     connect( result.data(), SIGNAL( updated() ),
-                            SIGNAL( dataChanged() ) );
+             SIGNAL( dataChanged() ) );
 }
 
 
@@ -99,16 +101,16 @@ PlayableItem::PlayableItem( const Tomahawk::query_ptr& query, PlayableItem* pare
     init( parent, row );
 
     connect( query->track().data(), SIGNAL( socialActionsLoaded() ),
-                                    SIGNAL( dataChanged() ) );
+             SIGNAL( dataChanged() ) );
 
     connect( query->track().data(), SIGNAL( attributesLoaded() ),
-                                    SIGNAL( dataChanged() ) );
+             SIGNAL( dataChanged() ) );
 
     connect( query->track().data(), SIGNAL( updated() ),
-                                    SIGNAL( dataChanged() ) );
+             SIGNAL( dataChanged() ) );
 
     connect( query.data(), SIGNAL( resultsChanged() ),
-                             SLOT( onResultsChanged() ) );
+             SLOT( onResultsChanged() ) );
 }
 
 
@@ -120,16 +122,16 @@ PlayableItem::PlayableItem( const Tomahawk::plentry_ptr& entry, PlayableItem* pa
     init( parent, row );
 
     connect( m_query->track().data(), SIGNAL( socialActionsLoaded() ),
-                                      SIGNAL( dataChanged() ) );
+             SIGNAL( dataChanged() ) );
 
     connect( m_query->track().data(), SIGNAL( attributesLoaded() ),
-                                      SIGNAL( dataChanged() ) );
+             SIGNAL( dataChanged() ) );
 
     connect( m_query->track().data(), SIGNAL( updated() ),
-                                      SIGNAL( dataChanged() ) );
+             SIGNAL( dataChanged() ) );
 
     connect( m_query.data(), SIGNAL( resultsChanged() ),
-                               SLOT( onResultsChanged() ) );
+             SLOT( onResultsChanged() ) );
 }
 
 
@@ -164,9 +166,13 @@ void
 PlayableItem::onResultsChanged()
 {
     if ( !m_query->results().isEmpty() )
+    {
         m_result = m_query->results().first();
+    }
     else
+    {
         m_result = result_ptr();
+    }
 
     emit dataChanged();
 }
@@ -235,7 +241,9 @@ PlayableItem::result() const
     if ( m_result.isNull() && !m_query.isNull() )
     {
         if ( m_query->numResults() )
+        {
             return m_query->results().first();
+        }
     }
 
     return m_result;

@@ -76,7 +76,9 @@ void
 LatchedStatusManager::latchedOn( const Tomahawk::source_ptr& from, const Tomahawk::source_ptr& to )
 {
     if ( from.isNull() || to.isNull() )
+    {
         return;
+    }
 
     if ( to->isLocal() )
     {
@@ -100,7 +102,9 @@ LatchedStatusManager::sourceOffline()
     {
         QPointer< LatchedStatusItem> job = m_jobs.take( s->nodeId() ).data();
         if ( !job.isNull() )
+        {
             job.data()->stop();
+        }
     }
 }
 
@@ -109,13 +113,17 @@ void
 LatchedStatusManager::latchedOff( const Tomahawk::source_ptr& from, const Tomahawk::source_ptr& to )
 {
     if ( from.isNull() || to.isNull() )
+    {
         return;
+    }
 
     if ( to->isLocal() && m_jobs.contains( from->nodeId() ) )
     {
         QPointer< LatchedStatusItem > item = m_jobs.take( from->nodeId() );
         if ( !item.isNull() )
+        {
             item.data()->stop();
+        }
     }
 }
 

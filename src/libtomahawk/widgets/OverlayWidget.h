@@ -27,35 +27,41 @@
 
 class DLLEXPORT OverlayWidget : public QWidget
 {
-Q_OBJECT
-Q_PROPERTY( qreal opacity READ opacity WRITE setOpacity )
+    Q_OBJECT
+    Q_PROPERTY( qreal opacity READ opacity WRITE setOpacity )
 
-public:
+  public:
     OverlayWidget( QWidget* parent );
     OverlayWidget( QAbstractItemView* parent );
     ~OverlayWidget();
 
-    qreal opacity() const { return m_opacity; }
+    qreal opacity() const
+    {
+        return m_opacity;
+    }
     void setOpacity( qreal opacity );
 
-    QString text() const { return m_text; }
+    QString text() const
+    {
+        return m_text;
+    }
     void setText( const QString& text );
 
     bool shown() const;
 
-public slots:
+  public slots:
     void show( int timeoutSecs = 0 );
     void hide();
 
-protected:
-//    void changeEvent( QEvent* e );
+  protected:
+    //    void changeEvent( QEvent* e );
     void paintEvent( QPaintEvent* event );
-    
-private slots:
+
+  private slots:
     void onViewChanged();
     void onViewModelChanged();
 
-private:
+  private:
     void init();
 
     QString m_text;

@@ -39,7 +39,7 @@ XmppAccountFactory::createAccount( const QString& accountId )
 }
 
 
-XmppAccount::XmppAccount( const QString &accountId )
+XmppAccount::XmppAccount( const QString& accountId )
     : Account( accountId )
 {
     setAccountServiceName( "Jabber (XMPP)" );
@@ -61,7 +61,9 @@ QPixmap
 XmppAccount::icon() const
 {
     if ( connectionState() == Connected )
+    {
         return m_onlinePixmap;
+    }
     return m_offlinePixmap;
 }
 
@@ -70,7 +72,9 @@ void
 XmppAccount::authenticate()
 {
     if ( connectionState() != Account::Connected )
+    {
         sipPlugin()->connectPlugin();
+    }
 }
 
 
@@ -78,7 +82,9 @@ void
 XmppAccount::deauthenticate()
 {
     if ( connectionState() != Account::Disconnected && !m_xmppSipPlugin.isNull() )
+    {
         m_xmppSipPlugin->disconnectPlugin();
+    }
 }
 
 bool
@@ -92,7 +98,9 @@ Account::ConnectionState
 XmppAccount::connectionState() const
 {
     if ( m_xmppSipPlugin.isNull() )
+    {
         return Account::Disconnected;
+    }
 
     return m_xmppSipPlugin.data()->connectionState();
 }
@@ -101,7 +109,9 @@ void
 XmppAccount::saveConfig()
 {
     if ( !m_configWidget.isNull() )
+    {
         static_cast< XmppConfigWidget* >( m_configWidget.data() )->saveConfig();
+    }
 }
 
 
@@ -109,7 +119,9 @@ InfoSystem::InfoPluginPtr
 XmppAccount::infoPlugin()
 {
     if( !m_xmppSipPlugin.isNull() )
+    {
         return m_xmppSipPlugin.data()->infoPlugin();
+    }
 
     return InfoSystem::InfoPluginPtr();
 }
@@ -121,7 +133,9 @@ XmppAccount::sipPlugin( bool create )
     if ( m_xmppSipPlugin.isNull() )
     {
         if ( !create )
+        {
             return 0;
+        }
 
         m_xmppSipPlugin = QPointer< XmppSipPlugin >( new XmppSipPlugin( this ) );
 

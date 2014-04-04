@@ -158,7 +158,7 @@ Connection::peerPort() const
 }
 
 void
-Connection::setPeerPort(int p)
+Connection::setPeerPort( int p )
 {
     Q_D( Connection );
 
@@ -179,7 +179,7 @@ Connection::shutdown( bool waitUntilSentAll )
     d_func()->do_shutdown = true;
     if ( !waitUntilSentAll )
     {
-//        qDebug() << "Shutting down immediately " << id();
+        //        qDebug() << "Shutting down immediately " << id();
         actualShutdown();
     }
     else
@@ -210,7 +210,7 @@ Connection::actualShutdown()
         d->sock->disconnectFromHost();
     }
 
-//    qDebug() << "EMITTING finished()";
+    //    qDebug() << "EMITTING finished()";
     emit finished();
 }
 
@@ -284,13 +284,13 @@ Connection::bytesReceived() const
 }
 
 void
-Connection::setMsgProcessorModeOut(quint32 m)
+Connection::setMsgProcessorModeOut( quint32 m )
 {
     d_func()->msgprocessor_out.setMode( m );
 }
 
 void
-Connection::setMsgProcessorModeIn(quint32 m)
+Connection::setMsgProcessorModeIn( quint32 m )
 {
     d_func()->msgprocessor_in.setMode( m );
 }
@@ -344,8 +344,8 @@ Connection::checkACL()
 
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Checking ACL for" << name();
     d->aclRequest = Tomahawk::Network::ACL::aclrequest_ptr(
-                new Tomahawk::Network::ACL::AclRequest( d->nodeid, bareName(), Tomahawk::ACLStatus::NotFound ),
-                &QObject::deleteLater );
+                        new Tomahawk::Network::ACL::AclRequest( d->nodeid, bareName(), Tomahawk::ACLStatus::NotFound ),
+                        &QObject::deleteLater );
     connect( d->aclRequest.data(), SIGNAL( decision( Tomahawk::ACLStatus::Type ) ), SLOT( aclDecision( Tomahawk::ACLStatus::Type ) ), Qt::QueuedConnection );
     ACLRegistry::instance()->isAuthorizedRequest( d->aclRequest );
 }
@@ -385,7 +385,9 @@ Connection::authCheckTimeout()
     Q_D( Connection );
 
     if ( d->ready )
+    {
         return;
+    }
 
     emit authTimeout();
 
@@ -429,16 +431,16 @@ Connection::doSetup()
         d->sock->moveToThread( thread() );
 
         connect( d->sock.data(), SIGNAL( bytesWritten( qint64 ) ),
-                                  SLOT( bytesWritten( qint64 ) ), Qt::QueuedConnection );
+                 SLOT( bytesWritten( qint64 ) ), Qt::QueuedConnection );
 
         connect( d->sock.data(), SIGNAL( disconnected() ),
-                                  SLOT( socketDisconnected() ), Qt::QueuedConnection );
+                 SLOT( socketDisconnected() ), Qt::QueuedConnection );
 
         connect( d->sock.data(), SIGNAL( error( QAbstractSocket::SocketError ) ),
-                                  SLOT( socketDisconnectedError( QAbstractSocket::SocketError ) ), Qt::QueuedConnection );
+                 SLOT( socketDisconnectedError( QAbstractSocket::SocketError ) ), Qt::QueuedConnection );
 
         connect( d->sock.data(), SIGNAL( readyRead() ),
-                                  SLOT( readyRead() ), Qt::QueuedConnection );
+                 SLOT( readyRead() ), Qt::QueuedConnection );
 
         // if connection not authed/setup fast enough, kill it:
         QTimer::singleShot( AUTH_TIMEOUT, this, SLOT( authCheckTimeout() ) );
@@ -496,11 +498,13 @@ Connection::socketDisconnectedError( QAbstractSocket::SocketError e )
     tDebug() << "SOCKET ERROR CODE" << e << this->name() << "CALLING Connection::shutdown(false)";
 
     if ( e == QAbstractSocket::RemoteHostClosedError )
+    {
         return;
+    }
 
     d_func()->peer_disconnected = true;
 
-    emit socketErrored(e);
+    emit socketErrored( e );
     emit socketClosed();
 
     shutdown( false );
@@ -540,31 +544,35 @@ Connection::setNodeId( const QString& nodeid )
 void
 Connection::readyRead()
 {
-//    qDebug() << "readyRead, bytesavail:" << m_sock->bytesAvailable();
+    //    qDebug() << "readyRead, bytesavail:" << m_sock->bytesAvailable();
     Q_D( Connection );
 
     if ( d->msg.isNull() )
     {
         if ( d->sock->bytesAvailable() < Msg::headerSize() )
+        {
             return;
+        }
 
         char msgheader[ Msg::headerSize() ];
-        if ( d->sock->read( (char*) &msgheader, Msg::headerSize() ) != Msg::headerSize() )
+        if ( d->sock->read( ( char* ) &msgheader, Msg::headerSize() ) != Msg::headerSize() )
         {
             tDebug() << "Failed reading msg header";
             this->markAsFailed();
             return;
         }
 
-        d->msg = Msg::begin( (char*) &msgheader );
+        d->msg = Msg::begin( ( char* ) &msgheader );
         d->rx_bytes += Msg::headerSize();
     }
 
     if ( d->sock->bytesAvailable() < d->msg->length() )
+    {
         return;
+    }
 
     QByteArray ba = d->sock->read( d->msg->length() );
-    if ( ba.length() != (qint32)d->msg->length() )
+    if ( ba.length() != ( qint32 )d->msg->length() )
     {
         tDebug() << "Failed to read full msg payload";
         this->markAsFailed();
@@ -589,8 +597,8 @@ Connection::handleReadMsg()
     Q_D( Connection );
 
     if ( outbound() == false &&
-        d->msg->is( Msg::SETUP ) &&
-        d->msg->payload() == "ok" )
+            d->msg->is( Msg::SETUP ) &&
+            d->msg->payload() == "ok" )
     {
         d->ready = true;
         tDebug( LOGVERBOSE ) << "Connection" << id() << "READY";
@@ -598,8 +606,8 @@ Connection::handleReadMsg()
         emit ready();
     }
     else if ( !d->ready &&
-             outbound() &&
-             d->msg->is( Msg::SETUP ) )
+              outbound() &&
+              d->msg->is( Msg::SETUP ) )
     {
         if ( d->msg->payload() == PROTOVER )
         {
@@ -630,7 +638,9 @@ Connection::sendMsg( QVariant j )
     Q_D( Connection );
 
     if ( d->do_shutdown )
+    {
         return;
+    }
 
     QJson::Serializer serializer;
     const QByteArray payload = serializer.serialize( j );
@@ -645,7 +655,7 @@ Connection::sendMsg( msg_ptr msg )
     if ( d_func()->do_shutdown )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "SHUTTING DOWN, NOT SENDING msg flags:"
-                             << (int)msg->flags() << "length:" << msg->length() << id();
+                             << ( int )msg->flags() << "length:" << msg->length() << id();
         return;
     }
 
@@ -659,7 +669,7 @@ Connection::sendMsg_now( msg_ptr msg )
 {
     Q_D( Connection );
     Q_ASSERT( QThread::currentThread() == thread() );
-//    Q_ASSERT( this->isRunning() );
+    //    Q_ASSERT( this->isRunning() );
 
     if ( d->sock.isNull() || !d->sock->isOpen() || !d->sock->isWritable() )
     {
@@ -683,7 +693,9 @@ Connection::bytesWritten( qint64 i )
     d_func()->tx_bytes += i;
     // if we are waiting to shutdown, and have sent all queued data, do actual shutdown:
     if ( d_func()->do_shutdown && d_func()->tx_bytes == d_func()->tx_bytes_requested )
+    {
         actualShutdown();
+    }
 }
 
 
@@ -693,8 +705,8 @@ Connection::calcStats()
     Q_D( Connection );
     int elapsed = d->statstimer_mark.restart(); // ms since last calc
 
-    d->stats_tx_bytes_per_sec = (float)1000 * ( (d->tx_bytes - d->tx_bytes_last) / (float)elapsed );
-    d->stats_rx_bytes_per_sec = (float)1000 * ( (d->rx_bytes - d->rx_bytes_last) / (float)elapsed );
+    d->stats_tx_bytes_per_sec = ( float )1000 * ( ( d->tx_bytes - d->tx_bytes_last ) / ( float )elapsed );
+    d->stats_rx_bytes_per_sec = ( float )1000 * ( ( d->rx_bytes - d->rx_bytes_last ) / ( float )elapsed );
 
     d->rx_bytes_last = d->rx_bytes;
     d->tx_bytes_last = d->tx_bytes;

@@ -36,47 +36,62 @@ class PlaylistModel;
 
 namespace Ui
 {
-    class SearchWidget;
+class SearchWidget;
 }
 
 class DLLEXPORT SearchWidget : public QWidget, public Tomahawk::ViewPage
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     SearchWidget( const QString& search, QWidget* parent = 0 );
     ~SearchWidget();
 
-    virtual QWidget* widget() { return this; }
+    virtual QWidget* widget()
+    {
+        return this;
+    }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 
-    virtual QString title() const { return QString( tr( "Search: %1" ) ).arg( m_search ); }
-    virtual QString description() const { return tr( "Results for '%1'" ).arg( m_search ); }
+    virtual QString title() const
+    {
+        return QString( tr( "Search: %1" ) ).arg( m_search );
+    }
+    virtual QString description() const
+    {
+        return tr( "Results for '%1'" ).arg( m_search );
+    }
     virtual QPixmap pixmap() const;
 
-    virtual bool showInfoBar() const { return true; }
+    virtual bool showInfoBar() const
+    {
+        return true;
+    }
     virtual bool isBeingPlayed() const;
-    virtual bool isTemporaryPage() const { return true; }
+    virtual bool isTemporaryPage() const
+    {
+        return true;
+    }
     virtual bool jumpToCurrentTrack();
 
-protected:
+  protected:
     void changeEvent( QEvent* e );
 
-signals:
+  signals:
     void destroyed( QWidget* widget );
 
-private slots:
+  private slots:
     void onResultsFound( const QList<Tomahawk::result_ptr>& results );
     void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums );
     void onArtistsFound( const QList<Tomahawk::artist_ptr>& artists );
 
     void onQueryFinished();
 
-private:
+  private:
     void updateArtists();
     void updateAlbums();
 
-    Ui::SearchWidget *ui;
+    Ui::SearchWidget* ui;
 
     QString m_search;
 

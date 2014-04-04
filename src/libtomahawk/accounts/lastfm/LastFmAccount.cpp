@@ -80,7 +80,9 @@ LastFmAccount::LastFmAccount( const QString& accountId )
 LastFmAccount::~LastFmAccount()
 {
     if ( m_infoPlugin )
+    {
         Tomahawk::InfoSystem::InfoSystem::instance()->removeInfoPlugin( infoPlugin() );
+    }
 
     delete m_resolver.data();
 }
@@ -92,7 +94,7 @@ LastFmAccount::authenticate()
     if ( !AtticaManager::instance()->resolversLoaded() )
     {
         // If we're still waiting to load, wait for the attica resolvers to come down the pipe
-        connect( AtticaManager::instance(), SIGNAL(resolversLoaded(Attica::Content::List)), this, SLOT( atticaLoaded( Attica::Content::List ) ), Qt::UniqueConnection );
+        connect( AtticaManager::instance(), SIGNAL( resolversLoaded( Attica::Content::List ) ), this, SLOT( atticaLoaded( Attica::Content::List ) ), Qt::UniqueConnection );
         return;
     }
 
@@ -108,7 +110,9 @@ LastFmAccount::authenticate()
     {
         qDebug() << "Got null resolver but asked to authenticate, so installing i we have one from attica:" << res.isValid() << res.id();
         if ( res.isValid() && !res.id().isEmpty() )
+        {
             AtticaManager::instance()->installResolver( res, false );
+        }
     }
     else
     {
@@ -131,7 +135,9 @@ void
 LastFmAccount::deauthenticate()
 {
     if ( !m_resolver.isNull() && m_resolver.data()->running() )
+    {
         m_resolver.data()->stop();
+    }
 
     emit connectionStateChanged( connectionState() );
 }
@@ -141,7 +147,9 @@ AccountConfigWidget*
 LastFmAccount::configurationWidget()
 {
     if ( m_configWidget.isNull() )
+    {
         m_configWidget = QPointer<LastFmConfig>( new LastFmConfig( this ) );
+    }
 
     return m_configWidget.data();
 }
@@ -165,7 +173,9 @@ InfoPluginPtr
 LastFmAccount::infoPlugin()
 {
     if ( m_infoPlugin.isNull() )
+    {
         m_infoPlugin = QPointer< LastFmInfoPlugin >( new LastFmInfoPlugin( this ) );
+    }
 
     return InfoPluginPtr( m_infoPlugin.data() );
 }
@@ -190,7 +200,9 @@ LastFmAccount::saveConfig()
     sync();
 
     if ( m_infoPlugin )
+    {
         QTimer::singleShot( 0, m_infoPlugin.data(), SLOT( settingsChanged() ) );
+    }
 }
 
 
@@ -258,7 +270,7 @@ LastFmAccount::setScrobble( bool scrobble )
 
 
 void
-LastFmAccount::resolverInstalled( const QString &resolverId )
+LastFmAccount::resolverInstalled( const QString& resolverId )
 {
     if ( resolverId == "lastfm" )
     {

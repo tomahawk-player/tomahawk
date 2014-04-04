@@ -79,8 +79,10 @@ Pipeline::~Pipeline()
 
     // stop script resolvers
     foreach ( QPointer< ExternalResolver > r, d->scriptResolvers )
-        if ( !r.isNull() )
-            r.data()->deleteLater();
+    if ( !r.isNull() )
+    {
+        r.data()->deleteLater();
+    }
 
     d->scriptResolvers.clear();
 }
@@ -182,7 +184,9 @@ Pipeline::addScriptResolver( const QString& path, const QStringList& additionalS
     {
         res = factory( path, additionalScriptPaths );
         if ( !res )
+        {
             continue;
+        }
 
         d->scriptResolvers << QPointer< ExternalResolver > ( res );
 
@@ -200,7 +204,9 @@ Pipeline::stopScriptResolver( const QString& path )
     foreach ( QPointer< ExternalResolver > res, d->scriptResolvers )
     {
         if ( res.data()->filePath() == path )
+        {
             res.data()->stop();
+        }
     }
 }
 
@@ -213,10 +219,14 @@ Pipeline::removeScriptResolver( const QString& scriptPath )
     foreach ( QPointer< ExternalResolver > res, d->scriptResolvers )
     {
         if ( res.isNull() )
+        {
             continue;
+        }
 
         if ( res.data()->filePath() == scriptPath )
+        {
             r = res;
+        }
     }
     d->scriptResolvers.removeAll( r );
 
@@ -245,7 +255,9 @@ Pipeline::resolverForPath( const QString& scriptPath )
     foreach ( QPointer< ExternalResolver > res, d->scriptResolvers )
     {
         if ( res.data()->filePath() == scriptPath )
+        {
             return res.data();
+        }
     }
     return 0;
 }
@@ -260,12 +272,16 @@ Pipeline::resolve( const QList<query_ptr>& qlist, bool prioritized, bool tempora
         QMutexLocker lock( &d->mut );
 
         int i = 0;
-        foreach ( const query_ptr& q, qlist )
+        foreach ( const query_ptr & q, qlist )
         {
             if ( q->resolvingFinished() )
+            {
                 continue;
+            }
             if ( d->qidsState.contains( q->id() ) )
+            {
                 continue;
+            }
             if ( d->queries_pending.contains( q ) )
             {
                 if ( prioritized )
@@ -276,19 +292,27 @@ Pipeline::resolve( const QList<query_ptr>& qlist, bool prioritized, bool tempora
             }
 
             if ( !d->qids.contains( q->id() ) )
+            {
                 d->qids.insert( q->id(), q );
+            }
 
             if ( prioritized )
+            {
                 d->queries_pending.insert( i++, q );
+            }
             else
+            {
                 d->queries_pending << q;
+            }
 
             if ( temporaryQuery )
             {
                 d->queries_temporary << q;
 
                 if ( d->temporaryQueryTimer.isActive() )
+                {
                     d->temporaryQueryTimer.stop();
+                }
                 d->temporaryQueryTimer.start();
             }
         }
@@ -311,7 +335,9 @@ void
 Pipeline::resolve( const query_ptr& q, bool prioritized, bool temporaryQuery )
 {
     if ( q.isNull() )
+    {
         return;
+    }
 
     QList< query_ptr > qlist;
     qlist << q;
@@ -331,7 +357,9 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 {
     Q_D( Pipeline );
     if ( !d->running )
+    {
         return;
+    }
     if ( !d->qids.contains( qid ) )
     {
         tDebug() << "Result arrived too late for:" << qid;
@@ -341,20 +369,29 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 
     Q_ASSERT( !q.isNull() );
     if ( q.isNull() )
+    {
         return;
+    }
 
     QList< result_ptr > cleanResults;
     QList< result_ptr > httpResults;
-    foreach ( const result_ptr& r, results )
+    foreach ( const result_ptr & r, results )
     {
         if ( r.isNull() )
+        {
             continue;
+        }
 
         if ( !r->checked() && ( r->url().startsWith( "http" ) && !r->url().startsWith( "http://localhost" ) ) )
+        {
             httpResults << r;
+        }
         else
+        {
             cleanResults << r;
-    }const
+        }
+    }
+    const
 
     ResultUrlChecker* checker = new ResultUrlChecker( q, httpResults );
     connect( checker, SIGNAL( done() ), SLOT( onResultUrlCheckerDone() ) );
@@ -367,7 +404,9 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
     }
 
     if ( httpResults.isEmpty() )
+    {
         decQIDState( q );
+    }
 }
 
 
@@ -375,14 +414,16 @@ void
 Pipeline::addResultsToQuery( const query_ptr& query, const QList< result_ptr >& results )
 {
     Q_D( Pipeline );
-//    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << query->toString() << results.count();
+    //    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << query->toString() << results.count();
 
     QList< result_ptr > cleanResults;
-    foreach ( const result_ptr& r, results )
+    foreach ( const result_ptr & r, results )
     {
         r->setScore( query->howSimilar( r ) );
         if ( !query->isFullTextQuery() && r->score() < MINSCORE )
+        {
             continue;
+        }
 
         cleanResults << r;
     }
@@ -393,7 +434,7 @@ Pipeline::addResultsToQuery( const query_ptr& query, const QList< result_ptr >& 
 
         if ( d->queries_temporary.contains( query ) )
         {
-            foreach ( const result_ptr& r, cleanResults )
+            foreach ( const result_ptr & r, cleanResults )
             {
                 d->rids.insert( r->id(), r );
             }
@@ -407,7 +448,9 @@ Pipeline::onResultUrlCheckerDone()
 {
     ResultUrlChecker* checker = qobject_cast< ResultUrlChecker* >( sender() );
     if ( !checker )
+    {
         return;
+    }
 
     checker->deleteLater();
 
@@ -428,7 +471,9 @@ Pipeline::reportAlbums( QID qid, const QList< album_ptr >& albums )
 {
     Q_D( Pipeline );
     if ( !d->running )
+    {
         return;
+    }
 
     if ( !d->qids.contains( qid ) )
     {
@@ -439,9 +484,9 @@ Pipeline::reportAlbums( QID qid, const QList< album_ptr >& albums )
     Q_ASSERT( q->isFullTextQuery() );
 
     QList< album_ptr > cleanAlbums;
-    foreach ( const album_ptr& r, albums )
+    foreach ( const album_ptr & r, albums )
     {
-//        float score = q->howSimilar( r );
+        //        float score = q->howSimilar( r );
 
         cleanAlbums << r;
     }
@@ -458,7 +503,9 @@ Pipeline::reportArtists( QID qid, const QList< artist_ptr >& artists )
 {
     Q_D( Pipeline );
     if ( !d->running )
+    {
         return;
+    }
 
     if ( !d->qids.contains( qid ) )
     {
@@ -469,9 +516,9 @@ Pipeline::reportArtists( QID qid, const QList< artist_ptr >& artists )
     Q_ASSERT( q->isFullTextQuery() );
 
     QList< artist_ptr > cleanArtists;
-    foreach ( const artist_ptr& r, artists )
+    foreach ( const artist_ptr & r, artists )
     {
-//        float score = q->howSimilar( r );
+        //        float score = q->howSimilar( r );
 
         cleanArtists << r;
     }
@@ -488,7 +535,9 @@ Pipeline::shuntNext()
 {
     Q_D( Pipeline );
     if ( !d->running )
+    {
         return;
+    }
 
     unsigned int rc;
     query_ptr q;
@@ -499,13 +548,17 @@ Pipeline::shuntNext()
         if ( d->queries_pending.isEmpty() )
         {
             if ( d->qidsState.isEmpty() )
+            {
                 emit idle();
+            }
             return;
         }
 
         // Check if we are ready to dispatch more queries
         if ( d->qidsState.count() >= d->maxConcurrentQueries )
+        {
             return;
+        }
 
         /*
             Since resolvers are async, we now dispatch to the highest weighted ones
@@ -524,7 +577,9 @@ Pipeline::timeoutShunt( const query_ptr& q )
 {
     Q_D( Pipeline );
     if ( !d->running )
+    {
         return;
+    }
 
     // are we still waiting for a timeout?
     if ( d->qidsTimeout.contains( q->id() ) )
@@ -539,11 +594,15 @@ Pipeline::shunt( const query_ptr& q )
 {
     Q_D( Pipeline );
     if ( !d->running )
+    {
         return;
+    }
 
     Resolver* r = 0;
     if ( !q->resolvingFinished() )
+    {
         r = nextResolver( q );
+    }
 
     if ( r )
     {
@@ -576,10 +635,12 @@ Pipeline::nextResolver( const Tomahawk::query_ptr& query ) const
     Q_D( const Pipeline );
     Resolver* newResolver = 0;
 
-    foreach ( Resolver* r, d->resolvers )
+    foreach ( Resolver * r, d->resolvers )
     {
         if ( query->resolvedBy().contains( r ) )
+        {
             continue;
+        }
 
         if ( !newResolver )
         {
@@ -588,7 +649,9 @@ Pipeline::nextResolver( const Tomahawk::query_ptr& query ) const
         }
 
         if ( r->weight() > newResolver->weight() )
+        {
             newResolver = r;
+        }
     }
 
     return newResolver;
@@ -602,7 +665,9 @@ Pipeline::setQIDState( const Tomahawk::query_ptr& query, int state )
     QMutexLocker lock( &d->mut );
 
     if ( d->qidsTimeout.contains( query->id() ) )
+    {
         d->qidsTimeout.remove( query->id() );
+    }
 
     if ( state > 0 )
     {
@@ -616,7 +681,9 @@ Pipeline::setQIDState( const Tomahawk::query_ptr& query, int state )
         query->onResolvingFinished();
 
         if ( !d->queries_temporary.contains( query ) )
+        {
             d->qids.remove( query->id() );
+        }
 
         new FuncTimeout( 0, boost::bind( &Pipeline::shuntNext, this ), this );
     }
@@ -649,7 +716,9 @@ Pipeline::decQIDState( const Tomahawk::query_ptr& query )
         QMutexLocker lock( &d->mut );
 
         if ( !d->qidsState.contains( query->id() ) )
+        {
             return 0;
+        }
 
         state = d->qidsState.value( query->id() ) - 1;
     }
@@ -673,8 +742,8 @@ Pipeline::onTemporaryQueryTimer()
         query_ptr q = d->queries_temporary.takeAt( i );
 
         d->qids.remove( q->id() );
-        foreach ( const Tomahawk::result_ptr& r, q->results() )
-            d->rids.remove( r->id() );
+        foreach ( const Tomahawk::result_ptr & r, q->results() )
+        d->rids.remove( r->id() );
     }
 }
 

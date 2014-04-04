@@ -22,14 +22,15 @@
 
 #include "database/DatabaseCommand.h"
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
 class DatabaseCommand_CalculatePlaytimePrivate;
 
 class DLLEXPORT DatabaseCommand_CalculatePlaytime : public Tomahawk::DatabaseCommand
 {
     Q_OBJECT
-public:
+  public:
     explicit DatabaseCommand_CalculatePlaytime( const playlist_ptr& playlist, QDateTime from, QDateTime to, QObject* parent = 0 );
     explicit DatabaseCommand_CalculatePlaytime( const playlist_ptr& playlist, const QStringList& plEntryIds, QDateTime from, QDateTime to, QObject* parent = 0 );
     explicit DatabaseCommand_CalculatePlaytime( const track_ptr& track, QDateTime from, QDateTime to, QObject* parent = 0 );
@@ -40,15 +41,21 @@ public:
 
     virtual void exec( DatabaseImpl* dbi );
 
-    virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "calculateplaytime"; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
+    virtual QString commandname() const
+    {
+        return "calculateplaytime";
+    }
 
 
-signals:
+  signals:
     void done( uint playtime );
     void done( const Tomahawk::playlist_ptr& playlist, uint playtime );
 
-private:
+  private:
     Q_DECLARE_PRIVATE( DatabaseCommand_CalculatePlaytime )
 };
 

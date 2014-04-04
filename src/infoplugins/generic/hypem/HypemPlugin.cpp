@@ -176,7 +176,7 @@ HypemPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
     criteria["chart_source"] = hash["chart_source"];
     /// @todo
     /// set cache time based on wether requested type is 3day, lastweek or recent.
-    emit getCachedInfo( criteria, Q_INT64_C(86400000), requestData );
+    emit getCachedInfo( criteria, Q_INT64_C( 86400000 ), requestData );
 }
 
 void
@@ -189,7 +189,7 @@ HypemPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData reque
     }
 
     Tomahawk::InfoSystem::InfoStringHash criteria;
-    emit getCachedInfo( criteria, Q_INT64_C(0), requestData );
+    emit getCachedInfo( criteria, Q_INT64_C( 0 ), requestData );
 }
 
 void
@@ -202,7 +202,7 @@ HypemPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSys
         {
             /// Fetch the chart, we need source and id
             tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "InfoChart not in cache! Fetching...";
-            QUrl url = QUrl( QString( HYPEM_URL "%1/%2" ).arg( criteria["chart_id"].toLower() ).arg(HYPEM_END_URL) );
+            QUrl url = QUrl( QString( HYPEM_URL "%1/%2" ).arg( criteria["chart_id"].toLower() ).arg( HYPEM_END_URL ) );
             qDebug() << Q_FUNC_INFO << "Getting chart url" << url;
 
             QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
@@ -245,32 +245,40 @@ HypemPlugin::chartTypes()
 
     QVariantMap charts;
 
-    foreach(QVariant types, m_types )
+    foreach( QVariant types, m_types )
     {
         QList< InfoStringHash > chart_types;
         QList< InfoStringHash > pop_charts;
         InfoStringHash c;
 
-        if(types.toString() != "Artists")
+        if( types.toString() != "Artists" )
         {
 
-            if(types.toString() == "Tracks")
+            if( types.toString() == "Tracks" )
             {
 
-                foreach(QVariant trackType, m_trackTypes)
+                foreach( QVariant trackType, m_trackTypes )
                 {
                     QString typeId;
-                    if(trackType.toString() == "Last 3 Days")
+                    if( trackType.toString() == "Last 3 Days" )
+                    {
                         typeId = "popular/3day";
+                    }
 
-                    if(trackType.toString() == "Last Week")
+                    if( trackType.toString() == "Last Week" )
+                    {
                         typeId = "popular/lastweek";
+                    }
 
-                    if(trackType.toString() == "No Remixes")
+                    if( trackType.toString() == "No Remixes" )
+                    {
                         typeId = "popular/noremix";
+                    }
 
-                    if(trackType.toString() == "On Twitter")
+                    if( trackType.toString() == "On Twitter" )
+                    {
                         typeId = "popular/twitter";
+                    }
 
                     c[ "id" ] = typeId;
                     c[ "label" ] = trackType.toString();
@@ -281,9 +289,9 @@ HypemPlugin::chartTypes()
                 chart_types.append( pop_charts );
 
             }
-            else if(types.toString() == "Recent by Tag")
+            else if( types.toString() == "Recent by Tag" )
             {
-                foreach(QVariant tagTypes, m_byTagTypes)
+                foreach( QVariant tagTypes, m_byTagTypes )
                 {
 
                     c[ "id" ] = "tags/" + tagTypes.toString().toLower();
@@ -294,7 +302,8 @@ HypemPlugin::chartTypes()
 
             }
 
-        }else
+        }
+        else
         {
             InfoStringHash c;
             c[ "id" ] = "popular/artists";
@@ -338,9 +347,13 @@ HypemPlugin::chartReturned()
         QStringList top_artists;
 
         if ( url.contains( "artists" ) )
+        {
             setChartType( Artist );
+        }
         else
+        {
             setChartType( Track );
+        }
 
         foreach ( QVariant result, res )
         {
@@ -363,7 +376,9 @@ HypemPlugin::chartReturned()
 
 
                 if ( chartType() == Artist )
+                {
                     top_artists << artist;
+                }
             }
         }
 
@@ -394,10 +409,12 @@ HypemPlugin::chartReturned()
         criteria[ "chart_source" ] = origData[ "chart_source" ];
         /// @todo
         /// set cache time based on wether requested type is 3day, lastweek or recent.
-        emit updateCache( criteria, Q_INT64_C(86400000), requestData.type, returnedData );
+        emit updateCache( criteria, Q_INT64_C( 86400000 ), requestData.type, returnedData );
     }
     else
+    {
         qDebug() << "Network error in fetching chart:" << reply->url().toString();
+    }
 
 }
 

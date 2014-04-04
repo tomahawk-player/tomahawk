@@ -93,19 +93,27 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QRect pixmapRect = option.rect.adjusted( 12, 12, -option.rect.width() + option.rect.height() - 12, -12 );
     QPixmap avatar = index.data( RecentlyPlayedPlaylistsModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->avatar( TomahawkUtils::RoundedCorners, pixmapRect.size() );
     if ( avatar.isNull() )
+    {
         avatar = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::RoundedCorners, pixmapRect.size() );
+    }
     painter->drawPixmap( pixmapRect, avatar );
 
     pixmapRect = QRect( option.rect.width() - option.fontMetrics.height() * 2.5 - 10, option.rect.top() + option.rect.height() / 4, option.fontMetrics.height() * 2.5, option.fontMetrics.height() * 2.5 );
     QPixmap icon;
-    RecentlyPlayedPlaylistsModel::PlaylistTypes type = (RecentlyPlayedPlaylistsModel::PlaylistTypes)index.data( RecentlyPlayedPlaylistsModel::PlaylistTypeRole ).toInt();
+    RecentlyPlayedPlaylistsModel::PlaylistTypes type = ( RecentlyPlayedPlaylistsModel::PlaylistTypes )index.data( RecentlyPlayedPlaylistsModel::PlaylistTypeRole ).toInt();
 
     if ( type == RecentlyPlayedPlaylistsModel::StaticPlaylist )
+    {
         icon = TomahawkUtils::defaultPixmap( TomahawkUtils::Playlist, TomahawkUtils::Original, pixmapRect.size() );
+    }
     else if ( type == RecentlyPlayedPlaylistsModel::AutoPlaylist )
+    {
         icon = TomahawkUtils::defaultPixmap( TomahawkUtils::AutomaticPlaylist, TomahawkUtils::Original, pixmapRect.size() );
+    }
     else if ( type == RecentlyPlayedPlaylistsModel::Station )
+    {
         icon = TomahawkUtils::defaultPixmap( TomahawkUtils::Station, TomahawkUtils::Original, pixmapRect.size() );
+    }
 
     painter->drawPixmap( pixmapRect, icon );
 
@@ -115,7 +123,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         painter->setFont( figFont );
         QString tracks = index.data( RecentlyPlayedPlaylistsModel::TrackCountRole ).toString();
         int width = painter->fontMetrics().width( tracks );
-//         int bottomEdge = pixmapRect
+        //         int bottomEdge = pixmapRect
         // right edge 10px past right edge of pixmapRect
         // bottom edge flush with bottom of pixmap
         QRect rect( pixmapRect.right() - width, 0, width - 8, 0 );
@@ -134,13 +142,15 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     painter->setFont( font );
     QString author = index.data( RecentlyPlayedPlaylistsModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->friendlyName();
     if ( author.indexOf( '@' ) > 0 )
+    {
         author = author.mid( 0, author.indexOf( '@' ) );
+    }
 
-/*    const int w = painter->fontMetrics().width( author ) + 2;
-    QRect avatarNameRect( opt.rect.width() - 10 - w, r.bottom(), w, opt.rect.bottom() - r.bottom() );
-    painter->drawText( avatarNameRect, author, QTextOption( Qt::AlignCenter ) );
+    /*    const int w = painter->fontMetrics().width( author ) + 2;
+        QRect avatarNameRect( opt.rect.width() - 10 - w, r.bottom(), w, opt.rect.bottom() - r.bottom() );
+        painter->drawText( avatarNameRect, author, QTextOption( Qt::AlignCenter ) );
 
-    const int leftEdge = opt.rect.width() - qMin( avatarNameRect.left(), r.left() );*/
+        const int leftEdge = opt.rect.width() - qMin( avatarNameRect.left(), r.left() );*/
     const int leftEdge = opt.rect.width() - pixmapRect.left();
     QString descText;
     if ( type == RecentlyPlayedPlaylistsModel::Station )

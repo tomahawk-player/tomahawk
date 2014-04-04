@@ -125,7 +125,7 @@ InfoBar::InfoBar( QWidget* parent )
     int topBottomMargin = TomahawkUtils::defaultFontHeight() / 6;
 
     ui->horizontalLayout->setContentsMargins( leftRightMargin, topBottomMargin,
-                                              leftRightMargin, topBottomMargin );
+            leftRightMargin, topBottomMargin );
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
     // top-margin + header + layout spacing + description + bottom-margin
     setFixedHeight( qMax( topBottomMargin + ui->captionLabel->height() + TomahawkUtils::defaultIconSize().height() / 4 + ui->descriptionLabel->height() + topBottomMargin,
@@ -196,7 +196,9 @@ void
 InfoBar::artistClicked()
 {
     if ( m_queryLabel && !m_queryLabel->artist().isNull() )
+    {
         ViewManager::instance()->show( m_queryLabel->artist() );
+    }
 }
 
 
@@ -209,7 +211,8 @@ InfoBar::setLongDescription( const QString& s )
     {
         ui->horizontalLayout->setStretchFactor( ui->verticalLayout, 1 );
         ui->horizontalLayout->setStretchFactor( ui->verticalLayout_2, 0 );
-    } else
+    }
+    else
     {
         ui->horizontalLayout->setStretchFactor( ui->verticalLayout, 0 );
         ui->horizontalLayout->setStretchFactor( ui->verticalLayout_2, 99 );
@@ -242,13 +245,15 @@ void
 InfoBar::setUpdaters( const QList<PlaylistUpdaterInterface*>& updaters )
 {
     QList< QWidget* > newUpdaterWidgets;
-    foreach ( PlaylistUpdaterInterface* updater, updaters )
+    foreach ( PlaylistUpdaterInterface * updater, updaters )
     {
         if ( updater->configurationWidget() )
+        {
             newUpdaterWidgets << updater->configurationWidget();
+        }
     }
 
-    foreach ( QWidget* updaterWidget, m_updaterConfigurations )
+    foreach ( QWidget * updaterWidget, m_updaterConfigurations )
     {
         updaterWidget->hide();
 
@@ -274,39 +279,39 @@ InfoBar::setUpdaters( const QList<PlaylistUpdaterInterface*>& updaters )
     }
     insertIdx++;
 
-    foreach ( QWidget* updaterWidget, m_updaterConfigurations )
+    foreach ( QWidget * updaterWidget, m_updaterConfigurations )
     {
         updaterWidget->setPalette( m_whitePal );
         ui->horizontalLayout->insertWidget( insertIdx, updaterWidget );
         updaterWidget->show();
     }
 
-//     if ( m_updaterConfiguration )
-//         m_updaterConfiguration->hide();
-//
-//     if ( m_updaterConfiguration && ( interface ? (m_updaterConfiguration != interface->configurationWidget()) : true ) )
-//         ui->horizontalLayout->removeWidget( m_updaterConfiguration );
-//
-//     m_updaterInterface = interface;
-//     m_updaterConfiguration = interface ? interface->configurationWidget() : 0;
-//
-//     if ( !m_updaterInterface || !m_updaterConfiguration )
-//         return;
-//
-//     m_updaterConfiguration->setPalette( m_whitePal );
-//     int insertIdx = -1; // Ugh, no indexOf for QSpacerItem*
-//     for ( int i = 0; i < ui->horizontalLayout->count(); i++ )
-//     {
-//         if ( ui->horizontalLayout->itemAt( i )->spacerItem() == ui->horizontalSpacer_4 )
-//         {
-//             insertIdx = i;
-//             break;
-//         }
-//     }
-//     insertIdx++;
-//     ui->horizontalLayout->insertWidget( insertIdx, m_updaterConfiguration );
-//
-//     m_updaterConfiguration->show();
+    //     if ( m_updaterConfiguration )
+    //         m_updaterConfiguration->hide();
+    //
+    //     if ( m_updaterConfiguration && ( interface ? (m_updaterConfiguration != interface->configurationWidget()) : true ) )
+    //         ui->horizontalLayout->removeWidget( m_updaterConfiguration );
+    //
+    //     m_updaterInterface = interface;
+    //     m_updaterConfiguration = interface ? interface->configurationWidget() : 0;
+    //
+    //     if ( !m_updaterInterface || !m_updaterConfiguration )
+    //         return;
+    //
+    //     m_updaterConfiguration->setPalette( m_whitePal );
+    //     int insertIdx = -1; // Ugh, no indexOf for QSpacerItem*
+    //     for ( int i = 0; i < ui->horizontalLayout->count(); i++ )
+    //     {
+    //         if ( ui->horizontalLayout->itemAt( i )->spacerItem() == ui->horizontalSpacer_4 )
+    //         {
+    //             insertIdx = i;
+    //             break;
+    //         }
+    //     }
+    //     insertIdx++;
+    //     ui->horizontalLayout->insertWidget( insertIdx, m_updaterConfiguration );
+    //
+    //     m_updaterConfiguration->show();
 }
 
 
@@ -322,16 +327,16 @@ InfoBar::paintEvent( QPaintEvent* event )
 {
     QWidget::paintEvent( event );
 
-/*    QPainter painter( this );
-    painter.setRenderHint( QPainter::Antialiasing );
+    /*    QPainter painter( this );
+        painter.setRenderHint( QPainter::Antialiasing );
 
-    QLinearGradient gradient( QPoint( 0, 0 ), QPoint( 0, 1 ) );
-    gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
-    gradient.setColorAt( 0.0, TomahawkStyle::HEADER_LOWER );
-    gradient.setColorAt( 1.0, TomahawkStyle::HEADER_UPPER );
+        QLinearGradient gradient( QPoint( 0, 0 ), QPoint( 0, 1 ) );
+        gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
+        gradient.setColorAt( 0.0, TomahawkStyle::HEADER_LOWER );
+        gradient.setColorAt( 1.0, TomahawkStyle::HEADER_UPPER );
 
-    painter.setBrush( gradient );
-    painter.fillRect( rect(), gradient );*/
+        painter.setBrush( gradient );
+        painter.fillRect( rect(), gradient );*/
 }
 
 
@@ -342,7 +347,7 @@ InfoBar::changeEvent( QEvent* event )
     switch ( event->type() )
     {
         case QEvent::LanguageChange:
-//            ui->retranslateUi( this );
+            //            ui->retranslateUi( this );
             break;
 
         default:

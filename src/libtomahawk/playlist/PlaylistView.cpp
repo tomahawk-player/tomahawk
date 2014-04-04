@@ -82,25 +82,25 @@ PlaylistView::eventFilter( QObject* obj, QEvent* event )
 {
     if ( event->type() == QEvent::DragEnter )
     {
-        QDragEnterEvent* e = static_cast<QDragEnterEvent*>(event);
+        QDragEnterEvent* e = static_cast<QDragEnterEvent*>( event );
         dragEnterEvent( e );
         return true;
     }
     if ( event->type() == QEvent::DragMove )
     {
-        QDragMoveEvent* e = static_cast<QDragMoveEvent*>(event);
+        QDragMoveEvent* e = static_cast<QDragMoveEvent*>( event );
         dragMoveEvent( e );
         return true;
     }
     if ( event->type() == QEvent::DragLeave )
     {
-        QDragLeaveEvent* e = static_cast<QDragLeaveEvent*>(event);
+        QDragLeaveEvent* e = static_cast<QDragLeaveEvent*>( event );
         dragLeaveEvent( e );
         return true;
     }
     if ( event->type() == QEvent::Drop )
     {
-        QDropEvent* e = static_cast<QDropEvent*>(event);
+        QDropEvent* e = static_cast<QDropEvent*>( event );
         dropEvent( e );
         return true;
     }
@@ -113,7 +113,9 @@ QList<PlaylistUpdaterInterface*>
 PlaylistView::updaters() const
 {
     if ( !m_model->playlist().isNull() )
+    {
         return m_model->playlist()->updaters();
+    }
 
     return QList<PlaylistUpdaterInterface*>();
 }
@@ -132,14 +134,20 @@ PlaylistView::onChanged()
     if ( m_model )
     {
         if ( m_model->isReadOnly() )
+        {
             setEmptyTip( tr( "This playlist is currently empty." ) );
+        }
         else
+        {
             setEmptyTip( tr( "This playlist is currently empty. Add some tracks to it and enjoy the music!" ) );
+        }
 
         setGuid( proxyModel()->guid() );
 
         if ( !m_model->playlist().isNull() && ViewManager::instance()->currentPage() == this )
+        {
             emit nameChanged( m_model->playlist()->title() );
+        }
     }
 }
 

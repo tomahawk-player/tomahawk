@@ -20,13 +20,13 @@
 
 #include <QMouseEvent>
 
-ContainedMenuButton::ContainedMenuButton( QWidget *parent )
+ContainedMenuButton::ContainedMenuButton( QWidget* parent )
     : QToolButton( parent )
 {
 }
 
 void
-ContainedMenuButton::setMenu( QMenu *menu )
+ContainedMenuButton::setMenu( QMenu* menu )
 {
     m_menu = menu;
     connect( m_menu, SIGNAL( aboutToHide() ), SLOT( menuHidden() ) );

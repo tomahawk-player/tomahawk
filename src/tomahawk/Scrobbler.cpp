@@ -42,7 +42,7 @@ Scrobbler::Scrobbler( QObject* parent )
     , m_reachedScrobblePoint( false )
 {
     connect( AudioEngine::instance(), SIGNAL( timerSeconds( unsigned int ) ),
-                                        SLOT( engineTick( unsigned int ) ), Qt::QueuedConnection );
+             SLOT( engineTick( unsigned int ) ), Qt::QueuedConnection );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
@@ -100,9 +100,13 @@ Scrobbler::trackStarted( const Tomahawk::result_ptr& track )
 
     // liblastfm forces 0-length tracks to scrobble after 4 minutes, stupid.
     if ( track->track()->duration() == 0 )
+    {
         m_scrobblePoint = lastfm::ScrobblePoint( 30 );
+    }
     else
+    {
         m_scrobblePoint = lastfm::ScrobblePoint( track->track()->duration() / 2 );
+    }
 }
 
 
@@ -137,7 +141,9 @@ void
 Scrobbler::engineTick( unsigned int secondsElapsed )
 {
     if ( secondsElapsed > m_scrobblePoint )
+    {
         m_reachedScrobblePoint = true;
+    }
 }
 
 
@@ -159,7 +165,9 @@ Scrobbler::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
 {
     Q_UNUSED( output );
     if ( requestData.caller == s_scInfoIdentifier )
+    {
         qDebug() << Q_FUNC_INFO;
+    }
 }
 
 

@@ -41,7 +41,9 @@ void
 DatabaseCommand_DeleteFiles::postCommitHook()
 {
     if ( !m_idList.count() )
+    {
         return;
+    }
 
     // make the collection object emit its tracksAdded signal, so the
     // collection browser will update/fade in etc.
@@ -54,7 +56,9 @@ DatabaseCommand_DeleteFiles::postCommitHook()
     emit notify( m_idList );
 
     if ( source()->isLocal() )
+    {
         Servent::instance()->triggerDBSync();
+    }
 }
 
 
@@ -70,11 +74,13 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
     {
         TomahawkSqlQuery dirquery = dbi->newquery();
         dirquery.prepare( QString( "SELECT id FROM file WHERE source %1" )
-                    .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) ) );
+                          .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) ) );
         dirquery.exec();
-        
+
         while ( dirquery.next() )
+        {
             m_idList << dirquery.value( 0 ).toUInt();
+        }
     }
     else if ( source()->isLocal() )
     {
@@ -95,31 +101,31 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
         else if ( !m_ids.isEmpty() )
         {
             tDebug() << Q_FUNC_INFO << "deleting given ids";
-            foreach ( const QVariant& id, m_ids )
-                m_idList << id.toUInt();
+            foreach ( const QVariant & id, m_ids )
+            m_idList << id.toUInt();
         }
     }
 
     if ( m_deleteAll )
     {
         delquery.prepare( QString( "DELETE FROM file WHERE source %1" )
-                    .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) ) );
+                          .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) ) );
         delquery.exec();
     }
     else if ( !m_ids.isEmpty() )
     {
         QString idstring;
-        foreach ( const QVariant& id, m_ids )
-            idstring.append( id.toString() + ", " );
+        foreach ( const QVariant & id, m_ids )
+        idstring.append( id.toString() + ", " );
         idstring.chop( 2 ); //remove the trailing ", "
 
         if ( !source()->isLocal() )
         {
             delquery.prepare( QString( "SELECT id FROM file WHERE source = %1 AND url IN ( %2 )" )
-                        .arg( source()->id() )
-                        .arg( idstring ) );
+                              .arg( source()->id() )
+                              .arg( idstring ) );
             delquery.exec();
-            
+
             idstring = QString();
             while ( delquery.next() )
             {
@@ -130,13 +136,15 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
         }
 
         delquery.prepare( QString( "DELETE FROM file WHERE source %1 AND id IN ( %2 )" )
-                             .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) )
-                             .arg( idstring ) );
+                          .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) )
+                          .arg( idstring ) );
         delquery.exec();
     }
 
     if ( m_idList.count() )
+    {
         source()->updateIndexWhenSynced();
+    }
 
     emit done( m_idList, source()->dbCollection() );
 }

@@ -35,30 +35,45 @@ class DatabaseCommand_LoadAllSortedPlaylists : public DatabaseCommand
 {
     Q_OBJECT
 
-public:
+  public:
     // don't macros rock... not
-    typedef QPair<int,QString> SourcePlaylistPair;
+    typedef QPair<int, QString> SourcePlaylistPair;
     explicit DatabaseCommand_LoadAllSortedPlaylists( const Tomahawk::source_ptr& s, QObject* parent = 0 )
         : DatabaseCommand( s, parent )
         , m_limitAmount( 0 )
         , m_sortOrder( DatabaseCommand_LoadAllPlaylists::None )
         , m_sortAscDesc( DatabaseCommand_LoadAllPlaylists::NoOrder )
     {
-        qRegisterMetaType<QList<Tomahawk::DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair> >("QList<Tomahawk::DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair>");
+        qRegisterMetaType<QList<Tomahawk::DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair> >( "QList<Tomahawk::DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair>" );
     }
 
     virtual void exec( DatabaseImpl* );
-    virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "loadallsortedplaylists"; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
+    virtual QString commandname() const
+    {
+        return "loadallsortedplaylists";
+    }
 
-    void setLimit( unsigned int limit ) { m_limitAmount = limit; }
-    void setSortOrder( DatabaseCommand_LoadAllPlaylists::SortOrder order ) { m_sortOrder = order; }
-    void setSortAscDesc( DatabaseCommand_LoadAllPlaylists::SortAscDesc asc  ) { m_sortAscDesc = asc; }
+    void setLimit( unsigned int limit )
+    {
+        m_limitAmount = limit;
+    }
+    void setSortOrder( DatabaseCommand_LoadAllPlaylists::SortOrder order )
+    {
+        m_sortOrder = order;
+    }
+    void setSortAscDesc( DatabaseCommand_LoadAllPlaylists::SortAscDesc asc  )
+    {
+        m_sortAscDesc = asc;
+    }
 
-signals:
+  signals:
     void done( const QList<Tomahawk::DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair>& playlistGuids ); // QPair< sourceid, playlistguid>
 
-private:
+  private:
     unsigned int m_limitAmount;
     DatabaseCommand_LoadAllPlaylists::SortOrder m_sortOrder;
     DatabaseCommand_LoadAllPlaylists::SortAscDesc m_sortAscDesc;

@@ -26,17 +26,17 @@ class Ui_LoadXSPF;
 class LoadXSPFDialog : public QDialog
 {
     Q_OBJECT
-public:
+  public:
     explicit LoadXSPFDialog( QWidget* parent = 0, Qt::WindowFlags f = 0 );
     virtual ~LoadXSPFDialog();
 
     QString xspfUrl() const;
     bool autoUpdate() const;
 
-public slots:
+  public slots:
     void getLocalFile();
 
-private:
+  private:
     Ui_LoadXSPF* m_ui;
 };
 

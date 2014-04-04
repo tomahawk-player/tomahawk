@@ -34,8 +34,9 @@ namespace Tomahawk
 class DLLEXPORT EchonestCatalogSynchronizer : public QObject
 {
     Q_OBJECT
-public:
-    static EchonestCatalogSynchronizer* instance() {
+  public:
+    static EchonestCatalogSynchronizer* instance()
+    {
         if ( !s_instance )
         {
             s_instance = new EchonestCatalogSynchronizer;
@@ -44,15 +45,21 @@ public:
         return s_instance;
     }
 
-    explicit EchonestCatalogSynchronizer(QObject *parent = 0);
+    explicit EchonestCatalogSynchronizer( QObject* parent = 0 );
 
-    Echonest::Catalog songCatalog() const { return m_songCatalog; }
-    Echonest::Catalog artistCatalog() const { return m_artistCatalog; }
+    Echonest::Catalog songCatalog() const
+    {
+        return m_songCatalog;
+    }
+    Echonest::Catalog artistCatalog() const
+    {
+        return m_artistCatalog;
+    }
 
-signals:
+  signals:
     void knownCatalogsChanged();
 
-private slots:
+  private slots:
     void checkSettingsChanged();
     void tracksAdded( const QList<unsigned int>& );
     void tracksRemoved( const QList<unsigned int>& );
@@ -68,7 +75,7 @@ private slots:
     void checkTicket();
 
     void rawTracksAdd( const QList< QStringList >& tracks );
-private:
+  private:
     void uploadDb();
     QByteArray escape( const QString& in ) const;
 

@@ -25,9 +25,11 @@
 #include <QModelIndex>
 
 class QAbstractButton;
-namespace Tomahawk {
-namespace Accounts {
-    class AccountFactory;
+namespace Tomahawk
+{
+namespace Accounts
+{
+class AccountFactory;
 class Account;
 }
 }
@@ -38,24 +40,25 @@ class Ui_AccountFactoryWrapper;
 class DLLEXPORT AccountFactoryWrapper : public QDialog
 {
     Q_OBJECT
-public:
-    enum ExtraRoles {
+  public:
+    enum ExtraRoles
+    {
         AccountRole = Qt::UserRole + 140
     };
 
     explicit AccountFactoryWrapper( Tomahawk::Accounts::AccountFactory* factory, QWidget* parent = 0 );
     virtual ~AccountFactoryWrapper() {}
 
-public slots:
+  public slots:
     void openAccountConfig( Tomahawk::Accounts::Account* );
     void removeAccount( Tomahawk::Accounts::Account* );
-    void accountCheckedOrUnchecked( const QModelIndex& , Tomahawk::Accounts::Account* , Qt::CheckState );
+    void accountCheckedOrUnchecked( const QModelIndex&, Tomahawk::Accounts::Account*, Qt::CheckState );
 
-private slots:
+  private slots:
     void buttonClicked( QAbstractButton* );
     void load();
 
-private:
+  private:
     Tomahawk::Accounts::AccountFactory* m_factory;
     Ui_AccountFactoryWrapper* m_ui;
     QPushButton* m_addButton;

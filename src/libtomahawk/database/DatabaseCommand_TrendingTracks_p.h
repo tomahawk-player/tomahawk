@@ -29,7 +29,7 @@ namespace Tomahawk
 
 class DatabaseCommand_TrendingTracksPrivate: DatabaseCommandPrivate
 {
-public:
+  public:
     DatabaseCommand_TrendingTracksPrivate( DatabaseCommand_TrendingTracks* q )
         : DatabaseCommandPrivate( q )
         , amount( 0 )
@@ -38,7 +38,7 @@ public:
 
     Q_DECLARE_PUBLIC( DatabaseCommand_TrendingTracks )
 
-private:
+  private:
     uint amount;
 };
 

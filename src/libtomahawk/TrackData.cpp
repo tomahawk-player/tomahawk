@@ -70,7 +70,9 @@ TrackData::get( unsigned int id, const QString& artist, const QString& track )
         s_dataidMutex.unlock();
 
         if ( track )
+        {
             return track;
+        }
     }
     s_dataidMutex.unlock();
 
@@ -80,7 +82,9 @@ TrackData::get( unsigned int id, const QString& artist, const QString& track )
     {
         trackdata_wptr track = s_trackDatasByName.value( key );
         if ( track )
+        {
             return track;
+        }
     }
 
     trackdata_ptr t = trackdata_ptr( new TrackData( id, artist, track ), &TrackData::deleteLater );
@@ -94,7 +98,9 @@ TrackData::get( unsigned int id, const QString& artist, const QString& track )
         s_dataidMutex.unlock();
     }
     else
+    {
         t->loadId( false );
+    }
 
     return t;
 }
@@ -163,9 +169,9 @@ QString
 TrackData::toString() const
 {
     return QString( "TrackData(%1, %2 - %3)" )
-              .arg( m_trackId )
-              .arg( m_artist )
-              .arg( m_track );
+           .arg( m_trackId )
+           .arg( m_artist )
+           .arg( m_track );
 }
 
 
@@ -223,12 +229,14 @@ void
 TrackData::loadAttributes()
 {
     if ( m_attributesLoaded )
+    {
         return;
+    }
 
     m_attributesLoaded = true;
 
     DatabaseCommand_LoadTrackAttributes* cmd = new DatabaseCommand_LoadTrackAttributes( m_ownRef.toStrongRef() );
-    Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 
@@ -248,7 +256,9 @@ void
 TrackData::loadSocialActions( bool force )
 {
     if ( !force && m_socialActionsLoaded )
+    {
         return;
+    }
 
     m_socialActionsLoaded = true;
 
@@ -284,7 +294,7 @@ TrackData::socialActions( const QString& actionName, const QVariant& value, bool
     QMutexLocker locker( &s_memberMutex );
 
     QList< Tomahawk::SocialAction > filtered;
-    foreach ( const Tomahawk::SocialAction& sa, m_allSocialActions )
+    foreach ( const Tomahawk::SocialAction & sa, m_allSocialActions )
     {
         if ( sa.action == actionName )
         {
@@ -295,25 +305,31 @@ TrackData::socialActions( const QString& actionName, const QVariant& value, bool
                 while ( it != filtered.end() )
                 {
                     if ( it->source == srcWithBadValue )
+                    {
                         it = filtered.erase( it );
+                    }
                     else
+                    {
                         ++it;
+                    }
                 }
                 continue;
             }
 
             bool dupe = false;
             for ( QList< Tomahawk::SocialAction>::iterator it = filtered.begin();
-                  it != filtered.end(); ++it )
+                    it != filtered.end(); ++it )
             {
                 if ( it->source == sa.source ||
                         ( filterDupeSourceNames &&
-                            ( it->source->friendlyName() == sa.source->friendlyName() ) ) )
+                          ( it->source->friendlyName() == sa.source->friendlyName() ) ) )
                 {
                     dupe = true;
                     // we store the earliest timestamp in the sa we're keeping
                     if ( it->timestamp.toInt() > sa.timestamp.toInt() )
+                    {
                         it->timestamp = sa.timestamp;
+                    }
                     // and always the new value
                     it->value = sa.value;
                     break;
@@ -321,9 +337,11 @@ TrackData::socialActions( const QString& actionName, const QVariant& value, bool
             }
 
             if ( dupe )
+            {
                 continue;
+            }
             filtered << sa;
-       }
+        }
     }
 
     return filtered;
@@ -389,13 +407,15 @@ void
 TrackData::loadStats()
 {
     if ( m_playbackHistoryLoaded )
+    {
         return;
+    }
 
     m_playbackHistoryLoaded = true;
 
     DatabaseCommand_TrackStats* cmd = new DatabaseCommand_TrackStats( m_ownRef.toStrongRef() );
     connect( cmd, SIGNAL( trackStats( unsigned int, unsigned int ) ), SLOT( onTrackStatsLoaded( unsigned int, unsigned int ) ) );
-    Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 
@@ -405,7 +425,7 @@ TrackData::playbackHistory( const Tomahawk::source_ptr& source ) const
     QMutexLocker locker( &s_memberMutex );
 
     QList< Tomahawk::PlaybackLog > history;
-    foreach ( const PlaybackLog& log, m_playbackHistory )
+    foreach ( const PlaybackLog & log, m_playbackHistory )
     {
         if ( source.isNull() || log.source == source )
         {
@@ -434,10 +454,12 @@ TrackData::playbackCount( const source_ptr& source )
     QMutexLocker locker( &s_memberMutex );
 
     unsigned int count = 0;
-    foreach ( const PlaybackLog& log, m_playbackHistory )
+    foreach ( const PlaybackLog & log, m_playbackHistory )
     {
         if ( source.isNull() || log.source == source )
+        {
             count++;
+        }
     }
 
     return count;
@@ -538,7 +560,9 @@ void
 TrackData::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
     if ( requestData.caller != id() )
+    {
         return;
+    }
 
     QVariantMap returnedData = output.value< QVariantMap >();
     switch ( requestData.type )
@@ -578,7 +602,9 @@ void
 TrackData::infoSystemFinished( QString target )
 {
     if ( target != id() )
+    {
         return;
+    }
 
     if ( --m_infoJobs == 0 )
     {

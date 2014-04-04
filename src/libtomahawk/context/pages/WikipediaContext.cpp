@@ -22,7 +22,7 @@
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "PlaylistInterface.h"
+#include "PlaylistInterface.h"
 #endif
 
 
@@ -33,13 +33,17 @@ void
 WikipediaContext::setArtist( const Tomahawk::artist_ptr& artist )
 {
     if ( artist.isNull() )
+    {
         return;
+    }
     if ( !m_artist.isNull() && m_artist->name() == artist->name() )
+    {
         return;
+    }
 
     m_artist = artist;
 
-    QString lang = QLocale::system().name().split("_").first();
+    QString lang = QLocale::system().name().split( "_" ).first();
     webView()->load( QString( "http://%1.wikipedia.org/w/index.php?useformat=mobile&title=%2" ).arg( lang ).arg( m_artist->name() ) );
 }
 
@@ -48,7 +52,9 @@ void
 WikipediaContext::setAlbum( const Tomahawk::album_ptr& album )
 {
     if ( album.isNull() )
+    {
         return;
+    }
 
     setArtist( album->artist() );
 }
@@ -58,7 +64,9 @@ void
 WikipediaContext::setQuery( const Tomahawk::query_ptr& query )
 {
     if ( query.isNull() )
+    {
         return;
+    }
 
     setArtist( query->track()->artistPtr() );
 }
@@ -68,9 +76,13 @@ void
 LastfmContext::setArtist( const Tomahawk::artist_ptr& artist )
 {
     if ( artist.isNull() )
+    {
         return;
+    }
     if ( !m_artist.isNull() && m_artist->name() == artist->name() )
+    {
         return;
+    }
 
     m_artist = artist;
 
@@ -82,7 +94,9 @@ void
 LastfmContext::setAlbum( const Tomahawk::album_ptr& album )
 {
     if ( album.isNull() )
+    {
         return;
+    }
 
     setArtist( album->artist() );
 }
@@ -92,7 +106,9 @@ void
 LastfmContext::setQuery( const Tomahawk::query_ptr& query )
 {
     if ( query.isNull() )
+    {
         return;
+    }
 
     setArtist( query->track()->artistPtr() );
 }

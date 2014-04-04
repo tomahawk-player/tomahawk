@@ -27,7 +27,7 @@
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "collection/Collection.h"
+#include "collection/Collection.h"
 #endif
 
 #include "infosystem/InfoSystem.h"
@@ -43,9 +43,9 @@ class IdThreadWorker;
 
 class DLLEXPORT Album : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     static album_ptr get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCreate = false );
     static album_ptr get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist );
 
@@ -69,24 +69,24 @@ public:
 
     void loadId( bool autoCreate );
 
-public slots:
+  public slots:
     void deleteLater();
 
-signals:
+  signals:
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
     void updated();
     void coverChanged();
 
-protected:
+  protected:
     QScopedPointer<AlbumPrivate> d_ptr;
 
-private slots:
+  private slots:
     void onTracksLoaded( Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
 
     void infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData, const QVariant& output );
     void infoSystemFinished( const QString& target );
 
-private:
+  private:
     Q_DECLARE_PRIVATE( Album )
     Q_DISABLE_COPY( Album )
     QString infoid() const;

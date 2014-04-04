@@ -52,67 +52,118 @@ class DLLEXPORT DynamicControl : public QObject
     Q_PROPERTY( QString input READ input WRITE setInput )
     Q_PROPERTY( QString summary READ summary ) // a summary of the control in phrase form
 
-public:
+  public:
     DynamicControl( const QStringList& typeSelectors = QStringList() );
     virtual ~DynamicControl();
 
 
     /// The current type of this control
-    QString  selectedType() const { return m_selectedType; }
+    QString  selectedType() const
+    {
+        return m_selectedType;
+    }
     /**
      * The match selector widget based on this control's type
      *
      * The control manages the lifetime of the widget.
      */
-    virtual QWidget* matchSelector()  { Q_ASSERT( false ); return 0; }
+    virtual QWidget* matchSelector()
+    {
+        Q_ASSERT( false );
+        return 0;
+    }
     /**
      * The input field widget that is associated with this type
      *
      * The control manages the lifetime of the widget.
      */
-    virtual QWidget* inputField()  { Q_ASSERT( false ); return 0;  }
+    virtual QWidget* inputField()
+    {
+        Q_ASSERT( false );
+        return 0;
+    }
 
     /// The user-readable match value, for showing in read-only playlists
-    virtual QString matchString() const { Q_ASSERT( false ); return QString(); }
+    virtual QString matchString() const
+    {
+        Q_ASSERT( false );
+        return QString();
+    }
 
     /// the serializable value of the match
-    virtual QString match() const  { Q_ASSERT( false ); return QString(); }
+    virtual QString match() const
+    {
+        Q_ASSERT( false );
+        return QString();
+    }
     /// the serializable value of the input
-    virtual QString input() const { Q_ASSERT( false ); return QString(); }
+    virtual QString input() const
+    {
+        Q_ASSERT( false );
+        return QString();
+    }
     /// the user-readable summary phrase
-    virtual QString summary() const { Q_ASSERT( false ); return QString(); }
+    virtual QString summary() const
+    {
+        Q_ASSERT( false );
+        return QString();
+    }
 
     // used by JSON serialization
-    virtual void setMatch( const QString& /*match*/ ) { Q_ASSERT( false ); }
-    virtual void setInput( const QString& /*input*/ ) { Q_ASSERT( false ); }
+    virtual void setMatch( const QString& /*match*/ )
+    {
+        Q_ASSERT( false );
+    }
+    virtual void setInput( const QString& /*input*/ )
+    {
+        Q_ASSERT( false );
+    }
     /// All the potential type selectors for this control
-    QStringList typeSelectors() const { return m_typeSelectors; }
+    QStringList typeSelectors() const
+    {
+        return m_typeSelectors;
+    }
 
-    QString id() {
+    QString id()
+    {
         if( m_id.isEmpty() )
+        {
             m_id = uuid();
+        }
         return m_id;
     };
-    void setId( const QString& id ) { m_id = id; }
+    void setId( const QString& id )
+    {
+        m_id = id;
+    }
 
-    void setType( const QString& type ) { m_type = type; }
-    QString type() const { return m_type; }
+    void setType( const QString& type )
+    {
+        m_type = type;
+    }
+    QString type() const
+    {
+        return m_type;
+    }
 
-signals:
+  signals:
     void changed();
 
-public slots:
+  public slots:
     /**
      * Sets the type to the newly specified one. Note that this will update the matchSelector
      *  and inputField widgets, so you should fetch the new widgets for use immediately.
      */
-    virtual void setSelectedType( const QString& selectedType ) { m_selectedType = selectedType; }
+    virtual void setSelectedType( const QString& selectedType )
+    {
+        m_selectedType = selectedType;
+    }
 
-protected:
+  protected:
     // Private constructor, you can't make one. Get it from your Generator.
     explicit DynamicControl( const QString& selectedType, const QStringList& typeSelectors, QObject* parent = 0 );
 
-private:
+  private:
     QString m_type;
     QString m_selectedType;
     QStringList m_typeSelectors;

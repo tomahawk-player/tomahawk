@@ -40,7 +40,7 @@ QVariantList
 DatabaseCommand_AddFiles::files() const
 {
     QVariantList list;
-    foreach ( const QVariant& v, m_files )
+    foreach ( const QVariant & v, m_files )
     {
         // replace url with the id, we don't leak file paths over the network.
         QVariantMap m = v.toMap();
@@ -66,7 +66,9 @@ DatabaseCommand_AddFiles::postCommitHook()
     emit notify( m_ids );
 
     if ( source()->isLocal() )
+    {
         Servent::instance()->triggerDBSync();
+    }
 }
 
 
@@ -122,7 +124,9 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         query_file.exec();
 
         if ( added % 1000 == 0 )
+        {
             qDebug() << "Inserted" << added;
+        }
 
         // get internal IDs for art/alb/trk
         fileid = query_file.lastInsertId().toInt();
@@ -132,14 +136,20 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
 
         artistid = dbi->artistId( artist, true );
         if ( artistid < 1 )
+        {
             continue;
+        }
         trackid = dbi->trackId( artistid, track, true );
         if ( trackid < 1 )
+        {
             continue;
+        }
         albumid = dbi->albumId( artistid, album, true );
 
         if( !composer.trimmed().isEmpty() )
+        {
             composerid = dbi->artistId( composer, true );
+        }
 
         // Now add the association
         query_filejoin.bindValue( 0, fileid );

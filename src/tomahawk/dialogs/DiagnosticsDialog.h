@@ -31,25 +31,25 @@ class SipInfo;
 
 namespace Ui
 {
-    class DiagnosticsDialog;
+class DiagnosticsDialog;
 }
 
 class DiagnosticsDialog : public QDialog
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit DiagnosticsDialog( QWidget* parent = 0 );
     ~DiagnosticsDialog() {};
 
-private slots:
+  private slots:
     void updateLogView();
     void copyToClipboard();
     void openLogfile();
 
     QString accountLog( Tomahawk::Accounts::Account* );
 
-private:
+  private:
     Ui::DiagnosticsDialog* ui;
     QString peerLog( const QString& nodeid, const QList<Tomahawk::peerinfo_ptr>& peerInfos );
 };

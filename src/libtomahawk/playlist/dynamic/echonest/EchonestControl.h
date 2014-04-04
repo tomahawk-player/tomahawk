@@ -32,7 +32,7 @@ namespace Tomahawk
 class EchonestControl : public DynamicControl
 {
     Q_OBJECT
-public:
+  public:
     virtual QWidget* inputField();
     virtual QWidget* matchSelector();
 
@@ -44,16 +44,16 @@ public:
     virtual QString matchString() const;
     virtual QString summary() const;
 
-    virtual void setInput(const QString& input);
-    virtual void setMatch(const QString& match);
+    virtual void setInput( const QString& input );
+    virtual void setMatch( const QString& match );
 
     /// DO NOT USE IF YOU ARE NOT A DBCMD
     EchonestControl( const QString& type, const QStringList& typeSelectors, QObject* parent = 0 );
 
-public slots:
+  public slots:
     virtual void setSelectedType ( const QString& type );
 
-private slots:
+  private slots:
     void updateData();
     void editingFinished();
     void editTimerFired();
@@ -62,7 +62,7 @@ private slots:
     void suggestFinished();
 
     void checkForMoodsStylesOrGenresFetched();
-private:
+  private:
     void updateWidgets();
     void updateWidgetsFromData();
 

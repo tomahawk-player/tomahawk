@@ -19,11 +19,11 @@ namespace kdtools
 class KDTOOLSCORE_EXPORT KDSharedMemoryLocker
 {
     Q_DISABLE_COPY( KDSharedMemoryLocker )
-public:
+  public:
     KDSharedMemoryLocker( QSharedMemory* mem );
     ~KDSharedMemoryLocker();
 
-private:
+  private:
     QSharedMemory* const mem;
 };
 

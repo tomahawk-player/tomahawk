@@ -31,7 +31,7 @@
 
 class ConnectionPrivate
 {
-public:
+  public:
     ConnectionPrivate( Connection* q, Servent* _servent )
         : q_ptr ( q )
         , servent( _servent )
@@ -58,7 +58,7 @@ public:
     Connection* q_ptr;
     Q_DECLARE_PUBLIC ( Connection )
 
-private:
+  private:
     Servent* servent;
     QPointer<QTcpSocket> sock;
     QHostAddress peerIpAddress;

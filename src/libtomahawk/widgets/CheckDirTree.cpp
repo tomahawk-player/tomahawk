@@ -26,7 +26,7 @@
 #include <QCoreApplication>
 #include <QProcess>
 #ifdef Q_OS_MAC
-    #include <QTimer>
+#include <QTimer>
 #endif
 
 static QString s_macVolumePath = "/Volumes";
@@ -58,7 +58,9 @@ CheckDirModel::cleanup()
 #ifdef Q_OS_MAC
     // reset to previous state
     if ( m_shownVolumes )
+    {
         QProcess::startDetached( QString( "%1 -a V %2" ).arg( m_setFilePath ).arg( s_macVolumePath ) );
+    }
 #endif
 }
 
@@ -93,14 +95,14 @@ void
 CheckDirModel::volumeShowFinished()
 {
 #if ! QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-//FIXME: this has no equivalent in Qt5, does it just work there?
+    //FIXME: this has no equivalent in Qt5, does it just work there?
     reset();
 #endif
 
 #ifdef Q_OS_MAC
     // Make sure /Volumes is there, if not wait and try again
-    const QModelIndex parent = index("/");
-    const int count = rowCount(parent);
+    const QModelIndex parent = index( "/" );
+    const int count = rowCount( parent );
     bool found = false;
     for ( int i = 0; i < count; i++ )
     {
@@ -111,7 +113,9 @@ CheckDirModel::volumeShowFinished()
         }
     }
     if ( !found )
+    {
         QTimer::singleShot( 500, this, SLOT( volumeShowFinished() ) );
+    }
 #endif
 }
 
@@ -167,7 +171,7 @@ CheckDirModel::setData( const QModelIndex& index, const QVariant& value, int rol
 
     if ( role == Qt::CheckStateRole )
     {
-        m_checkTable.insert( index, (Qt::CheckState)value.toInt() );
+        m_checkTable.insert( index, ( Qt::CheckState )value.toInt() );
         emit dataChanged( index, index );
         emit dataChangedByUser( index );
     }
@@ -180,7 +184,7 @@ void
 CheckDirModel::setCheck( const QModelIndex& index, const QVariant& value )
 {
     QFileSystemModel::setData( index, value, Qt::CheckStateRole );
-    m_checkTable.insert( index, (Qt::CheckState)value.toInt() );
+    m_checkTable.insert( index, ( Qt::CheckState )value.toInt() );
     emit dataChanged( index, index );
 }
 
@@ -188,7 +192,7 @@ CheckDirModel::setCheck( const QModelIndex& index, const QVariant& value )
 Qt::CheckState
 CheckDirModel::getCheck( const QModelIndex& index )
 {
-    return (Qt::CheckState)data( index, Qt::CheckStateRole ).toInt();
+    return ( Qt::CheckState )data( index, Qt::CheckStateRole ).toInt();
 }
 
 
@@ -207,16 +211,16 @@ CheckDirTree::CheckDirTree( QWidget* parent )
     //header()->hide();
 
     connect( &m_dirModel, SIGNAL( dataChangedByUser( QModelIndex ) ),
-                            SLOT( updateNode( QModelIndex ) ) );
+             SLOT( updateNode( QModelIndex ) ) );
     connect( &m_dirModel, SIGNAL( dataChangedByUser( const QModelIndex& ) ),
-                          SIGNAL( changed() ) );
+             SIGNAL( changed() ) );
     connect( &m_dirModel, SIGNAL( modelReset() ),
-                            SLOT( modelReset() ) );
+             SLOT( modelReset() ) );
 
     connect( this, SIGNAL( collapsed( QModelIndex ) ),
-                     SLOT( onCollapse( QModelIndex ) ) );
+             SLOT( onCollapse( QModelIndex ) ) );
     connect( this, SIGNAL( expanded( QModelIndex ) ),
-                     SLOT( onExpand( QModelIndex ) ) );
+             SLOT( onExpand( QModelIndex ) ) );
 }
 
 
@@ -239,7 +243,7 @@ CheckDirTree::checkPath( const QString& path, Qt::CheckState state )
 void
 CheckDirTree::setExclusions( const QStringList& list )
 {
-    foreach ( const QString& path, list )
+    foreach ( const QString & path, list )
     {
         checkPath( path, Qt::Unchecked );
     }
@@ -373,7 +377,7 @@ CheckDirTree::updateNode( const QModelIndex& idx )
 void
 CheckDirTree::modelReset()
 {
-    foreach ( const QString& dir, TomahawkSettings::instance()->scannerPaths() )
+    foreach ( const QString & dir, TomahawkSettings::instance()->scannerPaths() )
     {
         checkPath( dir, Qt::Checked );
     }

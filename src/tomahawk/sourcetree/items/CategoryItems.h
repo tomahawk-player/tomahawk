@@ -24,7 +24,7 @@
 class CategoryAddItem : public SourceTreeItem
 {
     Q_OBJECT
-public:
+  public:
     CategoryAddItem( SourcesModel* model, SourceTreeItem* parent, SourcesModel::CategoryType type );
     ~CategoryAddItem();
 
@@ -34,24 +34,24 @@ public:
     virtual QIcon icon() const;
     virtual int peerSortValue() const;
 
-    virtual bool willAcceptDrag(const QMimeData* data) const;
-    virtual DropTypes supportedDropTypes(const QMimeData* data) const;
-    virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action);
+    virtual bool willAcceptDrag( const QMimeData* data ) const;
+    virtual DropTypes supportedDropTypes( const QMimeData* data ) const;
+    virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action );
 
-private slots:
+  private slots:
     void parsedDroppedTracks( const QList< Tomahawk::query_ptr >& tracks );
 
     // Do the rename only after the revision is loaded
     void playlistToRenameLoaded();
 
-private:
+  private:
     SourcesModel::CategoryType m_categoryType;
 };
 
 class CategoryItem : public SourceTreeItem
 {
     Q_OBJECT
-public:
+  public:
     CategoryItem( SourcesModel* model, SourceTreeItem* parent, SourcesModel::CategoryType category, bool showAddItem );
 
     virtual QString text() const;
@@ -65,7 +65,7 @@ public:
 
     SourcesModel::CategoryType categoryType();
 
-private:
+  private:
     SourcesModel::CategoryType m_category;
     CategoryAddItem* m_addItem;
     bool m_showAdd;

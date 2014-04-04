@@ -37,7 +37,7 @@ namespace Tomahawk
 
 namespace Accounts
 {
-    class LastFmAccount;
+class LastFmAccount;
 }
 
 namespace InfoSystem
@@ -47,13 +47,16 @@ class DLLEXPORT LastFmInfoPlugin : public InfoPlugin
 {
     Q_OBJECT
 
-public:
+  public:
     LastFmInfoPlugin( Accounts::LastFmAccount* account );
     virtual ~LastFmInfoPlugin();
 
-    const QString friendlyName() const { return "LastFM"; };
+    const QString friendlyName() const
+    {
+        return "LastFM";
+    };
 
-public slots:
+  public slots:
     void settingsChanged();
 
     void onAuthenticated();
@@ -66,14 +69,14 @@ public slots:
     void chartReturned();
     void similarTracksReturned();
 
-protected slots:
+  protected slots:
     virtual void init();
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
 
     virtual void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData );
 
-private:
+  private:
     void fetchSimilarArtists( Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchTopTracks( Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchArtistInfo( Tomahawk::InfoSystem::InfoRequestData requestData );

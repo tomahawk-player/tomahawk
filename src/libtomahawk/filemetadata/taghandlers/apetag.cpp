@@ -21,13 +21,13 @@
 namespace Tomahawk
 {
 
-APETag::APETag( TagLib::Tag *tag, TagLib::APE::Tag *apeTag )
+APETag::APETag( TagLib::Tag* tag, TagLib::APE::Tag* apeTag )
     : Tag( tag )
     , m_apeTag( apeTag )
 {
     TagLib::APE::ItemListMap map = m_apeTag->itemListMap();
     for( TagLib::APE::ItemListMap::ConstIterator it = map.begin();
-         it != map.end(); ++it )
+            it != map.end(); ++it )
     {
         TagLib::String key = it->first;
         QString val = TStringToQString( it->second.toString() );

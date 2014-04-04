@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -38,21 +38,27 @@ namespace Tomahawk
   */
 class DLLEXPORT DatabaseCommand_LoadFiles : public DatabaseCommand
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit DatabaseCommand_LoadFiles( unsigned int id, QObject* parent = 0 );
     explicit DatabaseCommand_LoadFiles( const QList<unsigned int>& ids, QObject* parent = 0 );
 
     virtual void exec( DatabaseImpl* );
-    virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "loadfiles"; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
+    virtual QString commandname() const
+    {
+        return "loadfiles";
+    }
 
-signals:
+  signals:
     void result( const Tomahawk::result_ptr& result );
     void results( const QList<Tomahawk::result_ptr>& results );
 
-private:
+  private:
     bool m_single;
     QList<unsigned int> m_ids;
 };

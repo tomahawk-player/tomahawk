@@ -28,19 +28,19 @@ class ScrollingLabel : public QLabel
 {
     Q_OBJECT
 
-public:
+  public:
     explicit ScrollingLabel( QWidget* parent = 0 );
 
-public slots:
+  public slots:
     void setText( const QString& text );
 
-protected:
+  protected:
     virtual void paintEvent( QPaintEvent* );
     virtual void resizeEvent( QResizeEvent* );
     virtual void enterEvent( QEvent* );
     virtual void leaveEvent( QEvent* );
 
-private:
+  private:
     bool m_isMouseOver;
     void updateText();
     QString m_text;
@@ -54,7 +54,7 @@ private:
     QImage m_buffer;
     QTimer m_timer;
 
-private slots:
+  private slots:
     virtual void onTimerTimeout();
 };
 

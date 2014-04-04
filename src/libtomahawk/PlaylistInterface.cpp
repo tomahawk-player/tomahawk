@@ -47,14 +47,14 @@ PlaylistInterface::~PlaylistInterface()
 result_ptr
 PlaylistInterface::previousResult() const
 {
-     return siblingResult( -1 );
+    return siblingResult( -1 );
 }
 
 
 result_ptr
 PlaylistInterface::nextResult() const
 {
-     return siblingResult( 1 );
+    return siblingResult( 1 );
 }
 
 
@@ -126,10 +126,12 @@ PlaylistInterface::posOfResult( const Tomahawk::result_ptr& result ) const
     const QList< Tomahawk::query_ptr > queries = tracks();
 
     int res = 0;
-    foreach ( const Tomahawk::query_ptr& query, queries )
+    foreach ( const Tomahawk::query_ptr & query, queries )
     {
         if ( query && query->numResults() && query->results().contains( result ) )
+        {
             return res;
+        }
 
         res++;
     }
@@ -144,10 +146,12 @@ PlaylistInterface::posOfQuery( const Tomahawk::query_ptr& query ) const
     const QList< Tomahawk::query_ptr > queries = tracks();
 
     int res = 0;
-    foreach ( const Tomahawk::query_ptr& q, queries )
+    foreach ( const Tomahawk::query_ptr & q, queries )
     {
         if ( query == q )
+        {
             return res;
+        }
 
         res++;
     }
@@ -169,7 +173,9 @@ PlaylistInterface::filterTracks( const QList<Tomahawk::query_ptr>& queries )
         for ( int j = 0; j < result.count(); j++ )
         {
             if ( !picked )
+            {
                 break;
+            }
 
             const query_ptr& q2 = result.at( j );
 

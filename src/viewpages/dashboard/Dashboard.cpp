@@ -209,10 +209,14 @@ bool
 DashboardWidget::jumpToCurrentTrack()
 {
     if ( ui->tracksView->jumpToCurrentTrack() )
+    {
         return true;
+    }
 
     if ( ui->additionsView->jumpToCurrentTrack() )
+    {
         return true;
+    }
 
     return false;
 }
@@ -222,7 +226,9 @@ bool
 DashboardWidget::isBeingPlayed() const
 {
     if ( ui->additionsView->isBeingPlayed() )
+    {
         return true;
+    }
 
     return AudioEngine::instance()->currentTrackPlaylist() == ui->tracksView->playlistInterface();
 }
@@ -231,8 +237,8 @@ DashboardWidget::isBeingPlayed() const
 void
 DashboardWidget::onSourcesReady()
 {
-    foreach ( const source_ptr& source, SourceList::instance()->sources() )
-        onSourceAdded( source );
+    foreach ( const source_ptr & source, SourceList::instance()->sources() )
+    onSourceAdded( source );
 
     updateRecentAdditions();
 }
@@ -262,7 +268,9 @@ DashboardWidget::updatePlaylists()
         ui->playlistWidget->overlay()->show();
     }
     else
+    {
         ui->playlistWidget->overlay()->hide();
+    }
 }
 
 
@@ -271,9 +279,13 @@ DashboardWidget::onPlaylistActivated( const QModelIndex& item )
 {
     Tomahawk::playlist_ptr pl = item.data( RecentlyPlayedPlaylistsModel::PlaylistRole ).value< Tomahawk::playlist_ptr >();
     if ( Tomahawk::dynplaylist_ptr dynplaylist = pl.dynamicCast< Tomahawk::DynamicPlaylist >() )
+    {
         ViewManager::instance()->show( dynplaylist );
+    }
     else
+    {
         ViewManager::instance()->show( pl );
+    }
 }
 
 

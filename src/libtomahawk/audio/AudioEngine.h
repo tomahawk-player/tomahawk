@@ -31,9 +31,9 @@ class AudioEnginePrivate;
 
 class DLLEXPORT AudioEngine : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     enum AudioErrorCode { StreamReadError, AudioDeviceError, DecodeError, UnknownError, NoError };
     enum AudioState { Stopped = 0, Playing = 1, Paused = 2, Error = 3, Loading = 4 };
     enum AudioChannel { LeftChannel, LeftSurroundChannel, RightChannel , RightSurroundChannel, CenterChannel , SubwooferChannel };
@@ -66,7 +66,7 @@ public:
     int equalizerBandCount();
     bool setEqualizerBand( int band, int value );
 
-public slots:
+  public slots:
     void playPause();
     void play();
     void pause();
@@ -101,7 +101,7 @@ public slots:
     void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode );
     void setShuffled( bool enabled );
 
-signals:
+  signals:
     void loading( const Tomahawk::result_ptr& track );
     void started( const Tomahawk::result_ptr& track );
     void finished( const Tomahawk::result_ptr& track );
@@ -130,7 +130,7 @@ signals:
 
     void error( AudioEngine::AudioErrorCode errorCode );
 
-private slots:
+  private slots:
     void loadTrack( const Tomahawk::result_ptr& result ); //async!
     void performLoadIODevice( const Tomahawk::result_ptr& result, const QString& url ); //only call from loadTrack kthxbi
     void performLoadTrack( const Tomahawk::result_ptr& result, const QString& url, QSharedPointer< QIODevice >& io ); //only call from loadTrack or performLoadIODevice kthxbi
@@ -148,7 +148,7 @@ private slots:
     void sendNowPlayingNotification( const Tomahawk::InfoSystem::InfoType type );
     void sendWaitingNotification() const;
 
-private:
+  private:
     void setState( AudioState state );
     void setCurrentTrackPlaylist( const Tomahawk::playlistinterface_ptr& playlist );
 

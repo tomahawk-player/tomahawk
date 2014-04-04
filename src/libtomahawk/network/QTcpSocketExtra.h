@@ -40,9 +40,9 @@ class Connection;
 // In addition, functionality to limit the connection timeout is implemented.
 class DLLEXPORT QTcpSocketExtra : public QTcpSocket
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     QTcpSocketExtra() : QTcpSocket(), m_connectTimeout( -1 )
     {
         QTimer::singleShot( AUTH_TIMEOUT, this, SLOT( authTimeout() ) ) ;
@@ -50,7 +50,7 @@ public:
         connect( m_connectTimer, SIGNAL( timeout() ), this, SLOT( connectTimeout() ) );
     }
 
-    void connectToHost(const QString& host, quint16 port, OpenMode openMode = ReadWrite );
+    void connectToHost( const QString& host, quint16 port, OpenMode openMode = ReadWrite );
     void connectToHost( const QHostAddress& host, quint16 port, OpenMode openMode = ReadWrite );
 
     QPointer<Connection> _conn;
@@ -61,24 +61,32 @@ public:
     /**
      * Set a time limit for establishing a connection.
      */
-    void setConnectTimeout( qint32 timeout ) { m_connectTimeout = timeout; }
+    void setConnectTimeout( qint32 timeout )
+    {
+        m_connectTimeout = timeout;
+    }
 
     /**
      * Get the current timeout for establishing a connection.
      */
-    qint32 connectTimeout() const { return m_connectTimeout; }
+    qint32 connectTimeout() const
+    {
+        return m_connectTimeout;
+    }
 
-private slots:
+  private slots:
     void connectTimeout();
     void authTimeout()
     {
-      if( _disowned )
-          return;
+        if( _disowned )
+        {
+            return;
+        }
 
-      qDebug() << "Connection timed out before providing a valid offer-key";
-      this->disconnectFromHost();
+        qDebug() << "Connection timed out before providing a valid offer-key";
+        this->disconnectFromHost();
     }
-private:
+  private:
     /**
      * How long we will wait for a connection to establish
      */

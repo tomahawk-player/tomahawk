@@ -55,9 +55,9 @@ class CollapsibleControls;
  */
 class DynamicWidget : public QWidget, public Tomahawk::ViewPage
 {
-Q_OBJECT
-public:
-    explicit DynamicWidget( const dynplaylist_ptr& playlist, QWidget* parent = 0);
+    Q_OBJECT
+  public:
+    explicit DynamicWidget( const dynplaylist_ptr& playlist, QWidget* parent = 0 );
     virtual ~DynamicWidget();
 
     void loadDynamicPlaylist( const dynplaylist_ptr& playlist );
@@ -67,11 +67,14 @@ public:
 
     virtual QSize sizeHint() const;
     virtual void resizeEvent( QResizeEvent* );
-    virtual void showEvent(QShowEvent* );
+    virtual void showEvent( QShowEvent* );
 
     static void paintRoundedFilledRect( QPainter& p, QPalette& pal, QRect& r, qreal opacity = .95 );
 
-    virtual QWidget* widget() { return this; }
+    virtual QWidget* widget()
+    {
+        return this;
+    }
 
     virtual QString title() const;
     virtual QString description() const;
@@ -79,9 +82,9 @@ public:
 
     virtual bool jumpToCurrentTrack();
 
-public slots:
+  public slots:
     void onRevisionLoaded( const Tomahawk::DynamicPlaylistRevision& rev );
-    void playlistTypeChanged(QString);
+    void playlistTypeChanged( QString );
 
     void startStation();
     void stopStation( bool stopPlaying = true );
@@ -92,12 +95,12 @@ public slots:
     void playlistChanged( Tomahawk::playlistinterface_ptr );
     void tracksAdded();
 
-signals:
+  signals:
     void nameChanged( const QString& name );
     void descriptionChanged( const QString& caption );
     void destroyed( QWidget* widget );
 
-private slots:
+  private slots:
     void generate( int = -1 );
     void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );
     void generatorError( const QString& title, const QString& content );
@@ -111,7 +114,7 @@ private slots:
     void onDeleted();
     void onChanged();
 
-private:
+  private:
     dynplaylist_ptr m_playlist;
     QVBoxLayout* m_layout;
     bool m_resolveOnNextLoad;

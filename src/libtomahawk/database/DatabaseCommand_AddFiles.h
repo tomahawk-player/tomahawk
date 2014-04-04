@@ -33,10 +33,10 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCommand_AddFiles : public DatabaseCommandLoggable
 {
-Q_OBJECT
-Q_PROPERTY( QVariantList files READ files WRITE setFiles )
+    Q_OBJECT
+    Q_PROPERTY( QVariantList files READ files WRITE setFiles )
 
-public:
+  public:
     explicit DatabaseCommand_AddFiles( QObject* parent = 0 )
         : DatabaseCommandLoggable( parent )
     {}
@@ -47,20 +47,29 @@ public:
         setSource( source );
     }
 
-    virtual QString commandname() const { return "addfiles"; }
+    virtual QString commandname() const
+    {
+        return "addfiles";
+    }
 
     virtual void exec( DatabaseImpl* );
-    virtual bool doesMutates() const { return true; }
+    virtual bool doesMutates() const
+    {
+        return true;
+    }
     virtual void postCommitHook();
 
     QVariantList files() const;
-    void setFiles( const QVariantList& f ) { m_files = f; }
+    void setFiles( const QVariantList& f )
+    {
+        m_files = f;
+    }
 
-signals:
+  signals:
     void done( const QList<QVariant>&, const Tomahawk::collection_ptr& );
     void notify( const QList<unsigned int>& ids );
 
-private:
+  private:
     QVariantList m_files;
     QList<unsigned int> m_ids;
 };

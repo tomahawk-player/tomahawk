@@ -46,12 +46,12 @@ class Database;
 
 class DLLEXPORT DatabaseImpl : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-friend class FuzzyIndex;
-friend class DatabaseCommand_UpdateSearchIndex;
+    friend class FuzzyIndex;
+    friend class DatabaseCommand_UpdateSearchIndex;
 
-public:
+  public:
     DatabaseImpl( const QString& dbname );
     ~DatabaseImpl();
 
@@ -76,25 +76,34 @@ public:
     Tomahawk::result_ptr file( int fid );
     Tomahawk::result_ptr resultFromHint( const Tomahawk::query_ptr& query );
 
-    static bool scorepairSorter( const QPair<int,float>& left, const QPair<int,float>& right )
+    static bool scorepairSorter( const QPair<int, float>& left, const QPair<int, float>& right )
     {
         return left.second > right.second;
     }
 
-    QString dbid() const { return m_dbid; }
+    QString dbid() const
+    {
+        return m_dbid;
+    }
 
     void loadIndex();
 
-signals:
+  signals:
     void indexReady();
     void schemaUpdateStarted();
     void schemaUpdateStatus( const QString& message );
     void schemaUpdateDone();
 
-private:
+  private:
     DatabaseImpl( const QString& dbname, bool internal );
-    void setFuzzyIndex( FuzzyIndex* fi ) { m_fuzzyIndex = fi; }
-    void setDatabaseID( const QString& dbid ) { m_dbid = dbid; }
+    void setFuzzyIndex( FuzzyIndex* fi )
+    {
+        m_fuzzyIndex = fi;
+    }
+    void setDatabaseID( const QString& dbid )
+    {
+        m_dbid = dbid;
+    }
 
     void init();
     bool openDatabase( const QString& dbname, bool checkSchema = true );

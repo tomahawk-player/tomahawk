@@ -31,37 +31,82 @@ namespace Tomahawk
 
 class DLLEXPORT Tag
 {
-public:
-    static Tag *fromFile( const TagLib::FileRef &f );
+  public:
+    static Tag* fromFile( const TagLib::FileRef& f );
 
     //getter-setters for common TagLib items
-    virtual QString title() const { return TStringToQString( m_tag->title() ).trimmed(); }
-    virtual QString artist() const { return TStringToQString( m_tag->artist() ).trimmed(); }
-    virtual QString album() const { return TStringToQString( m_tag->album() ).trimmed(); }
-    virtual QString comment() const { return TStringToQString( m_tag->comment() ).trimmed(); }
-    virtual QString genre() const { return TStringToQString( m_tag->genre() ).trimmed(); }
-    virtual unsigned int year() const { return m_tag->year(); }
-    virtual unsigned int track() const { return m_tag->track(); }
-    virtual void setTitle( const QString &s ) { m_tag->setTitle( TagLib::String( s.toUtf8().data(), TagLib::String::UTF8 ) ); }
-    virtual void setArtist( const QString &s ) { m_tag->setArtist( TagLib::String( s.toUtf8().data(), TagLib::String::UTF8 ) ); }
-    virtual void setAlbum( const QString &s ) { m_tag->setAlbum( TagLib::String( s.toUtf8().data(), TagLib::String::UTF8 ) ); }
-    virtual void setComment( const QString &s ) { m_tag->setComment( TagLib::String( s.toUtf8().data(), TagLib::String::UTF8 ) ); }
-    virtual void setGenre( const QString &s ) { m_tag->setGenre( TagLib::String( s.toUtf8().data(), TagLib::String::UTF8 ) ); }
-    virtual void setYear( unsigned int i ) { m_tag->setYear( i ); }
-    virtual void setTrack( unsigned int i ) { m_tag->setTrack( i ); }
-    virtual bool isEmpty() const { return m_tag->isEmpty(); }
+    virtual QString title() const
+    {
+        return TStringToQString( m_tag->title() ).trimmed();
+    }
+    virtual QString artist() const
+    {
+        return TStringToQString( m_tag->artist() ).trimmed();
+    }
+    virtual QString album() const
+    {
+        return TStringToQString( m_tag->album() ).trimmed();
+    }
+    virtual QString comment() const
+    {
+        return TStringToQString( m_tag->comment() ).trimmed();
+    }
+    virtual QString genre() const
+    {
+        return TStringToQString( m_tag->genre() ).trimmed();
+    }
+    virtual unsigned int year() const
+    {
+        return m_tag->year();
+    }
+    virtual unsigned int track() const
+    {
+        return m_tag->track();
+    }
+    virtual void setTitle( const QString& s )
+    {
+        m_tag->setTitle( TagLib::String( s.toUtf8().data(), TagLib::String::UTF8 ) );
+    }
+    virtual void setArtist( const QString& s )
+    {
+        m_tag->setArtist( TagLib::String( s.toUtf8().data(), TagLib::String::UTF8 ) );
+    }
+    virtual void setAlbum( const QString& s )
+    {
+        m_tag->setAlbum( TagLib::String( s.toUtf8().data(), TagLib::String::UTF8 ) );
+    }
+    virtual void setComment( const QString& s )
+    {
+        m_tag->setComment( TagLib::String( s.toUtf8().data(), TagLib::String::UTF8 ) );
+    }
+    virtual void setGenre( const QString& s )
+    {
+        m_tag->setGenre( TagLib::String( s.toUtf8().data(), TagLib::String::UTF8 ) );
+    }
+    virtual void setYear( unsigned int i )
+    {
+        m_tag->setYear( i );
+    }
+    virtual void setTrack( unsigned int i )
+    {
+        m_tag->setTrack( i );
+    }
+    virtual bool isEmpty() const
+    {
+        return m_tag->isEmpty();
+    }
 
     virtual QString albumArtist() const = 0;
     virtual QString composer() const = 0;
     virtual unsigned int discNumber() const = 0;
     //TODO: add support for writing those 3 items with TagLib's addField/setField
 
-protected:
-    Tag( TagLib::Tag *tag ) : m_tag( tag ), m_discNumber( 0 ) {}
+  protected:
+    Tag( TagLib::Tag* tag ) : m_tag( tag ), m_discNumber( 0 ) {}
 
-    unsigned int processDiscNumber( const QString & ) const;
+    unsigned int processDiscNumber( const QString& ) const;
 
-    TagLib::Tag *m_tag;
+    TagLib::Tag* m_tag;
     QString m_albumArtist;
     QString m_composer;
     unsigned int m_discNumber;

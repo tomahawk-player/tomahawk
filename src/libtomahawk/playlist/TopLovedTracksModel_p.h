@@ -26,7 +26,7 @@
 
 class TopLovedTracksModelPrivate : public LovedTracksModelPrivate
 {
-public:
+  public:
     TopLovedTracksModelPrivate( TopLovedTracksModel* q )
         : LovedTracksModelPrivate( q )
     {

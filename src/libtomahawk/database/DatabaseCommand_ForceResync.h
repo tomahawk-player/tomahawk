@@ -37,7 +37,7 @@ class DLLEXPORT DatabaseCommand_ForceResync : public DatabaseCommandLoggable
 {
     Q_OBJECT
 
-public:
+  public:
 
     /**
      * \brief Default constructor for DatabaseCommand_ForceResync.
@@ -52,7 +52,10 @@ public:
      * \brief Returns the name of this database command.
      * \return QString containing the database command name 'forceresync'.
      */
-    virtual QString commandname() const { return "forceresync"; }
+    virtual QString commandname() const
+    {
+        return "forceresync";
+    }
 
     /**
      * \brief Executes the database command.
@@ -68,12 +71,18 @@ public:
      */
     virtual void postCommitHook();
 
-    virtual bool doesMutates() const { return true; }
-    virtual bool groupable() const { return false; }
+    virtual bool doesMutates() const
+    {
+        return true;
+    }
+    virtual bool groupable() const
+    {
+        return false;
+    }
 
-protected:
+  protected:
 
-private:
+  private:
 };
 
 }

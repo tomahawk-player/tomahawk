@@ -33,9 +33,9 @@ class TrackView;
 
 class DLLEXPORT PlaylistLargeItemDelegate : public PlaylistItemDelegate
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     enum DisplayMode
     { LovedTracks, RecentlyPlayed, LatestAdditions, Inbox };
 
@@ -43,13 +43,13 @@ public:
 
     virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
-protected:
+  protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
-protected slots:
+  protected slots:
     virtual void modelChanged();
 
-private:
+  private:
     TrackView* m_view;
     PlayableProxyModel* m_model;
     DisplayMode m_mode;

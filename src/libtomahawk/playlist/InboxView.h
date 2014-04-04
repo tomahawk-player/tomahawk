@@ -25,10 +25,10 @@
 class InboxView : public TrackView
 {
     Q_OBJECT
-public:
+  public:
     explicit InboxView( QWidget* parent = 0 );
 
-public slots:
+  public slots:
     /**
      * Reimplemented in order to ignore PlayableModel::isReadOnly()
      */

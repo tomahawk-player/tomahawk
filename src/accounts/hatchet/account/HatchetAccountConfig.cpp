@@ -28,12 +28,14 @@
 using namespace Tomahawk;
 using namespace Accounts;
 
-namespace {
-    enum ButtonAction {
-        Login,
-        Register,
-        Logout
-    };
+namespace
+{
+enum ButtonAction
+{
+    Login,
+    Register,
+    Logout
+};
 }
 
 HatchetAccountConfig::HatchetAccountConfig( HatchetAccount* account )
@@ -59,7 +61,9 @@ HatchetAccountConfig::HatchetAccountConfig( HatchetAccount* account )
     connect( m_account, SIGNAL( accessTokenFetched() ), this, SLOT( accountInfoUpdated() ) );
 
     if ( !m_account->refreshToken().isEmpty() )
+    {
         accountInfoUpdated();
+    }
     else
     {
         m_ui->usernameEdit->setText( m_account->username() );
@@ -131,7 +135,7 @@ HatchetAccountConfig::showLoggedIn()
     m_ui->errorLabel->clear();
     m_ui->errorLabel->hide();
 
-    m_ui->loginButton->setText( tr("Log out") );
+    m_ui->loginButton->setText( tr( "Log out" ) );
     m_ui->loginButton->setProperty( "action", Logout );
     m_ui->loginButton->setDefault( true );
 }
@@ -153,7 +157,7 @@ HatchetAccountConfig::showLoggedOut()
 
     m_ui->errorLabel->clear();
 
-    m_ui->loginButton->setText( tr("Log in") );
+    m_ui->loginButton->setText( tr( "Log in" ) );
     m_ui->loginButton->setProperty( "action", Login );
     m_ui->loginButton->setDefault( true );
 }
@@ -168,7 +172,7 @@ HatchetAccountConfig::accountInfoUpdated()
 
 
 void
-HatchetAccountConfig::authError( const QString &error, int statusCode, const QVariantMap& resp )
+HatchetAccountConfig::authError( const QString& error, int statusCode, const QVariantMap& resp )
 {
     if ( statusCode == 400 && error == "otp_needed" )
     {
@@ -178,17 +182,19 @@ HatchetAccountConfig::authError( const QString &error, int statusCode, const QVa
         m_ui->otpEdit->show();
         m_ui->passwordLabel->hide();
         m_ui->passwordEdit->hide();
-        m_ui->loginButton->setText( tr("Continue") );
+        m_ui->loginButton->setText( tr( "Continue" ) );
         return;
     }
     if ( statusCode == 401 )
+    {
         m_account->deauthenticate();
+    }
     QMessageBox::critical( this, "An error was encountered:", error );
 }
 
 
 void
-HatchetAccountConfig::showEvent( QShowEvent *event )
+HatchetAccountConfig::showEvent( QShowEvent* event )
 {
     AccountConfigWidget::showEvent( event );
     m_ui->loginButton->setDefault( true );

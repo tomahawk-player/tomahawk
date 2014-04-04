@@ -32,7 +32,7 @@ namespace Tomahawk
 class PlaylistPrivate
 {
     friend class DynamicPlaylist;
-public:
+  public:
     PlaylistPrivate( Playlist* q )
         : q_ptr( q )
     {
@@ -68,12 +68,12 @@ public:
     }
 
     PlaylistPrivate( Playlist* q, const source_ptr& _author,
-                        const QString& _guid,
-                        const QString& _title,
-                        const QString& _info,
-                        const QString& _creator,
-                        bool _shared,
-                        const QList< Tomahawk::plentry_ptr >& _entries )
+                     const QString& _guid,
+                     const QString& _title,
+                     const QString& _info,
+                     const QString& _creator,
+                     bool _shared,
+                     const QList< Tomahawk::plentry_ptr >& _entries )
         : q_ptr( q )
         , source( _author )
         , guid( _guid )
@@ -90,7 +90,7 @@ public:
     Playlist* q_ptr;
     Q_DECLARE_PUBLIC ( Playlist )
 
-private:
+  private:
     QWeakPointer< Playlist > weakSelf;
     source_ptr source;
     QString currentrevision;

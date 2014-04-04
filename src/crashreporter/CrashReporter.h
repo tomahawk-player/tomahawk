@@ -31,11 +31,11 @@ class CrashReporter : public QDialog
 {
     Q_OBJECT
 
-public:
+  public:
     CrashReporter( const QUrl& url, const QStringList& argv );
     virtual ~CrashReporter( );
 
-private:
+  private:
     Ui::CrashReporter ui;
 
     QString m_minidump;
@@ -45,10 +45,10 @@ private:
     QNetworkReply* m_reply;
     QUrl m_url;
 
-public slots:
+  public slots:
     void send();
 
-private slots:
+  private slots:
     void onDone();
     void onProgress( qint64 done, qint64 total );
     void onFail( int error, const QString& errorString );

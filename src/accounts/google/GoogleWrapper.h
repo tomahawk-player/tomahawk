@@ -35,13 +35,22 @@ class ACCOUNTDLLEXPORT GoogleWrapperFactory : public XmppAccountFactory
     Q_INTERFACES( Tomahawk::Accounts::AccountFactory )
     Q_PLUGIN_METADATA( IID "org.tomahawk-player.Player.AccountFactory" )
 
-public:
+  public:
     GoogleWrapperFactory() {}
     virtual ~GoogleWrapperFactory() {}
 
-    virtual QString prettyName() const { return "Google"; }
-    virtual QString factoryId() const { return "googleaccount"; }
-    QString description() const { return tr( "Connect to Google Talk to find your friends" ); }
+    virtual QString prettyName() const
+    {
+        return "Google";
+    }
+    virtual QString factoryId() const
+    {
+        return "googleaccount";
+    }
+    QString description() const
+    {
+        return tr( "Connect to Google Talk to find your friends" );
+    }
     virtual QPixmap icon() const;
     virtual Account* createAccount( const QString& pluginId );
 };
@@ -49,32 +58,38 @@ public:
 class ACCOUNTDLLEXPORT GoogleWrapperSip : public XmppSipPlugin
 {
     Q_OBJECT
-public:
+  public:
     GoogleWrapperSip( Tomahawk::Accounts::Account* account );
     virtual ~GoogleWrapperSip();
 
     virtual QString inviteString() const;
 
-public slots:
+  public slots:
     void showAddFriendDialog();
 
-protected:
+  protected:
     QString defaultSuffix() const;
 };
 
 class ACCOUNTDLLEXPORT GoogleWrapper : public XmppAccount
 {
     Q_OBJECT
-public:
+  public:
     GoogleWrapper( const QString& pluginID );
     virtual ~GoogleWrapper();
 
-    virtual const QString name() const { return QString( "Google" ); }
-    virtual const QString friendlyName() const { return "Google"; }
+    virtual const QString name() const
+    {
+        return QString( "Google" );
+    }
+    virtual const QString friendlyName() const
+    {
+        return "Google";
+    }
 
     virtual SipPlugin* sipPlugin( bool create = true );
 
-private:
+  private:
     QPointer< GoogleWrapperSip > m_sipPlugin;
 };
 

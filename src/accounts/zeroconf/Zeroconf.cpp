@@ -94,14 +94,14 @@ ZeroconfPlugin::connectPlugin()
     delete m_zeroconf;
     m_zeroconf = new TomahawkZeroconf( Servent::instance()->port(), this );
     QObject::connect( m_zeroconf, SIGNAL( tomahawkHostFound( QString, int, QString, QString ) ),
-                                    SLOT( lanHostFound( QString, int, QString, QString ) ) );
+                      SLOT( lanHostFound( QString, int, QString, QString ) ) );
 
     advertise();
     m_state = Account::Connected;
 
-    foreach( const QStringList& nodeSet, m_cachedNodes )
+    foreach( const QStringList & nodeSet, m_cachedNodes )
     {
-        lanHostFound( nodeSet[0], nodeSet[1].toInt(), nodeSet[2], nodeSet[3]);
+        lanHostFound( nodeSet[0], nodeSet[1].toInt(), nodeSet[2], nodeSet[3] );
     }
     m_cachedNodes.clear();
 
@@ -142,7 +142,9 @@ void
 ZeroconfPlugin::lanHostFound( const QString& host, int port, const QString& name, const QString& nodeid )
 {
     if ( sender() != m_zeroconf )
+    {
         return;
+    }
 
     qDebug() << "Found LAN host:" << host << port << nodeid;
 

@@ -29,7 +29,7 @@ namespace Tomahawk
 
 class PeerInfoPrivate
 {
-public:
+  public:
     PeerInfoPrivate( PeerInfo* q, SipPlugin* parent, const QString& id )
         : q_ptr ( q )
         , parent( parent )
@@ -45,7 +45,7 @@ public:
 
     static Tomahawk::Utils::WeakObjectHash<PeerInfo> s_peersByCacheKey;
 
-private:
+  private:
     QWeakPointer< Tomahawk::PeerInfo > ownRef;
     QPointer< ControlConnection > controlConnection;
 

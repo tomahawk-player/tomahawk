@@ -26,22 +26,22 @@ class QVBoxLayout;
 class AccountsPopupWidget : public QWidget
 {
     Q_OBJECT
-public:
+  public:
     explicit AccountsPopupWidget( QWidget* parent = 0 );
 
     void setWidget( QWidget* widget );
     void anchorAt( const QPoint& p );
     void setArrowOffset( int arrowOffset );
 
-signals:
+  signals:
     void hidden();
-    
-protected:
+
+  protected:
     virtual void paintEvent( QPaintEvent* );
     virtual void focusOutEvent( QFocusEvent* );
     virtual void hideEvent( QHideEvent* );
-    
-private:
+
+  private:
     QVBoxLayout* m_layout;
     QWidget* m_widget;
     int m_arrowOffset;

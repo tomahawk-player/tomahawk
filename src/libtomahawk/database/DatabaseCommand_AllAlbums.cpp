@@ -34,12 +34,12 @@ namespace Tomahawk
 {
 
 DatabaseCommand_AllAlbums::DatabaseCommand_AllAlbums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist, QObject* parent )
-  : DatabaseCommand( parent )
-  , m_collection( collection )
-  , m_artist( artist )
-  , m_amount( 0 )
-  , m_sortOrder( DatabaseCommand_AllAlbums::None )
-  , m_sortDescending( false )
+    : DatabaseCommand( parent )
+    , m_collection( collection )
+    , m_artist( artist )
+    , m_amount( 0 )
+    , m_sortOrder( DatabaseCommand_AllAlbums::None )
+    , m_sortDescending( false )
 {
 }
 
@@ -74,7 +74,9 @@ DatabaseCommand_AllAlbums::execForArtist( DatabaseImpl* dbi )
     }
 
     if ( !m_collection.isNull() )
+    {
         sourceToken = QString( "AND file.source %1" ).arg( m_collection->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( m_collection->source()->id() ) );
+    }
 
     if ( !m_filter.isEmpty() )
     {
@@ -89,23 +91,25 @@ DatabaseCommand_AllAlbums::execForArtist( DatabaseImpl* dbi )
         tables = "file, file_join, artist, track";
     }
     else
+    {
         tables = "file, file_join";
+    }
 
     QString sql = QString(
-        "SELECT DISTINCT album.id, album.name "
-        "FROM %1 "
-        "LEFT OUTER JOIN album ON file_join.album = album.id "
-        "WHERE file.id = file_join.file "
-        "AND file_join.artist = %2 "
-        "%3 %4 %5 %6 %7 %8"
-        ).arg( tables )
-         .arg( m_artist->id() )
-         .arg( sourceToken )
-         .arg( timeToken )
-         .arg( filterToken )
-         .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( orderToken ) : QString() )
-         .arg( m_sortDescending ? "DESC" : QString() )
-         .arg( m_amount > 0 ? QString( "LIMIT 0, %1" ).arg( m_amount ) : QString() );
+                      "SELECT DISTINCT album.id, album.name "
+                      "FROM %1 "
+                      "LEFT OUTER JOIN album ON file_join.album = album.id "
+                      "WHERE file.id = file_join.file "
+                      "AND file_join.artist = %2 "
+                      "%3 %4 %5 %6 %7 %8"
+                  ).arg( tables )
+                  .arg( m_artist->id() )
+                  .arg( sourceToken )
+                  .arg( timeToken )
+                  .arg( filterToken )
+                  .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( orderToken ) : QString() )
+                  .arg( m_sortDescending ? "DESC" : QString() )
+                  .arg( m_amount > 0 ? QString( "LIMIT 0, %1" ).arg( m_amount ) : QString() );
 
     query.prepare( sql );
     query.exec();
@@ -146,20 +150,22 @@ DatabaseCommand_AllAlbums::execForCollection( DatabaseImpl* dbi )
     }
 
     if ( !m_collection.isNull() )
+    {
         sourceToken = QString( "AND file.source %1 " ).arg( m_collection->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( m_collection->source()->id() ) );
+    }
 
     QString sql = QString(
-        "SELECT DISTINCT album.id, album.name, album.artist, artist.name "
-        "FROM file_join, file, album "
-        "LEFT OUTER JOIN artist ON album.artist = artist.id "
-        "WHERE file.id = file_join.file "
-        "AND file_join.album = album.id "
-        "%1 "
-        "%2 %3 %4"
-        ).arg( sourceToken )
-         .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( orderToken ) : QString() )
-         .arg( m_sortDescending ? "DESC" : QString() )
-         .arg( m_amount > 0 ? QString( "LIMIT 0, %1" ).arg( m_amount ) : QString() );
+                      "SELECT DISTINCT album.id, album.name, album.artist, artist.name "
+                      "FROM file_join, file, album "
+                      "LEFT OUTER JOIN artist ON album.artist = artist.id "
+                      "WHERE file.id = file_join.file "
+                      "AND file_join.album = album.id "
+                      "%1 "
+                      "%2 %3 %4"
+                  ).arg( sourceToken )
+                  .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( orderToken ) : QString() )
+                  .arg( m_sortDescending ? "DESC" : QString() )
+                  .arg( m_amount > 0 ? QString( "LIMIT 0, %1" ).arg( m_amount ) : QString() );
 
     query.prepare( sql );
     query.exec();

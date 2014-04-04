@@ -36,7 +36,7 @@ namespace TomahawkUtils
  */
 class DLLEXPORT DpiScaler
 {
-public:
+  public:
     DpiScaler( const QPaintDevice* that );
 
     QSize scaled( int w, int h ) const;
@@ -54,7 +54,7 @@ public:
     static int scaledX( const QPaintDevice* pd, int x );
     static int scaledY( const QPaintDevice* pd, int y );
 
-private:
+  private:
     inline static qreal ratioX( const QPaintDevice* pd );
     inline static qreal ratioY( const QPaintDevice* pd );
     inline static qreal ratioFromFontHeight();

@@ -31,9 +31,11 @@
 
 class QTimer;
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
-namespace InfoSystem {
+namespace InfoSystem
+{
 
 class INFOPLUGINDLLEXPORT AdiumPlugin : public InfoPlugin
 {
@@ -41,13 +43,13 @@ class INFOPLUGINDLLEXPORT AdiumPlugin : public InfoPlugin
     Q_OBJECT
     Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 
-public:
+  public:
     AdiumPlugin();
     virtual ~AdiumPlugin();
 
-protected slots:
+  protected slots:
     virtual void init() {}
-    
+
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     {
         Q_UNUSED( requestData );
@@ -55,20 +57,20 @@ protected slots:
 
     virtual void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData );
 
-public slots:
+  public slots:
     virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
     {
         Q_UNUSED( criteria );
         Q_UNUSED( requestData );
     }
 
-private slots:
+  private slots:
     void clearStatus();
     void settingsChanged();
 
-private:
+  private:
     void audioStarted( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair );
-    void audioFinished( const QVariant &input );
+    void audioFinished( const QVariant& input );
     void audioStopped();
     void audioPaused();
     void audioResumed( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair );

@@ -31,7 +31,7 @@ namespace Tomahawk
 
 namespace Accounts
 {
-    class SpotifyAccount;
+class SpotifyAccount;
 }
 
 namespace InfoSystem
@@ -41,26 +41,29 @@ class DLLEXPORT SpotifyInfoPlugin : public InfoPlugin
 {
     Q_OBJECT
 
-public:
+  public:
     explicit SpotifyInfoPlugin( Accounts::SpotifyAccount* account );
     virtual ~SpotifyInfoPlugin();
 
-    const QString friendlyName() const { return "Spotify"; };
+    const QString friendlyName() const
+    {
+        return "Spotify";
+    };
 
-public slots:
+  public slots:
     void  albumListingResult( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
 
-protected slots:
+  protected slots:
     virtual void init() {}
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
     virtual void pushInfo( Tomahawk::InfoSystem::InfoPushData  );
 
-private slots:
+  private slots:
     void albumIdLookupFinished( QNetworkReply* reply, const Tomahawk::InfoSystem::InfoRequestData& requestData );
     void albumContentsLookupFinished( QNetworkReply* reply, const Tomahawk::InfoSystem::InfoRequestData& requestData );
 
-private:
+  private:
     void dataError( InfoRequestData );
     void trackListResult( const QStringList& trackNameList, const Tomahawk::InfoSystem::InfoRequestData& requestData );
     void sendLoveSong( const InfoType type, QVariant input );

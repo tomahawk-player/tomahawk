@@ -29,20 +29,20 @@
 
 class DLLEXPORT AnimatedCounterLabel : public QLabel
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit AnimatedCounterLabel( QWidget* parent = 0, Qt::WindowFlags f = 0 );
 
     void setFormat( const QString& f );
 
-public slots:
+  public slots:
     void setVisible( bool b );
     void frame( int f );
     void setVal( unsigned int v );
     void showDiff();
 
-private:
+  private:
     QTimeLine m_timer;
 
     // what's in the label text:

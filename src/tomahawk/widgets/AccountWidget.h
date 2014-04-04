@@ -36,7 +36,7 @@ class QToolButton;
 class AccountWidget : public QWidget, private TomahawkUtils::DpiScaler
 {
     Q_OBJECT
-public:
+  public:
     explicit AccountWidget( QWidget* parent = 0 );
 
     virtual ~AccountWidget();
@@ -47,7 +47,7 @@ public:
     void setConnectionState( bool state );
     bool connectionState() const;
 
-private slots:
+  private slots:
     void changeAccountConnectionState( bool connected );
     void sendInvite();
     void onInviteSentSuccess( const QString& inviteId );
@@ -55,7 +55,7 @@ private slots:
     void clearInviteWidgets();
     void setInviteWidgetsEnabled( bool enabled );
 
-private:
+  private:
     QLabel*            m_imageLabel;
     ElidedLabel*       m_idLabel;
     QWidget*           m_spinnerWidget;

@@ -45,15 +45,30 @@ class ACCOUNTDLLEXPORT XmppAccountFactory : public AccountFactory
 
     // for settings access
     friend class XmppConfigWidget;
-public:
+  public:
     XmppAccountFactory() {}
     virtual ~XmppAccountFactory() {}
 
-    QString prettyName() const { return "Jabber (XMPP)"; }
-    QString description() const { return tr( "Log on to your Jabber/XMPP account to connect to your friends" ); }
-    QString factoryId() const { return "xmppaccount"; }
-    QPixmap icon() const { return QPixmap( ":/xmpp-account/xmpp-icon.png" ); }
-    AccountTypes types() const { return AccountTypes( SipType | StatusPushType ); }
+    QString prettyName() const
+    {
+        return "Jabber (XMPP)";
+    }
+    QString description() const
+    {
+        return tr( "Log on to your Jabber/XMPP account to connect to your friends" );
+    }
+    QString factoryId() const
+    {
+        return "xmppaccount";
+    }
+    QPixmap icon() const
+    {
+        return QPixmap( ":/xmpp-account/xmpp-icon.png" );
+    }
+    AccountTypes types() const
+    {
+        return AccountTypes( SipType | StatusPushType );
+    }
     Account* createAccount( const QString& pluginId = QString() );
 };
 
@@ -61,8 +76,8 @@ class ACCOUNTDLLEXPORT XmppAccount : public Account
 {
     Q_OBJECT
 
-public:
-    XmppAccount( const QString &accountId );
+  public:
+    XmppAccount( const QString& accountId );
     virtual ~XmppAccount();
 
     QPixmap icon() const;
@@ -75,13 +90,19 @@ public:
 
     SipPlugin* sipPlugin( bool create = true );
 
-    AccountConfigWidget* configurationWidget() { return m_configWidget.data(); }
-    QWidget* aclWidget() { return 0; }
+    AccountConfigWidget* configurationWidget()
+    {
+        return m_configWidget.data();
+    }
+    QWidget* aclWidget()
+    {
+        return 0;
+    }
     void saveConfig();
 
     virtual Tomahawk::Accounts::Account::ConnectionState connectionState() const;
 
-protected:
+  protected:
     QPointer< AccountConfigWidget > m_configWidget; // so the google wrapper can change the config dialog a bit
     QPointer< XmppSipPlugin > m_xmppSipPlugin;
     QPointer< Tomahawk::InfoSystem::XmppInfoPlugin > m_xmppInfoPlugin;

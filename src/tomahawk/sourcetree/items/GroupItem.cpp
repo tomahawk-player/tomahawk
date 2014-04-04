@@ -74,7 +74,7 @@ GroupItem::text() const
 
 
 bool
-GroupItem::willAcceptDrag(const QMimeData* data) const
+GroupItem::willAcceptDrag( const QMimeData* data ) const
 {
     Q_UNUSED( data );
     return false;
@@ -96,7 +96,7 @@ GroupItem::isBeingPlayed() const
 
 
 void
-GroupItem::setDefaultExpanded(bool b)
+GroupItem::setDefaultExpanded( bool b )
 {
     m_defaultExpanded = b;
 }

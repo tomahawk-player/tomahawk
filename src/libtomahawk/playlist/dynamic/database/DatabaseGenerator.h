@@ -30,50 +30,56 @@
 namespace Tomahawk
 {
 
-    class DLLEXPORT DatabaseFactory : public GeneratorFactoryInterface
+class DLLEXPORT DatabaseFactory : public GeneratorFactoryInterface
+{
+  public:
+    DatabaseFactory() {}
+
+    virtual GeneratorInterface* create();
+    virtual dyncontrol_ptr createControl( const QString& controlType = QString() );
+
+    // TO create a special SQL resolver that consists of a pre-baked SQL query and a description of it
+    virtual dyncontrol_ptr createControl( const QString& sql, DatabaseCommand_GenericSelect::QueryType type, const QString& summary );
+
+    virtual QStringList typeSelectors() const;
+};
+
+/**
+ * Generator based on the database. Can filter the database based on some user-controllable options,
+ *  or just be the front-facing part of any given SQL query to fake an interesting read-only playlist.
+ */
+class DatabaseGenerator : public GeneratorInterface
+{
+    Q_OBJECT
+  public:
+    explicit DatabaseGenerator( QObject* parent = 0 );
+    virtual ~DatabaseGenerator();
+
+    virtual dyncontrol_ptr createControl( const QString& type = QString() );
+    virtual dyncontrol_ptr createControl( const QString& sql, DatabaseCommand_GenericSelect::QueryType type, const QString& summary );
+
+    virtual QPixmap logo();
+    virtual void generate ( int number = -1 );
+    virtual void startOnDemand();
+    virtual void fetchNext( int rating = -1 );
+    virtual QString sentenceSummary();
+    virtual bool onDemandSteerable() const
     {
-    public:
-        DatabaseFactory() {}
-
-        virtual GeneratorInterface* create();
-        virtual dyncontrol_ptr createControl( const QString& controlType = QString() );
-
-        // TO create a special SQL resolver that consists of a pre-baked SQL query and a description of it
-        virtual dyncontrol_ptr createControl( const QString& sql, DatabaseCommand_GenericSelect::QueryType type, const QString& summary );
-
-        virtual QStringList typeSelectors() const;
-    };
-
-    /**
-     * Generator based on the database. Can filter the database based on some user-controllable options,
-     *  or just be the front-facing part of any given SQL query to fake an interesting read-only playlist.
-     */
-    class DatabaseGenerator : public GeneratorInterface
+        return false;
+    }
+    virtual QWidget* steeringWidget()
     {
-        Q_OBJECT
-    public:
-        explicit DatabaseGenerator( QObject* parent = 0 );
-        virtual ~DatabaseGenerator();
+        return 0;
+    }
 
-        virtual dyncontrol_ptr createControl( const QString& type = QString() );
-        virtual dyncontrol_ptr createControl( const QString& sql, DatabaseCommand_GenericSelect::QueryType type, const QString& summary );
+  private slots:
+    void tracksGenerated( const QList< Tomahawk::query_ptr >& tracks );
+    void dynamicStarted();
+    void dynamicFetched();
 
-        virtual QPixmap logo();
-        virtual void generate ( int number = -1 );
-        virtual void startOnDemand();
-        virtual void fetchNext( int rating = -1 );
-        virtual QString sentenceSummary();
-        virtual bool onDemandSteerable() const { return false; }
-        virtual QWidget* steeringWidget() { return 0; }
-
-    private slots:
-        void tracksGenerated( const QList< Tomahawk::query_ptr >& tracks );
-        void dynamicStarted();
-        void dynamicFetched();
-
-    private:
-        QPixmap m_logo;
-    };
+  private:
+    QPixmap m_logo;
+};
 
 };
 

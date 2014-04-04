@@ -29,20 +29,20 @@
 #include "qca.h"
 
 #ifdef Q_WS_MAC
-    #include "TomahawkApp_Mac.h"
-    #include </System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/Headers/AppleEvents.h>
-    static pascal OSErr appleEventHandler( const AppleEvent*, AppleEvent*, long );
+#include "TomahawkApp_Mac.h"
+#include </System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/Headers/AppleEvents.h>
+static pascal OSErr appleEventHandler( const AppleEvent*, AppleEvent*, long );
 #endif
 
 #ifndef ENABLE_HEADLESS
-    #include "TomahawkSettingsGui.h"
-    #ifdef WITH_BREAKPAD
-        #include "breakpad/BreakPad.h"
-    #endif
+#include "TomahawkSettingsGui.h"
+#ifdef WITH_BREAKPAD
+#include "breakpad/BreakPad.h"
+#endif
 
-    #ifdef Q_WS_X11 // This is probably a very bad idea with Qt5 anyway... because (if at all) X lives in a QPA plugin
-        #include <X11/Xlib.h>
-    #endif
+#ifdef Q_WS_X11 // This is probably a very bad idea with Qt5 anyway... because (if at all) X lives in a QPA plugin
+#include <X11/Xlib.h>
+#endif
 #endif
 
 
@@ -55,9 +55,9 @@ HINSTANCE hGuiLibInstance;
 
 LRESULT QT_WIN_CALLBACK qt_LowLevelKeyboardHookProc( int nCode, WPARAM wParam, LPARAM lParam )
 {
-    LPKBDLLHOOKSTRUCT kbHookStruct = reinterpret_cast<LPKBDLLHOOKSTRUCT>(lParam);
+    LPKBDLLHOOKSTRUCT kbHookStruct = reinterpret_cast<LPKBDLLHOOKSTRUCT>( lParam );
 
-    switch(kbHookStruct->vkCode)
+    switch( kbHookStruct->vkCode )
     {
         case VK_VOLUME_MUTE:
         case VK_VOLUME_DOWN:
@@ -68,25 +68,27 @@ LRESULT QT_WIN_CALLBACK qt_LowLevelKeyboardHookProc( int nCode, WPARAM wParam, L
         case VK_MEDIA_PLAY_PAUSE:
         case VK_LAUNCH_MEDIA_SELECT:
             // send message
+        {
+            HWND hWnd = NULL;
+            foreach ( QWidget * widget, QApplication::topLevelWidgets() )
             {
-                HWND hWnd = NULL;
-                foreach ( QWidget *widget, QApplication::topLevelWidgets() )
+                // relay message to each top level widgets(window)
+                // if the window has focus, we don't send a duplicate message
+                if ( QApplication::activeWindow() == widget )
                 {
-                    // relay message to each top level widgets(window)
-                    // if the window has focus, we don't send a duplicate message
-                    if ( QApplication::activeWindow() == widget )
-                        continue;
-
-                    hWnd = (HWND)widget->winId();
-
-                    // generate message and post it to the message queue
-                    LPKBDLLHOOKSTRUCT pKeyboardHookStruct = reinterpret_cast<LPKBDLLHOOKSTRUCT>(lParam);
-                    WPARAM _wParam = pKeyboardHookStruct->vkCode;
-                    LPARAM _lParam = MAKELPARAM( pKeyboardHookStruct->scanCode, pKeyboardHookStruct->flags );
-                    PostMessage( hWnd, wParam, _wParam, _lParam );
+                    continue;
                 }
+
+                hWnd = ( HWND )widget->winId();
+
+                // generate message and post it to the message queue
+                LPKBDLLHOOKSTRUCT pKeyboardHookStruct = reinterpret_cast<LPKBDLLHOOKSTRUCT>( lParam );
+                WPARAM _wParam = pKeyboardHookStruct->vkCode;
+                LPARAM _lParam = MAKELPARAM( pKeyboardHookStruct->scanCode, pKeyboardHookStruct->flags );
+                PostMessage( hWnd, wParam, _wParam, _lParam );
             }
-            break;
+        }
+        break;
 
         default:
             break;
@@ -106,7 +108,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine
     hGuiLibInstance = hInstance;
 
     // setup keyboard hook to receive multimedia key events when application is at background
-    hKeyboardHook = SetWindowsHookEx( WH_KEYBOARD_LL,(HOOKPROC) qt_LowLevelKeyboardHookProc, hGuiLibInstance, 0 );
+    hKeyboardHook = SetWindowsHookEx( WH_KEYBOARD_LL, ( HOOKPROC ) qt_LowLevelKeyboardHookProc, hGuiLibInstance, 0 );
 
     if ( fileno( stdout ) != -1 && _get_osfhandle( fileno( stdout ) ) != -1 )
     {
@@ -114,8 +116,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine
     }
     else
     {
-        typedef BOOL (WINAPI * AttachConsole_t) (DWORD);
-        AttachConsole_t p_AttachConsole = (AttachConsole_t) GetProcAddress( GetModuleHandleW( L"kernel32.dll" ), "AttachConsole" );
+        typedef BOOL ( WINAPI * AttachConsole_t ) ( DWORD );
+        AttachConsole_t p_AttachConsole = ( AttachConsole_t ) GetProcAddress( GetModuleHandleW( L"kernel32.dll" ), "AttachConsole" );
 
         if ( p_AttachConsole != NULL && p_AttachConsole( ATTACH_PARENT_PROCESS ) )
         {
@@ -128,7 +130,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine
 #else // Q_OS_WIN
 
 int
-main( int argc, char *argv[] )
+main( int argc, char* argv[] )
 {
     QCA::Initializer init;
     Q_UNUSED( init )
@@ -145,12 +147,12 @@ main( int argc, char *argv[] )
     // used for url handler
     AEEventHandlerUPP h = AEEventHandlerUPP( appleEventHandler );
     AEInstallEventHandler( 'GURL', 'GURL', h, 0, false );
-    #endif // Q_WS_MAC
+#endif // Q_WS_MAC
 #endif //Q_OS_WIN
 
-    #ifdef Q_WS_X11
-        XInitThreads();
-    #endif
+#ifdef Q_WS_X11
+    XInitThreads();
+#endif
 
     TomahawkApp a( argc, argv );
 
@@ -180,7 +182,9 @@ main( int argc, char *argv[] )
         returnCode = a.exec();
     }
     else
+    {
         qDebug() << "Tomahawk is already running, shutting down.";
+    }
 
 #ifdef Q_OS_WIN
     // clean up keyboard hook
@@ -214,7 +218,7 @@ appleEventHandler( const AppleEvent* e, AppleEvent*, long )
             buf[size] = '\0';
 
             QString url = QString::fromUtf8( buf );
-            static_cast<TomahawkApp*>(qApp)->loadUrl( url );
+            static_cast<TomahawkApp*>( qApp )->loadUrl( url );
             return noErr;
         }
 

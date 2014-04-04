@@ -33,11 +33,11 @@ class ScriptEngine;
 
 class DLLEXPORT JSResolver : public Tomahawk::ExternalResolverGui
 {
-Q_OBJECT
+    Q_OBJECT
 
-friend class ::JSResolverHelper;
+    friend class ::JSResolverHelper;
 
-public:
+  public:
     explicit JSResolver( const QString& scriptPath, const QStringList& additionalScriptPaths = QStringList() );
     virtual ~JSResolver();
     static ExternalResolver* factory( const QString& scriptPath, const QStringList& additionalScriptPaths = QStringList() );
@@ -60,7 +60,7 @@ public:
 
     virtual bool canParseUrl( const QString& url, UrlType type );
 
-public slots:
+  public slots:
     virtual void resolve( const Tomahawk::query_ptr& query );
     virtual void stop();
     virtual void start();
@@ -72,13 +72,13 @@ public slots:
     // For UrlLookup
     virtual void lookupUrl( const QString& url );
 
-signals:
+  signals:
     void stopped();
 
-private slots:
+  private slots:
     void onCollectionIconFetched();
 
-private:
+  private:
     void init();
 
     void loadUi();
@@ -98,7 +98,7 @@ private:
     QList< Tomahawk::result_ptr > parseResultVariantList( const QVariantList& reslist );
     QList< Tomahawk::artist_ptr > parseArtistVariantList( const QVariantList& reslist );
     QList< Tomahawk::album_ptr >  parseAlbumVariantList(  const Tomahawk::artist_ptr& artist,
-                                                          const QVariantList& reslist );
+            const QVariantList& reslist );
 
     Q_DECLARE_PRIVATE( JSResolver )
     JSResolverPrivate* d_ptr;

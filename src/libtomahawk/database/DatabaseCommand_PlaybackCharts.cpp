@@ -51,19 +51,21 @@ DatabaseCommand_PlaybackCharts::exec( DatabaseImpl* dbi )
     QString sourceToken;
 
     if ( source() )
+    {
         sourceToken = QString( "AND playback_log.source %1" ).arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) );
+    }
 
     QString sql = QString(
-            "SELECT artist.id, artist.name, COUNT(*) AS counter "
-            "FROM playback_log, artist, track "
-            "WHERE playback_log.track = track.id "
-            "AND artist.id = track.artist "
-            "%1 "
-            "GROUP BY artist.id "
-            "ORDER BY counter DESC "
-            "%2"
-            ).arg( sourceToken )
-             .arg( m_amount > 0 ? QString( "LIMIT 0, %1" ).arg( m_amount ) : QString() );
+                      "SELECT artist.id, artist.name, COUNT(*) AS counter "
+                      "FROM playback_log, artist, track "
+                      "WHERE playback_log.track = track.id "
+                      "AND artist.id = track.artist "
+                      "%1 "
+                      "GROUP BY artist.id "
+                      "ORDER BY counter DESC "
+                      "%2"
+                  ).arg( sourceToken )
+                  .arg( m_amount > 0 ? QString( "LIMIT 0, %1" ).arg( m_amount ) : QString() );
 
     query.prepare( sql );
     query.exec();

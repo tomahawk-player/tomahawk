@@ -67,7 +67,9 @@ GlobalActionManager*
 GlobalActionManager::instance()
 {
     if ( !s_instance )
+    {
         s_instance = new GlobalActionManager;
+    }
 
     return s_instance;
 }
@@ -128,11 +130,17 @@ GlobalActionManager::openLink( const QString& title, const QString& artist, cons
     QUrl link( QString( "%1/open/track/" ).arg( hostname() ) );
 
     if ( !artist.isEmpty() )
-       TomahawkUtils::urlAddQueryItem( link, "artist", artist );
+    {
+        TomahawkUtils::urlAddQueryItem( link, "artist", artist );
+    }
     if ( !title.isEmpty() )
+    {
         TomahawkUtils::urlAddQueryItem( link, "title", title );
+    }
     if ( !album.isEmpty() )
+    {
         TomahawkUtils::urlAddQueryItem( link, "album", album );
+    }
 
     return link;
 }
@@ -143,9 +151,13 @@ GlobalActionManager::openUrl( const QString& url )
 {
     // Native Implementations
     if ( url.startsWith( "tomahawk://" ) )
+    {
         return parseTomahawkLink( url );
+    }
     else if ( url.contains( "open.spotify.com" ) || url.startsWith( "spotify:" ) )
+    {
         return openSpotifyLink( url );
+    }
 
     // Can we parse the Url using a ScriptResolver?
     bool canParse = false;
@@ -192,14 +204,18 @@ GlobalActionManager::copyPlaylistToClipboard( const dynplaylist_ptr& playlist )
     TomahawkUtils::urlAddQueryItem( link, "title", playlist->title() );
 
     QList< dyncontrol_ptr > controls = playlist->generator()->controls();
-    foreach ( const dyncontrol_ptr& c, controls )
+    foreach ( const dyncontrol_ptr & c, controls )
     {
         if ( c->selectedType() == "Artist" )
         {
             if ( c->match().toInt() == Echonest::DynamicPlaylist::ArtistType )
+            {
                 TomahawkUtils::urlAddQueryItem( link, "artist_limitto", c->input() );
+            }
             else
+            {
                 TomahawkUtils::urlAddQueryItem( link, "artist", c->input() );
+            }
         }
         else if ( c->selectedType() == "Artist Description" )
         {
@@ -211,10 +227,12 @@ GlobalActionManager::copyPlaylistToClipboard( const dynplaylist_ptr& playlist )
             Echonest::DynamicPlaylist::PlaylistParam p = static_cast< Echonest::DynamicPlaylist::PlaylistParam >( c->match().toInt() );
             // if it is a max, set that too
             if ( p == Echonest::DynamicPlaylist::MaxTempo || p == Echonest::DynamicPlaylist::MaxDuration || p == Echonest::DynamicPlaylist::MaxLoudness
-               || p == Echonest::DynamicPlaylist::MaxDanceability || p == Echonest::DynamicPlaylist::MaxEnergy || p == Echonest::DynamicPlaylist::ArtistMaxFamiliarity
-               || p == Echonest::DynamicPlaylist::ArtistMaxHotttnesss || p == Echonest::DynamicPlaylist::SongMaxHotttnesss || p == Echonest::DynamicPlaylist::ArtistMaxLatitude
-               || p == Echonest::DynamicPlaylist::ArtistMaxLongitude )
+                    || p == Echonest::DynamicPlaylist::MaxDanceability || p == Echonest::DynamicPlaylist::MaxEnergy || p == Echonest::DynamicPlaylist::ArtistMaxFamiliarity
+                    || p == Echonest::DynamicPlaylist::ArtistMaxHotttnesss || p == Echonest::DynamicPlaylist::SongMaxHotttnesss || p == Echonest::DynamicPlaylist::ArtistMaxLatitude
+                    || p == Echonest::DynamicPlaylist::ArtistMaxLongitude )
+            {
                 name += "_max";
+            }
 
             TomahawkUtils::urlAddQueryItem( link, name, c->input() );
         }
@@ -276,7 +294,9 @@ GlobalActionManager::parseTomahawkLink( const QString& urlIn )
 {
     QString url = urlIn;
     if ( urlIn.startsWith( "http://toma.hk" ) )
+    {
         url.replace( "http://toma.hk/", "tomahawk://" );
+    }
 
     if ( url.contains( "tomahawk://" ) )
     {
@@ -434,7 +454,9 @@ GlobalActionManager::handleImportCommand( const QUrl& url )
 {
     QStringList parts = url.path().split( "/" ).mid( 1 ); // get the rest of the command
     if ( parts.size() < 1 )
+    {
         return false;
+    }
 
     if ( parts[ 0 ] == "playlist" )
     {
@@ -455,23 +477,23 @@ GlobalActionManager::handleImportCommand( const QUrl& url )
 
 
 void
-GlobalActionManager::createPlaylistFromUrl( const QString& type, const QString &url, const QString& title )
+GlobalActionManager::createPlaylistFromUrl( const QString& type, const QString& url, const QString& title )
 {
     if ( type == "xspf" )
     {
         QUrl xspf = QUrl::fromUserInput( url );
-        XSPFLoader* l= new XSPFLoader( true, this );
+        XSPFLoader* l = new XSPFLoader( true, this );
         l->setOverrideTitle( title );
         l->load( xspf );
-        connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
+        connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr ) ) );
     }
     else if ( type == "jspf" )
     {
         QUrl jspf = QUrl::fromUserInput( url );
-        JSPFLoader* l= new JSPFLoader( true, this );
+        JSPFLoader* l = new JSPFLoader( true, this );
         l->setOverrideTitle( title );
         l->load( jspf );
-        connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
+        connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr ) ) );
     }
 }
 
@@ -489,7 +511,9 @@ GlobalActionManager::playlistReadyToShow()
 {
     playlist_ptr pl = sender()->property( "sharedptr" ).value<Tomahawk::playlist_ptr>();
     if ( !pl.isNull() )
+    {
         ViewManager::instance()->show( pl );
+    }
 
     disconnect( sender(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistReadyToShow() ) );
 }
@@ -543,16 +567,24 @@ GlobalActionManager::handleLoveCommand( const QUrl& url )
     foreach ( pair, urlQueryItems( url ) )
     {
         if ( pair.first == "title" )
+        {
             title = pair.second;
+        }
         else if ( pair.first == "artist" )
+        {
             artist = pair.second;
+        }
         else if ( pair.first == "album" )
+        {
             album = pair.second;
+        }
     }
 
     track_ptr t = Track::get( artist, title, album );
     if ( t.isNull() )
+    {
         return false;
+    }
 
     t->setLoved( true );
 
@@ -578,7 +610,9 @@ void
 GlobalActionManager::handleOpenTracks( const QList< query_ptr >& queries )
 {
     if ( queries.isEmpty() )
+    {
         return;
+    }
 
     ViewManager::instance()->queue()->model()->appendQueries( queries );
     ViewManager::instance()->showQueue();
@@ -599,7 +633,7 @@ GlobalActionManager::handlePlayTrack( const query_ptr& qry )
 
 
 void
-GlobalActionManager::informationForUrl(const QString& url, const QSharedPointer<QObject>& information)
+GlobalActionManager::informationForUrl( const QString& url, const QSharedPointer<QObject>& information )
 {
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Got Information for URL:" << url;
     if ( m_queuedUrl != url )
@@ -712,7 +746,9 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
     if ( parts.size() && parts[ 0 ] == "track" )
     {
         if ( queueSpotify( parts, queryItems ) )
+        {
             return true;
+        }
 
         QPair< QString, QString > pair;
         QString title, artist, album, urlStr;
@@ -720,13 +756,21 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
         {
             pair.second = pair.second.replace( "+", " " ); // QUrl::queryItems doesn't decode + to a space :(
             if ( pair.first == "title" )
+            {
                 title = pair.second;
+            }
             else if ( pair.first == "artist" )
+            {
                 artist = pair.second;
+            }
             else if ( pair.first == "album" )
+            {
                 album = pair.second;
+            }
             else if ( pair.first == "url" )
+            {
                 urlStr = pair.second;
+            }
         }
 
         if ( !title.isEmpty() || !artist.isEmpty() || !album.isEmpty() )
@@ -734,7 +778,9 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
             // an individual; query to add to queue
             query_ptr q = Query::get( artist, title, album, uuid(), false );
             if ( q.isNull() )
+            {
                 return false;
+            }
 
             if ( !urlStr.isEmpty() )
             {
@@ -748,11 +794,14 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
             return true;
         }
         else
-        { // a list of urls to add to the queue
+        {
+            // a list of urls to add to the queue
             foreach ( pair, queryItems )
             {
                 if ( pair.first != "url" )
+                {
                     continue;
+                }
                 QUrl track = QUrl::fromUserInput( pair.second );
                 //FIXME: isLocalFile is Qt 4.8
                 if ( track.toString().startsWith( "file://" ) )
@@ -761,19 +810,26 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
                     // TODO
                 }
                 else
-                { // give it a web result hint
+                {
+                    // give it a web result hint
                     QFileInfo info( track.path() );
 
                     QString artistText = track.host();
                     if ( artistText.isEmpty() )
+                    {
                         artistText = info.absolutePath();
+                    }
                     if ( artistText.isEmpty() )
+                    {
                         artistText = track.toString();
+                    }
 
                     query_ptr q = Query::get( artistText, info.baseName(), QString(), uuid(), false );
 
                     if ( q.isNull() )
+                    {
                         continue;
+                    }
 
                     q->setResultHint( track.toString() );
                     q->setSaveHTTPResultHint( true );
@@ -829,7 +885,7 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
 
 
 bool
-GlobalActionManager::queueSpotify( const QStringList& , const QList< QPair< QString, QString > >& queryItems )
+GlobalActionManager::queueSpotify( const QStringList&, const QList< QPair< QString, QString > >& queryItems )
 {
     QString url;
 
@@ -837,13 +893,19 @@ GlobalActionManager::queueSpotify( const QStringList& , const QList< QPair< QStr
     foreach ( pair, queryItems )
     {
         if ( pair.first == "spotifyURL" )
+        {
             url = pair.second;
+        }
         else if ( pair.first == "spotifyURI" )
+        {
             url = pair.second;
+        }
     }
 
     if ( url.isEmpty() )
+    {
         return false;
+    }
 
     openSpotifyLink( url );
 
@@ -857,21 +919,31 @@ GlobalActionManager::handleSearchCommand( const QUrl& url )
     // open the super collection and set this as the search filter
     QString queryStr;
     if ( urlHasQueryItem( url, "query" ) )
+    {
         queryStr = urlQueryItemValue( url, "query" );
+    }
     else
     {
         QStringList query;
         if ( urlHasQueryItem( url, "artist" ) )
+        {
             query << urlQueryItemValue( url, "artist" );
+        }
         if ( urlHasQueryItem( url, "album" ) )
+        {
             query << urlQueryItemValue( url, "album" );
+        }
         if ( urlHasQueryItem( url, "title" ) )
+        {
             query << urlQueryItemValue( url, "title" );
+        }
         queryStr = query.join( " " );
     }
 
     if ( queryStr.trimmed().isEmpty() )
+    {
         return false;
+    }
 
     ViewManager::instance()->show( new SearchWidget( queryStr.trimmed() ) );
 
@@ -899,7 +971,9 @@ GlobalActionManager::handleViewCommand( const QUrl& url )
 
         artist_ptr artistPtr = Artist::get( artist );
         if ( !artistPtr.isNull() )
+        {
             ViewManager::instance()->show( artistPtr );
+        }
 
         return true;
     }
@@ -915,7 +989,9 @@ GlobalActionManager::handleViewCommand( const QUrl& url )
 
         album_ptr albumPtr = Album::get( Artist::get( artist, false ), album, false );
         if ( !albumPtr.isNull() )
+        {
             ViewManager::instance()->show( albumPtr );
+        }
 
         return true;
     }
@@ -932,7 +1008,9 @@ GlobalActionManager::handleViewCommand( const QUrl& url )
 
         query_ptr queryPtr = Query::get( artist, track, album );
         if ( !queryPtr.isNull() )
+        {
             ViewManager::instance()->show( queryPtr );
+        }
 
         return true;
     }
@@ -969,7 +1047,9 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
         QString type = urlQueryItemValue( url, "type" );
         GeneratorMode m = Static;
         if ( station )
+        {
             m = OnDemand;
+        }
 
         dynplaylist_ptr pl = DynamicPlaylist::create( SourceList::instance()->getLocal(), uuid(), title, QString(), QString(), m, false, type );
         pl->setMode( m );
@@ -981,28 +1061,28 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Artist" );
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistRadioType ) );
+                c->setMatch( QString::number( ( int )Echonest::DynamicPlaylist::ArtistRadioType ) );
                 controls << c;
             }
             else if ( param.first == "artist_limitto" )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Artist" );
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistType ) );
+                c->setMatch( QString::number( ( int )Echonest::DynamicPlaylist::ArtistType ) );
                 controls << c;
             }
             else if ( param.first == "description" )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Artist Description" );
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistDescriptionType ) );
+                c->setMatch( QString::number( ( int )Echonest::DynamicPlaylist::ArtistDescriptionType ) );
                 controls << c;
             }
             else if ( param.first == "variety" )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Variety" );
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::Variety ) );
+                c->setMatch( QString::number( ( int )Echonest::DynamicPlaylist::Variety ) );
                 controls << c;
             }
             else if ( param.first.startsWith( "tempo" ) )
@@ -1010,7 +1090,7 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
                 dyncontrol_ptr c = pl->generator()->createControl( "Tempo" );
                 int extra = param.first.endsWith( "_max" ) ? -1 : 0;
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::MinTempo + extra ) );
+                c->setMatch( QString::number( ( int )Echonest::DynamicPlaylist::MinTempo + extra ) );
                 controls << c;
             }
             else if ( param.first.startsWith( "duration" ) )
@@ -1018,7 +1098,7 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
                 dyncontrol_ptr c = pl->generator()->createControl( "Duration" );
                 int extra = param.first.endsWith( "_max" ) ? -1 : 0;
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::MinDuration + extra ) );
+                c->setMatch( QString::number( ( int )Echonest::DynamicPlaylist::MinDuration + extra ) );
                 controls << c;
             }
             else if ( param.first.startsWith( "loudness" ) )
@@ -1026,7 +1106,7 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
                 dyncontrol_ptr c = pl->generator()->createControl( "Loudness" );
                 int extra = param.first.endsWith( "_max" ) ? -1 : 0;
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::MinLoudness + extra ) );
+                c->setMatch( QString::number( ( int )Echonest::DynamicPlaylist::MinLoudness + extra ) );
                 controls << c;
             }
             else if ( param.first.startsWith( "danceability" ) )
@@ -1034,7 +1114,7 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
                 dyncontrol_ptr c = pl->generator()->createControl( "Danceability" );
                 int extra = param.first.endsWith( "_max" ) ? 1 : 0;
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::MinDanceability + extra ) );
+                c->setMatch( QString::number( ( int )Echonest::DynamicPlaylist::MinDanceability + extra ) );
                 controls << c;
             }
             else if ( param.first.startsWith( "energy" ) )
@@ -1042,7 +1122,7 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
                 dyncontrol_ptr c = pl->generator()->createControl( "Energy" );
                 int extra = param.first.endsWith( "_max" ) ? 1 : 0;
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::MinEnergy + extra ) );
+                c->setMatch( QString::number( ( int )Echonest::DynamicPlaylist::MinEnergy + extra ) );
                 controls << c;
             }
             else if ( param.first.startsWith( "artist_familiarity" ) )
@@ -1050,7 +1130,7 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
                 dyncontrol_ptr c = pl->generator()->createControl( "Artist Familiarity" );
                 int extra = param.first.endsWith( "_max" ) ? -1 : 0;
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistMinFamiliarity + extra ) );
+                c->setMatch( QString::number( ( int )Echonest::DynamicPlaylist::ArtistMinFamiliarity + extra ) );
                 controls << c;
             }
             else if ( param.first.startsWith( "artist_hotttnesss" ) )
@@ -1058,7 +1138,7 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
                 dyncontrol_ptr c = pl->generator()->createControl( "Artist Hotttnesss" );
                 int extra = param.first.endsWith( "_max" ) ? -1 : 0;
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistMinHotttnesss + extra ) );
+                c->setMatch( QString::number( ( int )Echonest::DynamicPlaylist::ArtistMinHotttnesss + extra ) );
                 controls << c;
             }
             else if ( param.first.startsWith( "song_hotttnesss" ) )
@@ -1066,7 +1146,7 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
                 dyncontrol_ptr c = pl->generator()->createControl( "Song Hotttnesss" );
                 int extra = param.first.endsWith( "_max" ) ? -1 : 0;
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::SongMinHotttnesss + extra ) );
+                c->setMatch( QString::number( ( int )Echonest::DynamicPlaylist::SongMinHotttnesss + extra ) );
                 controls << c;
             }
             else if ( param.first.startsWith( "longitude" ) )
@@ -1074,7 +1154,7 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
                 dyncontrol_ptr c = pl->generator()->createControl( "Longitude" );
                 int extra = param.first.endsWith( "_max" ) ? 1 : 0;
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistMinLongitude + extra ) );
+                c->setMatch( QString::number( ( int )Echonest::DynamicPlaylist::ArtistMinLongitude + extra ) );
                 controls << c;
             }
             else if ( param.first.startsWith( "latitude" ) )
@@ -1082,50 +1162,54 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
                 dyncontrol_ptr c = pl->generator()->createControl( "Latitude" );
                 int extra = param.first.endsWith( "_max" ) ? 1 : 0;
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistMinLatitude + extra ) );
+                c->setMatch( QString::number( ( int )Echonest::DynamicPlaylist::ArtistMinLatitude + extra ) );
                 controls << c;
             }
             else if ( param.first == "key" )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Key" );
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::Key ) );
+                c->setMatch( QString::number( ( int )Echonest::DynamicPlaylist::Key ) );
                 controls << c;
             }
             else if ( param.first == "mode" )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Mode" );
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::Mode ) );
+                c->setMatch( QString::number( ( int )Echonest::DynamicPlaylist::Mode ) );
                 controls << c;
             }
             else if ( param.first == "mood" )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Mood" );
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::Mood ) );
+                c->setMatch( QString::number( ( int )Echonest::DynamicPlaylist::Mood ) );
                 controls << c;
             }
             else if ( param.first == "style" )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Style" );
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::Style ) );
+                c->setMatch( QString::number( ( int )Echonest::DynamicPlaylist::Style ) );
                 controls << c;
             }
             else if ( param.first == "song" )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Song" );
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::SongRadioType ) );
+                c->setMatch( QString::number( ( int )Echonest::DynamicPlaylist::SongRadioType ) );
                 controls << c;
             }
         }
 
         if ( m == OnDemand )
+        {
             pl->createNewRevision( uuid(), pl->currentrevision(), type, controls );
+        }
         else
+        {
             pl->createNewRevision( uuid(), pl->currentrevision(), type, controls, pl->entries() );
+        }
 
         ViewManager::instance()->show( pl );
         return pl;
@@ -1155,25 +1239,37 @@ GlobalActionManager::handlePlayCommand( const QUrl& url )
     if ( parts[ 0 ] == "track" )
     {
         if ( playSpotify( url ) )
+        {
             return true;
+        }
 
         QPair< QString, QString > pair;
         QString title, artist, album, urlStr;
         foreach ( pair, urlQueryItems( url ) )
         {
             if ( pair.first == "title" )
+            {
                 title = pair.second;
+            }
             else if ( pair.first == "artist" )
+            {
                 artist = pair.second;
+            }
             else if ( pair.first == "album" )
+            {
                 album = pair.second;
+            }
             else if ( pair.first == "url" )
+            {
                 urlStr = pair.second;
+            }
         }
 
         query_ptr q = Query::get( artist, title, album );
         if ( q.isNull() )
+        {
             return false;
+        }
 
         if ( !urlStr.isEmpty() )
         {
@@ -1193,7 +1289,9 @@ bool
 GlobalActionManager::playSpotify( const QUrl& url )
 {
     if ( !urlHasQueryItem( url, "spotifyURI" ) && !urlHasQueryItem( url, "spotifyURL" ) )
+    {
         return false;
+    }
 
     QString spotifyUrl = urlHasQueryItem( url, "spotifyURI" ) ? urlQueryItemValue( url, "spotifyURI" ) : urlQueryItemValue( url, "spotifyURL" );
     SpotifyParser* p = new SpotifyParser( spotifyUrl, this );
@@ -1228,7 +1326,9 @@ void
 GlobalActionManager::showPlaylist()
 {
     if ( m_toShow.isNull() )
+    {
         return;
+    }
 
     ViewManager::instance()->show( m_toShow );
 
@@ -1248,11 +1348,13 @@ GlobalActionManager::waitingForResolved( bool /* success */ )
     if ( !m_waitingToPlay.isNull() && m_waitingToPlay->playable() )
     {
         // play it!
-//         AudioEngine::instance()->playItem( AudioEngine::instance()->playlist(), m_waitingToPlay->results().first() );
+        //         AudioEngine::instance()->playItem( AudioEngine::instance()->playlist(), m_waitingToPlay->results().first() );
         if ( sender() && sender()->property( "playNow" ).toBool() )
         {
             if ( !AudioEngine::instance()->playlist().isNull() )
+            {
                 AudioEngine::instance()->playItem( AudioEngine::instance()->playlist(), m_waitingToPlay->results().first() );
+            }
             else
             {
                 ViewManager::instance()->queue()->model()->appendQuery( m_waitingToPlay );
@@ -1260,7 +1362,9 @@ GlobalActionManager::waitingForResolved( bool /* success */ )
             }
         }
         else
+        {
             AudioEngine::instance()->play();
+        }
 
         m_waitingToPlay.clear();
     }

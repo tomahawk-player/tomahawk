@@ -31,7 +31,7 @@ class ImageButton;
 
 namespace Tomahawk
 {
-    class ContextMenu;
+class ContextMenu;
 };
 
 /**
@@ -40,25 +40,31 @@ namespace Tomahawk
  */
 class DLLEXPORT PlayableCover : public QLabel
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     PlayableCover( QWidget* parent = 0 );
     virtual ~PlayableCover();
 
-    bool showText() const { return m_showText; }
+    bool showText() const
+    {
+        return m_showText;
+    }
     void setShowText( bool b );
 
-    QPixmap pixmap() const { return m_pixmap; }
+    QPixmap pixmap() const
+    {
+        return m_pixmap;
+    }
 
-public slots:
+  public slots:
     virtual void setArtist( const Tomahawk::artist_ptr& artist );
     virtual void setAlbum( const Tomahawk::album_ptr& album );
     virtual void setQuery( const Tomahawk::query_ptr& query );
 
     void setPixmap( const QPixmap& pixmap );
 
-protected:
+  protected:
     virtual void resizeEvent( QResizeEvent* event );
     virtual void paintEvent( QPaintEvent* event );
 
@@ -67,14 +73,14 @@ protected:
     virtual void mouseReleaseEvent( QMouseEvent* event );
 
     virtual void contextMenuEvent( QContextMenuEvent* event );
-    
+
     void leaveEvent( QEvent* event );
     void enterEvent( QEvent* event );
 
-private slots:
+  private slots:
     void onClicked();
 
-private:
+  private:
     QPixmap m_pixmap;
 
     ImageButton* m_button;

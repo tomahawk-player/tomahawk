@@ -56,32 +56,57 @@ class TOMAHAWK_WIDGETS_EXPORT SocialPlaylistWidget : public QWidget, public Toma
 {
     Q_OBJECT
 
-public:
+  public:
     SocialPlaylistWidget( QWidget* parent = 0 );
     ~SocialPlaylistWidget();
 
-    virtual QWidget* widget() { return this; }
+    virtual QWidget* widget()
+    {
+        return this;
+    }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 
-    virtual QString title() const { return m_title; }
-    virtual QString description() const { return m_description; }
-    virtual QString longDescription() const { return m_longDescription; }
-    virtual QPixmap pixmap() const { if ( m_pixmap.isNull() ) return Tomahawk::ViewPage::pixmap(); else return m_pixmap; }
-    virtual bool jumpToCurrentTrack() { return false; }
+    virtual QString title() const
+    {
+        return m_title;
+    }
+    virtual QString description() const
+    {
+        return m_description;
+    }
+    virtual QString longDescription() const
+    {
+        return m_longDescription;
+    }
+    virtual QPixmap pixmap() const
+    {
+        if ( m_pixmap.isNull() )
+        {
+            return Tomahawk::ViewPage::pixmap();
+        }
+        else
+        {
+            return m_pixmap;
+        }
+    }
+    virtual bool jumpToCurrentTrack()
+    {
+        return false;
+    }
 
-signals:
+  signals:
     void longDescriptionChanged( const QString& description );
     void descriptionChanged( const QString& description );
     void pixmapChanged( const QPixmap& pixmap );
 
-private slots:
+  private slots:
     void popularAlbumsFetched( QList<Tomahawk::album_ptr> );
     void topForeignTracksFetched( QList<Tomahawk::query_ptr> );
 
-private:
+  private:
     void fetchFromDB();
 
-    Ui_SocialPlaylistWidget *ui;
+    Ui_SocialPlaylistWidget* ui;
     PlaylistModel* m_topForeignTracksModel;
     PlayableModel* m_popularNewAlbumsModel;
 

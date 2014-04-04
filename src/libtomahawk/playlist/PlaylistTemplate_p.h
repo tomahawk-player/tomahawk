@@ -29,7 +29,7 @@ namespace Tomahawk
 
 class PlaylistTemplatePrivate
 {
-public:
+  public:
     PlaylistTemplatePrivate( PlaylistTemplate* q,
                              const source_ptr& _author,
                              const QString& _guid,
@@ -52,7 +52,7 @@ public:
     Q_DECLARE_PUBLIC( PlaylistTemplate )
     PlaylistTemplate* q_ptr;
 
-protected:
+  protected:
     source_ptr author;
     QString guid;
     QString title;

@@ -41,10 +41,10 @@ HistoryWidget::HistoryWidget( const source_ptr& source, QWidget* parent )
     : FlexibleView( parent, m_header = new QWidget() )
 {
     m_header->setMaximumHeight( 160 );
-/*    QCalendarWidget* m_calendarFrom = new QCalendarWidget();
-    QCalendarWidget* m_calendarTo = new QCalendarWidget();
-    m_calendarFrom->setGridVisible( false );
-    m_calendarTo->setGridVisible( false );*/
+    /*    QCalendarWidget* m_calendarFrom = new QCalendarWidget();
+        QCalendarWidget* m_calendarTo = new QCalendarWidget();
+        m_calendarFrom->setGridVisible( false );
+        m_calendarTo->setGridVisible( false );*/
     m_calendarFrom = new QDateEdit( QDate::currentDate() );
     m_calendarTo = new QDateEdit( QDate::currentDate() );
     m_calendarFrom->setDisplayFormat( "yyyy MMMM dd" );
@@ -85,9 +85,13 @@ HistoryWidget::HistoryWidget( const source_ptr& source, QWidget* parent )
     m_model->setTitle( tr( "Recently Played Tracks" ) );
 
     if ( source->isLocal() )
+    {
         m_model->setDescription( tr( "Your recently played tracks" ) );
+    }
     else
+    {
         m_model->setDescription( tr( "%1's recently played tracks" ).arg( source->friendlyName() ) );
+    }
 
     PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, trackView(), trackView()->proxyModel() );
     trackView()->setPlaylistItemDelegate( del );
@@ -98,8 +102,8 @@ HistoryWidget::HistoryWidget( const source_ptr& source, QWidget* parent )
 
     setGuid( QString( "recentplays/%1" ).arg( source->nodeId() ) );
 
-/*    connect( m_calendarFrom, SIGNAL( clicked( QDate ) ), SLOT( onDateClicked( QDate ) ) );
-    connect( m_calendarTo, SIGNAL( clicked( QDate ) ), SLOT( onDateClicked( QDate ) ) );*/
+    /*    connect( m_calendarFrom, SIGNAL( clicked( QDate ) ), SLOT( onDateClicked( QDate ) ) );
+        connect( m_calendarTo, SIGNAL( clicked( QDate ) ), SLOT( onDateClicked( QDate ) ) );*/
     connect( m_calendarFrom, SIGNAL( dateChanged( QDate ) ), SLOT( onDateClicked( QDate ) ) );
     connect( m_calendarTo, SIGNAL( dateChanged( QDate ) ), SLOT( onDateClicked( QDate ) ) );
 }

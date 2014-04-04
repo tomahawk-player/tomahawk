@@ -36,27 +36,27 @@ class DatabaseCommand;
 
 class DBSyncConnection : public Connection
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit DBSyncConnection( Servent* s, const Tomahawk::source_ptr& src );
     virtual ~DBSyncConnection();
 
     void setup();
     Connection* clone();
 
-signals:
+  signals:
     void stateChanged( Tomahawk::DBSyncConnectionState newstate, Tomahawk::DBSyncConnectionState oldstate, const QString& info );
 
-protected slots:
+  protected slots:
     virtual void handleMsg( msg_ptr msg );
 
-public slots:
+  public slots:
     void sendOps();
     /// trigger a re-sync to pick up any new ops
     void trigger();
 
-private slots:
+  private slots:
     void gotThem( const QVariantMap& m );
 
     void fetchOpsData( const QString& sinceguid );
@@ -65,7 +65,7 @@ private slots:
 
     void check();
 
-private:
+  private:
     void synced();
     void changeState( Tomahawk::DBSyncConnectionState newstate );
 

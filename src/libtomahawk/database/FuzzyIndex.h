@@ -30,30 +30,30 @@
 
 namespace lucene
 {
-    namespace analysis
-    {
-      class SimpleAnalyzer;
-    }
-    namespace store
-    {
-      class Directory;
-    }
-    namespace index
-    {
-      class IndexReader;
-      class IndexWriter;
-    }
-    namespace search
-    {
-      class IndexSearcher;
-    }
+namespace analysis
+{
+class SimpleAnalyzer;
+}
+namespace store
+{
+class Directory;
+}
+namespace index
+{
+class IndexReader;
+class IndexWriter;
+}
+namespace search
+{
+class IndexSearcher;
+}
 }
 
 class FuzzyIndex : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit FuzzyIndex( QObject* parent, bool wipe = false );
     ~FuzzyIndex();
 
@@ -61,20 +61,20 @@ public:
     void endIndexing();
     void appendFields( const Tomahawk::IndexData& data );
 
-signals:
+  signals:
     void indexReady();
 
-public slots:
+  public slots:
     void loadLuceneIndex();
 
     QMap< int, float > search( const Tomahawk::query_ptr& query );
     QMap< int, float > searchAlbum( const Tomahawk::query_ptr& query );
 
-private slots:
+  private slots:
     void updateIndex();
     bool wipeIndex();
 
-private:
+  private:
     QMutex m_mutex;
     QString m_lucenePath;
 

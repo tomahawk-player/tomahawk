@@ -25,7 +25,7 @@
 
 class DLLEXPORT ImageRegistry
 {
-public:
+  public:
     static ImageRegistry* instance();
 
     explicit ImageRegistry();
@@ -33,7 +33,7 @@ public:
     QIcon icon( const QString& image, TomahawkUtils::ImageMode mode = TomahawkUtils::Original );
     QPixmap pixmap( const QString& image, const QSize& size, TomahawkUtils::ImageMode mode = TomahawkUtils::Original );
 
-private:
+  private:
     void putInCache( const QString& image, const QSize& size, TomahawkUtils::ImageMode mode, const QPixmap& pixmap );
 
     static ImageRegistry* s_instance;

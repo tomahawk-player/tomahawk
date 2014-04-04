@@ -33,32 +33,47 @@ class PlaylistModel;
 
 namespace Ui
 {
-    class NewPlaylistWidget;
+class NewPlaylistWidget;
 }
 
 class DLLEXPORT NewPlaylistWidget : public QWidget, public Tomahawk::ViewPage
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     NewPlaylistWidget( QWidget* parent = 0 );
     ~NewPlaylistWidget();
 
-    virtual QWidget* widget() { return this; }
-    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return Tomahawk::playlistinterface_ptr(); }
+    virtual QWidget* widget()
+    {
+        return this;
+    }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const
+    {
+        return Tomahawk::playlistinterface_ptr();
+    }
 
-    virtual QString title() const { return tr( "Create a new playlist" ); }
-    virtual QString description() const { return QString(); }
+    virtual QString title() const
+    {
+        return tr( "Create a new playlist" );
+    }
+    virtual QString description() const
+    {
+        return QString();
+    }
 
-    virtual bool jumpToCurrentTrack() { return false; }
+    virtual bool jumpToCurrentTrack()
+    {
+        return false;
+    }
 
-protected:
+  protected:
     void changeEvent( QEvent* e );
 
-signals:
+  signals:
     void destroyed( QWidget* widget );
 
-private slots:
+  private slots:
     void onTitleChanged( const QString& title );
     void onTagChanged();
 
@@ -68,8 +83,8 @@ private slots:
     void savePlaylist();
     void cancel();
 
-private:
-    Ui::NewPlaylistWidget *ui;
+  private:
+    Ui::NewPlaylistWidget* ui;
 
     PlaylistModel* m_suggestionsModel;
     QList< Tomahawk::query_ptr > m_queries;

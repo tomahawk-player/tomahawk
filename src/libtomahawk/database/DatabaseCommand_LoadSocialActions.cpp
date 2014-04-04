@@ -45,15 +45,17 @@ DatabaseCommand_LoadSocialActions::exec( DatabaseImpl* dbi )
     {
         // Load for just specified track
         if ( m_track->trackId() == 0 )
+        {
             return;
+        }
 
         QString whereToken;
         whereToken = QString( "WHERE id IS %1" ).arg( m_track->trackId() );
 
         QString sql = QString(
-                "SELECT k, v, timestamp, source "
-                "FROM social_attributes %1 "
-                "ORDER BY timestamp ASC" ).arg( whereToken );
+                          "SELECT k, v, timestamp, source "
+                          "FROM social_attributes %1 "
+                          "ORDER BY timestamp ASC" ).arg( whereToken );
 
         query.prepare( sql );
         query.exec();
@@ -68,7 +70,9 @@ DatabaseCommand_LoadSocialActions::exec( DatabaseImpl* dbi )
             action.source    = SourceList::instance()->get( query.value( 3 ).toInt() );  // source
 
             if ( !action.source.isNull() )
+            {
                 allSocialActions.append( action );
+            }
         }
 
         m_track->setAllSocialActions( allSocialActions );
@@ -88,7 +92,9 @@ DatabaseCommand_LoadSocialActions::exec( DatabaseImpl* dbi )
         {
             const QVariantMap track = dbi->track( query.value( 0 ).toInt() );
             if ( track.value( "artist" ).toString().isEmpty() || track.value( "name" ).toString().isEmpty() )
+            {
                 continue;
+            }
 
             const QVariantMap artist = dbi->artist( track.value( "artist" ).toInt() );
             const track_ptr t = Track::get( artist.value( "name" ).toString(), track.value( "name" ).toString(), QString() );

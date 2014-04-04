@@ -50,7 +50,9 @@ LoadXSPFDialog::getLocalFile()
     const QString path = TomahawkSettings::instance()->importXspfPath();
     QString url = QFileDialog::getOpenFileName( this, tr( "Load XSPF File" ), path, tr( "XSPF Files (*.xspf)" ) );
     if ( !url.isEmpty() )
+    {
         TomahawkSettings::instance()->setImportXspfPath( QFileInfo( url ).absoluteDir().absolutePath() );
+    }
 
     m_ui->lineEdit->setText( url );
 }

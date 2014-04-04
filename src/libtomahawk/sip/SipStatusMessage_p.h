@@ -28,7 +28,7 @@ class QTimer;
 
 class SipStatusMessagePrivate
 {
-public:
+  public:
     SipStatusMessagePrivate( SipStatusMessage* q, SipStatusMessage::SipStatusMessageType _statusMessageType, const QString& _contactId, const QString& _message )
         : q_ptr ( q )
         , contactId( _contactId )
@@ -40,7 +40,7 @@ public:
     SipStatusMessage* q_ptr;
     Q_DECLARE_PUBLIC ( SipStatusMessage )
 
-private:
+  private:
     QString contactId;
     SipStatusMessage::SipStatusMessageType statusMessageType;
     QString message;

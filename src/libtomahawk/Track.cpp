@@ -71,7 +71,9 @@ Track::get( const QString& artist, const QString& track, const QString& album, i
     {
         track_wptr track = s_tracksByName.value( key );
         if ( track )
+        {
             return track.toStrongRef();
+        }
     }
 
     track_ptr t = track_ptr( new Track( artist, track, album, duration, composer, albumpos, discnumber ), &Track::deleteLater );
@@ -91,7 +93,9 @@ Track::get( unsigned int id, const QString& artist, const QString& track, const 
     {
         track_wptr track = s_tracksByName.value( key );
         if ( track )
+        {
             return track;
+        }
     }
 
     track_ptr t = track_ptr( new Track( id, artist, track, album, duration, composer, albumpos, discnumber ), &Track::deleteLater );
@@ -246,7 +250,7 @@ void
 Track::startPlaying()
 {
     DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( weakRef().toStrongRef(),
-                                                                        DatabaseCommand_LogPlayback::Started );
+            DatabaseCommand_LogPlayback::Started );
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 
     markAsListened();
@@ -257,8 +261,8 @@ void
 Track::finishPlaying( int timeElapsed )
 {
     DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( weakRef().toStrongRef(),
-                                                                        DatabaseCommand_LogPlayback::Finished,
-                                                                        timeElapsed );
+            DatabaseCommand_LogPlayback::Finished,
+            timeElapsed );
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
@@ -275,7 +279,7 @@ Track::markAsListened()
         // The dbcmd does this in the DB, but let's update the TrackData ASAP
         QList< Tomahawk::SocialAction > actions = allSocialActions();
         for ( QList< Tomahawk::SocialAction >::iterator it = actions.begin();
-              it != actions.end(); ++it )
+                it != actions.end(); ++it )
         {
             if ( it->action == "Inbox" )
             {
@@ -326,7 +330,9 @@ bool
 Track::equals( const Tomahawk::track_ptr& other, bool ignoreCase ) const
 {
     if ( other.isNull() )
+    {
         return false;
+    }
 
     if ( ignoreCase )
         return ( artist().toLower() == other->artist().toLower() &&
@@ -356,9 +362,9 @@ QString
 Track::toString() const
 {
     return QString( "Track(%1 - %2%3)" )
-              .arg( artist() )
-              .arg( track() )
-              .arg( album().isEmpty() ? "" : QString( " on %1" ).arg( album() ) );
+           .arg( artist() )
+           .arg( track() )
+           .arg( album().isEmpty() ? "" : QString( " on %1" ).arg( album() ) );
 }
 
 
@@ -370,7 +376,9 @@ Track::toQuery()
     {
         query_ptr query = Tomahawk::Query::get( weakRef().toStrongRef() );
         if ( !query )
+        {
             return query_ptr();
+        }
 
         d->query = query->weakRef();
         return query;
@@ -486,9 +494,9 @@ Track::setLoved( bool loved, bool postToInfoSystem )
         loveInfo[ "trackinfo" ] = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
 
         Tomahawk::InfoSystem::InfoPushData pushData ( d->trackData->id(),
-                                                    ( loved ? Tomahawk::InfoSystem::InfoLove : Tomahawk::InfoSystem::InfoUnLove ),
-                                                    loveInfo,
-                                                    Tomahawk::InfoSystem::PushShortUrlFlag );
+                ( loved ? Tomahawk::InfoSystem::InfoLove : Tomahawk::InfoSystem::InfoUnLove ),
+                loveInfo,
+                Tomahawk::InfoSystem::PushShortUrlFlag );
 
         Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
     }
@@ -503,12 +511,14 @@ Track::socialActionDescription( const QString& action, DescriptionMode mode ) co
 
     QStringList actionSources;
     int loveTotal = 0;
-    foreach ( const Tomahawk::SocialAction& sa, socialActions )
+    foreach ( const Tomahawk::SocialAction & sa, socialActions )
     {
         if ( sa.action == action )
         {
             if ( actionSources.contains( sa.source->friendlyName() ) )
+            {
                 continue;
+            }
             actionSources << sa.source->friendlyName();
             loveTotal++;
         }
@@ -517,50 +527,72 @@ Track::socialActionDescription( const QString& action, DescriptionMode mode ) co
     QDateTime earliestTimestamp = QDateTime::currentDateTime();
     actionSources.clear();
     int loveCounter = 0;
-    foreach ( const Tomahawk::SocialAction& sa, socialActions )
+    foreach ( const Tomahawk::SocialAction & sa, socialActions )
     {
         if ( sa.action == action )
         {
             if ( actionSources.contains( sa.source->friendlyName() ) )
+            {
                 continue;
+            }
             actionSources << sa.source->friendlyName();
 
             if ( ++loveCounter > 3 )
+            {
                 continue;
+            }
             else if ( loveCounter > 1 )
             {
                 if ( loveCounter == loveTotal )
+                {
                     desc += tr( " and " );
+                }
                 else
+                {
                     desc += ", ";
+                }
             }
 
             if ( sa.source->isLocal() )
             {
                 if ( loveCounter == 1 )
+                {
                     desc += "<b>" + tr( "You" ) + "</b>";
+                }
                 else
+                {
                     desc += "<b>" + tr( "you" ) + "</b>";
+                }
             }
             else
+            {
                 desc += "<b>" + sa.source->friendlyName() + "</b>";
+            }
 
             QDateTime saTimestamp = QDateTime::fromTime_t( sa.timestamp.toInt() );
             if ( saTimestamp < earliestTimestamp && saTimestamp.toTime_t() > 0 )
+            {
                 earliestTimestamp = saTimestamp;
+            }
         }
     }
     if ( loveCounter > 0 )
     {
         if ( loveCounter > 3 )
+        {
             desc += " " + tr( "and" ) + " <b>" + tr( "%n other(s)", "", loveCounter - 3 ) + "</b>";
+        }
 
         if ( mode == Short )
+        {
             desc = "<b>" + tr( "%n people", "", loveCounter ) + "</b>";
+        }
 
-         //FIXME: more action descs required
+        //FIXME: more action descs required
         if ( action == "Love" )
+        {
             desc += " " + tr( "loved this track" );
+        }
         else if ( action == "Inbox" )
             desc += " " + tr( "sent you this track %1" )
                     .arg( TomahawkUtils::ageToString( earliestTimestamp, true ) );
@@ -613,7 +645,9 @@ Track::composerPtr() const
 {
     Q_D( const Track );
     if ( !d->composerPtr )
+    {
         d->composerPtr = Artist::get( composer(), false );
+    }
 
     return d->composerPtr;
 }
@@ -627,7 +661,9 @@ Track::cover( const QSize& size, bool forceLoad ) const
     if ( albumPtr()->coverLoaded() )
     {
         if ( !albumPtr()->cover( size ).isNull() )
+        {
             return albumPtr()->cover( size );
+        }
 
         return artistPtr()->cover( size, forceLoad );
     }
@@ -641,10 +677,14 @@ Track::coverLoaded() const
 {
     Q_D( const Track );
     if ( d->albumPtr.isNull() )
+    {
         return false;
+    }
 
     if ( d->albumPtr->coverLoaded() && !d->albumPtr->cover( QSize( 0, 0 ) ).isNull() )
+    {
         return true;
+    }
 
     return d->artistPtr->coverLoaded();
 }

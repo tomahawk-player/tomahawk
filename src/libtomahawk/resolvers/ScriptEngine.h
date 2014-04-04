@@ -32,24 +32,24 @@ class QNetworkReply;
 
 class DLLEXPORT ScriptEngine : public QWebPage
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit ScriptEngine( JSResolver* parent );
 
     QString userAgentForUrl( const QUrl& url ) const;
     void setScriptPath( const QString& scriptPath );
 
-public slots:
+  public slots:
     bool shouldInterruptJavaScript();
 
-protected:
+  protected:
     virtual void javaScriptConsoleMessage( const QString& message, int lineNumber, const QString& sourceID );
 
-private slots:
+  private slots:
     void sslErrorHandler( QNetworkReply* qnr, const QList<QSslError>& errlist );
 
-private:
+  private:
     JSResolver* m_parent;
     QString m_scriptPath;
     QString m_header;

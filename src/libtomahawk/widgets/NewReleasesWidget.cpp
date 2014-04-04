@@ -72,7 +72,7 @@ NewReleasesWidget::NewReleasesWidget( QWidget* parent )
 
     ui->breadCrumbLeft->setRootIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::NewReleases, TomahawkUtils::Original ) );
 
-    connect( ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged(QModelIndex) ) );
+    connect( ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged( QModelIndex ) ) );
 
     m_workerThread = new QThread( this );
     m_workerThread->start();
@@ -93,7 +93,7 @@ NewReleasesWidget::~NewReleasesWidget()
 {
     qDeleteAll( m_workers );
     m_workers.clear();
-    m_workerThread->exit(0);
+    m_workerThread->exit( 0 );
     m_playlistInterface.clear();
     delete m_spinner;
     delete ui;
@@ -143,7 +143,9 @@ void
 NewReleasesWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
     if ( requestData.caller != s_newReleasesIdentifier )
+    {
         return;
+    }
 
     if ( !output.canConvert< QVariantMap >() )
     {
@@ -157,12 +159,12 @@ NewReleasesWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData request
         case InfoSystem::InfoNewReleaseCapabilities:
         {
             tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Got InfoNewReleaseCapabilities";
-            QStandardItem *rootItem = m_crumbModelLeft->invisibleRootItem();
+            QStandardItem* rootItem = m_crumbModelLeft->invisibleRootItem();
 
             foreach ( const QString label, returnedData.keys() )
             {
-                QStandardItem *childItem = parseNode( rootItem, label, returnedData[label] );
-                rootItem->appendRow(childItem);
+                QStandardItem* childItem = parseNode( rootItem, label, returnedData[label] );
+                rootItem->appendRow( childItem );
                 tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "NewReleases:" << label;
             }
             break;
@@ -170,11 +172,15 @@ NewReleasesWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData request
 
         case InfoSystem::InfoNewRelease:
         {
-            if( !returnedData.contains("type") )
+            if( !returnedData.contains( "type" ) )
+            {
                 break;
+            }
             const QString type = returnedData["type"].toString();
-            if( !returnedData.contains(type) )
+            if( !returnedData.contains( type ) )
+            {
                 break;
+            }
 
             const QString releaseId = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >().value( "nr_id" );
 
@@ -196,7 +202,9 @@ NewReleasesWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData request
                 m_albumModels[ releaseId ] = albumModel;
 
                 if ( m_queueItemToShow == releaseId )
+                {
                     setLeftViewAlbums( albumModel );
+                }
             }
             else
             {
@@ -241,15 +249,19 @@ NewReleasesWidget::leftCrumbIndexChanged( QModelIndex index )
     tDebug( LOGVERBOSE ) << "NewReleases:: left crumb changed" << index.data();
     QStandardItem* item = m_crumbModelLeft->itemFromIndex( m_sortedProxy->mapToSource( index ) );
     if( !item )
+    {
         return;
+    }
     if( !item->data( Breadcrumb::ChartIdRole ).isValid() )
+    {
         return;
+    }
 
 
     QList<QModelIndex> indexes;
     while ( index.parent().isValid() )
     {
-        indexes.prepend(index);
+        indexes.prepend( index );
         index = index.parent();
     }
 
@@ -270,7 +282,7 @@ NewReleasesWidget::leftCrumbIndexChanged( QModelIndex index )
 
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria.insert( "nr_id", nrId );
-    criteria.insert( "nr_expires", QString::number(nrExpires) );
+    criteria.insert( "nr_expires", QString::number( nrExpires ) );
     /// Remember to lower the source!
     criteria.insert( "nr_source",  index.data().toString().toLower() );
 
@@ -309,22 +321,22 @@ NewReleasesWidget::changeEvent( QEvent* e )
 
 
 QStandardItem*
-NewReleasesWidget::parseNode( QStandardItem* parentItem, const QString &label, const QVariant &data )
+NewReleasesWidget::parseNode( QStandardItem* parentItem, const QString& label, const QVariant& data )
 {
     Q_UNUSED( parentItem );
-//     tDebug( LOGVERBOSE ) << "NewReleases:: parsing " << label;
+    //     tDebug( LOGVERBOSE ) << "NewReleases:: parsing " << label;
 
-    QStandardItem *sourceItem = new QStandardItem(label);
+    QStandardItem* sourceItem = new QStandardItem( label );
 
     if ( data.canConvert< QList< Tomahawk::InfoSystem::InfoStringHash > >() )
     {
         QList< Tomahawk::InfoSystem::InfoStringHash > charts = data.value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
         foreach ( Tomahawk::InfoSystem::InfoStringHash chart, charts )
         {
-            QStandardItem *childItem= new QStandardItem( chart[ "label" ] );
+            QStandardItem* childItem = new QStandardItem( chart[ "label" ] );
             childItem->setData( chart[ "id" ], Breadcrumb::ChartIdRole );
             childItem->setData( chart[ "expires" ], Breadcrumb::ChartExpireRole );
-            if ( chart.value( "default", "" ) == "true")
+            if ( chart.value( "default", "" ) == "true" )
             {
                 childItem->setData( true, Breadcrumb::DefaultRole );
             }
@@ -334,9 +346,9 @@ NewReleasesWidget::parseNode( QStandardItem* parentItem, const QString &label, c
     else if ( data.canConvert<QVariantMap>() )
     {
         QVariantMap dataMap = data.toMap();
-        foreach ( const QString childLabel,dataMap.keys() )
+        foreach ( const QString childLabel, dataMap.keys() )
         {
-            QStandardItem *childItem  = parseNode( sourceItem, childLabel, dataMap[childLabel] );
+            QStandardItem* childItem  = parseNode( sourceItem, childLabel, dataMap[childLabel] );
             sourceItem->appendRow( childItem );
         }
     }
@@ -346,13 +358,13 @@ NewReleasesWidget::parseNode( QStandardItem* parentItem, const QString &label, c
 
         foreach ( const QVariant value, dataList )
         {
-            QStandardItem *childItem= new QStandardItem(value.toString());
-            sourceItem->appendRow(childItem);
+            QStandardItem* childItem = new QStandardItem( value.toString() );
+            sourceItem->appendRow( childItem );
         }
     }
     else
     {
-        QStandardItem *childItem= new QStandardItem( data.toString() );
+        QStandardItem* childItem = new QStandardItem( data.toString() );
         sourceItem->appendRow( childItem );
     }
     return sourceItem;
@@ -374,7 +386,9 @@ NewReleasesWidget::newReleasesLoaded( ChartDataLoader* loader, const QList< albu
     Q_ASSERT( m_albumModels.contains( chartId ) );
 
     if ( m_albumModels.contains( chartId ) )
+    {
         m_albumModels[ chartId ]->appendAlbums( albums );
+    }
 
     m_workers.remove( loader );
     loader->deleteLater();

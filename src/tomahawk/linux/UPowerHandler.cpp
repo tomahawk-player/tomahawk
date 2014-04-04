@@ -30,7 +30,7 @@ const char* UPowerHandler::UPowerService = "org.freedesktop.UPower";
 const char* UPowerHandler::UPowerPath = "/org/freedesktop/UPower";
 const char* UPowerHandler::UPowerInterface = "org.freedesktop.UPower";
 
-Tomahawk::UPowerHandler::UPowerHandler( QObject *parent )
+Tomahawk::UPowerHandler::UPowerHandler( QObject* parent )
     : QObject( parent )
 {
 }
@@ -39,7 +39,8 @@ bool
 UPowerHandler::registerHandler()
 {
     // Check if the UPower is available
-    if ( !QDBusConnection::systemBus().interface()->isServiceRegistered( UPowerService ) ) {
+    if ( !QDBusConnection::systemBus().interface()->isServiceRegistered( UPowerService ) )
+    {
         tLog( LOGVERBOSE ) << Q_FUNC_INFO << "UPower is not available";
         return false;
     }
@@ -49,8 +50,8 @@ UPowerHandler::registerHandler()
     {
         m_interface = QSharedPointer<org::freedesktop::UPower>( new org::freedesktop::UPower( UPowerService, UPowerPath, QDBusConnection::systemBus(), this ) );
     }
-    connect( m_interface.data(), SIGNAL( Sleeping() ), this, SLOT( handleSleep() ));
-    connect( m_interface.data(), SIGNAL( Resuming() ), this, SLOT( handleResume() ));
+    connect( m_interface.data(), SIGNAL( Sleeping() ), this, SLOT( handleSleep() ) );
+    connect( m_interface.data(), SIGNAL( Resuming() ), this, SLOT( handleResume() ) );
     return true;
 }
 

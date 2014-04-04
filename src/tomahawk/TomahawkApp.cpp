@@ -72,29 +72,29 @@
 #include "widgets/SplashWidget.h"
 
 #ifndef ENABLE_HEADLESS
-    #include "resolvers/JSResolver.h"
-    #include "resolvers/ScriptResolver.h"
-    #include "utils/SpotifyParser.h"
-    #include "AtticaManager.h"
-    #include "TomahawkWindow.h"
-    #include "dialogs/SettingsDialog.h"
-    #include "ActionCollection.h"
-    #include "widgets/HeaderLabel.h"
-    #include "TomahawkSettingsGui.h"
+#include "resolvers/JSResolver.h"
+#include "resolvers/ScriptResolver.h"
+#include "utils/SpotifyParser.h"
+#include "AtticaManager.h"
+#include "TomahawkWindow.h"
+#include "dialogs/SettingsDialog.h"
+#include "ActionCollection.h"
+#include "widgets/HeaderLabel.h"
+#include "TomahawkSettingsGui.h"
 #endif
 
 #include "config.h"
 
 #ifdef WITH_UPOWER
-    #include "linux/UPowerHandler.h"
+#include "linux/UPowerHandler.h"
 #endif
 
 #ifdef WITH_GNOMESHORTCUTHANDLER
-    #include "linux/GnomeShortcutHandler.h"
+#include "linux/GnomeShortcutHandler.h"
 #endif
 
 #ifndef ENABLE_HEADLESS
-    #include <QMessageBox>
+#include <QMessageBox>
 #endif
 
 #ifdef Q_WS_MAC
@@ -136,14 +136,16 @@ increaseMaxFileDescriptors()
     int ret = setrlimit( RLIMIT_NOFILE, &limit );
 
     if ( ret == 0 )
-      qDebug() << "Max fd:" << max_fd;
+    {
+        qDebug() << "Max fd:" << max_fd;
+    }
 #endif
 }
 
 
 using namespace Tomahawk;
 
-TomahawkApp::TomahawkApp( int& argc, char *argv[] )
+TomahawkApp::TomahawkApp( int& argc, char* argv[] )
     : TOMAHAWK_APPLICATION( argc, argv )
 #ifndef ENABLE_HEADLESS
     , m_mainwindow( 0 )
@@ -208,7 +210,7 @@ TomahawkApp::init()
 
     tDebug( LOGINFO ) << "Setting NAM.";
 
-    TomahawkSettings *s = TomahawkSettings::instance();
+    TomahawkSettings* s = TomahawkSettings::instance();
     Tomahawk::Utils::setProxyDns( s->proxyDns() );
     Tomahawk::Utils::setProxyType( s->proxyType() );
     Tomahawk::Utils::setProxyHost( s->proxyHost() );
@@ -244,7 +246,10 @@ TomahawkApp::init()
     QByteArray magic = QByteArray::fromBase64( enApiSecret );
     QByteArray wand = QByteArray::fromBase64( QCoreApplication::applicationName().toLatin1() );
     int length = magic.length(), n2 = wand.length();
-    for ( int i=0; i<length; i++ ) magic[i] = magic[i] ^ wand[i%n2];
+    for ( int i = 0; i < length; i++ )
+    {
+        magic[i] = magic[i] ^ wand[i % n2];
+    }
     Echonest::Config::instance()->setAPIKey( magic );
 
 #ifndef ENABLE_HEADLESS
@@ -264,7 +269,7 @@ TomahawkApp::init()
 #endif
 
 #ifdef WITH_GNOMESHORTCUTHANDLER
-    GnomeShortcutHandler *gnomeShortcutHandler = new GnomeShortcutHandler( this );
+    GnomeShortcutHandler* gnomeShortcutHandler = new GnomeShortcutHandler( this );
     gnomeShortcutHandler->DoRegister();
     m_shortcutHandler = QPointer<Tomahawk::ShortcutHandler>( gnomeShortcutHandler );
 #endif
@@ -283,7 +288,7 @@ TomahawkApp::init()
     }
 
     connect( Playlist::removalHandler().data(), SIGNAL( aboutToBeDeletePlaylist( Tomahawk::playlist_ptr ) ),
-                SLOT( playlistRemoved( Tomahawk::playlist_ptr ) ));
+             SLOT( playlistRemoved( Tomahawk::playlist_ptr ) ) );
 
     tDebug() << "Init InfoSystem.";
     m_infoSystem = QPointer<Tomahawk::InfoSystem::InfoSystem>( Tomahawk::InfoSystem::InfoSystem::instance() );
@@ -296,15 +301,21 @@ TomahawkApp::~TomahawkApp()
     tDebug( LOGVERBOSE ) << "Shutting down Tomahawk...";
 
     if ( Pipeline::instance() )
+    {
         Pipeline::instance()->stop();
+    }
 
     if ( !m_servent.isNull() )
+    {
         delete m_servent.data();
+    }
 
     delete dynamic_cast< ACLRegistryImpl* >( ACLRegistry::instance() );
 
     if ( !m_scanManager.isNull() )
+    {
         delete m_scanManager.data();
+    }
 
     delete Tomahawk::Accounts::AccountManager::instance();
 
@@ -315,15 +326,21 @@ TomahawkApp::~TomahawkApp()
 
     // Main Window uses the AudioEngine, so delete it later.
     if ( !m_audioEngine.isNull() )
+    {
         delete m_audioEngine.data();
+    }
 
     if ( !m_database.isNull() )
+    {
         delete m_database.data();
+    }
 
     delete Pipeline::instance();
 
     if ( !m_infoSystem.isNull() )
+    {
         delete m_infoSystem.data();
+    }
 
     delete TomahawkUtils::Cache::instance();
 
@@ -334,21 +351,21 @@ TomahawkApp::~TomahawkApp()
 TomahawkApp*
 TomahawkApp::instance()
 {
-    return (TomahawkApp*)TOMAHAWK_APPLICATION::instance();
+    return ( TomahawkApp* )TOMAHAWK_APPLICATION::instance();
 }
 
 
 void
 TomahawkApp::printHelp()
 {
-    #define echo( X ) std::cout << QString( X ).toLatin1().data() << "\n"
+#define echo( X ) std::cout << QString( X ).toLatin1().data() << "\n"
 
     echo( "Usage: " + arguments().at( 0 ) + " [options] [url]" );
     echo( "Options are:" );
     echo( "  --help         Show this help" );
-//    echo( "  --http         Initialize HTTP server" );
-//    echo( "  --filescan     Scan files on startup" );
-//    echo( "  --headless     Run without a GUI" );
+    //    echo( "  --http         Initialize HTTP server" );
+    //    echo( "  --filescan     Scan files on startup" );
+    //    echo( "  --headless     Run without a GUI" );
     echo( "  --hide         Hide main window on startup" );
     echo( "  --testdb       Use a test database instead of real collection" );
     echo( "  --noupnp       Disable UPnP port-forwarding" );
@@ -382,64 +399,64 @@ TomahawkApp::audioControls()
 void
 TomahawkApp::registerMetaTypes()
 {
-    qRegisterMetaType< Tomahawk::dbcmd_ptr >("Tomahawk::dbcmd_ptr");
-    qRegisterMetaType< DBSyncConnectionState >("DBSyncConnectionState");
-    qRegisterMetaType< msg_ptr >("msg_ptr");
-    qRegisterMetaType< QList<dbop_ptr> >("QList<dbop_ptr>");
-    qRegisterMetaType< QList<QVariantMap> >("QList<QVariantMap>");
-    qRegisterMetaType< QList<QString> >("QList<QString>");
-    qRegisterMetaType< QList<uint> >("QList<uint>");
-    qRegisterMetaType< Connection* >("Connection*");
-    qRegisterMetaType< QAbstractSocket::SocketError >("QAbstractSocket::SocketError");
-    qRegisterMetaType< QTcpSocket* >("QTcpSocket*");
-    qRegisterMetaType< QSharedPointer<QIODevice> >("QSharedPointer<QIODevice>");
-    qRegisterMetaType< QFileInfo >("QFileInfo");
-    qRegisterMetaType< QDir >("QDir");
-    qRegisterMetaType< QHostAddress >("QHostAddress");
-    qRegisterMetaType< QMap<QString, unsigned int> >("QMap<QString, unsigned int>");
-    qRegisterMetaType< QMap< QString, plentry_ptr > >("QMap< QString, plentry_ptr >");
-    qRegisterMetaType< QHash< QString, QMap<quint32, quint16> > >("QHash< QString, QMap<quint32, quint16> >");
-    qRegisterMetaType< QMap< QString, QMap< unsigned int, unsigned int > > >("QMap< QString, QMap< unsigned int, unsigned int > >");
-    qRegisterMetaType< PairList >("PairList");
+    qRegisterMetaType< Tomahawk::dbcmd_ptr >( "Tomahawk::dbcmd_ptr" );
+    qRegisterMetaType< DBSyncConnectionState >( "DBSyncConnectionState" );
+    qRegisterMetaType< msg_ptr >( "msg_ptr" );
+    qRegisterMetaType< QList<dbop_ptr> >( "QList<dbop_ptr>" );
+    qRegisterMetaType< QList<QVariantMap> >( "QList<QVariantMap>" );
+    qRegisterMetaType< QList<QString> >( "QList<QString>" );
+    qRegisterMetaType< QList<uint> >( "QList<uint>" );
+    qRegisterMetaType< Connection* >( "Connection*" );
+    qRegisterMetaType< QAbstractSocket::SocketError >( "QAbstractSocket::SocketError" );
+    qRegisterMetaType< QTcpSocket* >( "QTcpSocket*" );
+    qRegisterMetaType< QSharedPointer<QIODevice> >( "QSharedPointer<QIODevice>" );
+    qRegisterMetaType< QFileInfo >( "QFileInfo" );
+    qRegisterMetaType< QDir >( "QDir" );
+    qRegisterMetaType< QHostAddress >( "QHostAddress" );
+    qRegisterMetaType< QMap<QString, unsigned int> >( "QMap<QString, unsigned int>" );
+    qRegisterMetaType< QMap< QString, plentry_ptr > >( "QMap< QString, plentry_ptr >" );
+    qRegisterMetaType< QHash< QString, QMap<quint32, quint16> > >( "QHash< QString, QMap<quint32, quint16> >" );
+    qRegisterMetaType< QMap< QString, QMap< unsigned int, unsigned int > > >( "QMap< QString, QMap< unsigned int, unsigned int > >" );
+    qRegisterMetaType< PairList >( "PairList" );
 
-    qRegisterMetaType<GeneratorMode>("GeneratorMode");
-    qRegisterMetaType<Tomahawk::GeneratorMode>("Tomahawk::GeneratorMode");
-    qRegisterMetaType<ModelMode>("Tomahawk::ModelMode");
-    qRegisterMetaType<Tomahawk::ModelMode>("Tomahawk::ModelMode");
+    qRegisterMetaType<GeneratorMode>( "GeneratorMode" );
+    qRegisterMetaType<Tomahawk::GeneratorMode>( "Tomahawk::GeneratorMode" );
+    qRegisterMetaType<ModelMode>( "Tomahawk::ModelMode" );
+    qRegisterMetaType<Tomahawk::ModelMode>( "Tomahawk::ModelMode" );
 
     // Extra definition for namespaced-versions of signals/slots required
-    qRegisterMetaType< Tomahawk::Resolver* >("Tomahawk::Resolver*");
-    qRegisterMetaType< Tomahawk::source_ptr >("Tomahawk::source_ptr");
-    qRegisterMetaType< Tomahawk::collection_ptr >("Tomahawk::collection_ptr");
-    qRegisterMetaType< Tomahawk::result_ptr >("Tomahawk::result_ptr");
-    qRegisterMetaType< Tomahawk::query_ptr >("Tomahawk::query_ptr");
-    qRegisterMetaType< Tomahawk::track_ptr >("Tomahawk::track_ptr");
-    qRegisterMetaType< Tomahawk::album_ptr >("Tomahawk::album_ptr");
-    qRegisterMetaType< Tomahawk::artist_ptr >("Tomahawk::artist_ptr");
-    qRegisterMetaType< Tomahawk::source_ptr >("Tomahawk::source_ptr");
-    qRegisterMetaType< Tomahawk::dyncontrol_ptr >("Tomahawk::dyncontrol_ptr");
-    qRegisterMetaType< Tomahawk::playlist_ptr >("Tomahawk::playlist_ptr");
-    qRegisterMetaType< Tomahawk::playlistinterface_ptr >("Tomahawk::playlistinterface_ptr");
-    qRegisterMetaType< Tomahawk::playlisttemplate_ptr >("Tomahawk::playlisttemplate_ptr");
-    qRegisterMetaType< Tomahawk::dynplaylist_ptr >("Tomahawk::dynplaylist_ptr");
-    qRegisterMetaType< Tomahawk::geninterface_ptr >("Tomahawk::geninterface_ptr");
-    qRegisterMetaType< Tomahawk::PlaybackLog >("Tomahawk::PlaybackLog");
-    qRegisterMetaType< QList<Tomahawk::playlist_ptr> >("QList<Tomahawk::playlist_ptr>");
-    qRegisterMetaType< QList<Tomahawk::dynplaylist_ptr> >("QList<Tomahawk::dynplaylist_ptr>");
-    qRegisterMetaType< QList<Tomahawk::dyncontrol_ptr> >("QList<Tomahawk::dyncontrol_ptr>");
-    qRegisterMetaType< QList<Tomahawk::geninterface_ptr> >("QList<Tomahawk::geninterface_ptr>");
-    qRegisterMetaType< QList<Tomahawk::plentry_ptr> >("QList<Tomahawk::plentry_ptr>");
-    qRegisterMetaType< QList<Tomahawk::query_ptr> >("QList<Tomahawk::query_ptr>");
-    qRegisterMetaType< QList<Tomahawk::track_ptr> >("QList<Tomahawk::track_ptr>");
-    qRegisterMetaType< QList<Tomahawk::result_ptr> >("QList<Tomahawk::result_ptr>");
-    qRegisterMetaType< QList<Tomahawk::artist_ptr> >("QList<Tomahawk::artist_ptr>");
-    qRegisterMetaType< QList<Tomahawk::album_ptr> >("QList<Tomahawk::album_ptr>");
-    qRegisterMetaType< QList<Tomahawk::source_ptr> >("QList<Tomahawk::source_ptr>");
-    qRegisterMetaType< QList<Tomahawk::PlaybackLog> >("QList<Tomahawk::PlaybackLog>");
-    qRegisterMetaType< QMap< QString, Tomahawk::plentry_ptr > >("QMap< QString, Tomahawk::plentry_ptr >");
-    qRegisterMetaType< Tomahawk::PlaylistRevision >("Tomahawk::PlaylistRevision");
-    qRegisterMetaType< Tomahawk::DynamicPlaylistRevision >("Tomahawk::DynamicPlaylistRevision");
-    qRegisterMetaType< Tomahawk::QID >("Tomahawk::QID");
+    qRegisterMetaType< Tomahawk::Resolver* >( "Tomahawk::Resolver*" );
+    qRegisterMetaType< Tomahawk::source_ptr >( "Tomahawk::source_ptr" );
+    qRegisterMetaType< Tomahawk::collection_ptr >( "Tomahawk::collection_ptr" );
+    qRegisterMetaType< Tomahawk::result_ptr >( "Tomahawk::result_ptr" );
+    qRegisterMetaType< Tomahawk::query_ptr >( "Tomahawk::query_ptr" );
+    qRegisterMetaType< Tomahawk::track_ptr >( "Tomahawk::track_ptr" );
+    qRegisterMetaType< Tomahawk::album_ptr >( "Tomahawk::album_ptr" );
+    qRegisterMetaType< Tomahawk::artist_ptr >( "Tomahawk::artist_ptr" );
+    qRegisterMetaType< Tomahawk::source_ptr >( "Tomahawk::source_ptr" );
+    qRegisterMetaType< Tomahawk::dyncontrol_ptr >( "Tomahawk::dyncontrol_ptr" );
+    qRegisterMetaType< Tomahawk::playlist_ptr >( "Tomahawk::playlist_ptr" );
+    qRegisterMetaType< Tomahawk::playlistinterface_ptr >( "Tomahawk::playlistinterface_ptr" );
+    qRegisterMetaType< Tomahawk::playlisttemplate_ptr >( "Tomahawk::playlisttemplate_ptr" );
+    qRegisterMetaType< Tomahawk::dynplaylist_ptr >( "Tomahawk::dynplaylist_ptr" );
+    qRegisterMetaType< Tomahawk::geninterface_ptr >( "Tomahawk::geninterface_ptr" );
+    qRegisterMetaType< Tomahawk::PlaybackLog >( "Tomahawk::PlaybackLog" );
+    qRegisterMetaType< QList<Tomahawk::playlist_ptr> >( "QList<Tomahawk::playlist_ptr>" );
+    qRegisterMetaType< QList<Tomahawk::dynplaylist_ptr> >( "QList<Tomahawk::dynplaylist_ptr>" );
+    qRegisterMetaType< QList<Tomahawk::dyncontrol_ptr> >( "QList<Tomahawk::dyncontrol_ptr>" );
+    qRegisterMetaType< QList<Tomahawk::geninterface_ptr> >( "QList<Tomahawk::geninterface_ptr>" );
+    qRegisterMetaType< QList<Tomahawk::plentry_ptr> >( "QList<Tomahawk::plentry_ptr>" );
+    qRegisterMetaType< QList<Tomahawk::query_ptr> >( "QList<Tomahawk::query_ptr>" );
+    qRegisterMetaType< QList<Tomahawk::track_ptr> >( "QList<Tomahawk::track_ptr>" );
+    qRegisterMetaType< QList<Tomahawk::result_ptr> >( "QList<Tomahawk::result_ptr>" );
+    qRegisterMetaType< QList<Tomahawk::artist_ptr> >( "QList<Tomahawk::artist_ptr>" );
+    qRegisterMetaType< QList<Tomahawk::album_ptr> >( "QList<Tomahawk::album_ptr>" );
+    qRegisterMetaType< QList<Tomahawk::source_ptr> >( "QList<Tomahawk::source_ptr>" );
+    qRegisterMetaType< QList<Tomahawk::PlaybackLog> >( "QList<Tomahawk::PlaybackLog>" );
+    qRegisterMetaType< QMap< QString, Tomahawk::plentry_ptr > >( "QMap< QString, Tomahawk::plentry_ptr >" );
+    qRegisterMetaType< Tomahawk::PlaylistRevision >( "Tomahawk::PlaylistRevision" );
+    qRegisterMetaType< Tomahawk::DynamicPlaylistRevision >( "Tomahawk::DynamicPlaylistRevision" );
+    qRegisterMetaType< Tomahawk::QID >( "Tomahawk::QID" );
 
     qRegisterMetaType< Tomahawk::InfoSystem::InfoStringHash >( "Tomahawk::InfoSystem::InfoStringHash" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoType >( "Tomahawk::InfoSystem::InfoType" );
@@ -450,11 +467,11 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< Tomahawk::InfoSystem::InfoSystemCache* >( "Tomahawk::InfoSystem::InfoSystemCache*" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoPluginPtr >( "Tomahawk::InfoSystem::InfoPluginPtr" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoPlugin* >( "Tomahawk::InfoSystem::InfoPlugin*" );
-    qRegisterMetaType< QList< Tomahawk::InfoSystem::InfoStringHash > >("QList< Tomahawk::InfoSystem::InfoStringHash > ");
+    qRegisterMetaType< QList< Tomahawk::InfoSystem::InfoStringHash > >( "QList< Tomahawk::InfoSystem::InfoStringHash > " );
 
     qRegisterMetaType< TomahawkSettings::PrivateListeningMode >( "TomahawkSettings::PrivateListeningMode" );
 
-    qRegisterMetaTypeStreamOperators< QList< Tomahawk::InfoSystem::InfoStringHash > >("QList< Tomahawk::InfoSystem::InfoStringHash > ");
+    qRegisterMetaTypeStreamOperators< QList< Tomahawk::InfoSystem::InfoStringHash > >( "QList< Tomahawk::InfoSystem::InfoStringHash > " );
     qRegisterMetaType< QPersistentModelIndex >( "QPersistentModelIndex" );
 
     qRegisterMetaType< Tomahawk::PlaylistModes::LatchMode >( "Tomahawk::PlaylistModes::LatchMode" );
@@ -602,7 +619,7 @@ TomahawkApp::initSIP()
     tDebug() << Q_FUNC_INFO;
     //FIXME: jabber autoconnect is really more, now that there is sip -- should be renamed and/or split out of jabber-specific settings
     if ( !arguments().contains( "--nosip" ) &&
-         Servent::instance()->isReady() && Accounts::AccountManager::instance()->isReadyForSip() )
+            Servent::instance()->isReady() && Accounts::AccountManager::instance()->isReadyForSip() )
     {
         tDebug( LOGINFO ) << "Connecting SIP classes";
         Accounts::AccountManager::instance()->initSIP();
@@ -707,14 +724,14 @@ TomahawkApp::onInfoSystemReady()
 void
 TomahawkApp::onSchemaUpdateStarted()
 {
-    startSplashWidget( tr( "Updating database\n") );
+    startSplashWidget( tr( "Updating database\n" ) );
 }
 
 
 void
 TomahawkApp::onSchemaUpdateStatus( const QString& status )
 {
-    updateSplashWidgetMessage( tr("Updating database\n%1" ).arg( status ) );
+    updateSplashWidgetMessage( tr( "Updating database\n%1" ).arg( status ) );
 }
 
 
@@ -822,7 +839,7 @@ TomahawkApp::loadUrl( const QString& url )
 
 
 bool
-TomahawkApp::notify( QObject *receiver, QEvent *e )
+TomahawkApp::notify( QObject* receiver, QEvent* e )
 {
     try
     {
@@ -864,28 +881,46 @@ TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
     }
 
     if ( arguments.contains( "--next" ) )
+    {
         AudioEngine::instance()->next();
+    }
     else if ( arguments.contains( "--prev" ) )
+    {
         AudioEngine::instance()->previous();
+    }
     else if ( arguments.contains( "--playpause" ) )
+    {
         AudioEngine::instance()->playPause();
+    }
     else if ( arguments.contains( "--play" ) )
+    {
         AudioEngine::instance()->play();
+    }
     else if ( arguments.contains( "--pause" ) )
+    {
         AudioEngine::instance()->pause();
+    }
     else if ( arguments.contains( "--stop" ) )
+    {
         AudioEngine::instance()->stop();
+    }
     else if ( arguments.contains( "--voldown" ) )
+    {
         AudioEngine::instance()->lowerVolume();
+    }
     else if ( arguments.contains( "--volup" ) )
+    {
         AudioEngine::instance()->raiseVolume();
+    }
     else
+    {
         activate();
+    }
 }
 
 
 void
-TomahawkApp::playlistRemoved(const playlist_ptr &playlist)
+TomahawkApp::playlistRemoved( const playlist_ptr& playlist )
 {
     TomahawkSettings::instance()->removePlaylistSettings( playlist->guid() );
 }

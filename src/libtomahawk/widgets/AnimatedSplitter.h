@@ -28,9 +28,9 @@ class AnimatedWidget;
 
 class DLLEXPORT AnimatedSplitter : public QSplitter
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit AnimatedSplitter( QWidget* parent = 0 );
 
     void show( int index, bool animate = true );
@@ -41,31 +41,31 @@ public:
     void addWidget( QWidget* widget );
     void addWidget( AnimatedWidget* widget );
 
-signals:
+  signals:
     void shown( QWidget*, bool animated );
     void hidden( QWidget*, bool animated );
 
-protected:
+  protected:
     virtual QSplitterHandle* createHandle();
 
-private slots:
+  private slots:
     void changeSize( QWidget* child, const QSize& size );
-    
+
     void onShowRequest();
     void onHideRequest();
 
     void onSizeChanged( const QSize& size );
     void onResizeRequest( const QPoint& delta );
-    
-private:
+
+  private:
     int m_greedyIndex;
 };
 
 
 class DLLEXPORT AnimatedSplitterHandle : public QSplitterHandle
 {
-Q_OBJECT
-public:
+    Q_OBJECT
+  public:
     explicit AnimatedSplitterHandle( Qt::Orientation orientation, QSplitter* parent )
         : QSplitterHandle( orientation, parent )
         , m_indexInSplitter( -1 )
@@ -76,7 +76,7 @@ public:
 
     virtual QSize sizeHint() const;
 
-private:
+  private:
     mutable int m_indexInSplitter;
     mutable int m_lastCount;
 };
@@ -84,27 +84,43 @@ private:
 
 class DLLEXPORT AnimatedWidget : public QWidget
 {
-Q_OBJECT
-public:
+    Q_OBJECT
+  public:
     explicit AnimatedWidget( AnimatedSplitter* parent );
     virtual ~AnimatedWidget();
 
-    QSize hiddenSize() const { return m_hiddenSize; }
-    void setHiddenSize( const QSize& size ) { m_hiddenSize = size; emit hiddenSizeChanged(); }
+    QSize hiddenSize() const
+    {
+        return m_hiddenSize;
+    }
+    void setHiddenSize( const QSize& size )
+    {
+        m_hiddenSize = size;
+        emit hiddenSizeChanged();
+    }
 
-    bool isHidden() const { return m_isHidden; }
+    bool isHidden() const
+    {
+        return m_isHidden;
+    }
 
-public slots:
+  public slots:
     virtual void onShown( QWidget*, bool animated );
     virtual void onHidden( QWidget*, bool animated );
 
-    virtual void hide() { emit hideWidget(); }
-    virtual void show() { emit showWidget(); }
+    virtual void hide()
+    {
+        emit hideWidget();
+    }
+    virtual void show()
+    {
+        emit showWidget();
+    }
 
-signals:
+  signals:
     void showWidget();
     void hideWidget();
-    
+
     void animationFinished();
 
     void resizeBy( const QPoint& delta );
@@ -112,14 +128,17 @@ signals:
     void sizeHintChanged( const QSize& size );
     void hiddenSizeChanged();
 
-private slots:
+  private slots:
     void onAnimationStep( int frame );
     void onAnimationFinished();
 
-protected:
-    AnimatedSplitter* splitter() { return m_parent; }
+  protected:
+    AnimatedSplitter* splitter()
+    {
+        return m_parent;
+    }
 
-private:
+  private:
     AnimatedSplitter* m_parent;
     bool m_animateForward;
     QSize m_hiddenSize;

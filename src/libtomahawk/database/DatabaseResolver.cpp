@@ -41,11 +41,11 @@ DatabaseResolver::resolve( const Tomahawk::query_ptr& query )
     Tomahawk::DatabaseCommand_Resolve* cmd = new Tomahawk::DatabaseCommand_Resolve( query );
 
     connect( cmd, SIGNAL( results( Tomahawk::QID, QList< Tomahawk::result_ptr > ) ),
-                    SLOT( gotResults( Tomahawk::QID, QList< Tomahawk::result_ptr > ) ), Qt::QueuedConnection );
+             SLOT( gotResults( Tomahawk::QID, QList< Tomahawk::result_ptr > ) ), Qt::QueuedConnection );
     connect( cmd, SIGNAL( albums( Tomahawk::QID, QList< Tomahawk::album_ptr > ) ),
-                    SLOT( gotAlbums( Tomahawk::QID, QList< Tomahawk::album_ptr > ) ), Qt::QueuedConnection );
+             SLOT( gotAlbums( Tomahawk::QID, QList< Tomahawk::album_ptr > ) ), Qt::QueuedConnection );
     connect( cmd, SIGNAL( artists( Tomahawk::QID, QList< Tomahawk::artist_ptr > ) ),
-                    SLOT( gotArtists( Tomahawk::QID, QList< Tomahawk::artist_ptr > ) ), Qt::QueuedConnection );
+             SLOT( gotArtists( Tomahawk::QID, QList< Tomahawk::artist_ptr > ) ), Qt::QueuedConnection );
 
     Tomahawk::Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
@@ -56,8 +56,8 @@ DatabaseResolver::gotResults( const Tomahawk::QID qid, QList< Tomahawk::result_p
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << qid << results.length();
 
-    foreach ( const Tomahawk::result_ptr& r, results )
-        r->setResolvedBy( this );
+    foreach ( const Tomahawk::result_ptr & r, results )
+    r->setResolvedBy( this );
 
     Tomahawk::Pipeline::instance()->reportResults( qid, results );
 }

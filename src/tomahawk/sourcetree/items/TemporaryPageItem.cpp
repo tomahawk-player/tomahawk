@@ -31,12 +31,14 @@
 
 #include <QAction>
 
-namespace {
-    enum LinkType {
-        ArtistLink,
-        AlbumLink,
-        TrackLink
-    };
+namespace
+{
+enum LinkType
+{
+    ArtistLink,
+    AlbumLink,
+    TrackLink
+};
 }
 
 using namespace Tomahawk;
@@ -52,21 +54,21 @@ TemporaryPageItem::TemporaryPageItem( SourcesModel* mdl, SourceTreeItem* parent,
     if ( dynamic_cast< ArtistInfoWidget* >( page ) )
     {
         action = new QAction( tr( "Copy Artist Link" ), this );
-        action->setProperty( "linkType", (int)ArtistLink );
+        action->setProperty( "linkType", ( int )ArtistLink );
 
         m_icon = ImageRegistry::instance()->icon( RESPATH "images/artist-icon.svg" );
     }
     else if ( dynamic_cast< AlbumInfoWidget* >( page ) )
     {
         action = new QAction( tr( "Copy Album Link" ), this );
-        action->setProperty( "linkType", (int)AlbumLink );
+        action->setProperty( "linkType", ( int )AlbumLink );
 
         m_icon = ImageRegistry::instance()->icon( RESPATH "images/album-icon.svg" );
     }
     else if ( dynamic_cast< TrackInfoWidget* >( page ) )
     {
         action = new QAction( tr( "Copy Track Link" ), this );
-        action->setProperty( "linkType", (int)TrackLink );
+        action->setProperty( "linkType", ( int )TrackLink );
 
         m_icon = ImageRegistry::instance()->icon( RESPATH "images/track-icon.svg" );
     }
@@ -84,7 +86,9 @@ TemporaryPageItem::TemporaryPageItem( SourcesModel* mdl, SourceTreeItem* parent,
     if ( QObject* obj = dynamic_cast< QObject* >( page ) )
     {
         if ( obj->metaObject()->indexOfSignal( "destroyed(QObject*)" ) > -1 )
+        {
             connect( obj, SIGNAL( destroyed( QObject* ) ), SLOT( pageDestroyed() ) );
+        }
     }
 
     model()->linkSourceItemToPage( this, page );
@@ -159,9 +163,11 @@ TemporaryPageItem::linkActionTriggered( QAction* action )
 {
     Q_ASSERT( action );
     if ( !action )
+    {
         return;
+    }
 
-    const LinkType type = (LinkType)action->property( "linkType" ).toInt();
+    const LinkType type = ( LinkType )action->property( "linkType" ).toInt();
     switch( type )
     {
         case ArtistLink:

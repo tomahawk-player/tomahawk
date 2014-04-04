@@ -28,10 +28,10 @@
 class AccountListView : public QListView
 {
     Q_OBJECT
-public:
+  public:
     explicit AccountListView( QWidget* parent = 0 );
 
-protected:
+  protected:
     void wheelEvent( QWheelEvent* );
 };
 

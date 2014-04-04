@@ -47,16 +47,22 @@ query_ptr
 Query::get( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve )
 {
     if ( artist.trimmed().isEmpty() || track.trimmed().isEmpty() )
+    {
         return query_ptr();
+    }
 
     if ( qid.isEmpty() )
+    {
         autoResolve = false;
+    }
 
     query_ptr q = query_ptr( new Query( Track::get( artist, track, album ), qid, autoResolve ), &QObject::deleteLater );
     q->setWeakRef( q.toWeakRef() );
 
     if ( autoResolve )
+    {
         Pipeline::instance()->resolve( q );
+    }
 
     return q;
 }
@@ -81,7 +87,9 @@ Query::get( const QString& query, const QID& qid )
     q->setWeakRef( q.toWeakRef() );
 
     if ( !qid.isEmpty() )
+    {
         Pipeline::instance()->resolve( q );
+    }
 
     return q;
 }
@@ -148,7 +156,9 @@ Query::track() const
 {
     Q_D( const Query );
     if ( !results().isEmpty() )
+    {
         return results().first()->track();
+    }
 
     return d->queryTrack;
 }
@@ -161,22 +171,22 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
     {
         QMutexLocker lock( &d->mutex );
 
-/*        const QStringList smt = AudioEngine::instance()->supportedMimeTypes();
-        foreach ( const Tomahawk::result_ptr& result, newresults )
-        {
-            if ( !smt.contains( result->mimetype() ) )
-            {
-                tDebug() << "Won't accept result, unsupported mimetype" << result->toString() << result->mimetype();
-            }
-            else
-                m_results.append( result );
-        }*/
+        /*        const QStringList smt = AudioEngine::instance()->supportedMimeTypes();
+                foreach ( const Tomahawk::result_ptr& result, newresults )
+                {
+                    if ( !smt.contains( result->mimetype() ) )
+                    {
+                        tDebug() << "Won't accept result, unsupported mimetype" << result->toString() << result->mimetype();
+                    }
+                    else
+                        m_results.append( result );
+                }*/
 
         d->results << newresults;
         qStableSort( d->results.begin(), d->results.end(), Query::resultSorter );
 
         // hook up signals, and check solved status
-        foreach( const result_ptr& rp, newresults )
+        foreach( const result_ptr & rp, newresults )
         {
             connect( rp.data(), SIGNAL( statusChanged() ), SLOT( onResultStatusChanged() ) );
         }
@@ -223,7 +233,9 @@ Query::refreshResults()
         d->resolveFinished = false;
         query_ptr q = d->ownRef.toStrongRef();
         if ( q )
+        {
             Pipeline::instance()->resolve( q );
+        }
     }
 }
 
@@ -241,7 +253,9 @@ Query::onResultStatusChanged()
         Q_D( Query );
         QMutexLocker lock( &d->mutex );
         if ( d->results.count() )
+        {
             qStableSort( d->results.begin(), d->results.end(), Query::resultSorter );
+        }
     }
 
     checkResults();
@@ -352,10 +366,10 @@ Query::resultSorter( const result_ptr& left, const result_ptr& right )
 
     if ( ls == rs )
     {
-/*        if ( left->collection() && left->collection()->source()->isLocal() )
-        {
-            return true;
-        }*/
+        /*        if ( left->collection() && left->collection()->source()->isLocal() )
+                {
+                    return true;
+                }*/
         if ( right->collection() && right->collection()->source()->isLocal() )
         {
             return false;
@@ -385,7 +399,9 @@ Query::currentResolver() const
     {
         QPointer< Resolver > r = d->resolvers.at( x );
         if ( r.isNull() )
+        {
             continue;
+        }
 
         return r.data();
     }
@@ -429,7 +445,7 @@ Query::setResolveFinished( bool resolved )
 void
 Query::clearResults()
 {
-    foreach( const result_ptr& rp, results() )
+    foreach( const result_ptr & rp, results() )
     {
         removeResult( rp );
     }
@@ -447,10 +463,12 @@ Query::checkResults()
         QMutexLocker lock( &d->mutex );
 
         // hook up signals, and check solved status
-        foreach( const result_ptr& rp, d->results )
+        foreach( const result_ptr & rp, d->results )
         {
             if ( rp->playable() )
+            {
                 playable = true;
+            }
 
             if ( rp->isOnline() && rp->score() > 0.99 )
             {
@@ -458,7 +476,9 @@ Query::checkResults()
             }
 
             if ( playable )
+            {
                 break;
+            }
         }
     }
 
@@ -483,7 +503,9 @@ bool
 Query::equals( const Tomahawk::query_ptr& other, bool ignoreCase ) const
 {
     if ( other.isNull() )
+    {
         return false;
+    }
 
     if ( ignoreCase )
         return ( queryTrack()->artist().toLower() == other->queryTrack()->artist().toLower() &&
@@ -516,16 +538,16 @@ Query::toString() const
     if ( !isFullTextQuery() )
     {
         return QString( "Query(%1, %2 - %3%4)" )
-                  .arg( id() )
-                  .arg( queryTrack()->artist() )
-                  .arg( queryTrack()->track() )
-                  .arg( queryTrack()->album().isEmpty() ? "" : QString( " on %1" ).arg( queryTrack()->album() ) );
+               .arg( id() )
+               .arg( queryTrack()->artist() )
+               .arg( queryTrack()->track() )
+               .arg( queryTrack()->album().isEmpty() ? "" : QString( " on %1" ).arg( queryTrack()->album() ) );
     }
     else
     {
         return QString( "Query(%1, Fulltext: %2)" )
-                  .arg( id() )
-                  .arg( fullTextQuery() );
+               .arg( id() )
+               .arg( fullTextQuery() );
     }
 }
 
@@ -568,9 +590,9 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
     int mltrk = qMax( qTrackname.length(), rTrackname.length() );
 
     // distance scores
-    float dcart = (float)( mlart - artdist ) / mlart;
-    float dcalb = (float)( mlalb - albdist ) / mlalb;
-    float dctrk = (float)( mltrk - trkdist ) / mltrk;
+    float dcart = ( float )( mlart - artdist ) / mlart;
+    float dcalb = ( float )( mlalb - albdist ) / mlalb;
+    float dctrk = ( float )( mltrk - trkdist ) / mltrk;
 
     if ( isFullTextQuery() )
     {
@@ -579,7 +601,7 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
 
         int atrdist = TomahawkUtils::levenshtein( artistTrackname, rArtistTrackname );
         int mlatr = qMax( artistTrackname.length(), rArtistTrackname.length() );
-        float dcatr = (float)( mlatr - atrdist ) / mlatr;
+        float dcatr = ( float )( mlatr - atrdist ) / mlatr;
 
         float res = qMax( dcart, dcalb );
         res = qMax( res, dcatr );
@@ -589,7 +611,9 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
     {
         // don't penalize for missing album name
         if ( queryTrack()->albumSortname().isEmpty() )
+        {
             dcalb = 1.0;
+        }
 
         // weighted, so album match is worth less than track title
         float combined = ( dcart * 4 + dcalb + dctrk * 5 ) / 10;

@@ -28,24 +28,24 @@ class CategoryItem;
 
 namespace Tomahawk
 {
-    class ViewPage;
+class ViewPage;
 }
 
 class HistoryItem : public GroupItem
 {
     Q_OBJECT
-public:
+  public:
     HistoryItem( SourcesModel* model, SourceTreeItem* parent, const QString& text, int peerSortValue = 0 );
     virtual ~HistoryItem();
 
-private slots:
+  private slots:
     void tempPageActivated( Tomahawk::ViewPage* );
     void temporaryPageDestroyed();
 
-private:
+  private:
     QList< TemporaryPageItem* > m_tempItems;
 
-private:
+  private:
 };
 
 #endif

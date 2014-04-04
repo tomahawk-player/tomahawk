@@ -35,31 +35,37 @@ namespace Tomahawk
 
 class DLLEXPORT JSPFLoader : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit JSPFLoader( bool autoCreate = true, QObject* parent = 0 );
 
     virtual ~JSPFLoader();
 
     QList< Tomahawk::query_ptr > entries() const;
-    void setOverrideTitle( const QString& newTitle ) { m_overrideTitle = newTitle; }
+    void setOverrideTitle( const QString& newTitle )
+    {
+        m_overrideTitle = newTitle;
+    }
 
-    void setAutoDelete( bool autoDelete ) { m_autoDelete = autoDelete; }
+    void setAutoDelete( bool autoDelete )
+    {
+        m_autoDelete = autoDelete;
+    }
 
-signals:
+  signals:
     void failed();
     void ok( const Tomahawk::playlist_ptr& );
 
-public slots:
+  public slots:
     void load( const QUrl& url );
     void load( QFile& file );
 
-private slots:
+  private slots:
     void networkLoadFinished();
     void networkError( QNetworkReply::NetworkError e );
 
-private:
+  private:
     void reportError();
     void gotBody();
 

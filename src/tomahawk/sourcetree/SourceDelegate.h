@@ -33,7 +33,7 @@ class AnimationHelper;
 class SourceDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
-public:
+  public:
     SourceDelegate( QAbstractItemView* parent = 0 );
     ~SourceDelegate();
 
@@ -42,24 +42,24 @@ public:
 
     SourceTreeItem::DropType hoveredDropType() const;
 
-signals:
+  signals:
     void clicked( const QModelIndex& idx );
     void doubleClicked( const QModelIndex& idx );
     void latchOn( const Tomahawk::source_ptr& idx );
     void latchOff( const Tomahawk::source_ptr& idx );
     void toggleRealtimeLatch( const Tomahawk::source_ptr& idx, bool realtime );
 
-protected:
+  protected:
     virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     virtual void updateEditorGeometry( QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     virtual int dropTypeCount( SourceTreeItem* item ) const;
     virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
 
-private slots:
+  private slots:
     void animationFinished( const QModelIndex& );
 
-private:
+  private:
     void paintStandardItem( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     void paintDecorations( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     void paintCollection( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;

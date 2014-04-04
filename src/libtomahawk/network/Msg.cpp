@@ -50,9 +50,9 @@ Msg::factory( const QByteArray& ba, char f )
 msg_ptr
 Msg::begin( char* headerToParse )
 {
-    quint32 lenBE = *( (quint32*) headerToParse );
-    quint8 flags = *( (quint8*) (headerToParse+4) );
-    return msg_ptr( new Msg( qFromBigEndian(lenBE), flags ) );
+    quint32 lenBE = *( ( quint32* ) headerToParse );
+    quint8 flags = *( ( quint8* ) ( headerToParse + 4 ) );
+    return msg_ptr( new Msg( qFromBigEndian( lenBE ), flags ) );
 }
 
 
@@ -61,21 +61,30 @@ Msg::fill( const QByteArray& ba )
 {
     Q_D( Msg );
     Q_ASSERT( d->incomplete );
-    Q_ASSERT( ba.length() == (qint32)d->length );
+    Q_ASSERT( ba.length() == ( qint32 )d->length );
     d->payload = ba;
     d->incomplete = false;
 }
 
 
 bool
-Msg::write( QIODevice * device )
+Msg::write( QIODevice* device )
 {
     Q_D( Msg );
     quint32 size  = qToBigEndian( d->length );
     quint8  flags = d->flags;
-    if( device->write( (const char*) &size,  sizeof(quint32) ) != sizeof(quint32) ) return false;
-    if( device->write( (const char*) &flags, sizeof(quint8) )  != sizeof(quint8)  ) return false;
-    if( device->write( (const char*) d->payload.data(), d->length ) != d->length ) return false;
+    if( device->write( ( const char* ) &size,  sizeof( quint32 ) ) != sizeof( quint32 ) )
+    {
+        return false;
+    }
+    if( device->write( ( const char* ) &flags, sizeof( quint8 ) )  != sizeof( quint8 )  )
+    {
+        return false;
+    }
+    if( device->write( ( const char* ) d->payload.data(), d->length ) != d->length )
+    {
+        return false;
+    }
     return true;
 }
 
@@ -83,7 +92,7 @@ Msg::write( QIODevice * device )
 quint8
 Msg::headerSize()
 {
-    return sizeof(quint32) + sizeof(quint8);
+    return sizeof( quint32 ) + sizeof( quint8 );
 }
 
 
@@ -118,8 +127,8 @@ QVariant&
 Msg::json()
 {
     Q_D( Msg );
-    Q_ASSERT( is(JSON) );
-    Q_ASSERT( !is(COMPRESSED) );
+    Q_ASSERT( is( JSON ) );
+    Q_ASSERT( !is( COMPRESSED ) );
 
     if( !d->json_parsed )
     {

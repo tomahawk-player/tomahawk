@@ -24,7 +24,7 @@
 class SplashWidget : public QSplashScreen
 {
     Q_OBJECT
-public:
+  public:
     explicit SplashWidget();
 
     void showMessage( const QString& message );

@@ -39,15 +39,16 @@ class PlaylistModelPrivate;
 
 class DLLEXPORT PlaylistModel : public PlayableModel
 {
-Q_OBJECT
+    Q_OBJECT
 
-typedef struct {
-    int row;
-    QPersistentModelIndex parent;
-    Qt::DropAction action;
-} DropStorageData;
+    typedef struct
+    {
+        int row;
+        QPersistentModelIndex parent;
+        Qt::DropAction action;
+    } DropStorageData;
 
-public:
+  public:
     explicit PlaylistModel( QObject* parent = 0 );
     virtual ~PlaylistModel();
 
@@ -64,7 +65,7 @@ public:
     bool acceptPlayableQueriesOnly() const;
     void setAcceptPlayableQueriesOnly( bool b );
 
-public slots:
+  public slots:
     virtual void clear();
 
     virtual void appendEntries( const QList< Tomahawk::plentry_ptr >& entries );
@@ -76,26 +77,26 @@ public slots:
 
     virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
 
-signals:
+  signals:
     void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
     void playlistDeleted();
     void playlistChanged();
 
-protected:
+  protected:
     PlaylistModel( QObject* parent, PlaylistModelPrivate* d );
     bool waitForRevision( const QString& revisionguid ) const;
     void removeFromWaitList( const QString& revisionguid );
 
     QList<Tomahawk::plentry_ptr> playlistEntries() const;
 
-private slots:
+  private slots:
     void onRevisionLoaded( Tomahawk::PlaylistRevision revision );
     void parsedDroppedTracks( QList<Tomahawk::query_ptr> );
     void trackResolved( bool );
     void onPlaylistChanged();
 
-private:
+  private:
     void beginPlaylistChanges();
     void endPlaylistChanges();
     void init();

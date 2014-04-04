@@ -35,11 +35,12 @@ class DatabaseImpl;
 
 class DLLEXPORT DatabaseCommand : public QObject
 {
-Q_OBJECT
-Q_PROPERTY( QString guid READ guid WRITE setGuid )
+    Q_OBJECT
+    Q_PROPERTY( QString guid READ guid WRITE setGuid )
 
-public:
-    enum State {
+  public:
+    enum State
+    {
         PENDING = 0,
         RUNNING = 1,
         FINISHED = 2
@@ -48,32 +49,57 @@ public:
     explicit DatabaseCommand( QObject* parent = 0 );
     explicit DatabaseCommand( const Tomahawk::source_ptr& src, QObject* parent = 0 );
 
-    DatabaseCommand( const DatabaseCommand &other ); //needed for QMetaType
+    DatabaseCommand( const DatabaseCommand& other ); //needed for QMetaType
 
     virtual ~DatabaseCommand();
 
-    virtual QString commandname() const { return "DatabaseCommand"; }
-    virtual bool doesMutates() const { return true; }
+    virtual QString commandname() const
+    {
+        return "DatabaseCommand";
+    }
+    virtual bool doesMutates() const
+    {
+        return true;
+    }
     State state() const;
 
     // if i make this pure virtual, i get compile errors in qmetatype.h.
     // we need Q_DECLARE_METATYPE to use in queued sig/slot connections.
-    virtual void exec( DatabaseImpl* /*lib*/ ) { Q_ASSERT( false ); }
+    virtual void exec( DatabaseImpl* /*lib*/ )
+    {
+        Q_ASSERT( false );
+    }
 
     void _exec( DatabaseImpl* lib );
 
     // stuff to do once transaction applied ok.
     // Don't change the database from in here, duh.
-    void postCommit() { postCommitHook(); emitCommitted(); }
-    virtual void postCommitHook(){}
+    void postCommit()
+    {
+        postCommitHook();
+        emitCommitted();
+    }
+    virtual void postCommitHook() {}
 
     void setSource( const Tomahawk::source_ptr& s );
     const Tomahawk::source_ptr& source() const;
 
-    virtual bool loggable() const { return false; }
-    virtual bool groupable() const { return false; }
-    virtual bool singletonCmd() const { return false; }
-    virtual bool localOnly() const { return false; }
+    virtual bool loggable() const
+    {
+        return false;
+    }
+    virtual bool groupable() const
+    {
+        return false;
+    }
+    virtual bool singletonCmd() const
+    {
+        return false;
+    }
+    virtual bool localOnly() const
+    {
+        return false;
+    }
 
     virtual QVariant data() const;
     virtual void setData( const QVariant& data );
@@ -88,7 +114,7 @@ public:
     QWeakPointer< Tomahawk::DatabaseCommand > weakRef() const;
     void setWeakRef( QWeakPointer< Tomahawk::DatabaseCommand > weakRef );
 
-signals:
+  signals:
     void running();
     void running( const Tomahawk::dbcmd_ptr& );
 
@@ -97,12 +123,12 @@ signals:
 
     void committed();
     void committed( const Tomahawk::dbcmd_ptr& );
-protected:
+  protected:
     explicit DatabaseCommand( QObject* parent, DatabaseCommandPrivate* d );
 
     QScopedPointer<DatabaseCommandPrivate> d_ptr;
 
-private:
+  private:
     Q_DECLARE_PRIVATE( DatabaseCommand )
 };
 

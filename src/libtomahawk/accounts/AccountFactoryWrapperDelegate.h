@@ -23,8 +23,10 @@
 
 #define ACCOUNT_ROW_HEIGHT 20
 
-namespace Tomahawk {
-namespace Accounts {
+namespace Tomahawk
+{
+namespace Accounts
+{
 class Account;
 }
 }
@@ -32,15 +34,15 @@ class Account;
 class AccountFactoryWrapperDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
-public:
+  public:
     explicit AccountFactoryWrapperDelegate( QObject* parent = 0 );
 
     virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
     virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-    virtual bool editorEvent(QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index);
+    virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
 
-signals:
+  signals:
     void update( const QModelIndex& );
 
     void openConfig( Tomahawk::Accounts::Account* );
@@ -48,7 +50,7 @@ signals:
 
     void checkOrUncheck( const QModelIndex& row, Tomahawk::Accounts::Account* account, Qt::CheckState newState );
 
-private:
+  private:
     QModelIndex m_configPressed;
 
     mutable QHash< QPersistentModelIndex, QRect > m_cachedCheckRects;

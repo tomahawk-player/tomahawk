@@ -65,9 +65,9 @@ TomahawkSqlQuery::prepare( const QString& query )
 bool
 TomahawkSqlQuery::exec( const QString& query )
 {
-//     bool prepareResult =
+    //     bool prepareResult =
     prepare( query );
-//     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Query preparation successful?" << ( prepareResult ? "true" : "false" );
+    //     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Query preparation successful?" << ( prepareResult ? "true" : "false" );
     return exec();
 }
 
@@ -80,7 +80,9 @@ TomahawkSqlQuery::exec()
     log = true;
 #endif
     if ( log )
+    {
         tLog( LOGSQL ) << "TomahawkSqlQuery::exec running in thread " << QThread::currentThread();
+    }
 
     QTime t;
     t.start();
@@ -89,14 +91,14 @@ TomahawkSqlQuery::exec()
     while ( !QSqlQuery::exec() && ++retries < 10 )
     {
         if ( lastError().text() == QCoreApplication::translate( "QSQLiteResult", "No query" ) ||
-             lastError().text() == QCoreApplication::translate( "QSQLiteResult", "Parameter count mismatch" ) )
+                lastError().text() == QCoreApplication::translate( "QSQLiteResult", "Parameter count mismatch" ) )
         {
             tDebug() << Q_FUNC_INFO << "Re-preparing query!";
 
             QMap< QString, QVariant > bv = boundValues();
             prepare( m_query );
 
-            foreach ( const QString& key, bv.keys() )
+            foreach ( const QString & key, bv.keys() )
             {
                 tDebug() << Q_FUNC_INFO << "Rebinding key" << key << "with value" << bv.value( key );
                 bindValue( key, bv.value( key ) );
@@ -104,7 +106,9 @@ TomahawkSqlQuery::exec()
         }
 
         if ( isBusyError( lastError() ) )
+        {
             retries = 0;
+        }
 
         tDebug() << "INFO: Retrying failed query:" << lastQuery() << lastError().text();
         TomahawkUtils::msleep( 10 );
@@ -112,11 +116,15 @@ TomahawkSqlQuery::exec()
 
     bool ret = ( retries < 10 );
     if ( !ret )
+    {
         showError();
+    }
 
     int e = t.elapsed();
     if ( log || e >= QUERY_THRESHOLD )
+    {
         tLog( LOGSQL ) << "TomahawkSqlQuery::exec (" << t.elapsed() << "ms ):" << lastQuery();
+    }
 
     return ret;
 }
@@ -130,13 +138,17 @@ TomahawkSqlQuery::commitTransaction()
     log = true;
 #endif
     if ( log )
+    {
         tLog( LOGSQL ) << "TomahawkSqlQuery::commitTransaction running in thread" << QThread::currentThread();
+    }
 
     unsigned int retries = 0;
     while ( !m_db.commit() && ++retries < 10 )
     {
         if ( isBusyError( lastError() ) )
+        {
             retries = 0;
+        }
 
         tDebug() << "INFO: Retrying failed commit:" << retries << lastError().text();
         TomahawkUtils::msleep( 10 );

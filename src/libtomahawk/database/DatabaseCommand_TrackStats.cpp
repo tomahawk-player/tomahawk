@@ -27,7 +27,7 @@
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "collection/Collection.h"
+#include "collection/Collection.h"
 #endif
 
 using namespace Tomahawk;
@@ -55,7 +55,9 @@ DatabaseCommand_TrackStats::exec( DatabaseImpl* dbi )
     if ( m_track )
     {
         if ( m_track->trackId() == 0 )
+        {
             return;
+        }
 
         query.prepare( "SELECT COUNT(*) AS counter, track.id "
                        "FROM playback_log, track "
@@ -72,7 +74,9 @@ DatabaseCommand_TrackStats::exec( DatabaseImpl* dbi )
         while ( query.next() )
         {
             if ( query.value( 0 ).toUInt() < 2 )
+            {
                 break;
+            }
 
             chartCount++;
             if ( chartPos == 0 && query.value( 1 ).toUInt() == trackId )
@@ -82,7 +86,9 @@ DatabaseCommand_TrackStats::exec( DatabaseImpl* dbi )
         }
 
         if ( chartPos == 0 )
+        {
             chartPos = chartCount;
+        }
 
         emit trackStats( chartPos, chartCount );
 
@@ -110,13 +116,19 @@ DatabaseCommand_TrackStats::exec( DatabaseImpl* dbi )
         log.secsPlayed = query.value( 4 ).toUInt();
 
         if ( log.source )
+        {
             playbackData.append( log );
+        }
     }
 
     if ( m_track )
+    {
         m_track->setPlaybackHistory( playbackData );
+    }
     else
+    {
         m_artist->setPlaybackHistory( playbackData );
+    }
 
     emit done( playbackData );
 }

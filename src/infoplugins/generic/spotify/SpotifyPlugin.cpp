@@ -117,7 +117,7 @@ SpotifyPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
     criteria["chart_id"] = hash["chart_id"];
     criteria["chart_source"] = hash["chart_source"];
 
-    emit getCachedInfo( criteria, Q_INT64_C(86400000) /* Expire chart cache in 1 day */, requestData );
+    emit getCachedInfo( criteria, Q_INT64_C( 86400000 ) /* Expire chart cache in 1 day */, requestData );
 }
 
 
@@ -132,7 +132,7 @@ SpotifyPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData req
 
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria[ "InfoChartCapabilities" ] = "spotifyplugin";
-    emit getCachedInfo( criteria, Q_INT64_C(604800000), requestData );
+    emit getCachedInfo( criteria, Q_INT64_C( 604800000 ), requestData );
 }
 
 
@@ -159,7 +159,9 @@ SpotifyPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, To
 
             // we never need to re-fetch
             if ( !m_allChartsMap.isEmpty() )
+            {
                 return;
+            }
 
             /// We need to fetch possible types before they are asked for
             tDebug() << "SpotifyPlugin: InfoChart fetching possible resources";
@@ -215,44 +217,48 @@ SpotifyPlugin::chartTypes()
         QVariantMap charts;
         foreach( QVariant geos, chartObj.value( "Charts" ).toList().takeLast().toMap().value( "geo" ).toList() )
         {
-           const QString geo = geos.toMap().value( "name" ).toString();
-           const QString geoId = geos.toMap().value( "id" ).toString();
-           QString country;
+            const QString geo = geos.toMap().value( "name" ).toString();
+            const QString geoId = geos.toMap().value( "id" ).toString();
+            QString country;
 
-           if( geo == "For me" )
-              continue; /// country = geo; Lets use this later, when we can get the spotify username from tomahawk
-           else if( geo == "Everywhere" )
-               country = geo;
-           else
-           {
-               QLocale l( QString( "en_%1" ).arg( geo ) );
-               country = Tomahawk::CountryUtils::fullCountryFromCode( geo );
+            if( geo == "For me" )
+            {
+                continue;    /// country = geo; Lets use this later, when we can get the spotify username from tomahawk
+            }
+            else if( geo == "Everywhere" )
+            {
+                country = geo;
+            }
+            else
+            {
+                QLocale l( QString( "en_%1" ).arg( geo ) );
+                country = Tomahawk::CountryUtils::fullCountryFromCode( geo );
 
-               for ( int i = 1; i < country.size(); i++ )
-               {
-                   if ( country.at( i ).isUpper() )
-                   {
-                       country.insert( i, " " );
-                       i++;
-                   }
-               }
-           }
+                for ( int i = 1; i < country.size(); i++ )
+                {
+                    if ( country.at( i ).isUpper() )
+                    {
+                        country.insert( i, " " );
+                        i++;
+                    }
+                }
+            }
 
-           QList< InfoStringHash > chart_types;
-           foreach( QVariant types, chartObj.value( "Charts" ).toList().takeFirst().toMap().value( "types" ).toList() )
-           {
-               QString type = types.toMap().value( "id" ).toString();
-               QString label = types.toMap().value( "name" ).toString();
+            QList< InfoStringHash > chart_types;
+            foreach( QVariant types, chartObj.value( "Charts" ).toList().takeFirst().toMap().value( "types" ).toList() )
+            {
+                QString type = types.toMap().value( "id" ).toString();
+                QString label = types.toMap().value( "name" ).toString();
 
-               InfoStringHash c;
-               c[ "id" ] = type + "/" + geoId;
-               c[ "label" ] = label;
-               c[ "type" ] = type;
+                InfoStringHash c;
+                c[ "id" ] = type + "/" + geoId;
+                c[ "label" ] = label;
+                c[ "type" ] = type;
 
-               chart_types.append( c );
-           }
+                chart_types.append( c );
+            }
 
-           charts.insert( country.toUtf8(), QVariant::fromValue<QList< InfoStringHash > >( chart_types ) );
+            charts.insert( country.toUtf8(), QVariant::fromValue<QList< InfoStringHash > >( chart_types ) );
         }
 
         QVariantMap defaultMap;
@@ -273,7 +279,7 @@ SpotifyPlugin::chartTypes()
             emit info( request, m_allChartsMap );
             Tomahawk::InfoSystem::InfoStringHash criteria;
             criteria[ "InfoChartCapabilities" ] = "spotifyplugin";
-            emit updateCache( criteria, Q_INT64_C(604800000), request.type, m_allChartsMap );
+            emit updateCache( criteria, Q_INT64_C( 604800000 ), request.type, m_allChartsMap );
         }
         m_cachedRequests.clear();
     }
@@ -305,13 +311,21 @@ SpotifyPlugin::chartReturned()
         QStringList top_artists;
 
         if( url.contains( "albums" ) )
+        {
             setChartType( Album );
+        }
         else if( url.contains( "tracks" ) )
+        {
             setChartType( Track );
+        }
         else if( url.contains( "artists" ) )
+        {
             setChartType( Artist );
+        }
         else
+        {
             setChartType( None );
+        }
 
         foreach( QVariant result, res.value( "toplist" ).toMap().value( "result" ).toList() )
         {
@@ -380,10 +394,12 @@ SpotifyPlugin::chartReturned()
         Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
         criteria[ "chart_id" ] = origData[ "chart_id" ];
         criteria[ "chart_source" ] = origData[ "chart_source" ];
-        emit updateCache( criteria, Q_INT64_C(86400000), requestData.type, returnedData );
+        emit updateCache( criteria, Q_INT64_C( 86400000 ), requestData.type, returnedData );
     }
     else
+    {
         qDebug() << "Network error in fetching chart:" << reply->url().toString();
+    }
 }
 
 

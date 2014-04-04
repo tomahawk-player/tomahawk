@@ -30,10 +30,12 @@
 
 #include <qjson/serializer.h>
 
-namespace Tomahawk {
-namespace Utils {
+namespace Tomahawk
+{
+namespace Utils
+{
 
-ShortLinkHelper::ShortLinkHelper(QObject *parent)
+ShortLinkHelper::ShortLinkHelper( QObject* parent )
     : QObject( parent )
     , d_ptr( new ShortLinkHelperPrivate( this ) )
 {
@@ -51,7 +53,7 @@ ShortLinkHelper::shortLink( const Tomahawk::playlist_ptr& pl )
     if ( QThread::currentThread() != thread() )
     {
         QMetaObject::invokeMethod( this, "shortLink", Qt::QueuedConnection,
-                                   Q_ARG( const Tomahawk::playlist_ptr&, pl) );
+                                   Q_ARG( const Tomahawk::playlist_ptr&, pl ) );
         return;
     }
 
@@ -70,10 +72,12 @@ ShortLinkHelper::shortLink( const Tomahawk::playlist_ptr& pl )
     m[ "title" ] = pl->title();
     m[ "creator" ] = pl->author().isNull() ? "" : pl->author()->friendlyName();
     QVariantList tracks;
-    foreach( const plentry_ptr& pl, pl->entries() )
+    foreach( const plentry_ptr & pl, pl->entries() )
     {
         if ( pl->query().isNull() )
+        {
             continue;
+        }
 
         QVariantMap track;
         track[ "title" ] = pl->query()->track()->track();
@@ -99,7 +103,7 @@ ShortLinkHelper::shortLink( const Tomahawk::playlist_ptr& pl )
     data += "\r\n\r\n";
     data += "--" + boundary + "--\r\n\r\n";
 
-    const QUrl url( QString( "%1/p/").arg( hostname() ) );
+    const QUrl url( QString( "%1/p/" ).arg( hostname() ) );
     QNetworkRequest req( url );
     req.setHeader( QNetworkRequest::ContentTypeHeader, QString( "multipart/form-data; boundary=%1" ).arg( QString::fromLatin1( boundary ) ) );
     d->reply = Tomahawk::Utils::nam()->post( req, data );
@@ -127,7 +131,9 @@ ShortLinkHelper::shortenLink( const QUrl& url, const QVariant& callbackObj )
 
     d->reply = Tomahawk::Utils::nam()->get( request );
     if ( callbackObj.isValid() )
+    {
         d->reply->setProperty( "callbackobj", callbackObj );
+    }
     connect( d->reply, SIGNAL( finished() ), SLOT( shortenLinkRequestFinished() ) );
     connect( d->reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( shortenLinkRequestError( QNetworkReply::NetworkError ) ) );
 }
@@ -172,26 +178,36 @@ ShortLinkHelper::shortenLinkRequestFinished()
 
     QVariant callbackObj;
     if ( d->reply->property( "callbackobj" ).isValid() )
+    {
         callbackObj = d->reply->property( "callbackobj" );
+    }
 
     // Check for the redirect attribute, as this should be the shortened link
     QVariant urlVariant = d->reply->attribute( QNetworkRequest::RedirectionTargetAttribute );
 
     // NOTE: this should never happen
     if ( urlVariant.isNull() || !urlVariant.isValid() )
+    {
         error = true;
+    }
 
     QUrl longUrl = d->reply->request().url();
     QUrl shortUrl = urlVariant.toUrl();
 
     // NOTE: this should never happen
     if ( !shortUrl.isValid() )
+    {
         error = true;
+    }
 
     if ( !error )
+    {
         emit shortLinkReady( longUrl, shortUrl, callbackObj );
+    }
     else
+    {
         emit shortLinkReady( longUrl, longUrl, callbackObj );
+    }
     emit done();
 
     d->reply->deleteLater();
@@ -213,7 +229,9 @@ ShortLinkHelper::shortenLinkRequestError( QNetworkReply::NetworkError )
 
     QVariantMap callbackMap;
     if ( d->reply->property( "callbackMap" ).canConvert< QVariantMap >() && !d->reply->property( "callbackMap" ).toMap().isEmpty() )
+    {
         callbackMap = d->reply->property( "callbackMap" ).toMap();
+    }
     d->reply->deleteLater();
     emit shortLinkReady( QUrl( "" ), QUrl( "" ), callbackMap );
     emit done();

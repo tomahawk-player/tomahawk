@@ -191,7 +191,7 @@ AudioControls::changeEvent( QEvent* e )
     switch ( e->type() )
     {
         case QEvent::LanguageChange:
-//            ui->retranslateUi( this );
+            //            ui->retranslateUi( this );
             break;
 
         default:
@@ -232,7 +232,7 @@ AudioControls::onControlStateChanged()
 
     // If the ViewManager doesn't know a page for the current interface, we can't offer the jump link
     ui->artistTrackLabel->setJumpLinkVisible( AudioEngine::instance()->currentTrackPlaylist()
-                                                && ViewManager::instance()->pageForInterface( AudioEngine::instance()->currentTrackPlaylist() ) );
+            && ViewManager::instance()->pageForInterface( AudioEngine::instance()->currentTrackPlaylist() ) );
 }
 
 
@@ -240,15 +240,21 @@ void
 AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 {
     if ( result.isNull() )
+    {
         return;
+    }
 
     if ( m_currentTrack.isNull() || ( !m_currentTrack.isNull() && m_currentTrack.data()->id() != result.data()->id() ) )
+    {
         onPlaybackLoading( result );
+    }
 
     qint64 duration = AudioEngine::instance()->currentTrackTotalTime();
 
     if ( duration == -1 )
+    {
         duration = result.data()->track()->duration() * 1000;
+    }
 
     ui->seekSlider->setRange( 0, duration );
     ui->seekSlider->setValue( 0 );
@@ -263,7 +269,7 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
     m_sliderTimeLine.setCurrentTime( 0 );
     m_seeked = false;
 
-    int updateRate = (double)1000 / ( (double)ui->seekSlider->contentsRect().width() / (double)( duration / 1000 ) );
+    int updateRate = ( double )1000 / ( ( double )ui->seekSlider->contentsRect().width() / ( double )( duration / 1000 ) );
     m_sliderTimeLine.setUpdateInterval( qBound( 40, updateRate, 500 ) );
 
     m_lastSliderCheck = 0;
@@ -330,9 +336,13 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     }
 
     if ( QUrl( result->linkUrl() ).isValid() || !result->collection().isNull() )
+    {
         ui->ownerButton->setCursor( Qt::PointingHandCursor );
+    }
     else
+    {
         ui->ownerButton->setCursor( Qt::ArrowCursor );
+    }
 
     setCover();
     setSocialActions();
@@ -344,7 +354,9 @@ AudioControls::onCoverUpdated()
 {
     Track* track = qobject_cast< Track* >( sender() );
     if ( !track || !m_currentTrack || track != m_currentTrack->track().data() )
+    {
         return;
+    }
 
     setCover();
 }
@@ -360,7 +372,9 @@ AudioControls::setCover()
         ui->coverImage->setPixmap( TomahawkUtils::createRoundedImage( cover, QSize( 0, 0 ) ), false );
     }
     else
+    {
         ui->coverImage->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::Original, ui->coverImage->size() ), true );
+    }
 }
 
 
@@ -369,7 +383,9 @@ AudioControls::onSocialActionsLoaded()
 {
     Track* track = qobject_cast< Track* >( sender() );
     if ( !track || !m_currentTrack || !track->equals( m_currentTrack->track() ) )
+    {
         return;
+    }
 
     setSocialActions();
 }
@@ -388,9 +404,13 @@ AudioControls::onInfoSystemPushTypesUpdated( InfoSystem::InfoTypeSet supportedTy
     }
 
     if ( AudioEngine::instance()->state() == AudioEngine::Stopped )
+    {
         ui->socialButton->setVisible( false );
+    }
     else
+    {
         ui->socialButton->setVisible( m_shouldShowShareAction );
+    }
 }
 
 
@@ -499,7 +519,9 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
     m_phononTickCheckTimer.start( 500 );
 
     if ( msElapsed == 0 )
+    {
         return;
+    }
 
     int currentTime = m_sliderTimeLine.currentTime();
     //tDebug( LOGEXTRA ) << Q_FUNC_INFO << "msElapsed =" << msElapsed << "and timer current time =" << currentTime << "and audio engine state is" << (int)AudioEngine::instance()->state();
@@ -514,7 +536,9 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
             && AudioEngine::instance()->state() == AudioEngine::Playing )
     {
         if ( m_sliderTimeLine.state() != QTimeLine::Running )
+        {
             m_sliderTimeLine.resume();
+        }
         m_lastSliderCheck = msElapsed;
         return;
     }
@@ -532,7 +556,9 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
             m_sliderTimeLine.setCurrentTime( msElapsed );
             m_seeked = false;
             if ( AudioEngine::instance()->state() == AudioEngine::Playing )
+            {
                 m_sliderTimeLine.resume();
+            }
         }
         // Next handle falling behind by too much, or getting ahead by too much (greater than allowed amount, which would have been sorted above)
         // However, a Phonon bug means that after a seek we'll actually have AudioEngine's state be Playing, when it ain't, so have to detect that
@@ -542,13 +568,15 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
             m_sliderTimeLine.setPaused( true );
             m_sliderTimeLine.setCurrentTime( msElapsed );
             if ( msElapsed != m_lastSliderCheck )
+            {
                 m_sliderTimeLine.resume();
+            }
         }
         // Finally, the case where the audioengine isn't playing; if the timeline is still running, pause it and catch up
         else if ( AudioEngine::instance()->state() != AudioEngine::Playing )
         {
             //tDebug() << Q_FUNC_INFO << "AudioEngine not playing";
-            if ( msElapsed != currentTime || m_sliderTimeLine.state() == QTimeLine::Running)
+            if ( msElapsed != currentTime || m_sliderTimeLine.state() == QTimeLine::Running )
             {
                 m_sliderTimeLine.setPaused( true );
                 m_sliderTimeLine.setCurrentTime( msElapsed );
@@ -691,15 +719,17 @@ void
 AudioControls::dragEnterEvent( QDragEnterEvent* e )
 {
     if ( DropJob::acceptsMimeData( e->mimeData() ) )
+    {
         e->acceptProposedAction();
+    }
 }
 
 
 void
 AudioControls::dragMoveEvent( QDragMoveEvent* /* e */ )
 {
-//     if ( GlobalActionManager::instance()->acceptsMimeData( e->mimeData() ) )
-//         e->acceptProposedAction();
+    //     if ( GlobalActionManager::instance()->acceptsMimeData( e->mimeData() ) )
+    //         e->acceptProposedAction();
 }
 
 
@@ -709,7 +739,7 @@ AudioControls::dropEvent( QDropEvent* e )
     tDebug() << "AudioControls got drop:" << e->mimeData()->formats();
     if ( DropJob::acceptsMimeData( e->mimeData() ) )
     {
-        DropJob *dj = new DropJob();
+        DropJob* dj = new DropJob();
         dj->setDropAction( DropJob::Append );
         connect( dj, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( droppedTracks( QList<Tomahawk::query_ptr> ) ) );
         dj->tracksFromMimeData( e->mimeData() );
@@ -735,7 +765,9 @@ void
 AudioControls::onSocialButtonClicked()
 {
     if ( !m_socialWidget.isNull() )
+    {
         m_socialWidget.data()->close();
+    }
 
     m_socialWidget = new SocialWidget( m_parent );
     QPoint socialWidgetPos = ui->socialButton->pos();
@@ -773,8 +805,12 @@ AudioControls::onOwnerButtonClicked()
     {
         QUrl url = QUrl( m_currentTrack->linkUrl() );
         if ( url.isValid() )
+        {
             QDesktopServices::openUrl( url );
+        }
     }
     else
+    {
         ViewManager::instance()->show( m_currentTrack->collection() );
+    }
 }

@@ -37,7 +37,7 @@
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "Playlist.h"
+#include "Playlist.h"
 #endif
 
 
@@ -50,7 +50,7 @@ ItunesParser::ItunesParser( const QStringList& urls, QObject* parent )
     : QObject ( parent )
     , m_single( false )
 {
-    foreach ( const QString& url, urls )
+    foreach ( const QString & url, urls )
     {
         lookupItunesUri( url );
     }
@@ -97,7 +97,9 @@ ItunesParser::lookupItunesUri( const QString& link )
             id = rxId.cap( 1 );
         }
         else
+        {
             return;
+        }
     }
 
     QUrl url;
@@ -171,7 +173,9 @@ ItunesParser::itunesResponseLookupFinished()
                 {
                     Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album, uuid(), true );
                     if ( q.isNull() )
+                    {
                         continue;
+                    }
 
                     m_tracks << q;
                 }
@@ -196,9 +200,13 @@ ItunesParser::checkTrackFinished()
     if ( m_queries.isEmpty() ) // we're done
     {
         if ( m_single && !m_tracks.isEmpty() )
+        {
             emit track( m_tracks.first() );
+        }
         else if ( !m_single && !m_tracks.isEmpty() )
+        {
             emit tracks( m_tracks );
+        }
 
         deleteLater();
     }
@@ -209,7 +217,9 @@ QPixmap
 ItunesParser::pixmap() const
 {
     if ( !s_pixmap )
+    {
         s_pixmap = new QPixmap( RESPATH "images/itunes.png" );
+    }
 
     return *s_pixmap;
 }

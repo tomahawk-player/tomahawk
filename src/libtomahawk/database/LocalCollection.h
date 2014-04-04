@@ -30,7 +30,7 @@ namespace Tomahawk
 class DLLEXPORT LocalCollection : public DatabaseCollection
 {
     Q_OBJECT
-public:
+  public:
     explicit LocalCollection( const Tomahawk::source_ptr& source, QObject* parent = 0 );
 
     virtual QString prettyName() const;

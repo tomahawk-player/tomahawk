@@ -32,10 +32,10 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCommand_ModifyPlaylist : public DatabaseCommand
 {
-Q_OBJECT
-Q_PROPERTY( int mode READ mode WRITE setMode )
+    Q_OBJECT
+    Q_PROPERTY( int mode READ mode WRITE setMode )
 
-public:
+  public:
     enum Mode
     {
         ADD = 1,
@@ -46,14 +46,23 @@ public:
     explicit DatabaseCommand_ModifyPlaylist( Tomahawk::Playlist* playlist, const QList< Tomahawk::plentry_ptr >& entries, Mode mode );
     virtual ~DatabaseCommand_ModifyPlaylist();
 
-    virtual bool doesMutates() const { return true; }
+    virtual bool doesMutates() const
+    {
+        return true;
+    }
 
     virtual void exec( DatabaseImpl* lib );
 
-    int mode() const { return m_mode; }
-    void setMode( int m ) { m_mode = (Mode)m; }
+    int mode() const
+    {
+        return m_mode;
+    }
+    void setMode( int m )
+    {
+        m_mode = ( Mode )m;
+    }
 
-private:
+  private:
     Tomahawk::Playlist* m_playlist;
     QList< Tomahawk::plentry_ptr > m_entries;
     Mode m_mode;

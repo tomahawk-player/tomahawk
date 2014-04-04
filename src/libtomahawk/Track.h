@@ -39,12 +39,12 @@ class TrackPrivate;
 
 class DLLEXPORT Track : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-friend class Pipeline;
-friend class DatabaseCommand_LoadInboxEntries; // for setAllSocialActions
+    friend class Pipeline;
+    friend class DatabaseCommand_LoadInboxEntries; // for setAllSocialActions
 
-public:
+  public:
     enum DescriptionMode
     { Detailed = 0, Short = 1 };
 
@@ -126,7 +126,7 @@ public:
     void markAsListened();
     bool isListened() const;
 
-signals:
+  signals:
     void coverChanged();
     void socialActionsLoaded();
     void attributesLoaded();
@@ -136,13 +136,13 @@ signals:
 
     void updated();
 
-public slots:
+  public slots:
     void deleteLater();
 
-protected:
+  protected:
     QScopedPointer<TrackPrivate> d_ptr;
 
-private:
+  private:
     Q_DECLARE_PRIVATE( Track )
     explicit Track( unsigned int id, const QString& artist, const QString& track, const QString& album, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber );
     explicit Track( const QString& artist, const QString& track, const QString& album, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber );

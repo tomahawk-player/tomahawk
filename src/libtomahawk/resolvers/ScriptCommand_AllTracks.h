@@ -27,26 +27,26 @@
 class ScriptCommand_AllTracks : public ScriptCommand, public Tomahawk::TracksRequest
 {
     Q_OBJECT
-public:
+  public:
     explicit ScriptCommand_AllTracks( const Tomahawk::collection_ptr& collection,
                                       const Tomahawk::album_ptr& album,
-                                      QObject *parent = 0 );
+                                      QObject* parent = 0 );
     virtual ~ScriptCommand_AllTracks() {}
 
     virtual void enqueue();
 
-signals:
+  signals:
     void tracks( const QList< Tomahawk::query_ptr >& );
     void done();
 
-protected:
+  protected:
     virtual void exec();
     virtual void reportFailure();
 
-private slots:
+  private slots:
     void onResolverDone( const QList< Tomahawk::query_ptr >& );
 
-private:
+  private:
     Tomahawk::collection_ptr m_collection;
     Tomahawk::album_ptr m_album;
 };

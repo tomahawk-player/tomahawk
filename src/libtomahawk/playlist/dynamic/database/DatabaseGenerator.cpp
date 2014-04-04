@@ -65,7 +65,7 @@ DatabaseGenerator::DatabaseGenerator ( QObject* parent )
     // defaults
     m_type = "database";
     m_mode = Static;
-//     m_logo.load( RESPATH "images )
+    //     m_logo.load( RESPATH "images )
 }
 
 
@@ -104,18 +104,22 @@ DatabaseGenerator::generate( int number )
         return;
     }
 
-    foreach ( const dyncontrol_ptr& ctrl, m_controls )
-        qDebug() << ctrl->selectedType() << ctrl->match() << ctrl->input();
+    foreach ( const dyncontrol_ptr & ctrl, m_controls )
+    qDebug() << ctrl->selectedType() << ctrl->match() << ctrl->input();
 
     // TODO for now, we just support the special "SQL" control, not meant to be shown to the user. Just does a raw query.
     bool hasSql = false;
     bool hasOther = false;
-    foreach ( const dyncontrol_ptr& ctrl, m_controls )
+    foreach ( const dyncontrol_ptr & ctrl, m_controls )
     {
         if ( ctrl->selectedType() == "SQL" )
+        {
             hasSql = true;
+        }
         else
+        {
             hasOther = true;
+        }
     }
     if ( hasSql == hasOther )
     {
@@ -131,8 +135,8 @@ DatabaseGenerator::generate( int number )
 
         tDebug() << "Generated sql query:" << control.dynamicCast< DatabaseControl >()->sql();
         DatabaseCommand_GenericSelect* cmd = new DatabaseCommand_GenericSelect( control.dynamicCast< DatabaseControl >()->sql(),
-                                                                                static_cast< DatabaseCommand_GenericSelect::QueryType >( control->match().toInt() ),
-                                                                                number
+                static_cast< DatabaseCommand_GenericSelect::QueryType >( control->match().toInt() ),
+                number
                                                                               );
 
         connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
@@ -178,7 +182,9 @@ QString
 DatabaseGenerator::sentenceSummary()
 {
     if( m_controls.count() && m_controls.first()->type() == "SQL" )
+    {
         return m_controls.first()->summary();
+    }
 
     // TODO
     return QString();

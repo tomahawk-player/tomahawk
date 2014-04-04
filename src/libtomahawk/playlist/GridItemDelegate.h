@@ -25,12 +25,14 @@
 
 #include "DllMacro.h"
 
-namespace Tomahawk {
-    class PixmapDelegateFader;
+namespace Tomahawk
+{
+class PixmapDelegateFader;
 }
 
-namespace _detail {
-    class Closure;
+namespace _detail
+{
+class Closure;
 }
 
 class QEvent;
@@ -40,31 +42,37 @@ class ImageButton;
 
 class DLLEXPORT GridItemDelegate : public QStyledItemDelegate
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     GridItemDelegate( QAbstractItemView* parent, PlayableProxyModel* proxy );
 
-    QSize itemSize() const { return m_itemSize; }
-    void setItemSize( const QSize& size ) { m_itemSize = size; }
+    QSize itemSize() const
+    {
+        return m_itemSize;
+    }
+    void setItemSize( const QSize& size )
+    {
+        m_itemSize = size;
+    }
 
-public slots:
+  public slots:
     void resetHoverIndex();
 
-protected:
+  protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
     bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
     bool eventFilter( QObject* obj, QEvent* event );
 
-signals:
+  signals:
     void updateIndex( const QModelIndex& idx );
 
     void startedPlaying( const QPersistentModelIndex& );
     void stoppedPlaying( const QPersistentModelIndex& );
 
-private slots:
+  private slots:
     void modelChanged();
     void doUpdateIndex( const QPersistentModelIndex& idx );
     void onCurrentIndexChanged();
@@ -79,11 +87,11 @@ private slots:
     void fadingFrameChanged( const QPersistentModelIndex& );
     void fadingFrameFinished( const QPersistentModelIndex& );
 
-    void updatePlayPauseButton(ImageButton* button , bool setState = false );
+    void updatePlayPauseButton( ImageButton* button , bool setState = false );
     void onPlayPauseHover( const QPersistentModelIndex& index );
     void onPlayPausedClicked();
 
-private:
+  private:
     QTimeLine* createTimeline( QTimeLine::Direction direction );
     void createPauseButton( const QPersistentModelIndex& index );
     void clearButtons();

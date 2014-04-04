@@ -34,15 +34,18 @@ namespace Tomahawk
 
 class DLLEXPORT AlbumPlaylistInterface : public Tomahawk::PlaylistInterface
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     AlbumPlaylistInterface( Tomahawk::Album* album, Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
     virtual ~AlbumPlaylistInterface();
 
     QList<Tomahawk::query_ptr> tracks() const;
 
-    virtual int trackCount() const { return m_queries.count(); }
+    virtual int trackCount() const
+    {
+        return m_queries.count();
+    }
 
     virtual void setCurrentIndex( qint64 index );
     virtual qint64 siblingIndex( int itemsAway, qint64 rootIndex = -1 ) const;
@@ -54,22 +57,28 @@ public:
 
     virtual Tomahawk::result_ptr currentItem() const;
 
-    virtual PlaylistModes::RepeatMode repeatMode() const { return PlaylistModes::NoRepeat; }
-    virtual bool shuffled() const { return false; }
+    virtual PlaylistModes::RepeatMode repeatMode() const
+    {
+        return PlaylistModes::NoRepeat;
+    }
+    virtual bool shuffled() const
+    {
+        return false;
+    }
 
     virtual void setRepeatMode( PlaylistModes::RepeatMode ) {}
     virtual void setShuffled( bool ) {}
     virtual bool setCurrentTrack( unsigned int albumpos );
 
-signals:
+  signals:
     void tracksLoaded( Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
 
-private slots:
+  private slots:
     void onTracksLoaded( const QList< Tomahawk::query_ptr >& tracks );
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( const QString& infoId );
 
-private:
+  private:
     void checkQueries();
 
     QList< Tomahawk::query_ptr > m_queries;

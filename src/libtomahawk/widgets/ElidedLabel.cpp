@@ -192,7 +192,9 @@ ElidedLabel::paintEvent( QPaintEvent* event )
         {
             QTextLine line = textLayout.createLine();
             if ( !line.isValid() )
+            {
                 break;
+            }
 
             line.setLineWidth( r.width() );
             widthUsed += line.naturalTextWidth();
@@ -242,5 +244,7 @@ ElidedLabel::mouseReleaseEvent( QMouseEvent* event )
 {
     QFrame::mouseReleaseEvent( event );
     if ( m_time.elapsed() < qApp->doubleClickInterval() )
+    {
         emit clicked();
+    }
 }

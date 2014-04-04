@@ -39,7 +39,7 @@
 #include <QHostInfo>
 #include <QUuid>
 
-HatchetSipPlugin::HatchetSipPlugin( Tomahawk::Accounts::Account *account )
+HatchetSipPlugin::HatchetSipPlugin( Tomahawk::Accounts::Account* account )
     : SipPlugin( account )
     , m_sipState( Closed )
     , m_version( 0 )
@@ -49,7 +49,7 @@ HatchetSipPlugin::HatchetSipPlugin( Tomahawk::Accounts::Account *account )
     tLog() << Q_FUNC_INFO;
 
     connect( m_account, SIGNAL( accessTokenFetched() ), this, SLOT( connectWebSocket() ) );
-    connect( Servent::instance(), SIGNAL( dbSyncTriggered() ), this, SLOT( dbSyncTriggered() ));
+    connect( Servent::instance(), SIGNAL( dbSyncTriggered() ), this, SLOT( dbSyncTriggered() ) );
 
     /*
     QFile pemFile( ":/hatchet-account/dreamcatcher.pem" );
@@ -125,9 +125,13 @@ HatchetSipPlugin::disconnectPlugin()
 {
     tLog() << Q_FUNC_INFO;
     if ( m_webSocketThreadController && m_webSocketThreadController->isRunning() )
+    {
         emit disconnectWebSocket();
+    }
     else
+    {
         webSocketDisconnected();
+    }
 }
 
 
@@ -155,8 +159,8 @@ HatchetSipPlugin::connectWebSocket()
 
     if ( !isValid() )
     {
-      tLog() << Q_FUNC_INFO << "Invalid state, not continuing with connection";
-      return;
+        tLog() << Q_FUNC_INFO << "Invalid state, not continuing with connection";
+        return;
     }
 
     m_token = m_account->credentials()[ "dreamcatcher_access_token" ].toString();
@@ -164,7 +168,7 @@ HatchetSipPlugin::connectWebSocket()
 
     if ( m_token.isEmpty() )
     {
-        tLog() << Q_FUNC_INFO << "Unable to find an access token"; 
+        tLog() << Q_FUNC_INFO << "Unable to find an access token";
         disconnectPlugin();
         return;
     }
@@ -263,7 +267,7 @@ HatchetSipPlugin::sendBytes( const QVariantMap& jsonMap ) const
 
 
 void
-HatchetSipPlugin::messageReceived( const QByteArray &msg )
+HatchetSipPlugin::messageReceived( const QByteArray& msg )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "WebSocket message: " << msg;
 
@@ -344,7 +348,7 @@ HatchetSipPlugin::messageReceived( const QByteArray &msg )
             m_sipState = Connected;
             hatchetAccount()->setConnectionState( Tomahawk::Accounts::Account::Connected );
             m_reconnectTimer.setInterval( 0 );
-            QTimer::singleShot(0, this, SLOT( dbSyncTriggered() ) );
+            QTimer::singleShot( 0, this, SLOT( dbSyncTriggered() ) );
             return;
         }
         else
@@ -361,7 +365,7 @@ HatchetSipPlugin::messageReceived( const QByteArray &msg )
         return;
     }
     else if ( !retMap.contains( "command" ) ||
-                !retMap[ "command" ].canConvert< QString >() )
+              !retMap[ "command" ].canConvert< QString >() )
     {
         tDebug() << Q_FUNC_INFO << "Unable to convert and/or interepret command from server";
         return;
@@ -370,11 +374,17 @@ HatchetSipPlugin::messageReceived( const QByteArray &msg )
     QString command = retMap[ "command" ].toString();
 
     if ( command == "new-peer" )
+    {
         newPeer( retMap );
+    }
     else if ( command == "peer-authorization" )
+    {
         peerAuthorization( retMap );
+    }
     else if ( command == "synclastseen" )
+    {
         sendOplog( retMap );
+    }
 }
 
 
@@ -407,7 +417,9 @@ HatchetSipPlugin::newPeer( const QVariantMap& valMap )
 
     QStringList keys( QStringList() << "command" << "username" << "hostinfo" << "dbid" );
     if ( !checkKeys( keys, valMap ) )
+    {
         return;
+    }
 
     Tomahawk::peerinfo_ptr peerInfo = Tomahawk::PeerInfo::get( this, dbid, Tomahawk::PeerInfo::AutoCreate );
     peerInfo->setContactId( username );
@@ -421,18 +433,24 @@ HatchetSipPlugin::newPeer( const QVariantMap& valMap )
     foreach ( const QVariant listItem, hostinfo )
     {
         if ( !listItem.canConvert< QVariantMap >() )
+        {
             continue;
+        }
 
         QVariantMap hostpair = listItem.toMap();
 
         if ( !hostpair.contains( "host" ) || !hostpair.contains( "port" ) )
+        {
             continue;
+        }
 
         const QString host = hostpair[ "host" ].toString();
         unsigned int port = hostpair[ "port" ].toUInt();
 
         if ( host.isEmpty() || port == 0 )
+        {
             continue;
+        }
 
         SipInfo sipInfo;
         sipInfo.setNodeId( dbid );
@@ -449,7 +467,7 @@ HatchetSipPlugin::newPeer( const QVariantMap& valMap )
 
 
 void
-HatchetSipPlugin::sendSipInfos(const Tomahawk::peerinfo_ptr& receiver, const QList< SipInfo >& infos)
+HatchetSipPlugin::sendSipInfos( const Tomahawk::peerinfo_ptr& receiver, const QList< SipInfo >& infos )
 {
     if ( infos.size() == 0 )
     {
@@ -466,7 +484,9 @@ HatchetSipPlugin::sendSipInfos(const Tomahawk::peerinfo_ptr& receiver, const QLi
     sendMap[ "offerkey" ] = infos[ 0 ].key();
 
     if ( !sendBytes( sendMap ) )
+    {
         tLog() << Q_FUNC_INFO << "Failed sending message";
+    }
 }
 
 
@@ -477,7 +497,9 @@ HatchetSipPlugin::peerAuthorization( const QVariantMap& valMap )
 
     QStringList keys( QStringList() << "command" << "dbid" << "offerkey" );
     if ( !checkKeys( keys, valMap ) )
+    {
         return;
+    }
 
     QString dbid = valMap[ "dbid" ].toString();
 
@@ -489,8 +511,10 @@ HatchetSipPlugin::peerAuthorization( const QVariantMap& valMap )
     }
 
     QList< SipInfo > sipInfos = m_sipInfoHash[ dbid ];
-    for (int i = 0; i < sipInfos.size(); i++)
+    for ( int i = 0; i < sipInfos.size(); i++ )
+    {
         sipInfos[i].setKey( valMap[ "offerkey" ].toString() );
+    }
     peerInfo->setSipInfos( sipInfos );
     m_sipInfoHash.remove( dbid );
 }
@@ -502,10 +526,14 @@ void
 HatchetSipPlugin::dbSyncTriggered()
 {
     if ( m_sipState != Connected )
+    {
         return;
+    }
 
     if ( !SourceList::instance() || SourceList::instance()->getLocal().isNull() )
+    {
         return;
+    }
 
     QVariantMap sourceMap;
     sourceMap[ "command" ] = "synctrigger";
@@ -567,10 +595,14 @@ HatchetSipPlugin::oplogFetched( const QString& sinceguid, const QString& /* last
             revMap[ "payload" ] = op->payload;
             currBytes += op->payload.length();
         }
-        if ( currBytes >= (int)(byteMax - 1000000) ) // tack on an extra 1M for safety as it seems qjson puts in spaces
+        if ( currBytes >= ( int )( byteMax - 1000000 ) ) // tack on an extra 1M for safety as it seems qjson puts in spaces
+        {
             break;
+        }
         else
-          revisions << revMap;
+        {
+            revisions << revMap;
+        }
     }
     tDebug() << Q_FUNC_INFO << "Sending" << revisions.size() << "revisions";
     commandMap[ "revisions" ] = revisions;

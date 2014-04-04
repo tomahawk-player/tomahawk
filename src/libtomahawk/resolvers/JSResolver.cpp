@@ -98,7 +98,9 @@ JSResolver::~JSResolver()
 {
     Q_D( JSResolver );
     if ( !d->stopped )
+    {
         stop();
+    }
 
     delete d->engine;
     delete d_ptr;
@@ -181,7 +183,8 @@ JSResolver::reload()
     {
         init();
         d->error = Tomahawk::ExternalResolver::NoError;
-    } else
+    }
+    else
     {
         d->error = Tomahawk::ExternalResolver::FileNotFound;
     }
@@ -189,7 +192,7 @@ JSResolver::reload()
 
 
 void
-JSResolver::setIcon( const QPixmap &icon )
+JSResolver::setIcon( const QPixmap& icon )
 {
     Q_D( JSResolver );
 
@@ -276,9 +279,13 @@ JSResolver::init()
 
     QByteArray icoData = m.value( "icon" ).toByteArray();
     if ( compressed )
+    {
         icoData = qUncompress( QByteArray::fromBase64( icoData ) );
+    }
     else
+    {
         icoData = QByteArray::fromBase64( icoData );
+    }
     QPixmap ico;
     ico.loadFromData( icoData );
 
@@ -319,9 +326,13 @@ JSResolver::start()
 
     d->stopped = false;
     if ( d->ready )
+    {
         Tomahawk::Pipeline::instance()->addResolver( this );
+    }
     else
+    {
         init();
+    }
 }
 
 
@@ -337,7 +348,7 @@ JSResolver::artists( const Tomahawk::collection_ptr& collection )
     }
 
     if ( !m_collections.contains( collection->name() ) || //if the collection doesn't belong to this resolver
-         !capabilities().testFlag( Browsable ) )          //or this resolver doesn't even support collections
+            !capabilities().testFlag( Browsable ) )          //or this resolver doesn't even support collections
     {
         emit artistsFound( QList< Tomahawk::artist_ptr >() );
         return;
@@ -373,7 +384,7 @@ JSResolver::albums( const Tomahawk::collection_ptr& collection, const Tomahawk::
     }
 
     if ( !m_collections.contains( collection->name() ) || //if the collection doesn't belong to this resolver
-         !capabilities().testFlag( Browsable ) )          //or this resolver doesn't even support collections
+            !capabilities().testFlag( Browsable ) )          //or this resolver doesn't even support collections
     {
         emit albumsFound( QList< Tomahawk::album_ptr >() );
         return;
@@ -410,7 +421,7 @@ JSResolver::tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::
     }
 
     if ( !m_collections.contains( collection->name() ) || //if the collection doesn't belong to this resolver
-         !capabilities().testFlag( Browsable ) )          //or this resolver doesn't even support collections
+            !capabilities().testFlag( Browsable ) )          //or this resolver doesn't even support collections
     {
         emit tracksFound( QList< Tomahawk::query_ptr >() );
         return;
@@ -451,7 +462,7 @@ JSResolver::canParseUrl( const QString& url, UrlType type )
     {
         QString eval = QString( "resolver.canParseUrl( '%1', %2 );" )
                        .arg( QString( url ).replace( "'", "\\'" ) )
-                       .arg( (int) type );
+                       .arg( ( int ) type );
         return d->engine->mainFrame()->evaluateJavaScript( eval ).toBool();
     }
     else
@@ -512,7 +523,7 @@ JSResolver::resolve( const Tomahawk::query_ptr& query )
 
     if ( QThread::currentThread() != thread() )
     {
-        QMetaObject::invokeMethod( this, "resolve", Qt::QueuedConnection, Q_ARG(Tomahawk::query_ptr, query) );
+        QMetaObject::invokeMethod( this, "resolve", Qt::QueuedConnection, Q_ARG( Tomahawk::query_ptr, query ) );
         return;
     }
 
@@ -520,10 +531,10 @@ JSResolver::resolve( const Tomahawk::query_ptr& query )
     if ( !query->isFullTextQuery() )
     {
         eval = QString( RESOLVER_LEGACY_CODE2 "resolver.resolve( '%1', '%2', '%3', '%4' );" )
-                  .arg( query->id().replace( "'", "\\'" ) )
-                  .arg( query->queryTrack()->artist().replace( "'", "\\'" ) )
-                  .arg( query->queryTrack()->album().replace( "'", "\\'" ) )
-                  .arg( query->queryTrack()->track().replace( "'", "\\'" ) );
+               .arg( query->id().replace( "'", "\\'" ) )
+               .arg( query->queryTrack()->artist().replace( "'", "\\'" ) )
+               .arg( query->queryTrack()->album().replace( "'", "\\'" ) )
+               .arg( query->queryTrack()->track().replace( "'", "\\'" ) );
     }
     else
     {
@@ -533,8 +544,8 @@ JSResolver::resolve( const Tomahawk::query_ptr& query )
                         "   resolve( '%1', '', '', '%2' );"
                         "}"
                       )
-                  .arg( query->id().replace( "'", "\\'" ) )
-                  .arg( query->fullTextQuery().replace( "'", "\\'" ) );
+               .arg( query->id().replace( "'", "\\'" ) )
+               .arg( query->fullTextQuery().replace( "'", "\\'" ) );
     }
 
     QVariantMap m = d->engine->mainFrame()->evaluateJavaScript( eval ).toMap();
@@ -560,13 +571,15 @@ JSResolver::parseResultVariantList( const QVariantList& reslist )
 {
     QList< Tomahawk::result_ptr > results;
 
-    foreach( const QVariant& rv, reslist )
+    foreach( const QVariant & rv, reslist )
     {
         QVariantMap m = rv.toMap();
         // TODO we need to handle preview urls separately. they should never trump a real url, and we need to display
         // the purchaseUrl for the user to upgrade to a full stream.
         if ( m.value( "preview" ).toBool() == true )
+        {
             continue;
+        }
 
         unsigned int duration = m.value( "duration", 0 ).toUInt();
         if ( duration <= 0 && m.contains( "durationString" ) )
@@ -577,17 +590,21 @@ JSResolver::parseResultVariantList( const QVariantList& reslist )
 
         Tomahawk::result_ptr rp = Tomahawk::Result::get( m.value( "url" ).toString() );
         if ( !rp )
+        {
             continue;
+        }
 
         Tomahawk::track_ptr track = Tomahawk::Track::get( m.value( "artist" ).toString(),
-                                                          m.value( "track" ).toString(),
-                                                          m.value( "album" ).toString(),
-                                                          duration,
-                                                          QString(),
-                                                          m.value( "albumpos" ).toUInt(),
-                                                          m.value( "discnumber" ).toUInt() );
+                                    m.value( "track" ).toString(),
+                                    m.value( "album" ).toString(),
+                                    duration,
+                                    QString(),
+                                    m.value( "albumpos" ).toUInt(),
+                                    m.value( "discnumber" ).toUInt() );
         if ( !track )
+        {
             continue;
+        }
 
         rp->setTrack( track );
         rp->setBitrate( m.value( "bitrate" ).toUInt() );
@@ -604,7 +621,7 @@ JSResolver::parseResultVariantList( const QVariantList& reslist )
         {
             QVariantMap attr;
             attr[ "releaseyear" ] = m.value( "year" );
-//            rp->track()->setAttributes( attr );
+            //            rp->track()->setAttributes( attr );
         }
 
         rp->setMimetype( m.value( "mimetype" ).toString() );
@@ -627,10 +644,12 @@ JSResolver::parseArtistVariantList( const QVariantList& reslist )
 {
     QList< Tomahawk::artist_ptr > results;
 
-    foreach( const QVariant& rv, reslist )
+    foreach( const QVariant & rv, reslist )
     {
         if ( rv.toString().trimmed().isEmpty() )
+        {
             continue;
+        }
 
         Tomahawk::artist_ptr ap = Tomahawk::Artist::get( rv.toString(), false );
 
@@ -646,10 +665,12 @@ JSResolver::parseAlbumVariantList( const Tomahawk::artist_ptr& artist, const QVa
 {
     QList< Tomahawk::album_ptr > results;
 
-    foreach( const QVariant& rv, reslist )
+    foreach( const QVariant & rv, reslist )
     {
         if ( rv.toString().trimmed().isEmpty() )
+        {
             continue;
+        }
 
         Tomahawk::album_ptr ap = Tomahawk::Album::get( artist, rv.toString(), false );
 
@@ -667,7 +688,7 @@ JSResolver::stop()
 
     d->stopped = true;
 
-    foreach ( const Tomahawk::collection_ptr& collection, m_collections )
+    foreach ( const Tomahawk::collection_ptr & collection, m_collections )
     {
         emit collectionRemoved( collection );
     }
@@ -691,20 +712,26 @@ JSResolver::loadUi()
     QByteArray uiData = m[ "widget" ].toByteArray();
 
     if( compressed )
+    {
         uiData = qUncompress( QByteArray::fromBase64( uiData ) );
+    }
     else
+    {
         uiData = QByteArray::fromBase64( uiData );
+    }
 
     QVariantMap images;
-    foreach(const QVariant& item, m[ "images" ].toList())
+    foreach( const QVariant & item, m[ "images" ].toList() )
     {
         QString key = item.toMap().keys().first();
-        QVariant value = item.toMap().value(key);
+        QVariant value = item.toMap().value( key );
         images[key] = value;
     }
 
     if( m.contains( "images" ) )
+    {
         uiData = fixDataImagePaths( uiData, compressed, images );
+    }
 
     d->configWidget = QPointer< AccountConfigWidget >( widgetFromData( uiData, 0 ) );
 
@@ -718,9 +745,13 @@ JSResolver::configUI() const
     Q_D( const JSResolver );
 
     if( d->configWidget.isNull() )
+    {
         return 0;
+    }
     else
+    {
         return d->configWidget.data();
+    }
 }
 
 
@@ -730,7 +761,7 @@ JSResolver::saveConfig()
     Q_D( JSResolver );
 
     QVariant saveData = loadDataFromWidgets();
-//    qDebug() << Q_FUNC_INFO << saveData;
+    //    qDebug() << Q_FUNC_INFO << saveData;
 
     d->resolverHelper->setResolverConfig( saveData.toMap() );
     d->engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "resolver.saveUserConfig();" );
@@ -738,7 +769,7 @@ JSResolver::saveConfig()
 
 
 QVariant
-JSResolver::widgetData(QWidget* widget, const QString& property)
+JSResolver::widgetData( QWidget* widget, const QString& property )
 {
     for( int i = 0; i < widget->metaObject()->propertyCount(); i++ )
     {
@@ -753,13 +784,13 @@ JSResolver::widgetData(QWidget* widget, const QString& property)
 
 
 void
-JSResolver::setWidgetData(const QVariant& value, QWidget* widget, const QString& property)
+JSResolver::setWidgetData( const QVariant& value, QWidget* widget, const QString& property )
 {
     for( int i = 0; i < widget->metaObject()->propertyCount(); i++ )
     {
         if( widget->metaObject()->property( i ).name() == property )
         {
-            widget->metaObject()->property( i ).write( widget, value);
+            widget->metaObject()->property( i ).write( widget, value );
             return;
         }
     }
@@ -772,12 +803,12 @@ JSResolver::loadDataFromWidgets()
     Q_D( JSResolver );
 
     QVariantMap saveData;
-    foreach( const QVariant& dataWidget, d->dataWidgets )
+    foreach( const QVariant & dataWidget, d->dataWidgets )
     {
         QVariantMap data = dataWidget.toMap();
 
         QString widgetName = data["widget"].toString();
-        QWidget* widget= d->configWidget.data()->findChild<QWidget*>( widgetName );
+        QWidget* widget = d->configWidget.data()->findChild<QWidget*>( widgetName );
 
         QVariant value = widgetData( widget, data["property"].toString() );
 
@@ -793,14 +824,14 @@ JSResolver::fillDataInWidgets( const QVariantMap& data )
 {
     Q_D( JSResolver );
 
-    foreach(const QVariant& dataWidget, d->dataWidgets)
+    foreach( const QVariant & dataWidget, d->dataWidgets )
     {
         QString widgetName = dataWidget.toMap()["widget"].toString();
-        QWidget* widget= d->configWidget.data()->findChild<QWidget*>( widgetName );
+        QWidget* widget = d->configWidget.data()->findChild<QWidget*>( widgetName );
         if( !widget )
         {
             tLog() << Q_FUNC_INFO << "Widget specified in resolver was not found:" << widgetName;
-            Q_ASSERT(false);
+            Q_ASSERT( false );
             return;
         }
 
@@ -831,9 +862,11 @@ JSResolver::loadCollections()
     {
         QVariantMap collectionInfo = d->engine->mainFrame()->evaluateJavaScript( "resolver.collection();" ).toMap();
         if ( collectionInfo.isEmpty() ||
-             !collectionInfo.contains( "prettyname" ) ||
-             !collectionInfo.contains( "description" ) )
+                !collectionInfo.contains( "prettyname" ) ||
+                !collectionInfo.contains( "description" ) )
+        {
             return;
+        }
 
         QString prettyname = collectionInfo.value( "prettyname" ).toString();
         QString desc = collectionInfo.value( "description" ).toString();
@@ -854,7 +887,9 @@ JSResolver::loadCollections()
             bool ok = false;
             int trackCount = collectionInfo.value( "trackcount" ).toInt( &ok );
             if ( ok )
+            {
                 sc->setTrackCount( trackCount );
+            }
         }
 
         if ( collectionInfo.contains( "iconfile" ) )
@@ -866,7 +901,9 @@ JSResolver::loadCollections()
             QPixmap iconPixmap;
             ok = iconPixmap.load( iconPath );
             if ( ok && !iconPixmap.isNull() )
+            {
                 sc->setIcon( QIcon( iconPixmap ) );
+            }
         }
 
         Tomahawk::collection_ptr collection( sc );
@@ -914,7 +951,9 @@ JSResolver::onCollectionIconFetched()
                 QPixmap collectionIcon = QPixmap::fromImageReader( &imageReader );
 
                 if ( !collectionIcon.isNull() )
+                {
                     qobject_cast< Tomahawk::ScriptCollection* >( collection.data() )->setIcon( collectionIcon );
+                }
             }
         }
         reply->deleteLater();

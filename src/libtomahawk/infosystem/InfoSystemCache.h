@@ -36,26 +36,26 @@ namespace InfoSystem
 
 class DLLEXPORT InfoSystemCache : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
-    InfoSystemCache( QObject *parent = 0 );
+  public:
+    InfoSystemCache( QObject* parent = 0 );
 
     virtual ~InfoSystemCache();
 
-signals:
+  signals:
     void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
-public slots:
+  public slots:
     void getCachedInfoSlot( Tomahawk::InfoSystem::InfoStringHash criteria, qint64 newMaxAge, Tomahawk::InfoSystem::InfoRequestData requestData );
     void updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output );
 
-private slots:
+  private slots:
     void pruneTimerFired();
 
-private:
-    void notInCache( QObject *receiver, Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
-    const QString criteriaMd5( const Tomahawk::InfoSystem::InfoStringHash &criteria, Tomahawk::InfoSystem::InfoType type = Tomahawk::InfoSystem::InfoNoInfo ) const;
+  private:
+    void notInCache( QObject* receiver, Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
+    const QString criteriaMd5( const Tomahawk::InfoSystem::InfoStringHash& criteria, Tomahawk::InfoSystem::InfoType type = Tomahawk::InfoSystem::InfoNoInfo ) const;
 
     QString m_cacheBaseDir;
     QHash< InfoType, QHash< QString, QString > > m_fileLocationCache;

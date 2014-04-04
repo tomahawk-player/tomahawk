@@ -9,7 +9,7 @@
   (The exception safety of this class has not been evaluated yet.)
 
   pimpl_ptr is a smart immutable pointer, which owns the contained object. Unlike other smart pointers,
-  it creates a standard constructed object when instanciated via the 
+  it creates a standard constructed object when instanciated via the
   \link pimpl_ptr() standard constructor\endlink.
   Additionally, pimpl_ptr respects constness of the pointer object and returns \c const \c T* for
   a const pimpl_ptr object.
@@ -126,7 +126,7 @@
 */
 
 /*!
-  \fn T * pimpl_ptr::operator->() 
+  \fn T * pimpl_ptr::operator->()
 
   Member-by-pointer operator. Returns get().
 */
@@ -140,21 +140,22 @@
 
 namespace
 {
-    struct ConstTester
+struct ConstTester
+{
+    bool isConst()
     {
-        bool isConst()
-        {
-            return false;
-        }
+        return false;
+    }
 
-        bool isConst() const
-        {
-            return true;
-        }
-    };
+    bool isConst() const
+    {
+        return true;
+    }
+};
 }
 
-KDAB_UNITTEST_SIMPLE( pimpl_ptr, "kdcoretools" ) {
+KDAB_UNITTEST_SIMPLE( pimpl_ptr, "kdcoretools" )
+{
 
     {
         kdtools::pimpl_ptr< QObject > p;
@@ -163,22 +164,22 @@ KDAB_UNITTEST_SIMPLE( pimpl_ptr, "kdcoretools" ) {
     }
 
 
-    {   
+    {
         QPointer< QObject > o;
         {
             kdtools::pimpl_ptr< QObject > qobject( new QObject );
             o = qobject.get();
             assertEqual( o, qobject.operator->() );
-            assertEqual( o, &(qobject.operator*()) );
+            assertEqual( o, &( qobject.operator * () ) );
         }
         assertNull( o );
     }
 
-    {   
+    {
         const kdtools::pimpl_ptr< QObject > qobject( new QObject );
         const QObject* o = qobject.get();
         assertEqual( o, qobject.operator->() );
-        assertEqual( o, &(qobject.operator*()) );
+        assertEqual( o, &( qobject.operator * () ) );
     }
 
     {
@@ -193,8 +194,8 @@ KDAB_UNITTEST_SIMPLE( pimpl_ptr, "kdcoretools" ) {
         kdtools::pimpl_ptr< ConstTester > o2;
         assertTrue( o1->isConst() );
         assertFalse( o2->isConst() );
-        assertTrue( (*o1).isConst() );
-        assertFalse( (*o2).isConst() );
+        assertTrue( ( *o1 ).isConst() );
+        assertFalse( ( *o2 ).isConst() );
         assertTrue( o1.get()->isConst() );
         assertFalse( o2.get()->isConst() );
     }

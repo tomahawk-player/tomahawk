@@ -30,23 +30,23 @@ class RecentlyPlayedModel;
 
 class DLLEXPORT HistoryWidget : public FlexibleView
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit HistoryWidget( const Tomahawk::source_ptr& source, QWidget* parent = 0 );
     virtual ~HistoryWidget();
 
-signals:
+  signals:
 
-private slots:
+  private slots:
     void onDateClicked( const QDate& date );
 
-private:
+  private:
     QWidget* m_header;
     RecentlyPlayedModel* m_model;
 
-/*    QCalendarWidget* m_calendarFrom;
-    QCalendarWidget* m_calendarTo;*/
+    /*    QCalendarWidget* m_calendarFrom;
+        QCalendarWidget* m_calendarTo;*/
     QDateEdit* m_calendarFrom;
     QDateEdit* m_calendarTo;
 };

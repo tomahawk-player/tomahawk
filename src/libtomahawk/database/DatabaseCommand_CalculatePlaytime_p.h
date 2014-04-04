@@ -40,7 +40,7 @@ class DatabaseCommand_CalculatePlaytimePrivate : public DatabaseCommandPrivate
 
     Q_DECLARE_PUBLIC( DatabaseCommand_CalculatePlaytime )
 
-private:
+  private:
     QDateTime from;
     QDateTime to;
     QStringList plEntryIds;

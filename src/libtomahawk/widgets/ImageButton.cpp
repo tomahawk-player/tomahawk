@@ -84,14 +84,14 @@ ImageButton::paintEvent( QPaintEvent* event )
     p.setClipRect( event->rect() );
 
     QIcon::Mode mode = isDown()
-        ? QIcon::Active
-        : isEnabled()
-            ? QIcon::Normal
-            : QIcon::Disabled;
+                       ? QIcon::Active
+                       : isEnabled()
+                       ? QIcon::Normal
+                       : QIcon::Disabled;
 
     QIcon::State state = isChecked()
-        ? QIcon::On
-        : QIcon::Off;
+                         ? QIcon::On
+                         : QIcon::Off;
 
     icon().paint( &p, rect(), Qt::AlignCenter, mode, state );
 }

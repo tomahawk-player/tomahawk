@@ -31,7 +31,7 @@
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "Result.h"
+#include "Result.h"
 #endif
 
 
@@ -63,7 +63,9 @@ LatchManager::latchRequest( const source_ptr& source )
 {
     qDebug() << Q_FUNC_INFO;
     if ( isLatched( source ) )
+    {
         return;
+    }
 
     m_state = Latching;
     m_waitingForLatch = source;
@@ -78,7 +80,9 @@ LatchManager::playlistChanged( Tomahawk::playlistinterface_ptr )
     if ( m_latchedOnTo.isNull() )
     {
         if ( m_waitingForLatch.isNull() )
-            return; // Neither latched on nor waiting to be latched on, no-op
+        {
+            return;    // Neither latched on nor waiting to be latched on, no-op
+        }
 
         m_latchedOnTo = m_waitingForLatch;
         m_latchedInterface = m_waitingForLatch->playlistInterface();
@@ -87,12 +91,12 @@ LatchManager::playlistChanged( Tomahawk::playlistinterface_ptr )
 
         DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction();
         cmd->setSource( SourceList::instance()->getLocal() );
-        cmd->setAction( "latchOn");
+        cmd->setAction( "latchOn" );
         cmd->setComment( m_latchedOnTo->nodeId() );
         cmd->setTimestamp( QDateTime::currentDateTime().toTime_t() );
         Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 
-        QAction *latchOnAction = ActionCollection::instance()->getAction( "latchOn" );
+        QAction* latchOnAction = ActionCollection::instance()->getAction( "latchOn" );
         latchOnAction->setText( tr( "&Catch Up" ) );
         latchOnAction->setIcon( QIcon() );
 
@@ -107,13 +111,13 @@ LatchManager::playlistChanged( Tomahawk::playlistinterface_ptr )
 
     DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction();
     cmd->setSource( SourceList::instance()->getLocal() );
-    cmd->setAction( "latchOff");
+    cmd->setAction( "latchOff" );
     cmd->setComment( source->nodeId() );
     cmd->setTimestamp( QDateTime::currentDateTime().toTime_t() );
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 
     if ( !m_waitingForLatch.isNull() &&
-          m_waitingForLatch != m_latchedOnTo )
+            m_waitingForLatch != m_latchedOnTo )
     {
         // We are asked to latch on immediately to another source
         m_latchedOnTo.clear();
@@ -129,7 +133,7 @@ LatchManager::playlistChanged( Tomahawk::playlistinterface_ptr )
 
     m_state = NotLatched;
 
-    QAction *latchOnAction = ActionCollection::instance()->getAction( "latchOn" );
+    QAction* latchOnAction = ActionCollection::instance()->getAction( "latchOn" );
     latchOnAction->setText( tr( "&Listen Along" ) );
     latchOnAction->setIcon( QIcon( RESPATH "images/headphones-sidebar.png" ) );
 }
@@ -162,7 +166,7 @@ LatchManager::unlatchRequest( const source_ptr& source )
     AudioEngine::instance()->stop();
     AudioEngine::instance()->setPlaylist( Tomahawk::playlistinterface_ptr() );
 
-    QAction *latchOnAction = ActionCollection::instance()->getAction( "latchOn" );
+    QAction* latchOnAction = ActionCollection::instance()->getAction( "latchOn" );
     latchOnAction->setText( tr( "&Listen Along" ) );
     latchOnAction->setIcon( QIcon( RESPATH "images/headphones-sidebar.png" ) );
 }
@@ -172,9 +176,13 @@ void
 LatchManager::latchModeChangeRequest( const Tomahawk::source_ptr& source, bool realtime )
 {
     if ( !isLatched( source ) )
+    {
         return;
+    }
 
     source->playlistInterface()->setLatchMode( realtime ? Tomahawk::PlaylistModes::RealTime : Tomahawk::PlaylistModes::StayOnSong );
     if ( realtime )
+    {
         catchUpRequest();
+    }
 }

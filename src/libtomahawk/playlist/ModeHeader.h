@@ -30,21 +30,21 @@ class DLLEXPORT ModeHeader : public QWidget
 {
     Q_OBJECT
 
-public:
+  public:
     ModeHeader( QWidget* parent );
     ~ModeHeader();
 
     void switchTo( int buttonIndex );
 
-protected:
+  protected:
     void changeEvent( QEvent* e );
 
-signals:
+  signals:
     void detailedClicked();
     void flatClicked();
     void gridClicked();
 
-private:
+  private:
     QWidget* m_parent;
 
     QRadioButton* m_radioCloud;

@@ -33,7 +33,7 @@ namespace Accounts
 class DLLEXPORT ConfigStorage : public QObject
 {
     Q_OBJECT
-public:
+  public:
     explicit ConfigStorage( QObject* parent = 0 );
 
     virtual ~ConfigStorage();
@@ -57,7 +57,7 @@ public:
     virtual void load( const QString& accountId, Account::Configuration& cfg ) const = 0;
     virtual void remove( const QString& accountId ) = 0;
 
-signals:
+  signals:
     void ready(); //emit this when done with whatever it is that needs to be initialized
 };
 

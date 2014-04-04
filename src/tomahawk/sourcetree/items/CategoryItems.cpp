@@ -130,13 +130,21 @@ CategoryAddItem::supportedDropTypes( const QMimeData* data ) const
     if ( m_categoryType == SourcesModel::PlaylistsCategory )
     {
         if ( data->hasFormat( "application/tomahawk.query.list" ) )
+        {
             return types | DropTypeThisTrack | DropTypeThisAlbum | DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50;
+        }
         else if ( data->hasFormat( "application/tomahawk.result.list" ) )
+        {
             return types | DropTypeThisTrack | DropTypeThisAlbum | DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50;
+        }
         else if ( data->hasFormat( "application/tomahawk.metadata.album" ) )
+        {
             return types | DropTypeThisAlbum | DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50;
+        }
         else if ( data->hasFormat( "application/tomahawk.metadata.artist" ) )
+        {
             return types | DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50;
+        }
     }
 
     return types;
@@ -148,13 +156,17 @@ CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
 {
     // As DropJob always converts dropped items to query_ptrs for all tracks we need to extract album/artist metadata ourselves for stations
     if ( m_categoryType == SourcesModel::StationsCategory &&
-         ( data->hasFormat( "application/tomahawk.metadata.artist" ) || data->hasFormat( "application/tomahawk.metadata.album" ) ) )
+            ( data->hasFormat( "application/tomahawk.metadata.artist" ) || data->hasFormat( "application/tomahawk.metadata.album" ) ) )
     {
         QByteArray mimeData;
         if ( data->hasFormat( "application/tomahawk.metadata.artist" ) )
+        {
             mimeData = data->data( "application/tomahawk.metadata.artist" );
+        }
         else if ( data->hasFormat( "application/tomahawk.metadata.album" ) )
+        {
             mimeData = data->data( "application/tomahawk.metadata.album" );
+        }
 
         QDataStream stream( &mimeData, QIODevice::ReadOnly );
 
@@ -169,11 +181,15 @@ CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
             QString artist;
             stream >> artist;
             if ( firstArtist.isEmpty() )
+            {
                 firstArtist = artist;
+            }
 
             QString album;
             if ( data->hasFormat( "application/tomahawk.metadata.album" ) )
-                stream >> album; // throw away album title... we only create artists filters for now
+            {
+                stream >> album;    // throw away album title... we only create artists filters for now
+            }
 
             dyncontrol_ptr c = newpl->generator()->createControl( "Artist" );
             c->setInput( QString( "%1" ).arg( artist ) );
@@ -233,13 +249,17 @@ CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
     } */
 
     // Create a new playlist seeded with these items
-    DropJob *dj = new DropJob();
+    DropJob* dj = new DropJob();
 
     connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ), Qt::QueuedConnection );
     if ( dropType() == DropTypeAllFromArtist )
+    {
         dj->setGetWholeArtists( true );
+    }
     if ( dropType() == DropTypeThisAlbum )
+    {
         dj->setGetWholeAlbums( true );
+    }
 
     if ( dropType() == DropTypeLocalItems )
     {
@@ -252,7 +272,9 @@ CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
         dj->tracksFromMimeData( data, false, false, true );
     }
     else
+    {
         dj->tracksFromMimeData( data, false, false );
+    }
 
     return true;
 }
@@ -266,9 +288,13 @@ CategoryAddItem::playlistToRenameLoaded()
 
     QString name = sender()->property( "newname" ).toString();
     if ( !name.isEmpty() )
+    {
         pl->rename( name );
+    }
     else
+    {
         QTimer::singleShot( 400, APP->mainWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
+    }
 
     disconnect( pl, SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( playlistToRenameLoaded() ) );
     disconnect( pl, SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistToRenameLoaded() ) );
@@ -296,7 +322,7 @@ CategoryAddItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
 
         // now we want to add each query as a song or similar artist filter...
         QList< dyncontrol_ptr > controls;
-        foreach ( const Tomahawk::query_ptr& q, tracks )
+        foreach ( const Tomahawk::query_ptr & q, tracks )
         {
             dyncontrol_ptr c = newpl->generator()->createControl( "Song" );
             c->setInput( QString( "%1 %2" ).arg( q->track()->track() ).arg( q->track()->artist() ) );
@@ -349,10 +375,12 @@ CategoryItem::insertItems( QList< SourceTreeItem* > items )
     // add the items to the category, and connect to the signals
     int curCount = children().size();
     if ( m_showAdd ) // if there's an add item, add it before that
+    {
         curCount--;
+    }
 
     beginRowsAdded( curCount, curCount + items.size() - 1 );
-    foreach( SourceTreeItem* item, items )
+    foreach( SourceTreeItem * item, items )
     {
         insertChild( children().count() - 1, item );
     }
@@ -364,11 +392,17 @@ int
 CategoryItem::peerSortValue() const
 {
     if ( m_category == SourcesModel::PlaylistsCategory )
+    {
         return -100;
+    }
     else if ( m_category == SourcesModel::StationsCategory )
+    {
         return 100;
+    }
     else
+    {
         return 0;
+    }
 }
 
 
@@ -384,10 +418,10 @@ CategoryItem::text() const
 {
     switch( m_category )
     {
-    case SourcesModel::PlaylistsCategory:
-        return tr( "Playlists" );
-    case SourcesModel::StationsCategory:
-        return tr( "Stations" );
+        case SourcesModel::PlaylistsCategory:
+            return tr( "Playlists" );
+        case SourcesModel::StationsCategory:
+            return tr( "Stations" );
     }
     return QString();
 }

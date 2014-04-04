@@ -40,33 +40,42 @@ class QCheckBox;
 class DLLEXPORT SourceTreePopupDialog : public QWidget
 {
     Q_OBJECT
-public:
+  public:
     explicit SourceTreePopupDialog();
 
-    int offset() const { return 16; }
+    int offset() const
+    {
+        return 16;
+    }
 
     void setTitle( const QString& text );
     void setMainText( const QString& text );
     void setOkButtonText( const QString& text );
     void setExtraQuestions( const Tomahawk::PlaylistDeleteQuestions& questions );
 
-    bool resultValue() const { return m_result; }
-    QMap< int, bool > questionResults() const { return m_questionResults; }
+    bool resultValue() const
+    {
+        return m_result;
+    }
+    QMap< int, bool > questionResults() const
+    {
+        return m_questionResults;
+    }
 
-signals:
+  signals:
     void result( bool accepted );
 
-protected:
+  protected:
     virtual void paintEvent( QPaintEvent* );
     virtual void focusOutEvent( QFocusEvent* );
     virtual void showEvent( QShowEvent* );
     virtual void hideEvent( QHideEvent* );
 
-private slots:
+  private slots:
     void onAccepted();
     void onRejected();
 
-private:
+  private:
     void calculateResults();
     void clearQuestionWidgets();
 

@@ -32,13 +32,22 @@ namespace Tomahawk
 class DLLEXPORT SingleTrackPlaylistInterface : public PlaylistInterface
 {
     Q_OBJECT
-public:
+  public:
     explicit SingleTrackPlaylistInterface( const query_ptr& query );
 
-    query_ptr track() const { return m_track; }
-    void setQuery( const query_ptr& track ) { m_track = track; }
+    query_ptr track() const
+    {
+        return m_track;
+    }
+    void setQuery( const query_ptr& track )
+    {
+        m_track = track;
+    }
 
-    virtual void setCurrentIndex( qint64 index ) { Q_UNUSED( index ); }
+    virtual void setCurrentIndex( qint64 index )
+    {
+        Q_UNUSED( index );
+    }
     virtual result_ptr currentItem() const;
 
     virtual Tomahawk::result_ptr resultAt( qint64 index ) const;
@@ -46,17 +55,30 @@ public:
     virtual qint64 indexOfResult( const Tomahawk::result_ptr& result ) const;
     virtual qint64 indexOfQuery( const Tomahawk::query_ptr& query ) const;
 
-    virtual PlaylistModes::RepeatMode repeatMode() const { return PlaylistModes::NoRepeat; }
+    virtual PlaylistModes::RepeatMode repeatMode() const
+    {
+        return PlaylistModes::NoRepeat;
+    }
     virtual void setRepeatMode( PlaylistModes::RepeatMode ) {}
 
-    virtual bool shuffled() const { return false; }
+    virtual bool shuffled() const
+    {
+        return false;
+    }
     virtual void setShuffled( bool ) {}
 
-    virtual qint64 siblingIndex( int, qint64 rootIndex = -1 ) const { Q_UNUSED( rootIndex ); return -1; }
-    virtual int trackCount() const { return 1; }
+    virtual qint64 siblingIndex( int, qint64 rootIndex = -1 ) const
+    {
+        Q_UNUSED( rootIndex );
+        return -1;
+    }
+    virtual int trackCount() const
+    {
+        return 1;
+    }
     virtual QList< query_ptr > tracks() const;
 
-private:
+  private:
     query_ptr m_track;
 };
 

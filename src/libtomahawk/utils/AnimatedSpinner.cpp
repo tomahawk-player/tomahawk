@@ -39,7 +39,7 @@ AnimatedSpinner::AnimatedSpinner( QWidget* parent )
     init();
 }
 
-AnimatedSpinner::AnimatedSpinner( const QSize& size, QWidget *parent )
+AnimatedSpinner::AnimatedSpinner( const QSize& size, QWidget* parent )
     : QWidget( parent )
     , m_showHide( new QTimeLine )
     , m_animation( new QTimeLine )
@@ -62,7 +62,9 @@ AnimatedSpinner::AnimatedSpinner( const QSize& size, bool autoStart )
     init();
 
     if ( autoStart )
+    {
         fadeIn();
+    }
 }
 
 
@@ -77,9 +79,13 @@ AnimatedSpinner::init()
     m_showHide->setUpdateInterval( 20 );
 
     if ( parentWidget() )
+    {
         connect( m_showHide, SIGNAL( frameChanged( int ) ), this, SLOT( update() ) );
+    }
     else
+    {
         connect( m_showHide, SIGNAL( frameChanged( int ) ), this, SLOT( updatePixmap() ) );
+    }
 
     connect( m_showHide, SIGNAL( finished() ), this, SLOT( hideFinished() ) );
 
@@ -96,9 +102,13 @@ AnimatedSpinner::init()
 
     QSize size;
     if ( parentWidget() )
+    {
         size = m_size != QSize( 0, 0 ) ? m_size : sizeHint();
+    }
     else
+    {
         size = m_pixmap.size();
+    }
 
     /// Radius is best-fit line with points (13x13, 2), (28x28, 5), (48x48, 10)
     m_radius = qRound( ( 23. * ( size.width() - 5. ) ) / 100. );
@@ -152,19 +162,20 @@ AnimatedSpinner::drawFrame( QPainter* p, const QRect& rect )
     if ( m_showHide->state() == QTimeLine::Running )
     {
         // showing or hiding
-        p->setOpacity( (qreal)m_showHide->currentValue() );
+        p->setOpacity( ( qreal )m_showHide->currentValue() );
     }
 
     p->setRenderHint( QPainter::Antialiasing, true );
     p->translate( rect.center() + QPoint( 0, 1 ) ); // center
 
-    const qreal stepRadius = (360 + 2*m_armWidth) / segmentCount();
+    const qreal stepRadius = ( 360 + 2 * m_armWidth ) / segmentCount();
     p->rotate( stepRadius );
 
-    for (int segment = 0; segment < segmentCount(); ++segment) {
-        p->rotate(stepRadius);
+    for ( int segment = 0; segment < segmentCount(); ++segment )
+    {
+        p->rotate( stepRadius );
         QPainterPath arm;
-        arm.addRoundedRect( m_armRect.adjusted( 0, -m_armWidth/2., 0, -m_armWidth/2 ), m_border, m_border );
+        arm.addRoundedRect( m_armRect.adjusted( 0, -m_armWidth / 2., 0, -m_armWidth / 2 ), m_border, m_border );
 
         p->fillPath( arm, colorForSegment( segment ) );
     }
@@ -175,19 +186,27 @@ void
 AnimatedSpinner::fadeIn()
 {
     if ( ( parentWidget() && isVisible() ) || m_animation->state() == QTimeLine::Running )
+    {
         return;
+    }
 
     m_animation->start();
 
     m_showHide->setDirection( QTimeLine::Forward );
 
     if ( m_showHide->state() != QTimeLine::Running )
+    {
         m_showHide->start();
+    }
 
     if ( parentWidget() )
+    {
         show();
+    }
     else
+    {
         updatePixmap();
+    }
 }
 
 
@@ -197,7 +216,9 @@ AnimatedSpinner::fadeOut()
     m_showHide->setDirection( QTimeLine::Backward );
 
     if ( m_showHide->state() != QTimeLine::Running )
+    {
         m_showHide->start();
+    }
 }
 
 
@@ -208,9 +229,13 @@ AnimatedSpinner::hideFinished()
     {
         m_animation->stop();
         if ( parentWidget() )
+        {
             hide();
+        }
         else
+        {
             updatePixmap();
+        }
     }
 }
 
@@ -226,7 +251,9 @@ void
 AnimatedSpinner::frameChanged( int frame )
 {
     if ( m_currentIndex == frame || frame > segmentCount() - 1 )
+    {
         return;
+    }
 
     m_currentIndex = frame;
     Q_ASSERT( frame >= 0 && frame < m_colors.size() );
@@ -238,18 +265,26 @@ AnimatedSpinner::frameChanged( int frame )
     while ( m_colors[cur] == -1 )
     {
         if ( running > tailLength )
-            m_colors[cur] = 0.; // beyond the tail, draw at base color
+        {
+            m_colors[cur] = 0.;    // beyond the tail, draw at base color
+        }
         else
-            m_colors[cur] = 1. - ((qreal)running/tailLength); // scale from 1 to 0 along tail
+        {
+            m_colors[cur] = 1. - ( ( qreal )running / tailLength );    // scale from 1 to 0 along tail
+        }
 
         ++running;
         cur = --cur < 0 ? m_colors.size() - 1 : cur;
     }
 
     if ( parentWidget() )
+    {
         update();
+    }
     else
+    {
         updatePixmap();
+    }
 }
 
 

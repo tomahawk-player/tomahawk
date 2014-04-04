@@ -37,20 +37,24 @@
 class QNetworkAccessManager;
 class DiagnosticsDialog;
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
-namespace InfoSystem {
+namespace InfoSystem
+{
 
 class InfoSystemCache;
 class InfoSystemWorker;
 
-enum PushInfoFlags { // must be powers of 2
+enum PushInfoFlags   // must be powers of 2
+{
     PushNoFlag = 1,
     PushShortUrlFlag = 2
 };
 
 
-struct DLLEXPORT InfoRequestData {
+struct DLLEXPORT InfoRequestData
+{
     quint64 requestId;
     quint64 internalId; //do not assign to this; it may get overwritten by the InfoSystem
     QString caller;
@@ -64,12 +68,13 @@ struct DLLEXPORT InfoRequestData {
 
     InfoRequestData( const quint64 rId, const QString& callr, const Tomahawk::InfoSystem::InfoType typ, const QVariant& inputvar, const QVariantMap& custom );
 
-private:
-    void init( const QString& callr, const InfoType typ, const QVariant& inputvar, const QVariantMap& custom);
+  private:
+    void init( const QString& callr, const InfoType typ, const QVariant& inputvar, const QVariantMap& custom );
 };
 
 
-struct InfoPushData {
+struct InfoPushData
+{
     QString caller;
     InfoType type;
     QVariant input;
@@ -82,7 +87,7 @@ struct InfoPushData {
         , input( QVariant() )
         , pushFlags( Tomahawk::InfoSystem::PushNoFlag )
         , infoPair( Tomahawk::InfoSystem::PushInfoPair( QVariantMap(), QVariant() ) )
-        {}
+    {}
 
     InfoPushData( const QString& callr, const Tomahawk::InfoSystem::InfoType typ, const QVariant& inputvar, const Tomahawk::InfoSystem::PushInfoFlags pflags )
         : caller( callr )
@@ -90,7 +95,7 @@ struct InfoPushData {
         , input( inputvar )
         , pushFlags( pflags )
         , infoPair( Tomahawk::InfoSystem::PushInfoPair( QVariantMap(), QVariant() ) )
-        {}
+    {}
 
 };
 
@@ -99,7 +104,7 @@ class DLLEXPORT InfoPlugin : public QObject
 {
     Q_OBJECT
 
-public:
+  public:
     /**
      * @brief Creates the plugin. Do *not* perform any network-based setup tasks here; defer that to init(), which will be called automatically.
      *
@@ -111,16 +116,22 @@ public:
     void setFriendlyName( const QString& friendlyName );
     virtual const QString friendlyName() const;
 
-    QSet< InfoType > supportedGetTypes() const { return m_supportedGetTypes; }
-    QSet< InfoType > supportedPushTypes() const { return m_supportedPushTypes; }
+    QSet< InfoType > supportedGetTypes() const
+    {
+        return m_supportedGetTypes;
+    }
+    QSet< InfoType > supportedPushTypes() const
+    {
+        return m_supportedPushTypes;
+    }
 
-signals:
+  signals:
     void getCachedInfo( Tomahawk::InfoSystem::InfoStringHash criteria, qint64 newMaxAge, Tomahawk::InfoSystem::InfoRequestData requestData );
     void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
     void updateCache( Tomahawk::InfoSystem::InfoStringHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output );
 
-protected slots:
+  protected slots:
 
     /**
      * @brief Called after the plugin has been moved to the appropriate thread. Do network-based setup tasks here.
@@ -133,13 +144,13 @@ protected slots:
     virtual void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData ) = 0;
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
 
-protected:
+  protected:
     InfoType m_type;
     QString m_friendlyName;
     QSet< InfoType > m_supportedGetTypes;
     QSet< InfoType > m_supportedPushTypes;
 
-private:
+  private:
     friend class InfoSystem;
 };
 
@@ -148,13 +159,13 @@ class DLLEXPORT InfoSystemCacheThread : public QThread
 {
     Q_OBJECT
 
-public:
+  public:
     InfoSystemCacheThread( QObject* parent );
     virtual ~InfoSystemCacheThread();
 
     void run();
 
-private:
+  private:
     friend class InfoSystem;
     InfoSystemCache* cache() const;
 
@@ -166,13 +177,13 @@ class DLLEXPORT InfoSystemWorkerThread : public QThread
 {
     Q_OBJECT
 
-public:
+  public:
     InfoSystemWorkerThread( QObject* parent );
     virtual ~InfoSystemWorkerThread();
 
     void run();
 
-private:
+  private:
     friend class ::DiagnosticsDialog;
     friend class InfoSystem;
     InfoSystemWorker* worker() const;
@@ -185,7 +196,7 @@ class DLLEXPORT InfoSystem : public QObject
 {
     Q_OBJECT
 
-public:
+  public:
     static InfoSystem* instance();
 
     InfoSystem( QObject* parent );
@@ -197,17 +208,23 @@ public:
     bool pushInfo( InfoPushData pushData );
     bool pushInfo( const QString& caller, const InfoTypeMap& input, const PushInfoFlags pushFlags );
 
-    const InfoTypeSet& supportedGetTypes() const { return m_supportedGetTypes; }
-    const InfoTypeSet& supportedPushTypes() const { return m_supportedPushTypes; }
+    const InfoTypeSet& supportedGetTypes() const
+    {
+        return m_supportedGetTypes;
+    }
+    const InfoTypeSet& supportedPushTypes() const
+    {
+        return m_supportedPushTypes;
+    }
 
     QPointer< QThread > workerThread() const;
 
-public slots:
+  public slots:
     // InfoSystem takes ownership of InfoPlugins
     void addInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin );
     void removeInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin );
 
-signals:
+  signals:
     void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void finished( QString target );
     void finished( QString target, Tomahawk::InfoSystem::InfoType type );
@@ -216,12 +233,12 @@ signals:
     void updatedSupportedGetTypes( Tomahawk::InfoSystem::InfoTypeSet supportedTypes );
     void updatedSupportedPushTypes( Tomahawk::InfoSystem::InfoTypeSet supportedTypes );
 
-private slots:
+  private slots:
     void init();
     void receiveUpdatedSupportedGetTypes( Tomahawk::InfoSystem::InfoTypeSet supportedTypes );
     void receiveUpdatedSupportedPushTypes( Tomahawk::InfoSystem::InfoTypeSet supportedTypes );
 
-private:
+  private:
     bool m_inited;
     InfoSystemCacheThread* m_infoSystemCacheThreadController;
     InfoSystemWorkerThread* m_infoSystemWorkerThreadController;
@@ -253,7 +270,7 @@ inline uint qHash( Tomahawk::InfoSystem::InfoStringHash hash )
     uint returnval = 0;
 
     foreach( uint val, hexData.toUcs4() )
-        returnval += val;
+    returnval += val;
 
     return returnval;
 }

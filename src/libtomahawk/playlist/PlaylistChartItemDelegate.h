@@ -26,7 +26,8 @@
 #include "Typedefs.h"
 
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 class PixmapDelegateFader;
 }
 
@@ -37,21 +38,21 @@ class TrackView;
 
 class DLLEXPORT PlaylistChartItemDelegate : public PlaylistItemDelegate
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     PlaylistChartItemDelegate( TrackView* parent = 0, PlayableProxyModel* proxy = 0 );
 
     virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
-protected:
+  protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
-private slots:
+  private slots:
     void doUpdateIndex( const QPersistentModelIndex& idx );
     void modelChanged();
 
-private:
+  private:
     QTextOption m_topOption;
     QTextOption m_centerOption;
     QTextOption m_centerRightOption;

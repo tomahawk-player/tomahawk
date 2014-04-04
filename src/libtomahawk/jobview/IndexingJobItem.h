@@ -25,16 +25,25 @@
 class IndexingJobItem : public JobStatusItem
 {
     Q_OBJECT
-public:
+  public:
     explicit IndexingJobItem() {}
 
     void done();
 
-    virtual int weight() const { return 50; }
-    virtual QString rightColumnText() const { return QString(); }
+    virtual int weight() const
+    {
+        return 50;
+    }
+    virtual QString rightColumnText() const
+    {
+        return QString();
+    }
     virtual QString mainText() const;
     virtual QPixmap icon() const;
-    virtual QString type() const { return "indexerjob"; }
+    virtual QString type() const
+    {
+        return "indexerjob";
+    }
 };
 
 #endif // INDEXINGJOBITEM_H

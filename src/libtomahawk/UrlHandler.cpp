@@ -30,8 +30,10 @@
 
 Q_DECLARE_METATYPE( IODeviceCallback )
 
-namespace Tomahawk {
-namespace UrlHandler {
+namespace Tomahawk
+{
+namespace UrlHandler
+{
 
 QMap< QString, IODeviceFactoryFunc > iofactories;
 QMap< QString, UrlTranslatorFunc > urltranslators;
@@ -54,7 +56,7 @@ initialiseDefaultIOFactories()
 }
 
 void
-registerIODeviceFactory( const QString &proto, IODeviceFactoryFunc fac )
+registerIODeviceFactory( const QString& proto, IODeviceFactoryFunc fac )
 {
     if ( iofactories.isEmpty() )
     {
@@ -67,7 +69,7 @@ registerIODeviceFactory( const QString &proto, IODeviceFactoryFunc fac )
 
 void
 getIODeviceForUrl( const Tomahawk::result_ptr& result, const QString& url,
-                            boost::function< void ( QSharedPointer< QIODevice >& ) > callback )
+                   boost::function< void ( QSharedPointer< QIODevice >& ) > callback )
 {
     if ( iofactories.isEmpty() )
     {
@@ -97,12 +99,14 @@ getIODeviceForUrl( const Tomahawk::result_ptr& result, const QString& url,
 
 void
 localFileIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
-                                   boost::function< void ( QSharedPointer< QIODevice >& ) > callback )
+                          boost::function< void ( QSharedPointer< QIODevice >& ) > callback )
 {
     // ignore "file://" at front of url
     QFile* io = new QFile( url.mid( QString( "file://" ).length() ) );
     if ( io )
+    {
         io->open( QIODevice::ReadOnly );
+    }
 
     //boost::functions cannot accept temporaries as parameters
     QSharedPointer< QIODevice > sp = QSharedPointer<QIODevice>( io );
@@ -112,16 +116,16 @@ localFileIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
 
 void
 httpIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
-                              boost::function< void ( QSharedPointer< QIODevice >& ) > callback )
+                     boost::function< void ( QSharedPointer< QIODevice >& ) > callback )
 {
     QNetworkRequest req( url );
     // Follow HTTP Redirects
     NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( req ) );
-    qRegisterMetaType<NetworkReply*>("NetworkReply*");
-    qRegisterMetaType<IODeviceCallback>("IODeviceCallback");
+    qRegisterMetaType<NetworkReply*>( "NetworkReply*" );
+    qRegisterMetaType<IODeviceCallback>( "IODeviceCallback" );
     HttpIODeviceReadyHandler* handler = new HttpIODeviceReadyHandler( reply, callback );
     reply->connect( reply, SIGNAL( finalUrlReached() ),
-                    handler, SLOT( called() ));
+                    handler, SLOT( called() ) );
 }
 
 
@@ -146,7 +150,7 @@ getUrlTranslation( const Tomahawk::result_ptr& result, const QString& url, boost
 }
 
 void
-registerUrlTranslator( const QString &proto, UrlTranslatorFunc fac )
+registerUrlTranslator( const QString& proto, UrlTranslatorFunc fac )
 {
     urltranslators.insert( proto, fac );
 }

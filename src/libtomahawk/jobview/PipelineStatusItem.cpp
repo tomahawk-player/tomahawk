@@ -39,7 +39,9 @@ PipelineStatusItem::PipelineStatusItem( const Tomahawk::query_ptr& q )
     connect( Tomahawk::Pipeline::instance(), SIGNAL( idle() ), this, SLOT( idle() ) );
 
     if ( !q.isNull() )
+    {
         resolving( q );
+    }
 }
 
 
@@ -66,7 +68,9 @@ void
 PipelineStatusItem::idle()
 {
     if ( !Tomahawk::Pipeline::instance()->activeQueryCount() )
+    {
         emit finished();
+    }
 }
 
 
@@ -81,9 +85,13 @@ void
 PipelineStatusItem::resolving( const Tomahawk::query_ptr& query )
 {
     if ( query->isFullTextQuery() )
+    {
         m_latestQuery = query->fullTextQuery();
+    }
     else
+    {
         m_latestQuery = QString( "%1 - %2" ).arg( query->queryTrack()->artist() ).arg( query->queryTrack()->track() );
+    }
 
     Q_ASSERT( !m_latestQuery.isEmpty() );
 

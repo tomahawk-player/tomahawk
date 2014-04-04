@@ -52,7 +52,7 @@ class DLLEXPORT DatabaseCommand_SocialAction : public DatabaseCommandLoggable
     Q_PROPERTY( QString artist READ artist WRITE setArtist )
     Q_PROPERTY( QString track READ track WRITE setTrack )
 
-public:
+  public:
 
     /**
      * \brief Default constructor for DatabaseCommand_SocialAction.
@@ -87,7 +87,10 @@ public:
      * \brief Returns the name of this database command.
      * \return QString containing the database command name 'socialaction'.
      */
-    virtual QString commandname() const { return "socialaction"; }
+    virtual QString commandname() const
+    {
+        return "socialaction";
+    }
 
     /**
      * \brief Executes the database command.
@@ -108,78 +111,114 @@ public:
      * \return Name of the artist.
      * \see setArtist()
      */
-    virtual QString artist() const { return m_artist; }
+    virtual QString artist() const
+    {
+        return m_artist;
+    }
 
     /**
      * \brief Sets the artist name for this database command.
      * \param s QString containing the artist name.
      * \see artist()
      */
-    virtual void setArtist( const QString& s ) { m_artist = s; }
+    virtual void setArtist( const QString& s )
+    {
+        m_artist = s;
+    }
 
     /**
      * \brief Returns the track name associated with this social action.
      * \return QString containing the track name.
      * \see setTrack()
      */
-    virtual QString track() const { return m_title; }
+    virtual QString track() const
+    {
+        return m_title;
+    }
 
     /**
      * \brief Sets the track name associated with this database command.
      * \param track QString containing the track name.
      * \see track()
      */
-    virtual void setTrack( const QString& title ) { m_title = title; }
+    virtual void setTrack( const QString& title )
+    {
+        m_title = title;
+    }
 
     /**
      * \brief Returns the social action for this database command instance.
      * \return QString containing the action name.
      * \see setAction()
      */
-    QString action() const { return m_action; }
+    QString action() const
+    {
+        return m_action;
+    }
 
     /**
      * \brief Sets the social actions
      * \param a QString containing action to be set in this class.
      * \see action()
      */
-    void setAction( QString a ) { m_action = a; }
+    void setAction( QString a )
+    {
+        m_action = a;
+    }
 
     /**
      * \brief Returns comment associated with this social action.
      * \return QString containing comment associated with this social action.
      * \see setComment()
      */
-    virtual QString comment() const { return m_comment; }
+    virtual QString comment() const
+    {
+        return m_comment;
+    }
 
     /**
      * \brief Sets the comment associated with this social action.
      * \param com Comment associated with this social action.
      * \see comment()
      */
-    virtual void setComment( const QString& com ) { m_comment = com; }
+    virtual void setComment( const QString& com )
+    {
+        m_comment = com;
+    }
 
     /**
      * \brief Returns the timestamp associated with this social action.
      * \return unsigned integer containing timestamp
      * \see setTimesetamp()
      */
-    virtual int timestamp() const { return m_timestamp; }
+    virtual int timestamp() const
+    {
+        return m_timestamp;
+    }
 
     /**
      * \brief Sets the timestamp associated with this social action.
      * \param ts unsigned integer associated with this social action.
      * \see timestamp()
      */
-    virtual void setTimestamp( const int ts ) { m_timestamp = ts; }
+    virtual void setTimestamp( const int ts )
+    {
+        m_timestamp = ts;
+    }
 
-    virtual bool doesMutates() const { return true; }
-    virtual bool groupable() const { return true; }
+    virtual bool doesMutates() const
+    {
+        return true;
+    }
+    virtual bool groupable() const
+    {
+        return true;
+    }
 
-protected:
+  protected:
     Tomahawk::trackdata_ptr m_track;
 
-private:
+  private:
     QString m_artist;
     QString m_title;
     int m_timestamp;

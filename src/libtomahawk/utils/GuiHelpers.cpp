@@ -52,10 +52,10 @@ handleAccountAdded( Tomahawk::Accounts::Account* account, bool added )
 class UtilsObject : public QObject
 {
     Q_OBJECT
-public:
+  public:
     UtilsObject( DelegateConfigWrapper* w ) : QObject( w ), m_w( w ) {}
 
-public slots:
+  public slots:
     void
     accountCreateConfigClosed( int ret )
     {
@@ -84,7 +84,7 @@ public slots:
         Q_ASSERT( account );
         Tomahawk::Accounts::AccountManager::instance()->removeAccount( account );
     }
-private:
+  private:
     DelegateConfigWrapper* m_w;
 
 };
@@ -107,7 +107,9 @@ createAccountFromFactory( Tomahawk::Accounts::AccountFactory* factory, QWidget* 
         QObject::connect( dialog, SIGNAL( finished( int ) ), obj, SLOT( accountCreateConfigClosed( int ) ) );
 
         if( account->configurationWidget()->metaObject()->indexOfSignal( "dataError(bool)" ) > -1 )
+        {
             QObject::connect( account->configurationWidget(), SIGNAL( dataError( bool ) ), dialog, SLOT( toggleOkButton( bool ) ), Qt::UniqueConnection );
+        }
 
         dialog->show();
 #else
@@ -115,13 +117,19 @@ createAccountFromFactory( Tomahawk::Accounts::AccountFactory* factory, QWidget* 
         QPointer< DelegateConfigWrapper > watcher( &dialog );
 
         if( account->configurationWidget()->metaObject()->indexOfSignal( "dataError(bool)" ) > -1 )
+        {
             QObject::connect( account->configurationWidget(), SIGNAL( dataError( bool ) ), &dialog, SLOT( toggleOkButton( bool ) ), Qt::UniqueConnection );
+        }
 
         int ret = dialog.exec();
         if( !watcher.isNull() && ret == QDialog::Accepted ) // send changed config to account
+        {
             added = true;
+        }
         else // canceled, delete it
+        {
             added = false;
+        }
 
         handleAccountAdded( account, added );
 #endif
@@ -140,7 +148,7 @@ openAccountConfig( Tomahawk::Accounts::Account* account, QWidget* parent, bool s
     if( account->configurationWidget() )
     {
 #ifndef Q_OS_MAC
-        DelegateConfigWrapper dialog( account->configurationWidget(), account->aboutWidget(), QObject::tr("%1 Configuration" ).arg( account->accountFriendlyName() ), parent );
+        DelegateConfigWrapper dialog( account->configurationWidget(), account->aboutWidget(), QObject::tr( "%1 Configuration" ).arg( account->accountFriendlyName() ), parent );
         dialog.setShowDelete( showDelete );
         QPointer< DelegateConfigWrapper > watcher( &dialog );
         int ret = dialog.exec();
@@ -155,7 +163,7 @@ openAccountConfig( Tomahawk::Accounts::Account* account, QWidget* parent, bool s
         }
 #else
         // on osx a sheet needs to be non-modal
-        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( account->configurationWidget(), account->aboutWidget(), QObject::tr("%1 Configuration" ).arg( account->accountFriendlyName() ), parent, Qt::Sheet );
+        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( account->configurationWidget(), account->aboutWidget(), QObject::tr( "%1 Configuration" ).arg( account->accountFriendlyName() ), parent, Qt::Sheet );
         dialog->setShowDelete( showDelete );
         dialog->setProperty( "accountplugin", QVariant::fromValue< QObject* >( account ) );
         UtilsObject* obj = new UtilsObject( dialog );

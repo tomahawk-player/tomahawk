@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2012 by Leo Franchi <lfranchi@kde.org>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,43 +31,51 @@
 #include <QDebug>
 #include <QPointer>
 
-class QToolbarTabDialogPrivate : public QObject {
+class QToolbarTabDialogPrivate : public QObject
+{
     Q_OBJECT
-public:
-    QToolbarTabDialogPrivate(QToolbarTabDialog* qq) : q(qq), layout(0), toolbar(0), rightSpacer(0), stack(0), separator(0), buttons(0), actionGroup(0) {}
+  public:
+    QToolbarTabDialogPrivate( QToolbarTabDialog* qq ) : q( qq ), layout( 0 ), toolbar( 0 ), rightSpacer( 0 ), stack( 0 ), separator( 0 ), buttons( 0 ), actionGroup( 0 ) {}
 
-public slots:
-    void actionTriggered(QAction* action) {
-        if (dialog.isNull())
+  public slots:
+    void actionTriggered( QAction* action )
+    {
+        if ( dialog.isNull() )
+        {
             return;
+        }
 
-        const int idx = toolbar->actions().indexOf(action);
+        const int idx = toolbar->actions().indexOf( action );
         // There's a left spacer, so we want 1 less
-        Q_ASSERT(idx > 0);
-        if (idx < 1)
+        Q_ASSERT( idx > 0 );
+        if ( idx < 1 )
+        {
             return;
+        }
 
-        stack->setCurrentIndex(idx - 1);
-        dialog.data()->setWindowTitle(action->text());
+        stack->setCurrentIndex( idx - 1 );
+        dialog.data()->setWindowTitle( action->text() );
     }
 
-    void accepted() {
-        Q_ASSERT(!dialog.isNull());
-        Q_ASSERT(!q.isNull());
+    void accepted()
+    {
+        Q_ASSERT( !dialog.isNull() );
+        Q_ASSERT( !q.isNull() );
 
         dialog.data()->hide();
         emit q.data()->accepted();
     }
 
-    void rejected() {
-        Q_ASSERT(!dialog.isNull());
-        Q_ASSERT(!q.isNull());
+    void rejected()
+    {
+        Q_ASSERT( !dialog.isNull() );
+        Q_ASSERT( !q.isNull() );
 
         dialog.data()->hide();
         emit q.data()->rejected();
     }
 
-public:
+  public:
     QPointer<QDialog> dialog;
     QPointer<QToolbarTabDialog> q;
 
@@ -82,119 +90,136 @@ public:
 };
 
 QToolbarTabDialog::QToolbarTabDialog() :
-    QObject(0),
-    pimpl(new QToolbarTabDialogPrivate(this))
+    QObject( 0 ),
+    pimpl( new QToolbarTabDialogPrivate( this ) )
 {
     pimpl->dialog = new QDialog;
-    pimpl->dialog.data()->setModal(true);
+    pimpl->dialog.data()->setModal( true );
 
-    pimpl->toolbar = new QToolBar(pimpl->dialog.data());
-    pimpl->toolbar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    pimpl->toolbar = new QToolBar( pimpl->dialog.data() );
+    pimpl->toolbar->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
 #ifdef Q_OS_WIN
     pimpl->toolbar->setStyleSheet( "QToolBar { border: 0px; }" );
 #endif
 
-    pimpl->stack = new QStackedWidget(pimpl->dialog.data());
+    pimpl->stack = new QStackedWidget( pimpl->dialog.data() );
 
-    pimpl->separator = new QFrame(pimpl->dialog.data());
-    pimpl->separator->setFrameShape(QFrame::HLine);
-    pimpl->separator->setFrameShadow(QFrame::Sunken);
+    pimpl->separator = new QFrame( pimpl->dialog.data() );
+    pimpl->separator->setFrameShape( QFrame::HLine );
+    pimpl->separator->setFrameShadow( QFrame::Sunken );
 
-    pimpl->actionGroup = new QActionGroup(pimpl->dialog.data());
+    pimpl->actionGroup = new QActionGroup( pimpl->dialog.data() );
 
-    connect(pimpl->toolbar, SIGNAL(actionTriggered(QAction*)), pimpl.data(), SLOT(actionTriggered(QAction*)));
+    connect( pimpl->toolbar, SIGNAL( actionTriggered( QAction* ) ), pimpl.data(), SLOT( actionTriggered( QAction* ) ) );
 
-    pimpl->buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, pimpl->dialog.data());
-    connect(pimpl->buttons, SIGNAL(accepted()), pimpl->dialog.data(), SLOT(accept()));
-    connect(pimpl->buttons, SIGNAL(rejected()), pimpl->dialog.data(), SLOT(reject()));
+    pimpl->buttons = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, pimpl->dialog.data() );
+    connect( pimpl->buttons, SIGNAL( accepted() ), pimpl->dialog.data(), SLOT( accept() ) );
+    connect( pimpl->buttons, SIGNAL( rejected() ), pimpl->dialog.data(), SLOT( reject() ) );
 
-    connect(pimpl->dialog.data(), SIGNAL(accepted()), pimpl.data(), SLOT(accepted()));
-    connect(pimpl->dialog.data(), SIGNAL(rejected()), pimpl.data(), SLOT(rejected()));
+    connect( pimpl->dialog.data(), SIGNAL( accepted() ), pimpl.data(), SLOT( accepted() ) );
+    connect( pimpl->dialog.data(), SIGNAL( rejected() ), pimpl.data(), SLOT( rejected() ) );
 
-    QWidget* leftSpacer = new QWidget(pimpl->toolbar);
-    leftSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    QWidget* rightSpacer = new QWidget(pimpl->toolbar);
-    rightSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    QWidget* leftSpacer = new QWidget( pimpl->toolbar );
+    leftSpacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
+    QWidget* rightSpacer = new QWidget( pimpl->toolbar );
+    rightSpacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
 
-    pimpl->toolbar->addWidget(leftSpacer);
-    pimpl->rightSpacer =  pimpl->toolbar->addWidget(rightSpacer);
+    pimpl->toolbar->addWidget( leftSpacer );
+    pimpl->rightSpacer =  pimpl->toolbar->addWidget( rightSpacer );
 
     pimpl->layout = new QVBoxLayout;
     pimpl->layout->setContentsMargins( 4, 4, 4, 4 );
-    pimpl->layout->addWidget(pimpl->toolbar);
-    pimpl->layout->addWidget(pimpl->separator);
-    pimpl->layout->addWidget(pimpl->stack);
-    pimpl->layout->addWidget(pimpl->buttons);
-    pimpl->dialog.data()->setLayout(pimpl->layout);
+    pimpl->layout->addWidget( pimpl->toolbar );
+    pimpl->layout->addWidget( pimpl->separator );
+    pimpl->layout->addWidget( pimpl->stack );
+    pimpl->layout->addWidget( pimpl->buttons );
+    pimpl->dialog.data()->setLayout( pimpl->layout );
 }
 
 QToolbarTabDialog::~QToolbarTabDialog()
 {
-    if (pimpl && !pimpl->dialog.isNull()) {
+    if ( pimpl && !pimpl->dialog.isNull() )
+    {
         delete pimpl->dialog.data();
     }
 }
 
-void QToolbarTabDialog::addTab(QWidget* page, const QPixmap& icon, const QString& label, const QString& tooltip)
+void QToolbarTabDialog::addTab( QWidget* page, const QPixmap& icon, const QString& label, const QString& tooltip )
 {
-    Q_ASSERT(pimpl);
-    if (!pimpl)
+    Q_ASSERT( pimpl );
+    if ( !pimpl )
+    {
         return;
+    }
 
-    pimpl->toolbar->removeAction(pimpl->rightSpacer);
+    pimpl->toolbar->removeAction( pimpl->rightSpacer );
 
-    QAction* action = new QAction(icon, label, pimpl->toolbar);
-    action->setCheckable(true);
-    action->setToolTip(tooltip);
+    QAction* action = new QAction( icon, label, pimpl->toolbar );
+    action->setCheckable( true );
+    action->setToolTip( tooltip );
 
-    pimpl->actionGroup->addAction(action);
+    pimpl->actionGroup->addAction( action );
 
-    pimpl->toolbar->addAction(action);
-    pimpl->stack->addWidget(page);
+    pimpl->toolbar->addAction( action );
+    pimpl->stack->addWidget( page );
 
-    pimpl->toolbar->addAction(pimpl->rightSpacer);
+    pimpl->toolbar->addAction( pimpl->rightSpacer );
 }
 
-void QToolbarTabDialog::setCurrentIndex(int index)
+void QToolbarTabDialog::setCurrentIndex( int index )
 {
-    Q_ASSERT(pimpl);
-    if (!pimpl || pimpl->dialog.isNull())
+    Q_ASSERT( pimpl );
+    if ( !pimpl || pimpl->dialog.isNull() )
+    {
         return;
+    }
 
 
-    Q_ASSERT(index < pimpl->toolbar->actions().length() + 1);
-    Q_ASSERT(index < pimpl->stack->count());
-    if (index < 0 || index > pimpl->toolbar->actions().length())
+    Q_ASSERT( index < pimpl->toolbar->actions().length() + 1 );
+    Q_ASSERT( index < pimpl->stack->count() );
+    if ( index < 0 || index > pimpl->toolbar->actions().length() )
+    {
         return;
-    if (index > pimpl->stack->count())
+    }
+    if ( index > pimpl->stack->count() )
+    {
         return;
+    }
 
-    if (pimpl->stack->currentIndex() != index)
-        pimpl->stack->setCurrentIndex(index);
+    if ( pimpl->stack->currentIndex() != index )
+    {
+        pimpl->stack->setCurrentIndex( index );
+    }
 
     // 1 spacer item before the first action
-    QAction* toCheck = pimpl->toolbar->actions().at(index + 1);
-    pimpl->dialog.data()->setWindowTitle(toCheck->text());
-    if (pimpl->actionGroup->checkedAction() != toCheck)
-        toCheck->setChecked(true);
+    QAction* toCheck = pimpl->toolbar->actions().at( index + 1 );
+    pimpl->dialog.data()->setWindowTitle( toCheck->text() );
+    if ( pimpl->actionGroup->checkedAction() != toCheck )
+    {
+        toCheck->setChecked( true );
+    }
 }
 
 void QToolbarTabDialog::show()
 {
-    Q_ASSERT(pimpl);
-    Q_ASSERT(!pimpl->dialog.isNull());
-    if (!pimpl || pimpl->dialog.isNull())
+    Q_ASSERT( pimpl );
+    Q_ASSERT( !pimpl->dialog.isNull() );
+    if ( !pimpl || pimpl->dialog.isNull() )
+    {
         return;
+    }
 
     pimpl->dialog.data()->show();
 }
 
 void QToolbarTabDialog::hide()
 {
-    Q_ASSERT(pimpl);
-    Q_ASSERT(!pimpl->dialog.isNull());
-    if (!pimpl || pimpl->dialog.isNull())
+    Q_ASSERT( pimpl );
+    Q_ASSERT( !pimpl->dialog.isNull() );
+    if ( !pimpl || pimpl->dialog.isNull() )
+    {
         return;
+    }
 
     pimpl->dialog.data()->hide();
 }

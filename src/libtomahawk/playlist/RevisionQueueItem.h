@@ -24,11 +24,12 @@
 
 #include "Typedefs.h"
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
 struct RevisionQueueItem
 {
-public:
+  public:
     QString newRev;
     QString oldRev;
     QList< plentry_ptr > entries;

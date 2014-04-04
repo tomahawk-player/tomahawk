@@ -29,7 +29,7 @@
 #include <QString>
 
 #ifndef ENABLE_HEADLESS
-    #include <QMenu>
+#include <QMenu>
 #endif
 
 #include "DllMacro.h"
@@ -37,20 +37,20 @@
 class SipInfo;
 namespace Tomahawk
 {
-    namespace Accounts
-    {
-        class Account;
-    }
-    class PeerInfo;
+namespace Accounts
+{
+class Account;
+}
+class PeerInfo;
 }
 
 class DLLEXPORT SipPlugin : public QObject
 {
     Q_OBJECT
 
-friend class Tomahawk::PeerInfo;
+    friend class Tomahawk::PeerInfo;
 
-public:
+  public:
     enum AddContactOptions { NoOptions = 0, SendInvite = 1 };
 
     SipPlugin();
@@ -72,7 +72,7 @@ public:
     // peer infos
     virtual const QList< Tomahawk::peerinfo_ptr > peersOnline() const;
 
-public slots:
+  public slots:
     virtual void connectPlugin() = 0;
     virtual void disconnectPlugin() = 0;
     virtual void checkSettings() = 0;
@@ -85,7 +85,7 @@ public slots:
      */
     virtual void sendSipInfos( const Tomahawk::peerinfo_ptr& receiver, const QList<SipInfo>& infos ) = 0;
 
-signals:
+  signals:
     void peerStatusChanged( const Tomahawk::peerinfo_ptr& );
     void dataError( bool );
     void inviteSentSuccess( const QString& inviteId );
@@ -99,10 +99,10 @@ signals:
     void removeMenu( QMenu* menu );
 #endif
 
-protected:
+  protected:
     void setAllPeersOffline();
 
-    Tomahawk::Accounts::Account *m_account;
+    Tomahawk::Accounts::Account* m_account;
 };
 
 #endif

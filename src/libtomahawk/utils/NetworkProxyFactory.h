@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
@@ -31,36 +31,45 @@ namespace Tomahawk
 {
 namespace Utils
 {
-    class DLLEXPORT NetworkProxyFactory : public QNetworkProxyFactory
-    {
-    public:
-        NetworkProxyFactory()
+class DLLEXPORT NetworkProxyFactory : public QNetworkProxyFactory
+{
+  public:
+    NetworkProxyFactory()
         : m_proxy( QNetworkProxy::NoProxy )
         , m_proxyChanged( false )
-        {}
+    {}
 
-        NetworkProxyFactory( const NetworkProxyFactory &other );
-        virtual ~NetworkProxyFactory() {}
+    NetworkProxyFactory( const NetworkProxyFactory& other );
+    virtual ~NetworkProxyFactory() {}
 
-        virtual QList< QNetworkProxy > queryProxy( const QNetworkProxyQuery & query = QNetworkProxyQuery() );
+    virtual QList< QNetworkProxy > queryProxy( const QNetworkProxyQuery& query = QNetworkProxyQuery() );
 
-        virtual void setNoProxyHosts( const QStringList &hosts );
-        virtual QStringList noProxyHosts() const { return m_noProxyHosts; }
-        virtual void setProxy( const QNetworkProxy &proxy, bool useProxyDns );
-        virtual QNetworkProxy proxy() { return m_proxy; }
+    virtual void setNoProxyHosts( const QStringList& hosts );
+    virtual QStringList noProxyHosts() const
+    {
+        return m_noProxyHosts;
+    }
+    virtual void setProxy( const QNetworkProxy& proxy, bool useProxyDns );
+    virtual QNetworkProxy proxy()
+    {
+        return m_proxy;
+    }
 
-        virtual NetworkProxyFactory& operator=( const NetworkProxyFactory &rhs );
-        virtual bool operator==( const NetworkProxyFactory &other ) const;
-        bool changed() const { return m_proxyChanged; }
+    virtual NetworkProxyFactory& operator=( const NetworkProxyFactory& rhs );
+    virtual bool operator==( const NetworkProxyFactory& other ) const;
+    bool changed() const
+    {
+        return m_proxyChanged;
+    }
 
-    private:
-        QStringList m_noProxyHosts;
-        QNetworkProxy m_proxy;
-        bool m_proxyChanged;
-    };
+  private:
+    QStringList m_noProxyHosts;
+    QNetworkProxy m_proxy;
+    bool m_proxyChanged;
+};
 
-    DLLEXPORT void setProxyFactory( NetworkProxyFactory* factory, bool noMutexLocker = false );
-    DLLEXPORT NetworkProxyFactory* proxyFactory( bool makeClone = false, bool noMutexLocker = false );
+DLLEXPORT void setProxyFactory( NetworkProxyFactory* factory, bool noMutexLocker = false );
+DLLEXPORT NetworkProxyFactory* proxyFactory( bool makeClone = false, bool noMutexLocker = false );
 }
 }
 

@@ -43,19 +43,19 @@ class Api_v1_5;
 
 namespace Tomahawk
 {
-    class Result;
-    typedef QSharedPointer< Result > result_ptr;
+class Result;
+typedef QSharedPointer< Result > result_ptr;
 }
 
 class TOMAHAWK_PLAYDARAPI_EXPORT Api_v1 : public QxtWebSlotService
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     Api_v1( QxtAbstractWebSessionManager* sm, QObject* parent = 0 );
     virtual ~Api_v1();
 
-public slots:
+  public slots:
     // authenticating uses /auth_1
     // we redirect to /auth_2 for the callback
     void auth_1( QxtWebRequestEvent* event, QString unused = QString() );
@@ -63,11 +63,11 @@ public slots:
 
     // all v1 api calls go to /api/
     void api( QxtWebRequestEvent* event,
-        const QString& version = QString(),
-        const QString& method = QString(),
-        const QString& arg1 = QString(),
-        const QString& arg2 = QString(),
-        const QString& arg3 = QString() );
+              const QString& version = QString(),
+              const QString& method = QString(),
+              const QString& arg1 = QString(),
+              const QString& arg2 = QString(),
+              const QString& arg3 = QString() );
 
     // request for stream: /sid/<id>
     void sid( QxtWebRequestEvent* event, QString unused = QString() );
@@ -88,11 +88,11 @@ public slots:
 
     void index( QxtWebRequestEvent* event );
 
-protected:
+  protected:
     void apiCallFailed( QxtWebRequestEvent* event, const QString& method );
     void sendPlain404( QxtWebRequestEvent* event, const QString& message, const QString& statusmessage );
 
-private:
+  private:
     void processSid( QxtWebRequestEvent* event, Tomahawk::result_ptr&, QSharedPointer< QIODevice >& );
 
     QxtWebRequestEvent* m_storedEvent;

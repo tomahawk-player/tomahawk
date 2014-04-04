@@ -45,34 +45,55 @@ class MetaAlbumInfoInterface;
 
 namespace Ui
 {
-    class AlbumInfoWidget;
+class AlbumInfoWidget;
 }
 
 class DLLEXPORT AlbumInfoWidget : public QWidget, public Tomahawk::ViewPage
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* parent = 0 );
     ~AlbumInfoWidget();
 
-    Tomahawk::album_ptr album() const { return m_album; }
+    Tomahawk::album_ptr album() const
+    {
+        return m_album;
+    }
 
-    virtual QWidget* widget() { return this; }
+    virtual QWidget* widget()
+    {
+        return this;
+    }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 
-    virtual QString title() const { return m_title; }
-    virtual QString description() const { return m_description; }
-    virtual QString longDescription() const { return m_longDescription; }
+    virtual QString title() const
+    {
+        return m_title;
+    }
+    virtual QString description() const
+    {
+        return m_description;
+    }
+    virtual QString longDescription() const
+    {
+        return m_longDescription;
+    }
     virtual QPixmap pixmap() const;
 
-    virtual bool isTemporaryPage() const { return true; }
-    virtual bool showInfoBar() const { return false; }
+    virtual bool isTemporaryPage() const
+    {
+        return true;
+    }
+    virtual bool showInfoBar() const
+    {
+        return false;
+    }
 
     virtual bool isBeingPlayed() const;
     virtual bool jumpToCurrentTrack();
 
-public slots:
+  public slots:
     /** \brief Loads information for a given album.
      *  \param album The album that you want to load information for.
      *
@@ -83,22 +104,22 @@ public slots:
      */
     void load( const Tomahawk::album_ptr& album );
 
-signals:
+  signals:
     void longDescriptionChanged( const QString& description );
     void descriptionChanged( const Tomahawk::artist_ptr& artist );
     void pixmapChanged( const QPixmap& pixmap );
 
-protected:
+  protected:
     void changeEvent( QEvent* e );
 
-private slots:
+  private slots:
     void loadAlbums( bool autoRefetch = false );
     void gotAlbums( const QList<Tomahawk::album_ptr>& albums );
 
     void onArtistClicked();
     void onAlbumImageUpdated();
 
-private:
+  private:
     Ui::AlbumInfoWidget* ui;
 
     Tomahawk::album_ptr m_album;

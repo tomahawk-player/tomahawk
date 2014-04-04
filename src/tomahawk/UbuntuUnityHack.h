@@ -22,19 +22,20 @@
 
 class QProcess;
 
-class UbuntuUnityHack : public QObject {
-  Q_OBJECT
-public:
-  UbuntuUnityHack(QObject* parent = NULL);
+class UbuntuUnityHack : public QObject
+{
+    Q_OBJECT
+  public:
+    UbuntuUnityHack( QObject* parent = NULL );
 
-private slots:
-  void GetFinished(int exit_code);
-  void GetError();
+  private slots:
+    void GetFinished( int exit_code );
+    void GetError();
 
-private:
-  static const char* kGSettingsFileName;
-  static const char* kUnityPanel;
-  static const char* kUnitySystrayWhitelist;
+  private:
+    static const char* kGSettingsFileName;
+    static const char* kUnityPanel;
+    static const char* kUnitySystrayWhitelist;
 };
 
 #endif // UBUNTUUNITYHACK_H

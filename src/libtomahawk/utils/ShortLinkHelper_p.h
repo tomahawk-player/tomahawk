@@ -32,7 +32,7 @@ namespace Utils
 
 class ShortLinkHelperPrivate
 {
-public:
+  public:
     ShortLinkHelperPrivate( ShortLinkHelper* q )
         : q_ptr( q )
     {
@@ -40,7 +40,7 @@ public:
 
     ShortLinkHelper* q_ptr;
     Q_DECLARE_PUBLIC( ShortLinkHelper )
-private:
+  private:
     QNetworkReply* reply;
 };
 

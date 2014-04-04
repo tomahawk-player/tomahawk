@@ -35,17 +35,19 @@ class QMimeData;
 class SourceTreeItem;
 class GroupItem;
 
-namespace Tomahawk {
-    class Source;
-    class Playlist;
-    class ViewPage;
+namespace Tomahawk
+{
+class Source;
+class Playlist;
+class ViewPage;
 }
 
 class SourcesModel : public QAbstractItemModel
 {
     Q_OBJECT
-public:
-    enum RowType {
+  public:
+    enum RowType
+    {
         Invalid = -1,
         Divider = 9,
 
@@ -67,12 +69,14 @@ public:
         Inbox = 12
     };
 
-    enum CategoryType {
+    enum CategoryType
+    {
         PlaylistsCategory = 0,
         StationsCategory = 1
     };
 
-    enum Roles {
+    enum Roles
+    {
         SourceTreeItemRole      = Qt::UserRole + 10,
         SourceTreeItemTypeRole  = Qt::UserRole + 11,
         SortRole                = Qt::UserRole + 12,
@@ -88,18 +92,18 @@ public:
     static QString rowTypeToString( RowType type );
 
     // reimplemented from QAIM
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual QModelIndex parent(const QModelIndex& child) const;
-    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
+    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
+    virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
+    virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
+    virtual QModelIndex parent( const QModelIndex& child ) const;
+    virtual QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
+    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
 
     virtual QStringList mimeTypes() const;
-    virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
-    virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
+    virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;
+    virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
     virtual Qt::DropActions supportedDropActions() const;
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+    virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
 
     void appendGroups();
 
@@ -113,7 +117,7 @@ public:
 
     QList< Tomahawk::source_ptr > sourcesWithViewPage() const;
 
-public slots:
+  public slots:
     void loadSources();
 
     void itemUpdated();
@@ -128,12 +132,12 @@ public slots:
     void itemExpandRequest( SourceTreeItem* item );
     void itemToggleExpandRequest( SourceTreeItem* item );
 
-signals:
+  signals:
     void selectRequest( const QPersistentModelIndex& idx );
     void expandRequest( const QPersistentModelIndex& idx );
     void toggleExpandRequest( const QPersistentModelIndex& idx );
 
-private slots:
+  private slots:
     void onSourcesAdded( const QList<Tomahawk::source_ptr>& sources );
     void onSourceAdded( const Tomahawk::source_ptr& source );
     void onSourceRemoved( const Tomahawk::source_ptr& source );
@@ -151,7 +155,7 @@ private slots:
      */
     void appendPageItem( const QString& name, Tomahawk::ViewPage* page, int sortValue );
 
-private:
+  private:
     SourceTreeItem* itemFromIndex( const QModelIndex& idx ) const;
     int rowForItem( SourceTreeItem* item ) const;
     SourceTreeItem* activatePlaylistPage( Tomahawk::ViewPage* p, SourceTreeItem* i );

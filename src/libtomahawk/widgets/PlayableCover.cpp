@@ -92,7 +92,9 @@ void
 PlayableCover::mousePressEvent( QMouseEvent* event )
 {
     if ( event->button() == Qt::LeftButton )
-         m_dragStartPosition = event->pos();
+    {
+        m_dragStartPosition = event->pos();
+    }
 }
 
 
@@ -101,7 +103,7 @@ PlayableCover::mouseMoveEvent( QMouseEvent* event )
 {
     QLabel::mouseMoveEvent( event );
 
-    foreach ( const QRect& rect, m_itemRects )
+    foreach ( const QRect & rect, m_itemRects )
     {
         if ( rect.contains( event->pos() ) )
         {
@@ -123,9 +125,13 @@ PlayableCover::mouseMoveEvent( QMouseEvent* event )
     }
 
     if ( !( event->buttons() & Qt::LeftButton ) )
+    {
         return;
+    }
     if ( ( event->pos() - m_dragStartPosition ).manhattanLength() < QApplication::startDragDistance() )
+    {
         return;
+    }
 
     QByteArray resultData;
     QDataStream resultStream( &resultData, QIODevice::WriteOnly );
@@ -168,16 +174,22 @@ PlayableCover::mouseReleaseEvent( QMouseEvent* event )
 {
     QLabel::mouseReleaseEvent( event );
 
-    foreach ( const QRect& rect, m_itemRects )
+    foreach ( const QRect & rect, m_itemRects )
     {
         if ( rect.contains( event->pos() ) )
         {
             if ( m_artist )
+            {
                 ViewManager::instance()->show( m_artist );
+            }
             else if ( m_album )
+            {
                 ViewManager::instance()->show( m_album->artist() );
+            }
             else if ( m_query )
+            {
                 ViewManager::instance()->show( m_query->queryTrack()->artistPtr() );
+            }
 
             return;
         }
@@ -191,11 +203,17 @@ PlayableCover::contextMenuEvent( QContextMenuEvent* event )
     m_contextMenu->clear();
 
     if ( m_artist )
+    {
         m_contextMenu->setArtist( m_artist );
+    }
     else if ( m_album )
+    {
         m_contextMenu->setAlbum( m_album );
+    }
     else
+    {
         m_contextMenu->setQuery( m_query );
+    }
 
     m_contextMenu->exec( event->globalPos() );
 }
@@ -219,7 +237,9 @@ PlayableCover::paintEvent( QPaintEvent* event )
     painter.drawPixmap( 0, 0, pixmap() );
 
     if ( !m_showText )
+    {
         return;
+    }
 
     QRect r = contentsRect().adjusted( margin(), margin(), -margin(), -margin() );
     QPixmap buffer( r.size() );
@@ -282,7 +302,9 @@ PlayableCover::paintEvent( QPaintEvent* event )
     QRect textRect = r.adjusted( 8, r.height() - frameHeight - 16, -8, -16 );
     bool oneLiner = false;
     if ( bottom.isEmpty() )
+    {
         oneLiner = true;
+    }
 
     bufpainter.setFont( boldFont );
     if ( oneLiner )
@@ -349,11 +371,17 @@ void
 PlayableCover::onClicked()
 {
     if ( m_artist )
+    {
         AudioEngine::instance()->playItem( m_artist );
+    }
     else if ( m_album )
+    {
         AudioEngine::instance()->playItem( m_album );
+    }
     else if ( m_query )
+    {
         AudioEngine::instance()->playItem( Tomahawk::playlistinterface_ptr(), m_query );
+    }
 }
 
 

@@ -37,18 +37,27 @@ class DatabaseCommand_CreateDynamicPlaylist : public DatabaseCommand_CreatePlayl
     Q_OBJECT
     Q_PROPERTY( QVariant playlist READ playlistV WRITE setPlaylistV )
 
-public:
+  public:
     explicit DatabaseCommand_CreateDynamicPlaylist( QObject* parent = 0 );
     explicit DatabaseCommand_CreateDynamicPlaylist( const Tomahawk::source_ptr& author, const Tomahawk::dynplaylist_ptr& playlist, bool autoLoad = true );
     virtual ~DatabaseCommand_CreateDynamicPlaylist();
 
-    QString commandname() const { return "createdynamicplaylist"; }
+    QString commandname() const
+    {
+        return "createdynamicplaylist";
+    }
 
     virtual void exec( DatabaseImpl* lib );
     virtual void postCommitHook();
-    virtual bool doesMutates() const { return true; }
+    virtual bool doesMutates() const
+    {
+        return true;
+    }
 
-    virtual bool loggable() const { return m_autoLoad; }
+    virtual bool loggable() const
+    {
+        return m_autoLoad;
+    }
 
     QVariant playlistV() const;
 
@@ -57,10 +66,13 @@ public:
         m_v = v;
     }
 
-protected:
-    virtual bool report() { return m_autoLoad; }
+  protected:
+    virtual bool report()
+    {
+        return m_autoLoad;
+    }
 
-private:
+  private:
     Tomahawk::dynplaylist_ptr m_playlist;
     bool m_autoLoad;
 };

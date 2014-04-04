@@ -47,9 +47,9 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->statsLabel->setStyleSheet( "QLabel { background-image:url(); border: 2px solid #dddddd; background-color: #faf9f9; border-radius: 4px; padding: 12px; }" );
     ui->statsLabel->setVisible( false );
 
-/*    ui->lyricsView->setVisible( false ); // FIXME eventually
-    TomahawkStyle::stylePageFrame( ui->lyricsView );
-    TomahawkStyle::styleScrollBar( ui->lyricsView->verticalScrollBar() );*/
+    /*    ui->lyricsView->setVisible( false ); // FIXME eventually
+        TomahawkStyle::stylePageFrame( ui->lyricsView );
+        TomahawkStyle::styleScrollBar( ui->lyricsView->verticalScrollBar() );*/
 
     ui->lineAbove->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
     ui->lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
@@ -186,10 +186,14 @@ bool
 TrackInfoWidget::isBeingPlayed() const
 {
     if ( ui->similarTracksView->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+    {
         return true;
+    }
 
     if ( ui->similarTracksView->playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
+    {
         return true;
+    }
 
     return false;
 }
@@ -239,7 +243,7 @@ TrackInfoWidget::load( const query_ptr& query )
 
     m_artist->loadStats();
     m_query->track()->loadStats();
-//    m_query->lyrics();
+    //    m_query->lyrics();
     onCoverUpdated();
 
     ui->cover->setQuery( query );
@@ -248,7 +252,9 @@ TrackInfoWidget::load( const query_ptr& query )
     m_relatedTracksModel->startLoading();
 
     if ( !m_query->track()->similarTracks().isEmpty() )
+    {
         onSimilarTracksLoaded();
+    }
 }
 
 
@@ -256,7 +262,9 @@ void
 TrackInfoWidget::onCoverUpdated()
 {
     if ( m_query->track()->cover( QSize( 0, 0 ) ).isNull() )
+    {
         return;
+    }
 
     m_pixmap = m_query->track()->cover( ui->cover->size() );
     ui->cover->setPixmap( TomahawkUtils::createRoundedImage( m_pixmap, QSize( 0, 0 ) ) );
@@ -272,9 +280,13 @@ TrackInfoWidget::onStatsLoaded()
     const unsigned int artistCounter = m_artist->playbackCount( SourceList::instance()->getLocal() );
 
     if ( trackCounter )
+    {
         stats = tr( "You've listened to this track %n time(s).", "", trackCounter );
+    }
     else
+    {
         stats = tr( "You've never listened to this track before." );
+    }
 
     if ( history.count() )
     {
@@ -289,7 +301,9 @@ TrackInfoWidget::onStatsLoaded()
         m_playStatsGauge->setValue( trackCounter );
     }
     else
+    {
         stats += "\n" + tr( "You've never listened to %1 before." ).arg( m_artist->name() );
+    }
 
     ui->statsLabel->setText( stats );
     m_playStatsTotalGauge->setMaximum( m_query->track()->chartCount() );
@@ -300,9 +314,9 @@ TrackInfoWidget::onStatsLoaded()
 void
 TrackInfoWidget::onSimilarArtistsLoaded()
 {
-/*    Artist* artist = qobject_cast<Artist*>( sender() );
+    /*    Artist* artist = qobject_cast<Artist*>( sender() );
 
-    m_relatedArtistsModel->addArtists( artist->similarArtists() );*/
+        m_relatedArtistsModel->addArtists( artist->similarArtists() );*/
 }
 
 
@@ -317,7 +331,7 @@ TrackInfoWidget::onSimilarTracksLoaded()
 void
 TrackInfoWidget::onLyricsLoaded()
 {
-//    ui->lyricsView->setHtml( m_query->track()->lyrics().join( "<br/>" ) );
+    //    ui->lyricsView->setHtml( m_query->track()->lyrics().join( "<br/>" ) );
 }
 
 
@@ -355,7 +369,11 @@ QPixmap
 TrackInfoWidget::pixmap() const
 {
     if ( m_pixmap.isNull() )
+    {
         return Tomahawk::ViewPage::pixmap();
+    }
     else
+    {
         return m_pixmap;
+    }
 }

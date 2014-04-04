@@ -29,16 +29,19 @@ class AccountConfigWidget;
 class DelegateConfigWrapper : public QDialog
 {
     Q_OBJECT
-public:
+  public:
     DelegateConfigWrapper( AccountConfigWidget* conf, QWidget* aboutWidget, const QString& title, QWidget* parent, Qt::WindowFlags flags = 0 );
 
     ~DelegateConfigWrapper() {}
 
     void setShowDelete( bool del );
 
-    bool deleted() const { return m_deleted; }
+    bool deleted() const
+    {
+        return m_deleted;
+    }
 
-public slots:
+  public slots:
     void toggleOkButton( bool dataError );
     void closed( QAbstractButton* b );
 
@@ -47,17 +50,17 @@ public slots:
 
     void updateSizeHint();
 
-signals:
+  signals:
     void closedWithDelete();
 
-private slots:
+  private slots:
     void aboutClicked( bool );
 
-private:
+  private:
     QDialogButtonBox* m_buttons;
     AccountConfigWidget* m_widget;
     QWidget* m_aboutW;
-    QPushButton *m_okButton, *m_deleteButton;
+    QPushButton* m_okButton, *m_deleteButton;
     bool m_deleted;
 };
 

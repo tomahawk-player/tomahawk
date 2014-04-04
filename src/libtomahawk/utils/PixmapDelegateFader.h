@@ -45,23 +45,26 @@ class PixmapDelegateFader : public QObject
 
     static QPointer< TomahawkUtils::SharedTimeLine > stlInstance();
 
-public:
+  public:
     PixmapDelegateFader( const artist_ptr& artist, const QSize& size, TomahawkUtils::ImageMode mode = TomahawkUtils::Original, bool forceLoad = true );
     PixmapDelegateFader( const album_ptr& album, const QSize& size, TomahawkUtils::ImageMode mode = TomahawkUtils::Original, bool forceLoad = true );
     PixmapDelegateFader( const query_ptr& track, const QSize& size, TomahawkUtils::ImageMode mode = TomahawkUtils::Original, bool forceLoad = true );
 
     virtual ~PixmapDelegateFader();
-    
-    QSize size() const { return m_size; }
+
+    QSize size() const
+    {
+        return m_size;
+    }
     QPixmap currentPixmap() const;
 
-public slots:
+  public slots:
     void setSize( const QSize& size );
 
-signals:
+  signals:
     void repaintRequest();
 
-private slots:
+  private slots:
     void artistChanged();
     void albumChanged();
     void trackChanged();
@@ -70,7 +73,7 @@ private slots:
     void onAnimationFinished();
     void setPixmap( const QPixmap& pixmap );
 
-private:
+  private:
     void init();
 
     artist_ptr m_artist;
@@ -83,9 +86,9 @@ private:
     float m_fadePct;
     qint64 m_oldImageMd5;
     bool m_defaultImage;
-    
+
     QQueue<QPixmap> m_pixmapQueue;
-    
+
     QPixmap m_currentReference, m_oldReference, m_current;
 
     static QPointer< TomahawkUtils::SharedTimeLine > s_stlInstance;

@@ -52,7 +52,9 @@ bool
 resolverSort( const Attica::Content& first, const Attica::Content& second )
 {
     if ( !first.attribute( "typeid" ).isEmpty() && second.attribute( "typeid" ).isEmpty() )
+    {
         return true;
+    }
 
     return first.downloads() > second.downloads();
 }
@@ -66,14 +68,14 @@ AtticaManager::AtticaManager( QObject* parent )
     connect( &m_manager, SIGNAL( providerAdded( Attica::Provider ) ), this, SLOT( providerAdded( Attica::Provider ) ) );
 
     // resolvers
-//    m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org/resolvers/providers.xml" ) );
+    //    m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org/resolvers/providers.xml" ) );
 
     const QString url = QString( "%1/resolvers/providers.xml?version=%2" ).arg( hostname() ).arg( TomahawkUtils::appFriendlyVersion() );
     QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( QUrl( url ) ) );
     NewClosure( reply, SIGNAL( finished() ), this, SLOT( providerFetched( QNetworkReply* ) ), reply );
     connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SLOT( providerError( QNetworkReply::NetworkError ) ) );
 
-//     m_manager.addProviderFile( QUrl( "http://lycophron/resolvers/providers.xml" ) );
+    //     m_manager.addProviderFile( QUrl( "http://lycophron/resolvers/providers.xml" ) );
 
     qRegisterMetaType< Attica::Content >( "Attica::Content" );
 }
@@ -84,10 +86,12 @@ AtticaManager::~AtticaManager()
     savePixmapsToCache();
 
 
-    foreach( const QString& id, m_resolverStates.keys() )
+    foreach( const QString & id, m_resolverStates.keys() )
     {
         if ( !m_resolverStates[ id ].pixmap )
+        {
             continue;
+        }
 
         delete m_resolverStates[ id ].pixmap;
     }
@@ -100,7 +104,9 @@ AtticaManager::fetchMissingIcons()
     foreach ( Content resolver, m_resolvers )
     {
         if ( !m_resolverStates.contains( resolver.id() ) )
+        {
             m_resolverStates.insert( resolver.id(), Resolver() );
+        }
 
         if ( !m_resolverStates.value( resolver.id() ).pixmap && !resolver.icons().isEmpty() && !resolver.icons().first().url().isEmpty() )
         {
@@ -124,11 +130,13 @@ AtticaManager::loadPixmapsFromCache()
 {
     QDir cacheDir = TomahawkUtils::appDataDir();
     if ( !cacheDir.cd( "atticacache" ) ) // doesn't exist, no cache
+    {
         return;
+    }
 
     qDebug() << "Loading resolvers from cache dir:" << cacheDir.absolutePath();
     qDebug() << "Currently we know about these resolvers:" << m_resolverStates.keys();
-    foreach ( const QString& file, cacheDir.entryList( QStringList() << "*.png", QDir::Files | QDir::NoSymLinks ) )
+    foreach ( const QString & file, cacheDir.entryList( QStringList() << "*.png", QDir::Files | QDir::NoSymLinks ) )
     {
         // load all the pixmaps
         QFileInfo info( file );
@@ -157,10 +165,12 @@ AtticaManager::savePixmapsToCache()
         cacheDir.cd( "atticache" );
     }
 
-    foreach( const QString& id, m_resolverStates.keys() )
+    foreach( const QString & id, m_resolverStates.keys() )
     {
         if ( !m_resolverStates[ id ].pixmap || !m_resolverStates[ id ].pixmapDirty )
+        {
             continue;
+        }
 
         const QString filename = cacheDir.absoluteFilePath( QString( "%1.png" ).arg( id ) );
         QFile f( filename );
@@ -183,7 +193,9 @@ QPixmap
 AtticaManager::iconForResolver( const Content& resolver )
 {
     if ( !m_resolverStates[ resolver.id() ].pixmap )
+    {
         return QPixmap();
+    }
 
     return *m_resolverStates.value( resolver.id() ).pixmap;
 }
@@ -199,10 +211,12 @@ AtticaManager::resolvers() const
 Content
 AtticaManager::resolverForId( const QString& id ) const
 {
-    foreach ( const Attica::Content& c, m_resolvers )
+    foreach ( const Attica::Content & c, m_resolvers )
     {
         if ( c.id() == id )
+        {
             return c;
+        }
     }
 
     return Content();
@@ -233,7 +247,9 @@ QString
 AtticaManager::pathFromId( const QString& resolverId ) const
 {
     if ( !m_resolverStates.contains( resolverId ) )
+    {
         return QString();
+    }
 
     return m_resolverStates.value( resolverId ).scriptPath;
 }
@@ -257,7 +273,7 @@ AtticaManager::uploadRating( const Content& c )
 
     TomahawkSettingsGui::instanceGui()->setAtticaResolverStates( m_resolverStates );
 
-    PostJob* job = m_resolverProvider.voteForContent( c.id(), (uint)c.rating() );
+    PostJob* job = m_resolverProvider.voteForContent( c.id(), ( uint )c.rating() );
     connect( job, SIGNAL( finished( Attica::BaseJob* ) ), job, SLOT( deleteLater() ) );
 
     job->start();
@@ -274,28 +290,28 @@ AtticaManager::userHasRated( const Content& c ) const
 
 
 bool
-AtticaManager::hasCustomAccountForAttica( const QString &id ) const
+AtticaManager::hasCustomAccountForAttica( const QString& id ) const
 {
     return m_customAccounts.keys().contains( id );
 }
 
 
 Tomahawk::Accounts::Account*
-AtticaManager::customAccountForAttica( const QString &id ) const
+AtticaManager::customAccountForAttica( const QString& id ) const
 {
     return m_customAccounts.value( id );
 }
 
 
 void
-AtticaManager::registerCustomAccount( const QString &atticaId, Tomahawk::Accounts::Account *account )
+AtticaManager::registerCustomAccount( const QString& atticaId, Tomahawk::Accounts::Account* account )
 {
     m_customAccounts.insert( atticaId, account );
 }
 
 
 AtticaManager::Resolver
-AtticaManager::resolverData(const QString &atticaId) const
+AtticaManager::resolverData( const QString& atticaId ) const
 {
     return m_resolverStates.value( atticaId );
 }
@@ -316,7 +332,9 @@ AtticaManager::providerFetched( QNetworkReply* reply )
 {
     Q_ASSERT( reply );
     if ( !reply )
+    {
         return;
+    }
 
     m_manager.addProviderFromXml( reply->readAll() );
 }
@@ -345,14 +363,18 @@ AtticaManager::categoriesReturned( BaseJob* j )
     ListJob< Category >* job = static_cast< ListJob< Category >* >( j );
 
     Category::List categories = job->itemList();
-    foreach ( const Category& category, categories )
+    foreach ( const Category & category, categories )
     {
         ListJob< Content >* job = m_resolverProvider.searchContents( Category::List() << category, QString(), Provider::Downloads, 0, 50 );
 
         if ( category.name() == "Resolver" )
+        {
             connect( job, SIGNAL( finished( Attica::BaseJob* ) ), this, SLOT( resolversList( Attica::BaseJob* ) ) );
+        }
         else if ( category.name() == "BinaryResolver" )
+        {
             connect( job, SIGNAL( finished( Attica::BaseJob* ) ), this, SLOT( binaryResolversList( Attica::BaseJob* ) ) );
+        }
 
         job->start();
     }
@@ -367,13 +389,15 @@ AtticaManager::resolversList( BaseJob* j )
     m_resolvers.append( job->itemList() );
 
     // Sanity check. if any resolvers are installed that don't exist on the hd, remove them.
-    foreach ( const QString& rId, m_resolverStates.keys() )
+    foreach ( const QString & rId, m_resolverStates.keys() )
     {
         if ( m_resolverStates[ rId ].state == Installed ||
-             m_resolverStates[ rId ].state == NeedsUpgrade )
+                m_resolverStates[ rId ].state == NeedsUpgrade )
         {
             if ( m_resolverStates[ rId ].binary )
+            {
                 continue;
+            }
 
             // Guess location on disk
             QDir dir( QString( "%1/atticaresolvers/%2" ).arg( TomahawkUtils::appDataDir().absolutePath() ).arg( rId ) );
@@ -425,7 +449,7 @@ AtticaManager::binaryResolversList( BaseJob* j )
     platform = QString();
 #endif
 
-    foreach ( const Content& c, binaryResolvers )
+    foreach ( const Content & c, binaryResolvers )
     {
         if ( !c.attribute( "typeid" ).isEmpty() && c.attribute( "typeid" ) == platform )
         {
@@ -439,7 +463,8 @@ AtticaManager::binaryResolversList( BaseJob* j )
                 m_resolverStates.insert( c.id(), r );
             }
             else if ( m_resolverStates[ c.id() ].binary != true )
-            { // HACK workaround... why is this not set in the first place sometimes? Migration issue?
+            {
+                // HACK workaround... why is this not set in the first place sometimes? Migration issue?
                 m_resolverStates[ c.id() ].binary = true;
             }
 
@@ -486,7 +511,7 @@ AtticaManager::syncServerData()
     // look for any newer. m_resolvers has list from server, and m_resolverStates will contain any locally installed ones
     // also update ratings
     tLog() << "Syncing server data!";
-    foreach ( const QString& id, m_resolverStates.keys() )
+    foreach ( const QString & id, m_resolverStates.keys() )
     {
         Resolver r = m_resolverStates[ id ];
         for ( int i = 0; i < m_resolvers.size(); i++ )
@@ -494,7 +519,9 @@ AtticaManager::syncServerData()
             Attica::Content upstream = m_resolvers[ i ];
             // same resolver
             if ( id != upstream.id() )
+            {
                 continue;
+            }
 
             // Update our rating with the server's idea of rating if we haven't rated it
             if ( m_resolverStates[ id ].userRating != -1 )
@@ -506,7 +533,7 @@ AtticaManager::syncServerData()
             // DO we need to upgrade?
             tDebug( LOGVERBOSE ) << "Upgrade check for" << upstream.id() << "local is" << r.version << "upstream is" << upstream.version() << "and state is: " << r.state;
             if ( ( r.state == Installed || r.state == NeedsUpgrade ) &&
-                 !upstream.version().isEmpty() )
+                    !upstream.version().isEmpty() )
             {
                 if ( TomahawkUtils::newerVersion( r.version, upstream.version() ) )
                 {
@@ -541,13 +568,15 @@ void AtticaManager::doInstallResolver( const Content& resolver, bool autoCreate,
     emit startedInstalling( resolver.id() );
 
     if ( m_resolverStates[ resolver.id() ].state != Upgrading )
+    {
         m_resolverStates[ resolver.id() ].state = Installing;
+    }
 
     m_resolverStates[ resolver.id() ].scriptPath = resolver.attribute( "mainscript" );
     m_resolverStates[ resolver.id() ].version = resolver.version();
     emit resolverStateChanged( resolver.id() );
 
-//    ItemJob< DownloadItem >* job = m_resolverProvider.downloadLink( resolver.id() );
+    //    ItemJob< DownloadItem >* job = m_resolverProvider.downloadLink( resolver.id() );
     QUrl url( QString( "%1/resolvers/v1/content/download/%2/1" ).arg( hostname() ).arg( resolver.id() ) );
 
     TomahawkUtils::urlAddQueryItem( url, "tomahawkversion", TomahawkUtils::appFriendlyVersion() );
@@ -556,7 +585,7 @@ void AtticaManager::doInstallResolver( const Content& resolver, bool autoCreate,
     r->setProperty( "resolverId", resolver.id() );
     r->setProperty( "createAccount", autoCreate );
     r->setProperty( "handler", QVariant::fromValue< QObject* >( handler ) );
-    r->setProperty( "binarySignature", resolver.attribute("signature"));
+    r->setProperty( "binarySignature", resolver.attribute( "signature" ) );
 }
 
 
@@ -568,7 +597,9 @@ AtticaManager::upgradeResolver( const Content& resolver )
     Q_ASSERT( m_resolverStates[ resolver.id() ].state == NeedsUpgrade );
 
     if ( !m_resolverStates.contains( resolver.id() ) || m_resolverStates[ resolver.id() ].state != NeedsUpgrade )
+    {
         return;
+    }
 
     m_resolverStates[ resolver.id() ].state = Upgrading;
     emit resolverStateChanged( resolver.id() );
@@ -579,45 +610,47 @@ AtticaManager::upgradeResolver( const Content& resolver )
 
 
 void
-AtticaManager::resolverDownloadFinished ( QNetworkReply *j )
+AtticaManager::resolverDownloadFinished ( QNetworkReply* j )
 {
     Q_ASSERT( j );
     if ( !j )
+    {
         return;
+    }
 
     if ( j->error() == QNetworkReply::NoError )
     {
         QDomDocument doc;
         doc.setContent( j );
 
-       const QDomNodeList nodes = doc.documentElement().elementsByTagName( "downloadlink" );
-       if ( nodes.length() < 1 )
-       {
-           tLog() << "Found no download link for resolver:" << doc.toString();
-           return;
-       }
+        const QDomNodeList nodes = doc.documentElement().elementsByTagName( "downloadlink" );
+        if ( nodes.length() < 1 )
+        {
+            tLog() << "Found no download link for resolver:" << doc.toString();
+            return;
+        }
 
-       QUrl url( nodes.item( 0 ).toElement().text() );
-       // download the resolver itself :)
-       tDebug() << "Downloading resolver from url:" << url.toString();
+        QUrl url( nodes.item( 0 ).toElement().text() );
+        // download the resolver itself :)
+        tDebug() << "Downloading resolver from url:" << url.toString();
 
-       const QDomNodeList signatures = doc.documentElement().elementsByTagName( "signature" );
+        const QDomNodeList signatures = doc.documentElement().elementsByTagName( "signature" );
 
-       // Use the original signature provided
-       QString signature = j->property( "binarySignature" ).toString();
-       if ( signatures.size() > 0 )
-       {
+        // Use the original signature provided
+        QString signature = j->property( "binarySignature" ).toString();
+        if ( signatures.size() > 0 )
+        {
             // THis download has an overriding signature. Take that one instead
-           const QString sig = signatures.item( 0 ).toElement().text();
-           tLog() << "Found overridden signature in binary download:" << sig;
-           signature = sig;
-       }
-       QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
-       connect( reply, SIGNAL( finished() ), this, SLOT( payloadFetched() ) );
-       reply->setProperty( "resolverId", j->property( "resolverId" ) );
-       reply->setProperty( "createAccount", j->property( "createAccount" ) );
-       reply->setProperty( "handler", j->property( "handler" ) );
-       reply->setProperty( "binarySignature", signature );
+            const QString sig = signatures.item( 0 ).toElement().text();
+            tLog() << "Found overridden signature in binary download:" << sig;
+            signature = sig;
+        }
+        QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
+        connect( reply, SIGNAL( finished() ), this, SLOT( payloadFetched() ) );
+        reply->setProperty( "resolverId", j->property( "resolverId" ) );
+        reply->setProperty( "createAccount", j->property( "createAccount" ) );
+        reply->setProperty( "handler", j->property( "handler" ) );
+        reply->setProperty( "binarySignature", signature );
     }
     else
     {
@@ -654,7 +687,9 @@ AtticaManager::payloadFetched()
             // Must have a signature for binary resolvers...
             Q_ASSERT( !signature.isEmpty() );
             if ( signature.isEmpty() )
+            {
                 return;
+            }
             if ( !TomahawkUtils::verifyFile( f->fileName(), signature ) )
             {
                 qWarning() << "FILE SIGNATURE FAILED FOR BINARY RESOLVER! WARNING! :" << f->fileName() << signature;
@@ -723,7 +758,7 @@ void
 AtticaManager::uninstallResolver( const QString& pathToResolver )
 {
     // when is this used? find and fix
-    Q_ASSERT(false);
+    Q_ASSERT( false );
 
     // User manually removed a resolver not through attica dialog, simple remove
     QRegExp r( ".*([^/]*)/contents/code/main.js" );
@@ -732,7 +767,7 @@ AtticaManager::uninstallResolver( const QString& pathToResolver )
     tDebug() << "Got resolver ID to remove:" << atticaId;
     if ( !atticaId.isEmpty() ) // this is an attica-installed resolver, mark as uninstalled
     {
-        foreach ( const Content& resolver, m_resolvers )
+        foreach ( const Content & resolver, m_resolvers )
         {
             if ( resolver.id() == atticaId ) // this is the one
             {
@@ -773,21 +808,29 @@ AtticaManager::doResolverRemove( const QString& id ) const
     // uninstalling is easy... just delete it! :)
     QDir resolverDir = TomahawkUtils::appDataDir();
     if ( !resolverDir.cd( QString( "atticaresolvers/%1" ).arg( id ) ) )
+    {
         return;
+    }
 
     if ( id.isEmpty() )
+    {
         return;
+    }
 
     // sanity check
     if ( !resolverDir.absolutePath().contains( "atticaresolvers" ) ||
-        !resolverDir.absolutePath().contains( id ) )
+            !resolverDir.absolutePath().contains( id ) )
+    {
         return;
+    }
 
     TomahawkUtils::removeDirectory( resolverDir.absolutePath() );
 
     QDir cacheDir = TomahawkUtils::appDataDir();
     if ( !cacheDir.cd( "atticacache" ) )
+    {
         return;
+    }
 
     const bool removed = cacheDir.remove( id + ".png" );
     tDebug() << "Tried to remove cached image, succeeded?" << removed << cacheDir.filePath( id );

@@ -23,7 +23,8 @@
 
 #include <QDateTime>
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
 
 DatabaseCommand_TrendingArtists::DatabaseCommand_TrendingArtists( QObject* parent )
@@ -58,11 +59,11 @@ DatabaseCommand_TrendingArtists::exec( DatabaseImpl* dbi )
         // We could just use the number of peers instead but that would include old peers that may have been inactive for a long while.
 
         QString peersLastWeekSql = QString(
-                    " SELECT COUNT(DISTINCT source ) "
-                    " FROM playback_log "
-                    " WHERE playback_log.source IS NOT NULL " // exclude self
-                    " AND playback_log.playtime >= %1 "
-                    ).arg( _1WeekAgo.toTime_t() );
+                                       " SELECT COUNT(DISTINCT source ) "
+                                       " FROM playback_log "
+                                       " WHERE playback_log.source IS NOT NULL " // exclude self
+                                       " AND playback_log.playtime >= %1 "
+                                   ).arg( _1WeekAgo.toTime_t() );
         TomahawkSqlQuery query = dbi->newquery();
         query.prepare( peersLastWeekSql );
         query.exec();
@@ -74,29 +75,29 @@ DatabaseCommand_TrendingArtists::exec( DatabaseImpl* dbi )
 
 
     QString timespanSql = QString(
-                " SELECT COUNT(*) as counter, track.artist as artistid "
-                " FROM playback_log "
-                " JOIN track ON track.id = playback_log.track "
-                " WHERE playback_log.source IS NOT NULL " // exclude self
-                " AND playback_log.playtime >= %1 AND playback_log.playtime <= %2 "
-                " GROUP BY track.artist "
-                " HAVING counter > 0 "
-                );
+                              " SELECT COUNT(*) as counter, track.artist as artistid "
+                              " FROM playback_log "
+                              " JOIN track ON track.id = playback_log.track "
+                              " WHERE playback_log.source IS NOT NULL " // exclude self
+                              " AND playback_log.playtime >= %1 AND playback_log.playtime <= %2 "
+                              " GROUP BY track.artist "
+                              " HAVING counter > 0 "
+                          );
     QString lastWeekSql = timespanSql.arg( _1WeekAgo.toTime_t() ).arg( now.toTime_t() );
     QString _1BeforeLastWeekSql = timespanSql.arg( _2WeeksAgo.toTime_t() ).arg( _1WeekAgo.toTime_t() );
     QString formula = QString(
-                " (  lastweek.counter /  weekbefore.counter ) "
-                " * "
-                " max(0, 1 - (%1 / (4*min(lastweek.counter, weekbefore.counter )) ) )"
-                ).arg( peersLastWeek );
+                          " (  lastweek.counter /  weekbefore.counter ) "
+                          " * "
+                          " max(0, 1 - (%1 / (4*min(lastweek.counter, weekbefore.counter )) ) )"
+                      ).arg( peersLastWeek );
     QString sql = QString(
-                " SELECT artist.name, ( %4 ) as trending "
-                " FROM ( %1 ) lastweek, ( %2 ) weekbefore, artist "
-                " WHERE lastweek.artistid = weekbefore.artistid "
-                " AND artist.id = lastweek.artistid "
-                " AND ( lastweek.counter - weekbefore.counter ) > 0"
-                " ORDER BY trending DESC %3 "
-                ).arg( lastWeekSql ).arg( _1BeforeLastWeekSql ).arg( limit ).arg( formula );
+                      " SELECT artist.name, ( %4 ) as trending "
+                      " FROM ( %1 ) lastweek, ( %2 ) weekbefore, artist "
+                      " WHERE lastweek.artistid = weekbefore.artistid "
+                      " AND artist.id = lastweek.artistid "
+                      " AND ( lastweek.counter - weekbefore.counter ) > 0"
+                      " ORDER BY trending DESC %3 "
+                  ).arg( lastWeekSql ).arg( _1BeforeLastWeekSql ).arg( limit ).arg( formula );
     TomahawkSqlQuery query = dbi->newquery();
     query.prepare( sql );
     query.exec();
@@ -108,7 +109,9 @@ DatabaseCommand_TrendingArtists::exec( DatabaseImpl* dbi )
     {
         Tomahawk::artist_ptr artist = Artist::get( query.value( 0 ).toString() );
         if ( !artist )
+        {
             continue;
+        }
 
         artists << QPair< double, artist_ptr >( query.value( 1 ).toDouble(), artist );
     }

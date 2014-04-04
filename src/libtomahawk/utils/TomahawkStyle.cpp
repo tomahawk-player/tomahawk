@@ -76,14 +76,16 @@ void
 TomahawkStyle::drawArrow( QStyle::PrimitiveElement element, QPainter* p, const QStyleOption* opt )
 {
     if ( opt->rect.width() <= 1 || opt->rect.height() <= 1 )
+    {
         return;
+    }
 
     QRect r = opt->rect;
     int size = qMin( r.height(), r.width() );
     QPixmap pixmap;
     QString pixmapName;
 
-    pixmapName.sprintf( "arrow-%s-%d-%d-%d-%lld", "$qt_ia", uint(opt->state), element, size, opt->palette.cacheKey() );
+    pixmapName.sprintf( "arrow-%s-%d-%d-%d-%lld", "$qt_ia", uint( opt->state ), element, size, opt->palette.cacheKey() );
     if ( !QPixmapCache::find( pixmapName, pixmap ) )
     {
         int border = size / 5;
@@ -169,7 +171,7 @@ void
 TomahawkStyle::stylePageFrame( QFrame* frame )
 {
     frame->setStyleSheet( QString( "QFrame#%1 { background-color: transparent; border: 0px solid white; border-radius: 0px; }" )
-                             .arg( frame->objectName() ) );
+                          .arg( frame->objectName() ) );
     frame->setFrameShape( QFrame::NoFrame );
     frame->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 }
@@ -179,7 +181,7 @@ void
 TomahawkStyle::stylePageWidget( QWidget* widget )
 {
     widget->setStyleSheet( QString( "QWidget%1 { background-color: transparent; }" )
-                              .arg( widget->objectName() ) );
+                           .arg( widget->objectName() ) );
 }
 
 
@@ -189,21 +191,21 @@ TomahawkStyle::styleScrollBar( QScrollBar* scrollBar )
     scrollBar->setStyleSheet(
         "QScrollBar:horizontal { background-color: transparent; }"
         "QScrollBar::handle:horizontal { border-height: 9px; margin-bottom: 6px;"
-            "border-image: url(" RESPATH "images/scrollbar-horizontal-handle.png) 3 3 3 3 stretch stretch;"
-            "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }"
+        "border-image: url(" RESPATH "images/scrollbar-horizontal-handle.png) 3 3 3 3 stretch stretch;"
+        "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }"
         "QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { width: 0px; height: 0px; background: none; }"
         "QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal { width: 0px; height: 0px; background: none; }"
         "QScrollBar:left-arrow:horizontal, QScrollBar::right-arrow:horizontal {"
-            "border: 0px; width: 0px; height: 0px; background: none; background-color: transparent; }"
+        "border: 0px; width: 0px; height: 0px; background: none; background-color: transparent; }"
 
         "QScrollBar:vertical { background-color: transparent; }"
         "QScrollBar::handle:vertical { border-width: 9px; margin-right: 6px;"
-            "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
-            "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }"
+        "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
+        "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }"
         "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical { width: 0px; height: 0px; background: none; }"
         "QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { width: 0px; height: 0px; background: none; }"
         "QScrollBar:up-arrow:vertical, QScrollBar::down-arrow:vertical {"
-            "border: 0px; width: 0px; height: 0px; background: none; background-color: transparent; }" );
+        "border: 0px; width: 0px; height: 0px; background: none; background-color: transparent; }" );
 }
 
 
@@ -211,7 +213,7 @@ void
 TomahawkStyle::loadFonts()
 {
     QDir dir( ":/data/fonts" );
-    foreach ( const QString& fileName, dir.entryList() )
+    foreach ( const QString & fileName, dir.entryList() )
     {
         tDebug() << "Trying to add font resource:" << fileName;
         const int id = QFontDatabase::addApplicationFont( ":/data/fonts/" + fileName );

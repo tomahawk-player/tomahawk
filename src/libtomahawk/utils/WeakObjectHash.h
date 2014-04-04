@@ -32,30 +32,30 @@ namespace Utils
 
 class WeakObjectHashBase
 {
-public:
+  public:
     virtual void remove( const QString& key );
     virtual ~WeakObjectHashBase();
-protected:
+  protected:
     WeakObjectHashBase() {}
 };
 
 class WeakObjectHashPrivate : public QObject
 {
     Q_OBJECT
-public:
+  public:
     WeakObjectHashPrivate( WeakObjectHashBase* parent );
 
-public slots:
+  public slots:
     void remove( const QString& key );
 
-private:
+  private:
     WeakObjectHashBase* m_parent;
 };
 
 template<class T>
 class WeakObjectHash : public WeakObjectHashBase
 {
-public:
+  public:
     WeakObjectHash() : m_private( this ) {}
 
     WeakObjectHash( const WeakObjectHash& hash )
@@ -72,10 +72,16 @@ public:
         m_hash.insert( key, value.toWeakRef() );
     }
 
-    const QHash< QString, QWeakPointer<T> >& hash() { return m_hash; }
-    virtual void remove( const QString& key ) { m_hash.remove( key ); }
+    const QHash< QString, QWeakPointer<T> >& hash()
+    {
+        return m_hash;
+    }
+    virtual void remove( const QString& key )
+    {
+        m_hash.remove( key );
+    }
 
-private:
+  private:
     QHash< QString, QWeakPointer<T> > m_hash;
     WeakObjectHashPrivate m_private;
 };

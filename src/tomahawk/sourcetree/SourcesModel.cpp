@@ -73,7 +73,7 @@ SourcesModel::SourcesModel( QObject* parent )
     connect( ViewManager::instance(), SIGNAL( viewPageActivated( Tomahawk::ViewPage* ) ),
              SLOT( viewPageActivated( Tomahawk::ViewPage* ) ) );
 
-    foreach ( const collection_ptr& c, SourceList::instance()->scriptCollections() )
+    foreach ( const collection_ptr & c, SourceList::instance()->scriptCollections() )
     {
         onScriptCollectionAdded( c );
     }
@@ -121,54 +121,60 @@ QVariant
 SourcesModel::data( const QModelIndex& index, int role ) const
 {
     if ( !index.isValid() )
+    {
         return QVariant();
+    }
 
     SourceTreeItem* item = itemFromIndex( index );
     if ( !item )
+    {
         return QVariant();
+    }
 
     switch ( role )
     {
-    case Qt::SizeHintRole:
-        return QSize( 0, 18 );
-    case SourceTreeItemRole:
-        return QVariant::fromValue< SourceTreeItem* >( item );
-    case SourceTreeItemTypeRole:
-        return item->type();
-    case Qt::DisplayRole:
-    case Qt::EditRole:
-        return item->text();
-    case Qt::DecorationRole:
-        return item->icon();
-    case SourcesModel::SortRole:
-        return item->peerSortValue();
-    case SourcesModel::IDRole:
-        return item->IDValue();
-    case SourcesModel::LatchedOnRole:
-    {
-        if ( item->type() == Collection )
+        case Qt::SizeHintRole:
+            return QSize( 0, 18 );
+        case SourceTreeItemRole:
+            return QVariant::fromValue< SourceTreeItem* >( item );
+        case SourceTreeItemTypeRole:
+            return item->type();
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+            return item->text();
+        case Qt::DecorationRole:
+            return item->icon();
+        case SourcesModel::SortRole:
+            return item->peerSortValue();
+        case SourcesModel::IDRole:
+            return item->IDValue();
+        case SourcesModel::LatchedOnRole:
         {
-            SourceItem* cItem = qobject_cast< SourceItem* >( item );
-            return cItem->localLatchedOn();
+            if ( item->type() == Collection )
+            {
+                SourceItem* cItem = qobject_cast< SourceItem* >( item );
+                return cItem->localLatchedOn();
+            }
+            return false;
         }
-        return false;
-    }
-    case SourcesModel::LatchedRealtimeRole:
-    {
-        if ( item->type() == Collection )
+        case SourcesModel::LatchedRealtimeRole:
         {
-            SourceItem* cItem = qobject_cast< SourceItem* >( item );
-            return cItem->localLatchMode() == Tomahawk::PlaylistModes::RealTime;
+            if ( item->type() == Collection )
+            {
+                SourceItem* cItem = qobject_cast< SourceItem* >( item );
+                return cItem->localLatchMode() == Tomahawk::PlaylistModes::RealTime;
+            }
+            return false;
         }
-        return false;
-    }
-    case SourcesModel::CustomActionRole:
-    {
-        return QVariant::fromValue< QList< QAction* > >( item->customActions() );
-    }
-    case Qt::ToolTipRole:
-        if ( !item->tooltip().isEmpty() )
-            return item->tooltip();
+        case SourcesModel::CustomActionRole:
+        {
+            return QVariant::fromValue< QList< QAction* > >( item->customActions() );
+        }
+        case Qt::ToolTipRole:
+            if ( !item->tooltip().isEmpty() )
+            {
+                return item->tooltip();
+            }
     }
     return QVariant();
 }
@@ -204,7 +210,9 @@ SourcesModel::parent( const QModelIndex& child ) const
     SourceTreeItem* node = itemFromIndex( child );
     SourceTreeItem* parent = node->parent();
     if ( parent == m_rootItem )
+    {
         return QModelIndex();
+    }
 
     return createIndex( rowForItem( parent ), 0, parent );
 }
@@ -214,12 +222,14 @@ QModelIndex
 SourcesModel::index( int row, int column, const QModelIndex& parent ) const
 {
     if ( row < 0 || column < 0 )
+    {
         return QModelIndex();
+    }
 
     if ( hasIndex( row, column, parent ) )
     {
-        SourceTreeItem *parentNode = itemFromIndex( parent );
-        SourceTreeItem *childNode = parentNode->children().at( row );
+        SourceTreeItem* parentNode = itemFromIndex( parent );
+        SourceTreeItem* childNode = parentNode->children().at( row );
         return createIndex( row, column, childNode );
     }
 
@@ -255,17 +265,23 @@ bool
 SourcesModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )
 {
     SourceTreeItem* item = 0;
-//    qDebug() << "Got mime data dropped:" << row << column << parent << itemFromIndex( parent )->text();
+    //    qDebug() << "Got mime data dropped:" << row << column << parent << itemFromIndex( parent )->text();
     if ( row == -1 && column == -1 )
+    {
         item = itemFromIndex( parent );
+    }
     else if ( column == 0 )
+    {
         item = itemFromIndex( index( row, column, parent ) );
+    }
     else if ( column == -1 ) // column is -1, that means the drop is happening "below" the indices. that means we actually want the one before it
+    {
         item = itemFromIndex( index( row - 1, 0, parent ) );
+    }
 
     Q_ASSERT( item );
 
-//    qDebug() << "Dropping on:" << item->text();
+    //    qDebug() << "Dropping on:" << item->text();
     return item->dropMimeData( data, action );
 }
 
@@ -289,7 +305,9 @@ SourcesModel::flags( const QModelIndex& index ) const
         return itemFromIndex( index )->flags();
     }
     else
+    {
         return 0;
+    }
 }
 
 
@@ -300,31 +318,31 @@ SourcesModel::appendGroups()
 
     m_browse = new GroupItem( this, m_rootItem, tr( "Browse" ), 0 );
     new HistoryItem( this, m_rootItem, tr( "Search History" ), 1 );
-//    new SourceTreeItem( this, m_rootItem, SourcesModel::Divider, 2 );
+    //    new SourceTreeItem( this, m_rootItem, SourcesModel::Divider, 2 );
     m_myMusicGroup = new GroupItem( this, m_rootItem, tr( "My Music" ), 3 );
 
     InboxItem* inbox = new InboxItem( this, m_browse );
     inbox->setSortValue( 3 );
 
     // super collection
-/*    GenericPageItem* sc = new GenericPageItem( this, m_browse, tr( "SuperCollection" ), ImageRegistry::instance()->icon( RESPATH "images/supercollection.svg" ),
-                                                  boost::bind( &ViewManager::showSuperCollection, ViewManager::instance() ),
-                                                  boost::bind( &ViewManager::superCollectionView, ViewManager::instance() ) );
-    sc->setSortValue( 4 );*/
+    /*    GenericPageItem* sc = new GenericPageItem( this, m_browse, tr( "SuperCollection" ), ImageRegistry::instance()->icon( RESPATH "images/supercollection.svg" ),
+                                                      boost::bind( &ViewManager::showSuperCollection, ViewManager::instance() ),
+                                                      boost::bind( &ViewManager::superCollectionView, ViewManager::instance() ) );
+        sc->setSortValue( 4 );*/
 
     GenericPageItem* hot = new GenericPageItem( this, m_browse, tr( "Charts" ), ImageRegistry::instance()->icon( RESPATH "images/charts.svg" ),
-                                                boost::bind( &ViewManager::showWhatsHotPage, ViewManager::instance() ),
-                                                boost::bind( &ViewManager::whatsHotWidget, ViewManager::instance() ) );
+            boost::bind( &ViewManager::showWhatsHotPage, ViewManager::instance() ),
+            boost::bind( &ViewManager::whatsHotWidget, ViewManager::instance() ) );
     hot->setSortValue( 5 );
 
     GenericPageItem* newReleases = new GenericPageItem( this, m_browse, tr( "New Releases" ), ImageRegistry::instance()->icon( RESPATH "images/new-releases.svg" ),
-                                                boost::bind( &ViewManager::showNewReleasesPage, ViewManager::instance() ),
-                                                boost::bind( &ViewManager::newReleasesWidget, ViewManager::instance() ) );
+            boost::bind( &ViewManager::showNewReleasesPage, ViewManager::instance() ),
+            boost::bind( &ViewManager::newReleasesWidget, ViewManager::instance() ) );
     newReleases->setSortValue( 6 );
 
     GenericPageItem* recent = new GenericPageItem( this, m_browse, tr( "Recently Played" ), ImageRegistry::instance()->icon( RESPATH "images/recently-played.svg" ),
-                                                boost::bind( &ViewManager::showRecentPlaysPage, ViewManager::instance() ),
-                                                boost::bind( &ViewManager::recentPlaysWidget, ViewManager::instance() ) );
+            boost::bind( &ViewManager::showRecentPlaysPage, ViewManager::instance() ),
+            boost::bind( &ViewManager::recentPlaysWidget, ViewManager::instance() ) );
     recent->setSortValue( 7 );
 
     m_collectionsGroup = new GroupItem( this, m_rootItem, tr( "Friends" ), 4 );
@@ -333,7 +351,7 @@ SourcesModel::appendGroups()
     endInsertRows();
 
     QHash< QString, ViewPagePlugin* > plugins = Tomahawk::Utils::PluginLoader( "viewpage" ).loadPlugins< ViewPagePlugin >();
-    foreach ( ViewPagePlugin* plugin, plugins.values() )
+    foreach ( ViewPagePlugin * plugin, plugins.values() )
     {
         ViewManager::instance()->addDynamicPage( plugin );
     }
@@ -346,8 +364,8 @@ SourcesModel::appendPageItem( const QString& name, ViewPage* page, int sortValue
     QModelIndex parentIndex = indexFromItem( m_browse );
     beginInsertRows( parentIndex, rowCount( parentIndex ), rowCount( parentIndex ) );
     GenericPageItem* pageItem = new GenericPageItem( this, m_browse, page->title(), page->pixmap(),
-                                            boost::bind( &ViewManager::showDynamicPage, ViewManager::instance(), name ),
-                                            boost::bind( &ViewManager::dynamicPageWidget, ViewManager::instance(), name ) );
+            boost::bind( &ViewManager::showDynamicPage, ViewManager::instance(), name ),
+            boost::bind( &ViewManager::dynamicPageWidget, ViewManager::instance(), name ) );
     if ( sortValue )
     {
         pageItem->setSortValue( sortValue );
@@ -388,7 +406,7 @@ SourcesModel::appendItem( const Tomahawk::source_ptr& source )
 bool
 SourcesModel::removeItem( const Tomahawk::source_ptr& source )
 {
-//    qDebug() << "Removing source item from SourceTree:" << source->friendlyName();
+    //    qDebug() << "Removing source item from SourceTree:" << source->friendlyName();
 
     QModelIndex idx;
     int rows = rowCount();
@@ -398,12 +416,12 @@ SourcesModel::removeItem( const Tomahawk::source_ptr& source )
         SourceItem* item = static_cast< SourceItem* >( idx.internalPointer() );
         if ( item && item->source() == source )
         {
-//            qDebug() << "Found removed source item:" << item->source()->userName();
+            //            qDebug() << "Found removed source item:" << item->source()->userName();
             beginRemoveRows( QModelIndex(), row, row );
             m_rootItem->removeChild( item );
             endRemoveRows();
 
-//             onItemOffline( idx );
+            //             onItemOffline( idx );
 
             delete item;
             return true;
@@ -422,7 +440,7 @@ SourcesModel::viewPageActivated( Tomahawk::ViewPage* page )
         // Hide again any offline sources we exposed, since we're showing a different page now. they'll be re-shown if the user selects a playlist that is from an offline user
         QList< source_ptr > temp = m_sourcesWithViewPage;
         m_sourcesWithViewPage.clear();
-        foreach ( const source_ptr& s, temp )
+        foreach ( const source_ptr & s, temp )
         {
             QModelIndex idx = indexFromItem( m_sourcesWithViewPageItems.value( s ) );
             emit dataChanged( idx, idx );
@@ -437,9 +455,13 @@ SourcesModel::viewPageActivated( Tomahawk::ViewPage* page )
         QModelIndex idx = indexFromItem( m_sourceTreeLinks[ page ] );
 
         if ( !idx.isValid() )
+        {
             m_sourceTreeLinks.remove( page );
+        }
         else
+        {
             emit selectRequest( QPersistentModelIndex( idx ) );
+        }
     }
     else
     {
@@ -455,7 +477,7 @@ SourcesModel::viewPageActivated( Tomahawk::ViewPage* page )
 
         if ( !p.isNull() )
         {
-            source_ptr s= p->author();
+            source_ptr s = p->author();
             if ( !s.isNull() && !s->isOnline() && item )
             {
                 m_sourcesWithViewPage << s;
@@ -488,17 +510,23 @@ SourceTreeItem*
 SourcesModel::activatePlaylistPage( ViewPage* p, SourceTreeItem* i )
 {
     if ( !i )
+    {
         return 0;
+    }
 
     if ( qobject_cast< PlaylistItem* >( i ) &&
-        qobject_cast< PlaylistItem* >( i )->activateCurrent() )
+            qobject_cast< PlaylistItem* >( i )->activateCurrent() )
+    {
         return i;
+    }
 
     SourceTreeItem* ret = 0;
     for ( int k = 0; k < i->children().size(); k++ )
     {
         if ( SourceTreeItem* retItem = activatePlaylistPage( p, i->children().at( k ) ) )
+        {
             ret = retItem;
+        }
     }
 
     return ret;
@@ -510,16 +538,16 @@ SourcesModel::loadSources()
 {
     QList<source_ptr> sources = SourceList::instance()->sources();
 
-    foreach ( const source_ptr& source, sources )
-        appendItem( source );
+    foreach ( const source_ptr & source, sources )
+    appendItem( source );
 }
 
 
 void
 SourcesModel::onSourcesAdded( const QList<source_ptr>& sources )
 {
-    foreach ( const source_ptr& source, sources )
-        appendItem( source );
+    foreach ( const source_ptr & source, sources )
+    appendItem( source );
 }
 
 
@@ -541,13 +569,15 @@ void
 SourcesModel::onScriptCollectionAdded( const collection_ptr& collection )
 {
     if ( m_scriptCollections.contains( collection ) )
+    {
         return;
+    }
 
     QModelIndex parent = indexFromItem( m_cloudGroup );
     beginInsertRows( parent, rowCount( parent ), rowCount( parent ) );
     ScriptCollectionItem* item = new ScriptCollectionItem( this,
-                                                 m_cloudGroup,
-                                                 collection );
+            m_cloudGroup,
+            collection );
     endInsertRows();
 
     m_scriptCollections.insert( collection, item );
@@ -594,11 +624,15 @@ SourcesModel::itemUpdated()
     SourceTreeItem* item = qobject_cast< SourceTreeItem* >( sender() );
 
     if ( !item )
+    {
         return;
+    }
 
     QModelIndex idx = indexFromItem( item );
     if ( idx.isValid() )
+    {
         emit dataChanged( idx, idx );
+    }
 }
 
 
@@ -609,7 +643,9 @@ SourcesModel::onItemRowsAddedBegin( int first, int last )
     SourceTreeItem* item = qobject_cast< SourceTreeItem* >( sender() );
 
     if ( !item )
+    {
         return;
+    }
 
     QModelIndex idx = indexFromItem( item );
     beginInsertRows( idx, first, last );
@@ -632,7 +668,9 @@ SourcesModel::onItemRowsRemovedBegin( int first, int last )
     SourceTreeItem* item = qobject_cast< SourceTreeItem* >( sender() );
 
     if ( !item )
+    {
         return;
+    }
 
     QModelIndex idx = indexFromItem( item );
     beginRemoveRows( idx, first, last );
@@ -655,12 +693,16 @@ SourcesModel::linkSourceItemToPage( SourceTreeItem* item, ViewPage* p )
     m_sourceTreeLinks[ p ] = item;
 
     if ( p && m_viewPageDelayedCacheItem == p )
+    {
         emit selectRequest( QPersistentModelIndex( indexFromItem( item ) ) );
+    }
 
     if ( QObject* obj = dynamic_cast< QObject* >( p ) )
     {
         if ( obj->metaObject()->indexOfSignal( "destroyed(QWidget*)" ) > -1 )
+        {
             connect( obj, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ), Qt::UniqueConnection );
+        }
     }
     m_viewPageDelayedCacheItem = 0;
 }
@@ -678,8 +720,8 @@ void
 SourcesModel::removeSourceItemLink( SourceTreeItem* item )
 {
     QList< ViewPage* > pages = m_sourceTreeLinks.keys( item );
-    foreach ( ViewPage* p, pages )
-        m_sourceTreeLinks.remove( p );
+    foreach ( ViewPage * p, pages )
+    m_sourceTreeLinks.remove( p );
 }
 
 
@@ -687,7 +729,9 @@ SourceTreeItem*
 SourcesModel::itemFromIndex( const QModelIndex& idx ) const
 {
     if ( !idx.isValid() )
+    {
         return m_rootItem;
+    }
 
     Q_ASSERT( idx.internalPointer() );
 
@@ -699,7 +743,9 @@ QModelIndex
 SourcesModel::indexFromItem( SourceTreeItem* item ) const
 {
     if ( !item || !item->parent() ) // should never happen..
+    {
         return QModelIndex();
+    }
 
     // reconstructs a modelindex from a sourcetreeitem that is somewhere in the tree
     // traverses the item to the root node, then rebuilds the qmodeindices from there back down
@@ -719,24 +765,27 @@ SourcesModel::indexFromItem( SourceTreeItem* item ) const
      **/
     QList< int > childIndexList;
     SourceTreeItem* curItem = item;
-    while ( curItem != m_rootItem ) {
+    while ( curItem != m_rootItem )
+    {
         int row  = rowForItem( curItem );
         if ( row < 0 ) // something went wrong, bail
+        {
             return QModelIndex();
+        }
 
         childIndexList << row;
 
         curItem = curItem->parent();
     }
-//     qDebug() << "build child index list:" << childIndexList;
+    //     qDebug() << "build child index list:" << childIndexList;
     // now rebuild the qmodelindex we need
     QModelIndex idx;
     for ( int i = childIndexList.size() - 1; i >= 0 ; i-- )
     {
         idx = index( childIndexList[ i ], 0, idx );
     }
-//     qDebug() << "Got index from item:" << idx << idx.data( Qt::DisplayRole ).toString();
-//     qDebug() << "parent:" << idx.parent();
+    //     qDebug() << "Got index from item:" << idx << idx.data( Qt::DisplayRole ).toString();
+    //     qDebug() << "parent:" << idx.parent();
     return idx;
 }
 
@@ -745,7 +794,9 @@ int
 SourcesModel::rowForItem( SourceTreeItem* item ) const
 {
     if ( !item || !item->parent() || !item->parent()->children().contains( item ) )
+    {
         return -1;
+    }
 
     return item->parent()->children().indexOf( item );
 }
@@ -759,14 +810,14 @@ SourcesModel::itemSelectRequest( SourceTreeItem* item )
 
 
 void
-SourcesModel::itemExpandRequest( SourceTreeItem *item )
+SourcesModel::itemExpandRequest( SourceTreeItem* item )
 {
     emit expandRequest( QPersistentModelIndex( indexFromItem( item ) ) );
 }
 
 
 void
-SourcesModel::itemToggleExpandRequest( SourceTreeItem *item )
+SourcesModel::itemToggleExpandRequest( SourceTreeItem* item )
 {
     emit toggleExpandRequest( QPersistentModelIndex( indexFromItem( item ) ) );
 }

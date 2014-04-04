@@ -43,7 +43,7 @@ ControlConnection::ControlConnection( Servent* parent )
     , d_ptr( new ControlConnectionPrivate( this ) )
 {
     qDebug() << "CTOR controlconnection";
-    setId("ControlConnection()");
+    setId( "ControlConnection()" );
 
     // auto delete when connection closes:
     connect( this, SIGNAL( finished() ), SLOT( deleteLater() ) );
@@ -69,7 +69,9 @@ ControlConnection::~ControlConnection()
     delete d->pingtimer;
     servent()->unregisterControlConnection( this );
     if ( d->dbsyncconn )
+    {
         d->dbsyncconn->deleteLater();
+    }
     delete d_ptr;
 }
 
@@ -133,7 +135,7 @@ ControlConnection::setup()
         // delay setting up collection/etc until source is synced.
         // we need it DB synced so it has an ID + exists in DB.
         connect( d->source.data(), SIGNAL( syncedWithDatabase() ),
-                                    SLOT( registerSource() ), Qt::QueuedConnection );
+                 SLOT( registerSource() ), Qt::QueuedConnection );
 
         d->source->setOnline();
 
@@ -173,7 +175,7 @@ ControlConnection::registerSource()
     if ( d->source->controlConnection() == this )
     {
         qDebug() << Q_FUNC_INFO << d->source->id();
-        Source* source = (Source*) sender();
+        Source* source = ( Source* ) sender();
         Q_UNUSED( source )
         Q_ASSERT( source == d->source.data() );
 
@@ -197,7 +199,9 @@ ControlConnection::setupDbSyncConnection( bool ondemand )
     qDebug() << Q_FUNC_INFO << ondemand << d->source->id() << d->dbconnkey << d->dbsyncconn << d->registered;
 
     if ( d->dbsyncconn || !d->registered )
+    {
         return;
+    }
 
     Q_ASSERT( d->source->id() > 0 );
 
@@ -228,7 +232,7 @@ ControlConnection::setupDbSyncConnection( bool ondemand )
                  d->dbsyncconn,   SLOT( deleteLater() ) );
 
         connect( d->dbsyncconn, SIGNAL( destroyed( QObject* ) ),
-                                 SLOT( dbSyncConnFinished( QObject* ) ), Qt::DirectConnection );
+                 SLOT( dbSyncConnFinished( QObject* ) ), Qt::DirectConnection );
     }
 }
 
@@ -238,13 +242,15 @@ ControlConnection::dbSyncConnFinished( QObject* c )
 {
     Q_D( ControlConnection );
     qDebug() << Q_FUNC_INFO << "DBSync connection closed (for now)";
-    if ( (DBSyncConnection*)c == d->dbsyncconn )
+    if ( ( DBSyncConnection* )c == d->dbsyncconn )
     {
         //qDebug() << "Setting m_dbsyncconn to NULL";
         d->dbsyncconn = NULL;
     }
     else
+    {
         qDebug() << "Old DbSyncConn destroyed?!";
+    }
 }
 
 
@@ -255,7 +261,7 @@ ControlConnection::dbSyncConnection()
     if ( !d->dbsyncconn )
     {
         setupDbSyncConnection( true );
-//        Q_ASSERT( m_dbsyncconn );
+        //        Q_ASSERT( m_dbsyncconn );
     }
 
     return d->dbsyncconn;
@@ -324,7 +330,9 @@ void
 ControlConnection::authCheckTimeout()
 {
     if ( isReady() )
+    {
         return;
+    }
 
     Q_D( ControlConnection );
     Servent::instance()->queueForAclResult( bareName(), d->peerInfos );
@@ -366,8 +374,8 @@ ControlConnection::removePeerInfo( const peerinfo_ptr& peerInfo )
     peerInfoDebug( peerInfo ) << "Remove peer from control connection:" << name();
 
     Q_ASSERT( peerInfo->controlConnection() == this );
-//     TODO: find out why this happens
-//     Q_ASSERT( m_peerInfos.contains( peerInfo ) );
+    //     TODO: find out why this happens
+    //     Q_ASSERT( m_peerInfos.contains( peerInfo ) );
 
     d->peerInfos.remove( peerInfo );
 

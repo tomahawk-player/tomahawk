@@ -53,7 +53,8 @@ DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
 
     tLog( LOGVERBOSE ) << "trying to load playlist entries for guid:" << m_revguid;
     QString prevrev;
-    QJson::Parser parser; bool ok;
+    QJson::Parser parser;
+    bool ok;
 
     if ( query_entries.next() )
     {
@@ -68,9 +69,9 @@ DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
 
             TomahawkSqlQuery query = dbi->newquery();
             QString sql = QString( "SELECT guid, trackname, artistname, albumname, annotation, "
-                                "duration, addedon, addedby, result_hint "
-                                "FROM playlist_item "
-                                "WHERE guid IN %1" ).arg( inclause );
+                                   "duration, addedon, addedby, result_hint "
+                                   "FROM playlist_item "
+                                   "WHERE guid IN %1" ).arg( inclause );
 
             query.exec( sql );
             while ( query.next() )
@@ -85,11 +86,15 @@ DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
 
                 Tomahawk::query_ptr q = Tomahawk::Query::get( query.value( 2 ).toString(), query.value( 1 ).toString(), query.value( 3 ).toString() );
                 if ( q.isNull() )
+                {
                     continue;
+                }
 
                 q->setResultHint( resultHint );
                 if ( resultHint.startsWith( "http" ) )
+                {
                     q->setSaveHTTPResultHint( true );
+                }
 
                 q->setProperty( "annotation", e->annotation() );
                 e->setQuery( q );
@@ -102,7 +107,7 @@ DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
     }
     else
     {
-//        qDebug() << "Playlist has no current revision data";
+        //        qDebug() << "Playlist has no current revision data";
     }
 
     if ( prevrev.length() )
@@ -132,10 +137,10 @@ DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
         m_islatest = query_entries_old.value( 1 ).toBool();
     }
 
-//    qDebug() << Q_FUNC_INFO << "entrymap:" << m_entrymap;
+    //    qDebug() << Q_FUNC_INFO << "entrymap:" << m_entrymap;
 }
 
-DatabaseCommand_LoadPlaylistEntries::DatabaseCommand_LoadPlaylistEntries( QString revision_guid, QObject *parent )
+DatabaseCommand_LoadPlaylistEntries::DatabaseCommand_LoadPlaylistEntries( QString revision_guid, QObject* parent )
     : DatabaseCommand( parent )
     , m_islatest( true )
     , m_revguid( revision_guid )

@@ -120,7 +120,7 @@ Tomahawk::Accounts::TelepathyConfigStorage::onTpAccountManagerReady( Tp::Pending
     }
 
     QStringList keychainIds;
-    foreach ( const Tp::AccountPtr& acc, m_tpam->validAccounts()->accounts() )
+    foreach ( const Tp::AccountPtr & acc, m_tpam->validAccounts()->accounts() )
     {
         if ( acc->protocolName() == "jabber" )
         {
@@ -135,7 +135,7 @@ Tomahawk::Accounts::TelepathyConfigStorage::onTpAccountManagerReady( Tp::Pending
     connect( cm, SIGNAL( serviceReady( QString ) ),
              this, SLOT( onCredentialsManagerReady( QString ) ) );
     Tomahawk::Accounts::AccountManager::instance()->credentialsManager()->addService( m_credentialsServiceName,
-                                                                                      keychainIds );
+            keychainIds );
     tDebug() << Q_FUNC_INFO << "LOADING ALL CREDENTIALS FOR SERVICE" << m_credentialsServiceName << m_accountIds << keychainIds;
 }
 
@@ -144,7 +144,9 @@ void
 Tomahawk::Accounts::TelepathyConfigStorage::onCredentialsManagerReady( const QString& service )
 {
     if ( service != m_credentialsServiceName )
+    {
         return;
+    }
 
     //no need to listen for it any more
     disconnect( this, SLOT( onCredentialsManagerReady( QString ) ) );
@@ -157,7 +159,7 @@ void
 Tomahawk::Accounts::TelepathyConfigStorage::loadConfigWidgetPlugins()
 {
     tDebug() << Q_FUNC_INFO;
-    foreach( QObject* plugin, Tomahawk::Utils::PluginLoader( "configstorage_telepathy" ).loadPlugins().values() )
+    foreach( QObject * plugin, Tomahawk::Utils::PluginLoader( "configstorage_telepathy" ).loadPlugins().values() )
     {
         TelepathyConfigStorageConfigWidgetPlugin* configWidgetPlugin = qobject_cast< TelepathyConfigStorageConfigWidgetPlugin* >( plugin );
         if( !configWidgetPlugin )
@@ -175,7 +177,9 @@ QString
 Tomahawk::Accounts::TelepathyConfigStorage::telepathyPathToAccountId( const QString& objectPath, const QString& telepathyServiceName )
 {
     if ( telepathyServiceName == "google-talk" )
+    {
         return QString( "googleaccount_" ) + objectPath;
+    }
     return QString( "xmppaccount_" ) + objectPath;
 }
 
@@ -187,7 +191,9 @@ Tomahawk::Accounts::TelepathyConfigStorage::accountIdToTelepathyPath( const QStr
     foreach ( QString prefix, m_allowedPrefixes )
     {
         if ( r.startsWith( prefix ) )
+        {
             r.remove( 0, prefix.length() );
+        }
     }
     return r;
 }
@@ -241,7 +247,9 @@ Tomahawk::Accounts::TelepathyConfigStorage::deduplicateFrom( const Tomahawk::Acc
                 }
             }
             if ( !typesMatch )
+            {
                 continue;
+            }
 
             QString otherUsername;
             {
@@ -276,7 +284,9 @@ Tomahawk::Accounts::TelepathyConfigStorage::save( const QString& accountId, cons
     s->sync();
 
     if ( !m_accountIds.contains( accountId ) )
+    {
         m_accountIds.append( accountId );
+    }
 }
 
 
@@ -293,28 +303,42 @@ Tomahawk::Accounts::TelepathyConfigStorage::load( const QString& accountId, Acco
     Tp::AccountPtr account = m_tpam->accountForObjectPath( accountIdToTelepathyPath( accountId ) );
 
     if ( !account->normalizedName().isEmpty() )
+    {
         cfg.accountFriendlyName = account->normalizedName();
+    }
     else if ( !account->parameters()[ "account" ].isNull() )
+    {
         cfg.accountFriendlyName = account->parameters()[ "account" ].toString();
+    }
 
     if ( cfg.accountFriendlyName.isEmpty() ) //this should never happen
+    {
         cfg.accountFriendlyName = accountId;
+    }
 
     QStringList types;
     types << "SipType";
     cfg.types = types;
 
     if ( account->serviceName() == "google-talk" ||
-         account->parameters()[ "port" ].isNull() )
+            account->parameters()[ "port" ].isNull() )
+    {
         cfg.configuration[ "port" ] = "5222";
+    }
     else
+    {
         cfg.configuration[ "port" ] = account->parameters()[ "port" ].toString();
+    }
 
     if ( !account->parameters()[ "server" ].isNull() )
+    {
         cfg.configuration[ "server" ] = account->parameters()[ "server" ].toString();
+    }
 
     if ( !account->parameters()[ "require-encryption" ].isNull() )
+    {
         cfg.configuration[ "enforcesecure" ] = account->parameters()[ "require-encryption" ].toBool();
+    }
 
     cfg.configuration[ "publishtracks" ] = true;
 
@@ -322,13 +346,19 @@ Tomahawk::Accounts::TelepathyConfigStorage::load( const QString& accountId, Acco
     cfg.credentials = QVariantHash();
 
     if ( !account->parameters()[ "account" ].isNull() )
+    {
         cfg.credentials[ "username" ] = account->parameters()[ "account" ].toString();
+    }
     else
+    {
         cfg.credentials[ "username" ] = account->normalizedName();
+    }
 
     QVariant credentials = c->credentials( m_credentialsServiceName, account->uniqueIdentifier() );
     if ( credentials.type() == QVariant::String )
+    {
         cfg.credentials[ "password" ] = credentials.toString();
+    }
 
     cfg.configuration[ "read-only" ] = true;
 }

@@ -30,18 +30,24 @@ namespace Tomahawk
 class DatabaseCommand_CollectionAttributes : public DatabaseCommand
 {
     Q_OBJECT
-public:
+  public:
 
     DatabaseCommand_CollectionAttributes( DatabaseCommand_SetCollectionAttributes::AttributeType type );
     virtual void exec( DatabaseImpl* lib );
-    virtual bool doesMutates() const { return false; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
 
-    virtual QString commandname() const { return "collectionattributes"; }
+    virtual QString commandname() const
+    {
+        return "collectionattributes";
+    }
 
-signals:
+  signals:
     void collectionAttributes( PairList );
 
-private:
+  private:
     DatabaseCommand_SetCollectionAttributes::AttributeType m_type;
 };
 

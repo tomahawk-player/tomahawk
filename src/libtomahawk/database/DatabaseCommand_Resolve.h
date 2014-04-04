@@ -34,22 +34,28 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCommand_Resolve : public DatabaseCommand
 {
-Q_OBJECT
-public:
+    Q_OBJECT
+  public:
     explicit DatabaseCommand_Resolve( const Tomahawk::query_ptr& query );
     virtual ~DatabaseCommand_Resolve();
 
-    virtual QString commandname() const { return "dbresolve"; }
-    virtual bool doesMutates() const { return false; }
+    virtual QString commandname() const
+    {
+        return "dbresolve";
+    }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
 
-    virtual void exec( DatabaseImpl *lib );
+    virtual void exec( DatabaseImpl* lib );
 
-signals:
+  signals:
     void results( Tomahawk::QID qid, QList<Tomahawk::result_ptr> results );
     void albums( Tomahawk::QID qid, QList<Tomahawk::album_ptr> albums );
     void artists( Tomahawk::QID qid, QList<Tomahawk::artist_ptr> artists );
 
-private:
+  private:
     DatabaseCommand_Resolve();
 
     void fullTextResolve( DatabaseImpl* lib );

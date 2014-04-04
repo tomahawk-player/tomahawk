@@ -36,8 +36,9 @@ namespace Tomahawk
 class ChartDataLoader : public QObject
 {
     Q_OBJECT
-public:
-    enum DataType {
+  public:
+    enum DataType
+    {
         Track,
         Artist,
         Album
@@ -45,20 +46,29 @@ public:
 
     ChartDataLoader();
 
-    void setType( DataType type ) { m_type = type; }
-    void setData( const QList< InfoSystem::InfoStringHash >& data ) { m_data = data; }
-    void setData( const QStringList& artists ) { m_artists = artists; }
+    void setType( DataType type )
+    {
+        m_type = type;
+    }
+    void setData( const QList< InfoSystem::InfoStringHash >& data )
+    {
+        m_data = data;
+    }
+    void setData( const QStringList& artists )
+    {
+        m_artists = artists;
+    }
 
-public slots:
+  public slots:
     void go();
 
-signals:
+  signals:
     void tracks( Tomahawk::ChartDataLoader*, const QList< Tomahawk::query_ptr >& tracks );
     void artists( Tomahawk::ChartDataLoader*, const QList< Tomahawk::artist_ptr >& artists );
     void albums( Tomahawk::ChartDataLoader*, const QList< Tomahawk::album_ptr >& albums );
 
 
-private:
+  private:
     DataType m_type;
     QList<InfoSystem::InfoStringHash> m_data;
     QStringList m_artists;

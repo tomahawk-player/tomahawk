@@ -31,14 +31,14 @@
 
 namespace Tomahawk
 {
-    class ContextMenu;
+class ContextMenu;
 };
 
 class DLLEXPORT QueryLabel : public QFrame
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     enum DisplayType
     {
         None = 0,
@@ -60,13 +60,31 @@ public:
     QString text() const;
     QString track() const;
 
-    Tomahawk::result_ptr result() const { return m_result; }
-    Tomahawk::query_ptr query() const { return m_query; }
-    Tomahawk::artist_ptr artist() const { return m_artist; }
-    Tomahawk::album_ptr album() const { return m_album; }
+    Tomahawk::result_ptr result() const
+    {
+        return m_result;
+    }
+    Tomahawk::query_ptr query() const
+    {
+        return m_query;
+    }
+    Tomahawk::artist_ptr artist() const
+    {
+        return m_artist;
+    }
+    Tomahawk::album_ptr album() const
+    {
+        return m_album;
+    }
 
-    DisplayType type() const { return m_type; }
-    void setType( DisplayType type ) { m_type = type; }
+    DisplayType type() const
+    {
+        return m_type;
+    }
+    void setType( DisplayType type )
+    {
+        m_type = type;
+    }
 
     Qt::Alignment alignment() const;
     void setAlignment( Qt::Alignment alignment );
@@ -83,14 +101,14 @@ public:
     void init();
     void updateLabel();
 
-public slots:
+  public slots:
     void setText( const QString& text );
     void setResult( const Tomahawk::result_ptr& result );
     void setQuery( const Tomahawk::query_ptr& query );
     void setArtist( const Tomahawk::artist_ptr& artist );
     void setAlbum( const Tomahawk::album_ptr& album );
 
-signals:
+  signals:
     void clicked();
     void clickedArtist();
     void clickedAlbum();
@@ -100,7 +118,7 @@ signals:
     void resultChanged( const Tomahawk::result_ptr& result );
     void queryChanged( const Tomahawk::query_ptr& query );
 
-protected:
+  protected:
     virtual void contextMenuEvent( QContextMenuEvent* event );
 
     virtual void mousePressEvent( QMouseEvent* event );
@@ -113,10 +131,10 @@ protected:
 
     virtual void startDrag();
 
-private slots:
+  private slots:
     void onResultChanged();
 
-private:
+  private:
     QString smartAppend( QString& text, const QString& appendage ) const;
     QTime m_time;
 

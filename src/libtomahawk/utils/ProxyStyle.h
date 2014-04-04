@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -26,18 +26,24 @@
 
 class DLLEXPORT ProxyStyle : public QProxyStyle
 {
-public:
+  public:
     ProxyStyle( bool interceptPolish = false );
 
-    virtual void polish( QApplication *a ) { QProxyStyle::polish( a ); }
+    virtual void polish( QApplication* a )
+    {
+        QProxyStyle::polish( a );
+    }
     virtual void polish( QPalette& pal );
-    virtual void polish( QWidget *w ) { QProxyStyle::polish( w ); }
+    virtual void polish( QWidget* w )
+    {
+        QProxyStyle::polish( w );
+    }
 
-    virtual void drawPrimitive( PrimitiveElement pe, const QStyleOption *opt, QPainter *p, const QWidget *w = 0 ) const;
-    virtual void drawControl( ControlElement ce, const QStyleOption *opt, QPainter *p, const QWidget *w = 0 ) const;
-    virtual QSize sizeFromContents( ContentsType type, const QStyleOption *option, const QSize &size, const QWidget *widget ) const;
+    virtual void drawPrimitive( PrimitiveElement pe, const QStyleOption* opt, QPainter* p, const QWidget* w = 0 ) const;
+    virtual void drawControl( ControlElement ce, const QStyleOption* opt, QPainter* p, const QWidget* w = 0 ) const;
+    virtual QSize sizeFromContents( ContentsType type, const QStyleOption* option, const QSize& size, const QWidget* widget ) const;
 
-private:
+  private:
     bool m_interceptPolish;
 };
 

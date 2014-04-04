@@ -36,7 +36,9 @@ GenericPageItem::GenericPageItem( SourcesModel* model, SourceTreeItem* parent, c
     , m_get( get )
 {
     if ( ViewPage* p = m_get() )
+    {
         model->linkSourceItemToPage( this, p );
+    }
 }
 
 
@@ -74,7 +76,7 @@ GenericPageItem::willAcceptDrag( const QMimeData* data ) const
     {
         return false;
     }
-    return m_get()->willAcceptDrag(data);
+    return m_get()->willAcceptDrag( data );
 }
 
 
@@ -85,7 +87,7 @@ GenericPageItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
     {
         return false;
     }
-    return m_get()->dropMimeData(data, action);
+    return m_get()->dropMimeData( data, action );
 }
 
 
@@ -103,13 +105,19 @@ GenericPageItem::isBeingPlayed() const
     if ( m_get() )
     {
         if ( m_get()->isBeingPlayed() )
+        {
             return true;
+        }
 
         if ( m_get()->playlistInterface() && m_get()->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+        {
             return true;
+        }
 
         if ( m_get()->playlistInterface() && m_get()->playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
+        {
             return true;
+        }
     }
 
     return false;

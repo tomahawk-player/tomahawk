@@ -44,8 +44,8 @@ class ACCOUNTDLLEXPORT TwitterSipPlugin : public SipPlugin
 {
     Q_OBJECT
 
-public:
-    TwitterSipPlugin( Tomahawk::Accounts::Account *account );
+  public:
+    TwitterSipPlugin( Tomahawk::Accounts::Account* account );
 
     virtual ~TwitterSipPlugin() {}
 
@@ -53,10 +53,10 @@ public:
     virtual Tomahawk::Accounts::Account::ConnectionState connectionState() const;
     virtual QString inviteString() const;
 
-signals:
+  signals:
     void stateChanged( Tomahawk::Accounts::Account::ConnectionState );
 
-public slots:
+  public slots:
     virtual void connectPlugin();
     void disconnectPlugin();
     void configurationChanged();
@@ -67,12 +67,12 @@ public slots:
         Q_UNUSED( info );
     }
 
-    void broadcastMsg( const QString &msg )
+    void broadcastMsg( const QString& msg )
     {
         Q_UNUSED( msg );
     }
 
-    bool addContact( const QString &peerId, AddContactOptions options, const QString& msg = QString() )
+    bool addContact( const QString& peerId, AddContactOptions options, const QString& msg = QString() )
     {
         Q_UNUSED( peerId );
         Q_UNUSED( msg );
@@ -83,29 +83,29 @@ public slots:
 
     void checkSettings();
 
-private slots:
-    void accountAuthenticated( const QPointer< TomahawkOAuthTwitter > &twitterAuth, const QTweetUser &user );
+  private slots:
+    void accountAuthenticated( const QPointer< TomahawkOAuthTwitter >& twitterAuth, const QTweetUser& user );
     void checkTimerFired();
     void connectTimerFired();
-    void friendsTimelineStatuses( const QList< QTweetStatus > &statuses );
-    void mentionsStatuses( const QList< QTweetStatus > &statuses );
+    void friendsTimelineStatuses( const QList< QTweetStatus >& statuses );
+    void mentionsStatuses( const QList< QTweetStatus >& statuses );
     void pollDirectMessages();
-    void directMessages( const QList< QTweetDMStatus > &messages );
-    void directMessagePosted( const QTweetDMStatus &message );
-    void directMessagePostError( QTweetNetBase::ErrorCode errorCode, const QString &message );
-    void directMessageDestroyed( const QTweetDMStatus &message );
-    void registerOffers( const QStringList &peerList );
-    void registerOffer( const QString &screenName, const QVariantHash &peerdata );
-    void sendOffer( const QString &screenName, const QVariantHash &peerdata );
-    void makeConnection( const QString &screenName, const QVariantHash &peerdata );
-    void fetchAvatar( const QString &screenName );
-    void avatarUserDataSlot( const QTweetUser &user );
+    void directMessages( const QList< QTweetDMStatus >& messages );
+    void directMessagePosted( const QTweetDMStatus& message );
+    void directMessagePostError( QTweetNetBase::ErrorCode errorCode, const QString& message );
+    void directMessageDestroyed( const QTweetDMStatus& message );
+    void registerOffers( const QStringList& peerList );
+    void registerOffer( const QString& screenName, const QVariantHash& peerdata );
+    void sendOffer( const QString& screenName, const QVariantHash& peerdata );
+    void makeConnection( const QString& screenName, const QVariantHash& peerdata );
+    void fetchAvatar( const QString& screenName );
+    void avatarUserDataSlot( const QTweetUser& user );
     void profilePicReply();
 
-private:
+  private:
     void syncConfig();
     bool refreshTwitterAuth();
-    void parseGotTomahawk( const QRegExp &regex, const QString &screenName, const QString &text );
+    void parseGotTomahawk( const QRegExp& regex, const QString& screenName, const QString& text );
 
     QPointer< TomahawkOAuthTwitter > m_cachedTwitterAuth;
 

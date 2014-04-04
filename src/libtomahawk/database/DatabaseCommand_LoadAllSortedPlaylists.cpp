@@ -52,7 +52,9 @@ DatabaseCommand_LoadAllSortedPlaylists::exec( DatabaseImpl* dbi )
     }
 
     if ( !source().isNull() )
+    {
         sourceToken = QString( "AND source %1 " ).arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) );
+    }
 
 
     query.exec( QString( "SELECT playlist.guid as guid, title, info, creator, lastmodified, shared, currentrevision, createdOn, dynplaylist, source, dynamic_playlist.pltype, dynamic_playlist.plmode "
@@ -60,16 +62,16 @@ DatabaseCommand_LoadAllSortedPlaylists::exec( DatabaseImpl* dbi )
                          "LEFT JOIN dynamic_playlist ON playlist.guid = dynamic_playlist.guid  "
                          "%1 "
                          "%2 %3 %4"
-    )
-    .arg( sourceToken )
-    .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( orderToken ) : QString() )
-    .arg( ascDescToken )
-    .arg( m_limitAmount > 0 ? QString( "LIMIT 0, %1" ).arg( m_limitAmount ) : QString() ) );
+                       )
+                .arg( sourceToken )
+                .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( orderToken ) : QString() )
+                .arg( ascDescToken )
+                .arg( m_limitAmount > 0 ? QString( "LIMIT 0, %1" ).arg( m_limitAmount ) : QString() ) );
 
     QList<SourcePlaylistPair> plists;
     while ( query.next() )
     {
-        plists << QPair< int, QString >( query.value(9).toInt(), query.value(0).toString() );
+        plists << QPair< int, QString >( query.value( 9 ).toInt(), query.value( 0 ).toString() );
 
     }
 

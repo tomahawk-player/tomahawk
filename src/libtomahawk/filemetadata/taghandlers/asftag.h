@@ -27,15 +27,24 @@ namespace Tomahawk
 
 class DLLEXPORT ASFTag : public Tag
 {
-public:
-    ASFTag( TagLib::Tag *, TagLib::ASF::Tag * );
+  public:
+    ASFTag( TagLib::Tag*, TagLib::ASF::Tag* );
 
-    virtual QString albumArtist() const { return m_albumArtist; }
-    virtual QString composer() const { return m_composer; }
-    virtual unsigned int discNumber() const { return m_discNumber; }
+    virtual QString albumArtist() const
+    {
+        return m_albumArtist;
+    }
+    virtual QString composer() const
+    {
+        return m_composer;
+    }
+    virtual unsigned int discNumber() const
+    {
+        return m_discNumber;
+    }
 
-private:
-    TagLib::ASF::Tag *m_asfTag;
+  private:
+    TagLib::ASF::Tag* m_asfTag;
 };
 
 }

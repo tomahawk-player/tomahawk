@@ -57,7 +57,7 @@ AccountManager::instance()
 }
 
 
-AccountManager::AccountManager( QObject *parent )
+AccountManager::AccountManager( QObject* parent )
     : QObject( parent )
     , m_readyForSip( false )
     , m_completelyReady( false )
@@ -103,14 +103,15 @@ void
 AccountManager::loadPluginFactories()
 {
     QHash< QString, QObject* > plugins = Tomahawk::Utils::PluginLoader( "account" ).loadPlugins();
-    foreach ( QObject* plugin, plugins.values() )
+    foreach ( QObject * plugin, plugins.values() )
     {
         AccountFactory* accountfactory = qobject_cast<AccountFactory*>( plugin );
         if ( accountfactory )
         {
             tDebug() << Q_FUNC_INFO << "Loaded plugin factory:" << plugins.key( plugin ) << accountfactory->factoryId() << accountfactory->prettyName();
             m_accountFactories[ accountfactory->factoryId() ] = accountfactory;
-        } else
+        }
+        else
         {
             tDebug() << Q_FUNC_INFO << "Loaded invalid plugin.." << plugins.key( plugin );
         }
@@ -121,10 +122,12 @@ AccountManager::loadPluginFactories()
 bool
 AccountManager::hasPluginWithFactory( const QString& factory ) const
 {
-    foreach ( Account* account, m_accounts )
+    foreach ( Account * account, m_accounts )
     {
         if ( factoryFromId( account->accountId() ) == factory )
+        {
             return true;
+        }
     }
     return false;
 
@@ -151,12 +154,16 @@ AccountManager::enableAccount( Account* account )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( account->enabled() )
+    {
         return;
+    }
 
     account->authenticate();
 
     if ( account->preventEnabling() )
+    {
         return;
+    }
 
     account->setEnabled( true );
     m_enabledAccounts << account;
@@ -170,7 +177,9 @@ AccountManager::disableAccount( Account* account )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( !account->enabled() )
+    {
         return;
+    }
 
     account->deauthenticate();
     account->setEnabled( false );
@@ -184,7 +193,7 @@ void
 AccountManager::connectAll()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
-    foreach ( Account* acc, m_accounts )
+    foreach ( Account * acc, m_accounts )
     {
         if ( acc->enabled() )
         {
@@ -206,7 +215,7 @@ void
 AccountManager::disconnectAll()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
-    foreach ( Account* acc, m_enabledAccounts )
+    foreach ( Account * acc, m_enabledAccounts )
     {
         if ( acc->sipPlugin( false ) )
         {
@@ -227,9 +236,13 @@ AccountManager::toggleAccountsConnected()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( m_connected )
+    {
         disconnectAll();
+    }
     else
+    {
         connectAll();
+    }
 }
 
 
@@ -242,16 +255,18 @@ AccountManager::loadFromConfig()
     m_configStorageById.insert( localCS->id(), localCS );
 
     QList< QObject* > configStoragePlugins = Tomahawk::Utils::PluginLoader( "configstorage" ).loadPlugins().values();
-    foreach( QObject* plugin, configStoragePlugins )
+    foreach( QObject * plugin, configStoragePlugins )
     {
         ConfigStorage* cs = qobject_cast< ConfigStorage* >( plugin );
         if ( !cs )
+        {
             continue;
+        }
 
         m_configStorageById.insert( cs->id(), cs );
     }
 
-    foreach ( ConfigStorage* cs, m_configStorageById )
+    foreach ( ConfigStorage * cs, m_configStorageById )
     {
         m_configStorageLoading.insert( cs->id() );
         NewClosure( cs, SIGNAL( ready() ),
@@ -265,20 +280,26 @@ void
 AccountManager::finishLoadingFromConfig( const QString& csid )
 {
     if ( m_configStorageLoading.contains( csid ) )
+    {
         m_configStorageLoading.remove( csid );
+    }
 
     if ( !m_configStorageLoading.isEmpty() )
+    {
         return;
+    }
 
     // First we prioritize available ConfigStorages
     QList< ConfigStorage* > csByPriority;
-    foreach ( ConfigStorage* cs, m_configStorageById )
+    foreach ( ConfigStorage * cs, m_configStorageById )
     {
         int i = 0;
         for ( ; i < csByPriority.length(); ++i )
         {
             if ( csByPriority.at( i )->priority() > cs->priority() )
+            {
                 break;
+            }
         }
         csByPriority.insert( i, cs );
     }
@@ -294,14 +315,14 @@ AccountManager::finishLoadingFromConfig( const QString& csid )
         }
     }
 
-    foreach ( const ConfigStorage* cs, m_configStorageById )
+    foreach ( const ConfigStorage * cs, m_configStorageById )
     {
         QStringList accountIds = cs->accountIds();
 
         qDebug() << "LOADING ALL ACCOUNTS FOR STORAGE" << cs->metaObject()->className()
                  << ":" << accountIds;
 
-        foreach ( const QString& accountId, accountIds )
+        foreach ( const QString & accountId, accountIds )
         {
             QString pluginFactory = factoryFromId( accountId );
             if ( m_accountFactories.contains( pluginFactory ) )
@@ -320,7 +341,7 @@ void
 AccountManager::initSIP()
 {
     tDebug() << Q_FUNC_INFO;
-    foreach ( Account* account, accounts() )
+    foreach ( Account * account, accounts() )
     {
         hookupAndEnable( account, true );
     }
@@ -351,13 +372,21 @@ AccountManager::addAccount( Account* account )
     m_accounts.append( account );
 
     if ( account->types() & Accounts::SipType )
+    {
         m_accountsByAccountType[ Accounts::SipType ].append( account );
+    }
     if ( account->types() & Accounts::InfoType )
+    {
         m_accountsByAccountType[ Accounts::InfoType ].append( account );
+    }
     if ( account->types() & Accounts::ResolverType )
+    {
         m_accountsByAccountType[ Accounts::ResolverType ].append( account );
+    }
     if ( account->types() & Accounts::StatusPushType )
+    {
         m_accountsByAccountType[ Accounts::StatusPushType ].append( account );
+    }
 
     emit added( account );
 }
@@ -383,7 +412,9 @@ AccountManager::removeAccount( Account* account )
 
     ResolverAccount* raccount = qobject_cast< ResolverAccount* >( account );
     if ( raccount )
+    {
         raccount->removeBundle();
+    }
 
     TomahawkSettings::instance()->removeAccount( account->accountId() );
 
@@ -396,10 +427,12 @@ QList< Account* >
 AccountManager::accountsFromFactory( AccountFactory* factory ) const
 {
     QList< Account* > accts;
-    foreach ( Account* acct, m_accounts )
+    foreach ( Account * acct, m_accounts )
     {
         if ( factoryForAccount( acct ) == factory )
+        {
             accts << acct;
+        }
     }
     return accts;
 }
@@ -408,7 +441,7 @@ AccountManager::accountsFromFactory( AccountFactory* factory ) const
 Account*
 AccountManager::accountFromPath( const QString& accountPath )
 {
-    foreach ( AccountFactory* factory, m_factoriesForFilesytem )
+    foreach ( AccountFactory * factory, m_factoriesForFilesytem )
     {
         if ( factory->acceptsPath( accountPath ) )
         {
@@ -438,10 +471,12 @@ AccountManager::addAccountFactory( AccountFactory* factory )
 Account*
 AccountManager::zeroconfAccount() const
 {
-    foreach ( Account* account, accounts() )
+    foreach ( Account * account, accounts() )
     {
         if ( account->sipPlugin( false ) && account->sipPlugin()->serviceName() == "zeroconf" )
+        {
             return account;
+        }
     }
 
     return 0;
@@ -451,10 +486,12 @@ AccountManager::zeroconfAccount() const
 ConfigStorage*
 AccountManager::configStorageForAccount( const QString& accountId )
 {
-    foreach ( ConfigStorage* cs, m_configStorageById )
+    foreach ( ConfigStorage * cs, m_configStorageById )
     {
         if ( cs->accountIds().contains( accountId ) )
+        {
             return cs;
+        }
     }
     tLog() << "Warning: defaulting to LocalConfigStorage for account" << accountId;
     return localConfigStorage();
@@ -509,7 +546,7 @@ AccountManager::onError( int code, const QString& msg )
     }
     else
     {
-        statusMessage = new SipStatusMessage(SipStatusMessage::SipConnectionFailure, account->accountFriendlyName(), msg );
+        statusMessage = new SipStatusMessage( SipStatusMessage::SipConnectionFailure, account->accountFriendlyName(), msg );
         JobStatusView::instance()->model()->addJob( statusMessage );
         QTimer::singleShot( 10000, account, SLOT( authenticate() ) );
     }
@@ -519,10 +556,12 @@ AccountManager::onError( int code, const QString& msg )
 void
 AccountManager::onSettingsChanged()
 {
-    foreach ( Account* account, m_accounts )
+    foreach ( Account * account, m_accounts )
     {
         if ( account->types() & Accounts::SipType && account->sipPlugin( false ) )
+        {
             account->sipPlugin()->checkSettings();
+        }
     }
 }
 

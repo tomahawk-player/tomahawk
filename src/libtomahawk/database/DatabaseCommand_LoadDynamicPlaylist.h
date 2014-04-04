@@ -32,18 +32,24 @@ class DatabaseCommand_LoadDynamicPlaylist : public DatabaseCommand
 {
     Q_OBJECT
 
-public:
+  public:
     explicit DatabaseCommand_LoadDynamicPlaylist( const source_ptr& s, const QString& guid, QObject* parent = 0 );
 
     virtual void exec( DatabaseImpl* );
-    virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "loadsingledynamicplaylist"; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
+    virtual QString commandname() const
+    {
+        return "loadsingledynamicplaylist";
+    }
 
-signals:
+  signals:
     void dynamicPlaylistLoaded( const Tomahawk::dynplaylist_ptr& pl );
     void done();
 
-private:
+  private:
     QString m_plid;
 };
 

@@ -27,7 +27,7 @@
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "collection/Collection.h"
+#include "collection/Collection.h"
 #endif
 
 
@@ -62,7 +62,9 @@ DatabaseCommand_ArtistStats::exec( DatabaseImpl* dbi )
     while ( query.next() )
     {
         if ( query.value( 0 ).toUInt() < 2 )
+        {
             break;
+        }
 
         chartCount++;
         if ( chartPos == 0 && query.value( 1 ).toUInt() == artistId )
@@ -73,7 +75,9 @@ DatabaseCommand_ArtistStats::exec( DatabaseImpl* dbi )
     }
 
     if ( chartPos == 0 )
+    {
         chartPos = chartCount;
+    }
 
     emit done( plays, chartPos, chartCount );
 }

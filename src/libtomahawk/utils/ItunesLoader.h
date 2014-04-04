@@ -33,11 +33,11 @@ namespace Tomahawk
 class DLLEXPORT ItunesLoader : public QObject
 {
     Q_OBJECT
-public:
+  public:
     explicit ItunesLoader( const QString& input, QObject* parent = 0 );
-    ~ItunesLoader(){}
+    ~ItunesLoader() {}
 
-private:
+  private:
     void parseTracks( const QVariantMap& tracks );
     void parsePlaylists( const QVariantList& playlists );
 

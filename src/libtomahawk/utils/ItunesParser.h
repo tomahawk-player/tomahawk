@@ -44,19 +44,19 @@ namespace Tomahawk
 class DLLEXPORT ItunesParser : public QObject
 {
     Q_OBJECT
-public:
+  public:
     explicit ItunesParser( const QString& trackUrl, QObject* parent = 0 );
     explicit ItunesParser( const QStringList& trackUrls, QObject* parent = 0 );
     virtual ~ItunesParser();
 
-signals:
+  signals:
     void track( const Tomahawk::query_ptr& track );
     void tracks( const QList< Tomahawk::query_ptr > tracks );
 
-private slots:
+  private slots:
     void itunesResponseLookupFinished();
 
-private:
+  private:
     QPixmap pixmap() const;
     void lookupItunesUri( const QString& track );
     void checkTrackFinished();

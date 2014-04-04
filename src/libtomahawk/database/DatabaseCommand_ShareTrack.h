@@ -36,7 +36,7 @@ class DLLEXPORT DatabaseCommand_ShareTrack : public DatabaseCommand_SocialAction
     Q_OBJECT
     Q_PROPERTY( QString recipient   READ recipient  WRITE setRecipient )
 
-public:
+  public:
     explicit DatabaseCommand_ShareTrack( QObject* parent = 0 );
 
     explicit DatabaseCommand_ShareTrack( const Tomahawk::trackdata_ptr& track,
@@ -56,7 +56,7 @@ public:
     virtual QString recipient() const;
     virtual void setRecipient( const QString& s );
 
-private:
+  private:
     QString m_recipient;
 };
 

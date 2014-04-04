@@ -33,12 +33,14 @@ class DLLEXPORT DatabaseCommand_LoadAllPlaylists : public DatabaseCommand
 {
     Q_OBJECT
 
-public:
-    enum SortOrder {
+  public:
+    enum SortOrder
+    {
         None = 0,
         ModificationTime = 1
     };
-    enum SortAscDesc {
+    enum SortAscDesc
+    {
         NoOrder = 0,
         Ascending = 1,
         Descending = 2
@@ -47,8 +49,14 @@ public:
     explicit DatabaseCommand_LoadAllPlaylists( const Tomahawk::source_ptr& s, QObject* parent = 0 );
 
     virtual void exec( DatabaseImpl* );
-    virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "loadallplaylists"; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
+    virtual QString commandname() const
+    {
+        return "loadallplaylists";
+    }
 
     void setLimit( unsigned int limit );
     void setSortOrder( SortOrder order );
@@ -64,7 +72,7 @@ public:
      */
     void setReturnPlEntryIds( bool returnPlEntryIds );
 
-signals:
+  signals:
     void done( const QList<Tomahawk::playlist_ptr>& playlists );
 
     /**
@@ -72,7 +80,7 @@ signals:
      */
     void done( const QHash< Tomahawk::playlist_ptr, QStringList >& playlists );
 
-private:
+  private:
     Q_DECLARE_PRIVATE( DatabaseCommand_LoadAllPlaylists )
 };
 

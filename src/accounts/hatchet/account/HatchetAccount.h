@@ -42,16 +42,31 @@ class ACCOUNTDLLEXPORT HatchetAccountFactory : public AccountFactory
     Q_INTERFACES( Tomahawk::Accounts::AccountFactory )
     Q_PLUGIN_METADATA( IID "org.tomahawk-player.Player.AccountFactory" )
 
-public:
+  public:
     HatchetAccountFactory();
     virtual ~HatchetAccountFactory();
 
-    virtual QString factoryId() const { return "hatchetaccount"; }
-    virtual QString prettyName() const { return "Hatchet"; }
-    virtual QString description() const { return tr( "Connect to your Hatchet account" ); }
-    virtual bool isUnique() const { return true; }
-    AccountTypes types() const { return AccountTypes( SipType ); }
-//    virtual bool allowUserCreation() const { return false; }
+    virtual QString factoryId() const
+    {
+        return "hatchetaccount";
+    }
+    virtual QString prettyName() const
+    {
+        return "Hatchet";
+    }
+    virtual QString description() const
+    {
+        return tr( "Connect to your Hatchet account" );
+    }
+    virtual bool isUnique() const
+    {
+        return true;
+    }
+    AccountTypes types() const
+    {
+        return AccountTypes( SipType );
+    }
+    //    virtual bool allowUserCreation() const { return false; }
     virtual QPixmap icon() const;
 
     virtual Account* createAccount ( const QString& pluginId = QString() );
@@ -60,12 +75,13 @@ public:
 class ACCOUNTDLLEXPORT HatchetAccount : public Account
 {
     Q_OBJECT
-public:
-    enum Service {
+  public:
+    enum Service
+    {
         Facebook = 0
     };
 
-    HatchetAccount( const QString &accountId );
+    HatchetAccount( const QString& accountId );
     virtual ~HatchetAccount();
 
     static HatchetAccount* instance();
@@ -79,26 +95,32 @@ public:
     void setConnectionState( Account::ConnectionState connectionState );
     ConnectionState connectionState() const;
 
-    virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() { return Tomahawk::InfoSystem::InfoPluginPtr(); }
+    virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin()
+    {
+        return Tomahawk::InfoSystem::InfoPluginPtr();
+    }
     SipPlugin* sipPlugin( bool create = true );
 
     AccountConfigWidget* configurationWidget();
-    QWidget* aclWidget() { return 0; }
+    QWidget* aclWidget()
+    {
+        return 0;
+    }
 
     QString username() const;
 
     void fetchAccessToken( const QString& type = "dreamcatcher" );
 
-signals:
+  signals:
     void authError( QString error, int statusCode, const QVariantMap );
     void deauthenticated();
     void accessTokenFetched();
 
-private slots:
+  private slots:
     void onPasswordLoginFinished( QNetworkReply*, const QString& username );
     void onFetchAccessTokenFinished( QNetworkReply*, const QString& type );
 
-private:
+  private:
     QByteArray refreshToken() const;
     uint refreshTokenExpiration() const;
 
@@ -107,7 +129,7 @@ private:
 
     QByteArray mandellaTokenType() const;
 
-    void loginWithPassword( const QString& username, const QString& password, const QString &otp );
+    void loginWithPassword( const QString& username, const QString& password, const QString& otp );
 
     QVariantMap parseReply( QNetworkReply* reply, bool& ok ) const;
 

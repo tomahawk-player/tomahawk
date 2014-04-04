@@ -42,22 +42,22 @@
 //FIXME: Qt5: this doesnt fail because Q_WS_X11 is deprecated
 //TODO: change to Q_OS_X11 and fix errors
 #ifdef Q_WS_X11
-    #include <QtGui/QX11Info>
-    #include <libqnetwm/netwm.h>
+#include <QtGui/QX11Info>
+#include <libqnetwm/netwm.h>
 #endif
 
 #ifdef Q_OS_WIN
-    #include <windows.h>
-    #include <windowsx.h>
-    #include <shellapi.h>
+#include <windows.h>
+#include <windowsx.h>
+#include <shellapi.h>
 #endif
 
 #ifdef QT_MAC_USE_COCOA
-    #include "widgets/SourceTreePopupDialog_mac.h"
+#include "widgets/SourceTreePopupDialog_mac.h"
 #endif
 
 // Defined in qpixmapfilter.cpp, private but exported
-extern void qt_blurImage( QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0 );
+extern void qt_blurImage( QPainter* p, QImage& blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0 );
 
 namespace TomahawkUtils
 {
@@ -149,12 +149,12 @@ drawShadowText( QPainter* painter, const QRect& rect, const QString& text, const
 
     painter->drawText( rect, text, textOption );
 
-/*    QFont font = painter->font();
-    font.setPixelSize( font.pixelSize() + 2 );
-    painter->setFont( font );
+    /*    QFont font = painter->font();
+        font.setPixelSize( font.pixelSize() + 2 );
+        painter->setFont( font );
 
-    painter->setPen( Qt::black );
-    painter->drawText( rect, text, textOption );*/
+        painter->setPen( Qt::black );
+        painter->drawText( rect, text, textOption );*/
 
     painter->restore();
 }
@@ -167,7 +167,9 @@ drawBackgroundAndNumbers( QPainter* painter, const QString& text, const QRect& f
 
     QRect figRect = figRectIn;
     if ( text.length() == 1 )
+    {
         figRect.adjust( -painter->fontMetrics().averageCharWidth(), 0, 0, 0 );
+    }
 
     QPen origpen = painter->pen();
     QPen pen = painter->brush().color();
@@ -181,13 +183,13 @@ drawBackgroundAndNumbers( QPainter* painter, const QString& text, const QRect& f
 
     QPainterPath ppath;
     ppath.moveTo( QPoint( figRect.x() + offset, figRect.y() + figRect.height() / 2 ) );
-    QRect leftArcRect( figRect.x() + offset - bulgeWidth, figRect.y(), 2*bulgeWidth, figRect.height() );
+    QRect leftArcRect( figRect.x() + offset - bulgeWidth, figRect.y(), 2 * bulgeWidth, figRect.height() );
     ppath.arcTo( leftArcRect, 90, 180 );
     painter->drawPath( ppath );
 
     ppath = QPainterPath();
     ppath.moveTo( figRect.x() + figRect.width() - offset, figRect.y() + figRect.height() / 2 );
-    leftArcRect = QRect( figRect.x() + figRect.width() - offset - bulgeWidth, figRect.y(), 2*bulgeWidth, figRect.height() );
+    leftArcRect = QRect( figRect.x() + figRect.width() - offset - bulgeWidth, figRect.y(), 2 * bulgeWidth, figRect.height() );
     ppath.arcTo( leftArcRect, 270, 180 );
     painter->drawPath( ppath );
 
@@ -224,7 +226,9 @@ unmarginLayout( QLayout* layout )
     {
         QLayout* childLayout = layout->itemAt( i )->layout();
         if ( childLayout )
+        {
             unmarginLayout( childLayout );
+        }
     }
 }
 
@@ -235,7 +239,9 @@ tomahawkWindow()
     QWidgetList widgetList = qApp->topLevelWidgets();
     int i = 0;
     while( i < widgetList.count() && widgetList.at( i )->objectName() != "TH_Main_Window" )
+    {
         i++;
+    }
 
     if ( i == widgetList.count() )
     {
@@ -244,7 +250,7 @@ tomahawkWindow()
         return 0;
     }
 
-    QWidget *widget = widgetList.at( i );
+    QWidget* widget = widgetList.at( i );
     return widget;
 }
 
@@ -259,7 +265,9 @@ bringToFront()
 
         QWidget* widget = tomahawkWindow();
         if ( !widget )
+        {
             return;
+        }
 
         widget->show();
         widget->activateWindow();
@@ -288,7 +296,9 @@ bringToFront()
 
         QWidget* widget = tomahawkWindow();
         if ( !widget )
+        {
             return;
+        }
 
         widget->show();
         widget->activateWindow();
@@ -297,12 +307,12 @@ bringToFront()
         WId wid = widget->winId();
 
         HWND hwndActiveWin = GetForegroundWindow();
-        int  idActive      = GetWindowThreadProcessId(hwndActiveWin, NULL);
-        if ( AttachThreadInput(GetCurrentThreadId(), idActive, TRUE) )
+        int  idActive      = GetWindowThreadProcessId( hwndActiveWin, NULL );
+        if ( AttachThreadInput( GetCurrentThreadId(), idActive, TRUE ) )
         {
-            SetForegroundWindow( (HWND)wid );
-            SetFocus( (HWND)wid );
-            AttachThreadInput(GetCurrentThreadId(), idActive, FALSE);
+            SetForegroundWindow( ( HWND )wid );
+            SetFocus( ( HWND )wid );
+            AttachThreadInput( GetCurrentThreadId(), idActive, FALSE );
         }
     }
 #endif
@@ -314,7 +324,7 @@ void
 openUrl( const QUrl& url )
 {
 #ifdef Q_OS_WIN
-    ShellExecuteW( 0, 0, (LPCWSTR)url.toString().utf16(), 0, 0, SW_SHOWNORMAL );
+    ShellExecuteW( 0, 0, ( LPCWSTR )url.toString().utf16(), 0, 0, SW_SHOWNORMAL );
 #else
     QDesktopServices::openUrl( url );
 #endif
@@ -339,11 +349,15 @@ createRoundedImage( const QPixmap& pixmap, const QSize& size, float frameWidthPc
     }
 
     if ( !height || !width )
+    {
         return QPixmap();
+    }
 
     QPixmap scaledAvatar = pixmap.scaled( width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
     if ( frameWidthPct == 0.00 )
+    {
         return scaledAvatar;
+    }
 
     QPixmap frame( width, height );
     frame.fill( Qt::transparent );
@@ -361,9 +375,9 @@ createRoundedImage( const QPixmap& pixmap, const QSize& size, float frameWidthPc
     painter.setPen( pen );
     painter.drawRoundedRect( outerRect, frameWidthPct * 100.0, frameWidthPct * 100.0, Qt::RelativeSize );
 
-/*    painter.setBrush( Qt::transparent );
-    painter.setPen( Qt::white );
-    painter.drawRoundedRect( outerRect, frameWidthPct, frameWidthPct, Qt::RelativeSize ); */
+    /*    painter.setBrush( Qt::transparent );
+        painter.setPen( Qt::white );
+        painter.drawRoundedRect( outerRect, frameWidthPct, frameWidthPct, Qt::RelativeSize ); */
 
     return frame;
 }
@@ -408,7 +422,7 @@ defaultIconSize()
 QColor
 alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity )
 {
-    opacity = qMax( (float)0.3, opacity );
+    opacity = qMax( ( float )0.3, opacity );
     int r = colorFrom.red(), g = colorFrom.green(), b = colorFrom.blue();
     r = opacity * r + ( 1 - opacity ) * colorTo.red();
     g = opacity * g + ( 1 - opacity ) * colorTo.green();
@@ -427,41 +441,65 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
     {
         case DefaultAlbumCover:
             if ( mode == CoverInCase )
+            {
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/no-album-art-placeholder.svg", size );
+            }
             else if ( mode == Grid )
+            {
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/album-placeholder-grid.svg", size );
+            }
             else
+            {
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/album-icon.svg", size );
+            }
             break;
 
         case DefaultArtistImage:
             if ( mode == Grid )
+            {
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/artist-placeholder-grid.svg", size );
+            }
             else
+            {
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/artist-icon.svg", size );
+            }
             break;
 
         case DefaultTrackImage:
             if ( mode == Grid )
+            {
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-placeholder-grid.svg", size );
+            }
             else if ( mode == RoundedCorners )
+            {
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-icon.svg", size, TomahawkUtils::RoundedCorners );
+            }
             else
+            {
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-icon.svg", size );
+            }
             break;
 
         case DefaultSourceAvatar:
             if ( mode == RoundedCorners )
+            {
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/user-avatar.svg", size, TomahawkUtils::RoundedCorners );
+            }
             else
+            {
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/user-avatar.svg", size );
+            }
             break;
 
         case DefaultResolver:
             if ( mode == RoundedCorners )
+            {
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/resolver-default.svg", size, TomahawkUtils::RoundedCorners );
+            }
             else
+            {
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/resolver-default.svg", size );
+            }
             break;
 
         case DefaultCollection:
@@ -755,9 +793,11 @@ prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, Pl
     {
         float opacity = 0.0;
         if ( !item->query()->results().isEmpty() && item->query()->results().first()->isOnline() )
+        {
             opacity = item->query()->results().first()->score();
+        }
 
-        opacity = qMax( (float)0.3, opacity );
+        opacity = qMax( ( float )0.3, opacity );
         QColor textColor = alphaBlend( option->palette.color( QPalette::Text ), option->palette.color( QPalette::BrightText ), opacity );
 
         option->palette.setColor( QPalette::Text, textColor );
@@ -766,7 +806,7 @@ prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, Pl
 
 
 void
-drawRoundedButton( QPainter* painter, const QRect& btnRect, const QColor& color, const QColor &gradient1bottom, const QColor& gradient2top, const QColor& gradient2bottom )
+drawRoundedButton( QPainter* painter, const QRect& btnRect, const QColor& color, const QColor& gradient1bottom, const QColor& gradient2top, const QColor& gradient2bottom )
 {
     QPainterPath btnPath;
     const int radius = 3;
@@ -777,7 +817,7 @@ drawRoundedButton( QPainter* painter, const QRect& btnRect, const QColor& color,
     btnPath.quadTo( QPoint( btnRect.topLeft() ), QPoint( btnRect.left() + radius, btnRect.top() ) );
     btnPath.lineTo( btnRect.right() - radius, btnRect.top() );
     btnPath.quadTo( QPoint( btnRect.topRight() ), QPoint( btnRect.right(), btnRect.top() + radius ) );
-    btnPath.lineTo( btnRect.right(),btnCenter );
+    btnPath.lineTo( btnRect.right(), btnCenter );
     btnPath.lineTo( btnRect.left(), btnCenter );
 
     QLinearGradient g;
@@ -788,7 +828,9 @@ drawRoundedButton( QPainter* painter, const QRect& btnRect, const QColor& color,
         painter->fillPath( btnPath, g );
     }
     else
+    {
         painter->fillPath( btnPath, color );
+    }
     //painter->setPen( bg.darker() );
 
     //painter->drawPath( btnPath );
@@ -809,7 +851,9 @@ drawRoundedButton( QPainter* painter, const QRect& btnRect, const QColor& color,
         painter->fillPath( btnPath, g );
     }
     else
+    {
         painter->fillPath( btnPath, color );
+    }
 
 }
 
@@ -818,7 +862,9 @@ QPixmap
 createTiledPixmap( int width, int height, const QImage& inputTile )
 {
     if ( inputTile.isNull() )
+    {
         return QPixmap();
+    }
 
 
     QImage localTile = inputTile;
@@ -831,7 +877,7 @@ createTiledPixmap( int width, int height, const QImage& inputTile )
         int curY = 0;
         while ( curY < taller.height() )
         {
-            const int thisHeight = (curY + localTile.height() > height) ? height - curY : localTile.height();
+            const int thisHeight = ( curY + localTile.height() > height ) ? height - curY : localTile.height();
             p.drawImage( QRect( 0, curY, localTile.width(), thisHeight ), localTile, QRect( 0, 0, localTile.width(), thisHeight ) );
             curY += localTile.height();
         }
@@ -846,7 +892,7 @@ createTiledPixmap( int width, int height, const QImage& inputTile )
     QPainter p( &tiledImage );
     while ( curWidth < width )
     {
-        const int thisWidth = (curWidth + localTile.width() > width) ? width - curWidth : localTile.width();
+        const int thisWidth = ( curWidth + localTile.width() > width ) ? width - curWidth : localTile.width();
 
         const QRect source( 0, 0, thisWidth, tiledImage.height() );
         const QRect dest( curWidth, 0, thisWidth, tiledImage.height() );
@@ -944,7 +990,9 @@ drawCompositedPopup( QWidget* widget,
     compositingWorks = false;
 #elif defined(Q_WS_X11)
     if ( !QX11Info::isCompositingManagerRunning() )
+    {
         compositingWorks = false;
+    }
 #endif
 
     QPainter p;

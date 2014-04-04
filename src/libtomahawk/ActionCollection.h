@@ -30,16 +30,17 @@ class DLLEXPORT ActionCollection : public QObject
 {
     Q_OBJECT
 
-public:
+  public:
     // Categories for custom-registered actions
-    enum ActionDestination {
-//         Tracks, TODO
+    enum ActionDestination
+    {
+        //         Tracks, TODO
         LocalPlaylists = 0
     };
 
     static ActionCollection* instance();
 
-    ActionCollection( QObject *parent );
+    ActionCollection( QObject* parent );
     ~ActionCollection();
 
     void initActions();
@@ -47,7 +48,7 @@ public:
     /**
      * This method returns a main menu bar, suitable for Windows, Mac and X11.
      */
-    QMenuBar *createMenuBar( QWidget *parent );
+    QMenuBar* createMenuBar( QWidget* parent );
 
     /**
      * Returns a QMenu with all the entries that would normally be in the main menu,
@@ -55,7 +56,7 @@ public:
      * and fairly little sense on Unity and other X11 desktop configurations which pull
      * out the menu bar from the window.
      */
-    QMenu *createCompactMenu( QWidget *parent );
+    QMenu* createCompactMenu( QWidget* parent );
 
     QAction* getAction( const QString& name );
     QList< QAction* > getAction( ActionDestination category );
@@ -87,13 +88,13 @@ public:
     void removeAction( QAction* action );
     void removeAction( QAction* action, ActionDestination category );
 
-public slots:
+  public slots:
     void togglePrivateListeningMode();
 
-signals:
+  signals:
     void privacyModeChanged();
 
-private:
+  private:
     static ActionCollection* s_instance;
 
     QHash< QString, QAction* > m_actionCollection;

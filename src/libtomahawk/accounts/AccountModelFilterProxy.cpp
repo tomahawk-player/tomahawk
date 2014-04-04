@@ -25,7 +25,7 @@ using namespace Tomahawk;
 using namespace Accounts;
 
 AccountModelFilterProxy::AccountModelFilterProxy( QObject* parent )
-    : QSortFilterProxyModel(parent)
+    : QSortFilterProxyModel( parent )
     , m_filterType( NoType )
 {
 
@@ -47,7 +47,9 @@ bool
 AccountModelFilterProxy::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
 {
     if ( m_filterType == NoType )
+    {
         return true;
+    }
 
     const QModelIndex idx = sourceModel()->index( sourceRow, 0, sourceParent );
     const AccountTypes types = static_cast< AccountTypes >( idx.data( AccountModel::AccountTypeRole ).value< AccountTypes >() );
@@ -61,7 +63,9 @@ void
 AccountModelFilterProxy::setFilterType( AccountType type )
 {
     if ( type == m_filterType )
+    {
         return;
+    }
 
     m_filterType = type;
     invalidate();

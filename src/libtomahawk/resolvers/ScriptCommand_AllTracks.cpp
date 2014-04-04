@@ -25,8 +25,8 @@
 #include "utils/Logger.h"
 
 ScriptCommand_AllTracks::ScriptCommand_AllTracks( const Tomahawk::collection_ptr& collection,
-                                                  const Tomahawk::album_ptr& album,
-                                                  QObject* parent )
+        const Tomahawk::album_ptr& album,
+        QObject* parent )
     : ScriptCommand( parent )
     , m_collection( collection )
     , m_album( album )

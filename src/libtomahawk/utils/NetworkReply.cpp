@@ -40,7 +40,9 @@ NetworkReply::NetworkReply( QNetworkReply* parent )
 NetworkReply::~NetworkReply()
 {
     if ( m_reply )
+    {
         m_reply->deleteLater();
+    }
 }
 
 

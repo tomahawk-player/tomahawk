@@ -27,7 +27,7 @@
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "Source.h"
+#include "Source.h"
 #endif
 
 
@@ -63,7 +63,9 @@ Tomahawk::InfoSystem::XmppInfoPlugin::init()
     }
 
     if ( m_sipPlugin.isNull() )
+    {
         return;
+    }
 
     connect( this, SIGNAL( publishTune( QUrl, Tomahawk::InfoSystem::InfoStringHash ) ), m_sipPlugin.data(), SLOT( publishTune( QUrl, Tomahawk::InfoSystem::InfoStringHash ) ), Qt::QueuedConnection );
 }
@@ -95,7 +97,7 @@ Tomahawk::InfoSystem::XmppInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushDa
 
 
 void
-Tomahawk::InfoSystem::XmppInfoPlugin::audioStarted( const Tomahawk::InfoSystem::PushInfoPair &pushInfoPair )
+Tomahawk::InfoSystem::XmppInfoPlugin::audioStarted( const Tomahawk::InfoSystem::PushInfoPair& pushInfoPair )
 {
     if ( !pushInfoPair.second.canConvert< QVariantMap >() )
     {
@@ -120,9 +122,13 @@ Tomahawk::InfoSystem::XmppInfoPlugin::audioStarted( const Tomahawk::InfoSystem::
 
     QUrl url;
     if ( pushInfoPair.first.contains( "shorturl" ) )
+    {
         url = pushInfoPair.first[ "shorturl" ].toUrl();
+    }
     else
+    {
         url = GlobalActionManager::instance()->openLink( info.value( "title" ), info.value( "artist" ), info.value( "album" ) );
+    }
 
     emit publishTune( url, info );
 }
@@ -142,14 +148,14 @@ Tomahawk::InfoSystem::XmppInfoPlugin::audioStopped()
 
 
 void
-Tomahawk::InfoSystem::XmppInfoPlugin::getInfo(Tomahawk::InfoSystem::InfoRequestData requestData)
+Tomahawk::InfoSystem::XmppInfoPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     Q_UNUSED( requestData );
 }
 
 
 void
-Tomahawk::InfoSystem::XmppInfoPlugin::notInCacheSlot(const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData)
+Tomahawk::InfoSystem::XmppInfoPlugin::notInCacheSlot( const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     Q_UNUSED( criteria );
     Q_UNUSED( requestData );

@@ -25,7 +25,8 @@
 class QHBoxLayout;
 class QAbstractItemModel;
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
 class BreadcrumbButton;
 
@@ -46,8 +47,9 @@ class BreadcrumbButton;
 class DLLEXPORT Breadcrumb : public QWidget
 {
     Q_OBJECT
-public:
-    enum ExtraRoles {
+  public:
+    enum ExtraRoles
+    {
         DefaultRole = Qt::UserRole + 1,
         UserSelectedRole = Qt::UserRole + 2,
         ChartIdRole = Qt::UserRole + 3,
@@ -58,20 +60,23 @@ public:
     virtual ~Breadcrumb();
 
     void setModel( QAbstractItemModel* model );
-    QAbstractItemModel* model() const { return m_model; }
+    QAbstractItemModel* model() const
+    {
+        return m_model;
+    }
 
     void setRootIcon( const QPixmap& pm );
 
-protected:
+  protected:
     virtual void paintEvent( QPaintEvent* );
 
-signals:
+  signals:
     void activateIndex( const QModelIndex& idx );
 
-private slots:
+  private slots:
     void breadcrumbComboChanged( const QModelIndex& );
 
-private:
+  private:
     // Takes an index in the selection model to update from (updates from that to all children)
     void updateButtons( const QModelIndex& fromIndex );
 

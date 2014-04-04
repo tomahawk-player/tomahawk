@@ -47,7 +47,7 @@ struct DynQueueItem : RevisionQueueItem
 
 class DynamicPlaylistPrivate : public PlaylistPrivate
 {
-public:
+  public:
     DynamicPlaylistPrivate( DynamicPlaylist* q, const source_ptr& _author )
         : PlaylistPrivate( q, _author )
     {
@@ -55,15 +55,15 @@ public:
 
 
     DynamicPlaylistPrivate( DynamicPlaylist* q, const source_ptr& _src,
-                     const QString& _currentrevision,
-                     const QString& _title,
-                     const QString& _info,
-                     const QString& _creator,
-                     uint _createdOn,
-                     bool _shared,
-                     int _lastmod,
-                     const QString& _guid,
-                     bool _autoload )
+                            const QString& _currentrevision,
+                            const QString& _title,
+                            const QString& _info,
+                            const QString& _creator,
+                            uint _createdOn,
+                            bool _shared,
+                            int _lastmod,
+                            const QString& _guid,
+                            bool _autoload )
         : PlaylistPrivate( q, _src, _currentrevision, _title, _info, _creator, _createdOn, _shared, _lastmod, _guid )
         , autoLoad( _autoload )
     {
@@ -71,7 +71,7 @@ public:
 
     Q_DECLARE_PUBLIC( DynamicPlaylist )
 
-private:
+  private:
     QWeakPointer< DynamicPlaylist > weakSelf;
 
     geninterface_ptr generator;

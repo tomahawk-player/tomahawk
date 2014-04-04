@@ -55,20 +55,20 @@ NetworkActivityWorker::run()
     tLog() << Q_FUNC_INFO << QDateTime::currentDateTime().toTime_t();
     {
         // Load trending tracks
-        qRegisterMetaType< QList< QPair< double,Tomahawk::track_ptr > > >("QList< QPair< double,Tomahawk::track_ptr > >");
+        qRegisterMetaType< QList< QPair< double, Tomahawk::track_ptr > > >( "QList< QPair< double,Tomahawk::track_ptr > >" );
         DatabaseCommand_TrendingTracks* dbcmd = new DatabaseCommand_TrendingTracks();
         dbcmd->setLimit( Tomahawk::Widgets::NetworkActivityWidget::numberOfTrendingTracks );
-        connect( dbcmd, SIGNAL( done( QList< QPair< double,Tomahawk::track_ptr > >) ),
-                 SLOT( trendingTracksReceived( QList< QPair< double,Tomahawk::track_ptr > > ) ),
+        connect( dbcmd, SIGNAL( done( QList< QPair< double, Tomahawk::track_ptr > > ) ),
+                 SLOT( trendingTracksReceived( QList< QPair< double, Tomahawk::track_ptr > > ) ),
                  Qt::QueuedConnection );
         Database::instance()->enqueue( dbcmd_ptr( dbcmd ) );
     }
     {
-        qRegisterMetaType< QList< QPair< double, Tomahawk::artist_ptr > > >("QList< QPair< double, Tomahawk::artist_ptr > >");
+        qRegisterMetaType< QList< QPair< double, Tomahawk::artist_ptr > > >( "QList< QPair< double, Tomahawk::artist_ptr > >" );
         DatabaseCommand_TrendingArtists* dbcmd = new DatabaseCommand_TrendingArtists();
         dbcmd->setLimit( Tomahawk::Widgets::NetworkActivityWidget::numberOfTrendingArtists );
         connect( dbcmd, SIGNAL( done( QList< QPair< double, Tomahawk::artist_ptr > > ) ),
-                 SLOT( trendingArtistsReceived( QList< QPair< double, Tomahawk::artist_ptr > >) ),
+                 SLOT( trendingArtistsReceived( QList< QPair< double, Tomahawk::artist_ptr > > ) ),
                  Qt::QueuedConnection );
         Database::instance()->enqueue( dbcmd_ptr( dbcmd ) );
     }
@@ -76,7 +76,7 @@ NetworkActivityWorker::run()
         DatabaseCommand_LoadAllSources* dbcmd = new DatabaseCommand_LoadAllSources();
         connect( dbcmd, SIGNAL( done( QList<Tomahawk::source_ptr> ) ),
                  SLOT( allSourcesReceived( QList<Tomahawk::source_ptr> ) ),
-                 Qt::QueuedConnection);
+                 Qt::QueuedConnection );
         Database::instance()->enqueue( dbcmd_ptr( dbcmd ) );
     }
     tLog() << Q_FUNC_INFO << QDateTime::currentDateTime().toTime_t();
@@ -113,7 +113,7 @@ NetworkActivityWorker::allSourcesReceived( const QList<source_ptr>& sources )
     Q_D( NetworkActivityWorker );
     d->sourcesToLoad = sources.count();
 
-    foreach ( const source_ptr& source, sources)
+    foreach ( const source_ptr & source, sources )
     {
         DatabaseCommand_LoadAllPlaylists* dbcmd = new DatabaseCommand_LoadAllPlaylists( source );
         dbcmd->setReturnPlEntryIds( true );
@@ -126,7 +126,7 @@ NetworkActivityWorker::allSourcesReceived( const QList<source_ptr>& sources )
 
 
 void
-NetworkActivityWorker::playlistLoaded(PlaylistRevision)
+NetworkActivityWorker::playlistLoaded( PlaylistRevision )
 {
     Q_D( NetworkActivityWorker );
 
@@ -149,7 +149,7 @@ NetworkActivityWorker::playtime( const Tomahawk::playlist_ptr& playlist, uint pl
         QList<playlist_ptr> playlists;
         QMapIterator<uint, playlist_ptr> iter( d->playlistCount );
         iter.toBack();
-        while (iter.hasPrevious() && (uint)playlists.size() < Widgets::NetworkActivityWidget::numberOfHotPlaylists )
+        while ( iter.hasPrevious() && ( uint )playlists.size() < Widgets::NetworkActivityWidget::numberOfHotPlaylists )
         {
             iter.previous();
             Tomahawk::playlist_ptr playlist = iter.value();
@@ -179,7 +179,7 @@ NetworkActivityWorker::trendingArtistsReceived( const QList<QPair<double, artist
     QList< artist_ptr > artists;
     QList< QPair< double, artist_ptr > >::const_iterator iter = _artists.constBegin();
     const QList< QPair< double, artist_ptr > >::const_iterator end = _artists.constEnd();
-    for(; iter != end; ++iter)
+    for( ; iter != end; ++iter )
     {
         artists << iter->second;
     }
@@ -190,7 +190,7 @@ NetworkActivityWorker::trendingArtistsReceived( const QList<QPair<double, artist
 
 
 void
-NetworkActivityWorker::trendingTracksReceived( const QList<QPair<double, Tomahawk::track_ptr> >& _tracks)
+NetworkActivityWorker::trendingTracksReceived( const QList<QPair<double, Tomahawk::track_ptr> >& _tracks )
 {
     Q_D( NetworkActivityWorker );
     d->trendingTracksDone = true;
@@ -198,7 +198,7 @@ NetworkActivityWorker::trendingTracksReceived( const QList<QPair<double, Tomahaw
     QList<track_ptr> tracks;
     QList< QPair< double, track_ptr > >::const_iterator iter = _tracks.constBegin();
     const QList< QPair< double, track_ptr > >::const_iterator end = _tracks.constEnd();
-    for(; iter != end; ++iter)
+    for( ; iter != end; ++iter )
     {
         tracks << iter->second;
     }
@@ -221,7 +221,7 @@ NetworkActivityWorker::checkDone()
 void
 NetworkActivityWorker::checkHotPlaylistsDone()
 {
-    Q_D(NetworkActivityWorker);
+    Q_D( NetworkActivityWorker );
 
     if ( d->playlistsToLoad == 0 )
     {

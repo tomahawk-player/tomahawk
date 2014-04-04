@@ -62,7 +62,9 @@ DatabaseCommand_AllArtists::exec( DatabaseImpl* dbi )
     }
 
     if ( !m_collection.isNull() )
+    {
         sourceToken = QString( "AND file.source %1" ).arg( m_collection->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( m_collection->source()->id() ) );
+    }
 
     if ( !m_filter.isEmpty() )
     {
@@ -78,22 +80,24 @@ DatabaseCommand_AllArtists::exec( DatabaseImpl* dbi )
         tables = "artist, track, file, file_join";
     }
     else
+    {
         tables = "artist, file, file_join";
+    }
 
     QString sql = QString(
-            "SELECT DISTINCT artist.id, artist.name "
-            "FROM %1 "
-            "%2 "
-            "WHERE file.id = file_join.file "
-            "AND file_join.artist = artist.id "
-            "%3 %4 %5 %6 %7"
-            ).arg( tables )
-             .arg( joins )
-             .arg( sourceToken )
-             .arg( filterToken )
-             .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( orderToken ) : QString() )
-             .arg( m_sortDescending ? "DESC" : QString() )
-             .arg( m_amount > 0 ? QString( "LIMIT 0, %1" ).arg( m_amount ) : QString() );
+                      "SELECT DISTINCT artist.id, artist.name "
+                      "FROM %1 "
+                      "%2 "
+                      "WHERE file.id = file_join.file "
+                      "AND file_join.artist = artist.id "
+                      "%3 %4 %5 %6 %7"
+                  ).arg( tables )
+                  .arg( joins )
+                  .arg( sourceToken )
+                  .arg( filterToken )
+                  .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( orderToken ) : QString() )
+                  .arg( m_sortDescending ? "DESC" : QString() )
+                  .arg( m_amount > 0 ? QString( "LIMIT 0, %1" ).arg( m_amount ) : QString() );
 
     query.prepare( sql );
     query.exec();

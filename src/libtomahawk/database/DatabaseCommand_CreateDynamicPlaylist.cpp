@@ -44,7 +44,7 @@ DatabaseCommand_CreateDynamicPlaylist::DatabaseCommand_CreateDynamicPlaylist( QO
 
 
 DatabaseCommand_CreateDynamicPlaylist::DatabaseCommand_CreateDynamicPlaylist( const source_ptr& author,
-                                                                const dynplaylist_ptr& playlist, bool autoLoad )
+        const dynplaylist_ptr& playlist, bool autoLoad )
     : DatabaseCommand_CreatePlaylist( author, playlist.staticCast<Playlist>() )
     , m_playlist( playlist )
     , m_autoLoad( autoLoad )
@@ -58,10 +58,14 @@ DatabaseCommand_CreateDynamicPlaylist::~DatabaseCommand_CreateDynamicPlaylist()
 QVariant
 DatabaseCommand_CreateDynamicPlaylist::playlistV() const
 {
-        if( m_v.isNull() )
-            return QJson::QObjectHelper::qobject2qvariant( (QObject*)m_playlist.data() );
-        else
-            return m_v;
+    if( m_v.isNull() )
+    {
+        return QJson::QObjectHelper::qobject2qvariant( ( QObject* )m_playlist.data() );
+    }
+    else
+    {
+        return m_v;
+    }
 }
 
 void
@@ -80,12 +84,15 @@ DatabaseCommand_CreateDynamicPlaylist::exec( DatabaseImpl* lib )
     cre.prepare( "INSERT INTO dynamic_playlist( guid, pltype, plmode, autoload ) "
                  "VALUES( ?, ?, ?, ? )" );
 
-    if( m_playlist.isNull() ) {
+    if( m_playlist.isNull() )
+    {
         QVariantMap m = m_v.toMap();
         cre.addBindValue( m.value( "guid" ) );
         cre.addBindValue( m.value( "type" ) );
         cre.addBindValue( m.value( "mode" ) );
-    } else {
+    }
+    else
+    {
         cre.addBindValue( m_playlist->guid() );
         cre.addBindValue( m_playlist->type() );
         cre.addBindValue( m_playlist->mode() );
@@ -106,14 +113,17 @@ DatabaseCommand_CreateDynamicPlaylist::postCommitHook()
     }
 
     if(  !DatabaseCommand_CreatePlaylist::report() || report() == false )
+    {
         return;
+    }
 
     qDebug() << Q_FUNC_INFO << "..reporting..";
-    if( m_playlist.isNull() ) {
+    if( m_playlist.isNull() )
+    {
         QMetaObject::invokeMethod( SourceList::instance(),
                                    "createDynamicPlaylist",
                                    Qt::BlockingQueuedConnection,
-                                   QGenericArgument( "Tomahawk::source_ptr", (const void*)&source() ),
+                                   QGenericArgument( "Tomahawk::source_ptr", ( const void* )&source() ),
                                    Q_ARG( QVariant, m_v ) );
     }
     else
@@ -121,5 +131,7 @@ DatabaseCommand_CreateDynamicPlaylist::postCommitHook()
         m_playlist->reportCreated( m_playlist );
     }
     if( source()->isLocal() )
+    {
         Servent::instance()->triggerDBSync();
+    }
 }

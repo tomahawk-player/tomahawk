@@ -29,13 +29,13 @@ class TrackView;
 
 class DLLEXPORT QueueProxyModel : public PlayableProxyModel
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit QueueProxyModel( TrackView* parent = 0 );
     virtual ~QueueProxyModel();
 
-private slots:
+  private slots:
     void onIndexChanged( const QModelIndex& index );
     void onIndexActivated( const QModelIndex& index );
     void onPlaybackStarted( const Tomahawk::result_ptr& result );

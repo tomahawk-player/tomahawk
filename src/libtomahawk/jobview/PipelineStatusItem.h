@@ -28,7 +28,7 @@
 class PipelineStatusItem : public JobStatusItem
 {
     Q_OBJECT
-public:
+  public:
     explicit PipelineStatusItem( const Tomahawk::query_ptr& q );
     virtual ~PipelineStatusItem();
 
@@ -36,29 +36,35 @@ public:
     virtual QString mainText() const;
     virtual QPixmap icon() const;
 
-    virtual QString type() const { return "pipeline"; }
+    virtual QString type() const
+    {
+        return "pipeline";
+    }
 
-    virtual bool collapseItem() const { return false; } // We can't collapse, since we use this meta-item instead of one per resolve
+    virtual bool collapseItem() const
+    {
+        return false;    // We can't collapse, since we use this meta-item instead of one per resolve
+    }
 
-private slots:
+  private slots:
     void resolving( const Tomahawk::query_ptr& query );
     void idle();
 
-private:
+  private:
     QString m_latestQuery;
 };
 
 class PipelineStatusManager : public QObject
 {
     Q_OBJECT
-public:
+  public:
     explicit PipelineStatusManager( QObject* parent = 0 );
     virtual ~PipelineStatusManager() {}
 
-private slots:
+  private slots:
     void resolving( const Tomahawk::query_ptr& p );
 
-private:
+  private:
     QPointer<PipelineStatusItem> m_curItem;
 };
 

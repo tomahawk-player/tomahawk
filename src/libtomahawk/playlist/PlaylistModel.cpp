@@ -81,7 +81,9 @@ PlaylistModel::guid() const
         return QString( "playlistmodel/%1" ).arg( d->playlist->guid() );
     }
     else
+    {
         return QString();
+    }
 }
 
 
@@ -113,7 +115,9 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
 
     onPlaylistChanged();
     if ( !loadEntries )
+    {
         return;
+    }
 
     if ( playlist->loaded() )
     {
@@ -139,8 +143,8 @@ PlaylistModel::onPlaylistChanged()
     {
         if ( d->playlist->author()->isLocal() )
         {
-             desc = tr( "A playlist you created %1." )
-                    .arg( age );
+            desc = tr( "A playlist you created %1." )
+                   .arg( age );
         }
         else
         {
@@ -186,13 +190,15 @@ PlaylistModel::insertAlbums( const QList< Tomahawk::album_ptr >& albums, int row
     // FIXME: This currently appends, not inserts!
     Q_UNUSED( row );
 
-    foreach ( const album_ptr& album, albums )
+    foreach ( const album_ptr & album, albums )
     {
         if ( !album )
+        {
             return;
+        }
 
         connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
-                                 SLOT( appendQueries( QList<Tomahawk::query_ptr> ) ) );
+                 SLOT( appendQueries( QList<Tomahawk::query_ptr> ) ) );
 
         appendQueries( album->playlistInterface( Mixed )->tracks() );
     }
@@ -213,13 +219,15 @@ PlaylistModel::insertArtists( const QList< Tomahawk::artist_ptr >& artists, int 
     // FIXME: This currently appends, not inserts!
     Q_UNUSED( row );
 
-    foreach ( const artist_ptr& artist, artists )
+    foreach ( const artist_ptr & artist, artists )
     {
         if ( !artist )
+        {
             return;
+        }
 
         connect( artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
-                                  SLOT( appendQueries( QList<Tomahawk::query_ptr> ) ) );
+                 SLOT( appendQueries( QList<Tomahawk::query_ptr> ) ) );
 
         appendQueries( artist->playlistInterface( Mixed )->tracks() );
     }
@@ -238,10 +246,12 @@ PlaylistModel::insertQueries( const QList< Tomahawk::query_ptr >& queries, int r
 {
     Q_D( PlaylistModel );
     QList< Tomahawk::plentry_ptr > entries;
-    foreach ( const query_ptr& query, queries )
+    foreach ( const query_ptr & query, queries )
     {
         if ( d->acceptPlayableQueriesOnly && query && query->resolvingFinished() && !query->playable() )
+        {
             continue;
+        }
 
         plentry_ptr entry = plentry_ptr( new PlaylistEntry() );
 
@@ -249,7 +259,9 @@ PlaylistModel::insertQueries( const QList< Tomahawk::query_ptr >& queries, int r
         entry->setLastmodified( 0 );
         QString annotation = "";
         if ( !query->property( "annotation" ).toString().isEmpty() )
+        {
             annotation = query->property( "annotation" ).toString();
+        }
         entry->setAnnotation( annotation );
 
         entry->setQuery( query );
@@ -289,18 +301,22 @@ PlaylistModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int
     QList< Tomahawk::query_ptr > queries;
     int i = 0;
     PlayableItem* plitem;
-    foreach( const plentry_ptr& entry, entries )
+    foreach( const plentry_ptr & entry, entries )
     {
         plitem = new PlayableItem( entry, rootItem(), row + i );
         plitem->index = createIndex( row + i, 0, plitem );
 
         if ( logs.count() > i )
+        {
             plitem->setPlaybackLog( logs.at( i ) );
+        }
 
         i++;
 
         if ( entry->query()->id() == currentItemUuid() )
+        {
             setCurrentIndex( plitem->index );
+        }
 
         if ( !entry->query()->resolvingFinished() && !entry->query()->playable() )
         {
@@ -375,7 +391,9 @@ PlaylistModel::mimeData( const QModelIndexList& indexes ) const
     // Add the playlist id to the mime data so that we can detect dropping on ourselves
     QMimeData* data = PlayableModel::mimeData( indexes );
     if ( d->playlist )
+    {
         data->setData( "application/tomahawk.playlist.id", d->playlist->guid().toLatin1() );
+    }
 
     return data;
 }
@@ -388,10 +406,14 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
     Q_UNUSED( column );
 
     if ( action == Qt::IgnoreAction || isReadOnly() )
+    {
         return true;
+    }
 
     if ( !DropJob::acceptsMimeData( data ) )
+    {
         return false;
+    }
 
     d->dropStorage.row = row;
     d->dropStorage.parent = QPersistentModelIndex( parent );
@@ -400,18 +422,20 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
     DropJob* dj = new DropJob();
 
     if ( !DropJob::acceptsMimeData( data, DropJob::Track | DropJob::Playlist | DropJob::Album | DropJob::Artist ) )
+    {
         return false;
+    }
 
     dj->setDropTypes( DropJob::Track | DropJob::Playlist | DropJob::Artist | DropJob::Album );
     dj->setDropAction( DropJob::Append );
-/*    if ( action & Qt::MoveAction )
-        dj->setDropAction( DropJob::Move ); */
+    /*    if ( action & Qt::MoveAction )
+            dj->setDropAction( DropJob::Move ); */
 
 #ifdef Q_WS_MAC
     // On mac, drags from outside the app are still Qt::MoveActions instead of Qt::CopyAction by default
     // so check if the drag originated in this playlist to determine whether or not to copy
     if ( !data->hasFormat( "application/tomahawk.playlist.id" ) ||
-       ( d->playlist && data->data( "application/tomahawk.playlist.id" ) != d->playlist->guid() ) )
+            ( d->playlist && data->data( "application/tomahawk.playlist.id" ) != d->playlist->guid() ) )
     {
         dj->setDropAction( DropJob::Append );
     }
@@ -437,26 +461,38 @@ PlaylistModel::parsedDroppedTracks( QList< query_ptr > tracks )
 {
     Q_D( PlaylistModel );
     if ( d->dropStorage.row == -10  ) // nope
+    {
         return;
+    }
 
     int beginRow;
     if ( d->dropStorage.row != -1 )
+    {
         beginRow = d->dropStorage.row;
+    }
     else if ( d->dropStorage.parent.isValid() )
+    {
         beginRow = d->dropStorage.parent.row();
+    }
     else
+    {
         beginRow = rowCount( QModelIndex() );
+    }
 
     if ( tracks.count() )
     {
         bool update = ( d->dropStorage.action & Qt::CopyAction || d->dropStorage.action & Qt::MoveAction );
         if ( update )
+        {
             beginPlaylistChanges();
+        }
 
         insertQueries( tracks, beginRow );
 
         if ( update && d->dropStorage.action & Qt::CopyAction )
+        {
             endPlaylistChanges();
+        }
     }
 
     d->dropStorage.parent = QPersistentModelIndex();
@@ -469,7 +505,9 @@ PlaylistModel::beginPlaylistChanges()
 {
     Q_D( PlaylistModel );
     if ( !d->playlist || !d->playlist->author()->isLocal() )
+    {
         return;
+    }
 
     Q_ASSERT( !d->changesOngoing );
     d->changesOngoing = true;
@@ -520,7 +558,7 @@ PlaylistModel::endPlaylistChanges()
     }
 
     if ( d->savedInsertPos >= 0 && !d->savedInsertTracks.isEmpty() &&
-         !d->savedRemoveTracks.isEmpty() )
+            !d->savedRemoveTracks.isEmpty() )
     {
         // If we have *both* an insert and remove, then it's a move action
         // However, since we got the insert before the remove (Qt...), the index we have as the saved
@@ -530,12 +568,16 @@ PlaylistModel::endPlaylistChanges()
         {
             const QModelIndex idx = index( i, 0, QModelIndex() );
             if ( !idx.isValid() )
+            {
                 continue;
+            }
             const PlayableItem* item = itemFromIndex( idx );
             if ( !item || !item->entry() )
+            {
                 continue;
+            }
 
-//             qDebug() << "Checking for equality:" << (item->entry() == m_savedInsertTracks.first()) << m_savedInsertTracks.first()->query()->track() << m_savedInsertTracks.first()->query()->artist();
+            //             qDebug() << "Checking for equality:" << (item->entry() == m_savedInsertTracks.first()) << m_savedInsertTracks.first()->query()->track() << m_savedInsertTracks.first()->query()->artist();
             if ( item->entry() == d->savedInsertTracks.first() )
             {
                 // Found our index
@@ -569,11 +611,15 @@ PlaylistModel::playlistEntries() const
     {
         QModelIndex idx = index( i, 0, QModelIndex() );
         if ( !idx.isValid() )
+        {
             continue;
+        }
 
         PlayableItem* item = itemFromIndex( idx );
         if ( item )
+        {
             l << item->entry();
+        }
     }
 
     return l;
@@ -591,19 +637,27 @@ PlaylistModel::removeIndex( const QModelIndex& index, bool moreToCome )
         disconnect( item->query().data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolved( bool ) ) );
         d->waitingForResolved.removeAll( item->query().data() );
         if ( d->waitingForResolved.isEmpty() )
+        {
             finishLoading();
+        }
     }
 
     if ( !d->changesOngoing )
+    {
         beginPlaylistChanges();
+    }
 
     if ( item && !d->isLoading )
+    {
         d->savedRemoveTracks << item->query();
+    }
 
     PlayableModel::removeIndex( index, moreToCome );
 
     if ( !moreToCome )
+    {
         endPlaylistChanges();
+    }
 }
 
 

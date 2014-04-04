@@ -23,7 +23,7 @@
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "Query.h"
+#include "Query.h"
 #endif
 
 
@@ -49,13 +49,19 @@ SourceTreeItem::SourceTreeItem( SourcesModel* model, SourceTreeItem* parent, Sou
     connect( this, SIGNAL( toggleExpandRequest( SourceTreeItem* ) ), m_model, SLOT( itemToggleExpandRequest( SourceTreeItem* ) ) );
 
     if ( !m_parent )
+    {
         return;
+    }
 
     // caller must call begin/endInsertRows
     if ( index < 0 )
+    {
         m_parent->appendChild( this );
+    }
     else
+    {
         m_parent->insertChild( index, this );
+    }
 }
 
 
@@ -69,7 +75,9 @@ void
 SourceTreeItem::checkPlayingStatus()
 {
     if ( isBeingPlayed() )
+    {
         emit updated();
+    }
 }
 
 
@@ -102,21 +110,21 @@ SourceTreeItem::children() const
 
 
 void
-SourceTreeItem::appendChild(SourceTreeItem* item)
+SourceTreeItem::appendChild( SourceTreeItem* item )
 {
     m_children.append( item );
 }
 
 
 void
-SourceTreeItem::insertChild(int index, SourceTreeItem* item)
+SourceTreeItem::insertChild( int index, SourceTreeItem* item )
 {
     m_children.insert( index, item );
 }
 
 
 void
-SourceTreeItem::removeChild(SourceTreeItem* item)
+SourceTreeItem::removeChild( SourceTreeItem* item )
 {
     m_children.removeAll( item );
 }
@@ -151,21 +159,21 @@ SourceTreeItem::icon() const
 
 
 bool
-SourceTreeItem::willAcceptDrag(const QMimeData*) const
+SourceTreeItem::willAcceptDrag( const QMimeData* ) const
 {
     return false;
 }
 
 
 bool
-SourceTreeItem::dropMimeData(const QMimeData*, Qt::DropAction)
+SourceTreeItem::dropMimeData( const QMimeData*, Qt::DropAction )
 {
     return false;
 }
 
 
 bool
-SourceTreeItem::setData(const QVariant&, bool)
+SourceTreeItem::setData( const QVariant&, bool )
 {
     return false;
 }
@@ -186,7 +194,7 @@ SourceTreeItem::IDValue() const
 
 
 SourceTreeItem::DropTypes
-SourceTreeItem::supportedDropTypes(const QMimeData* mimeData) const
+SourceTreeItem::supportedDropTypes( const QMimeData* mimeData ) const
 {
     Q_UNUSED( mimeData );
     return DropTypesNone;
@@ -194,7 +202,7 @@ SourceTreeItem::supportedDropTypes(const QMimeData* mimeData) const
 
 
 void
-SourceTreeItem::setDropType(SourceTreeItem::DropType type)
+SourceTreeItem::setDropType( SourceTreeItem::DropType type )
 {
     m_dropType = type;
 }
@@ -222,7 +230,7 @@ SourceTreeItem::customActions() const
 
 
 void
-SourceTreeItem::beginRowsAdded(int from, int to)
+SourceTreeItem::beginRowsAdded( int from, int to )
 {
     emit beginChildRowsAdded( from, to );
 }
@@ -236,7 +244,7 @@ SourceTreeItem::endRowsAdded()
 
 
 void
-SourceTreeItem::beginRowsRemoved(int from, int to)
+SourceTreeItem::beginRowsRemoved( int from, int to )
 {
     emit beginChildRowsRemoved( from, to );
 }
@@ -250,14 +258,14 @@ SourceTreeItem::endRowsRemoved()
 
 
 void
-SourceTreeItem::setRowType(SourcesModel::RowType t)
+SourceTreeItem::setRowType( SourcesModel::RowType t )
 {
     m_type = t;
 }
 
 
 void
-SourceTreeItem::setParentItem(SourceTreeItem* item)
+SourceTreeItem::setParentItem( SourceTreeItem* item )
 {
     m_parent = item;
 }

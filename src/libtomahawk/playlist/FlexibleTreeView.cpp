@@ -58,17 +58,17 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
 
     m_treeView->proxyModel()->setPlaylistInterface( m_columnView->proxyModel()->playlistInterface() );
 
-//    m_trackView->setPlaylistInterface( m_playlistInterface );
-//    m_columnView->setPlaylistInterface( m_trackView->proxyModel()->playlistInterface() );
-//    m_gridView->setPlaylistInterface( m_trackView->proxyModel()->playlistInterface() );
+    //    m_trackView->setPlaylistInterface( m_playlistInterface );
+    //    m_columnView->setPlaylistInterface( m_trackView->proxyModel()->playlistInterface() );
+    //    m_gridView->setPlaylistInterface( m_trackView->proxyModel()->playlistInterface() );
 
-/*    m_columnView->setColumnHidden( PlayableModel::Age, true ); // Hide age column per default
-    m_columnView->setColumnHidden( PlayableModel::Filesize, true ); // Hide filesize column per default
-    m_columnView->setColumnHidden( PlayableModel::Composer, true ); // Hide composer column per default*/
+    /*    m_columnView->setColumnHidden( PlayableModel::Age, true ); // Hide age column per default
+        m_columnView->setColumnHidden( PlayableModel::Filesize, true ); // Hide filesize column per default
+        m_columnView->setColumnHidden( PlayableModel::Composer, true ); // Hide composer column per default*/
 
-/*    PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, m_trackView, m_trackView->proxyModel() );
-    m_trackView->setPlaylistItemDelegate( del );
-    m_trackView->proxyModel()->setStyle( PlayableProxyModel::Large );*/
+    /*    PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, m_trackView, m_trackView->proxyModel() );
+        m_trackView->setPlaylistItemDelegate( del );
+        m_trackView->proxyModel()->setStyle( PlayableProxyModel::Large );*/
 
     m_stack = new QStackedWidget();
     setLayout( new QVBoxLayout() );
@@ -86,7 +86,9 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
     layout()->addWidget( m_header );
     layout()->addWidget( m_modeHeader );
     if ( extraHeader )
+    {
         layout()->addWidget( extraHeader );
+    }
     layout()->addWidget( lineBelow );
     layout()->addWidget( lineBelow2 );
     layout()->addWidget( m_stack );
@@ -127,7 +129,7 @@ FlexibleTreeView::setTrackView( TrackView* view )
         delete m_trackView;
     }
 
-//    view->setPlaylistInterface( m_playlistInterface );
+    //    view->setPlaylistInterface( m_playlistInterface );
 
     m_trackView = view;
     m_stack->addWidget( view );
@@ -145,7 +147,7 @@ FlexibleTreeView::setColumnView( ColumnView* view )
 
     connect( view, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ), Qt::UniqueConnection );
 
-//    view->setPlaylistInterface( m_trackView->proxyModel()->playlistInterface() );
+    //    view->setPlaylistInterface( m_trackView->proxyModel()->playlistInterface() );
 
     m_columnView = view;
     m_stack->addWidget( view );
@@ -161,7 +163,7 @@ FlexibleTreeView::setTreeView( TreeView* view )
         delete m_treeView;
     }
 
-//    view->setPlaylistInterface( m_columnView->proxyModel()->playlistInterface() );
+    //    view->setPlaylistInterface( m_columnView->proxyModel()->playlistInterface() );
 
     m_treeView = view;
     m_stack->addWidget( view );
@@ -179,16 +181,16 @@ FlexibleTreeView::setTreeModel( TreeModel* model )
 
     m_model = model;
 
-//    m_trackView->setPlayableModel( model );
+    //    m_trackView->setPlayableModel( model );
     m_columnView->setTreeModel( model );
     m_treeView->setTreeModel( model );
     //    m_gridView->setPlayableModel( model );
 
-/*    m_trackView->setSortingEnabled( false );
-    m_trackView->sortByColumn( -1 );
-    m_trackView->proxyModel()->sort( -1 );
-    m_columnView->proxyModel()->sort( -1 );
-    m_gridView->proxyModel()->sort( -1 );*/
+    /*    m_trackView->setSortingEnabled( false );
+        m_trackView->sortByColumn( -1 );
+        m_trackView->proxyModel()->sort( -1 );
+        m_columnView->proxyModel()->sort( -1 );
+        m_gridView->proxyModel()->sort( -1 );*/
 
     connect( model, SIGNAL( changed() ), SLOT( onModelChanged() ), Qt::UniqueConnection );
     onModelChanged();
@@ -224,7 +226,7 @@ FlexibleTreeView::setCurrentMode( FlexibleTreeViewMode mode )
 
         case Albums:
         {
-//            m_stack->setCurrentWidget( m_gridView );
+            //            m_stack->setCurrentWidget( m_gridView );
             break;
         }
     }
@@ -270,7 +272,7 @@ FlexibleTreeView::jumpToCurrentTrack()
 
     // note: the order of comparison is important here, if we'd write "b || foo" then foo will not be executed if b is already true!
     b = m_columnView->jumpToCurrentTrack() || b;
-//    b = m_trackView->jumpToCurrentTrack() || b;
+    //    b = m_trackView->jumpToCurrentTrack() || b;
     b = m_treeView->jumpToCurrentTrack() || b;
 
     return b;
@@ -301,14 +303,14 @@ FlexibleTreeView::restoreViewMode()
 
     switch ( m_mode )
     {
-    case Columns:
-        m_modeHeader->switchTo( 0 );
-        break;
-    case Flat:
-        m_modeHeader->switchTo( 1 );
-        break;
-    case Albums:
-        m_modeHeader->switchTo( 2 );
+        case Columns:
+            m_modeHeader->switchTo( 0 );
+            break;
+        case Flat:
+            m_modeHeader->switchTo( 1 );
+            break;
+        case Albums:
+            m_modeHeader->switchTo( 2 );
     }
 }
 
@@ -339,9 +341,13 @@ FlexibleTreeView::onModelChanged()
     m_header->setDescription( m_model->description() );
 
     if ( m_model->isReadOnly() )
+    {
         setEmptyTip( tr( "This playlist is currently empty." ) );
+    }
     else
+    {
         setEmptyTip( tr( "This playlist is currently empty. Add some tracks to it and enjoy the music!" ) );
+    }
 }
 
 
@@ -371,13 +377,19 @@ bool
 FlexibleTreeView::isBeingPlayed() const
 {
     if ( !playlistInterface() )
+    {
         return false;
+    }
 
     if ( playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+    {
         return true;
+    }
 
     if ( playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
+    {
         return true;
+    }
 
     return false;
 }

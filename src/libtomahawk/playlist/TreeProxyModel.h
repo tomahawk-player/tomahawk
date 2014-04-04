@@ -28,21 +28,24 @@
 
 namespace Tomahawk
 {
-    class ArtistsRequest;
-    class TreeProxyModelPlaylistInterface;
+class ArtistsRequest;
+class TreeProxyModelPlaylistInterface;
 }
 
 class DLLEXPORT TreeProxyModel : public PlayableProxyModel
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit TreeProxyModel( QObject* parent = 0 );
     virtual ~TreeProxyModel() {}
 
     virtual void setSourcePlayableModel( TreeModel* model );
     // workaround overloaded-virtual warning
-    virtual void setSourcePlayableModel( PlayableModel* ) { Q_ASSERT( false ); }
+    virtual void setSourcePlayableModel( PlayableModel* )
+    {
+        Q_ASSERT( false );
+    }
 
     virtual void setFilter( const QString& pattern );
     virtual QString filter() const;
@@ -52,14 +55,19 @@ public:
     QModelIndex indexFromResult( const Tomahawk::result_ptr& result ) const;
     QModelIndex indexFromQuery( const Tomahawk::query_ptr& query ) const;
 
-protected:
+  protected:
     bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
 
     bool lessThan( const QModelIndex& left, const QModelIndex& right ) const;
     // workaround overloaded-virtual warning: using this would lead to serious weirdness in release mode, sometimes an assert is simply not enough
-    bool lessThan( int, const Tomahawk::query_ptr&, const Tomahawk::query_ptr& ) const {  Q_ASSERT( false ); TomahawkUtils::crash(); return false; }
+    bool lessThan( int, const Tomahawk::query_ptr&, const Tomahawk::query_ptr& ) const
+    {
+        Q_ASSERT( false );
+        TomahawkUtils::crash();
+        return false;
+    }
 
-private slots:
+  private slots:
     void onRowsInserted( const QModelIndex& parent, int start, int end );
 
     void onFilterArtists( const QList<Tomahawk::artist_ptr>& artists );
@@ -67,7 +75,7 @@ private slots:
 
     void onModelReset();
 
-private:
+  private:
     void filterFinished();
     QString textForItem( PlayableItem* item ) const;
 

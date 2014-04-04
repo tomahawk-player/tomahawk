@@ -50,7 +50,7 @@ class DropJobNotifier;
 class DLLEXPORT SpotifyParser : public QObject
 {
     Q_OBJECT
-public:
+  public:
     friend class SpotifyJobNotifier;
     explicit SpotifyParser( const QString& trackUrl, bool createNewPlaylist = false, QObject* parent = 0 );
     explicit SpotifyParser( const QStringList& trackUrls, bool createNewPlaylist = false, QObject* parent = 0 );
@@ -59,27 +59,30 @@ public:
     // if true, emits track(), if false, emits tracks().
     // only matters if you're using the QStrin constructor and explicityl dont' want
     // the single track signal
-    void setSingleMode( bool single ) { m_single = single; }
+    void setSingleMode( bool single )
+    {
+        m_single = single;
+    }
 
-public slots:
+  public slots:
     void  playlistListingResult( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
 
-signals:
+  signals:
     void track( const Tomahawk::query_ptr& track );
     void tracks( const QList< Tomahawk::query_ptr > tracks );
     void playlist( const Tomahawk::query_ptr& playlist );
 
-private slots:
+  private slots:
     void spotifyTrackLookupFinished();
     void spotifyBrowseFinished();
 
     void playlistCreated();
-private:
+  private:
     QPixmap pixmap() const;
 
     void lookupUrl( const QString& url );
     void lookupTrack( const QString& track );
-    void lookupSpotifyBrowse(const QString& link );
+    void lookupSpotifyBrowse( const QString& link );
     void checkTrackFinished();
     void checkBrowseFinished();
 

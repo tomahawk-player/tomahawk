@@ -83,7 +83,7 @@ SourceList::loadSources()
     Tomahawk::DatabaseCommand_LoadAllSources* cmd = new Tomahawk::DatabaseCommand_LoadAllSources();
 
     connect( cmd, SIGNAL( done( QList<Tomahawk::source_ptr> ) ),
-                    SLOT( setSources( QList<Tomahawk::source_ptr> ) ) );
+             SLOT( setSources( QList<Tomahawk::source_ptr> ) ) );
 
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
@@ -96,7 +96,7 @@ SourceList::setSources( const QList<Tomahawk::source_ptr>& sources )
         QMutexLocker lock( &m_mut );
 
         m_isReady = true;
-        foreach( const source_ptr& src, sources )
+        foreach( const source_ptr & src, sources )
         {
             add( src );
         }
@@ -132,11 +132,13 @@ SourceList::add( const source_ptr& source )
 {
     Q_ASSERT( m_isReady );
 
-//    qDebug() << "Adding to sources:" << source->nodeId() << source->id();
+    //    qDebug() << "Adding to sources:" << source->nodeId() << source->id();
     m_sources.insert( source->nodeId(), source );
 
     if ( source->id() > 0 )
+    {
         m_sources_id2name.insert( source->id(), source->nodeId() );
+    }
     connect( source.data(), SIGNAL( syncedWithDatabase() ), SLOT( sourceSynced() ) );
 
     collection_ptr coll( new RemoteCollection( source ) );
@@ -151,7 +153,7 @@ SourceList::add( const source_ptr& source )
 void
 SourceList::removeAllRemote()
 {
-    foreach( const source_ptr& s, m_sources )
+    foreach( const source_ptr & s, m_sources )
     {
         qDebug() << "Disconnecting" << s->friendlyName() << s->isLocal() << s->controlConnection() << s->isOnline();
         if ( !s->isLocal() && s->controlConnection() )
@@ -168,10 +170,12 @@ SourceList::sources( bool onlyOnline ) const
     QMutexLocker lock( &m_mut );
 
     QList< source_ptr > sources;
-    foreach( const source_ptr& src, m_sources )
+    foreach( const source_ptr & src, m_sources )
     {
         if ( !onlyOnline || src->controlConnection() )
+        {
             sources << src;
+        }
     }
 
     return sources;
@@ -184,9 +188,13 @@ SourceList::get( int id ) const
     QMutexLocker lock( &m_mut );
 
     if ( id == 0 )
+    {
         return m_local;
+    }
     else
+    {
         return m_sources.value( m_sources_id2name.value( id ) );
+    }
 }
 
 
@@ -278,16 +286,18 @@ SourceList::onResolverAdded( Resolver* resolver )
 {
     ExternalResolver* r = qobject_cast< ExternalResolver* >( resolver );
     if ( r == 0 )
+    {
         return;
+    }
 
-    foreach ( const Tomahawk::collection_ptr& collection, r->collections() )
+    foreach ( const Tomahawk::collection_ptr & collection, r->collections() )
     {
         addScriptCollection( collection );
     }
 
     connect( r, SIGNAL( collectionAdded( Tomahawk::collection_ptr ) ),
              this, SLOT( addScriptCollection( Tomahawk::collection_ptr ) ) );
-    connect( r, SIGNAL( collectionRemoved(Tomahawk::collection_ptr) ),
+    connect( r, SIGNAL( collectionRemoved( Tomahawk::collection_ptr ) ),
              this, SLOT( removeScriptCollection( Tomahawk::collection_ptr ) ) );
 }
 
@@ -297,15 +307,19 @@ SourceList::onResolverRemoved( Resolver* resolver )
 {
     ExternalResolver* r = qobject_cast< ExternalResolver* >( resolver );
     if ( r == 0 )
+    {
         return;
+    }
 
-    foreach ( const Tomahawk::collection_ptr& collection, m_scriptCollections )
-        if ( qobject_cast< ScriptCollection* >( collection.data() )->resolver() == r )
-            removeScriptCollection( collection );
+    foreach ( const Tomahawk::collection_ptr & collection, m_scriptCollections )
+    if ( qobject_cast< ScriptCollection* >( collection.data() )->resolver() == r )
+    {
+        removeScriptCollection( collection );
+    }
 
     disconnect( r, SIGNAL( collectionAdded( Tomahawk::collection_ptr ) ),
                 this, SLOT( addScriptCollection( Tomahawk::collection_ptr ) ) );
-    disconnect( r, SIGNAL( collectionRemoved(Tomahawk::collection_ptr) ),
+    disconnect( r, SIGNAL( collectionRemoved( Tomahawk::collection_ptr ) ),
                 this, SLOT( removeScriptCollection( Tomahawk::collection_ptr ) ) );
 }
 

@@ -92,7 +92,9 @@ JSPFLoader::reportError()
     emit failed();
 
     if ( m_autoDelete )
+    {
         deleteLater();
+    }
 }
 
 
@@ -148,16 +150,20 @@ JSPFLoader::gotBody()
 
     m_title = origTitle;
     if ( m_title.isEmpty() )
+    {
         m_title = tr( "New Playlist" );
+    }
     if ( !m_overrideTitle.isEmpty() )
+    {
         m_title = m_overrideTitle;
+    }
 
     if ( pl.contains( "track" ) )
     {
         QVariantList tracks = pl.value( "track" ).toList();
 
         bool shownError = false;
-        foreach ( const QVariant& currentTrack, tracks )
+        foreach ( const QVariant & currentTrack, tracks )
         {
             QVariantMap tM = currentTrack.toMap();
             QString artist, album, track, duration, annotation, url;
@@ -168,7 +174,9 @@ JSPFLoader::gotBody()
             duration = tM.value( "duration" ).toString();
             annotation = tM.value( "annotation" ).toString();
             if ( tM.value( "location" ).toList().size() > 0 )
+            {
                 url = tM.value( "location" ).toList().first().toString();
+            }
 
             if ( artist.isEmpty() || track.isEmpty() )
             {
@@ -183,7 +191,9 @@ JSPFLoader::gotBody()
             track_ptr t = Tomahawk::Track::get( artist, track, album, duration.toInt() / 1000 );
             query_ptr q = Tomahawk::Query::get( t );
             if ( !q )
+            {
                 continue;
+            }
 
             if ( !url.isEmpty() )
             {
@@ -223,5 +233,7 @@ JSPFLoader::gotBody()
     emit ok( m_playlist );
 
     if ( m_autoDelete )
+    {
         deleteLater();
+    }
 }

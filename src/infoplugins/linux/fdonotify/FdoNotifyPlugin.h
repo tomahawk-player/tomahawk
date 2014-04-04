@@ -39,11 +39,11 @@ class INFOPLUGINDLLEXPORT FdoNotifyPlugin : public InfoPlugin
     Q_OBJECT
     Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 
-public:
+  public:
     FdoNotifyPlugin();
     virtual ~FdoNotifyPlugin();
 
-protected slots:
+  protected slots:
     virtual void init() {}
 
     virtual void dbusPlayingReplyReceived( QDBusPendingCallWatcher* watcher );
@@ -62,7 +62,7 @@ protected slots:
         Q_UNUSED( requestData );
     }
 
-private:
+  private:
     int getNotificationIconHeight();
 
     void notifyUser( const QString& messageText );

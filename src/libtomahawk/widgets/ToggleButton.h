@@ -30,28 +30,37 @@
  */
 class DLLEXPORT ToggleButton : public QLabel
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     ToggleButton( QWidget* parent = 0 );
     virtual ~ToggleButton();
 
-    QSize minimumSizeHint() const { return sizeHint(); }
+    QSize minimumSizeHint() const
+    {
+        return sizeHint();
+    }
 
-    bool isChecked() const { return m_checked; }
+    bool isChecked() const
+    {
+        return m_checked;
+    }
 
-public slots:
+  public slots:
     virtual void setText( const QString& text );
-    virtual void setChecked( bool b ) { m_checked = b; }
+    virtual void setChecked( bool b )
+    {
+        m_checked = b;
+    }
 
-signals:
+  signals:
     void clicked();
 
-protected:
+  protected:
     virtual void paintEvent( QPaintEvent* );
     void mouseReleaseEvent( QMouseEvent* event );
 
-private:
+  private:
     bool m_checked;
 };
 

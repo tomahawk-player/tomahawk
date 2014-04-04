@@ -75,7 +75,9 @@ FuzzyIndex::FuzzyIndex( QObject* parent, bool wipe )
     }
 
     if ( wipe )
+    {
         wipeIndex();
+    }
 }
 
 
@@ -186,7 +188,9 @@ FuzzyIndex::appendFields( const Tomahawk::IndexData& data )
                                       Field::STORE_YES | Field::INDEX_NO ) ) );
         }
         else
+        {
             return;
+        }
 
         m_luceneWriter->addDocument( &doc );
     }
@@ -253,7 +257,7 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
         {
             QString track = QString::fromWCharArray( parser.escape( Tomahawk::DatabaseImpl::sortname( query->queryTrack()->track() ).toStdWString().c_str() ) );
             QString artist = QString::fromWCharArray( parser.escape( Tomahawk::DatabaseImpl::sortname( query->queryTrack()->artist() ).toStdWString().c_str() ) );
-//            QString album = QString::fromWCharArray( parser.escape( query->album().toStdWString().c_str() ) );
+            //            QString album = QString::fromWCharArray( parser.escape( query->album().toStdWString().c_str() ) );
 
             Term* term = _CLNEW Term( _T( "track" ), track.toStdWString().c_str() );
             Query* fqry = _CLNEW FuzzyQuery( term );
@@ -277,7 +281,7 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
             if ( score > minScore )
             {
                 resultsmap.insert( id, score );
-//                tDebug() << "Index hit:" << id << score << QString::fromWCharArray( ((Query*)qry)->toString() );
+                //                tDebug() << "Index hit:" << id << score << QString::fromWCharArray( ((Query*)qry)->toString() );
             }
         }
 
@@ -332,7 +336,7 @@ FuzzyIndex::searchAlbum( const Tomahawk::query_ptr& query )
             if ( score > 0.30 )
             {
                 resultsmap.insert( id, score );
-//                tDebug() << "Index hit:" << id << score;
+                //                tDebug() << "Index hit:" << id << score;
             }
         }
 

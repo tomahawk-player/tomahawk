@@ -25,26 +25,27 @@
 
 #include <QAbstractListModel>
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
 class PlaylistsModelPrivate;
 
 class DLLEXPORT PlaylistsModel : public QAbstractListModel
 {
     Q_OBJECT
-public:
+  public:
     explicit PlaylistsModel( const QList<playlist_ptr>& playlists, QObject* parent = 0 );
     virtual ~PlaylistsModel();
-    
+
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
 
-protected:
+  protected:
     QScopedPointer<PlaylistsModelPrivate> d_ptr;
 
     void updateArtists();
 
-private:
+  private:
     Q_DECLARE_PRIVATE( PlaylistsModel )
 
 };

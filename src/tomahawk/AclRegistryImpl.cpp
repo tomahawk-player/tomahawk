@@ -25,11 +25,11 @@
 #include "Source.h"
 
 #ifndef ENABLE_HEADLESS
-    #include "accounts/AccountManager.h"
-    #include "accounts/Account.h"
-    #include "jobview/AclJobItem.h"
-    #include "jobview/JobStatusView.h"
-    #include "jobview/JobStatusModel.h"
+#include "accounts/AccountManager.h"
+#include "accounts/Account.h"
+#include "jobview/AclJobItem.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
 #endif
 
 #include "utils/Logger.h"
@@ -54,12 +54,14 @@ ACLRegistryImpl::~ACLRegistryImpl()
 
 
 Tomahawk::ACLStatus::Type
-ACLRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username, Tomahawk::ACLStatus::Type globalType, bool skipEmission )
+ACLRegistryImpl::isAuthorizedUser( const QString& dbid, const QString& username, Tomahawk::ACLStatus::Type globalType, bool skipEmission )
 {
     if ( QThread::currentThread() != TOMAHAWK_APPLICATION::instance()->thread() )
     {
         if ( !skipEmission )
-            QMetaObject::invokeMethod( this, "isAuthorizedUser", Qt::QueuedConnection, Q_ARG( const QString&, dbid ), Q_ARG( const QString &, username ), Q_ARG( Tomahawk::ACLStatus::Type, globalType ), Q_ARG( bool, skipEmission ) );
+        {
+            QMetaObject::invokeMethod( this, "isAuthorizedUser", Qt::QueuedConnection, Q_ARG( const QString&, dbid ), Q_ARG( const QString&, username ), Q_ARG( Tomahawk::ACLStatus::Type, globalType ), Q_ARG( bool, skipEmission ) );
+        }
         return Tomahawk::ACLStatus::NotFound;
     }
 
@@ -69,15 +71,19 @@ ACLRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username,
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Checking account friendly names against" << username;
         Tomahawk::Accounts::AccountManager* accountManager = Tomahawk::Accounts::AccountManager::instance();
         QList< Tomahawk::Accounts::Account* > accounts = accountManager->accounts();
-        foreach( Tomahawk::Accounts::Account* account, accounts )
+        foreach( Tomahawk::Accounts::Account * account, accounts )
         {
             if ( !( account->types() & Tomahawk::Accounts::SipType ) )
+            {
                 continue;
+            }
             tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Checking against account friendly name" << account->accountFriendlyName();
             if ( account->accountFriendlyName() == username )
             {
                 if ( !skipEmission )
+                {
                     emit aclResult( dbid, username, Tomahawk::ACLStatus::Stream );
+                }
                 return Tomahawk::ACLStatus::Stream;
             }
         }
@@ -94,7 +100,9 @@ ACLRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username,
             if ( dbid == knowndbid )
             {
                 if ( !user.knownAccountIds.contains( username ) )
+                {
                     user.knownAccountIds.append( username );
+                }
                 found = true;
             }
         }
@@ -104,7 +112,9 @@ ACLRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username,
             if ( username == knownaccountid )
             {
                 if ( !user.knownDbids.contains( dbid ) )
+                {
                     user.knownDbids.append( dbid );
+                }
                 found = true;
             }
         }
@@ -112,21 +122,27 @@ ACLRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username,
         if ( found )
         {
             if ( !skipEmission )
+            {
                 emit aclResult( dbid, username, user.acl );
+            }
             i.setValue( user );
             return user.acl;
         }
     }
 
     if ( skipEmission )
+    {
         return Tomahawk::ACLStatus::NotFound;
+    }
 
     // User was not found, create a new user entry
     ACLRegistry::User user;
     user.knownDbids.append( dbid );
     user.knownAccountIds.append( username );
     if ( globalType != Tomahawk::ACLStatus::NotFound )
+    {
         user.acl = globalType;
+    }
 #ifdef ENABLE_HEADLESS
     user.acl = Tomahawk::ACLStatus::Stream;
 #else
@@ -136,7 +152,9 @@ ACLRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username,
         return Tomahawk::ACLStatus::NotFound;
     }
     else
+    {
         user.acl = Tomahawk::ACLStatus::Stream;
+    }
 #endif
     m_cache.append( user );
     save();
@@ -147,10 +165,12 @@ ACLRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username,
 
 #ifndef ENABLE_HEADLESS
 void
-ACLRegistryImpl::getUserDecision( ACLRegistry::User user, const QString &username )
+ACLRegistryImpl::getUserDecision( ACLRegistry::User user, const QString& username )
 {
     if ( TomahawkUtils::headless() )
+    {
         return;
+    }
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     ACLJobItem* job = new ACLJobItem( user, username );
@@ -163,7 +183,9 @@ void
 ACLRegistryImpl::userDecision( ACLRegistry::User user )
 {
     if ( TomahawkUtils::headless() )
+    {
         return;
+    }
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     m_cache.append( user );
@@ -172,7 +194,9 @@ ACLRegistryImpl::userDecision( ACLRegistry::User user )
 
     m_jobCount--;
     if ( !m_jobQueue.isEmpty() )
+    {
         QTimer::singleShot( 0, this, SLOT( queueNextJob() ) );
+    }
 }
 
 
@@ -180,7 +204,9 @@ void
 ACLRegistryImpl::queueNextJob()
 {
     if ( TomahawkUtils::headless() )
+    {
         return;
+    }
 
     if ( QThread::currentThread() != TOMAHAWK_APPLICATION::instance()->thread() )
     {
@@ -191,7 +217,9 @@ ACLRegistryImpl::queueNextJob()
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "jobCount =" << m_jobCount;
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "jobQueue size =" << m_jobQueue.length();
     if ( m_jobCount != 0 )
+    {
         return;
+    }
 
     if ( !m_jobQueue.isEmpty() )
     {
@@ -268,7 +296,9 @@ ACLRegistryImpl::save()
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "user is" << user.uuid << "with known name" << user.knownAccountIds.first();
         QVariant val = QVariant::fromValue< ACLRegistry::User >( user );
         if ( val.isValid() )
+        {
             entryList.append( val );
+        }
     }
     TomahawkSettings::instance()->setAclEntries( entryList );
 }

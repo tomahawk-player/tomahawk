@@ -25,17 +25,17 @@
 class ResolverConfigDelegate : public ConfigDelegateBase
 {
     Q_OBJECT
-public:
+  public:
     explicit ResolverConfigDelegate( QObject* parent = 0 );
     virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
-    virtual QRect checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx, int role ) const;
+    virtual QRect checkRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx, int role ) const;
     virtual QRect configRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const;
 
-private slots:
+  private slots:
     void onConfigPressed ( const QModelIndex& );
 
-signals:
+  signals:
     void openConfig( const QString& resolverPath );
 };
 

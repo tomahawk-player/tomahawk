@@ -20,7 +20,8 @@
 #include "TomahawkSettings.h"
 #include "Source.h"
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
 bool
 operator==( const SerializedUpdater& one, const SerializedUpdater& two )
@@ -52,7 +53,7 @@ PlaylistUpdaterInterface::loadForPlaylist( const playlist_ptr& pl )
     {
         // Ok, we have some we can try to load
         const SerializedUpdaterList updaters = allUpdaters.values( pl->guid() );
-        foreach ( const SerializedUpdater& info, updaters )
+        foreach ( const SerializedUpdater & info, updaters )
         {
             if ( !s_factories.contains( info.type ) )
             {
@@ -83,7 +84,9 @@ PlaylistUpdaterInterface::PlaylistUpdaterInterface( const playlist_ptr& pl )
 PlaylistUpdaterInterface::~PlaylistUpdaterInterface()
 {
     if ( !m_playlist.isNull() )
+    {
         m_playlist->removeUpdater( this );
+    }
 }
 
 
@@ -91,13 +94,17 @@ void
 PlaylistUpdaterInterface::save()
 {
     if ( m_playlist.isNull() )
+    {
         return;
+    }
 
     TomahawkSettings* s = TomahawkSettings::instance();
 
     SerializedUpdaters allUpdaters = s->playlistUpdaters();
     if ( allUpdaters.contains( m_playlist->guid(), SerializedUpdater( type() ) ) )
+    {
         allUpdaters.remove( m_playlist->guid(), SerializedUpdater( type() ) );
+    }
 
     SerializedUpdater updater;
     updater.type = type();
@@ -111,13 +118,17 @@ void
 PlaylistUpdaterInterface::remove()
 {
     if ( m_playlist.isNull() )
+    {
         return;
+    }
 
     TomahawkSettings* s = TomahawkSettings::instance();
     SerializedUpdaters allUpdaters = s->playlistUpdaters();
 
     if ( allUpdaters.remove( m_playlist->guid(), SerializedUpdater( type() ) ) )
+    {
         s->setPlaylistUpdaters( allUpdaters );
+    }
 
     aboutToDelete();
     deleteLater();

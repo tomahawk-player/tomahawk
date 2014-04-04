@@ -51,8 +51,12 @@ void
 PlaylistWidget::verifySize()
 {
     if ( !model() )
+    {
         return;
+    }
 
     if ( model()->rowCount() > 0 )
+    {
         setFixedHeight( model()->rowCount() * itemDelegate()->sizeHint( QStyleOptionViewItem(), model()->index( 0, 0 ) ).height() + frameWidth() * 2 );
+    }
 }

@@ -24,511 +24,514 @@
 #include <QtCore/qchar.h>
 #include <QLocale>
 
-namespace Tomahawk {
-namespace CountryUtils {
+namespace Tomahawk
+{
+namespace CountryUtils
+{
 
 static const unsigned char country_code_list[] =
-"  \0" // AnyCountry
-"AF\0" // Afghanistan
-"AL\0" // Albania
-"DZ\0" // Algeria
-"AS\0" // AmericanSamoa
-"AD\0" // Andorra
-"AO\0" // Angola
-"AI\0" // Anguilla
-"AQ\0" // Antarctica
-"AG\0" // AntiguaAndBarbuda
-"AR\0" // Argentina
-"AM\0" // Armenia
-"AW\0" // Aruba
-"AU\0" // Australia
-"AT\0" // Austria
-"AZ\0" // Azerbaijan
-"BS\0" // Bahamas
-"BH\0" // Bahrain
-"BD\0" // Bangladesh
-"BB\0" // Barbados
-"BY\0" // Belarus
-"BE\0" // Belgium
-"BZ\0" // Belize
-"BJ\0" // Benin
-"BM\0" // Bermuda
-"BT\0" // Bhutan
-"BO\0" // Bolivia
-"BA\0" // BosniaAndHerzegowina
-"BW\0" // Botswana
-"BV\0" // BouvetIsland
-"BR\0" // Brazil
-"IO\0" // BritishIndianOceanTerritory
-"BN\0" // BruneiDarussalam
-"BG\0" // Bulgaria
-"BF\0" // BurkinaFaso
-"BI\0" // Burundi
-"KH\0" // Cambodia
-"CM\0" // Cameroon
-"CA\0" // Canada
-"CV\0" // CapeVerde
-"KY\0" // CaymanIslands
-"CF\0" // CentralAfricanRepublic
-"TD\0" // Chad
-"CL\0" // Chile
-"CN\0" // China
-"CX\0" // ChristmasIsland
-"CC\0" // CocosIslands
-"CO\0" // Colombia
-"KM\0" // Comoros
-"CD\0" // DemocraticRepublicOfCongo
-"CG\0" // PeoplesRepublicOfCongo
-"CK\0" // CookIslands
-"CR\0" // CostaRica
-"CI\0" // IvoryCoast
-"HR\0" // Croatia
-"CU\0" // Cuba
-"CY\0" // Cyprus
-"CZ\0" // CzechRepublic
-"DK\0" // Denmark
-"DJ\0" // Djibouti
-"DM\0" // Dominica
-"DO\0" // DominicanRepublic
-"TL\0" // EastTimor
-"EC\0" // Ecuador
-"EG\0" // Egypt
-"SV\0" // ElSalvador
-"GQ\0" // EquatorialGuinea
-"ER\0" // Eritrea
-"EE\0" // Estonia
-"ET\0" // Ethiopia
-"FK\0" // FalklandIslands
-"FO\0" // FaroeIslands
-"FJ\0" // Fiji
-"FI\0" // Finland
-"FR\0" // France
-"FX\0" // MetropolitanFrance
-"GF\0" // FrenchGuiana
-"PF\0" // FrenchPolynesia
-"TF\0" // FrenchSouthernTerritories
-"GA\0" // Gabon
-"GM\0" // Gambia
-"GE\0" // Georgia
-"DE\0" // Germany
-"GH\0" // Ghana
-"GI\0" // Gibraltar
-"GR\0" // Greece
-"GL\0" // Greenland
-"GD\0" // Grenada
-"GP\0" // Guadeloupe
-"GU\0" // Guam
-"GT\0" // Guatemala
-"GN\0" // Guinea
-"GW\0" // GuineaBissau
-"GY\0" // Guyana
-"HT\0" // Haiti
-"HM\0" // HeardAndMcDonaldIslands
-"HN\0" // Honduras
-"HK\0" // HongKong
-"HU\0" // Hungary
-"IS\0" // Iceland
-"IN\0" // India
-"ID\0" // Indonesia
-"IR\0" // Iran
-"IQ\0" // Iraq
-"IE\0" // Ireland
-"IL\0" // Israel
-"IT\0" // Italy
-"JM\0" // Jamaica
-"JP\0" // Japan
-"JO\0" // Jordan
-"KZ\0" // Kazakhstan
-"KE\0" // Kenya
-"KI\0" // Kiribati
-"KP\0" // DemocraticRepublicOfKorea
-"KR\0" // RepublicOfKorea
-"KW\0" // Kuwait
-"KG\0" // Kyrgyzstan
-"LA\0" // Lao
-"LV\0" // Latvia
-"LB\0" // Lebanon
-"LS\0" // Lesotho
-"LR\0" // Liberia
-"LY\0" // LibyanArabJamahiriya
-"LI\0" // Liechtenstein
-"LT\0" // Lithuania
-"LU\0" // Luxembourg
-"MO\0" // Macau
-"MK\0" // Macedonia
-"MG\0" // Madagascar
-"MW\0" // Malawi
-"MY\0" // Malaysia
-"MV\0" // Maldives
-"ML\0" // Mali
-"MT\0" // Malta
-"MH\0" // MarshallIslands
-"MQ\0" // Martinique
-"MR\0" // Mauritania
-"MU\0" // Mauritius
-"YT\0" // Mayotte
-"MX\0" // Mexico
-"FM\0" // Micronesia
-"MD\0" // Moldova
-"MC\0" // Monaco
-"MN\0" // Mongolia
-"MS\0" // Montserrat
-"MA\0" // Morocco
-"MZ\0" // Mozambique
-"MM\0" // Myanmar
-"NA\0" // Namibia
-"NR\0" // Nauru
-"NP\0" // Nepal
-"NL\0" // Netherlands
-"AN\0" // NetherlandsAntilles
-"NC\0" // NewCaledonia
-"NZ\0" // NewZealand
-"NI\0" // Nicaragua
-"NE\0" // Niger
-"NG\0" // Nigeria
-"NU\0" // Niue
-"NF\0" // NorfolkIsland
-"MP\0" // NorthernMarianaIslands
-"NO\0" // Norway
-"OM\0" // Oman
-"PK\0" // Pakistan
-"PW\0" // Palau
-"PS\0" // PalestinianTerritory
-"PA\0" // Panama
-"PG\0" // PapuaNewGuinea
-"PY\0" // Paraguay
-"PE\0" // Peru
-"PH\0" // Philippines
-"PN\0" // Pitcairn
-"PL\0" // Poland
-"PT\0" // Portugal
-"PR\0" // PuertoRico
-"QA\0" // Qatar
-"RE\0" // Reunion
-"RO\0" // Romania
-"RU\0" // RussianFederation
-"RW\0" // Rwanda
-"KN\0" // SaintKittsAndNevis
-"LC\0" // StLucia
-"VC\0" // StVincentAndTheGrenadines
-"WS\0" // Samoa
-"SM\0" // SanMarino
-"ST\0" // SaoTomeAndPrincipe
-"SA\0" // SaudiArabia
-"SN\0" // Senegal
-"SC\0" // Seychelles
-"SL\0" // SierraLeone
-"SG\0" // Singapore
-"SK\0" // Slovakia
-"SI\0" // Slovenia
-"SB\0" // SolomonIslands
-"SO\0" // Somalia
-"ZA\0" // SouthAfrica
-"GS\0" // SouthGeorgiaAndTheSouthSandwichIslands
-"ES\0" // Spain
-"LK\0" // SriLanka
-"SH\0" // StHelena
-"PM\0" // StPierreAndMiquelon
-"SD\0" // Sudan
-"SR\0" // Suriname
-"SJ\0" // SvalbardAndJanMayenIslands
-"SZ\0" // Swaziland
-"SE\0" // Sweden
-"CH\0" // Switzerland
-"SY\0" // SyrianArabRepublic
-"TW\0" // Taiwan
-"TJ\0" // Tajikistan
-"TZ\0" // Tanzania
-"TH\0" // Thailand
-"TG\0" // Togo
-"TK\0" // Tokelau
-"TO\0" // Tonga
-"TT\0" // TrinidadAndTobago
-"TN\0" // Tunisia
-"TR\0" // Turkey
-"TM\0" // Turkmenistan
-"TC\0" // TurksAndCaicosIslands
-"TV\0" // Tuvalu
-"UG\0" // Uganda
-"UA\0" // Ukraine
-"AE\0" // UnitedArabEmirates
-"GB\0" // UnitedKingdom
-"US\0" // UnitedStates
-"UM\0" // UnitedStatesMinorOutlyingIslands
-"UY\0" // Uruguay
-"UZ\0" // Uzbekistan
-"VU\0" // Vanuatu
-"VA\0" // VaticanCityState
-"VE\0" // Venezuela
-"VN\0" // VietNam
-"VG\0" // BritishVirginIslands
-"VI\0" // USVirginIslands
-"WF\0" // WallisAndFutunaIslands
-"EH\0" // WesternSahara
-"YE\0" // Yemen
-"YU\0" // Yugoslavia
-"ZM\0" // Zambia
-"ZW\0" // Zimbabwe
-"CS\0" // SerbiaAndMontenegro
-"ME\0" // Montenegro
-"RS\0" // Serbia
-"BL\0" // Saint Barthelemy
-"MF\0" // Saint Martin
-"419" // LatinAmericaAndTheCaribbean
-;
+    "  \0" // AnyCountry
+    "AF\0" // Afghanistan
+    "AL\0" // Albania
+    "DZ\0" // Algeria
+    "AS\0" // AmericanSamoa
+    "AD\0" // Andorra
+    "AO\0" // Angola
+    "AI\0" // Anguilla
+    "AQ\0" // Antarctica
+    "AG\0" // AntiguaAndBarbuda
+    "AR\0" // Argentina
+    "AM\0" // Armenia
+    "AW\0" // Aruba
+    "AU\0" // Australia
+    "AT\0" // Austria
+    "AZ\0" // Azerbaijan
+    "BS\0" // Bahamas
+    "BH\0" // Bahrain
+    "BD\0" // Bangladesh
+    "BB\0" // Barbados
+    "BY\0" // Belarus
+    "BE\0" // Belgium
+    "BZ\0" // Belize
+    "BJ\0" // Benin
+    "BM\0" // Bermuda
+    "BT\0" // Bhutan
+    "BO\0" // Bolivia
+    "BA\0" // BosniaAndHerzegowina
+    "BW\0" // Botswana
+    "BV\0" // BouvetIsland
+    "BR\0" // Brazil
+    "IO\0" // BritishIndianOceanTerritory
+    "BN\0" // BruneiDarussalam
+    "BG\0" // Bulgaria
+    "BF\0" // BurkinaFaso
+    "BI\0" // Burundi
+    "KH\0" // Cambodia
+    "CM\0" // Cameroon
+    "CA\0" // Canada
+    "CV\0" // CapeVerde
+    "KY\0" // CaymanIslands
+    "CF\0" // CentralAfricanRepublic
+    "TD\0" // Chad
+    "CL\0" // Chile
+    "CN\0" // China
+    "CX\0" // ChristmasIsland
+    "CC\0" // CocosIslands
+    "CO\0" // Colombia
+    "KM\0" // Comoros
+    "CD\0" // DemocraticRepublicOfCongo
+    "CG\0" // PeoplesRepublicOfCongo
+    "CK\0" // CookIslands
+    "CR\0" // CostaRica
+    "CI\0" // IvoryCoast
+    "HR\0" // Croatia
+    "CU\0" // Cuba
+    "CY\0" // Cyprus
+    "CZ\0" // CzechRepublic
+    "DK\0" // Denmark
+    "DJ\0" // Djibouti
+    "DM\0" // Dominica
+    "DO\0" // DominicanRepublic
+    "TL\0" // EastTimor
+    "EC\0" // Ecuador
+    "EG\0" // Egypt
+    "SV\0" // ElSalvador
+    "GQ\0" // EquatorialGuinea
+    "ER\0" // Eritrea
+    "EE\0" // Estonia
+    "ET\0" // Ethiopia
+    "FK\0" // FalklandIslands
+    "FO\0" // FaroeIslands
+    "FJ\0" // Fiji
+    "FI\0" // Finland
+    "FR\0" // France
+    "FX\0" // MetropolitanFrance
+    "GF\0" // FrenchGuiana
+    "PF\0" // FrenchPolynesia
+    "TF\0" // FrenchSouthernTerritories
+    "GA\0" // Gabon
+    "GM\0" // Gambia
+    "GE\0" // Georgia
+    "DE\0" // Germany
+    "GH\0" // Ghana
+    "GI\0" // Gibraltar
+    "GR\0" // Greece
+    "GL\0" // Greenland
+    "GD\0" // Grenada
+    "GP\0" // Guadeloupe
+    "GU\0" // Guam
+    "GT\0" // Guatemala
+    "GN\0" // Guinea
+    "GW\0" // GuineaBissau
+    "GY\0" // Guyana
+    "HT\0" // Haiti
+    "HM\0" // HeardAndMcDonaldIslands
+    "HN\0" // Honduras
+    "HK\0" // HongKong
+    "HU\0" // Hungary
+    "IS\0" // Iceland
+    "IN\0" // India
+    "ID\0" // Indonesia
+    "IR\0" // Iran
+    "IQ\0" // Iraq
+    "IE\0" // Ireland
+    "IL\0" // Israel
+    "IT\0" // Italy
+    "JM\0" // Jamaica
+    "JP\0" // Japan
+    "JO\0" // Jordan
+    "KZ\0" // Kazakhstan
+    "KE\0" // Kenya
+    "KI\0" // Kiribati
+    "KP\0" // DemocraticRepublicOfKorea
+    "KR\0" // RepublicOfKorea
+    "KW\0" // Kuwait
+    "KG\0" // Kyrgyzstan
+    "LA\0" // Lao
+    "LV\0" // Latvia
+    "LB\0" // Lebanon
+    "LS\0" // Lesotho
+    "LR\0" // Liberia
+    "LY\0" // LibyanArabJamahiriya
+    "LI\0" // Liechtenstein
+    "LT\0" // Lithuania
+    "LU\0" // Luxembourg
+    "MO\0" // Macau
+    "MK\0" // Macedonia
+    "MG\0" // Madagascar
+    "MW\0" // Malawi
+    "MY\0" // Malaysia
+    "MV\0" // Maldives
+    "ML\0" // Mali
+    "MT\0" // Malta
+    "MH\0" // MarshallIslands
+    "MQ\0" // Martinique
+    "MR\0" // Mauritania
+    "MU\0" // Mauritius
+    "YT\0" // Mayotte
+    "MX\0" // Mexico
+    "FM\0" // Micronesia
+    "MD\0" // Moldova
+    "MC\0" // Monaco
+    "MN\0" // Mongolia
+    "MS\0" // Montserrat
+    "MA\0" // Morocco
+    "MZ\0" // Mozambique
+    "MM\0" // Myanmar
+    "NA\0" // Namibia
+    "NR\0" // Nauru
+    "NP\0" // Nepal
+    "NL\0" // Netherlands
+    "AN\0" // NetherlandsAntilles
+    "NC\0" // NewCaledonia
+    "NZ\0" // NewZealand
+    "NI\0" // Nicaragua
+    "NE\0" // Niger
+    "NG\0" // Nigeria
+    "NU\0" // Niue
+    "NF\0" // NorfolkIsland
+    "MP\0" // NorthernMarianaIslands
+    "NO\0" // Norway
+    "OM\0" // Oman
+    "PK\0" // Pakistan
+    "PW\0" // Palau
+    "PS\0" // PalestinianTerritory
+    "PA\0" // Panama
+    "PG\0" // PapuaNewGuinea
+    "PY\0" // Paraguay
+    "PE\0" // Peru
+    "PH\0" // Philippines
+    "PN\0" // Pitcairn
+    "PL\0" // Poland
+    "PT\0" // Portugal
+    "PR\0" // PuertoRico
+    "QA\0" // Qatar
+    "RE\0" // Reunion
+    "RO\0" // Romania
+    "RU\0" // RussianFederation
+    "RW\0" // Rwanda
+    "KN\0" // SaintKittsAndNevis
+    "LC\0" // StLucia
+    "VC\0" // StVincentAndTheGrenadines
+    "WS\0" // Samoa
+    "SM\0" // SanMarino
+    "ST\0" // SaoTomeAndPrincipe
+    "SA\0" // SaudiArabia
+    "SN\0" // Senegal
+    "SC\0" // Seychelles
+    "SL\0" // SierraLeone
+    "SG\0" // Singapore
+    "SK\0" // Slovakia
+    "SI\0" // Slovenia
+    "SB\0" // SolomonIslands
+    "SO\0" // Somalia
+    "ZA\0" // SouthAfrica
+    "GS\0" // SouthGeorgiaAndTheSouthSandwichIslands
+    "ES\0" // Spain
+    "LK\0" // SriLanka
+    "SH\0" // StHelena
+    "PM\0" // StPierreAndMiquelon
+    "SD\0" // Sudan
+    "SR\0" // Suriname
+    "SJ\0" // SvalbardAndJanMayenIslands
+    "SZ\0" // Swaziland
+    "SE\0" // Sweden
+    "CH\0" // Switzerland
+    "SY\0" // SyrianArabRepublic
+    "TW\0" // Taiwan
+    "TJ\0" // Tajikistan
+    "TZ\0" // Tanzania
+    "TH\0" // Thailand
+    "TG\0" // Togo
+    "TK\0" // Tokelau
+    "TO\0" // Tonga
+    "TT\0" // TrinidadAndTobago
+    "TN\0" // Tunisia
+    "TR\0" // Turkey
+    "TM\0" // Turkmenistan
+    "TC\0" // TurksAndCaicosIslands
+    "TV\0" // Tuvalu
+    "UG\0" // Uganda
+    "UA\0" // Ukraine
+    "AE\0" // UnitedArabEmirates
+    "GB\0" // UnitedKingdom
+    "US\0" // UnitedStates
+    "UM\0" // UnitedStatesMinorOutlyingIslands
+    "UY\0" // Uruguay
+    "UZ\0" // Uzbekistan
+    "VU\0" // Vanuatu
+    "VA\0" // VaticanCityState
+    "VE\0" // Venezuela
+    "VN\0" // VietNam
+    "VG\0" // BritishVirginIslands
+    "VI\0" // USVirginIslands
+    "WF\0" // WallisAndFutunaIslands
+    "EH\0" // WesternSahara
+    "YE\0" // Yemen
+    "YU\0" // Yugoslavia
+    "ZM\0" // Zambia
+    "ZW\0" // Zimbabwe
+    "CS\0" // SerbiaAndMontenegro
+    "ME\0" // Montenegro
+    "RS\0" // Serbia
+    "BL\0" // Saint Barthelemy
+    "MF\0" // Saint Martin
+    "419" // LatinAmericaAndTheCaribbean
+    ;
 
 
 static const char country_name_list[] =
-"Default\0"
-"Afghanistan\0"
-"Albania\0"
-"Algeria\0"
-"AmericanSamoa\0"
-"Andorra\0"
-"Angola\0"
-"Anguilla\0"
-"Antarctica\0"
-"AntiguaAndBarbuda\0"
-"Argentina\0"
-"Armenia\0"
-"Aruba\0"
-"Australia\0"
-"Austria\0"
-"Azerbaijan\0"
-"Bahamas\0"
-"Bahrain\0"
-"Bangladesh\0"
-"Barbados\0"
-"Belarus\0"
-"Belgium\0"
-"Belize\0"
-"Benin\0"
-"Bermuda\0"
-"Bhutan\0"
-"Bolivia\0"
-"BosniaAndHerzegowina\0"
-"Botswana\0"
-"BouvetIsland\0"
-"Brazil\0"
-"BritishIndianOceanTerritory\0"
-"BruneiDarussalam\0"
-"Bulgaria\0"
-"BurkinaFaso\0"
-"Burundi\0"
-"Cambodia\0"
-"Cameroon\0"
-"Canada\0"
-"CapeVerde\0"
-"CaymanIslands\0"
-"CentralAfricanRepublic\0"
-"Chad\0"
-"Chile\0"
-"China\0"
-"ChristmasIsland\0"
-"CocosIslands\0"
-"Colombia\0"
-"Comoros\0"
-"DemocraticRepublicOfCongo\0"
-"PeoplesRepublicOfCongo\0"
-"CookIslands\0"
-"CostaRica\0"
-"IvoryCoast\0"
-"Croatia\0"
-"Cuba\0"
-"Cyprus\0"
-"CzechRepublic\0"
-"Denmark\0"
-"Djibouti\0"
-"Dominica\0"
-"DominicanRepublic\0"
-"EastTimor\0"
-"Ecuador\0"
-"Egypt\0"
-"ElSalvador\0"
-"EquatorialGuinea\0"
-"Eritrea\0"
-"Estonia\0"
-"Ethiopia\0"
-"FalklandIslands\0"
-"FaroeIslands\0"
-"Fiji\0"
-"Finland\0"
-"France\0"
-"MetropolitanFrance\0"
-"FrenchGuiana\0"
-"FrenchPolynesia\0"
-"FrenchSouthernTerritories\0"
-"Gabon\0"
-"Gambia\0"
-"Georgia\0"
-"Germany\0"
-"Ghana\0"
-"Gibraltar\0"
-"Greece\0"
-"Greenland\0"
-"Grenada\0"
-"Guadeloupe\0"
-"Guam\0"
-"Guatemala\0"
-"Guinea\0"
-"GuineaBissau\0"
-"Guyana\0"
-"Haiti\0"
-"HeardAndMcDonaldIslands\0"
-"Honduras\0"
-"HongKong\0"
-"Hungary\0"
-"Iceland\0"
-"India\0"
-"Indonesia\0"
-"Iran\0"
-"Iraq\0"
-"Ireland\0"
-"Israel\0"
-"Italy\0"
-"Jamaica\0"
-"Japan\0"
-"Jordan\0"
-"Kazakhstan\0"
-"Kenya\0"
-"Kiribati\0"
-"DemocraticRepublicOfKorea\0"
-"RepublicOfKorea\0"
-"Kuwait\0"
-"Kyrgyzstan\0"
-"Lao\0"
-"Latvia\0"
-"Lebanon\0"
-"Lesotho\0"
-"Liberia\0"
-"LibyanArabJamahiriya\0"
-"Liechtenstein\0"
-"Lithuania\0"
-"Luxembourg\0"
-"Macau\0"
-"Macedonia\0"
-"Madagascar\0"
-"Malawi\0"
-"Malaysia\0"
-"Maldives\0"
-"Mali\0"
-"Malta\0"
-"MarshallIslands\0"
-"Martinique\0"
-"Mauritania\0"
-"Mauritius\0"
-"Mayotte\0"
-"Mexico\0"
-"Micronesia\0"
-"Moldova\0"
-"Monaco\0"
-"Mongolia\0"
-"Montserrat\0"
-"Morocco\0"
-"Mozambique\0"
-"Myanmar\0"
-"Namibia\0"
-"Nauru\0"
-"Nepal\0"
-"Netherlands\0"
-"NetherlandsAntilles\0"
-"NewCaledonia\0"
-"NewZealand\0"
-"Nicaragua\0"
-"Niger\0"
-"Nigeria\0"
-"Niue\0"
-"NorfolkIsland\0"
-"NorthernMarianaIslands\0"
-"Norway\0"
-"Oman\0"
-"Pakistan\0"
-"Palau\0"
-"PalestinianTerritory\0"
-"Panama\0"
-"PapuaNewGuinea\0"
-"Paraguay\0"
-"Peru\0"
-"Philippines\0"
-"Pitcairn\0"
-"Poland\0"
-"Portugal\0"
-"PuertoRico\0"
-"Qatar\0"
-"Reunion\0"
-"Romania\0"
-"RussianFederation\0"
-"Rwanda\0"
-"SaintKittsAndNevis\0"
-"StLucia\0"
-"StVincentAndTheGrenadines\0"
-"Samoa\0"
-"SanMarino\0"
-"SaoTomeAndPrincipe\0"
-"SaudiArabia\0"
-"Senegal\0"
-"Seychelles\0"
-"SierraLeone\0"
-"Singapore\0"
-"Slovakia\0"
-"Slovenia\0"
-"SolomonIslands\0"
-"Somalia\0"
-"SouthAfrica\0"
-"SouthGeorgiaAndTheSouthSandwichIslands\0"
-"Spain\0"
-"SriLanka\0"
-"StHelena\0"
-"StPierreAndMiquelon\0"
-"Sudan\0"
-"Suriname\0"
-"SvalbardAndJanMayenIslands\0"
-"Swaziland\0"
-"Sweden\0"
-"Switzerland\0"
-"SyrianArabRepublic\0"
-"Taiwan\0"
-"Tajikistan\0"
-"Tanzania\0"
-"Thailand\0"
-"Togo\0"
-"Tokelau\0"
-"Tonga\0"
-"TrinidadAndTobago\0"
-"Tunisia\0"
-"Turkey\0"
-"Turkmenistan\0"
-"TurksAndCaicosIslands\0"
-"Tuvalu\0"
-"Uganda\0"
-"Ukraine\0"
-"UnitedArabEmirates\0"
-"UnitedKingdom\0"
-"UnitedStates\0"
-"UnitedStatesMinorOutlyingIslands\0"
-"Uruguay\0"
-"Uzbekistan\0"
-"Vanuatu\0"
-"VaticanCityState\0"
-"Venezuela\0"
-"VietNam\0"
-"BritishVirginIslands\0"
-"USVirginIslands\0"
-"WallisAndFutunaIslands\0"
-"WesternSahara\0"
-"Yemen\0"
-"Yugoslavia\0"
-"Zambia\0"
-"Zimbabwe\0"
-"SerbiaAndMontenegro\0"
-"Montenegro\0"
-"Serbia\0"
-"Saint Barthelemy\0"
-"Saint Martin\0"
-"LatinAmericaAndTheCaribbean\0"
-;
+    "Default\0"
+    "Afghanistan\0"
+    "Albania\0"
+    "Algeria\0"
+    "AmericanSamoa\0"
+    "Andorra\0"
+    "Angola\0"
+    "Anguilla\0"
+    "Antarctica\0"
+    "AntiguaAndBarbuda\0"
+    "Argentina\0"
+    "Armenia\0"
+    "Aruba\0"
+    "Australia\0"
+    "Austria\0"
+    "Azerbaijan\0"
+    "Bahamas\0"
+    "Bahrain\0"
+    "Bangladesh\0"
+    "Barbados\0"
+    "Belarus\0"
+    "Belgium\0"
+    "Belize\0"
+    "Benin\0"
+    "Bermuda\0"
+    "Bhutan\0"
+    "Bolivia\0"
+    "BosniaAndHerzegowina\0"
+    "Botswana\0"
+    "BouvetIsland\0"
+    "Brazil\0"
+    "BritishIndianOceanTerritory\0"
+    "BruneiDarussalam\0"
+    "Bulgaria\0"
+    "BurkinaFaso\0"
+    "Burundi\0"
+    "Cambodia\0"
+    "Cameroon\0"
+    "Canada\0"
+    "CapeVerde\0"
+    "CaymanIslands\0"
+    "CentralAfricanRepublic\0"
+    "Chad\0"
+    "Chile\0"
+    "China\0"
+    "ChristmasIsland\0"
+    "CocosIslands\0"
+    "Colombia\0"
+    "Comoros\0"
+    "DemocraticRepublicOfCongo\0"
+    "PeoplesRepublicOfCongo\0"
+    "CookIslands\0"
+    "CostaRica\0"
+    "IvoryCoast\0"
+    "Croatia\0"
+    "Cuba\0"
+    "Cyprus\0"
+    "CzechRepublic\0"
+    "Denmark\0"
+    "Djibouti\0"
+    "Dominica\0"
+    "DominicanRepublic\0"
+    "EastTimor\0"
+    "Ecuador\0"
+    "Egypt\0"
+    "ElSalvador\0"
+    "EquatorialGuinea\0"
+    "Eritrea\0"
+    "Estonia\0"
+    "Ethiopia\0"
+    "FalklandIslands\0"
+    "FaroeIslands\0"
+    "Fiji\0"
+    "Finland\0"
+    "France\0"
+    "MetropolitanFrance\0"
+    "FrenchGuiana\0"
+    "FrenchPolynesia\0"
+    "FrenchSouthernTerritories\0"
+    "Gabon\0"
+    "Gambia\0"
+    "Georgia\0"
+    "Germany\0"
+    "Ghana\0"
+    "Gibraltar\0"
+    "Greece\0"
+    "Greenland\0"
+    "Grenada\0"
+    "Guadeloupe\0"
+    "Guam\0"
+    "Guatemala\0"
+    "Guinea\0"
+    "GuineaBissau\0"
+    "Guyana\0"
+    "Haiti\0"
+    "HeardAndMcDonaldIslands\0"
+    "Honduras\0"
+    "HongKong\0"
+    "Hungary\0"
+    "Iceland\0"
+    "India\0"
+    "Indonesia\0"
+    "Iran\0"
+    "Iraq\0"
+    "Ireland\0"
+    "Israel\0"
+    "Italy\0"
+    "Jamaica\0"
+    "Japan\0"
+    "Jordan\0"
+    "Kazakhstan\0"
+    "Kenya\0"
+    "Kiribati\0"
+    "DemocraticRepublicOfKorea\0"
+    "RepublicOfKorea\0"
+    "Kuwait\0"
+    "Kyrgyzstan\0"
+    "Lao\0"
+    "Latvia\0"
+    "Lebanon\0"
+    "Lesotho\0"
+    "Liberia\0"
+    "LibyanArabJamahiriya\0"
+    "Liechtenstein\0"
+    "Lithuania\0"
+    "Luxembourg\0"
+    "Macau\0"
+    "Macedonia\0"
+    "Madagascar\0"
+    "Malawi\0"
+    "Malaysia\0"
+    "Maldives\0"
+    "Mali\0"
+    "Malta\0"
+    "MarshallIslands\0"
+    "Martinique\0"
+    "Mauritania\0"
+    "Mauritius\0"
+    "Mayotte\0"
+    "Mexico\0"
+    "Micronesia\0"
+    "Moldova\0"
+    "Monaco\0"
+    "Mongolia\0"
+    "Montserrat\0"
+    "Morocco\0"
+    "Mozambique\0"
+    "Myanmar\0"
+    "Namibia\0"
+    "Nauru\0"
+    "Nepal\0"
+    "Netherlands\0"
+    "NetherlandsAntilles\0"
+    "NewCaledonia\0"
+    "NewZealand\0"
+    "Nicaragua\0"
+    "Niger\0"
+    "Nigeria\0"
+    "Niue\0"
+    "NorfolkIsland\0"
+    "NorthernMarianaIslands\0"
+    "Norway\0"
+    "Oman\0"
+    "Pakistan\0"
+    "Palau\0"
+    "PalestinianTerritory\0"
+    "Panama\0"
+    "PapuaNewGuinea\0"
+    "Paraguay\0"
+    "Peru\0"
+    "Philippines\0"
+    "Pitcairn\0"
+    "Poland\0"
+    "Portugal\0"
+    "PuertoRico\0"
+    "Qatar\0"
+    "Reunion\0"
+    "Romania\0"
+    "RussianFederation\0"
+    "Rwanda\0"
+    "SaintKittsAndNevis\0"
+    "StLucia\0"
+    "StVincentAndTheGrenadines\0"
+    "Samoa\0"
+    "SanMarino\0"
+    "SaoTomeAndPrincipe\0"
+    "SaudiArabia\0"
+    "Senegal\0"
+    "Seychelles\0"
+    "SierraLeone\0"
+    "Singapore\0"
+    "Slovakia\0"
+    "Slovenia\0"
+    "SolomonIslands\0"
+    "Somalia\0"
+    "SouthAfrica\0"
+    "SouthGeorgiaAndTheSouthSandwichIslands\0"
+    "Spain\0"
+    "SriLanka\0"
+    "StHelena\0"
+    "StPierreAndMiquelon\0"
+    "Sudan\0"
+    "Suriname\0"
+    "SvalbardAndJanMayenIslands\0"
+    "Swaziland\0"
+    "Sweden\0"
+    "Switzerland\0"
+    "SyrianArabRepublic\0"
+    "Taiwan\0"
+    "Tajikistan\0"
+    "Tanzania\0"
+    "Thailand\0"
+    "Togo\0"
+    "Tokelau\0"
+    "Tonga\0"
+    "TrinidadAndTobago\0"
+    "Tunisia\0"
+    "Turkey\0"
+    "Turkmenistan\0"
+    "TurksAndCaicosIslands\0"
+    "Tuvalu\0"
+    "Uganda\0"
+    "Ukraine\0"
+    "UnitedArabEmirates\0"
+    "UnitedKingdom\0"
+    "UnitedStates\0"
+    "UnitedStatesMinorOutlyingIslands\0"
+    "Uruguay\0"
+    "Uzbekistan\0"
+    "Vanuatu\0"
+    "VaticanCityState\0"
+    "Venezuela\0"
+    "VietNam\0"
+    "BritishVirginIslands\0"
+    "USVirginIslands\0"
+    "WallisAndFutunaIslands\0"
+    "WesternSahara\0"
+    "Yemen\0"
+    "Yugoslavia\0"
+    "Zambia\0"
+    "Zimbabwe\0"
+    "SerbiaAndMontenegro\0"
+    "Montenegro\0"
+    "Serbia\0"
+    "Saint Barthelemy\0"
+    "Saint Martin\0"
+    "LatinAmericaAndTheCaribbean\0"
+    ;
 
-static const quint16 country_name_index[] = {
+static const quint16 country_name_index[] =
+{
     0, // AnyCountry
     8, // Afghanistan
     20, // Albania
@@ -779,7 +782,7 @@ static const quint16 country_name_index[] = {
 };
 
 // Assumes that code is a 2 letter code
-DLLEXPORT QString fullCountryFromCode(const QString& countryCode);
+DLLEXPORT QString fullCountryFromCode( const QString& countryCode );
 
 }
 }

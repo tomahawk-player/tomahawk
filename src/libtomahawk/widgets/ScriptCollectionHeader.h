@@ -26,15 +26,15 @@ class QPushButton;
 class DLLEXPORT ScriptCollectionHeader : public FilterHeader
 {
     Q_OBJECT
-public:
+  public:
     explicit ScriptCollectionHeader( QWidget* parent = 0 );
 
     void setRefreshVisible( bool visible );
-    
-signals:
+
+  signals:
     void refreshClicked();
 
-protected:
+  protected:
     QPushButton* m_refreshButton;
 };
 

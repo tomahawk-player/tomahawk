@@ -27,7 +27,7 @@ namespace Tomahawk
 
 class PlaylistsModelPrivate
 {
-public:
+  public:
     PlaylistsModelPrivate( PlaylistsModel* q, const QList<playlist_ptr>& _playlists )
         : q_ptr( q )
         , playlists( _playlists )
@@ -37,7 +37,7 @@ public:
 
     PlaylistsModel* q_ptr;
     Q_DECLARE_PUBLIC( PlaylistsModel )
-private:
+  private:
     QList<playlist_ptr> playlists;
     QMap<playlist_ptr, QString> artists;
 };

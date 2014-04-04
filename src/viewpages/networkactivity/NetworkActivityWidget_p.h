@@ -32,7 +32,7 @@ namespace Widgets
 
 class NetworkActivityWidgetPrivate
 {
-public:
+  public:
     NetworkActivityWidgetPrivate( Tomahawk::Widgets::NetworkActivityWidget* q )
         : q_ptr ( q )
         , ui( new Ui::NetworkActivityWidget )
@@ -44,7 +44,7 @@ public:
     Tomahawk::Widgets::NetworkActivityWidget* q_ptr;
     Q_DECLARE_PUBLIC ( Tomahawk::Widgets::NetworkActivityWidget )
 
-private:
+  private:
     QSharedPointer<Ui::NetworkActivityWidget> ui;
     Tomahawk::playlistinterface_ptr playlistInterface;
     QStandardItemModel* crumbModelLeft;

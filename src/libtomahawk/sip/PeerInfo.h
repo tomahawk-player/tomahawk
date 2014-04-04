@@ -38,9 +38,9 @@ class PeerInfoPrivate;
 
 class DLLEXPORT PeerInfo : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     enum Status
     {
         Online,
@@ -119,10 +119,10 @@ public:
      */
     const QString key() const;
 
-signals:
+  signals:
     void sipInfoChanged();
 
-private:
+  private:
     PeerInfo( SipPlugin* parent, const QString& id );
     void announce();
 

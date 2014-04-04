@@ -33,9 +33,9 @@ namespace Tomahawk
 
 class DLLEXPORT TreeProxyModelPlaylistInterface : public Tomahawk::PlaylistInterface
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit TreeProxyModelPlaylistInterface( TreeProxyModel* proxyModel );
     virtual ~TreeProxyModelPlaylistInterface();
 
@@ -53,20 +53,37 @@ public:
 
     virtual QString filter() const;
 
-    virtual PlaylistModes::RepeatMode repeatMode() const { return m_repeatMode; }
-    virtual bool shuffled() const { return m_shuffled; }
-    virtual PlaylistModes::ViewMode viewMode() const { return PlaylistModes::Tree; }
+    virtual PlaylistModes::RepeatMode repeatMode() const
+    {
+        return m_repeatMode;
+    }
+    virtual bool shuffled() const
+    {
+        return m_shuffled;
+    }
+    virtual PlaylistModes::ViewMode viewMode() const
+    {
+        return PlaylistModes::Tree;
+    }
 
-signals:
+  signals:
     void filterChanged( const QString& filter );
     void filteringStarted();
     void filteringFinished();
 
-public slots:
-    virtual void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode ) { m_repeatMode = mode; emit repeatModeChanged( mode ); }
-    virtual void setShuffled( bool enabled ) { m_shuffled = enabled; emit shuffleModeChanged( enabled ); }
+  public slots:
+    virtual void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode )
+    {
+        m_repeatMode = mode;
+        emit repeatModeChanged( mode );
+    }
+    virtual void setShuffled( bool enabled )
+    {
+        m_shuffled = enabled;
+        emit shuffleModeChanged( enabled );
+    }
 
-private:
+  private:
     QPointer< TreeProxyModel > m_proxyModel;
 
     PlaylistModes::RepeatMode m_repeatMode;

@@ -29,7 +29,7 @@
 SipPlugin::SipPlugin() : QObject() {}
 SipPlugin::~SipPlugin() {}
 
-SipPlugin::SipPlugin( Tomahawk::Accounts::Account *account, QObject* parent )
+SipPlugin::SipPlugin( Tomahawk::Accounts::Account* account, QObject* parent )
     : QObject( parent )
     , m_account( account )
 {
@@ -87,10 +87,12 @@ SipPlugin::peersOnline() const
 {
     QList< Tomahawk::peerinfo_ptr > result;
 
-    foreach( const Tomahawk::peerinfo_ptr& peerInfo, Tomahawk::PeerInfo::getAll() )
+    foreach( const Tomahawk::peerinfo_ptr & peerInfo, Tomahawk::PeerInfo::getAll() )
     {
-        if(peerInfo->sipPlugin() == this)
+        if( peerInfo->sipPlugin() == this )
+        {
             result.append( peerInfo );
+        }
     }
 
     return result;
@@ -99,7 +101,7 @@ SipPlugin::peersOnline() const
 
 void SipPlugin::setAllPeersOffline()
 {
-    foreach( const Tomahawk::peerinfo_ptr& peerInfo, peersOnline() )
+    foreach( const Tomahawk::peerinfo_ptr & peerInfo, peersOnline() )
     {
         peerInfo->setStatus( Tomahawk::PeerInfo::Offline );
     }

@@ -39,23 +39,29 @@ class DatabaseCommandLoggable;
 
 class DatabaseWorker : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     DatabaseWorker( Database* db, bool mutates );
     ~DatabaseWorker();
 
-    bool busy() const { return m_outstanding > 0; }
-    unsigned int outstandingJobs() const { return m_outstanding; }
+    bool busy() const
+    {
+        return m_outstanding > 0;
+    }
+    unsigned int outstandingJobs() const
+    {
+        return m_outstanding;
+    }
 
-public slots:
+  public slots:
     void enqueue( const Tomahawk::dbcmd_ptr& );
     void enqueue( const QList< Tomahawk::dbcmd_ptr >& );
 
-private slots:
+  private slots:
     void doWork();
 
-private:
+  private:
     void logOp( DatabaseCommandLoggable* command );
 
     QMutex m_mut;
@@ -68,18 +74,18 @@ private:
 
 class DatabaseWorkerThread : public QThread
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     DatabaseWorkerThread( Database* db, bool mutates );
     ~DatabaseWorkerThread();
 
     QPointer< DatabaseWorker > worker() const;
 
-protected:
+  protected:
     void run();
 
-private:
+  private:
     QPointer< DatabaseWorker > m_worker;
     Database* m_db;
     bool m_mutates;

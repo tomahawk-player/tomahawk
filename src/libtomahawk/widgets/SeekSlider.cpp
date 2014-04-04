@@ -34,25 +34,25 @@ SeekSlider::SeekSlider( QWidget* parent )
 {
     setFixedHeight( scaledY( 20 ) );
     setStyleSheet( QString(
-                   "QSlider::groove:horizontal {"
-                   "margin: %1px; border-width: %2px;"
-                   "border-image: url(" RESPATH "images/seek-slider-bkg.png) %2 %2 %2 %2 stretch stretch;"
-                   "}"
+                       "QSlider::groove:horizontal {"
+                       "margin: %1px; border-width: %2px;"
+                       "border-image: url(" RESPATH "images/seek-slider-bkg.png) %2 %2 %2 %2 stretch stretch;"
+                       "}"
 
-                   "QSlider::sub-page:horizontal {"
-                   "margin: %1px; border-width: %2px;"
-                   "border-image: url(" RESPATH "images/seek-slider-level.png) %2 %2 %2 %2 stretch stretch;"
-                   "}" )
-                   .arg( 5 /*margin*/)
-                   .arg( 3 /*border*/) +
+                       "QSlider::sub-page:horizontal {"
+                       "margin: %1px; border-width: %2px;"
+                       "border-image: url(" RESPATH "images/seek-slider-level.png) %2 %2 %2 %2 stretch stretch;"
+                       "}" )
+                   .arg( 5 /*margin*/ )
+                   .arg( 3 /*border*/ ) +
                    QString(
-                   "QSlider::handle:horizontal {"
-                   "margin-bottom: -%1px; margin-top: -%1px;"
-                   "margin-left: -%2px; margin-right: -%2px;"
-                   "height: %3px; width: %4px;"
-                   "background-image: url(" RESPATH "images/seek-and-volume-knob-rest.png);"
-                   "background-repeat: no-repeat;"
-                   "}" )
+                       "QSlider::handle:horizontal {"
+                       "margin-bottom: -%1px; margin-top: -%1px;"
+                       "margin-left: -%2px; margin-right: -%2px;"
+                       "height: %3px; width: %4px;"
+                       "background-image: url(" RESPATH "images/seek-and-volume-knob-rest.png);"
+                       "background-repeat: no-repeat;"
+                       "}" )
                    .arg( /*margin top&bottom*/ 7 )
                    .arg( /*margin left&right*/ 4 )
                    .arg( /*height*/ 17 )
@@ -74,16 +74,18 @@ SeekSlider::mousePressEvent( QMouseEvent* event )
         QSlider::mousePressEvent( &eventSwap );
     }
     else
+    {
         QSlider::mousePressEvent( event );
+    }
 }
 
 
 void
 SeekSlider::setValue( int value )
 {
-//    int newVal = qBound( minimum(), value, maximum() );
-    
-    if ( !m_timeLine || sender() != m_timeLine ) 
+    //    int newVal = qBound( minimum(), value, maximum() );
+
+    if ( !m_timeLine || sender() != m_timeLine )
     {
         QSlider::setValue( value );
         return;

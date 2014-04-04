@@ -32,22 +32,31 @@ namespace Tomahawk
 class ResultUrlChecker : public QObject
 {
     Q_OBJECT
-public:
+  public:
     ResultUrlChecker( const query_ptr& query, const QList< result_ptr >& results );
     virtual ~ResultUrlChecker();
 
-    query_ptr query() const { return m_query; }
-    QList< result_ptr > results() const { return m_results; }
-    QList< result_ptr > validResults() const { return m_validResults; }
+    query_ptr query() const
+    {
+        return m_query;
+    }
+    QList< result_ptr > results() const
+    {
+        return m_results;
+    }
+    QList< result_ptr > validResults() const
+    {
+        return m_validResults;
+    }
 
-signals:
+  signals:
     void done();
 
-private slots:
+  private slots:
     void check();
     void headFinished();
 
-private:
+  private:
     query_ptr m_query;
     QList< result_ptr > m_results;
     QList< result_ptr > m_validResults;

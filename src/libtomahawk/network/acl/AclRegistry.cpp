@@ -25,22 +25,22 @@
 #include "utils/Logger.h"
 
 
-QDataStream& operator<<( QDataStream &out, const ACLRegistry::User &user )
+QDataStream& operator<<( QDataStream& out, const ACLRegistry::User& user )
 {
     out << ACLUSERVERSION;
     out << user.uuid;
     out << user.friendlyName;
     out << user.knownDbids.length();
     foreach( QString knownDbid, user.knownDbids )
-        out << knownDbid;
+    out << knownDbid;
     out << user.knownAccountIds.length();
     foreach( QString knownAccount, user.knownAccountIds )
-        out << knownAccount;
-    out << (int)( user.acl );
+    out << knownAccount;
+    out << ( int )( user.acl );
     return out;
 }
 
-QDataStream& operator>>( QDataStream &in, ACLRegistry::User &user )
+QDataStream& operator>>( QDataStream& in, ACLRegistry::User& user )
 {
     int ver;
     in >> ver;
@@ -66,7 +66,7 @@ QDataStream& operator>>( QDataStream &in, ACLRegistry::User &user )
         }
         int aclIn;
         in >> aclIn;
-        user.acl = (Tomahawk::ACLStatus::Type)( aclIn );
+        user.acl = ( Tomahawk::ACLStatus::Type )( aclIn );
     }
     return in;
 }
@@ -96,7 +96,7 @@ ACLRegistry::ACLRegistry( QObject* parent )
     qRegisterMetaTypeStreamOperators< ACLRegistry::User >( "ACLRegistry::User" );
 
     connect( this, SIGNAL( aclResult( QString, QString, Tomahawk::ACLStatus::Type ) ),
-             SLOT( aclResultForRequest(QString,QString,Tomahawk::ACLStatus::Type ) ) );
+             SLOT( aclResultForRequest( QString, QString, Tomahawk::ACLStatus::Type ) ) );
 }
 
 

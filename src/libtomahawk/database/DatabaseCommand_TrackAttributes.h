@@ -31,7 +31,7 @@ namespace Tomahawk
 class DatabaseCommand_TrackAttributes : public DatabaseCommand
 {
     Q_OBJECT
-public:
+  public:
 
     // Get all tracks with this attribute
     DatabaseCommand_TrackAttributes( DatabaseCommand_SetTrackAttributes::AttributeType type );
@@ -39,14 +39,20 @@ public:
     DatabaseCommand_TrackAttributes( DatabaseCommand_SetTrackAttributes::AttributeType type, const QList< Tomahawk::QID > ids );
 
     virtual void exec( DatabaseImpl* lib );
-    virtual bool doesMutates() const { return false; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
 
-    virtual QString commandname() const { return "trackattributes"; }
+    virtual QString commandname() const
+    {
+        return "trackattributes";
+    }
 
-signals:
+  signals:
     void trackAttributes( PairList );
 
-private:
+  private:
     DatabaseCommand_SetTrackAttributes::AttributeType m_type;
     QList< Tomahawk::QID > m_ids;
 };

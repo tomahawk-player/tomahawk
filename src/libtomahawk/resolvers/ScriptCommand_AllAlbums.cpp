@@ -27,8 +27,8 @@
 #include "ScriptCollection.h"
 
 ScriptCommand_AllAlbums::ScriptCommand_AllAlbums( const Tomahawk::collection_ptr& collection,
-                                                  const Tomahawk::artist_ptr& artist,
-                                                  QObject* parent )
+        const Tomahawk::artist_ptr& artist,
+        QObject* parent )
     : ScriptCommand( parent )
     , m_collection( collection )
     , m_artist( artist )
@@ -93,15 +93,19 @@ void
 ScriptCommand_AllAlbums::onResolverDone( const QList< Tomahawk::album_ptr >& a )
 {
     if ( m_filter.isEmpty() )
+    {
         emit albums( a );
+    }
     else
     {
         QList< Tomahawk::album_ptr > filtered;
-        foreach( const Tomahawk::album_ptr& album, a )
+        foreach( const Tomahawk::album_ptr & album, a )
         {
             if( album->name().toLower().contains( m_filter.toLower() ) ||
-                album->artist()->name().toLower().contains( m_filter.toLower() ) )
+                    album->artist()->name().toLower().contains( m_filter.toLower() ) )
+            {
                 filtered.append( album );
+            }
         }
         emit albums( filtered );
     }

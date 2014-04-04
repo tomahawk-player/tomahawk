@@ -38,9 +38,10 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCommand_AllAlbums : public DatabaseCommand, public Tomahawk::AlbumsRequest
 {
-Q_OBJECT
-public:
-    enum SortOrder {
+    Q_OBJECT
+  public:
+    enum SortOrder
+    {
         None = 0,
         ModificationTime = 1
     };
@@ -52,28 +53,52 @@ public:
 
     virtual void exec( DatabaseImpl* );
 
-    virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "allalbums"; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
+    virtual QString commandname() const
+    {
+        return "allalbums";
+    }
 
-    virtual void enqueue() { Database::instance()->enqueue( Tomahawk::dbcmd_ptr( this ) ); }
+    virtual void enqueue()
+    {
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr( this ) );
+    }
 
-    Tomahawk::collection_ptr collection() const { return m_collection; }
+    Tomahawk::collection_ptr collection() const
+    {
+        return m_collection;
+    }
 
     void execForCollection( DatabaseImpl* );
     void execForArtist( DatabaseImpl* );
 
     void setArtist( const Tomahawk::artist_ptr& artist );
-    void setLimit( unsigned int amount ) { m_amount = amount; }
-    void setSortOrder( DatabaseCommand_AllAlbums::SortOrder order ) { m_sortOrder = order; }
-    void setSortDescending( bool descending ) { m_sortDescending = descending; }
-    void setFilter( const QString& filter ) { m_filter = filter; }
+    void setLimit( unsigned int amount )
+    {
+        m_amount = amount;
+    }
+    void setSortOrder( DatabaseCommand_AllAlbums::SortOrder order )
+    {
+        m_sortOrder = order;
+    }
+    void setSortDescending( bool descending )
+    {
+        m_sortDescending = descending;
+    }
+    void setFilter( const QString& filter )
+    {
+        m_filter = filter;
+    }
 
-signals:
+  signals:
     void albums( const QList<Tomahawk::album_ptr>&, const QVariant& data );
     void albums( const QList<Tomahawk::album_ptr>& );
     void done();
 
-private:
+  private:
     Tomahawk::collection_ptr m_collection;
     Tomahawk::artist_ptr m_artist;
 

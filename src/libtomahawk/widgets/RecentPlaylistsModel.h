@@ -32,23 +32,23 @@
 class DLLEXPORT RecentPlaylistsModel : public QAbstractListModel
 {
     Q_OBJECT
-public:
+  public:
     explicit RecentPlaylistsModel( unsigned int maxPlaylists, QObject* parent = 0 );
 
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
 
-public slots:
+  public slots:
     void refresh();
     void onReady();
 
-signals:
+  signals:
     void emptinessChanged( bool isEmpty );
 
     void loadingStarted();
     void loadingFinished();
 
-private slots:
+  private slots:
     void onRefresh();
     void playlistsLoaded( const QList<Tomahawk::DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair>& playlistGuids );
 
@@ -59,7 +59,7 @@ private slots:
     void sourceOnline();
     void onSourceAdded( const Tomahawk::source_ptr& source );
 
-private:
+  private:
     QList< Tomahawk::playlist_ptr > m_playlists;
     mutable QHash< Tomahawk::playlist_ptr, QString > m_artists;
     unsigned int m_maxPlaylists;

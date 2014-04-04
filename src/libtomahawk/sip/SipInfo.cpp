@@ -29,7 +29,7 @@
 
 class SipInfoPrivate : public QSharedData
 {
-public:
+  public:
     SipInfoPrivate()
         : port( -1 )
     {
@@ -99,13 +99,19 @@ SipInfo::isValid() const
     {
         // visible and all data available
         if (  d->visible.toBool() && !d->host.isEmpty() && ( d->port > 0 ) && !d->nodeId.isNull() && !d->key.isNull() )
+        {
             return true;
+        }
         // invisible and no data available
         if ( !d->visible.toBool() &&  d->host.isEmpty() && ( d->port < 0 ) && d->nodeId.isNull() && d->key.isNull() )
+        {
             return true;
+        }
         // invisible and but nodeId and key available
         if ( !d->visible.toBool() &&  d->host.isEmpty() && ( d->port < 0 ) && !d->nodeId.isNull() && !d->key.isNull() )
+        {
             return true;
+        }
     }
 
     return false;
@@ -241,9 +247,13 @@ QDebug
 operator<< ( QDebug dbg, const SipInfo& info )
 {
     if ( !info.isValid() )
+    {
         dbg.nospace() << "info is invalid";
+    }
     else
+    {
         dbg.nospace() << info.toJson();
+    }
 
     return dbg.maybeSpace();
 }
@@ -260,10 +270,10 @@ operator==( const SipInfo& one, const SipInfo& two )
     else if ( one.isValid() && two.isValid() )
     {
         if ( one.isVisible() == two.isVisible()
-            && one.host() == two.host()
-            && one.port() == two.port()
-            && one.nodeId() == two.nodeId()
-            && one.key() == two.key() )
+                && one.host() == two.host()
+                && one.port() == two.port()
+                && one.nodeId() == two.nodeId()
+                && one.key() == two.key() )
         {
             return true;
         }
@@ -278,9 +288,9 @@ SipInfo::debugString() const
 {
     QString debugString( "SIP INFO: visible: %1 host: host %2 port: %3 nodeid: %4 key: %5" );
     return debugString.arg( d->visible.toBool() )
-                      .arg( d->host )
-                      .arg( d->port )
-                      .arg( d->nodeId )
-                      .arg( d->key );
+           .arg( d->host )
+           .arg( d->port )
+           .arg( d->nodeId )
+           .arg( d->key );
 }
 

@@ -25,23 +25,24 @@
 #include <QMutex>
 #include <QSharedPointer>
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
 class UPowerHandler : public QObject
 {
     Q_OBJECT
-public:
-    explicit UPowerHandler( QObject *parent = 0 );
+  public:
+    explicit UPowerHandler( QObject* parent = 0 );
     bool registerHandler();
 
     static const char* UPowerService;
     static const char* UPowerPath;
     static const char* UPowerInterface;
-private:
+  private:
     QSharedPointer<org::freedesktop::UPower> m_interface;
     QMutex m_mutex;
 
-private slots:
+  private slots:
     void handleSleep();
     void handleResume();
     void actualResume();

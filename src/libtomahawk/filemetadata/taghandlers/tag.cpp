@@ -29,9 +29,9 @@
 #include <taglib/vorbisfile.h>
 #include <taglib/oggflacfile.h>
 #if defined(TAGLIB_MAJOR_VERSION) && defined(TAGLIB_MINOR_VERSION)
-    #if TAGLIB_MAJOR_VERSION >= 1 && TAGLIB_MINOR_VERSION >= 9
-        #include <taglib/opusfile.h>
-    #endif
+#if TAGLIB_MAJOR_VERSION >= 1 && TAGLIB_MINOR_VERSION >= 9
+#include <taglib/opusfile.h>
+#endif
 #endif
 #include <taglib/flacfile.h>
 #include <taglib/speexfile.h>
@@ -47,25 +47,29 @@
 namespace Tomahawk
 {
 
-/*static*/ Tag* Tag::fromFile( const TagLib::FileRef &f )
+/*static*/ Tag* Tag::fromFile( const TagLib::FileRef& f )
 {
-    Tag *t = 0;
+    Tag* t = 0;
 
-    if( TagLib::Ogg::Vorbis::File *file =
-            dynamic_cast< TagLib::Ogg::Vorbis::File * >( f.file() ) )
+    if( TagLib::Ogg::Vorbis::File* file =
+                dynamic_cast< TagLib::Ogg::Vorbis::File* >( f.file() ) )
     {
         if( file->tag() )
+        {
             t = new OggTag( f.tag(), file->tag() );
+        }
     }
-    else if( TagLib::Ogg::FLAC::File *file =
-             dynamic_cast< TagLib::Ogg::FLAC::File * >( f.file() ) )
+    else if( TagLib::Ogg::FLAC::File* file =
+                 dynamic_cast< TagLib::Ogg::FLAC::File* >( f.file() ) )
     {
         if( file->tag() )
+        {
             t = new OggTag( f.tag(), file->tag() );
+        }
     }
 #if TAGLIB_MAJOR_VERSION >= 1 && TAGLIB_MINOR_VERSION >= 9
-    else if ( TagLib::Ogg::Opus::File *file =
-              dynamic_cast< TagLib::Ogg::Opus::File * >( f.file() ) )
+    else if ( TagLib::Ogg::Opus::File* file =
+                  dynamic_cast< TagLib::Ogg::Opus::File* >( f.file() ) )
     {
         if ( file->tag() )
         {
@@ -73,79 +77,113 @@ namespace Tomahawk
         }
     }
 #endif
-    else if( TagLib::RIFF::AIFF::File *file =
-             dynamic_cast< TagLib::RIFF::AIFF::File * >( f.file() ) )
+    else if( TagLib::RIFF::AIFF::File* file =
+                 dynamic_cast< TagLib::RIFF::AIFF::File* >( f.file() ) )
     {
         if( file->tag() )
+        {
             t = new ID3v2Tag( f.tag(), file->tag() );
+        }
     }
-    else if( TagLib::Ogg::Speex::File *file =
-             dynamic_cast< TagLib::Ogg::Speex::File * >( f.file() ) )
+    else if( TagLib::Ogg::Speex::File* file =
+                 dynamic_cast< TagLib::Ogg::Speex::File* >( f.file() ) )
     {
         if( file->tag() )
+        {
             t = new OggTag( f.tag(), file->tag() );
+        }
     }
-    else if( TagLib::FLAC::File *file =
-             dynamic_cast< TagLib::FLAC::File * >( f.file() ) )
+    else if( TagLib::FLAC::File* file =
+                 dynamic_cast< TagLib::FLAC::File* >( f.file() ) )
     {
         if( file->xiphComment() )
+        {
             t = new OggTag( f.tag(), file->xiphComment() );
+        }
         else if( file->ID3v2Tag() )
+        {
             t = new ID3v2Tag( f.tag(), file->ID3v2Tag() );
+        }
         else if( file->ID3v1Tag() )
+        {
             t = new ID3v1Tag( f.tag() );
+        }
     }
-    else if( TagLib::MPEG::File *file =
-             dynamic_cast< TagLib::MPEG::File * >( f.file() ) )
+    else if( TagLib::MPEG::File* file =
+                 dynamic_cast< TagLib::MPEG::File* >( f.file() ) )
     {
         if( file->ID3v2Tag() )
+        {
             t = new ID3v2Tag( f.tag(), file->ID3v2Tag() );
+        }
         else if( file->APETag() )
+        {
             t = new APETag( f.tag(), file->APETag() );
+        }
         else if( file->ID3v1Tag() )
+        {
             t = new ID3v1Tag( f.tag() );
+        }
     }
-    else if( TagLib::MP4::File *file =
-             dynamic_cast< TagLib::MP4::File * >( f.file() ) )
+    else if( TagLib::MP4::File* file =
+                 dynamic_cast< TagLib::MP4::File* >( f.file() ) )
     {
         if( file->tag() )
+        {
             t = new MP4Tag( f.tag(), file->tag() );
+        }
     }
-    else if( TagLib::MPC::File *file =
-             dynamic_cast< TagLib::MPC::File * >( f.file() ) )
+    else if( TagLib::MPC::File* file =
+                 dynamic_cast< TagLib::MPC::File* >( f.file() ) )
     {
         if( file->APETag() )
+        {
             t = new APETag( f.tag(), file->APETag() );
+        }
         else if( file->ID3v1Tag() )
+        {
             t = new ID3v1Tag( f.tag() );
+        }
     }
-    else if( TagLib::ASF::File *file =
-             dynamic_cast< TagLib::ASF::File * >( f.file() ) )
+    else if( TagLib::ASF::File* file =
+                 dynamic_cast< TagLib::ASF::File* >( f.file() ) )
     {
         if( file->tag() )
+        {
             t = new ASFTag( f.tag(), file->tag() );
+        }
     }
-    else if( TagLib::WavPack::File *file =
-        dynamic_cast< TagLib::WavPack::File * >( f.file() ) )
+    else if( TagLib::WavPack::File* file =
+                 dynamic_cast< TagLib::WavPack::File* >( f.file() ) )
     {
         if( file->APETag() )
+        {
             t = new APETag( f.tag(), file->APETag() );
+        }
         else if( file->ID3v1Tag() )
+        {
             t = new ID3v1Tag( f.tag() );
+        }
     }
 
     return t;
 }
 
-unsigned int Tag::processDiscNumber( const QString &s ) const
+unsigned int Tag::processDiscNumber( const QString& s ) const
 {
     int disc;
     if( s.indexOf( '/' ) != -1 )
+    {
         disc = s.split( '/', QString::SkipEmptyParts ).value( 0 ).toInt();
+    }
     else if( s.indexOf( ':' ) != -1 )
+    {
         disc = s.split( '/', QString::SkipEmptyParts ).value( 0 ).toInt();
+    }
     else
+    {
         disc = s.toInt();
+    }
 
     return disc;
 }

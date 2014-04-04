@@ -36,9 +36,9 @@ class PlayableModelPrivate;
 
 class DLLEXPORT PlayableModel : public QAbstractItemModel
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     enum Columns
     {
         Artist = 0,
@@ -78,7 +78,10 @@ public:
     explicit PlayableModel( QObject* parent = 0, bool loading = true );
     virtual ~PlayableModel();
 
-    virtual QString guid() const { return QString(); }
+    virtual QString guid() const
+    {
+        return QString();
+    }
 
     virtual QModelIndex index( int row, int column, const QModelIndex& parent ) const;
     virtual QModelIndex parent( const QModelIndex& child ) const;
@@ -117,7 +120,10 @@ public:
     virtual Tomahawk::QID currentItemUuid();
 
     virtual Tomahawk::PlaylistModes::RepeatMode repeatMode() const;
-    virtual bool shuffled() const { return false; }
+    virtual bool shuffled() const
+    {
+        return false;
+    }
 
     virtual void ensureResolved();
 
@@ -131,7 +137,7 @@ public:
     void startLoading();
     void finishLoading();
 
-signals:
+  signals:
     void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
@@ -146,7 +152,7 @@ signals:
     void changed();
     void currentIndexChanged();
 
-public slots:
+  public slots:
     virtual void setCurrentIndex( const QModelIndex& index );
 
     virtual void clear();
@@ -175,14 +181,14 @@ public slots:
     virtual void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode /*mode*/ ) {}
     virtual void setShuffled( bool /*shuffled*/ ) {}
 
-protected:
+  protected:
     QScopedPointer<PlayableModelPrivate> d_ptr;
     PlayableModel( QObject* parent, PlayableModelPrivate* d );
 
     PlayableItem* rootItem() const;
     QModelIndex createIndex( int row, int column, PlayableItem* item = 0 ) const;
 
-private slots:
+  private slots:
     void onDataChanged();
 
     void onQueryBecamePlayable( bool playable );
@@ -191,7 +197,7 @@ private slots:
     void onPlaybackStarted( const Tomahawk::result_ptr& result );
     void onPlaybackStopped();
 
-private:
+  private:
     void init();
     template <typename T>
     void insertInternal( const QList< T >& items, int row, const QList< Tomahawk::PlaybackLog >& logs = QList< Tomahawk::PlaybackLog >() );

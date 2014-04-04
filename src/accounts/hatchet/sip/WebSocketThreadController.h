@@ -27,17 +27,17 @@ class WebSocketThreadController : public QThread
 {
     Q_OBJECT
 
-public:
+  public:
     explicit WebSocketThreadController( QObject* sip );
     virtual ~WebSocketThreadController();
 
-    void setUrl( const QString &url );
-    void setAuthorizationHeader( const QString &authorizationHeader );
+    void setUrl( const QString& url );
+    void setAuthorizationHeader( const QString& authorizationHeader );
 
-protected:
+  protected:
     void run();
 
-private:
+  private:
     Q_DISABLE_COPY( WebSocketThreadController )
 
     QPointer< WebSocket > m_webSocket;

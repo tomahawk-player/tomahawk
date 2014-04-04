@@ -73,7 +73,9 @@ QueueProxyModel::onPlaybackStarted( const Tomahawk::result_ptr& result )
         {
             removeIndex( idx );
             if ( !rowCount() )
+            {
                 ViewManager::instance()->hideQueue();
+            }
         }
     }
 }
@@ -86,5 +88,7 @@ QueueProxyModel::onIndexActivated( const QModelIndex& index )
     removeIndex( index );
 
     if ( !rowCount() )
+    {
         ViewManager::instance()->hideQueue();
+    }
 }

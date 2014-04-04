@@ -38,7 +38,7 @@ class DLLEXPORT ScriptCollection : public Collection
 {
     Q_OBJECT
 
-public:
+  public:
     explicit ScriptCollection( const source_ptr& source,
                                ExternalResolver* resolver,
                                QObject* parent = 0 );
@@ -56,7 +56,10 @@ public:
     virtual void setServiceName( const QString& name );
     virtual QString prettyName() const;
     virtual QString itemName() const;
-    virtual BackendType backendType() const { return ScriptCollectionType; }
+    virtual BackendType backendType() const
+    {
+        return ScriptCollectionType;
+    }
 
     virtual void setIcon( const QIcon& icon );
     virtual QIcon icon() const;
@@ -65,7 +68,10 @@ public:
     virtual void setDescription( const QString& text );
     virtual QString description() const;
 
-    virtual ExternalResolver* resolver() { return m_resolver; }
+    virtual ExternalResolver* resolver()
+    {
+        return m_resolver;
+    }
 
     virtual Tomahawk::ArtistsRequest* requestArtists();
     virtual Tomahawk::AlbumsRequest*  requestAlbums( const Tomahawk::artist_ptr& artist );
@@ -74,7 +80,7 @@ public:
     virtual void setTrackCount( int count );
     virtual int trackCount() const;
 
-private:
+  private:
     ExternalResolver* m_resolver;
     QString m_servicePrettyName;
     QString m_description;

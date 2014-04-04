@@ -37,8 +37,8 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCommand_AllArtists : public DatabaseCommand, public Tomahawk::ArtistsRequest
 {
-Q_OBJECT
-public:
+    Q_OBJECT
+  public:
     enum SortOrder
     {
         None = 0,
@@ -50,21 +50,42 @@ public:
 
     virtual void exec( DatabaseImpl* );
 
-    virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "allartists"; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
+    virtual QString commandname() const
+    {
+        return "allartists";
+    }
 
-    virtual void enqueue() { Database::instance()->enqueue( Tomahawk::dbcmd_ptr( this ) ); }
+    virtual void enqueue()
+    {
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr( this ) );
+    }
 
-    void setLimit( unsigned int amount ) { m_amount = amount; }
-    void setSortOrder( DatabaseCommand_AllArtists::SortOrder order ) { m_sortOrder = order; }
-    void setSortDescending( bool descending ) { m_sortDescending = descending; }
-    void setFilter( const QString& filter ) { m_filter = filter; }
+    void setLimit( unsigned int amount )
+    {
+        m_amount = amount;
+    }
+    void setSortOrder( DatabaseCommand_AllArtists::SortOrder order )
+    {
+        m_sortOrder = order;
+    }
+    void setSortDescending( bool descending )
+    {
+        m_sortDescending = descending;
+    }
+    void setFilter( const QString& filter )
+    {
+        m_filter = filter;
+    }
 
-signals:
+  signals:
     void artists( const QList<Tomahawk::artist_ptr>& );
     void done();
 
-private:
+  private:
     Tomahawk::collection_ptr m_collection;
     unsigned int m_amount;
     DatabaseCommand_AllArtists::SortOrder m_sortOrder;

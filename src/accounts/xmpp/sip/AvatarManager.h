@@ -29,24 +29,24 @@
 
 class ACCOUNTDLLEXPORT AvatarManager : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
-    AvatarManager(Jreen::Client* client);
+  public:
+    AvatarManager( Jreen::Client* client );
     virtual ~AvatarManager();
 
-    QPixmap avatar(const QString& jid) const;
+    QPixmap avatar( const QString& jid ) const;
 
-signals:
+  signals:
     void newAvatar( const QString& jid );
 
-private slots:
+  private slots:
     void onNewPresence( const Jreen::Presence& presence );
-    void onNewIq(const Jreen::IQ& iq);
+    void onNewIq( const Jreen::IQ& iq );
     void onNewConnection();
     void onNewAvatar( const QString& jid );
 
-private:
+  private:
     void fetchVCard( const QString& jid );
     QString avatarHash( const QString& jid ) const;
     QString avatarPath( const QString& avatarHash ) const;

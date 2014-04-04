@@ -43,14 +43,16 @@ using namespace Accounts;
 static QPixmap* s_icon = 0;
 HatchetAccount* HatchetAccount::s_instance  = 0;
 
-const QString c_loginServer("https://auth.hatchet.is/v1");
-const QString c_accessTokenServer("https://auth.hatchet.is/v1");
+const QString c_loginServer( "https://auth.hatchet.is/v1" );
+const QString c_accessTokenServer( "https://auth.hatchet.is/v1" );
 
 HatchetAccountFactory::HatchetAccountFactory()
 {
 #ifndef ENABLE_HEADLESS
     if ( s_icon == 0 )
+    {
         s_icon = new QPixmap( ":/hatchet-account/hatchet-icon-512x512.png" );
+    }
 #endif
 }
 
@@ -86,21 +88,21 @@ HatchetAccount::HatchetAccount( const QString& accountId )
     setAccountServiceName( "Hatchet" );
     // We're connecting peers.
     setTypes( SipType );
-/*
-    QFile pemFile( ":/hatchet-account/mandella.pem" );
-    pemFile.open( QIODevice::ReadOnly );
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "certs/mandella.pem: " << pemFile.readAll();
-    pemFile.close();
-    pemFile.open( QIODevice::ReadOnly );
-    QCA::ConvertResult conversionResult;
-    QCA::PublicKey publicKey = QCA::PublicKey::fromPEM(pemFile.readAll(), &conversionResult);
-    if ( QCA::ConvertGood != conversionResult )
-    {
-        tLog() << Q_FUNC_INFO << "INVALID PUBKEY READ";
-        return;
-    }
-    m_publicKey = new QCA::PublicKey( publicKey );
-*/
+    /*
+        QFile pemFile( ":/hatchet-account/mandella.pem" );
+        pemFile.open( QIODevice::ReadOnly );
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "certs/mandella.pem: " << pemFile.readAll();
+        pemFile.close();
+        pemFile.open( QIODevice::ReadOnly );
+        QCA::ConvertResult conversionResult;
+        QCA::PublicKey publicKey = QCA::PublicKey::fromPEM(pemFile.readAll(), &conversionResult);
+        if ( QCA::ConvertGood != conversionResult )
+        {
+            tLog() << Q_FUNC_INFO << "INVALID PUBKEY READ";
+            return;
+        }
+        m_publicKey = new QCA::PublicKey( publicKey );
+    */
 }
 
 
@@ -121,7 +123,9 @@ AccountConfigWidget*
 HatchetAccount::configurationWidget()
 {
     if ( m_configWidget.isNull() )
+    {
         m_configWidget = QPointer<HatchetAccountConfig>( new HatchetAccountConfig( this ) );
+    }
 
     return m_configWidget.data();
 }
@@ -131,13 +135,17 @@ void
 HatchetAccount::authenticate()
 {
     if ( connectionState() == Connected )
+    {
         return;
+    }
 
     if ( !refreshToken().isEmpty() )
     {
         qDebug() << "Have saved credentials with refresh token:" << refreshToken();
         if ( sipPlugin() )
+        {
             sipPlugin()->connectPlugin();
+        }
         setAccountFriendlyName( username() );
     }
     else if ( !username().isEmpty() )
@@ -152,7 +160,9 @@ void
 HatchetAccount::deauthenticate()
 {
     if ( !m_tomahawkSipPlugin.isNull() )
+    {
         m_tomahawkSipPlugin->disconnectPlugin();
+    }
     emit deauthenticated();
 }
 
@@ -179,7 +189,9 @@ HatchetAccount::sipPlugin( bool create )
     if ( m_tomahawkSipPlugin.isNull() )
     {
         if ( !create )
+        {
             return 0;
+        }
 
         tLog() << Q_FUNC_INFO;
         m_tomahawkSipPlugin = QPointer< HatchetSipPlugin >( new HatchetSipPlugin( this ) );
@@ -249,7 +261,7 @@ HatchetAccount::mandellaTokenType() const
 
 
 void
-HatchetAccount::loginWithPassword( const QString& username, const QString& password, const QString &otp )
+HatchetAccount::loginWithPassword( const QString& username, const QString& password, const QString& otp )
 {
     //if ( username.isEmpty() || password.isEmpty() || !m_publicKey )
     if ( username.isEmpty() || password.isEmpty() )
@@ -265,7 +277,7 @@ HatchetAccount::loginWithPassword( const QString& username, const QString& passw
     params[ "nonce" ] = QString( result.toByteArray().toBase64() );
     */
 
-    QNetworkRequest req( QUrl( c_loginServer + "/authentication/password") );
+    QNetworkRequest req( QUrl( c_loginServer + "/authentication/password" ) );
     req.setHeader( QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded" );
 
     QUrl params;
@@ -273,7 +285,9 @@ HatchetAccount::loginWithPassword( const QString& username, const QString& passw
     TomahawkUtils::urlAddQueryItem( params, "password", password );
     TomahawkUtils::urlAddQueryItem( params, "grant_type", "password" );
     if ( !otp.isEmpty() )
+    {
         TomahawkUtils::urlAddQueryItem( params, "otp", otp );
+    }
 
     QByteArray data = TomahawkUtils::encodedQuery( params );
 
@@ -292,9 +306,9 @@ HatchetAccount::fetchAccessToken( const QString& type )
         return;
     }
     if ( mandellaAccessToken().isEmpty() ||
-        (mandellaAccessTokenExpiration() < QDateTime::currentDateTime().toTime_t() &&
-          (refreshToken().isEmpty() ||
-            (refreshTokenExpiration() != 0 && refreshTokenExpiration() < QDateTime::currentDateTime().toTime_t()))) )
+            ( mandellaAccessTokenExpiration() < QDateTime::currentDateTime().toTime_t() &&
+              ( refreshToken().isEmpty() ||
+                ( refreshTokenExpiration() != 0 && refreshTokenExpiration() < QDateTime::currentDateTime().toTime_t() ) ) ) )
     {
         tLog() << "No valid combination of access/refresh tokens, not logging in";
         tLog() << "Mandella access token expiration:" << mandellaAccessTokenExpiration() << ", refresh token expiration:" << refreshTokenExpiration();
@@ -315,7 +329,7 @@ HatchetAccount::fetchAccessToken( const QString& type )
         tLog() << "Fetching access tokens of type" << type;
     }
 
-    QNetworkRequest req( QUrl( c_accessTokenServer + "/tokens/" + (interceptionNeeded ? "refresh/" + QString::fromUtf8(mandellaTokenType()).toLower() : "fetch/" + type) ) );
+    QNetworkRequest req( QUrl( c_accessTokenServer + "/tokens/" + ( interceptionNeeded ? "refresh/" + QString::fromUtf8( mandellaTokenType() ).toLower() : "fetch/" + type ) ) );
     QNetworkReply* reply;
 
     if ( interceptionNeeded )
@@ -332,9 +346,9 @@ HatchetAccount::fetchAccessToken( const QString& type )
     else
     {
         tLog() << "Fetching token of type" << type;
-        req.setRawHeader( "Authorization", QString( mandellaTokenType() + " " + mandellaAccessToken()).toUtf8() );
+        req.setRawHeader( "Authorization", QString( mandellaTokenType() + " " + mandellaAccessToken() ).toUtf8() );
         reply = Tomahawk::Utils::nam()->get( req );
-    } 
+    }
 
     NewClosure( reply, SIGNAL( finished() ), this, SLOT( onFetchAccessTokenFinished( QNetworkReply*, const QString& ) ), reply, type );
 }
@@ -419,7 +433,9 @@ HatchetAccount::onPasswordLoginFinished( QNetworkReply* reply, const QString& us
     syncConfig();
 
     if ( sipPlugin() )
+    {
         sipPlugin()->connectPlugin();
+    }
 }
 
 

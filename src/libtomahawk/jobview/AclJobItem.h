@@ -33,23 +33,23 @@ class DLLEXPORT ACLJobDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 
-public:
+  public:
     explicit ACLJobDelegate ( QObject* parent = 0 );
     virtual ~ACLJobDelegate();
 
     virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
-    virtual void emitSizeHintChanged( const QModelIndex &index );
+    virtual void emitSizeHintChanged( const QModelIndex& index );
 
-signals:
+  signals:
     void update( const QModelIndex& idx );
     void aclResult( Tomahawk::ACLStatus::Type result );
 
-protected:
+  protected:
     virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
 
-private:
+  private:
     void drawRoundedButton( QPainter* painter, const QRect& btnRect, bool red = false ) const;
 
     QPoint m_savedHoverPos;
@@ -61,33 +61,63 @@ private:
 class DLLEXPORT ACLJobItem : public JobStatusItem
 {
     Q_OBJECT
-public:
-    explicit ACLJobItem( ACLRegistry::User user, const QString &username );
+  public:
+    explicit ACLJobItem( ACLRegistry::User user, const QString& username );
     virtual ~ACLJobItem();
 
-    virtual int weight() const { return 99; }
-    
-    virtual QString rightColumnText() const { return QString(); }
-    virtual QString mainText() const { return QString(); }
-    virtual QPixmap icon() const { return QPixmap(); }
-    virtual QString type() const { return "acljob"; }
+    virtual int weight() const
+    {
+        return 99;
+    }
 
-    virtual int concurrentJobLimit() const { return 3; }
+    virtual QString rightColumnText() const
+    {
+        return QString();
+    }
+    virtual QString mainText() const
+    {
+        return QString();
+    }
+    virtual QPixmap icon() const
+    {
+        return QPixmap();
+    }
+    virtual QString type() const
+    {
+        return "acljob";
+    }
 
-    virtual bool hasCustomDelegate() const { return true; }
+    virtual int concurrentJobLimit() const
+    {
+        return 3;
+    }
+
+    virtual bool hasCustomDelegate() const
+    {
+        return true;
+    }
     virtual void createDelegate( QObject* parent = 0 );
-    virtual QStyledItemDelegate* customDelegate() const { return m_delegate; }
+    virtual QStyledItemDelegate* customDelegate() const
+    {
+        return m_delegate;
+    }
 
-    virtual ACLRegistry::User user() const { return m_user; }
-    virtual const QString& username() const { return m_username; }
-    
-signals:
+    virtual ACLRegistry::User user() const
+    {
+        return m_user;
+    }
+    virtual const QString& username() const
+    {
+        return m_username;
+    }
+
+  signals:
     void userDecision( ACLRegistry::User user );
 
-public slots:
+  public slots:
     void aclResult( Tomahawk::ACLStatus::Type result );
-    
-private:
+
+  private:
     QStyledItemDelegate* m_delegate;
     ACLRegistry::User m_user;
     const QString m_username;

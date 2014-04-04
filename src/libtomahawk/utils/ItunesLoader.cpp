@@ -24,8 +24,8 @@
 
 using namespace Tomahawk;
 
-ItunesLoader::ItunesLoader( const QString& input, QObject *parent )
-    : QObject(parent)
+ItunesLoader::ItunesLoader( const QString& input, QObject* parent )
+    : QObject( parent )
     , m_itunesLibFile( input )
 {
     /**
@@ -36,14 +36,14 @@ ItunesLoader::ItunesLoader( const QString& input, QObject *parent )
      *  http://support.apple.com/kb/HT1660
      */
 
-    QSettings plist( QUrl::fromUserInput( QString( input.simplified() ) ).toLocalFile(), QSettings::NativeFormat);
+    QSettings plist( QUrl::fromUserInput( QString( input.simplified() ) ).toLocalFile(), QSettings::NativeFormat );
 
     m_ignoreFields << "Library" << "Movies" << "TV Shows" << "Music Videos" << "Genius";
 
     parseTracks( plist.value( "Tracks" ).toMap() );
     parsePlaylists( plist.value( "Playlists" ).toList() );
 
-    foreach ( const QString& name, m_playlists.keys())
+    foreach ( const QString & name, m_playlists.keys() )
     {
         Playlist::create( SourceList::instance()->getLocal(),
                           uuid(),
@@ -62,18 +62,22 @@ ItunesLoader::ItunesLoader( const QString& input, QObject *parent )
 void
 ItunesLoader::parseTracks( const QVariantMap& tracks )
 {
-    foreach ( const QVariant& track, tracks )
+    foreach ( const QVariant & track, tracks )
     {
         QVariantMap trackMap = track.toMap();
         if ( !trackMap.value( "Track ID" ).isValid() )
+        {
             continue;
+        }
 
         const QString artist = trackMap.value( "Artist", "" ).toString();
         const QString title = trackMap.value( "Name", "" ).toString();
         const QString album = trackMap.value( "Album", "" ).toString();
 
         if ( artist.isEmpty() || title.isEmpty() )
+        {
             continue;
+        }
 
         m_tracks.insert( trackMap.value( "Track ID" ).toInt(), Tomahawk::Query::get( artist, title, album ) );
     }
@@ -83,20 +87,24 @@ ItunesLoader::parseTracks( const QVariantMap& tracks )
 void
 ItunesLoader::parsePlaylists( const QVariantList& playlists )
 {
-    foreach ( const QVariant& playlist, playlists )
+    foreach ( const QVariant & playlist, playlists )
     {
         const QString title = playlist.toMap().value( "Name" ).toString();
 
         if ( m_ignoreFields.contains( title ) )
+        {
             continue;
+        }
 
-        foreach ( const QVariant& items, playlist.toMap() )
+        foreach ( const QVariant & items, playlist.toMap() )
         {
             if ( items.toMap().value( "Track ID" ).isValid() )
             {
                 int trackId = items.toMap().value( "Track ID" ).toInt();
                 if ( m_tracks.contains( trackId ) )
+                {
                     m_playlists[title] << m_tracks[ trackId ];
+                }
             }
         }
     }

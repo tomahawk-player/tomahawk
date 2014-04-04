@@ -27,15 +27,24 @@ namespace Tomahawk
 
 class DLLEXPORT ID3v2Tag : public Tag
 {
-public:
-    ID3v2Tag( TagLib::Tag *, TagLib::ID3v2::Tag * );
+  public:
+    ID3v2Tag( TagLib::Tag*, TagLib::ID3v2::Tag* );
 
-    virtual QString albumArtist() const { return m_albumArtist; }
-    virtual QString composer() const { return m_composer; }
-    virtual unsigned int discNumber() const { return m_discNumber; }
+    virtual QString albumArtist() const
+    {
+        return m_albumArtist;
+    }
+    virtual QString composer() const
+    {
+        return m_composer;
+    }
+    virtual unsigned int discNumber() const
+    {
+        return m_discNumber;
+    }
 
-private:
-    TagLib::ID3v2::Tag *m_id3v2Tag;
+  private:
+    TagLib::ID3v2::Tag* m_id3v2Tag;
 };
 
 }

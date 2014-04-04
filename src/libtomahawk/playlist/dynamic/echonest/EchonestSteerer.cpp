@@ -62,10 +62,10 @@ EchonestSteerer::EchonestSteerer( QWidget* parent )
     f.setBold( true );
     m_steerTop->setFont( f );
     m_textL->addWidget( m_steerTop );
-//    m_steerBottom = new QLabel( tr( "Takes effect on track change" ), this );
-//    f.setPointSize( f.pointSize() - 3 );
-//    m_steerBottom->setFont( f );
-//    m_textL->addWidget( m_steerBottom );
+    //    m_steerBottom = new QLabel( tr( "Takes effect on track change" ), this );
+    //    f.setPointSize( f.pointSize() - 3 );
+    //    m_steerBottom->setFont( f );
+    //    m_textL->addWidget( m_steerBottom );
 
 
     QPalette p = m_steerTop->palette();
@@ -88,14 +88,14 @@ EchonestSteerer::EchonestSteerer( QWidget* parent )
     m_amplifier->addItem( tr( "Much more" ), "^2" );
     m_amplifier->setCurrentIndex( 3 );
     m_field = new QComboBox( this );
-    m_field->addItem( tr( "Tempo" ), "tempo");
-    m_field->addItem( tr( "Loudness" ), "loudness");
-    m_field->addItem( tr( "Danceability" ), "danceability");
-    m_field->addItem( tr( "Energy" ), "energy");
-    m_field->addItem( tr( "Song Hotttnesss" ), "tempo");
-    m_field->addItem( tr( "Artist Hotttnesss" ), "artist_hotttnesss");
-    m_field->addItem( tr( "Artist Familiarity" ), "artist_familiarity");
-    m_field->addItem( tr( "By Description" ), "desc");
+    m_field->addItem( tr( "Tempo" ), "tempo" );
+    m_field->addItem( tr( "Loudness" ), "loudness" );
+    m_field->addItem( tr( "Danceability" ), "danceability" );
+    m_field->addItem( tr( "Energy" ), "energy" );
+    m_field->addItem( tr( "Song Hotttnesss" ), "tempo" );
+    m_field->addItem( tr( "Artist Hotttnesss" ), "artist_hotttnesss" );
+    m_field->addItem( tr( "Artist Familiarity" ), "artist_familiarity" );
+    m_field->addItem( tr( "By Description" ), "desc" );
     m_layout->addWidget( m_amplifier );
     m_layout->addWidget( m_field );
 
@@ -156,7 +156,9 @@ EchonestSteerer::setOpacity( qreal opacity )
 {
     m_opacity = opacity;
     if( m_opacity == 0 )
+    {
         hide();
+    }
     repaint();
 }
 
@@ -182,9 +184,11 @@ EchonestSteerer::fadeOut()
 void
 EchonestSteerer::changed()
 {
-    if( m_field->itemData( m_field->currentIndex() ).toString() != "desc" ) {
+    if( m_field->itemData( m_field->currentIndex() ).toString() != "desc" )
+    {
         // if description was shown, animate to shrink
-        if( m_layout->indexOf( m_description ) > 0 ) {
+        if( m_layout->indexOf( m_description ) > 0 )
+        {
             m_expanding = false;
             int start = width();
             int end = start - m_layout->spacing() - m_description->sizeHint().width();;
@@ -196,8 +200,11 @@ EchonestSteerer::changed()
             m_resizeAnim.setFrameRange( start, end );
             m_resizeAnim.start();
         }
-    } else { // description, so put in the description field
-        if( m_layout->indexOf( m_description ) == -1 ) {
+    }
+    else     // description, so put in the description field
+    {
+        if( m_layout->indexOf( m_description ) == -1 )
+        {
             // animate to expand
             m_layout->insertWidget( m_layout->count() - 1, m_description, 1 );
             m_layout->setStretchFactor( m_textL, 0 );
@@ -238,7 +245,7 @@ EchonestSteerer::applySteering()
 void
 EchonestSteerer::resizeFrame( int width )
 {
-//     qDebug() << "RESIZING TO:" << width;
+    //     qDebug() << "RESIZING TO:" << width;
     resize( width, sizeHint().height() );
     repaint();
 
@@ -251,7 +258,8 @@ EchonestSteerer::resetSteering( bool automatic )
 {
     m_amplifier->setCurrentIndex( 3 );
 
-    if( !automatic ) {
+    if( !automatic )
+    {
         m_description->clear();
         m_field->setCurrentIndex( 0 );
         emit reset();

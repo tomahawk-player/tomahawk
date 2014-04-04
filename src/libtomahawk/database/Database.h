@@ -39,17 +39,17 @@ class IdThreadWorker;
 
 class DLLEXPORT DatabaseCommandFactory : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
     friend class Database;
 
-public:
+  public:
     virtual ~DatabaseCommandFactory() {}
     dbcmd_ptr newInstance();
 
-signals:
+  signals:
     void created( const Tomahawk::dbcmd_ptr& command );
 
-protected:
+  protected:
     void notifyCreated( const Tomahawk::dbcmd_ptr& command );
 
     virtual DatabaseCommand* create() const = 0;
@@ -58,8 +58,11 @@ protected:
 template <class COMMAND>
 class DatabaseCommandFactoryImplementation : public DatabaseCommandFactory
 {
-protected:
-    virtual COMMAND* create() const { return new COMMAND(); }
+  protected:
+    virtual COMMAND* create() const
+    {
+        return new COMMAND();
+    }
 };
 
 /*
@@ -74,16 +77,19 @@ protected:
 */
 class DLLEXPORT Database : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     static Database* instance();
 
     explicit Database( const QString& dbname, QObject* parent = 0 );
     ~Database();
 
     void loadIndex();
-    bool isReady() const { return m_ready; }
+    bool isReady() const
+    {
+        return m_ready;
+    }
 
     DatabaseImpl* impl();
 
@@ -100,21 +106,21 @@ public:
         return commandFactoryByClassName( T::staticMetaObject.className() );
     }
 
-signals:
+  signals:
     void indexReady(); // search index
     void ready();
 
     void newJobRO( Tomahawk::dbcmd_ptr );
     void newJobRW( Tomahawk::dbcmd_ptr );
 
-public slots:
+  public slots:
     void enqueue( const Tomahawk::dbcmd_ptr& lc );
     void enqueue( const QList< Tomahawk::dbcmd_ptr >& lc );
 
-private slots:
+  private slots:
     void markAsReady();
 
-private:
+  private:
     void registerCommand( DatabaseCommandFactory* commandFactory );
     DatabaseCommandFactory* commandFactoryByClassName( const QString& className );
     DatabaseCommandFactory* commandFactoryByCommandName( const QString& commandName );

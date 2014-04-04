@@ -74,9 +74,9 @@ const QHash< QString, QObject* > PluginLoader::loadPlugins() const
 
     QHash< QString, QObject* > plugins;
 
-    foreach( const QString& pluginPath, pluginPaths() )
+    foreach( const QString & pluginPath, pluginPaths() )
     {
-//        tDebug() << Q_FUNC_INFO << "Trying to load plugin:" << pluginPath;
+        //        tDebug() << Q_FUNC_INFO << "Trying to load plugin:" << pluginPath;
 
         if ( !QLibrary::isLibrary( pluginPath ) )
         {
@@ -138,18 +138,18 @@ PluginLoader::pluginFilenames( const QString& name ) const
 {
     //TODO: ifdef!
     const QStringList extensions = QStringList()
-            << "so"
-            << "dll"
-            << "dylib";
+                                   << "so"
+                                   << "dll"
+                                   << "dylib";
 
 
     QStringList fileNames;
-    foreach( const QString& extension, extensions )
+    foreach( const QString & extension, extensions )
     {
-        fileNames << QString("libtomahawk_%1_%2.%3")
-                     .arg( d_ptr->type )
-                     .arg( name )
-                     .arg( extension );
+        fileNames << QString( "libtomahawk_%1_%2.%3" )
+                  .arg( d_ptr->type )
+                  .arg( name )
+                  .arg( extension );
     }
 
     return fileNames;
@@ -162,7 +162,7 @@ PluginLoader::pluginPaths( const QString& name ) const
     const QString type = d_ptr->type;
 
     QSet< QString > paths;
-    foreach ( const QDir& pluginDir, pluginDirs() )
+    foreach ( const QDir & pluginDir, pluginDirs() )
     {
         tDebug() << Q_FUNC_INFO << "Checking directory for" << type << "plugins:" << pluginDir;
         foreach ( QString fileName, pluginDir.entryList( pluginFilenames( name ), QDir::Files ) )

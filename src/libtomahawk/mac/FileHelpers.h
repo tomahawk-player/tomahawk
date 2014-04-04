@@ -22,19 +22,19 @@
 #import <Cocoa/Cocoa.h>
 
 // Implement this delegate protocol to get notified about the result of your copy attempt
-@interface NSObject (SUInstallerDelegateInformalProtocol)
-- (void)moveFinished;
-- (void)moveFailedWithError:(NSError *)error;
+@interface NSObject ( SUInstallerDelegateInformalProtocol )
+- ( void )moveFinished;
+- ( void )moveFailedWithError:( NSError* )error;
 @end
 
 @interface FileHelpers : NSObject
 {}
 // Move a file from point A to point B, asking for authentication if necessary
 // Will be asynchronous: Implement the delegate protocol know about the completion
-+ (void) moveFile:(NSString *)source to:(NSString*)dest withDelegate:delegate;
++ ( void ) moveFile:( NSString* )source to:( NSString* )dest withDelegate:delegate;
 
 // Internal
-+ (void)notifyDelegate:(NSDictionary *)info;
++ ( void )notifyDelegate:( NSDictionary* )info;
 
 @end
 

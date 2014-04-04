@@ -38,7 +38,9 @@ SourcePlaylistInterface::SourcePlaylistInterface( Tomahawk::Source* source, Toma
     setLatchMode( latchMode );
 
     if ( !m_source.isNull() )
+    {
         connect( m_source.data(), SIGNAL( playbackStarted( const Tomahawk::track_ptr& ) ), SLOT( onSourcePlaybackStarted( const Tomahawk::track_ptr& ) ) );
+    }
 }
 
 
@@ -52,7 +54,9 @@ void
 SourcePlaylistInterface::setCurrentIndex( qint64 index )
 {
     if ( index == 1 )
+    {
         m_gotNextItem = false;
+    }
 }
 
 
@@ -60,9 +64,13 @@ qint64
 SourcePlaylistInterface::indexOfResult( const Tomahawk::result_ptr& result ) const
 {
     if ( nextResult() == result )
+    {
         return 1;
+    }
     else
+    {
         return -1;
+    }
 }
 
 
@@ -73,9 +81,13 @@ SourcePlaylistInterface::siblingIndex( int itemsAway, qint64 rootIndex ) const
     Q_UNUSED( rootIndex );
 
     if ( nextResult() )
+    {
         return 1;
+    }
     else
+    {
         return -1;
+    }
 }
 
 
@@ -99,7 +111,9 @@ SourcePlaylistInterface::nextResult() const
         m_currentItem = m_source.data()->currentTrack()->results().first();
     }
     else
+    {
         m_currentItem = result_ptr();
+    }
 
     return m_currentItem;
 }
@@ -117,7 +131,9 @@ SourcePlaylistInterface::sourceValid() const
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     if ( m_source.isNull() || m_source.data()->currentTrack().isNull() )
+    {
         return false;
+    }
 
     return true;
 }
@@ -127,7 +143,9 @@ bool
 SourcePlaylistInterface::hasNextResult() const
 {
     if ( !sourceValid() )
+    {
         return false;
+    }
 
     return m_gotNextItem;
 }
@@ -138,7 +156,9 @@ SourcePlaylistInterface::tracks() const
 {
     QList<Tomahawk::query_ptr> tracks;
     if ( nextResult() )
+    {
         tracks << nextResult()->toQuery();
+    }
 
     return tracks;
 }
@@ -155,9 +175,13 @@ void
 SourcePlaylistInterface::reset()
 {
     if ( m_currentItem.isNull() )
+    {
         m_gotNextItem = false;
+    }
     else
+    {
         m_gotNextItem = true;
+    }
 }
 
 
@@ -195,7 +219,9 @@ SourcePlaylistInterface::queryAt( qint64 index ) const
         return res->toQuery();
     }
     else
+    {
         return Tomahawk::query_ptr();
+    }
 }
 
 
@@ -203,7 +229,11 @@ Tomahawk::result_ptr
 SourcePlaylistInterface::resultAt( qint64 index ) const
 {
     if ( index == 1 )
+    {
         return nextResult();
+    }
     else
+    {
         return Tomahawk::result_ptr();
+    }
 }

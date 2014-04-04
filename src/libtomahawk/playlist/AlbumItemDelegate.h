@@ -27,7 +27,8 @@
 #include "DllMacro.h"
 #include "Typedefs.h"
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 class PixmapDelegateFader;
 }
 
@@ -37,17 +38,17 @@ class TrackView;
 
 class DLLEXPORT AlbumItemDelegate : public PlaylistItemDelegate
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     AlbumItemDelegate( TrackView* parent = 0, PlayableProxyModel* proxy = 0, bool showArtist = false );
 
     virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
-protected:
+  protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
-private:
+  private:
     TrackView* m_view;
     PlayableProxyModel* m_model;
     bool m_showArtist;

@@ -40,7 +40,9 @@ void
 ProxyStyle::polish( QPalette& pal )
 {
     if( !m_interceptPolish )
+    {
         QProxyStyle::polish( pal );
+    }
 }
 
 void
@@ -77,7 +79,9 @@ ProxyStyle::drawPrimitive( PrimitiveElement pe, const QStyleOption* opt, QPainte
     }
 
     if ( pe != PE_FrameStatusBar )
+    {
         QProxyStyle::drawPrimitive( pe, opt, p, w );
+    }
 }
 
 
@@ -116,21 +120,29 @@ ProxyStyle::drawControl( ControlElement ce, const QStyleOption* opt, QPainter* p
         }
     }
     else
+    {
         QProxyStyle::drawControl( ce, opt, p, w );
+    }
 }
 
 
 QSize
-ProxyStyle::sizeFromContents( QStyle::ContentsType type, const QStyleOption *option, const QSize &size, const QWidget *widget ) const
+ProxyStyle::sizeFromContents( QStyle::ContentsType type, const QStyleOption* option, const QSize& size, const QWidget* widget ) const
 {
     if ( type == CT_Splitter )
     {
         const QSplitter* splitter = qobject_cast< const QSplitter* >( widget );
         if ( splitter->orientation() == Qt::Horizontal )
+        {
             return QSize( 2, size.height() );
+        }
         else
+        {
             return QSize( size.width(), 2 );
+        }
     }
     else
+    {
         return QProxyStyle::sizeFromContents( type, option, size, widget );
+    }
 }

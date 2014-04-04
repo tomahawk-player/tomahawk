@@ -26,7 +26,7 @@
 
 namespace Ui
 {
-    class XmppConfigWidget;
+class XmppConfigWidget;
 }
 
 namespace Tomahawk
@@ -43,24 +43,24 @@ class ACCOUNTDLLEXPORT XmppConfigWidget : public AccountConfigWidget
 {
     Q_OBJECT
 
-public:
-    explicit XmppConfigWidget( XmppAccount* account = 0, QWidget *parent = 0 );
+  public:
+    explicit XmppConfigWidget( XmppAccount* account = 0, QWidget* parent = 0 );
     virtual ~XmppConfigWidget();
 
     void saveConfig();
 
     virtual void checkForErrors();
 
-signals:
+  signals:
     void dataError( bool exists );
 
-private slots:
+  private slots:
     void onCheckJidExists( const QString& jid );
     void launchExternalConfigDialog();
 
-private:
-    Ui::XmppConfigWidget *m_ui;
-    XmppAccount *m_account;
+  private:
+    Ui::XmppConfigWidget* m_ui;
+    XmppAccount* m_account;
 
     bool m_serverWasEditedByUser;
 

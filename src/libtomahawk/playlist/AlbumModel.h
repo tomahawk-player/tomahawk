@@ -34,13 +34,16 @@ class QMetaData;
 
 class DLLEXPORT AlbumModel : public PlayableModel
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit AlbumModel( QObject* parent = 0 );
     virtual ~AlbumModel();
 
-    Tomahawk::collection_ptr collection() const { return m_collection; }
+    Tomahawk::collection_ptr collection() const
+    {
+        return m_collection;
+    }
 
     void addCollection( const Tomahawk::collection_ptr& collection, bool overwrite = false );
     void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, Tomahawk::DatabaseCommand_AllAlbums::SortOrder order, bool overwrite = false );
@@ -48,18 +51,18 @@ public:
     PlayableItem* findItem( const Tomahawk::artist_ptr& artist ) const;
     PlayableItem* findItem( const Tomahawk::album_ptr& album ) const;
 
-public slots:
+  public slots:
     void addAlbums( const QList<Tomahawk::album_ptr>& albums );
     void addArtists( const QList<Tomahawk::artist_ptr>& artists );
     void addQueries( const QList<Tomahawk::query_ptr>& queries );
 
-signals:
+  signals:
 
-private slots:
+  private slots:
     void onSourceAdded( const Tomahawk::source_ptr& source );
     void onCollectionChanged();
 
-private:
+  private:
     bool m_overwriteOnAdd;
 
     Tomahawk::collection_ptr m_collection;

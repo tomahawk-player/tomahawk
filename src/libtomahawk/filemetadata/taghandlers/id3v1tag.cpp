@@ -21,7 +21,7 @@
 namespace Tomahawk
 {
 
-ID3v1Tag::ID3v1Tag( TagLib::Tag *tag )
+ID3v1Tag::ID3v1Tag( TagLib::Tag* tag )
     : Tag( tag )
 {}
 

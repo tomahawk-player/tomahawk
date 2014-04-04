@@ -25,7 +25,7 @@
 class InboxItem : public SourceTreeItem
 {
     Q_OBJECT
-public:
+  public:
     explicit InboxItem( SourcesModel* model, SourceTreeItem* parent );
     virtual ~InboxItem();
 
@@ -36,10 +36,10 @@ public:
 
     int unlistenedCount() const;
 
-public slots:
+  public slots:
     virtual void activate();
 
-private:
+  private:
     int m_sortValue;
     QIcon m_icon;
     QString m_text;

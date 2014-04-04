@@ -25,28 +25,30 @@
 #include <QWeakPointer>
 
 
-namespace Tomahawk {
-namespace Utils {
+namespace Tomahawk
+{
+namespace Utils
+{
 
 class WeakObjectListBase
 {
-public:
+  public:
     virtual void remove( QObject* object );
     virtual ~WeakObjectListBase();
-protected:
+  protected:
     WeakObjectListBase() {}
 };
 
 class WeakObjectListPrivate : public QObject
 {
     Q_OBJECT
-public:
+  public:
     WeakObjectListPrivate( WeakObjectListBase* parent );
 
-public slots:
+  public slots:
     void remove( QObject* object );
 
-private:
+  private:
     WeakObjectListBase* m_parent;
 };
 
@@ -54,7 +56,7 @@ template<class T>
 class WeakObjectList : public WeakObjectListBase
 {
     typedef QWeakPointer<T> wptr;
-public:
+  public:
     WeakObjectList() : m_private( this ) {}
 
     WeakObjectList( const WeakObjectList& list )
@@ -65,12 +67,18 @@ public:
 
     void insert( const QSharedPointer<T>& value )
     {
-        m_private.connect( value.data(), SIGNAL( destroyed( QObject* ) ), &m_private, SLOT( remove( QObject* )) );
+        m_private.connect( value.data(), SIGNAL( destroyed( QObject* ) ), &m_private, SLOT( remove( QObject* ) ) );
         m_list.append( value.toWeakRef() );
     }
 
-    const QList<wptr>& list() { return m_list; }
-    QMutableListIterator< wptr > iter() { return QMutableListIterator< wptr >( m_list ); }
+    const QList<wptr>& list()
+    {
+        return m_list;
+    }
+    QMutableListIterator< wptr > iter()
+    {
+        return QMutableListIterator< wptr >( m_list );
+    }
     virtual void remove( QObject* object )
     {
         QMutableListIterator< wptr > iter( m_list );
@@ -84,7 +92,7 @@ public:
         }
     }
 
-private:
+  private:
     QList< wptr > m_list;
     WeakObjectListPrivate m_private;
 };

@@ -28,7 +28,7 @@
 #include "AvatarManager.h"
 
 #ifndef ENABLE_HEADLESS
-    #include "XmlConsole.h"
+#include "XmlConsole.h"
 #endif
 
 #include "accounts/AccountDllMacro.h"
@@ -51,7 +51,7 @@
 #include <jreen/pubsubmanager.h>
 
 #ifndef ENABLE_HEADLESS
-    #include <QMessageBox>
+#include <QMessageBox>
 #endif
 
 
@@ -59,14 +59,17 @@ class ACCOUNTDLLEXPORT XmppSipPlugin : public SipPlugin
 {
     Q_OBJECT
 
-friend class Tomahawk::InfoSystem::XmppInfoPlugin;
+    friend class Tomahawk::InfoSystem::XmppInfoPlugin;
 
-public:
+  public:
     XmppSipPlugin( Tomahawk::Accounts::Account* account );
     virtual ~XmppSipPlugin();
 
     //FIXME: Make this more correct
-    virtual bool isValid() const { return true; }
+    virtual bool isValid() const
+    {
+        return true;
+    }
     virtual QString inviteString() const;
 
     Tomahawk::InfoSystem::InfoPluginPtr infoPlugin();
@@ -78,14 +81,14 @@ public:
     // used by XmppAccount to expose connection state and controls
     Tomahawk::Accounts::Account::ConnectionState connectionState() const;
 
-signals:
+  signals:
     void jidChanged( const QString& );
 
     // Used by XmppAccount
     void stateChanged( Tomahawk::Accounts::Account::ConnectionState state );
     void error( int errorId, const QString& errorStr );
 
-public slots:
+  public slots:
     virtual void connectPlugin();
     virtual void disconnectPlugin();
     virtual void checkSettings();
@@ -97,10 +100,10 @@ public slots:
     void showAddFriendDialog();
     void publishTune( const QUrl& url, const Tomahawk::InfoSystem::InfoStringHash& trackInfo );
 
-protected:
+  protected:
     virtual QString defaultSuffix() const;
 
-private slots:
+  private slots:
     void showXmlConsole();
     void onConnect();
     void onDisconnect( Jreen::Client::DisconnectReason reason );
@@ -114,7 +117,7 @@ private slots:
     void onNewIq( const Jreen::IQ& iq );
     void onNewAvatar( const QString& jid );
 
-private:
+  private:
     bool readXmlConsoleEnabled();
     QString readUsername();
     QString readPassword();

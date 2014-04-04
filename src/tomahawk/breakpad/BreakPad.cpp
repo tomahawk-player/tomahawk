@@ -41,15 +41,21 @@ LaunchUploader( const char* dump_dir, const char* minidump_id, void* that, bool 
     // So that indeed means, no QStrings, no qDebug(), no QAnything, seriously!
 
     if ( !succeeded )
+    {
         return false;
+    }
 
-    const char* crashReporter = static_cast<BreakPad*>(that)->crashReporter();
+    const char* crashReporter = static_cast<BreakPad*>( that )->crashReporter();
     if ( !s_active || strlen( crashReporter ) == 0 )
+    {
         return false;
+    }
 
     pid_t pid = fork();
     if ( pid == -1 ) // fork failed
+    {
         return false;
+    }
     if ( pid == 0 )
     {
         // we are the fork
@@ -58,7 +64,7 @@ LaunchUploader( const char* dump_dir, const char* minidump_id, void* that, bool 
                dump_dir,
                minidump_id,
                minidump_id,
-               (char*) 0 );
+               ( char* ) 0 );
 
         // execl replaces this process, so no more code will be executed
         // unless it failed. If it failed, then we should return false.
@@ -85,11 +91,17 @@ BreakPad::BreakPad( const QString& path, bool active )
     QString globalReporter = QString( "%1/%2" ).arg( CMAKE_INSTALL_FULL_LIBEXECDIR ).arg( CRASH_REPORTER_BINARY );
 
     if ( QFileInfo( localReporter ).exists() )
+    {
         reporter = localReporter;
+    }
     else if ( QFileInfo( globalReporter ).exists() )
+    {
         reporter = globalReporter;
+    }
     else
+    {
         qDebug() << "Could not find \"" CRASH_REPORTER_BINARY "\" in \"" CMAKE_INSTALL_FULL_LIBEXECDIR "\" or application path";
+    }
 
     char* creporter;
     std::string sreporter = reporter.toStdString();
@@ -104,28 +116,30 @@ BreakPad::BreakPad( const QString& path, bool active )
 
 
 static bool
-LaunchUploader( const wchar_t* dump_dir, const wchar_t* minidump_id, void* that, EXCEPTION_POINTERS *exinfo, MDRawAssertionInfo *assertion, bool succeeded )
+LaunchUploader( const wchar_t* dump_dir, const wchar_t* minidump_id, void* that, EXCEPTION_POINTERS* exinfo, MDRawAssertionInfo* assertion, bool succeeded )
 {
     if ( !succeeded )
+    {
         return false;
+    }
 
     // DON'T USE THE HEAP!!!
     // So that indeed means, no QStrings, no qDebug(), no QAnything, seriously!
 
-// broken in mingw, hardcode it for now
+    // broken in mingw, hardcode it for now
 
     //     const char* productName = static_cast<BreakPad*>(that)->productName();s
     // convert productName to widechars, which sadly means the product name must be Latin1
 
     wchar_t product_name[ 256 ] = L"tomahawk";;
 
-//     char* out = (char*)product_name;
-//     const char* in = productName - 1;
-//     do {
-//         *out++ = *++in; //latin1 chars fit in first byte of each wchar
-//         *out++ = '\0';  //every second byte is NULL
-//     }
-//     while (*in);
+    //     char* out = (char*)product_name;
+    //     const char* in = productName - 1;
+    //     do {
+    //         *out++ = *++in; //latin1 chars fit in first byte of each wchar
+    //         *out++ = '\0';  //every second byte is NULL
+    //     }
+    //     while (*in);
 
     wchar_t command[MAX_PATH * 3 + 6];
     wcscpy( command, CRASH_REPORTER_BINARY L" \"" );
@@ -140,10 +154,10 @@ LaunchUploader( const wchar_t* dump_dir, const wchar_t* minidump_id, void* that,
     PROCESS_INFORMATION pi;
 
     ZeroMemory( &si, sizeof( si ) );
-    si.cb = sizeof(si);
+    si.cb = sizeof( si );
     si.dwFlags = STARTF_USESHOWWINDOW;
     si.wShowWindow = SW_SHOWNORMAL;
-    ZeroMemory( &pi, sizeof(pi) );
+    ZeroMemory( &pi, sizeof( pi ) );
 
     if ( CreateProcess( NULL, command, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi ) )
     {

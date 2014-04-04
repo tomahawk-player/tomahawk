@@ -39,16 +39,22 @@ struct IndexData
 
 class DLLEXPORT DatabaseCommand_UpdateSearchIndex : public DatabaseCommand
 {
-Q_OBJECT
-public:
+    Q_OBJECT
+  public:
     explicit DatabaseCommand_UpdateSearchIndex();
     virtual ~DatabaseCommand_UpdateSearchIndex();
 
-    virtual QString commandname() const { return "updatesearchindex"; }
-    virtual bool doesMutates() const { return true; }
+    virtual QString commandname() const
+    {
+        return "updatesearchindex";
+    }
+    virtual bool doesMutates() const
+    {
+        return true;
+    }
     virtual void exec( DatabaseImpl* db );
 
-private:
+  private:
     QPointer<IndexingJobItem> m_statusJob;
 };
 

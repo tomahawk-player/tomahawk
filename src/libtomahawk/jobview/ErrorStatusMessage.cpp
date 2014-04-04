@@ -24,8 +24,8 @@
 
 
 ErrorStatusMessage::ErrorStatusMessage( const QString& message, int timeoutSecs )
-  : JobStatusItem()
-  , m_message( message )
+    : JobStatusItem()
+    , m_message( message )
 {
     m_timer = new QTimer( this );
     m_timer->setInterval( timeoutSecs * 1000 );

@@ -41,9 +41,9 @@ namespace Tomahawk
  */
 class DLLEXPORT DatabaseCommand_LoadTrackAttributes : public DatabaseCommand
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     /**
      * \brief Overloaded constructor for DatabaseCommand_LoadTrackAttributes.
      * \param result A Tomahawk Query object.
@@ -61,7 +61,10 @@ public:
      * \brief Returns the name of this database command.
      * \return QString containing the database command name 'loadtrackattributes'.
      */
-    virtual QString commandname() const { return "loadtrackattributes"; }
+    virtual QString commandname() const
+    {
+        return "loadtrackattributes";
+    }
 
     /**
      * \brief Executes the database command.
@@ -74,12 +77,15 @@ public:
      */
     virtual void exec( DatabaseImpl* );
 
-    virtual bool doesMutates() const { return false; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
 
-signals:
+  signals:
     void done();
 
-private:
+  private:
     Tomahawk::trackdata_ptr m_track;
 };
 

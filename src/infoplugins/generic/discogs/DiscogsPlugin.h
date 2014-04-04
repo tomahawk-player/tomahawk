@@ -39,21 +39,21 @@ class INFOPLUGINDLLEXPORT DiscogsPlugin : public InfoPlugin
     Q_OBJECT
     Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 
-public:
+  public:
     DiscogsPlugin();
     virtual ~DiscogsPlugin();
 
-protected slots:
+  protected slots:
     virtual void init() {}
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     virtual void notInCacheSlot( InfoStringHash criteria, InfoRequestData requestData );
 
     virtual void pushInfo( Tomahawk::InfoSystem::InfoPushData ) {}
-private slots:
-    void albumSearchSlot( const Tomahawk::InfoSystem::InfoRequestData& , QNetworkReply* );
-    void albumInfoSlot( const Tomahawk::InfoSystem::InfoRequestData& , QNetworkReply* );
+  private slots:
+    void albumSearchSlot( const Tomahawk::InfoSystem::InfoRequestData&, QNetworkReply* );
+    void albumInfoSlot( const Tomahawk::InfoSystem::InfoRequestData&, QNetworkReply* );
 
-private:
+  private:
     bool isValidTrackData( Tomahawk::InfoSystem::InfoRequestData requestData );
 };
 

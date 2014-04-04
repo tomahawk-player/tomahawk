@@ -30,24 +30,24 @@ class QSearchField;
 class DLLEXPORT FilterHeader : public BasicHeader
 {
     Q_OBJECT
-public:
-    explicit FilterHeader( QWidget *parent = 0 );
+  public:
+    explicit FilterHeader( QWidget* parent = 0 );
     virtual ~FilterHeader();
-    
-public slots:
+
+  public slots:
     void setFilter( const QString& filter );
 
-signals:
+  signals:
     void filterTextChanged( const QString& filter );
 
-private slots:
+  private slots:
     void onFilterEdited();
     void applyFilter();
 
-protected:
+  protected:
     QSearchField* m_filterField;
 
-private:
+  private:
     QString m_filter;
     QTimer m_filterTimer;
 };

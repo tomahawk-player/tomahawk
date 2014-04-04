@@ -26,7 +26,7 @@ class TestQuery : public QObject
 {
     Q_OBJECT
 
-private slots:
+  private slots:
     void testGet()
     {
         Tomahawk::query_ptr q = Tomahawk::Query::get( "", "", "" );

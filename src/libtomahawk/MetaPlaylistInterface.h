@@ -31,9 +31,9 @@ namespace Tomahawk
 
 class DLLEXPORT MetaPlaylistInterface : public PlaylistInterface
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit MetaPlaylistInterface();
     virtual ~MetaPlaylistInterface();
 
@@ -53,11 +53,11 @@ public:
 
     virtual bool hasChildInterface( const Tomahawk::playlistinterface_ptr& interface );
 
-public slots:
+  public slots:
     virtual void setRepeatMode( PlaylistModes::RepeatMode mode );
     virtual void setShuffled( bool enabled );
 
-private:
+  private:
     QList< Tomahawk::playlistinterface_ptr > m_childInterfaces;
 };
 

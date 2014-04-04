@@ -36,11 +36,13 @@ ChartDataLoader::go()
         case Track:
         {
             QList< query_ptr > track_ptrs;
-            foreach ( const Tomahawk::InfoSystem::InfoStringHash& track, m_data )
+            foreach ( const Tomahawk::InfoSystem::InfoStringHash & track, m_data )
             {
                 query_ptr q = Query::get( track[ "artist" ], track[ "track" ], QString(), uuid(), false );
                 if ( q.isNull() )
+                {
                     continue;
+                }
 
                 const QString url = track[ "streamUrl" ];
                 if ( !url.isEmpty() )
@@ -59,7 +61,7 @@ ChartDataLoader::go()
         {
             QList< artist_ptr > artist_ptrs;
 
-            foreach ( const QString& artistname, m_artists )
+            foreach ( const QString & artistname, m_artists )
             {
                 artist_ptrs << Artist::get( artistname, false );
             }
@@ -71,10 +73,12 @@ ChartDataLoader::go()
         {
             QList< album_ptr > album_ptrs;
 
-            foreach ( const Tomahawk::InfoSystem::InfoStringHash& album, m_data )
+            foreach ( const Tomahawk::InfoSystem::InfoStringHash & album, m_data )
             {
                 if ( album["artist"].isEmpty() )
+                {
                     continue;
+                }
 
                 artist_ptr artistPtr = Artist::get( album[ "artist" ], false );
                 album_ptr albumPtr = Album::get( artistPtr, album[ "album" ], false );

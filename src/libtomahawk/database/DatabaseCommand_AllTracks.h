@@ -38,9 +38,10 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCommand_AllTracks : public DatabaseCommand, public Tomahawk::TracksRequest
 {
-Q_OBJECT
-public:
-    enum SortOrder {
+    Q_OBJECT
+  public:
+    enum SortOrder
+    {
         None = 0,
         Album = 1,
         ModificationTime = 2,
@@ -59,24 +60,48 @@ public:
 
     virtual void exec( DatabaseImpl* );
 
-    virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "alltracks"; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
+    virtual QString commandname() const
+    {
+        return "alltracks";
+    }
 
-    virtual void enqueue() { Database::instance()->enqueue( Tomahawk::dbcmd_ptr( this ) ); }
+    virtual void enqueue()
+    {
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr( this ) );
+    }
 
-    void setArtist( const Tomahawk::artist_ptr& artist ) { m_artist = artist; }
-    void setAlbum( const Tomahawk::album_ptr& album ) { m_album = album; }
+    void setArtist( const Tomahawk::artist_ptr& artist )
+    {
+        m_artist = artist;
+    }
+    void setAlbum( const Tomahawk::album_ptr& album )
+    {
+        m_album = album;
+    }
 
-    void setLimit( unsigned int amount ) { m_amount = amount; }
-    void setSortOrder( DatabaseCommand_AllTracks::SortOrder order ) { m_sortOrder = order; }
-    void setSortDescending( bool descending ) { m_sortDescending = descending; }
+    void setLimit( unsigned int amount )
+    {
+        m_amount = amount;
+    }
+    void setSortOrder( DatabaseCommand_AllTracks::SortOrder order )
+    {
+        m_sortOrder = order;
+    }
+    void setSortDescending( bool descending )
+    {
+        m_sortDescending = descending;
+    }
 
-signals:
+  signals:
     void tracks( const QList<Tomahawk::query_ptr>&, const QVariant& data );
     void tracks( const QList<Tomahawk::query_ptr>& );
     void done( const Tomahawk::collection_ptr& );
 
-private:
+  private:
     Tomahawk::collection_ptr m_collection;
 
     Tomahawk::artist_ptr m_artist;

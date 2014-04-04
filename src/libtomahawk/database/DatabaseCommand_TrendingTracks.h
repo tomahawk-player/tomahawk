@@ -22,7 +22,8 @@
 #include "Track.h"
 #include "database/DatabaseCommand.h"
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
 class DatabaseCommand_TrendingTracksPrivate;
 
@@ -43,21 +44,27 @@ class DatabaseCommand_TrendingTracksPrivate;
 class DLLEXPORT DatabaseCommand_TrendingTracks : public Tomahawk::DatabaseCommand
 {
     Q_OBJECT
-public:
+  public:
     explicit DatabaseCommand_TrendingTracks( QObject* parent = 0 );
     virtual ~DatabaseCommand_TrendingTracks();
 
     virtual void exec( DatabaseImpl* );
 
-    virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "trendingtracks"; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
+    virtual QString commandname() const
+    {
+        return "trendingtracks";
+    }
 
     void setLimit( unsigned int amount );
 
-signals:
+  signals:
     void done( const QList<QPair< double, Tomahawk::track_ptr > >& tracks );
 
-private:
+  private:
     Q_DECLARE_PRIVATE( DatabaseCommand_TrendingTracks )
 };
 

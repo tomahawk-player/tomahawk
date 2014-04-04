@@ -49,13 +49,13 @@ DatabaseCommand_loadOps::exec( DatabaseImpl* dbi )
 
     TomahawkSqlQuery query = dbi->newquery();
     query.prepare( QString(
-                   "SELECT guid, command, json, compressed, singleton "
-                   "FROM oplog "
-                   "WHERE source %1 "
-                   "AND id > coalesce((SELECT id FROM oplog WHERE guid = ?),0) "
-                   "ORDER BY id ASC"
+                       "SELECT guid, command, json, compressed, singleton "
+                       "FROM oplog "
+                       "WHERE source %1 "
+                       "AND id > coalesce((SELECT id FROM oplog WHERE guid = ?),0) "
+                       "ORDER BY id ASC"
                    ).arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) )
-                  );
+                 );
     query.addBindValue( m_since );
     query.exec();
 
@@ -73,7 +73,7 @@ DatabaseCommand_loadOps::exec( DatabaseImpl* dbi )
         ops << op;
     }
 
-//    qDebug() << "Loaded" << ops.length() << "ops from db";
+    //    qDebug() << "Loaded" << ops.length() << "ops from db";
     emit done( m_since, lastguid, ops );
 }
 

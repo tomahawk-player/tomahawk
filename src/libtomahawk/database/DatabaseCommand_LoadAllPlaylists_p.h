@@ -31,7 +31,7 @@ namespace Tomahawk
 
 class DatabaseCommand_LoadAllPlaylistsPrivate: public DatabaseCommandPrivate
 {
-public:
+  public:
     DatabaseCommand_LoadAllPlaylistsPrivate( DatabaseCommand_LoadAllPlaylists* q, const source_ptr& s )
         : DatabaseCommandPrivate( q, s )
         , limitAmount( 0 )
@@ -43,7 +43,7 @@ public:
 
     Q_DECLARE_PUBLIC( DatabaseCommand_LoadAllPlaylists )
 
-private:
+  private:
     unsigned int limitAmount;
     bool returnPlEntryIds;
     DatabaseCommand_LoadAllPlaylists::SortOrder sortOrder;

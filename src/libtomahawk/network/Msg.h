@@ -43,7 +43,7 @@ class Msg
 {
     friend class MsgProcessor;
 
-public:
+  public:
     enum Flag
     {
         RAW = 1,
@@ -76,7 +76,7 @@ public:
     /**
      * frames the msg and writes to the wire:
      */
-    bool write( QIODevice * device );
+    bool write( QIODevice* device );
 
     // len(4) + flags(1)
     static quint8 headerSize();
@@ -91,7 +91,7 @@ public:
 
     char flags() const;
 
-private:
+  private:
     /**
      * Used when constructing Msg you wish to send
      */

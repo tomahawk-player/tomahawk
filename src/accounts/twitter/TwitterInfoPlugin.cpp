@@ -60,8 +60,8 @@ TwitterInfoPlugin::init()
 
     if ( refreshTwitterAuth() )
     {
-        QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
-        connect( credVerifier, SIGNAL( parsedUser( const QTweetUser & ) ), SLOT( connectAuthVerifyReply( const QTweetUser & ) ) );
+        QTweetAccountVerifyCredentials* credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
+        connect( credVerifier, SIGNAL( parsedUser( const QTweetUser& ) ), SLOT( connectAuthVerifyReply( const QTweetUser& ) ) );
         credVerifier->verify();
     }
 }
@@ -78,14 +78,18 @@ TwitterInfoPlugin::refreshTwitterAuth()
 {
     tDebug() << Q_FUNC_INFO << "begin" << this;
     if ( !m_twitterAuth.isNull() )
+    {
         delete m_twitterAuth.data();
+    }
 
     Q_ASSERT( TomahawkUtils::nam() != 0 );
     tDebug() << Q_FUNC_INFO << "with nam" << TomahawkUtils::nam() << this;
     m_twitterAuth = QPointer< TomahawkOAuthTwitter >( new TomahawkOAuthTwitter( TomahawkUtils::nam(), this ) );
 
     if ( m_twitterAuth.isNull() )
-      return false;
+    {
+        return false;
+    }
 
     m_twitterAuth.data()->setOAuthToken( m_account->credentials()[ "oauthtoken" ].toString().toLatin1() );
     m_twitterAuth.data()->setOAuthTokenSecret( m_account->credentials()[ "oauthtokensecret" ].toString().toLatin1() );
@@ -95,7 +99,7 @@ TwitterInfoPlugin::refreshTwitterAuth()
 
 
 void
-TwitterInfoPlugin::connectAuthVerifyReply( const QTweetUser &user )
+TwitterInfoPlugin::connectAuthVerifyReply( const QTweetUser& user )
 {
     if ( user.id() == 0 )
     {
@@ -157,18 +161,20 @@ TwitterInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
     {
         info = map[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
         msg = tr( "Listening to \"%1\" by %2 and loving it! %3" )
-                .arg( info[ "title" ] )
-                .arg( info[ "artist" ] )
-                .arg( pushInfoPair.first.contains( "shorturl" ) ?
-                        pushInfoPair.first[ "shorturl" ].toUrl().toString() :
-                        GlobalActionManager::instance()->openLink( info[ "title" ], info[ "artist" ], info[ "album" ] ).toString() );
+              .arg( info[ "title" ] )
+              .arg( info[ "artist" ] )
+              .arg( pushInfoPair.first.contains( "shorturl" ) ?
+                    pushInfoPair.first[ "shorturl" ].toUrl().toString() :
+                    GlobalActionManager::instance()->openLink( info[ "title" ], info[ "artist" ], info[ "album" ] ).toString() );
     }
     else
+    {
         msg = map[ "message" ].toString();
+    }
 
-    QTweetStatusUpdate *statUpdate = new QTweetStatusUpdate( m_twitterAuth.data(), this );
-    connect( statUpdate, SIGNAL( postedStatus(const QTweetStatus &) ), SLOT( postLovedStatusUpdateReply(const QTweetStatus &) ) );
-    connect( statUpdate, SIGNAL( error(QTweetNetBase::ErrorCode, const QString&) ), SLOT( postLovedStatusUpdateError(QTweetNetBase::ErrorCode, const QString &) ) );
+    QTweetStatusUpdate* statUpdate = new QTweetStatusUpdate( m_twitterAuth.data(), this );
+    connect( statUpdate, SIGNAL( postedStatus( const QTweetStatus& ) ), SLOT( postLovedStatusUpdateReply( const QTweetStatus& ) ) );
+    connect( statUpdate, SIGNAL( error( QTweetNetBase::ErrorCode, const QString& ) ), SLOT( postLovedStatusUpdateError( QTweetNetBase::ErrorCode, const QString& ) ) );
     tDebug() << Q_FUNC_INFO << "Posting message:" << msg;
     statUpdate->post( msg );
 }
@@ -178,9 +184,13 @@ void
 TwitterInfoPlugin::postLovedStatusUpdateReply( const QTweetStatus& status )
 {
     if ( status.id() == 0 )
+    {
         tDebug() << Q_FUNC_INFO << "Failed to post loved status";
+    }
     else
+    {
         tDebug() << Q_FUNC_INFO << "Successfully posted loved status";
+    }
 }
 
 

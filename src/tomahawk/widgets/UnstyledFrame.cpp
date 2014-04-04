@@ -38,7 +38,7 @@ UnstyledFrame::paintEvent( QPaintEvent* event )
 }
 
 
-void UnstyledFrame::setFrameColor(const QColor& color)
+void UnstyledFrame::setFrameColor( const QColor& color )
 {
     m_frameColor = color;
     repaint();

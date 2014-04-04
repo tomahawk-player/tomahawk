@@ -30,11 +30,11 @@
 
 namespace Tomahawk
 {
-    class ExternalResolverGui;
+class ExternalResolverGui;
 
 namespace InfoSystem
 {
-    class LastFmInfoPlugin;
+class LastFmInfoPlugin;
 }
 
 namespace Accounts
@@ -45,17 +45,35 @@ class LastFmConfig;
 class DLLEXPORT LastFmAccountFactory : public AccountFactory
 {
     Q_OBJECT
-public:
+  public:
     LastFmAccountFactory();
 
-    virtual Account* createAccount(const QString& accountId = QString());
-    virtual QString description() const { return tr( "Scrobble your tracks to last.fm, and find freely downloadable tracks to play" ); }
-    virtual QString factoryId() const { return "lastfmaccount"; }
-    virtual QString prettyName() const { return "Last.fm"; }
-    virtual AccountTypes types() const { return AccountTypes( InfoType | StatusPushType ); }
-    virtual bool allowUserCreation() const { return false; }
+    virtual Account* createAccount( const QString& accountId = QString() );
+    virtual QString description() const
+    {
+        return tr( "Scrobble your tracks to last.fm, and find freely downloadable tracks to play" );
+    }
+    virtual QString factoryId() const
+    {
+        return "lastfmaccount";
+    }
+    virtual QString prettyName() const
+    {
+        return "Last.fm";
+    }
+    virtual AccountTypes types() const
+    {
+        return AccountTypes( InfoType | StatusPushType );
+    }
+    virtual bool allowUserCreation() const
+    {
+        return false;
+    }
     virtual QPixmap icon() const;
-    virtual bool isUnique() const { return true; }
+    virtual bool isUnique() const
+    {
+        return true;
+    }
 };
 
 /**
@@ -66,21 +84,27 @@ public:
 class DLLEXPORT LastFmAccount : public CustomAtticaAccount
 {
     Q_OBJECT
-public:
+  public:
     explicit LastFmAccount( const QString& accountId );
     ~LastFmAccount();
 
     virtual void deauthenticate();
     virtual void authenticate();
 
-    virtual SipPlugin* sipPlugin( bool ) { return 0; }
+    virtual SipPlugin* sipPlugin( bool )
+    {
+        return 0;
+    }
     virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin();
 
     virtual bool isAuthenticated() const;
 
     virtual ConnectionState connectionState() const;
     virtual QPixmap icon() const;
-    virtual QWidget* aclWidget() { return 0; }
+    virtual QWidget* aclWidget()
+    {
+        return 0;
+    }
     virtual AccountConfigWidget* configurationWidget();
     virtual void saveConfig();
 
@@ -95,13 +119,13 @@ public:
 
     Attica::Content atticaContent() const;
 
-private slots:
+  private slots:
     void atticaLoaded( Attica::Content::List );
 
     void resolverInstalled( const QString& resolverId );
 
     void resolverChanged();
-private:
+  private:
     void hookupResolver();
 
     QPointer<Tomahawk::ExternalResolverGui> m_resolver;

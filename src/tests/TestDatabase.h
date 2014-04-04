@@ -27,18 +27,21 @@
 
 class TestDatabaseCommand : public Tomahawk::DatabaseCommand
 {
-Q_OBJECT
-    virtual QString commandname() const { return "TestCommand"; }
+    Q_OBJECT
+    virtual QString commandname() const
+    {
+        return "TestCommand";
+    }
 };
 
 class TestDatabase : public QObject
 {
     Q_OBJECT
 
-private slots:
+  private slots:
     void testFactories()
     {
-        Tomahawk::Database* db = new Tomahawk::Database("test");
+        Tomahawk::Database* db = new Tomahawk::Database( "test" );
         Tomahawk::dbcmd_ptr command;
 
         // can we check that his ASSERTs?, it's a build in type, one must not register it again

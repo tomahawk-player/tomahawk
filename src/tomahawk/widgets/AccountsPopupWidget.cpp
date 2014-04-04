@@ -66,13 +66,15 @@ AccountsPopupWidget::setWidget( QWidget* widget )
 
 
 void
-AccountsPopupWidget::anchorAt( const QPoint &p )
+AccountsPopupWidget::anchorAt( const QPoint& p )
 {
     QPoint myTopRight( p.x() - sizeHint().width(), p.y() - 2 ); //we go 2px up to point inside the button
 
     move( myTopRight );
     if( isVisible() )
+    {
         repaint();
+    }
 }
 
 
@@ -84,7 +86,9 @@ AccountsPopupWidget::setArrowOffset( int arrowOffset )
     {
         m_arrowOffset = arrowOffset;
         if ( isVisible() )
+        {
             repaint();
+        }
     }
 }
 

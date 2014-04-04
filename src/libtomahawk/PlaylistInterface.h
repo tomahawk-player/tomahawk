@@ -31,16 +31,22 @@ namespace Tomahawk
 
 class DLLEXPORT PlaylistInterface : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit PlaylistInterface();
     virtual ~PlaylistInterface();
 
-    const QString id() const { return m_id; }
+    const QString id() const
+    {
+        return m_id;
+    }
 
     virtual QList< Tomahawk::query_ptr > tracks() const = 0;
-    virtual bool isFinished() const { return m_finished; }
+    virtual bool isFinished() const
+    {
+        return m_finished;
+    }
 
     virtual int trackCount() const = 0;
 
@@ -56,7 +62,7 @@ public:
     virtual qint64 siblingResultIndex( int itemsAway, qint64 rootIndex = -1 ) const;
     virtual Tomahawk::result_ptr siblingResult( int itemsAway, qint64 rootIndex = -1 ) const;
     virtual Tomahawk::result_ptr setSiblingResult( int itemsAway, qint64 rootIndex = -1 );
-    
+
     virtual Tomahawk::result_ptr resultAt( qint64 index ) const = 0;
     virtual Tomahawk::query_ptr queryAt( qint64 index ) const = 0;
     virtual qint64 indexOfResult( const Tomahawk::result_ptr& result ) const = 0;
@@ -68,31 +74,59 @@ public:
     virtual PlaylistModes::RepeatMode repeatMode() const = 0;
     virtual bool shuffled() const = 0;
 
-    virtual PlaylistModes::ViewMode viewMode() const { return PlaylistModes::Unknown; }
+    virtual PlaylistModes::ViewMode viewMode() const
+    {
+        return PlaylistModes::Unknown;
+    }
 
-    virtual PlaylistModes::SeekRestrictions seekRestrictions() const { return PlaylistModes::NoSeekRestrictions; }
-    virtual PlaylistModes::SkipRestrictions skipRestrictions() const { return PlaylistModes::NoSkipRestrictions; }
+    virtual PlaylistModes::SeekRestrictions seekRestrictions() const
+    {
+        return PlaylistModes::NoSeekRestrictions;
+    }
+    virtual PlaylistModes::SkipRestrictions skipRestrictions() const
+    {
+        return PlaylistModes::NoSkipRestrictions;
+    }
 
-    virtual PlaylistModes::RetryMode retryMode() const { return PlaylistModes::NoRetry; }
-    virtual quint32 retryInterval() const { return 30000; }
+    virtual PlaylistModes::RetryMode retryMode() const
+    {
+        return PlaylistModes::NoRetry;
+    }
+    virtual quint32 retryInterval() const
+    {
+        return 30000;
+    }
 
-    virtual PlaylistModes::LatchMode latchMode() const { return m_latchMode; }
-    virtual void setLatchMode( PlaylistModes::LatchMode latchMode ) { m_latchMode = latchMode; }
+    virtual PlaylistModes::LatchMode latchMode() const
+    {
+        return m_latchMode;
+    }
+    virtual void setLatchMode( PlaylistModes::LatchMode latchMode )
+    {
+        m_latchMode = latchMode;
+    }
 
-    virtual bool setCurrentTrack( unsigned int albumpos ) { Q_UNUSED( albumpos ); return false; }
+    virtual bool setCurrentTrack( unsigned int albumpos )
+    {
+        Q_UNUSED( albumpos );
+        return false;
+    }
 
     virtual void reset() {}
 
     //TODO: Get rid of the next two functions once all playlsitinterfaces are factored out
     // Some playlist interfaces can wrap other interfaces. When checking for top-level
     // equality (say, to compare the currently playing interface) this might be needed
-    virtual bool hasChildInterface( const Tomahawk::playlistinterface_ptr& ) { return false; }
+    virtual bool hasChildInterface( const Tomahawk::playlistinterface_ptr& )
+    {
+        return false;
+    }
 
-public slots:
+  public slots:
     virtual void setRepeatMode( PlaylistModes::RepeatMode mode ) = 0;
     virtual void setShuffled( bool enabled ) = 0;
 
-signals:
+  signals:
     void itemCountChanged( unsigned int tracks );
     void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
@@ -103,10 +137,10 @@ signals:
 
     void currentIndexChanged();
 
-protected slots:
+  protected slots:
     virtual void onItemsChanged();
 
-protected:
+  protected:
     virtual QList<Tomahawk::query_ptr> filterTracks( const QList<Tomahawk::query_ptr>& queries );
 
     PlaylistModes::LatchMode m_latchMode;
@@ -115,10 +149,10 @@ protected:
     mutable bool m_nextAvail;
     mutable qint64 m_currentIndex;
 
-private:
+  private:
     Q_DISABLE_COPY( PlaylistInterface )
 
-private:
+  private:
     QString m_id;
     QString m_filter;
 };

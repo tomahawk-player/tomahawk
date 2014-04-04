@@ -104,7 +104,9 @@ StreamConnection::~StreamConnection()
         //m_iodev->setErrorString("FTConnection providing data went away mid-transfer");
 
         if ( !m_iodev.isNull() )
-            ((BufferIODevice*)m_iodev.data())->inputComplete();
+        {
+            ( ( BufferIODevice* )m_iodev.data() )->inputComplete();
+        }
     }
 
     Servent::instance()->onStreamFinished( this );
@@ -115,8 +117,8 @@ QString
 StreamConnection::id() const
 {
     return QString( "FTC[%1 %2]" )
-              .arg( m_type == SENDING ? "TX" : "RX" )
-              .arg( m_fid );
+           .arg( m_type == SENDING ? "TX" : "RX" )
+           .arg( m_fid );
 }
 
 
@@ -146,11 +148,13 @@ void
 StreamConnection::setup()
 {
     QList<source_ptr> sources = SourceList::instance()->sources();
-    foreach ( const source_ptr& src, sources )
+    foreach ( const source_ptr & src, sources )
     {
         // local src doesnt have a control connection, skip it:
         if ( src.isNull() || src->isLocal() )
+        {
             continue;
+        }
 
         if ( src->controlConnection() == m_cc )
         {
@@ -189,7 +193,7 @@ StreamConnection::startSending( const Tomahawk::result_ptr& result )
     qDebug() << "Starting to transmit" << m_result->url();
 
     boost::function< void ( QSharedPointer< QIODevice >& ) > callback =
-            boost::bind( &StreamConnection::reallyStartSending, this, result, _1 );
+        boost::bind( &StreamConnection::reallyStartSending, this, result, _1 );
     Tomahawk::UrlHandler::getIODeviceForUrl( m_result, m_result->url(), callback );
 }
 
@@ -234,7 +238,7 @@ StreamConnection::handleMsg( msg_ptr msg )
     else if ( msg->payload().startsWith( "doneblock" ) )
     {
         int block = QString( msg->payload() ).mid( 9 ).toInt();
-        ( (BufferIODevice*)m_iodev.data() )->seeked( block );
+        ( ( BufferIODevice* )m_iodev.data() )->seeked( block );
 
         m_curBlock = block;
         qDebug() << "Next block is now:" << block;
@@ -242,19 +246,19 @@ StreamConnection::handleMsg( msg_ptr msg )
     else if ( msg->payload().startsWith( "data" ) )
     {
         m_badded += msg->payload().length() - 4;
-        ( (BufferIODevice*)m_iodev.data() )->addData( m_curBlock++, msg->payload().mid( 4 ) );
+        ( ( BufferIODevice* )m_iodev.data() )->addData( m_curBlock++, msg->payload().mid( 4 ) );
     }
 
     //qDebug() << Q_FUNC_INFO << "flags" << (int) msg->flags()
     //         << "payload len" << msg->payload().length()
     //         << "written to device so far: " << m_badded;
 
-    if ( m_iodev && ( (BufferIODevice*)m_iodev.data() )->nextEmptyBlock() < 0 )
+    if ( m_iodev && ( ( BufferIODevice* )m_iodev.data() )->nextEmptyBlock() < 0 )
     {
         m_allok = true;
 
         // tell our iodev there is no more data to read, no args meaning a success:
-        ( (BufferIODevice*)m_iodev.data() )->inputComplete();
+        ( ( BufferIODevice* )m_iodev.data() )->inputComplete();
 
         shutdown();
     }
@@ -301,7 +305,9 @@ StreamConnection::onBlockRequest( int block )
     qDebug() << Q_FUNC_INFO << block;
 
     if ( m_curBlock == block )
+    {
         return;
+    }
 
     QByteArray sm;
     sm.append( QString( "block%1" ).arg( block ) );

@@ -33,8 +33,8 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCommand_PlaybackHistory : public DatabaseCommand
 {
-Q_OBJECT
-public:
+    Q_OBJECT
+  public:
     explicit DatabaseCommand_PlaybackHistory( const Tomahawk::source_ptr& source, QObject* parent = 0 )
         : DatabaseCommand( parent )
         , m_amount( 0 )
@@ -44,17 +44,32 @@ public:
 
     virtual void exec( DatabaseImpl* );
 
-    virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "playbackhistory"; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
+    virtual QString commandname() const
+    {
+        return "playbackhistory";
+    }
 
-    void setLimit( unsigned int amount ) { m_amount = amount; }
-    void setDateFrom( const QDate& date ) { m_dateFrom = date; }
-    void setDateTo( const QDate& date ) { m_dateTo = date; }
+    void setLimit( unsigned int amount )
+    {
+        m_amount = amount;
+    }
+    void setDateFrom( const QDate& date )
+    {
+        m_dateFrom = date;
+    }
+    void setDateTo( const QDate& date )
+    {
+        m_dateTo = date;
+    }
 
-signals:
+  signals:
     void tracks( const QList<Tomahawk::track_ptr>& tracks, QList<Tomahawk::PlaybackLog> logs );
 
-private:
+  private:
     unsigned int m_amount;
     QDate m_dateFrom;
     QDate m_dateTo;

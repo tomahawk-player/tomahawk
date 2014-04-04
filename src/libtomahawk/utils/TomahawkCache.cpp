@@ -28,13 +28,15 @@
 
 using namespace TomahawkUtils;
 
-Cache*Cache::s_instance = 0;
+Cache* Cache::s_instance = 0;
 
 
 Cache* Cache::instance()
 {
     if ( !s_instance )
+    {
         s_instance = new Cache();
+    }
 
     return s_instance;
 }
@@ -66,14 +68,14 @@ Cache::pruneTimerFired()
     qlonglong currentMSecsSinceEpoch = QDateTime::currentMSecsSinceEpoch();
 
     QVariantList clients = m_cacheManifest.value( "clients" ).toList();
-    foreach ( const QVariant& client, clients )
+    foreach ( const QVariant & client, clients )
     {
         const QString client_identifier = client.toString();
         const QString cache_dir = m_cacheBaseDir + client_identifier;
 
         QSettings cached_settings( cache_dir, QSettings::IniFormat );
         const QStringList keys = cached_settings.allKeys();
-        foreach ( const QString& key, keys )
+        foreach ( const QString & key, keys )
         {
             CacheData data = cached_settings.value( key ).value<TomahawkUtils::CacheData>();
             if ( data.maxAge < currentMSecsSinceEpoch )
@@ -84,7 +86,9 @@ Cache::pruneTimerFired()
         }
         cached_settings.sync();
         if ( cached_settings.allKeys().size() == 0 )
+        {
             removeClient( client_identifier );
+        }
     }
 }
 
@@ -133,11 +137,13 @@ void
 Cache::addClient( const QString& identifier )
 {
     QVariantList clients = m_cacheManifest.value( "clients" ).toList();
-    foreach ( const QVariant& client, clients )
+    foreach ( const QVariant & client, clients )
     {
         const QString client_identifier = client.toString();
         if ( identifier == client_identifier )
+        {
             return;
+        }
     }
 
     tLog() << Q_FUNC_INFO << "adding client" << identifier;

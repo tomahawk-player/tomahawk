@@ -33,9 +33,11 @@
 
 #include "DllMacro.h"
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
-namespace InfoSystem {
+namespace InfoSystem
+{
 
 class InfoSystemCache;
 
@@ -44,13 +46,13 @@ class DLLEXPORT InfoSystemWorker : public QObject
 {
     Q_OBJECT
 
-public:
+  public:
     InfoSystemWorker();
     ~InfoSystemWorker();
 
     const QList< InfoPluginPtr > plugins() const;
 
-signals:
+  signals:
     void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void finished( QString target );
     void finished( QString target, Tomahawk::InfoSystem::InfoType type );
@@ -58,29 +60,29 @@ signals:
     void updatedSupportedGetTypes( Tomahawk::InfoSystem::InfoTypeSet supportedTypes );
     void updatedSupportedPushTypes( Tomahawk::InfoSystem::InfoTypeSet supportedTypes );
 
-public slots:
+  public slots:
     void init( Tomahawk::InfoSystem::InfoSystemCache* cache );
     void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
 
     void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData );
-    
+
     void infoSlot( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
     void addInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin );
     void removeInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin );
     void loadInfoPlugins();
-    
+
     void getShortUrl( Tomahawk::InfoSystem::InfoPushData data );
     void shortLinkReady( QUrl longUrl, QUrl shortUrl, QVariant callbackObj );
 
-private slots:
+  private slots:
     void checkTimeoutsTimerFired();
 
-private:
-    void registerInfoTypes( const InfoPluginPtr &plugin, const QSet< InfoType > &getTypes, const QSet< InfoType > &pushTypes );
-    void deregisterInfoTypes( const InfoPluginPtr &plugin, const QSet< InfoType > &getTypes, const QSet< InfoType > &pushTypes );
+  private:
+    void registerInfoTypes( const InfoPluginPtr& plugin, const QSet< InfoType >& getTypes, const QSet< InfoType >& pushTypes );
+    void deregisterInfoTypes( const InfoPluginPtr& plugin, const QSet< InfoType >& getTypes, const QSet< InfoType >& pushTypes );
 
-    void checkFinished( const Tomahawk::InfoSystem::InfoRequestData &target );
+    void checkFinished( const Tomahawk::InfoSystem::InfoRequestData& target );
     QList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;
 
     QHash< QString, QHash< InfoType, int > > m_dataTracker;

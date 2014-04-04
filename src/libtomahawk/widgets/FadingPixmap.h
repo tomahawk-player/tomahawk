@@ -36,36 +36,36 @@
  */
 class DLLEXPORT FadingPixmap : public QLabel
 {
-Q_OBJECT
+    Q_OBJECT
 
     static QPointer< TomahawkUtils::SharedTimeLine > stlInstance();
 
-public:
+  public:
     FadingPixmap( QWidget* parent = 0 );
     virtual ~FadingPixmap();
 
-public slots:
+  public slots:
     virtual void setPixmap( const QPixmap& pixmap, bool isDefault );
     void onAnimationStep( int frame );
 
-signals:
+  signals:
     void clicked();
 
-protected:
+  protected:
     virtual void paintEvent( QPaintEvent* );
     void mouseReleaseEvent( QMouseEvent* event );
 
-private slots:
+  private slots:
     void onAnimationFinished();
 
-private:
+  private:
     QPixmap m_pixmap;
     QPixmap m_oldPixmap;
 
     QString m_oldImageMd5;
-    
+
     QList<QPixmap> m_pixmapQueue;
-    
+
     int m_fadePct;
     int m_startFrame;
     bool m_isDefault;

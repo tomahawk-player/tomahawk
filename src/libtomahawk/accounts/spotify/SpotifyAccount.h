@@ -35,21 +35,24 @@ class QTimer;
 
 class ScriptResolver;
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
 class SpotifyParser;
 
 namespace InfoSystem
 {
-    class SpotifyInfoPlugin;
+class SpotifyInfoPlugin;
 }
 
-namespace Accounts {
+namespace Accounts
+{
 
 class SpotifyAccountConfig;
 
 // metadata for a playlist
-struct SpotifyPlaylistInfo {
+struct SpotifyPlaylistInfo
+{
     QString name, plid, revid;
     bool sync, subscribed, changed, isOwner, starContainer;
     bool loveSync;
@@ -65,25 +68,43 @@ struct SpotifyPlaylistInfo {
 class DLLEXPORT SpotifyAccountFactory : public AccountFactory
 {
     Q_OBJECT
-public:
+  public:
     SpotifyAccountFactory() {}
 
     virtual Account* createAccount( const QString& accountId = QString() );
-    virtual QString description() const { return tr( "Play music from and sync your playlists with Spotify Premium" ); }
-    virtual QString factoryId() const { return "spotifyaccount"; }
-    virtual QString prettyName() const { return "Spotify"; }
+    virtual QString description() const
+    {
+        return tr( "Play music from and sync your playlists with Spotify Premium" );
+    }
+    virtual QString factoryId() const
+    {
+        return "spotifyaccount";
+    }
+    virtual QString prettyName() const
+    {
+        return "Spotify";
+    }
 
-    virtual AccountTypes types() const { return AccountTypes( ResolverType ); }
-    virtual bool allowUserCreation() const { return false; }
+    virtual AccountTypes types() const
+    {
+        return AccountTypes( ResolverType );
+    }
+    virtual bool allowUserCreation() const
+    {
+        return false;
+    }
     virtual QPixmap icon() const;
-    virtual bool isUnique() const { return true; }
+    virtual bool isUnique() const
+    {
+        return true;
+    }
 
 };
 
 class DLLEXPORT SpotifyAccount : public CustomAtticaAccount
 {
     Q_OBJECT
-public:
+  public:
     SpotifyAccount( const QString& accountId );
     SpotifyAccount( const QString& accountId, const QString& path );
     virtual ~SpotifyAccount();
@@ -98,15 +119,24 @@ public:
     virtual bool isAuthenticated() const;
     virtual void deauthenticate();
 
-    virtual QWidget* aclWidget() { return 0; }
+    virtual QWidget* aclWidget()
+    {
+        return 0;
+    }
     virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin();
-    virtual SipPlugin* sipPlugin( bool ) { return 0; }
-    virtual bool preventEnabling() const { return m_preventEnabling; }
+    virtual SipPlugin* sipPlugin( bool )
+    {
+        return 0;
+    }
+    virtual bool preventEnabling() const
+    {
+        return m_preventEnabling;
+    }
 
     bool hasPlaylist( const QString& plId );
     Tomahawk::playlist_ptr playlistForURI( const QString& plId );
     void registerUpdaterForPlaylist( const QString& plId, SpotifyPlaylistUpdater* updater );
-    void registerPlaylistInfo( const QString& name, const QString& plid, const QString &revid, const bool sync, const bool subscribed , const bool owner = false );
+    void registerPlaylistInfo( const QString& name, const QString& plid, const QString& revid, const bool sync, const bool subscribed , const bool owner = false );
     void registerPlaylistInfo( SpotifyPlaylistInfo* info );
     void unregisterUpdater( const QString& plid );
 
@@ -119,7 +149,7 @@ public:
 
     bool loggedIn() const;
 
-public slots:
+  public slots:
     QString sendMessage( const QVariantMap& msg, QObject* receiver = 0, const QString& slot = QString(), const QVariant& extraData = QVariant() );
 
     void aboutToShow( QAction* action, const Tomahawk::playlist_ptr& playlist );
@@ -128,7 +158,7 @@ public slots:
     void atticaLoaded( Attica::Content::List );
     void collaborateActionTriggered( QAction* action );
 
-private slots:
+  private slots:
     void resolverChanged();
     void resolverInstalled( const QString& resolverId );
 
@@ -139,14 +169,14 @@ private slots:
     void logout();
 
     // SpotifyResolver message handlers, all take msgtype, msg as argument
-  //  void <here>( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
+    //  void <here>( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
     void startPlaylistSyncWithPlaylist( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
     void playlistCreated( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
     void playlistCopyCreated( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
     void delayedInit();
     void hookupAfterDeletion( bool autoEnable );
 
-private:
+  private:
     void init();
     bool checkForResolver();
     void hookupResolver();
@@ -164,7 +194,7 @@ private:
     void createActions();
     void removeActions();
     playlist_ptr playlistFromAction( QAction* action ) const;
-    SpotifyPlaylistUpdater* getPlaylistUpdater( const playlist_ptr plptr);
+    SpotifyPlaylistUpdater* getPlaylistUpdater( const playlist_ptr plptr );
     SpotifyPlaylistUpdater* getPlaylistUpdater( QObject* sender );
     static SpotifyAccount* s_instance;
 

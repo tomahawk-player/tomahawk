@@ -27,15 +27,24 @@ namespace Tomahawk
 
 class DLLEXPORT APETag : public Tag
 {
-public:
-    APETag( TagLib::Tag *, TagLib::APE::Tag * );
+  public:
+    APETag( TagLib::Tag*, TagLib::APE::Tag* );
 
-    virtual QString albumArtist() const { return m_albumArtist; }
-    virtual QString composer() const { return m_composer; }
-    virtual unsigned int discNumber() const { return m_discNumber; }
+    virtual QString albumArtist() const
+    {
+        return m_albumArtist;
+    }
+    virtual QString composer() const
+    {
+        return m_composer;
+    }
+    virtual unsigned int discNumber() const
+    {
+        return m_discNumber;
+    }
 
-private:
-    TagLib::APE::Tag *m_apeTag;
+  private:
+    TagLib::APE::Tag* m_apeTag;
 };
 
 }

@@ -29,14 +29,14 @@ namespace Tomahawk
 
 class DLLEXPORT AlbumsRequest
 {
-public:
+  public:
     virtual ~AlbumsRequest();
 
     virtual void enqueue() = 0;
 
     virtual void setFilter( const QString& filter ) = 0;
 
-protected: //signals
+  protected: //signals
     virtual void albums( const QList< Tomahawk::album_ptr >& ) = 0;
 };
 

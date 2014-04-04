@@ -61,12 +61,15 @@ GroovesharkParser::GroovesharkParser( const QStringList& trackUrls, bool createN
 
     QByteArray wand = QByteArray::fromBase64( QCoreApplication::applicationName().toLatin1() );
     int length = magic.length(), n2 = wand.length();
-    for ( int i=0; i<length; i++ ) magic[i] = magic[i] ^ wand[i%n2];
+    for ( int i = 0; i < length; i++ )
+    {
+        magic[i] = magic[i] ^ wand[i % n2];
+    }
 
     m_apiKey = QCA::SymmetricKey( magic );
 
-    foreach ( const QString& url, trackUrls )
-        lookupUrl( url );
+    foreach ( const QString & url, trackUrls )
+    lookupUrl( url );
 }
 
 
@@ -81,16 +84,24 @@ GroovesharkParser::lookupUrl( const QString& link )
     if ( link.contains( "playlist" ) )
     {
         if ( !m_createNewPlaylist )
+        {
             m_trackMode = true;
+        }
         else
+        {
             m_trackMode = false;
+        }
 
         lookupGroovesharkPlaylist( link );
     }
     else if ( link.contains( "grooveshark.com/s/" ) || link.contains( "grooveshark.com/#/s/" ) )
+    {
         lookupGroovesharkTrack( link );
+    }
     else
+    {
         return;
+    }
 }
 
 
@@ -100,14 +111,17 @@ GroovesharkParser::lookupGroovesharkPlaylist( const QString& linkRaw )
     tLog() << "Parsing Grooveshark Playlist URI:" << linkRaw;
 
     QString urlFragment = QUrl( linkRaw ).fragment( );
-    if ( urlFragment.isEmpty() ) {
+    if ( urlFragment.isEmpty() )
+    {
         tDebug() << "no fragment, setting fragment to path";
-        urlFragment = QUrl(linkRaw).path();
+        urlFragment = QUrl( linkRaw ).path();
     }
 
     int paramStartingPostition = urlFragment.indexOf( "?" );
     if ( paramStartingPostition != -1 )
+    {
         urlFragment.truncate( paramStartingPostition );
+    }
 
     QStringList urlParts = urlFragment.split( "/", QString::SkipEmptyParts );
 
@@ -128,7 +142,7 @@ GroovesharkParser::lookupGroovesharkPlaylist( const QString& linkRaw )
     QCA::MessageAuthenticationCode hmac( "hmac(md5)", m_apiKey );
 
     QCA::SecureArray secdata( data );
-    hmac.update(secdata);
+    hmac.update( secdata );
     QCA::SecureArray resultArray = hmac.final();
 
     QString hash = QCA::arrayToHex( resultArray.toByteArray() );
@@ -178,9 +192,9 @@ GroovesharkParser::trackPageFetchFinished()
     page.settings()->setAttribute( QWebSettings::JavaEnabled, false );
     page.settings()->setAttribute( QWebSettings::AutoLoadImages, false );
     page.mainFrame()->setHtml( QString::fromUtf8( r->reply()->readAll() ) );
-    QWebElement title = page.mainFrame()->findFirstElement("span[itemprop='name']");
-    QWebElement artist = page.mainFrame()->findFirstElement("noscript span[itemprop='byArtist']");
-    QWebElement album = page.mainFrame()->findFirstElement("noscript span[itemprop='inAlbum']");
+    QWebElement title = page.mainFrame()->findFirstElement( "span[itemprop='name']" );
+    QWebElement artist = page.mainFrame()->findFirstElement( "noscript span[itemprop='byArtist']" );
+    QWebElement album = page.mainFrame()->findFirstElement( "noscript span[itemprop='inAlbum']" );
 
     if ( !title.toPlainText().isEmpty() && !artist.toPlainText().isEmpty() )
     {
@@ -188,7 +202,9 @@ GroovesharkParser::trackPageFetchFinished()
 
         Tomahawk::query_ptr q = Tomahawk::Query::get( artist.toPlainText(), title.toPlainText(), album.toPlainText(), uuid(), true );
         if ( !q.isNull() )
+        {
             m_tracks << q;
+        }
     }
 
     checkTrackFinished();
@@ -218,7 +234,7 @@ GroovesharkParser::groovesharkLookupFinished()
         }
 
         QVariantList list = res.value( "result" ).toMap().value( "songs" ).toList();
-        foreach ( const QVariant& var, list )
+        foreach ( const QVariant & var, list )
         {
             QVariantMap trackResult = var.toMap();
 
@@ -248,9 +264,13 @@ GroovesharkParser::groovesharkLookupFinished()
     }
 
     if ( m_trackMode )
+    {
         checkTrackFinished();
+    }
     else
+    {
         checkPlaylistFinished();
+    }
 }
 
 
@@ -261,17 +281,19 @@ GroovesharkParser::checkPlaylistFinished()
     if ( m_queries.isEmpty() ) // we're done
     {
         if ( m_browseJob )
+        {
             m_browseJob->setFinished();
+        }
 
         if( m_createNewPlaylist && !m_tracks.isEmpty() )
         {
             m_playlist = Playlist::create( SourceList::instance()->getLocal(),
-                                       uuid(),
-                                       m_title,
-                                       m_info,
-                                       m_creator,
-                                       false,
-                                       m_tracks );
+                                           uuid(),
+                                           m_title,
+                                           m_info,
+                                           m_creator,
+                                           false,
+                                           m_tracks );
             connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistCreated() ) );
             return;
         }
@@ -289,7 +311,9 @@ GroovesharkParser::checkTrackFinished()
     if ( m_queries.isEmpty() ) // we're done
     {
         if ( m_browseJob )
+        {
             m_browseJob->setFinished();
+        }
 
         emit tracks( m_tracks );
 
@@ -311,7 +335,9 @@ QPixmap
 GroovesharkParser::pixmap() const
 {
     if ( !s_pixmap )
+    {
         s_pixmap = new QPixmap( RESPATH "images/grooveshark.png" );
+    }
 
     return *s_pixmap;
 }

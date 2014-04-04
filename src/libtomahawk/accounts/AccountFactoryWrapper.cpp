@@ -46,12 +46,12 @@ AccountFactoryWrapper::AccountFactoryWrapper( AccountFactory* factory, QWidget* 
 
     connect( del, SIGNAL( openConfig( Tomahawk::Accounts::Account* ) ), this, SLOT( openAccountConfig( Tomahawk::Accounts::Account* ) ) );
     connect( del, SIGNAL( removeAccount( Tomahawk::Accounts::Account* ) ), this, SLOT( removeAccount( Tomahawk::Accounts::Account* ) ) );
-    connect( del, SIGNAL( checkOrUncheck( QModelIndex, Tomahawk::Accounts::Account* , Qt::CheckState ) ), this, SLOT( accountCheckedOrUnchecked( QModelIndex ,Tomahawk::Accounts::Account* ,Qt::CheckState ) ) );
+    connect( del, SIGNAL( checkOrUncheck( QModelIndex, Tomahawk::Accounts::Account*, Qt::CheckState ) ), this, SLOT( accountCheckedOrUnchecked( QModelIndex , Tomahawk::Accounts::Account*, Qt::CheckState ) ) );
     load();
 
     connect( m_ui->buttonBox, SIGNAL( rejected() ), this, SLOT( reject() ) );
     connect( m_ui->buttonBox, SIGNAL( accepted() ), this, SLOT( accept() ) );
-    connect( m_ui->buttonBox, SIGNAL( clicked( QAbstractButton*) ), this, SLOT( buttonClicked( QAbstractButton* ) ) );
+    connect( m_ui->buttonBox, SIGNAL( clicked( QAbstractButton* ) ), this, SLOT( buttonClicked( QAbstractButton* ) ) );
 
 
     connect ( AccountManager::instance(), SIGNAL( added( Tomahawk::Accounts::Account* ) ), this, SLOT( load() ) );
@@ -67,18 +67,20 @@ void
 AccountFactoryWrapper::load()
 {
     m_ui->accountsList->clear();
-    foreach ( Account* acc, AccountManager::instance()->accounts() )
+    foreach ( Account * acc, AccountManager::instance()->accounts() )
     {
         if ( AccountManager::instance()->factoryForAccount( acc ) == m_factory )
         {
             QTreeWidgetItem* item = new QTreeWidgetItem( m_ui->accountsList );
-            item->setData( 0, AccountRole, QVariant::fromValue< QObject *>( acc ) );
+            item->setData( 0, AccountRole, QVariant::fromValue< QObject*>( acc ) );
             item->setCheckState( 0, acc->enabled() ? Qt::Checked : Qt::Unchecked );
         }
     }
 
     if ( m_ui->accountsList->model()->rowCount() == 0 )
+    {
         accept();
+    }
 
 #ifndef Q_OS_MAC
     const int padding = 7;
@@ -133,6 +135,8 @@ AccountFactoryWrapper::buttonClicked( QAbstractButton* button )
         TomahawkUtils::createAccountFromFactory( m_factory, this );
     }
     else
+    {
         reject();
+    }
 }
 

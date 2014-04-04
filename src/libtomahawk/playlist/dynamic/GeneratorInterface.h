@@ -50,7 +50,7 @@ class DLLEXPORT GeneratorInterface : public QObject
     /// oh qjson.
     Q_PROPERTY( int mode READ mode WRITE setMode )
 
-public:
+  public:
     // can't inline constructors/destructors for forward declared shared pointer types
     explicit GeneratorInterface( QObject* parent = 0 );
     virtual ~GeneratorInterface();
@@ -72,7 +72,10 @@ public:
      * Connect to the generated() signal for the results.
      *
      */
-    virtual void generate( int number = -1 ) { Q_UNUSED( number ); }
+    virtual void generate( int number = -1 )
+    {
+        Q_UNUSED( number );
+    }
 
     /**
      * Starts an on demand session for this generator. Listen to the nextTrack() signal to get
@@ -84,19 +87,28 @@ public:
      * Get the next on demand track.
      * \param rating Rating from 1-5, -1 for none
      */
-    virtual void fetchNext( int rating = -1 ) { Q_UNUSED( rating ) }
+    virtual void fetchNext( int rating = -1 )
+    {
+        Q_UNUSED( rating )
+    }
 
     /**
      * Return a sentence that describes this generator's controls. TODO english only ATM
      */
-    virtual QString sentenceSummary() { return QString(); }
+    virtual QString sentenceSummary()
+    {
+        return QString();
+    }
 
     /**
      * If an OnDemand playlist can be steered, this returns true.
      * If so, the generator should also provide a steering widget
      *  in steeringWidget()
      */
-    virtual bool onDemandSteerable() const { return false; }
+    virtual bool onDemandSteerable() const
+    {
+        return false;
+    }
 
     /**
      * Returns a widget used to steer the OnDemand dynamic playlist.
@@ -108,13 +120,25 @@ public:
      *  upcoming tracks and re-fetch them.
      *
      */
-    virtual QWidget* steeringWidget() { return 0; }
+    virtual QWidget* steeringWidget()
+    {
+        return 0;
+    }
 
     /// The type of this generator
-    QString type() const { return m_type; }
+    QString type() const
+    {
+        return m_type;
+    }
 
-    int mode() const { return (int)m_mode; }
-    void setMode( int mode ) { m_mode = (GeneratorMode)mode; }
+    int mode() const
+    {
+        return ( int )m_mode;
+    }
+    void setMode( int mode )
+    {
+        m_mode = ( GeneratorMode )mode;
+    }
 
     // control functions
     QList< dyncontrol_ptr > controls();
@@ -123,12 +147,12 @@ public:
     void setControls( const QList< dyncontrol_ptr>& controls );
     void removeControl( const dyncontrol_ptr& control );
 
-signals:
-    void error( const QString& title, const QString& body);
+  signals:
+    void error( const QString& title, const QString& body );
     void generated( const QList< Tomahawk::query_ptr>& queries );
     void nextTrackGenerated( const Tomahawk::query_ptr& track );
 
-protected:
+  protected:
     QString m_type;
     GeneratorMode m_mode;
     QList< dyncontrol_ptr > m_controls;

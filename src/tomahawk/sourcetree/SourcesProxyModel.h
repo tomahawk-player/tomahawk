@@ -26,31 +26,31 @@ class SourcesModel;
 
 class SourcesProxyModel : public QSortFilterProxyModel
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     explicit SourcesProxyModel( SourcesModel* model, QObject* parent = 0 );
 
-public slots:
+  public slots:
     void showOfflineSources( bool offlineSourcesShown );
 
     void selectRequested( const QPersistentModelIndex& );
     void expandRequested( const QPersistentModelIndex& );
     void toggleExpandRequested( const QPersistentModelIndex& );
 
-signals:
+  signals:
     void selectRequest( const QPersistentModelIndex& idx );
     void expandRequest( const QPersistentModelIndex& idx );
     void toggleExpandRequest( const QPersistentModelIndex& idx );
 
-protected:
+  protected:
     bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
     bool lessThan( const QModelIndex& left, const QModelIndex& right ) const;
 
-private slots:
+  private slots:
     void onModelChanged();
 
-private:
+  private:
     SourcesModel* m_model;
 
     bool m_filtered;

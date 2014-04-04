@@ -28,7 +28,8 @@
 #include <QStringList>
 #include <QMimeData>
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 class DropJobNotifier;
 }
 
@@ -36,8 +37,8 @@ class DropJobNotifier;
 class DLLEXPORT DropJob : public QObject
 {
     Q_OBJECT
-public:
-    explicit DropJob( QObject *parent = 0 );
+  public:
+    explicit DropJob( QObject* parent = 0 );
     ~DropJob();
 
     /**
@@ -49,7 +50,8 @@ public:
      * Connect to tracks( QList< query_ptr> ); for the extracted tracks.
      */
 
-    enum DropType {
+    enum DropType
+    {
         None =      0x00,
         Playlist =  0x01,
         Track =     0x02,
@@ -58,9 +60,10 @@ public:
 
         All =       0xFF
     };
-    Q_DECLARE_FLAGS(DropTypes, DropType)
+    Q_DECLARE_FLAGS( DropTypes, DropType )
 
-    enum DropAction {
+    enum DropAction
+    {
         Default = 0,
         Append,
         Create,
@@ -118,16 +121,16 @@ public:
     static bool canParseSpotifyPlaylists();
     static void setCanParseSpotifyPlaylists( bool parseable );
 
-signals:
+  signals:
     /// QMimeData parsing results
     void tracks( const QList< Tomahawk::query_ptr >& tracks );
 
-private slots:
+  private slots:
     void expandedUrls( QStringList );
     void informationForUrl( const QString& url, const QSharedPointer<QObject>& information );
     void onTracksAdded( const QList<Tomahawk::query_ptr>& );
 
-private:
+  private:
     /// handle parsing mime data
     void handleAllUrls( const QString& urls );
     void handleTrackUrls( const QString& urls );
@@ -165,5 +168,5 @@ private:
     static bool s_canParseSpotifyPlaylists;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(DropJob::DropTypes)
+Q_DECLARE_OPERATORS_FOR_FLAGS( DropJob::DropTypes )
 #endif // DROPJOB_H

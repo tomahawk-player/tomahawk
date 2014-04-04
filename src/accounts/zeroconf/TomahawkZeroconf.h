@@ -37,9 +37,9 @@
 
 class Node : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     Node( const QString& i, const QString& n, int p )
         : ip( i ), nid( n ), port( p )
     {
@@ -51,17 +51,21 @@ public:
         qDebug() << Q_FUNC_INFO;
     }
 
-signals:
+  signals:
     void tomahawkHostFound( const QString&, int, const QString&, const QString& );
 
-public slots:
+  public slots:
     void resolved( QHostInfo i )
     {
         qDebug() << Q_FUNC_INFO << "zeroconf-derived IP has resolved to name " << i.hostName();
         if ( i.hostName().length() )
+        {
             emit tomahawkHostFound( ip, port, i.hostName(), nid );
+        }
         else
+        {
             emit tomahawkHostFound( ip, port, "Unknown", nid );
+        }
         this->deleteLater();
     }
 
@@ -71,7 +75,7 @@ public slots:
         QHostInfo::lookupHost( ip, this, SLOT( resolved( QHostInfo ) ) );
     }
 
-private:
+  private:
     QString ip;
     QString nid;
     int port;
@@ -80,9 +84,9 @@ private:
 
 class ACCOUNTDLLEXPORT TomahawkZeroconf : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     TomahawkZeroconf( int port, QObject* parent = 0 )
         : QObject( parent ), m_sock( this ), m_port( port )
     {
@@ -97,34 +101,36 @@ public:
         qDebug() << Q_FUNC_INFO;
     }
 
-public slots:
+  public slots:
     void advertise()
     {
         qDebug() << "Advertising us on the LAN (both versions)";
         // Keep newer versions first
         QByteArray advert = QString( "TOMAHAWKADVERT:%1:%2:%3" )
-                               .arg( m_port )
-                               .arg( Tomahawk::Database::instance()->impl()->dbid() )
-                               .arg( QHostInfo::localHostName() )
-                               .toLatin1();
+                            .arg( m_port )
+                            .arg( Tomahawk::Database::instance()->impl()->dbid() )
+                            .arg( QHostInfo::localHostName() )
+                            .toLatin1();
         m_sock.writeDatagram( advert.data(), advert.size(), QHostAddress::Broadcast, ZCONF_PORT );
 
         advert = QString( "TOMAHAWKADVERT:%1:%2" )
-                    .arg( m_port )
-                    .arg( Tomahawk::Database::instance()->impl()->dbid() )
-                    .toLatin1();
+                 .arg( m_port )
+                 .arg( Tomahawk::Database::instance()->impl()->dbid() )
+                 .toLatin1();
         m_sock.writeDatagram( advert.data(), advert.size(), QHostAddress::Broadcast, ZCONF_PORT );
     }
 
-signals:
+  signals:
     // IP, port, name, session
     void tomahawkHostFound( const QString&, int, const QString&, const QString& );
 
-private slots:
+  private slots:
     void readPacket()
     {
         if ( !m_sock.hasPendingDatagrams() )
+        {
             return;
+        }
 
         QByteArray datagram;
         datagram.resize( m_sock.pendingDatagramSize() );
@@ -135,17 +141,19 @@ private slots:
 
         // Ignore our own requests
         if ( QNetworkInterface::allAddresses().contains( sender ) )
+        {
             return;
+        }
 
         // only process msgs originating on the LAN:
         if ( datagram.startsWith( "TOMAHAWKADVERT:" ) &&
-            Servent::isIPWhitelisted( sender ) )
+                Servent::isIPWhitelisted( sender ) )
         {
             QStringList parts = QString::fromLatin1( datagram ).split( ':' );
             if ( parts.length() == 4 )
             {
                 bool ok;
-                int port = parts.at(1).toInt( &ok );
+                int port = parts.at( 1 ).toInt( &ok );
                 if ( ok && Tomahawk::Database::instance()->impl()->dbid() != parts.at( 2 ) )
                 {
                     emit tomahawkHostFound( sender.toString(), port, parts.at( 3 ), parts.at( 2 ) );
@@ -154,11 +162,11 @@ private slots:
             else if ( parts.length() == 3 )
             {
                 bool ok;
-                int port = parts.at(1).toInt( &ok );
+                int port = parts.at( 1 ).toInt( &ok );
                 if ( ok && Tomahawk::Database::instance()->impl()->dbid() != parts.at( 2 ) )
                 {
                     qDebug() << "ADVERT received:" << sender << port;
-                    Node *n = new Node( sender.toString(), parts.at( 2 ), port );
+                    Node* n = new Node( sender.toString(), parts.at( 2 ), port );
                     connect( n,    SIGNAL( tomahawkHostFound( QString, int, QString, QString ) ),
                              this, SIGNAL( tomahawkHostFound( QString, int, QString, QString ) ) );
                     n->resolve();
@@ -167,10 +175,12 @@ private slots:
         }
 
         if ( m_sock.hasPendingDatagrams() )
+        {
             QTimer::singleShot( 0, this, SLOT( readPacket() ) );
+        }
     }
 
-private:
+  private:
     QUdpSocket m_sock;
     int m_port;
 };

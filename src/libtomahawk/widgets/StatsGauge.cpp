@@ -60,7 +60,7 @@ StatsGauge::paintEvent( QPaintEvent* event )
 
     int fullCircle = 16 * 360;
     p.drawArc( QRect( 12, 12, gaugeSize.width() - 24, gaugeSize.height() - 24 ),
-               4 * 360, (int)( -1.0 * (float)fullCircle * ( invertedAppearance() ? ( 1.0 - m_percentage ) : m_percentage ) ) );
+               4 * 360, ( int )( -1.0 * ( float )fullCircle * ( invertedAppearance() ? ( 1.0 - m_percentage ) : m_percentage ) ) );
 
     pen = QPen( TomahawkStyle::HEADER_GAUGE_HIGHLIGHT.darker() );
     pen.setWidth( 6 );
@@ -76,9 +76,13 @@ StatsGauge::paintEvent( QPaintEvent* event )
     font.setWeight( QFont::Black );
 
     if ( value() <= 999 )
+    {
         font.setPixelSize( 60 );
+    }
     else
+    {
         font.setPixelSize( 44 );
+    }
 
     p.setFont( font );
     QRect textRect( 0, gaugeSize.height() / 2 - 14, gaugeSize.width(), 62 );
@@ -119,13 +123,17 @@ void
 StatsGauge::setValue( int v )
 {
     if ( maximum() == 0 || v == 0 )
+    {
         return;
+    }
     if ( v == m_targetValue )
+    {
         return;
+    }
 
     m_targetValue = v;
     {
-        QPropertyAnimation* a = new QPropertyAnimation( (QProgressBar*)this, "value" );
+        QPropertyAnimation* a = new QPropertyAnimation( ( QProgressBar* )this, "value" );
         a->setEasingCurve( QEasingCurve( QEasingCurve::OutQuad ) );
         a->setStartValue( value() > 0 ? value() : 1 );
         a->setEndValue( v );
@@ -135,10 +143,10 @@ StatsGauge::setValue( int v )
         a->start();
     }
     {
-        QPropertyAnimation* a = new QPropertyAnimation( (QProgressBar*)this, "percentage" );
+        QPropertyAnimation* a = new QPropertyAnimation( ( QProgressBar* )this, "percentage" );
         a->setEasingCurve( QEasingCurve( QEasingCurve::OutQuad ) );
-        a->setStartValue( (float)0 );
-        a->setEndValue( (float)v / (float)maximum() );
+        a->setStartValue( ( float )0 );
+        a->setEndValue( ( float )v / ( float )maximum() );
         a->setDuration( 2000 );
 
         connect( a, SIGNAL( finished() ), a, SLOT( deleteLater() ) );

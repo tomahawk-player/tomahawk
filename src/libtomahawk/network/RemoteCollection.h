@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -30,11 +30,11 @@ namespace Tomahawk
 
 class RemoteCollection : public DatabaseCollection
 {
-Q_OBJECT
+    Q_OBJECT
 
-friend class ControlConnection; // for receiveTracks()
+    friend class ControlConnection; // for receiveTracks()
 
-public:
+  public:
     explicit RemoteCollection( Tomahawk::source_ptr source, QObject* parent = 0 );
     ~RemoteCollection()
     {
@@ -43,7 +43,7 @@ public:
 
     virtual QString prettyName() const;
 
-public slots:
+  public slots:
     virtual void addTracks( const QList<QVariant>& newitems );
     virtual void removeTracks( const QDir& dir );
 };

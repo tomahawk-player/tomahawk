@@ -41,14 +41,18 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
 
     QToolBar* toolbar = qobject_cast< QToolBar* >( parent );
     if ( toolbar )
+    {
         setIconSize( toolbar->iconSize() );
+    }
     else
+    {
         setIconSize( scaled( 22, 22 ) );
+    }
 
     //Set up popup...
-    QWidget *w = new QWidget( this );
+    QWidget* w = new QWidget( this );
     w->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum );
-    QVBoxLayout *wMainLayout = new QVBoxLayout( w );
+    QVBoxLayout* wMainLayout = new QVBoxLayout( w );
     w->setLayout( wMainLayout  );
 
     TomahawkUtils::unmarginLayout( w->layout() );
@@ -68,7 +72,7 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
     m_proxy->setFilterRowType( Tomahawk::Accounts::AccountModel::TopLevelFactory );
     m_proxy->setFilterEnabled( true );
 
-    AccountListWidget *view = new AccountListWidget( m_proxy, m_popup );
+    AccountListWidget* view = new AccountListWidget( m_proxy, m_popup );
     wMainLayout->addWidget( view );
     view->setAutoFillBackground( false );
     view->setAttribute( Qt::WA_TranslucentBackground, true );
@@ -76,7 +80,7 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
     connect( m_proxy, SIGNAL( dataChanged( QModelIndex, QModelIndex ) ),
              this, SLOT( repaint() ) );
 
-    QWidget *separatorLine = new QWidget( w );
+    QWidget* separatorLine = new QWidget( w );
     separatorLine->setFixedHeight( 1 );
     separatorLine->setContentsMargins( 0, 0, 0, 0 );
     separatorLine->setStyleSheet( "QWidget { border-top: 1px solid " +
@@ -85,12 +89,12 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
 
     wMainLayout->addSpacing( scaledY( 6 ) );
 
-    QPushButton *settingsButton = new QPushButton( w );
+    QPushButton* settingsButton = new QPushButton( w );
     settingsButton->setIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::AccountSettings ) );
     settingsButton->setText( tr( "Configure Accounts" ) );
     connect( settingsButton, SIGNAL( clicked() ), window(), SLOT( showSettingsDialog() ) );
 
-    QHBoxLayout *bottomLayout = new QHBoxLayout();
+    QHBoxLayout* bottomLayout = new QHBoxLayout();
     TomahawkUtils::unmarginLayout( bottomLayout );
     bottomLayout->addStretch();
     bottomLayout->addWidget( settingsButton );
@@ -106,7 +110,7 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
              this, SLOT( updateIcons() ) );
 
 #ifdef Q_WS_MAC
-    setIconSize( QSize( iconSize().width()-4, iconSize().height()-4 ) );
+    setIconSize( QSize( iconSize().width() - 4, iconSize().height() - 4 ) );
     setStyleSheet( "AccountsToolButton {"
                    "    border: 1px solid #7d7d7d;"
                    "    border-radius: 4px;"
@@ -130,9 +134,13 @@ AccountsToolButton::mousePressEvent( QMouseEvent* event )
         m_popup->anchorAt( myPos );
         m_popup->setArrowOffset( rect().width() / 2 );
         if ( !m_popup->isVisible() )
+        {
             m_popup->show();
+        }
         else
+        {
             m_popup->hide();
+        }
         event->accept();
     }
 }
@@ -159,7 +167,7 @@ AccountsToolButton::paintEvent( QPaintEvent* event )
         {
             int diff = height() - iconSize().height();
             int pixmapRectX = diff / 2
-                            + i * ( iconSize().width() + diff );
+                              + i * ( iconSize().width() + diff );
             QRect pixmapRect( QPoint( pixmapRectX, height() / 2 - iconSize().height() / 2 ),
                               iconSize() );
             painter.drawPixmap( pixmapRect, m_factoryPixmaps.at( i ) );
@@ -200,19 +208,21 @@ AccountsToolButton::updateIcons()
     {
         QModelIndex idx = m_proxy->index( i, 0 );
         const QList< Tomahawk::Accounts::Account* >& children =
-                idx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
-                   .value< QList< Tomahawk::Accounts::Account* > >();
+            idx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
+            .value< QList< Tomahawk::Accounts::Account* > >();
         int count = children.count();
 
         if ( count == 0 )
+        {
             continue;
+        }
 
         if ( count == 1 )
         {
             m_factoryPixmaps.append( children.first()->icon()
-                                                .scaled( iconSize(),
-                                                         Qt::KeepAspectRatio,
-                                                         Qt::SmoothTransformation ) );
+                                     .scaled( iconSize(),
+                                              Qt::KeepAspectRatio,
+                                              Qt::SmoothTransformation ) );
         }
         else //we need to find if at least one of this factory's accounts is connected
         {
@@ -220,7 +230,7 @@ AccountsToolButton::updateIcons()
             for ( int j = 0; j < count; ++j )
             {
                 if ( children.at( j )->connectionState() ==
-                     Tomahawk::Accounts::Account::Connected )
+                        Tomahawk::Accounts::Account::Connected )
                 {
                     connectedAccountIndex = j;
                     break;
@@ -229,23 +239,25 @@ AccountsToolButton::updateIcons()
             if ( connectedAccountIndex != -1 )
             {
                 m_factoryPixmaps.append( children.at( connectedAccountIndex )->icon()
-                                                        .scaled( iconSize(),
-                                                                 Qt::KeepAspectRatio,
-                                                                 Qt::SmoothTransformation ) );
+                                         .scaled( iconSize(),
+                                                  Qt::KeepAspectRatio,
+                                                  Qt::SmoothTransformation ) );
             }
             else
             {
                 m_factoryPixmaps.append( children.first()->icon()
-                                                    .scaled( iconSize(),
-                                                             Qt::KeepAspectRatio,
-                                                             Qt::SmoothTransformation ) );
+                                         .scaled( iconSize(),
+                                                  Qt::KeepAspectRatio,
+                                                  Qt::SmoothTransformation ) );
             }
         }
     }
 
     resize( sizeHint() );
     if ( oldWidth != sizeHint().width() )
+    {
         emit widthChanged();
+    }
 
     m_popup->setArrowOffset( rect().width() / 2 );
 
@@ -258,7 +270,9 @@ AccountsToolButton::sizeHint() const
 {
     QSize size = QToolButton::sizeHint();
     if ( m_factoryPixmaps.count() == 0 ) //no accounts enabled!
+    {
         return size;
+    }
 
     size.rwidth() *= m_factoryPixmaps.count();
     return size;

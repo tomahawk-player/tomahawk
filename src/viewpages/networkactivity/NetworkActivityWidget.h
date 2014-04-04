@@ -30,7 +30,7 @@ class QStandardItemModel;
 class QSortFilterProxyModel;
 namespace Ui
 {
-    class NetworkActivityWidget;
+class NetworkActivityWidget;
 }
 
 namespace Tomahawk
@@ -43,7 +43,7 @@ class NetworkActivityWidgetPrivate;
 class TOMAHAWK_VIEWPAGE_EXPORT NetworkActivityWidget : public QWidget
 {
     Q_OBJECT
-public:
+  public:
     enum ViewType
     {
         WeekChart = 1,
@@ -54,23 +54,23 @@ public:
         RecentlyLoved = 6
     };
 
-    NetworkActivityWidget(QWidget* parent = 0);
+    NetworkActivityWidget( QWidget* parent = 0 );
     ~NetworkActivityWidget();
 
     static const uint numberOfHotPlaylists = 3;
     static const uint numberOfTrendingArtists = 3;
     static const uint numberOfTrendingTracks = 3;
     static const uint numberOfNetworkChartEntries = 20;
-    
+
     // ViewPageWidget interface
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
     virtual bool isBeingPlayed() const;
     virtual bool jumpToCurrentTrack();
 
-protected:
+  protected:
     QScopedPointer<NetworkActivityWidgetPrivate> d_ptr;
 
-private slots:
+  private slots:
     void weeklyCharts( const QList<Tomahawk::track_ptr>& );
     void monthlyCharts( const QList<Tomahawk::track_ptr>& );
     void yearlyCharts( const QList<Tomahawk::track_ptr>& );
@@ -83,7 +83,7 @@ private slots:
     void leftCrumbIndexChanged( const QModelIndex& );
     void onPlaylistActivated( const QModelIndex& );
 
-private:
+  private:
     void fetchWeekCharts();
     void fetchMonthCharts();
     void fetchYearCharts();

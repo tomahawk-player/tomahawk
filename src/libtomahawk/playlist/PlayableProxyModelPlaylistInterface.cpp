@@ -70,7 +70,9 @@ QList< Tomahawk::query_ptr >
 PlayableProxyModelPlaylistInterface::tracks() const
 {
     if ( m_proxyModel.isNull() )
+    {
         return QList< query_ptr >();
+    }
 
     PlayableProxyModel* proxyModel = m_proxyModel.data();
     QList< query_ptr > queries;
@@ -79,7 +81,9 @@ PlayableProxyModelPlaylistInterface::tracks() const
     {
         PlayableItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( proxyModel->index( i, 0 ) ) );
         if ( item )
+        {
             queries << item->query();
+        }
     }
 
     return queries;
@@ -90,9 +94,13 @@ void
 PlayableProxyModelPlaylistInterface::onCurrentIndexChanged()
 {
     if ( m_proxyModel.data()->currentIndex().isValid() )
-        setCurrentIndex( (qint64) m_proxyModel.data()->mapToSource( m_proxyModel.data()->currentIndex() ).internalPointer() );
+    {
+        setCurrentIndex( ( qint64 ) m_proxyModel.data()->mapToSource( m_proxyModel.data()->currentIndex() ).internalPointer() );
+    }
     else
+    {
         setCurrentIndex( -1 );
+    }
 }
 
 
@@ -100,21 +108,25 @@ void
 PlayableProxyModelPlaylistInterface::setCurrentIndex( qint64 index )
 {
     if ( m_proxyModel.isNull() )
+    {
         return;
+    }
 
     if ( m_currentIndex == index )
+    {
         return;
+    }
     m_currentIndex = index; // we need to manually set m_currentIndex (protected member from PlaylistInterface) here
-                            // because calling m_proxyModel.data()->setCurrentIndex( ... ) will end up emitting a
-                            // signal which leads right back here and would cause an infinite loop.
+    // because calling m_proxyModel.data()->setCurrentIndex( ... ) will end up emitting a
+    // signal which leads right back here and would cause an infinite loop.
 
-    PlayableItem* item = reinterpret_cast<PlayableItem*>( (void*)index );
+    PlayableItem* item = reinterpret_cast<PlayableItem*>( ( void* )index );
     if ( index >= 0 && item )
     {
         if ( m_shuffled && m_shuffleHistory.count() > 1 )
         {
             if ( m_proxyModel.data()->itemFromQuery( m_shuffleHistory.at( m_shuffleHistory.count() - 2 ) ) &&
-               ( m_proxyModel.data()->mapFromSource( item->index ) == m_proxyModel.data()->mapFromSource( m_proxyModel.data()->itemFromQuery( m_shuffleHistory.at( m_shuffleHistory.count() - 2 ) )->index ) ) )
+                    ( m_proxyModel.data()->mapFromSource( item->index ) == m_proxyModel.data()->mapFromSource( m_proxyModel.data()->itemFromQuery( m_shuffleHistory.at( m_shuffleHistory.count() - 2 ) )->index ) ) )
             {
                 // Note: the following lines aren't by mistake:
                 // We detected that we're going to the previous track in our shuffle history and hence we want to remove the currently playing and the previous track from the shuffle history.
@@ -137,7 +149,9 @@ qint64
 PlayableProxyModelPlaylistInterface::siblingIndex( int itemsAway, qint64 rootIndex ) const
 {
     if ( m_proxyModel.isNull() )
+    {
         return -1;
+    }
 
     PlayableProxyModel* proxyModel = m_proxyModel.data();
 
@@ -156,10 +170,14 @@ PlayableProxyModelPlaylistInterface::siblingIndex( int itemsAway, qint64 rootInd
                 if ( m_shuffleHistory.count() > 1 )
                 {
                     if ( proxyModel->itemFromQuery( m_shuffleHistory.at( m_shuffleHistory.count() - 2 ) ) )
+                    {
                         idx = proxyModel->mapFromSource( proxyModel->itemFromQuery( m_shuffleHistory.at( m_shuffleHistory.count() - 2 ) )->index );
+                    }
                 }
                 else
+                {
                     return -1;
+                }
             }
             else
             {
@@ -179,7 +197,7 @@ PlayableProxyModelPlaylistInterface::siblingIndex( int itemsAway, qint64 rootInd
                         item = proxyModel->itemFromIndex( proxyModel->mapToSource( idx ) );
                     }
                     while ( safetyCounter < proxyModel->rowCount() &&
-                          ( !item || !item->query()->playable() || m_shuffleHistory.contains( item->query() ) ) );
+                            ( !item || !item->query()->playable() || m_shuffleHistory.contains( item->query() ) ) );
 
                     if ( item && item->query()->playable() )
                     {
@@ -209,9 +227,11 @@ PlayableProxyModelPlaylistInterface::siblingIndex( int itemsAway, qint64 rootInd
                 }
                 else
                 {
-                    PlayableItem* pitem = reinterpret_cast<PlayableItem*>( (void*)rootIndex );
+                    PlayableItem* pitem = reinterpret_cast<PlayableItem*>( ( void* )rootIndex );
                     if ( !pitem || !pitem->index.isValid() )
+                    {
                         return -1;
+                    }
 
                     idx = proxyModel->mapFromSource( pitem->index );
                 }
@@ -241,7 +261,7 @@ PlayableProxyModelPlaylistInterface::siblingIndex( int itemsAway, qint64 rootInd
         PlayableItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( idx ) );
         if ( item )
         {
-            return (qint64)( item->index.internalPointer() );
+            return ( qint64 )( item->index.internalPointer() );
         }
 
         idx = proxyModel->index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0 );
@@ -255,13 +275,17 @@ Tomahawk::result_ptr
 PlayableProxyModelPlaylistInterface::currentItem() const
 {
     if ( m_proxyModel.isNull() )
+    {
         return result_ptr();
+    }
 
     PlayableProxyModel* proxyModel = m_proxyModel.data();
 
     PlayableItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( proxyModel->currentIndex() ) );
     if ( item && !item->query().isNull() && item->query()->playable() )
+    {
         return item->query()->results().at( 0 );
+    }
 
     return result_ptr();
 }
@@ -271,11 +295,15 @@ Tomahawk::query_ptr
 PlayableProxyModelPlaylistInterface::queryAt( qint64 index ) const
 {
     if ( m_proxyModel.isNull() )
+    {
         return query_ptr();
+    }
 
-    PlayableItem* item = reinterpret_cast<PlayableItem*>( (void*)index );
+    PlayableItem* item = reinterpret_cast<PlayableItem*>( ( void* )index );
     if ( item && item->query() )
+    {
         return item->query();
+    }
 
     return query_ptr();
 }
@@ -285,11 +313,15 @@ Tomahawk::result_ptr
 PlayableProxyModelPlaylistInterface::resultAt( qint64 index ) const
 {
     if ( m_proxyModel.isNull() )
+    {
         return result_ptr();
+    }
 
-    PlayableItem* item = reinterpret_cast<PlayableItem*>( (void*)index );
+    PlayableItem* item = reinterpret_cast<PlayableItem*>( ( void* )index );
     if ( item && item->result() )
+    {
         return item->result();
+    }
 
     return result_ptr();
 }
@@ -299,11 +331,15 @@ qint64
 PlayableProxyModelPlaylistInterface::indexOfResult( const Tomahawk::result_ptr& result ) const
 {
     if ( m_proxyModel.isNull() )
+    {
         return -1;
+    }
 
     PlayableItem* item = m_proxyModel.data()->itemFromResult( result );
     if ( item )
-        return (qint64)( item->index.internalPointer() );
+    {
+        return ( qint64 )( item->index.internalPointer() );
+    }
 
     return -1;
 }
@@ -313,11 +349,15 @@ qint64
 PlayableProxyModelPlaylistInterface::indexOfQuery( const Tomahawk::query_ptr& query ) const
 {
     if ( m_proxyModel.isNull() )
+    {
         return -1;
+    }
 
     PlayableItem* item = m_proxyModel.data()->itemFromQuery( query );
     if ( item )
-        return (qint64)( item->index.internalPointer() );
+    {
+        return ( qint64 )( item->index.internalPointer() );
+    }
 
     return -1;
 }

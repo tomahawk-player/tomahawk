@@ -31,8 +31,8 @@ namespace Tomahawk
 
 class DLLEXPORT DatabaseCommand_loadOps : public DatabaseCommand
 {
-Q_OBJECT
-public:
+    Q_OBJECT
+  public:
     explicit DatabaseCommand_loadOps( const Tomahawk::source_ptr& src, QString since, QObject* parent = 0 )
         : DatabaseCommand( src ), m_since( since )
     {
@@ -40,13 +40,19 @@ public:
     }
 
     virtual void exec( DatabaseImpl* db );
-    virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "loadops"; }
+    virtual bool doesMutates() const
+    {
+        return false;
+    }
+    virtual QString commandname() const
+    {
+        return "loadops";
+    }
 
-signals:
+  signals:
     void done( QString sinceguid, QString lastguid, QList< dbop_ptr > ops );
 
-private:
+  private:
     QString m_since; // guid to load from
 };
 

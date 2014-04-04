@@ -38,9 +38,9 @@ class Servent;
 
 class DLLEXPORT ControlConnection : public Connection
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     ControlConnection( Servent* parent );
     ~ControlConnection();
     Connection* clone();
@@ -59,19 +59,19 @@ public:
     void setShutdownOnEmptyPeerInfos( bool shutdownOnEmptyPeerInfos );
     const QSet< Tomahawk::peerinfo_ptr > peerInfos() const;
 
-protected:
+  protected:
     virtual void setup();
 
-protected slots:
+  protected slots:
     virtual void handleMsg( msg_ptr msg );
     virtual void authCheckTimeout();
 
-private slots:
+  private slots:
     void dbSyncConnFinished( QObject* c );
     void registerSource();
     void onPingTimer();
 
-private:
+  private:
     Q_DECLARE_PRIVATE( ControlConnection )
     ControlConnectionPrivate* d_ptr;
 

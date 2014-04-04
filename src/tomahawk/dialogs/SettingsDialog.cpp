@@ -70,7 +70,7 @@
 using namespace Tomahawk;
 using namespace Accounts;
 
-SettingsDialog::SettingsDialog(QObject *parent )
+SettingsDialog::SettingsDialog( QObject* parent )
     : QObject( parent )
     , m_accountsWidgetUi( new Ui_Settings_Accounts )
     , m_accountsWidget( new QWidget )
@@ -96,18 +96,24 @@ SettingsDialog::SettingsDialog(QObject *parent )
     m_advancedWidgetUi->checkBoxHttp->setChecked( s->httpEnabled() );
     m_advancedWidgetUi->checkBoxListenApi->setChecked( s->httpBindAll() );
     m_advancedWidgetUi->checkBoxSongChangeNotifications->setChecked( s->songChangeNotificationEnabled() );
-    #ifndef Q_OS_LINUX // no backends on OSX or Win so far
-        m_advancedWidgetUi->checkBoxSongChangeNotifications->setVisible( false );
-    #endif
+#ifndef Q_OS_LINUX // no backends on OSX or Win so far
+    m_advancedWidgetUi->checkBoxSongChangeNotifications->setVisible( false );
+#endif
 
     //Network settings
     Tomahawk::Network::ExternalAddress::Mode mode = TomahawkSettings::instance()->externalAddressMode();
     if ( mode == Tomahawk::Network::ExternalAddress::Lan )
+    {
         m_advancedWidgetUi->lanOnlyRadioButton->setChecked( true );
+    }
     else if ( mode == Tomahawk::Network::ExternalAddress::Static )
+    {
         m_advancedWidgetUi->staticIpRadioButton->setChecked( true );
+    }
     else
+    {
         m_advancedWidgetUi->upnpRadioButton->setChecked( true );
+    }
 
     m_advancedWidgetUi->staticHostSettingsButton->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
 
@@ -145,9 +151,9 @@ SettingsDialog::SettingsDialog(QObject *parent )
     m_accountProxy = new AccountModelFilterProxy( m_accountModel );
     m_accountProxy->setSourceModel( m_accountModel );
 
-    connect( m_accountProxy, SIGNAL( startInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( startInstalling(QPersistentModelIndex) ) );
-    connect( m_accountProxy, SIGNAL( doneInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( doneInstalling(QPersistentModelIndex) ) );
-    connect( m_accountProxy, SIGNAL( errorInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( errorInstalling(QPersistentModelIndex) ) );
+    connect( m_accountProxy, SIGNAL( startInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( startInstalling( QPersistentModelIndex ) ) );
+    connect( m_accountProxy, SIGNAL( doneInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( doneInstalling( QPersistentModelIndex ) ) );
+    connect( m_accountProxy, SIGNAL( errorInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( errorInstalling( QPersistentModelIndex ) ) );
     connect( m_accountProxy, SIGNAL( scrollTo( QModelIndex ) ), SLOT( scrollTo( QModelIndex ) ) );
 
     m_accountsWidgetUi->accountsView->setModel( m_accountProxy );
@@ -190,10 +196,10 @@ SettingsDialog::SettingsDialog(QObject *parent )
         m_collectionWidgetUi->scannerTimeSpinBox->hide();
     }
 
-/*    foreach ( const QString& dir, TomahawkSettings::instance()->scannerPaths() )
-    {
-        m_collectionWidgetUi->dirTree->checkPath( dir, Qt::Checked );
-    }*/
+    /*    foreach ( const QString& dir, TomahawkSettings::instance()->scannerPaths() )
+        {
+            m_collectionWidgetUi->dirTree->checkPath( dir, Qt::Checked );
+        }*/
     m_collectionWidgetUi->pathListWidget->addItems( TomahawkSettings::instance()->scannerPaths() );
 
     const int buttonSize = TomahawkUtils::defaultFontHeight() * 2.5;
@@ -227,16 +233,16 @@ SettingsDialog::SettingsDialog(QObject *parent )
 #endif
 
     // NOW PLAYING
-// #ifdef Q_WS_MAC
-//     ui->checkBoxEnableAdium->setChecked( s->nowPlayingEnabled() );
-// #else
-//     ui->checkBoxEnableAdium->hide();
-// #endif
+    // #ifdef Q_WS_MAC
+    //     ui->checkBoxEnableAdium->setChecked( s->nowPlayingEnabled() );
+    // #else
+    //     ui->checkBoxEnableAdium->hide();
+    // #endif
 
     m_dialog->addTab( m_accountsWidget, TomahawkUtils::defaultPixmap( TomahawkUtils::AccountSettings ),
                       tr( "Services" ), tr( "Configure the accounts and services used by Tomahawk "
-                                             "to search and retrieve music, find your friends and "
-                                             "update your status." ) );
+                                            "to search and retrieve music, find your friends and "
+                                            "update your status." ) );
 
     m_dialog->addTab( m_collectionWidget, TomahawkUtils::defaultPixmap( TomahawkUtils::MusicSettings ),
                       tr( "Collection" ), tr( "Manage how Tomahawk finds music on your computer." ) );
@@ -284,20 +290,22 @@ SettingsDialog::saveSettings()
         libraryPaths << m_collectionWidgetUi->pathListWidget->item( i )->text();
     }
     s->setScannerPaths( libraryPaths );
-//    s->setScannerPaths( m_collectionWidgetUi->dirTree->getCheckedPaths() );
+    //    s->setScannerPaths( m_collectionWidgetUi->dirTree->getCheckedPaths() );
     s->setWatchForChanges( m_collectionWidgetUi->checkBoxWatchForChanges->isChecked() );
     s->setScannerTime( m_collectionWidgetUi->scannerTimeSpinBox->value() );
     s->setEnableEchonestCatalogs( m_collectionWidgetUi->enableEchonestCatalog->isChecked() );
 
-//         s->setNowPlayingEnabled( ui->checkBoxEnableAdium->isChecked() );
+    //         s->setNowPlayingEnabled( ui->checkBoxEnableAdium->isChecked() );
 
     s->applyChanges();
     s->sync();
 
     if ( m_restartRequired )
+    {
         QMessageBox::information( 0, tr( "Information" ), tr( "Some changed settings will not take effect until Tomahawk is restarted" ) );
+    }
 
-//    m_collectionWidgetUi->dirTree->cleanup();
+    //    m_collectionWidgetUi->dirTree->cleanup();
 
     Tomahawk::Utils::NetworkProxyFactory* proxyFactory = Tomahawk::Utils::proxyFactory();
     if ( !m_advancedWidgetUi->enableProxyCheckBox->isChecked() )
@@ -353,7 +361,7 @@ SettingsDialog::onRejected()
 
 
 void
-SettingsDialog::changeEvent( QEvent *e )
+SettingsDialog::changeEvent( QEvent* e )
 {
     switch ( e->type() )
     {
@@ -413,8 +421,8 @@ void
 SettingsDialog::addLibraryPath()
 {
     QString dir = QFileDialog::getExistingDirectory( m_collectionWidget, tr( "Open Directory" ),
-                                                     QDir::homePath(),
-                                                     QFileDialog::ShowDirsOnly );
+                  QDir::homePath(),
+                  QFileDialog::ShowDirsOnly );
 
     if ( !dir.isEmpty() )
     {
@@ -461,12 +469,16 @@ void
 SettingsDialog::openAccountFactoryConfig( AccountFactory* factory )
 {
     QList< Account* > accts;
-    foreach ( Account* acct, AccountManager::instance()->accounts() )
+    foreach ( Account * acct, AccountManager::instance()->accounts() )
     {
         if ( AccountManager::instance()->factoryForAccount( acct ) == factory )
+        {
             accts << acct;
+        }
         if ( accts.size() > 1 )
+        {
             break;
+        }
     }
     Q_ASSERT( accts.size() > 0 ); // Shouldn't have a config wrench if there are no accounts!
     if ( accts.size() == 1 )
@@ -507,11 +519,11 @@ void
 SettingsDialog::installFromFile()
 {
     const QString resolver = QFileDialog::getOpenFileName( 0, tr( "Install resolver from file" ),
-                                                           TomahawkSettings::instance()->scriptDefaultPath(),
-                                                           tr( "Tomahawk Resolvers (*.axe *.js);;"
-                                                           "All files (*)" ),
-                                                           0,
-                                                           QFileDialog::ReadOnly );
+                             TomahawkSettings::instance()->scriptDefaultPath(),
+                             tr( "Tomahawk Resolvers (*.axe *.js);;"
+                                 "All files (*)" ),
+                             0,
+                             QFileDialog::ReadOnly );
 
     if ( !resolver.isEmpty() )
     {
@@ -528,7 +540,7 @@ SettingsDialog::installFromFile()
             //
             // Hence, we special-case the spotify resolver and directly set the path on it here.
             SpotifyAccount* acct = 0;
-            foreach ( Account* account, AccountManager::instance()->accounts() )
+            foreach ( Account * account, AccountManager::instance()->accounts() )
             {
                 if ( SpotifyAccount* spotify = qobject_cast< SpotifyAccount* >( account ) )
                 {
@@ -551,8 +563,8 @@ SettingsDialog::installFromFile()
             QFileInfo fi( resolver );
 
             JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
-                                    tr( "Resolver installation from file %1 failed." )
-                                    .arg( fi.fileName() ) ) );
+                        tr( "Resolver installation from file %1 failed." )
+                        .arg( fi.fileName() ) ) );
 
             tDebug() << "Resolver was not installed:" << resolver;
             return;
@@ -569,12 +581,12 @@ void
 SettingsDialog::aclEntryClearButtonClicked()
 {
     QMessageBox::StandardButton button = QMessageBox::question(
-                           0,
-                           tr( "Delete all Access Control entries?" ),
-                           tr( "Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to." ),
-                           QMessageBox::Ok | QMessageBox::Cancel,
-                           QMessageBox::Ok
-                         );
+            0,
+            tr( "Delete all Access Control entries?" ),
+            tr( "Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to." ),
+            QMessageBox::Ok | QMessageBox::Cancel,
+            QMessageBox::Ok
+                                         );
     if ( button == QMessageBox::Ok )
     {
         ACLRegistry::instance()->wipeEntries();
@@ -634,7 +646,7 @@ HostDialog::toggleAutoDetectIp( bool checked )
 }
 
 
-ProxyDialog::ProxyDialog( QWidget *parent )
+ProxyDialog::ProxyDialog( QWidget* parent )
     : QDialog( parent )
     , ui( new Ui::ProxyDialog )
 {

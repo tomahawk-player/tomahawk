@@ -37,19 +37,25 @@ SplashWidget::SplashWidget()
     compositingWorks = false;
 #elif defined(Q_WS_X11)
     if ( !QX11Info::isCompositingManagerRunning() )
+    {
         compositingWorks = false;
+    }
 #endif
 
     QString imagePath;
     if ( compositingWorks )
+    {
         imagePath = RESPATH "images/splash.svg";
+    }
     else
+    {
         imagePath = RESPATH "images/splash-unrounded.svg";
+    }
 
     QSize size( 304, 333 );
 
     setPixmap( ImageRegistry::instance()->pixmap( imagePath,
-        TomahawkUtils::DpiScaler::scaled( this, size ), TomahawkUtils::Original ) );
+               TomahawkUtils::DpiScaler::scaled( this, size ), TomahawkUtils::Original ) );
 
     QFont font = this->font();
 

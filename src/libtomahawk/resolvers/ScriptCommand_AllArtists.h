@@ -27,7 +27,7 @@
 class ScriptCommand_AllArtists : public ScriptCommand, public Tomahawk::ArtistsRequest
 {
     Q_OBJECT
-public:
+  public:
     explicit ScriptCommand_AllArtists( const Tomahawk::collection_ptr& collection,
                                        QObject* parent = 0 );
     virtual ~ScriptCommand_AllArtists() {}
@@ -36,18 +36,18 @@ public:
 
     void setFilter( const QString& filter );
 
-signals:
+  signals:
     void artists( const QList< Tomahawk::artist_ptr >& );
     void done();
 
-protected:
+  protected:
     virtual void exec();
     virtual void reportFailure();
 
-private slots:
+  private slots:
     void onResolverDone( const QList< Tomahawk::artist_ptr >& );
 
-private:
+  private:
     Tomahawk::collection_ptr m_collection;
     QString m_filter;
 };

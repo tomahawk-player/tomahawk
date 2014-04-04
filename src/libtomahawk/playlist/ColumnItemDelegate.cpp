@@ -41,7 +41,7 @@
 
 
 ColumnItemDelegate::ColumnItemDelegate( ColumnView* parent, TreeProxyModel* proxy )
-    : QStyledItemDelegate( (QObject*)parent )
+    : QStyledItemDelegate( ( QObject* )parent )
     , m_view( parent )
     , m_model( proxy )
 {
@@ -55,7 +55,7 @@ ColumnItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIn
 
     if ( index.isValid() )
     {
-        Tomahawk::ModelTypes type = (Tomahawk::ModelTypes)index.data( PlayableProxyModel::TypeRole ).toInt();
+        Tomahawk::ModelTypes type = ( Tomahawk::ModelTypes )index.data( PlayableProxyModel::TypeRole ).toInt();
         switch ( type )
         {
             case Tomahawk::TypeAlbum:
@@ -87,9 +87,11 @@ ColumnItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option
 {
     PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
     if ( !item )
+    {
         return;
+    }
 
-    QTextOption textOption( Qt::AlignVCenter | (Qt::Alignment)index.data( Qt::TextAlignmentRole ).toUInt() );
+    QTextOption textOption( Qt::AlignVCenter | ( Qt::Alignment )index.data( Qt::TextAlignmentRole ).toUInt() );
     textOption.setWrapMode( QTextOption::NoWrap );
 
     QString text;
@@ -104,7 +106,7 @@ ColumnItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option
     else if ( !item->result().isNull() || !item->query().isNull() )
     {
         float opacity = item->result() && item->result()->isOnline() ? item->result()->score() : 0.0;
-        opacity = qMax( (float)0.3, opacity );
+        opacity = qMax( ( float )0.3, opacity );
         QColor textColor = TomahawkUtils::alphaBlend( option.palette.color( QPalette::Foreground ), option.palette.color( QPalette::Background ), opacity );
 
         {
@@ -115,9 +117,13 @@ ColumnItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option
             o.palette.setColor( QPalette::Text, textColor );
 
             if ( m_view->currentIndex() == index )
+            {
                 o.state |= QStyle::State_Selected;
+            }
             else
+            {
                 o.state &= ~QStyle::State_Selected;
+            }
 
             if ( o.state & QStyle::State_Selected && o.state & QStyle::State_Active )
             {
@@ -133,25 +139,27 @@ ColumnItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option
             }
 
             int oldX = 0;
-//            if ( m_view->header()->visualIndex( index.column() ) == 0 )
+            //            if ( m_view->header()->visualIndex( index.column() ) == 0 )
             {
                 oldX = o.rect.x();
                 o.rect.setX( 0 );
             }
             qApp->style()->drawControl( QStyle::CE_ItemViewItem, &o, painter );
             if ( oldX > 0 )
-                o.rect.setX( oldX );
-
-/*            if ( m_hoveringOver == index && !index.data().toString().isEmpty() && index.column() == 0 )
             {
-                o.rect.setWidth( o.rect.width() - o.rect.height() );
-                QRect arrowRect( o.rect.x() + o.rect.width(), o.rect.y() + 1, o.rect.height() - 2, o.rect.height() - 2 );
+                o.rect.setX( oldX );
+            }
 
-                QPixmap infoIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, arrowRect.size() );
-                painter->drawPixmap( arrowRect, infoIcon );
+            /*            if ( m_hoveringOver == index && !index.data().toString().isEmpty() && index.column() == 0 )
+                        {
+                            o.rect.setWidth( o.rect.width() - o.rect.height() );
+                            QRect arrowRect( o.rect.x() + o.rect.width(), o.rect.y() + 1, o.rect.height() - 2, o.rect.height() - 2 );
 
-                m_infoButtonRects[ index ] = arrowRect;
-            }*/
+                            QPixmap infoIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, arrowRect.size() );
+                            painter->drawPixmap( arrowRect, infoIcon );
+
+                            m_infoButtonRects[ index ] = arrowRect;
+                        }*/
 
             {
                 QRect r = o.rect.adjusted( 3, 0, 0, 0 );
@@ -172,8 +180,8 @@ ColumnItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option
                 if ( item->query()->track()->albumpos() > 0 )
                 {
                     text = QString( "%1. %2" )
-                              .arg( index.data( PlayableModel::AlbumPosRole ).toString() )
-                              .arg( index.data().toString() );
+                           .arg( index.data( PlayableModel::AlbumPosRole ).toString() )
+                           .arg( index.data().toString() );
                 }
 
                 text = painter->fontMetrics().elidedText( text, Qt::ElideRight, r.width() - 3 );
@@ -185,19 +193,27 @@ ColumnItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option
         return;
     }
     else
+    {
         return;
+    }
 
     if ( text.trimmed().isEmpty() )
+    {
         text = tr( "Unknown" );
+    }
 
     QStyleOptionViewItemV4 opt = option;
     initStyleOption( &opt, QModelIndex() );
 
     const QModelIndex curIndex = m_view->currentIndex();
     if ( curIndex == index || curIndex.parent() == index || curIndex.parent().parent() == index )
+    {
         opt.state |= QStyle::State_Selected;
+    }
     else
+    {
         opt.state &= ~QStyle::State_Selected;
+    }
 
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
 
@@ -216,27 +232,29 @@ ColumnItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option
     }
 
     if ( index.column() > 0 )
+    {
         return;
+    }
 
     painter->save();
     painter->setRenderHint( QPainter::Antialiasing );
     painter->setPen( opt.palette.color( QPalette::Text ) );
 
     QRect r = option.rect.adjusted( 8, 2, -option.rect.width() + option.rect.height() + 4, -2 );
-//    painter->drawPixmap( r, QPixmap( RESPATH "images/cover-shadow.png" ) );
+    //    painter->drawPixmap( r, QPixmap( RESPATH "images/cover-shadow.png" ) );
 
     if ( !m_pixmaps.contains( index ) )
     {
         if ( !item->album().isNull() )
         {
             m_pixmaps.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->album(), r.size(), TomahawkUtils::Original, false ) ) );
-            _detail::Closure* closure = NewClosure( m_pixmaps[ index ], SIGNAL( repaintRequest() ), const_cast<ColumnItemDelegate*>(this), SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), QPersistentModelIndex( index ) );
+            _detail::Closure* closure = NewClosure( m_pixmaps[ index ], SIGNAL( repaintRequest() ), const_cast<ColumnItemDelegate*>( this ), SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), QPersistentModelIndex( index ) );
             closure->setAutoDelete( false );
         }
         else if ( !item->artist().isNull() )
         {
             m_pixmaps.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->artist(), r.size(), TomahawkUtils::Original, false ) ) );
-            _detail::Closure* closure = NewClosure( m_pixmaps[ index ], SIGNAL( repaintRequest() ), const_cast<ColumnItemDelegate*>(this), SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), QPersistentModelIndex( index ) );
+            _detail::Closure* closure = NewClosure( m_pixmaps[ index ], SIGNAL( repaintRequest() ), const_cast<ColumnItemDelegate*>( this ), SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), QPersistentModelIndex( index ) );
             closure->setAutoDelete( false );
         }
     }
@@ -245,7 +263,7 @@ ColumnItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option
     painter->drawPixmap( r, cover );
 
     QFont font = painter->font();
-//    font.setWeight( 58 );
+    //    font.setWeight( 58 );
     font.setPointSize( TomahawkUtils::defaultFontSize() + 2 );
     painter->setFont( font );
 
@@ -262,7 +280,9 @@ ColumnItemDelegate::doUpdateIndex( const QPersistentModelIndex& index )
 {
     PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
     if ( !item )
+    {
         return;
+    }
 
     item->forceUpdate();
 }
@@ -275,10 +295,12 @@ ColumnItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const
     Q_UNUSED( option );
 
     if ( event->type() != QEvent::MouseButtonRelease &&
-         event->type() != QEvent::MouseMove &&
-         event->type() != QEvent::MouseButtonPress &&
-         event->type() != QEvent::Leave )
+            event->type() != QEvent::MouseMove &&
+            event->type() != QEvent::MouseButtonPress &&
+            event->type() != QEvent::Leave )
+    {
         return false;
+    }
 
     bool hoveringInfo = false;
     if ( m_infoButtonRects.contains( index ) )
@@ -291,9 +313,13 @@ ColumnItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const
     if ( event->type() == QEvent::MouseMove )
     {
         if ( hoveringInfo )
+        {
             m_view->setCursor( Qt::PointingHandCursor );
+        }
         else
+        {
             m_view->setCursor( Qt::ArrowCursor );
+        }
 
         if ( m_hoveringOver != index )
         {
@@ -316,7 +342,9 @@ ColumnItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const
         {
             PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
             if ( !item )
+            {
                 return false;
+            }
 
             if ( item->query() )
             {

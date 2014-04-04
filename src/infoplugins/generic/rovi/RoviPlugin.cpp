@@ -68,7 +68,7 @@ RoviPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     criteria["artist"] = hash["artist"];
     criteria["album"] = hash["album"];
 
-    emit getCachedInfo( criteria, Q_INT64_C(0), requestData );
+    emit getCachedInfo( criteria, Q_INT64_C( 0 ), requestData );
 }
 
 
@@ -105,7 +105,9 @@ void
 RoviPlugin::albumLookupError( QNetworkReply::NetworkError error )
 {
     if ( error == QNetworkReply::NoError )
+    {
         return;
+    }
 
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
     Q_ASSERT( reply );
@@ -124,7 +126,9 @@ RoviPlugin::albumLookupFinished()
     Q_ASSERT( reply );
 
     if ( reply->error() != QNetworkReply::NoError )
+    {
         return;
+    }
 
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
 
@@ -157,11 +161,13 @@ RoviPlugin::albumLookupFinished()
 
 
     QStringList trackNameList;
-    foreach ( const QVariant& track, tracks )
+    foreach ( const QVariant & track, tracks )
     {
         const QVariantMap trackData = track.toMap();
         if ( trackData.contains( "title" ) )
+        {
             trackNameList << trackData[ "title" ].toString();
+        }
     }
 
     QVariantMap returnedData;
@@ -173,7 +179,7 @@ RoviPlugin::albumLookupFinished()
     criteria["artist"] = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>()["artist"];
     criteria["album"] = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>()["album"];
 
-    emit updateCache( criteria, Q_INT64_C(0), requestData.type, returnedData );
+    emit updateCache( criteria, Q_INT64_C( 0 ), requestData.type, returnedData );
 }
 
 

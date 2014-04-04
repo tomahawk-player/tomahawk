@@ -25,7 +25,7 @@
 #include "utils/Logger.h"
 
 ScriptCommand_AllArtists::ScriptCommand_AllArtists( const Tomahawk::collection_ptr& collection,
-                                                    QObject* parent )
+        QObject* parent )
     : ScriptCommand( parent )
     , m_collection( collection )
 {
@@ -82,14 +82,18 @@ ScriptCommand_AllArtists::reportFailure()
 void ScriptCommand_AllArtists::onResolverDone( const QList< Tomahawk::artist_ptr >& a )
 {
     if ( m_filter.isEmpty() )
+    {
         emit artists( a );
+    }
     else
     {
         QList< Tomahawk::artist_ptr > filtered;
-        foreach( const Tomahawk::artist_ptr& artist, a )
+        foreach( const Tomahawk::artist_ptr & artist, a )
         {
             if ( artist->name().contains( m_filter ) )
+            {
                 filtered.append( artist );
+            }
         }
         emit artists( filtered );
     }

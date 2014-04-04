@@ -37,7 +37,9 @@ ScriptCommandQueue::enqueue( const QSharedPointer< ScriptCommand >& req )
     locker.unlock();
 
     if ( m_queue.count() == 1 )
+    {
         nextCommand();
+    }
 }
 
 
@@ -45,7 +47,9 @@ void
 ScriptCommandQueue::nextCommand()
 {
     if ( m_queue.isEmpty() )
+    {
         return;
+    }
 
     QSharedPointer< ScriptCommand > req = m_queue.first();
 
@@ -64,7 +68,9 @@ void
 ScriptCommandQueue::onCommandDone()
 {
     if ( m_queue.isEmpty() || !m_timer->isActive() ) //the timeout already happened or some other weird thing
-        return;                                      //nothing to do here
+    {
+        return;    //nothing to do here
+    }
 
     m_timer->stop();
 
@@ -79,7 +85,9 @@ ScriptCommandQueue::onCommandDone()
                 this, SLOT( onTimeout() ) );
 
     if ( m_queue.count() > 0 )
+    {
         nextCommand();
+    }
 }
 
 
@@ -101,5 +109,7 @@ ScriptCommandQueue::onTimeout()
                 this, SLOT( onTimeout() ) );
 
     if ( m_queue.count() > 0 )
+    {
         nextCommand();
+    }
 }

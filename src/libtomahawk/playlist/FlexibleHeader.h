@@ -31,14 +31,14 @@ class DLLEXPORT FlexibleHeader : public FilterHeader
 {
     Q_OBJECT
 
-public:
+  public:
     FlexibleHeader( FlexibleView* parent );
     ~FlexibleHeader();
 
-protected:
+  protected:
     void changeEvent( QEvent* e );
 
-private:
+  private:
     FlexibleView* m_parent;
 
     QRadioButton* m_radioCloud;

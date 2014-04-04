@@ -34,30 +34,45 @@ class PlaylistView;
 
 class DLLEXPORT TopTracksContext : public Tomahawk::ContextPage
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     TopTracksContext();
     ~TopTracksContext();
 
-    virtual QGraphicsWidget* widget() { return m_proxy; }
+    virtual QGraphicsWidget* widget()
+    {
+        return m_proxy;
+    }
 
-    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return Tomahawk::playlistinterface_ptr(); }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const
+    {
+        return Tomahawk::playlistinterface_ptr();
+    }
 
-    virtual QString title() const { return tr( "Top Hits" ); }
-    virtual QString description() const { return QString(); }
+    virtual QString title() const
+    {
+        return tr( "Top Hits" );
+    }
+    virtual QString description() const
+    {
+        return QString();
+    }
 
-    virtual bool jumpToCurrentTrack() { return false; }
+    virtual bool jumpToCurrentTrack()
+    {
+        return false;
+    }
 
-public slots:
+  public slots:
     virtual void setArtist( const Tomahawk::artist_ptr& artist );
     virtual void setAlbum( const Tomahawk::album_ptr& album );
     virtual void setQuery( const Tomahawk::query_ptr& query );
 
-private slots:
+  private slots:
     void onTracksFound( const QList<Tomahawk::query_ptr>& queries, Tomahawk::ModelMode mode );
 
-private:
+  private:
     PlaylistView* m_topHitsView;
     PlaylistModel* m_topHitsModel;
 

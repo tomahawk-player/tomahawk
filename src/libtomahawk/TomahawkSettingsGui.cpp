@@ -26,20 +26,20 @@
 
 using namespace Tomahawk;
 
-inline QDataStream& operator<<(QDataStream& out, const AtticaManager::StateHash& states)
+inline QDataStream& operator<<( QDataStream& out, const AtticaManager::StateHash& states )
 {
     out <<  TOMAHAWK_SETTINGS_VERSION;
-    out << (quint32)states.count();
-    foreach( const QString& key, states.keys() )
+    out << ( quint32 )states.count();
+    foreach( const QString & key, states.keys() )
     {
         AtticaManager::Resolver resolver = states[ key ];
-        out << key << resolver.version << resolver.scriptPath << (qint32)resolver.state << resolver.userRating << resolver.binary;
+        out << key << resolver.version << resolver.scriptPath << ( qint32 )resolver.state << resolver.userRating << resolver.binary;
     }
     return out;
 }
 
 
-inline QDataStream& operator>>(QDataStream& in, AtticaManager::StateHash& states)
+inline QDataStream& operator>>( QDataStream& in, AtticaManager::StateHash& states )
 {
     quint32 count = 0, configVersion = 0;
     in >> configVersion;
@@ -59,7 +59,7 @@ inline QDataStream& operator>>(QDataStream& in, AtticaManager::StateHash& states
             // V11 includes 'bool binary' flag
             in >> binary;
         }
-        states[ key ] = AtticaManager::Resolver( version, scriptPath, userRating, (AtticaManager::ResolverState)state, binary );
+        states[ key ] = AtticaManager::Resolver( version, scriptPath, userRating, ( AtticaManager::ResolverState )state, binary );
     }
     return in;
 }
@@ -68,7 +68,7 @@ inline QDataStream& operator>>(QDataStream& in, AtticaManager::StateHash& states
 TomahawkSettingsGui*
 TomahawkSettingsGui::instanceGui()
 {
-    return qobject_cast< TomahawkSettingsGui* >(TomahawkSettings::instance());
+    return qobject_cast< TomahawkSettingsGui* >( TomahawkSettings::instance() );
 }
 
 
@@ -149,5 +149,5 @@ void
 TomahawkSettingsGui::registerCustomSettingsHandlers()
 {
     qRegisterMetaType< AtticaManager::StateHash >( "AtticaManager::StateHash" );
-    qRegisterMetaTypeStreamOperators<AtticaManager::StateHash>("AtticaManager::StateHash");
+    qRegisterMetaTypeStreamOperators<AtticaManager::StateHash>( "AtticaManager::StateHash" );
 }

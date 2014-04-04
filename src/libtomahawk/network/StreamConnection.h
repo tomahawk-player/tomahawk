@@ -35,9 +35,9 @@ class BufferIODevice;
 
 class DLLEXPORT StreamConnection : public Connection
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
+  public:
     enum Type
     {
         SENDING = 0,
@@ -55,23 +55,41 @@ public:
     void setup();
     Connection* clone();
 
-    const QSharedPointer<QIODevice>& iodevice() { return m_iodev; }
-    ControlConnection* controlConnection() const { return m_cc; }
+    const QSharedPointer<QIODevice>& iodevice()
+    {
+        return m_iodev;
+    }
+    ControlConnection* controlConnection() const
+    {
+        return m_cc;
+    }
 
     Tomahawk::source_ptr source() const;
-    Tomahawk::result_ptr track() const { return m_result; }
-    qint64 transferRate() const { return m_transferRate; }
+    Tomahawk::result_ptr track() const
+    {
+        return m_result;
+    }
+    qint64 transferRate() const
+    {
+        return m_transferRate;
+    }
 
-    Type type() const { return m_type; }
-    QString fid() const { return m_fid; }
+    Type type() const
+    {
+        return m_type;
+    }
+    QString fid() const
+    {
+        return m_fid;
+    }
 
-signals:
+  signals:
     void updated();
 
-protected slots:
+  protected slots:
     virtual void handleMsg( msg_ptr msg );
 
-private slots:
+  private slots:
     void startSending( const Tomahawk::result_ptr& result );
     void reallyStartSending( const Tomahawk::result_ptr& result, QSharedPointer< QIODevice >& io ); //only called back from startSending
     void sendSome();
@@ -79,7 +97,7 @@ private slots:
 
     void onBlockRequest( int pos );
 
-private:
+  private:
     QSharedPointer<QIODevice> m_iodev;
     ControlConnection* m_cc;
     QString m_fid;
