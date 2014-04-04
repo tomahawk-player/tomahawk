@@ -20,7 +20,7 @@
 #define HATCHET_ACCOUNT_H
 
 #include "TomahawkPlugin.h"
-#include "HatchetHelpers.h"
+#include "utils/HatchetHelpers.h"
 
 #include <accounts/Account.h>
 #include <accounts/AccountDllMacro.h>

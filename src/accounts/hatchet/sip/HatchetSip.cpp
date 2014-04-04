@@ -19,8 +19,7 @@
 #include "HatchetSip.h"
 
 #include "account/HatchetAccount.h"
-#include "WebSocketThreadController.h"
-//#include "WebSocket.h"
+#include "utils/WebSocketThreadController.h"
 
 #include <database/Database.h>
 #include <database/DatabaseImpl.h>

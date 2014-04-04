@@ -18,7 +18,6 @@
 
 #include "HatchetAccount.h"
 
-#include "HatchetHelpers.h"
 #include "HatchetAccountConfig.h"
 #include "sip/HatchetSip.h"
 #include "utils/Closure.h"
