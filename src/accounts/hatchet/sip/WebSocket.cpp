@@ -86,6 +86,8 @@ WebSocket::setAuthorizationHeader( const QString &authorizationHeader )
         return;
     }
 
+    m_authorizationHeader = authorizationHeader;
+
     // We'll let automatic reconnection handle things
     if ( m_socket && m_socket->isEncrypted() )
     {
