@@ -37,13 +37,12 @@ tomahawk_add_plugin(hatchet
     TYPE account
     EXPORT_MACRO ACCOUNTDLLEXPORT_PRO
     SOURCES
-        HatchetHelpers.cpp
+        utils/HatchetHelpers.cpp
         account/HatchetAccount.cpp
         account/HatchetAccountConfig.cpp
-        sip/WebSocket.cpp
-        sip/WebSocketThreadController.cpp
+        utils/WebSocket.cpp
+        utils/WebSocketThreadController.cpp
         sip/HatchetSip.cpp
-        #sip/HatchetCredentialFetcher.cpp
     UI
         account/HatchetAccountConfig.ui
     LINK_LIBRARIES
