@@ -33,8 +33,20 @@
 #include <QApplication>
 
 #include <QImage>
+
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+namespace Qt
+{
+inline QString escape( const QString &x )
+{
+    x.toHtmlEscaped();
+ }
+ }
+#else
 // QTextDocument provides Qt::escape()
 #include <QTextDocument>
+#endif
 
 namespace Tomahawk
 {
