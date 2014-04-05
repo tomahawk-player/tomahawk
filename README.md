@@ -53,7 +53,6 @@ Required dependencies:
 The following dependencies are optional, but recommended:
 
 * Jreen 1.0.5 (1.1.0 will fail, 1.1.1 is fine) - http://qutim.org/jreen/
-* QTweetLib 0.5.0 - https://github.com/minimoog/QTweetLib/
 
 Third party libraries that we ship with our source:
 

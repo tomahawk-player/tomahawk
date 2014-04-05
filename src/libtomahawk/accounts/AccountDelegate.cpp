@@ -420,10 +420,8 @@ AccountDelegate::drawAccountList( QPainter* painter, QStyleOptionViewItemV4& opt
 
     for ( int i = 0; i < accts.size(); i++ )
     {
-        //FIXME: special case for twitter, remove for 0.8.0
-        if ( accts.at( i )->accountServiceName() != "Twitter" )
         // draw lightbulb and text
-            runningRightEdge = drawStatus( painter, QPointF( rightEdge - PADDING, current), accts.at( i ) );
+        runningRightEdge = drawStatus( painter, QPointF( rightEdge - PADDING, current), accts.at( i ) );
 
         const QString label = accts.at( i )->accountFriendlyName();
         const QPoint textTopLeft( runningRightEdge - PADDING - painter->fontMetrics().width( label ), current);
