@@ -202,6 +202,8 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
 {
     QList<Tomahawk::artist_ptr> artists;
     QList<Tomahawk::album_ptr> albums;
+    QList<Tomahawk::query_ptr> queries;
+
     foreach( const Tomahawk::result_ptr& result, results )
     {
         if ( !result->collection().isNull() && !result->isOnline() )
@@ -213,12 +215,12 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
         Tomahawk::query_ptr q = result->toQuery();
         q->addResults( rl );
 
-        m_resultsModel->appendQuery( q );
-
+        queries << q;
         artists << result->track()->artistPtr();
         albums << result->track()->albumPtr();
     }
 
+    m_resultsModel->appendQueries( queries );
     onArtistsFound( artists );
     onAlbumsFound( albums );
 }
