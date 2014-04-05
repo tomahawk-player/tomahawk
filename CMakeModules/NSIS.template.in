@@ -352,7 +352,6 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
 
    File "${MING_BIN}\libechonest.dll"
    File "${MING_BIN}\liblastfm.dll"
-   File "${MING_BIN}\libQTweetLib.dll"
    File "${MING_BIN}\libquazip.dll"
    File "${MING_BIN}\libqtkeychain.dll"
 

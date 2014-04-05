@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/twitter-account">
-        <file>twitter-icon.png</file>
-        <file>twitter-offline-icon.png</file>
-    </qresource>
-</RCC>

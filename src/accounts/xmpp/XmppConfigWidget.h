@@ -72,4 +72,4 @@ private:
 
 }
 
-#endif // TWITTERCONFIGWIDGET_H
+#endif // JABBERACCOUNTCONFIGWIDGET_H

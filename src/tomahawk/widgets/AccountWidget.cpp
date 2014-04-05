@@ -175,11 +175,6 @@ AccountWidget::update( const QPersistentModelIndex& idx, int accountIdx )
                 qobject_cast< Tomahawk::Accounts::AccountFactory* >(
                     idx.data( Tomahawk::Accounts::AccountModel::AccountData )
                         .value< QObject* >() );
-        if ( fac->factoryId() == "twitteraccount" )
-        {
-            m_inviteContainer->setVisible( false );
-            m_inviteButton->setVisible( false );
-        }
 
         switch ( account->connectionState() )
         {
