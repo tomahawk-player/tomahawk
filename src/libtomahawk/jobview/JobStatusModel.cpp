@@ -295,8 +295,8 @@ JobStatusModel::itemFinished()
 
         if ( !m_jobQueue[ item->type() ].isEmpty() )
         {
-            JobStatusItem* item = m_jobQueue[ item->type() ].dequeue();
-            QMetaObject::invokeMethod( this, "addJob", Qt::QueuedConnection, Q_ARG( JobStatusItem*, item ) );
+            JobStatusItem* nextItem = m_jobQueue[ item->type() ].dequeue();
+            QMetaObject::invokeMethod( this, "addJob", Qt::QueuedConnection, Q_ARG( JobStatusItem*, nextItem ) );
         }
     }
 
