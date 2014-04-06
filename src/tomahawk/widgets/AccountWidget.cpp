@@ -170,12 +170,6 @@ AccountWidget::update( const QPersistentModelIndex& idx, int accountIdx )
                                "</b><br>" +
                                account->accountFriendlyName() );
 
-        //we already know it's a factory because of the FactoryProxy
-        Tomahawk::Accounts::AccountFactory* fac =
-                qobject_cast< Tomahawk::Accounts::AccountFactory* >(
-                    idx.data( Tomahawk::Accounts::AccountModel::AccountData )
-                        .value< QObject* >() );
-
         switch ( account->connectionState() )
         {
             case Tomahawk::Accounts::Account::Connected:

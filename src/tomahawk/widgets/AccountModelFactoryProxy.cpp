@@ -47,8 +47,6 @@ AccountModelFactoryProxy::filterAcceptsRow( int sourceRow, const QModelIndex& so
         if ( idx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
              .value< QList< Tomahawk::Accounts::Account* > >().isEmpty() )
             return false;
-
-        Tomahawk::Accounts::AccountFactory* factory = qobject_cast< Tomahawk::Accounts::AccountFactory* >( idx.data( Tomahawk::Accounts::AccountModel::AccountData ).value< QObject* >() );
     }
 
     return rowType == m_filterRowType;
