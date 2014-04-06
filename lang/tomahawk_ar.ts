@@ -2338,17 +2338,17 @@ Password (OTP)</source>
         <translation>تحميل %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="574"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="572"/>
         <source>Online</source>
         <translation>متصل</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="579"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="577"/>
         <source>Connecting...</source>
         <translation>جاري الاتصال...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="584"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="582"/>
         <source>Offline</source>
         <translation>غير متصل</translation>
     </message>
@@ -2639,143 +2639,6 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="96"/>
         <source>KDE Instant Messaging Accounts</source>
         <translation>حسابات الرسائل الفورية الخاصة بك د أي (KDE)</translation>
-    </message>
-</context>
-<context>
-    <name>Tomahawk::Accounts::TwitterAccountFactory</name>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterAccount.h" line="51"/>
-        <source>Send tweets from Tomahawk.</source>
-        <translation>إرسال تغريدات من توماهوك.</translation>
-    </message>
-</context>
-<context>
-    <name>Tomahawk::Accounts::TwitterConfigWidget</name>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="60"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="144"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="192"/>
-        <source>Tweet!</source>
-        <translation>تويت (Tweet)!</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="68"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="170"/>
-        <source>Status: No saved credentials</source>
-        <translation>الحالة: بيانات غير محفوظة</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="69"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="95"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="171"/>
-        <source>Authenticate</source>
-        <translation>صادق</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="76"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="139"/>
-        <source>Status: Credentials saved for %1</source>
-        <translation>الحالة: بيانات %1 حفظت</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="77"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="140"/>
-        <source>De-authenticate</source>
-        <translation>قطع المصادقة</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="125"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="203"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="214"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="232"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="274"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="283"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="293"/>
-        <source>Tweetin&apos; Error</source>
-        <translation>خطأ توتينغ (&apos;Tweetin)</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="125"/>
-        <source>The credentials could not be verified.
-You may wish to try re-authenticating.</source>
-        <translation>لم نستطيع التحقق من صحة البيانات.
-قد ترغب بإعادة المصادقة.</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="155"/>
-        <source>Status: Error validating credentials</source>
-        <translation>الحالة: خطأ في التحقق من صحة البيانات</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="182"/>
-        <source>Global Tweet</source>
-        <translation>تويت شامل (Global Tweet)</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="187"/>
-        <source>Direct Message</source>
-        <translation>رسالة مباشرة</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="188"/>
-        <source>Send Message!</source>
-        <translation>إرسل رسالة!</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="189"/>
-        <source>@Mention</source>
-        <translation>@ذكر</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="190"/>
-        <source>Send Mention!</source>
-        <translation>إرسال ذكر!</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="203"/>
-        <source>You must enter a user name for this type of tweet.</source>
-        <translation>يجب إدخال اسم المستخدم لهذا النوع من التويت (tweet).</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="214"/>
-        <source>Your saved credentials could not be loaded.
-You may wish to try re-authenticating.</source>
-        <translation>لم نستطيع تحميل بياناتك المحفوظة.
-قد ترغب بمعاودة التصديق.</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="232"/>
-        <source>Your saved credentials could not be verified.
-You may wish to try re-authenticating.</source>
-        <translation>لم نستطيع التحقق من بياناتك المحفوظة.
-قد ترغب بمعاودة التصديق.</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="274"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="293"/>
-        <source>There was an error posting your status -- sorry!</source>
-        <translation>عذراً... حصل خطأ في تسجيل رسالتك!</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="276"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="285"/>
-        <source>Tweeted!</source>
-        <translation>ثبت التويت! (!Tweeted)</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="276"/>
-        <source>Your tweet has been posted!</source>
-        <translation>رسالتك على تويتر قد نشرت!</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="283"/>
-        <source>There was an error posting your direct message -- sorry!</source>
-        <translation>نعتذر، حصل خطأ في نشر رسالتك المباشرة !</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="285"/>
-        <source>Your message has been posted!</source>
-        <translation>رسالتك قد نشرت!</translation>
     </message>
 </context>
 <context>
@@ -3560,14 +3423,6 @@ Try tweaking the filters for a new set of songs to play.</source>
     </message>
 </context>
 <context>
-    <name>Tomahawk::InfoSystem::TwitterInfoPlugin</name>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterInfoPlugin.cpp" line="159"/>
-        <source>Listening to &quot;%1&quot; by %2 and loving it! %3</source>
-        <translation>إنني أستمع إلى &quot;%1&quot; من قبل %2 وقد أحببتها! %3</translation>
-    </message>
-</context>
-<context>
     <name>Tomahawk::ItunesParser</name>
     <message>
         <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="184"/>
@@ -3868,21 +3723,6 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="767"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>الكشف التلقائي عن عنوان IP الخارجي فشل.</translation>
-    </message>
-</context>
-<context>
-    <name>TomahawkOAuthTwitter</name>
-    <message>
-        <location filename="../src/accounts/twitter/TomahawkOAuthTwitter.cpp" line="39"/>
-        <source>Twitter PIN</source>
-        <translation>رقم البن لتويتر (Twitter Pin)</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TomahawkOAuthTwitter.cpp" line="39"/>
-        <source>After authenticating on Twitter's web site,
-enter the displayed PIN number here:</source>
-        <translation>بعد المصادقة على موقع تويتر (Twitter)،
-أدخل رقم البين (PIN) الموجود أمامك على الشاشة هنا:</translation>
     </message>
 </context>
 <context>
@@ -4219,87 +4059,6 @@ enter the displayed PIN number here:</source>
         <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="306"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>نتأسف، نظام الترشيح لم يجد شيئا تحت عنوان &apos;%1&apos;.</translation>
-    </message>
-</context>
-<context>
-    <name>TwitterConfigWidget</name>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="73"/>
-        <source>Configure this Twitter account</source>
-        <translation>تكوين حساب &quot;Twitter&quot;</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="119"/>
-        <source>The Twitter plugin allows you to post messages to your Twitter account.</source>
-        <translation>البرنامج المساعد لتويتر يسمح لك بنشر رسائل على حساب تويتر الخاص بك.</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="137"/>
-        <source>Status: No saved credentials</source>
-        <translation>الحالة: بيانات غير محفوظة</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="166"/>
-        <source>Authenticate with Twitter</source>
-        <translation>صادق مع تويتر (Twitter)</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="196"/>
-        <source>Twitter Connections</source>
-        <translation>إتصالات بتويتر (Twitter)</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="202"/>
-        <source>
-If you only want to post tweets, you're done.
-
-If you want to connect Tomahawk to your friends using Twitter, select the type of tweet and press the button below to send a sync message. You must both be following each other as Direct Messages are used. Then be (very) patient -- it can take several minutes!
-
-You can re-send a sync message at any time simply by sending another tweet using the button.</source>
-        <translation>
-إن كنت تريد نشر التويت (Tweet) فقط، لقد انتهيت!
-
-إن كنت تريد لتوماهوك الاتصال بأصدقائك من خلال تويتر (Twitter)، حدد نوع التويت (Tweet) و إضغط على الزر أدناه لإرسال رسالة مزامنة. يجب أن تكونا تابعين لبعضكما البعض على حد سواء لأن الرسائل المباشرة تستخدم. ثم يجب الإنتظار بصبر (كبير) - يمكن أن تستغرق العملية عدة دقائق!
-
-يمكنك إعادة إرسال رسالة المزامنة في أي وقت عن طريق إرسال تويت (Tweet) آخر بضغط هذا الزر من جديد.</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="244"/>
-        <source>Select the kind of tweet you would like, then press the button to post it:</source>
-        <translation>حدد نوع التويت (Tweet) اللذي ترغب به، ثم إضغط على الزر لنشره:</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="276"/>
-        <source>Global Tweet</source>
-        <translation>تويت شامل (Global Tweet)</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="281"/>
-        <source>@Mention</source>
-        <translation>@ذكر</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="286"/>
-        <source>Direct Message</source>
-        <translation>رسالة مباشرة</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="322"/>
-        <source>e.g. @tomahawk</source>
-        <translation>مثل: @tomahawk</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="351"/>
-        <source>Send Message</source>
-        <translation>إرسل رسالة</translation>
-    </message>
-</context>
-<context>
-    <name>TwitterSipPlugin</name>
-    <message>
-        <location filename="../src/accounts/twitter/sip/TwitterSip.cpp" line="104"/>
-        <source>Enter Twitter username</source>
-        <translation>أدخل اسم المستخدم الخاص بتويتر (Twitter)</translation>
     </message>
 </context>
 <context>

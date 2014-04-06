@@ -2337,17 +2337,17 @@ Password (OTP)</source>
         <translation>%1 个下载</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="574"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="572"/>
         <source>Online</source>
         <translation>在线</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="579"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="577"/>
         <source>Connecting...</source>
         <translation>连接中...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="584"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="582"/>
         <source>Offline</source>
         <translation>离线</translation>
     </message>
@@ -2638,143 +2638,6 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="96"/>
         <source>KDE Instant Messaging Accounts</source>
         <translation>KDE 即时通信账户</translation>
-    </message>
-</context>
-<context>
-    <name>Tomahawk::Accounts::TwitterAccountFactory</name>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterAccount.h" line="51"/>
-        <source>Send tweets from Tomahawk.</source>
-        <translation>使用 Tomahawk 发推</translation>
-    </message>
-</context>
-<context>
-    <name>Tomahawk::Accounts::TwitterConfigWidget</name>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="60"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="144"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="192"/>
-        <source>Tweet!</source>
-        <translation>Tweet!</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="68"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="170"/>
-        <source>Status: No saved credentials</source>
-        <translation>状态：没有已保存的凭据</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="69"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="95"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="171"/>
-        <source>Authenticate</source>
-        <translation>认证</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="76"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="139"/>
-        <source>Status: Credentials saved for %1</source>
-        <translation>状态：为 %1 保存凭据</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="77"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="140"/>
-        <source>De-authenticate</source>
-        <translation>取消认证</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="125"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="203"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="214"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="232"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="274"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="283"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="293"/>
-        <source>Tweetin&apos; Error</source>
-        <translation>Tweetin&apos; 错误</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="125"/>
-        <source>The credentials could not be verified.
-You may wish to try re-authenticating.</source>
-        <translation>未能验证认证。
-你也许可以重新认证。</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="155"/>
-        <source>Status: Error validating credentials</source>
-        <translation>状态：验证认证时错误</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="182"/>
-        <source>Global Tweet</source>
-        <translation>全局 Tweet</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="187"/>
-        <source>Direct Message</source>
-        <translation>私信</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="188"/>
-        <source>Send Message!</source>
-        <translation>发送消息！</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="189"/>
-        <source>@Mention</source>
-        <translation>@提及他人</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="190"/>
-        <source>Send Mention!</source>
-        <translation>发送提及信息！</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="203"/>
-        <source>You must enter a user name for this type of tweet.</source>
-        <translation>你必须为这种 tweet 输入用户名！</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="214"/>
-        <source>Your saved credentials could not be loaded.
-You may wish to try re-authenticating.</source>
-        <translation>保存的认证未能载入。
-你也许可以重新认证。</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="232"/>
-        <source>Your saved credentials could not be verified.
-You may wish to try re-authenticating.</source>
-        <translation>保存的认证未能成功验证。
-你也许可以重新认证。</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="274"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="293"/>
-        <source>There was an error posting your status -- sorry!</source>
-        <translation>在发布状态时出现错误。抱歉！</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="276"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="285"/>
-        <source>Tweeted!</source>
-        <translation>推完了！</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="276"/>
-        <source>Your tweet has been posted!</source>
-        <translation>你的 Tweet 已经发布！</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="283"/>
-        <source>There was an error posting your direct message -- sorry!</source>
-        <translation>抱歉，发送消息时出现错误。</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="285"/>
-        <source>Your message has been posted!</source>
-        <translation>你的消息已发送！</translation>
     </message>
 </context>
 <context>
@@ -3560,14 +3423,6 @@ Try tweaking the filters for a new set of songs to play.</source>
     </message>
 </context>
 <context>
-    <name>Tomahawk::InfoSystem::TwitterInfoPlugin</name>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterInfoPlugin.cpp" line="159"/>
-        <source>Listening to &quot;%1&quot; by %2 and loving it! %3</source>
-        <translation>聆听 %2 的 &quot;%1&quot; 并喜欢它！ %3</translation>
-    </message>
-</context>
-<context>
     <name>Tomahawk::ItunesParser</name>
     <message>
         <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="184"/>
@@ -3869,21 +3724,6 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="767"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>自动检测外部 IP 是否失效</translation>
-    </message>
-</context>
-<context>
-    <name>TomahawkOAuthTwitter</name>
-    <message>
-        <location filename="../src/accounts/twitter/TomahawkOAuthTwitter.cpp" line="39"/>
-        <source>Twitter PIN</source>
-        <translation>Twitter PIN</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TomahawkOAuthTwitter.cpp" line="39"/>
-        <source>After authenticating on Twitter's web site,
-enter the displayed PIN number here:</source>
-        <translation>在 Twitter 网站认证后，
-在这里输入获得的 PIN：</translation>
     </message>
 </context>
 <context>
@@ -4220,87 +4060,6 @@ enter the displayed PIN number here:</source>
         <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="306"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>对不起，根据条件 &apos;%1&apos; 没有找到任何结果。</translation>
-    </message>
-</context>
-<context>
-    <name>TwitterConfigWidget</name>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="73"/>
-        <source>Configure this Twitter account</source>
-        <translation>配置 Twitter 账户</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="119"/>
-        <source>The Twitter plugin allows you to post messages to your Twitter account.</source>
-        <translation>此 Twitter 插件允许你向关联账号发推</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="137"/>
-        <source>Status: No saved credentials</source>
-        <translation>状态：没有已保存的证书</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="166"/>
-        <source>Authenticate with Twitter</source>
-        <translation>Twitter 认证</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="196"/>
-        <source>Twitter Connections</source>
-        <translation>Twitter 连接</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="202"/>
-        <source>
-If you only want to post tweets, you're done.
-
-If you want to connect Tomahawk to your friends using Twitter, select the type of tweet and press the button below to send a sync message. You must both be following each other as Direct Messages are used. Then be (very) patient -- it can take several minutes!
-
-You can re-send a sync message at any time simply by sending another tweet using the button.</source>
-        <translation>
-如果你只想用来发推, 那么完事了。
-
-如果你想将 Tomahawk 连接到使用 Twitter 的朋友，请选择 Tweet 类型并点击下方的按钮来发表一条同步状态，不过前提是你们已经互相关注，因为我们使用了直接消息功能. 然后请（非常的）耐心等待 —— 这个操作可能会花费几分钟！
-
-你也可以随时再次发送同步信息，只需要点击下方的按钮发送另一条 Tweet。</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="244"/>
-        <source>Select the kind of tweet you would like, then press the button to post it:</source>
-        <translation>选择你喜欢的 Tweet 类型，然后按下按钮发布：</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="276"/>
-        <source>Global Tweet</source>
-        <translation>全局 Tweet</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="281"/>
-        <source>@Mention</source>
-        <translation>@提及某人</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="286"/>
-        <source>Direct Message</source>
-        <translation>Direct Message</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="322"/>
-        <source>e.g. @tomahawk</source>
-        <translation>l例如 @tomahawk</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="351"/>
-        <source>Send Message</source>
-        <translation>发送消息</translation>
-    </message>
-</context>
-<context>
-    <name>TwitterSipPlugin</name>
-    <message>
-        <location filename="../src/accounts/twitter/sip/TwitterSip.cpp" line="104"/>
-        <source>Enter Twitter username</source>
-        <translation>输入 Twitter 用户名</translation>
     </message>
 </context>
 <context>

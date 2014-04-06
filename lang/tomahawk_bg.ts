@@ -2348,17 +2348,17 @@ Password (OTP)</source>
         <translation>%1 сваляния</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="574"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="572"/>
         <source>Online</source>
         <translation>На линия</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="579"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="577"/>
         <source>Connecting...</source>
         <translation>Свързване...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="584"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="582"/>
         <source>Offline</source>
         <translation>Извън линия</translation>
     </message>
@@ -2652,144 +2652,6 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="96"/>
         <source>KDE Instant Messaging Accounts</source>
         <translation>Регистрации за моментални съобщения на KDE</translation>
-    </message>
-</context>
-<context>
-    <name>Tomahawk::Accounts::TwitterAccountFactory</name>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterAccount.h" line="51"/>
-        <source>Send tweets from Tomahawk.</source>
-        <translation>Изпрати туитове от Tomahawk.</translation>
-    </message>
-</context>
-<context>
-    <name>Tomahawk::Accounts::TwitterConfigWidget</name>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="60"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="144"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="192"/>
-        <source>Tweet!</source>
-        <translation>Чурулик!</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="68"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="170"/>
-        <source>Status: No saved credentials</source>
-        <translation>Няма запазени данни за вход</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="69"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="95"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="171"/>
-        <source>Authenticate</source>
-        <translation>Удостовери</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="76"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="139"/>
-        <source>Status: Credentials saved for %1</source>
-        <translation>Статус: данните са запаметени за %1</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="77"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="140"/>
-        <source>De-authenticate</source>
-        <translation>Премахни удостоверяване</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="125"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="203"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="214"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="232"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="274"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="283"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="293"/>
-        <source>Tweetin&apos; Error</source>
-        <translation>Грешка при изпращане на съобщение</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="125"/>
-        <source>The credentials could not be verified.
-You may wish to try re-authenticating.</source>
-        <translation>Данните за вход не могат да бъдат потвърдени.
-Моля, опитай отново.</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="155"/>
-        <source>Status: Error validating credentials</source>
-        <translation>Грешка при валидиране на данни за вход</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="182"/>
-        <source>Global Tweet</source>
-        <translation>Общо съобщение</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="187"/>
-        <source>Direct Message</source>
-        <translation>Лично съобщение</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="188"/>
-        <source>Send Message!</source>
-        <translation>Изпрати съобщението!</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="189"/>
-        <source>@Mention</source>
-        <translation>@Споменаване</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="190"/>
-        <source>Send Mention!</source>
-        <translation>Изпрати споменаването!</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="203"/>
-        <source>You must enter a user name for this type of tweet.</source>
-        <translation>Въведи име на потребител, за този вид съобщение.</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="214"/>
-        <source>Your saved credentials could not be loaded.
-You may wish to try re-authenticating.</source>
-        <translation>Данните ти за вход не могат да бъдат заредени. 
-Може би искаш да пробваш отново.</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="232"/>
-        <source>Your saved credentials could not be verified.
-You may wish to try re-authenticating.</source>
-        <translation>Запаметените данни за вход не могат да бъдат потвърдени.
-Може би искаш да пробваш отново.</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="274"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="293"/>
-        <source>There was an error posting your status -- sorry!</source>
-        <translation>Грешка при публикуване. Опитай отново.</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="276"/>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="285"/>
-        <source>Tweeted!</source>
-        <translation>Изчуруликано!</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="276"/>
-        <source>Your tweet has been posted!</source>
-        <translation>Съобщението ти беше публикувано.</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="283"/>
-        <source>There was an error posting your direct message -- sorry!</source>
-        <translation>Грешка при изпращане на лично съобщение.
-Опитай отново.</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="285"/>
-        <source>Your message has been posted!</source>
-        <translation>Съобщението беще публикувано!</translation>
     </message>
 </context>
 <context>
@@ -3572,14 +3434,6 @@ Try tweaking the filters for a new set of songs to play.</source>
     </message>
 </context>
 <context>
-    <name>Tomahawk::InfoSystem::TwitterInfoPlugin</name>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterInfoPlugin.cpp" line="159"/>
-        <source>Listening to &quot;%1&quot; by %2 and loving it! %3</source>
-        <translation>&quot;%1&quot; от %2  %3</translation>
-    </message>
-</context>
-<context>
     <name>Tomahawk::ItunesParser</name>
     <message>
         <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="184"/>
@@ -3881,20 +3735,6 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="767"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Автоматичното откриване на външен IP не успя.</translation>
-    </message>
-</context>
-<context>
-    <name>TomahawkOAuthTwitter</name>
-    <message>
-        <location filename="../src/accounts/twitter/TomahawkOAuthTwitter.cpp" line="39"/>
-        <source>Twitter PIN</source>
-        <translation>Twitter код</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TomahawkOAuthTwitter.cpp" line="39"/>
-        <source>After authenticating on Twitter's web site,
-enter the displayed PIN number here:</source>
-        <translation>След удостоверяване в Twitter,  въведи генерирания код тук:</translation>
     </message>
 </context>
 <context>
@@ -4234,87 +4074,6 @@ enter the displayed PIN number here:</source>
         <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="306"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Съжалявам, но филтърът &apos;%1&apos; не върна никакви резултати.</translation>
-    </message>
-</context>
-<context>
-    <name>TwitterConfigWidget</name>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="73"/>
-        <source>Configure this Twitter account</source>
-        <translation>Настрой Twitter профил</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="119"/>
-        <source>The Twitter plugin allows you to post messages to your Twitter account.</source>
-        <translation>Този модул за Twitter ще ти позволи да  публикуваш съобщения от твоя профил.</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="137"/>
-        <source>Status: No saved credentials</source>
-        <translation>Статус: Няма запазени данни за вход</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="166"/>
-        <source>Authenticate with Twitter</source>
-        <translation>Удостовери към Twitter</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="196"/>
-        <source>Twitter Connections</source>
-        <translation>Twitter връзки</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="202"/>
-        <source>
-If you only want to post tweets, you're done.
-
-If you want to connect Tomahawk to your friends using Twitter, select the type of tweet and press the button below to send a sync message. You must both be following each other as Direct Messages are used. Then be (very) patient -- it can take several minutes!
-
-You can re-send a sync message at any time simply by sending another tweet using the button.</source>
-        <translation>
-Ако желаеш да се свържеш с твои приятели, ползващи Twitter, избери тип на съобщението и натисни бутонът от долу, за изпращане. 
-Трябва взаимно да се следвате, за да можете да ползвате функцията DM. 
-След изпращане, бъди (много) търпелив.
-Може да изминат няколко минути преди публикуване.
-Можеш да изпращаш съобщения за повторно свързване по всяко време, само като натиснеш бутонът по-долу.</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="244"/>
-        <source>Select the kind of tweet you would like, then press the button to post it:</source>
-        <translation>Избери тип на съобщението и след това натисни бутонът, за да го публикуваш.</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="276"/>
-        <source>Global Tweet</source>
-        <translation>Общо съобщение</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="281"/>
-        <source>@Mention</source>
-        <translation>@Споменаване</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="286"/>
-        <source>Direct Message</source>
-        <translation>Лично съобщение</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="322"/>
-        <source>e.g. @tomahawk</source>
-        <translation>напр. @tomahawk</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="351"/>
-        <source>Send Message</source>
-        <translation>Изпрати съобщение</translation>
-    </message>
-</context>
-<context>
-    <name>TwitterSipPlugin</name>
-    <message>
-        <location filename="../src/accounts/twitter/sip/TwitterSip.cpp" line="104"/>
-        <source>Enter Twitter username</source>
-        <translation>Въведи потребителско име в Twitter</translation>
     </message>
 </context>
 <context>
