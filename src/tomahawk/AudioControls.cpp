@@ -247,7 +247,7 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 
     qint64 duration = AudioEngine::instance()->currentTrackTotalTime();
 
-    if ( duration == -1 )
+    if ( duration == -1 || duration == 0 )
         duration = result.data()->track()->duration() * 1000;
 
     ui->seekSlider->setRange( 0, duration );
@@ -257,6 +257,7 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
     ui->timeLabel->setText( TomahawkUtils::timeToString( 0 ) );
     ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( 0 ) );
 
+    tLog() << Q_FUNC_INFO << duration;
     m_sliderTimeLine.setDuration( duration );
     m_sliderTimeLine.setFrameRange( 0, duration );
     m_sliderTimeLine.setCurveShape( QTimeLine::LinearCurve );
