@@ -1799,7 +1799,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="42"/>
         <source>Automatic port forward with UPnP (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>Redirección de puertos automática con UPnP (recomendado)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="60"/>
