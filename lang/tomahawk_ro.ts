@@ -330,37 +330,37 @@ se conecteze și să redea de la tine?</translation>
 <context>
     <name>AudioControls</name>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="308"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="309"/>
         <source>Shuffle</source>
         <translation>Amestecă</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="309"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="310"/>
         <source>Repeat</source>
         <translation>Repetă</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="306"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="307"/>
         <source>Time Elapsed</source>
         <translation>Timp scurs</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="307"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="308"/>
         <source>Time Remaining</source>
         <translation>Timp rămas</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="312"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="313"/>
         <source>Playing from %1</source>
         <translation>Se redă de la %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="310"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="311"/>
         <source>Share</source>
         <translation>Partajează</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="311"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="312"/>
         <source>Love</source>
         <translation>Îndrăgit</translation>
     </message>

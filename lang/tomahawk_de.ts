@@ -330,37 +330,37 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>AudioControls</name>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="308"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="309"/>
         <source>Shuffle</source>
         <translation>Zufall</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="309"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="310"/>
         <source>Repeat</source>
         <translation>Wiederholen</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="306"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="307"/>
         <source>Time Elapsed</source>
         <translation>Abgelaufene Zeit</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="307"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="308"/>
         <source>Time Remaining</source>
         <translation>Verbleibende Zeit</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="312"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="313"/>
         <source>Playing from %1</source>
         <translation>Wiedergabe von %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="310"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="311"/>
         <source>Share</source>
         <translation>Teilen</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="311"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="312"/>
         <source>Love</source>
         <translation>Lieben</translation>
     </message>

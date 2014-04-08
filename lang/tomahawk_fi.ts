@@ -330,37 +330,37 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>AudioControls</name>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="308"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="309"/>
         <source>Shuffle</source>
         <translation>Sekoita</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="309"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="310"/>
         <source>Repeat</source>
         <translation>Toista</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="306"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="307"/>
         <source>Time Elapsed</source>
         <translation>Kulunut aika</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="307"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="308"/>
         <source>Time Remaining</source>
         <translation>Jäljellä oleva aika</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="312"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="313"/>
         <source>Playing from %1</source>
         <translation>Soitetaan lähteestä %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="310"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="311"/>
         <source>Share</source>
         <translation>Jaa</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="311"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="312"/>
         <source>Love</source>
         <translation>Tykkää</translation>
     </message>
