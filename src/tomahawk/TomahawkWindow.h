@@ -45,10 +45,10 @@
 
 namespace Tomahawk
 {
-namespace Accounts
-{
-class Account;
-}
+    namespace Accounts
+    {
+        class Account;
+    }
 }
 
 class JobStatusSortModel;
