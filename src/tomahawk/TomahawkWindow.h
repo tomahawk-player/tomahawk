@@ -37,14 +37,18 @@
 #include <QToolButton>
 #ifdef Q_OS_WIN
     #include <shobjidl.h>
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 2, 0 )
+    #include <QWinThumbnailToolBar>
+    #include <QWinThumbnailToolButton>
+#endif
 #endif
 
 namespace Tomahawk
 {
-    namespace Accounts
-    {
-        class Account;
-    }
+namespace Accounts
+{
+class Account;
+}
 }
 
 class JobStatusSortModel;
@@ -87,7 +91,7 @@ protected:
     void hideEvent( QHideEvent* e );
     void keyPressEvent( QKeyEvent* e );
 
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK( 5, 2, 0 )
     bool winEvent( MSG* message, long* result );
 #endif
 
@@ -142,6 +146,8 @@ private slots:
     void toggleMenuBar();
     void balanceToolbar();
 
+    void toggleLoved();
+
 #ifdef Q_OS_WIN
     void audioStateChanged( AudioState newState, AudioState oldState );
     void updateWindowsLoveButton();
@@ -162,11 +168,16 @@ private:
 
 #ifdef Q_OS_WIN
     bool setupWindowsButtons();
+#if QT_VERSION < QT_VERSION_CHECK( 5, 2, 0 )
     const unsigned int m_buttonCreatedID;
     HICON thumbIcon(TomahawkUtils::ImageType type);
     ITaskbarList3* m_taskbarList;
     THUMBBUTTON m_thumbButtons[5];
-    enum TB_STATES{ TP_PREVIOUS = 0,TP_PLAY_PAUSE = 1,TP_NEXT = 2,TP_LOVE = 4 };
+#else    
+    QIcon thumbIcon(TomahawkUtils::ImageType type);
+    QWinThumbnailToolBar *m_taskbarList;
+#endif
+    enum TB_STATES{ TP_PREVIOUS = 0,TP_PLAY_PAUSE = 1,TP_NEXT = 2, TP_SPACE = 3, TP_LOVE = 4 };
 #endif
 
     Ui::TomahawkWindow* ui;
