@@ -207,6 +207,9 @@ namespace TomahawkUtils
      * Qt4 / Qt5 compatibility layer
      */
 
+    /* QJson */
+    DLLEXPORT QVariant parseJson( const QByteArray& jsonData, bool* ok = 0 );
+
     /* QUrl */
     DLLEXPORT void urlAddQueryItem( QUrl& url, const QString& key, const QString& value );
     DLLEXPORT QString urlQueryItemValue( const QUrl& url, const QString& key );

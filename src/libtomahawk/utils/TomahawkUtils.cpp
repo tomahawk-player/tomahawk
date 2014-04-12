@@ -54,8 +54,12 @@
 #include <QStringList>
 #include <QTranslator>
 
+// Qt version specific includes
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     #include <QUrlQuery>
+    #include <QJsonDocument>
+#else
+    #include <qjson/parser.h>
 #endif
 
 #ifdef Q_OS_WIN
@@ -839,6 +843,21 @@ compareVersionStrings( const QString& first, const QString& second )
     }
 
     return verdict;
+}
+
+
+QVariant
+parseJson( const QByteArray& jsonData, bool* ok )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    QJsonParseError error;
+    QJsonDocument doc = QJsonDocument::fromJson( jsonData, &error );
+    *ok = ( error.error == QJsonParseError::NoError );
+    return doc.toVariant();
+#else
+    QJson::Parser p;
+    return p.parse( jsonData, ok );
+#endif
 }
 
 
