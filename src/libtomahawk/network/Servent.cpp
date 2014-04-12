@@ -980,9 +980,9 @@ Servent::ipDetected()
 
     if ( reply->error() == QNetworkReply::NoError )
     {
-        QJson::Parser p;
         bool ok;
-        const QVariantMap res = p.parse( reply, &ok ).toMap();
+        // We are called when the NetworkReply has finished so we should have all data available.
+        const QVariantMap res = TomahawkUtils::parseJson( reply->readAll(), &ok ).toMap();
         if ( !ok )
         {
             tLog() << Q_FUNC_INFO << "Failed parsing ip-autodetection response";
