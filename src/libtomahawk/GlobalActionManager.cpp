@@ -50,9 +50,6 @@
 #include "TomahawkSettings.h"
 #include "ViewManager.h"
 
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
-
 #include <QApplication>
 #include <QClipboard>
 
