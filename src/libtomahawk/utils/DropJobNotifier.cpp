@@ -23,8 +23,6 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 
-#include <qjson/parser.h>
-
 #include "Query.h"
 #include "SourceList.h"
 #include "DropJob.h"
