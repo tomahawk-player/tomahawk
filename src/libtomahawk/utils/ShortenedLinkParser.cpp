@@ -19,8 +19,6 @@
 
 #include "ShortenedLinkParser.h"
 
-#include <qjson/parser.h>
-
 #include <QtNetwork/QNetworkAccessManager>
 
 #include "DropJobNotifier.h"
