@@ -21,8 +21,6 @@
 
 #include <QtNetwork/QNetworkAccessManager>
 
-#include <qjson/parser.h>
-
 #include "Query.h"
 #include "SourceList.h"
 #include "DropJob.h"
@@ -228,13 +226,13 @@ SpotifyParser::spotifyBrowseFinished()
 
     if ( r->reply()->error() == QNetworkReply::NoError )
     {
-        QJson::Parser p;
         bool ok;
-        QVariantMap res = p.parse( r->reply(), &ok ).toMap();
+        QByteArray jsonData = r->reply()->readAll();
+        QVariantMap res = TomahawkUtils::parseJson( jsonData, &ok ).toMap();
 
         if ( !ok )
         {
-            tLog() << "Failed to parse json from Spotify browse item:" << p.errorString() << "On line" << p.errorLine();
+            tLog() << "Failed to parse json from Spotify browse item:" << jsonData;
             checkTrackFinished();
             return;
         }
@@ -300,13 +298,13 @@ SpotifyParser::spotifyTrackLookupFinished()
 
     if ( r->reply()->error() == QNetworkReply::NoError )
     {
-        QJson::Parser p;
         bool ok;
-        QVariantMap res = p.parse( r->reply(), &ok ).toMap();
+        QByteArray jsonData = r->reply()->readAll();
+        QVariantMap res = TomahawkUtils::parseJson( jsonData, &ok ).toMap();
 
         if ( !ok )
         {
-            tLog() << "Failed to parse json from Spotify track lookup:" << p.errorString() << "On line" << p.errorLine();
+            tLog() << "Failed to parse json from Spotify track lookup:" << jsonData;
             checkTrackFinished();
             return;
         }
