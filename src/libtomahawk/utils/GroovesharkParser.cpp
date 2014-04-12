@@ -29,8 +29,6 @@
 #include <QWebFrame>
 #include <QWebElement>
 
-#include <qjson/parser.h>
-
 #include "Query.h"
 #include "SourceList.h"
 #include "DropJob.h"
@@ -206,13 +204,13 @@ GroovesharkParser::groovesharkLookupFinished()
 
     if ( r->reply()->error() == QNetworkReply::NoError )
     {
-        QJson::Parser p;
         bool ok;
-        QVariantMap res = p.parse( r->reply(), &ok ).toMap();
+        QByteArray jsonData = r->reply()->readAll();
+        QVariantMap res = TomahawkUtils::parseJson( jsonData, &ok ).toMap();
 
         if ( !ok )
         {
-            tLog() << "Failed to parse json from Grooveshark browse item:" << p.errorString() << "On line" << p.errorLine();
+            tLog() << "Failed to parse json from Grooveshark browse item:" << jsonData;
             checkTrackFinished();
             return;
         }
