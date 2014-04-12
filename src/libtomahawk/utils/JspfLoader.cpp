@@ -32,8 +32,6 @@
 #include <QDomDocument>
 #include <QMessageBox>
 
-#include <qjson/parser.h>
-
 using namespace Tomahawk;
 
 
@@ -125,13 +123,12 @@ JSPFLoader::networkError( QNetworkReply::NetworkError e )
 void
 JSPFLoader::gotBody()
 {
-    QJson::Parser p;
     bool retOk;
-    QVariantMap wrapper = p.parse( m_body, &retOk ).toMap();
+    QVariantMap wrapper = TomahawkUtils::parseJson( m_body, &retOk ).toMap();
 
     if ( !retOk )
     {
-        tLog() << "Failed to parse jspf json:" << p.errorString() << "on line" << p.errorLine();
+        tLog() << "Failed to parse jspf json: " << m_body;
         return;
     }
 
