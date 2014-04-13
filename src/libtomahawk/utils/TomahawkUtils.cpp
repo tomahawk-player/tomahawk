@@ -861,6 +861,20 @@ parseJson( const QByteArray& jsonData, bool* ok )
 }
 
 
+QByteArray
+toJson( const QVariant &variant, bool* ok )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    QJsonDocument doc = QJsonDocument::fromVariant( variant );
+    *ok = true;
+    return doc.toJson();
+#else
+    QJson::Serializer serializer;
+    return serializer.serialize( variant, ok );
+#endif
+}
+
+
 void
 urlAddQueryItem( QUrl& url, const QString& key, const QString& value )
 {

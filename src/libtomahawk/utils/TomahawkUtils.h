@@ -209,6 +209,7 @@ namespace TomahawkUtils
 
     /* QJson */
     DLLEXPORT QVariant parseJson( const QByteArray& jsonData, bool* ok = 0 );
+    DLLEXPORT QByteArray toJson( const QVariant &variant, bool* ok = 0 );
 
     /* QUrl */
     DLLEXPORT void urlAddQueryItem( QUrl& url, const QString& key, const QString& value );
