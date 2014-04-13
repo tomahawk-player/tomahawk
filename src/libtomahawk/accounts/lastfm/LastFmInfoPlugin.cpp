@@ -37,8 +37,6 @@
 #include <lastfm/ws.h>
 #include <lastfm/XmlQuery.h>
 
-#include <qjson/parser.h>
-
 using namespace Tomahawk::Accounts;
 using namespace Tomahawk::InfoSystem;
 
