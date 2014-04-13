@@ -28,10 +28,6 @@
 #include "ExternalResolverGui.h"
 #include "DllMacro.h"
 
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
-#include <qjson/qobjecthelper.h>
-
 #include <QProcess>
 
 class QWidget;
@@ -109,9 +105,6 @@ private:
 
     bool m_ready, m_stopped, m_configSent, m_deleting;
     ExternalResolver::ErrorState m_error;
-
-    QJson::Parser m_parser;
-    QJson::Serializer m_serializer;
 };
 
 #endif // SCRIPTRESOLVER_H

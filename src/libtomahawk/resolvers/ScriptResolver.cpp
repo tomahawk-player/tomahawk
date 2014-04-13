@@ -158,7 +158,7 @@ ScriptResolver::sendConfig()
         hosts << host;
     m.insert( "noproxyhosts", hosts );
 
-    QByteArray data = m_serializer.serialize( m );
+    QByteArray data = TomahawkUtils::toJson( m );
     sendMsg( data );
 }
 
@@ -180,7 +180,7 @@ ScriptResolver::running() const
 void
 ScriptResolver::sendMessage( const QVariantMap& map )
 {
-    QByteArray data = m_serializer.serialize( map );
+    QByteArray data = TomahawkUtils::toJson( map );
     sendMsg( data );
 }
 
@@ -253,10 +253,10 @@ ScriptResolver::handleMsg( const QByteArray& msg )
         return;
 
     bool ok;
-    QVariant v = m_parser.parse( msg, &ok );
+    QVariant v = TomahawkUtils::parseJson( msg, &ok );
     if ( !ok || v.type() != QVariant::Map )
     {
-        Q_ASSERT(false);
+        Q_ASSERT( false );
         return;
     }
     QVariantMap m = v.toMap();
@@ -382,7 +382,7 @@ ScriptResolver::resolve( const Tomahawk::query_ptr& query )
             m.insert( "resultHint", query->resultHint() );
     }
 
-    const QByteArray msg = m_serializer.serialize( QVariant( m ) );
+    const QByteArray msg = TomahawkUtils::toJson( QVariant( m ) );
     sendMsg( msg );
 }
 
@@ -527,7 +527,7 @@ ScriptResolver::saveConfig()
     m.insert( "_msgtype", "setpref" );
     QVariant widgets = configMsgFromWidget( m_configWidget.data() );
     m.insert( "widgets", widgets );
-    QByteArray data = m_serializer.serialize( m );
+    QByteArray data = TomahawkUtils::toJson( m );
 
     sendMsg( data );
 }
