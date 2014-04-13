@@ -455,9 +455,10 @@ Api_v1::get_results( QxtWebRequestEvent* event )
 void
 Api_v1::sendJSON( const QVariantMap& m, QxtWebRequestEvent* event )
 {
-    QJson::Serializer ser;
     QByteArray ctype;
-    QByteArray body = ser.serialize( m );
+    bool ok;
+    QByteArray body = TomahawkUtils::toJson( m, &ok );
+    Q_ASSERT( ok );
 
     if ( urlHasQueryItem( event->url, "jsonp" ) && !urlQueryItemValue( event->url, "jsonp" ).isEmpty() )
     {

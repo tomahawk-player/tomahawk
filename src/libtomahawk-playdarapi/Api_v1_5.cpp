@@ -104,9 +104,8 @@ Api_v1_5::playback( QxtWebRequestEvent* event, const QString& command )
             trackInfo.insert( "duration", currentTrack->track()->duration() );
             trackInfo.insert( "track", currentTrack->track()->track() );
 
-            QJson::Serializer serializer;
             bool ok;
-            json = serializer.serialize( trackInfo, &ok );
+            json = TomahawkUtils::toJson( trackInfo, &ok );
             Q_ASSERT( ok );
         }
 

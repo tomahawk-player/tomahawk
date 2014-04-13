@@ -31,8 +31,6 @@
 #include <QxtWeb/QxtWebSlotService>
 #include <QxtWeb/QxtWebPageEvent>
 
-#include <qjson/serializer.h>
-
 #include <QFile>
 #include <QSharedPointer>
 #include <QStringList>
