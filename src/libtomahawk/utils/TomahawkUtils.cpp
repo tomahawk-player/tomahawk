@@ -852,7 +852,10 @@ parseJson( const QByteArray& jsonData, bool* ok )
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     QJsonParseError error;
     QJsonDocument doc = QJsonDocument::fromJson( jsonData, &error );
-    *ok = ( error.error == QJsonParseError::NoError );
+    if ( ok != NULL )
+    {
+        *ok = ( error.error == QJsonParseError::NoError );
+    }
     return doc.toVariant();
 #else
     QJson::Parser p;
@@ -866,7 +869,10 @@ toJson( const QVariant &variant, bool* ok )
 {
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     QJsonDocument doc = QJsonDocument::fromVariant( variant );
-    *ok = true;
+    if ( ok != NULL )
+    {
+        *ok = true;
+    }
     return doc.toJson();
 #else
     QJson::Serializer serializer;
