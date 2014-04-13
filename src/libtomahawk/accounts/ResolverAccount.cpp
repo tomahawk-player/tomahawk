@@ -39,8 +39,6 @@
 #include "TomahawkSettings.h"
 #include "TomahawkVersion.h"
 
-#include "qjson/parser.h"
-
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
@@ -228,9 +226,8 @@ ResolverAccountFactory::metadataFromJsonFile( const QString& path )
     QFile metadataFile( path );
     if ( metadataFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
-        QJson::Parser parser;
         bool ok;
-        QVariantMap variant = parser.parse( metadataFile.readAll(), &ok ).toMap();
+        QVariantMap variant = TomahawkUtils::parseJson( metadataFile.readAll(), &ok ).toMap();
 
         if ( ok )
         {

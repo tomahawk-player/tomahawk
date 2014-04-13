@@ -23,8 +23,6 @@
 #include "utils/Logger.h"
 #include "utils/NetworkAccessManager.h"
 
-#include <qjson/parser.h>
-
 using namespace Tomahawk;
 using namespace Tomahawk::InfoSystem;
 
@@ -206,8 +204,7 @@ SpotifyInfoPlugin::albumIdLookupFinished( QNetworkReply* reply, const InfoReques
 
     if ( reply->error() == QNetworkReply::NoError )
     {
-        QJson::Parser p;
-        const QVariantMap response = p.parse( reply ).toMap();
+        const QVariantMap response = TomahawkUtils::parseJson( reply->readAll() ).toMap();
         if ( !response.contains( "albums" ) )
         {
             dataError( requestData );
@@ -254,8 +251,7 @@ SpotifyInfoPlugin::albumContentsLookupFinished( QNetworkReply* reply, const Info
 
     if ( reply->error() == QNetworkReply::NoError )
     {
-        QJson::Parser p;
-        const QVariantMap response = p.parse( reply ).toMap();
+        const QVariantMap response = TomahawkUtils::parseJson( reply->readAll() ).toMap();
 
         if ( !response.contains( "album" ) )
         {

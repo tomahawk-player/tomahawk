@@ -28,8 +28,7 @@
     #else
         #include <qt5keychain/keychain.h>
     #endif
-    #include <qjson/serializer.h>
-    #include <qjson/parser.h>
+    #include "utils/TomahawkUtils.h"
 #endif
 
 #include <QStringList>
@@ -218,9 +217,8 @@ CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QV
         }
         else if ( value.type() == QVariant::Hash )
         {
-            QJson::Serializer serializer;
             bool ok;
-            QByteArray data = serializer.serialize( value.toHash(), &ok );
+            QByteArray data = TomahawkUtils::toJson( value.toHash(), &ok );
 
             if ( ok )
             {
@@ -278,10 +276,9 @@ CredentialsManager::keychainJobFinished( QKeychain::Job* j )
                      << readJob->key() << "finished without errors";
 
             QVariant creds;
-            QJson::Parser parser;
             bool ok;
 
-            creds = parser.parse( readJob->textData().toLatin1(), &ok );
+            creds = TomahawkUtils::parseJson( readJob->textData().toLatin1(), &ok );
 
             QVariantMap map = creds.toMap();
             QVariantHash hash;
