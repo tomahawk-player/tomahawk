@@ -21,10 +21,7 @@
 #include "network/Msg_p.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
-
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
-#include <qjson/qobjecthelper.h>
+#include "utils/TomahawkUtils.h"
 
 #include <QThread>
 #include <QFuture>
@@ -127,8 +124,7 @@ MsgProcessor::process( msg_ptr msg, quint32 mode, quint32 threshold )
     {
 //        qDebug() << "MsgProcessor::PARSING JSON";
         bool ok;
-        QJson::Parser parser;
-        msg->d_func()->json = parser.parse( msg->payload(), &ok );
+        msg->d_func()->json = TomahawkUtils::parseJson( msg->payload(), &ok );
         msg->d_func()->json_parsed = true;
     }
 

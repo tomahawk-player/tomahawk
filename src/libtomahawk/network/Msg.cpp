@@ -19,7 +19,7 @@
 
 #include "Msg_p.h"
 
-#include <qjson/parser.h>
+#include "utils/TomahawkUtils.h"
 
 #include <QtEndian>
 
@@ -123,9 +123,8 @@ Msg::json()
 
     if( !d->json_parsed )
     {
-        QJson::Parser p;
         bool ok;
-        d->json = p.parse( d->payload, &ok );
+        d->json = TomahawkUtils::parseJson( d->payload, &ok );
         d->json_parsed = true;
     }
     return d->json;
