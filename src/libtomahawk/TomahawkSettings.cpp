@@ -32,7 +32,6 @@
 #include "PlaylistInterface.h"
 #include "Source.h"
 
-#include <qjson/serializer.h>
 #if QT_VERSION < QT_VERSION_CHECK(5,0,0)
     #include <qtkeychain/keychain.h>
 #else
@@ -643,9 +642,8 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 #if defined( Q_OS_UNIX ) && !defined( Q_OS_MAC )
                 j->setInsecureFallback( true );
 #endif
-                QJson::Serializer serializer;
                 bool ok;
-                QByteArray data = serializer.serialize( creds, &ok );
+                QByteArray data = TomahawkUtils::toJson( creds, &ok );
 
                 if ( ok )
                 {
