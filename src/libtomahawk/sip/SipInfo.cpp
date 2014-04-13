@@ -20,9 +20,7 @@
 #include "SipInfo.h"
 
 #include "utils/Logger.h"
-
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
+#include "utils/TomahawkUtils.h"
 
 #include <QVariant>
 
@@ -202,8 +200,7 @@ SipInfo::toJson() const
     }
 
     // serialize
-    QJson::Serializer serializer;
-    QByteArray ba = serializer.serialize( m );
+    QByteArray ba = TomahawkUtils::toJson( m );
 
     return QString::fromLatin1( ba );
 }
@@ -214,9 +211,8 @@ SipInfo::fromJson( QString json )
 {
     SipInfo info;
 
-    QJson::Parser parser;
     bool ok;
-    QVariant v = parser.parse( json.toLatin1(), &ok );
+    QVariant v = TomahawkUtils::parseJson( json.toLatin1(), &ok );
     if ( !ok  || v.type() != QVariant::Map )
     {
         qDebug() << Q_FUNC_INFO << "Invalid JSON: " << json;
