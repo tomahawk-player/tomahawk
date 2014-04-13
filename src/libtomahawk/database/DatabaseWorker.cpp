@@ -280,7 +280,7 @@ DatabaseWorker::logOp( DatabaseCommandLoggable* command )
                         "VALUES(?, ?, ?, ?, ?, ?)" );
 
     QVariantMap variant = QJson::QObjectHelper::qobject2qvariant( command );
-    QByteArray ba = m_serializer.serialize( variant );
+    QByteArray ba = TomahawkUtils::toJson( variant );
 
 //     qDebug() << "OP JSON:" << ba.isNull() << ba << "from:" << variant; // debug
 

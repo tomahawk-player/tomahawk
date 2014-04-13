@@ -28,8 +28,6 @@
 #include "Source.h"
 #include "TomahawkSqlQuery.h"
 
-#include "qjson/parser.h"
-
 #include <QSqlQuery>
 #include <QString>
 
@@ -65,9 +63,8 @@ DatabaseCommand_LoadDynamicPlaylistEntries::exec( DatabaseImpl* dbi )
     if( controlsQuery.first() )
     {
         playlist_guid = controlsQuery.value( 0 ).toString();
-        QJson::Parser parser;
         bool ok;
-        QVariant v = parser.parse( controlsQuery.value(1).toByteArray(), &ok );
+        QVariant v = TomahawkUtils::parseJson( controlsQuery.value(1).toByteArray(), &ok );
         Q_ASSERT( ok && v.type() == QVariant::List ); //TODO
 
 

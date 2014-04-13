@@ -28,9 +28,6 @@
 #include "TomahawkSqlQuery.h"
 #include "Track.h"
 
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
-
 #include <QSqlQuery>
 
 using namespace Tomahawk;
@@ -150,8 +147,7 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
     }
 
     QVariantList vlist = m_orderedguids;
-    QJson::Serializer ser;
-    const QByteArray entries = ser.serialize( vlist );
+    const QByteArray entries = TomahawkUtils::toJson( vlist );
 
     // add any new items:
     TomahawkSqlQuery adde = lib->newquery();
@@ -266,8 +262,7 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
         if ( query_entries.next() )
         {
             bool ok;
-            QJson::Parser parser;
-            QVariant v = parser.parse( query_entries.value( 0 ).toByteArray(), &ok );
+            QVariant v = TomahawkUtils::parseJson( query_entries.value( 0 ).toByteArray(), &ok );
             Q_ASSERT( ok && v.type() == QVariant::List ); //TODO
 
             m_previous_rev_orderedguids = v.toStringList();

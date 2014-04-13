@@ -28,8 +28,6 @@
 #include "Source.h"
 #include "TomahawkSqlQuery.h"
 
-#include <qjson/serializer.h>
-
 #include <QSqlQuery>
 
 namespace Tomahawk
@@ -198,8 +196,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::exec( DatabaseImpl* lib )
         }
     }
 
-    QJson::Serializer ser;
-    const QByteArray newcontrols_data = ser.serialize( newcontrols );
+    const QByteArray newcontrols_data = TomahawkUtils::toJson( newcontrols );
 
     TomahawkSqlQuery query = lib->newquery();
     QString sql = "INSERT INTO dynamic_playlist_revision (guid, controls, plmode, pltype) "

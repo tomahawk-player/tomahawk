@@ -24,8 +24,6 @@
 #include "PlaylistEntry.h"
 #include "Source.h"
 
-#include <qjson/parser.h>
-
 #include <QSqlQuery>
 
 using namespace Tomahawk;
@@ -83,7 +81,6 @@ DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
 
     QList<playlist_ptr> plists;
     QHash<playlist_ptr, QStringList> phash;
-    QJson::Parser parser;
     while ( query.next() )
     {
         playlist_ptr p( new Playlist( source(),                  //src
@@ -101,7 +98,7 @@ DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
 
         if ( d->returnPlEntryIds )
         {
-            QStringList trackIds = parser.parse( query.value( 8 ).toByteArray() ).toStringList();
+            QStringList trackIds = TomahawkUtils::parseJson( query.value( 8 ).toByteArray() ).toStringList();
             phash.insert( p, trackIds );
         }
     }
