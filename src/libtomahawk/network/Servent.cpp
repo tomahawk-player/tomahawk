@@ -638,7 +638,7 @@ Servent::readyRead()
     ControlConnection* cc = 0;
     bool ok;
     QString key, conntype, nodeid, controlid;
-    QVariantMap m = d_func()->parser.parse( sock.data()->_msg->payload(), &ok ).toMap();
+    QVariantMap m = TomahawkUtils::parseJson( sock.data()->_msg->payload(), &ok ).toMap();
     if ( !ok )
     {
         tDebug() << "Invalid JSON on new connection, aborting";
@@ -800,8 +800,7 @@ Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, 
         m.insert( "offer", key );
         m.insert( "controlid", Database::instance()->impl()->dbid() );
 
-        QJson::Serializer ser;
-        orig_conn->sendMsg( Msg::factory( ser.serialize(m), Msg::JSON ) );
+        orig_conn->sendMsg( Msg::factory( TomahawkUtils::toJson( m ), Msg::JSON ) );
     }
 }
 

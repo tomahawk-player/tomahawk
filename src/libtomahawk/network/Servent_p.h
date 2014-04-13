@@ -26,10 +26,6 @@
 
 #include <QMutex>
 
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
-#include <qjson/qobjecthelper.h>
-
 #include <boost/function.hpp>
 
 class ServentPrivate : public QObject
@@ -51,7 +47,6 @@ private:
     QMap< QString, QPointer< Connection > > offers;
     QMap< QString, QPair< Tomahawk::peerinfo_ptr, QString > > lazyoffers;
     QStringList connectedNodes;
-    QJson::Parser parser;
 
     /**
      * canonical list of authed peers
