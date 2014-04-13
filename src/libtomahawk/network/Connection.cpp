@@ -25,11 +25,10 @@
 #include "network/Servent.h"
 #include "network/Msg.h"
 #include "utils/Logger.h"
+#include "utils/TomahawkUtils.h"
 
 #include "QTcpSocketExtra.h"
 #include "Source.h"
-
-#include <qjson/serializer.h>
 
 #include <QTime>
 #include <QThread>
@@ -92,8 +91,7 @@ Connection::handleIncomingQueueEmpty()
 void
 Connection::setFirstMessage( const QVariant& m )
 {
-    QJson::Serializer ser;
-    const QByteArray ba = ser.serialize( m );
+    const QByteArray ba = TomahawkUtils::toJson( m );
     //qDebug() << "first msg json len:" << ba.length();
     setFirstMessage( Msg::factory( ba, Msg::JSON ) );
 }
@@ -632,8 +630,7 @@ Connection::sendMsg( QVariant j )
     if ( d->do_shutdown )
         return;
 
-    QJson::Serializer serializer;
-    const QByteArray payload = serializer.serialize( j );
+    const QByteArray payload = TomahawkUtils::toJson( j );
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Sending to" << id() << ":" << payload;
     sendMsg( Msg::factory( payload, Msg::JSON ) );
 }
