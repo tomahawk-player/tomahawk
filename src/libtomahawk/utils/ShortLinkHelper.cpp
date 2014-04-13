@@ -28,8 +28,6 @@
 #include "Source.h"
 #include "Track.h"
 
-#include <qjson/serializer.h>
-
 namespace Tomahawk {
 namespace Utils {
 
@@ -87,8 +85,7 @@ ShortLinkHelper::shortLink( const Tomahawk::playlist_ptr& pl )
     QVariantMap jspf;
     jspf["playlist"] = m;
 
-    QJson::Serializer s;
-    QByteArray msg = s.serialize( jspf );
+    QByteArray msg = TomahawkUtils::toJson( jspf );
 
     // No built-in Qt facilities for doing a FORM POST. So we build the payload ourselves...
     const QByteArray boundary = "----------------------------2434992cccab";
