@@ -1,5 +1,5 @@
 macro(tomahawk_add_test test_class)
-    include_directories(${QT_INCLUDES} "${PROJECT_SOURCE_DIR}/src" ${CMAKE_CURRENT_BINARY_DIR} ${QJSON_INCLUDE_DIR})
+    include_directories(${QT_INCLUDES} "${PROJECT_SOURCE_DIR}/src" ${CMAKE_CURRENT_BINARY_DIR})
 
     set(TOMAHAWK_TEST_CLASS ${test_class})
     set(TOMAHAWK_TEST_TARGET ${TOMAHAWK_TEST_CLASS}Test)
