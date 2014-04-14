@@ -44,11 +44,16 @@
 #include <string>
 #include <vector>
 
+#include "common/using_std_string.h"
 #include "google_breakpad/common/breakpad_types.h"
 #include "processor/logging.h"
 #include "processor/tokenize.h"
 
 namespace google_breakpad {
+
+#ifdef _WIN32
+#define strtoull _strtoui64
+#endif
 
 struct WindowsFrameInfo {
  public:
@@ -84,14 +89,14 @@ struct WindowsFrameInfo {
                      program_string() {}
 
   WindowsFrameInfo(StackInfoTypes type,
-                 u_int32_t set_prolog_size,
-                 u_int32_t set_epilog_size,
-                 u_int32_t set_parameter_size,
-                 u_int32_t set_saved_register_size,
-                 u_int32_t set_local_size,
-                 u_int32_t set_max_stack_size,
+                 uint32_t set_prolog_size,
+                 uint32_t set_epilog_size,
+                 uint32_t set_parameter_size,
+                 uint32_t set_saved_register_size,
+                 uint32_t set_local_size,
+                 uint32_t set_max_stack_size,
                  int set_allocates_base_pointer,
-                 const std::string set_program_string)
+                 const string set_program_string)
       : type_(type),
         valid(VALID_ALL),
         prolog_size(set_prolog_size),
@@ -107,11 +112,11 @@ struct WindowsFrameInfo {
   // a string. Returns NULL if parsing fails, or a new object
   // otherwise. type, rva and code_size are present in the STACK line,
   // but not the StackFrameInfo structure, so return them as outparams.
-  static WindowsFrameInfo *ParseFromString(const std::string string,
+  static WindowsFrameInfo *ParseFromString(const string string,
                                            int &type,
-                                           u_int64_t &rva,
-                                           u_int64_t &code_size) {
-    // The format of a STACK WIN record is documented at: 
+                                           uint64_t &rva,
+                                           uint64_t &code_size) {
+    // The format of a STACK WIN record is documented at:
     //
     // http://code.google.com/p/google-breakpad/wiki/SymbolFiles
 
@@ -127,12 +132,12 @@ struct WindowsFrameInfo {
 
     rva                           = strtoull(tokens[1],  NULL, 16);
     code_size                     = strtoull(tokens[2],  NULL, 16);
-    u_int32_t prolog_size         =  strtoul(tokens[3],  NULL, 16);
-    u_int32_t epilog_size         =  strtoul(tokens[4],  NULL, 16);
-    u_int32_t parameter_size      =  strtoul(tokens[5],  NULL, 16);
-    u_int32_t saved_register_size =  strtoul(tokens[6],  NULL, 16);
-    u_int32_t local_size          =  strtoul(tokens[7],  NULL, 16);
-    u_int32_t max_stack_size      =  strtoul(tokens[8],  NULL, 16);
+    uint32_t prolog_size          =  strtoul(tokens[3],  NULL, 16);
+    uint32_t epilog_size          =  strtoul(tokens[4],  NULL, 16);
+    uint32_t parameter_size       =  strtoul(tokens[5],  NULL, 16);
+    uint32_t saved_register_size  =  strtoul(tokens[6],  NULL, 16);
+    uint32_t local_size           =  strtoul(tokens[7],  NULL, 16);
+    uint32_t max_stack_size       =  strtoul(tokens[8],  NULL, 16);
     int has_program_string        =  strtoul(tokens[9], NULL, 16);
 
     const char *program_string = "";
@@ -185,17 +190,17 @@ struct WindowsFrameInfo {
   int valid;
 
   // These values come from IDiaFrameData.
-  u_int32_t prolog_size;
-  u_int32_t epilog_size;
-  u_int32_t parameter_size;
-  u_int32_t saved_register_size;
-  u_int32_t local_size;
-  u_int32_t max_stack_size;
+  uint32_t prolog_size;
+  uint32_t epilog_size;
+  uint32_t parameter_size;
+  uint32_t saved_register_size;
+  uint32_t local_size;
+  uint32_t max_stack_size;
 
   // Only one of allocates_base_pointer or program_string will be valid.
   // If program_string is empty, use allocates_base_pointer.
   bool allocates_base_pointer;
-  std::string program_string;
+  string program_string;
 };
 
 }  // namespace google_breakpad

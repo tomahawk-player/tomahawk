@@ -26,6 +26,11 @@
 #include <QFileInfo>
 #include <string.h>
 
+#ifdef Q_OS_LINUX
+#include "client/linux/handler/minidump_descriptor.h"
+#endif
+
+
 #define CRASH_REPORTER_BINARY "tomahawk_crash_reporter"
 
 bool s_active = true;
@@ -35,7 +40,7 @@ bool s_active = true;
 
 
 static bool
-LaunchUploader( const char* dump_dir, const char* minidump_id, void* that, bool succeeded )
+LaunchUploader( const google_breakpad::MinidumpDescriptor& descriptor, void* context, bool succeeded )
 {
     // DON'T USE THE HEAP!!!
     // So that indeed means, no QStrings, no qDebug(), no QAnything, seriously!
@@ -43,7 +48,7 @@ LaunchUploader( const char* dump_dir, const char* minidump_id, void* that, bool 
     if ( !succeeded )
         return false;
 
-    const char* crashReporter = static_cast<BreakPad*>(that)->crashReporter();
+    const char* crashReporter = static_cast<BreakPad*>(context)->crashReporter();
     if ( !s_active || strlen( crashReporter ) == 0 )
         return false;
 
@@ -55,9 +60,7 @@ LaunchUploader( const char* dump_dir, const char* minidump_id, void* that, bool 
         // we are the fork
         execl( crashReporter,
                crashReporter,
-               dump_dir,
-               minidump_id,
-               minidump_id,
+               descriptor.path(),
                (char*) 0 );
 
         // execl replaces this process, so no more code will be executed
@@ -73,7 +76,7 @@ LaunchUploader( const char* dump_dir, const char* minidump_id, void* that, bool 
 
 BreakPad::BreakPad( const QString& path, bool active )
 #ifdef Q_OS_LINUX
-    : google_breakpad::ExceptionHandler( path.toStdString(), 0, LaunchUploader, this, true )
+    : google_breakpad::ExceptionHandler( google_breakpad::MinidumpDescriptor(path.toStdString()), NULL, LaunchUploader, this, true, -1 )
 #else
     : google_breakpad::ExceptionHandler( path.toStdString(), 0, LaunchUploader, this, true, 0 )
 #endif
@@ -117,7 +120,7 @@ LaunchUploader( const wchar_t* dump_dir, const wchar_t* minidump_id, void* that,
     //     const char* productName = static_cast<BreakPad*>(that)->productName();s
     // convert productName to widechars, which sadly means the product name must be Latin1
 
-    wchar_t product_name[ 256 ] = L"tomahawk";;
+    wchar_t product_name[ 256 ] = L"tomahawk";
 
 //     char* out = (char*)product_name;
 //     const char* in = productName - 1;
@@ -130,11 +133,10 @@ LaunchUploader( const wchar_t* dump_dir, const wchar_t* minidump_id, void* that,
     wchar_t command[MAX_PATH * 3 + 6];
     wcscpy( command, CRASH_REPORTER_BINARY L" \"" );
     wcscat( command, dump_dir );
-    wcscat( command, L"\" \"" );
+    wcscat( command, L"/" );
     wcscat( command, minidump_id );
-    wcscat( command, L"\" \"" );
-    wcscat( command, product_name );
-    wcscat( command, L"\"" );
+    wcscat( command, L".dmp\"" );
+
 
     STARTUPINFO si;
     PROCESS_INFORMATION pi;

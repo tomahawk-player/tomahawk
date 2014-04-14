@@ -39,16 +39,20 @@
 #include "client/windows/handler/exception_handler.h"
 #include "common/windows/guid_string.h"
 
+#include "yvals.h"
+
 namespace google_breakpad {
 
 static const int kWaitForHandlerThreadMs = 60000;
 static const int kExceptionHandlerThreadInitialStackSize = 64 * 1024;
 
+// As documented on MSDN, on failure SuspendThread returns (DWORD) -1
+static const DWORD kFailedToSuspendThread = static_cast<DWORD>(-1);
+
 // This is passed as the context to the MinidumpWriteDump callback.
 typedef struct {
-  ULONG64 memory_base;
-  ULONG memory_size;
-  bool finished;
+  AppMemoryList::const_iterator iter;
+  AppMemoryList::const_iterator end;
 } MinidumpCallbackContext;
 
 vector<ExceptionHandler*>* ExceptionHandler::handler_stack_ = NULL;
@@ -71,7 +75,50 @@ ExceptionHandler::ExceptionHandler(const wstring& dump_path,
              handler_types,
              dump_type,
              pipe_name,
+             NULL,  // pipe_handle
+             NULL,  // crash_generation_client
              custom_info);
+}
+
+ExceptionHandler::ExceptionHandler(const wstring& dump_path,
+                                   FilterCallback filter,
+                                   MinidumpCallback callback,
+                                   void* callback_context,
+                                   int handler_types,
+                                   MINIDUMP_TYPE dump_type,
+                                   HANDLE pipe_handle,
+                                   const CustomClientInfo* custom_info) {
+  Initialize(dump_path,
+             filter,
+             callback,
+             callback_context,
+             handler_types,
+             dump_type,
+             NULL,  // pipe_name
+             pipe_handle,
+             NULL,  // crash_generation_client
+             custom_info);
+}
+
+ExceptionHandler::ExceptionHandler(
+    const wstring& dump_path,
+    FilterCallback filter,
+    MinidumpCallback callback,
+    void* callback_context,
+    int handler_types,
+    CrashGenerationClient* crash_generation_client) {
+  // The dump_type, pipe_name and custom_info that are passed in to Initialize()
+  // are not used.  The ones set in crash_generation_client are used instead.
+  Initialize(dump_path,
+             filter,
+             callback,
+             callback_context,
+             handler_types,
+             MiniDumpNormal,           // dump_type - not used
+             NULL,                     // pipe_name - not used
+             NULL,                     // pipe_handle
+             crash_generation_client,
+             NULL);                    // custom_info - not used
 }
 
 ExceptionHandler::ExceptionHandler(const wstring &dump_path,
@@ -85,18 +132,23 @@ ExceptionHandler::ExceptionHandler(const wstring &dump_path,
              callback_context,
              handler_types,
              MiniDumpNormal,
-             NULL,
-             NULL);
+             NULL,   // pipe_name
+             NULL,   // pipe_handle
+             NULL,   // crash_generation_client
+             NULL);  // custom_info
 }
 
-void ExceptionHandler::Initialize(const wstring& dump_path,
-                                  FilterCallback filter,
-                                  MinidumpCallback callback,
-                                  void* callback_context,
-                                  int handler_types,
-                                  MINIDUMP_TYPE dump_type,
-                                  const wchar_t* pipe_name,
-                                  const CustomClientInfo* custom_info) {
+void ExceptionHandler::Initialize(
+    const wstring& dump_path,
+    FilterCallback filter,
+    MinidumpCallback callback,
+    void* callback_context,
+    int handler_types,
+    MINIDUMP_TYPE dump_type,
+    const wchar_t* pipe_name,
+    HANDLE pipe_handle,
+    CrashGenerationClient* crash_generation_client,
+    const CustomClientInfo* custom_info) {
   LONG instance_count = InterlockedIncrement(&instance_count_);
   filter_ = filter;
   callback_ = callback;
@@ -111,9 +163,9 @@ void ExceptionHandler::Initialize(const wstring& dump_path,
   uuid_create_ = NULL;
   handler_types_ = handler_types;
   previous_filter_ = NULL;
-#if _MSC_VER >= 1400  // MSVC 2005/8
+//#if _MSC_VER >= 1400  // MSVC 2005/8
   previous_iph_ = NULL;
-#endif  // _MSC_VER >= 1400
+//#endif  // _MSC_VER >= 1400
   previous_pch_ = NULL;
   handler_thread_ = NULL;
   is_shutdown_ = false;
@@ -125,13 +177,20 @@ void ExceptionHandler::Initialize(const wstring& dump_path,
   handler_return_value_ = false;
   handle_debug_exceptions_ = false;
 
-  // Attempt to use out-of-process if user has specified pipe name.
-  if (pipe_name != NULL) {
-    scoped_ptr<CrashGenerationClient> client(
-        new CrashGenerationClient(pipe_name,
-                                  dump_type_,
-                                  custom_info));
+  // Attempt to use out-of-process if user has specified a pipe or a
+  // crash generation client.
+  scoped_ptr<CrashGenerationClient> client;
+  if (crash_generation_client) {
+    client.reset(crash_generation_client);
+  } else if (pipe_name) {
+    client.reset(
+      new CrashGenerationClient(pipe_name, dump_type_, custom_info));
+  } else if (pipe_handle) {
+    client.reset(
+      new CrashGenerationClient(pipe_handle, dump_type_, custom_info));
+  }
 
+  if (client.get() != NULL) {
     // If successful in registering with the monitoring process,
     // there is no need to setup in-process crash generation.
     if (client->Register()) {
@@ -188,6 +247,12 @@ void ExceptionHandler::Initialize(const wstring& dump_path,
     set_dump_path(dump_path);
   }
 
+  // Reserve one element for the instruction memory
+  AppMemory instruction_memory;
+  instruction_memory.ptr = NULL;
+  instruction_memory.length = 0;
+  app_memory_info_.push_back(instruction_memory);
+
   // There is a race condition here. If the first instance has not yet
   // initialized the critical section, the second (and later) instances may
   // try to use uninitialized critical section object. The feature of multiple
@@ -216,13 +281,13 @@ void ExceptionHandler::Initialize(const wstring& dump_path,
     if (handler_types & HANDLER_EXCEPTION)
       previous_filter_ = SetUnhandledExceptionFilter(HandleException);
 
-#if _MSC_VER >= 1400  // MSVC 2005/8
+//#if _MSC_VER >= 1400  // MSVC 2005/8
     if (handler_types & HANDLER_INVALID_PARAMETER)
       previous_iph_ = _set_invalid_parameter_handler(HandleInvalidParameter);
-#endif  // _MSC_VER >= 1400
+//#endif  // _MSC_VER >= 1400
 
-//    if (handler_types & HANDLER_PURECALL)
-//      previous_pch_ = _set_purecall_handler(HandlePureVirtualCall);
+    if (handler_types & HANDLER_PURECALL)
+      previous_pch_ = _set_purecall_handler(HandlePureVirtualCall);
 
     LeaveCriticalSection(&handler_stack_critical_section_);
   }
@@ -243,13 +308,13 @@ ExceptionHandler::~ExceptionHandler() {
     if (handler_types_ & HANDLER_EXCEPTION)
       SetUnhandledExceptionFilter(previous_filter_);
 
-#if _MSC_VER >= 1400  // MSVC 2005/8
+//#if _MSC_VER >= 1400  // MSVC 2005/8
     if (handler_types_ & HANDLER_INVALID_PARAMETER)
       _set_invalid_parameter_handler(previous_iph_);
-#endif  // _MSC_VER >= 1400
+//#endif  // _MSC_VER >= 1400
 
-//    if (handler_types_ & HANDLER_PURECALL)
-//      _set_purecall_handler(previous_pch_);
+    if (handler_types_ & HANDLER_PURECALL)
+      _set_purecall_handler(previous_pch_);
 
     if (handler_stack_->back() == this) {
       handler_stack_->pop_back();
@@ -379,10 +444,10 @@ class AutoExceptionHandler {
     // In case another exception occurs while this handler is doing its thing,
     // it should be delivered to the previous filter.
     SetUnhandledExceptionFilter(handler_->previous_filter_);
-#if _MSC_VER >= 1400  // MSVC 2005/8
+//#if _MSC_VER >= 1400  // MSVC 2005/8
     _set_invalid_parameter_handler(handler_->previous_iph_);
-#endif  // _MSC_VER >= 1400
-//    _set_purecall_handler(handler_->previous_pch_);
+//#endif  // _MSC_VER >= 1400
+    _set_purecall_handler(handler_->previous_pch_);
   }
 
   ~AutoExceptionHandler() {
@@ -391,7 +456,7 @@ class AutoExceptionHandler {
 #if _MSC_VER >= 1400  // MSVC 2005/8
     _set_invalid_parameter_handler(ExceptionHandler::HandleInvalidParameter);
 #endif  // _MSC_VER >= 1400
-//    _set_purecall_handler(ExceptionHandler::HandlePureVirtualCall);
+    _set_purecall_handler(ExceptionHandler::HandlePureVirtualCall);
 
     --ExceptionHandler::handler_stack_index_;
     LeaveCriticalSection(&ExceptionHandler::handler_stack_critical_section_);
@@ -466,7 +531,7 @@ LONG ExceptionHandler::HandleException(EXCEPTION_POINTERS* exinfo) {
   return action;
 }
 
-#if _MSC_VER >= 1400  // MSVC 2005/8
+//#if _MSC_VER >= 1400  // MSVC 2005/8
 // static
 void ExceptionHandler::HandleInvalidParameter(const wchar_t* expression,
                                               const wchar_t* function,
@@ -549,7 +614,7 @@ void ExceptionHandler::HandleInvalidParameter(const wchar_t* expression,
 #ifdef _DEBUG
       _invalid_parameter(expression, function, file, line, reserved);
 #else  // _DEBUG
-      _invalid_parameter_noinfo();
+//      _invalid_parameter_noinfo();
 #endif  // _DEBUG
     }
   }
@@ -559,7 +624,7 @@ void ExceptionHandler::HandleInvalidParameter(const wchar_t* expression,
   // the behavior of "swallowing" exceptions.
   exit(0);
 }
-#endif  // _MSC_VER >= 1400
+//#endif  // _MSC_VER >= 1400
 
 // static
 void ExceptionHandler::HandlePureVirtualCall() {
@@ -701,6 +766,62 @@ bool ExceptionHandler::WriteMinidump(const wstring &dump_path,
   return handler.WriteMinidump();
 }
 
+// static
+bool ExceptionHandler::WriteMinidumpForChild(HANDLE child,
+                                             DWORD child_blamed_thread,
+                                             const wstring& dump_path,
+                                             MinidumpCallback callback,
+                                             void* callback_context) {
+  EXCEPTION_RECORD ex;
+  CONTEXT ctx;
+  EXCEPTION_POINTERS exinfo = { NULL, NULL };
+  DWORD last_suspend_count = kFailedToSuspendThread;
+  HANDLE child_thread_handle = OpenThread(THREAD_GET_CONTEXT |
+                                          THREAD_QUERY_INFORMATION |
+                                          THREAD_SUSPEND_RESUME,
+                                          FALSE,
+                                          child_blamed_thread);
+  // This thread may have died already, so not opening the handle is a
+  // non-fatal error.
+  if (child_thread_handle != NULL) {
+    last_suspend_count = SuspendThread(child_thread_handle);
+    if (last_suspend_count != kFailedToSuspendThread) {
+      ctx.ContextFlags = CONTEXT_ALL;
+      if (GetThreadContext(child_thread_handle, &ctx)) {
+        memset(&ex, 0, sizeof(ex));
+        ex.ExceptionCode = EXCEPTION_BREAKPOINT;
+#if defined(_M_IX86)
+        ex.ExceptionAddress = reinterpret_cast<PVOID>(ctx.Eip);
+#elif defined(_M_X64)
+        ex.ExceptionAddress = reinterpret_cast<PVOID>(ctx.Rip);
+#endif
+        exinfo.ExceptionRecord = &ex;
+        exinfo.ContextRecord = &ctx;
+      }
+    }
+  }
+
+  ExceptionHandler handler(dump_path, NULL, callback, callback_context,
+                           HANDLER_NONE);
+  bool success = handler.WriteMinidumpWithExceptionForProcess(
+      child_blamed_thread,
+      exinfo.ExceptionRecord ? &exinfo : NULL,
+      NULL, child, false);
+
+  if (last_suspend_count != kFailedToSuspendThread) {
+    ResumeThread(child_thread_handle);
+  }
+
+  CloseHandle(child_thread_handle);
+
+  if (callback) {
+    success = callback(handler.dump_path_c_, handler.next_minidump_id_c_,
+                       callback_context, NULL, NULL, success);
+  }
+
+  return success;
+}
+
 bool ExceptionHandler::WriteMinidumpWithException(
     DWORD requesting_thread_id,
     EXCEPTION_POINTERS* exinfo,
@@ -719,106 +840,11 @@ bool ExceptionHandler::WriteMinidumpWithException(
   if (IsOutOfProcess()) {
     success = crash_generation_client_->RequestDump(exinfo, assertion);
   } else {
-    if (minidump_write_dump_) {
-      HANDLE dump_file = CreateFile(next_minidump_path_c_,
-                                    GENERIC_WRITE,
-                                    0,  // no sharing
-                                    NULL,
-                                    CREATE_NEW,  // fail if exists
-                                    FILE_ATTRIBUTE_NORMAL,
-                                    NULL);
-      if (dump_file != INVALID_HANDLE_VALUE) {
-        MINIDUMP_EXCEPTION_INFORMATION except_info;
-        except_info.ThreadId = requesting_thread_id;
-        except_info.ExceptionPointers = exinfo;
-        except_info.ClientPointers = FALSE;
-
-        // Add an MDRawBreakpadInfo stream to the minidump, to provide
-        // additional information about the exception handler to the Breakpad
-        // processor. The information will help the processor determine which
-        // threads are relevant.  The Breakpad processor does not require this
-        // information but can function better with Breakpad-generated dumps
-        // when it is present. The native debugger is not harmed by the
-        // presence of this information.
-        MDRawBreakpadInfo breakpad_info;
-        breakpad_info.validity = MD_BREAKPAD_INFO_VALID_DUMP_THREAD_ID |
-                               MD_BREAKPAD_INFO_VALID_REQUESTING_THREAD_ID;
-        breakpad_info.dump_thread_id = GetCurrentThreadId();
-        breakpad_info.requesting_thread_id = requesting_thread_id;
-
-        // Leave room in user_stream_array for a possible assertion info stream.
-        MINIDUMP_USER_STREAM user_stream_array[2];
-        user_stream_array[0].Type = MD_BREAKPAD_INFO_STREAM;
-        user_stream_array[0].BufferSize = sizeof(breakpad_info);
-        user_stream_array[0].Buffer = &breakpad_info;
-
-        MINIDUMP_USER_STREAM_INFORMATION user_streams;
-        user_streams.UserStreamCount = 1;
-        user_streams.UserStreamArray = user_stream_array;
-
-        if (assertion) {
-          user_stream_array[1].Type = MD_ASSERTION_INFO_STREAM;
-          user_stream_array[1].BufferSize = sizeof(MDRawAssertionInfo);
-          user_stream_array[1].Buffer = assertion;
-          ++user_streams.UserStreamCount;
-        }
-
-        MINIDUMP_CALLBACK_INFORMATION callback;
-        MinidumpCallbackContext context;
-        MINIDUMP_CALLBACK_INFORMATION* callback_pointer = NULL;
-        // Older versions of DbgHelp.dll don't correctly put the memory around
-        // the faulting instruction pointer into the minidump. This
-        // callback will ensure that it gets included.
-        if (exinfo) {
-          // Find a memory region of 256 bytes centered on the
-          // faulting instruction pointer.
-          const ULONG64 instruction_pointer = 
-#if defined(_M_IX86)
-            exinfo->ContextRecord->Eip;
-#elif defined(_M_AMD64)
-            exinfo->ContextRecord->Rip;
-#else
-#error Unsupported platform
-#endif
-
-          MEMORY_BASIC_INFORMATION info;
-          if (VirtualQuery(reinterpret_cast<LPCVOID>(instruction_pointer),
-                           &info,
-                           sizeof(MEMORY_BASIC_INFORMATION)) != 0 &&
-              info.State == MEM_COMMIT) {
-            // Attempt to get 128 bytes before and after the instruction
-            // pointer, but settle for whatever's available up to the
-            // boundaries of the memory region.
-            const ULONG64 kIPMemorySize = 256;
-            context.memory_base =
-              (std::max)(reinterpret_cast<ULONG64>(info.BaseAddress),
-                       instruction_pointer - (kIPMemorySize / 2));
-            ULONG64 end_of_range =
-              (std::min)(instruction_pointer + (kIPMemorySize / 2),
-                       reinterpret_cast<ULONG64>(info.BaseAddress)
-                       + info.RegionSize);
-            context.memory_size =
-                static_cast<ULONG>(end_of_range - context.memory_base);
-
-            context.finished = false;
-            callback.CallbackRoutine = MinidumpWriteDumpCallback;
-            callback.CallbackParam = reinterpret_cast<void*>(&context);
-            callback_pointer = &callback;
-          }
-        }
-
-        // The explicit comparison to TRUE avoids a warning (C4800).
-        success = (minidump_write_dump_(GetCurrentProcess(),
-                                        GetCurrentProcessId(),
-                                        dump_file,
-                                        dump_type_,
-                                        exinfo ? &except_info : NULL,
-                                        &user_streams,
-                                        callback_pointer) == TRUE);
-
-        CloseHandle(dump_file);
-      }
-    }
+    success = WriteMinidumpWithExceptionForProcess(requesting_thread_id,
+                                                   exinfo,
+                                                   assertion,
+                                                   GetCurrentProcess(),
+                                                   true);
   }
 
   if (callback_) {
@@ -842,16 +868,16 @@ BOOL CALLBACK ExceptionHandler::MinidumpWriteDumpCallback(
   case MemoryCallback: {
     MinidumpCallbackContext* callback_context =
         reinterpret_cast<MinidumpCallbackContext*>(context);
-    if (callback_context->finished)
+    if (callback_context->iter == callback_context->end)
       return FALSE;
 
     // Include the specified memory region.
-    callback_output->MemoryBase = callback_context->memory_base;
-    callback_output->MemorySize = callback_context->memory_size;
-    callback_context->finished = true;
+    callback_output->MemoryBase = callback_context->iter->ptr;
+    callback_output->MemorySize = callback_context->iter->length;
+    callback_context->iter++;
     return TRUE;
   }
-    
+
     // Include all modules.
   case IncludeModuleCallback:
   case ModuleCallback:
@@ -872,6 +898,132 @@ BOOL CALLBACK ExceptionHandler::MinidumpWriteDumpCallback(
   return FALSE;
 }
 
+bool ExceptionHandler::WriteMinidumpWithExceptionForProcess(
+    DWORD requesting_thread_id,
+    EXCEPTION_POINTERS* exinfo,
+    MDRawAssertionInfo* assertion,
+    HANDLE process,
+    bool write_requester_stream) {
+  bool success = false;
+  if (minidump_write_dump_) {
+    HANDLE dump_file = CreateFile(next_minidump_path_c_,
+                                  GENERIC_WRITE,
+                                  0,  // no sharing
+                                  NULL,
+                                  CREATE_NEW,  // fail if exists
+                                  FILE_ATTRIBUTE_NORMAL,
+                                  NULL);
+    if (dump_file != INVALID_HANDLE_VALUE) {
+      MINIDUMP_EXCEPTION_INFORMATION except_info;
+      except_info.ThreadId = requesting_thread_id;
+      except_info.ExceptionPointers = exinfo;
+      except_info.ClientPointers = FALSE;
+
+      // Leave room in user_stream_array for possible breakpad and
+      // assertion info streams.
+      MINIDUMP_USER_STREAM user_stream_array[2];
+      MINIDUMP_USER_STREAM_INFORMATION user_streams;
+      user_streams.UserStreamCount = 0;
+      user_streams.UserStreamArray = user_stream_array;
+
+      if (write_requester_stream) {
+        // Add an MDRawBreakpadInfo stream to the minidump, to provide
+        // additional information about the exception handler to the Breakpad
+        // processor. The information will help the processor determine which
+        // threads are relevant.  The Breakpad processor does not require this
+        // information but can function better with Breakpad-generated dumps
+        // when it is present. The native debugger is not harmed by the
+        // presence of this information.
+        MDRawBreakpadInfo breakpad_info;
+        breakpad_info.validity = MD_BREAKPAD_INFO_VALID_DUMP_THREAD_ID |
+                                 MD_BREAKPAD_INFO_VALID_REQUESTING_THREAD_ID;
+        breakpad_info.dump_thread_id = GetCurrentThreadId();
+        breakpad_info.requesting_thread_id = requesting_thread_id;
+
+        int index = user_streams.UserStreamCount;
+        user_stream_array[index].Type = MD_BREAKPAD_INFO_STREAM;
+        user_stream_array[index].BufferSize = sizeof(breakpad_info);
+        user_stream_array[index].Buffer = &breakpad_info;
+        ++user_streams.UserStreamCount;
+      }
+
+      if (assertion) {
+        int index = user_streams.UserStreamCount;
+        user_stream_array[index].Type = MD_ASSERTION_INFO_STREAM;
+        user_stream_array[index].BufferSize = sizeof(MDRawAssertionInfo);
+        user_stream_array[index].Buffer = assertion;
+        ++user_streams.UserStreamCount;
+      }
+
+      // Older versions of DbgHelp.dll don't correctly put the memory around
+      // the faulting instruction pointer into the minidump. This
+      // callback will ensure that it gets included.
+      if (exinfo) {
+        // Find a memory region of 256 bytes centered on the
+        // faulting instruction pointer.
+        const ULONG64 instruction_pointer =
+#if defined(_M_IX86)
+          exinfo->ContextRecord->Eip;
+#elif defined(_M_AMD64)
+        exinfo->ContextRecord->Rip;
+#else
+#error Unsupported platform
+#endif
+
+        MEMORY_BASIC_INFORMATION info;
+        if (VirtualQueryEx(process,
+                           reinterpret_cast<LPCVOID>(instruction_pointer),
+                           &info,
+                           sizeof(MEMORY_BASIC_INFORMATION)) != 0 &&
+            info.State == MEM_COMMIT) {
+          // Attempt to get 128 bytes before and after the instruction
+          // pointer, but settle for whatever's available up to the
+          // boundaries of the memory region.
+          const ULONG64 kIPMemorySize = 256;
+          ULONG64 base =
+            (std::max)(reinterpret_cast<ULONG64>(info.BaseAddress),
+                       instruction_pointer - (kIPMemorySize / 2));
+          ULONG64 end_of_range =
+            (std::min)(instruction_pointer + (kIPMemorySize / 2),
+                       reinterpret_cast<ULONG64>(info.BaseAddress)
+                       + info.RegionSize);
+          ULONG size = static_cast<ULONG>(end_of_range - base);
+
+          AppMemory& elt = app_memory_info_.front();
+          elt.ptr = base;
+          elt.length = size;
+        }
+      }
+
+      MinidumpCallbackContext context;
+      context.iter = app_memory_info_.begin();
+      context.end = app_memory_info_.end();
+
+      // Skip the reserved element if there was no instruction memory
+      if (context.iter->ptr == 0) {
+        context.iter++;
+      }
+
+      MINIDUMP_CALLBACK_INFORMATION callback;
+      callback.CallbackRoutine = MinidumpWriteDumpCallback;
+      callback.CallbackParam = reinterpret_cast<void*>(&context);
+
+      // The explicit comparison to TRUE avoids a warning (C4800).
+      success = (minidump_write_dump_(process,
+                                      GetProcessId(process),
+                                      dump_file,
+                                      dump_type_,
+                                      exinfo ? &except_info : NULL,
+                                      &user_streams,
+                                      &callback) == TRUE);
+
+      CloseHandle(dump_file);
+    }
+  }
+
+  return success;
+}
+
 void ExceptionHandler::UpdateNextID() {
   assert(uuid_create_);
   UUID id = {0};
@@ -890,6 +1042,28 @@ void ExceptionHandler::UpdateNextID() {
 
   next_minidump_path_ = minidump_path;
   next_minidump_path_c_ = next_minidump_path_.c_str();
+}
+
+void ExceptionHandler::RegisterAppMemory(void* ptr, size_t length) {
+  AppMemoryList::iterator iter =
+    std::find(app_memory_info_.begin(), app_memory_info_.end(), ptr);
+  if (iter != app_memory_info_.end()) {
+    // Don't allow registering the same pointer twice.
+    return;
+  }
+
+  AppMemory app_memory;
+  app_memory.ptr = reinterpret_cast<ULONG64>(ptr);
+  app_memory.length = static_cast<ULONG>(length);
+  app_memory_info_.push_back(app_memory);
+}
+
+void ExceptionHandler::UnregisterAppMemory(void* ptr) {
+  AppMemoryList::iterator iter =
+    std::find(app_memory_info_.begin(), app_memory_info_.end(), ptr);
+  if (iter != app_memory_info_.end()) {
+    app_memory_info_.erase(iter);
+  }
 }
 
 }  // namespace google_breakpad

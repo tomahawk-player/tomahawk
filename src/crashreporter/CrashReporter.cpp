@@ -28,7 +28,7 @@
 
 #define LOGFILE TomahawkUtils::appLogDir().filePath( "Tomahawk.log" ).toLocal8Bit()
 #define RESPATH ":/data/"
-
+#define PRODUCT_NAME "WaterWolf"
 
 CrashReporter::CrashReporter( const QUrl& url, const QStringList& args )
     : m_reply( 0 )
@@ -60,9 +60,7 @@ CrashReporter::CrashReporter( const QUrl& url, const QStringList& args )
 
     m_request = new QNetworkRequest( m_url );
 
-    m_dir = args.value( 1 );
-    m_minidump = m_dir + '/' + args.value( 2 ) + ".dmp";
-    m_product_name = args.value( 3 );
+    m_minidump_file_path = args.value( 1 );
 
     //hide until "send report" has been clicked
     ui.progressBar->setVisible( false );
@@ -99,17 +97,46 @@ CrashReporter::send()
     // socorro expects a 10 digit build id
     QRegExp rx( "(\\d+\\.\\d+\\.\\d+).(\\d+)" );
     rx.exactMatch( TomahawkUtils::appFriendlyVersion() );
-    QString const version = rx.cap( 1 );
+    //QString const version = rx.cap( 1 );
     QString const buildId = rx.cap( 2 ).leftJustified( 10, '0' );
 
     // add parameters
     typedef QPair<QByteArray, QByteArray> Pair;
     QList<Pair> pairs;
     pairs << Pair( "BuildID", buildId.toUtf8() )
-          << Pair( "ProductName", m_product_name.toUtf8() )
+          << Pair( "ProductName",  PRODUCT_NAME)
           << Pair( "Version", TomahawkUtils::appFriendlyVersion().toLocal8Bit() )
-          << Pair( "Vendor", "Tomahawk" )
-          << Pair( "timestamp", QByteArray::number( QDateTime::currentDateTime().toTime_t() ) );
+          //<< Pair( "Vendor", "Tomahawk" )
+          //<< Pair( "timestamp", QByteArray::number( QDateTime::currentDateTime().toTime_t() ) )
+
+//            << Pair("InstallTime", "1357622062")
+//            << Pair("Theme", "classic/1.0")
+//            << Pair("Version", "30")
+//            << Pair("id", "{ec8030f7-c20a-464f-9b0e-13a3a9e97384}")
+//            << Pair("Vendor", "Mozilla")
+//            << Pair("EMCheckCompatibility", "true")
+//            << Pair("Throttleable", "0")
+//            << Pair("URL", "http://code.google.com/p/crashme/")
+//            << Pair("version", "20.0a1")
+//            << Pair("CrashTime", "1357770042")
+//            << Pair("ReleaseChannel", "nightly")
+//            << Pair("submitted_timestamp", "2013-01-09T22:21:18.646733+00:00")
+//            << Pair("buildid", "20130107030932")
+//            << Pair("timestamp", "1357770078.646789")
+//            << Pair("Notes", "OpenGL: NVIDIA Corporation -- GeForce 8600M GT/PCIe/SSE2 -- 3.3.0 NVIDIA 313.09 -- texture_from_pixmap\r\n")
+//            << Pair("StartupTime", "1357769913")
+//            << Pair("FramePoisonSize", "4096")
+//            << Pair("FramePoisonBase", "7ffffffff0dea000")
+//            << Pair("Add-ons", "%7B972ce4c6-7e08-4474-a285-3208198ce6fd%7D:20.0a1,crashme%40ted.mielczarek.org:0.4")
+//            << Pair("BuildID", "YYYYMMDDHH")
+//            << Pair("SecondsSinceLastCrash", "1831736")
+//            << Pair("ProductName", "WaterWolf")
+//            << Pair("legacy_processing", "0")
+//            << Pair("ProductID", "{ec8030f7-c20a-464f-9b0e-13a3a9e97384}")
+
+            ;
+
+
 
     foreach ( Pair const pair, pairs )
     {
@@ -119,14 +146,18 @@ CrashReporter::send()
                            pair.second + "\r\n";
     }
 
+    // TODO: check if dump file actually exists ...
+
     // add minidump file
     body += "--thkboundary\r\n";
     body += "Content-Disposition: form-data; name=\"upload_file_minidump\"; filename=\""
-          + QFileInfo( m_minidump ).fileName() + "\"\r\n";
+          + QFileInfo( m_minidump_file_path ).fileName() + "\"\r\n";
     body += "Content-Type: application/octet-stream\r\n";
     body += "\r\n";
-    body += contents( m_minidump );
+    body += contents( m_minidump_file_path );
     body += "\r\n";
+
+
 
     // add logfile
     body += "--thkboundary\r\n";

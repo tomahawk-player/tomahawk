@@ -26,7 +26,7 @@
 
 const char* k_usage =
     "Usage:\n"
-    "  CrashReporter <logDir> <dumpFileName> <productName>\n";
+    "  CrashReporter <dumpFilePath>\n";
 
 int main( int argc, char* argv[] )
 {
@@ -39,13 +39,13 @@ int main( int argc, char* argv[] )
     QApplication app( argc, argv );
     TomahawkUtils::installTranslator( &app );
 
-    if ( app.arguments().size() != 4 )
+    if ( app.arguments().size() != 2 )
     {
         std::cout << k_usage;
         return 1;
     }
 
-    CrashReporter reporter( QUrl( "http://oops.tomahawk-player.org/addreport.php" ),  app.arguments() );
+    CrashReporter reporter( QUrl( "http://crash-reports.tomahawk-player.org/submit" ),  app.arguments() );
     reporter.show();
 
     return app.exec();

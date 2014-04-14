@@ -28,7 +28,6 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <fcntl.h>
-#import <pwd.h>
 #import <sys/stat.h>
 #include <TargetConditionals.h>
 #import <unistd.h>

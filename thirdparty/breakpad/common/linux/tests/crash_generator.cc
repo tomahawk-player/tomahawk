@@ -43,9 +43,13 @@
 
 #include <string>
 
+#if defined(__ANDROID__)
+#include "common/android/testing/pthread_fixes.h"
+#endif
 #include "common/linux/eintr_wrapper.h"
 #include "common/tests/auto_tempdir.h"
 #include "common/tests/file_utils.h"
+#include "common/using_std_string.h"
 
 namespace {
 
@@ -97,11 +101,11 @@ bool CrashGenerator::HasDefaultCorePattern() const {
          buffer_size == 5 && memcmp(buffer, "core", 4) == 0;
 }
 
-std::string CrashGenerator::GetCoreFilePath() const {
+string CrashGenerator::GetCoreFilePath() const {
   return temp_dir_.path() + "/core";
 }
 
-std::string CrashGenerator::GetDirectoryOfProcFilesCopy() const {
+string CrashGenerator::GetDirectoryOfProcFilesCopy() const {
   return temp_dir_.path() + "/proc";
 }
 
@@ -170,7 +174,7 @@ bool CrashGenerator::CreateChildCrash(
     }
     if (SetCoreFileSizeLimit(kCoreSizeLimit)) {
       CreateThreadsInChildProcess(num_threads);
-      std::string proc_dir = GetDirectoryOfProcFilesCopy();
+      string proc_dir = GetDirectoryOfProcFilesCopy();
       if (mkdir(proc_dir.c_str(), 0755) == -1) {
         perror("CrashGenerator: Failed to create proc directory");
         exit(1);

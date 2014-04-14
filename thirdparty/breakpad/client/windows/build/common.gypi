@@ -123,10 +123,10 @@
       # Python version.
       'python_ver%': '2.5',
 
-      # Set ARM-v7 compilation flags
-      'armv7%': 0,
+      # Determine ARM compilation flags.
+      'arm_version%': 7,
 
-      # Set Neon compilation flags (only meaningful if armv7==1).
+      # Set Neon compilation flags (only meaningful if arm_version==7).
       'arm_neon%': 1,
 
       # The system root for cross-compiles. Default: none.
@@ -148,7 +148,7 @@
     'fastbuild%': '<(fastbuild)',
     'linux_fpic%': '<(linux_fpic)',
     'python_ver%': '<(python_ver)',
-    'armv7%': '<(armv7)',
+    'arm_version%': '<(arm_version)',
     'arm_neon%': '<(arm_neon)',
     'sysroot%': '<(sysroot)',
     'disable_sse2%': '<(disable_sse2)',
@@ -198,14 +198,6 @@
     #  'win_release_RuntimeLibrary': 2
     # to ~/.gyp/include.gypi, gclient runhooks --force, and do a release build.
     'win_use_allocator_shim%': 1, # 0 = shim allocator via libcmt; 1 = msvcrt
-
-    # To do a shared build on linux we need to be able to choose between type
-    # static_library and shared_library. We default to doing a static build
-    # but you can override this with "gyp -Dlibrary=shared_library" or you
-    # can add the following line (without the #) to ~/.gyp/include.gypi
-    # {'variables': {'library': 'shared_library'}}
-    # to compile as shared by default
-    'library%': 'static_library',
 
     # Whether usage of OpenMAX is enabled.
     'enable_openmax%': 0,
@@ -262,7 +254,7 @@
     # Set Thumb compilation flags.
     'arm_thumb%': 0,
 
-    # Set ARM fpu compilation flags (only meaningful if armv7==1 and
+    # Set ARM fpu compilation flags (only meaningful if arm_version==7 and
     # arm_neon==0).
     'arm_fpu%': 'vfpv3',
 
@@ -329,9 +321,9 @@
       # Whether to use multiple cores to compile with visual studio. This is
       # optional because it sometimes causes corruption on VS 2005.
       # It is on by default on VS 2008 and off on VS 2005.
-      ['OS=="win"', {
+      ['"<(GENERATOR)" == "msvs"', {
         'conditions': [
-          ['MSVS_VERSION=="2005"', {
+          [ 'MSVS_VERSION=="2005"', {
             'msvs_multi_core_compile%': 0,
           },{
             'msvs_multi_core_compile%': 1,
@@ -348,6 +340,10 @@
           # Native Client loader for 64-bit Windows.
           'NACL_WIN64',
         ],
+      },
+      {
+            # XXX: because value is used below...
+            'msvs_multi_core_compile%': 0,
       }],
       # Compute based on OS and target architecture whether the GPU
       # plugin / process is supported.
@@ -511,12 +507,11 @@
               '_CRT_SECURE_NO_DEPRECATE',
               '_CRT_NONSTDC_NO_WARNINGS',
               '_CRT_NONSTDC_NO_DEPRECATE',
-              '_SCL_SECURE_NO_DEPRECATE',
             ],
             'msvs_disabled_warnings': [4800],
             'msvs_settings': {
               'VCCLCompilerTool': {
-                'WarnAsError': 'false',
+                'WarnAsError': 'true',
                 'Detect64BitPortabilityProblems': 'false',
               },
             },
@@ -832,7 +827,7 @@
           'IMPLICIT_COMMAND_DEPENDENCIES': 0,
           # -rpath is only used when building with shared libraries.
           'conditions': [
-            [ 'library=="shared_library"', {
+            [ 'component=="shared_library"', {
               'RPATH': '$LIB_DIR',
             }],
           ],
@@ -989,7 +984,7 @@
                     '-Wa,-mimplicit-it=thumb',
                     ]
                   }],
-                  ['armv7==1', {
+                  ['arm_version==7', {
                     'cflags': [
                       '-march=armv7-a',
                       '-mtune=cortex-a8',
@@ -1183,7 +1178,7 @@
           '$(VSInstallDir)/VC/atlmfc/include',
         ],
         'msvs_cygwin_dirs': ['<(DEPTH)/third_party/cygwin'],
-        'msvs_disabled_warnings': [4396, 4503, 4819],
+        'msvs_disabled_warnings': [4100, 4127, 4396, 4503, 4512, 4702, 4819, 4995],
         'msvs_settings': {
           'VCCLCompilerTool': {
             'MinimalRebuild': 'false',
@@ -1191,7 +1186,7 @@
             'BufferSecurityCheck': 'true',
             'EnableFunctionLevelLinking': 'true',
             'RuntimeTypeInfo': 'false',
-            'WarningLevel': '3',
+            'WarningLevel': '4',
             'WarnAsError': 'true',
             'DebugInformationFormat': '3',
             'conditions': [

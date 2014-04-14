@@ -27,15 +27,26 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+// We don't want windows.h to define the macro max() which collides with
+// std::numeric_limits::max()
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+
+#include "common/windows/pdb_source_line_writer.h"
+
+#include <windows.h>
+#include <winnt.h>
 #include <atlbase.h>
 #include <dia2.h>
 #include <ImageHlp.h>
 #include <stdio.h>
 
-#include "common/windows/string_utils-inl.h"
+#include <limits>
 
-#include "common/windows/pdb_source_line_writer.h"
+#include "common/windows/dia_util.h"
 #include "common/windows/guid_string.h"
+#include "common/windows/string_utils-inl.h"
 
 // This constant may be missing from DbgHelp.h.  See the documentation for
 // IDiaSymbol::get_undecoratedNameEx.
@@ -44,6 +55,8 @@
 #endif  // UNDNAME_NO_ECSU
 
 namespace google_breakpad {
+
+namespace {
 
 using std::vector;
 
@@ -62,6 +75,8 @@ class AutoImage {
  private:
   PLOADED_IMAGE img_;
 };
+
+}  // namespace
 
 PDBSourceLineWriter::PDBSourceLineWriter() : output_(NULL) {
 }
@@ -109,7 +124,7 @@ bool PDBSourceLineWriter::Open(const wstring &file, FileFormat format) {
           fprintf(stderr, "loadDataForPdb and loadDataFromExe failed for %ws\n", file.c_str());
           return false;
         }
-	code_file_ = file;
+        code_file_ = file;
       }
       break;
     default:
@@ -157,7 +172,12 @@ bool PDBSourceLineWriter::PrintLines(IDiaEnumLineNumbers *lines) {
       return false;
     }
 
-    fprintf(output_, "%x %x %d %d\n", rva, length, line_num, source_id);
+    AddressRangeVector ranges;
+    MapAddressRange(image_map_, AddressRange(rva, length), &ranges);
+    for (size_t i = 0; i < ranges.size(); ++i) {
+      fprintf(output_, "%x %x %d %d\n", ranges[i].rva, ranges[i].length,
+              line_num, source_id);
+    }
     line.Release();
   }
   return true;
@@ -196,8 +216,13 @@ bool PDBSourceLineWriter::PrintFunction(IDiaSymbol *function,
     stack_param_size = GetFunctionStackParamSize(function);
   }
 
-  fprintf(output_, "FUNC %x %" WIN_STRING_FORMAT_LL "x %x %ws\n",
-          rva, length, stack_param_size, name);
+  AddressRangeVector ranges;
+  MapAddressRange(image_map_, AddressRange(rva, static_cast<DWORD>(length)),
+                  &ranges);
+  for (size_t i = 0; i < ranges.size(); ++i) {
+    fprintf(output_, "FUNC %x %x %x %ws\n",
+            ranges[i].rva, ranges[i].length, stack_param_size, name);
+  }
 
   CComPtr<IDiaEnumLineNumbers> lines;
   if (FAILED(session_->findLinesByRVA(rva, DWORD(length), &lines))) {
@@ -369,30 +394,17 @@ bool PDBSourceLineWriter::PrintFrameData() {
   // associated function, as is done with line numbers, but the DIA API
   // doesn't make it possible to get the frame data in that way.
 
-  CComPtr<IDiaEnumTables> tables;
-  if (FAILED(session_->getEnumTables(&tables)))
-    return false;
-
-  // Pick up the first table that supports IDiaEnumFrameData.
   CComPtr<IDiaEnumFrameData> frame_data_enum;
-  CComPtr<IDiaTable> table;
-  ULONG count;
-  while (!frame_data_enum &&
-         SUCCEEDED(tables->Next(1, &table, &count)) &&
-         count == 1) {
-    table->QueryInterface(_uuidof(IDiaEnumFrameData),
-                          reinterpret_cast<void**>(&frame_data_enum));
-    table.Release();
-  }
-  if (!frame_data_enum)
+  if (!FindTable(session_, &frame_data_enum))
     return false;
 
-  DWORD last_type = -1;
-  DWORD last_rva = -1;
+  DWORD last_type = std::numeric_limits<DWORD>::max();
+  DWORD last_rva = std::numeric_limits<DWORD>::max();
   DWORD last_code_size = 0;
-  DWORD last_prolog_size = -1;
+  DWORD last_prolog_size = std::numeric_limits<DWORD>::max();
 
   CComPtr<IDiaFrameData> frame_data;
+  ULONG count = 0;
   while (SUCCEEDED(frame_data_enum->Next(1, &frame_data, &count)) &&
          count == 1) {
     DWORD type;
@@ -410,9 +422,6 @@ bool PDBSourceLineWriter::PrintFrameData() {
     DWORD prolog_size;
     if (FAILED(frame_data->get_lengthProlog(&prolog_size)))
       return false;
-
-    // epliog_size is always 0.
-    DWORD epilog_size = 0;
 
     // parameter_size is the size of parameters passed on the stack.  If any
     // parameters are not passed on the stack (such as in registers), their
@@ -460,14 +469,67 @@ bool PDBSourceLineWriter::PrintFrameData() {
     // this check reduces the size of the dumped symbol file by a third.
     if (type != last_type || rva != last_rva || code_size != last_code_size ||
         prolog_size != last_prolog_size) {
-      fprintf(output_, "STACK WIN %x %x %x %x %x %x %x %x %x %d ",
-              type, rva, code_size, prolog_size, epilog_size,
-              parameter_size, saved_register_size, local_size, max_stack_size,
-              program_string_result == S_OK);
-      if (program_string_result == S_OK) {
-        fprintf(output_, "%ws\n", program_string);
+      // The prolog and the code portions of the frame have to be treated
+      // independently as they may have independently changed in size, or may
+      // even have been split.
+      // NOTE: If epilog size is ever non-zero, we have to do something
+      //     similar with it.
+
+      // Figure out where the prolog bytes have landed.
+      AddressRangeVector prolog_ranges;
+      if (prolog_size > 0) {
+        MapAddressRange(image_map_, AddressRange(rva, prolog_size),
+                        &prolog_ranges);
+      }
+
+      // And figure out where the code bytes have landed.
+      AddressRangeVector code_ranges;
+      MapAddressRange(image_map_,
+                      AddressRange(rva + prolog_size,
+                                   code_size - prolog_size),
+                      &code_ranges);
+
+      struct FrameInfo {
+        DWORD rva;
+        DWORD code_size;
+        DWORD prolog_size;
+      };
+      std::vector<FrameInfo> frame_infos;
+
+      // Special case: The prolog and the code bytes remain contiguous. This is
+      // only done for compactness of the symbol file, and we could actually
+      // be outputting independent frame info for the prolog and code portions.
+      if (prolog_ranges.size() == 1 && code_ranges.size() == 1 &&
+          prolog_ranges[0].end() == code_ranges[0].rva) {
+        FrameInfo fi = { prolog_ranges[0].rva,
+                         prolog_ranges[0].length + code_ranges[0].length,
+                         prolog_ranges[0].length };
+        frame_infos.push_back(fi);
       } else {
-        fprintf(output_, "%d\n", allocates_base_pointer);
+        // Otherwise we output the prolog and code frame info independently.
+        for (size_t i = 0; i < prolog_ranges.size(); ++i) {
+          FrameInfo fi = { prolog_ranges[i].rva,
+                           prolog_ranges[i].length,
+                           prolog_ranges[i].length };
+          frame_infos.push_back(fi);
+        }
+        for (size_t i = 0; i < code_ranges.size(); ++i) {
+          FrameInfo fi = { code_ranges[i].rva, code_ranges[i].length, 0 };
+          frame_infos.push_back(fi);
+        }
+      }
+
+      for (size_t i = 0; i < frame_infos.size(); ++i) {
+        const FrameInfo& fi(frame_infos[i]);
+        fprintf(output_, "STACK WIN %x %x %x %x %x %x %x %x %x %d ",
+                type, fi.rva, fi.code_size, fi.prolog_size,
+                0 /* epilog_size */, parameter_size, saved_register_size,
+                local_size, max_stack_size, program_string_result == S_OK);
+        if (program_string_result == S_OK) {
+          fprintf(output_, "%ws\n", program_string);
+        } else {
+          fprintf(output_, "%d\n", allocates_base_pointer);
+        }
       }
 
       last_type = type;
@@ -502,8 +564,12 @@ bool PDBSourceLineWriter::PrintCodePublicSymbol(IDiaSymbol *symbol) {
     return false;
   }
 
-  fprintf(output_, "PUBLIC %x %x %ws\n", rva,
-          stack_param_size > 0 ? stack_param_size : 0, name);
+  AddressRangeVector ranges;
+  MapAddressRange(image_map_, AddressRange(rva, 1), &ranges);
+  for (size_t i = 0; i < ranges.size(); ++i) {
+    fprintf(output_, "PUBLIC %x %x %ws\n", ranges[i].rva,
+            stack_param_size > 0 ? stack_param_size : 0, name);
+  }
   return true;
 }
 
@@ -530,8 +596,8 @@ bool PDBSourceLineWriter::PrintPEInfo() {
   }
 
   fprintf(output_, "INFO CODE_ID %ws %ws\n",
-	  info.code_identifier.c_str(),
-	  info.code_file.c_str());
+          info.code_identifier.c_str(),
+          info.code_file.c_str());
   return true;
 }
 
@@ -588,12 +654,12 @@ bool PDBSourceLineWriter::FindPEFile() {
     for (int i = 0; i < sizeof(extensions) / sizeof(extensions[0]); i++) {
       size_t dot_pos = file.find_last_of(L".");
       if (dot_pos != wstring::npos) {
-	file.replace(dot_pos + 1, wstring::npos, extensions[i]);
-	// Check if this file exists.
-	if (GetFileAttributesW(file.c_str()) != INVALID_FILE_ATTRIBUTES) {
-	  code_file_ = file;
-	  return true;
-	}
+        file.replace(dot_pos + 1, wstring::npos, extensions[i]);
+        // Check if this file exists.
+        if (GetFileAttributesW(file.c_str()) != INVALID_FILE_ATTRIBUTES) {
+          code_file_ = file;
+          return true;
+        }
       }
     }
   }
@@ -803,13 +869,20 @@ next_child:
 bool PDBSourceLineWriter::WriteMap(FILE *map_file) {
   output_ = map_file;
 
+  // Load the OMAP information, and disable auto-translation of addresses in
+  // preference of doing it ourselves.
+  OmapData omap_data;
+  if (!GetOmapDataAndDisableTranslation(session_, &omap_data))
+    return false;
+  BuildImageMap(omap_data, &image_map_);
+
   bool ret = PrintPDBInfo();
   // This is not a critical piece of the symbol file.
   PrintPEInfo();
   ret = ret &&
-    PrintSourceFiles() && 
-    PrintFunctions() &&
-    PrintFrameData();
+      PrintSourceFiles() && 
+      PrintFunctions() &&
+      PrintFrameData();
 
   output_ = NULL;
   return ret;
@@ -956,8 +1029,8 @@ bool PDBSourceLineWriter::GetPEInfo(PEModuleInfo *info) {
   }
   wchar_t code_identifier[32];
   swprintf(code_identifier,
-	   sizeof(code_identifier) / sizeof(code_identifier[0]),
-	   L"%08X%X", TimeDateStamp, SizeOfImage);
+      sizeof(code_identifier) / sizeof(code_identifier[0]),
+      L"%08X%X", TimeDateStamp, SizeOfImage);
   info->code_identifier = code_identifier;
 
   return true;

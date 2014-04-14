@@ -41,7 +41,7 @@
         'crash_generation_app.cc',
         'crash_generation_app.h',
         'crash_generation_app.ico',
-        'crash_generation_app.rc',
+        'resource.rc',
         'resource.h',
         'small.ico',
       ],
@@ -50,6 +50,30 @@
         '../../crash_generation/crash_generation.gyp:crash_generation_server',
         '../../crash_generation/crash_generation.gyp:crash_generation_client',
         '../../handler/exception_handler.gyp:exception_handler',
+      ],
+      'conditions': [
+          [ '"<(GENERATOR)" == "make"', {
+              'ldflags': [
+                  '-Wl,--subsystem=2', '-municode'
+              ],
+              'rules': [
+                  { 'rule_name': 'windres',
+                    'extension': 'rc',
+                    'inputs'   : [ ],
+                    'outputs'  : [ '$(builddir)/<(RULE_INPUT_ROOT).o' ],
+                    'action'   : [ '$(RC)', '--input=<(RULE_INPUT_PATH)', '--output=$(builddir)/<(RULE_INPUT_ROOT).o', '--input-format=rc', '--output-format=coff', '-v', '--use-temp-file' ],
+                    'message'  : 'Compiling Windows resources',
+                    'process_outputs_as_sources' : 1,
+                },
+              ],
+            }
+          ],
+          [ '"<(GENERATOR)" == "msvs"', {
+              'libraries': [
+                  'user32.lib',
+              ],
+            }
+          ]
       ],
       'msvs_settings': {
         'VCLinkerTool': {

@@ -38,6 +38,8 @@
 #include <hash_map>
 #include <string>
 
+#include "common/windows/omap.h"
+
 struct IDiaEnumLineNumbers;
 struct IDiaSession;
 struct IDiaSymbol;
@@ -227,6 +229,9 @@ class PDBSourceLineWriter {
   hash_map<DWORD, DWORD> file_ids_;
   // This maps unique filenames to file IDs.
   hash_map<wstring, DWORD> unique_files_;
+
+  // This is used for calculating post-transform symbol addresses and lengths.
+  ImageMap image_map_;
 
   // Disallow copy ctor and operator=
   PDBSourceLineWriter(const PDBSourceLineWriter&);

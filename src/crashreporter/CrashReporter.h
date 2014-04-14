@@ -38,9 +38,7 @@ public:
 private:
     Ui::CrashReporter ui;
 
-    QString m_minidump;
-    QString m_dir;
-    QString m_product_name;
+    QString m_minidump_file_path;
     QNetworkRequest* m_request;
     QNetworkReply* m_reply;
     QUrl m_url;

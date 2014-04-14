@@ -39,10 +39,15 @@
 #include <string.h>
 #include <time.h>
 
+#include <string>
+
+#include "common/using_std_string.h"
 #include "processor/logging.h"
 #include "processor/pathname_stripper.h"
 
-#ifdef _WIN32
+#ifdef __MINGW32__
+#include <pthread.h>
+#elif defined(_WIN32)
 #define snprintf _snprintf
 #endif
 
@@ -54,7 +59,7 @@ LogStream::LogStream(std::ostream &stream, Severity severity,
   time_t clock;
   time(&clock);
   struct tm tm_struct;
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(__MINGW32__)
   localtime_s(&tm_struct, &clock);
 #else
   localtime_r(&clock, &tm_struct);
@@ -80,25 +85,25 @@ LogStream::~LogStream() {
   stream_ << std::endl;
 }
 
-std::string HexString(u_int32_t number) {
+string HexString(uint32_t number) {
   char buffer[11];
   snprintf(buffer, sizeof(buffer), "0x%x", number);
-  return std::string(buffer);
+  return string(buffer);
 }
 
-std::string HexString(u_int64_t number) {
+string HexString(uint64_t number) {
   char buffer[19];
   snprintf(buffer, sizeof(buffer), "0x%" PRIx64, number);
-  return std::string(buffer);
+  return string(buffer);
 }
 
-std::string HexString(int number) {
+string HexString(int number) {
   char buffer[19];
   snprintf(buffer, sizeof(buffer), "0x%x", number);
-  return std::string(buffer);
+  return string(buffer);
 }
 
-int ErrnoString(std::string *error_string) {
+int ErrnoString(string *error_string) {
   assert(error_string);
 
   // strerror isn't necessarily thread-safe.  strerror_r would be preferrable,

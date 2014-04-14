@@ -204,11 +204,11 @@ int __breakpad_fdnlist(int fd, nlist_type *list, const char **symbolNames,
       *((unsigned int *)&buf) == FAT_MAGIC) {
     /* Get host info */
     host_t host = mach_host_self();
-    unsigned i = HOST_BASIC_INFO_COUNT;
+    unsigned hic = HOST_BASIC_INFO_COUNT;
     struct host_basic_info hbi;
     kern_return_t kr;
     if ((kr = host_info(host, HOST_BASIC_INFO,
-                        (host_info_t)(&hbi), &i)) != KERN_SUCCESS) {
+                        (host_info_t)(&hbi), &hic)) != KERN_SUCCESS) {
       return -1;
     }
     mach_port_deallocate(mach_task_self(), host);
@@ -361,7 +361,7 @@ int __breakpad_fdnlist(int fd, nlist_type *list, const char **symbolNames,
     if (read(fd, (char *)space, m) != m)
       break;
     n -= m;
-    long savpos = lseek(fd, 0, SEEK_CUR);
+    off_t savpos = lseek(fd, 0, SEEK_CUR);
     if (savpos == -1) {
       return -1;
     }

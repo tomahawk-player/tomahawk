@@ -41,10 +41,13 @@
 #include "processor/fast_source_line_resolver_types.h"
 
 #include <map>
+#include <string>
 #include <utility>
 
+#include "common/scoped_ptr.h"
+#include "common/using_std_string.h"
 #include "processor/module_factory.h"
-#include "processor/scoped_ptr.h"
+#include "processor/simple_serializer-inl.h"
 
 using std::map;
 using std::make_pair;
@@ -114,18 +117,18 @@ WindowsFrameInfo FastSourceLineResolver::CopyWFI(const char *raw) {
   // The first 8 bytes of int data are unused.
   // They correspond to "StackInfoTypes type_;" and "int valid;"
   // data member of WFI.
-  const u_int32_t *para_uint32 = reinterpret_cast<const u_int32_t*>(
+  const uint32_t *para_uint32 = reinterpret_cast<const uint32_t*>(
       raw + 2 * sizeof(int32_t));
 
-  u_int32_t prolog_size = para_uint32[0];;
-  u_int32_t epilog_size = para_uint32[1];
-  u_int32_t parameter_size = para_uint32[2];
-  u_int32_t saved_register_size = para_uint32[3];
-  u_int32_t local_size = para_uint32[4];
-  u_int32_t max_stack_size = para_uint32[5];
+  uint32_t prolog_size = para_uint32[0];;
+  uint32_t epilog_size = para_uint32[1];
+  uint32_t parameter_size = para_uint32[2];
+  uint32_t saved_register_size = para_uint32[3];
+  uint32_t local_size = para_uint32[4];
+  uint32_t max_stack_size = para_uint32[5];
   const char *boolean = reinterpret_cast<const char*>(para_uint32 + 6);
   bool allocates_base_pointer = (*boolean != 0);
-  std::string program_string = boolean + 1;
+  string program_string = boolean + 1;
 
   return WindowsFrameInfo(type,
                           prolog_size,
@@ -141,10 +144,16 @@ WindowsFrameInfo FastSourceLineResolver::CopyWFI(const char *raw) {
 // Loads a map from the given buffer in char* type.
 // Does NOT take ownership of mem_buffer.
 // In addition, treat mem_buffer as const char*.
-bool FastSourceLineResolver::Module::LoadMapFromMemory(char *mem_buffer) {
-  if (!mem_buffer) return false;
+bool FastSourceLineResolver::Module::LoadMapFromMemory(
+    char *memory_buffer,
+    size_t memory_buffer_size) {
+  if (!memory_buffer) return false;
 
-  const u_int32_t *map_sizes = reinterpret_cast<const u_int32_t*>(mem_buffer);
+  // Read the "is_corrupt" flag.
+  const char *mem_buffer = memory_buffer;
+  mem_buffer = SimpleSerializer<bool>::Read(mem_buffer, &is_corrupt_);
+
+  const uint32_t *map_sizes = reinterpret_cast<const uint32_t*>(mem_buffer);
 
   unsigned int header_size = kNumberMaps_ * sizeof(unsigned int);
 

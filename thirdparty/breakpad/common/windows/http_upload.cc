@@ -30,9 +30,12 @@
 #include <assert.h>
 
 // Disable exception handler warnings.
-#pragma warning( disable : 4530 )
+#pragma warning(disable:4530)
 
 #include <fstream>
+#ifdef __MINGW32__
+#include <ext/stdio_filebuf.h>
+#endif
 
 #include "common/windows/string_utils-inl.h"
 
@@ -152,18 +155,18 @@ bool HTTPUpload::SendRequest(const wstring &url,
     if (!InternetSetOption(request.get(),
                            INTERNET_OPTION_SEND_TIMEOUT,
                            timeout,
-                           sizeof(timeout))) {
+                           sizeof(*timeout))) {
       fwprintf(stderr, L"Could not unset send timeout, continuing...\n");
     }
 
     if (!InternetSetOption(request.get(),
                            INTERNET_OPTION_RECEIVE_TIMEOUT,
                            timeout,
-                           sizeof(timeout))) {
+                           sizeof(*timeout))) {
       fwprintf(stderr, L"Could not unset receive timeout, continuing...\n");
     }
   }
-  
+
   if (!HttpSendRequest(request.get(), NULL, 0,
                        const_cast<char *>(request_body.data()),
                        static_cast<DWORD>(request_body.size()))) {
@@ -215,8 +218,7 @@ bool HTTPUpload::ReadResponse(HINTERNET request, wstring *response) {
   BOOL return_code;
 
   while (((return_code = InternetQueryDataAvailable(request, &bytes_available,
-	  0, 0)) != 0) && bytes_available > 0) {
-
+      0, 0)) != 0) && bytes_available > 0) {
     vector<char> response_buffer(bytes_available);
     DWORD size_read;
 
@@ -323,28 +325,44 @@ bool HTTPUpload::GenerateRequestBody(const map<wstring, wstring> &parameters,
 // static
 bool HTTPUpload::GetFileContents(const wstring &filename,
                                  vector<char> *contents) {
+  bool rv = false;
   // The "open" method on pre-MSVC8 ifstream implementations doesn't accept a
   // wchar_t* filename, so use _wfopen directly in that case.  For VC8 and
-  // later, _wfopen has been deprecated in favor of _wfopen_s, which does
-  // not exist in earlier versions, so let the ifstream open the file itself.
-#if _MSC_VER >= 1400  // MSVC 2005/8
+  // later, _wfopen has been deprecated in favor of _wfopen_s, which does not
+  // exist in earlier versions, so let the ifstream open the file itself.  GCC
+  // doesn't support using a wide-character file name, so use the stdio_filebuf
+  // extension.
+#if _MSC_VER >= 1400 // MSVC 2005/8
   ifstream file;
   file.open(filename.c_str(), ios::binary);
-#else  // _MSC_VER >= 1400
+  if (!file.is_open()) return false;
+#elif defined(_MSC_VER)
   ifstream file(_wfopen(filename.c_str(), L"rb"));
-#endif  // _MSC_VER >= 1400
-  if (file.is_open()) {
+  if (!file.is_open()) return false;
+#else
+  FILE *f = _wfopen(filename.c_str(), L"rb");
+  if (!f) return false;
+  __gnu_cxx::stdio_filebuf<char> filebuf(f, std::ios::in);
+  std::istream file(&filebuf);
+#endif
+
+  {
     file.seekg(0, ios::end);
     std::streamoff length = file.tellg();
-    contents->resize(length);
-    if (length != 0) {
-      file.seekg(0, ios::beg);
-      file.read(&((*contents)[0]), length);
+    // Check for loss of data when converting lenght from std::streamoff into
+    // std::vector<char>::size_type
+    std::vector<char>::size_type vector_size =
+        static_cast<std::vector<char>::size_type>(length);
+    if (static_cast<std::streamoff>(vector_size) == length) {
+      contents->resize(vector_size);
+      if (length != 0) {
+        file.seekg(0, ios::beg);
+        file.read(&((*contents)[0]), length);
+      }
+      rv = true;
     }
-    file.close();
-    return true;
   }
-  return false;
+  return rv;
 }
 
 // static

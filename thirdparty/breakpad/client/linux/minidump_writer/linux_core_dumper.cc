@@ -99,12 +99,14 @@ bool LinuxCoreDumper::GetThreadInfoByIndex(size_t index, ThreadInfo* info) {
   memcpy(&stack_pointer, &info->regs.rsp, sizeof(info->regs.rsp));
 #elif defined(__ARM_EABI__)
   memcpy(&stack_pointer, &info->regs.ARM_sp, sizeof(info->regs.ARM_sp));
+#elif defined(__mips__)
+  stack_pointer = 
+      reinterpret_cast<uint8_t*>(info->regs.regs[MD_CONTEXT_MIPS_REG_SP]);
 #else
 #error "This code hasn't been ported to your platform yet."
 #endif
-
-  return GetStackInfo(&info->stack, &info->stack_len,
-                      reinterpret_cast<uintptr_t>(stack_pointer));
+  info->stack_pointer = reinterpret_cast<uintptr_t>(stack_pointer);
+  return true;
 }
 
 bool LinuxCoreDumper::IsPostMortem() const {

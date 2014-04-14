@@ -39,6 +39,7 @@
 #include "common/linux/memory_mapped_file.h"
 #include "common/tests/file_utils.h"
 #include "common/linux/tests/crash_generator.h"
+#include "common/using_std_string.h"
 
 using google_breakpad::AutoTempDir;
 using google_breakpad::CrashGenerator;
@@ -47,13 +48,12 @@ using google_breakpad::MemoryMappedFile;
 using google_breakpad::MemoryRange;
 using google_breakpad::WriteFile;
 using std::set;
-using std::string;
 
 TEST(ElfCoreDumpTest, DefaultConstructor) {
   ElfCoreDump core;
   EXPECT_FALSE(core.IsValid());
   EXPECT_EQ(NULL, core.GetHeader());
-  EXPECT_EQ(0, core.GetProgramHeaderCount());
+  EXPECT_EQ(0U, core.GetProgramHeaderCount());
   EXPECT_EQ(NULL, core.GetProgramHeader(0));
   EXPECT_EQ(NULL, core.GetFirstProgramHeaderOfType(PT_LOAD));
   EXPECT_FALSE(core.GetFirstNote().IsValid());
@@ -74,7 +74,7 @@ TEST(ElfCoreDumpTest, TestElfHeader) {
   core.SetContent(mapped_core_file.content());
   EXPECT_FALSE(core.IsValid());
   EXPECT_EQ(NULL, core.GetHeader());
-  EXPECT_EQ(0, core.GetProgramHeaderCount());
+  EXPECT_EQ(0U, core.GetProgramHeaderCount());
   EXPECT_EQ(NULL, core.GetProgramHeader(0));
   EXPECT_EQ(NULL, core.GetFirstProgramHeaderOfType(PT_LOAD));
   EXPECT_FALSE(core.GetFirstNote().IsValid());
@@ -182,8 +182,12 @@ TEST(ElfCoreDumpTest, ValidCoreFile) {
 
   size_t num_nt_prpsinfo = 0;
   size_t num_nt_prstatus = 0;
+#if defined(__i386__) || defined(__x86_64__)
   size_t num_nt_fpregset = 0;
+#endif
+#if defined(__i386__)
   size_t num_nt_prxfpreg = 0;
+#endif
   set<pid_t> actual_thread_ids;
   ElfCoreDump::Note note = core.GetFirstNote();
   while (note.IsValid()) {
@@ -211,7 +215,7 @@ TEST(ElfCoreDumpTest, ValidCoreFile) {
         ++num_nt_prstatus;
         break;
       }
-#if defined(__i386) || defined(__x86_64)
+#if defined(__i386__) || defined(__x86_64__)
       case NT_FPREGSET: {
         EXPECT_TRUE(description.data() != NULL);
         EXPECT_EQ(sizeof(user_fpregs_struct), description.length());
@@ -219,7 +223,7 @@ TEST(ElfCoreDumpTest, ValidCoreFile) {
         break;
       }
 #endif
-#if defined(__i386)
+#if defined(__i386__)
       case NT_PRXFPREG: {
         EXPECT_TRUE(description.data() != NULL);
         EXPECT_EQ(sizeof(user_fpxregs_struct), description.length());
@@ -234,12 +238,12 @@ TEST(ElfCoreDumpTest, ValidCoreFile) {
   }
 
   EXPECT_TRUE(expected_thread_ids == actual_thread_ids);
-  EXPECT_EQ(1, num_nt_prpsinfo);
+  EXPECT_EQ(1U, num_nt_prpsinfo);
   EXPECT_EQ(kNumOfThreads, num_nt_prstatus);
-#if defined(__i386) || defined(__x86_64)
+#if defined(__i386__) || defined(__x86_64__)
   EXPECT_EQ(kNumOfThreads, num_nt_fpregset);
 #endif
-#if defined(__i386)
+#if defined(__i386__)
   EXPECT_EQ(kNumOfThreads, num_nt_prxfpreg);
 #endif
 }

@@ -84,15 +84,42 @@ vector<string> DwarfCFIToModule::RegisterNames::X86_64() {
   return MakeVector(names, sizeof(names) / sizeof(names[0]));
 }
 
+// Per ARM IHI 0040A, section 3.1
 vector<string> DwarfCFIToModule::RegisterNames::ARM() {
   static const char *const names[] = {
     "r0",  "r1",  "r2",  "r3",  "r4",  "r5",  "r6",  "r7",
     "r8",  "r9",  "r10", "r11", "r12", "sp",  "lr",  "pc",
     "f0",  "f1",  "f2",  "f3",  "f4",  "f5",  "f6",  "f7",
-    "fps", "cpsr"
+    "fps", "cpsr", "",   "",    "",    "",    "",    "",
+    "",    "",    "",    "",    "",    "",    "",    "",
+    "",    "",    "",    "",    "",    "",    "",    "",
+    "",    "",    "",    "",    "",    "",    "",    "",
+    "",    "",    "",    "",    "",    "",    "",    "",
+    "s0",  "s1",  "s2",  "s3",  "s4",  "s5",  "s6",  "s7",
+    "s8",  "s9",  "s10", "s11", "s12", "s13", "s14", "s15",
+    "s16", "s17", "s18", "s19", "s20", "s21", "s22", "s23",
+    "s24", "s25", "s26", "s27", "s28", "s29", "s30", "s31",
+    "f0",  "f1",  "f2",  "f3",  "f4",  "f5",  "f6",  "f7"
   };
 
   return MakeVector(names, sizeof(names) / sizeof(names[0]));
+}
+
+vector<string> DwarfCFIToModule::RegisterNames::MIPS() {
+  static const char* const kRegisterNames[] = {
+    "$zero", "$at",  "$v0",  "$v1",  "$a0",   "$a1",  "$a2",  "$a3",
+    "$t0",   "$t1",  "$t2",  "$t3",  "$t4",   "$t5",  "$t6",  "$t7",
+    "$s0",   "$s1",  "$s2",  "$s3",  "$s4",   "$s5",  "$s6",  "$s7",
+    "$t8",   "$t9",  "$k0",  "$k1",  "$gp",   "$sp",  "$fp",  "$ra",
+    "$lo",   "$hi",  "$pc",  "$f0",  "$f2",   "$f3",  "$f4",  "$f5",
+    "$f6",   "$f7",  "$f8",  "$f9",  "$f10",  "$f11", "$f12", "$f13",
+    "$f14",  "$f15", "$f16", "$f17", "$f18",  "$f19", "$f20",
+    "$f21",  "$f22", "$f23", "$f24", "$f25",  "$f26", "$f27",
+    "$f28",  "$f29", "$f30", "$f31", "$fcsr", "$fir"
+  };
+
+  return MakeVector(kRegisterNames, 
+                    sizeof(kRegisterNames) / sizeof(kRegisterNames[0]));
 }
 
 bool DwarfCFIToModule::Entry(size_t offset, uint64 address, uint64 length,
@@ -132,7 +159,8 @@ string DwarfCFIToModule::RegisterName(int i) {
   if (reg == return_address_)
     return ra_name_;
 
-  if (reg < register_names_.size())
+  // Ensure that a non-empty name exists for this register value.
+  if (reg < register_names_.size() && !register_names_[reg].empty())
     return register_names_[reg];
 
   reporter_->UnnamedRegister(entry_offset_, reg);

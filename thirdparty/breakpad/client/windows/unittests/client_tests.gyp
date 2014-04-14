@@ -36,8 +36,10 @@
       'target_name': 'client_tests',
       'type': 'executable',
       'sources': [
+        'exception_handler_test.h',
         'exception_handler_test.cc',
         'exception_handler_death_test.cc',
+        'exception_handler_nesting_test.cc',
         'minidump_test.cc',
         'dump_analysis.cc',
         'dump_analysis.h',
@@ -50,8 +52,16 @@
         '../crash_generation/crash_generation.gyp:crash_generation_server',
         '../crash_generation/crash_generation.gyp:crash_generation_client',
         '../handler/exception_handler.gyp:exception_handler',
-	'processor_bits',
-      ]
+        'processor_bits',
+      ],
+      'conditions': [
+          [ '"<(GENERATOR)" == "make"', {
+              'libraries': [
+                  '-ldbghelp', '-lversion', '-lpthread',
+              ],
+            },
+          ],
+      ],
     },
     {
       'target_name': 'processor_bits',

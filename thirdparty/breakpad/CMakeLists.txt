@@ -40,24 +40,26 @@ IF(UNIX)
         )
     ELSE(APPLE)
         SET( breakpadSources
-            common/linux/safe_readlink.cc
             client/linux/crash_generation/crash_generation_client.cc
             client/linux/crash_generation/crash_generation_server.cc
-            client/linux/minidump_writer/minidump_writer.cc
-            client/linux/minidump_writer/linux_dumper.cc
             client/linux/handler/exception_handler.cc
-            common/linux/dump_symbols.cc
-            common/linux/file_id.cc
-            common/linux/libcurl_wrapper.cc
-            common/linux/google_crashdump_uploader.cc
-            common/linux/synth_elf.cc
-            common/linux/http_upload.cc
-            common/linux/guid_creator.cc
-            common/linux/elf_symbols_to_module.cc
-            client/minidump_file_writer.cc
-            client/linux/minidump_writer/linux_ptrace_dumper.cc
-            common/linux/memory_mapped_file.cc
+            client/linux/handler/minidump_descriptor.cc
             client/linux/log/log.cc
+            client/linux/minidump_writer/linux_dumper.cc
+            client/linux/minidump_writer/linux_ptrace_dumper.cc
+            client/linux/minidump_writer/minidump_writer.cc
+            client/minidump_file_writer.cc
+
+            common/convert_UTF.c
+#             common/md5.c
+            common/string_conversion.cc
+            common/linux/elfutils.cc
+
+            common/linux/file_id.cc
+            common/linux/guid_creator.cc
+            common/linux/linux_libc_support.cc
+            common/linux/memory_mapped_file.cc
+            common/linux/safe_readlink.cc
         )
     ENDIF(APPLE)
 
@@ -82,3 +84,7 @@ INCLUDE_DIRECTORIES(.)
 ADD_DEFINITIONS( -fPIC )
 ADD_LIBRARY( tomahawk_breakpad STATIC ${breakpadSources} )
 TARGET_LINK_LIBRARIES( tomahawk_breakpad )
+
+IF(WIN32)
+    TARGET_LINK_LIBRARIES(tomahawk_breakpad "mingwex")
+ENDIF()
