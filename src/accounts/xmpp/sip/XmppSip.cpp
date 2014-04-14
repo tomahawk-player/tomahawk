@@ -48,9 +48,6 @@
 #include <jreen/logger.h>
 #include <jreen/tune.h>
 
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
-
 #include <QtPlugin>
 #include <QStringList>
 #include <QDateTime>
