@@ -22,8 +22,6 @@
 #include "utils/Logger.h"
 #include "utils/NetworkAccessManager.h"
 
-#include <qjson/parser.h>
-
 #include <QDateTime>
 #include <QNetworkReply>
 
@@ -128,13 +126,13 @@ RoviPlugin::albumLookupFinished()
 
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
 
-    QJson::Parser p;
     bool ok;
-    QVariantMap response = p.parse( reply, &ok ).toMap();
+    QByteArray jsonData = reply->readAll();
+    QVariantMap response = TomahawkUtils::parseJson( jsonData, &ok ).toMap();
 
     if ( !ok || response.isEmpty() || !response.contains( "searchResponse" ) )
     {
-        tLog() << "Error parsing JSON from Rovi!" << p.errorString() << response;
+        tLog() << "Error parsing JSON from Rovi!" << jsonData;
         emit info( requestData, QVariant() );
         return;
     }
@@ -151,7 +149,7 @@ RoviPlugin::albumLookupFinished()
 
     if ( tracks.isEmpty() )
     {
-        tLog() << "Error parsing JSON from Rovi!" << p.errorString() << response;
+        tLog() << "Error parsing JSON from Rovi!" << jsonData;
         emit info( requestData, QVariant() );
     }
 
