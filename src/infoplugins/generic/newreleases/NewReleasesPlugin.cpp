@@ -32,9 +32,6 @@
 #include "Source.h"
 #include "utils/NetworkAccessManager.h"
 
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
-
 #include <QDate>
 #include <QDateTime>
 #include <QDir>
@@ -305,14 +302,14 @@ NewReleasesPlugin::nrSourcesList()
 
     if ( reply->error() == QNetworkReply::NoError )
     {
-        QJson::Parser p;
         bool ok;
-        const QVariantMap res = p.parse ( reply, &ok ).toMap();
+        QByteArray jsonData = reply->readAll();
+        const QVariantMap res = TomahawkUtils::parseJson( jsonData, &ok ).toMap();
         const QVariantList sources = res.value ( "sources" ).toList();
 
         if ( !ok )
         {
-            tDebug() << Q_FUNC_INFO  << "Failed to parse sources" << p.errorString() << "On line" << p.errorLine();
+            tDebug() << Q_FUNC_INFO  << "Failed to parse sources" << jsonData;
             return;
         }
 
@@ -439,13 +436,13 @@ NewReleasesPlugin::nrList()
 
     if ( reply->error() == QNetworkReply::NoError )
     {
-        QJson::Parser p;
         bool ok;
-        const QVariantMap res = p.parse( reply, &ok ).toMap();
+        QByteArray jsonData = reply->readAll();
+        const QVariantMap res = TomahawkUtils::parseJson( jsonData, &ok ).toMap();
 
         if ( !ok )
         {
-            tLog() << "Failed to parse resources" << p.errorString() << "On line" << p.errorLine();
+            tLog() << "Failed to parse resources" << jsonData;
             return;
         }
 
@@ -669,13 +666,13 @@ NewReleasesPlugin::nrReturned()
 
     if ( reply->error() == QNetworkReply::NoError )
     {
-        QJson::Parser p;
         bool ok;
-        QVariantMap res = p.parse ( reply, &ok ).toMap();
+        QByteArray jsonData = reply->readAll();
+        QVariantMap res = TomahawkUtils::parseJson( jsonData, &ok ).toMap();
 
         if ( !ok )
         {
-            tLog() << "Failed to parse json from chart lookup:" << p.errorString() << "On line" << p.errorLine();
+            tLog() << "Failed to parse json from chart lookup:" << jsonData;
             return;
         }
 

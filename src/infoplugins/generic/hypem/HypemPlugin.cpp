@@ -36,8 +36,6 @@
 
 #define HYPEM_URL "http://hypem.com/playlist/"
 #define HYPEM_END_URL "json/1/data.js"
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
 
 namespace Tomahawk
 {
@@ -323,13 +321,13 @@ HypemPlugin::chartReturned()
     QVariantMap returnedData;
     if ( reply->error() == QNetworkReply::NoError )
     {
-        QJson::Parser p;
         bool ok;
-        QVariantMap res = p.parse( reply, &ok ).toMap();
+        QByteArray jsonData = reply->readAll();
+        QVariantMap res = TomahawkUtils::parseJson( jsonData, &ok ).toMap();
 
         if ( !ok )
         {
-            tLog() << "Failed to parse json from chart lookup:" << p.errorString() << "On line" << p.errorLine();
+            tLog() << "Failed to parse json from chart lookup:" << jsonData;
             return;
         }
 

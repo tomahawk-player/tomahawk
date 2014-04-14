@@ -32,9 +32,6 @@
 #include "utils/NetworkAccessManager.h"
 #include "Source.h"
 
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
-
 #include <QDir>
 #include <QSettings>
 #include <QNetworkConfiguration>
@@ -296,14 +293,14 @@ ChartsPlugin::chartSourcesList()
 
     if ( reply->error() == QNetworkReply::NoError )
     {
-        QJson::Parser p;
         bool ok;
-        const QVariantMap res = p.parse( reply, &ok ).toMap();
+        QByteArray jsonData = reply->readAll();
+        const QVariantMap res = TomahawkUtils::parseJson( jsonData, &ok ).toMap();
         const QVariantList sources = res.value( "sources" ).toList();
 
         if ( !ok )
         {
-            tLog() << Q_FUNC_INFO << "Failed to parse sources" << p.errorString() << "On line" << p.errorLine();
+            tLog() << Q_FUNC_INFO << "Failed to parse sources" << jsonData;
             return;
         }
 
@@ -438,14 +435,13 @@ ChartsPlugin::chartsList()
 
     if ( reply->error() == QNetworkReply::NoError )
     {
-        QJson::Parser p;
         bool ok;
-        QVariantMap res = p.parse( reply, &ok ).toMap();
+        QByteArray jsonData = reply->readAll();
+        QVariantMap res = TomahawkUtils::parseJson( jsonData, &ok ).toMap();
 
         if ( !ok )
         {
-            tLog() << "Failed to parse resources" << p.errorString() << "On line" << p.errorLine();
-
+            tLog() << "Failed to parse resources" << jsonData;
             return;
         }
 
@@ -631,13 +627,13 @@ ChartsPlugin::chartReturned()
 
     if ( reply->error() == QNetworkReply::NoError )
     {
-        QJson::Parser p;
         bool ok;
-        QVariantMap res = p.parse( reply, &ok ).toMap();
+        QByteArray jsonData = reply->readAll();
+        QVariantMap res = TomahawkUtils::parseJson( jsonData, &ok ).toMap();
 
         if ( !ok )
         {
-            tLog() << "Failed to parse json from chart lookup:" << p.errorString() << "On line" << p.errorLine();
+            tLog() << "Failed to parse json from chart lookup:" << jsonData;
             return;
         }
 

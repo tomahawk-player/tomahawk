@@ -24,8 +24,6 @@
 #include "utils/Closure.h"
 #include "utils/NetworkAccessManager.h"
 
-#include <qjson/parser.h>
-
 #include <QNetworkReply>
 #include <QDomDocument>
 
@@ -116,8 +114,7 @@ DiscogsPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requestD
 void
 DiscogsPlugin::albumSearchSlot( const InfoRequestData &requestData, QNetworkReply *reply )
 {
-    QJson::Parser p;
-    QVariantMap results = p.parse( reply ).toMap();
+    QVariantMap results = TomahawkUtils::parseJson( reply->readAll() ).toMap();
 
     if ( !results.contains( "results" ) || results.value( "results" ).toList().isEmpty() )
     {
@@ -145,8 +142,7 @@ DiscogsPlugin::albumSearchSlot( const InfoRequestData &requestData, QNetworkRepl
 void
 DiscogsPlugin::albumInfoSlot( const InfoRequestData& requestData, QNetworkReply* reply )
 {
-    QJson::Parser p;
-    QVariantMap results = p.parse( reply ).toMap();
+    QVariantMap results = TomahawkUtils::parseJson( reply->readAll() ).toMap();
 
     if ( !results.contains( "resp" ) )
     {

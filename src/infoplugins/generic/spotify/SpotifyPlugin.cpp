@@ -36,8 +36,6 @@
 #include "Source.h"
 
 #define SPOTIFY_API_URL "http://spotikea.tomahawk-player.org/"
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
 
 using namespace Tomahawk::InfoSystem;
 
@@ -200,14 +198,14 @@ SpotifyPlugin::chartTypes()
 
     if ( reply->error() == QNetworkReply::NoError )
     {
-        QJson::Parser p;
         bool ok;
-        const QVariantMap res = p.parse( reply, &ok ).toMap();
+        QByteArray jsonData = reply->readAll();
+        const QVariantMap res = TomahawkUtils::parseJson( jsonData, &ok ).toMap();
         const QVariantMap chartObj = res;
 
         if ( !ok )
         {
-            tLog() << Q_FUNC_INFO << "Failed to parse resources" << p.errorString() << "On line" << p.errorLine();
+            tLog() << Q_FUNC_INFO << "Failed to parse resources:" << jsonData;
 
             return;
         }
@@ -289,13 +287,13 @@ SpotifyPlugin::chartReturned()
     QVariantMap returnedData;
     if ( reply->error() == QNetworkReply::NoError )
     {
-        QJson::Parser p;
         bool ok;
-        QVariantMap res = p.parse( reply, &ok ).toMap();
+        QByteArray jsonData = reply->readAll();
+        QVariantMap res = TomahawkUtils::parseJson( jsonData, &ok ).toMap();
 
         if ( !ok )
         {
-            tLog() << "Failed to parse json from chart lookup:" << p.errorString() << "On line" << p.errorLine();
+            tLog() << "Failed to parse json from chart lookup:" << jsonData;
             return;
         }
 
