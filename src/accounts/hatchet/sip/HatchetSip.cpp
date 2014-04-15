@@ -32,9 +32,6 @@
 #include <utils/Logger.h>
 #include <SourceList.h>
 
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
-
 #include <QFile>
 #include <QHostInfo>
 #include <QUuid>
@@ -248,8 +245,7 @@ HatchetSipPlugin::sendBytes( const QVariantMap& jsonMap ) const
         return false;
     }
 
-    QJson::Serializer serializer;
-    QByteArray bytes = serializer.serialize( jsonMap );
+    QByteArray bytes = TomahawkUtils::toJson( jsonMap );
     if ( bytes.isEmpty() )
     {
         tLog() << Q_FUNC_INFO << "could not serialize register structure to JSON";
@@ -267,9 +263,8 @@ HatchetSipPlugin::messageReceived( const QByteArray &msg )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "WebSocket message: " << msg;
 
-    QJson::Parser parser;
     bool ok;
-    QVariant jsonVariant = parser.parse( msg, &ok );
+    QVariant jsonVariant = TomahawkUtils::parseJson( msg, &ok );
     if ( !jsonVariant.isValid() )
     {
         tLog() << Q_FUNC_INFO << "Failed to parse message back from server";

@@ -20,11 +20,11 @@
 #include <QHostInfo>
 
 #include "HatchetAccountConfig.h"
+#include "sip/HatchetSip.h"
 #include "utils/Closure.h"
 #include "utils/Logger.h"
-#include "sip/HatchetSip.h"
-#include "utils/TomahawkUtils.h"
 #include "utils/NetworkAccessManager.h"
+#include "utils/TomahawkUtils.h"
 
 #include <QtPlugin>
 #include <QFile>
@@ -33,9 +33,6 @@
 #include <QNetworkReply>
 #include <QUrl>
 #include <QUuid>
-
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
 
 using namespace Tomahawk;
 using namespace Accounts;
@@ -538,9 +535,8 @@ HatchetAccount::parseReply( QNetworkReply* reply, bool& okRet ) const
         return resp;
     }
 
-    QJson::Parser p;
     QByteArray replyData = reply->readAll();
-    resp = p.parse( replyData, &ok ).toMap();
+    resp = TomahawkUtils::parseJson( replyData, &ok ).toMap();
 
     if ( !ok )
     {
