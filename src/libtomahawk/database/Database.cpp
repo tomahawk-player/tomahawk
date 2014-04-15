@@ -345,7 +345,7 @@ Database::createCommandInstance(const QVariant& op, const source_ptr& source)
         return command;
 
     command->setSource( source );
-    QJson::QObjectHelper::qvariant2qobject( op.toMap(), command.data() );
+    TomahawkUtils::qvariant2qobject( op.toMap(), command.data() );
     return command;
 }
 

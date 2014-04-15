@@ -60,6 +60,8 @@
     #include <QJsonDocument>
 #else
     #include <qjson/parser.h>
+    #include <qjson/qobjecthelper.h>
+    #include <qjson/serializer.h>
 #endif
 
 #ifdef Q_OS_WIN
@@ -843,6 +845,33 @@ compareVersionStrings( const QString& first, const QString& second )
     }
 
     return verdict;
+}
+
+
+void
+qvariant2qobject( const QVariantMap& variant, QObject* object )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    for ( QVariantMap::const_iterator iter = variant.begin(); iter != variant.end(); ++iter )
+    {
+        QVariant property = object->property( iter.key().toLatin1() );
+        QVariant value = iter.value();
+        Q_ASSERT( property.isValid() );
+        if ( property.isValid() )
+        {
+            if ( value.canConvert( property.type() ) )
+            {
+                value.convert( property.type() );
+                object->setProperty( iter.key().toLatin1(), value );
+            } else if ( QString( QLatin1String("QVariant") ).compare( QLatin1String( property.typeName() ) ) == 0 ) {
+                object->setProperty( iter.key().toLatin1(), value );
+            }
+        }
+    }
+#else
+    QJson::QObjectHelper::qvariant2qobject( variant, objects );
+#endif
+
 }
 
 

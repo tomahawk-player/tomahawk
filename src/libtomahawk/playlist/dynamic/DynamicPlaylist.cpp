@@ -556,7 +556,7 @@ DynamicPlaylist::variantsToControl( const QList< QVariantMap >& controlsV )
 //        qDebug() << "Creating control with data:" << controlV;
         if ( control )
         {
-            QJson::QObjectHelper::qvariant2qobject( controlV, control.data() );
+            TomahawkUtils::qvariant2qobject( controlV, control.data() );
             realControls << control;
         }
     }

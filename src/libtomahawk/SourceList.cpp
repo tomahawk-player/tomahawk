@@ -30,8 +30,6 @@
 
 #include "utils/Logger.h"
 
-#include <qjson/qobjecthelper.h>
-
 using namespace Tomahawk;
 
 SourceList* SourceList::s_instance = 0;
@@ -225,7 +223,7 @@ void
 SourceList::createPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents )
 {
     Tomahawk::playlist_ptr p = Tomahawk::playlist_ptr( new Tomahawk::Playlist( src ) );
-    QJson::QObjectHelper::qvariant2qobject( contents.toMap(), p.data() );
+    TomahawkUtils::qvariant2qobject( contents.toMap(), p.data() );
     p->reportCreated( p );
 }
 
@@ -234,7 +232,7 @@ void
 SourceList::createDynamicPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents )
 {
     Tomahawk::dynplaylist_ptr p = Tomahawk::dynplaylist_ptr( new Tomahawk::DynamicPlaylist( src, contents.toMap().value( "type", QString() ).toString()  ) );
-    QJson::QObjectHelper::qvariant2qobject( contents.toMap(), p.data() );
+    TomahawkUtils::qvariant2qobject( contents.toMap(), p.data() );
     p->reportCreated( p );
 }
 

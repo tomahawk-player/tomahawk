@@ -284,7 +284,7 @@ DatabaseCommand_SetPlaylistRevision::setAddedentriesV( const QVariantList& vlist
     foreach( const QVariant& v, vlist )
     {
         PlaylistEntry* pep = new PlaylistEntry;
-        QJson::QObjectHelper::qvariant2qobject( v.toMap(), pep );
+        TomahawkUtils::qvariant2qobject( v.toMap(), pep );
 
         if ( pep->isValid() )
             m_addedentries << plentry_ptr( pep );
