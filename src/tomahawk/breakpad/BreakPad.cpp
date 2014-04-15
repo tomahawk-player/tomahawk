@@ -40,13 +40,37 @@ bool s_active = true;
 
 
 static bool
+#ifdef Q_OS_LINUX
 LaunchUploader( const google_breakpad::MinidumpDescriptor& descriptor, void* context, bool succeeded )
 {
+#else // Q_OS_MAC
+LaunchUploader( const char* dump_dir, const char* minidump_id, void* context, bool succeeded)
+{
+#endif
+
+    if ( !succeeded )
+    {
+        printf("Could not write crash dump file");
+        return false;
+    }
+
     // DON'T USE THE HEAP!!!
     // So that indeed means, no QStrings, no qDebug(), no QAnything, seriously!
 
-    if ( !succeeded )
-        return false;
+#ifdef Q_OS_LINUX
+    const char* path = descriptor.path();
+#else // Q_OS_MAC
+    const char* extension = "dmp";
+
+    char path[4096];
+    strcpy(path, dump_dir);
+    strcat(path, "/");
+    strcat(path, minidump_id);
+    strcat(path, ".");
+    strcat(path,  extension);
+#endif
+
+    printf("Dump file was written to: %s\n", path);
 
     const char* crashReporter = static_cast<BreakPad*>(context)->crashReporter();
     if ( !s_active || strlen( crashReporter ) == 0 )
@@ -60,7 +84,7 @@ LaunchUploader( const google_breakpad::MinidumpDescriptor& descriptor, void* con
         // we are the fork
         execl( crashReporter,
                crashReporter,
-               descriptor.path(),
+               path,
                (char*) 0 );
 
         // execl replaces this process, so no more code will be executed
@@ -75,8 +99,10 @@ LaunchUploader( const google_breakpad::MinidumpDescriptor& descriptor, void* con
 
 
 BreakPad::BreakPad( const QString& path, bool active )
-#ifdef Q_OS_LINUX
+#if defined Q_OS_LINUX
     : google_breakpad::ExceptionHandler( google_breakpad::MinidumpDescriptor(path.toStdString()), NULL, LaunchUploader, this, true, -1 )
+#elif defined Q_OS_MAC
+    : google_breakpad::ExceptionHandler( path.toStdString(), NULL, LaunchUploader, this, true, NULL)
 #else
     : google_breakpad::ExceptionHandler( path.toStdString(), 0, LaunchUploader, this, true, 0 )
 #endif

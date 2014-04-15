@@ -24,8 +24,6 @@ IF(UNIX)
             client/mac/handler/exception_handler.cc
             client/mac/handler/minidump_generator.cc
             client/mac/handler/protected_memory_allocator.cc
-    #         client/mac/Framework/Breakpad.mm
-    #         client/mac/Framework/OnDemandServer.mm
             common/mac/file_id.cc
             common/mac/macho_id.cc
             common/mac/macho_reader.cc
@@ -35,8 +33,9 @@ IF(UNIX)
             common/md5.cc
             common/mac/dump_syms.mm
             common/mac/MachIPC.mm
-            common/mac/SimpleStringDictionary.mm
+            common/dwarf/dwarf2reader.cc
             common/mac/bootstrap_compat.cc
+            common/dwarf_cfi_to_module.cc
         )
     ELSE(APPLE)
         SET( breakpadSources
