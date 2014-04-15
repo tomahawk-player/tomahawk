@@ -103,9 +103,15 @@ ENDIF()
 
 # set paths
 SET( THIRDPARTY_DIR  ${CMAKE_SOURCE_DIR}/thirdparty )
-SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
+
+# put executables into bundle dir on on osx
+IF(APPLE)
+    SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tomahawk.app/Contents/MacOS/" )
+ELSE()
+    SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
+ENDIF()
 
 # make predefined install dirs available everywhere
 INCLUDE( GNUInstallDirs )

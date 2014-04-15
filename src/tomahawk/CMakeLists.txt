@@ -162,6 +162,9 @@ SET_TARGET_PROPERTIES(tomahawk_bin
         AUTOMOC TRUE
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_BINARY_DIR}/Info.plist"
         RUNTIME_OUTPUT_NAME tomahawk
+
+        # OSX: MACOSX_BUNDLE messes with paths
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
 
