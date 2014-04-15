@@ -24,6 +24,8 @@
 
 #include "DllMacro.h"
 
+#include <QStringList>
+
 namespace Tomahawk
 {
 
