@@ -21,7 +21,6 @@
 
 #include "DatabaseCommandLoggable.h"
 #include "Playlist.h"
-#include "qjson/qobjecthelper.h"
 
 #include "DllMacro.h"
 

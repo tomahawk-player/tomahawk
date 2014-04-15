@@ -25,8 +25,6 @@
 #include <QList>
 #include <QPointer>
 
-#include <qjson/qobjecthelper.h>
-
 #include "DatabaseCommand.h"
 
 namespace Tomahawk

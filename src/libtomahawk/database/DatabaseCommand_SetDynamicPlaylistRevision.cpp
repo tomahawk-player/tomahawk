@@ -80,7 +80,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::controlsV()
     {
         foreach ( const dyncontrol_ptr& control, m_controls )
         {
-            m_controlsV << QJson::QObjectHelper::qobject2qvariant( control.data() );
+            m_controlsV << TomahawkUtils::qobject2qvariant( control.data() );
         }
     }
 

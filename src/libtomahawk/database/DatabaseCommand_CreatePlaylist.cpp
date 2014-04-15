@@ -61,7 +61,7 @@ QVariant
 DatabaseCommand_CreatePlaylist::playlistV() const
 {
     if( m_v.isNull() )
-        return QJson::QObjectHelper::qobject2qvariant( (QObject*)m_playlist.data() );
+        return TomahawkUtils::qobject2qvariant( (QObject*)m_playlist.data() );
     else
         return m_v;
  }

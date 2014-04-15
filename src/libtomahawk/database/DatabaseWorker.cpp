@@ -279,7 +279,7 @@ DatabaseWorker::logOp( DatabaseCommandLoggable* command )
     oplogquery.prepare( "INSERT INTO oplog(source, guid, command, singleton, compressed, json) "
                         "VALUES(?, ?, ?, ?, ?, ?)" );
 
-    QVariantMap variant = QJson::QObjectHelper::qobject2qvariant( command );
+    QVariantMap variant = TomahawkUtils::qobject2qvariant( command );
     QByteArray ba = TomahawkUtils::toJson( variant );
 
 //     qDebug() << "OP JSON:" << ba.isNull() << ba << "from:" << variant; // debug

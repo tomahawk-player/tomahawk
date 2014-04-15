@@ -208,6 +208,7 @@ namespace TomahawkUtils
      */
 
     /* QJson */
+    DLLEXPORT QVariantMap qobject2qvariant( const QObject* object );
     DLLEXPORT void qvariant2qobject( const QVariantMap& variant, QObject* object );
     DLLEXPORT QVariant parseJson( const QByteArray& jsonData, bool* ok = 0 );
     DLLEXPORT QByteArray toJson( const QVariant &variant, bool* ok = 0 );

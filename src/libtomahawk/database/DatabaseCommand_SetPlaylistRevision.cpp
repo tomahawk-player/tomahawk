@@ -301,7 +301,7 @@ DatabaseCommand_SetPlaylistRevision::addedentriesV() const
         if ( !pe->isValid() )
             continue;
 
-        QVariant v = QJson::QObjectHelper::qobject2qvariant( pe.data() );
+        QVariant v = TomahawkUtils::qobject2qvariant( pe.data() );
         vlist << v;
     }
     return vlist;

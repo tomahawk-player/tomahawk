@@ -848,6 +848,27 @@ compareVersionStrings( const QString& first, const QString& second )
 }
 
 
+QVariantMap
+qobject2qvariant( const QObject* object )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    const QMetaObject* metaObject = object->metaObject();
+    QVariantMap map;
+    for ( int i = 0; i < metaObject->propertyCount(); ++i )
+    {
+        QMetaProperty metaproperty = metaObject->property( i );
+        if ( metaproperty.isReadable() )
+        {
+            map[ QLatin1String( metaproperty.name() ) ] = object->property( metaproperty.name() );
+        }
+    }
+    return map;
+#else
+    return QJson::QObjectHelper::qobject2qvariant( object );
+#endif
+}
+
+
 void
 qvariant2qobject( const QVariantMap& variant, QObject* object )
 {
@@ -869,9 +890,8 @@ qvariant2qobject( const QVariantMap& variant, QObject* object )
         }
     }
 #else
-    QJson::QObjectHelper::qvariant2qobject( variant, objects );
+    QJson::QObjectHelper::qvariant2qobject( variant, object );
 #endif
-
 }
 
 

@@ -21,7 +21,6 @@
 
 #include "Typedefs.h"
 #include "DatabaseCommandLoggable.h"
-#include "qjson/qobjecthelper.h"
 
 #include "DllMacro.h"
 
