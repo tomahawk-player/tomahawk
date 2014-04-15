@@ -29,6 +29,7 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <QStackedLayout>
+#include <QApplication>
 
 using namespace Tomahawk;
 
@@ -57,17 +58,23 @@ DynamicControlWrapper::DynamicControlWrapper( const Tomahawk::dyncontrol_ptr& co
     m_plusL->addWidget( m_minusButton );
     m_plusL->addWidget( createDummy( m_minusButton, m_parent ) ); // :-(
 
-    connect( m_typeSelector, SIGNAL( activated( QString) ), SLOT( typeSelectorChanged( QString ) ) );
+    connect( m_typeSelector, SIGNAL( activated( int ) ), SLOT( typeSelectorChanged( int ) ) );
     connect( m_control.data(), SIGNAL( changed() ), this, SIGNAL( changed() ) );
 
     m_layout.data()->addWidget( m_typeSelector, row, 0, Qt::AlignLeft );
 
     if( !control.isNull() ) {
         foreach( const QString& type, control->typeSelectors() )
-            m_typeSelector->addItem( type );
+            m_typeSelector->addItem( qApp->translate( "Type selector", type.toUtf8() ), type );
     }
 
-    typeSelectorChanged( m_control.isNull() ? "" : m_control->selectedType(), true );
+
+    int typeIndex = 0;
+    if ( !m_control.isNull() ) {
+        typeIndex = m_typeSelector->findData( m_control->selectedType() );
+        if (typeIndex == -1) typeIndex = 0;
+    }
+    typeSelectorChanged( typeIndex, true );
 
     m_layout.data()->addLayout( m_plusL, m_row, 3, Qt::AlignCenter );
     m_plusL->setCurrentIndex( 0 );
@@ -141,19 +148,20 @@ DynamicControlWrapper::createDummy( QWidget* fromW, QWidget* parent )
 
 
 void
-DynamicControlWrapper::typeSelectorChanged( const QString& type, bool firstLoad )
+DynamicControlWrapper::typeSelectorChanged( int typeIndex, bool firstLoad )
 {
     Q_ASSERT( !m_layout.isNull() );
     m_layout.data()->removeWidget( m_matchSelector.data() );
     m_layout.data()->removeWidget( m_entryWidget.data() );
 
+    // Get the untranslated type name
+    QString type = m_typeSelector->itemData(typeIndex).toString();
+
     if( m_control->selectedType() != type && !firstLoad )
         m_control->setSelectedType( type );
 
 
-    int idx = m_typeSelector->findText( type );
-    if( idx > -1 )
-        m_typeSelector->setCurrentIndex( idx );
+    m_typeSelector->setCurrentIndex( typeIndex );
 
 
     if( m_control->matchSelector() ) {

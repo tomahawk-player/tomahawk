@@ -71,9 +71,19 @@ EchonestFactory::createControl( const QString& controlType )
 QStringList
 EchonestFactory::typeSelectors() const
 {
-    QStringList types =  QStringList() << "Artist" << "Artist Description" << "User Radio" << "Song" << "Genre" << "Mood" << "Style" << "Adventurousness" << "Variety" << "Tempo" << "Duration" << "Loudness"
-                          << "Danceability" << "Energy" << "Artist Familiarity" << "Artist Hotttnesss" << "Song Hotttnesss"
-                          << "Longitude" << "Latitude" <<  "Mode" << "Key" << "Sorting" << "Song Type";
+    // Using QT_TRANSLATE_NOOP here because this function should return the untranslated types
+    QStringList types =  QStringList() << QT_TRANSLATE_NOOP( "Type selector", "Artist" ) << QT_TRANSLATE_NOOP( "Type selector", "Artist Description" )
+                          << QT_TRANSLATE_NOOP( "Type selector", "User Radio" ) << QT_TRANSLATE_NOOP( "Type selector", "Song" )
+                          << QT_TRANSLATE_NOOP( "Type selector", "Genre" ) << QT_TRANSLATE_NOOP( "Type selector", "Mood" )
+                          << QT_TRANSLATE_NOOP( "Type selector", "Style" ) << QT_TRANSLATE_NOOP( "Type selector", "Adventurousness" )
+                          << QT_TRANSLATE_NOOP( "Type selector", "Variety" ) << QT_TRANSLATE_NOOP( "Type selector", "Tempo" )
+                          << QT_TRANSLATE_NOOP( "Type selector", "Duration" ) << QT_TRANSLATE_NOOP( "Type selector", "Loudness" )
+                          << QT_TRANSLATE_NOOP( "Type selector", "Danceability" ) << QT_TRANSLATE_NOOP( "Type selector", "Energy" )
+                          << QT_TRANSLATE_NOOP( "Type selector", "Artist Familiarity" ) << QT_TRANSLATE_NOOP( "Type selector", "Artist Hotttnesss" )
+                          << QT_TRANSLATE_NOOP( "Type selector", "Song Hotttnesss" ) << QT_TRANSLATE_NOOP( "Type selector", "Longitude" )
+                          << QT_TRANSLATE_NOOP( "Type selector", "Latitude" ) << QT_TRANSLATE_NOOP( "Type selector", "Mode" )
+                          << QT_TRANSLATE_NOOP( "Type selector", "Key" ) << QT_TRANSLATE_NOOP( "Type selector", "Sorting" )
+                          << QT_TRANSLATE_NOOP( "Type selector", "Song Type" );
 
     return types;
 }
@@ -530,7 +540,7 @@ EchonestGenerator::sentenceSummary()
      *        and all Artist types must be the same. The filters aren't checked at the moment until Generate / Play is pressed. Consider doing a check on hide as well.
      */
     QList< dyncontrol_ptr > allcontrols = m_controls;
-    QString sentence = "Songs ";
+    QString sentence = QObject::tr( "Songs ", "Beginning of a sentence summary" );
 
     /// 1. Collect all required filters
     /// 2. Get the sorted by filter if it exists.
@@ -559,7 +569,7 @@ EchonestGenerator::sentenceSummary()
 
     /// If there are no artists and no filters, show some help text
     if( required.isEmpty() && allcontrols.isEmpty() )
-        sentence = "No configured filters!";
+        sentence = QObject::tr( "No configured filters!" );
 
     /// Do the assembling. Start with the artists if there are any, then do all the rest.
     for( int i = 0; i < required.size(); i++ ) {
@@ -573,24 +583,24 @@ EchonestGenerator::sentenceSummary()
         if( i == 0 ) { // if it's the first.. special casez
             center = summary.remove( "~" );
             if( required.size() == 2 ) // special case for 2, no comma. ( X and Y )
-                suffix = " and ";
+                suffix = QObject::tr( " and ", "Inserted between items in a list of two" );
             else if( required.size() > 2 ) // in a list with more after
-                suffix = ", ";
+                suffix = QObject::tr( ", ", "Inserted between items in a list" );
             else if( allcontrols.isEmpty() && sorting.isNull() ) // the last one, and no more controls, so put a period
-                suffix = ".";
+                suffix = QObject::tr( ".", "Inserted when ending a sentence summary" );
             else
-                suffix = " ";
+                suffix = " "; // shouldn't happen, but don't fail. it doesn't make sense to have this translatable
         } else {
             center = summary.mid( summary.indexOf( "~" ) + 1 );
             if( i == required.size() - 1 ) { // if there are more, add an " and "
                 if( !( allcontrols.isEmpty() && sorting.isNull() ) )
-                    suffix = ", ";
+                    suffix = QObject::tr( ", ", "Inserted between items in a list" );
                 else
-                    suffix = ".";
+                    suffix = QObject::tr( ".", "Inserted when ending a sentence summary" );
             } else if ( i < required.size() - 2 ) // An item in the list that is before the second to last one, don't use ", and", we only want that for the last item
-                suffix += ", ";
+                suffix += QObject::tr( ", ", "Inserted between items in a list" );
             else
-                suffix += ", and ";
+                suffix += QObject::tr( ", and ", "Inserted between the last two items in a list of more than two" );
         }
         sentence += center + suffix;
     }
@@ -601,15 +611,15 @@ EchonestGenerator::sentenceSummary()
         QString prefix, suffix;
         if( last ) { // only if there is not just 1
             if( !( required.isEmpty() && allcontrols.size() == 1 ) )
-                prefix = "and ";
-            suffix = ".";
+                prefix = QObject::tr( "and ", "Inserted before the last item in a list" );
+            suffix = QObject::tr( ".", "Inserted when ending a sentence summary" );
         } else
-            suffix = ", ";
+            suffix = QObject::tr( ", ", "Inserted between items in a list" );
         sentence += prefix + allcontrols.value( i ).dynamicCast< EchonestControl >()->summary() + suffix;
     }
 
     if( !sorting.isNull() ) {
-        sentence += "and " + sorting.dynamicCast< EchonestControl >()->summary() + ".";
+        sentence += QObject::tr( "and ", "Inserted before the sorting summary in a sentence summary" ) + sorting.dynamicCast< EchonestControl >()->summary() + QObject::tr( ".","Inserted when ending a sentence summary" );
     }
 
     return sentence;
