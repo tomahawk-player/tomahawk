@@ -25,6 +25,7 @@
 #include "Servent.h"
 
 #include <QMutex>
+#include <QStringList>
 
 #include <boost/function.hpp>
 
