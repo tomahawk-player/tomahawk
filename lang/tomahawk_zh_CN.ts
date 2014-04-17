@@ -664,7 +664,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="94"/>
         <source>Energy</source>
-        <translation>能量指数</translation>
+        <translation>力量指数</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="95"/>
@@ -1557,18 +1557,18 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="543"/>
         <source>Songs </source>
         <comment>Beginning of a sentence summary</comment>
-        <translation type="unfinished"/>
+        <translation>歌曲</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="572"/>
         <source>No configured filters!</source>
-        <translation type="unfinished"/>
+        <translation>没有配置过滤器</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="586"/>
         <source> and </source>
         <comment>Inserted between items in a list of two</comment>
-        <translation type="unfinished"/>
+        <translation>和</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="588"/>
@@ -1577,7 +1577,7 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="617"/>
         <source>, </source>
         <comment>Inserted between items in a list</comment>
-        <translation type="unfinished"/>
+        <translation>, </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="590"/>
@@ -1586,25 +1586,25 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="622"/>
         <source>.</source>
         <comment>Inserted when ending a sentence summary</comment>
-        <translation type="unfinished"/>
+        <translation>.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="603"/>
         <source>, and </source>
         <comment>Inserted between the last two items in a list of more than two</comment>
-        <translation type="unfinished"/>
+        <translation>, 和</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="614"/>
         <source>and </source>
         <comment>Inserted before the last item in a list</comment>
-        <translation type="unfinished"/>
+        <translation>和</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="622"/>
         <source>and </source>
         <comment>Inserted before the sorting summary in a sentence summary</comment>
-        <translation type="unfinished"/>
+        <translation>和</translation>
     </message>
 </context>
 <context>
@@ -2976,17 +2976,17 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="167"/>
         <source>Similar To</source>
-        <translation type="unfinished"/>
+        <translation>类似于</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="168"/>
         <source>Limit To</source>
-        <translation type="unfinished"/>
+        <translation>限制在</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="172"/>
         <source>Artist name</source>
-        <translation type="unfinished"/>
+        <translation>艺术家名</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="195"/>
@@ -3018,7 +3018,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="248"/>
         <source>Enter any combination of song name and artist here...</source>
-        <translation type="unfinished"/>
+        <translation>输入歌曲名或艺人名的任意组合……</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="269"/>
@@ -3076,13 +3076,13 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="364"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="371"/>
         <source>-180%1</source>
-        <translation type="unfinished"/>
+        <translation>-180%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="364"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="371"/>
         <source>180%1</source>
-        <translation type="unfinished"/>
+        <translation>180%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="380"/>
@@ -3200,7 +3200,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="441"/>
         <source>Latitude</source>
-        <translation>范围</translation>
+        <translation>纬度</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="442"/>
@@ -3221,7 +3221,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="445"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="912"/>
         <source>Energy</source>
-        <translation>能量</translation>
+        <translation>力量</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="446"/>
@@ -3238,41 +3238,41 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="497"/>
         <source>Studio</source>
         <comment>Song type: The song was recorded in a studio.</comment>
-        <translation type="unfinished"/>
+        <translation>录音室</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="498"/>
         <source>Live</source>
         <comment>Song type: The song was a life performance.</comment>
-        <translation type="unfinished"/>
+        <translation>现场</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="499"/>
         <source>Acoustic</source>
         <comment>Song type</comment>
-        <translation type="unfinished"/>
+        <translation>不插电</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="500"/>
         <source>Electric</source>
         <comment>Song type</comment>
-        <translation type="unfinished"/>
+        <translation>电子</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="501"/>
         <source>Christmas</source>
         <comment>Song type: A christmas song</comment>
-        <translation type="unfinished"/>
+        <translation>圣诞</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="528"/>
         <source>At Least</source>
-        <translation type="unfinished"/>
+        <translation>至少</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="529"/>
         <source>At Most</source>
-        <translation type="unfinished"/>
+        <translation>最多</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="880"/>
@@ -4167,117 +4167,117 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="75"/>
         <source>Artist</source>
-        <translation type="unfinished"/>
+        <translation>艺术家</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="75"/>
         <source>Artist Description</source>
-        <translation type="unfinished"/>
+        <translation>艺人描述</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="76"/>
         <source>User Radio</source>
-        <translation type="unfinished"/>
+        <translation>用户电台</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="76"/>
         <source>Song</source>
-        <translation type="unfinished"/>
+        <translation>歌曲</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="77"/>
         <source>Genre</source>
-        <translation type="unfinished"/>
+        <translation>风格</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="77"/>
         <source>Mood</source>
-        <translation type="unfinished"/>
+        <translation>气氛</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="78"/>
         <source>Style</source>
-        <translation type="unfinished"/>
+        <translation>风格</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="78"/>
         <source>Adventurousness</source>
-        <translation type="unfinished"/>
+        <translation>新奇度</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="79"/>
         <source>Variety</source>
-        <translation type="unfinished"/>
+        <translation>变种</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="79"/>
         <source>Tempo</source>
-        <translation type="unfinished"/>
+        <translation>节奏</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="80"/>
         <source>Duration</source>
-        <translation type="unfinished"/>
+        <translation>长度</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="80"/>
         <source>Loudness</source>
-        <translation type="unfinished"/>
+        <translation>响度</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="81"/>
         <source>Danceability</source>
-        <translation type="unfinished"/>
+        <translation>舞动指数</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="81"/>
         <source>Energy</source>
-        <translation type="unfinished"/>
+        <translation>力量</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="82"/>
         <source>Artist Familiarity</source>
-        <translation type="unfinished"/>
+        <translation>艺人相似度</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="82"/>
         <source>Artist Hotttnesss</source>
-        <translation type="unfinished"/>
+        <translation>艺人热度</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="83"/>
         <source>Song Hotttnesss</source>
-        <translation type="unfinished"/>
+        <translation>歌曲热度</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="83"/>
         <source>Longitude</source>
-        <translation type="unfinished"/>
+        <translation>经度</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="84"/>
         <source>Latitude</source>
-        <translation type="unfinished"/>
+        <translation>纬度</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="84"/>
         <source>Mode</source>
-        <translation type="unfinished"/>
+        <translation>模式</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="85"/>
         <source>Key</source>
-        <translation type="unfinished"/>
+        <translation>音调</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="85"/>
         <source>Sorting</source>
-        <translation type="unfinished"/>
+        <translation>排序</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="86"/>
         <source>Song Type</source>
-        <translation type="unfinished"/>
+        <translation>歌曲类型</translation>
     </message>
 </context>
 <context>

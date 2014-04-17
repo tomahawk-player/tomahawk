@@ -1558,18 +1558,18 @@ heslo</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="543"/>
         <source>Songs </source>
         <comment>Beginning of a sentence summary</comment>
-        <translation type="unfinished"/>
+        <translation>Písně</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="572"/>
         <source>No configured filters!</source>
-        <translation type="unfinished"/>
+        <translation>Žádné nastavené filtry!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="586"/>
         <source> and </source>
         <comment>Inserted between items in a list of two</comment>
-        <translation type="unfinished"/>
+        <translation>a</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="588"/>
@@ -1578,7 +1578,7 @@ heslo</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="617"/>
         <source>, </source>
         <comment>Inserted between items in a list</comment>
-        <translation type="unfinished"/>
+        <translation>, </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="590"/>
@@ -1587,25 +1587,25 @@ heslo</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="622"/>
         <source>.</source>
         <comment>Inserted when ending a sentence summary</comment>
-        <translation type="unfinished"/>
+        <translation>.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="603"/>
         <source>, and </source>
         <comment>Inserted between the last two items in a list of more than two</comment>
-        <translation type="unfinished"/>
+        <translation>, a </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="614"/>
         <source>and </source>
         <comment>Inserted before the last item in a list</comment>
-        <translation type="unfinished"/>
+        <translation>a </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="622"/>
         <source>and </source>
         <comment>Inserted before the sorting summary in a sentence summary</comment>
-        <translation type="unfinished"/>
+        <translation>a </translation>
     </message>
 </context>
 <context>
@@ -2975,17 +2975,17 @@ Zkuste vyladit filtry pro nové písně.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="167"/>
         <source>Similar To</source>
-        <translation type="unfinished"/>
+        <translation>Podobný</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="168"/>
         <source>Limit To</source>
-        <translation type="unfinished"/>
+        <translation>Omezit na</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="172"/>
         <source>Artist name</source>
-        <translation type="unfinished"/>
+        <translation>Jméno umělce</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="195"/>
@@ -3017,7 +3017,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="248"/>
         <source>Enter any combination of song name and artist here...</source>
-        <translation type="unfinished"/>
+        <translation>Zde zadejte jakoukoli kombinaci názvu písně a umělcova jména...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="269"/>
@@ -3075,13 +3075,13 @@ Zkuste vyladit filtry pro nové písně.</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="364"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="371"/>
         <source>-180%1</source>
-        <translation type="unfinished"/>
+        <translation>-180%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="364"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="371"/>
         <source>180%1</source>
-        <translation type="unfinished"/>
+        <translation>180%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="380"/>
@@ -3237,41 +3237,41 @@ Zkuste vyladit filtry pro nové písně.</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="497"/>
         <source>Studio</source>
         <comment>Song type: The song was recorded in a studio.</comment>
-        <translation type="unfinished"/>
+        <translation>Studio</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="498"/>
         <source>Live</source>
         <comment>Song type: The song was a life performance.</comment>
-        <translation type="unfinished"/>
+        <translation>Naživo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="499"/>
         <source>Acoustic</source>
         <comment>Song type</comment>
-        <translation type="unfinished"/>
+        <translation>Akustické</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="500"/>
         <source>Electric</source>
         <comment>Song type</comment>
-        <translation type="unfinished"/>
+        <translation>Elektrické</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="501"/>
         <source>Christmas</source>
         <comment>Song type: A christmas song</comment>
-        <translation type="unfinished"/>
+        <translation>Vánoce</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="528"/>
         <source>At Least</source>
-        <translation type="unfinished"/>
+        <translation>Alespoň</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="529"/>
         <source>At Most</source>
-        <translation type="unfinished"/>
+        <translation>Ne více než</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="880"/>
@@ -4167,117 +4167,117 @@ Zkuste vyladit filtry pro nové písně.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="75"/>
         <source>Artist</source>
-        <translation type="unfinished"/>
+        <translation>Umělec</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="75"/>
         <source>Artist Description</source>
-        <translation type="unfinished"/>
+        <translation>Popis umělce</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="76"/>
         <source>User Radio</source>
-        <translation type="unfinished"/>
+        <translation>Rádio uživatele</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="76"/>
         <source>Song</source>
-        <translation type="unfinished"/>
+        <translation>Píseň</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="77"/>
         <source>Genre</source>
-        <translation type="unfinished"/>
+        <translation>Žánr</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="77"/>
         <source>Mood</source>
-        <translation type="unfinished"/>
+        <translation>Nálada</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="78"/>
         <source>Style</source>
-        <translation type="unfinished"/>
+        <translation>Styl</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="78"/>
         <source>Adventurousness</source>
-        <translation type="unfinished"/>
+        <translation>Dobrodružnost</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="79"/>
         <source>Variety</source>
-        <translation type="unfinished"/>
+        <translation>Rozmanitost</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="79"/>
         <source>Tempo</source>
-        <translation type="unfinished"/>
+        <translation>Tempo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="80"/>
         <source>Duration</source>
-        <translation type="unfinished"/>
+        <translation>Doba trvání</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="80"/>
         <source>Loudness</source>
-        <translation type="unfinished"/>
+        <translation>Hlasitost</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="81"/>
         <source>Danceability</source>
-        <translation type="unfinished"/>
+        <translation>Tanečnost</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="81"/>
         <source>Energy</source>
-        <translation type="unfinished"/>
+        <translation>Energie</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="82"/>
         <source>Artist Familiarity</source>
-        <translation type="unfinished"/>
+        <translation>Podobnost umělce</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="82"/>
         <source>Artist Hotttnesss</source>
-        <translation type="unfinished"/>
+        <translation>Oblíbenost umělce</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="83"/>
         <source>Song Hotttnesss</source>
-        <translation type="unfinished"/>
+        <translation>Oblíbenost písně</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="83"/>
         <source>Longitude</source>
-        <translation type="unfinished"/>
+        <translation>Stupeň zeměpisné délky</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="84"/>
         <source>Latitude</source>
-        <translation type="unfinished"/>
+        <translation>Stupeň zeměpisné šířky</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="84"/>
         <source>Mode</source>
-        <translation type="unfinished"/>
+        <translation>Režim</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="85"/>
         <source>Key</source>
-        <translation type="unfinished"/>
+        <translation>Klíč</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="85"/>
         <source>Sorting</source>
-        <translation type="unfinished"/>
+        <translation>Třídění</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="86"/>
         <source>Song Type</source>
-        <translation type="unfinished"/>
+        <translation>Typ písně</translation>
     </message>
 </context>
 <context>

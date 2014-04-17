@@ -1558,18 +1558,18 @@ salasana (OTP)</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="543"/>
         <source>Songs </source>
         <comment>Beginning of a sentence summary</comment>
-        <translation type="unfinished"/>
+        <translation>Kappaleet </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="572"/>
         <source>No configured filters!</source>
-        <translation type="unfinished"/>
+        <translation>Ei asetettuja suodattimia!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="586"/>
         <source> and </source>
         <comment>Inserted between items in a list of two</comment>
-        <translation type="unfinished"/>
+        <translation> ja </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="588"/>
@@ -1578,7 +1578,7 @@ salasana (OTP)</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="617"/>
         <source>, </source>
         <comment>Inserted between items in a list</comment>
-        <translation type="unfinished"/>
+        <translation>, </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="590"/>
@@ -1587,25 +1587,25 @@ salasana (OTP)</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="622"/>
         <source>.</source>
         <comment>Inserted when ending a sentence summary</comment>
-        <translation type="unfinished"/>
+        <translation>.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="603"/>
         <source>, and </source>
         <comment>Inserted between the last two items in a list of more than two</comment>
-        <translation type="unfinished"/>
+        <translation> ja </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="614"/>
         <source>and </source>
         <comment>Inserted before the last item in a list</comment>
-        <translation type="unfinished"/>
+        <translation>ja </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="622"/>
         <source>and </source>
         <comment>Inserted before the sorting summary in a sentence summary</comment>
-        <translation type="unfinished"/>
+        <translation>ja </translation>
     </message>
 </context>
 <context>
@@ -2981,17 +2981,17 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="167"/>
         <source>Similar To</source>
-        <translation type="unfinished"/>
+        <translation>Samankaltainen kuin</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="168"/>
         <source>Limit To</source>
-        <translation type="unfinished"/>
+        <translation>Rajoita</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="172"/>
         <source>Artist name</source>
-        <translation type="unfinished"/>
+        <translation>Artistin nimi</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="195"/>
@@ -3023,7 +3023,7 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="248"/>
         <source>Enter any combination of song name and artist here...</source>
-        <translation type="unfinished"/>
+        <translation>Kirjoita mikä tahansa kappaleen nimen ja artistin yhdistelmä tähän…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="269"/>
@@ -3081,13 +3081,13 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="364"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="371"/>
         <source>-180%1</source>
-        <translation type="unfinished"/>
+        <translation>−180%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="364"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="371"/>
         <source>180%1</source>
-        <translation type="unfinished"/>
+        <translation>180%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="380"/>
@@ -3243,41 +3243,41 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="497"/>
         <source>Studio</source>
         <comment>Song type: The song was recorded in a studio.</comment>
-        <translation type="unfinished"/>
+        <translation>Studio</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="498"/>
         <source>Live</source>
         <comment>Song type: The song was a life performance.</comment>
-        <translation type="unfinished"/>
+        <translation>Live</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="499"/>
         <source>Acoustic</source>
         <comment>Song type</comment>
-        <translation type="unfinished"/>
+        <translation>Akustinen</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="500"/>
         <source>Electric</source>
         <comment>Song type</comment>
-        <translation type="unfinished"/>
+        <translation>Elektroninen</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="501"/>
         <source>Christmas</source>
         <comment>Song type: A christmas song</comment>
-        <translation type="unfinished"/>
+        <translation>Joululaulu</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="528"/>
         <source>At Least</source>
-        <translation type="unfinished"/>
+        <translation>Vähintään</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="529"/>
         <source>At Most</source>
-        <translation type="unfinished"/>
+        <translation>Enintään</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="880"/>
@@ -3404,7 +3404,7 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="992"/>
         <source>where genre is %1</source>
-        <translation>genrellä %1</translation>
+        <translation>lajityypillä %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1005"/>
@@ -4173,117 +4173,117 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="75"/>
         <source>Artist</source>
-        <translation type="unfinished"/>
+        <translation>Artisti</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="75"/>
         <source>Artist Description</source>
-        <translation type="unfinished"/>
+        <translation>Artistin kuvaus</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="76"/>
         <source>User Radio</source>
-        <translation type="unfinished"/>
+        <translation>Käyttäjäradio</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="76"/>
         <source>Song</source>
-        <translation type="unfinished"/>
+        <translation>Kappale</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="77"/>
         <source>Genre</source>
-        <translation type="unfinished"/>
+        <translation>Lajityyppi</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="77"/>
         <source>Mood</source>
-        <translation type="unfinished"/>
+        <translation>Mieliala</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="78"/>
         <source>Style</source>
-        <translation type="unfinished"/>
+        <translation>Tyyli</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="78"/>
         <source>Adventurousness</source>
-        <translation type="unfinished"/>
+        <translation>Seikkailunhaluisuus</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="79"/>
         <source>Variety</source>
-        <translation type="unfinished"/>
+        <translation>Vaihtelevuus</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="79"/>
         <source>Tempo</source>
-        <translation type="unfinished"/>
+        <translation>Tempo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="80"/>
         <source>Duration</source>
-        <translation type="unfinished"/>
+        <translation>Kesto</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="80"/>
         <source>Loudness</source>
-        <translation type="unfinished"/>
+        <translation>Äänekkyys</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="81"/>
         <source>Danceability</source>
-        <translation type="unfinished"/>
+        <translation>Tanssittavuus</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="81"/>
         <source>Energy</source>
-        <translation type="unfinished"/>
+        <translation>Energia</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="82"/>
         <source>Artist Familiarity</source>
-        <translation type="unfinished"/>
+        <translation>Artistin tuttuus</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="82"/>
         <source>Artist Hotttnesss</source>
-        <translation type="unfinished"/>
+        <translation>Artistin suosittuus</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="83"/>
         <source>Song Hotttnesss</source>
-        <translation type="unfinished"/>
+        <translation>Kappaleen suosittuus</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="83"/>
         <source>Longitude</source>
-        <translation type="unfinished"/>
+        <translation>Pituusaste</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="84"/>
         <source>Latitude</source>
-        <translation type="unfinished"/>
+        <translation>Leveysaste</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="84"/>
         <source>Mode</source>
-        <translation type="unfinished"/>
+        <translation>Moodi</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="85"/>
         <source>Key</source>
-        <translation type="unfinished"/>
+        <translation>Sävellaji</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="85"/>
         <source>Sorting</source>
-        <translation type="unfinished"/>
+        <translation>Lajittelu</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="86"/>
         <source>Song Type</source>
-        <translation type="unfinished"/>
+        <translation>Kappaleen tyyppi</translation>
     </message>
 </context>
 <context>
