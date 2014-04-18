@@ -56,7 +56,15 @@ QVariant
 PlaylistEntry::queryVariant() const
 {
     Q_D( const PlaylistEntry );
-    return d->query->toVariant();
+
+    if ( d->query.isNull() )
+    {
+        return QVariantMap();
+    }
+    else
+    {
+        return d->query->toVariant();
+    }
 }
 
 
