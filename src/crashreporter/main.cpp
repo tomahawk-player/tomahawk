@@ -20,8 +20,11 @@
 
 #include <QTranslator>
 #include <iostream>
+#include <QApplication>
+#include <QFileInfo>
 
 #include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
 
 
 const char* k_usage =
@@ -98,15 +101,11 @@ int main( int argc, char* argv[] )
 
         ;
 
-
-        //     // add logfile
-        //     body += "--thkboundary\r\n";
-        //     body += "Content-Disposition: form-data; name=\"upload_file_tomahawklog\"; filename=\"Tomahawk.log\"\r\n";
-        //     body += "Content-Type: application/x-gzip\r\n";
-        //     body += "\r\n";
-        //     body += qCompress( contents( LOGFILE ) );
-        //     body += "\r\n";
-        //     body += "--thkboundary--\r\n";
+    // send log
+    QFile logFile( Logger::logFile() );
+    logFile.open( QFile::ReadOnly );
+    reporter.setReportData( "upload_file_tomahawklog", qCompress( logFile.readAll() ), "application/x-gzip", QFileInfo( Logger::logFile() ).fileName().toUtf8());
+    logFile.close();
 
     reporter.show();
 
