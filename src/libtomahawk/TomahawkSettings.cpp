@@ -26,6 +26,7 @@
 #include "infosystem/InfoSystemCache.h"
 #include "playlist/PlaylistUpdaterInterface.h"
 #include "utils/Logger.h"
+#include "utils/Json.h"
 #include "utils/TomahawkUtils.h"
 
 #include "PlaylistEntry.h"

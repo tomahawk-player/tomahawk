@@ -19,6 +19,7 @@
 
 #include "JspfLoader.h"
 
+#include "utils/Json.h"
 #include "utils/Logger.h"
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtils.h"

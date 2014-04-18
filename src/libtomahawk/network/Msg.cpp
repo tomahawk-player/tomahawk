@@ -19,7 +19,7 @@
 
 #include "Msg_p.h"
 
-#include "utils/TomahawkUtils.h"
+#include "utils/Json.h"
 
 #include <QtEndian>
 

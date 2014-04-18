@@ -27,7 +27,7 @@
 #include "infosystem/InfoSystemCache.h"
 #include "resolvers/ExternalResolver.h"
 #include "resolvers/ScriptCollection.h"
-
+#include "utils/Json.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;

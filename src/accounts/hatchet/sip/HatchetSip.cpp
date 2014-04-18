@@ -29,6 +29,7 @@
 #include <network/Servent.h>
 #include <sip/SipInfo.h>
 #include <sip/PeerInfo.h>
+#include <utils/Json.h>
 #include <utils/Logger.h>
 #include <SourceList.h>
 

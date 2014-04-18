@@ -18,6 +18,7 @@
 
 #include "DatabaseCommand_LoadPlaylistEntries.h"
 
+#include "utils/Json.h"
 #include "utils/Logger.h"
 
 #include "DatabaseImpl.h"

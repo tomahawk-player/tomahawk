@@ -345,7 +345,7 @@ list(APPEND libSources
     playlist/dynamic/database/DatabaseGenerator.cpp
     playlist/dynamic/database/DatabaseControl.cpp
     playlist/dynamic/DynamicControl.cpp
-    
+
     resolvers/ExternalResolver.cpp
     resolvers/Resolver.cpp
     resolvers/ScriptCollection.cpp
@@ -360,6 +360,7 @@ list(APPEND libSources
     sip/PeerInfo.cpp
     sip/SipStatusMessage.cpp
 
+    utils/Json.cpp
     utils/TomahawkUtils.cpp
     utils/Logger.cpp
     utils/Qnr_IoDeviceStream.cpp

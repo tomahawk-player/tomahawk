@@ -22,6 +22,7 @@
 #include "ShortLinkHelper_p.h"
 
 #include "utils/Closure.h"
+#include "utils/Json.h"
 #include "utils/NetworkAccessManager.h"
 #include "utils/TomahawkUtils.h"
 #include "Playlist.h"

@@ -20,18 +20,20 @@
 
 #include "ItunesParser.h"
 
-#include <QtNetwork/QNetworkAccessManager>
-#include <QRegExp>
-
-#include "Query.h"
-#include "SourceList.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
+#include "utils/Json.h"
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "utils/NetworkAccessManager.h"
+
+#include "Query.h"
+#include "SourceList.h"
+
+#include <QNetworkAccessManager>
+#include <QRegExp>
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )

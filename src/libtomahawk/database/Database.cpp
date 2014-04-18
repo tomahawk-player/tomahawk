@@ -19,6 +19,7 @@
 
 #include "Database.h"
 
+#include "utils/Json.h"
 #include "utils/Logger.h"
 
 #include "DatabaseCommand.h"

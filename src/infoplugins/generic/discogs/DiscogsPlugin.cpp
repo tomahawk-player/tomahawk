@@ -19,7 +19,7 @@
 #include "DiscogsPlugin.h"
 
 
-#include "utils/TomahawkUtils.h"
+#include "utils/Json.h"
 #include "utils/Logger.h"
 #include "utils/Closure.h"
 #include "utils/NetworkAccessManager.h"

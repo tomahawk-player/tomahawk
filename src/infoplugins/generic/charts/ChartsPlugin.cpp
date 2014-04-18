@@ -26,7 +26,7 @@
 #include "Typedefs.h"
 #include "audio/AudioEngine.h"
 #include "TomahawkSettings.h"
-#include "utils/TomahawkUtils.h"
+#include "utils/Json.h"
 #include "utils/Logger.h"
 #include "utils/TomahawkCache.h"
 #include "utils/NetworkAccessManager.h"

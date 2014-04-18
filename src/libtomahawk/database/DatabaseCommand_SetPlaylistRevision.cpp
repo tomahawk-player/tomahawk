@@ -20,6 +20,7 @@
 
 #include "collection/Collection.h"
 #include "network/Servent.h"
+#include "utils/Json.h"
 #include "utils/Logger.h"
 
 #include "DatabaseImpl.h"

@@ -30,6 +30,7 @@
 #include "TomahawkSettings.h"
 #include "utils/TomahawkUtils.h"
 #include "infosystem/InfoSystemWorker.h"
+#include "utils/Json.h"
 #include "utils/Logger.h"
 #include "utils/NetworkAccessManager.h"
 #include "Source.h"

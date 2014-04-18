@@ -28,7 +28,7 @@
     #else
         #include <qt5keychain/keychain.h>
     #endif
-    #include "utils/TomahawkUtils.h"
+    #include "utils/Json.h"
 #endif
 
 #include <QStringList>

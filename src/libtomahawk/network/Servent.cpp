@@ -32,6 +32,7 @@
 #include "sip/PeerInfo.h"
 #include "sip/SipPlugin.h"
 #include "utils/Closure.h"
+#include "utils/Json.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "utils/NetworkAccessManager.h"

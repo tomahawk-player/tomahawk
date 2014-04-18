@@ -26,6 +26,7 @@
 #include "database/DatabaseCommand_SetDynamicPlaylistRevision.h"
 #include "database/DatabaseCommand_LoadDynamicPlaylistEntries.h"
 #include "database/DatabaseCommand_DeleteDynamicPlaylist.h"
+#include "utils/Json.h"
 #include "utils/Logger.h"
 
 #include "GeneratorFactory.h"

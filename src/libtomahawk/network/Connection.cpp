@@ -25,6 +25,7 @@
 #include "network/Servent.h"
 #include "network/Msg.h"
 #include "utils/Logger.h"
+#include "utils/Json.h"
 #include "utils/TomahawkUtils.h"
 
 #include "QTcpSocketExtra.h"

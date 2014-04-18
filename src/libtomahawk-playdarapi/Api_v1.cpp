@@ -25,6 +25,7 @@
 #include "database/DatabaseCommand_AddClientAuth.h"
 #include "database/DatabaseCommand_ClientAuthValid.h"
 #include "network/Servent.h"
+#include "utils/Json.h"
 #include "utils/Logger.h"
 #include "utils/TomahawkUtils.h"
 

@@ -27,6 +27,7 @@
 #include "ConfigStorage.h"
 #include "resolvers/ExternalResolver.h"
 #include "resolvers/ExternalResolverGui.h"
+#include "utils/Json.h"
 #include "utils/Logger.h"
 
 #include "Album.h"

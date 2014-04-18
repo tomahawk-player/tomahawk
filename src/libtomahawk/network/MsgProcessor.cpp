@@ -20,6 +20,7 @@
 
 #include "network/Msg_p.h"
 #include "network/Servent.h"
+#include "utils/Json.h"
 #include "utils/Logger.h"
 #include "utils/TomahawkUtils.h"
 

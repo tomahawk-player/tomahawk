@@ -19,20 +19,22 @@
 
 #include "SpotifyParser.h"
 
-#include <QtNetwork/QNetworkAccessManager>
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
+#include "utils/Json.h"
+#include "utils/NetworkReply.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
+#include "utils/NetworkAccessManager.h"
 
 #include "Query.h"
 #include "SourceList.h"
 #include "DropJob.h"
 #include "DropJobNotifier.h"
 #include "ViewManager.h"
-#include "jobview/JobStatusView.h"
-#include "jobview/JobStatusModel.h"
-#include "jobview/ErrorStatusMessage.h"
-#include "utils/NetworkReply.h"
-#include "utils/TomahawkUtils.h"
-#include "utils/Logger.h"
-#include "utils/NetworkAccessManager.h"
+
+#include <QNetworkAccessManager>
 
 using namespace Tomahawk;
 

@@ -19,6 +19,7 @@
 
 #include "DatabaseWorker.h"
 
+#include "utils/Json.h"
 #include "utils/Logger.h"
 
 #include "Database.h"

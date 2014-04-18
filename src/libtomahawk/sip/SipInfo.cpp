@@ -20,7 +20,7 @@
 #include "SipInfo.h"
 
 #include "utils/Logger.h"
-#include "utils/TomahawkUtils.h"
+#include "utils/Json.h"
 
 #include <QVariant>
 

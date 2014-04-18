@@ -19,6 +19,7 @@
 
 #include "RoviPlugin.h"
 
+#include "utils/Json.h"
 #include "utils/Logger.h"
 #include "utils/NetworkAccessManager.h"
 

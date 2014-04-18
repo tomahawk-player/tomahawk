@@ -22,6 +22,7 @@
 
 #include "accounts/AccountConfigWidget.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/Json.h"
 #include "utils/Logger.h"
 #include "utils/NetworkAccessManager.h"
 #include "utils/NetworkProxyFactory.h"

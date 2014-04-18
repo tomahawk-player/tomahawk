@@ -19,6 +19,8 @@
 
 #include "DatabaseCommand_LoadAllPlaylists_p.h"
 
+#include "utils/Json.h"
+
 #include "DatabaseImpl.h"
 #include "Playlist.h"
 #include "PlaylistEntry.h"

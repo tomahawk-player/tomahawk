@@ -24,6 +24,7 @@
 #include "utils/Closure.h"
 #include "utils/Logger.h"
 #include "utils/NetworkAccessManager.h"
+#include "utils/Json.h"
 #include "utils/TomahawkUtils.h"
 
 #include <QtPlugin>

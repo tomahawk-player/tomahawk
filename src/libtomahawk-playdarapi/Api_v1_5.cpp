@@ -24,6 +24,7 @@
 
 #include "audio/AudioEngine.h"
 #include "resolvers/Resolver.h"
+#include "utils/Json.h"
 #include "utils/Logger.h"
 
 // Assumptions: QxtWebRequestEvent instance is called event and result is true on success

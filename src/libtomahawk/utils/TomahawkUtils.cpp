@@ -57,11 +57,6 @@
 // Qt version specific includes
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     #include <QUrlQuery>
-    #include <QJsonDocument>
-#else
-    #include <qjson/parser.h>
-    #include <qjson/qobjecthelper.h>
-    #include <qjson/serializer.h>
 #endif
 
 #ifdef Q_OS_WIN
@@ -845,88 +840,6 @@ compareVersionStrings( const QString& first, const QString& second )
     }
 
     return verdict;
-}
-
-
-QVariantMap
-qobject2qvariant( const QObject* object )
-{
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-    const QMetaObject* metaObject = object->metaObject();
-    QVariantMap map;
-    for ( int i = 0; i < metaObject->propertyCount(); ++i )
-    {
-        QMetaProperty metaproperty = metaObject->property( i );
-        if ( metaproperty.isReadable() )
-        {
-            map[ QLatin1String( metaproperty.name() ) ] = object->property( metaproperty.name() );
-        }
-    }
-    return map;
-#else
-    return QJson::QObjectHelper::qobject2qvariant( object );
-#endif
-}
-
-
-void
-qvariant2qobject( const QVariantMap& variant, QObject* object )
-{
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-    for ( QVariantMap::const_iterator iter = variant.begin(); iter != variant.end(); ++iter )
-    {
-        QVariant property = object->property( iter.key().toLatin1() );
-        QVariant value = iter.value();
-        Q_ASSERT( property.isValid() );
-        if ( property.isValid() )
-        {
-            if ( value.canConvert( property.type() ) )
-            {
-                value.convert( property.type() );
-                object->setProperty( iter.key().toLatin1(), value );
-            } else if ( QString( QLatin1String("QVariant") ).compare( QLatin1String( property.typeName() ) ) == 0 ) {
-                object->setProperty( iter.key().toLatin1(), value );
-            }
-        }
-    }
-#else
-    QJson::QObjectHelper::qvariant2qobject( variant, object );
-#endif
-}
-
-
-QVariant
-parseJson( const QByteArray& jsonData, bool* ok )
-{
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-    QJsonParseError error;
-    QJsonDocument doc = QJsonDocument::fromJson( jsonData, &error );
-    if ( ok != NULL )
-    {
-        *ok = ( error.error == QJsonParseError::NoError );
-    }
-    return doc.toVariant();
-#else
-    QJson::Parser p;
-    return p.parse( jsonData, ok );
-#endif
-}
-
-
-QByteArray
-toJson( const QVariant &variant, bool* ok )
-{
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-    QJsonDocument doc = QJsonDocument::fromVariant( variant );
-    if ( ok != NULL )
-    {
-        *ok = true;
-    }
-    return doc.toJson();
-#else
-    QJson::Serializer serializer;
-    return serializer.serialize( variant, ok );
-#endif
 }
 
 
