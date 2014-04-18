@@ -36,7 +36,7 @@
 
 #ifndef ENABLE_HEADLESS
     #include "TomahawkSettingsGui.h"
-    #ifdef WITH_BREAKPAD
+    #ifdef WITH_CRASHREPORTER
         #include "libcrashreporter-handler/Handler.h"
     #endif
 
@@ -165,7 +165,7 @@ main( int argc, char *argv[] )
 #endif
 
 #ifndef ENABLE_HEADLESS
-#ifdef WITH_BREAKPAD
+#ifdef WITH_CRASHREPORTER
     new CrashReporter::Handler( QDir::tempPath(), TomahawkSettings::instance()->crashReporterEnabled() && !TomahawkUtils::headless(), "tomahawk_crash_reporter" );
 #endif
 #endif
