@@ -50,7 +50,7 @@ int main( int argc, char* argv[] )
 
     CrashReporter reporter( QUrl( "http://crash-reports.tomahawk-player.org/submit" ),  app.arguments() );
 
-    reporter.setLogo(QPixmap("/home/domme/dev/sources/tomahawk/data/icons/tomahawk-icon-128x128.png"));
+    reporter.setLogo(QPixmap(":/tomahawk-icon.png"));
 
 
 //     // socorro expects a 10 digit build id
