@@ -27,6 +27,7 @@ Version 0.8.0:
     * Added basic remote control API
     * Add support for Opus codec in local files (requires TagLib 1.9)
     * Support rtmp:// streams
+    * Drop QJson as a dependency for Qt5
 
 Version 0.7.0:
     * JavaScript Resolvers can now expose collections.
