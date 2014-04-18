@@ -169,7 +169,6 @@ main( int argc, char *argv[] )
     new CrashReporter::Handler( QDir::tempPath(), TomahawkSettings::instance()->crashReporterEnabled() && !TomahawkUtils::headless(), "tomahawk_crash_reporter" );
 #endif
 #endif
-    TomahawkUtils::crash();
 
     KDSingleApplicationGuard guard( KDSingleApplicationGuard::AutoKillOtherInstances );
     QObject::connect( &guard, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ), &a, SLOT( instanceStarted( KDSingleApplicationGuard::Instance ) ) );

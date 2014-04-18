@@ -60,7 +60,7 @@ CMAKE_DEPENDENT_OPTION(WITH_UPOWER "Build with support for UPower events" ON
 CMAKE_DEPENDENT_OPTION(WITH_GNOMESHORTCUTHANDLER "Build with shortcut handler for GNOME" ON
        "UNIX;NOT APPLE" OFF)
 
-IF( CMAKE_SYSTEM_PROCESSOR MATCHES "arm" OR NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/libcrashreporter-qt")
+IF( CMAKE_SYSTEM_PROCESSOR MATCHES "arm" OR NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/libcrashreporter-qt/CMakeLists.txt")
     message(STATUS "Build of crashreporter disabled.")
     SET(WITH_CRASHREPORTER OFF)
 ENDIF()
