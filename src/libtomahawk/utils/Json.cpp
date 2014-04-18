@@ -36,8 +36,13 @@ QVariantMap
 qobject2qvariant( const QObject* object )
 {
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-    const QMetaObject* metaObject = object->metaObject();
     QVariantMap map;
+    if ( object == NULL )
+    {
+        return map;
+    }
+
+    const QMetaObject* metaObject = object->metaObject();
     for ( int i = 0; i < metaObject->propertyCount(); ++i )
     {
         QMetaProperty metaproperty = metaObject->property( i );
