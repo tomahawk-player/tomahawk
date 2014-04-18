@@ -37,7 +37,7 @@
 #ifndef ENABLE_HEADLESS
     #include "TomahawkSettingsGui.h"
     #ifdef WITH_BREAKPAD
-        #include "breakpad/BreakPad.h"
+        #include "libcrashreporter-handler/Handler.h"
     #endif
 
     #ifdef Q_WS_X11 // This is probably a very bad idea with Qt5 anyway... because (if at all) X lives in a QPA plugin
@@ -166,9 +166,10 @@ main( int argc, char *argv[] )
 
 #ifndef ENABLE_HEADLESS
 #ifdef WITH_BREAKPAD
-    new BreakPad( QDir::tempPath(), TomahawkSettings::instance()->crashReporterEnabled() && !TomahawkUtils::headless() );
+    new CrashReporter::Handler( QDir::tempPath(), TomahawkSettings::instance()->crashReporterEnabled() && !TomahawkUtils::headless(), "tomahawk_crash_reporter" );
 #endif
 #endif
+    TomahawkUtils::crash();
 
     KDSingleApplicationGuard guard( KDSingleApplicationGuard::AutoKillOtherInstances );
     QObject::connect( &guard, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ), &a, SLOT( instanceStarted( KDSingleApplicationGuard::Instance ) ) );

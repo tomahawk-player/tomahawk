@@ -71,10 +71,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      widgets/UnstyledFrame.cpp
 )
 
-IF( WITH_BREAKPAD )
-    LIST(APPEND tomahawkSourcesGui breakpad/BreakPad.cpp)
-ENDIF()
-
 SET( tomahawkUI ${tomahawkUI}
      dialogs/DiagnosticsDialog.ui
      dialogs/HostDialog.ui
@@ -100,7 +96,7 @@ INCLUDE_DIRECTORIES(
     ../libtomahawk
     mac
 
-    ${THIRDPARTY_DIR}/breakpad
+    ${THIRDPARTY_DIR}/libcrashreporter-qt/src/
 
     ${TAGLIB_INCLUDES}
     ${LIBATTICA_INCLUDE_DIR}
@@ -178,7 +174,7 @@ IF( QCA2_FOUND )
     LIST(APPEND LINK_LIBRARIES ${LINK_LIBRARIES} ${QCA2_LIBRARIES} )
 ENDIF( QCA2_FOUND )
 IF( WITH_BREAKPAD )
-    LIST(APPEND LINK_LIBRARIES ${LINK_LIBRARIES} tomahawk_breakpad )
+    LIST(APPEND LINK_LIBRARIES ${LINK_LIBRARIES} crashreporter-handler )
 ENDIF()
 
 TARGET_LINK_LIBRARIES( tomahawk_bin
