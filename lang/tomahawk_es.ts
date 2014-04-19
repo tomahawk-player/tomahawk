@@ -1463,67 +1463,67 @@ de un solo uso (OTP)</translation>
 <context>
     <name>QObject</name>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="253"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="248"/>
         <source>%n year(s) ago</source>
         <translation><numerusform>hace %n año</numerusform><numerusform>hace %n años</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="255"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="250"/>
         <source>%n year(s)</source>
         <translation><numerusform>%n año</numerusform><numerusform>%n años</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="261"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="256"/>
         <source>%n month(s) ago</source>
         <translation><numerusform>hace %n mes</numerusform><numerusform>hace %n meses</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="263"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="258"/>
         <source>%n month(s)</source>
         <translation><numerusform>%n mes</numerusform><numerusform>%n meses</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="269"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="264"/>
         <source>%n week(s) ago</source>
         <translation><numerusform>hace %n semana</numerusform><numerusform>hace %n semanas</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="271"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="266"/>
         <source>%n week(s)</source>
         <translation><numerusform>%n semana</numerusform><numerusform>%n semanas</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="277"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="272"/>
         <source>%n day(s) ago</source>
         <translation><numerusform>ayer</numerusform><numerusform>hace %n días</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="279"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="274"/>
         <source>%n day(s)</source>
         <translation><numerusform>%n día</numerusform><numerusform>%n días</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="285"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="280"/>
         <source>%n hour(s) ago</source>
         <translation><numerusform>hace %n hora</numerusform><numerusform>hace %n horas</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="287"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="282"/>
         <source>%n hour(s)</source>
         <translation><numerusform>%n hora</numerusform><numerusform>%n horas</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="293"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="288"/>
         <source>%1 minutes ago</source>
         <translation>hace %1 minutos</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="295"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="290"/>
         <source>%1 minutes</source>
         <translation>%1 minutos</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="299"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="294"/>
         <source>just now</source>
         <translation>justo ahora</translation>
     </message>
@@ -1736,12 +1736,12 @@ de un solo uso (OTP)</translation>
 <context>
     <name>Servent</name>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="989"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="990"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
         <translation>Falló la detección automática de IP externa: no se pudo analizar la respuesta en JSON.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="1002"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="1003"/>
         <source>Automatically detecting external IP failed: %1</source>
         <translation>Falló la detección automática de IP externa: %1</translation>
     </message>
@@ -2572,27 +2572,27 @@ y estaciones basadas en sus gustos personales.</translation>
 <context>
     <name>Tomahawk::Accounts::ResolverAccountFactory</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="112"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="113"/>
         <source>Resolver installation error: cannot open bundle.</source>
         <translation>Error de instalación del servicio: no se puede abrir el paquete.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="119"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="120"/>
         <source>Resolver installation error: incomplete bundle.</source>
         <translation>Error de instalación del servicio: el paquete está incompleto.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="158"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="159"/>
         <source>Resolver installation error: bad metadata in bundle.</source>
         <translation>Error de instalación del servicio: el paquete contiene metadatos incorrectos.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="196"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="197"/>
         <source>Resolver installation error: platform mismatch.</source>
         <translation>Error de instalación del servicio: la plataforma no coincide.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="209"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="210"/>
         <source>Resolver installation error: Tomahawk %1 or newer is required.</source>
         <translation>Error de instalación del servicio: se necesita Tomahawk %1 o superior.</translation>
     </message>
@@ -3417,7 +3417,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
 <context>
     <name>Tomahawk::GroovesharkParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/GroovesharkParser.cpp" line="242"/>
+        <location filename="../src/libtomahawk/utils/GroovesharkParser.cpp" line="243"/>
         <source>Error fetching Grooveshark information from the network!</source>
         <translation>¡Error al obtener la información de Grooveshark en la red!</translation>
     </message>
@@ -3519,7 +3519,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
 <context>
     <name>Tomahawk::InfoSystem::NewReleasesPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="598"/>
+        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="599"/>
         <source>Albums</source>
         <translation>Álbumes</translation>
     </message>
@@ -3527,7 +3527,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
 <context>
     <name>Tomahawk::ItunesParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="182"/>
+        <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="184"/>
         <source>Error fetching iTunes information from the network!</source>
         <translation>¡Error al obtener la información de iTunes en la red!</translation>
     </message>
@@ -3535,27 +3535,27 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
 <context>
     <name>Tomahawk::JSPFLoader</name>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="148"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="149"/>
         <source>New Playlist</source>
         <translation>Lista de reproducción nueva</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="174"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="175"/>
         <source>Failed to save tracks</source>
         <translation>Fallo al guardar pistas</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="174"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="175"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>Algunas pistas en la lista de reproducción no contienen artista ni título. Éstas se ignorarán.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="199"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="200"/>
         <source>XSPF Error</source>
         <translation>Error de XSPF</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="199"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="200"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>Esta no es una lista de reproducción XSPF válida.</translation>
     </message>
@@ -3659,7 +3659,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
 <context>
     <name>Tomahawk::SpotifyParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="280"/>
+        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="282"/>
         <source>Error fetching Spotify information from the network!</source>
         <translation>¡Error al obtener la información de Spotify en la red!</translation>
     </message>
@@ -3832,7 +3832,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="380"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="381"/>
         <source>Local Network</source>
         <translation>Red local</translation>
     </message>

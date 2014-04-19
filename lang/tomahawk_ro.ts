@@ -1463,67 +1463,67 @@ Password (OTP)</translation>
 <context>
     <name>QObject</name>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="253"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="248"/>
         <source>%n year(s) ago</source>
         <translation><numerusform>acum %n an</numerusform><numerusform>acum %n ani</numerusform><numerusform>acum %n de ani</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="255"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="250"/>
         <source>%n year(s)</source>
         <translation><numerusform>%n an</numerusform><numerusform>%n ani</numerusform><numerusform>%n de ani</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="261"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="256"/>
         <source>%n month(s) ago</source>
         <translation><numerusform>acum %n lună</numerusform><numerusform>acum %n luni</numerusform><numerusform>acum %n de luni</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="263"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="258"/>
         <source>%n month(s)</source>
         <translation><numerusform>%n lună</numerusform><numerusform>%n luni</numerusform><numerusform>%n de luni</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="269"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="264"/>
         <source>%n week(s) ago</source>
         <translation><numerusform>acum %n săptămână</numerusform><numerusform>acum %n săptămâni</numerusform><numerusform>acum %n de săptămâni</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="271"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="266"/>
         <source>%n week(s)</source>
         <translation><numerusform>%n săptămână</numerusform><numerusform>%n săptămâni</numerusform><numerusform>%n de săptămâni</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="277"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="272"/>
         <source>%n day(s) ago</source>
         <translation><numerusform>acum %n zi</numerusform><numerusform>acum %n zile</numerusform><numerusform>acum %n de zile</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="279"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="274"/>
         <source>%n day(s)</source>
         <translation><numerusform>%n zi</numerusform><numerusform>%n zile</numerusform><numerusform>%n de zile</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="285"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="280"/>
         <source>%n hour(s) ago</source>
         <translation><numerusform>acum %n oră</numerusform><numerusform>acum %n ore</numerusform><numerusform>acum %n de ore</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="287"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="282"/>
         <source>%n hour(s)</source>
         <translation><numerusform>%n oră</numerusform><numerusform>%n ore</numerusform><numerusform>%n de ore</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="293"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="288"/>
         <source>%1 minutes ago</source>
         <translation>acum %1 minute</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="295"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="290"/>
         <source>%1 minutes</source>
         <translation>%1 minute</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="299"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="294"/>
         <source>just now</source>
         <translation>chiar acum</translation>
     </message>
@@ -1736,12 +1736,12 @@ Password (OTP)</translation>
 <context>
     <name>Servent</name>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="989"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="990"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
         <translation>Detectarea automată a IP-ului extern a eșuat: Nu s-a putut interpreta răspunsul JSON.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="1002"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="1003"/>
         <source>Automatically detecting external IP failed: %1</source>
         <translation>Detectarea automată a IP-ului extern a eșuat: %1</translation>
     </message>
@@ -2572,27 +2572,27 @@ Password (OTP)</translation>
 <context>
     <name>Tomahawk::Accounts::ResolverAccountFactory</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="112"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="113"/>
         <source>Resolver installation error: cannot open bundle.</source>
         <translation>Eroare de instalare rezolvator: nu se poate deschide pachetul.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="119"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="120"/>
         <source>Resolver installation error: incomplete bundle.</source>
         <translation>Eroare de instalare rezolvator: pachet incomplet.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="158"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="159"/>
         <source>Resolver installation error: bad metadata in bundle.</source>
         <translation>Eroare de instalare rezolvator: metadate greșite în pachet.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="196"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="197"/>
         <source>Resolver installation error: platform mismatch.</source>
         <translation>Eroare de instalare rezolvator: platformă nepotrivită.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="209"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="210"/>
         <source>Resolver installation error: Tomahawk %1 or newer is required.</source>
         <translation>Eroare de instalare rezolvator: este necesar Tomahawk %1 sau mai nou.</translation>
     </message>
@@ -3417,7 +3417,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::GroovesharkParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/GroovesharkParser.cpp" line="242"/>
+        <location filename="../src/libtomahawk/utils/GroovesharkParser.cpp" line="243"/>
         <source>Error fetching Grooveshark information from the network!</source>
         <translation>Eroare la descărcarea informațiilor Grooveshark din rețea!</translation>
     </message>
@@ -3519,7 +3519,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::NewReleasesPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="598"/>
+        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="599"/>
         <source>Albums</source>
         <translation>Albume</translation>
     </message>
@@ -3527,7 +3527,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::ItunesParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="182"/>
+        <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="184"/>
         <source>Error fetching iTunes information from the network!</source>
         <translation>Eroare la descărcarea informațiilor iTunes din rețea!</translation>
     </message>
@@ -3535,27 +3535,27 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::JSPFLoader</name>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="148"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="149"/>
         <source>New Playlist</source>
         <translation>Listă de redare nouă</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="174"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="175"/>
         <source>Failed to save tracks</source>
         <translation>Salvarea pieselor a eșuat</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="174"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="175"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>Unele piese din lista de redare nu conțin un artist și un titlu. Vor fi ignorate.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="199"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="200"/>
         <source>XSPF Error</source>
         <translation>Eroare XSPF</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="199"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="200"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>Aceasta nu este o listă de redare XSPF validă.</translation>
     </message>
@@ -3659,7 +3659,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::SpotifyParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="280"/>
+        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="282"/>
         <source>Error fetching Spotify information from the network!</source>
         <translation>Eroare la descărcarea informațiilor Spotify din rețea!</translation>
     </message>
@@ -3832,7 +3832,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="380"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="381"/>
         <source>Local Network</source>
         <translation>Rețea locală</translation>
     </message>
