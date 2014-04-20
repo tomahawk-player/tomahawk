@@ -68,7 +68,7 @@ DropJob::DropJob( QObject *parent )
 
 DropJob::~DropJob()
 {
-    qDebug() << "destryong DropJob";
+    qDebug() << "destroying DropJob";
 }
 
 
