@@ -173,8 +173,6 @@ Api_v1::auth_2( QxtWebRequestEvent* event, QString arg )
 void
 Api_v1::api( QxtWebRequestEvent* event, const QString& version, const QString& method, const QString& arg1, const QString& arg2, const QString& arg3 )
 {
-    tDebug( LOGVERBOSE ) << "HTTP" << event->url.toString();
-
     if ( version.isEmpty() ) {
       // We dealing with API 1.0
 

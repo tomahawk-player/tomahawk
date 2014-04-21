@@ -135,7 +135,7 @@ Api_v1_5::jsonReply( QxtWebRequestEvent* event, const char* funcInfo, const QStr
 {
     if ( isError )
     {
-        tLog( LOGVERBOSE ) << funcInfo << errorMessage;
+        tLog() << funcInfo << errorMessage;
         m_service->sendJsonError( event, errorMessage );
     }
     else
