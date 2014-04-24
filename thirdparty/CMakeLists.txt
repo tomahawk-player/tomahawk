@@ -1,6 +1,6 @@
 ADD_SUBDIRECTORY( qxt )
-IF( WITH_BREAKPAD )
-    ADD_SUBDIRECTORY( breakpad )
+IF( WITH_CRASHREPORTER )
+    ADD_SUBDIRECTORY( libcrashreporter-qt )
 ENDIF()
 IF( APPLE )
     ADD_SUBDIRECTORY( SPMediaKeyTap )

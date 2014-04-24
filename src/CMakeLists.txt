@@ -21,7 +21,10 @@ add_subdirectory( viewpages )
 
 # application
 add_subdirectory( tomahawk )
-add_subdirectory( crashreporter )
+
+if(WITH_CRASHREPORTER)
+    add_subdirectory( crashreporter )
+endif()
 
 # tests
 add_subdirectory( tests )

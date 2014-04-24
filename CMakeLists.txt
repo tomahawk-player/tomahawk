@@ -50,7 +50,6 @@ option(BUILD_TESTS "Build Tomahawk with unit tests" ON)
 option(BUILD_HATCHET "Build the Hatchet plugin" OFF)
 option(BUILD_WITH_QT4 "Build Tomahawk with Qt4 no matter if Qt5 was found" ON)
 
-option(WITH_BREAKPAD "Build with breakpad integration" ON)
 option(WITH_CRASHREPORTER "Build with CrashReporter" ON)
 option(WITH_BINARY_ATTICA "Enable support for downloading binary resolvers automatically" ON)
 option(LEGACY_KDE_INTEGRATION "Install tomahawk.protocol file, deprecated since 4.6.0" OFF)
@@ -61,19 +60,9 @@ CMAKE_DEPENDENT_OPTION(WITH_UPOWER "Build with support for UPower events" ON
 CMAKE_DEPENDENT_OPTION(WITH_GNOMESHORTCUTHANDLER "Build with shortcut handler for GNOME" ON
        "UNIX;NOT APPLE" OFF)
 
-IF( CMAKE_SYSTEM_PROCESSOR MATCHES "arm" )
-    message(STATUS "Build of breakpad library disabled on this platform.")
-    SET(WITH_BREAKPAD OFF)
+IF( CMAKE_SYSTEM_PROCESSOR MATCHES "arm" OR NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/libcrashreporter-qt/CMakeLists.txt")
+    message(STATUS "Build of crashreporter disabled.")
     SET(WITH_CRASHREPORTER OFF)
-ENDIF()
-
-# add definitions based on build options
-IF( WITH_BREAKPAD )
-    message(STATUS "Build with support for breakpad.")
-    IF( CMAKE_COMPILER_IS_GNUCXX )
-        ADD_DEFINITIONS( -DSTDC_HEADERS -std=gnu++98 )
-#        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DSTDC_HEADERS -std=gnu++98" )
-    ENDIF()
 ENDIF()
 
 # generate version string

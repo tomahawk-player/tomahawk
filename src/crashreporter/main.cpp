@@ -16,17 +16,20 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "CrashReporter.h"
+#include <libcrashreporter-gui/CrashReporter.h>
 
 #include <QTranslator>
 #include <iostream>
+#include <QApplication>
+#include <QFileInfo>
 
 #include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
 
 
 const char* k_usage =
     "Usage:\n"
-    "  CrashReporter <logDir> <dumpFileName> <productName>\n";
+    "  CrashReporter <dumpFilePath>\n";
 
 int main( int argc, char* argv[] )
 {
@@ -39,13 +42,71 @@ int main( int argc, char* argv[] )
     QApplication app( argc, argv );
     TomahawkUtils::installTranslator( &app );
 
-    if ( app.arguments().size() != 4 )
+    if ( app.arguments().size() != 2 )
     {
         std::cout << k_usage;
         return 1;
     }
 
-    CrashReporter reporter( QUrl( "http://oops.tomahawk-player.org/addreport.php" ),  app.arguments() );
+    CrashReporter reporter( QUrl( "http://crash-reports.tomahawk-player.org/submit" ),  app.arguments() );
+
+    reporter.setLogo(QPixmap(":/tomahawk-icon.png"));
+
+
+//     // socorro expects a 10 digit build id
+//     QRegExp rx( "(\\d+\\.\\d+\\.\\d+).(\\d+)" );
+//     rx.exactMatch( TomahawkUtils::appFriendlyVersion() );
+//     //QString const version = rx.cap( 1 );
+//     QString const buildId = rx.cap( 2 ).leftJustified( 10, '0' );
+
+     reporter.setReportData( "BuildID", "YYYYMMDDHH" );
+     reporter.setReportData( "ProductName",  "WaterWolf" );
+     reporter.setReportData( "Version", TomahawkUtils::appFriendlyVersion().toLocal8Bit() );
+     //reporter.setReportData( "timestamp", QByteArray::number( QDateTime::currentDateTime().toTime_t() ) );
+
+
+        // add parameters
+
+//        QList<Pair> pairs;
+//        pairs  //<< Pair( "BuildID", buildId.toUtf8() )
+//        << Pair( )
+//        //<< Pair( "Version", TomahawkUtils::appFriendlyVersion().toLocal8Bit() )
+//        //<< Pair( "Vendor", "Tomahawk" )
+//        //<< Pair(  )
+
+        //            << Pair("InstallTime", "1357622062")
+        //            << Pair("Theme", "classic/1.0")
+        //            << Pair("Version", "30")
+        //            << Pair("id", "{ec8030f7-c20a-464f-9b0e-13a3a9e97384}")
+        //            << Pair("Vendor", "Mozilla")
+        //            << Pair("EMCheckCompatibility", "true")
+        //            << Pair("Throttleable", "0")
+        //            << Pair("URL", "http://code.google.com/p/crashme/")
+        //            << Pair("version", "20.0a1")
+        //            << Pair("CrashTime", "1357770042")
+        //            << Pair("ReleaseChannel", "nightly")
+        //            << Pair("submitted_timestamp", "2013-01-09T22:21:18.646733+00:00")
+        //            << Pair("buildid", "20130107030932")
+        //            << Pair("timestamp", "1357770078.646789")
+        //            << Pair("Notes", "OpenGL: NVIDIA Corporation -- GeForce 8600M GT/PCIe/SSE2 -- 3.3.0 NVIDIA 313.09 -- texture_from_pixmap\r\n")
+        //            << Pair("StartupTime", "1357769913")
+        //            << Pair("FramePoisonSize", "4096")
+        //            << Pair("FramePoisonBase", "7ffffffff0dea000")
+        //            << Pair("Add-ons", "%7B972ce4c6-7e08-4474-a285-3208198ce6fd%7D:20.0a1,crashme%40ted.mielczarek.org:0.4")
+        //            << Pair("BuildID", "YYYYMMDDHH")
+        //            << Pair("SecondsSinceLastCrash", "1831736")
+        //            << Pair("ProductName", "WaterWolf")
+        //            << Pair("legacy_processing", "0")
+        //            << Pair("ProductID", "{ec8030f7-c20a-464f-9b0e-13a3a9e97384}")
+
+        ;
+
+    // send log
+    QFile logFile( Logger::logFile() );
+    logFile.open( QFile::ReadOnly );
+    reporter.setReportData( "upload_file_tomahawklog", qCompress( logFile.readAll() ), "application/x-gzip", QFileInfo( Logger::logFile() ).fileName().toUtf8());
+    logFile.close();
+
     reporter.show();
 
     return app.exec();

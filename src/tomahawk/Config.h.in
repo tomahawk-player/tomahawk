@@ -12,7 +12,6 @@
 #cmakedefine LEOPARD
 #cmakedefine HAVE_SPARKLE
 
-#cmakedefine WITH_BREAKPAD
 #cmakedefine WITH_CRASHREPORTER
 #cmakedefine WITH_BINARY_ATTICA
 #cmakedefine WITH_QTSPARKLE

@@ -57,7 +57,6 @@ The following dependencies are optional, but recommended:
 Third party libraries that we ship with our source:
 
 * MiniUPnP 1.6 - http://miniupnp.free.fr/
-* Breakpad - http://code.google.com/p/google-breakpad/
 * Qocoa - https://github.com/mikemcquaid/Qocoa/
 * libqnetwm - http://code.google.com/p/libqnetwm/
 * libqxt (QxtWeb module) - http://libqxt.org/
