@@ -492,60 +492,6 @@ connect and stream from you?</source>
     </message>
 </context>
 <context>
-    <name>CrashReporter</name>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="23"/>
-        <source>Tomahawk Crash Reporter</source>
-        <translation>Enviament d&apos;errors del Tomahawk</translation>
-    </message>
-    <message utf8="true">
-        <location filename="../src/crashreporter/CrashReporter.ui" line="80"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sorry!&lt;/span&gt; Tomahawk crashed. Please tell us about it! Tomahawk has created an error report for you that can help improve the stability in the future. You can now send this report directly to the Tomahawk developers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Vaja!&lt;/span&gt; Ha fallat el Tomahawk. Informeu-nos d&apos;això! El Tomahawk ha creat un informe d&apos;error que pot ajudar a millorar l&apos;estabilit en futures versions. Podeu enviar este informe directament als desenvolupadors del Tomahawk.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="129"/>
-        <source>Send this report</source>
-        <translation>Envia este informe</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="136"/>
-        <source>Don&apos;t send</source>
-        <translation>No l&apos;envies</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="190"/>
-        <source>Abort</source>
-        <translation>Interromp</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="210"/>
-        <source>You can disable sending crash reports in the configuration dialog.</source>
-        <translation>Podeu deshabilitar l&apos;enviament d&apos;informació sobre els errors des del diàleg de configuració.</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="159"/>
-        <source>Uploaded %L1 of %L2 KB.</source>
-        <translation>%L1 de %L2 KB carregats.</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="173"/>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="189"/>
-        <source>Close</source>
-        <translation>Tanca</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="182"/>
-        <source>Sent! &lt;b&gt;Many thanks&lt;/b&gt;.</source>
-        <translation>S&apos;ha enviat! &lt;b&gt;Moltes gràcies&lt;/b&gt;.</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="190"/>
-        <source>Failed to send crash info.</source>
-        <translation>S&apos;ha produït un error en enviar la informació sobre l&apos;error.</translation>
-    </message>
-</context>
-<context>
     <name>DashboardWidget</name>
     <message>
         <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="89"/>

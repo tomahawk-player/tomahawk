@@ -493,60 +493,6 @@ połączyć się i strumieniować od ciebie?</translation>
     </message>
 </context>
 <context>
-    <name>CrashReporter</name>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="23"/>
-        <source>Tomahawk Crash Reporter</source>
-        <translation>Agent zgłaszania awarii Tomahawka</translation>
-    </message>
-    <message utf8="true">
-        <location filename="../src/crashreporter/CrashReporter.ui" line="80"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sorry!&lt;/span&gt; Tomahawk crashed. Please tell us about it! Tomahawk has created an error report for you that can help improve the stability in the future. You can now send this report directly to the Tomahawk developers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-weigth:600;&quot;&gt;Przepraszamy!&lt;/span&gt;Tomahawk przestał odpowiadać. Poinformuj nas o tym! Tomahawk utworzył raport o błędzie, który może poprawić stabilność w przyszłości. Możesz teraz wysłać ten raport bezpośrednio do programistów Tomahawka.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="129"/>
-        <source>Send this report</source>
-        <translation>Wyślij ten raport</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="136"/>
-        <source>Don&apos;t send</source>
-        <translation>Nie wysyłaj</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="190"/>
-        <source>Abort</source>
-        <translation>Przerwij</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="210"/>
-        <source>You can disable sending crash reports in the configuration dialog.</source>
-        <translation>Możesz wyłączyć zgłaszanie awarii w ustawieniach.</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="159"/>
-        <source>Uploaded %L1 of %L2 KB.</source>
-        <translation>Wysłano %L1 z %L2 KB.</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="173"/>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="189"/>
-        <source>Close</source>
-        <translation>Zamknij</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="182"/>
-        <source>Sent! &lt;b&gt;Many thanks&lt;/b&gt;.</source>
-        <translation>Wysłano! &lt;b&gt;Wielkie dzięki&lt;/b&gt;.</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="190"/>
-        <source>Failed to send crash info.</source>
-        <translation>Nie udało sie wysłać informacji o awarii.</translation>
-    </message>
-</context>
-<context>
     <name>DashboardWidget</name>
     <message>
         <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="89"/>

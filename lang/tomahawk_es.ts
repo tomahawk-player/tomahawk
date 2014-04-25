@@ -493,60 +493,6 @@ conectarse a usted y transmitir música?</translation>
     </message>
 </context>
 <context>
-    <name>CrashReporter</name>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="23"/>
-        <source>Tomahawk Crash Reporter</source>
-        <translation>Informador de fallos de Tomahawk</translation>
-    </message>
-    <message utf8="true">
-        <location filename="../src/crashreporter/CrashReporter.ui" line="80"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sorry!&lt;/span&gt; Tomahawk crashed. Please tell us about it! Tomahawk has created an error report for you that can help improve the stability in the future. You can now send this report directly to the Tomahawk developers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;¡Lo sentimos!&lt;/span&gt;Tomahawk ha fallado. ¡Por favor infórmenos! Tomahawk ha creado un informe de error que puede mejorar la estabilidad del programa en el futuro. Puede enviar este informe directamente a los desarrolladores de Tomahawk.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="129"/>
-        <source>Send this report</source>
-        <translation>Enviar informe de fallo</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="136"/>
-        <source>Don&apos;t send</source>
-        <translation>No enviar</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="190"/>
-        <source>Abort</source>
-        <translation>Cancelar</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="210"/>
-        <source>You can disable sending crash reports in the configuration dialog.</source>
-        <translation>Puede desactivar el envío de informes de error en el diálogo de configuración.</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="159"/>
-        <source>Uploaded %L1 of %L2 KB.</source>
-        <translation>Se subieron %L1 de %L2 KB.</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="173"/>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="189"/>
-        <source>Close</source>
-        <translation>Cerrar</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="182"/>
-        <source>Sent! &lt;b&gt;Many thanks&lt;/b&gt;.</source>
-        <translation>¡Enviado! &lt;b&gt;Muchas gracias&lt;/b&gt;.</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="190"/>
-        <source>Failed to send crash info.</source>
-        <translation>Error al enviar el informe del fallo.</translation>
-    </message>
-</context>
-<context>
     <name>DashboardWidget</name>
     <message>
         <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="89"/>
@@ -820,7 +766,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="17"/>
         <source>Host Settings</source>
-        <translation type="unfinished"/>
+        <translation>Configuración de equipo</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="35"/>
@@ -1525,7 +1471,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="294"/>
         <source>just now</source>
-        <translation>justo ahora</translation>
+        <translation>ahora mismo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="38"/>
@@ -1558,18 +1504,18 @@ de un solo uso (OTP)</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="543"/>
         <source>Songs </source>
         <comment>Beginning of a sentence summary</comment>
-        <translation type="unfinished"/>
+        <translation>Canciones</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="572"/>
         <source>No configured filters!</source>
-        <translation type="unfinished"/>
+        <translation>No se configuró ningún filtro.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="586"/>
         <source> and </source>
         <comment>Inserted between items in a list of two</comment>
-        <translation type="unfinished"/>
+        <translation> y </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="588"/>
@@ -1578,7 +1524,7 @@ de un solo uso (OTP)</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="617"/>
         <source>, </source>
         <comment>Inserted between items in a list</comment>
-        <translation type="unfinished"/>
+        <translation>, </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="590"/>
@@ -1587,25 +1533,25 @@ de un solo uso (OTP)</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="622"/>
         <source>.</source>
         <comment>Inserted when ending a sentence summary</comment>
-        <translation type="unfinished"/>
+        <translation>.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="603"/>
         <source>, and </source>
         <comment>Inserted between the last two items in a list of more than two</comment>
-        <translation type="unfinished"/>
+        <translation>, y </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="614"/>
         <source>and </source>
         <comment>Inserted before the last item in a list</comment>
-        <translation type="unfinished"/>
+        <translation>y </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="622"/>
         <source>and </source>
         <comment>Inserted before the sorting summary in a sentence summary</comment>
-        <translation type="unfinished"/>
+        <translation>y </translation>
     </message>
 </context>
 <context>
@@ -2988,7 +2934,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="172"/>
         <source>Artist name</source>
-        <translation type="unfinished"/>
+        <translation>Nombre del artista</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="195"/>
@@ -4175,22 +4121,22 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="75"/>
         <source>Artist Description</source>
-        <translation type="unfinished"/>
+        <translation>Descripción del artista</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="76"/>
         <source>User Radio</source>
-        <translation type="unfinished"/>
+        <translation>Radio del usuario</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="76"/>
         <source>Song</source>
-        <translation type="unfinished"/>
+        <translation>Canción</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="77"/>
         <source>Genre</source>
-        <translation type="unfinished"/>
+        <translation>Género</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="77"/>
@@ -4215,12 +4161,12 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="79"/>
         <source>Tempo</source>
-        <translation type="unfinished"/>
+        <translation>Tempo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="80"/>
         <source>Duration</source>
-        <translation type="unfinished"/>
+        <translation>Duración</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="80"/>
@@ -4255,17 +4201,17 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="83"/>
         <source>Longitude</source>
-        <translation type="unfinished"/>
+        <translation>Longitud</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="84"/>
         <source>Latitude</source>
-        <translation type="unfinished"/>
+        <translation>Latitud</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="84"/>
         <source>Mode</source>
-        <translation type="unfinished"/>
+        <translation>Modo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="85"/>
@@ -4280,7 +4226,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="86"/>
         <source>Song Type</source>
-        <translation type="unfinished"/>
+        <translation>Tipo de canción</translation>
     </message>
 </context>
 <context>

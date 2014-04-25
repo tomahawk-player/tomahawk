@@ -493,60 +493,6 @@ lidhuni dhe transmeto nga ju?</translation>
     </message>
 </context>
 <context>
-    <name>CrashReporter</name>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="23"/>
-        <source>Tomahawk Crash Reporter</source>
-        <translation>Raporti Prishjes Tomahawk</translation>
-    </message>
-    <message utf8="true">
-        <location filename="../src/crashreporter/CrashReporter.ui" line="80"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sorry!&lt;/span&gt; Tomahawk crashed. Please tell us about it! Tomahawk has created an error report for you that can help improve the stability in the future. You can now send this report directly to the Tomahawk developers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="129"/>
-        <source>Send this report</source>
-        <translation>Dërgo këtë raport</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="136"/>
-        <source>Don&apos;t send</source>
-        <translation>Mos dërgo</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="190"/>
-        <source>Abort</source>
-        <translation>Reth</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="210"/>
-        <source>You can disable sending crash reports in the configuration dialog.</source>
-        <translation>Ju mund të çaktivizoni dërgimin e raporteve përplasje në dialogun për konfigurim.</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="159"/>
-        <source>Uploaded %L1 of %L2 KB.</source>
-        <translation>Ngarkuar %L1 të %L2 KB.</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="173"/>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="189"/>
-        <source>Close</source>
-        <translation>Mbyll</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="182"/>
-        <source>Sent! &lt;b&gt;Many thanks&lt;/b&gt;.</source>
-        <translation>Dërguar &lt;b&gt;Shumë faleminderit&lt;/b&gt;.</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="190"/>
-        <source>Failed to send crash info.</source>
-        <translation>Dështoi të dërgoi informacionet e prishjes.</translation>
-    </message>
-</context>
-<context>
     <name>DashboardWidget</name>
     <message>
         <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="89"/>

@@ -493,60 +493,6 @@ ansluta och strömma från dig?</translation>
     </message>
 </context>
 <context>
-    <name>CrashReporter</name>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="23"/>
-        <source>Tomahawk Crash Reporter</source>
-        <translation>Tomahawk kraschrapport</translation>
-    </message>
-    <message utf8="true">
-        <location filename="../src/crashreporter/CrashReporter.ui" line="80"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sorry!&lt;/span&gt; Tomahawk crashed. Please tell us about it! Tomahawk has created an error report for you that can help improve the stability in the future. You can now send this report directly to the Tomahawk developers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sorry!&lt;/span&gt; Tomahawk kraschade Låt oss veta vad som hänt! Tomahawk har skapat en felrapport åt dig som kan hjälpa till att förbättra stabiliteten i framtiden. Du kan skicka den direkt till Tomahawks utvecklare.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="129"/>
-        <source>Send this report</source>
-        <translation>Skicka rapporten</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="136"/>
-        <source>Don&apos;t send</source>
-        <translation>Skicka inte</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="190"/>
-        <source>Abort</source>
-        <translation>Avbryt</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.ui" line="210"/>
-        <source>You can disable sending crash reports in the configuration dialog.</source>
-        <translation>Du kan välja att inte skicka kraschrapporter i konfigurationsdialogen. </translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="159"/>
-        <source>Uploaded %L1 of %L2 KB.</source>
-        <translation>Laddade upp %L1 av %L2 KB.</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="173"/>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="189"/>
-        <source>Close</source>
-        <translation>Stäng</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="182"/>
-        <source>Sent! &lt;b&gt;Many thanks&lt;/b&gt;.</source>
-        <translation>Skickat! &lt;b&gt;Tack så mycket&lt;/b&gt;.</translation>
-    </message>
-    <message>
-        <location filename="../src/crashreporter/CrashReporter.cpp" line="190"/>
-        <source>Failed to send crash info.</source>
-        <translation>Misslyckades skicka kraschrapport.</translation>
-    </message>
-</context>
-<context>
     <name>DashboardWidget</name>
     <message>
         <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="89"/>
