@@ -18,6 +18,8 @@
 
 #include <libcrashreporter-gui/CrashReporter.h>
 
+#include "CrashReporterConfig.h"
+
 #include <QTranslator>
 #include <iostream>
 #include <QApplication>
@@ -53,16 +55,12 @@ int main( int argc, char* argv[] )
     reporter.setLogo(QPixmap(":/tomahawk-icon.png"));
 
 
-//     // socorro expects a 10 digit build id
-//     QRegExp rx( "(\\d+\\.\\d+\\.\\d+).(\\d+)" );
-//     rx.exactMatch( TomahawkUtils::appFriendlyVersion() );
-//     //QString const version = rx.cap( 1 );
-//     QString const buildId = rx.cap( 2 ).leftJustified( 10, '0' );
+    reporter.setReportData( "BuildID", CRASHREPORTER_BUILD_ID );
+    reporter.setReportData( "ProductName",  "Tomahawk" );
+    reporter.setReportData( "Version", TomahawkUtils::appFriendlyVersion().toLocal8Bit() );
+    reporter.setReportData( "ReleaseChannel", CRASHREPORTER_RELEASE_CHANNEL);
 
-     reporter.setReportData( "BuildID", "YYYYMMDDHH" );
-     reporter.setReportData( "ProductName",  "WaterWolf" );
-     reporter.setReportData( "Version", TomahawkUtils::appFriendlyVersion().toLocal8Bit() );
-     //reporter.setReportData( "timestamp", QByteArray::number( QDateTime::currentDateTime().toTime_t() ) );
+    //reporter.setReportData( "timestamp", QByteArray::number( QDateTime::currentDateTime().toTime_t() ) );
 
 
         // add parameters
@@ -84,7 +82,6 @@ int main( int argc, char* argv[] )
         //            << Pair("URL", "http://code.google.com/p/crashme/")
         //            << Pair("version", "20.0a1")
         //            << Pair("CrashTime", "1357770042")
-        //            << Pair("ReleaseChannel", "nightly")
         //            << Pair("submitted_timestamp", "2013-01-09T22:21:18.646733+00:00")
         //            << Pair("buildid", "20130107030932")
         //            << Pair("timestamp", "1357770078.646789")
@@ -93,7 +90,6 @@ int main( int argc, char* argv[] )
         //            << Pair("FramePoisonSize", "4096")
         //            << Pair("FramePoisonBase", "7ffffffff0dea000")
         //            << Pair("Add-ons", "%7B972ce4c6-7e08-4474-a285-3208198ce6fd%7D:20.0a1,crashme%40ted.mielczarek.org:0.4")
-        //            << Pair("BuildID", "YYYYMMDDHH")
         //            << Pair("SecondsSinceLastCrash", "1831736")
         //            << Pair("ProductName", "WaterWolf")
         //            << Pair("legacy_processing", "0")

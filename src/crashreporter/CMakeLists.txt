@@ -9,6 +9,17 @@ list(APPEND crashreporter_RC resources.qrc)
 qt_wrap_ui( crashreporter_UI_HEADERS ${crashreporter_UI} )
 qt_add_resources( crashreporter_RC_RCC ${crashreporter_RC} )
 
+
+if(BUILD_RELEASE)
+    set(CRASHREPORTER_RELEASE_CHANNEL "release")
+else()
+    set(CRASHREPORTER_RELEASE_CHANNEL "nightly")
+endif()
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/CrashReporterConfig.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/CrashReporterConfig.h)
+
+
 include_directories( ${CMAKE_CURRENT_BINARY_DIR}
     ../../libtomahawk
     ../../thirdparty/libcrashreporter-qt/src
