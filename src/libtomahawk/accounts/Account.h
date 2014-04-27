@@ -76,7 +76,7 @@ public:
         QVariantHash configuration;
         QVariantMap acl;
         QStringList types;
-        QVariantHash credentials;
+        QVariantMap credentials;
     };
 
     enum AuthErrorCode { AuthError, ConnectionError };
@@ -107,7 +107,7 @@ public:
 
     virtual void saveConfig() {} // called when the widget has been edited. save values from config widget, call sync() to write to disk account generic settings
 
-    QVariantHash credentials() const { QMutexLocker locker( &m_mutex ); return m_cfg.credentials; }
+    QVariantMap credentials() const { QMutexLocker locker( &m_mutex ); return m_cfg.credentials; }
 
     QVariantMap acl() const { QMutexLocker locker( &m_mutex ); return m_cfg.acl; }
 
@@ -129,7 +129,7 @@ public:
     void setAccountFriendlyName( const QString &friendlyName )  { QMutexLocker locker( &m_mutex ); m_cfg.accountFriendlyName = friendlyName; }
     void setEnabled( bool enabled ) { QMutexLocker locker( &m_mutex ); m_cfg.enabled = enabled; }
     void setAccountId( const QString &accountId )  { QMutexLocker locker( &m_mutex ); m_accountId = accountId; }
-    void setCredentials( const QVariantHash &credentialHash ) { QMutexLocker locker( &m_mutex ); m_cfg.credentials = credentialHash; }
+    void setCredentials( const QVariantMap &credentialHash ) { QMutexLocker locker( &m_mutex ); m_cfg.credentials = credentialHash; }
     void setConfiguration( const QVariantHash &configuration ) { QMutexLocker locker( &m_mutex ); m_cfg.configuration = configuration; }
     void setAcl( const QVariantMap &acl ) { QMutexLocker locker( &m_mutex ); m_cfg.acl = acl; }
 

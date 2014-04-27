@@ -22,7 +22,7 @@
 #include "DllMacro.h"
 
 #include <QObject>
-#include <QVariantHash>
+#include <QVariantMap>
 #include <QMutex>
 #include <QStringList>
 
@@ -69,7 +69,7 @@ public:
     QStringList services() const;
 
     QVariant credentials( const QString& serviceName, const QString& key ) const; //returns QString or QVH
-    void setCredentials( const QString& serviceName, const QString& key, const QVariantHash& value );
+    void setCredentials( const QString& serviceName, const QString& key, const QVariantMap& value );
     void setCredentials( const QString& serviceName, const QString& key, const QString& value );
 
 signals:

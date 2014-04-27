@@ -319,7 +319,7 @@ Tomahawk::Accounts::TelepathyConfigStorage::load( const QString& accountId, Acco
     cfg.configuration[ "publishtracks" ] = true;
 
     Tomahawk::Accounts::CredentialsManager* c = Tomahawk::Accounts::AccountManager::instance()->credentialsManager();
-    cfg.credentials = QVariantHash();
+    cfg.credentials = QVariantMap();
 
     if ( !account->parameters()[ "account" ].isNull() )
         cfg.credentials[ "username" ] = account->parameters()[ "account" ].toString();

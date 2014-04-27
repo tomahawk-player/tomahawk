@@ -406,7 +406,7 @@ SpotifyParser::checkBrowseFinished()
 
             if ( spotifyAccountLoggedIn )
             {
-                QVariantHash creds = Accounts::SpotifyAccount::instance()->credentials();
+                QVariantMap creds = Accounts::SpotifyAccount::instance()->credentials();
                 spotifyUsername = creds.value( "username" ).toString();
             }
 

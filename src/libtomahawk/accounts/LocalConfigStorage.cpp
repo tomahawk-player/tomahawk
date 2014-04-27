@@ -142,8 +142,8 @@ LocalConfigStorage::load( const QString& accountId, Account::Configuration& cfg 
 
     CredentialsManager* c = AccountManager::instance()->credentialsManager();
     QVariant credentials = c->credentials( s_credentialsServiceName, accountId );
-    if ( credentials.type() == QVariant::Hash )
-        cfg.credentials = credentials.toHash();
+    if ( credentials.type() == QVariant::Map )
+        cfg.credentials = credentials.toMap();
 }
 
 
@@ -161,7 +161,7 @@ LocalConfigStorage::remove( const QString& accountId )
     s->remove( "accounts/" + accountId );
 
     CredentialsManager* c = AccountManager::instance()->credentialsManager();
-    c->setCredentials( s_credentialsServiceName, accountId, QVariantHash() );
+    c->setCredentials( s_credentialsServiceName, accountId, QVariantMap() );
 }
 
 }
