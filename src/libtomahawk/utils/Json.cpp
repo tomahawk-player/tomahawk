@@ -109,7 +109,7 @@ toJson( const QVariant &variant, bool* ok )
     QJsonDocument doc = QJsonDocument::fromVariant( variant );
     if ( ok != NULL )
     {
-        *ok = true;
+        *ok = !doc.isNull();
     }
     return doc.toJson();
 #else
