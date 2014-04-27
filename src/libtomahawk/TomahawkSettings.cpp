@@ -337,7 +337,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 
             if ( pluginName == "sipjabber" || pluginName == "sipgoogle" )
             {
-                QVariantMap credentials;
+                QVariantHash credentials;
                 credentials[ "username" ] = value( sipPlugin + "/username" );
                 credentials[ "password" ] = value( sipPlugin + "/password" );
 
@@ -631,10 +631,16 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         {
             tDebug() << "beginGroup" << QString( "accounts/%1" ).arg( account );
             beginGroup( QString( "accounts/%1" ).arg( account ) );
-            const QVariantMap creds = value( "credentials" ).toMap();
-            tDebug() << creds[ "username" ]
-                     << ( creds[ "password" ].isNull() ? ", no password" : ", has password" );
+            const QVariantHash hash = value( "credentials" ).toHash();
+            tDebug() << hash[ "username" ]
+                     << ( hash[ "password" ].isNull() ? ", no password" : ", has password" );
 
+            QVariantMap creds;
+            for ( QVariantHash::const_iterator it = hash.constBegin(); it != hash.constEnd(); ++it )
+            {
+                creds.insert( it.key(), it.value() );
+
+            }
             if ( !creds.isEmpty() )
             {
                 QKeychain::WritePasswordJob* j = new QKeychain::WritePasswordJob( QLatin1String( "Tomahawk" ), this );
