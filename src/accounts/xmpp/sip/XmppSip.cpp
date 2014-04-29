@@ -599,7 +599,7 @@ XmppSipPlugin::configurationChanged()
     if ( !m_currentUsername.contains( '@' ) )
     {
         m_currentUsername += defaultSuffix();
-        QVariantHash credentials = m_account->credentials();
+        QVariantMap credentials = m_account->credentials();
         credentials[ "username" ] = m_currentUsername;
         m_account->setCredentials( credentials );
         m_account->sync();
@@ -1103,7 +1103,7 @@ XmppSipPlugin::readXmlConsoleEnabled()
 QString
 XmppSipPlugin::readUsername()
 {
-    QVariantHash credentials = m_account->credentials();
+    QVariantMap credentials = m_account->credentials();
     return credentials.contains( "username" ) ? credentials[ "username" ].toString() : QString();
 }
 
@@ -1111,7 +1111,7 @@ XmppSipPlugin::readUsername()
 QString
 XmppSipPlugin::readPassword()
 {
-    QVariantHash credentials = m_account->credentials();
+    QVariantMap credentials = m_account->credentials();
     return credentials.contains( "password" ) ? credentials[ "password" ].toString() : QString();
 }
 

@@ -96,7 +96,7 @@ XmppConfigWidget::~XmppConfigWidget()
 void
 XmppConfigWidget::saveConfig()
 {
-    QVariantHash credentials = m_account->credentials();
+    QVariantMap credentials = m_account->credentials();
     credentials[ "username" ] = m_ui->xmppUsername->text().trimmed();
     credentials[ "password" ] = m_ui->xmppPassword->text().trimmed();
 

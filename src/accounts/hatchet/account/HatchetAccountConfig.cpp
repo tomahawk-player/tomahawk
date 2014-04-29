@@ -92,7 +92,7 @@ HatchetAccountConfig::login()
         m_ui->passwordEdit->clear();
         m_ui->otpEdit->clear();
 
-        QVariantHash creds = m_account->credentials();
+        QVariantMap creds = m_account->credentials();
         creds.clear();
         m_account->setCredentials( creds );
         m_account->sync();

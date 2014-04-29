@@ -807,7 +807,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
 {
     if ( msgType == "credentials" )
     {
-        QVariantHash creds = credentials();
+        QVariantMap creds = credentials();
 
         creds[ "username" ] = msg.value( "username" );
         creds[ "password" ] = msg.value( "password" );
@@ -1043,7 +1043,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
     }
     else if ( msgType == "loginResponse" )
     {
-        QVariantHash creds = credentials();
+        QVariantMap creds = credentials();
         creds[ "username" ] = msg.value( "username" ).toString();
         creds[ "password" ] = msg.value( "password" ).toString();
         creds[ "highQuality" ] = msg.value( "highQuality" ).toString();
@@ -1181,7 +1181,7 @@ SpotifyAccount::saveConfig()
     if ( m_configWidget.isNull() )
         return;
 
-    QVariantHash creds = credentials();
+    QVariantMap creds = credentials();
     if ( creds.value( "username" ).toString() != m_configWidget.data()->username() ||
          creds.value( "password" ).toString() != m_configWidget.data()->password() ||
          creds.value( "highQuality" ).toBool() != m_configWidget.data()->highQuality() )

@@ -204,7 +204,7 @@ LastFmAccount::password() const
 void
 LastFmAccount::setPassword( const QString& password )
 {
-    QVariantHash creds = credentials();
+    QVariantMap creds = credentials();
     creds[ "password" ] = password;
     setCredentials( creds );
 }
@@ -219,7 +219,7 @@ LastFmAccount::sessionKey() const
 void
 LastFmAccount::setSessionKey( const QString& sessionkey )
 {
-    QVariantHash creds = credentials();
+    QVariantMap creds = credentials();
     creds[ "sessionkey" ] = sessionkey;
     setCredentials( creds );
 }
@@ -235,7 +235,7 @@ LastFmAccount::username() const
 void
 LastFmAccount::setUsername( const QString& username )
 {
-    QVariantHash creds = credentials();
+    QVariantMap creds = credentials();
     creds[ "username" ] = username;
     setCredentials( creds );
 }

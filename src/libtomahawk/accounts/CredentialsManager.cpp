@@ -95,7 +95,7 @@ CredentialsManager::loadCredentials( const QString &service )
     {
         tDebug() << "beginGroup" << QString( "accounts/%1" ).arg( key );
         TomahawkSettings::instance()->beginGroup( QString( "accounts/%1" ).arg( key ) );
-        const QVariantHash creds = TomahawkSettings::instance()->value( "credentials" ).toHash();
+        const QVariantMap creds = TomahawkSettings::instance()->value( "credentials" ).toMap();
         tDebug() << creds[ "username" ]
                  << ( creds[ "password" ].isNull() ? ", no password" : ", has password" );
 
@@ -176,7 +176,7 @@ CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QV
 
     QKeychain::Job* j;
     if ( value.isNull() ||
-         ( value.type() == QVariant::Hash && value.toHash().isEmpty() ) ||
+         ( value.type() == QVariant::Map && value.toMap().isEmpty() ) ||
          ( value.type() == QVariant::String && value.toString().isEmpty() ) )
     {
         if ( !m_credentials.contains( csKey ) ) //if we don't have any credentials for this key, we bail
@@ -209,16 +209,16 @@ CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QV
         QKeychain::WritePasswordJob* wj = new QKeychain::WritePasswordJob( csKey.service(), this );
         wj->setKey( csKey.key() );
 
-        Q_ASSERT( value.type() == QVariant::String || value.type() == QVariant::Hash );
+        Q_ASSERT( value.type() == QVariant::String || value.type() == QVariant::Map );
 
         if ( tryToWriteAsString && value.type() == QVariant::String )
         {
             wj->setTextData( value.toString() );
         }
-        else if ( value.type() == QVariant::Hash )
+        else if ( value.type() == QVariant::Map )
         {
             bool ok;
-            QByteArray data = TomahawkUtils::toJson( value.toHash(), &ok );
+            QByteArray data = TomahawkUtils::toJson( value.toMap(), &ok );
 
             if ( ok )
             {
@@ -250,7 +250,7 @@ CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QV
 
 
 void
-CredentialsManager::setCredentials( const QString& serviceName, const QString& key, const QVariantHash& value )
+CredentialsManager::setCredentials( const QString& serviceName, const QString& key, const QVariantMap& value )
 {
     setCredentials( CredentialsStorageKey( serviceName, key ), QVariant( value ) );
 }
@@ -281,15 +281,9 @@ CredentialsManager::keychainJobFinished( QKeychain::Job* j )
             creds = TomahawkUtils::parseJson( readJob->textData().toLatin1(), &ok );
 
             QVariantMap map = creds.toMap();
-            QVariantHash hash;
-            for ( QVariantMap::const_iterator it = map.constBegin();
-                  it != map.constEnd(); ++it )
-            {
-                hash.insert( it.key(), it.value() );
-            }
-            creds = QVariant( hash );
+            creds = QVariant( map );
 
-            if ( !ok || creds.toHash().isEmpty() )
+            if ( !ok || creds.toMap().isEmpty() )
             {
                 creds = QVariant( readJob->textData() );
             }

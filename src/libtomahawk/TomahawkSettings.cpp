@@ -358,7 +358,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
                      value( sipPlugin + "/screenname" ).toString().isEmpty() )
                     continue;
 
-                QVariantHash credentials;
+                QVariantMap credentials;
                 credentials[ "oauthtoken" ] = value( sipPlugin + "/oauthtoken" );
                 credentials[ "oauthtokensecret" ] = value( sipPlugin + "/oauthtokensecret" );
                 credentials[ "username" ] = value( sipPlugin + "/screenname" );
@@ -448,7 +448,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         setValue( "enabled", hasLastFmEnabled );
         setValue( "autoconnect", true );
         setValue( "types", QStringList() << "ResolverType" << "StatusPushType" );
-        QVariantHash credentials;
+        QVariantMap credentials;
         credentials[ "username" ] = lfmUsername;
         credentials[ "password" ] = lfmPassword;
         credentials[ "session" ] = value( "lastfm/session" ).toString();
@@ -631,10 +631,16 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         {
             tDebug() << "beginGroup" << QString( "accounts/%1" ).arg( account );
             beginGroup( QString( "accounts/%1" ).arg( account ) );
-            const QVariantHash creds = value( "credentials" ).toHash();
-            tDebug() << creds[ "username" ]
-                     << ( creds[ "password" ].isNull() ? ", no password" : ", has password" );
+            const QVariantHash hash = value( "credentials" ).toHash();
+            tDebug() << hash[ "username" ]
+                     << ( hash[ "password" ].isNull() ? ", no password" : ", has password" );
 
+            QVariantMap creds;
+            for ( QVariantHash::const_iterator it = hash.constBegin(); it != hash.constEnd(); ++it )
+            {
+                creds.insert( it.key(), it.value() );
+
+            }
             if ( !creds.isEmpty() )
             {
                 QKeychain::WritePasswordJob* j = new QKeychain::WritePasswordJob( QLatin1String( "Tomahawk" ), this );

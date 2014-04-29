@@ -406,7 +406,7 @@ HatchetAccount::onPasswordLoginFinished( QNetworkReply* reply, const QString& us
         return;
     }
 
-    QVariantHash creds = credentials();
+    QVariantMap creds = credentials();
     creds[ "username" ] = username;
     creds[ "refresh_token" ] = refreshTokenBytes;
     creds[ "refresh_token_expiration" ] = refreshTokenExpiration == 0 ? 0 : QDateTime::currentDateTime().toTime_t() + refreshTokenExpiration;
@@ -462,7 +462,7 @@ HatchetAccount::onFetchAccessTokenFinished( QNetworkReply* reply, const QString&
         return;
     }
 
-    QVariantHash creds = credentials();
+    QVariantMap creds = credentials();
 
     if ( !originalType.isEmpty() )
     {
