@@ -25,7 +25,6 @@
 
 #include "audio/AudioEngine.h"
 #include "database/LocalCollection.h"
-#include "echonest/Playlist.h"
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "playlist/PlaylistTemplate.h"
 #include "playlist/PlaylistView.h"
@@ -52,6 +51,12 @@
 
 #include <QApplication>
 #include <QClipboard>
+
+#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
+    #include <echonest/Playlist.h>
+#else
+    #include <echonest5/Playlist.h>
+#endif
 
 
 GlobalActionManager* GlobalActionManager::s_instance = 0;

@@ -25,8 +25,6 @@
 #include "utils/Logger.h"
 #include "SourceList.h"
 
-#include <echonest/Playlist.h>
-
 #include <QComboBox>
 #include <QLineEdit>
 #include <QLabel>

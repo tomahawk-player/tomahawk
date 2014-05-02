@@ -18,9 +18,6 @@
 
 #include "EchonestCatalogSynchronizer.h"
 
-#include <echonest/CatalogUpdateEntry.h>
-#include <echonest/Config.h>
-
 #include "collection/Collection.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
@@ -35,8 +32,13 @@
 #include "TomahawkSettings.h"
 #include "Track.h"
 
-#include <echonest/CatalogUpdateEntry.h>
-#include <echonest/Config.h>
+#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
+    #include <echonest/CatalogUpdateEntry.h>
+    #include <echonest/Config.h>
+#else
+    #include <echonest5/CatalogUpdateEntry.h>
+    #include <echonest5/Config.h>
+#endif
 
 using namespace Tomahawk;
 

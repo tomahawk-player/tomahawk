@@ -20,7 +20,6 @@
 #define ECHONEST_GENERATOR_H
 
 #include <stdexcept>
-#include <echonest/Playlist.h>
 
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "playlist/dynamic/GeneratorFactory.h"
@@ -28,6 +27,12 @@
 #include "database/DatabaseCommand_CollectionAttributes.h"
 
 #include "DllMacro.h"
+
+#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
+    #include <echonest/Playlist.h>
+#else
+    #include <echonest5/Playlist.h>
+#endif
 
 namespace Tomahawk
 {
