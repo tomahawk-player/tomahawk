@@ -71,7 +71,7 @@ Tomahawk.versionCompare = function (version1, version2) {
         } else if (v2[i] > v1[i]) {
             // v1 < v2
             return -1;
-        } else if (v2[i] < v2[i]) {
+        } else if (v2[i] < v1[i]) {
             // v1 > v2
             return 1;
         }
@@ -84,7 +84,7 @@ Tomahawk.versionCompare = function (version1, version2) {
   * Check if this is at least specified tomahawk-api-version.
   */
 Tomahawk.atLeastVersion = function (version) {
-    return (Tomahawk.versionCompare(version, Tomahawk.apiVersion) >= 0)
+    return (Tomahawk.versionCompare(Tomahawk.apiVersion, version) >= 0)
 };
 
 
