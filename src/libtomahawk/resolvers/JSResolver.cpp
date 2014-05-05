@@ -344,7 +344,7 @@ JSResolver::artists( const Tomahawk::collection_ptr& collection )
     }
 
     QString eval = QString( "resolver.artists( '%1' );" )
-                   .arg( collection->name().replace( "'", "\\'" ) );
+                   .arg( collection->name().replace( "\\", "\\\\" ).replace( "'", "\\'" ) );
 
     QVariantMap m = d->engine->mainFrame()->evaluateJavaScript( eval ).toMap();
     if ( m.isEmpty() )
@@ -380,8 +380,8 @@ JSResolver::albums( const Tomahawk::collection_ptr& collection, const Tomahawk::
     }
 
     QString eval = QString( "resolver.albums( '%1', '%2' );" )
-                   .arg( collection->name().replace( "'", "\\'" ) )
-                   .arg( artist->name().replace( "'", "\\'" ) );
+                   .arg( collection->name().replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
+                   .arg( artist->name().replace( "\\", "\\\\" ).replace( "'", "\\'" ) );
 
     QVariantMap m = d->engine->mainFrame()->evaluateJavaScript( eval ).toMap();
     if ( m.isEmpty() )
@@ -417,9 +417,9 @@ JSResolver::tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::
     }
 
     QString eval = QString( "resolver.tracks( '%1', '%2', '%3' );" )
-                   .arg( collection->name().replace( "'", "\\'" ) )
-                   .arg( album->artist()->name().replace( "'", "\\'" ) )
-                   .arg( album->name().replace( "'", "\\'" ) );
+                   .arg( collection->name().replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
+                   .arg( album->artist()->name().replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
+                   .arg( album->name().replace( "\\", "\\\\" ).replace( "'", "\\'" ) );
 
     QVariantMap m = d->engine->mainFrame()->evaluateJavaScript( eval ).toMap();
     if ( m.isEmpty() )
@@ -450,7 +450,7 @@ JSResolver::canParseUrl( const QString& url, UrlType type )
     if ( d->capabilities.testFlag( UrlLookup ) )
     {
         QString eval = QString( "resolver.canParseUrl( '%1', %2 );" )
-                       .arg( QString( url ).replace( "'", "\\'" ) )
+                       .arg( QString( url ).replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
                        .arg( (int) type );
         return d->engine->mainFrame()->evaluateJavaScript( eval ).toBool();
     }
@@ -481,7 +481,7 @@ JSResolver::lookupUrl( const QString& url )
     }
 
     QString eval = QString( "resolver.lookupUrl( '%1' );" )
-                   .arg( QString( url ).replace( "'", "\\'" ) );
+                   .arg( QString( url ).replace( "\\", "\\\\" ).replace( "'", "\\'" ) );
 
     QVariantMap m = d->engine->mainFrame()->evaluateJavaScript( eval ).toMap();
     if ( m.isEmpty() )
@@ -520,10 +520,10 @@ JSResolver::resolve( const Tomahawk::query_ptr& query )
     if ( !query->isFullTextQuery() )
     {
         eval = QString( RESOLVER_LEGACY_CODE2 "resolver.resolve( '%1', '%2', '%3', '%4' );" )
-                  .arg( query->id().replace( "'", "\\'" ) )
-                  .arg( query->queryTrack()->artist().replace( "'", "\\'" ) )
-                  .arg( query->queryTrack()->album().replace( "'", "\\'" ) )
-                  .arg( query->queryTrack()->track().replace( "'", "\\'" ) );
+                  .arg( query->id().replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
+                  .arg( query->queryTrack()->artist().replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
+                  .arg( query->queryTrack()->album().replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
+                  .arg( query->queryTrack()->track().replace( "\\", "\\\\" ).replace( "'", "\\'" ) );
     }
     else
     {
@@ -533,8 +533,8 @@ JSResolver::resolve( const Tomahawk::query_ptr& query )
                         "   resolve( '%1', '', '', '%2' );"
                         "}"
                       )
-                  .arg( query->id().replace( "'", "\\'" ) )
-                  .arg( query->fullTextQuery().replace( "'", "\\'" ) );
+                  .arg( query->id().replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
+                  .arg( query->fullTextQuery().replace( "\\", "\\\\" ).replace( "'", "\\'" ) );
     }
 
     QVariantMap m = d->engine->mainFrame()->evaluateJavaScript( eval ).toMap();
