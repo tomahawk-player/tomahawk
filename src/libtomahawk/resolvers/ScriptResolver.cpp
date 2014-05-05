@@ -159,7 +159,9 @@ ScriptResolver::sendConfig()
         hosts << host;
     m.insert( "noproxyhosts", hosts );
 
-    QByteArray data = TomahawkUtils::toJson( m );
+    bool ok;
+    QByteArray data = TomahawkUtils::toJson( m, &ok );
+    Q_ASSERT( ok );
     sendMsg( data );
 }
 
@@ -181,7 +183,9 @@ ScriptResolver::running() const
 void
 ScriptResolver::sendMessage( const QVariantMap& map )
 {
-    QByteArray data = TomahawkUtils::toJson( map );
+    bool ok;
+    QByteArray data = TomahawkUtils::toJson( map, &ok );
+    Q_ASSERT( ok );
     sendMsg( data );
 }
 
@@ -528,7 +532,9 @@ ScriptResolver::saveConfig()
     m.insert( "_msgtype", "setpref" );
     QVariant widgets = configMsgFromWidget( m_configWidget.data() );
     m.insert( "widgets", widgets );
-    QByteArray data = TomahawkUtils::toJson( m );
+    bool ok;
+    QByteArray data = TomahawkUtils::toJson( m, &ok );
+    Q_ASSERT( ok );
 
     sendMsg( data );
 }
