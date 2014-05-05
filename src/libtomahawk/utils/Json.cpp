@@ -20,9 +20,9 @@
 
 // Qt version specific includes
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-    #include <QUrlQuery>
     #include <QJsonDocument>
     #include <QMetaProperty>
+    #include <QVariantHash>
 #else
     #include <qjson/parser.h>
     #include <qjson/qobjecthelper.h>
@@ -106,7 +106,22 @@ QByteArray
 toJson( const QVariant &variant, bool* ok )
 {
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-    QJsonDocument doc = QJsonDocument::fromVariant( variant );
+    QVariant _variant = variant;
+    if ( variant.type() == QVariant::Hash )
+    {
+        // QJsonDocument cannot deal with QVariantHash, so convert.
+        const QVariantHash hash = variant.toHash();
+        QVariantMap map;
+        QHashIterator<QString, QVariant> it(hash);
+        while ( it.hasNext() )
+        {
+            it.next();
+            map.insert( it.key(), it.value() );
+        }
+        _variant = map;
+    }
+
+    QJsonDocument doc = QJsonDocument::fromVariant( _variant );
     if ( ok != NULL )
     {
         *ok = !doc.isNull();
