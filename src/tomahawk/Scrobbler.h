@@ -38,7 +38,7 @@ public:
     virtual ~Scrobbler();
 
 public slots:
-    void trackStarted( const Tomahawk::result_ptr& );
+    void trackStarted( const Tomahawk::result_ptr );
     void trackPaused();
     void trackResumed();
     void trackStopped();

@@ -797,7 +797,7 @@ PlayableModel::rootItem() const
 
 
 void
-PlayableModel::onPlaybackStarted( const Tomahawk::result_ptr& result )
+PlayableModel::onPlaybackStarted( const Tomahawk::result_ptr result )
 {
     Q_D( PlayableModel );
     PlayableItem* oldEntry = itemFromIndex( d->currentIndex );

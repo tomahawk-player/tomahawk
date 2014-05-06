@@ -1286,7 +1286,7 @@ TomahawkWindow::audioStopped()
 
 
 void
-TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
+TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr result )
 {
     m_currentTrack = result;
     setWindowTitle( m_windowTitle );

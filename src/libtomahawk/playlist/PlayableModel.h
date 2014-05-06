@@ -188,7 +188,7 @@ private slots:
     void onQueryBecamePlayable( bool playable );
     void onQueryResolved( bool hasResults );
 
-    void onPlaybackStarted( const Tomahawk::result_ptr& result );
+    void onPlaybackStarted( const Tomahawk::result_ptr result );
     void onPlaybackStopped();
 
 private:

@@ -102,9 +102,9 @@ public slots:
     void setShuffled( bool enabled );
 
 signals:
-    void loading( const Tomahawk::result_ptr& track );
-    void started( const Tomahawk::result_ptr& track );
-    void finished( const Tomahawk::result_ptr& track );
+    void loading( const Tomahawk::result_ptr track );
+    void started( const Tomahawk::result_ptr track );
+    void finished( const Tomahawk::result_ptr track );
     void stopped();
     void paused();
     void resumed();

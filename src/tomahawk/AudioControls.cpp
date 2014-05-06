@@ -237,7 +237,7 @@ AudioControls::onControlStateChanged()
 
 
 void
-AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
+AudioControls::onPlaybackStarted( const Tomahawk::result_ptr result )
 {
     if ( result.isNull() )
         return;
@@ -273,7 +273,7 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 
 
 void
-AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
+AudioControls::onPlaybackLoading( const Tomahawk::result_ptr result )
 {
     if ( !m_currentTrack.isNull() )
     {

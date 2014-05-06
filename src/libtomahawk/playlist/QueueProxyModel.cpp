@@ -62,7 +62,7 @@ QueueProxyModel::onIndexChanged( const QModelIndex& index )
 
 
 void
-QueueProxyModel::onPlaybackStarted( const Tomahawk::result_ptr& result )
+QueueProxyModel::onPlaybackStarted( const Tomahawk::result_ptr result )
 {
     for ( int i = 0; i < rowCount(); i++ )
     {

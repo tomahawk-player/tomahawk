@@ -65,8 +65,8 @@ protected:
 private slots:
     void phononTickCheckTimeout();
 
-    void onPlaybackStarted( const Tomahawk::result_ptr& result );
-    void onPlaybackLoading( const Tomahawk::result_ptr& result );
+    void onPlaybackStarted( const Tomahawk::result_ptr result );
+    void onPlaybackLoading( const Tomahawk::result_ptr result );
     void onPlaybackPaused();
     void onPlaybackResumed();
     void onPlaybackSeeked( qint64 msec );

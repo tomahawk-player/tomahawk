@@ -119,7 +119,7 @@ private slots:
     void onXSPFError( XSPFLoader::XSPFErrorCode error );
     void onXSPFOk( const Tomahawk::playlist_ptr& );
 
-    void onPlaybackLoading( const Tomahawk::result_ptr& result );
+    void onPlaybackLoading( const Tomahawk::result_ptr result );
 
     void audioStarted();
     void audioFinished();

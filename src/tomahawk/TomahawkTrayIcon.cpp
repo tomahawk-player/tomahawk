@@ -153,7 +153,7 @@ TomahawkTrayIcon::menuAboutToShow()
 
 
 void
-TomahawkTrayIcon::setResult( const Tomahawk::result_ptr& result )
+TomahawkTrayIcon::setResult( const Tomahawk::result_ptr result )
 {
     if ( m_currentTrack )
     {

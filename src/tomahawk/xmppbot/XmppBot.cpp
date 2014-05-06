@@ -66,8 +66,8 @@ XMPPBot::XMPPBot(QObject *parent)
     m_client.data()->registerMessageHandler(this);
     m_client.data()->setPresence(Presence::Available, 1, "Tomahawkbot available");
 
-    connect(AudioEngine::instance(), SIGNAL(started(const Tomahawk::result_ptr &)),
-            SLOT(newTrackSlot(const Tomahawk::result_ptr &)));
+    connect(AudioEngine::instance(), SIGNAL(started(const Tomahawk::result_ptr )),
+            SLOT(newTrackSlot(const Tomahawk::result_ptr )));
 
     connect(InfoSystem::instance(),
         SIGNAL(info(QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap)),

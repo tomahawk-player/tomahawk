@@ -48,8 +48,8 @@ Scrobbler::Scrobbler( QObject* parent )
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
              SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 
-    connect( AudioEngine::instance(), SIGNAL( started( const Tomahawk::result_ptr& ) ),
-             SLOT( trackStarted( const Tomahawk::result_ptr& ) ), Qt::QueuedConnection );
+    connect( AudioEngine::instance(), SIGNAL( started( const Tomahawk::result_ptr ) ),
+             SLOT( trackStarted( const Tomahawk::result_ptr ) ), Qt::QueuedConnection );
 
     connect( AudioEngine::instance(), SIGNAL( paused() ),
              SLOT( trackPaused() ), Qt::QueuedConnection );
@@ -70,7 +70,7 @@ Scrobbler::~Scrobbler()
 
 
 void
-Scrobbler::trackStarted( const Tomahawk::result_ptr& track )
+Scrobbler::trackStarted( const Tomahawk::result_ptr track )
 {
     Q_ASSERT( QThread::currentThread() == thread() );
 

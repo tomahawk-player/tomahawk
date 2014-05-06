@@ -37,7 +37,7 @@ public:
     void setShowHideWindow( bool show = true );
 
 public slots:
-    void setResult( const Tomahawk::result_ptr& result );
+    void setResult( const Tomahawk::result_ptr result );
 
 private slots:
     void onAnimationTimer();

@@ -66,7 +66,7 @@ public:
     virtual ~XMPPBot();
 
 public slots:
-    virtual void newTrackSlot(const Tomahawk::result_ptr &track);
+    virtual void newTrackSlot(const Tomahawk::result_ptr track);
     virtual void infoReturnedSlot(QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, QVariantMap customData);
     virtual void infoFinishedSlot(QString caller);
 
