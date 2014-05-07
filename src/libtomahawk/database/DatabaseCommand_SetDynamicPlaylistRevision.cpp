@@ -110,11 +110,15 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
     // private, but we are a friend. will recall itself in its own thread:
     DynamicPlaylist* rawPl = 0;
     dynplaylist_ptr playlist = source()->dbCollection()->autoPlaylist( playlistguid() );
-    if ( !playlist )
+    if ( playlist.isNull() )
+    {
         playlist = source()->dbCollection()->station( playlistguid() );
+    }
 
-    if ( playlist )
+    if ( !playlist.isNull() )
+    {
         rawPl = playlist.data();
+    }
     else
     {
         // if it's neither an auto or station, it must not be auto-loaded, so we MUST have been told about it directly
