@@ -86,9 +86,9 @@
     #if defined ( WITH_QTSPARKLE )
         #include <qtsparkle/Updater>
     #endif
+    #include <shellapi.h>
     #if QT_VERSION < QT_VERSION_CHECK(5,2,0)
         #include <windows.h>
-        #include <shellapi.h>
         #ifndef THBN_CLICKED
             #define THBN_CLICKED    0x1800
         #endif
