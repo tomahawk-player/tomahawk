@@ -457,6 +457,11 @@ XmppSipPlugin::sendSipInfos( const Tomahawk::peerinfo_ptr& receiver, const QList
     Jreen::IQ iq( Jreen::IQ::Set, receiver->id() );
     iq.addExtension( sipMessage );
     Jreen::IQReply *reply = m_client->send( iq );
+
+    // Check that we were able to create a reply
+    Q_ASSERT( reply );
+    if ( !reply ) return;
+
     reply->setData( SipMessageSent );
     connect( reply, SIGNAL( received( Jreen::IQ ) ), SLOT( onNewIq( Jreen::IQ ) ) );
 }
