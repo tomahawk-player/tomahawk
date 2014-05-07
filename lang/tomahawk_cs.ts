@@ -3850,157 +3850,183 @@ Zkuste vyladit filtry pro nové písně.</translation>
         <translation>Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="286"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="288"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="578"/>
         <source>Back</source>
         <translation>Zpět</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="289"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="291"/>
         <source>Go back one page</source>
         <translation>Jít o jednu stranu zpět</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="296"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="298"/>
         <source>Forward</source>
         <translation>Vpřed</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="299"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="301"/>
         <source>Go forward one page</source>
         <translation>Jít o jednu stranu vpřed</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="216"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1330"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="218"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1454"/>
         <source>Hide Menu Bar</source>
         <translation>Skrýt pruh s hlavní nabídkou</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="216"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1324"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="218"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1448"/>
         <source>Show Menu Bar</source>
         <translation>Ukázat pruh s hlavní nabídkou</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="316"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="318"/>
         <source>Search for any artist, album or song...</source>
         <translation>Hledat umělce, album nebo píseň...</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="339"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="341"/>
         <source>&amp;Main Menu</source>
         <translation>Hlavní &amp;nabídka</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="944"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="585"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="899"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="911"/>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="591"/>
+        <source>Next</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="604"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="959"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="966"/>
+        <source>Love</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="954"/>
+        <source>Unlove</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1063"/>
         <source>Exit Full Screen</source>
         <translation>Ukončit režim na celou obrazovku</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="962"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1081"/>
         <source>Enter Full Screen</source>
         <translation>Vstoupit do režimu na celou obrazovku</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1024"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1143"/>
         <source>XSPF Error</source>
         <translation>Chyba XSPF</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1024"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1143"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>Toto není platný seznam skladeb XSPF.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1028"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1147"/>
         <source>Failed to save tracks</source>
         <translation>Nepodařilo se uložit skladby</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1028"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1147"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>Některé skladby v seznamu skladeb neobsahují ani umělce ani název. Tyto budou přehlíženy.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1042"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1161"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
         <translation>Je nám to líto, ale Tomahawk nemůže přistupovat k vašemu zvukovému zařízení nebo k žádané skladbě, a proto se nynější skladba přeskakuje. Ujistěte se, že máte nainstalováno vhodné jádro Phonona potřebné přídavné moduly.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1044"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1163"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
         <translation>Je nám to líto, ale Tomahawk nemůže přistupovat k vašemu zvukovému zařízení nebo k žádané skladbě, a proto se nynější skladba přeskakuje.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1062"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1181"/>
         <source>Station</source>
         <translation>Stanice</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1064"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1183"/>
         <source>Create New Station</source>
         <translation>Vytvořit novou stanici</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1064"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1099"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1183"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1218"/>
         <source>Name:</source>
         <translation>Název:</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1097"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1216"/>
         <source>Playlist</source>
         <translation>Seznam skladeb</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1099"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1218"/>
         <source>Create New Playlist</source>
         <translation>Vytvořit nový seznam skladeb</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1132"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="890"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1251"/>
         <source>Pause</source>
         <translation>Pozastavit</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1154"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1273"/>
         <source>&amp;Play</source>
         <translation>&amp;Přehrát</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1186"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1305"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
         <translation>%1 od %2</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1187"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1306"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1198"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1317"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1202"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1321"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1206"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1325"/>
         <source>Copyright 2010 - 2013</source>
         <translation>Autorské právo 2010 - 2013</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1207"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1326"/>
         <source>Thanks to:</source>
         <translation>Poděkování: </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1214"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1333"/>
         <source>About Tomahawk</source>
         <translation>O Tomahawku</translation>
     </message>
