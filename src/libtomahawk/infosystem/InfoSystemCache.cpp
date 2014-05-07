@@ -192,7 +192,6 @@ InfoSystemCache::notInCache( QObject *receiver, Tomahawk::InfoSystem::InfoString
 void
 InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output )
 {
-    //qDebug() << Q_FUNC_INFO;
     const QString criteriaHashVal = criteriaMd5( criteria );
     const QString criteriaHashValWithType = criteriaMd5( criteria, type );
     const QString cacheDir = m_cacheBaseDir + QString::number( (int)type );

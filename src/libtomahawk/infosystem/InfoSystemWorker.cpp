@@ -282,7 +282,7 @@ InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 void
 InfoSystemWorker::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 {
-    tDebug() << Q_FUNC_INFO << "type is " << pushData.type;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "type is " << pushData.type;
 
     if ( pushData.pushFlags != PushNoFlag )
     {
@@ -294,7 +294,7 @@ InfoSystemWorker::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
         }
     }
 
-    tDebug() << Q_FUNC_INFO << "number of matching plugins: " << m_infoPushMap[ pushData.type ].size();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "number of matching plugins: " << m_infoPushMap[ pushData.type ].size();
 
     Q_FOREACH( InfoPluginPtr ptr, m_infoPushMap[ pushData.type ] )
     {
@@ -307,7 +307,7 @@ InfoSystemWorker::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 void
 InfoSystemWorker::getShortUrl( Tomahawk::InfoSystem::InfoPushData pushData )
 {
-    tDebug() << Q_FUNC_INFO << "type is " << pushData.type;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "type is " << pushData.type;
     if ( !pushData.infoPair.second.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
         QMetaObject::invokeMethod( this, "pushInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPushData, pushData ) );
@@ -344,7 +344,7 @@ InfoSystemWorker::getShortUrl( Tomahawk::InfoSystem::InfoPushData pushData )
 void
 InfoSystemWorker::shortLinkReady( QUrl longUrl, QUrl shortUrl, QVariant callbackObj )
 {
-    tDebug() << Q_FUNC_INFO << "long url = " << longUrl << ", shortUrl = " << shortUrl;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "long url = " << longUrl << ", shortUrl = " << shortUrl;
     m_shortLinksWaiting--;
     if ( !m_shortLinksWaiting )
         disconnect( GlobalActionManager::instance(), SIGNAL( shortLinkReady( QUrl, QUrl, QVariant ) ) );
@@ -364,7 +364,7 @@ InfoSystemWorker::shortLinkReady( QUrl longUrl, QUrl shortUrl, QVariant callback
         pushData.infoPair.first = flagProps;
     }
 
-    tDebug() << Q_FUNC_INFO << "pushInfoPair first is: " << pushData.infoPair.first.keys();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "pushInfoPair first is: " << pushData.infoPair.first.keys();
 
     QMetaObject::invokeMethod( this, "pushInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPushData, pushData ) );
 }

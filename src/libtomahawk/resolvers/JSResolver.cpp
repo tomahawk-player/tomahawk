@@ -229,7 +229,6 @@ JSResolver::init()
         QDir cryptojs( RESPATH "js/cryptojs" );
         foreach ( QString jsfile, cryptojs.entryList( jsfiles ) )
         {
-            qWarning() << Q_FUNC_INFO << ( RESPATH "js/cryptojs/" +  jsfile );
             d->engine->setScriptPath( RESPATH "js/cryptojs/" +  jsfile );
             QFile jslib(  RESPATH "js/cryptojs/" +  jsfile  );
             jslib.open( QIODevice::ReadOnly );

@@ -108,8 +108,6 @@ InfoSystem::InfoSystem( QObject* parent )
 {
     s_instance = this;
 
-    qDebug() << Q_FUNC_INFO;
-
     m_infoSystemCacheThreadController = new InfoSystemCacheThread( this );
     m_infoSystemCacheThreadController->start( QThread::IdlePriority );
 
@@ -150,7 +148,6 @@ InfoSystem::~InfoSystem()
 void
 InfoSystem::init()
 {
-    // tDebug() << Q_FUNC_INFO;
     if ( m_inited )
         return;
 
@@ -191,7 +188,6 @@ InfoSystem::init()
 bool
 InfoSystem::getInfo( const InfoRequestData& requestData )
 {
-    //qDebug() << Q_FUNC_INFO;
     if ( !m_inited || !m_infoSystemWorkerThreadController->worker() )
     {
         init();
@@ -228,7 +224,7 @@ InfoSystem::getInfo( const QString& caller, const QVariantMap& customData, const
 bool
 InfoSystem::pushInfo( InfoPushData pushData )
 {
-    tDebug() << Q_FUNC_INFO << "type is" << pushData.type;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "type is" << pushData.type;
     if ( !m_inited || !m_infoSystemWorkerThreadController->worker() )
     {
         init();
@@ -286,7 +282,7 @@ InfoSystem::addInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
         return;
     }
 
-    tDebug() << Q_FUNC_INFO << plugin.data();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << plugin.data();
     QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "addInfoPlugin", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPluginPtr, plugin ) );
 }
 
@@ -313,7 +309,7 @@ InfoSystem::removeInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
         return;
     }
 
-    tDebug() << Q_FUNC_INFO << plugin.data();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << plugin.data();
     QMetaObject::invokeMethod( m_infoSystemWorkerThreadController->worker(), "removeInfoPlugin", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPluginPtr, plugin ) );
 }
 
