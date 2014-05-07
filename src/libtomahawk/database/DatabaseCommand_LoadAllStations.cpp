@@ -51,7 +51,10 @@ DatabaseCommand_LoadAllStations::exec( DatabaseImpl* dbi )
 
     query.exec( QString( "SELECT playlist.guid as guid, title, info, creator, createdOn, lastmodified, shared, currentrevision, dynamic_playlist.pltype, dynamic_playlist.plmode "
                          "FROM playlist, dynamic_playlist WHERE "
-                         "dynplaylist = 'true' AND playlist.guid = dynamic_playlist.guid AND dynamic_playlist.plmode = %1 AND dynamic_playlist.autoload = 'true' "
+                         "(dynplaylist = 'true' OR dynplaylist = 1) "
+                         "AND playlist.guid = dynamic_playlist.guid "
+                         "AND dynamic_playlist.plmode = %1 "
+                         "AND (dynamic_playlist.autoload = 'true' OR dynamic_playlist.autoload = 1) "
                          "%2"
                          "%3 %4 %5"
                        )
