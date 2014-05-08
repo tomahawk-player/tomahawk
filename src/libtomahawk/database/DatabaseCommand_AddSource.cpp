@@ -59,7 +59,7 @@ DatabaseCommand_addSource::exec( DatabaseImpl* dbi )
     query.prepare( "INSERT INTO source(name, friendlyname, isonline) VALUES(?,?,?)" );
     query.addBindValue( m_username );
     query.addBindValue( m_fname );
-    query.addBindValue( true );
+    query.addBindValue( "true" );
     query.exec();
 
     unsigned int id = query.lastInsertId().toUInt();

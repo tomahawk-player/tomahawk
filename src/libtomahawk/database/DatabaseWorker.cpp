@@ -276,14 +276,12 @@ void
 DatabaseWorker::logOp( DatabaseCommandLoggable* command )
 {
     TomahawkSqlQuery oplogquery = Database::instance()->impl()->newquery();
-    qDebug() << "INSERTING INTO OPLOG:" << command->source()->id() << command->guid() << command->commandname();
+    tLog( LOGVERBOSE ) << "INSERTING INTO OPLOG:" << command->source()->id() << command->guid() << command->commandname();
     oplogquery.prepare( "INSERT INTO oplog(source, guid, command, singleton, compressed, json) "
                         "VALUES(?, ?, ?, ?, ?, ?)" );
 
     QVariantMap variant = TomahawkUtils::qobject2qvariant( command );
     QByteArray ba = TomahawkUtils::toJson( variant );
-
-//     qDebug() << "OP JSON:" << ba.isNull() << ba << "from:" << variant; // debug
 
     bool compressed = false;
     if ( ba.length() >= 512 )
@@ -291,25 +289,26 @@ DatabaseWorker::logOp( DatabaseCommandLoggable* command )
         // We need to compress this in this thread, since inserting into the log
         // has to happen as part of the same transaction as the dbcmd.
         // (we are in a worker thread for RW dbcmds anyway, so it's ok)
-        //qDebug() << "Compressing DB OP JSON, uncompressed size:" << ba.length();
         ba = qCompress( ba, 9 );
         compressed = true;
-        //qDebug() << "Compressed DB OP JSON size:" << ba.length();
     }
 
     if ( command->singletonCmd() )
     {
-        tDebug() << "Singleton command, deleting previous oplog commands";
+        tLog( LOGVERBOSE ) << "Singleton command, deleting previous oplog commands";
 
         TomahawkSqlQuery oplogdelquery = Database::instance()->impl()->newquery();
-        oplogdelquery.prepare( QString( "DELETE FROM oplog WHERE source %1 AND singleton = 'true' AND command = ?" )
+        oplogdelquery.prepare( QString( "DELETE FROM oplog WHERE "
+                                        "source %1 "
+                                        "AND (singleton = 'true' or singleton = 1) "
+                                        "AND command = ?" )
                                   .arg( command->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( command->source()->id() ) ) );
 
         oplogdelquery.bindValue( 0, command->commandname() );
         oplogdelquery.exec();
     }
 
-    tDebug() << "Saving to oplog:" << command->commandname()
+    tLog( LOGVERBOSE ) << "Saving to oplog:" << command->commandname()
              << "bytes:" << ba.length()
              << "guid:" << command->guid();
 
@@ -317,8 +316,8 @@ DatabaseWorker::logOp( DatabaseCommandLoggable* command )
                           QVariant(QVariant::Int) : command->source()->id() );
     oplogquery.bindValue( 1, command->guid() );
     oplogquery.bindValue( 2, command->commandname() );
-    oplogquery.bindValue( 3, command->singletonCmd() );
-    oplogquery.bindValue( 4, compressed );
+    oplogquery.bindValue( 3, command->singletonCmd() ? "true" : "false" );
+    oplogquery.bindValue( 4, compressed ? "true" : "false" );
     oplogquery.bindValue( 5, ba );
     if ( !oplogquery.exec() )
     {

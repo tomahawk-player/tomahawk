@@ -76,6 +76,7 @@ public:
     void setType( const QString& type ) { m_type = type; }
     void setMode( int mode ) { m_mode = (GeneratorMode)mode; }
 
+    // TODO: Pass wptr here, so we can get a strong reference again
     void setPlaylist( DynamicPlaylist* pl ); // raw pointer b/c we don't have the shared pointer from inside the shared pointer
 
 private:

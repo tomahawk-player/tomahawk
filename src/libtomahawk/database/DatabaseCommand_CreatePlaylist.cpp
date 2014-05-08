@@ -117,12 +117,12 @@ DatabaseCommand_CreatePlaylist::createPlaylist( DatabaseImpl* lib, bool dynamic)
                  "VALUES( :guid, :source, :shared, :title, :info, :creator, :lastmodified, :dynplaylist, :createdOn )" );
 
     cre.bindValue( ":source", source()->isLocal() ? QVariant(QVariant::Int) : source()->id() );
-    cre.bindValue( ":dynplaylist", dynamic );
+    cre.bindValue( ":dynplaylist", dynamic ? "true" : "false" );
     cre.bindValue( ":createdOn", now );
     if ( !m_playlist.isNull() )
     {
         cre.bindValue( ":guid", m_playlist->guid() );
-        cre.bindValue( ":shared", m_playlist->shared() );
+        cre.bindValue( ":shared", m_playlist->shared() ? "true" : "false" );
         cre.bindValue( ":title", m_playlist->title() );
         cre.bindValue( ":info", m_playlist->info() );
         cre.bindValue( ":creator", m_playlist->creator() );
