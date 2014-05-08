@@ -829,10 +829,10 @@ salasana (OTP)</translation>
 <context>
     <name>JSResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="356"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="393"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="431"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="493"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="355"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="392"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="430"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="492"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Skriptiselvittimen varoitus: API-kutsu %1 palautti dataa synkronisesti.</translation>
     </message>
@@ -3903,24 +3903,24 @@ kappaleen %2%4 %3.</translation>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="899"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="911"/>
         <source>Play</source>
-        <translation type="unfinished"/>
+        <translation>Soita</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="591"/>
         <source>Next</source>
-        <translation type="unfinished"/>
+        <translation>Seuraava</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="604"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="959"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="966"/>
         <source>Love</source>
-        <translation type="unfinished"/>
+        <translation>Tykkää</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="954"/>
         <source>Unlove</source>
-        <translation type="unfinished"/>
+        <translation>Lakkaa tykkäämästä</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1063"/>
@@ -4595,7 +4595,7 @@ Sanat artistin %2 kappaleelle ”%1”:
         <translation>Tuntematon</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="816"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="821"/>
         <source>Do you want to add &lt;b&gt;%1&lt;/b&gt; to your friend list?</source>
         <translation>Haluatko lisätä käyttäjän &lt;b&gt;%1&lt;/b&gt; kaverilistallesi?</translation>
     </message>
@@ -4625,32 +4625,32 @@ Sanat artistin %2 kappaleelle ”%1”:
         <translation>Ei-tuettu ominaisuus</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="495"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="500"/>
         <source>Add Friend</source>
         <translation>Lisää kaveri</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="496"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="501"/>
         <source>Enter Xmpp ID:</source>
         <translation>Anna XMPP-tunnus:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="652"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="657"/>
         <source>Add Friend...</source>
         <translation>Lisää kaveri…</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="657"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="662"/>
         <source>XML Console...</source>
         <translation>XML-konsoli…</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="706"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="711"/>
         <source>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</source>
         <translation>Pahoittelen – olen pelkkä Tomahawk-soittimen (http://gettomahawk.com) automaattinen läsnäoloviesti. Jos näet tämän viestin, tavoittelemasi henkilö ei todennäköisesti ole kirjautuneena, joten yritä myöhemmin uudelleen!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="815"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="820"/>
         <source>Authorize User</source>
         <translation>Salli käyttäjä</translation>
     </message>

@@ -828,10 +828,10 @@ Password (OTP)</source>
 <context>
     <name>JSResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="356"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="393"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="431"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="493"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="355"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="392"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="430"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="492"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Resovler-skriptvarning: API-kall %1 returnerade data synkront</translation>
     </message>
@@ -4590,7 +4590,7 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>Okänd</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="816"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="821"/>
         <source>Do you want to add &lt;b&gt;%1&lt;/b&gt; to your friend list?</source>
         <translation>Vill du lägga till &lt;b&gt;%1&lt;/b&gt; till din vänlista?</translation>
     </message>
@@ -4620,32 +4620,32 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>Ingen stödd funktion</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="495"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="500"/>
         <source>Add Friend</source>
         <translation>Lägg till vän</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="496"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="501"/>
         <source>Enter Xmpp ID:</source>
         <translation>Ange XMPP-id:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="652"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="657"/>
         <source>Add Friend...</source>
         <translation>Lägg till vän...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="657"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="662"/>
         <source>XML Console...</source>
         <translation>XML-konsol...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="706"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="711"/>
         <source>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</source>
         <translation>Tyvärr! Det här är bara en automatisk närvaro använt av Tomahawk Player (http://gettomahawk.com). Om du får det här meddelandet så är personen du försöker nå antagligen inte online, så var god och försök igen senare!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="815"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="820"/>
         <source>Authorize User</source>
         <translation>Auktorisera användare</translation>
     </message>

@@ -829,10 +829,10 @@ Password (OTP)</translation>
 <context>
     <name>JSResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="356"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="393"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="431"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="493"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="355"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="392"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="430"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="492"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Atenționare script rezolvator: Apelul API %1 a returnat date sincron.</translation>
     </message>
@@ -4595,7 +4595,7 @@ Versuri pentru &quot;%1&quot; de %2:
         <translation>Necunoscut</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="816"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="821"/>
         <source>Do you want to add &lt;b&gt;%1&lt;/b&gt; to your friend list?</source>
         <translation>Dorești să adaugi &lt;b&gt;%1&lt;/b&gt; în lista ta de prieteni?</translation>
     </message>
@@ -4625,32 +4625,32 @@ Versuri pentru &quot;%1&quot; de %2:
         <translation>Nicio funcție suportată</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="495"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="500"/>
         <source>Add Friend</source>
         <translation>Adaugă prieten</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="496"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="501"/>
         <source>Enter Xmpp ID:</source>
         <translation>Introdu ID Xmpp:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="652"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="657"/>
         <source>Add Friend...</source>
         <translation>Adaugă prieten...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="657"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="662"/>
         <source>XML Console...</source>
         <translation>Consolă XML...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="706"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="711"/>
         <source>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</source>
         <translation>Îmi pare rău -- Sunt doar o prezență automată folosită de playerul Tomahawk (http://gettomahawk.com). Dacă primești acest mesaj, probabil persoana pe care o cauți nu este conectată, te rog încearcă din nou mai târziu!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="815"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="820"/>
         <source>Authorize User</source>
         <translation>Autorizează utilizator</translation>
     </message>

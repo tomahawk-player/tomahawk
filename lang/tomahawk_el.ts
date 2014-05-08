@@ -828,10 +828,10 @@ Password (OTP)</source>
 <context>
     <name>JSResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="356"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="393"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="431"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="493"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="355"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="392"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="430"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="492"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Σριπτ προειδοποίηση αναλυτή: API κλήση% 1 επέστρεψε δεδομένα συγχρονισμένα.</translation>
     </message>
@@ -4590,7 +4590,7 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>Άγνωστο</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="816"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="821"/>
         <source>Do you want to add &lt;b&gt;%1&lt;/b&gt; to your friend list?</source>
         <translation>Θέλετε να προσθέσετε τον &lt;b&gt;%1&lt;/b&gt; στην λίστα φίλων σας;</translation>
     </message>
@@ -4620,33 +4620,33 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>Κανένα υποστηριζόμενο χαρακτηριστικό</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="495"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="500"/>
         <source>Add Friend</source>
         <translation>Προσθήκη φίλου</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="496"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="501"/>
         <source>Enter Xmpp ID:</source>
         <translation>Εισαγωγη του Xmpp ID:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="652"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="657"/>
         <source>Add Friend...</source>
         <translation>Προσθήκη Φίλου...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="657"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="662"/>
         <source>XML Console...</source>
         <translation>XML Κονσολα...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="706"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="711"/>
         <source>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</source>
         <translation>Λυπάμαι - Είμαι μια αυτόματο παρουσία που χρησιμοποιείται από τον Tomahawk Player 
 (http://gettomahawk.com). Αν παίρνετε αυτό το μήνυμα, το πρόσωπο που προσπαθείτε να φτάσετε δεν είναι πιθανόν να υπογραφεί, οπότε δοκιμάστε ξανά αργότερα ! </translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="815"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="820"/>
         <source>Authorize User</source>
         <translation>Πιστοποιηση χρηστη</translation>
     </message>
