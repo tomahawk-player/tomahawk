@@ -3897,24 +3897,24 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="899"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="911"/>
         <source>Play</source>
-        <translation type="unfinished"/>
+        <translation>播放</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="591"/>
         <source>Next</source>
-        <translation type="unfinished"/>
+        <translation>下一首</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="604"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="959"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="966"/>
         <source>Love</source>
-        <translation type="unfinished"/>
+        <translation>喜欢</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="954"/>
         <source>Unlove</source>
-        <translation type="unfinished"/>
+        <translation>不喜欢</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1063"/>
