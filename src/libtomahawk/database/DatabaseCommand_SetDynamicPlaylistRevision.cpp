@@ -108,27 +108,21 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
     tLog() << "Postcommitting this playlist:" << playlistguid() << source().isNull();
 
     // private, but we are a friend. will recall itself in its own thread:
-    DynamicPlaylist* rawPl = 0;
     dynplaylist_ptr playlist = source()->dbCollection()->autoPlaylist( playlistguid() );
     if ( playlist.isNull() )
     {
         playlist = source()->dbCollection()->station( playlistguid() );
     }
 
-    if ( !playlist.isNull() )
-    {
-        rawPl = playlist.data();
-    }
-    else
+    if ( playlist.isNull() && !m_playlist.isNull() )
     {
         // if it's neither an auto or station, it must not be auto-loaded, so we MUST have been told about it directly
-        rawPl = m_playlist;
+        playlist = m_playlist;
     }
 
-    if ( !rawPl )
+    if ( playlist.isNull() )
     {
         tLog() << "Got null playlist with guid:" << playlistguid() << "from source and collection:" << source()->friendlyName() << source()->dbCollection()->name() << "and mode is static?:" << (m_mode == Static);
-//        Q_ASSERT( false );
         return;
     }
 
@@ -139,13 +133,13 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
             controlMap << v.toMap();
 
         if ( m_mode == OnDemand )
-            rawPl->setRevision(  newrev(),
+            playlist->setRevision(  newrev(),
                                     true, // this *is* the newest revision so far
                                     m_type,
                                     controlMap,
                                     m_applied );
         else
-            rawPl->setRevision(  newrev(),
+            playlist->setRevision(  newrev(),
                                     orderedentriesguids,
                                     m_previous_rev_orderedguids,
                                     m_type,
@@ -157,13 +151,13 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
     else
     {
         if ( m_mode == OnDemand )
-            rawPl->setRevision(  newrev(),
+            playlist->setRevision(  newrev(),
                                     true, // this *is* the newest revision so far
                                     m_type,
                                     m_controls,
                                     m_applied );
         else
-            rawPl->setRevision(  newrev(),
+            playlist->setRevision(  newrev(),
                                     orderedentriesguids,
                                     m_previous_rev_orderedguids,
                                     m_type,
@@ -269,9 +263,9 @@ DatabaseCommand_SetDynamicPlaylistRevision::exec( DatabaseImpl* lib )
 }
 
 void
-DatabaseCommand_SetDynamicPlaylistRevision::setPlaylist( DynamicPlaylist* pl )
+DatabaseCommand_SetDynamicPlaylistRevision::setPlaylist( QWeakPointer<DynamicPlaylist> pl )
 {
-    m_playlist = pl;
+    m_playlist = pl.toStrongRef();
 }
 
 }

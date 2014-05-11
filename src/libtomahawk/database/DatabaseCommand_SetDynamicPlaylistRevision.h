@@ -76,8 +76,7 @@ public:
     void setType( const QString& type ) { m_type = type; }
     void setMode( int mode ) { m_mode = (GeneratorMode)mode; }
 
-    // TODO: Pass wptr here, so we can get a strong reference again
-    void setPlaylist( DynamicPlaylist* pl ); // raw pointer b/c we don't have the shared pointer from inside the shared pointer
+    void setPlaylist( QWeakPointer<DynamicPlaylist> pl ); // raw pointer b/c we don't have the shared pointer from inside the shared pointer
 
 private:
     QString m_type;
@@ -85,8 +84,7 @@ private:
     QList< dyncontrol_ptr > m_controls;
     QList< QVariant > m_controlsV;
 
-    // ARG i hate sharedpointers sometimes
-    DynamicPlaylist* m_playlist; // Only used if setting revision of a non-autoloaded playlist, as those aren't able to be looked up by guid
+    QSharedPointer<DynamicPlaylist> m_playlist; // Only used if setting revision of a non-autoloaded playlist, as those aren't able to be looked up by guid
 };
 
 }

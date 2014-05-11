@@ -242,7 +242,7 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
                                                     Static,
                                                     controls );
     if ( !d->autoLoad )
-        cmd->setPlaylist( this );
+        cmd->setPlaylist( d->weakSelf );
 
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
@@ -278,7 +278,7 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
                                                     OnDemand,
                                                     controls );
     if ( !d->autoLoad )
-        cmd->setPlaylist( this );
+        cmd->setPlaylist( d->weakSelf );
 
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
