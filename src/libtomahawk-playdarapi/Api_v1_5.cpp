@@ -97,7 +97,12 @@ Api_v1_5::playback( QxtWebRequestEvent* event, const QString& command )
             QVariantMap trackInfo;
             trackInfo.insert( "playing", true );
             trackInfo.insert( "bitrate", currentTrack->bitrate() );
-            trackInfo.insert( "resolvedBy", currentTrack->resolvedBy()->name() );
+            if ( currentTrack->resolvedBy() != NULL ) {
+                QString resolverName = currentTrack->resolvedBy()->name();
+                trackInfo.insert( "resolvedBy", resolverName );
+            } else {
+                trackInfo.insert( "resolvedBy", "<unknown resolver>" );
+            }
             trackInfo.insert( "score", currentTrack->score() );
             trackInfo.insert( "album", currentTrack->track()->album() );
             trackInfo.insert( "albumpos", currentTrack->track()->albumpos() );
