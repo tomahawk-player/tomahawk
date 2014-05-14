@@ -61,7 +61,8 @@ Track::get( const QString& artist, const QString& track, const QString& album, i
 {
     if ( artist.trimmed().isEmpty() || track.trimmed().isEmpty() )
     {
-        Q_ASSERT( false );
+        tDebug() << "Artist:" << artist << "Track:" << track;
+        Q_ASSERT_X( false , Q_FUNC_INFO, "Given artist or track is empty" );
         return track_ptr();
     }
 
