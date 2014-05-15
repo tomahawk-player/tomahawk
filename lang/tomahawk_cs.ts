@@ -3610,42 +3610,42 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>Tomahawk::Track</name>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="533"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="534"/>
         <source> and </source>
         <translation>a</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="541"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="542"/>
         <source>You</source>
         <translation>Vy</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="543"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="544"/>
         <source>you</source>
         <translation>vy</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="556"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="557"/>
         <source>and</source>
         <translation>a</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="556"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="557"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n dalšímu</numerusform><numerusform>%n dalším</numerusform><numerusform>%n dalším</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="559"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="560"/>
         <source>%n people</source>
         <translation><numerusform>%n člověku</numerusform><numerusform>%n lidem</numerusform><numerusform>%n lidem</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="563"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="564"/>
         <source>loved this track</source>
         <translation>se tato skladba líbí</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="565"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="566"/>
         <source>sent you this track %1</source>
         <translation>vám poslal tuto skladbu %1</translation>
     </message>

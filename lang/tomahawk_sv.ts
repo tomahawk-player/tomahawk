@@ -3610,42 +3610,42 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>Tomahawk::Track</name>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="533"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="534"/>
         <source> and </source>
         <translation>och</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="541"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="542"/>
         <source>You</source>
         <translation>Du</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="543"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="544"/>
         <source>you</source>
         <translation>du</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="556"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="557"/>
         <source>and</source>
         <translation>och</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="556"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="557"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n annan</numerusform><numerusform>%n andra</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="559"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="560"/>
         <source>%n people</source>
         <translation><numerusform>%n person</numerusform><numerusform>%n personer</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="563"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="564"/>
         <source>loved this track</source>
         <translation>älskade detta spåret</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="565"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="566"/>
         <source>sent you this track %1</source>
         <translation>skickade spåret &apos;%1&apos; till dig</translation>
     </message>

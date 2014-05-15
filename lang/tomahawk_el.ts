@@ -3611,42 +3611,42 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Track</name>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="533"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="534"/>
         <source> and </source>
         <translation>και</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="541"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="542"/>
         <source>You</source>
         <translation>Εσυ</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="543"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="544"/>
         <source>you</source>
         <translation>εσυ</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="556"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="557"/>
         <source>and</source>
         <translation>και</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="556"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="557"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n άλλοι</numerusform><numerusform>%n άλλοι</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="559"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="560"/>
         <source>%n people</source>
         <translation><numerusform>%n άτομα</numerusform><numerusform>%n άτομα</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="563"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="564"/>
         <source>loved this track</source>
         <translation>Αγαπημένο τραγούδι</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="565"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="566"/>
         <source>sent you this track %1</source>
         <translation>αυτο το τραγουδι σταλθηκε %1</translation>
     </message>

@@ -3613,42 +3613,42 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Track</name>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="533"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="534"/>
         <source> and </source>
         <translation>și</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="541"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="542"/>
         <source>You</source>
         <translation>Tu</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="543"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="544"/>
         <source>you</source>
         <translation>tu</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="556"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="557"/>
         <source>and</source>
         <translation>și</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="556"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="557"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n altă</numerusform><numerusform>%n alte</numerusform><numerusform>%n alte</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="559"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="560"/>
         <source>%n people</source>
         <translation><numerusform>%n persoană</numerusform><numerusform>%n persoane</numerusform><numerusform>%n de persoane</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="563"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="564"/>
         <source>loved this track</source>
         <translation>îndrăgești această piesă</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="565"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="566"/>
         <source>sent you this track %1</source>
         <translation>ți-au trimis această piesă %1</translation>
     </message>
