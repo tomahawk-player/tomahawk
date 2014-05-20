@@ -114,9 +114,13 @@ void
 HistoryWidget::onDateClicked( const QDate& date )
 {
     QDateEdit* cw = qobject_cast< QDateEdit* >( sender() );
-    if ( cw == m_calendarFrom )
+    if ( cw == m_calendarFrom && date > m_calendarTo->date())
     {
         m_calendarTo->setDate( date );
+    }
+    if ( cw == m_calendarTo && date < m_calendarFrom->date())
+    {
+        m_calendarFrom->setDate( date );
     }
 
     m_model->setLimit( 0 );
