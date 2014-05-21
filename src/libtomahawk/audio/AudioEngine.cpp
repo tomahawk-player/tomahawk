@@ -646,7 +646,6 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 void
 AudioEngine::performLoadIODevice( const result_ptr& result, const QString& url )
 {
-    Q_D( AudioEngine );
     tDebug( LOGEXTRA ) << Q_FUNC_INFO << ( result.isNull() ? QString() : url );
 
     if ( !TomahawkUtils::isLocalResult( url ) && !TomahawkUtils::isHttpResult( url )
