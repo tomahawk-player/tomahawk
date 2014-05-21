@@ -610,7 +610,7 @@ Source::onPlaybackFinished( const Tomahawk::track_ptr& track, const Tomahawk::Pl
 {
     Q_D( Source );
 
-    tDebug() << Q_FUNC_INFO << track->toString();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << track->toString();
     emit playbackFinished( track, log );
 
     d->currentTrack.clear();

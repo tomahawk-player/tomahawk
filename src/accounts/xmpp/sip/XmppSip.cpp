@@ -521,7 +521,7 @@ XmppSipPlugin::publishTune( const QUrl& url, const InfoSystem::InfoStringHash& t
     tune->setSource( "Tomahawk" );
 
     tune->setUri( url );
-    tDebug() << Q_FUNC_INFO << "Setting URI of" << tune->uri().toString();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Setting URI of" << tune->uri().toString();
 
     m_pubSubManager->publishItems( QList<Jreen::Payload::Ptr>() << tune, Jreen::JID() );
 }
@@ -694,7 +694,7 @@ XmppSipPlugin::onNewMessage( const Jreen::Message& message )
         return;
     }
 
-    qDebug() << Q_FUNC_INFO << "From:" << message.from().full() << ":" << message.body();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "From:" << message.from().full() << ":" << message.body();
 }
 
 
@@ -864,7 +864,7 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
 
         if ( discoInfo->features().contains( TOMAHAWK_FEATURE ) )
         {
-            qDebug() << Q_FUNC_INFO << jid.full() << "Running tomahawk/feature enabled: yes";
+            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << jid.full() << "Running tomahawk/feature enabled: yes";
 
             // the actual presence doesn't matter, it just needs to be "online"
             handlePeerStatus( jid, Jreen::Presence::Available );
@@ -877,7 +877,7 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
         {
             QMutexLocker locker( &peerQueueMutex );
             QString versionString = QString( "%1 %2 %3" ).arg( softwareVersion->name(), softwareVersion->os(), softwareVersion->version() );
-            qDebug() << Q_FUNC_INFO << "Received software version for" << iq.from().full() << ":" << versionString;
+            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Received software version for" << iq.from().full() << ":" << versionString;
             Tomahawk::peerinfo_ptr peerInfo =  PeerInfo::get( this, iq.from().full() );
             if ( !peerInfo.isNull() )
             {
@@ -896,15 +896,15 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
     }
     else if ( context == RequestedDisco )
     {
-        qDebug() << "Sent IQ(Set), what should be happening here?";
+        tDebug( LOGVERBOSE ) << "Sent IQ(Set), what should be happening here?";
     }
     else if ( context == SipMessageSent )
     {
-        qDebug() << "Sent SipMessage... what now?!";
+        tDebug( LOGVERBOSE ) << "Sent SipMessage... what now?!";
     }
     /*else if ( context == RequestedVCard )
     {
-        qDebug() << "Requested VCard... what now?!";
+        tDebug( LOGVERBOSE ) << "Requested VCard... what now?!";
     }*/
     else
     {
@@ -976,7 +976,7 @@ XmppSipPlugin::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type pr
     if ( !presenceMeansOnline( presenceType ) &&
        ( !m_peers.contains( jid ) || presenceMeansOnline( m_peers.value( jid ) ) ) )
     {
-        qDebug() << Q_FUNC_INFO << "* Peer goes offline:" << fulljid;
+        tDebug() << Q_FUNC_INFO << "Peer goes offline:" << fulljid;
 
         m_peers[ jid ] = presenceType;
 
@@ -1007,7 +1007,7 @@ XmppSipPlugin::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type pr
     if ( presenceMeansOnline( presenceType ) &&
        ( !m_peers.contains( jid ) || !presenceMeansOnline( m_peers.value( jid ) ) ) )
     {
-        qDebug() << Q_FUNC_INFO << "* Peer goes online:" << fulljid;
+        tDebug() << Q_FUNC_INFO << "Peer goes online:" << fulljid;
 
         QMutexLocker locker( &peerQueueMutex );
         m_peers[ jid ] = presenceType;
@@ -1032,7 +1032,6 @@ XmppSipPlugin::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type pr
         return;
     }
 
-    //qDebug() << "Updating presence data for" << fulljid;
     m_peers[ jid ] = presenceType;
 }
 
