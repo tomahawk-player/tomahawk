@@ -246,7 +246,7 @@ XSPFLoader::gotBody()
         m_title = m_overrideTitle;
 
     bool shownError = false;
-    for ( unsigned int i = 0; i < tracklist.length(); i++ )
+    for ( int i = 0; i < tracklist.length(); i++ )
     {
         QDomNode e = tracklist.at( i );
 
