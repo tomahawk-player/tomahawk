@@ -29,23 +29,18 @@
 #include "database/DatabaseCommand_AddSource.h"
 #include "database/DatabaseCommand_CollectionStats.h"
 #include "database/DatabaseCommand_LoadAllSources.h"
+#include "database/DatabaseCommand_SocialAction.h"
 #include "database/DatabaseCommand_SourceOffline.h"
 #include "database/DatabaseCommand_UpdateSearchIndex.h"
 #include "database/DatabaseImpl.h"
 #include "database/Database.h"
+#include "utils/Logger.h"
+#include "sip/PeerInfo.h"
+#include "utils/TomahawkCache.h"
+#include "utils/TomahawkUtilsGui.h"
 
 #include <QCoreApplication>
 #include <QtAlgorithms>
-
-#include "utils/TomahawkCache.h"
-#include "database/DatabaseCommand_SocialAction.h"
-
-#ifndef ENABLE_HEADLESS
-    #include "utils/TomahawkUtilsGui.h"
-#endif
-
-#include "utils/Logger.h"
-#include "sip/PeerInfo.h"
 
 using namespace Tomahawk;
 
@@ -281,7 +276,6 @@ Source::friendlyNamesLessThan( const QString& first, const QString& second )
 }
 
 
-#ifndef ENABLE_HEADLESS
 QPixmap
 Source::avatar( TomahawkUtils::ImageMode style, const QSize& size )
 {
@@ -320,7 +314,6 @@ Source::avatar( TomahawkUtils::ImageMode style, const QSize& size )
 
     return QPixmap();
 }
-#endif
 
 
 void
