@@ -1,4 +1,5 @@
 ADD_SUBDIRECTORY( qxt )
+ADD_SUBDIRECTORY( kdsingleapplicationguard )
 IF( WITH_CRASHREPORTER )
     ADD_SUBDIRECTORY( libcrashreporter-qt )
 ENDIF()

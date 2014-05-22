@@ -28,7 +28,7 @@
 #include "Typedefs.h"
 #include "libtomahawk-playdarapi/PlaydarApi.h"
 #include "utils/TomahawkUtils.h"
-#include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
+#include "kdsingleapplicationguard.h"
 
 #include "HeadlessCheck.h"
 #include "config.h"

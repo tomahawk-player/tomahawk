@@ -97,6 +97,7 @@ INCLUDE_DIRECTORIES(
     mac
 
     ${THIRDPARTY_DIR}/libcrashreporter-qt/src/
+    ${THIRDPARTY_DIR}/kdsingleapplicationguard/
 
     ${TAGLIB_INCLUDES}
     ${LIBATTICA_INCLUDE_DIR}
@@ -178,6 +179,7 @@ IF( WITH_CRASHREPORTER )
 ENDIF()
 
 TARGET_LINK_LIBRARIES( tomahawk_bin
+    kdsingleapplicationguard
     ${LINK_LIBRARIES}
     ${TOMAHAWK_WIDGETS_LIBRARIES}
     ${TOMAHAWK_PLAYDARAPI_LIBRARIES}

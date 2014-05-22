@@ -370,11 +370,6 @@ list(APPEND libSources
     utils/WeakObjectHash.cpp
     utils/WeakObjectList.cpp
     utils/PluginLoader.cpp
-
-    thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.cpp
-    thirdparty/kdsingleapplicationguard/kdsharedmemorylocker.cpp
-    thirdparty/kdsingleapplicationguard/kdtoolsglobal.cpp
-    thirdparty/kdsingleapplicationguard/kdlockedsharedmemorypointer.cpp
 )
 
 add_subdirectory( accounts/configstorage )

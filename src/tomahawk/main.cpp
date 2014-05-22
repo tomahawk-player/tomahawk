@@ -19,7 +19,7 @@
 
 #include "TomahawkApp.h"
 
-#include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
+#include "kdsingleapplicationguard.h"
 #include "UbuntuUnityHack.h"
 #include "TomahawkSettings.h"
 #include "utils/TomahawkUtils.h"

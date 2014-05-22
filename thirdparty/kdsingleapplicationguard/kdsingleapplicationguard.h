@@ -1,22 +1,21 @@
 #ifndef __KDTOOLSCORE_KDSINGLEAPPLICATIONGUARD_H__
 #define __KDTOOLSCORE_KDSINGLEAPPLICATIONGUARD_H__
 
-#include <QtCore/QObject>
+#include <QObject>
 
 #ifndef QT_NO_SHAREDMEMORY
 
-#include <QtCore/QStringList>
-#include <QtCore/QMetaType>
+#include <QStringList>
+#include <QMetaType>
 
 #include "pimpl_ptr.h"
-#include "DllMacro.h"
 
 #include <algorithm>
 
 template <typename T> class QVector;
 class QCoreApplication;
 
-class DLLEXPORT KDSingleApplicationGuard : public QObject
+class KDSingleApplicationGuard : public QObject
 {
     Q_OBJECT
     Q_ENUMS( Policy )
@@ -78,7 +77,7 @@ private:
     kdtools::pimpl_ptr< Private > d;
 };
 
-class DLLEXPORT KDSingleApplicationGuard::Instance {
+class KDSingleApplicationGuard::Instance {
     friend class ::KDSingleApplicationGuard;
     friend class ::KDSingleApplicationGuard::Private;
     Instance( const QStringList &, bool, qint64 );
