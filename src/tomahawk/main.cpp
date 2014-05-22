@@ -28,21 +28,19 @@
 
 #include "qca.h"
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     #include "TomahawkApp_Mac.h"
     #include </System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/Headers/AppleEvents.h>
     static pascal OSErr appleEventHandler( const AppleEvent*, AppleEvent*, long );
 #endif
 
-#ifndef ENABLE_HEADLESS
-    #include "TomahawkSettingsGui.h"
-    #ifdef WITH_CRASHREPORTER
-        #include "libcrashreporter-handler/Handler.h"
-    #endif
+#include "TomahawkSettingsGui.h"
+#ifdef WITH_CRASHREPORTER
+    #include "libcrashreporter-handler/Handler.h"
+#endif
 
-    #ifdef Q_WS_X11 // This is probably a very bad idea with Qt5 anyway... because (if at all) X lives in a QPA plugin
-        #include <X11/Xlib.h>
-    #endif
+#if QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
+    #include <X11/Xlib.h>
 #endif
 
 
@@ -133,7 +131,7 @@ main( int argc, char *argv[] )
     QCA::Initializer init;
     Q_UNUSED( init )
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     // Do Mac specific startup to get media keys working.
     // This must go before QApplication initialisation.
     Tomahawk::macMain();
@@ -145,11 +143,13 @@ main( int argc, char *argv[] )
     // used for url handler
     AEEventHandlerUPP h = AEEventHandlerUPP( appleEventHandler );
     AEInstallEventHandler( 'GURL', 'GURL', h, 0, false );
-    #endif // Q_WS_MAC
+    #endif // Q_OS_MAC
 #endif //Q_OS_WIN
 
-    #ifdef Q_WS_X11
+    #if QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
         XInitThreads();
+    #else
+        QCoreApplication::setAttribute( Qt::AA_X11InitThreads );
     #endif
 
     TomahawkApp a( argc, argv );
@@ -164,10 +164,8 @@ main( int argc, char *argv[] )
     new TomahawkSettingsGui( &a );
 #endif
 
-#ifndef ENABLE_HEADLESS
 #ifdef WITH_CRASHREPORTER
     new CrashReporter::Handler( QDir::tempPath(), TomahawkSettings::instance()->crashReporterEnabled() && !TomahawkUtils::headless(), "tomahawk_crash_reporter" );
-#endif
 #endif
 
     KDSingleApplicationGuard guard( KDSingleApplicationGuard::AutoKillOtherInstances );
@@ -195,7 +193,7 @@ main( int argc, char *argv[] )
 }
 
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 static pascal OSErr
 appleEventHandler( const AppleEvent* e, AppleEvent*, long )
 {
