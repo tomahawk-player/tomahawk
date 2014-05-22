@@ -464,13 +464,10 @@ Result::setFileId( unsigned int id )
 }
 
 
-Tomahawk::Resolver*
+QPointer<Tomahawk::Resolver>
 Result::resolvedBy() const
 {
-    if ( m_resolvedBy.isNull() )
-        return 0;
-
-    return m_resolvedBy.data();
+    return m_resolvedBy;
 }
 
 

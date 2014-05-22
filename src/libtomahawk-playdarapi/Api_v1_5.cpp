@@ -97,7 +97,7 @@ Api_v1_5::playback( QxtWebRequestEvent* event, const QString& command )
             QVariantMap trackInfo;
             trackInfo.insert( "playing", true );
             trackInfo.insert( "bitrate", currentTrack->bitrate() );
-            if ( currentTrack->resolvedBy() != NULL ) {
+            if ( !currentTrack->resolvedBy().isNull() ) {
                 QString resolverName = currentTrack->resolvedBy()->name();
                 trackInfo.insert( "resolvedBy", resolverName );
             } else {

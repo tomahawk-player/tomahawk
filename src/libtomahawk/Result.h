@@ -62,7 +62,7 @@ public:
     QString toString() const;
     Tomahawk::query_ptr toQuery();
 
-    Tomahawk::Resolver* resolvedBy() const;
+    QPointer<Tomahawk::Resolver> resolvedBy() const;
     void setResolvedBy( Tomahawk::Resolver* resolver );
 
     float score() const;
