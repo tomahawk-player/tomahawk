@@ -47,27 +47,12 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QImageReader>
-#include <QMessageBox>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QMetaProperty>
-#include <QCryptographicHash>
-#include <QSslError>
 #include <QWebFrame>
 
-#ifdef QCA2_FOUND
-#include <QtCrypto>
-#endif
-
-
 #include <boost/bind.hpp>
-
-// FIXME: bloody hack, remove this for 0.3
-// this one adds new functionality to old resolvers
-#define RESOLVER_LEGACY_CODE "var resolver = Tomahawk.resolver.instance ? Tomahawk.resolver.instance : TomahawkResolver;"
-// this one keeps old code invokable
-#define RESOLVER_LEGACY_CODE2 "var resolver = Tomahawk.resolver.instance ? Tomahawk.resolver.instance : window;"
-
 
 JSResolver::JSResolver( const QString& scriptPath, const QStringList& additionalScriptPaths )
     : Tomahawk::ExternalResolverGui( scriptPath )
@@ -342,7 +327,7 @@ JSResolver::artists( const Tomahawk::collection_ptr& collection )
         return;
     }
 
-    QString eval = QString( "resolver.artists( '%1' );" )
+    QString eval = QString( "Tomahawk.resolver.instance.artists( '%1' );" )
                    .arg( collection->name().replace( "\\", "\\\\" ).replace( "'", "\\'" ) );
 
     QVariantMap m = d->engine->mainFrame()->evaluateJavaScript( eval ).toMap();
@@ -378,7 +363,7 @@ JSResolver::albums( const Tomahawk::collection_ptr& collection, const Tomahawk::
         return;
     }
 
-    QString eval = QString( "resolver.albums( '%1', '%2' );" )
+    QString eval = QString( "Tomahawk.resolver.instance.albums( '%1', '%2' );" )
                    .arg( collection->name().replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
                    .arg( artist->name().replace( "\\", "\\\\" ).replace( "'", "\\'" ) );
 
@@ -415,7 +400,7 @@ JSResolver::tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::
         return;
     }
 
-    QString eval = QString( "resolver.tracks( '%1', '%2', '%3' );" )
+    QString eval = QString( "Tomahawk.resolver.instance.tracks( '%1', '%2', '%3' );" )
                    .arg( collection->name().replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
                    .arg( album->artist()->name().replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
                    .arg( album->name().replace( "\\", "\\\\" ).replace( "'", "\\'" ) );
@@ -448,7 +433,7 @@ JSResolver::canParseUrl( const QString& url, UrlType type )
 
     if ( d->capabilities.testFlag( UrlLookup ) )
     {
-        QString eval = QString( "resolver.canParseUrl( '%1', %2 );" )
+        QString eval = QString( "Tomahawk.resolver.instance.canParseUrl( '%1', %2 );" )
                        .arg( QString( url ).replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
                        .arg( (int) type );
         return d->engine->mainFrame()->evaluateJavaScript( eval ).toBool();
@@ -479,7 +464,7 @@ JSResolver::lookupUrl( const QString& url )
         return;
     }
 
-    QString eval = QString( "resolver.lookupUrl( '%1' );" )
+    QString eval = QString( "Tomahawk.resolver.instance.lookupUrl( '%1' );" )
                    .arg( QString( url ).replace( "\\", "\\\\" ).replace( "'", "\\'" ) );
 
     QVariantMap m = d->engine->mainFrame()->evaluateJavaScript( eval ).toMap();
@@ -518,7 +503,7 @@ JSResolver::resolve( const Tomahawk::query_ptr& query )
     QString eval;
     if ( !query->isFullTextQuery() )
     {
-        eval = QString( RESOLVER_LEGACY_CODE2 "resolver.resolve( '%1', '%2', '%3', '%4' );" )
+        eval = QString( "Tomahawk.resolver.instance.resolve( '%1', '%2', '%3', '%4' );" )
                   .arg( query->id().replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
                   .arg( query->queryTrack()->artist().replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
                   .arg( query->queryTrack()->album().replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
@@ -526,12 +511,7 @@ JSResolver::resolve( const Tomahawk::query_ptr& query )
     }
     else
     {
-        eval = QString( "if(Tomahawk.resolver.instance !== undefined) {"
-                        "   resolver.search( '%1', '%2' );"
-                        "} else {"
-                        "   resolve( '%1', '', '', '%2' );"
-                        "}"
-                      )
+        eval = QString( "Tomahawk.resolver.instance.search( '%1', '%2' );" )
                   .arg( query->id().replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
                   .arg( query->fullTextQuery().replace( "\\", "\\\\" ).replace( "'", "\\'" ) );
     }
@@ -681,7 +661,7 @@ JSResolver::loadUi()
 {
     Q_D( JSResolver );
 
-    QVariantMap m = d->engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE  "resolver.getConfigUi();" ).toMap();
+    QVariantMap m = d->engine->mainFrame()->evaluateJavaScript( "Tomahawk.resolver.instance.getConfigUi();" ).toMap();
     d->dataWidgets = m["fields"].toList();
 
     bool compressed = m.value( "compressed", "false" ).toBool();
@@ -732,7 +712,7 @@ JSResolver::saveConfig()
 //    qDebug() << Q_FUNC_INFO << saveData;
 
     d->resolverHelper->setResolverConfig( saveData.toMap() );
-    d->engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "resolver.saveUserConfig();" );
+    d->engine->mainFrame()->evaluateJavaScript( "Tomahawk.resolver.instance.saveUserConfig();" );
 }
 
 
@@ -828,7 +808,7 @@ JSResolver::loadCollections()
 
     if ( d->capabilities.testFlag( Browsable ) )
     {
-        QVariantMap collectionInfo = d->engine->mainFrame()->evaluateJavaScript( "resolver.collection();" ).toMap();
+        QVariantMap collectionInfo = d->engine->mainFrame()->evaluateJavaScript( "Tomahawk.resolver.instance.collection();" ).toMap();
         if ( collectionInfo.isEmpty() ||
              !collectionInfo.contains( "prettyname" ) ||
              !collectionInfo.contains( "description" ) )
@@ -926,7 +906,7 @@ JSResolver::resolverSettings()
 {
     Q_D( JSResolver );
 
-    return d->engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "if(resolver.settings) resolver.settings; else getSettings(); " ).toMap();
+    return d->engine->mainFrame()->evaluateJavaScript( "Tomahawk.resolver.instance.settings;" ).toMap();
 }
 
 
@@ -935,7 +915,7 @@ JSResolver::resolverUserConfig()
 {
     Q_D( JSResolver );
 
-    return d->engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "resolver.getUserConfig();" ).toMap();
+    return d->engine->mainFrame()->evaluateJavaScript( "Tomahawk.resolver.instance.getUserConfig();" ).toMap();
 }
 
 
@@ -944,7 +924,7 @@ JSResolver::resolverInit()
 {
     Q_D( JSResolver );
 
-    return d->engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "resolver.init();" ).toMap();
+    return d->engine->mainFrame()->evaluateJavaScript( "Tomahawk.resolver.instance.init();" ).toMap();
 }
 
 
