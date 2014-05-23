@@ -43,6 +43,7 @@
 #include <QFileInfo>
 #include <QtCrypto>
 #include <QWebFrame>
+#include <QMap>
 
 using namespace Tomahawk;
 
@@ -464,6 +465,13 @@ JSResolverHelper::addCustomUrlHandler( const QString& protocol,
 
 
 void
+JSResolverHelper::reportStreamUrl( const QString& qid, const QString& streamUrl )
+{
+    reportStreamUrl( qid, streamUrl, QVariantMap() );
+}
+
+
+void
 JSResolverHelper::addCustomUrlTranslator( const QString& protocol,
                                              const QString& callbackFuncName,
                                              const QString& isAsynchronous )
@@ -529,7 +537,7 @@ JSResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr&, const QStr
 
         QString urlStr = m_resolver->d_func()->engine->mainFrame()->evaluateJavaScript( getUrl ).toString();
 
-        returnStreamUrl( urlStr, callback );
+        returnStreamUrl( urlStr, QMap<QString, QString>(), callback );
     }
 }
 
@@ -564,19 +572,28 @@ JSResolverHelper::customUrlTranslator( const Tomahawk::result_ptr&, const QStrin
 
 void
 JSResolverHelper::reportStreamUrl( const QString& qid,
-                                         const QString& streamUrl )
+                                         const QString& streamUrl, const QVariantMap& headers )
 {
     if ( !m_streamCallbacks.contains( qid ) )
         return;
 
     boost::function< void( QSharedPointer< QIODevice >& ) > callback = m_streamCallbacks.take( qid );
 
-    returnStreamUrl( streamUrl, callback );
+    QMap<QString, QString> parsedHeaders;
+    foreach ( const QString& key,  headers.keys()) {
+        Q_ASSERT_X( headers[key].canConvert( QVariant::String ), Q_FUNC_INFO, "Expected a Map of string for additional headers" );
+        if ( headers[key].canConvert( QVariant::String ) ) {
+            parsedHeaders.insert( key, headers[key].toString() );
+        }
+    }
+
+    returnStreamUrl( streamUrl, parsedHeaders, callback );
 }
 
 
 void
-JSResolverHelper::returnStreamUrl( const QString& streamUrl, boost::function< void( QSharedPointer< QIODevice >& ) > callback )
+JSResolverHelper::returnStreamUrl( const QString& streamUrl, const QMap<QString, QString>& headers,
+                                   boost::function< void( QSharedPointer< QIODevice >& ) > callback )
 {
     QSharedPointer< QIODevice > sp;
     if ( streamUrl.isEmpty() )
@@ -587,6 +604,9 @@ JSResolverHelper::returnStreamUrl( const QString& streamUrl, boost::function< vo
 
     QUrl url = QUrl::fromEncoded( streamUrl.toUtf8() );
     QNetworkRequest req( url );
+    foreach ( const QString& key , headers.keys() ) {
+        req.setRawHeader( key.toLatin1(), headers[key].toLatin1() );
+    }
     tDebug() << "Creating a QNetowrkReply with url:" << req.url().toString();
     QNetworkReply* reply = Tomahawk::Utils::nam()->get( req );
 
