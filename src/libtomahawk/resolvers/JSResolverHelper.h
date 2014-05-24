@@ -24,6 +24,7 @@
 
 #include "DllMacro.h"
 #include "Typedefs.h"
+#include "utils/NetworkReply.h"
 
 #include <boost/function.hpp>
 
@@ -82,7 +83,7 @@ public slots:
     void reportCapabilities( const QVariant& capabilities );
 
 private slots:
-    void gotStreamUrl( boost::function< void( QSharedPointer< QIODevice >& ) > callback );
+    void gotStreamUrl( boost::function< void( QSharedPointer< QIODevice >& ) > callback, NetworkReply* reply );
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::ModelMode, const Tomahawk::collection_ptr& collection );
     void pltemplateTracksLoadedForUrl( const QString& url, const Tomahawk::playlisttemplate_ptr& pltemplate );
 
