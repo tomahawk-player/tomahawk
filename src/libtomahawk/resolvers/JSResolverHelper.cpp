@@ -611,14 +611,12 @@ JSResolverHelper::returnStreamUrl( const QString& streamUrl, const QMap<QString,
     tDebug() << "Creating a QNetowrkReply with url:" << req.url().toString();
     NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( req ) );
 
-    NewClosure( QSharedPointer<NetworkReply>( reply ) , SIGNAL( finalUrlReached() ), this, SLOT( gotStreamUrl( boost::function< void( QSharedPointer< QIODevice >& ) > ) ), callback );
+    NewClosure( QSharedPointer<NetworkReply>( reply ) , SIGNAL( finalUrlReached() ), this, SLOT( gotStreamUrl( boost::function< void( QSharedPointer< QIODevice >& ) >, NetworkReply* )), callback, reply );
 }
 
 void
-JSResolverHelper::gotStreamUrl( boost::function< void( QSharedPointer< QIODevice >& ) > callback )
+JSResolverHelper::gotStreamUrl( boost::function< void( QSharedPointer< QIODevice >& ) > callback, NetworkReply* reply )
 {
-    NetworkReply* reply = (NetworkReply*) sender();
-
     //boost::functions cannot accept temporaries as parameters
     QSharedPointer< QIODevice > sp = QSharedPointer< QIODevice >( reply->reply(), &QObject::deleteLater );
     reply->disconnectFromReply();
