@@ -50,6 +50,7 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QMetaProperty>
+#include <QTime>
 #include <QWebFrame>
 
 #include <boost/bind.hpp>
