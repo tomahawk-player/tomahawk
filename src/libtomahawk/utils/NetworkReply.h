@@ -37,6 +37,7 @@ public:
 
     void blacklistHostFromRedirection( const QString& host );
     QNetworkReply* reply() const { return m_reply; }
+    void disconnectFromReply();
 
     static const int maxRedirects = 100;
     static const int maxSameRedirects = 5;

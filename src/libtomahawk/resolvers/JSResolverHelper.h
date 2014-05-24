@@ -31,6 +31,7 @@
 #include <QVariantMap>
 
 class JSResolver;
+Q_DECLARE_METATYPE( boost::function< void( QSharedPointer< QIODevice >& ) >  )
 
 class DLLEXPORT JSResolverHelper : public QObject
 {
@@ -81,6 +82,7 @@ public slots:
     void reportCapabilities( const QVariant& capabilities );
 
 private slots:
+    void gotStreamUrl( boost::function< void( QSharedPointer< QIODevice >& ) > callback );
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::ModelMode, const Tomahawk::collection_ptr& collection );
     void pltemplateTracksLoadedForUrl( const QString& url, const Tomahawk::playlisttemplate_ptr& pltemplate );
 

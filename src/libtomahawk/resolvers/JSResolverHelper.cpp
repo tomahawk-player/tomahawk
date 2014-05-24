@@ -29,6 +29,7 @@
 #include "network/Servent.h"
 #include "utils/Closure.h"
 #include "utils/NetworkAccessManager.h"
+#include "utils/NetworkReply.h"
 #include "utils/Logger.h"
 
 #include "config.h"
@@ -595,9 +596,9 @@ void
 JSResolverHelper::returnStreamUrl( const QString& streamUrl, const QMap<QString, QString>& headers,
                                    boost::function< void( QSharedPointer< QIODevice >& ) > callback )
 {
-    QSharedPointer< QIODevice > sp;
     if ( streamUrl.isEmpty() )
     {
+        QSharedPointer< QIODevice > sp;
         callback( sp );
         return;
     }
@@ -608,10 +609,21 @@ JSResolverHelper::returnStreamUrl( const QString& streamUrl, const QMap<QString,
         req.setRawHeader( key.toLatin1(), headers[key].toLatin1() );
     }
     tDebug() << "Creating a QNetowrkReply with url:" << req.url().toString();
-    QNetworkReply* reply = Tomahawk::Utils::nam()->get( req );
+    NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( req ) );
+
+    NewClosure( QSharedPointer<NetworkReply>( reply ) , SIGNAL( finalUrlReached ), this, SLOT( gotStreamUrl() ), callback );
+}
+
+void
+JSResolverHelper::gotStreamUrl( boost::function< void( QSharedPointer< QIODevice >& ) > callback )
+{
+    NetworkReply* reply = (NetworkReply*) sender();
 
     //boost::functions cannot accept temporaries as parameters
-    sp = QSharedPointer< QIODevice >( reply, &QObject::deleteLater );
+    QSharedPointer< QIODevice > sp = QSharedPointer< QIODevice >( reply->reply(), &QObject::deleteLater );
+    reply->disconnectFromReply();
+    reply->deleteLater();
+
     callback( sp );
 }
 

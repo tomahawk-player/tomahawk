@@ -52,6 +52,14 @@ NetworkReply::blacklistHostFromRedirection( const QString& host )
 
 
 void
+NetworkReply::disconnectFromReply()
+{
+    disconnectReplySignals();
+    m_reply = NULL;
+}
+
+
+void
 NetworkReply::deletedByParent()
 {
     if ( sender() == m_reply )
