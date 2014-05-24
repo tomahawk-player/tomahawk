@@ -90,13 +90,13 @@ private:
                           boost::function< void( QSharedPointer< QIODevice >& ) > callback );
     void returnUrlTranslation( const QString& streamUrl, boost::function< void( const QString& ) > callback );
 
+    QVariantMap m_resolverConfig;
+    JSResolver* m_resolver;
     QString m_scriptPath, m_urlCallback, m_urlTranslator;
     QHash< QString, boost::function< void( QSharedPointer< QIODevice >& ) > > m_streamCallbacks;
     QHash< QString, boost::function< void( const QString& ) > > m_translatorCallbacks;
     bool m_urlCallbackIsAsync;
     bool m_urlTranslatorIsAsync;
-    QVariantMap m_resolverConfig;
-    JSResolver* m_resolver;
     QString m_pendingUrl;
     Tomahawk::album_ptr m_pendingAlbum;
 };

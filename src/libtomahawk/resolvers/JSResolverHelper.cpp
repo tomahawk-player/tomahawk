@@ -39,21 +39,21 @@
 #include "UrlHandler.h"
 
 #include <boost/bind.hpp>
+#include <QtCrypto>
 #include <QFile>
 #include <QFileInfo>
-#include <QtCrypto>
-#include <QWebFrame>
 #include <QMap>
+#include <QWebFrame>
 
 using namespace Tomahawk;
 
 JSResolverHelper::JSResolverHelper( const QString& scriptPath, JSResolver* parent )
     : QObject( parent )
+    , m_resolver( parent )
+    , m_scriptPath( scriptPath )
     , m_urlCallbackIsAsync( false )
     , m_urlTranslatorIsAsync( false )
 {
-    m_scriptPath = scriptPath;
-    m_resolver = parent;
 }
 
 
