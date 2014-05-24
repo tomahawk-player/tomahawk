@@ -611,7 +611,7 @@ JSResolverHelper::returnStreamUrl( const QString& streamUrl, const QMap<QString,
     tDebug() << "Creating a QNetowrkReply with url:" << req.url().toString();
     NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( req ) );
 
-    NewClosure( QSharedPointer<NetworkReply>( reply ) , SIGNAL( finalUrlReached ), this, SLOT( gotStreamUrl() ), callback );
+    NewClosure( QSharedPointer<NetworkReply>( reply ) , SIGNAL( finalUrlReached() ), this, SLOT( gotStreamUrl( boost::function< void( QSharedPointer< QIODevice >& ) > ) ), callback );
 }
 
 void
