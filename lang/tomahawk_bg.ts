@@ -829,10 +829,10 @@ Password (OTP)</source>
 <context>
     <name>JSResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="340"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="377"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="415"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="477"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="341"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="378"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="416"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="478"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Предупреждение на скриптът за извличане:  Заявката към %1 върна данни синхронно.</translation>
     </message>

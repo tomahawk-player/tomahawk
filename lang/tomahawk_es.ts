@@ -829,10 +829,10 @@ de un solo uso (OTP)</translation>
 <context>
     <name>JSResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="340"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="377"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="415"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="477"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="341"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="378"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="416"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="478"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Aviso del script del servicio: la llamada a la API %1 devolvió datos en sincronía.</translation>
     </message>
