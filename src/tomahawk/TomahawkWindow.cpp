@@ -108,7 +108,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     #endif
     , ui( new Ui::TomahawkWindow )
     , m_searchWidget( 0 )
-    , m_trayIcon( new TomahawkTrayIcon( this ) )
+    , m_trayIcon( 0 )
     , m_audioRetryCounter( 0 )
 {
     TomahawkStyle::loadFonts();
@@ -126,6 +126,11 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     ui->centralWidget->setContentsMargins( 0, 0, 0, 0 );
     TomahawkUtils::unmarginLayout( ui->centralWidget->layout() );
+
+    if ( QSystemTrayIcon::isSystemTrayAvailable() )
+    {
+        m_trayIcon = new TomahawkTrayIcon( this );
+    }
 
     setupMenuBar();
     setupToolBar();
@@ -712,7 +717,10 @@ TomahawkWindow::closeEvent( QCloseEvent* e )
         return;
     }
 #else
-    m_trayIcon->setShowHideWindow( false );
+    if ( m_trayIcon )
+    {
+        m_trayIcon->setShowHideWindow( false );
+    }
 #endif
 
     e->accept();
