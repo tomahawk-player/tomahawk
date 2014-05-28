@@ -452,7 +452,7 @@ PlaylistItemDelegate::drawAvatarsForBox( QPainter* painter,
 
     QHash< Tomahawk::source_ptr, QRect > rectsToSave;
 
-    unsigned int i = 0;
+    int i = 0;
     foreach ( const Tomahawk::source_ptr& s, sources )
     {
         if ( i >= count )
@@ -575,7 +575,6 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
 
         if ( !hoveredAvatar.isNull() )
         {
-            const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
             QToolTip::showText( m_view->mapToGlobal( hoveredAvatarRect.bottomLeft() ),
                                 hoveredAvatar->friendlyName(),
                                 m_view,
