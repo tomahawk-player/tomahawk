@@ -312,6 +312,11 @@ Tomahawk.asyncRequest = function (url, callback, extraHeaders, options) {
 };
 
 Tomahawk.sha256 = Tomahawk.sha256 || CryptoJS.SHA256;
+Tomahawk.md5 = Tomahawk.md5 || CryptoJS.MD5;
+// Return a HMAC (md5) signature of the input text with the desired key
+Tomahawk.hmac = function (key, message) {
+    return CryptoJS.HmacMD5(message, key);
+};
 
 // some aliases
 Tomahawk.setTimeout = Tomahawk.setTimeout || window.setTimeout;

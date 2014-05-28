@@ -42,10 +42,6 @@ public:
     JSResolverHelper( const QString& scriptPath, JSResolver* parent );
     void setResolverConfig( const QVariantMap& config );
 
-    // Return a HMAC (md5) signature of the input text with the desired key
-    Q_INVOKABLE QString hmac( const QByteArray& key, const QByteArray& input );
-    Q_INVOKABLE QString md5( const QByteArray& input );
-
     Q_INVOKABLE void addCustomUrlHandler( const QString& protocol, const QString& callbackFuncName, const QString& isAsynchronous = "false" );
     Q_INVOKABLE void reportStreamUrl( const QString& qid, const QString& streamUrl );
     Q_INVOKABLE void reportStreamUrl( const QString& qid, const QString& streamUrl, const QVariantMap& headers );

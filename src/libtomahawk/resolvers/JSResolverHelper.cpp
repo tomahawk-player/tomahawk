@@ -40,7 +40,6 @@
 #include "UrlHandler.h"
 
 #include <boost/bind.hpp>
-#include <QtCrypto>
 #include <QFile>
 #include <QFileInfo>
 #include <QMap>
@@ -415,39 +414,6 @@ JSResolverHelper::setResolverConfig( const QVariantMap& config )
     m_resolverConfig = config;
 }
 
-
-QString
-JSResolverHelper::hmac( const QByteArray& key, const QByteArray &input )
-{
-#ifdef QCA2_FOUND
-    if ( !QCA::isSupported( "hmac(md5)" ) )
-    {
-        tLog() << "HMAC(md5) not supported with qca-ossl plugin, or qca-ossl plugin is not installed! Unable to generate signature!";
-        return QByteArray();
-    }
-
-    QCA::MessageAuthenticationCode md5hmac1( "hmac(md5)", QCA::SecureArray() );
-    QCA::SymmetricKey keyObject( key );
-    md5hmac1.setup( keyObject );
-
-    md5hmac1.update( QCA::SecureArray( input ) );
-    QCA::SecureArray resultArray = md5hmac1.final();
-
-    QString result = QCA::arrayToHex( resultArray.toByteArray() );
-    return result.toUtf8();
-#else
-    tLog() << "Tomahawk compiled without QCA support, cannot generate HMAC signature";
-    return QString();
-#endif
-}
-
-
-QString
-JSResolverHelper::md5( const QByteArray& input )
-{
-    QByteArray const digest = QCryptographicHash::hash( input, QCryptographicHash::Md5 );
-    return QString::fromLatin1( digest.toHex() );
-}
 
 void
 JSResolverHelper::addCustomUrlHandler( const QString& protocol,
