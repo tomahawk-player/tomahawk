@@ -159,7 +159,7 @@ RoviPlugin::albumLookupFinished()
     foreach ( const QVariant& track, tracks )
     {
         const QVariantMap trackData = track.toMap();
-        if ( trackData.contains( "title" ) )
+        if ( trackData.contains( "title" ) && !trackData[ "title" ].toString().isEmpty() )
             trackNameList << trackData[ "title" ].toString();
     }
 
