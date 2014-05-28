@@ -115,12 +115,6 @@ Query::Query( const QString& query, const QID& qid )
 
 Query::~Query()
 {
-    Q_D( Query );
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << toString();
-
-    QMutexLocker lock( &d->mutex );
-    d->ownRef.clear();
-    d->results.clear();
 }
 
 
