@@ -60,8 +60,8 @@ private:
     QString versionString;
     QVariant data;
 
-    mutable QPixmap* avatar;
-    mutable QPixmap* fancyAvatar;
+    mutable QScopedPointer< QPixmap > avatar;
+    mutable QScopedPointer< QPixmap > fancyAvatar;
 
     mutable QByteArray avatarBuffer;
     mutable QByteArray avatarHash;

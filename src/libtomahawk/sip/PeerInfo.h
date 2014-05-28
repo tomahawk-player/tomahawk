@@ -127,7 +127,7 @@ private:
     void announce();
 
     Q_DECLARE_PRIVATE( Tomahawk::PeerInfo )
-    Tomahawk::PeerInfoPrivate* d_ptr;
+    QScopedPointer< Tomahawk::PeerInfoPrivate > d_ptr;
 
     static QHash< SipPlugin*, peerinfo_ptr > s_selfPeersBySipPlugin;
 };
