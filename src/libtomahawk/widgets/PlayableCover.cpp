@@ -159,7 +159,7 @@ PlayableCover::mouseMoveEvent( QMouseEvent* event )
     drag->setPixmap( pixmap );
     drag->setHotSpot( QPoint( -20, -20 ) );
 
-    Qt::DropAction action = drag->exec( Qt::CopyAction, Qt::CopyAction );
+    drag->exec( Qt::CopyAction, Qt::CopyAction );
 }
 
 
