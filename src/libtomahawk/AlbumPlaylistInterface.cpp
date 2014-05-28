@@ -61,9 +61,11 @@ AlbumPlaylistInterface::~AlbumPlaylistInterface()
 void
 AlbumPlaylistInterface::setCurrentIndex( qint64 index )
 {
-    PlaylistInterface::setCurrentIndex( index );
+    if ( index < m_queries.size() && !m_queries.at( index ).isNull() && m_queries.at( index )->results().size() > 0 ) {
+      PlaylistInterface::setCurrentIndex( index );
 
-    m_currentItem = m_queries.at( index )->results().first();
+      m_currentItem = m_queries.at( index )->results().first();
+    }
 }
 
 
