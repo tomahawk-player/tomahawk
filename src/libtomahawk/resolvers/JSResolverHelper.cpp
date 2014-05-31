@@ -466,20 +466,6 @@ JSResolverHelper::reportUrlTranslation( const QString& qid, const QString& strea
 }
 
 
-QByteArray
-JSResolverHelper::base64Encode( const QByteArray& input )
-{
-    return input.toBase64();
-}
-
-
-QByteArray
-JSResolverHelper::base64Decode( const QByteArray& input )
-{
-    return QByteArray::fromBase64( input );
-}
-
-
 void
 JSResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
                                                boost::function< void( QSharedPointer< QIODevice >& ) > callback )

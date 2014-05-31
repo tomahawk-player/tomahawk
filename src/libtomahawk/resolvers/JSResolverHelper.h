@@ -48,9 +48,6 @@ public:
     Q_INVOKABLE void addCustomUrlTranslator( const QString& protocol, const QString& callbackFuncName, const QString& isAsynchronous = "false" );
     Q_INVOKABLE void reportUrlTranslation( const QString& qid, const QString& streamUrl );
 
-    Q_INVOKABLE QByteArray base64Encode( const QByteArray& input );
-    Q_INVOKABLE QByteArray base64Decode( const QByteArray& input );
-
     void customIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
                                 boost::function< void( QSharedPointer< QIODevice >& ) > callback ); // async
     void customUrlTranslator( const Tomahawk::result_ptr&, const QString& url,
