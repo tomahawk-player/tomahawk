@@ -28,7 +28,7 @@
 
 #include "Album.h"
 #include "Artist.h"
-#include "FuzzyIndex.h"
+#include "fuzzyindex/DatabaseFuzzyIndex.h"
 #include "PlaylistEntry.h"
 #include "Result.h"
 #include "SourceList.h"
@@ -89,7 +89,7 @@ Tomahawk::DatabaseImpl::DatabaseImpl( const QString& dbname )
     query.exec( "UPDATE source SET isonline = 'false'" );
     query.exec( "DELETE FROM oplog WHERE source IS NULL AND singleton = 'true'" );
 
-    m_fuzzyIndex = new FuzzyIndex( this, schemaUpdated );
+    m_fuzzyIndex = new Tomahawk::DatabaseFuzzyIndex( this, schemaUpdated );
 
     tDebug( LOGVERBOSE ) << "Loaded index:" << t.elapsed();
     if ( qApp->arguments().contains( "--dumpdb" ) )

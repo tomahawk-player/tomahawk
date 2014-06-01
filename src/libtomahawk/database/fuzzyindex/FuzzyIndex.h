@@ -26,7 +26,7 @@
 #include <QMutex>
 
 #include "Query.h"
-#include "DatabaseCommand_UpdateSearchIndex.h"
+#include "database/DatabaseCommand_UpdateSearchIndex.h"
 
 namespace lucene
 {
@@ -54,12 +54,14 @@ class FuzzyIndex : public QObject
 Q_OBJECT
 
 public:
-    explicit FuzzyIndex( QObject* parent, bool wipe = false );
-    ~FuzzyIndex();
+    explicit FuzzyIndex( QObject* parent, const QString& filename, bool wipe = false );
+    virtual ~FuzzyIndex();
 
     void beginIndexing();
     void endIndexing();
     void appendFields( const Tomahawk::IndexData& data );
+
+    virtual void updateIndex() = 0;
 
 signals:
     void indexReady();
@@ -71,7 +73,7 @@ public slots:
     QMap< int, float > searchAlbum( const Tomahawk::query_ptr& query );
 
 private slots:
-    void updateIndex();
+    void updateIndexSlot();
     bool wipeIndex();
 
 private:

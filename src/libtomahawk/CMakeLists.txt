@@ -240,7 +240,8 @@ list(APPEND libSources
     collection/TracksRequest.cpp
 
     database/Database.cpp
-    database/FuzzyIndex.cpp
+    database/fuzzyindex/FuzzyIndex.cpp
+    database/fuzzyindex/DatabaseFuzzyIndex.cpp
     database/DatabaseCollection.cpp
     database/LocalCollection.cpp
     database/DatabaseWorker.cpp

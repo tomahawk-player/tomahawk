@@ -18,12 +18,9 @@
 
 #include "FuzzyIndex.h"
 
-#include "collection/Collection.h"
-#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
-#include "DatabaseImpl.h"
-#include "Database.h"
+#include "database/DatabaseImpl.h"
 #include "PlaylistEntry.h"
 #include "Source.h"
 #include "Track.h"
@@ -44,12 +41,12 @@ using namespace lucene::queryParser;
 using namespace lucene::search;
 
 
-FuzzyIndex::FuzzyIndex( QObject* parent, bool wipe )
+FuzzyIndex::FuzzyIndex( QObject* parent, const QString& filename, bool wipe )
     : QObject( parent )
     , m_luceneReader( 0 )
     , m_luceneSearcher( 0 )
 {
-    QString m_lucenePath = TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" );
+    m_lucenePath = TomahawkUtils::appDataDir().absoluteFilePath( filename );
     QByteArray path = m_lucenePath.toUtf8();
     const char* cPath = path.constData();
 
@@ -95,17 +92,16 @@ FuzzyIndex::wipeIndex()
     beginIndexing();
     endIndexing();
 
-    QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
+    QTimer::singleShot( 0, this, SLOT( updateIndexSlot() ) );
 
     return true; // FIXME
 }
 
 
 void
-FuzzyIndex::updateIndex()
+FuzzyIndex::updateIndexSlot()
 {
-    Tomahawk::DatabaseCommand* cmd = new Tomahawk::DatabaseCommand_UpdateSearchIndex();
-    Tomahawk::Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
+    updateIndex();
 }
 
 
@@ -216,7 +212,7 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
     {
         if ( !m_luceneReader )
         {
-            if ( !IndexReader::indexExists( TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" ).toStdString().c_str() ) )
+            if ( !IndexReader::indexExists( m_lucenePath.toStdString().c_str() ) )
             {
                 tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "index didn't exist.";
                 return resultsmap;
@@ -307,7 +303,7 @@ FuzzyIndex::searchAlbum( const Tomahawk::query_ptr& query )
     {
         if ( !m_luceneReader )
         {
-            if ( !IndexReader::indexExists( TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" ).toStdString().c_str() ) )
+            if ( !IndexReader::indexExists( m_lucenePath.toStdString().c_str() ) )
             {
                 tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "index didn't exist.";
                 return resultsmap;
