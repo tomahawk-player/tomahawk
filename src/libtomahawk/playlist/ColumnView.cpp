@@ -510,7 +510,12 @@ ColumnView::onUpdatePreviewWidget( const QModelIndex& index )
     m_previewWidget->setQuery( item->result()->toQuery() );
 
     QList< int > widths = columnWidths();
-    const int previewWidth = viewport()->width() - widths.at( 0 ) - widths.at( 1 ) - widths.at( 2 );
+    int previewWidth = viewport()->width() - widths.at( 0 ) - widths.at( 1 ) - widths.at( 2 );
+    // Sometimes we do not have 3 columns because of wrong usage of the ColumnView.
+    // At least do not crash.
+    for (int i = 0; i < 3 && i < widths.length(); i++ ) {
+        previewWidth -= widths.at( i );
+    }
     widths.removeLast();
     widths << qMax( previewWidth, m_previewWidget->minimumSize().width() + 32 );
     setColumnWidths( widths );
