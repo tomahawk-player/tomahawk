@@ -1225,7 +1225,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
 
 void
 Servent::remoteIODeviceFactory( const Tomahawk::result_ptr& result, const QString& url,
-                                boost::function< void ( QSharedPointer< QIODevice >& ) > callback )
+                                boost::function< void ( const QString&, QSharedPointer< QIODevice >& ) > callback )
 {
     QSharedPointer<QIODevice> sp;
 
@@ -1235,7 +1235,7 @@ Servent::remoteIODeviceFactory( const Tomahawk::result_ptr& result, const QStrin
     source_ptr s = SourceList::instance()->get( sourceName );
     if ( s.isNull() || !s->controlConnection() )
     {
-        callback( sp );
+        callback( result->url(), sp );
         return;
     }
 
@@ -1245,7 +1245,7 @@ Servent::remoteIODeviceFactory( const Tomahawk::result_ptr& result, const QStrin
 
     //boost::functions cannot accept temporaries as parameters
     sp = sc->iodevice();
-    callback( sp );
+    callback( result->url(), sp );
 }
 
 

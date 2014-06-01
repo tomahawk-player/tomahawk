@@ -73,7 +73,7 @@ protected slots:
 
 private slots:
     void startSending( const Tomahawk::result_ptr& result );
-    void reallyStartSending( const Tomahawk::result_ptr& result, QSharedPointer< QIODevice >& io ); //only called back from startSending
+    void reallyStartSending( const Tomahawk::result_ptr& result, const QString& url, QSharedPointer< QIODevice >& io ); //only called back from startSending
     void sendSome();
     void showStats( qint64 tx, qint64 rx );
 

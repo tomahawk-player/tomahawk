@@ -45,7 +45,7 @@ public slots:
     void called()
     {
         QSharedPointer< QIODevice > sp = QSharedPointer< QIODevice >( reply->reply(), &QObject::deleteLater );
-        callback( sp );
+        callback( reply->reply()->url().toString(), sp );
 
         // Call once, then self-destruct
         deleteLater();

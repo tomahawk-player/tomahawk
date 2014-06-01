@@ -557,6 +557,13 @@ isHttpResult( const QString& url )
 
 
 bool
+isHttpsResult( const QString& url )
+{
+    return url.startsWith( "https://" );
+}
+
+
+bool
 isLocalResult( const QString& url )
 {
     return url.startsWith( "file://" );

@@ -24,6 +24,7 @@
 
 #include "DllMacro.h"
 #include "Typedefs.h"
+#include "UrlHandler.h"
 #include "utils/NetworkReply.h"
 
 #include <boost/function.hpp>
@@ -45,13 +46,9 @@ public:
     Q_INVOKABLE void addCustomUrlHandler( const QString& protocol, const QString& callbackFuncName, const QString& isAsynchronous = "false" );
     Q_INVOKABLE void reportStreamUrl( const QString& qid, const QString& streamUrl );
     Q_INVOKABLE void reportStreamUrl( const QString& qid, const QString& streamUrl, const QVariantMap& headers );
-    Q_INVOKABLE void addCustomUrlTranslator( const QString& protocol, const QString& callbackFuncName, const QString& isAsynchronous = "false" );
-    Q_INVOKABLE void reportUrlTranslation( const QString& qid, const QString& streamUrl );
 
     void customIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
-                                boost::function< void( QSharedPointer< QIODevice >& ) > callback ); // async
-    void customUrlTranslator( const Tomahawk::result_ptr&, const QString& url,
-                                boost::function< void( const QString& ) > callback ); // async
+                                boost::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback ); // async
 
 public slots:
     QByteArray readRaw( const QString& fileName );
@@ -76,20 +73,19 @@ public slots:
     void reportCapabilities( const QVariant& capabilities );
 
 private slots:
-    void gotStreamUrl( boost::function< void( QSharedPointer< QIODevice >& ) > callback, NetworkReply* reply );
+    void gotStreamUrl( IODeviceCallback callback, NetworkReply* reply );
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::ModelMode, const Tomahawk::collection_ptr& collection );
     void pltemplateTracksLoadedForUrl( const QString& url, const Tomahawk::playlisttemplate_ptr& pltemplate );
 
 private:
     Tomahawk::query_ptr parseTrack( const QVariantMap& track );
     void returnStreamUrl( const QString& streamUrl, const QMap<QString, QString>& headers,
-                          boost::function< void( QSharedPointer< QIODevice >& ) > callback );
-    void returnUrlTranslation( const QString& streamUrl, boost::function< void( const QString& ) > callback );
+                          boost::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback );
 
     QVariantMap m_resolverConfig;
     JSResolver* m_resolver;
     QString m_scriptPath, m_urlCallback, m_urlTranslator;
-    QHash< QString, boost::function< void( QSharedPointer< QIODevice >& ) > > m_streamCallbacks;
+    QHash< QString, boost::function< void( const QString&, QSharedPointer< QIODevice >& ) > > m_streamCallbacks;
     QHash< QString, boost::function< void( const QString& ) > > m_translatorCallbacks;
     bool m_urlCallbackIsAsync;
     bool m_urlTranslatorIsAsync;

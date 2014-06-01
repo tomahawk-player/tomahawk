@@ -188,15 +188,17 @@ StreamConnection::startSending( const Tomahawk::result_ptr& result )
     m_result = result;
     qDebug() << "Starting to transmit" << m_result->url();
 
-    boost::function< void ( QSharedPointer< QIODevice >& ) > callback =
-            boost::bind( &StreamConnection::reallyStartSending, this, result, _1 );
+    boost::function< void ( const QString&, QSharedPointer< QIODevice >& ) > callback =
+            boost::bind( &StreamConnection::reallyStartSending, this, result, _1, _2 );
     Tomahawk::UrlHandler::getIODeviceForUrl( m_result, m_result->url(), callback );
 }
 
 
 void
-StreamConnection::reallyStartSending( const Tomahawk::result_ptr& result, QSharedPointer< QIODevice >& io )
+StreamConnection::reallyStartSending( const Tomahawk::result_ptr& result, const QString& url, QSharedPointer< QIODevice >& io )
 {
+    Q_UNUSED( url );
+
     // Note: We don't really need to pass in 'result' here, since we already have it stored
     // as a member variable. The callback-signature of getIODeviceForUrl requires it, though.
     if ( !io || io.isNull() )

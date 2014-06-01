@@ -155,8 +155,10 @@ PlayableProxyModelPlaylistInterface::siblingIndex( int itemsAway, qint64 rootInd
             {
                 if ( m_shuffleHistory.count() > 1 )
                 {
-                    if ( proxyModel->itemFromQuery( m_shuffleHistory.at( m_shuffleHistory.count() - 2 ) ) )
-                        idx = proxyModel->mapFromSource( proxyModel->itemFromQuery( m_shuffleHistory.at( m_shuffleHistory.count() - 2 ) )->index );
+                    if ( proxyModel->itemFromQuery( m_shuffleHistory.at( m_shuffleHistory.count() - 2 ) ) ) {
+                        int historyIndex = m_shuffleHistory.count() - 2;
+                        idx = proxyModel->mapFromSource( proxyModel->itemFromQuery( m_shuffleHistory.at( historyIndex ) )->index );
+                    }
                 }
                 else
                     return -1;

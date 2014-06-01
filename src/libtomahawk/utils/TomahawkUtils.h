@@ -171,6 +171,7 @@ namespace TomahawkUtils
       * Attention: This only checks for a http result, not a httpS result.
       */
     DLLEXPORT bool isHttpResult( const QString& url );
+    DLLEXPORT bool isHttpsResult( const QString& url );
     DLLEXPORT bool isLocalResult( const QString& url );
     DLLEXPORT bool isRtmpResult( const QString& url );
 
