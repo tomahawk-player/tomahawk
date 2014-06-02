@@ -368,17 +368,17 @@ połączyć się i strumieniować od ciebie?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="899"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="897"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Przepraszamy, Tomahawk nie mógł znaleźć utworu &apos;%1&apos; wykonawcy %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="923"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="921"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Przepraszamy, Tomahawk nie mógł znaleźć wykonawcy &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="949"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="947"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Przepraszamy, Tomahawk nie mógł znaleźć albumu &apos;%1&apos; wykonawcy %2</translation>
     </message>
