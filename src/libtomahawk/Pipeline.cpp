@@ -173,14 +173,14 @@ Pipeline::addExternalResolverFactory( ResolverFactoryFunc resolverFactory )
 
 
 Tomahawk::ExternalResolver*
-Pipeline::addScriptResolver( const QString& path, const QStringList& additionalScriptPaths )
+Pipeline::addScriptResolver( const QString& accountId, const QString& path, const QStringList& additionalScriptPaths )
 {
     Q_D( Pipeline );
     ExternalResolver* res = 0;
 
     foreach ( ResolverFactoryFunc factory, d->resolverFactories )
     {
-        res = factory( path, additionalScriptPaths );
+        res = factory( accountId, path, additionalScriptPaths );
         if ( !res )
             continue;
 

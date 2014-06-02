@@ -349,7 +349,7 @@ ResolverAccount::hookupResolver()
     if ( configuration().contains( "scripts" ) )
         additionalPaths = configuration().value( "scripts" ).toStringList();
 
-    Tomahawk::ExternalResolver* er = Pipeline::instance()->addScriptResolver( mainScriptPath, additionalPaths );
+    Tomahawk::ExternalResolver* er = Pipeline::instance()->addScriptResolver( accountId(), mainScriptPath, additionalPaths );
     m_resolver = QPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( er ) );
     connect( m_resolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
 

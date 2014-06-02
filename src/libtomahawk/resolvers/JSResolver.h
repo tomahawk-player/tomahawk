@@ -38,9 +38,9 @@ Q_OBJECT
 friend class ::JSResolverHelper;
 
 public:
-    explicit JSResolver( const QString& scriptPath, const QStringList& additionalScriptPaths = QStringList() );
+    explicit JSResolver( const QString& accountId, const QString& scriptPath, const QStringList& additionalScriptPaths = QStringList() );
     virtual ~JSResolver();
-    static ExternalResolver* factory( const QString& scriptPath, const QStringList& additionalScriptPaths = QStringList() );
+    static ExternalResolver* factory( const QString& accountId, const QString& scriptPath, const QStringList& additionalScriptPaths = QStringList() );
 
     virtual Capabilities capabilities() const;
 

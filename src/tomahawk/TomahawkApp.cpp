@@ -234,8 +234,8 @@ TomahawkApp::init()
     m_scanManager = QPointer<ScanManager>( new ScanManager( this ) );
 
 #ifndef ENABLE_HEADLESS
-    Pipeline::instance()->addExternalResolverFactory( boost::bind( &JSResolver::factory, _1, _2 ) );
-    Pipeline::instance()->addExternalResolverFactory( boost::bind( &ScriptResolver::factory, _1, _2 ) );
+    Pipeline::instance()->addExternalResolverFactory( boost::bind( &JSResolver::factory, _1, _2, _3 ) );
+    Pipeline::instance()->addExternalResolverFactory( boost::bind( &ScriptResolver::factory, _1, _2, _3 ) );
 
     new ActionCollection( this );
     connect( ActionCollection::instance()->getAction( "quit" ), SIGNAL( triggered() ), SLOT( quit() ), Qt::UniqueConnection );

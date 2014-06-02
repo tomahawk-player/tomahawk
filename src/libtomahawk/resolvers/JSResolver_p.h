@@ -30,8 +30,9 @@ class JSResolverPrivate
 {
     friend class ::JSResolverHelper;
 public:
-    JSResolverPrivate( JSResolver* q, const QString& scriptPath, const QStringList& additionalScriptPaths )
+    JSResolverPrivate( JSResolver* q, const QString& pAccountId, const QString& scriptPath, const QStringList& additionalScriptPaths )
         : q_ptr ( q )
+        , accountId( pAccountId )
         , ready( false )
         , stopped( true )
         , error( Tomahawk::ExternalResolver::NoError )
@@ -45,6 +46,7 @@ public:
 private:
     ScriptEngine* engine;
 
+    QString accountId;
     QString name;
     QPixmap icon;
     unsigned int weight, timeout;

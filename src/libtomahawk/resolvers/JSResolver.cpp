@@ -55,9 +55,9 @@
 
 #include <boost/bind.hpp>
 
-JSResolver::JSResolver( const QString& scriptPath, const QStringList& additionalScriptPaths )
+JSResolver::JSResolver( const QString& accountId, const QString& scriptPath, const QStringList& additionalScriptPaths )
     : Tomahawk::ExternalResolverGui( scriptPath )
-    , d_ptr( new JSResolverPrivate( this, scriptPath, additionalScriptPaths ) )
+    , d_ptr( new JSResolverPrivate( this, accountId, scriptPath, additionalScriptPaths ) )
 {
     Q_D( JSResolver );
     tLog() << Q_FUNC_INFO << "Loading JS resolver:" << scriptPath;
@@ -91,14 +91,14 @@ JSResolver::~JSResolver()
 }
 
 
-Tomahawk::ExternalResolver* JSResolver::factory( const QString& scriptPath, const QStringList& additionalScriptPaths )
+Tomahawk::ExternalResolver* JSResolver::factory( const QString& accountId, const QString& scriptPath, const QStringList& additionalScriptPaths )
 {
     ExternalResolver* res = 0;
 
     const QFileInfo fi( scriptPath );
     if ( fi.suffix() == "js" || fi.suffix() == "script" )
     {
-        res = new JSResolver( scriptPath, additionalScriptPaths );
+        res = new JSResolver( accountId, scriptPath, additionalScriptPaths );
         tLog() << Q_FUNC_INFO << scriptPath << "Loaded.";
     }
 
