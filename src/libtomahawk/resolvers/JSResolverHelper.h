@@ -47,6 +47,17 @@ public:
     Q_INVOKABLE void reportStreamUrl( const QString& qid, const QString& streamUrl );
     Q_INVOKABLE void reportStreamUrl( const QString& qid, const QString& streamUrl, const QVariantMap& headers );
 
+    /**
+     * Clucene indices for JS resolvers
+     **/
+
+    Q_INVOKABLE bool hasFuzzyIndex();
+    Q_INVOKABLE void createFuzzyIndex( const QVariantList& list );
+    Q_INVOKABLE void addToFuzzyIndex( const QVariantList& list );
+    Q_INVOKABLE QMap<int, float> searchFuzzyIndex( const QString& query );
+    Q_INVOKABLE QMap<int, float> resolveFromFuzzyIndex( const QString& artist, const QString& album, const QString& tracks );
+    Q_INVOKABLE void deleteFuzzyIndex();
+
     void customIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
                                 boost::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback ); // async
 

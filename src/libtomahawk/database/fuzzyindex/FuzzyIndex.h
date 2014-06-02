@@ -61,6 +61,13 @@ public:
     void endIndexing();
     void appendFields( const Tomahawk::IndexData& data );
 
+    /**
+     * Delete the index from the harddrive.
+     *
+     * You should no longer use this FuzzyIndex object after this call.
+     */
+    void deleteIndex();
+
     virtual void updateIndex() = 0;
 
 signals:

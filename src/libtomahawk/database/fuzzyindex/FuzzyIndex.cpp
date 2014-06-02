@@ -196,6 +196,25 @@ FuzzyIndex::appendFields( const Tomahawk::IndexData& data )
 
 
 void
+FuzzyIndex::deleteIndex()
+{
+    if ( m_luceneReader != 0 )
+    {
+        tDebug( LOGVERBOSE ) << "Deleting old lucene stuff.";
+
+        m_luceneSearcher->close();
+        m_luceneReader->close();
+        delete m_luceneSearcher;
+        delete m_luceneReader;
+        m_luceneSearcher = 0;
+        m_luceneReader = 0;
+    }
+
+    TomahawkUtils::removeDirectory( m_lucenePath );
+}
+
+
+void
 FuzzyIndex::loadLuceneIndex()
 {
     emit indexReady();

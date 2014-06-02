@@ -487,6 +487,59 @@ JSResolverHelper::reportStreamUrl( const QString& qid,
 }
 
 
+bool
+JSResolverHelper::hasFuzzyIndex()
+{
+    return !m_resolver->d_func()->fuzzyIndex.isNull();
+}
+
+
+void
+JSResolverHelper::createFuzzyIndex( const QVariantList& list )
+{
+    // TODO
+}
+
+
+void
+JSResolverHelper::addToFuzzyIndex( const QVariantList& list )
+{
+    // TODO
+}
+
+
+QMap<int, float>
+JSResolverHelper::searchFuzzyIndex( const QString& query )
+{
+    if ( m_resolver->d_func()->fuzzyIndex )
+    {
+        return m_resolver->d_func()->fuzzyIndex->search( Query::get( query, QString() ) );
+    }
+    return QMap<int, float>();
+}
+
+
+QMap<int, float>
+JSResolverHelper::resolveFromFuzzyIndex( const QString& artist, const QString& album, const QString& track )
+{
+    if ( m_resolver->d_func()->fuzzyIndex )
+    {
+        // Important: Do not autoresolve!
+        query_ptr query = Query::get( artist, album, track, QString(), false );
+        return m_resolver->d_func()->fuzzyIndex->search( query );
+    }
+    return QMap<int, float>();
+}
+
+
+void
+JSResolverHelper::deleteFuzzyIndex()
+{
+    m_resolver->d_func()->fuzzyIndex->deleteIndex();
+    m_resolver->d_func()->fuzzyIndex->deleteLater();
+}
+
+
 void
 JSResolverHelper::returnStreamUrl( const QString& streamUrl, const QMap<QString, QString>& headers,
                                    boost::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback )

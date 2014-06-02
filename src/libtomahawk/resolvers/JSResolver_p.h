@@ -25,6 +25,7 @@
 #include "JSResolver.h"
 
 #include "JSResolverHelper.h"
+#include "database/fuzzyindex/FuzzyIndex.h"
 
 class JSResolverPrivate
 {
@@ -57,6 +58,7 @@ private:
     Tomahawk::ExternalResolver::ErrorState error;
 
     JSResolverHelper* resolverHelper;
+    QScopedPointer<FuzzyIndex> fuzzyIndex;
     QPointer< AccountConfigWidget > configWidget;
     QList< QVariant > dataWidgets;
     QStringList requiredScriptPaths;
