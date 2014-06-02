@@ -233,13 +233,11 @@ TomahawkApp::init()
 
     m_scanManager = QPointer<ScanManager>( new ScanManager( this ) );
 
-#ifndef ENABLE_HEADLESS
     Pipeline::instance()->addExternalResolverFactory( boost::bind( &JSResolver::factory, _1, _2, _3 ) );
     Pipeline::instance()->addExternalResolverFactory( boost::bind( &ScriptResolver::factory, _1, _2, _3 ) );
 
     new ActionCollection( this );
     connect( ActionCollection::instance()->getAction( "quit" ), SIGNAL( triggered() ), SLOT( quit() ), Qt::UniqueConnection );
-#endif
 
     QByteArray magic = QByteArray::fromBase64( enApiSecret );
     QByteArray wand = QByteArray::fromBase64( QCoreApplication::applicationName().toLatin1() );
@@ -247,10 +245,8 @@ TomahawkApp::init()
     for ( int i=0; i<length; i++ ) magic[i] = magic[i] ^ wand[i%n2];
     Echonest::Config::instance()->setAPIKey( magic );
 
-#ifndef ENABLE_HEADLESS
     tDebug() << "Init Echonest Factory.";
     GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
-#endif
     tDebug() << "Init Database Factory.";
     GeneratorFactory::registerFactory( "database", new DatabaseFactory );
 
