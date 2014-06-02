@@ -52,7 +52,6 @@ JSResolverHelper::JSResolverHelper( const QString& scriptPath, JSResolver* paren
     , m_resolver( parent )
     , m_scriptPath( scriptPath )
     , m_urlCallbackIsAsync( false )
-    , m_urlTranslatorIsAsync( false )
 {
 }
 

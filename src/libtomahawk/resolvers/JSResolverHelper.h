@@ -88,7 +88,6 @@ private:
     QHash< QString, boost::function< void( const QString&, QSharedPointer< QIODevice >& ) > > m_streamCallbacks;
     QHash< QString, boost::function< void( const QString& ) > > m_translatorCallbacks;
     bool m_urlCallbackIsAsync;
-    bool m_urlTranslatorIsAsync;
     QString m_pendingUrl;
     Tomahawk::album_ptr m_pendingAlbum;
 };
