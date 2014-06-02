@@ -251,7 +251,7 @@ TomahawkApp::init()
     GeneratorFactory::registerFactory( "database", new DatabaseFactory );
 
     // Register shortcut handler for this platform
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     m_shortcutHandler = QPointer<Tomahawk::ShortcutHandler>( new MacShortcutHandler( this ) );
     Tomahawk::setShortcutHandler( static_cast<MacShortcutHandler*>( m_shortcutHandler.data() ) );
 
