@@ -25,12 +25,14 @@
 #include "DllMacro.h"
 #include "Typedefs.h"
 #include "UrlHandler.h"
+#include "database/fuzzyindex/FuzzyIndex.h"
 #include "utils/NetworkReply.h"
 
 #include <boost/function.hpp>
 
 #include <QObject>
 #include <QVariantMap>
+
 
 class JSResolver;
 Q_DECLARE_METATYPE( boost::function< void( QSharedPointer< QIODevice >& ) >  )
@@ -54,8 +56,8 @@ public:
     Q_INVOKABLE bool hasFuzzyIndex();
     Q_INVOKABLE void createFuzzyIndex( const QVariantList& list );
     Q_INVOKABLE void addToFuzzyIndex( const QVariantList& list );
-    Q_INVOKABLE QMap<int, float> searchFuzzyIndex( const QString& query );
-    Q_INVOKABLE QMap<int, float> resolveFromFuzzyIndex( const QString& artist, const QString& album, const QString& tracks );
+    Q_INVOKABLE QVariantList searchFuzzyIndex( const QString& query );
+    Q_INVOKABLE QVariantList resolveFromFuzzyIndex( const QString& artist, const QString& album, const QString& tracks );
     Q_INVOKABLE void deleteFuzzyIndex();
 
     void customIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
@@ -92,6 +94,9 @@ private:
     Tomahawk::query_ptr parseTrack( const QVariantMap& track );
     void returnStreamUrl( const QString& streamUrl, const QMap<QString, QString>& headers,
                           boost::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback );
+
+    bool indexDataFromVariant( const QVariantMap& map, struct Tomahawk::IndexData& indexData );
+    QVariantList searchInFuzzyIndex( const Tomahawk::query_ptr& query );
 
     QVariantMap m_resolverConfig;
     JSResolver* m_resolver;

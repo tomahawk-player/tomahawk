@@ -188,6 +188,13 @@ JSResolver::init()
 {
     Q_D( JSResolver );
 
+    QString lucenePath = d->accountId + ".lucene";
+    QDir luceneDir( TomahawkUtils::appDataDir().absoluteFilePath( lucenePath ) );
+    if ( luceneDir.exists() )
+    {
+        d->fuzzyIndex.reset( new FuzzyIndex( this, lucenePath, false ) );
+    }
+
     QFile scriptFile( filePath() );
     if( !scriptFile.open( QIODevice::ReadOnly ) )
     {

@@ -494,49 +494,158 @@ JSResolverHelper::hasFuzzyIndex()
 }
 
 
+bool
+JSResolverHelper::indexDataFromVariant( const QVariantMap &map, struct Tomahawk::IndexData& indexData )
+{
+    // We do not use artistId at the moment
+    indexData.artistId = 0;
+
+    if ( map.contains( "album" ) )
+    {
+        indexData.album = map["album"].toString();
+    }
+    else
+    {
+        indexData.album = QString();
+    }
+
+    // Check that we have the three required attributes
+    if ( !map.contains( "id" ) || !map["id"].canConvert( QVariant::Int )
+         || !map.contains( "track" ) || !map.contains( "artist" ) )
+    {
+        return false;
+    }
+
+    bool ok;
+    indexData.id = map["id"].toInt( &ok );
+    if ( !ok )
+    {
+        return false;
+    }
+
+    indexData.artist = map["artist"].toString().trimmed();
+    if ( indexData.artist.isEmpty() )
+    {
+        return false;
+    }
+
+    indexData.track = map["track"].toString().trimmed();
+    if ( indexData.track.isEmpty() )
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
 void
 JSResolverHelper::createFuzzyIndex( const QVariantList& list )
 {
-    // TODO
+    if ( m_resolver->d_func()->fuzzyIndex.isNull() )
+    {
+        m_resolver->d_func()->fuzzyIndex.reset( new FuzzyIndex( m_resolver, m_resolver->d_func()->accountId + ".lucene" , true ) );
+    }
+    else
+    {
+        m_resolver->d_func()->fuzzyIndex->wipeIndex();
+    }
+
+    addToFuzzyIndex( list );
 }
 
 
 void
 JSResolverHelper::addToFuzzyIndex( const QVariantList& list )
 {
-    // TODO
+    if ( m_resolver->d_func()->fuzzyIndex.isNull() )
+    {
+        tLog() << Q_FUNC_INFO << "Cannot add entries to non-existing index.";
+        return;
+    }
+
+    m_resolver->d_func()->fuzzyIndex->beginIndexing();
+
+    foreach ( const QVariant& variant, list )
+    {
+        // Convert each entry to IndexData
+        if ( variant.canConvert( QVariant::Map ) ) {
+            QVariantMap map = variant.toMap();
+
+            // Convert each entry and do multiple checks that we have valid data.
+            struct IndexData indexData;
+
+            if ( indexDataFromVariant( map, indexData ) )
+            {
+                m_resolver->d_func()->fuzzyIndex->appendFields( indexData );
+            }
+        }
+    }
+
+    m_resolver->d_func()->fuzzyIndex->endIndexing();
 }
 
 
-QMap<int, float>
+bool
+cmpTuple ( QVariant x, QVariant y )
+{
+    return x.toList().at( 1 ).toFloat() < y.toList().at( 1 ).toFloat();
+}
+
+
+QVariantList
+JSResolverHelper::searchInFuzzyIndex( const query_ptr& query )
+{
+    if ( m_resolver->d_func()->fuzzyIndex )
+    {
+        QMap<int, float> map = m_resolver->d_func()->fuzzyIndex->search( query );
+
+        // Convert map to sorted QVariantList
+        QVariantList list;
+        foreach ( int id, map.keys() ) {
+            QVariantList innerList;
+            innerList.append( QVariant( id ) );
+            innerList.append( QVariant( map[id] ) );
+            // Wrap into QVariant or the list will be flattend
+            list.append( QVariant( innerList  ));
+        }
+        std::sort( list.begin(), list.end(), cmpTuple );
+
+        return list;
+    }
+    return QVariantList();
+}
+
+
+QVariantList
 JSResolverHelper::searchFuzzyIndex( const QString& query )
 {
-    if ( m_resolver->d_func()->fuzzyIndex )
-    {
-        return m_resolver->d_func()->fuzzyIndex->search( Query::get( query, QString() ) );
-    }
-    return QMap<int, float>();
+    return searchInFuzzyIndex( Query::get( query, QString() ) );
 }
 
 
-QMap<int, float>
+QVariantList
 JSResolverHelper::resolveFromFuzzyIndex( const QString& artist, const QString& album, const QString& track )
 {
-    if ( m_resolver->d_func()->fuzzyIndex )
-    {
-        // Important: Do not autoresolve!
-        query_ptr query = Query::get( artist, album, track, QString(), false );
-        return m_resolver->d_func()->fuzzyIndex->search( query );
+    // Important: Do not autoresolve!
+    query_ptr query = Query::get( artist, track, album, QString(), false );
+    if ( query.isNull() ) {
+        tLog() << Q_FUNC_INFO << "Could not create a query for" << artist << "-" << track;
+        return QVariantList();
     }
-    return QMap<int, float>();
+    return searchInFuzzyIndex( query );
 }
 
 
 void
 JSResolverHelper::deleteFuzzyIndex()
 {
-    m_resolver->d_func()->fuzzyIndex->deleteIndex();
-    m_resolver->d_func()->fuzzyIndex->deleteLater();
+    if ( m_resolver->d_func()->fuzzyIndex )
+    {
+        m_resolver->d_func()->fuzzyIndex->deleteIndex();
+        m_resolver->d_func()->fuzzyIndex->deleteLater();
+        m_resolver->d_func()->fuzzyIndex.reset();
+    }
 }
 
 
@@ -563,6 +672,7 @@ JSResolverHelper::returnStreamUrl( const QString& streamUrl, const QMap<QString,
         NewClosure( reply , SIGNAL( finalUrlReached() ), this, SLOT( gotStreamUrl( IODeviceCallback, NetworkReply* )), callback, reply );
     }
 }
+
 
 Q_DECLARE_METATYPE( IODeviceCallback )
 

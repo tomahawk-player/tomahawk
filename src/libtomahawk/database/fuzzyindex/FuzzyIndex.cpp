@@ -213,6 +213,12 @@ FuzzyIndex::deleteIndex()
     TomahawkUtils::removeDirectory( m_lucenePath );
 }
 
+void
+FuzzyIndex::updateIndex()
+{
+    // NO-OP
+}
+
 
 void
 FuzzyIndex::loadLuceneIndex()

@@ -68,20 +68,20 @@ public:
      */
     void deleteIndex();
 
-    virtual void updateIndex() = 0;
+    virtual void updateIndex();
 
 signals:
     void indexReady();
 
 public slots:
     void loadLuceneIndex();
+    bool wipeIndex();
 
     QMap< int, float > search( const Tomahawk::query_ptr& query );
     QMap< int, float > searchAlbum( const Tomahawk::query_ptr& query );
 
 private slots:
     void updateIndexSlot();
-    bool wipeIndex();
 
 private:
     QMutex m_mutex;
