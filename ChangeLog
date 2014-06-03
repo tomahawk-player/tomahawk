@@ -29,6 +29,7 @@ Version 0.8.0:
     * Support rtmp:// streams
     * Drop QJson as a dependency for Qt5
     * Support additional headers in CustomUrlHandler
+    * Fuzzy search indices for JS Resolvers
 
 Version 0.7.0:
     * JavaScript Resolvers can now expose collections.
