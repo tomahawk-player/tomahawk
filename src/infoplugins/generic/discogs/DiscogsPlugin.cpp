@@ -168,7 +168,7 @@ DiscogsPlugin::albumInfoSlot( const InfoRequestData& requestData, QNetworkReply*
     foreach ( const QVariant& v, release[ "tracklist" ].toList() )
     {
         const QVariantMap track = v.toMap();
-        if ( track.contains( "title" ) )
+        if ( track.contains( "title" ) && !track[ "title" ].toString().isEmpty() )
             trackNameList << track[ "title" ].toString();
     }
 
