@@ -828,10 +828,10 @@ Password (OTP)</source>
 <context>
     <name>JSResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="341"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="378"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="416"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="478"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="348"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="385"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="423"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="485"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>脚本解析器警告： API 调用 %1 同步返回数据</translation>
     </message>
@@ -3749,25 +3749,25 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="529"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="525"/>
         <source>My Collection</source>
         <translation>我的收藏</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="710"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="706"/>
         <source>Updating database
 </source>
         <translation>更新数据库中</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="717"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="713"/>
         <source>Updating database
 %1</source>
         <translation>更新数据库
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="767"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="763"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>自动检测外部 IP 是否失效</translation>
     </message>
