@@ -28,6 +28,7 @@
 #include "resolvers/ScriptEngine.h"
 #include "network/Servent.h"
 #include "utils/Closure.h"
+#include "utils/Json.h"
 #include "utils/NetworkAccessManager.h"
 #include "utils/NetworkReply.h"
 #include "utils/Logger.h"
@@ -484,6 +485,69 @@ JSResolverHelper::reportStreamUrl( const QString& qid,
     }
 
     returnStreamUrl( streamUrl, parsedHeaders, callback );
+}
+
+
+void
+JSResolverHelper::nativeAsyncRequest( const int requestId, const QString& url,
+                                      const QVariantMap& headers,
+                                      const QVariantMap& options )
+{
+    QNetworkRequest req( url );
+    foreach ( const QString& key , headers.keys() ) {
+        req.setRawHeader( key.toLatin1(), headers[key].toString().toLatin1() );
+    }
+
+    if ( options.contains( "username" ) && options.contains( "password" ) )
+    {
+        // If we have sufficient authentication data, we will send
+        // username+password as HTTP Basic Auth
+        QString credentials = QString( "Basic %1" )
+                .arg( QString( QString("%1:%2")
+                        .arg( options["username"].toString() )
+                        .arg( options["password"].toString() )
+                        .toLatin1().toBase64() )
+                );
+        req.setRawHeader( "Authorization", credentials.toLatin1() );
+    }
+
+    NetworkReply* reply = NULL;
+    if ( options.contains( "method") && options["method"].toString().toUpper() == "POST" ) {
+        QByteArray data;
+        if ( options.contains( "data" ) ) {
+            data = options["data"].toString().toLatin1();
+        }
+        reply = new NetworkReply( Tomahawk::Utils::nam()->post( req, data ) );
+    } else if ( options.contains( "method") && options["method"].toString().toUpper() == "HEAD" ) {
+        reply = new NetworkReply( Tomahawk::Utils::nam()->head( req ) );
+    } else {
+        reply = new NetworkReply( Tomahawk::Utils::nam()->get( req ) );
+    }
+
+    NewClosure( reply , SIGNAL( finished() ), this, SLOT( nativeAsyncRequestDone( int, NetworkReply* ) ), requestId, reply );
+}
+
+
+void
+JSResolverHelper::nativeAsyncRequestDone( int requestId, NetworkReply* reply )
+{
+    QVariantMap map;
+    map["response"] = QString::fromUtf8( reply->reply()->readAll() );
+    map["responseText"] = map["response"];
+    map["responseType"] = QString(); // Default, indicates a string in map["response"]
+    map["readyState"] = 4;
+    map["status"] = reply->reply()->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    map["statusText"] = QString("%1 %2").arg( map["status"].toString() )
+            .arg( reply->reply()->attribute( QNetworkRequest::HttpReasonPhraseAttribute ).toString() );
+
+    bool ok = false;
+    QString json = QString::fromUtf8( TomahawkUtils::toJson( map, &ok ) );
+    Q_ASSERT( ok );
+
+    QString javascript = QString( "Tomahawk.nativeAsyncRequestDone( %1, %2 );" )
+            .arg( QString::number( requestId ) )
+            .arg( json );
+    m_resolver->d_func()->engine->mainFrame()->evaluateJavaScript( javascript );
 }
 
 

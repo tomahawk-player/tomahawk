@@ -50,6 +50,19 @@ public:
     Q_INVOKABLE void reportStreamUrl( const QString& qid, const QString& streamUrl, const QVariantMap& headers );
 
     /**
+     * Native handler for asynchronous HTTP requests.
+     *
+     * This handler shall only be used if we cannot achieve the request with
+     * XMLHttpRequest as that would be more efficient.
+     * Use cases are:
+     *  * Referer header: Stripped on MacOS and the specification says it
+     *    should be stripped
+     */
+    Q_INVOKABLE void nativeAsyncRequest( int requestId, const QString& url,
+                                         const QVariantMap& headers,
+                                         const QVariantMap& options );
+
+    /**
      * Clucene indices for JS resolvers
      **/
 
@@ -89,6 +102,7 @@ private slots:
     void gotStreamUrl( IODeviceCallback callback, NetworkReply* reply );
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::ModelMode, const Tomahawk::collection_ptr& collection );
     void pltemplateTracksLoadedForUrl( const QString& url, const Tomahawk::playlisttemplate_ptr& pltemplate );
+    void nativeAsyncRequestDone( int requestId, NetworkReply* reply );
 
 private:
     Tomahawk::query_ptr parseTrack( const QVariantMap& track );

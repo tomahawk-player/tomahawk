@@ -278,6 +278,35 @@ Tomahawk.syncRequest = function (url, extraHeaders, options) {
 };
 
 /**
+ * Internal counter used to identify asyncRequest callback from native code.
+ */
+Tomahawk.asyncRequestIdCounter = 0;
+/**
+ * Internal map used to map asyncRequestIds to the respective javascript
+ * callback functions.
+ */
+Tomahawk.asyncRequestCallbacks = {};
+
+/**
+ * Pass the natively retrived reply back to the javascript callback
+ * and augment the fake XMLHttpRequest object.
+ *
+ * Internal use only!
+ */
+Tomahawk.nativeAsyncRequestDone = function (reqId, xhr) {
+    // Check we have a matching callback stored.
+    if (!Tomahawk.asyncRequestCallbacks.hasOwnProperty(reqId)) {
+        return;
+    }
+
+    // Call the real callback
+    Tomahawk.asyncRequestCallbacks[reqId](xhr);
+
+    // Callback are only used once.
+    delete Tomahawk.asyncRequestCallbacks[reqId];
+};
+
+/**
  * Possible options:
  *  - method: The HTTP request method (default: GET)
  *  - username: The username for HTTP Basic Auth
@@ -289,26 +318,40 @@ Tomahawk.asyncRequest = function (url, callback, extraHeaders, options) {
     // unpack options
     var opt = options || {};
     var method = opt.method || 'GET';
+    var doNativeRequest = false;
 
-    var xmlHttpRequest = new XMLHttpRequest();
-    xmlHttpRequest.open(method, url, true, opt.username, opt.password);
-    if (extraHeaders) {
-        for (var headerName in extraHeaders) {
-            xmlHttpRequest.setRequestHeader(headerName, extraHeaders[headerName]);
-        }
+    if (extraHeaders && (extraHeaders.hasOwnProperty("Referer") || extraHeaders.hasOwnProperty("referer"))) {
+        doNativeRequest = true;
     }
-    xmlHttpRequest.onreadystatechange = function () {
-        if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200) {
-            callback.call(window, xmlHttpRequest);
-        } else if (xmlHttpRequest.readyState === 4) {
-            Tomahawk.log("Failed to do " + method + " request: to: " + url);
-            Tomahawk.log("Status Code was: " + xmlHttpRequest.status);
-            if (opt.hasOwnProperty('errorHandler')) {
-                opt.errorHandler.call(window, xmlHttpRequest);
+
+    if (doNativeRequest) {
+        // Assign a request Id to the callback so we can use it when we are
+        // returning from the native call.
+        var reqId = Tomahawk.asyncRequestIdCounter;
+        Tomahawk.asyncRequestIdCounter++;
+        Tomahawk.asyncRequestCallbacks[reqId] = callback;
+        Tomahawk.nativeAsyncRequest(reqId, url, extraHeaders, options);
+    } else {
+        var xmlHttpRequest = new XMLHttpRequest();
+        xmlHttpRequest.open(method, url, true, opt.username, opt.password);
+        if (extraHeaders) {
+            for (var headerName in extraHeaders) {
+                xmlHttpRequest.setRequestHeader(headerName, extraHeaders[headerName]);
             }
         }
-    };
-    xmlHttpRequest.send(opt.data || null);
+        xmlHttpRequest.onreadystatechange = function () {
+            if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200) {
+                callback.call(window, xmlHttpRequest);
+            } else if (xmlHttpRequest.readyState === 4) {
+                Tomahawk.log("Failed to do " + method + " request: to: " + url);
+                Tomahawk.log("Status Code was: " + xmlHttpRequest.status);
+                if (opt.hasOwnProperty('errorHandler')) {
+                    opt.errorHandler.call(window, xmlHttpRequest);
+                }
+            }
+        };
+        xmlHttpRequest.send(opt.data || null);
+    }
 };
 
 Tomahawk.sha256 = Tomahawk.sha256 || CryptoJS.SHA256;
