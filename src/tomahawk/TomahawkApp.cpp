@@ -95,11 +95,11 @@
     #include <QMessageBox>
 #endif
 
-#ifdef Q_WS_MAC
-#include "mac/MacShortcutHandler.h"
+#ifdef Q_OS_MAC
+    #include "mac/MacShortcutHandler.h"
 
-#include <sys/resource.h>
-#include <sys/sysctl.h>
+    #include <sys/resource.h>
+    #include <sys/sysctl.h>
 #endif
 
 #include <QDir>
