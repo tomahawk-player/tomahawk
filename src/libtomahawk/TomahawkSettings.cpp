@@ -35,9 +35,12 @@
 
 #if QT_VERSION < QT_VERSION_CHECK(5,0,0)
     #include <qtkeychain/keychain.h>
+    #include <QDesktopServices>
 #else
     #include <qt5keychain/keychain.h>
+    #include <QStandardPaths>
 #endif
+
 #include <QDir>
 
 using namespace Tomahawk;
@@ -705,7 +708,11 @@ TomahawkSettings::infoSystemCacheVersion() const
 QString
 TomahawkSettings::storageCacheLocation() const
 {
-    return QDir::tempPath() + "/tomahawk/";
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    return QStandardPaths::writableLocation( QStandardPaths::CacheLocation );
+#else
+    return QDesktopServices::storageLocation( QDesktopServices::CacheLocation );
+#endif
 }
 
 
@@ -714,8 +721,10 @@ TomahawkSettings::scannerPaths() const
 {
     QString musicLocation;
 
-#if defined(Q_OS_LINUX)
-    musicLocation = QDir::homePath() + QLatin1String("/Music");
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    musicLocation = QStandardPaths::writableLocation( QStandardPaths::MusicLocation );
+#else
+    musicLocation = QDesktopServices::storageLocation( QDesktopServices::MusicLocation );
 #endif
 
     return value( "scanner/paths", musicLocation ).toStringList();
@@ -1597,3 +1606,40 @@ TomahawkSettings::registerCustomSettingsHandlers()
     qRegisterMetaType< AtticaManager::StateHash >( "AtticaManager::StateHash" );
     qRegisterMetaTypeStreamOperators< AtticaManager::StateHash >( "AtticaManager::StateHash" );
 }
+
+
+void
+TomahawkSettings::setAtticaResolverState( const QString& resolver, AtticaManager::ResolverState state )
+{
+    AtticaManager::StateHash resolvers = value( "script/atticaresolverstates" ).value< AtticaManager::StateHash >();
+    AtticaManager::Resolver r = resolvers.value( resolver );
+    r.state = state;
+    resolvers.insert( resolver, r );
+    setValue( "script/atticaresolverstates", QVariant::fromValue< AtticaManager::StateHash >( resolvers ) );
+
+    sync();
+}
+
+
+AtticaManager::StateHash
+TomahawkSettings::atticaResolverStates() const
+{
+    return value( "script/atticaresolverstates" ).value< AtticaManager::StateHash >();
+}
+
+
+void
+TomahawkSettings::setAtticaResolverStates( const AtticaManager::StateHash states )
+{
+    setValue( "script/atticaresolverstates", QVariant::fromValue< AtticaManager::StateHash >( states ) );
+}
+
+
+void
+TomahawkSettings::removeAtticaResolverState ( const QString& resolver )
+{
+    AtticaManager::StateHash resolvers = value( "script/atticaresolverstates" ).value< AtticaManager::StateHash >();
+    resolvers.remove( resolver );
+    setValue( "script/atticaresolverstates", QVariant::fromValue< AtticaManager::StateHash >( resolvers ) );
+}
+

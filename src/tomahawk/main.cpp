@@ -34,7 +34,7 @@
     static pascal OSErr appleEventHandler( const AppleEvent*, AppleEvent*, long );
 #endif
 
-#include "TomahawkSettingsGui.h"
+#include "TomahawkSettings.h"
 #ifdef WITH_CRASHREPORTER
     #include "libcrashreporter-handler/Handler.h"
 #endif
@@ -156,13 +156,7 @@ main( int argc, char *argv[] )
 
     // MUST register StateHash ****before*** initing TomahawkSettingsGui as constructor of settings does upgrade before Gui subclass registers type
     TomahawkSettings::registerCustomSettingsHandlers();
-    TomahawkSettingsGui::registerCustomSettingsHandlers();
-
-#ifdef ENABLE_HEADLESS
     new TomahawkSettings( &a );
-#else
-    new TomahawkSettingsGui( &a );
-#endif
 
 #ifdef WITH_CRASHREPORTER
     new CrashReporter::Handler( QDir::tempPath(), TomahawkSettings::instance()->crashReporterEnabled() && !TomahawkUtils::headless(), "tomahawk_crash_reporter" );

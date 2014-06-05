@@ -49,9 +49,9 @@ public:
     void applyChanges() { emit changed(); }
 
     /// General settings
-    virtual QString storageCacheLocation() const;
+    QString storageCacheLocation() const;
 
-    virtual QStringList scannerPaths() const; /// QDesktopServices::MusicLocation in TomahawkSettingsGui
+    QStringList scannerPaths() const; /// QDesktopServices::MusicLocation in TomahawkSettingsGui
     void setScannerPaths( const QStringList& paths );
     bool hasScannerPaths() const;
     uint scannerTime() const;
@@ -225,6 +225,13 @@ public:
     // Charts
     void setLastChartIds( const QMap<QString, QVariant>& ids );
     QMap<QString, QVariant> lastChartIds();
+
+    AtticaManager::StateHash atticaResolverStates() const;
+    void setAtticaResolverStates( const AtticaManager::StateHash states );
+
+    void setAtticaResolverState( const QString& resolver, AtticaManager::ResolverState state );
+    void removeAtticaResolverState( const QString& resolver );
+
 
 signals:
     void changed();

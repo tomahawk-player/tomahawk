@@ -19,7 +19,7 @@
 #include "BinaryInstallerHelper.h"
 
 #include "accounts/AccountManager.h"
-#include "TomahawkSettingsGui.h"
+#include "TomahawkSettings.h"
 #include <QTemporaryFile>
 
 BinaryInstallerHelper::BinaryInstallerHelper( QTemporaryFile* tempFile, const QString& resolverId, bool createAccount, AtticaManager* manager )
@@ -64,7 +64,7 @@ BinaryInstallerHelper::installSucceeded( const QString& path )
     m_manager.data()->m_resolverStates[ m_resolverId ].scriptPath = path;
     m_manager.data()->m_resolverStates[ m_resolverId ].state = AtticaManager::Installed;
 
-    TomahawkSettingsGui::instanceGui()->setAtticaResolverStates( m_manager.data()->m_resolverStates );
+    TomahawkSettings::instance()->setAtticaResolverStates( m_manager.data()->m_resolverStates );
     emit m_manager.data()->resolverInstalled( m_resolverId );
     emit m_manager.data()->resolverStateChanged( m_resolverId );
 

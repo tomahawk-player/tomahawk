@@ -22,7 +22,6 @@ set( libGuiSources
     ViewPagePlugin.cpp
     ViewManager.cpp
     LatchManager.cpp
-    TomahawkSettingsGui.cpp
 
     context/ContextPage.cpp
     context/ContextWidget.cpp

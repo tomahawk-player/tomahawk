@@ -71,17 +71,15 @@
 #include "utils/TomahawkCache.h"
 #include "widgets/SplashWidget.h"
 
-#ifndef ENABLE_HEADLESS
-    #include "resolvers/JSResolver.h"
-    #include "resolvers/ScriptResolver.h"
-    #include "utils/SpotifyParser.h"
-    #include "AtticaManager.h"
-    #include "TomahawkWindow.h"
-    #include "dialogs/SettingsDialog.h"
-    #include "ActionCollection.h"
-    #include "widgets/HeaderLabel.h"
-    #include "TomahawkSettingsGui.h"
-#endif
+#include "resolvers/JSResolver.h"
+#include "resolvers/ScriptResolver.h"
+#include "utils/SpotifyParser.h"
+#include "AtticaManager.h"
+#include "TomahawkWindow.h"
+#include "dialogs/SettingsDialog.h"
+#include "ActionCollection.h"
+#include "widgets/HeaderLabel.h"
+#include "TomahawkSettings.h"
 
 #include "config.h"
 

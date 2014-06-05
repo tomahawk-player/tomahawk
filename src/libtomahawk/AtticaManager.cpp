@@ -19,7 +19,7 @@
 #include "AtticaManager.h"
 
 #include "utils/TomahawkUtils.h"
-#include "TomahawkSettingsGui.h"
+#include "TomahawkSettings.h"
 #include "Pipeline.h"
 #include "Source.h"
 #include "config.h"
@@ -255,7 +255,7 @@ AtticaManager::uploadRating( const Content& c )
         }
     }
 
-    TomahawkSettingsGui::instanceGui()->setAtticaResolverStates( m_resolverStates );
+    TomahawkSettings::instance()->setAtticaResolverStates( m_resolverStates );
 
     PostJob* job = m_resolverProvider.voteForContent( c.id(), (uint)c.rating() );
     connect( job, SIGNAL( finished( Attica::BaseJob* ) ), job, SLOT( deleteLater() ) );
@@ -330,7 +330,7 @@ AtticaManager::providerAdded( const Provider& provider )
         m_resolverProvider = provider;
         m_resolvers.clear();
 
-        m_resolverStates = TomahawkSettingsGui::instanceGui()->atticaResolverStates();
+        m_resolverStates = TomahawkSettings::instance()->atticaResolverStates();
 
         ListJob<Category>* job = m_resolverProvider.requestCategories();
         connect( job, SIGNAL( finished( Attica::BaseJob* ) ), this, SLOT( categoriesReturned( Attica::BaseJob* ) ) );
@@ -382,7 +382,7 @@ AtticaManager::resolversList( BaseJob* j )
                 // Uh oh
                 qWarning() << "Found attica resolver marked as installed that didn't exist on disk! Setting to uninstalled: " << rId << dir.absolutePath();
                 m_resolverStates[ rId ].state = Uninstalled;
-                TomahawkSettingsGui::instanceGui()->setAtticaResolverState( rId, Uninstalled );
+                TomahawkSettings::instance()->setAtticaResolverState( rId, Uninstalled );
             }
         }
     }
@@ -708,7 +708,7 @@ AtticaManager::payloadFetched()
     {
         tDebug( LOGVERBOSE ) << "Setting installed state to resolver:" << resolverId;
         m_resolverStates[ resolverId ].state = Installed;
-        TomahawkSettingsGui::instanceGui()->setAtticaResolverStates( m_resolverStates );
+        TomahawkSettings::instance()->setAtticaResolverStates( m_resolverStates );
         emit resolverInstalled( resolverId );
         emit resolverStateChanged( resolverId );
     }
@@ -739,7 +739,7 @@ AtticaManager::uninstallResolver( const QString& pathToResolver )
                 m_resolverStates[ atticaId ].state = Uninstalled;
                 delete m_resolverStates[ resolver.id() ].pixmap;
                 m_resolverStates[ atticaId ].pixmap = 0;
-                TomahawkSettingsGui::instanceGui()->setAtticaResolverState( atticaId, Uninstalled );
+                TomahawkSettings::instance()->setAtticaResolverState( atticaId, Uninstalled );
 
                 doResolverRemove( atticaId );
             }
@@ -757,7 +757,7 @@ AtticaManager::uninstallResolver( const Content& resolver )
         emit resolverStateChanged( resolver.id() );
 
         m_resolverStates[ resolver.id() ].state = Uninstalled;
-        TomahawkSettingsGui::instanceGui()->setAtticaResolverState( resolver.id(), Uninstalled );
+        TomahawkSettings::instance()->setAtticaResolverState( resolver.id(), Uninstalled );
     }
 
     delete m_resolverStates[ resolver.id() ].pixmap;
