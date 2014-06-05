@@ -1546,10 +1546,54 @@ QMap<QString, QVariant> TomahawkSettings::lastChartIds(){
 }
 
 
+inline QDataStream&
+operator<<( QDataStream& out, const AtticaManager::StateHash& states )
+{
+    out <<  TOMAHAWK_SETTINGS_VERSION;
+    out << (quint32)states.count();
+    foreach( const QString& key, states.keys() )
+    {
+        AtticaManager::Resolver resolver = states[ key ];
+        out << key << resolver.version << resolver.scriptPath << (qint32)resolver.state << resolver.userRating << resolver.binary;
+    }
+    return out;
+}
+
+
+inline QDataStream&
+operator>>( QDataStream& in, AtticaManager::StateHash& states )
+{
+    quint32 count = 0, configVersion = 0;
+    in >> configVersion;
+    in >> count;
+    for ( uint i = 0; i < count; i++ )
+    {
+        QString key, version, scriptPath;
+        qint32 state, userRating;
+        bool binary = false;
+        in >> key;
+        in >> version;
+        in >> scriptPath;
+        in >> state;
+        in >> userRating;
+        if ( configVersion > 10 )
+        {
+            // V11 includes 'bool binary' flag
+            in >> binary;
+        }
+        states[ key ] = AtticaManager::Resolver( version, scriptPath, userRating, (AtticaManager::ResolverState)state, binary );
+    }
+    return in;
+}
+
+
 void
 TomahawkSettings::registerCustomSettingsHandlers()
 {
     qRegisterMetaType< Tomahawk::SerializedUpdater >( "Tomahawk::SerializedUpdater" );
     qRegisterMetaType< Tomahawk::SerializedUpdaters >( "Tomahawk::SerializedUpdaters" );
     qRegisterMetaTypeStreamOperators< Tomahawk::SerializedUpdaters >( "Tomahawk::SerializedUpdaters" );
+
+    qRegisterMetaType< AtticaManager::StateHash >( "AtticaManager::StateHash" );
+    qRegisterMetaTypeStreamOperators< AtticaManager::StateHash >( "AtticaManager::StateHash" );
 }

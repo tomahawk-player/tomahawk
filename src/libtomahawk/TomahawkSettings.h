@@ -21,10 +21,11 @@
 #ifndef TOMAHAWK_SETTINGS_H
 #define TOMAHAWK_SETTINGS_H
 
-#include "network/Enums.h"
-
 #include "DllMacro.h"
 #include "Typedefs.h"
+
+#include "network/Enums.h"
+#include "AtticaManager.h"
 
 #include <QSettings>
 #include <QNetworkProxy>
@@ -241,6 +242,7 @@ private:
     static TomahawkSettings* s_instance;
 };
 
-Q_DECLARE_METATYPE( TomahawkSettings::PrivateListeningMode );
+Q_DECLARE_METATYPE( TomahawkSettings::PrivateListeningMode )
+Q_DECLARE_METATYPE( AtticaManager::StateHash )
 
 #endif
