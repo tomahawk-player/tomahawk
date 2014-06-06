@@ -3748,26 +3748,26 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="525"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="523"/>
         <source>My Collection</source>
         <translation>Moje sbírka</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="706"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="704"/>
         <source>Updating database
 </source>
         <translation>Obnovit databázi
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="713"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="711"/>
         <source>Updating database
 %1</source>
         <translation>Obnovit databázi
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="763"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="761"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Automatické zjištění vnější adresy IP se nezdařilo.</translation>
     </message>
@@ -3775,7 +3775,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="381"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="384"/>
         <source>Local Network</source>
         <translation>Místní síť</translation>
     </message>

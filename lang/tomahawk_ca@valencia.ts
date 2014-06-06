@@ -3748,24 +3748,24 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="525"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="523"/>
         <source>My Collection</source>
         <translation>La meua Col·lecció</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="706"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="704"/>
         <source>Updating database
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="713"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="711"/>
         <source>Updating database
 %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="763"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="761"/>
         <source>Automatically detecting external IP failed.</source>
         <translation type="unfinished"/>
     </message>
@@ -3773,7 +3773,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="381"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="384"/>
         <source>Local Network</source>
         <translation>Xarxa local</translation>
     </message>

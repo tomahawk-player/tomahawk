@@ -3751,26 +3751,26 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="525"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="523"/>
         <source>My Collection</source>
         <translation>Colecția mea</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="706"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="704"/>
         <source>Updating database
 </source>
         <translation>Se actualizează baza de date
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="713"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="711"/>
         <source>Updating database
 %1</source>
         <translation>Se actualizează baza de date
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="763"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="761"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Detectarea automată a IP-ului extern a eșuat.</translation>
     </message>
@@ -3778,7 +3778,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="381"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="384"/>
         <source>Local Network</source>
         <translation>Rețea locală</translation>
     </message>
