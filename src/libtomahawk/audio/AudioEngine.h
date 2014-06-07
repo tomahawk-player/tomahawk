@@ -51,10 +51,19 @@ public:
     bool isPaused() const;
     bool isStopped() const;
 
-    /* Returns the PlaylistInterface of the currently playing track. Note: This might be different to the current playlist! */
+    /**
+     * Returns the PlaylistInterface of the currently playing track.
+     *
+     * Note: This might be different to the current playlist!
+     */
     Tomahawk::playlistinterface_ptr currentTrackPlaylist() const;
 
-    /* Returns the PlaylistInterface of the current playlist. Note: The currently playing track might still be from a different playlist! */
+    /**
+     * Returns the PlaylistInterface of the current playlist.
+     *
+     * Note: The currently playing track might still be from a different
+     * playlist!
+     */
     Tomahawk::playlistinterface_ptr playlist() const;
 
     Tomahawk::result_ptr currentTrack() const;
