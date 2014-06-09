@@ -360,6 +360,7 @@ list(APPEND libSources
     sip/PeerInfo.cpp
     sip/SipStatusMessage.cpp
 
+    utils/Cloudstream.cpp
     utils/Json.cpp
     utils/TomahawkUtils.cpp
     utils/Logger.cpp
