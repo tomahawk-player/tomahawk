@@ -324,7 +324,9 @@ Tomahawk.retrievedMetadata = function(metadataId, metadata, error) {
     }
 
     // Call the real callback
-    Tomahawk.retrieveMetadataCallbacks[metadataId](metadata, error);
+    if (Tomahawk.retrieveMetadataCallbacks.hasOwnProperty(metadataId)) {
+        Tomahawk.retrieveMetadataCallbacks[metadataId](metadata, error);
+    }
 
     // Callback are only used once.
     delete Tomahawk.retrieveMetadataCallbacks[metadataId];
