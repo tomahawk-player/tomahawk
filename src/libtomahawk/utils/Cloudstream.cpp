@@ -36,7 +36,7 @@ CloudStream::CloudStream(const QUrl& url,
                          const long length, const QMap<QString, QString>& headers,
                          QNetworkAccessManager* network)
     : url_(url),
-      encoded_filename_(url.fileName().toUtf8()),
+      encoded_filename_(url.path().toUtf8()),
       length_(length),
       headers_(headers),
       cursor_(0),
