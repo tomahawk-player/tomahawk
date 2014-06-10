@@ -43,8 +43,25 @@ public:
     explicit AudioEngine();
     ~AudioEngine();
 
+    /**
+     * List the MIME types we can play.
+     *
+     * This list might not include all possible MIME types that can be played.
+     * If you know that a certain service always returns a specific MIME type
+     * not reported here, we still might be able to play this media. Please
+     * check the individual backends why they do not report it and if every
+     * (recent) version supports this type.
+     *
+     * @return A list of playable MIME types.
+     */
     QStringList supportedMimeTypes() const;
-    unsigned int volume() const; // in percent
+
+    /**
+     * Reports the current set volume in percent (0-100).
+     *
+     * @return Current volume in percent.
+     */
+    unsigned int volume() const;
 
     AudioState state() const;
     bool isPlaying() const;
@@ -69,7 +86,26 @@ public:
     Tomahawk::result_ptr currentTrack() const;
     Tomahawk::query_ptr stopAfterTrack() const;
 
+    /**
+     * Get the current position in the media.
+     *
+     * As the user might seek forwards and backwards this only returns the
+     * location in the media, not the actual time that the media was already
+     * playing.
+     * @return The current time in milliseconds.
+     */
     qint64 currentTime() const;
+
+    /**
+     * Returns the total duration of the currently playing track.
+     *
+     * For some media this time might only be an estimate as metadate might
+     * not have reported a duration and thus the duration is estimated. During
+     * playback we might get a better estimate so that the return value may
+     * differ between multiple calls.
+     *
+     * @return The total duration in milliseconds.
+     */
     qint64 currentTrackTotalTime() const;
 
     int equalizerBandCount();
