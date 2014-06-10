@@ -517,9 +517,17 @@ JSResolverHelper::nativeRetrieveMetadata( int metadataId, const QString& url,
 
     if ( TomahawkUtils::isHttpResult( url ) || TomahawkUtils::isHttpsResult( url ) )
     {
+        QMap<QString, QString> headers;
+        if ( options.contains( "headers" ) && options["headers"].canConvert( QVariant::Map ) )
+        {
+            const QVariantMap variantHeaders = options["headers"].toMap();
+            foreach ( const QString& key, variantHeaders.keys() ) {
+                headers.insert( key, variantHeaders[key].toString() );
+            }
+        }
+
         // TODO: Add heuristic if size is not defined
-        // TOOD: Support pushing multiple headers
-        CloudStream stream( url, sizehint, QString("insert headers here"),
+        CloudStream stream( url, sizehint, headers,
                             Tomahawk::Utils::nam() );
         stream.Precache();
         QScopedPointer<TagLib::File> tag;

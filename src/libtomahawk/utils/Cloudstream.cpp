@@ -33,12 +33,12 @@ static const int kTaglibSuffixCacheBytes = 8 * 1024;
 }
 
 CloudStream::CloudStream(const QUrl& url,
-                         const long length, const QString& auth,
+                         const long length, const QMap<QString, QString>& headers,
                          QNetworkAccessManager* network)
     : url_(url),
       encoded_filename_(url.fileName().toUtf8()),
       length_(length),
-      auth_(auth),
+      headers_(headers),
       cursor_(0),
       network_(network),
       cache_(length),
@@ -106,8 +106,8 @@ TagLib::ByteVector CloudStream::readBlock(ulong length) {
   }
 
   QNetworkRequest request = QNetworkRequest(url_);
-  if (!auth_.isEmpty()) {
-    request.setRawHeader("Authorization", auth_.toUtf8());
+  foreach (const QString& key, headers_) {
+      request.setRawHeader(key.toLatin1(), headers_[key].toUtf8());
   }
   request.setRawHeader("Range",
                        QString("bytes=%1-%2").arg(start).arg(end).toUtf8());
