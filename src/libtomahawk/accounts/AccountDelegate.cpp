@@ -250,19 +250,14 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     {
         const QString btnText = tr( "Remove" );
         const int btnWidth = installMetrics.width( btnText ) + 2*PADDING;
-        QRect btnRect;
+
+        QRect btnRect = QRect( opt.rect.right() - 3 * PADDING - btnWidth,
+                         center - installMetrics.height() / 2 - PADDING,
+                         btnWidth, installMetrics.height() + 2*PADDING );
 
         if ( hasConfigWrench )
-            btnRect = QRect( opt.rect.right() - PADDING - btnWidth, opt.rect.bottom() - installMetrics.height() - 3*PADDING,  btnWidth, installMetrics.height() + 2*PADDING );
-        else
-            btnRect = QRect( opt.rect.right() - PADDING - btnWidth, center - ( installMetrics.height() + 4 ) / 2, btnWidth, installMetrics.height() + 2*PADDING );
+            btnRect.moveLeft( btnRect.left() - WRENCH_SIZE );
 
-#ifdef Q_WS_MAC
-        btnRect.adjust( -4, 0, 4, 0 );
-
-        if ( hasConfigWrench )
-            btnRect.moveTop( btnRect.top() + 2 );
-#endif
         leftEdge = btnRect.left();
         m_cachedButtonRects[ index ] = btnRect;
 
