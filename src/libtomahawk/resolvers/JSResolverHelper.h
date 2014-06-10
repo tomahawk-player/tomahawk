@@ -50,6 +50,23 @@ public:
     Q_INVOKABLE void reportStreamUrl( const QString& qid, const QString& streamUrl, const QVariantMap& headers );
 
     /**
+     * Retrieve metadata for a media stream.
+     *
+     * Current suported transport protocols are:
+     *  * HTTP
+     *  * HTTPS
+     *
+     * This method is asynchronous and will call
+     *     Tomahawk.retrievedMetadata(metadataId, metadata, error)
+     * on completion. This method is an internal variant, JavaScript resolvers
+     * are advised to use Tomahawk.retrieveMetadata(url, options, callback).
+     */
+    Q_INVOKABLE void nativeRetrieveMetadata( int metadataId, const QString& url,
+                                             const QString& mimetype,
+                                             int sizehint,
+                                             const QVariantMap& options );
+
+    /**
      * Native handler for asynchronous HTTP requests.
      *
      * This handler shall only be used if we cannot achieve the request with

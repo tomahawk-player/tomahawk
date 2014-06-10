@@ -28,6 +28,7 @@
 #include "resolvers/ScriptEngine.h"
 #include "network/Servent.h"
 #include "utils/Closure.h"
+#include "utils/Cloudstream.h"
 #include "utils/Json.h"
 #include "utils/NetworkAccessManager.h"
 #include "utils/NetworkReply.h"
@@ -45,6 +46,19 @@
 #include <QFileInfo>
 #include <QMap>
 #include <QWebFrame>
+#include <taglib/asffile.h>
+#include <taglib/flacfile.h>
+#include <taglib/id3v2framefactory.h>
+#include <taglib/mp4file.h>
+#include <taglib/mpegfile.h>
+#include <taglib/oggfile.h>
+#include <taglib/vorbisfile.h>
+
+#if defined(TAGLIB_MAJOR_VERSION) && defined(TAGLIB_MINOR_VERSION)
+#if TAGLIB_MAJOR_VERSION >= 1 && TAGLIB_MINOR_VERSION >= 9
+    #include <taglib/opusfile.h>
+#endif
+#endif
 
 using namespace Tomahawk;
 
@@ -485,6 +499,137 @@ JSResolverHelper::reportStreamUrl( const QString& qid,
     }
 
     returnStreamUrl( streamUrl, parsedHeaders, callback );
+}
+
+
+void
+JSResolverHelper::nativeRetrieveMetadata( int metadataId, const QString& url,
+                                          const QString& mime_type, int sizehint,
+                                          const QVariantMap& options )
+{
+    if ( sizehint <= 0 )
+    {
+        QString javascript = QString( "Tomahawk.retrievedMetadata( %1, null, 'Supplied size is not (yet) supported');" )
+                .arg( metadataId );
+        m_resolver->d_func()->engine->mainFrame()->evaluateJavaScript( javascript );
+        return;
+    }
+
+    if ( TomahawkUtils::isHttpResult( url ) || TomahawkUtils::isHttpsResult( url ) )
+    {
+        // TODO: Add heuristic if size is not defined
+        // TOOD: Support pushing multiple headers
+        CloudStream stream( url, sizehint, QString("insert headers here"),
+                            Tomahawk::Utils::nam() );
+        stream.Precache();
+        QScopedPointer<TagLib::File> tag;
+        if ( mime_type == "audio/mpeg" )
+        {
+            tag.reset( new TagLib::MPEG::File( &stream,
+                TagLib::ID3v2::FrameFactory::instance(),
+                TagLib::AudioProperties::Accurate
+            ));
+        }
+        else if ( mime_type == "audio/mp4" )
+        {
+            tag.reset( new TagLib::MP4::File( &stream,
+                true, TagLib::AudioProperties::Accurate
+            ));
+        }
+#if defined(TAGLIB_MAJOR_VERSION) && defined(TAGLIB_MINOR_VERSION)
+#if TAGLIB_MAJOR_VERSION >= 1 && TAGLIB_MINOR_VERSION >= 9
+        else if ( mime_type == "application/opus" || mime_type == "audio/opus" )
+        {
+            tag.reset( new TagLib::Ogg::Opus::File( &stream, true,
+                TagLib::AudioProperties::Accurate
+            ));
+        }
+#endif
+#endif
+        else if ( mime_type == "application/ogg" || mime_type == "audio/ogg" )
+        {
+            tag.reset( new TagLib::Ogg::Vorbis::File( &stream, true,
+                TagLib::AudioProperties::Accurate
+            ));
+        }
+        else if ( mime_type == "application/x-flac" || mime_type == "audio/flac" ||
+                   mime_type == "audio/x-flac" )
+        {
+            tag.reset( new TagLib::FLAC::File( &stream,
+                TagLib::ID3v2::FrameFactory::instance(),
+                true, TagLib::AudioProperties::Accurate
+            ));
+        }
+        else if ( mime_type == "audio/x-ms-wma" )
+        {
+            tag.reset( new TagLib::ASF::File( &stream, true,
+                TagLib::AudioProperties::Accurate
+            ));
+        }
+        else
+        {
+            QString javascript = QString( "Tomahawk.retrievedMetadata( %1, null, 'Unknown mime type for tagging: %2');" )
+                    .arg( metadataId ).arg( mime_type );
+            m_resolver->d_func()->engine->mainFrame()->evaluateJavaScript( javascript );
+            return;
+        }
+
+        if ( stream.num_requests() > 2)
+        {
+            // Warn if pre-caching failed.
+            tLog() << "Total requests for file:" << url
+                   << stream.num_requests() << stream.cached_bytes();
+        }
+
+        if ( !tag->tag() || tag->tag()->isEmpty() )
+        {
+            QString javascript = QString( "Tomahawk.retrievedMetadata( %1, null, 'Could not read tag information.');" )
+                    .arg( metadataId );
+            m_resolver->d_func()->engine->mainFrame()->evaluateJavaScript( javascript );
+            return;
+        }
+
+        QVariantMap m;
+        m["url"] = url;
+        m["track"] = QString( tag->tag()->title().toCString() ).trimmed();
+        m["album"] = QString( tag->tag()->album().toCString() ).trimmed();
+        m["artist"] = QString( tag->tag()->artist().toCString() ).trimmed();
+
+        if ( m["track"].toString().isEmpty() )
+        {
+            QString javascript = QString( "Tomahawk.retrievedMetadata( %1, null, 'Empty track returnd');" )
+                    .arg( metadataId );
+            m_resolver->d_func()->engine->mainFrame()->evaluateJavaScript( javascript );
+            return;
+        }
+
+        if ( m["artist"].toString().isEmpty() )
+        {
+            QString javascript = QString( "Tomahawk.retrievedMetadata( %1, null, 'Empty artist returnd');" )
+                    .arg( metadataId );
+            m_resolver->d_func()->engine->mainFrame()->evaluateJavaScript( javascript );
+            return;
+        }
+
+        if ( tag->audioProperties() )
+        {
+            m["bitrate"] = tag->audioProperties()->bitrate();
+            m["channels"] = tag->audioProperties()->channels();
+            m["duration"] = tag->audioProperties()->length();
+            m["samplerate"] = tag->audioProperties()->sampleRate();
+        }
+
+        QString javascript = QString( "Tomahawk.retrievedMetadata( %1, %2 );" )
+                .arg( metadataId )
+                .arg( QString::fromLatin1( TomahawkUtils::toJson( m ) ) );
+        m_resolver->d_func()->engine->mainFrame()->evaluateJavaScript( javascript );
+    }
+    else
+    {
+        QString javascript = QString( "Tomahawk.retrievedMetadata( %1, null, 'Protocol not supported');" )
+                .arg( metadataId );
+        m_resolver->d_func()->engine->mainFrame()->evaluateJavaScript( javascript );
+    }
 }
 
 

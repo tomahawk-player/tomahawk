@@ -4,7 +4,7 @@
  *   Copyright 2011-2012, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2011,      Thierry Goeckel
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
- *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
+ *   Copyright 2013-2014,  Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -275,6 +275,59 @@ Tomahawk.syncRequest = function (url, extraHeaders, options) {
             opt.errorHandler.call(window, xmlHttpRequest);
         }
     }
+};
+
+/**
+ * Internal counter used to identify retrievedMetadata call back from native
+ * code.
+ */
+Tomahawk.retrieveMetadataIdCounter = 0;
+/**
+ * Internal map used to map metadataIds to the respective JavaScript callbacks.
+ */
+Tomahawk.retrieveMetadataCallbacks = {};
+
+/**
+ * Retrieve metadata for a media stream.
+ *
+ * @param url String The URL which should be scanned for metadata.
+ * @param mimetype String The mimetype of the stream, e.g. application/ogg
+ * @param sizehint Size in bytes if not supplied possibly the whole file needs
+ *          to be downloaded
+ * @param options Object Map to specify various parameters related to the media
+ *          URL. This includes:
+ *          * headers: Object of HTTP(S) headers that should be set on doing the
+ *                     request.
+ *          * method: String HTTP verb to be used (default: GET)
+ *          * username: Username when using authentication
+ *          * password: Password when using authentication
+ * @param callback Function(Object,String) This function is called on completeion.
+ *          If an error occured, error is set to the corresponding message else
+ *          null.
+ */
+Tomahawk.retrieveMetadata = function (url, mimetype, sizehint, options, callback) {
+    var metadataId = Tomahawk.retrieveMetadataIdCounter;
+    Tomahawk.retrieveMetadataIdCounter++;
+    Tomahawk.retrieveMetadataCallbacks[metadataId] = callback;
+    Tomahawk.nativeRetrieveMetadata(metadataId, url, mimetype, sizehint, options);
+};
+
+/**
+ * Pass the natively retrieved metadata back to the JavaScript callback.
+ *
+ * Internal use only!
+ */
+Tomahawk.retrievedMetadata = function(metadataId, metadata, error) {
+    // Check we have a matching callback stored.
+    if (!Tomahawk.retrieveMetadataCallbacks.hasOwnProperty(metadataId)) {
+        return;
+    }
+
+    // Call the real callback
+    Tomahawk.retrieveMetadataCallbacks[metadataId](metadata, error);
+
+    // Callback are only used once.
+    delete Tomahawk.retrieveMetadataCallbacks[metadataId];
 };
 
 /**
