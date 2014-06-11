@@ -78,6 +78,8 @@ private:
 
     QRect checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx ) const;
 
+    int removeBtnWidth( QStyleOptionViewItemV4 opt ) const;
+
     int m_hoveringOver;
     QPersistentModelIndex m_hoveringItem, m_configPressed;
     mutable QHash< QPersistentModelIndex, QRect > m_cachedButtonRects;

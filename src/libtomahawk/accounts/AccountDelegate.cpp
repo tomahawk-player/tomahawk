@@ -249,7 +249,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     else if ( canDelete )
     {
         const QString btnText = tr( "Remove" );
-        const int btnWidth = installMetrics.width( btnText ) + 2*PADDING;
+        const int btnWidth = removeBtnWidth( opt );
 
         QRect btnRect = QRect( opt.rect.right() - 3 * PADDING - btnWidth,
                          center - installMetrics.height() / 2 - PADDING,
@@ -311,7 +311,9 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     }
 
     // description
-    const int descWidth = rightEdge - leftTitleEdge - PADDING;
+    int descWidth = rightEdge - leftTitleEdge - PADDING;
+    if ( canDelete )
+        descWidth -= removeBtnWidth( opt ) + PADDING;
     painter->setFont( descFont );
     const QRect descRect( leftTitleEdge, runningBottom + PADDING, descWidth, painter->fontMetrics().height() );
     desc = painter->fontMetrics().elidedText( desc, Qt::ElideRight, descWidth );
@@ -658,6 +660,17 @@ AccountDelegate::checkRectForIndex( const QStyleOptionViewItem& option, const QM
     return checkRect;
 
 }
+
+
+int
+AccountDelegate::removeBtnWidth( QStyleOptionViewItemV4 opt ) const
+{
+    const QString btnText = tr( "Remove" );
+    QFont font = opt.font;
+    font.setItalic( false );
+    return QFontMetrics( font ).width( btnText ) + 2*PADDING;
+}
+
 
 void
 AccountDelegate::startInstalling( const QPersistentModelIndex& idx )
