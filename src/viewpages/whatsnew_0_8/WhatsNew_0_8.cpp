@@ -72,20 +72,8 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
     ui->lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
 
     {
-        QScrollArea* area = new QScrollArea();
-        area->setWidgetResizable( true );
-        area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-        area->setWidget( widget );
-
-        QPalette pal = palette();
-        pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_BACKGROUND );
-        area->setPalette( pal );
-        area->setAutoFillBackground( true );
-        area->setFrameShape( QFrame::NoFrame );
-        area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
         QVBoxLayout* layout = new QVBoxLayout();
-        layout->addWidget( area );
+        layout->addWidget( widget );
         setLayout( layout );
         TomahawkUtils::unmarginLayout( layout );
     }
