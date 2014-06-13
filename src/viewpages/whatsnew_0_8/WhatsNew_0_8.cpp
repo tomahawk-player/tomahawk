@@ -90,6 +90,31 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
         QPixmap inboxPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/inbox.svg", QSize( 64, 64 ) );
         ui->inboxBoxImage->setPixmap( inboxPixmap );
     }
+
+    {
+        // TODO: Add URL Lookup Pixmap
+    }
+
+    {
+        QPixmap trendingPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/trending.svg", QSize( 64, 64) );
+        ui->trendingBoxImage->setPixmap( trendingPixmap );
+    }
+
+    {
+        // TODO: Add Beats Music Pixmap
+    }
+
+    {
+        // TODO: Add GMusic Pixmap
+    }
+
+    {
+        // TODO: Add IPv6 Pixmap
+    }
+
+    {
+        // TODO: Add Design Pixmap
+    }
 }
 
 
