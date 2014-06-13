@@ -41,7 +41,7 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item alignment="Qt::AlignLeft|Qt::AlignTop">
-         <widget class="QWidget" name="widget_2" native="true">
+         <widget class="QWidget" name="featureBoxes" native="true">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -62,7 +62,7 @@
             <number>0</number>
            </property>
            <item alignment="Qt::AlignLeft">
-            <widget class="QWidget" name="widget_3" native="true">
+            <widget class="QWidget" name="inboxBox" native="true">
              <property name="minimumSize">
               <size>
                <width>64</width>
@@ -83,7 +83,7 @@
                <number>0</number>
               </property>
               <item alignment="Qt::AlignTop">
-               <widget class="QLabel" name="label">
+               <widget class="QLabel" name="inboxBoxHeader">
                 <property name="text">
                  <string>Inbox</string>
                 </property>
@@ -93,7 +93,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="label_2">
+               <widget class="QLabel" name="inboxBoxImage">
                 <property name="minimumSize">
                  <size>
                   <width>64</width>

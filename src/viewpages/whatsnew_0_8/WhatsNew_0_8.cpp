@@ -86,8 +86,10 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
         ui->widget->setAutoFillBackground( true );
     }
 
-    QPixmap inboxPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/inbox.svg", QSize( 64, 64 ) );
-    ui->label_2->setPixmap( inboxPixmap );
+    {
+        QPixmap inboxPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/inbox.svg", QSize( 64, 64 ) );
+        ui->inboxBoxImage->setPixmap( inboxPixmap );
+    }
 }
 
 
