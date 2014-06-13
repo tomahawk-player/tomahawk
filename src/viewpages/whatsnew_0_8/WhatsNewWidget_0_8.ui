@@ -439,8 +439,11 @@
          <widget class="QStackedWidget" name="stackedWidget">
           <widget class="QWidget" name="inboxPage"/>
           <widget class="QWidget" name="urlLookupPage"/>
-          <widget class="QWidget" name="page"/>
-          <widget class="QWidget" name="page_2"/>
+          <widget class="QWidget" name="trendingPage"/>
+          <widget class="QWidget" name="beatsPage"/>
+          <widget class="QWidget" name="gmusicPage"/>
+          <widget class="QWidget" name="networkingPage"/>
+          <widget class="QWidget" name="designPage"/>
          </widget>
         </item>
        </layout>
