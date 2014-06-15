@@ -101,7 +101,8 @@ border-color: white;
 color: white;
 border-bottom: none;
 border-bottom-right-radius: 0px;
-border-bottom-left-radius: 0px;</string>
+border-bottom-left-radius: 0px;
+background-color:#292f34;</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <property name="spacing">
