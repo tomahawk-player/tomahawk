@@ -52,8 +52,11 @@
       </property>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="spacing">
+         <number>0</number>
+        </property>
         <property name="bottomMargin">
-         <number>16</number>
+         <number>0</number>
         </property>
         <item alignment="Qt::AlignHCenter|Qt::AlignTop">
          <widget class="QWidget" name="featureBoxes" native="true">
@@ -73,17 +76,8 @@
            <property name="spacing">
             <number>16</number>
            </property>
-           <property name="leftMargin">
+           <property name="margin">
             <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>16</number>
            </property>
            <item alignment="Qt::AlignHCenter|Qt::AlignTop">
             <widget class="QWidget" name="inboxBox" native="true">
@@ -104,14 +98,26 @@
 border-style: solid;
 border-radius: 4px;
 border-color: white;
-color: white;</string>
+color: white;
+border-bottom: none;
+border-bottom-right-radius: 0px;
+border-bottom-left-radius: 0px;</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <property name="spacing">
                <number>8</number>
               </property>
-              <property name="margin">
+              <property name="leftMargin">
                <number>8</number>
+              </property>
+              <property name="topMargin">
+               <number>8</number>
+              </property>
+              <property name="rightMargin">
+               <number>8</number>
+              </property>
+              <property name="bottomMargin">
+               <number>16</number>
               </property>
               <item alignment="Qt::AlignTop">
                <widget class="QLabel" name="inboxBoxHeader">
@@ -230,7 +236,7 @@ color: grey;</string>
              </layout>
             </widget>
            </item>
-           <item>
+           <item alignment="Qt::AlignTop">
             <widget class="QWidget" name="trendingBox" native="true">
              <property name="minimumSize">
               <size>
@@ -296,7 +302,7 @@ color: grey;</string>
              </layout>
             </widget>
            </item>
-           <item>
+           <item alignment="Qt::AlignTop">
             <widget class="QWidget" name="beatsBox" native="true">
              <property name="minimumSize">
               <size>
@@ -362,7 +368,7 @@ color: grey;</string>
              </layout>
             </widget>
            </item>
-           <item>
+           <item alignment="Qt::AlignTop">
             <widget class="QWidget" name="gmusicBox" native="true">
              <property name="minimumSize">
               <size>
@@ -428,7 +434,7 @@ color: grey;</string>
              </layout>
             </widget>
            </item>
-           <item>
+           <item alignment="Qt::AlignTop">
             <widget class="QWidget" name="networkingBox" native="true">
              <property name="minimumSize">
               <size>
@@ -494,7 +500,7 @@ color: grey;</string>
              </layout>
             </widget>
            </item>
-           <item>
+           <item alignment="Qt::AlignTop">
             <widget class="QWidget" name="designBox" native="true">
              <property name="minimumSize">
               <size>
@@ -563,15 +569,45 @@ color: grey;</string>
           </layout>
          </widget>
         </item>
-        <item alignment="Qt::AlignTop">
+        <item alignment="Qt::AlignHCenter|Qt::AlignTop">
          <widget class="QStackedWidget" name="stackedWidget">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="minimumSize">
+           <size>
+            <width>720</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>720</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border-width: 2px;
+border-style: solid;
+border-radius: 4px;
+border-color: white;
+color: white;
+padding: 2px;
+background-color:#292f34;</string>
+          </property>
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
           <widget class="QWidget" name="inboxPage">
+           <property name="styleSheet">
+            <string notr="true">border: none;</string>
+           </property>
            <layout class="QVBoxLayout" name="verticalLayout_4">
             <property name="spacing">
              <number>0</number>
@@ -588,10 +624,13 @@ color: grey;</string>
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Some Text about what can be done with the inbox Feature</string>
+               <string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec.</string>
               </property>
               <property name="scaledContents">
                <bool>false</bool>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
