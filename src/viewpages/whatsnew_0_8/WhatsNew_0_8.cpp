@@ -102,7 +102,8 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
     }
 
     {
-        // TODO: Add Beats Music Pixmap
+        QPixmap beatsPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/beatsmusic.svg", QSize( 64, 64) );
+        ui->beatsBoxImage->setPixmap( beatsPixmap );
     }
 
     {
