@@ -193,5 +193,6 @@
         <file>data/js/cryptojs-core.js</file>
         <file>data/www/index.html</file>
         <file>data/images/beatsmusic.svg</file>
+        <file>data/images/ipv6-logo.svg</file>
     </qresource>
 </RCC>

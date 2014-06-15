@@ -111,7 +111,8 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
     }
 
     {
-        // TODO: Add IPv6 Pixmap
+        QPixmap networkingPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/ipv6-logo.svg", QSize( 64, 64) );
+        ui->networkingBoxImage->setPixmap( networkingPixmap );
     }
 
     {
