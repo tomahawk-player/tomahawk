@@ -10,6 +10,12 @@
     <height>616</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string notr="true" extracomment="not translatable because not shown to the user">Form</string>
   </property>
@@ -22,6 +28,12 @@
    </property>
    <item>
     <widget class="QWidget" name="widget" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <property name="spacing">
        <number>0</number>
@@ -40,50 +52,78 @@
       </property>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item alignment="Qt::AlignLeft">
+        <property name="bottomMargin">
+         <number>16</number>
+        </property>
+        <item alignment="Qt::AlignHCenter|Qt::AlignTop">
          <widget class="QWidget" name="featureBoxes" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
             <height>79</height>
            </size>
           </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>79</height>
-           </size>
-          </property>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <property name="spacing">
+            <number>16</number>
+           </property>
+           <property name="leftMargin">
             <number>0</number>
            </property>
-           <property name="margin">
+           <property name="topMargin">
             <number>0</number>
            </property>
-           <item>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>16</number>
+           </property>
+           <item alignment="Qt::AlignHCenter|Qt::AlignTop">
             <widget class="QWidget" name="inboxBox" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="minimumSize">
               <size>
                <width>64</width>
-               <height>79</height>
+               <height>100</height>
               </size>
              </property>
-             <property name="maximumSize">
-              <size>
-               <width>64</width>
-               <height>79</height>
-              </size>
+             <property name="styleSheet">
+              <string notr="true">border-width: 2px;
+border-style: solid;
+border-radius: 4px;
+border-color: white;
+color: white;</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <property name="spacing">
-               <number>0</number>
+               <number>8</number>
               </property>
               <property name="margin">
-               <number>0</number>
+               <number>8</number>
               </property>
               <item alignment="Qt::AlignTop">
                <widget class="QLabel" name="inboxBoxHeader">
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">border-style: none;</string>
+                </property>
                 <property name="text">
                  <string>Inbox</string>
                 </property>
@@ -94,6 +134,12 @@
               </item>
               <item>
                <widget class="QLabel" name="inboxBoxImage">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="minimumSize">
                  <size>
                   <width>64</width>
@@ -106,6 +152,10 @@
                   <height>64</height>
                  </size>
                 </property>
+                <property name="styleSheet">
+                 <string notr="true">border-style:none;
+margin-bottom: 4px;</string>
+                </property>
                 <property name="text">
                  <string/>
                 </property>
@@ -114,29 +164,39 @@
              </layout>
             </widget>
            </item>
-           <item>
+           <item alignment="Qt::AlignTop">
             <widget class="QWidget" name="urlLookupBox" native="true">
              <property name="minimumSize">
               <size>
                <width>64</width>
-               <height>79</height>
+               <height>100</height>
               </size>
              </property>
-             <property name="maximumSize">
-              <size>
-               <width>64</width>
-               <height>79</height>
-              </size>
+             <property name="styleSheet">
+              <string notr="true">border-width: 2px;
+border-style: solid;
+border-radius: 4px;
+border-color: grey;
+color: grey;</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <property name="spacing">
-               <number>0</number>
+               <number>8</number>
               </property>
               <property name="margin">
-               <number>0</number>
+               <number>8</number>
               </property>
               <item alignment="Qt::AlignTop">
                <widget class="QLabel" name="urlLookupBoxHeader">
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">border:none</string>
+                </property>
                 <property name="text">
                  <string>Open URL</string>
                 </property>
@@ -159,6 +219,9 @@
                   <height>64</height>
                  </size>
                 </property>
+                <property name="styleSheet">
+                 <string notr="true">border: none;</string>
+                </property>
                 <property name="text">
                  <string/>
                 </property>
@@ -175,21 +238,31 @@
                <height>79</height>
               </size>
              </property>
-             <property name="maximumSize">
-              <size>
-               <width>64</width>
-               <height>79</height>
-              </size>
+             <property name="styleSheet">
+              <string notr="true">border-width: 2px;
+border-style: solid;
+border-radius: 4px;
+border-color: grey;
+color: grey;</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <property name="spacing">
-               <number>0</number>
+               <number>8</number>
               </property>
               <property name="margin">
-               <number>0</number>
+               <number>8</number>
               </property>
               <item alignment="Qt::AlignTop">
-               <widget class="QLabel" name="trendinfBoxHeader">
+               <widget class="QLabel" name="trendingBoxHeader">
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">border: none;</string>
+                </property>
                 <property name="text">
                  <string>Trending</string>
                 </property>
@@ -212,6 +285,9 @@
                   <height>64</height>
                  </size>
                 </property>
+                <property name="styleSheet">
+                 <string notr="true">border: none;</string>
+                </property>
                 <property name="text">
                  <string/>
                 </property>
@@ -225,24 +301,34 @@
              <property name="minimumSize">
               <size>
                <width>64</width>
-               <height>79</height>
+               <height>100</height>
               </size>
              </property>
-             <property name="maximumSize">
-              <size>
-               <width>64</width>
-               <height>79</height>
-              </size>
+             <property name="styleSheet">
+              <string notr="true">border-width: 2px;
+border-style: solid;
+border-radius: 4px;
+border-color: grey;
+color: grey;</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <property name="spacing">
-               <number>0</number>
+               <number>8</number>
               </property>
               <property name="margin">
-               <number>0</number>
+               <number>8</number>
               </property>
               <item alignment="Qt::AlignTop">
                <widget class="QLabel" name="beatsBoxHeader">
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">border: none;</string>
+                </property>
                 <property name="text">
                  <string>Beats</string>
                 </property>
@@ -265,6 +351,9 @@
                   <height>64</height>
                  </size>
                 </property>
+                <property name="styleSheet">
+                 <string notr="true">border: none;</string>
+                </property>
                 <property name="text">
                  <string/>
                 </property>
@@ -281,21 +370,31 @@
                <height>79</height>
               </size>
              </property>
-             <property name="maximumSize">
-              <size>
-               <width>64</width>
-               <height>79</height>
-              </size>
+             <property name="styleSheet">
+              <string notr="true">border-width: 2px;
+border-style: solid;
+border-radius: 4px;
+border-color: grey;
+color: grey;</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <property name="spacing">
-               <number>0</number>
+               <number>8</number>
               </property>
               <property name="margin">
-               <number>0</number>
+               <number>8</number>
               </property>
               <item alignment="Qt::AlignTop">
                <widget class="QLabel" name="gmusicBoxHeader">
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">border: none;</string>
+                </property>
                 <property name="text">
                  <string>GMusic</string>
                 </property>
@@ -318,6 +417,9 @@
                   <height>64</height>
                  </size>
                 </property>
+                <property name="styleSheet">
+                 <string notr="true">border: none;</string>
+                </property>
                 <property name="text">
                  <string/>
                 </property>
@@ -334,21 +436,31 @@
                <height>79</height>
               </size>
              </property>
-             <property name="maximumSize">
-              <size>
-               <width>64</width>
-               <height>79</height>
-              </size>
+             <property name="styleSheet">
+              <string notr="true">border-width: 2px;
+border-style: solid;
+border-radius: 4px;
+border-color: grey;
+color: grey;</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <property name="spacing">
-               <number>0</number>
+               <number>8</number>
               </property>
               <property name="margin">
-               <number>0</number>
+               <number>8</number>
               </property>
               <item alignment="Qt::AlignTop">
                <widget class="QLabel" name="networkingBoxHeader">
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">border: none;</string>
+                </property>
                 <property name="text">
                  <string>IPv6+</string>
                 </property>
@@ -371,6 +483,9 @@
                   <height>64</height>
                  </size>
                 </property>
+                <property name="styleSheet">
+                 <string notr="true">border: none;</string>
+                </property>
                 <property name="text">
                  <string/>
                 </property>
@@ -387,21 +502,31 @@
                <height>79</height>
               </size>
              </property>
-             <property name="maximumSize">
-              <size>
-               <width>64</width>
-               <height>79</height>
-              </size>
+             <property name="styleSheet">
+              <string notr="true">border-width: 2px;
+border-style: solid;
+border-radius: 4px;
+border-color: grey;
+color: grey;</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <property name="spacing">
-               <number>0</number>
+               <number>8</number>
               </property>
               <property name="margin">
-               <number>0</number>
+               <number>8</number>
               </property>
               <item alignment="Qt::AlignTop">
                <widget class="QLabel" name="designBoxHeader">
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">border: none;</string>
+                </property>
                 <property name="text">
                  <string>Design</string>
                 </property>
@@ -424,6 +549,9 @@
                   <height>64</height>
                  </size>
                 </property>
+                <property name="styleSheet">
+                 <string notr="true">border: none;</string>
+                </property>
                 <property name="text">
                  <string/>
                 </property>
@@ -437,6 +565,12 @@
         </item>
         <item alignment="Qt::AlignTop">
          <widget class="QStackedWidget" name="stackedWidget">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <widget class="QWidget" name="inboxPage">
            <layout class="QVBoxLayout" name="verticalLayout_4">
             <property name="spacing">
@@ -483,6 +617,19 @@
           <widget class="QWidget" name="networkingPage"/>
           <widget class="QWidget" name="designPage"/>
          </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </item>
