@@ -92,17 +92,17 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
     }
 
     {
-        QPixmap urlLookupPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/drop-all-songs.svg", QSize( 64, 64) );
+        QPixmap urlLookupPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/drop-all-songs.svg", QSize( 64, 64 ) );
         ui->urlLookupBoxImage->setPixmap( urlLookupPixmap );
     }
 
     {
-        QPixmap trendingPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/trending.svg", QSize( 64, 64) );
+        QPixmap trendingPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/trending.svg", QSize( 64, 64 ) );
         ui->trendingBoxImage->setPixmap( trendingPixmap );
     }
 
     {
-        QPixmap beatsPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/beatsmusic.svg", QSize( 64, 64) );
+        QPixmap beatsPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/beatsmusic.svg", QSize( 64, 64 ) );
         ui->beatsBoxImage->setPixmap( beatsPixmap );
     }
 
@@ -111,12 +111,13 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
     }
 
     {
-        QPixmap networkingPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/ipv6-logo.svg", QSize( 64, 64) );
+        QPixmap networkingPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/ipv6-logo.svg", QSize( 64, 64 ) );
         ui->networkingBoxImage->setPixmap( networkingPixmap );
     }
 
     {
-        // TODO: Add Design Pixmap
+        QPixmap designPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/new-additions.svg", QSize( 64, 64 ) );
+        ui->designBoxImage->setPixmap( designPixmap );
     }
 }
 
