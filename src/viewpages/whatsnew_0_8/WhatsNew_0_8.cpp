@@ -92,7 +92,8 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
     }
 
     {
-        // TODO: Add URL Lookup Pixmap
+        QPixmap urlLookupPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/drop-all-songs.svg", QSize( 64, 64) );
+        ui->urlLookupBoxImage->setPixmap( urlLookupPixmap );
     }
 
     {
