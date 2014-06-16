@@ -185,7 +185,6 @@ SourceTreeView::setupMenus()
 
     QAction* latchOnAction = ActionCollection::instance()->getAction( "latchOn" );
     m_latchMenu.addAction( latchOnAction );
-
     m_privacyMenu.addAction( ActionCollection::instance()->getAction( "togglePrivacy" ) );
 
     if ( type == SourcesModel::Collection )
@@ -253,7 +252,7 @@ SourceTreeView::setupMenus()
 
     // Handle any custom actions registered for playlists
     if ( type == SourcesModel::StaticPlaylist && !readonly &&
-        !ActionCollection::instance()->getAction( ActionCollection::LocalPlaylists ).isEmpty() )
+         !ActionCollection::instance()->getAction( ActionCollection::LocalPlaylists ).isEmpty() )
     {
         m_playlistMenu.addSeparator();
 
@@ -449,7 +448,6 @@ SourceTreeView::onDeletePlaylistResult( bool result )
     const QMap< int, bool > questionResults = m_popupDialog.data()->questionResults();
 
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( idx, SourcesModel::SourceTreeItemTypeRole ).toInt();
-
     if ( type == SourcesModel::StaticPlaylist )
     {
         PlaylistItem* item = itemFromIndex< PlaylistItem >( idx );
@@ -595,7 +593,6 @@ void
 SourceTreeView::latchOff()
 {
     disconnect( this, SLOT( latchOff() ) );
-    qDebug() << Q_FUNC_INFO;
     if ( !m_contextMenuIndex.isValid() )
         return;
 
@@ -630,9 +627,8 @@ SourceTreeView::latchOff( const Tomahawk::source_ptr& source )
 void
 SourceTreeView::latchModeToggled( bool checked )
 {
-
+    tDebug() << Q_FUNC_INFO << checked;
     disconnect( this, SLOT( latchOff() ) );
-    qDebug() << Q_FUNC_INFO;
     if ( !m_contextMenuIndex.isValid() )
         return;
 
@@ -643,6 +639,42 @@ SourceTreeView::latchModeToggled( bool checked )
     const SourceItem* item = itemFromIndex< SourceItem >( m_contextMenuIndex );
     const source_ptr source = item->source();
     emit latchModeChangeRequest( source, checked );
+}
+
+
+void
+SourceTreeView::renamePlaylist( const Tomahawk::playlist_ptr& playlist )
+{
+    //FIXME: this is unbelievably ugly
+    QModelIndex editIndex;
+    for ( int i = 0; i < model()->rowCount(); i++ )
+    {
+        const QModelIndex topIdx = model()->index( i, 0, QModelIndex() );
+        for ( int j = 0; j < model()->rowCount( topIdx ); j++ )
+        {
+            const QModelIndex colIdx = model()->index( j, 0, QModelIndex( topIdx ) );
+            for ( int x = 0; x < model()->rowCount( colIdx ); x++ )
+            {
+                const QModelIndex grpIdx = model()->index( x, 0, QModelIndex( colIdx ) );
+                for ( int y = 0; y < model()->rowCount( grpIdx ); y++ )
+                {
+                    const QModelIndex plIdx = model()->index( y, 0, QModelIndex( grpIdx ) );
+                    SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( plIdx, SourcesModel::SourceTreeItemTypeRole ).toInt();
+                    if ( type == SourcesModel::StaticPlaylist )
+                    {
+                        const PlaylistItem* item = itemFromIndex< PlaylistItem >( plIdx );
+                        if ( item->playlist() == playlist )
+                        {
+                            editIndex = plIdx;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if ( editIndex.isValid() )
+        edit( editIndex );
 }
 
 
@@ -659,8 +691,6 @@ SourceTreeView::renamePlaylist()
 void
 SourceTreeView::onCustomContextMenu( const QPoint& pos )
 {
-    qDebug() << Q_FUNC_INFO;
-
     QModelIndex idx = m_contextMenuIndex = indexAt( pos );
     if ( !idx.isValid() )
         return;
@@ -700,7 +730,7 @@ SourceTreeView::onCustomContextMenu( const QPoint& pos )
 void
 SourceTreeView::dragEnterEvent( QDragEnterEvent* event )
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     QTreeView::dragEnterEvent( event );
 
     if ( DropJob::acceptsMimeData( event->mimeData(), DropJob::Track | DropJob::Artist | DropJob::Album | DropJob::Playlist,  DropJob::Create ) )
@@ -820,13 +850,12 @@ SourceTreeView::dropEvent( QDropEvent* event )
         Q_ASSERT( item );
 
         item->setDropType( m_delegate->hoveredDropType() );
-        qDebug() << Q_FUNC_INFO << "dropType is " << m_delegate->hoveredDropType();
+        tDebug() << Q_FUNC_INFO << "dropType is" << m_delegate->hoveredDropType();
     }
 
     // if it's a playlist drop, accept it anywhere in the sourcetree by manually parsing it.
     if ( DropJob::isDropType( DropJob::Playlist, event->mimeData()  ) )
     {
-        qDebug() << Q_FUNC_INFO << "Current Event";
         DropJob* dropThis = new DropJob;
         dropThis->setDropTypes( DropJob::Playlist );
         dropThis->setDropAction( DropJob::Create );

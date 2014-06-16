@@ -49,6 +49,7 @@ public:
 public slots:
     void showOfflineSources( bool offlineSourcesShown );
 
+    void renamePlaylist( const Tomahawk::playlist_ptr& playlist );
     void renamePlaylist();
 
     void update( const QModelIndex &index );
