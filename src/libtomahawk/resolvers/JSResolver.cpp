@@ -132,6 +132,7 @@ JSResolver::icon() const
     return d->icon;
 }
 
+
 unsigned int
 JSResolver::weight() const
 {
@@ -139,6 +140,7 @@ JSResolver::weight() const
 
     return d->weight;
 }
+
 
 unsigned int
 JSResolver::timeout() const
@@ -239,7 +241,7 @@ JSResolver::init()
     }
 
     // add resolver dependencies, if any
-    foreach ( QString s, d->requiredScriptPaths )
+    foreach ( const QString& s, d->requiredScriptPaths )
     {
         QFile reqFile( s );
         if( !reqFile.open( QIODevice::ReadOnly ) )

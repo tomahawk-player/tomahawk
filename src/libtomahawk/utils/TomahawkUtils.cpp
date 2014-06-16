@@ -906,6 +906,7 @@ urlSetQuery( QUrl& url, const QString& query )
 #endif
 }
 
+
 QByteArray
 percentEncode( const QUrl& url )
 {

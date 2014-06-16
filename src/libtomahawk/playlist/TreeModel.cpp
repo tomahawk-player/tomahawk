@@ -262,7 +262,6 @@ TreeModel::addCollection( const collection_ptr& collection )
     connect( collection.data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
 
     setIcon( collection->bigIcon() );
-
     setTitle( collection->prettyName() );
     setDescription( collection->description() );
 }

@@ -80,6 +80,7 @@ Playlist::Playlist( const source_ptr& author,
     init();
 }
 
+
 Playlist::Playlist( const source_ptr& author,
                     const QString& guid,
                     const QString& title,
@@ -111,6 +112,7 @@ Playlist::~Playlist()
 {
     delete d_ptr;
 }
+
 
 QSharedPointer<PlaylistRemovalHandler> Playlist::removalHandler()
 {

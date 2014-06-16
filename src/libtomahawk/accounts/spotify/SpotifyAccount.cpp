@@ -231,7 +231,7 @@ SpotifyAccount::hookupResolver()
     m_spotifyResolver.data()->setIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::SpotifyIcon ) );
 
     connect( m_spotifyResolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
-    connect( m_spotifyResolver.data(), SIGNAL( customMessage( QString,QVariantMap ) ), this, SLOT( resolverMessage( QString, QVariantMap ) ) );
+    connect( m_spotifyResolver.data(), SIGNAL( customMessage( QString, QVariantMap ) ), this, SLOT( resolverMessage( QString, QVariantMap ) ) );
     connect( ActionCollection::instance(), SIGNAL( privacyModeChanged() ), SLOT( privateModeChanged() ) );
     // Always get logged in status
     QVariantMap msg;
