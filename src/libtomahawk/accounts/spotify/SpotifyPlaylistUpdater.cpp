@@ -22,6 +22,7 @@
 
 #include "accounts/AccountManager.h"
 #include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
 #include "SpotifyAccount.h"
 #include "Track.h"
 
@@ -53,7 +54,7 @@ SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl, const QVariantH
 
     if ( m_account.isNull() )
     {
-        qWarning() << "Found a spotify updater with no spotify account... ignoring for now!!";
+        qWarning() << "Found a spotify updater with no spotify account... ignoring for now!";
         return 0;
     }
 
@@ -425,7 +426,7 @@ SpotifyPlaylistUpdater::spotifyTracksRemoved( const QVariantList& trackIds, cons
         return;
     }
 
-    qDebug() << Q_FUNC_INFO << "remove tracks in middle of tomahawk playlist, from spotify command!" << trackIds << newRev << oldRev;
+    tDebug() << Q_FUNC_INFO << "remove tracks in middle of tomahawk playlist, from spotify command!" << trackIds << newRev << oldRev;
     // Uh oh, dont' want to get out of sync!!
 //     Q_ASSERT( m_latestRev == oldRev );
 //     m_latestRev = newRev;
@@ -439,7 +440,7 @@ SpotifyPlaylistUpdater::spotifyTracksRemoved( const QVariantList& trackIds, cons
         const QString id = trackIdV.toString();
         if ( id.isEmpty() )
         {
-            qWarning() << Q_FUNC_INFO << "Tried to get track id to remove, but either couldn't convert to qstring:" << trackIdV;
+            tDebug() << Q_FUNC_INFO << "Tried to get track id to remove, but either couldn't convert to qstring:" << trackIdV;
             continue;
         }
 
@@ -458,9 +459,9 @@ SpotifyPlaylistUpdater::spotifyTracksRemoved( const QVariantList& trackIds, cons
         entries.removeAll( torm );
 
     const int sizeDiff = playlist()->entries().size() - entries.size();
-    qDebug() << "We were asked to delete:" << trackIds.size() << "tracks from the playlist, and we deleted:" << sizeDiff;
+    tDebug() << "We were asked to delete:" << trackIds.size() << "tracks from the playlist, and we deleted:" << sizeDiff;
     if ( trackIds.size() != ( playlist()->entries().size() - entries.size() ) )
-        qWarning() << "========================= Failed to delete all the tracks we were asked for!! Didn't find some indicesss... ===================";
+        tDebug() << Q_FUNC_INFO << "Failed to delete all the tracks we were asked for! Didn't find some indexes!";
 
     if ( sizeDiff > 0 )
     {
@@ -528,7 +529,10 @@ SpotifyPlaylistUpdater::spotifyTracksMoved( const QVariantList& tracks, const QS
     for ( QList< plentry_ptr >::iterator iter = entries.begin(); iter != entries.end(); )
     {
         if ( (*iter)->annotation().isEmpty() )
+        {
+            ++iter;
             continue;
+        }
 
         if ( tracks.contains( (*iter)->annotation() ) )
         {
