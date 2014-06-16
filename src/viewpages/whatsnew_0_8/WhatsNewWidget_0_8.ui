@@ -104,7 +104,7 @@ border-bottom-right-radius: 0px;
 border-bottom-left-radius: 0px;
 background-color:#292f34;</string>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_4">
+             <layout class="QVBoxLayout" name="verticalLayout_41">
               <property name="spacing">
                <number>8</number>
               </property>
@@ -186,7 +186,7 @@ border-radius: 4px;
 border-color: grey;
 color: grey;</string>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_4">
+             <layout class="QVBoxLayout" name="verticalLayout_42">
               <property name="spacing">
                <number>8</number>
               </property>
@@ -252,7 +252,7 @@ border-radius: 4px;
 border-color: grey;
 color: grey;</string>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_4">
+             <layout class="QVBoxLayout" name="verticalLayout_43">
               <property name="spacing">
                <number>8</number>
               </property>
@@ -318,7 +318,7 @@ border-radius: 4px;
 border-color: grey;
 color: grey;</string>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_4">
+             <layout class="QVBoxLayout" name="verticalLayout_44">
               <property name="spacing">
                <number>8</number>
               </property>
@@ -384,7 +384,7 @@ border-radius: 4px;
 border-color: grey;
 color: grey;</string>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_4">
+             <layout class="QVBoxLayout" name="verticalLayout_45">
               <property name="spacing">
                <number>8</number>
               </property>
@@ -450,7 +450,7 @@ border-radius: 4px;
 border-color: grey;
 color: grey;</string>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_4">
+             <layout class="QVBoxLayout" name="verticalLayout_46">
               <property name="spacing">
                <number>8</number>
               </property>
@@ -516,7 +516,7 @@ border-radius: 4px;
 border-color: grey;
 color: grey;</string>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_4">
+             <layout class="QVBoxLayout" name="verticalLayout_47">
               <property name="spacing">
                <number>8</number>
               </property>
@@ -609,7 +609,7 @@ background-color:#292f34;</string>
            <property name="styleSheet">
             <string notr="true">border: none;</string>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_4">
+           <layout class="QVBoxLayout" name="verticalLayout_48">
             <property name="spacing">
              <number>0</number>
             </property>
