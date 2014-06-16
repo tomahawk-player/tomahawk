@@ -19,33 +19,8 @@
 #include "WhatsNew_0_8.h"
 #include "ui_WhatsNewWidget_0_8.h"
 
-#include "libtomahawk-widgets/PlaylistDelegate.h"
-
-#include "ViewManager.h"
-#include "SourceList.h"
-#include "TomahawkSettings.h"
-#include "widgets/RecentPlaylistsModel.h"
-#include "widgets/RecentlyPlayedPlaylistsModel.h"
-#include "MetaPlaylistInterface.h"
-#include "audio/AudioEngine.h"
-#include "playlist/AlbumModel.h"
-#include "playlist/RecentlyPlayedModel.h"
-#include "playlist/dynamic/GeneratorInterface.h"
-#include "widgets/OverlayWidget.h"
-#include "widgets/BasicHeader.h"
 #include "utils/ImageRegistry.h"
-#include "utils/AnimatedSpinner.h"
 #include "utils/TomahawkStyle.h"
-#include "utils/TomahawkUtilsGui.h"
-#include "utils/Logger.h"
-#include "utils/DpiScaler.h"
-
-#include <QPainter>
-#include <QScrollArea>
-#include <QLabel>
-
-#define HISTORY_PLAYLIST_ITEMS 10
-#define HISTORY_TRACK_ITEMS 15
 
 using namespace Tomahawk;
 using namespace Tomahawk::Widgets;

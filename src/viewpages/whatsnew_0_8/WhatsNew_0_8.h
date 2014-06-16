@@ -19,25 +19,12 @@
 #ifndef WHATSNEW_0_8_H
 #define WHATSNEW_0_8_H
 
-#include "PlaylistInterface.h"
-
-#include "Query.h"
-#include "Source.h"
 #include "ViewPagePlugin.h"
 #include "ViewPageLazyLoader.h"
 
-#include "utils/TomahawkUtilsGui.h"
-
 #include <QWidget>
-#include <QListWidgetItem>
-#include <QStyledItemDelegate>
 
 #include "../ViewPageDllMacro.h"
-
-class AlbumModel;
-class RecentlyPlayedModel;
-class OverlayWidget;
-class BasicHeader;
 
 namespace Ui
 {
