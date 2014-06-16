@@ -172,7 +172,7 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
         QRect figureRect = r.adjusted( 0, 0, -option.rect.width() + 60 - 6 + r.left(), 0 );
         painter->setFont( figureFont );
-        painter->setPen( option.palette.text().color().lighter( 450 ) );
+        painter->setPen( option.palette.mid().color() );
         painter->drawText( figureRect, QString::number( index.row() + 1 ), m_centerOption );
         painter->setPen( opt.palette.text().color() );
 
