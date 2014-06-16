@@ -200,6 +200,8 @@ SearchWidget::jumpToCurrentTrack()
 void
 SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
 {
+    tDebug() << Q_FUNC_INFO;
+
     QList<Tomahawk::artist_ptr> artists;
     QList<Tomahawk::album_ptr> albums;
     QList<Tomahawk::query_ptr> queries;
@@ -229,6 +231,8 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
 void
 SearchWidget::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums )
 {
+    tDebug() << Q_FUNC_INFO;
+
     foreach ( const Tomahawk::album_ptr& album, albums )
     {
         int distance = TomahawkUtils::levenshtein( m_search, album->name() );
@@ -249,6 +253,8 @@ SearchWidget::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums )
 void
 SearchWidget::onArtistsFound( const QList<Tomahawk::artist_ptr>& artists )
 {
+    tDebug() << Q_FUNC_INFO;
+
     foreach ( const Tomahawk::artist_ptr& artist, artists )
     {
         int distance = TomahawkUtils::levenshtein( m_search, artist->name() );
@@ -269,6 +275,8 @@ SearchWidget::onArtistsFound( const QList<Tomahawk::artist_ptr>& artists )
 void
 SearchWidget::onQueryFinished()
 {
+    tDebug() << Q_FUNC_INFO;
+
     m_artistsModel->finishLoading();
     m_albumsModel->finishLoading();
     m_resultsModel->finishLoading();
@@ -278,6 +286,8 @@ SearchWidget::onQueryFinished()
 void
 SearchWidget::updateArtists()
 {
+    tDebug() << Q_FUNC_INFO;
+
     QList< Tomahawk::artist_ptr > sortedArtists;
     QList< float > floats = m_artists.keys();
     qSort( floats.begin(), floats.end() );
@@ -295,6 +305,8 @@ SearchWidget::updateArtists()
 void
 SearchWidget::updateAlbums()
 {
+    tDebug() << Q_FUNC_INFO;
+
     QList< Tomahawk::album_ptr > sortedAlbums;
     QList< float > floats = m_albums.keys();
     qSort( floats.begin(), floats.end() );
