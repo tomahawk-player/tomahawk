@@ -598,9 +598,10 @@ color: grey;</string>
 border-style: solid;
 border-radius: 4px;
 border-color: white;
-color: white;
 padding: 2px;
-background-color:#292f34;</string>
+color: white;
+background-color:#292f34;
+</string>
           </property>
           <property name="currentIndex">
            <number>0</number>

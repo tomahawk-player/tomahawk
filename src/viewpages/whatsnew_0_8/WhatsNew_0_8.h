@@ -54,7 +54,19 @@ public:
 protected:
     void changeEvent( QEvent* e );
 
+private slots:
+    void inboxBoxClicked();
+    void urlLookupBoxClicked();
+    void trendingBoxClicked();
+    void beatsBoxClicked();
+    void gmusicBoxClicked();
+    void networkingBoxClicked();
+    void designBoxClicked();
+
 private:
+    void activateBox( QWidget* widget );
+    void deactivateAllBoxes();
+
     Ui::WhatsNewWidget_0_8 *ui;
 };
 
