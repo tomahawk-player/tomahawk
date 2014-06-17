@@ -121,7 +121,7 @@ background-color:#292f34;</string>
                <number>16</number>
               </property>
               <item alignment="Qt::AlignTop">
-               <widget class="QLabel" name="inboxBoxHeader">
+               <widget class="ClickableLabel" name="inboxBoxHeader">
                 <property name="font">
                  <font>
                   <weight>75</weight>
@@ -140,7 +140,7 @@ background-color:#292f34;</string>
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="inboxBoxImage">
+               <widget class="ClickableLabel" name="inboxBoxImage">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
                   <horstretch>0</horstretch>
@@ -194,7 +194,7 @@ color: grey;</string>
                <number>8</number>
               </property>
               <item alignment="Qt::AlignTop">
-               <widget class="QLabel" name="urlLookupBoxHeader">
+               <widget class="ClickableLabel" name="urlLookupBoxHeader">
                 <property name="font">
                  <font>
                   <weight>75</weight>
@@ -213,7 +213,7 @@ color: grey;</string>
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="urlLookupBoxImage">
+               <widget class="ClickableLabel" name="urlLookupBoxImage">
                 <property name="minimumSize">
                  <size>
                   <width>64</width>
@@ -260,7 +260,7 @@ color: grey;</string>
                <number>8</number>
               </property>
               <item alignment="Qt::AlignTop">
-               <widget class="QLabel" name="trendingBoxHeader">
+               <widget class="ClickableLabel" name="trendingBoxHeader">
                 <property name="font">
                  <font>
                   <weight>75</weight>
@@ -279,7 +279,7 @@ color: grey;</string>
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="trendingBoxImage">
+               <widget class="ClickableLabel" name="trendingBoxImage">
                 <property name="minimumSize">
                  <size>
                   <width>64</width>
@@ -326,7 +326,7 @@ color: grey;</string>
                <number>8</number>
               </property>
               <item alignment="Qt::AlignTop">
-               <widget class="QLabel" name="beatsBoxHeader">
+               <widget class="ClickableLabel" name="beatsBoxHeader">
                 <property name="font">
                  <font>
                   <weight>75</weight>
@@ -345,7 +345,7 @@ color: grey;</string>
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="beatsBoxImage">
+               <widget class="ClickableLabel" name="beatsBoxImage">
                 <property name="minimumSize">
                  <size>
                   <width>64</width>
@@ -392,7 +392,7 @@ color: grey;</string>
                <number>8</number>
               </property>
               <item alignment="Qt::AlignTop">
-               <widget class="QLabel" name="gmusicBoxHeader">
+               <widget class="ClickableLabel" name="gmusicBoxHeader">
                 <property name="font">
                  <font>
                   <weight>75</weight>
@@ -411,7 +411,7 @@ color: grey;</string>
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="gmusicBoxImage">
+               <widget class="ClickableLabel" name="gmusicBoxImage">
                 <property name="minimumSize">
                  <size>
                   <width>64</width>
@@ -458,7 +458,7 @@ color: grey;</string>
                <number>8</number>
               </property>
               <item alignment="Qt::AlignTop">
-               <widget class="QLabel" name="networkingBoxHeader">
+               <widget class="ClickableLabel" name="networkingBoxHeader">
                 <property name="font">
                  <font>
                   <weight>75</weight>
@@ -477,7 +477,7 @@ color: grey;</string>
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="networkingBoxImage">
+               <widget class="ClickableLabel" name="networkingBoxImage">
                 <property name="minimumSize">
                  <size>
                   <width>64</width>
@@ -524,7 +524,7 @@ color: grey;</string>
                <number>8</number>
               </property>
               <item alignment="Qt::AlignTop">
-               <widget class="QLabel" name="designBoxHeader">
+               <widget class="ClickableLabel" name="designBoxHeader">
                 <property name="font">
                  <font>
                   <weight>75</weight>
@@ -543,7 +543,7 @@ color: grey;</string>
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="designBoxImage">
+               <widget class="ClickableLabel" name="designBoxImage">
                 <property name="minimumSize">
                  <size>
                   <width>64</width>
@@ -704,6 +704,13 @@ background-color:#292f34;</string>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ClickableLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">widgets/ClickableLabel.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
