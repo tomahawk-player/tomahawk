@@ -827,10 +827,10 @@ Password (OTP)</source>
 <context>
     <name>JSResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="348"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="385"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="423"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="485"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="350"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="387"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="425"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="487"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation type="unfinished"/>
     </message>
@@ -2078,68 +2078,68 @@ Password (OTP)</source>
 <context>
     <name>SourceTreeView</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="229"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="228"/>
         <source>&amp;Copy Link</source>
         <translation>&amp;Kopijuoti nuorodą</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="237"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="236"/>
         <source>&amp;Delete %1</source>
         <translation>Paša&amp;linti %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="241"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="240"/>
         <source>Add to my Playlists</source>
         <translation>Pridėti prie mano grojaraščių</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="243"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="242"/>
         <source>Add to my Automatic Playlists</source>
         <translation>Pridėti prie mano automatinių grojaraščių</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="245"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="244"/>
         <source>Add to my Stations</source>
         <translation>Pridėti prie mano stočių</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="233"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="232"/>
         <source>&amp;Export Playlist</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="387"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="386"/>
         <source>playlist</source>
         <translation>grojaraštis</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="391"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="390"/>
         <source>automatic playlist</source>
         <translation>automatinis grojaraštis</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="395"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="394"/>
         <source>station</source>
         <translation>stotis</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="424"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="423"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Ar norite pašalinti %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="426"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="425"/>
         <source>Delete</source>
         <translation>Pašalinti</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="532"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="530"/>
         <source>Save XSPF</source>
         <translation>Išsaugoti XSPF</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="533"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="531"/>
         <source>Playlists (*.xspf)</source>
         <translation>Grojaraščiai (*.xspf)</translation>
     </message>
@@ -2283,7 +2283,7 @@ Password (OTP)</source>
 <context>
     <name>SpotifyPlaylistUpdater</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="354"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="355"/>
         <source>Delete associated Spotify playlist?</source>
         <translation>Pašalinti susietą Spotify grojaraštį?</translation>
     </message>

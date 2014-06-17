@@ -828,10 +828,10 @@ Password (OTP)</source>
 <context>
     <name>JSResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="348"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="385"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="423"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="485"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="350"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="387"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="425"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="487"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Σριπτ προειδοποίηση αναλυτή: API κλήση% 1 επέστρεψε δεδομένα συγχρονισμένα.</translation>
     </message>
@@ -2081,68 +2081,68 @@ Password (OTP)</source>
 <context>
     <name>SourceTreeView</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="229"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="228"/>
         <source>&amp;Copy Link</source>
         <translation>&amp;Αντιγραφή Υπερσυνδέσμου</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="237"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="236"/>
         <source>&amp;Delete %1</source>
         <translation>&amp;Διαγραφή %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="241"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="240"/>
         <source>Add to my Playlists</source>
         <translation>Προσθηκη στις λιστες αναπαραγωγης</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="243"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="242"/>
         <source>Add to my Automatic Playlists</source>
         <translation>Προσθηκη στις αυτοματες λιστες αναπαραγωγης σας</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="245"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="244"/>
         <source>Add to my Stations</source>
         <translation>Προσθηκη στους σταθμους μου</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="233"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="232"/>
         <source>&amp;Export Playlist</source>
         <translation>&amp;Εξαγωγή Λίστας Αναπαραγωγής</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="387"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="386"/>
         <source>playlist</source>
         <translation>λίστας αναπαραγωγής</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="391"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="390"/>
         <source>automatic playlist</source>
         <translation>αυτόματη λίστα αναπαραγωγής</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="395"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="394"/>
         <source>station</source>
         <translation>σταθμός</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="424"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="423"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Θέλετε να διαγράψετε την %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="426"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="425"/>
         <source>Delete</source>
         <translation>Διαγραφή</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="532"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="530"/>
         <source>Save XSPF</source>
         <translation>Αποθήκευση αρχείου XSPF</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="533"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="531"/>
         <source>Playlists (*.xspf)</source>
         <translation>Λίστες Αναπαραγωγής (*.xspf)</translation>
     </message>
@@ -2286,7 +2286,7 @@ Password (OTP)</source>
 <context>
     <name>SpotifyPlaylistUpdater</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="354"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="355"/>
         <source>Delete associated Spotify playlist?</source>
         <translation>Διαγραφή σχετιζόμενης λίστας αναπαραγωγής Spotify;</translation>
     </message>

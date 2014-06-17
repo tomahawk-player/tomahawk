@@ -827,10 +827,10 @@ Password (OTP)</source>
 <context>
     <name>JSResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="348"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="385"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="423"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="485"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="350"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="387"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="425"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="487"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation type="unfinished"/>
     </message>
@@ -2082,68 +2082,68 @@ i emissores basades en els vostres gusts musicals.</translation>
 <context>
     <name>SourceTreeView</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="229"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="228"/>
         <source>&amp;Copy Link</source>
         <translation>&amp;Copia l&apos;Enllaç</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="237"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="236"/>
         <source>&amp;Delete %1</source>
         <translation>&amp;Esborra %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="241"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="240"/>
         <source>Add to my Playlists</source>
         <translation>Afegeix a les meves Llistes</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="243"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="242"/>
         <source>Add to my Automatic Playlists</source>
         <translation>Afegeix a les meves Llistes Automàtiques</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="245"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="244"/>
         <source>Add to my Stations</source>
         <translation>Afegeix a les meves Emissores</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="233"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="232"/>
         <source>&amp;Export Playlist</source>
         <translation>E&amp;xporta la Llista de Reproducció</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="387"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="386"/>
         <source>playlist</source>
         <translation>llista</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="391"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="390"/>
         <source>automatic playlist</source>
         <translation>llista automàtica</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="395"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="394"/>
         <source>station</source>
         <translation>emissora</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="424"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="423"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Voleu esborrar %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="426"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="425"/>
         <source>Delete</source>
         <translation>Suprimeix</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="532"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="530"/>
         <source>Save XSPF</source>
         <translation>Desa com XSPF</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="533"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="531"/>
         <source>Playlists (*.xspf)</source>
         <translation>Llistes de reproducció (*.xspf)</translation>
     </message>
@@ -2287,7 +2287,7 @@ i emissores basades en els vostres gusts musicals.</translation>
 <context>
     <name>SpotifyPlaylistUpdater</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="354"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="355"/>
         <source>Delete associated Spotify playlist?</source>
         <translation>Voleu suprimir la llista de reproducció associada de l&apos;Spotify?</translation>
     </message>
