@@ -41,7 +41,7 @@ Required dependencies:
 * Phonon 4.6.0 - http://phonon.kde.org/
 * QJson 0.8.1 - http://qjson.sourceforge.net/
 * SQLite 3.6.22 - http://www.sqlite.org/
-* TagLib 1.6.2 - http://developer.kde.org/~wheeler/taglib.html
+* TagLib 1.8 - http://developer.kde.org/~wheeler/taglib.html
 * Boost 1.3 - http://www.boost.org/
 * CLucene 0.9.23 (0.9.21 will fail) - http://clucene.sourceforge.net/download.shtml
 * libechonest 2.2.0 - http://projects.kde.org/projects/playground/libs/libechonest/
