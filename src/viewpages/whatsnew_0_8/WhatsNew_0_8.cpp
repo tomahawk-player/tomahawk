@@ -23,6 +23,7 @@
 #include "utils/TomahawkStyle.h"
 
 #include <QLayout>
+#include <QScrollArea>
 #include <QStackedWidget>
 
 using namespace Tomahawk;
@@ -70,9 +71,22 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
     ui->lineAbove->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
     ui->lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
 
+
     {
+        QScrollArea* area = new QScrollArea();
+        area->setWidgetResizable( true );
+        area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+        area->setWidget( widget );
+
+        QPalette pal = palette();
+        pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_BACKGROUND );
+        area->setPalette( pal );
+        area->setAutoFillBackground( true );
+        area->setFrameShape( QFrame::NoFrame );
+        area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
         QVBoxLayout* layout = new QVBoxLayout();
-        layout->addWidget( widget );
+        layout->addWidget( area );
         setLayout( layout );
         TomahawkUtils::unmarginLayout( layout );
     }
