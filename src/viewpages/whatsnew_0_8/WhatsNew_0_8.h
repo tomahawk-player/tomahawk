@@ -64,7 +64,8 @@ private slots:
     void designBoxClicked();
 
 private:
-    void activateBox( QWidget* widget );
+    void activateBox( QWidget* widget, int activeIndex );
+    void deactivateBox( QWidget* widget );
     void deactivateAllBoxes();
 
     Ui::WhatsNewWidget_0_8 *ui;

@@ -201,97 +201,82 @@ WhatsNewWidget_0_8::changeEvent( QEvent* e )
 void
 WhatsNewWidget_0_8::inboxBoxClicked()
 {
-    deactivateAllBoxes();
-    activateBox( ui->inboxBox );
-    ui->stackedWidget->setCurrentIndex( 0 );
+    activateBox( ui->inboxBox, 0 );
 }
 
 
 void
 WhatsNewWidget_0_8::urlLookupBoxClicked()
 {
-    deactivateAllBoxes();
-    activateBox( ui->urlLookupBox );
-    ui->stackedWidget->setCurrentIndex( 1 );
+    activateBox( ui->urlLookupBox, 1 );
 }
 
 
 void
 WhatsNewWidget_0_8::trendingBoxClicked()
 {
-    deactivateAllBoxes();
-    activateBox( ui->trendingBox );
-    ui->stackedWidget->setCurrentIndex( 2 );
+    activateBox( ui->trendingBox, 2 );
 }
 
 
 void
 WhatsNewWidget_0_8::beatsBoxClicked()
 {
-    deactivateAllBoxes();
-    activateBox( ui->beatsBox );
-    ui->stackedWidget->setCurrentIndex( 3 );
+    activateBox( ui->beatsBox, 3 );
 }
 
 
 void
 WhatsNewWidget_0_8::gmusicBoxClicked()
 {
-    deactivateAllBoxes();
-    activateBox( ui->gmusicBox );
-    ui->stackedWidget->setCurrentIndex( 4 );
+    activateBox( ui->gmusicBox, 4 );
 }
 
 
 void
 WhatsNewWidget_0_8::networkingBoxClicked()
 {
-    deactivateAllBoxes();
-    activateBox( ui->networkingBox );
-    ui->stackedWidget->setCurrentIndex( 5 );
+    activateBox( ui->networkingBox, 5 );
 }
 
 
 void
 WhatsNewWidget_0_8::designBoxClicked()
 {
-    deactivateAllBoxes();
-    activateBox( ui->designBox );
-    ui->stackedWidget->setCurrentIndex( 6 );
+    activateBox( ui->designBox, 6 );
 }
 
 
 void
-WhatsNewWidget_0_8::activateBox( QWidget* widget )
+WhatsNewWidget_0_8::activateBox( QWidget* widget, int activeIndex )
 {
+    deactivateAllBoxes();
+
     widget->layout()->setContentsMargins( 8, 8, 8, 16 );
     widget->setStyleSheet( activeWidgetThumbStylesheet );
+
+    ui->stackedWidget->setCurrentIndex( activeIndex );
+}
+
+
+void
+WhatsNewWidget_0_8::deactivateBox( QWidget* widget )
+{
+    widget->layout()->setContentsMargins( 8, 8, 8, 8 );
+    widget->setStyleSheet( inactiveWidgetThumbStylesheet );
 }
 
 
 void
 WhatsNewWidget_0_8::deactivateAllBoxes()
 {
-    ui->inboxBox->layout()->setContentsMargins( 8, 8, 8, 8 );
-    ui->inboxBox->setStyleSheet( inactiveWidgetThumbStylesheet );
-
-    ui->urlLookupBox->layout()->setContentsMargins( 8, 8, 8, 8 );
-    ui->urlLookupBox->setStyleSheet( inactiveWidgetThumbStylesheet );
-
-    ui->trendingBox->layout()->setContentsMargins( 8, 8, 8, 8 );
-    ui->trendingBox->setStyleSheet( inactiveWidgetThumbStylesheet );
-
-    ui->beatsBox->layout()->setContentsMargins( 8, 8, 8, 8 );
-    ui->beatsBox->setStyleSheet( inactiveWidgetThumbStylesheet );
-
-    ui->gmusicBox->layout()->setContentsMargins( 8, 8, 8, 8 );
-    ui->gmusicBox->setStyleSheet( inactiveWidgetThumbStylesheet );
-
-    ui->networkingBox->layout()->setContentsMargins( 8, 8, 8, 8 );
-    ui->networkingBox->setStyleSheet( inactiveWidgetThumbStylesheet );
-
-    ui->designBox->layout()->setContentsMargins( 8, 8, 8, 8 );
-    ui->designBox->setStyleSheet( inactiveWidgetThumbStylesheet );
+    deactivateBox( ui->inboxBox );
+    deactivateBox( ui->urlLookupBox );
+    deactivateBox( ui->trendingBox );
+    deactivateBox( ui->beatsBox );
+    deactivateBox( ui->gmusicBox );
+    deactivateBox( ui->networkingBox );
+    deactivateBox( ui->designBox );
 }
 
 
