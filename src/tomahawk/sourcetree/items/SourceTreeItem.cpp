@@ -261,3 +261,26 @@ SourceTreeItem::setParentItem(SourceTreeItem* item)
 {
     m_parent = item;
 }
+
+void
+SourceTreeItem::removeFromList()
+{
+    pageDestroyed();
+}
+
+
+void
+SourceTreeItem::pageDestroyed()
+{
+    model()->removeSourceItemLink( this );
+
+    int idx = parent()->children().indexOf( this );
+    parent()->beginRowsRemoved( idx, idx );
+    parent()->removeChild( this );
+    parent()->endRowsRemoved();
+
+    emit removed();
+    deleteLater();
+}
+
+

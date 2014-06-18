@@ -132,29 +132,6 @@ TemporaryPageItem::IDValue() const
 
 
 void
-TemporaryPageItem::removeFromList()
-{
-    pageDestroyed();
-    ViewManager::instance()->destroyPage( m_page );
-}
-
-
-void
-TemporaryPageItem::pageDestroyed()
-{
-    model()->removeSourceItemLink( this );
-
-    int idx = parent()->children().indexOf( this );
-    parent()->beginRowsRemoved( idx, idx );
-    parent()->removeChild( this );
-    parent()->endRowsRemoved();
-
-    emit removed();
-    deleteLater();
-}
-
-
-void
 TemporaryPageItem::linkActionTriggered( QAction* action )
 {
     Q_ASSERT( action );
@@ -210,4 +187,13 @@ bool
 TemporaryPageItem::isBeingPlayed() const
 {
     return m_page->isBeingPlayed();
+}
+
+
+void
+TemporaryPageItem::removeFromList()
+{
+    SourceTreeItem::removeFromList();
+
+    ViewManager::instance()->destroyPage( m_page );
 }
