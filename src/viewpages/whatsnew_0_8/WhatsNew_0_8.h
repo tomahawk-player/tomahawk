@@ -82,14 +82,15 @@ public:
     WhatsNew_0_8( QWidget* parent = 0 );
     virtual ~WhatsNew_0_8();
 
-    virtual const QString defaultName() { return WHATSNEW_0_8_VIEWPAGE_NAME; }
-    virtual QString title() const { return tr( "What's new in Tomahawk 0.8?" ); }
-    virtual QString description() const { return tr( "An overview of the changes and additions since 0.7." ); }
-    virtual const QString pixmapPath() const { return ( RESPATH "images/dashboard.svg" ); }
+    const QString defaultName() { return WHATSNEW_0_8_VIEWPAGE_NAME; }
+    QString title() const { return tr( "What's new in Tomahawk 0.8?" ); }
+    QString description() const { return tr( "An overview of the changes and additions since 0.7." ); }
+    const QString pixmapPath() const { return ( RESPATH "images/dashboard.svg" ); }
+    bool isDeletable() const { return true; }
 
-    virtual int sortValue() { return 1; }
+    int sortValue() { return 1; }
 
-    virtual bool showInfoBar() const { return true; }
+    bool showInfoBar() const { return true; }
 };
 
 
