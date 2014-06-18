@@ -171,8 +171,12 @@ DatabaseCollection::requestTracks( const Tomahawk::album_ptr& album )
         return 0;
 
     DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( thisCollection );
-    cmd->setAlbum( album->weakRef() );
-    cmd->setSortOrder( DatabaseCommand_AllTracks::AlbumPosition );
+
+    if ( album )
+    {
+        cmd->setAlbum( album->weakRef() );
+        cmd->setSortOrder( DatabaseCommand_AllTracks::AlbumPosition );
+    }
 
     return cmd;
 }
