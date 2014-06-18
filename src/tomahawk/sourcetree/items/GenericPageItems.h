@@ -41,6 +41,7 @@ public:
     virtual int peerSortValue() const; // How to sort relative to peers in the tree.
     virtual bool isBeingPlayed() const;
 
+    void setDeletable( bool deletable );
     void setText( const QString& text );
     void setSortValue( int value );
 

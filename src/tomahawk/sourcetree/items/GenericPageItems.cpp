@@ -116,6 +116,20 @@ GenericPageItem::isBeingPlayed() const
 }
 
 
+void
+GenericPageItem::setDeletable( bool deletable )
+{
+    if ( deletable )
+    {
+        setRowType( SourcesModel::TemporaryPage );
+    }
+    else
+    {
+        setRowType( SourcesModel::GenericPage );
+    }
+}
+
+
 int
 GenericPageItem::peerSortValue() const
 {
