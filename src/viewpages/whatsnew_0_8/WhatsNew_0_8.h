@@ -83,7 +83,7 @@ public:
     virtual ~WhatsNew_0_8();
 
     const QString defaultName() { return WHATSNEW_0_8_VIEWPAGE_NAME; }
-    QString title() const { return tr( "What's new in Tomahawk 0.8?" ); }
+    QString title() const { return tr( "What's new in 0.8?" ); }
     QString description() const { return tr( "An overview of the changes and additions since 0.7." ); }
     const QString pixmapPath() const { return ( RESPATH "images/dashboard.svg" ); }
     bool isDeletable() const { return true; }
