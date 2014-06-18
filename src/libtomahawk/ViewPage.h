@@ -72,6 +72,14 @@ public:
     virtual bool jumpToCurrentTrack() = 0;
 
     virtual bool isTemporaryPage() const { return false; }
+    /**
+     * This page is actually a constant page that will be shown on every
+     * restart of Tomahawk until the user selects it to be removed.
+     *
+     * The main distinction between this and isTemporaryPage() is that the
+     * page will not be listed in the search history.
+     */
+    virtual bool isDeletable() const { return false; }
     virtual bool isBeingPlayed() const { return false; }
 
     virtual QList<PlaylistUpdaterInterface*> updaters() const { return QList<PlaylistUpdaterInterface*>(); }
