@@ -343,6 +343,8 @@ SourcesModel::appendPageItem( const QString& name, ViewPage* page, int sortValue
     GenericPageItem* pageItem = new GenericPageItem( this, m_browse, page->title(), page->pixmap(),
                                             boost::bind( &ViewManager::showDynamicPage, ViewManager::instance(), name ),
                                             boost::bind( &ViewManager::dynamicPageWidget, ViewManager::instance(), name ) );
+    pageItem->setDeletable( page->isDeletable() );
+
     if ( sortValue )
     {
         pageItem->setSortValue( sortValue );
