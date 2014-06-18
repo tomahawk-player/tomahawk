@@ -52,14 +52,13 @@ using namespace Tomahawk;
 using namespace Tomahawk::Widgets;
 
 
-Dashboard::Dashboard( QWidget* parent )
+Dashboard::Dashboard( QWidget* /* parent */ )
 {
 }
 
 
 Dashboard::~Dashboard()
 {
-
 }
 
 
