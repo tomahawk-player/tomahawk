@@ -28,8 +28,8 @@
 #include <functional>
 using std::function;
 #else
-#include <tr1/functional>
-using std::tr1::function;
+#include <functional>
+using std::function;
 #endif
 
 #include <QMetaMethod>
