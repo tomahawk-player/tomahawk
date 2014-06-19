@@ -273,7 +273,8 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
     {
         tDebug() << "Not updating current revision, optimistic locking fail" << currentRevision << m_oldrev;
 
-        Q_ASSERT( !source()->isLocal() );
+        // This will fail if we run two SetPlaylistRevisions commands on the same playlist concurrently
+        // Q_ASSERT( !source()->isLocal() );
     }
 }
 
