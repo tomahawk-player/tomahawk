@@ -26,6 +26,8 @@
 
 #include "playlist/RevisionQueueItem.h"
 
+class DatabaseCommand_SetPlaylistRevision;
+
 namespace Tomahawk
 {
 
@@ -35,6 +37,7 @@ class PlaylistPrivate
 public:
     PlaylistPrivate( Playlist* q )
         : q_ptr( q )
+        , queuedSetPlaylistRevision( false )
     {
     }
 
@@ -42,6 +45,7 @@ public:
         : q_ptr( q )
         , source( _author )
         , lastmodified( 0 )
+        , queuedSetPlaylistRevision( false )
     {
     }
 
@@ -63,6 +67,7 @@ public:
         , creator( _creator )
         , lastmodified( _lastmod )
         , createdOn( _createdOn )
+        , queuedSetPlaylistRevision( false )
         , shared( _shared )
     {
     }
@@ -82,6 +87,7 @@ public:
         , creator( _creator )
         , lastmodified( 0 )
         , createdOn( 0 ) // will be set by db command
+        , queuedSetPlaylistRevision( false )
         , shared( _shared )
         , initEntries( _entries )
     {
@@ -100,10 +106,12 @@ private:
     QString creator;
     unsigned int lastmodified;
     unsigned int createdOn;
+    bool queuedSetPlaylistRevision;
     bool shared;
     bool loaded;
 
     QQueue<_detail::Closure*> queuedOps;
+    QQueue<DatabaseCommand_SetPlaylistRevision*> queuedSetPlaylistRevisionCmds;
     QList< plentry_ptr > initEntries;
     QList< plentry_ptr > entries;
 

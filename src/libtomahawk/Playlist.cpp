@@ -354,7 +354,17 @@ Playlist::createNewRevision( const QString& newrev, const QString& oldrev, const
                                                      added,
                                                      entries );
 
-    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
+    connect( cmd, SIGNAL( finished() ),
+             this, SLOT( setPlaylistRevisionFinished() ) );
+    if ( d->queuedSetPlaylistRevision )
+    {
+        d->queuedSetPlaylistRevisionCmds.enqueue( cmd );
+    }
+    else
+    {
+        d->queuedSetPlaylistRevision = true;
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
+    }
 }
 
 
@@ -389,7 +399,17 @@ Playlist::updateEntries( const QString& newrev, const QString& oldrev, const QLi
                                              orderedguids,
                                              entries );
 
-    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
+    connect( cmd, SIGNAL( finished() ),
+             this, SLOT( setPlaylistRevisionFinished() ) );
+    if ( d->queuedSetPlaylistRevision )
+    {
+        d->queuedSetPlaylistRevisionCmds.enqueue( cmd );
+    }
+    else
+    {
+        d->queuedSetPlaylistRevision = true;
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
+    }
 }
 
 
@@ -557,6 +577,22 @@ Playlist::onResolvingFinished()
     {
         d->locallyChanged = false;
         createNewRevision( currentrevision(), currentrevision(), d->entries );
+    }
+}
+
+
+void
+Playlist::setPlaylistRevisionFinished()
+{
+    Q_D( Playlist );
+    if ( d->queuedSetPlaylistRevisionCmds.length() > 0 )
+    {
+        DatabaseCommand_SetPlaylistRevision* cmd = d->queuedSetPlaylistRevisionCmds.dequeue();
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
+    }
+    else
+    {
+        d->queuedSetPlaylistRevision = false;
     }
 }
 

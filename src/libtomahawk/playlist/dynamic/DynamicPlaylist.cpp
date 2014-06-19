@@ -244,7 +244,18 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
     if ( !d->autoLoad )
         cmd->setPlaylist( d->weakSelf );
 
-    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
+    connect( cmd, SIGNAL( finished() ),
+             this, SLOT( setPlaylistRevisionFinished() ) );
+
+    if ( d->queuedSetPlaylistRevision )
+    {
+        d->queuedSetPlaylistRevisionCmds.enqueue( cmd );
+    }
+    else
+    {
+        d->queuedSetPlaylistRevision = true;
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
+    }
 }
 
 
@@ -280,7 +291,18 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
     if ( !d->autoLoad )
         cmd->setPlaylist( d->weakSelf );
 
-    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
+    connect( cmd, SIGNAL( finished() ),
+             this, SLOT( setPlaylistRevisionFinished() ) );
+
+    if ( d->queuedSetPlaylistRevision )
+    {
+        d->queuedSetPlaylistRevisionCmds.enqueue( cmd );
+    }
+    else
+    {
+        d->queuedSetPlaylistRevision = true;
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
+    }
 }
 
 

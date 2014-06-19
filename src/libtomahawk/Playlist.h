@@ -272,6 +272,7 @@ protected:
 private slots:
     void onResultsChanged();
     void onResolvingFinished();
+    void setPlaylistRevisionFinished();
 
 private:
     Playlist();
