@@ -911,11 +911,21 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
     else if ( msgType == "tracksRemoved" )
     {
         const QString plid = msg.value( "playlistid" ).toString();
-        // We should already be syncing this playlist if we get updates for it
-//         Q_ASSERT( m_updaters.contains( plid ) );
 
         if ( !m_updaters.contains( plid ) )
+        {
+            // If the resolver gets out-of-sync with Tomahawk's config, also
+            // inform it that we do not sync the playlist anymore. This is a
+            // very rare case but will lead to crashes if we do not sync
+            // Tomahawk's sync settings to the resolver. See TWK-1397.
+            QVariantMap msg;
+            msg[ "_msgtype" ] = "removeFromSyncList";
+            msg[ "playlistid" ] = plid;
+
+            m_spotifyResolver.data()->sendMessage( msg );
+
             return;
+        }
 
         SpotifyPlaylistInfo* info = m_allSpotifyPlaylists[ plid ];
         if( (info && info->starContainer ) && loveSync() )
