@@ -33,6 +33,7 @@
 #include "Pipeline.h"
 #include "Result.h"
 #include "Source.h"
+#include "StatResponseHandler.h"
 #include "UrlHandler.h"
 
 #include <boost/bind.hpp>
@@ -294,43 +295,23 @@ void
 Api_v1::stat( QxtWebRequestEvent* event )
 {
     tDebug( LOGVERBOSE ) << "Got Stat request:" << event->url.toString();
-    m_storedEvent = event;
 
     if ( !event->content.isNull() )
         tDebug( LOGVERBOSE ) << "BODY:" << event->content->readAll();
+
+    StatResponseHandler* handler = new StatResponseHandler( this, event );
 
     if ( urlHasQueryItem( event->url, "auth" ) )
     {
         // check for auth status
         DatabaseCommand_ClientAuthValid* dbcmd = new DatabaseCommand_ClientAuthValid( urlQueryItemValue( event->url, "auth" ) );
-        connect( dbcmd, SIGNAL( authValid( QString, QString, bool ) ), this, SLOT( statResult( QString, QString, bool ) ) );
+        connect( dbcmd, SIGNAL( authValid( QString, QString, bool ) ), handler, SLOT( statResult( QString, QString, bool ) ) );
         Database::instance()->enqueue( Tomahawk::dbcmd_ptr(dbcmd) );
     }
     else
     {
-        statResult( QString(), QString(), false );
+       handler->statResult( QString(), QString(), false );
     }
-}
-
-
-void
-Api_v1::statResult( const QString& clientToken, const QString& name, bool valid )
-{
-    Q_UNUSED( clientToken )
-    Q_UNUSED( name )
-
-    Q_ASSERT( m_storedEvent );
-    if ( !m_storedEvent )
-        return;
-
-    QVariantMap m;
-    m.insert( "name", "playdar" );
-    m.insert( "version", "0.1.1" ); // TODO (needs to be >=0.1.1 for JS to work)
-    m.insert( "authenticated", valid ); // TODO
-    m.insert( "capabilities", QVariantList() );
-    sendJSON( m, m_storedEvent );
-
-    m_storedEvent = 0;
 }
 
 

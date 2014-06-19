@@ -69,7 +69,6 @@ public slots:
     void sid( QxtWebRequestEvent* event, QString unused = QString() );
     void send404( QxtWebRequestEvent* event );
     void stat( QxtWebRequestEvent* event );
-    void statResult( const QString& clientToken, const QString& name, bool valid );
     void resolve( QxtWebRequestEvent* event );
     void staticdata( QxtWebRequestEvent* event, const QString& file );
     void staticdata( QxtWebRequestEvent* event, const QString& path, const QString& file );
@@ -91,7 +90,6 @@ protected:
 private:
     void processSid( QxtWebRequestEvent* event, Tomahawk::result_ptr&, const QString& url, QSharedPointer< QIODevice >& );
 
-    QxtWebRequestEvent* m_storedEvent;
     QSharedPointer< QIODevice > m_ioDevice;
     Api_v1_5* m_api_v1_5;
 };

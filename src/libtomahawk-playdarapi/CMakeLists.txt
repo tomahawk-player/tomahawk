@@ -5,6 +5,7 @@ list(APPEND ${TOMAHAWK_PLAYDARAPI_LIBRARY_TARGET}_SOURCES
     Api_v1.cpp
     Api_v1_5.cpp
     PlaydarApi.cpp
+    StatResponseHandler.cpp
     )
 
 list(APPEND ${TOMAHAWK_PLAYDARAPI_LIBRARY_TARGET}_UI
