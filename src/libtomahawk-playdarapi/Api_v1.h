@@ -75,10 +75,11 @@ public slots:
     void get_results( QxtWebRequestEvent* event );
     void sendJSON( const QVariantMap& m, QxtWebRequestEvent* event );
 
-    // load an html template from a file, replace args from map
-    // then serve
     void sendJsonError( QxtWebRequestEvent* event, const QString& message );
     void sendJsonOk( QxtWebRequestEvent* event );
+    /**
+     * Load an html template from a file, replace args from map and then serve.
+     */
     void sendWebpageWithArgs( QxtWebRequestEvent* event, const QString& filenameSource, const QHash< QString, QString >& args );
 
     void index( QxtWebRequestEvent* event );
