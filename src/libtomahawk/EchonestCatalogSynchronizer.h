@@ -23,11 +23,7 @@
 #include "Query.h"
 #include "database/DatabaseCommand_TrackAttributes.h"
 
-#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
-    #include <echonest/Catalog.h>
-#else
-    #include <echonest5/Catalog.h>
-#endif
+#include <echonest/Catalog.h>
 
 #include <QObject>
 #include <QQueue>

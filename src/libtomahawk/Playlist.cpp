@@ -588,6 +588,8 @@ Playlist::setPlaylistRevisionFinished()
     if ( d->queuedSetPlaylistRevisionCmds.length() > 0 )
     {
         DatabaseCommand_SetPlaylistRevision* cmd = d->queuedSetPlaylistRevisionCmds.dequeue();
+        // Update oldrev to currentRevision so that optimistic locking works correctly.
+        cmd->setOldrev( currentrevision() );
         Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
     }
     else
