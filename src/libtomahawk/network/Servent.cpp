@@ -138,6 +138,8 @@ Servent::startListening( QHostAddress ha, bool upnp, int port, Tomahawk::Network
         }
     }
 
+    d->externalListenAll = false;
+
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     if ( ha == QHostAddress::Any )
 #else
@@ -156,7 +158,8 @@ Servent::startListening( QHostAddress ha, bool upnp, int port, Tomahawk::Network
             if ( addr.isInSubnet( QHostAddress::parseSubnet( "fe80::/10" ) ) )
                 continue; // Skip link local addresses
             tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Listening to " << addr.toString();
-            d_func()->externalAddresses.append( addr );
+            d->externalAddresses.append( addr );
+            d->externalListenAll = true;
         }
 
     }
@@ -411,8 +414,17 @@ Servent::lookupControlConnection( const QString& nodeid )
 QList<SipInfo>
 Servent::getLocalSipInfos( const QString& nodeid, const QString& key )
 {
+    Q_D( Servent );
+
     QList<SipInfo> sipInfos = QList<SipInfo>();
-    foreach ( QHostAddress ha, d_func()->externalAddresses )
+    QList<QHostAddress> addresses = d->externalAddresses;
+
+    if ( d->externalListenAll )
+    {
+        addresses = QNetworkInterface::allAddresses();
+    }
+
+    foreach ( QHostAddress ha, addresses )
     {
         SipInfo info = SipInfo();
         info.setHost( ha.toString() );
@@ -867,13 +879,22 @@ Servent::cleanupSocket( QTcpSocketExtra* sock )
 void
 Servent::initiateConnection( const SipInfo& sipInfo, Connection* conn )
 {
+    Q_D( Servent );
+
     Q_ASSERT( sipInfo.isValid() );
     Q_ASSERT( sipInfo.isVisible() );
     Q_ASSERT( sipInfo.port() > 0 );
     Q_ASSERT( conn );
 
     // Check that we are not connecting to ourselves
-    foreach ( QHostAddress ha, d_func()->externalAddresses )
+    QList<QHostAddress> addresses = d->externalAddresses;
+
+    if ( d->externalListenAll )
+    {
+        addresses = QNetworkInterface::allAddresses();
+    }
+
+    foreach ( QHostAddress ha, addresses )
     {
         if ( sipInfo.host() == ha.toString() )
         {
@@ -1063,6 +1084,13 @@ Servent::port() const
 QList<QHostAddress>
 Servent::addresses() const
 {
+    Q_D( const Servent );
+
+    if ( d->externalListenAll )
+    {
+        return QNetworkInterface::allAddresses();
+    }
+
     return d_func()->externalAddresses;
 }
 

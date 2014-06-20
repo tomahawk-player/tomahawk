@@ -71,6 +71,14 @@ private:
     QList<QHostAddress> externalAddresses;
 
     /**
+     * Do we listen to all external addresses.
+     *
+     * If true, we will always reiterate over the current adresses known to Qt
+     * instead of returning a static list for the local SipInfos.
+     */
+    bool externalListenAll;
+
+    /**
      * Either the static set or the UPnP set external host
      */
     QString externalHostname;
