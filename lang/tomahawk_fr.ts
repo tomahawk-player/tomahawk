@@ -1681,12 +1681,12 @@ Password (OTP)</source>
 <context>
     <name>Servent</name>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="990"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="1011"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
         <translation>Echec de la détection automatique de l&apos;IP : lecture du JSON de réponse impossible</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="1003"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="1024"/>
         <source>Automatically detecting external IP failed: %1</source>
         <translation>Echec de la détection automatique de l&apos;IP externe : %1</translation>
     </message>
