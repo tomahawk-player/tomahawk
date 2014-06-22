@@ -3656,7 +3656,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Widgets::DashboardWidget</name>
     <message>
-        <location filename="../src/viewpages/dashboard/Dashboard.cpp" line="261"/>
+        <location filename="../src/viewpages/dashboard/Dashboard.cpp" line="260"/>
         <source>No recently created playlists in your network.</source>
         <translation type="unfinished"/>
     </message>

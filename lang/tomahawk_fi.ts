@@ -3673,7 +3673,7 @@ kappaleen %2%4 %3.</translation>
 <context>
     <name>Tomahawk::Widgets::DashboardWidget</name>
     <message>
-        <location filename="../src/viewpages/dashboard/Dashboard.cpp" line="261"/>
+        <location filename="../src/viewpages/dashboard/Dashboard.cpp" line="260"/>
         <source>No recently created playlists in your network.</source>
         <translation>Verkossasi ei ole viime aikoina luotuja soittolistoja.</translation>
     </message>

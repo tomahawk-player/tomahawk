@@ -3667,7 +3667,7 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>Tomahawk::Widgets::DashboardWidget</name>
     <message>
-        <location filename="../src/viewpages/dashboard/Dashboard.cpp" line="261"/>
+        <location filename="../src/viewpages/dashboard/Dashboard.cpp" line="260"/>
         <source>No recently created playlists in your network.</source>
         <translation>Inga skapade spellistor i ditt nätverk på sistone.</translation>
     </message>

@@ -3666,7 +3666,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
 <context>
     <name>Tomahawk::Widgets::DashboardWidget</name>
     <message>
-        <location filename="../src/viewpages/dashboard/Dashboard.cpp" line="261"/>
+        <location filename="../src/viewpages/dashboard/Dashboard.cpp" line="260"/>
         <source>No recently created playlists in your network.</source>
         <translation>Pas de liste de lecture créée récemment dans votre réseau.</translation>
     </message>
