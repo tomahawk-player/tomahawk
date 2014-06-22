@@ -40,7 +40,7 @@ namespace Qt
 {
 inline QString escape( const QString &x )
 {
-    x.toHtmlEscaped();
+    return x.toHtmlEscaped();
  }
  }
 #else
