@@ -24,11 +24,7 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
-#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
-    #include <echonest/Playlist.h>
-#else
-    #include <echonest5/Playlist.h>
-#endif
+#include <echonest/Playlist.h>
 
 #include <QPaintEvent>
 #include <QHBoxLayout>
