@@ -117,14 +117,19 @@ endif()
 if( NOT BUILD_WITH_QT4 )
     find_package(Qt5Core QUIET)
     if( Qt5Core_DIR )
-        find_package(Qt5Widgets QUIET)
+        # CMAKE 2.8.13+/3.0.0+ requires these for IMPORTed targets
+        find_package(Qt5Concurrent REQUIRED)
+        find_package(Qt5UiTools REQUIRED)
+        find_package(Qt5WebKitWidgets REQUIRED)
+        find_package(Qt5Widgets REQUIRED)
+        find_package(Qt5Xml REQUIRED)
         message(STATUS "Found Qt5! Be aware that Qt5-support is still experimental and not officially supported!")
 
         if( UNIX AND NOT APPLE )
             # We need this to find the paths to qdbusxml2cpp and co
             find_package(Qt5DBus REQUIRED)
         endif()
-        
+
         if(WIN32)
             find_package(Qt5WinExtras REQUIRED)
         endif()
