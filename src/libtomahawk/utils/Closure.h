@@ -21,9 +21,10 @@
 #ifndef CLOSURE_H
 #define CLOSURE_H
 
+#include "config.h"
 #include "DllMacro.h"
 
-#ifdef _WEBSOCKETPP_CPP11_STL_
+#if defined(_WEBSOCKETPP_CPP11_STL_) || defined(CXX_STD_FUNCTIONAL)
 #include <functional>
 using std::function;
 #else

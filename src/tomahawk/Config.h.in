@@ -11,6 +11,7 @@
 #cmakedefine SNOW_LEOPARD
 #cmakedefine LEOPARD
 #cmakedefine HAVE_SPARKLE
+#cmakedefine CXX_STD_FUNCTIONAL
 
 #cmakedefine WITH_CRASHREPORTER
 #cmakedefine WITH_BINARY_ATTICA
