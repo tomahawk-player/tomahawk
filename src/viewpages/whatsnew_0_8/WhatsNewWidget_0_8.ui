@@ -74,7 +74,7 @@
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <property name="spacing">
-            <number>16</number>
+            <number>8</number>
            </property>
            <property name="margin">
             <number>0</number>
@@ -567,6 +567,138 @@ color: grey;</string>
              </layout>
             </widget>
            </item>
+           <item alignment="Qt::AlignTop">
+            <widget class="QWidget" name="hatchetBox" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>64</width>
+               <height>79</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">border-width: 2px;
+border-style: solid;
+border-radius: 4px;
+border-color: grey;
+color: grey;</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_471">
+              <property name="spacing">
+               <number>8</number>
+              </property>
+              <property name="margin">
+               <number>8</number>
+              </property>
+              <item alignment="Qt::AlignTop">
+               <widget class="ClickableLabel" name="hatchetBoxHeader">
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">border: none;</string>
+                </property>
+                <property name="text">
+                 <string>Hatchet</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="ClickableLabel" name="hatchetBoxImage">
+                <property name="minimumSize">
+                 <size>
+                  <width>64</width>
+                  <height>64</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>64</width>
+                  <height>64</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">border: none;</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignTop">
+            <widget class="QWidget" name="androidBox" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>64</width>
+               <height>79</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">border-width: 2px;
+border-style: solid;
+border-radius: 4px;
+border-color: grey;
+color: grey;</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_472">
+              <property name="spacing">
+               <number>8</number>
+              </property>
+              <property name="margin">
+               <number>8</number>
+              </property>
+              <item alignment="Qt::AlignTop">
+               <widget class="ClickableLabel" name="androidBoxHeader">
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">border: none;</string>
+                </property>
+                <property name="text">
+                 <string>Android</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="ClickableLabel" name="androidBoxImage">
+                <property name="minimumSize">
+                 <size>
+                  <width>64</width>
+                  <height>64</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>64</width>
+                  <height>64</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">border: none;</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
           </layout>
          </widget>
         </item>
@@ -583,7 +715,7 @@ color: grey;</string>
           </property>
           <property name="minimumSize">
            <size>
-            <width>720</width>
+            <width>820</width>
             <height>0</height>
            </size>
           </property>
@@ -604,7 +736,7 @@ background-color:#292f34;
 </string>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>8</number>
           </property>
           <widget class="QWidget" name="inboxPage">
            <property name="styleSheet">
@@ -806,7 +938,7 @@ background-color:#292f34;
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Google Music is another of our latest supported services - both for your music you've uploaded to the Google Music "locker" as well as their full streaming catalog for your Google Play Music All Access subscribers.</string>
+               <string>Google Music is another of our latest supported services - both for your music you've uploaded to the Google Music &quot;locker&quot; as well as their full streaming catalog for your Google Play Music All Access subscribers.</string>
               </property>
               <property name="scaledContents">
                <bool>false</bool>
@@ -908,6 +1040,96 @@ background-color:#292f34;
             </item>
             <item>
              <widget class="QLabel" name="label_14">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Display an Image here</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="hatchetPage">
+           <property name="styleSheet">
+            <string notr="true">border: none;</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_541">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_15">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Lots of new views - artist pages, album pages, song pages and more. A new Loved Widget shows what friends have loved tracks throughout the app. Some cleaner fonts, some new colors. Retina display support and more.</string>
+              </property>
+              <property name="scaledContents">
+               <bool>false</bool>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_16">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Display an Image here</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="androidPage">
+           <property name="styleSheet">
+            <string notr="true">border: none;</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_542">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_17">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Lots of new views - artist pages, album pages, song pages and more. A new Loved Widget shows what friends have loved tracks throughout the app. Some cleaner fonts, some new colors. Retina display support and more.</string>
+              </property>
+              <property name="scaledContents">
+               <bool>false</bool>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_18">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>

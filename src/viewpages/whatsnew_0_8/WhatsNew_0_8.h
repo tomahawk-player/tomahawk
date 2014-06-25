@@ -62,6 +62,8 @@ private slots:
     void gmusicBoxClicked();
     void networkingBoxClicked();
     void designBoxClicked();
+    void hatchetBoxClicked();
+    void androidBoxClicked();
 
 private:
     void activateBox( QWidget* widget, int activeIndex );

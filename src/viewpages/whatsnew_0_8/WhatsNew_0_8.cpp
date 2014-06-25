@@ -152,6 +152,23 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
         connect( ui->designBoxHeader, SIGNAL( clicked() ), SLOT( designBoxClicked() ) );
         connect( ui->designBoxImage, SIGNAL( clicked() ), SLOT( designBoxClicked() ) );
     }
+
+    {
+        // TODO: hatchet icon is not really part of the correct resources yet.
+        QPixmap hatchetPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/new-additions.svg", QSize( 64, 64 ) );
+        ui->hatchetBoxImage->setPixmap( hatchetPixmap );
+
+        connect( ui->hatchetBoxHeader, SIGNAL( clicked() ), SLOT( hatchetBoxClicked() ) );
+        connect( ui->hatchetBoxImage, SIGNAL( clicked() ), SLOT( hatchetBoxClicked() ) );
+    }
+
+    {
+        QPixmap androidPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/new-additions.svg", QSize( 64, 64 ) );
+        ui->androidBoxImage->setPixmap( androidPixmap );
+
+        connect( ui->androidBoxHeader, SIGNAL( clicked() ), SLOT( androidBoxClicked() ) );
+        connect( ui->androidBoxImage, SIGNAL( clicked() ), SLOT( androidBoxClicked() ) );
+    }
 }
 
 
@@ -248,6 +265,20 @@ WhatsNewWidget_0_8::designBoxClicked()
 
 
 void
+WhatsNewWidget_0_8::hatchetBoxClicked()
+{
+    activateBox( ui->hatchetBox, 7 );
+}
+
+
+void
+WhatsNewWidget_0_8::androidBoxClicked()
+{
+    activateBox( ui->androidBox, 8 );
+}
+
+
+void
 WhatsNewWidget_0_8::activateBox( QWidget* widget, int activeIndex )
 {
     deactivateAllBoxes();
@@ -277,6 +308,8 @@ WhatsNewWidget_0_8::deactivateAllBoxes()
     deactivateBox( ui->gmusicBox );
     deactivateBox( ui->networkingBox );
     deactivateBox( ui->designBox );
+    deactivateBox( ui->hatchetBox );
+    deactivateBox( ui->androidBox );
 }
 
 
