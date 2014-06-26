@@ -306,7 +306,11 @@ PlaylistModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int
         {
             queries << entry->query();
             d->waitingForResolved.append( entry->query().data() );
-            connect( entry->query().data(), SIGNAL( resolvingFinished( bool ) ), SLOT( trackResolved( bool ) ) );
+            connect( entry->query().data(), SIGNAL( playableStateChanged( bool ) ),
+                     SLOT( onQueryBecamePlayable( bool ) ),
+                     Qt::UniqueConnection );
+            connect( entry->query().data(), SIGNAL( resolvingFinished( bool ) ),
+                     SLOT( trackResolved( bool ) ) );
         }
 
         connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
