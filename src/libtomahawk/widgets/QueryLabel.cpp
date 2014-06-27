@@ -371,7 +371,6 @@ QueryLabel::paintEvent( QPaintEvent* event )
         {
             m_hoverArea.setLeft( 0 );
             m_hoverArea.setRight( fm.width( elidedText ) + contentsMargins().left() * 2 );
-            m_hoverType = Track;
         }
 
         TomahawkUtils::drawQueryBackground( &p, m_hoverArea );
