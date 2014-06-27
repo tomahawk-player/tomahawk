@@ -1,0 +1,33 @@
+project = Certificate
+description = Certificate Documentation
+
+sourcedirs = ../src ./src
+headerdirs = ../src
+exampledirs = ../examples
+
+sources.fileextensions = "*.cpp *.qdoc"
+headers.fileextensions = "*.h"
+examples.fileextensions = "*.h *.cpp"
+
+outputdir  =    html
+outputformats = HTML
+
+Cpp.ignoretokens = \
+    QT_BEGIN_NAMESPACE_CERTIFICATE \
+    QT_END_NAMESPACE_CERTIFICATE \
+    Q_ADDON_CERTIFICATE_EXPORT
+
+HTML.nobreadcrumbs = "true"
+
+HTML.templatedir = .
+HTML.stylesheets = style/style.css
+
+HTML.headerstyles = "  <link rel=\"stylesheet\" type=\"text/css\" href=\"style/style.css\" />\n"
+HTML.endheader = "</head>\n"
+
+HTML.postheader = \
+  " <div class=\"header\">\n" \
+  "   <div id=\"nav-logo\">\n" \
+  "     <a href=\"index.html\">Certificate Reference</a>" \
+  "   </div>\n" \
+  " </div>\n"

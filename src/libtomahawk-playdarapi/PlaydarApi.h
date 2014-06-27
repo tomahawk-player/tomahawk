@@ -30,7 +30,14 @@ class TOMAHAWK_PLAYDARAPI_EXPORT PlaydarApi : public QObject
 {
     Q_OBJECT
 public:
-    explicit PlaydarApi( QHostAddress ha, qint16 port, QObject *parent = 0 );
+    /**
+     * Creates a Playdar HTTP interface
+     * @param ha Address to listen on
+     * @param port Port to listen on with HTTP
+     * @param sport Pot to listen on with HTTPS
+     * @param parent
+     */
+    explicit PlaydarApi( QHostAddress ha, qint16 port, qint16 sport, QObject *parent = 0 );
     virtual ~PlaydarApi();
 
     void start();

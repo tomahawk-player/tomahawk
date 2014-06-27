@@ -38,8 +38,15 @@ private:
     QScopedPointer< Api_v1 > instance;
     QScopedPointer< QxtHttpServerConnector > connector;
     QScopedPointer< QxtHttpSessionManager > session;
+
+    // TLS secured interface
+    QScopedPointer< Api_v1 > tlsInstance;
+    QScopedPointer< QxtHttpsServerConnector > tlsConnector;
+    QScopedPointer< QxtHttpSessionManager > tlsSession;
+
     QHostAddress ha;
     qint16 port;
+    qint16 sport;
 };
 
 #endif // PLAYDARAPI_P_H

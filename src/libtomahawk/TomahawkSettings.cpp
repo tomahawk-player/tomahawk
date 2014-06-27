@@ -1643,3 +1643,31 @@ TomahawkSettings::removeAtticaResolverState ( const QString& resolver )
     setValue( "script/atticaresolverstates", QVariant::fromValue< AtticaManager::StateHash >( resolvers ) );
 }
 
+
+QByteArray
+TomahawkSettings::playdarCertificate() const
+{
+    return value( "playdar/certificate").value< QByteArray >();
+}
+
+
+void
+TomahawkSettings::setPlaydarCertificate( const QByteArray& cert )
+{
+    setValue( "playdar/certificate", cert );
+}
+
+
+QByteArray
+TomahawkSettings::playdarKey() const
+{
+    return value( "playdar/key" ).value< QByteArray >();
+}
+
+
+void
+TomahawkSettings::setPlaydarKey( const QByteArray& key )
+{
+    setValue( "playdar/key", key );
+}
+

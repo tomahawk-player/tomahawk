@@ -257,9 +257,16 @@ macro_log_feature(Boost_FOUND "Boost" "Provides free peer-reviewed portable C++ 
 
 macro_optional_find_package(Sparsehash)
 macro_log_feature(SPARSEHASH_FOUND "Sparsehash"
-    "https://code.google.com/p/sparsehash/" "" TRUE ""
+    "An extremely memory-efficient hash_map implementation."
+    "https://code.google.com/p/sparsehash/" TRUE ""
     "Sparsehash is needed for reading metadata of mediastreams and fast
     forward/backward seeking in HTTP streams")
+
+macro_optional_find_package(GnuTLS)
+macro_log_feature(GNUTLS_FOUND "GnuTLS"
+    "GnuTLS is a secure communications library implementing the SSL, TLS and DTLS protocols and technologies around them."
+    "http://gnutls.org/" TRUE ""
+    "GnuTLS is needed for serving the Playdar/HTTP API via TLS")
 
 macro_optional_find_package(QCA2)
 macro_log_feature(QCA2_FOUND "QCA2" "Provides encryption and signing functions necessary for some resolvers and accounts" "http://delta.affinix.com/qca/" TRUE "" "")

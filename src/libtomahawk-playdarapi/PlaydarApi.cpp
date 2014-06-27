@@ -18,9 +18,19 @@
 
 #include "PlaydarApi_p.h"
 
+#include "qxtsslserver.h"
+#include "TomahawkSettings.h"
+#include "Typedefs.h"
+
+#include "certificate/certificatebuilder.h"
+#include "certificate/certificaterequestbuilder.h"
+#include "certificate/keybuilder.h"
 #include "utils/Logger.h"
 
-PlaydarApi::PlaydarApi( QHostAddress ha, qint16 port, QObject* parent )
+
+using namespace QtAddOn::Certificate;
+
+PlaydarApi::PlaydarApi( QHostAddress ha, qint16 port, qint16 sport, QObject* parent )
     : QObject( parent )
     , d_ptr( new PlaydarApiPrivate( this ) )
 {
@@ -28,6 +38,7 @@ PlaydarApi::PlaydarApi( QHostAddress ha, qint16 port, QObject* parent )
 
     d->ha = ha;
     d->port = port;
+    d->sport = sport;
 }
 
 
@@ -48,12 +59,19 @@ PlaydarApi::start()
 
     d->session.reset( new QxtHttpSessionManager() );
     d->connector.reset( new QxtHttpServerConnector() );
-    if ( d->session.isNull() || d->connector.isNull() )
+    d->tlsSession.reset( new QxtHttpSessionManager() );
+    d->tlsConnector.reset( new QxtHttpsServerConnector() );
+    if ( d->session.isNull() || d->connector.isNull()
+         || d->tlsSession.isNull() || d->tlsConnector.isNull() )
     {
         if ( !d->session.isNull() )
-            delete d->session.data();
+            d->session.reset();
         if ( !d->connector.isNull() )
-            delete d->connector.data();
+            d->connector.reset();
+        if ( !d->tlsSession.isNull() )
+            d->tlsSession.reset();
+        if ( !d->tlsConnector.isNull() )
+            d->tlsConnector.reset();
         tLog() << "Failed to start HTTPd, could not create object";
         return;
     }
@@ -67,4 +85,68 @@ PlaydarApi::start()
 
     tLog() << "Starting HTTPd on" << d->session->listenInterface().toString() << d->session->port();
     d->session->start();
+
+    d->tlsSession->setListenInterface( d->ha );
+    d->tlsSession->setPort( d->sport );
+    d->tlsSession->setConnector( d->tlsConnector.data() );
+
+    d->tlsInstance.reset( new Api_v1( d->tlsSession.data() ) );
+    d->tlsSession->setStaticContentService( d->tlsInstance.data() );
+
+    QByteArray settingsKey = TomahawkSettings::instance()->playdarKey();
+    QSslKey key;
+    if ( settingsKey.isNull() || settingsKey.isEmpty() )
+    {
+        // Generate a SSL key
+        key = KeyBuilder::generate( QSsl::Rsa, KeyBuilder::StrengthNormal );
+        TomahawkSettings::instance()->setPlaydarKey( key.toPem() );
+    }
+    else
+    {
+        // Restore key
+        key = QSslKey( settingsKey, QSsl::Rsa );
+    }
+
+    QByteArray settingsCert = TomahawkSettings::instance()->playdarCertificate();
+    QSslCertificate cert;
+    if ( settingsCert.isNull() || settingsCert.isEmpty() )
+    {
+        // Generate a SSL certificate
+        CertificateRequestBuilder reqbuilder;
+        reqbuilder.setVersion( 1 );
+        reqbuilder.setKey( key );
+        reqbuilder.addNameEntry( Certificate::EntryCountryName, "GB" );
+        reqbuilder.addNameEntry( Certificate::EntryOrganizationName, "Tomahawk Player (Desktop)" );
+        reqbuilder.addNameEntry( Certificate::EntryCommonName, "localhost" );
+
+        // Sign the request
+        CertificateRequest req = reqbuilder.signedRequest(key);
+
+        // Now make a certificate
+        CertificateBuilder builder;
+        builder.setRequest( req );
+
+        builder.setVersion( 3 );
+        builder.setSerial( uuid().toLatin1() );
+        builder.setActivationTime( QDateTime::currentDateTimeUtc());
+        builder.setExpirationTime( QDateTime::currentDateTimeUtc().addYears( 10 ) );
+        builder.setBasicConstraints( false );
+        builder.addKeyPurpose( CertificateBuilder::PurposeWebServer );
+        builder.setKeyUsage( CertificateBuilder::UsageKeyAgreement|CertificateBuilder::UsageKeyEncipherment );
+        builder.addSubjectKeyIdentifier();
+
+        cert = builder.signedCertificate( key );
+        TomahawkSettings::instance()->setPlaydarCertificate( cert.toPem() );
+    }
+    else
+    {
+        cert = QSslCertificate( settingsCert );
+    }
+
+    QxtSslServer* sslServer = d->tlsConnector->tcpServer();
+    sslServer->setPrivateKey( key );
+    sslServer->setLocalCertificate( cert );
+
+    tLog() << "Starting HTTPSd on" << d->tlsSession->listenInterface().toString() << d->tlsSession->port();
+    tLog() << Q_FUNC_INFO << d->tlsSession->start();
 }
