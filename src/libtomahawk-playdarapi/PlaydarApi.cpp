@@ -19,6 +19,7 @@
 #include "PlaydarApi_p.h"
 
 #include "qxtsslserver.h"
+#include "TomahawkSettings.h"
 #include "Typedefs.h"
 
 #include "certificate/certificatebuilder.h"
@@ -92,33 +93,55 @@ PlaydarApi::start()
     d->tlsInstance.reset( new Api_v1( d->tlsSession.data() ) );
     d->tlsSession->setStaticContentService( d->tlsInstance.data() );
 
-    // Generate a SSL certificate
-    QSslKey key = KeyBuilder::generate( QSsl::Rsa, KeyBuilder::StrengthNormal );
+    QByteArray settingsKey = TomahawkSettings::instance()->playdarKey();
+    QSslKey key;
+    if ( settingsKey.isNull() || settingsKey.isEmpty() )
+    {
+        // Generate a SSL key
+        key = KeyBuilder::generate( QSsl::Rsa, KeyBuilder::StrengthNormal );
+        TomahawkSettings::instance()->setPlaydarKey( key.toPem() );
+    }
+    else
+    {
+        // Restore key
+        key = QSslKey( settingsKey, QSsl::Rsa );
+    }
 
-    CertificateRequestBuilder reqbuilder;
-    reqbuilder.setVersion( 1 );
-    reqbuilder.setKey( key );
-    reqbuilder.addNameEntry( Certificate::EntryCountryName, "GB" );
-    reqbuilder.addNameEntry( Certificate::EntryOrganizationName, "Tomahawk Player (Desktop)" );
-    reqbuilder.addNameEntry( Certificate::EntryCommonName, "localhost" );
+    QByteArray settingsCert = TomahawkSettings::instance()->playdarCertificate();
+    QSslCertificate cert;
+    if ( settingsCert.isNull() || settingsCert.isEmpty() )
+    {
+        // Generate a SSL certificate
+        CertificateRequestBuilder reqbuilder;
+        reqbuilder.setVersion( 1 );
+        reqbuilder.setKey( key );
+        reqbuilder.addNameEntry( Certificate::EntryCountryName, "GB" );
+        reqbuilder.addNameEntry( Certificate::EntryOrganizationName, "Tomahawk Player (Desktop)" );
+        reqbuilder.addNameEntry( Certificate::EntryCommonName, "localhost" );
 
-    // Sign the request
-    CertificateRequest req = reqbuilder.signedRequest(key);
+        // Sign the request
+        CertificateRequest req = reqbuilder.signedRequest(key);
 
-    // Now make a certificate
-    CertificateBuilder builder;
-    builder.setRequest( req );
+        // Now make a certificate
+        CertificateBuilder builder;
+        builder.setRequest( req );
 
-    builder.setVersion( 3 );
-    builder.setSerial( uuid().toLatin1() );
-    builder.setActivationTime( QDateTime::currentDateTimeUtc());
-    builder.setExpirationTime( QDateTime::currentDateTimeUtc().addYears( 10 ) );
-    builder.setBasicConstraints( false );
-    builder.addKeyPurpose( CertificateBuilder::PurposeWebServer );
-    builder.setKeyUsage( CertificateBuilder::UsageKeyAgreement|CertificateBuilder::UsageKeyEncipherment );
-    builder.addSubjectKeyIdentifier();
+        builder.setVersion( 3 );
+        builder.setSerial( uuid().toLatin1() );
+        builder.setActivationTime( QDateTime::currentDateTimeUtc());
+        builder.setExpirationTime( QDateTime::currentDateTimeUtc().addYears( 10 ) );
+        builder.setBasicConstraints( false );
+        builder.addKeyPurpose( CertificateBuilder::PurposeWebServer );
+        builder.setKeyUsage( CertificateBuilder::UsageKeyAgreement|CertificateBuilder::UsageKeyEncipherment );
+        builder.addSubjectKeyIdentifier();
 
-    QSslCertificate cert = builder.signedCertificate( key );
+        cert = builder.signedCertificate( key );
+        TomahawkSettings::instance()->setPlaydarCertificate( cert.toPem() );
+    }
+    else
+    {
+        cert = QSslCertificate( settingsCert );
+    }
 
     QxtSslServer* sslServer = d->tlsConnector->tcpServer();
     sslServer->setPrivateKey( key );

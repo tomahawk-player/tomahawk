@@ -232,6 +232,13 @@ public:
     void setAtticaResolverState( const QString& resolver, AtticaManager::ResolverState state );
     void removeAtticaResolverState( const QString& resolver );
 
+    // Playdar TLS Certificate and Key.
+    // TODO: Store in Keychain
+    QByteArray playdarCertificate() const;
+    void setPlaydarCertificate( const QByteArray& cert );
+    QByteArray playdarKey() const;
+    void setPlaydarKey( const QByteArray& key );
+
 
 signals:
     void changed();
