@@ -74,7 +74,13 @@ ScriptCommand_AllTracks::exec()
 void
 ScriptCommand_AllTracks::reportFailure()
 {
-    tDebug() << Q_FUNC_INFO << "for collection" << m_collection->name() << " artist" << m_album->artist()->name() << " album" << m_album->name();
+    if ( m_album && m_collection )
+        tDebug() << Q_FUNC_INFO << "for collection" << m_collection->name() << " artist" << m_album->artist()->name() << " album" << m_album->name();
+    else if ( m_collection )
+        tDebug() << Q_FUNC_INFO << "for collection" << m_collection->name() << " (no more information available)";
+    else
+        tDebug() << Q_FUNC_INFO;
+
     emit tracks( QList< Tomahawk::query_ptr >() );
     emit done();
 }
