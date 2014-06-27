@@ -168,6 +168,7 @@ gnutls_x509_subject_alt_name_t qssl_altnameentrytype_to_altname(QSsl::Alternativ
     default:
         qWarning("Unknown alternative name type %d", int(qtype));
     }
+    return GNUTLS_SAN_OTHERNAME;
 }
 #else
 gnutls_x509_subject_alt_name_t qssl_altnameentrytype_to_altname(QSsl::AlternateNameEntryType qtype)
@@ -180,6 +181,8 @@ gnutls_x509_subject_alt_name_t qssl_altnameentrytype_to_altname(QSsl::AlternateN
     default:
         qWarning("Unknown alternative name type %d", int(qtype));
     }
+
+    return GNUTLS_SAN_OTHERNAME;
 }
 #endif
 
