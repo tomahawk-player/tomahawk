@@ -1,3 +1,7 @@
+if( NOT WIN32 )
+        add_definitions( -fPIC )
+endif()
+
 list(APPEND qtcertificateaddon_INCLUDE_DIRECTORIES
     ${QT_INCLUDES}
     ${QT_QTCORE_INCLUDE_DIR}
