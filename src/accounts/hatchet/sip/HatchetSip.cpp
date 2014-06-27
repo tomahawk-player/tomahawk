@@ -230,7 +230,7 @@ HatchetSipPlugin::webSocketDisconnected()
         // Work on the assumption that we were disconnected because Dreamcatcher shut down
         // Reconnect after a time; use reasonable backoff + random
         int interval = m_reconnectTimer.interval() <= 25000 ? m_reconnectTimer.interval() + 5000 : 30000;
-        interval += QCA::Random::randomInt() % 30;
+        interval += qrand() % 30;
         m_reconnectTimer.setInterval( interval );
         m_reconnectTimer.start();
     }
