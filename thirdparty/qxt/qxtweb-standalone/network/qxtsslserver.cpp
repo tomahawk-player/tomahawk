@@ -197,8 +197,13 @@ bool QxtSslServer::autoEncrypt() const
 /*!
  * \reimp
  */
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+void QxtSslServer::incomingConnection(qintptr socketDescriptor)
+#else
 void QxtSslServer::incomingConnection(int socketDescriptor)
+#endif
 {
+    qWarning() << Q_FUNC_INFO << socketDescriptor;
     QSslSocket* socket = new QSslSocket(this);
     if(socket->setSocketDescriptor(socketDescriptor)) {
         socket->setLocalCertificate(qxt_d().localCertificate);
