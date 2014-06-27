@@ -51,9 +51,9 @@ PlaydarApi::start()
     if ( d->session.isNull() || d->connector.isNull() )
     {
         if ( !d->session.isNull() )
-            delete d->session.data();
+            d->session.reset();
         if ( !d->connector.isNull() )
-            delete d->connector.data();
+            d->connector.reset();
         tLog() << "Failed to start HTTPd, could not create object";
         return;
     }
