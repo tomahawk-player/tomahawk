@@ -31,7 +31,7 @@ Version 0.8.0:
     * Support additional headers in CustomUrlHandler
     * Fuzzy search indices for JS Resolvers
     * Add metadata retrieval of HTTP(S) streams in JavaScript resolvers
-    * New Dependency: google-sparsehash
+    * New Dependencies: google-sparsehash, GnuTLS
 
 Version 0.7.0:
     * JavaScript Resolvers can now expose collections.
