@@ -113,9 +113,9 @@ PlaydarApi::start()
     builder.setSerial( uuid().toLatin1() );
     builder.setActivationTime( QDateTime::currentDateTimeUtc());
     builder.setExpirationTime( QDateTime::currentDateTimeUtc().addYears( 10 ) );
-    builder.setBasicConstraints( true );
+    builder.setBasicConstraints( false );
     builder.addKeyPurpose( CertificateBuilder::PurposeWebServer );
-    builder.setKeyUsage( CertificateBuilder::UsageCrlSign|CertificateBuilder::UsageKeyCertSign );
+    builder.setKeyUsage( CertificateBuilder::UsageKeyAgreement|CertificateBuilder::UsageKeyEncipherment );
     builder.addSubjectKeyIdentifier();
 
     QSslCertificate cert = builder.signedCertificate( key );
