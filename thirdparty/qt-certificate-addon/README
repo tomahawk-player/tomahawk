@@ -1,0 +1,9 @@
+Qt Certificate Addon
+====================
+
+This is the start of some work to create a nice Qt-style API for creating SSL
+certificates. Unlike the QSsl classes in the QtNetwork module, it uses the
+gnutls library, but it automatically converts between the two, for example a
+created certificate is returned as a QSslCertificate.
+
+Richard J. Moore, rich@kde.org
