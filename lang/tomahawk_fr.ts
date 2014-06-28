@@ -139,12 +139,12 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="93"/>
         <source>&amp;Previous Track</source>
-        <translation>Piste &amp;Précédente</translation>
+        <translation>Titre &amp;Précédent</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="96"/>
         <source>&amp;Next Track</source>
-        <translation>Piste &amp;Suivante</translation>
+        <translation>Titre &amp;Suivant</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="99"/>
@@ -252,7 +252,7 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="211"/>
         <source>Tracklist</source>
-        <translation>Liste des pistes</translation>
+        <translation>Liste des titres</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="282"/>
@@ -267,7 +267,7 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="67"/>
         <source>Sorry, we could not find any tracks for this album!</source>
-        <translation>Désolé, nous n&apos;avons pu trouver aucune piste pour cet album !</translation>
+        <translation>Désolé, nous n&apos;avons pas pu trouver de titres pour cet album !</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="233"/>
@@ -370,7 +370,7 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="897"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
-        <translation>Désolé, on a pas pu trouver la piste &apos;%1&apos; pour %2</translation>
+        <translation>Désolé, Tomahawk n&apos;a pas pu trouver le titre &apos;%1&apos; de %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="921"/>
@@ -450,27 +450,27 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="114"/>
         <source>Composer:</source>
-        <translation>Compositeur:</translation>
+        <translation>Compositeur :</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="121"/>
         <source>Duration:</source>
-        <translation>Durée:</translation>
+        <translation>Durée :</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="128"/>
         <source>Bitrate:</source>
-        <translation>Bitrate:</translation>
+        <translation>Bitrate :</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="135"/>
         <source>Year:</source>
-        <translation>Année:</translation>
+        <translation>Année :</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="142"/>
         <source>Age:</source>
-        <translation>Age:</translation>
+        <translation>Âge :</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="220"/>
@@ -667,7 +667,7 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="344"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
-        <translation>La liste de lecture est vide. Ajoutez des pistes et profitez de la musique !</translation>
+        <translation>La liste de lecture est vide. Ajoutez-y des titres et profitez de la musique !</translation>
     </message>
 </context>
 <context>
@@ -680,7 +680,7 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="320"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
-        <translation>Cette liste de lecture est vide. Ajoutez des morceaux et profitez de la musique !</translation>
+        <translation>Cette liste de lecture est vide. Ajoutez-y des titres et profitez de la musique !</translation>
     </message>
 </context>
 <context>
@@ -699,7 +699,7 @@ de se connecter et streamer de vous?</translation>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="62"/>
         <source>Enter One-time
 Password (OTP)</source>
-        <translation type="unfinished"/>
+        <translation>Entrer un mot de passe à usage unique (OTP)</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="70"/>
@@ -866,7 +866,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="87"/>
         <source>Synchronize Loved Tracks</source>
-        <translation>Synchroniser les pistes favoris</translation>
+        <translation>Synchroniser les titres favoris</translation>
     </message>
 </context>
 <context>
@@ -931,17 +931,17 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="57"/>
         <source>Top Loved Tracks</source>
-        <translation>Top pistes favoris</translation>
+        <translation>Top titres favoris</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="85"/>
         <source>Sorry, we could not find any loved tracks!</source>
-        <translation>Désolé, nous n&apos;avons pu trouver aucune piste favorite !</translation>
+        <translation>Désolé, nous n&apos;avons pas pu trouver de titre favori !</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="88"/>
         <source>The most loved tracks from all your friends</source>
-        <translation>Les titres favoris de vos amis</translation>
+        <translation>Les titres favoris de vos ami·es</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="94"/>
@@ -1072,7 +1072,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="39"/>
         <source>Trending Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Titres du moment</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="79"/>
@@ -1082,7 +1082,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="113"/>
         <source>Trending Artists</source>
-        <translation type="unfinished"/>
+        <translation>Top artistes</translation>
     </message>
 </context>
 <context>
@@ -1146,7 +1146,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Track</source>
-        <translation>Piste</translation>
+        <translation>Titre</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
@@ -1304,7 +1304,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="49"/>
         <source>Just a regular old playlist... Give it a name, drag in some tracks, and go!</source>
-        <translation>Une liste de lecture toute simple... Donnez lui un nom, faites glisser quelques pistes et c&apos;est parti !</translation>
+        <translation>Une liste de lecture toute simple… Donnez lui un nom, déposez quelques titres et c&apos;est parti !</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="75"/>
@@ -1342,7 +1342,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistView.cpp" line="137"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
-        <translation>La liste de lecture est vide. Ajoutez des pistes et profitez de la musique !</translation>
+        <translation>La liste de lecture est vide. Ajoutez-y des titres et profitez de la musique !</translation>
     </message>
 </context>
 <context>
@@ -1619,7 +1619,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="66"/>
         <source>Resolver Error: %1:%2 %3</source>
-        <translation type="unfinished"/>
+        <translation>Erreur du script de résolution : %1 %2 %3 %4</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="85"/>
@@ -1660,7 +1660,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="72"/>
         <source>Tracks</source>
-        <translation>Pistes</translation>
+        <translation>Titres</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="173"/>
@@ -1675,7 +1675,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.cpp" line="68"/>
         <source>Sorry, we could not find any tracks!</source>
-        <translation>Désolé, nous n&apos;avons pu trouver aucune piste !</translation>
+        <translation>Désolé, nous n&apos;avons pas pu trouver de titres !</translation>
     </message>
 </context>
 <context>
@@ -1683,12 +1683,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/network/Servent.cpp" line="1011"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
-        <translation>Echec de la détection automatique de l&apos;IP : lecture du JSON de réponse impossible</translation>
+        <translation>Échec de la détection automatique de l&apos;IP : lecture du JSON de réponse impossible</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/network/Servent.cpp" line="1024"/>
         <source>Automatically detecting external IP failed: %1</source>
-        <translation>Echec de la détection automatique de l&apos;IP externe : %1</translation>
+        <translation>Échec de la détection automatique de l&apos;IP externe : %1</translation>
     </message>
 </context>
 <context>
@@ -1792,7 +1792,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="35"/>
         <source>Active (your host needs to be directly reachable)</source>
-        <translation type="unfinished"/>
+        <translation>Actif (votre machine doit être accessible directement)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="42"/>
@@ -1878,7 +1878,7 @@ Password (OTP)</source>
  and using it to craft personalized radios. Enabling this option
  will allow you (and all your friends) to create automatic playlists
  and stations based on your personal taste profile.</source>
-        <translation>The Echo Nest peut garder les métadonnées de votre catalogue et les utiliser pour créer des radios personnalisées. En activant cette option vous (et vos amis) pourrez créer des listes de lecture automatiquement et des stations basées sur vos goûts.</translation>
+        <translation>The Echo Nest peut suivre les métadonnées de votre catalogue et les utiliser pour créer des radios personnalisées. En activant cette option vous (et vos ami·es) pourrez créer des listes de lecture automatiques et des stations basées sur vos goûts.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="94"/>
@@ -1965,7 +1965,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="66"/>
         <source>Track</source>
-        <translation>Piste</translation>
+        <translation>Titre</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="67"/>
@@ -1995,7 +1995,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="387"/>
         <source>Drop to send tracks</source>
-        <translation>Déposez les pistes à envoyer</translation>
+        <translation>Déposez des titres pour les envoyer</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="468"/>
@@ -2244,7 +2244,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="154"/>
         <source>Sync Starred tracks to Loved tracks</source>
-        <translation>Synchroniser les pistes favorites</translation>
+        <translation>Synchroniser les titres favoris</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="167"/>
@@ -2313,7 +2313,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/TemporaryPageItem.cpp" line="68"/>
         <source>Copy Track Link</source>
-        <translation>Copier le lien de la piste</translation>
+        <translation>Copier le lien vers le titre</translation>
     </message>
 </context>
 <context>
@@ -2417,7 +2417,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="128"/>
         <source>Logged in as: %1</source>
-        <translation>Connecté en tant que : %1</translation>
+        <translation>Connecté·e en tant que : %1</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="134"/>
@@ -2630,12 +2630,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="79"/>
         <source>the KDE instant messaging framework</source>
-        <translation type="unfinished"/>
+        <translation>le système de messagerie instantanée KDE</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="96"/>
         <source>KDE Instant Messaging Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Comptes de messagerie instantanée KDE</translation>
     </message>
 </context>
 <context>
@@ -2738,12 +2738,12 @@ utilisateur@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="172"/>
         <source>Continue Playback after this &amp;Track</source>
-        <translation>Continuer la lecture après cette &amp;piste</translation>
+        <translation>Continuer la lecture après ce &amp;titre</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="174"/>
         <source>Stop Playback after this &amp;Track</source>
-        <translation>Stopper la lecture après cette &amp;piste</translation>
+        <translation>Arrêter la lecture après ce &amp;titre</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="181"/>
@@ -2768,7 +2768,7 @@ utilisateur@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="210"/>
         <source>&amp;Copy Track Link</source>
-        <translation>&amp;Copier le lien de la piste</translation>
+        <translation>&amp;Copier le lien vers le titre</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="230"/>
@@ -2863,7 +2863,7 @@ utilisateur@jabber.org</translation>
         <source>Could not find a playable track.
 
 Please change the filters or try again.</source>
-        <translation>Impossible de trouver une piste jouable.
+        <translation>Impossible de trouver un titre jouable.
 
 Veuillez changer les filtres et essayez de nouveau.</translation>
     </message>
@@ -2911,7 +2911,7 @@ Veuillez changer les filtres et essayez de nouveau.</translation>
         <source>Station ran out of tracks!
 
 Try tweaking the filters for a new set of songs to play.</source>
-        <translation>Il n&apos;y a plus de chansons dans la station !
+        <translation>Plus de titres à jouer dans cette station !
 
 Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</translation>
     </message>
@@ -3380,7 +3380,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="579"/>
         <source>Tracks</source>
-        <translation>Pistes</translation>
+        <translation>Titres</translation>
     </message>
 </context>
 <context>
@@ -3485,7 +3485,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="175"/>
         <source>Failed to save tracks</source>
-        <translation>Échec de la sauvegarde des pistes</translation>
+        <translation>Échec lors de la sauvegarde des titres</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="175"/>
@@ -3527,7 +3527,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="53"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation>Après avoir scanné votre collection musicale, vous trouverez tous vos titres ici.</translation>
+        <translation>Une fois votre collection musicale scannée, vous trouverez tous vos titres ici.</translation>
     </message>
 </context>
 <context>
@@ -3642,12 +3642,12 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="564"/>
         <source>loved this track</source>
-        <translation>a aimé cette piste</translation>
+        <translation>a aimé ce titre</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="566"/>
         <source>sent you this track %1</source>
-        <translation>vous a envoyé cette piste %1</translation>
+        <translation>vous a envoyé ce titre %1</translation>
     </message>
 </context>
 <context>
@@ -3709,17 +3709,17 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="94"/>
         <source>Recently Loved</source>
-        <translation type="unfinished"/>
+        <translation>Aimé récemment</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="109"/>
         <source>Sorry, we are still loading the charts.</source>
-        <translation type="unfinished"/>
+        <translation>Désolé, les tops sont encore en cours de chargement.</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="132"/>
         <source>Sorry, we couldn&apos;t find any trending tracks.</source>
-        <translation type="unfinished"/>
+        <translation>Désolé, impossible de trouver les titres du moment.</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="80"/>
@@ -3769,7 +3769,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="761"/>
         <source>Automatically detecting external IP failed.</source>
-        <translation>Echec de la détection automatique de l&apos;IP externe.</translation>
+        <translation>Échec de la détection automatique de l&apos;IP externe.</translation>
     </message>
 </context>
 <context>
@@ -3785,7 +3785,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="180"/>
         <source>&amp;Stop Playback after current Track</source>
-        <translation>&amp;Stopper la lecture après cette piste</translation>
+        <translation>&amp;Arrêter la lecture après ce titre</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="75"/>
@@ -3826,7 +3826,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="178"/>
         <source>&amp;Continue Playback after current Track</source>
-        <translation>&amp;Continuer la lecture après cette piste</translation>
+        <translation>&amp;Continuer la lecture après le titre en cours</translation>
     </message>
 </context>
 <context>
@@ -3939,7 +3939,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1155"/>
         <source>Failed to save tracks</source>
-        <translation>Échec de la sauvegarde des pistes </translation>
+        <translation>Échec lors de la sauvegarde des titres.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1155"/>
@@ -3949,12 +3949,12 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1169"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
-        <translation>Désolé, il y a un problème d&apos;accès à votre matériel audio ou la piste en cours va être sautée. Vérifiez que vous avez un backend Phonon et les plugins requis installés.</translation>
+        <translation>Désolé, il y a un problème d&apos;accès à votre matériel audio ou au titre demandé, le titre en cours va être sauté. Vérifiez que vous avez un backend Phonon adéquat et les extensions requises installées.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1171"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
-        <translation>Désolé, il y a un problème d&apos;accès à votre matériel audio ou la piste en cours , celle-ci va être sautée.</translation>
+        <translation>Désolé, il y a un problème d&apos;accès à votre matériel audio ou au titre demandé, le titre en cours va être sauté.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1189"/>
@@ -4044,12 +4044,12 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="241"/>
         <source>Similar Tracks</source>
-        <translation>Piste similaire</translation>
+        <translation>Titres similaires</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="80"/>
         <source>Sorry, but we could not find similar tracks for this song!</source>
-        <translation>Désolé, nous n&apos;avons pu trouver aucune piste similaire pour cette chanson !</translation>
+        <translation>Désolé, nous n&apos;avons pas pu trouver de titre similaire à cette chanson !</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="63"/>
@@ -4064,12 +4064,12 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="275"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
-        <translation><numerusform>Vous avez écouté cette piste %n fois.</numerusform><numerusform>Vous avez écouté cette piste %n fois.</numerusform></translation>
+        <translation><numerusform>Vous avez écouté cette piste %n fois.</numerusform><numerusform>Vous avez écouté ce titre %n fois.</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="277"/>
         <source>You&apos;ve never listened to this track before.</source>
-        <translation>Vous n&apos;avez encore jamais écouté cette piste.</translation>
+        <translation>Vous n&apos;avez encore jamais écouté ce titre.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="281"/>
@@ -4282,7 +4282,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="438"/>
         <source>Recently played tracks from all your friends</source>
-        <translation>Derniers titres joués par vos amis</translation>
+        <translation>Derniers titres joués par vos ami·es</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="444"/>
@@ -4531,7 +4531,7 @@ Paroles de &quot;%1&quot; par %2 :
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="402"/>
         <source>Publish currently playing track</source>
-        <translation>Publier la piste en cours de lecture</translation>
+        <translation>Publier le titre en cours de lecture</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="409"/>
