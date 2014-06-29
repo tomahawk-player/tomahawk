@@ -214,6 +214,11 @@ if( NOT Qt5Core_DIR )
 
         include( ${QT_USE_FILE} )
     endmacro()
+
+    # Qt5 C++11 Macros not defined within Qt4
+    # TODO: Add C++11 support
+    add_definitions( "-DQ_DECL_FINAL" )
+    add_definitions( "-DQ_DECL_OVERRIDE" )
 endif()
 
 if( Qt5Core_DIR )
