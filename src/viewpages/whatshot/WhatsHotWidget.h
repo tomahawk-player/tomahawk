@@ -22,21 +22,17 @@
 #ifndef WHATSHOTWIDGET_H
 #define WHATSHOTWIDGET_H
 
-#include "PlaylistInterface.h"
-#include "infosystem/InfoSystem.h"
 #include "../ViewPageDllMacro.h"
 #include "ViewPagePlugin.h"
 #include "ViewPageLazyLoader.h"
 
 
+class AnimatedSpinner;
+class PlayableModel;
 class QSortFilterProxyModel;
 class QStandardItemModel;
 class QStandardItem;
 class TreeModel;
-class PlaylistModel;
-class TreeProxyModel;
-class PlayableModel;
-class AnimatedSpinner;
 
 namespace Ui
 {
@@ -47,7 +43,6 @@ namespace Tomahawk
 {
     class ChartDataLoader;
     class ChartsPlaylistInterface;
-    class ChartDataLoader;
 }
 
 namespace Tomahawk
