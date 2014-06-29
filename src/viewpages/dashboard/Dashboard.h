@@ -108,6 +108,6 @@ public:
 };
 
 
-}; // Widgets
-}; // Tomahawk
+} // Widgets
+} // Tomahawk
 #endif // DASHBOARD_H
