@@ -312,11 +312,6 @@ SourcesModel::appendGroups()
                                                   boost::bind( &ViewManager::superCollectionView, ViewManager::instance() ) );
     sc->setSortValue( 4 );*/
 
-    GenericPageItem* hot = new GenericPageItem( this, m_browse, tr( "Charts" ), ImageRegistry::instance()->icon( RESPATH "images/charts.svg" ),
-                                                boost::bind( &ViewManager::showWhatsHotPage, ViewManager::instance() ),
-                                                boost::bind( &ViewManager::whatsHotWidget, ViewManager::instance() ) );
-    hot->setSortValue( 5 );
-
     GenericPageItem* newReleases = new GenericPageItem( this, m_browse, tr( "New Releases" ), ImageRegistry::instance()->icon( RESPATH "images/new-releases.svg" ),
                                                 boost::bind( &ViewManager::showNewReleasesPage, ViewManager::instance() ),
                                                 boost::bind( &ViewManager::newReleasesWidget, ViewManager::instance() ) );

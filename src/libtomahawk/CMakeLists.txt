@@ -163,7 +163,6 @@ set( libGuiSources
     widgets/SourceTreePopupDialog.cpp
     widgets/StatsGauge.cpp
     widgets/ToggleButton.cpp
-    widgets/WhatsHotWidget.cpp
     widgets/infowidgets/SourceInfoWidget.cpp
     widgets/infowidgets/ArtistInfoWidget.cpp
     widgets/infowidgets/AlbumInfoWidget.cpp
@@ -389,7 +388,6 @@ set( libUI ${libUI}
     widgets/PlaylistTypeSelectorDialog.ui
     widgets/NewPlaylistWidget.ui
     widgets/SearchWidget.ui
-    widgets/WhatsHotWidget.ui
     widgets/NewReleasesWidget.ui
     widgets/infowidgets/SourceInfoWidget.ui
     widgets/infowidgets/ArtistInfoWidget.ui

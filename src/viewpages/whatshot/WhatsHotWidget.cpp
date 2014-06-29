@@ -4,6 +4,7 @@
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2012, Hugo Lindström <hugolm84@gmail.com>
+ *   Copyright 2014, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -25,9 +26,8 @@
 #include "ViewManager.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"
-#include "RecentPlaylistsModel.h"
-#include "ChartDataLoader.h"
 #include "MetaPlaylistInterface.h"
+#include "Pipeline.h"
 
 #include "audio/AudioEngine.h"
 #include "playlist/dynamic/GeneratorInterface.h"
@@ -35,9 +35,9 @@
 #include "playlist/PlaylistModel.h"
 #include "playlist/TreeProxyModel.h"
 #include "playlist/PlaylistChartItemDelegate.h"
+#include "widgets/ChartDataLoader.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
-#include "Pipeline.h"
 #include "utils/AnimatedSpinner.h"
 
 #include <QPainter>
@@ -50,6 +50,7 @@
 #define HISTORY_RESOLVING_TIMEOUT 2500
 
 using namespace Tomahawk;
+using namespace Tomahawk::Widgets;
 
 static QString s_whatsHotIdentifier = QString( "WhatsHotWidget" );
 
@@ -119,6 +120,8 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->stackLeft->setCurrentIndex( 2 );
     m_spinner = new AnimatedSpinner( ui->albumsView );
     m_spinner->fadeIn();
+
+    fetchData();
 }
 
 
@@ -621,4 +624,15 @@ WhatsHotWidget::chartAlbumsLoaded( ChartDataLoader* loader, const QList< album_p
 
     m_workers.remove( loader );
     loader->deleteLater();
+}
+
+
+WhatsHot::WhatsHot( QWidget* parent )
+{
+    Q_UNUSED( parent )
+}
+
+
+WhatsHot::~WhatsHot()
+{
 }

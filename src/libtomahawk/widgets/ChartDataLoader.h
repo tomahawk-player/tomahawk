@@ -33,7 +33,7 @@ namespace Tomahawk
   into their respective tomahawk types. Move this object to a thread
   and listen to the result signals.
 */
-class ChartDataLoader : public QObject
+class DLLEXPORT ChartDataLoader : public QObject
 {
     Q_OBJECT
 public:

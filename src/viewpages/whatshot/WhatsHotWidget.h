@@ -3,6 +3,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2014, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -23,13 +24,10 @@
 
 #include "PlaylistInterface.h"
 #include "infosystem/InfoSystem.h"
-#include "ViewPage.h"
+#include "../ViewPageDllMacro.h"
+#include "ViewPagePlugin.h"
+#include "ViewPageLazyLoader.h"
 
-#include "DllMacro.h"
-
-#include <QWidget>
-#include <QListWidgetItem>
-#include <QStyledItemDelegate>
 
 class QSortFilterProxyModel;
 class QStandardItemModel;
@@ -39,6 +37,7 @@ class PlaylistModel;
 class TreeProxyModel;
 class PlayableModel;
 class AnimatedSpinner;
+
 namespace Ui
 {
     class WhatsHotWidget;
@@ -51,11 +50,17 @@ namespace Tomahawk
     class ChartDataLoader;
 }
 
+namespace Tomahawk
+{
+namespace Widgets
+{
+
+
 /**
  * \class
  * \brief The tomahawk page that shows music charts.
  */
-class DLLEXPORT WhatsHotWidget : public QWidget, public Tomahawk::ViewPage
+class DLLEXPORT WhatsHotWidget : public QWidget
 {
 Q_OBJECT
 
@@ -63,16 +68,9 @@ public:
     WhatsHotWidget( QWidget* parent = 0 );
     ~WhatsHotWidget();
 
-    virtual QWidget* widget() { return this; }
-    virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
-
-    virtual QString title() const { return tr( "Charts" ); }
-    virtual QString description() const { return QString(); }
-
-    virtual bool showInfoBar() const { return false; }
-    virtual bool isBeingPlayed() const;
-
-    virtual bool jumpToCurrentTrack();
+    Tomahawk::playlistinterface_ptr playlistInterface() const;
+    bool isBeingPlayed() const;
+    bool jumpToCurrentTrack();
 
 protected:
     void changeEvent( QEvent* e );
@@ -124,5 +122,32 @@ private:
     bool m_loading;
     friend class Tomahawk::ChartsPlaylistInterface;
 };
+
+const QString WHATSHOT_VIEWPAGE_NAME = "whatshot";
+
+class TOMAHAWK_VIEWPAGE_EXPORT WhatsHot : public Tomahawk::ViewPageLazyLoader< WhatsHotWidget >
+{
+Q_OBJECT
+Q_INTERFACES( Tomahawk::ViewPagePlugin )
+Q_PLUGIN_METADATA( IID "org.tomahawk-player.Player.ViewPagePlugin" )
+
+public:
+    WhatsHot( QWidget* parent = 0 );
+    virtual ~WhatsHot();
+
+    const QString defaultName() Q_DECL_OVERRIDE { return WHATSHOT_VIEWPAGE_NAME; }
+    QString title() const Q_DECL_OVERRIDE { return tr( "Charts" ); }
+    QString description() const Q_DECL_OVERRIDE { return QString(); }
+
+    const QString pixmapPath() const Q_DECL_OVERRIDE { return ( RESPATH "images/charts.svg" ); }
+
+    int sortValue() Q_DECL_OVERRIDE { return 5; }
+
+    bool showInfoBar() const Q_DECL_OVERRIDE { return false; }
+};
+
+
+} // Widgets
+} // Tomahawk
 
 #endif // WHATSHOTWIDGET_H
