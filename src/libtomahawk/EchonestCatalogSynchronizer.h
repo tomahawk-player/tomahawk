@@ -21,7 +21,6 @@
 
 #include "DllMacro.h"
 #include "Query.h"
-#include "database/DatabaseCommand_TrackAttributes.h"
 
 #include <echonest/Catalog.h>
 
