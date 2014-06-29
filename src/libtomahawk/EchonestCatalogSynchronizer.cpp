@@ -24,6 +24,7 @@
 #include "database/DatabaseCommand_GenericSelect.h"
 #include "database/DatabaseCommand_SetCollectionAttributes.h"
 #include "database/DatabaseCommand_LoadFiles.h"
+#include "database/DatabaseCommand_SetTrackAttributes.h"
 #include "utils/Logger.h"
 
 #include "PlaylistEntry.h"
