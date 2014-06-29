@@ -97,14 +97,14 @@ public:
     Dashboard( QWidget* parent = 0 );
     virtual ~Dashboard();
 
-    virtual const QString defaultName() { return DASHBOARD_VIEWPAGE_NAME; }
-    virtual QString title() const { return tr( "Dashboard" ); }
-    virtual QString description() const { return tr( "An overview of your friends' recent activity" ); }
-    virtual const QString pixmapPath() const { return ( RESPATH "images/dashboard.svg" ); }
+    const QString defaultName() Q_DECL_OVERRIDE { return DASHBOARD_VIEWPAGE_NAME; }
+    QString title() const Q_DECL_OVERRIDE { return tr( "Dashboard" ); }
+    QString description() const Q_DECL_OVERRIDE { return tr( "An overview of your friends' recent activity" ); }
+    const QString pixmapPath() const Q_DECL_OVERRIDE { return ( RESPATH "images/dashboard.svg" ); }
 
-    virtual int sortValue() { return 1; }
+    int sortValue() Q_DECL_OVERRIDE { return 1; }
 
-    virtual bool showInfoBar() const { return true; }
+    bool showInfoBar() const Q_DECL_OVERRIDE { return true; }
 };
 
 
