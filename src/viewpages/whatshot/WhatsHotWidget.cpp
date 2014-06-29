@@ -23,26 +23,18 @@
 #include "WhatsHotWidget.h"
 #include "ui_WhatsHotWidget.h"
 
-#include "ViewManager.h"
-#include "SourceList.h"
-#include "TomahawkSettings.h"
 #include "MetaPlaylistInterface.h"
+#include "TomahawkSettings.h"
 #include "Pipeline.h"
 
 #include "audio/AudioEngine.h"
-#include "playlist/dynamic/GeneratorInterface.h"
-#include "playlist/PlayableModel.h"
-#include "playlist/PlaylistModel.h"
-#include "playlist/TreeProxyModel.h"
 #include "playlist/PlaylistChartItemDelegate.h"
 #include "widgets/ChartDataLoader.h"
-#include "utils/TomahawkUtilsGui.h"
-#include "utils/Logger.h"
 #include "utils/AnimatedSpinner.h"
+#include "utils/Logger.h"
+#include "utils/TomahawkUtilsGui.h"
 
-#include <QPainter>
 #include <QStandardItemModel>
-#include <QStandardItem>
 
 
 #define HISTORY_TRACK_ITEMS 25
