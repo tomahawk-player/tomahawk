@@ -44,7 +44,7 @@ public:
     virtual QString factoryId() const  { return "resolveraccount"; }
     virtual QString description() const { return QString(); }
     virtual QString prettyName() const { return QString(); } // Internal, not displayed
-    AccountTypes types() const { return AccountTypes( ResolverType ); };
+    AccountTypes types() const { return AccountTypes( ResolverType ); }
     virtual bool allowUserCreation() const { return false; }
 
     // Used to create a new resolver from a script on disk, either chosen by
