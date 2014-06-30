@@ -55,7 +55,7 @@ namespace Widgets
  * \class
  * \brief The tomahawk page that shows music charts.
  */
-class DLLEXPORT WhatsHotWidget : public QWidget
+class WhatsHotWidget : public QWidget
 {
 Q_OBJECT
 
