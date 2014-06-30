@@ -41,11 +41,8 @@
 
 #include "qglobal.h"
 
-#if defined(QT_CERTIFICATE_LIB)
-#  define Q_CERTIFICATE_EXPORT Q_DECL_EXPORT
-#else
-#  define Q_CERTIFICATE_EXPORT Q_DECL_IMPORT
-#endif
+// We build a static version here, so no exports.
+#define Q_CERTIFICATE_EXPORT 
 
 #if defined(QT_NAMESPACE)
 #  define QT_BEGIN_NAMESPACE_CERTIFICATE namespace QT_NAMESPACE { namespace QtAddOn { namespace Certificate {
