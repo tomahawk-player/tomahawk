@@ -101,7 +101,7 @@ private:
                                                           const QVariantList& reslist );
 
     Q_DECLARE_PRIVATE( JSResolver )
-    JSResolverPrivate* d_ptr;
+    QScopedPointer<JSResolverPrivate> d_ptr;
 
 };
 

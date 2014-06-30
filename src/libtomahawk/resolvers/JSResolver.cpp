@@ -87,7 +87,6 @@ JSResolver::~JSResolver()
         stop();
 
     delete d->engine;
-    delete d_ptr;
 }
 
 
