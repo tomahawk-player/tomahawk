@@ -62,6 +62,9 @@ function(tomahawk_add_library)
         # At least in CMake 2.8.8, you CANNOT set more than one COMPILE_DEFINITIONS value
         # only takes the first one if called multiple times or bails out with wrong number of arguments
         # when passing in a list, thus i redefine the export macro here in hope it won't mess up other targets
+        # Dear domme,
+        # "The COMPILE_DEFINITIONS property may be set to a semicolon-separated list"
+        # Sincerely, CMake Documentation
         add_definitions( "-D${LIBRARY_EXPORT_MACRO}" )
 
         set_target_properties(${target} PROPERTIES COMPILE_DEFINITIONS ${LIBRARY_COMPILE_DEFINITIONS})
