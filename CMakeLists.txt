@@ -38,10 +38,18 @@ SET( TOMAHAWK_VERSION_PATCH 100 )
 
 SET( TOMAHAWK_TRANSLATION_LANGUAGES ar bg bn_IN ca cs de en el es fi fr hi_IN hu gl it ja lt pl pt_BR ro ru sv tr zh_CN zh_TW )
 
+# add_definitions is only in the scope of this directory and all directories
+# below it. Tomahawk Libraries and plugins that are built with Tomahawk are
+# not included in out-of-source build so we need to re-add_definitions there.
+macro(tomahawk_add_definitions DEFINITION)
+    add_definitions( ${DEFINITION} )
+    list(APPEND TOMAHAWK_DEFINITIONS ${DEFINITION})
+endmacro()
+
 # enforce proper symbol exporting on all platforms
-add_definitions( "-fvisibility=hidden" )
+tomahawk_add_definitions( "-fvisibility=hidden" )
 # enforce using constBegin, constEnd for const-iterators
-add_definitions( "-DQT_STRICT_ITERATORS" )
+tomahawk_add_definitions( "-DQT_STRICT_ITERATORS" )
 
 # build options
 option(BUILD_GUI "Build Tomahawk with GUI" ON)
@@ -217,8 +225,8 @@ if( NOT Qt5Core_DIR )
 
     # Qt5 C++11 Macros not defined within Qt4
     # TODO: Add C++11 support
-    add_definitions( "-DQ_DECL_FINAL" )
-    add_definitions( "-DQ_DECL_OVERRIDE" )
+    tomahawk_add_definitions( "-DQ_DECL_FINAL=" )
+    tomahawk_add_definitions( "-DQ_DECL_OVERRIDE=" )
 endif()
 
 if( Qt5Core_DIR )

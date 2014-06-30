@@ -52,6 +52,7 @@ function(tomahawk_add_library)
     add_definitions(${QT_DEFINITIONS})
     set_target_properties(${target} PROPERTIES AUTOMOC TRUE)
 
+    add_definitions(${TOMAHAWK_DEFINITIONS})
     if(LIBRARY_EXPORT_MACRO)
         set_target_properties(${target} PROPERTIES COMPILE_DEFINITIONS ${LIBRARY_EXPORT_MACRO})
     endif()
