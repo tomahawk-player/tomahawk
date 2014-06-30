@@ -45,6 +45,13 @@ public:
     JSResolverHelper( const QString& scriptPath, JSResolver* parent );
     void setResolverConfig( const QVariantMap& config );
 
+    /**
+     * Get the instance unique account id for this resolver.
+     *
+     * INTERNAL USE ONLY!
+     */
+    Q_INVOKABLE QString acountId();
+
     Q_INVOKABLE void addCustomUrlHandler( const QString& protocol, const QString& callbackFuncName, const QString& isAsynchronous = "false" );
     Q_INVOKABLE void reportStreamUrl( const QString& qid, const QString& streamUrl );
     Q_INVOKABLE void reportStreamUrl( const QString& qid, const QString& streamUrl, const QVariantMap& headers );

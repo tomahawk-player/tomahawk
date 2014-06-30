@@ -429,6 +429,13 @@ JSResolverHelper::setResolverConfig( const QVariantMap& config )
 }
 
 
+QString
+JSResolverHelper::acountId()
+{
+    return m_resolver->d_func()->accountId;
+}
+
+
 void
 JSResolverHelper::addCustomUrlHandler( const QString& protocol,
                                              const QString& callbackFuncName,
