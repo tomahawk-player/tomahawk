@@ -2195,27 +2195,22 @@ käyttäjäradion käyttöönottamiseksi</translation>
         <translation>Oma musiikki</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="331"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="326"/>
         <source>Cloud</source>
         <translation>Pilvi</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="325"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="320"/>
         <source>Recently Played</source>
         <translation>Viime aikoina kuunnellut</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="315"/>
-        <source>Charts</source>
-        <translation>Listat</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="320"/>
         <source>New Releases</source>
         <translation>Uudet julkaisut</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="330"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="325"/>
         <source>Friends</source>
         <translation>Kaverit</translation>
     </message>
@@ -3745,6 +3740,14 @@ kappaleen %2%4 %3.</translation>
     </message>
 </context>
 <context>
+    <name>Tomahawk::Widgets::WhatsHot</name>
+    <message>
+        <location filename="../src/viewpages/whatshot/WhatsHotWidget.h" line="134"/>
+        <source>Charts</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Tomahawk::XspfUpdater</name>
     <message>
         <location filename="../src/libtomahawk/playlist/XspfUpdater.cpp" line="63"/>
@@ -4262,52 +4265,44 @@ kappaleen %2%4 %3.</translation>
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="95"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="93"/>
         <source>Inbox</source>
         <translation>Saapuneet</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="96"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="94"/>
         <source>Listening suggestions from your friends</source>
         <translation>Kaveriesi lähettämät kuunteluehdotukset</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="376"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="373"/>
         <source>SuperCollection</source>
         <translation>Superkokoelma</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="377"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="374"/>
         <source>Combined libraries of all your online friends</source>
         <translation>Kaikkien verkkokaveriesi yhdistetyt kirjastot</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="437"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="421"/>
         <source>Recently Played Tracks</source>
         <translation>Viime aikoina kuunnellut kappaleet</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="438"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="422"/>
         <source>Recently played tracks from all your friends</source>
         <translation>Kaikkien kaveriesi viime aikoina kuuntelemat kappaleet</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="444"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="428"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Valitettavasti emme löytäneet yhtään viimeaikaisia soittoja!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="471"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="455"/>
         <source>No listening suggestions here.</source>
         <translation>Ei kuunteluehdotuksia.</translation>
-    </message>
-</context>
-<context>
-    <name>WhatsHotWidget</name>
-    <message>
-        <location filename="../src/libtomahawk/widgets/WhatsHotWidget.h" line="69"/>
-        <source>Charts</source>
-        <translation>Listat</translation>
     </message>
 </context>
 <context>
