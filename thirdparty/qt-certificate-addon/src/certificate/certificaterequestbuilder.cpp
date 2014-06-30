@@ -60,7 +60,7 @@ CertificateRequestBuilder::CertificateRequestBuilder()
     ensure_gnutls_init();
 
     gnutls_x509_crq_init(&d->crq);
-    d->errno = GNUTLS_E_SUCCESS;
+    d->errnumber = GNUTLS_E_SUCCESS;
 }
 
 /*!
@@ -79,7 +79,7 @@ CertificateRequestBuilder::~CertificateRequestBuilder()
  */
 int CertificateRequestBuilder::error() const
 {
-    return d->errno;
+    return d->errnumber;
 }
 
 /*!
@@ -88,7 +88,7 @@ int CertificateRequestBuilder::error() const
  */
 QString CertificateRequestBuilder::errorString() const
 {
-    return QString::fromUtf8(gnutls_strerror(d->errno));
+    return QString::fromUtf8(gnutls_strerror(d->errnumber));
 }
 
 /*!
@@ -97,8 +97,8 @@ QString CertificateRequestBuilder::errorString() const
  */
 bool CertificateRequestBuilder::setVersion(int version)
 {
-    d->errno = gnutls_x509_crq_set_version(d->crq, version);
-    return GNUTLS_E_SUCCESS == d->errno;
+    d->errnumber = gnutls_x509_crq_set_version(d->crq, version);
+    return GNUTLS_E_SUCCESS == d->errnumber;
 }
 
 /*!
@@ -108,7 +108,7 @@ int CertificateRequestBuilder::version() const
 {
     int ver = gnutls_x509_crq_get_version(d->crq);
     if (ver < 0)
-        d->errno = ver;
+        d->errnumber = ver;
     return ver;
 }
 
@@ -117,17 +117,17 @@ int CertificateRequestBuilder::version() const
  */
 bool CertificateRequestBuilder::setKey(const QSslKey &qkey)
 {
-    gnutls_x509_privkey_t key = qsslkey_to_key(qkey, &d->errno);
-    if (GNUTLS_E_SUCCESS != d->errno) {
+    gnutls_x509_privkey_t key = qsslkey_to_key(qkey, &d->errnumber);
+    if (GNUTLS_E_SUCCESS != d->errnumber) {
         gnutls_x509_privkey_deinit(key);
         return false;
     };
 
-    d->errno = gnutls_x509_crq_set_key(d->crq, key);
+    d->errnumber = gnutls_x509_crq_set_key(d->crq, key);
 
     gnutls_x509_privkey_deinit(key);
 
-    return GNUTLS_E_SUCCESS == d->errno;
+    return GNUTLS_E_SUCCESS == d->errnumber;
 }
 
 /*!
@@ -143,14 +143,14 @@ QList<QByteArray> CertificateRequestBuilder::nameEntryAttributes()
         QByteArray buffer(1024, 0);
         size_t size = buffer.size();
 
-        d->errno = gnutls_x509_crq_get_dn_oid(d->crq, index, buffer.data(), &size);
+        d->errnumber = gnutls_x509_crq_get_dn_oid(d->crq, index, buffer.data(), &size);
 
-        if (GNUTLS_E_SUCCESS == d->errno) {
+        if (GNUTLS_E_SUCCESS == d->errnumber) {
             buffer.resize(size);
             result << buffer;
         }
         index++;
-    } while(GNUTLS_E_SUCCESS == d->errno);
+    } while(GNUTLS_E_SUCCESS == d->errnumber);
 
     return result;
 }
@@ -177,13 +177,13 @@ QStringList CertificateRequestBuilder::nameEntryInfo(const QByteArray &oid)
         QByteArray buffer(1024, 0);
         size_t size = buffer.size();
 
-        d->errno = gnutls_x509_crq_get_dn_by_oid(d->crq, oid.constData(), index, false, buffer.data(), &size);
+        d->errnumber = gnutls_x509_crq_get_dn_by_oid(d->crq, oid.constData(), index, false, buffer.data(), &size);
 
-        if (GNUTLS_E_SUCCESS == d->errno)
+        if (GNUTLS_E_SUCCESS == d->errnumber)
             result << QString::fromUtf8(buffer);
 
         index++;
-    } while(GNUTLS_E_SUCCESS == d->errno);
+    } while(GNUTLS_E_SUCCESS == d->errnumber);
 
     return result;
 }
@@ -213,9 +213,9 @@ bool CertificateRequestBuilder::addNameEntry(Certificate::EntryType type, const 
  */
 bool CertificateRequestBuilder::addNameEntry(const QByteArray &oid, const QByteArray &value, bool raw)
 {
-    d->errno = gnutls_x509_crq_set_dn_by_oid(d->crq, oid.constData(), raw,
+    d->errnumber = gnutls_x509_crq_set_dn_by_oid(d->crq, oid.constData(), raw,
                                              value.constData(), qstrlen(value.constData()));
-    return GNUTLS_E_SUCCESS == d->errno;
+    return GNUTLS_E_SUCCESS == d->errnumber;
 }
 
 #if QT_VERSION >= 0x050000
@@ -223,16 +223,16 @@ bool CertificateRequestBuilder::addSubjectAlternativeNameEntry(QSsl::Alternative
 {
     gnutls_x509_subject_alt_name_t type = qssl_altnameentrytype_to_altname(qtype);
 
-    d->errno = gnutls_x509_crq_set_subject_alt_name(d->crq, type, value.constData(), value.size(), GNUTLS_FSAN_APPEND);
-    return GNUTLS_E_SUCCESS == d->errno;
+    d->errnumber = gnutls_x509_crq_set_subject_alt_name(d->crq, type, value.constData(), value.size(), GNUTLS_FSAN_APPEND);
+    return GNUTLS_E_SUCCESS == d->errnumber;
 }
 #else
 bool CertificateRequestBuilder::addSubjectAlternativeNameEntry(QSsl::AlternateNameEntryType qtype, const QByteArray &value)
 {
     gnutls_x509_subject_alt_name_t type = qssl_altnameentrytype_to_altname(qtype);
 
-    d->errno = gnutls_x509_crq_set_subject_alt_name(d->crq, type, value.constData(), value.size(), GNUTLS_FSAN_APPEND);
-    return GNUTLS_E_SUCCESS == d->errno;
+    d->errnumber = gnutls_x509_crq_set_subject_alt_name(d->crq, type, value.constData(), value.size(), GNUTLS_FSAN_APPEND);
+    return GNUTLS_E_SUCCESS == d->errnumber;
 }
 #endif
 
@@ -243,16 +243,16 @@ CertificateRequest CertificateRequestBuilder::signedRequest(const QSslKey &qkey)
 {
     CertificateRequest result;
 
-    gnutls_x509_privkey_t key = qsslkey_to_key(qkey, &d->errno);
-    if (GNUTLS_E_SUCCESS != d->errno) {
+    gnutls_x509_privkey_t key = qsslkey_to_key(qkey, &d->errnumber);
+    if (GNUTLS_E_SUCCESS != d->errnumber) {
         gnutls_x509_privkey_deinit(key);
         return result;
     };
 
-    d->errno = gnutls_x509_crq_sign2(d->crq, key, GNUTLS_DIG_SHA1, 0);
+    d->errnumber = gnutls_x509_crq_sign2(d->crq, key, GNUTLS_DIG_SHA1, 0);
     gnutls_x509_privkey_deinit(key);
 
-    if (GNUTLS_E_SUCCESS != d->errno)
+    if (GNUTLS_E_SUCCESS != d->errnumber)
         return result;
 
     gnutls_x509_crq_t crqsave = result.d->crq;

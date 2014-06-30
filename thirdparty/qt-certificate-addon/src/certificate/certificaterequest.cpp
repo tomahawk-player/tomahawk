@@ -57,14 +57,14 @@ QT_BEGIN_NAMESPACE_CERTIFICATE
   \internal
   Convert a crq to a PEM or DER encoded QByteArray.
  */
-static QByteArray request_to_bytearray(gnutls_x509_crq_t crq, gnutls_x509_crt_fmt_t format, int *errno)
+static QByteArray request_to_bytearray(gnutls_x509_crq_t crq, gnutls_x509_crt_fmt_t format, int *errnumber)
 {
     QByteArray ba(4096, 0);
     size_t size = ba.size();
 
-    *errno = gnutls_x509_crq_export(crq, format, ba.data(), &size);
+    *errnumber = gnutls_x509_crq_export(crq, format, ba.data(), &size);
 
-    if (GNUTLS_E_SUCCESS != *errno)
+    if (GNUTLS_E_SUCCESS != *errnumber)
         return QByteArray();
 
     ba.resize(size); // size has now been updated
@@ -77,7 +77,7 @@ CertificateRequestPrivate::CertificateRequestPrivate()
     ensure_gnutls_init();
 
     gnutls_x509_crq_init(&crq);
-    errno = GNUTLS_E_SUCCESS;
+    errnumber = GNUTLS_E_SUCCESS;
 }
 
 CertificateRequestPrivate::~CertificateRequestPrivate()
@@ -114,8 +114,8 @@ CertificateRequest::CertificateRequest(QIODevice *io, QSsl::EncodingFormat forma
     buffer.data = (unsigned char *)(buf.data());
     buffer.size = buf.size();
 
-    d->errno = gnutls_x509_crq_import(d->crq, &buffer, (QSsl::Pem == format) ? GNUTLS_X509_FMT_PEM : GNUTLS_X509_FMT_DER);
-    if (GNUTLS_E_SUCCESS == d->errno)
+    d->errnumber = gnutls_x509_crq_import(d->crq, &buffer, (QSsl::Pem == format) ? GNUTLS_X509_FMT_PEM : GNUTLS_X509_FMT_DER);
+    if (GNUTLS_E_SUCCESS == d->errnumber)
         d->null = false;
 }
 
@@ -141,7 +141,7 @@ bool CertificateRequest::isNull() const
  */
 int CertificateRequest::error() const
 {
-    return d->errno;
+    return d->errnumber;
 }
 
 /*!
@@ -150,7 +150,7 @@ int CertificateRequest::error() const
  */
 QString CertificateRequest::errorString() const
 {
-    return QString::fromUtf8(gnutls_strerror(d->errno));
+    return QString::fromUtf8(gnutls_strerror(d->errnumber));
 }
 
 /*!
@@ -174,14 +174,14 @@ QList<QByteArray> CertificateRequest::nameEntryAttributes()
         QByteArray buffer(1024, 0);
         size_t size = buffer.size();
 
-        d->errno = gnutls_x509_crq_get_dn_oid(d->crq, index, buffer.data(), &size);
+        d->errnumber = gnutls_x509_crq_get_dn_oid(d->crq, index, buffer.data(), &size);
 
-        if (GNUTLS_E_SUCCESS == d->errno) {
+        if (GNUTLS_E_SUCCESS == d->errnumber) {
             buffer.resize(size);
             result << buffer;
         }
         index++;
-    } while(GNUTLS_E_SUCCESS == d->errno);
+    } while(GNUTLS_E_SUCCESS == d->errnumber);
 
     return result;
 }
@@ -208,13 +208,13 @@ QStringList CertificateRequest::nameEntryInfo(const QByteArray &oid)
         QByteArray buffer(1024, 0);
         size_t size = buffer.size();
 
-        d->errno = gnutls_x509_crq_get_dn_by_oid(d->crq, oid.constData(), index, false, buffer.data(), &size);
+        d->errnumber = gnutls_x509_crq_get_dn_by_oid(d->crq, oid.constData(), index, false, buffer.data(), &size);
 
-        if (GNUTLS_E_SUCCESS == d->errno)
+        if (GNUTLS_E_SUCCESS == d->errnumber)
             result << QString::fromUtf8(buffer);
 
         index++;
-    } while(GNUTLS_E_SUCCESS == d->errno);
+    } while(GNUTLS_E_SUCCESS == d->errnumber);
 
     return result;
 }
@@ -224,7 +224,7 @@ QStringList CertificateRequest::nameEntryInfo(const QByteArray &oid)
  */
 QByteArray CertificateRequest::toPem()
 {
-    return request_to_bytearray(d->crq, GNUTLS_X509_FMT_PEM, &d->errno);
+    return request_to_bytearray(d->crq, GNUTLS_X509_FMT_PEM, &d->errnumber);
 }
 
 /*!
@@ -232,7 +232,7 @@ QByteArray CertificateRequest::toPem()
  */
 QByteArray CertificateRequest::toDer()
 {
-    return request_to_bytearray(d->crq, GNUTLS_X509_FMT_DER, &d->errno);
+    return request_to_bytearray(d->crq, GNUTLS_X509_FMT_DER, &d->errnumber);
 }
 
 /*!
@@ -241,9 +241,9 @@ QByteArray CertificateRequest::toDer()
 QString CertificateRequest::toText()
 {
     gnutls_datum_t datum;
-    d->errno = gnutls_x509_crq_print(d->crq, GNUTLS_CRT_PRINT_FULL, &datum);
+    d->errnumber = gnutls_x509_crq_print(d->crq, GNUTLS_CRT_PRINT_FULL, &datum);
 
-    if (GNUTLS_E_SUCCESS != d->errno)
+    if (GNUTLS_E_SUCCESS != d->errnumber)
         return QString();
 
     QString result = QString::fromUtf8(reinterpret_cast<const char *>(datum.data), datum.size);

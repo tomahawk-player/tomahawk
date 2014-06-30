@@ -66,8 +66,8 @@ QByteArray RandomGenerator::getPositiveBytes(int size)
 {
     QByteArray result(size, 0);
 
-    int errno = gnutls_rnd(GNUTLS_RND_RANDOM, result.data(), size);
-    if (GNUTLS_E_SUCCESS != errno)
+    int errnumber = gnutls_rnd(GNUTLS_RND_RANDOM, result.data(), size);
+    if (GNUTLS_E_SUCCESS != errnumber)
         return QByteArray();
 
     // Clear the top bit to ensure the number is positive

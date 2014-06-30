@@ -53,7 +53,7 @@ public:
     ~CertificateRequestPrivate();
 
     bool null;
-    int errno;
+    int errnumber;
     gnutls_x509_crq_t crq;
 };
 

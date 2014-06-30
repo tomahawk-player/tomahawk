@@ -94,12 +94,12 @@ QByteArray entrytype_to_oid(Certificate::EntryType type)
     return oid;
 }
 
-gnutls_x509_privkey_t qsslkey_to_key(const QSslKey &qkey, int *errno)
+gnutls_x509_privkey_t qsslkey_to_key(const QSslKey &qkey, int *errnumber)
 {
     gnutls_x509_privkey_t key;
 
-    *errno = gnutls_x509_privkey_init(&key);
-    if (GNUTLS_E_SUCCESS != *errno)
+    *errnumber = gnutls_x509_privkey_init(&key);
+    if (GNUTLS_E_SUCCESS != *errnumber)
         return 0;
 
     QByteArray buf(qkey.toPem());
@@ -109,16 +109,16 @@ gnutls_x509_privkey_t qsslkey_to_key(const QSslKey &qkey, int *errno)
     buffer.data = (unsigned char *)(buf.data());
     buffer.size = buf.size();
 
-    *errno = gnutls_x509_privkey_import(key, &buffer, GNUTLS_X509_FMT_PEM);
+    *errnumber = gnutls_x509_privkey_import(key, &buffer, GNUTLS_X509_FMT_PEM);
     return key;
 }
 
-gnutls_x509_crt_t qsslcert_to_crt(const QSslCertificate &qcert, int *errno)
+gnutls_x509_crt_t qsslcert_to_crt(const QSslCertificate &qcert, int *errnumber)
 {
     gnutls_x509_crt_t cert;
 
-    *errno = gnutls_x509_crt_init(&cert);
-    if (GNUTLS_E_SUCCESS != *errno)
+    *errnumber = gnutls_x509_crt_init(&cert);
+    if (GNUTLS_E_SUCCESS != *errnumber)
         return 0;
 
     QByteArray buf(qcert.toPem());
@@ -129,29 +129,29 @@ gnutls_x509_crt_t qsslcert_to_crt(const QSslCertificate &qcert, int *errno)
     buffer.size = buf.size();
 
     // Import the cert
-    *errno = gnutls_x509_crt_import(cert, &buffer, GNUTLS_X509_FMT_PEM);
+    *errnumber = gnutls_x509_crt_import(cert, &buffer, GNUTLS_X509_FMT_PEM);
     return cert;
 }
 
-QSslCertificate crt_to_qsslcert(gnutls_x509_crt_t crt, int *errno)
+QSslCertificate crt_to_qsslcert(gnutls_x509_crt_t crt, int *errnumber)
 {
     QByteArray ba(4096, 0);
     size_t size = ba.size();
 
-    *errno = gnutls_x509_crt_export(crt, GNUTLS_X509_FMT_PEM, ba.data(), &size);
-    if (GNUTLS_E_SUCCESS != *errno)
+    *errnumber = gnutls_x509_crt_export(crt, GNUTLS_X509_FMT_PEM, ba.data(), &size);
+    if (GNUTLS_E_SUCCESS != *errnumber)
         return QSslCertificate();
 
     return QSslCertificate(ba);
 }
 
-QSslKey key_to_qsslkey(gnutls_x509_privkey_t key, QSsl::KeyAlgorithm algo, int *errno)
+QSslKey key_to_qsslkey(gnutls_x509_privkey_t key, QSsl::KeyAlgorithm algo, int *errnumber)
 {
     QByteArray ba(4096, 0);
     size_t size = ba.size();
 
-    *errno = gnutls_x509_privkey_export(key, GNUTLS_X509_FMT_PEM, ba.data(), &size);
-    if (GNUTLS_E_SUCCESS != *errno)
+    *errnumber = gnutls_x509_privkey_export(key, GNUTLS_X509_FMT_PEM, ba.data(), &size);
+    if (GNUTLS_E_SUCCESS != *errnumber)
         return QSslKey();
 
     return QSslKey(ba, algo);

@@ -48,7 +48,7 @@ QT_BEGIN_NAMESPACE_CERTIFICATE
 
 struct CertificateBuilderPrivate
 {
-    int errno;
+    int errnumber;
     gnutls_x509_crt_t crt;
 };
 

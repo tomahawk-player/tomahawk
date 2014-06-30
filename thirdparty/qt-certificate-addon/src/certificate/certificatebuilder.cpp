@@ -62,7 +62,7 @@ CertificateBuilder::CertificateBuilder()
     : d(new CertificateBuilderPrivate)
 {
     ensure_gnutls_init();
-    d->errno = gnutls_x509_crt_init(&d->crt);
+    d->errnumber = gnutls_x509_crt_init(&d->crt);
 }
 
 /*!
@@ -81,7 +81,7 @@ CertificateBuilder::~CertificateBuilder()
  */
 int CertificateBuilder::error() const
 {
-    return d->errno;
+    return d->errnumber;
 }
 
 /*!
@@ -90,7 +90,7 @@ int CertificateBuilder::error() const
  */
 QString CertificateBuilder::errorString() const
 {
-    return QString::fromUtf8(gnutls_strerror(d->errno));
+    return QString::fromUtf8(gnutls_strerror(d->errnumber));
 }
 
 /*!
@@ -98,8 +98,8 @@ QString CertificateBuilder::errorString() const
  */
 bool CertificateBuilder::setRequest(const CertificateRequest &crq)
 {
-    d->errno = gnutls_x509_crt_set_crq(d->crt, crq.d->crq);
-    return GNUTLS_E_SUCCESS == d->errno;
+    d->errnumber = gnutls_x509_crt_set_crq(d->crt, crq.d->crq);
+    return GNUTLS_E_SUCCESS == d->errnumber;
 }
 
 /*!
@@ -107,8 +107,8 @@ bool CertificateBuilder::setRequest(const CertificateRequest &crq)
  */
 bool CertificateBuilder::setVersion(int version)
 {
-    d->errno = gnutls_x509_crt_set_version(d->crt, version);
-    return GNUTLS_E_SUCCESS == d->errno;
+    d->errnumber = gnutls_x509_crt_set_version(d->crt, version);
+    return GNUTLS_E_SUCCESS == d->errnumber;
 }
 
 /*!
@@ -117,8 +117,8 @@ bool CertificateBuilder::setVersion(int version)
  */
 bool CertificateBuilder::setSerial(const QByteArray &serial)
 {
-    d->errno = gnutls_x509_crt_set_serial(d->crt, serial.constData(), serial.size());
-    return GNUTLS_E_SUCCESS == d->errno;
+    d->errnumber = gnutls_x509_crt_set_serial(d->crt, serial.constData(), serial.size());
+    return GNUTLS_E_SUCCESS == d->errnumber;
 }
 
 /*!
@@ -126,8 +126,8 @@ bool CertificateBuilder::setSerial(const QByteArray &serial)
  */
 bool CertificateBuilder::setActivationTime(const QDateTime &date)
 {
-    d->errno = gnutls_x509_crt_set_activation_time(d->crt, date.toTime_t());
-    return GNUTLS_E_SUCCESS == d->errno;
+    d->errnumber = gnutls_x509_crt_set_activation_time(d->crt, date.toTime_t());
+    return GNUTLS_E_SUCCESS == d->errnumber;
 }
 
 /*!
@@ -135,8 +135,8 @@ bool CertificateBuilder::setActivationTime(const QDateTime &date)
  */
 bool CertificateBuilder::setExpirationTime(const QDateTime &date)
 {
-    d->errno = gnutls_x509_crt_set_expiration_time(d->crt, date.toTime_t());
-    return GNUTLS_E_SUCCESS == d->errno;
+    d->errnumber = gnutls_x509_crt_set_expiration_time(d->crt, date.toTime_t());
+    return GNUTLS_E_SUCCESS == d->errnumber;
 }
 
 /*!
@@ -147,8 +147,8 @@ bool CertificateBuilder::setExpirationTime(const QDateTime &date)
  */
 bool CertificateBuilder::copyRequestExtensions(const CertificateRequest &crq)
 {
-    d->errno = gnutls_x509_crt_set_crq_extensions(d->crt, crq.d->crq);
-    return GNUTLS_E_SUCCESS == d->errno;
+    d->errnumber = gnutls_x509_crt_set_crq_extensions(d->crt, crq.d->crq);
+    return GNUTLS_E_SUCCESS == d->errnumber;
 }
 
 /*!
@@ -159,8 +159,8 @@ bool CertificateBuilder::copyRequestExtensions(const CertificateRequest &crq)
  */
 bool CertificateBuilder::setBasicConstraints(bool ca, int pathLength)
 {
-    d->errno = gnutls_x509_crt_set_basic_constraints (d->crt, ca, pathLength);
-    return GNUTLS_E_SUCCESS == d->errno;
+    d->errnumber = gnutls_x509_crt_set_basic_constraints (d->crt, ca, pathLength);
+    return GNUTLS_E_SUCCESS == d->errnumber;
 }
 
 /*!
@@ -214,8 +214,8 @@ bool CertificateBuilder::addKeyPurpose(KeyPurpose purpose, bool critical)
  */
 bool CertificateBuilder::addKeyPurpose(const QByteArray &oid, bool critical)
 {
-    d->errno = gnutls_x509_crt_set_key_purpose_oid(d->crt, oid.constData(), critical);
-    return GNUTLS_E_SUCCESS == d->errno;
+    d->errnumber = gnutls_x509_crt_set_key_purpose_oid(d->crt, oid.constData(), critical);
+    return GNUTLS_E_SUCCESS == d->errnumber;
 }
 
 /*!
@@ -244,8 +244,8 @@ bool CertificateBuilder::setKeyUsage(KeyUsageFlags usages)
     if (usages & UsageDecipherOnly)
         usage |= GNUTLS_KEY_DECIPHER_ONLY;
 
-    d->errno = gnutls_x509_crt_set_key_usage(d->crt, usage);
-    return GNUTLS_E_SUCCESS == d->errno;
+    d->errnumber = gnutls_x509_crt_set_key_usage(d->crt, usage);
+    return GNUTLS_E_SUCCESS == d->errnumber;
 }
 
 /*!
@@ -257,12 +257,12 @@ bool CertificateBuilder::addSubjectKeyIdentifier()
     QByteArray ba(128, 0); // Normally 20 bytes (SHA1)
     size_t size = ba.size();
 
-    d->errno = gnutls_x509_crt_get_key_id(d->crt, 0, reinterpret_cast<unsigned char *>(ba.data()), &size);
-    if (GNUTLS_E_SUCCESS != d->errno)
+    d->errnumber = gnutls_x509_crt_get_key_id(d->crt, 0, reinterpret_cast<unsigned char *>(ba.data()), &size);
+    if (GNUTLS_E_SUCCESS != d->errnumber)
         return false;
 
-    d->errno = gnutls_x509_crt_set_subject_key_id (d->crt, ba.constData(), size);
-    return GNUTLS_E_SUCCESS == d->errno;
+    d->errnumber = gnutls_x509_crt_set_subject_key_id (d->crt, ba.constData(), size);
+    return GNUTLS_E_SUCCESS == d->errnumber;
 }
 
 /*!
@@ -272,30 +272,30 @@ bool CertificateBuilder::addSubjectKeyIdentifier()
  */
 bool CertificateBuilder::addAuthorityKeyIdentifier(const QSslCertificate &qcacert)
 {
-    gnutls_x509_crt_t cacrt = qsslcert_to_crt(qcacert, &d->errno);
-    if (GNUTLS_E_SUCCESS != d->errno)
+    gnutls_x509_crt_t cacrt = qsslcert_to_crt(qcacert, &d->errnumber);
+    if (GNUTLS_E_SUCCESS != d->errnumber)
         return false;
 
     QByteArray ba(128, 0); // Normally 20 bytes (SHA1)
     size_t size = ba.size();
 
     // Try using the subject keyid
-    d->errno = gnutls_x509_crt_get_subject_key_id(cacrt, reinterpret_cast<unsigned char *>(ba.data()), &size, NULL);
+    d->errnumber = gnutls_x509_crt_get_subject_key_id(cacrt, reinterpret_cast<unsigned char *>(ba.data()), &size, NULL);
 
     // Or fallback to creating it
-    if (GNUTLS_E_SUCCESS != d->errno) {
-        d->errno = gnutls_x509_crt_get_key_id(cacrt, 0, reinterpret_cast<unsigned char *>(ba.data()), &size);
+    if (GNUTLS_E_SUCCESS != d->errnumber) {
+        d->errnumber = gnutls_x509_crt_get_key_id(cacrt, 0, reinterpret_cast<unsigned char *>(ba.data()), &size);
 
-        if (GNUTLS_E_SUCCESS != d->errno) {
+        if (GNUTLS_E_SUCCESS != d->errnumber) {
             gnutls_x509_crt_deinit(cacrt);
             return false;
         }
     }
 
     gnutls_x509_crt_deinit(cacrt);
-    d->errno = gnutls_x509_crt_set_authority_key_id(d->crt, reinterpret_cast<const unsigned char *>(ba.constData()), size);
+    d->errnumber = gnutls_x509_crt_set_authority_key_id(d->crt, reinterpret_cast<const unsigned char *>(ba.constData()), size);
 
-    return GNUTLS_E_SUCCESS == d->errno;
+    return GNUTLS_E_SUCCESS == d->errnumber;
 }
 
 /*!
@@ -304,29 +304,29 @@ bool CertificateBuilder::addAuthorityKeyIdentifier(const QSslCertificate &qcacer
  */
 QSslCertificate CertificateBuilder::signedCertificate(const QSslKey &qkey)
 {
-    gnutls_x509_privkey_t key = qsslkey_to_key(qkey, &d->errno);
-    if (GNUTLS_E_SUCCESS != d->errno) {
+    gnutls_x509_privkey_t key = qsslkey_to_key(qkey, &d->errnumber);
+    if (GNUTLS_E_SUCCESS != d->errnumber) {
         gnutls_x509_privkey_deinit(key);
         return QSslCertificate();
     };
 
     gnutls_privkey_t abstractKey;
-    d->errno = gnutls_privkey_init(&abstractKey);
-    if (GNUTLS_E_SUCCESS != d->errno) {
+    d->errnumber = gnutls_privkey_init(&abstractKey);
+    if (GNUTLS_E_SUCCESS != d->errnumber) {
         gnutls_x509_privkey_deinit(key);
         return QSslCertificate();
     }
 
     gnutls_privkey_import_x509(abstractKey, key, GNUTLS_PRIVKEY_IMPORT_AUTO_RELEASE);
 
-    d->errno = gnutls_x509_crt_privkey_sign(d->crt, d->crt, abstractKey, GNUTLS_DIG_SHA1, 0);
+    d->errnumber = gnutls_x509_crt_privkey_sign(d->crt, d->crt, abstractKey, GNUTLS_DIG_SHA1, 0);
 
     gnutls_x509_privkey_deinit(key);
 
-    if (GNUTLS_E_SUCCESS != d->errno)
+    if (GNUTLS_E_SUCCESS != d->errnumber)
         return QSslCertificate();
 
-    return crt_to_qsslcert(d->crt, &d->errno);    
+    return crt_to_qsslcert(d->crt, &d->errnumber);    
 }
 
 /*!
@@ -338,15 +338,15 @@ QSslCertificate CertificateBuilder::signedCertificate(const QSslCertificate &qca
     //
     // Extract the CA key
     //
-    gnutls_x509_privkey_t key = qsslkey_to_key(qcakey, &d->errno);
-    if (GNUTLS_E_SUCCESS != d->errno) {
+    gnutls_x509_privkey_t key = qsslkey_to_key(qcakey, &d->errnumber);
+    if (GNUTLS_E_SUCCESS != d->errnumber) {
         gnutls_x509_privkey_deinit(key);
         return QSslCertificate();
     };
 
     gnutls_privkey_t abstractKey;
-    d->errno = gnutls_privkey_init(&abstractKey);
-    if (GNUTLS_E_SUCCESS != d->errno) {
+    d->errnumber = gnutls_privkey_init(&abstractKey);
+    if (GNUTLS_E_SUCCESS != d->errnumber) {
         gnutls_x509_privkey_deinit(key);
         return QSslCertificate();
     }
@@ -356,8 +356,8 @@ QSslCertificate CertificateBuilder::signedCertificate(const QSslCertificate &qca
     //
     // Extract the CA cert
     //
-    gnutls_x509_crt_t cacrt = qsslcert_to_crt(qcacert, &d->errno);
-    if (GNUTLS_E_SUCCESS != d->errno) {
+    gnutls_x509_crt_t cacrt = qsslcert_to_crt(qcacert, &d->errnumber);
+    if (GNUTLS_E_SUCCESS != d->errnumber) {
         gnutls_x509_privkey_deinit(key);
         return QSslCertificate();
     }
@@ -365,15 +365,15 @@ QSslCertificate CertificateBuilder::signedCertificate(const QSslCertificate &qca
     //
     // Sign the cert
     //
-    d->errno = gnutls_x509_crt_privkey_sign(d->crt, cacrt, abstractKey, GNUTLS_DIG_SHA1, 0);
+    d->errnumber = gnutls_x509_crt_privkey_sign(d->crt, cacrt, abstractKey, GNUTLS_DIG_SHA1, 0);
 
     gnutls_x509_crt_deinit(cacrt);
     gnutls_x509_privkey_deinit(key);
 
-    if (GNUTLS_E_SUCCESS != d->errno)
+    if (GNUTLS_E_SUCCESS != d->errnumber)
         return QSslCertificate();
 
-    return crt_to_qsslcert(d->crt, &d->errno);
+    return crt_to_qsslcert(d->crt, &d->errnumber);
 }
 
 QT_END_NAMESPACE_CERTIFICATE
