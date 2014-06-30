@@ -17,6 +17,8 @@
  */
 #include "ChartDataLoader.h"
 
+#include "Album.h"
+#include "Artist.h"
 #include "Source.h"
 
 using namespace Tomahawk;
