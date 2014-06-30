@@ -88,20 +88,20 @@ QSslKey KeyBuilder::generate( QSsl::KeyAlgorithm algo, KeyStrength strength )
     gnutls_x509_privkey_t key;
     gnutls_x509_privkey_init(&key);
 
-    int errno = gnutls_x509_privkey_generate(key, (algo == QSsl::Rsa) ? GNUTLS_PK_RSA : GNUTLS_PK_DSA, bits, 0);
-    if (GNUTLS_E_SUCCESS != errno) {
-        qWarning("Failed to generate key %s", gnutls_strerror(errno));
+    int errnumber = gnutls_x509_privkey_generate(key, (algo == QSsl::Rsa) ? GNUTLS_PK_RSA : GNUTLS_PK_DSA, bits, 0u);
+    if (GNUTLS_E_SUCCESS != errnumber) {
+        qWarning("Failed to generate key %s", gnutls_strerror(errnumber));
         gnutls_x509_privkey_deinit(key);
         return QSslKey();
     }
 
-    QSslKey qkey = key_to_qsslkey(key, algo, &errno);
-    if (GNUTLS_E_SUCCESS != errno) {
-        qWarning("Failed to convert key to bytearray %s", gnutls_strerror(errno));
+    QSslKey qkey = key_to_qsslkey(key, algo, &errnumber);
+    if (GNUTLS_E_SUCCESS != errnumber) {
+        qWarning("Failed to convert key to bytearray %s", gnutls_strerror(errnumber));
         gnutls_x509_privkey_deinit(key);
         return QSslKey();
     }
-    
+
     return qkey;
 }
 
