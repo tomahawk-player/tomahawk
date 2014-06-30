@@ -196,10 +196,10 @@ SpotifyParser::lookupTrack( const QString& link )
 
     // we need Spotify URIs such as spotify:track:XXXXXX, so if we by chance get a http://open.spotify.com url, convert it
     QString uri = link;
-    if ( link.contains( "open.spotify.com" ) )
+    if ( link.contains( "open.spotify.com" ) || link.contains( "play.spotify.com" ) )
     {
         QString hash = link;
-        hash.replace( "http://open.spotify.com/track/", "" );
+        hash.replace( "http://open.spotify.com/track/", "" ).replace( "http://play.spotify.com/track/", "" );
         uri = QString( "spotify:track:%1" ).arg( hash );
     }
 
