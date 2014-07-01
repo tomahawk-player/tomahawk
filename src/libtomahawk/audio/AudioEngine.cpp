@@ -701,6 +701,16 @@ AudioEngine::performLoadIODevice( const result_ptr& result, const QString& url )
 void
 AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString url, QSharedPointer< QIODevice > io )
 {
+    if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "performLoadTrack", Qt::QueuedConnection,
+                                   Q_ARG( const Tomahawk::result_ptr, result ),
+                                   Q_ARG( const QString, url ),
+                                   Q_ARG( QSharedPointer< QIODevice >, io )
+                                   );
+        return;
+    }
+
     Q_D( AudioEngine );
     if ( currentTrack() != result )
     {
