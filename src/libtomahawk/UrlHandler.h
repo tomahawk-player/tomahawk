@@ -41,7 +41,7 @@ namespace UrlHandler
 {
 
     DLLEXPORT void getIODeviceForUrl( const Tomahawk::result_ptr&, const QString& url,
-                                      boost::function< void ( const QString&, QSharedPointer< QIODevice >& ) > callback );
+                                      boost::function< void ( const QString, QSharedPointer< QIODevice > ) > callback );
     DLLEXPORT void registerIODeviceFactory( const QString& proto, IODeviceFactoryFunc fac );
     DLLEXPORT void localFileIODeviceFactory( const Tomahawk::result_ptr& result, const QString& url,
                                              boost::function< void ( const QString&, QSharedPointer< QIODevice >& ) > callback );

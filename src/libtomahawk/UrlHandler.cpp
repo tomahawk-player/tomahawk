@@ -68,7 +68,7 @@ registerIODeviceFactory( const QString &proto, IODeviceFactoryFunc fac )
 
 void
 getIODeviceForUrl( const Tomahawk::result_ptr& result, const QString& url,
-                            boost::function< void ( const QString&, QSharedPointer< QIODevice >& ) > callback )
+                            boost::function< void ( const QString, QSharedPointer< QIODevice > ) > callback )
 {
     if ( iofactories.isEmpty() )
     {

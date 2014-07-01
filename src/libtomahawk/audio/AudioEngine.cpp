@@ -686,7 +686,7 @@ AudioEngine::performLoadIODevice( const result_ptr& result, const QString& url )
     if ( !TomahawkUtils::isLocalResult( url ) && !TomahawkUtils::isHttpResult( url )
          && !TomahawkUtils::isRtmpResult( url ) )
     {
-        boost::function< void ( const QString&, QSharedPointer< QIODevice >& ) > callback =
+        boost::function< void ( const QString, QSharedPointer< QIODevice > ) > callback =
                 boost::bind( &AudioEngine::performLoadTrack, this, result, _1, _2 );
         Tomahawk::UrlHandler::getIODeviceForUrl( result, url, callback );
     }
@@ -699,7 +699,7 @@ AudioEngine::performLoadIODevice( const result_ptr& result, const QString& url )
 
 
 void
-AudioEngine::performLoadTrack( const Tomahawk::result_ptr& result, const QString& url, QSharedPointer< QIODevice >& io )
+AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString url, QSharedPointer< QIODevice > io )
 {
     Q_D( AudioEngine );
     if ( currentTrack() != result )

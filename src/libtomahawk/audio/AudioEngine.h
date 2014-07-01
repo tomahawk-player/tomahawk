@@ -178,7 +178,7 @@ signals:
 private slots:
     void loadTrack( const Tomahawk::result_ptr& result ); //async!
     void performLoadIODevice( const Tomahawk::result_ptr& result, const QString& url ); //only call from loadTrack kthxbi
-    void performLoadTrack( const Tomahawk::result_ptr& result, const QString& url, QSharedPointer< QIODevice >& io ); //only call from loadTrack or performLoadIODevice kthxbi
+    void performLoadTrack( const Tomahawk::result_ptr result, const QString url, QSharedPointer< QIODevice > io ); //only call from loadTrack or performLoadIODevice kthxbi
     void loadPreviousTrack();
     void loadNextTrack();
 

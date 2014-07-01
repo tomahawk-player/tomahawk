@@ -188,14 +188,14 @@ StreamConnection::startSending( const Tomahawk::result_ptr& result )
     m_result = result;
     qDebug() << "Starting to transmit" << m_result->url();
 
-    boost::function< void ( const QString&, QSharedPointer< QIODevice >& ) > callback =
+    boost::function< void ( const QString, QSharedPointer< QIODevice > ) > callback =
             boost::bind( &StreamConnection::reallyStartSending, this, result, _1, _2 );
     Tomahawk::UrlHandler::getIODeviceForUrl( m_result, m_result->url(), callback );
 }
 
 
 void
-StreamConnection::reallyStartSending( const Tomahawk::result_ptr& result, const QString& url, QSharedPointer< QIODevice >& io )
+StreamConnection::reallyStartSending( const Tomahawk::result_ptr result, const QString url, QSharedPointer< QIODevice > io )
 {
     Q_UNUSED( url );
 

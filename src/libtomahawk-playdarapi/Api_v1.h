@@ -89,7 +89,7 @@ protected:
     void sendPlain404( QxtWebRequestEvent* event, const QString& message, const QString& statusmessage );
 
 private:
-    void processSid( QxtWebRequestEvent* event, Tomahawk::result_ptr&, const QString& url, QSharedPointer< QIODevice >& );
+    void processSid( QxtWebRequestEvent* event, const Tomahawk::result_ptr, const QString url, QSharedPointer< QIODevice > );
 
     QSharedPointer< QIODevice > m_ioDevice;
     Api_v1_5* m_api_v1_5;

@@ -242,14 +242,14 @@ Api_v1::sid( QxtWebRequestEvent* event, QString unused )
         return send404( event );
     }
 
-    boost::function< void ( const QString&, QSharedPointer< QIODevice >& ) > callback =
+    boost::function< void ( const QString, QSharedPointer< QIODevice > ) > callback =
             boost::bind( &Api_v1::processSid, this, event, rp, _1, _2 );
     Tomahawk::UrlHandler::getIODeviceForUrl( rp, rp->url(), callback );
 }
 
 
 void
-Api_v1::processSid( QxtWebRequestEvent* event, Tomahawk::result_ptr& rp, const QString& url, QSharedPointer< QIODevice >& iodev )
+Api_v1::processSid( QxtWebRequestEvent* event, const Tomahawk::result_ptr rp, const QString url, QSharedPointer< QIODevice > iodev )
 {
     Q_UNUSED( url );
 
