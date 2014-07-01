@@ -1330,7 +1330,7 @@ TomahawkWindow::showAboutTomahawk()
          .arg( TomahawkUtils::appFriendlyVersion() );
 #endif
 
-    const QString copyright( tr( "Copyright 2010 - 2013" ) );
+    const QString copyright( tr( "Copyright 2010 - 2014" ) );
     const QString thanksto( tr( "Thanks to:" ) );
 
     desc = QString( "%1<br/>Christian Muehlhaeuser &lt;muesli@tomahawk-player.org&gt;<br/><br/>"
