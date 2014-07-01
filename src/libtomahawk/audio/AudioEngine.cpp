@@ -817,6 +817,12 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString 
 void
 AudioEngine::loadPreviousTrack()
 {
+    if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "loadPreviousTrack", Qt::QueuedConnection );
+        return;
+    }
+
     Q_D( AudioEngine );
 
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
@@ -844,6 +850,12 @@ AudioEngine::loadPreviousTrack()
 void
 AudioEngine::loadNextTrack()
 {
+    if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "loadNextTrack", Qt::QueuedConnection );
+        return;
+    }
+
     Q_D( AudioEngine );
 
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
