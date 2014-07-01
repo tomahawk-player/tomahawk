@@ -264,6 +264,13 @@ AudioEngine::supportedMimeTypes() const
 void
 AudioEngine::playPause()
 {
+    if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "playPause", Qt::QueuedConnection );
+        return;
+    }
+
+
     if ( isPlaying() )
         pause();
     else
@@ -274,6 +281,12 @@ AudioEngine::playPause()
 void
 AudioEngine::play()
 {
+    if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "play", Qt::QueuedConnection );
+        return;
+    }
+
     Q_D( AudioEngine );
 
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
@@ -300,6 +313,12 @@ AudioEngine::play()
 void
 AudioEngine::pause()
 {
+    if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "pause", Qt::QueuedConnection );
+        return;
+    }
+
     Q_D( AudioEngine );
 
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
@@ -314,6 +333,12 @@ AudioEngine::pause()
 void
 AudioEngine::stop( AudioErrorCode errorCode )
 {
+    if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "stop", Qt::QueuedConnection );
+        return;
+    }
+
     Q_D( AudioEngine );
 
     tDebug() << Q_FUNC_INFO << errorCode << isStopped();
@@ -375,6 +400,12 @@ void AudioEngine::audioDataArrived( QMap< AudioEngine::AudioChannel, QVector< qi
 void
 AudioEngine::previous()
 {
+    if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "previous", Qt::QueuedConnection );
+        return;
+    }
+
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     if ( canGoPrevious() )
@@ -385,6 +416,12 @@ AudioEngine::previous()
 void
 AudioEngine::next()
 {
+    if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "next", Qt::QueuedConnection );
+        return;
+    }
+
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     if ( canGoNext() )
