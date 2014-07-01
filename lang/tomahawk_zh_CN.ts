@@ -828,10 +828,10 @@ Password (OTP)</source>
 <context>
     <name>JSResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="350"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="387"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="425"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="487"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="349"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="386"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="424"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="486"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>脚本解析器警告： API 调用 %1 同步返回数据</translation>
     </message>
@@ -3739,7 +3739,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatshot/WhatsHotWidget.h" line="134"/>
         <source>Charts</source>
-        <translation type="unfinished"/>
+        <translation>排行榜</translation>
     </message>
 </context>
 <context>
