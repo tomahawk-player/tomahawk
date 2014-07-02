@@ -50,6 +50,7 @@ Required dependencies:
 * liblastfm 1.0.1 - https://github.com/lastfm/liblastfm/
 * QtKeychain 0.1 - https://github.com/frankosterfeld/qtkeychain/
 * Sparsehash - https://code.google.com/p/sparsehash/
+* GnuTLS - http://gnutls.org/
 
 The following dependencies are optional, but recommended:
 
