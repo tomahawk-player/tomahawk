@@ -370,7 +370,6 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_LIB}\libsnore\libsnore_backend_snarl.dll"
    File "${MING_LIB}\libsnore\libsnore_backend_snore.dll"
    File "${MING_LIB}\libsnore\libsnore_backend_snoretoast.dll"
-   File "${MING_LIB}\libsnore\libsnore_backend_trayicon.dll"
 
    ; Jabber
    File "${MING_BIN}\libjreen.dll"
