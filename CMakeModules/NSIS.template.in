@@ -363,6 +363,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_BIN}\libintl-8.dll"
    File "${MING_BIN}\libnettle-4-6.dll"
    File "${MING_BIN}\libp11-kit-0.dll"
+   File "${MING_BIN}\libffi-6.dll"
 
    ; Jabber
    File "${MING_BIN}\libjreen.dll"
