@@ -359,6 +359,10 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_BIN}\libgnutls-28.dll"
    File "${MING_BIN}\libtasn1-6.dll"
    File "${MING_BIN}\libgmp-10.dll"
+   File "${MING_BIN}\libhogweed-2-4.dll"
+   File "${MING_BIN}\libintl-8.dll"
+   File "${MING_BIN}\libnettle-4-6.dll"
+   File "${MING_BIN}\libp11-kit-0.dll"
 
    ; Jabber
    File "${MING_BIN}\libjreen.dll"
