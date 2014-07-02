@@ -367,17 +367,17 @@ connect and stream from you?</source>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="897"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="956"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Συγνωμη, το Tomahawk δεν βρηκε το τραγουδι &apos;%1&apos; απο %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="921"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="980"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Συγνωμη, το Tomahawk δεν μπορεσε να βρει τον καλλιτεχνη &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="947"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1006"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Συγνωμη, το Tomahawk δεν μπορεσε να βρει το αλμπουμ του &apos;%1&apos; απο %2 </translation>
     </message>
@@ -3986,6 +3986,11 @@ Try tweaking the filters for a new set of songs to play.</source>
         <translation>Δημιουργία Νέας Λίστας Αναπαραγωγής</translation>
     </message>
     <message>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1333"/>
+        <source>Copyright 2010 - 2014</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="898"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1259"/>
         <source>Pause</source>
@@ -4017,11 +4022,6 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1329"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1333"/>
-        <source>Copyright 2010 - 2013</source>
-        <translation>Copyright 2010 - 2013</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1334"/>
