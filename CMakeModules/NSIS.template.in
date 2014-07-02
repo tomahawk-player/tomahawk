@@ -365,6 +365,13 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_BIN}\libp11-kit-0.dll"
    File "${MING_BIN}\libffi-6.dll"
 
+   ; Snorenotify
+   File "${MING_BIN}\libsnore.dll"
+   File "${MING_LIB}\libsnore\libsnore_backend_snarl.dll"
+   File "${MING_LIB}\libsnore\libsnore_backend_snore.dll"
+   File "${MING_LIB}\libsnore\libsnore_backend_snoretoast.dll"
+   File "${MING_LIB}\libsnore\libsnore_backend_trayicon.dll"
+
    ; Jabber
    File "${MING_BIN}\libjreen.dll"
    File "${MING_BIN}\libqca.dll"
