@@ -332,6 +332,15 @@ if( WIN32 )
     macro_log_feature(QTSPARKLE_FOUND "qtsparkle" "Library for creating auto updaters written in Qt" "https://github.com/davidsansome/qtsparkle" FALSE "" "")
 endif( WIN32 )
 
+if( WIN32 OR APPLE )
+if( TOMAHAWK_QT5 )
+    macro_optional_find_package(LibsnoreQt5 QUIET)
+else()
+    macro_optional_find_package(Libsnore QUIET)
+endif()
+    macro_log_feature(LIBSNORE_FOUND "Libsnore" "Library for notifications" "https://github.com/TheOneRing/Snorenotify" FALSE "" "")
+endif()
+
 #TODO: support external qxt
 set(QXTWEB_FOUND TRUE)
 set(QXTWEB_LIBRARIES qxtweb-standalone)
