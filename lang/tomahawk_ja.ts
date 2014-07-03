@@ -3461,6 +3461,78 @@ Try tweaking the filters for a new set of songs to play.</source>
     </message>
 </context>
 <context>
+    <name>Tomahawk::InfoSystem::SnoreNotifyPlugin</name>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="86"/>
+        <source>Notify User</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="87"/>
+        <source>Now Playing</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="88"/>
+        <source>Unresolved track</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="89"/>
+        <source>Playback Stopped</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="90"/>
+        <source>You received a Song recomondation</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="201"/>
+        <source>on</source>
+        <comment>'on' is followed by an album name</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="203"/>
+        <source>%1%4 %2%3.</source>
+        <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist ('by' in english)</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="207"/>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="269"/>
+        <source>by</source>
+        <comment>preposition to link track and artist</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="216"/>
+        <source>on &quot;%1&quot;</source>
+        <comment>%1 is an album name</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="218"/>
+        <source>&quot;%1&quot; by %2%3.</source>
+        <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="265"/>
+        <source>%1 sent you
+%2%4 %3.</source>
+        <comment>%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist ('by' in english)</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="276"/>
+        <source>%1 sent you &quot;%2&quot; by %3.</source>
+        <comment>%1 is a nickname, %2 is a title, %3 is an artist</comment>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Tomahawk::ItunesParser</name>
     <message>
         <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="184"/>

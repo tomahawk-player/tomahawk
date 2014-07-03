@@ -3182,19 +3182,19 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="495"/>
         <source>Studio</source>
         <comment>Song type: The song was recorded in a studio.</comment>
-        <translation type="unfinished"/>
+        <translation>Estudio</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="496"/>
         <source>Live</source>
         <comment>Song type: The song was a life performance.</comment>
-        <translation type="unfinished"/>
+        <translation>Directo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="497"/>
         <source>Acoustic</source>
         <comment>Song type</comment>
-        <translation type="unfinished"/>
+        <translation>Acústico</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="498"/>
@@ -3464,6 +3464,78 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
         <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="599"/>
         <source>Albums</source>
         <translation>Álbumes</translation>
+    </message>
+</context>
+<context>
+    <name>Tomahawk::InfoSystem::SnoreNotifyPlugin</name>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="86"/>
+        <source>Notify User</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="87"/>
+        <source>Now Playing</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="88"/>
+        <source>Unresolved track</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="89"/>
+        <source>Playback Stopped</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="90"/>
+        <source>You received a Song recomondation</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="201"/>
+        <source>on</source>
+        <comment>'on' is followed by an album name</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="203"/>
+        <source>%1%4 %2%3.</source>
+        <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist ('by' in english)</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="207"/>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="269"/>
+        <source>by</source>
+        <comment>preposition to link track and artist</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="216"/>
+        <source>on &quot;%1&quot;</source>
+        <comment>%1 is an album name</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="218"/>
+        <source>&quot;%1&quot; by %2%3.</source>
+        <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="265"/>
+        <source>%1 sent you
+%2%4 %3.</source>
+        <comment>%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist ('by' in english)</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="276"/>
+        <source>%1 sent you &quot;%2&quot; by %3.</source>
+        <comment>%1 is a nickname, %2 is a title, %3 is an artist</comment>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3741,7 +3813,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/viewpages/whatshot/WhatsHotWidget.h" line="134"/>
         <source>Charts</source>
-        <translation type="unfinished"/>
+        <translation>Listas de éxitos</translation>
     </message>
 </context>
 <context>
@@ -3904,12 +3976,12 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="907"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="919"/>
         <source>Play</source>
-        <translation type="unfinished"/>
+        <translation>Reproducir</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="596"/>
         <source>Next</source>
-        <translation type="unfinished"/>
+        <translation>Siguiente</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="609"/>
@@ -3992,7 +4064,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1333"/>
         <source>Copyright 2010 - 2014</source>
-        <translation type="unfinished"/>
+        <translation>Copyright 2010 - 2014 {2010 ?}</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="898"/>
@@ -4146,7 +4218,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="75"/>
         <source>Artist</source>
-        <translation type="unfinished"/>
+        <translation>Artista</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="75"/>
@@ -4176,7 +4248,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="78"/>
         <source>Style</source>
-        <translation type="unfinished"/>
+        <translation>Estilo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="78"/>
@@ -4211,7 +4283,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="81"/>
         <source>Energy</source>
-        <translation type="unfinished"/>
+        <translation>Energía</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="82"/>
