@@ -628,3 +628,5 @@ WhatsHot::WhatsHot( QWidget* parent )
 WhatsHot::~WhatsHot()
 {
 }
+
+Q_EXPORT_PLUGIN2( ViewPagePlugin, WhatsHot )
