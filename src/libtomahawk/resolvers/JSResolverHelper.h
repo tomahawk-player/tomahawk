@@ -43,6 +43,10 @@ Q_OBJECT
 
 public:
     JSResolverHelper( const QString& scriptPath, JSResolver* parent );
+
+    /**
+     * INTERNAL USE ONLY!
+     */
     void setResolverConfig( const QVariantMap& config );
 
     /**
@@ -67,6 +71,8 @@ public:
      *     Tomahawk.retrievedMetadata(metadataId, metadata, error)
      * on completion. This method is an internal variant, JavaScript resolvers
      * are advised to use Tomahawk.retrieveMetadata(url, options, callback).
+     *
+     * INTERNAL USE ONLY!
      */
     Q_INVOKABLE void nativeRetrieveMetadata( int metadataId, const QString& url,
                                              const QString& mimetype,
@@ -81,6 +87,8 @@ public:
      * Use cases are:
      *  * Referer header: Stripped on MacOS and the specification says it
      *    should be stripped
+     *
+     * INTERNAL USE ONLY!
      */
     Q_INVOKABLE void nativeAsyncRequest( int requestId, const QString& url,
                                          const QVariantMap& headers,
@@ -97,6 +105,9 @@ public:
     Q_INVOKABLE QVariantList resolveFromFuzzyIndex( const QString& artist, const QString& album, const QString& tracks );
     Q_INVOKABLE void deleteFuzzyIndex();
 
+    /**
+     * INTERNAL USE ONLY!
+     */
     void customIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
                                 boost::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback ); // async
 
