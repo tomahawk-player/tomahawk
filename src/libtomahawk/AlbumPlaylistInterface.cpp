@@ -237,7 +237,8 @@ AlbumPlaylistInterface::infoSystemFinished( const QString& infoId )
     disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ),
                 this, SLOT( infoSystemFinished( QString ) ) );
 
-    if ( m_queries.isEmpty() && m_mode == Mixed )
+    // Add !m_finished check to not endlessly reload on an empty album.
+    if ( m_queries.isEmpty() && m_mode == Mixed && !m_finished )
     {
         if ( m_collection.isNull() ) //we do a dbcmd directly, for the SuperCollection I guess?
         {
