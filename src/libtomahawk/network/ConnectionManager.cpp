@@ -220,10 +220,10 @@ ConnectionManager::connectToPeer( const Tomahawk::peerinfo_ptr &peerInfo, bool l
     {
         // We are already connected to this peer, so just add some more details.
         peerInfoDebug( peerInfo ) << "Existing connection found, not connecting.";
-        cconn->addPeerInfo( peerInfo );
         if ( cconn != NULL )
         {
-            d_func()->controlConnection = QPointer<ControlConnection>(cconn);
+            cconn->addPeerInfo( peerInfo );
+            d_func()->controlConnection = QPointer<ControlConnection>( cconn );
         }
         deactivate();
         return;
