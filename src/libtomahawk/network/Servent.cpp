@@ -813,7 +813,9 @@ Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, 
         m.insert( "offer", key );
         m.insert( "controlid", Database::instance()->impl()->dbid() );
 
-        orig_conn->sendMsg( Msg::factory( TomahawkUtils::toJson( m ), Msg::JSON ) );
+        if (orig_conn) {
+            orig_conn->sendMsg( Msg::factory( TomahawkUtils::toJson( m ), Msg::JSON ) );
+        }
     }
 }
 
