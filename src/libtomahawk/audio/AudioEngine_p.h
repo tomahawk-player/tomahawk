@@ -21,6 +21,8 @@ Q_OBJECT
 public:
     AudioEnginePrivate( AudioEngine* q )
         : q_ptr ( q )
+        , underrunCount( 0 )
+        , underrunNotified( false )
     {
     }
     AudioEngine* q_ptr;
