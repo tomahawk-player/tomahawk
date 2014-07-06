@@ -640,12 +640,13 @@ Tomahawk::EchonestControl::updateFromComboAndSlider( bool smooth )
     {
         m_matchString = combo->currentText();
         m_matchData = combo->itemData( combo->currentIndex() ).toString();
-    }
-    LabeledSlider* ls = qobject_cast<LabeledSlider*>( m_input.data() );
-    if( ls && ls->slider() )
-    {
-        m_data.first = static_cast< Echonest::DynamicPlaylist::PlaylistParam >( combo->itemData( combo->currentIndex() ).toInt() );
-        m_data.second = ls->slider()->value() / ( smooth ? 10000. : 1.0 );
+
+        LabeledSlider* ls = qobject_cast<LabeledSlider*>( m_input.data() );
+        if( ls && ls->slider() )
+        {
+            m_data.first = static_cast< Echonest::DynamicPlaylist::PlaylistParam >( combo->itemData( combo->currentIndex() ).toInt() );
+            m_data.second = ls->slider()->value() / ( smooth ? 10000. : 1.0 );
+        }
     }
 }
 
