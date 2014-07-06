@@ -161,12 +161,14 @@ SpotifyParser::lookupSpotifyBrowse( const QString& link )
 
     if ( m_browseUri.contains( "spotify:user" ) )
         type = DropJob::Playlist;
-    if ( m_browseUri.contains( "spotify:artist" ) )
+    else if ( m_browseUri.contains( "spotify:artist" ) )
         type = DropJob::Artist;
-    if ( m_browseUri.contains( "spotify:album" ) )
+    else if ( m_browseUri.contains( "spotify:album" ) )
         type = DropJob::Album;
-    if ( m_browseUri.contains( "spotify:track" ) )
+    else if ( m_browseUri.contains( "spotify:track" ) )
         type = DropJob::Track;
+    else
+        return; // Type not supported.
 
     QUrl url;
 
