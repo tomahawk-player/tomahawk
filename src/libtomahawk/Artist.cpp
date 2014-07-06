@@ -336,7 +336,6 @@ Artist::id() const
 {
     s_idMutex.lockForRead();
     const bool waiting = m_waitingForFuture;
-    unsigned int finalid = m_id;
     s_idMutex.unlock();
 
     if ( waiting )
@@ -344,7 +343,7 @@ Artist::id() const
 //        qDebug() << Q_FUNC_INFO << "Asked for artist ID and NOT loaded yet" << m_name << m_idFuture.isFinished();
         m_idFuture.waitForFinished();
 //        qDebug() << "DONE WAITING:" << m_idFuture.resultCount() << m_idFuture.isResultReadyAt( 0 ) << m_idFuture.isCanceled() << m_idFuture.isFinished() << m_idFuture.isPaused() << m_idFuture.isRunning() << m_idFuture.isStarted();
-        finalid = m_idFuture.result();
+        unsigned int finalid = m_idFuture.result();
 
 //        qDebug() << Q_FUNC_INFO << "Got loaded artist:" << m_name << finalid;
 
