@@ -1367,7 +1367,7 @@ SpotifyAccount::playlistCopyCreated( const QString& msgType, const QVariantMap& 
     const QString qid = msg.value( "qid" ).toString();
     const QString title = msg.value( "playlistname" ).toString();
 
-    qDebug() << msg;
+    qDebug() << Q_FUNC_INFO << msg;
     if ( !m_waitingForCreateReply.contains( qid ) )
     {
         qWarning() << "Got a createPlaylist reply for a playlist/qid we were not waiting for :-/ " << qid << m_waitingForCreateReply;

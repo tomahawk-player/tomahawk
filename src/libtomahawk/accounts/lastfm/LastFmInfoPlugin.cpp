@@ -87,7 +87,7 @@ LastFmInfoPlugin::init()
 
 LastFmInfoPlugin::~LastFmInfoPlugin()
 {
-    qDebug() << Q_FUNC_INFO;
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
     delete m_scrobbler;
     m_scrobbler = 0;
 }
@@ -914,7 +914,7 @@ LastFmInfoPlugin::settingsChanged()
     else if ( m_account.data()->username() != lastfm::ws::Username ||
         m_account.data()->password() != m_pw )
     {
-        qDebug() << "Last.fm credentials changed, re-creating scrobbler";
+        tDebug() << Q_FUNC_INFO << "Last.fm credentials changed, re-creating scrobbler";
         lastfm::ws::Username = m_account.data()->username();
         m_pw = m_account.data()->password();
         // credentials have changed, have to re-create scrobbler for them to take effect
@@ -962,7 +962,7 @@ LastFmInfoPlugin::onAuthenticated()
         else
             error += ".";
 
-        tLog() << error.simplified();
+        tLog() << Q_FUNC_INFO << error.simplified();
     }
 
     authJob->deleteLater();
@@ -977,7 +977,7 @@ LastFmInfoPlugin::createScrobbler()
 
     if ( m_account.data()->sessionKey().isEmpty() ) // no session key, so get one
     {
-        qDebug() << "LastFmInfoPlugin::createScrobbler Session key is empty";
+        tLog() << Q_FUNC_INFO << "Session key is empty";
         QString authToken = TomahawkUtils::md5( ( lastfm::ws::Username.toLower() + TomahawkUtils::md5( m_pw.toUtf8() ) ).toUtf8() );
 
         QMap<QString, QString> query;
@@ -990,7 +990,7 @@ LastFmInfoPlugin::createScrobbler()
     }
     else
     {
-        qDebug() << "LastFmInfoPlugin::createScrobbler Already have session key";
+        tLog() << Q_FUNC_INFO << "LastFmInfoPlugin::createScrobbler Already have session key";
         lastfm::ws::SessionKey = m_account.data()->sessionKey();
 
         m_scrobbler = new lastfm::Audioscrobbler( "thk" );
@@ -1013,7 +1013,7 @@ LastFmInfoPlugin::parseTrackList( QNetworkReply* reply )
     }
     catch ( lastfm::ws::ParseError& e )
     {
-        qWarning() << e.message();
+        tLog() << Q_FUNC_INFO << e.message();
     }
 
     return tracks;

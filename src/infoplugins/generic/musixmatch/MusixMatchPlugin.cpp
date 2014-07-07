@@ -115,7 +115,7 @@ MusixMatchPlugin::trackSearchSlot()
 
     QDomDocument doc;
     doc.setContent(oldReply->readAll());
-    qDebug() << doc.toString();
+    qDebug() << Q_FUNC_INFO << doc.toString();
     QDomNodeList domNodeList = doc.elementsByTagName("track_id");
     if ( domNodeList.isEmpty() )
     {

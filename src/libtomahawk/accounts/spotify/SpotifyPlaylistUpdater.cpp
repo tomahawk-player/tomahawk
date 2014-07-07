@@ -750,7 +750,7 @@ SpotifyPlaylistUpdater::tomahawkTracksMoved( const QList< plentry_ptr >& tracks,
     qDebug() << Q_FUNC_INFO << "Got tracks moved at position:" << position;
     foreach ( const plentry_ptr& ple, tracks )
     {
-        qDebug() << ple->query()->queryTrack()->toString();
+        qDebug() << Q_FUNC_INFO << ple->query()->queryTrack()->toString();
     }
 
     qDebug() << Q_FUNC_INFO  << "updating spotify resolver with moved tracks to:" << position;
