@@ -3457,12 +3457,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="86"/>
         <source>Notify User</source>
-        <translation type="unfinished"/>
+        <translation>Beritahu Pengguna</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="87"/>
         <source>Now Playing</source>
-        <translation type="unfinished"/>
+        <translation>Sedang Memutar</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="88"/>
@@ -3472,12 +3472,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="89"/>
         <source>Playback Stopped</source>
-        <translation type="unfinished"/>
+        <translation>Pemutaran Dihentikan.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="90"/>
         <source>You received a Song recomondation</source>
-        <translation type="unfinished"/>
+        <translation>Anda mendapatkan sebuah rekomendasi lagu</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="201"/>
@@ -3496,7 +3496,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="269"/>
         <source>by</source>
         <comment>preposition to link track and artist</comment>
-        <translation type="unfinished"/>
+        <translation>oleh</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="216"/>
@@ -3799,7 +3799,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatshot/WhatsHotWidget.h" line="134"/>
         <source>Charts</source>
-        <translation type="unfinished"/>
+        <translation>Tingkatan</translation>
     </message>
 </context>
 <context>
@@ -3960,24 +3960,24 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="907"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="919"/>
         <source>Play</source>
-        <translation type="unfinished"/>
+        <translation>Putar</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="596"/>
         <source>Next</source>
-        <translation type="unfinished"/>
+        <translation>Lanjut</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="609"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="967"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="974"/>
         <source>Love</source>
-        <translation type="unfinished"/>
+        <translation>Sukai</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="962"/>
         <source>Unlove</source>
-        <translation type="unfinished"/>
+        <translation>Tidak Sukai</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1071"/>
@@ -4048,7 +4048,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1333"/>
         <source>Copyright 2010 - 2014</source>
-        <translation type="unfinished"/>
+        <translation>Hak Cipta 2010 - 2014 {2010 ?}</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="898"/>
@@ -4252,37 +4252,37 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="80"/>
         <source>Duration</source>
-        <translation type="unfinished"/>
+        <translation>Durasi</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="80"/>
         <source>Loudness</source>
-        <translation type="unfinished"/>
+        <translation>Kekerasan Suara</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="81"/>
         <source>Danceability</source>
-        <translation type="unfinished"/>
+        <translation>Kemampuan Menari</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="81"/>
         <source>Energy</source>
-        <translation type="unfinished"/>
+        <translation>Tenaga</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="82"/>
         <source>Artist Familiarity</source>
-        <translation type="unfinished"/>
+        <translation>Kemiripan Artis</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="82"/>
         <source>Artist Hotttnesss</source>
-        <translation type="unfinished"/>
+        <translation>Keseksian Artis</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="83"/>
         <source>Song Hotttnesss</source>
-        <translation type="unfinished"/>
+        <translation>Keseksian Lagu</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="83"/>
@@ -4297,22 +4297,22 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="84"/>
         <source>Mode</source>
-        <translation type="unfinished"/>
+        <translation>Mode</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="85"/>
         <source>Key</source>
-        <translation type="unfinished"/>
+        <translation>Kunci</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="85"/>
         <source>Sorting</source>
-        <translation type="unfinished"/>
+        <translation>Mengurutkan</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="86"/>
         <source>Song Type</source>
-        <translation type="unfinished"/>
+        <translation>Tipe Lagu</translation>
     </message>
 </context>
 <context>

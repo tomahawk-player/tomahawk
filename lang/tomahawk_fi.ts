@@ -3474,71 +3474,72 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="86"/>
         <source>Notify User</source>
-        <translation type="unfinished"/>
+        <translation>Ilmoitus käyttäjälle</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="87"/>
         <source>Now Playing</source>
-        <translation type="unfinished"/>
+        <translation>Nyt soi</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="88"/>
         <source>Unresolved track</source>
-        <translation type="unfinished"/>
+        <translation>Selvittämätön kappale</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="89"/>
         <source>Playback Stopped</source>
-        <translation type="unfinished"/>
+        <translation>Soitto pysäytetty</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="90"/>
         <source>You received a Song recomondation</source>
-        <translation type="unfinished"/>
+        <translation>Sait kappalesuosituksen</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="201"/>
         <source>on</source>
         <comment>'on' is followed by an album name</comment>
-        <translation type="unfinished"/>
+        <translation>albumilta</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="203"/>
         <source>%1%4 %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist ('by' in english)</comment>
-        <translation type="unfinished"/>
+        <translation>%1%4 %2%3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="207"/>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="269"/>
         <source>by</source>
         <comment>preposition to link track and artist</comment>
-        <translation type="unfinished"/>
+        <translation>artistilta</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="216"/>
         <source>on &quot;%1&quot;</source>
         <comment>%1 is an album name</comment>
-        <translation type="unfinished"/>
+        <translation>albumilta ”%1”</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="218"/>
         <source>&quot;%1&quot; by %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing</comment>
-        <translation type="unfinished"/>
+        <translation>”%1” artistilta %2%3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="265"/>
         <source>%1 sent you
 %2%4 %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist ('by' in english)</comment>
-        <translation type="unfinished"/>
+        <translation>%1 lähetti sinulle
+%2%4 %3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="276"/>
         <source>%1 sent you &quot;%2&quot; by %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist</comment>
-        <translation type="unfinished"/>
+        <translation>%1 lähetti sinulle ”%2” artistilta %3.</translation>
     </message>
 </context>
 <context>
@@ -4067,7 +4068,7 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1333"/>
         <source>Copyright 2010 - 2014</source>
-        <translation type="unfinished"/>
+        <translation>Copyright 2010–2014 {2010 ?}</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="898"/>
