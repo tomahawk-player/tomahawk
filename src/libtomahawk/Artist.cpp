@@ -52,9 +52,7 @@ Artist::~Artist()
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Deleting artist:" << m_name;
     m_ownRef.clear();
 
-#ifndef ENABLE_HEADLESS
     delete m_cover;
-#endif
 }
 
 
@@ -137,9 +135,7 @@ Artist::Artist( unsigned int id, const QString& name )
     , m_infoJobs( 0 )
     , m_chartPosition( 0 )
     , m_chartCount( 0 )
-#ifndef ENABLE_HEADLESS
     , m_cover( 0 )
-#endif
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Creating artist:" << id << name;
     m_sortname = DatabaseImpl::sortname( name, true );
@@ -158,9 +154,7 @@ Artist::Artist( const QString& name )
     , m_infoJobs( 0 )
     , m_chartPosition( 0 )
     , m_chartCount( 0 )
-#ifndef ENABLE_HEADLESS
     , m_cover( 0 )
-#endif
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Creating artist:" << name;
     m_sortname = DatabaseImpl::sortname( name, true );
@@ -590,7 +584,6 @@ Artist::infoSystemFinished( QString target )
 }
 
 
-#ifndef ENABLE_HEADLESS
 QPixmap
 Artist::cover( const QSize& size, bool forceLoad ) const
 {
@@ -650,7 +643,6 @@ Artist::cover( const QSize& size, bool forceLoad ) const
     else
         return QPixmap();
 }
-#endif
 
 
 Tomahawk::playlistinterface_ptr

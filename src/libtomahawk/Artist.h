@@ -20,12 +20,8 @@
 #ifndef TOMAHAWKARTIST_H
 #define TOMAHAWKARTIST_H
 
-#include <QtCore/QObject>
-#ifndef ENABLE_HEADLESS
-    #include <QtGui/QPixmap>
-#endif
-
 #include <QFuture>
+#include <QPixmap>
 
 #include "TrackData.h"
 #include "Typedefs.h"
@@ -69,9 +65,7 @@ public:
 
     QString biography() const;
 
-#ifndef ENABLE_HEADLESS
     QPixmap cover( const QSize& size, bool forceLoad = true ) const;
-#endif
     bool coverLoaded() const { return m_coverLoaded; }
 
     Tomahawk::playlistinterface_ptr playlistInterface();
@@ -134,9 +128,7 @@ private:
     unsigned int m_chartCount;
 
     mutable QByteArray m_coverBuffer;
-#ifndef ENABLE_HEADLESS
     mutable QPixmap* m_cover;
-#endif
 
     QHash< Tomahawk::ModelMode, QHash< Tomahawk::collection_ptr, Tomahawk::playlistinterface_ptr > > m_playlistInterface;
 
