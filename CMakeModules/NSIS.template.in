@@ -369,6 +369,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_BIN}\libffi-6.dll"
 
    ; Snorenotify
+   File "${MING_BIN}\SnoreToast.exe"
    File "${MING_BIN}\libsnore.dll"
    File "${MING_LIB}\libsnore\libsnore_backend_snarl.dll"
    File "${MING_LIB}\libsnore\libsnore_backend_snore.dll"
