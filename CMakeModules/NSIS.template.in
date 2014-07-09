@@ -34,6 +34,9 @@
 
 !define NSI_PATH "${SOURCE_PATH}/admin/win/nsi"
 
+;define app id needed for Windows 8 notifications
+!define AppUserModelId org.tomahawk-player.Tomahawk
+
 ;-----------------------------------------------------------------------------
 ; Installer version
 ;-----------------------------------------------------------------------------
@@ -366,6 +369,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_BIN}\libffi-6.dll"
 
    ; Snorenotify
+   File "${MING_BIN}\SnoreToast.exe"
    File "${MING_BIN}\libsnore.dll"
    File "${MING_LIB}\libsnore\libsnore_backend_snarl.dll"
    File "${MING_LIB}\libsnore\libsnore_backend_snore.dll"
@@ -400,6 +404,7 @@ SectionGroup "Shortcuts"
       CreateDirectory "$SMPROGRAMS\Tomahawk"
       CreateShortCut "$SMPROGRAMS\Tomahawk\LICENSE.lnk" "$INSTDIR\LICENSE.txt"
       CreateShortCut "$SMPROGRAMS\Tomahawk\Tomahawk.lnk" "$INSTDIR\tomahawk.exe"
+      WinShell::SetLnkAUMI "$SMPROGRAMS\Tomahawk\Tomahawk.lnk" "${AppUserModelId}"
       CreateShortCut "$SMPROGRAMS\Tomahawk\Release notes.lnk" "$INSTDIR\NOTES.txt"
       CreateShortCut "$SMPROGRAMS\Tomahawk\Uninstall.lnk" "$INSTDIR\uninstall.exe"
       SetShellVarContext current
@@ -544,6 +549,8 @@ Section Uninstall
    ;Start menu shortcuts.
    !ifdef OPTION_SECTION_SC_START_MENU
       SetShellVarContext all
+      WinShell::UninstAppUserModelId "${AppUserModelId}"
+      WinShell::UninstShortcut "$SMPROGRAMS\Tomahawk\Tomahawk.lnk"
       RMDir /r "$SMPROGRAMS\Tomahawk"
       SetShellVarContext current
    !endif

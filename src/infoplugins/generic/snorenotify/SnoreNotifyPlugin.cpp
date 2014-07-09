@@ -81,7 +81,8 @@ SnoreNotifyPlugin::SnoreNotifyPlugin()
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << m_snore->primaryNotificationBackend();
 
     m_application = Snore::Application( qApp->applicationName(), m_defaultIcon );
-    m_application.hints().setValue( "desktop-entry" ,"tomahawk" );
+    m_application.hints().setValue( "windows_app_id", "org.tomahawk-player.Tomahawk" );
+    m_application.hints().setValue( "desktop-entry", "tomahawk" );
 
     addAlert( InfoNotifyUser, tr( "Notify User" ) );
     addAlert( InfoNowPlaying, tr( "Now Playing" ) );
