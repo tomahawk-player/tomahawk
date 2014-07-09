@@ -318,6 +318,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    SetOutPath "$INSTDIR\sqldrivers"
    File "${SQLITE_DLL_PATH}\qsqlite4.dll"
    SetOutPath "$INSTDIR"
+   File "${MING_BIN}\libsqlite3-0.dll"
 
    ;Image plugins
    SetOutPath "$INSTDIR\imageformats"
