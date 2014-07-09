@@ -349,7 +349,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    ; Other
    File "${MING_BIN}\libqjson.dll"
    File "${MING_BIN}\libtag.dll"
-   File "${MING_BIN}\libpng15-15.dll"
+   File "${MING_BIN}\libpng16-16.dll"
    File "${MING_BIN}\libjpeg-8.dll"
    File "${MING_BIN}\zlib1.dll"
 
