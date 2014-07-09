@@ -1118,7 +1118,7 @@ background-color:#292f34;
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Lots of new views - artist pages, album pages, song pages and more. A new Loved Widget shows what friends have loved tracks throughout the app. Some cleaner fonts, some new colors. Retina display support and more.</string>
+               <string>Send tracks to your friends just by dragging it onto their avatar in the Tomahawk sidebar. Check out what your friend’s think you listen to in your Inbox. As The Commodores say, “Easy like Sunday Morning”.</string>
               </property>
               <property name="scaledContents">
                <bool>false</bool>
