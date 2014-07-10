@@ -893,7 +893,7 @@ background-color:#292f34;
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Beats Music (now owned by Apple) is now available as a resolver. Welcome Beats Music subscribers!</string>
+               <string>Beats Music (recently acquired by Apple) is now available as a resolver.  This means that Beats Music subscribers can enjoy Tomahawk Stations playlists from their friends that use other services, and can easily drop Spotify, Rdio and other service links into Tomahawk and have those playlists, albums and tracks stream from your Beats account. Welcome Beats Music subscribers!</string>
               </property>
               <property name="scaledContents">
                <bool>false</bool>
