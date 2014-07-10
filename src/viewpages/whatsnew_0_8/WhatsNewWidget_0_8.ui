@@ -708,7 +708,7 @@ color: grey;</string>
            <bool>true</bool>
           </property>
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -787,7 +787,7 @@ background-color:#292f34;
             <item alignment="Qt::AlignHCenter">
              <widget class="QLabel" name="label">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -804,6 +804,12 @@ border-color: #ccc;
               </property>
               <property name="pixmap">
                <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/inbox-screenshot.png</pixmap>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+              </property>
+              <property name="indent">
+               <number>0</number>
               </property>
              </widget>
             </item>
