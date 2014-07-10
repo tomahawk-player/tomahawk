@@ -174,6 +174,13 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
         font.setFamily( "Titillium Web" );
 
         ui->label_2->setFont( font );
+        ui->label_3->setFont( font );
+        ui->label_5->setFont( font );
+        ui->label_7->setFont( font );
+        ui->label_9->setFont( font );
+        ui->label_11->setFont( font );
+        ui->label_13->setFont( font );
+        ui->label_17->setFont( font );
     }
 }
 
