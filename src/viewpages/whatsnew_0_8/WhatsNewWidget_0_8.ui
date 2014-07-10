@@ -212,7 +212,7 @@ color: grey;</string>
                 </property>
                </widget>
               </item>
-              <item>
+              <item alignment="Qt::AlignHCenter">
                <widget class="ClickableLabel" name="urlLookupBoxImage">
                 <property name="minimumSize">
                  <size>
