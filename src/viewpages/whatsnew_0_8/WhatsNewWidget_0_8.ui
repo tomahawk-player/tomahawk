@@ -848,7 +848,7 @@ background-color:#292f34;
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Get a quick look at all of the songs, playlists and artists that are trending across your network.  Simple, eh?</string>
+               <string>Get a quick look at all of the songs, playlists and artists that are trending across your network. Check out the hot songs your friends are listening to, and their playlists that are trending with their friends.  Or just listen to a dynamic playlist of your network’s latest Loves, most Loved or top played songs - from last week to all-time. </string>
               </property>
               <property name="scaledContents">
                <bool>false</bool>
