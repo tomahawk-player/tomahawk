@@ -169,6 +169,16 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
         connect( ui->androidBoxHeader, SIGNAL( clicked() ), SLOT( androidBoxClicked() ) );
         connect( ui->androidBoxImage, SIGNAL( clicked() ), SLOT( androidBoxClicked() ) );
     }
+
+    {
+        QFont font = ui->label_2->font();
+
+        int fontSize = TomahawkUtils::defaultFontSize() + 2;
+        font.setPointSize( fontSize );
+        font.setFamily( "Titillium Web" );
+
+        ui->label_2->setFont( font );
+    }
 }
 
 

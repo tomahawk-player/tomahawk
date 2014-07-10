@@ -773,10 +773,13 @@ background-color:#292f34;
               <property name="orientation">
                <enum>Qt::Vertical</enum>
               </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
               <property name="sizeHint" stdset="0">
                <size>
                 <width>20</width>
-                <height>40</height>
+                <height>20</height>
                </size>
               </property>
              </spacer>
@@ -789,6 +792,13 @@ background-color:#292f34;
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="styleSheet">
+               <string notr="true">border-width: 1px;
+border-radius: 0px;
+border-style: solid;
+border-color: #ccc;
+</string>
+              </property>
               <property name="text">
                <string/>
               </property>
@@ -796,6 +806,22 @@ background-color:#292f34;
                <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/inbox-screenshot.png</pixmap>
               </property>
              </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::MinimumExpanding</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
             </item>
            </layout>
           </widget>
