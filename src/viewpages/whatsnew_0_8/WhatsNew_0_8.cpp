@@ -147,9 +147,6 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
     }
 
     {
-        QPixmap androidPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/new-additions.svg", QSize( 64, 64 ) );
-        ui->androidBoxImage->setPixmap( androidPixmap );
-
         connect( ui->androidBoxHeader, SIGNAL( clicked() ), SLOT( androidBoxClicked() ) );
         connect( ui->androidBoxImage, SIGNAL( clicked() ), SLOT( androidBoxClicked() ) );
     }
