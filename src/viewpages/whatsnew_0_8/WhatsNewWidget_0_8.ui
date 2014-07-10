@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>965</width>
-    <height>660</height>
+    <height>600</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -48,7 +48,7 @@
        <number>0</number>
       </property>
       <property name="bottomMargin">
-       <number>16</number>
+       <number>0</number>
       </property>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -436,6 +436,12 @@ color: grey;</string>
                 <property name="text">
                  <string/>
                 </property>
+                <property name="pixmap">
+                 <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/gmusic.png</pixmap>
+                </property>
+                <property name="scaledContents">
+                 <bool>true</bool>
+                </property>
                </widget>
               </item>
              </layout>
@@ -676,7 +682,7 @@ background-color:#292f34;
 </string>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>4</number>
           </property>
           <widget class="QWidget" name="inboxPage">
            <property name="styleSheet">
@@ -1037,6 +1043,22 @@ border-color: #ccc;
              </widget>
             </item>
             <item>
+             <spacer name="verticalSpacer_10">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::MinimumExpanding</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item alignment="Qt::AlignHCenter">
              <widget class="QLabel" name="label_10">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1044,10 +1066,23 @@ border-color: #ccc;
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="text">
-               <string>Google Music is another of our latest supported services - both for the music you’ve uploaded to Google Music as well as their full streaming catalog for Google Play Music All Access subscribers.  Every song and playlist that you search and add to Tomahawk can now be streamed from you Google Play Music account</string>
+              <property name="pixmap">
+               <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/gmusic-banner.png</pixmap>
               </property>
              </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_11">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
             </item>
            </layout>
           </widget>
@@ -1205,6 +1240,9 @@ border-color: #ccc;
          <spacer name="verticalSpacer">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::MinimumExpanding</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>

@@ -5,5 +5,7 @@
         <file>data/images/universal-link-network.png</file>
         <file>data/images/trending.png</file>
         <file>data/images/beatsmusic.png</file>
+        <file>data/images/gmusic.png</file>
+        <file>data/images/gmusic-banner.png</file>
     </qresource>
 </RCC>
