@@ -106,9 +106,6 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
     }
 
     {
-        QPixmap urlLookupPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/drop-all-songs.svg", QSize( 64, 64 ) );
-        ui->urlLookupBoxImage->setPixmap( urlLookupPixmap );
-
         connect( ui->urlLookupBoxHeader, SIGNAL( clicked() ), SLOT( urlLookupBoxClicked() ) );
         connect( ui->urlLookupBoxImage, SIGNAL( clicked() ), SLOT( urlLookupBoxClicked() ) );
     }
