@@ -62,7 +62,6 @@ private slots:
     void gmusicBoxClicked();
     void networkingBoxClicked();
     void designBoxClicked();
-    void hatchetBoxClicked();
     void androidBoxClicked();
 
 private:
