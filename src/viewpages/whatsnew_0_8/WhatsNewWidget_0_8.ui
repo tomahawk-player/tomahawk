@@ -1028,7 +1028,7 @@ background-color:#292f34;
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Lots of new views - artist pages, album pages, song pages and more. A new Loved Widget shows what friends have loved tracks throughout the app. Some cleaner fonts, some new colors. Retina display support and more.</string>
+               <string>Lots of new views - artist pages, album pages, track pages and more. A new Loved Widget shows what friends have loved tracks throughout the app. Some cleaner fonts, some new colors. Retina display support and more.</string>
               </property>
               <property name="scaledContents">
                <bool>false</bool>
