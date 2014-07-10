@@ -626,6 +626,7 @@ TomahawkWindow::thumbIcon( TomahawkUtils::ImageType type )
         QPixmap pix ( TomahawkUtils::defaultPixmap(type , TomahawkUtils::Original, QSize( 20, 20 ) ) );
         thumbIcons[type] = pix.toWinHICON();
     }
+    return thumbIcons[type];
 }
 #else
 
