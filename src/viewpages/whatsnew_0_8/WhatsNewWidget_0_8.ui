@@ -983,7 +983,7 @@ background-color:#292f34;
                </sizepolicy>
               </property>
               <property name="text">
-               <string>We've improved the connection between Tomahawk peers and now support having multiple IPs (including IPv6).</string>
+               <string>We’ve improved the connection between Tomahawk users and now support each Tomahawk instance having multiple IPs (including IPv6).</string>
               </property>
               <property name="scaledContents">
                <bool>false</bool>
