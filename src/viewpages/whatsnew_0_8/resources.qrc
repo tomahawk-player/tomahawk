@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/whatsnew_0_8">
+        <file>data/images/inbox-screenshot.png</file>
+    </qresource>
+</RCC>
