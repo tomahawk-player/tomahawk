@@ -3467,63 +3467,63 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::SnoreNotifyPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="86"/>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="87"/>
         <source>Notify User</source>
         <translation>通知用户</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="87"/>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="88"/>
         <source>Now Playing</source>
         <translation>正在播放</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="88"/>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="89"/>
         <source>Unresolved track</source>
         <translation>未解决曲目</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="89"/>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="90"/>
         <source>Playback Stopped</source>
         <translation>回放停止</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="90"/>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="91"/>
         <source>You received a Song recomondation</source>
         <translation>您已接收歌曲推荐</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="201"/>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="202"/>
         <source>on</source>
         <comment>'on' is followed by an album name</comment>
         <translation>开</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="203"/>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="204"/>
         <source>%1%4 %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist ('by' in english)</comment>
         <translation>%1%4 %2%3.</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="207"/>
-        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="269"/>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="208"/>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="270"/>
         <source>by</source>
         <comment>preposition to link track and artist</comment>
         <translation>-</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="216"/>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="217"/>
         <source>on &quot;%1&quot;</source>
         <comment>%1 is an album name</comment>
         <translation>在 &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="218"/>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="219"/>
         <source>&quot;%1&quot; by %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing</comment>
         <translation>&quot;%1&quot; - %2%3.</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="265"/>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="266"/>
         <source>%1 sent you
 %2%4 %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist ('by' in english)</comment>
@@ -3531,7 +3531,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 %2%4 %3.</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="276"/>
+        <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="277"/>
         <source>%1 sent you &quot;%2&quot; by %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist</comment>
         <translation>%1 发给您 &quot;%2&quot; - %3.</translation>
