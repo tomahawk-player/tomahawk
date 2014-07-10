@@ -803,7 +803,7 @@ background-color:#292f34;
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Love finding song links and embedded players across the web and your social networks but hate that they are using sources you don't use?  Just drag links from Spotify, Rdio, Deezer, Beats and more into Tomahawk and watch them resolve to your best available source!</string>
+               <string>Love that your friends and influencers are posting music links across the web and your social networks but hate that they are links for music services you don’t use?  Just drag Rdio, Deezer, Beats Music and other music service URLS into Tomahawk and have them automatically play from your preferred source.</string>
               </property>
               <property name="scaledContents">
                <bool>false</bool>
