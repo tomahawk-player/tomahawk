@@ -1118,7 +1118,7 @@ border-color: #ccc;
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Tomahawk now supports multiple IP addresses (IPv6).  This improves the discoverability and connection and between Tomahawk users on the same local network - particularly large networks often found in work and university settings.</string>
+               <string>Tomahawk now supports multiple IP addresses (IPv6).  This improves the discoverability and connection between Tomahawk users on the same local network - particularly large networks often found in work and university settings.</string>
               </property>
               <property name="scaledContents">
                <bool>false</bool>
