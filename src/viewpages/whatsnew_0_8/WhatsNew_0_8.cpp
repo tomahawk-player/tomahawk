@@ -75,7 +75,6 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
     {
         QScrollArea* area = new QScrollArea();
         area->setWidgetResizable( true );
-        area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
         area->setWidget( widget );
 
         QPalette pal = palette();
