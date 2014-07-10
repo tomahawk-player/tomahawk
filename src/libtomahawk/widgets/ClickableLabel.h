@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2014,      Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,35 +17,41 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HEADERLABEL_H
-#define HEADERLABEL_H
+#pragma once
+#ifndef CLICKABLELABEL_H
+#define CLICKABLELABEL_H
 
-#include "ClickableLabel.h"
+#include <QLabel>
+#include <QTime>
+
 #include "DllMacro.h"
 
-/**
- * \class HeaderLabel
- * \brief A styled label for use in headers.
- */
-class DLLEXPORT HeaderLabel : public ClickableLabel
+class DLLEXPORT ClickableLabel : public QLabel
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-    HeaderLabel( QWidget* parent );
-    ~HeaderLabel();
 
-    QSize minimumSizeHint() const { return sizeHint(); }
-    QSize sizeHint() const;
+    ClickableLabel( QWidget* parent );
+    virtual ~ClickableLabel();
 
-    static int defaultFontSize();
+signals:
 
-protected:
-//    void changeEvent( QEvent* e );
-    void paintEvent( QPaintEvent* event );
+    void clicked();
+    void resized( const QPoint& delta );
+
+public slots:
+
+    void mousePressEvent( QMouseEvent* event );
+    void mouseReleaseEvent( QMouseEvent* event );
+    void mouseMoveEvent( QMouseEvent* event );
 
 private:
-    QWidget* m_parent;
+
+    QPoint m_dragPoint;
+    bool m_pressed;
+    bool m_moved;
+    QTime m_time;
 };
 
-#endif // HEADERLABEL_H
+#endif // CLICKABLELABEL_H

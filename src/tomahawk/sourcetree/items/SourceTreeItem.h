@@ -81,9 +81,11 @@ public:
 public slots:
     virtual void activate() {}
     virtual void doubleClicked() {}
+    virtual void removeFromList();
 
 signals:
     void updated();
+    bool removed();
     void selectRequest( SourceTreeItem* );
     void expandRequest( SourceTreeItem* );
     void toggleExpandRequest( SourceTreeItem* );
@@ -100,6 +102,7 @@ protected:
 
 private slots:
     void checkPlayingStatus();
+    void pageDestroyed();
 
 private:
     SourcesModel::RowType m_type;

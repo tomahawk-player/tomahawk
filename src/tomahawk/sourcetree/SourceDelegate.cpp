@@ -723,10 +723,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         }
         else if ( type == SourcesModel::TemporaryPage )
         {
-            TemporaryPageItem* gpi = qobject_cast< TemporaryPageItem* >( item );
-            Q_ASSERT( gpi );
-
-            if ( gpi && opt.state & QStyle::State_MouseOver )
+            if ( opt.state & QStyle::State_MouseOver )
             {
                 int padding = 3;
                 m_iconHeight = ( opt.rect.height() - 2 * padding );
@@ -852,7 +849,7 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
         SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
         if ( type == SourcesModel::TemporaryPage )
         {
-            TemporaryPageItem* gpi = qobject_cast< TemporaryPageItem* >( index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
+            SourceTreeItem* gpi = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
             Q_ASSERT( gpi );
             QMouseEvent* ev = static_cast< QMouseEvent* >( event );
 

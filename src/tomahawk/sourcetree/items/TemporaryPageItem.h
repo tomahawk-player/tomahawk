@@ -46,12 +46,8 @@ public:
 public slots:
     void removeFromList();
 
-signals:
-    bool removed();
-
 private slots:
     void linkActionTriggered( QAction* );
-    void pageDestroyed();
 
 private:
     Tomahawk::ViewPage* m_page;

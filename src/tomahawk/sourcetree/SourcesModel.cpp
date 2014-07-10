@@ -304,23 +304,23 @@ SourcesModel::appendGroups()
     m_myMusicGroup = new GroupItem( this, m_rootItem, tr( "My Music" ), 3 );
 
     InboxItem* inbox = new InboxItem( this, m_browse );
-    inbox->setSortValue( 3 );
+    inbox->setSortValue( 4 );
 
     // super collection
 /*    GenericPageItem* sc = new GenericPageItem( this, m_browse, tr( "SuperCollection" ), ImageRegistry::instance()->icon( RESPATH "images/supercollection.svg" ),
                                                   boost::bind( &ViewManager::showSuperCollection, ViewManager::instance() ),
                                                   boost::bind( &ViewManager::superCollectionView, ViewManager::instance() ) );
-    sc->setSortValue( 4 );*/
+    sc->setSortValue( 5 );*/
 
     GenericPageItem* newReleases = new GenericPageItem( this, m_browse, tr( "New Releases" ), ImageRegistry::instance()->icon( RESPATH "images/new-releases.svg" ),
                                                 boost::bind( &ViewManager::showNewReleasesPage, ViewManager::instance() ),
                                                 boost::bind( &ViewManager::newReleasesWidget, ViewManager::instance() ) );
-    newReleases->setSortValue( 6 );
+    newReleases->setSortValue( 7 );
 
     GenericPageItem* recent = new GenericPageItem( this, m_browse, tr( "Recently Played" ), ImageRegistry::instance()->icon( RESPATH "images/recently-played.svg" ),
                                                 boost::bind( &ViewManager::showRecentPlaysPage, ViewManager::instance() ),
                                                 boost::bind( &ViewManager::recentPlaysWidget, ViewManager::instance() ) );
-    recent->setSortValue( 7 );
+    recent->setSortValue( 8 );
 
     m_collectionsGroup = new GroupItem( this, m_rootItem, tr( "Friends" ), 4 );
     m_cloudGroup = new GroupItem( this, m_rootItem, tr( "Cloud" ), 5 );
@@ -343,6 +343,8 @@ SourcesModel::appendPageItem( const QString& name, ViewPage* page, int sortValue
     GenericPageItem* pageItem = new GenericPageItem( this, m_browse, page->title(), page->pixmap(),
                                             boost::bind( &ViewManager::showDynamicPage, ViewManager::instance(), name ),
                                             boost::bind( &ViewManager::dynamicPageWidget, ViewManager::instance(), name ) );
+    pageItem->setDeletable( page->isDeletable() );
+
     if ( sortValue )
     {
         pageItem->setSortValue( sortValue );

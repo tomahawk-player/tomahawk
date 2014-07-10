@@ -102,7 +102,7 @@ public:
     QString description() const Q_DECL_OVERRIDE { return tr( "An overview of your friends' recent activity" ); }
     const QString pixmapPath() const Q_DECL_OVERRIDE { return ( RESPATH "images/dashboard.svg" ); }
 
-    int sortValue() Q_DECL_OVERRIDE { return 1; }
+    int sortValue() Q_DECL_OVERRIDE { return 2; }
 
     bool showInfoBar() const Q_DECL_OVERRIDE { return true; }
 };

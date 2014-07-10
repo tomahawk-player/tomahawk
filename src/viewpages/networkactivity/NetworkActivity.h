@@ -59,7 +59,7 @@ public:
     virtual const QString pixmapPath() const { return ( RESPATH "images/trending.svg" ); }
     virtual bool showInfoBar() const { return true; }
     
-    virtual int sortValue() { return 2; }
+    virtual int sortValue() { return 3; }
 };
 
 } // Widgets
