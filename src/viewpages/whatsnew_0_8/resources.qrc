@@ -7,5 +7,7 @@
         <file>data/images/beatsmusic.png</file>
         <file>data/images/gmusic.png</file>
         <file>data/images/gmusic-banner.png</file>
+        <file>data/images/design.png</file>
+        <file>data/images/design-screenshot.png</file>
     </qresource>
 </RCC>

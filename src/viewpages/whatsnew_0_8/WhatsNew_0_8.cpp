@@ -142,9 +142,6 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
     }
 
     {
-        QPixmap designPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/new-additions.svg", QSize( 64, 64 ) );
-        ui->designBoxImage->setPixmap( designPixmap );
-
         connect( ui->designBoxHeader, SIGNAL( clicked() ), SLOT( designBoxClicked() ) );
         connect( ui->designBoxImage, SIGNAL( clicked() ), SLOT( designBoxClicked() ) );
     }

@@ -574,6 +574,12 @@ color: grey;</string>
                 <property name="text">
                  <string/>
                 </property>
+                <property name="pixmap">
+                 <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/design.png</pixmap>
+                </property>
+                <property name="scaledContents">
+                 <bool>true</bool>
+                </property>
                </widget>
               </item>
              </layout>
@@ -682,7 +688,7 @@ background-color:#292f34;
 </string>
           </property>
           <property name="currentIndex">
-           <number>5</number>
+           <number>6</number>
           </property>
           <widget class="QWidget" name="inboxPage">
            <property name="styleSheet">
@@ -1188,6 +1194,22 @@ border-color: #ccc;
              </widget>
             </item>
             <item>
+             <spacer name="verticalSpacer_15">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::MinimumExpanding</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item alignment="Qt::AlignHCenter">
              <widget class="QLabel" name="label_14">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1195,10 +1217,29 @@ border-color: #ccc;
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="text">
-               <string>Display an Image here</string>
+              <property name="styleSheet">
+               <string notr="true">border-width: 1px;
+border-radius: 0px;
+border-style: solid;
+border-color: #ccc;</string>
+              </property>
+              <property name="pixmap">
+               <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/design-screenshot.png</pixmap>
               </property>
              </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_14">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
             </item>
            </layout>
           </widget>
