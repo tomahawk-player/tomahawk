@@ -916,6 +916,9 @@ ViewManager::showDynamicPage( const QString& pageName )
 
         ViewPage* viewPage = m_dynamicPagesInstanceLoaders.value( pageName )();
         Q_ASSERT( viewPage );
+        if ( !viewPage ) {
+            return NULL;
+        }
         m_dynamicPages.insert( pageName, viewPage );
 
         m_dynamicPagesInstanceLoaders.remove( pageName );
