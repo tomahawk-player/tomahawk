@@ -11,6 +11,5 @@
         <file>data/images/design-screenshot.png</file>
         <file>data/images/android.png</file>
         <file>data/images/tomahawk-android.png</file>
-        <file>data/images/whatsnew.png</file>
     </qresource>
 </RCC>
