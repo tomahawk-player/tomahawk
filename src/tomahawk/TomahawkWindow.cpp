@@ -63,6 +63,7 @@
 #include "jobview/JobStatusModel.h"
 #include "sip/SipPlugin.h"
 #include "filemetadata/ScanManager.h"
+#include "viewpages/whatsnew_0_8/WhatsNew_0_8.h"
 
 #include "Playlist.h"
 #include "Query.h"
@@ -661,6 +662,7 @@ TomahawkWindow::setupSignals()
     connect( ac->getAction( "updateCollection" ), SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
     connect( ac->getAction( "rescanCollection" ), SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
     connect( ac->getAction( "loadXSPF" ), SIGNAL( triggered() ), SLOT( loadSpiff() ) );
+    connect( ac->getAction( "whatsnew_0_8" ), SIGNAL( triggered() ), SLOT( showWhatsNew_0_8() ) );
     connect( ac->getAction( "aboutTomahawk" ), SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ac->getAction( "quit" ), SIGNAL( triggered() ), qApp, SLOT( quit() ) );
     connect( ac->getAction( "showOfflineSources" ), SIGNAL( triggered() ), SLOT( showOfflineSources() ) );
@@ -1340,6 +1342,13 @@ TomahawkWindow::showAboutTomahawk()
               .arg( thanksto );
 
     QMessageBox::about( this, tr( "About Tomahawk" ), head + desc );
+}
+
+
+void
+TomahawkWindow::showWhatsNew_0_8()
+{
+    ViewManager::instance()->showDynamicPage( Tomahawk::Widgets::WHATSNEW_0_8_VIEWPAGE_NAME );
 }
 
 

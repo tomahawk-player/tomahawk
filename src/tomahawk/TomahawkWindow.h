@@ -127,6 +127,7 @@ private slots:
     void audioStopped();
 
     void showAboutTomahawk();
+    void showWhatsNew_0_8();
     void checkForUpdates();
 
     void onSearch( const QString& search );

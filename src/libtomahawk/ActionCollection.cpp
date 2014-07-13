@@ -143,6 +143,8 @@ ActionCollection::initActions()
     m_actionCollection[ "checkForUpdates" ]->setMenuRole( QAction::ApplicationSpecificRole );
 #endif
     m_actionCollection[ "crashNow" ] = new QAction( "Crash now...", this );
+    m_actionCollection[ "whatsnew_0_8" ] = new QAction( tr( "0.8" ) , this );
+    m_actionCollection[ "whatsnew_0_8" ]->setMenuRole( QAction::ApplicationSpecificRole );
 }
 
 
@@ -175,6 +177,8 @@ ActionCollection::createMenuBar( QWidget *parent )
     helpMenu->addAction( m_actionCollection[ "diagnostics" ] );
     helpMenu->addAction( m_actionCollection[ "openLogfile" ] );
     helpMenu->addAction( m_actionCollection[ "legalInfo" ] );
+    QMenu* whatsNew = helpMenu->addMenu( ImageRegistry::instance()->icon( RESPATH "images/whatsnew.png" ), tr("What's new in ..") );
+    whatsNew->addAction( m_actionCollection[ "whatsnew_0_8" ] );
     helpMenu->addAction( m_actionCollection[ "aboutTomahawk" ] );
 
     // Setup update check
@@ -240,6 +244,8 @@ ActionCollection::createCompactMenu( QWidget *parent )
     compactMenu->addAction( m_actionCollection[ "diagnostics" ] );
     compactMenu->addAction( m_actionCollection[ "openLogfile" ] );
     compactMenu->addAction( m_actionCollection[ "legalInfo" ] );
+    QMenu* whatsNew = compactMenu->addMenu( ImageRegistry::instance()->icon( RESPATH "images/whatsnew.png" ), tr("What's new in ..") );
+    whatsNew->addAction( m_actionCollection[ "whatsnew_0_8" ] );
     compactMenu->addAction( m_actionCollection[ "aboutTomahawk" ] );
 
     // Setup update check
