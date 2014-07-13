@@ -338,6 +338,11 @@ SourcesModel::appendGroups()
 void
 SourcesModel::appendPageItem( const QString& name, ViewPage* page, int sortValue )
 {
+    // If there should be no page item, there is nothing to do for us here.
+    if ( !page->addPageItem() ) {
+        return;
+    }
+
     QModelIndex parentIndex = indexFromItem( m_browse );
     beginInsertRows( parentIndex, rowCount( parentIndex ), rowCount( parentIndex ) );
     GenericPageItem* pageItem = new GenericPageItem( this, m_browse, page->title(), page->pixmap(),

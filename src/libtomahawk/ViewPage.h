@@ -72,6 +72,12 @@ public:
     virtual bool jumpToCurrentTrack() = 0;
 
     virtual bool isTemporaryPage() const { return false; }
+
+    /**
+     * Should we add a row in the SourceTreeView for this page.
+     */
+    virtual bool addPageItem() const { return true; }
+
     /**
      * This page is actually a constant page that will be shown on every
      * restart of Tomahawk until the user selects it to be removed.
