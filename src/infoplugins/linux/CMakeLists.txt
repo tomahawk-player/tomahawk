@@ -1,24 +1,15 @@
-# don't build with Qt5 because QX11Info is missing there
-if(NOT Qt5Core_DIR)
+SET(fdo_srcs
+    fdonotify/FdoNotifyPlugin.cpp
+    fdonotify/ImageConverter.cpp
+)
+SET(FDO_LINK_LIBRARIES ${LINK_LIBRARIES})
+qt_add_dbus_interface(fdo_srcs fdonotify/org.freedesktop.Notifications.xml
+                       FreedesktopNotificationsProxy)
 
-    IF(BUILD_GUI AND X11_FOUND)
-        INCLUDE_DIRECTORIES( ${THIRDPARTY_DIR}/libqnetwm )
-        SET(fdo_srcs
-            fdonotify/FdoNotifyPlugin.cpp
-            fdonotify/ImageConverter.cpp
-            ${THIRDPARTY_DIR}/libqnetwm/libqnetwm/netwm.cpp
-        )
-        SET(FDO_LINK_LIBRARIES ${LINK_LIBRARIES} ${X11_LIBRARIES})
-        qt_add_dbus_interface(fdo_srcs fdonotify/org.freedesktop.Notifications.xml
-                               FreedesktopNotificationsProxy)
-
-        tomahawk_add_plugin(fdonotify
-            TYPE infoplugin EXPORT_MACRO INFOPLUGINDLLEXPORT_PRO
-            SOURCES "${fdo_srcs}" LINK_LIBRARIES "${FDO_LINK_LIBRARIES}"
-        )
-    ENDIF()
-
-endif()
+tomahawk_add_plugin(fdonotify
+    TYPE infoplugin EXPORT_MACRO INFOPLUGINDLLEXPORT_PRO
+    SOURCES "${fdo_srcs}" LINK_LIBRARIES "${FDO_LINK_LIBRARIES}"
+)
 
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} )
 SET(mpris_srcs
