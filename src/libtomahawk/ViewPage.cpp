@@ -51,3 +51,9 @@ ViewPage::dropMimeData( const QMimeData* data, Qt::DropAction action )
     Q_UNUSED( action );
     return false;
 }
+
+
+bool
+ViewPage::addPageItem() const {
+    return true;
+}

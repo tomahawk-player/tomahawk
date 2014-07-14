@@ -76,7 +76,7 @@ public:
     /**
      * Should we add a row in the SourceTreeView for this page.
      */
-    virtual bool addPageItem() const { return true; }
+    virtual bool addPageItem() const;
 
     /**
      * This page is actually a constant page that will be shown on every
@@ -106,6 +106,6 @@ private:
     QString m_filter;
 };
 
-}; // ns
+} // ns
 
 #endif //VIEWPAGE_H
