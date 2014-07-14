@@ -103,13 +103,13 @@ DirLister::scanDir( QDir dir, int depth )
 DirListerThreadController::DirListerThreadController( QObject *parent )
     : QThread( parent )
 {
-    tDebug() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
 }
 
 
 DirListerThreadController::~DirListerThreadController()
 {
-    tDebug() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
 }
 
 
@@ -161,7 +161,7 @@ MusicScanner::MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& 
 
 MusicScanner::~MusicScanner()
 {
-    tDebug() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
 
     if ( m_dirListerThreadController )
     {
@@ -208,7 +208,7 @@ MusicScanner::setFileMtimes( const QMap< QString, QMap< unsigned int, unsigned i
 void
 MusicScanner::scan()
 {
-    tDebug( LOGEXTRA ) << "Num saved file mtimes from last scan:" << m_filemtimes.size();
+    tDebug( LOGVERBOSE ) << "Num saved file mtimes from last scan:" << m_filemtimes.size();
 
     connect( this, SIGNAL( batchReady( QVariantList, QVariantList ) ),
                      SLOT( commitBatch( QVariantList, QVariantList ) ), Qt::DirectConnection );
