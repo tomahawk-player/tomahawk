@@ -68,7 +68,6 @@ rm -rvf \
     services_discovery/ \
     visualization/ \
     control/ \
-    misc/ \
     **/libi420* \
     **/libi422* \
     mux/ \
