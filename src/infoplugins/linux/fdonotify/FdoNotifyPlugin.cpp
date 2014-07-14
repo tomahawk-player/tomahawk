@@ -52,8 +52,11 @@
 #include <QDBusConnection>
 #include <QDBusPendingCallWatcher>
 #include <QImage>
-// QTextDocument provides Qt::escape()
-#include <QTextDocument>
+
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+    // QTextDocument provides Qt::escape()
+    #include <QTextDocument>
+#endif
 
 namespace Tomahawk
 {
