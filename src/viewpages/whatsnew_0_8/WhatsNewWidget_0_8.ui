@@ -1150,7 +1150,10 @@ border-color: #ccc;
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Display an Image here</string>
+               <string/>
+              </property>
+              <property name="pixmap">
+               <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/networking.png</pixmap>
               </property>
              </widget>
             </item>
