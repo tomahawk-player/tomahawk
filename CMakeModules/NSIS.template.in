@@ -379,6 +379,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
 
    ; Jabber
    File "${MING_BIN}\libjreen.dll"
+   File "${MING_BIN}\libidn-11.dll"
    File "${MING_BIN}\libgsasl-7.dll"
    File "${MING_BIN}\libqca.dll"
    SetOutPath "$INSTDIR\crypto"
