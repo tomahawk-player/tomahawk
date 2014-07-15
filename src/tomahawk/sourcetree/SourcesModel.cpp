@@ -674,7 +674,7 @@ SourcesModel::linkSourceItemToPage( SourceTreeItem* item, ViewPage* p )
     }
     m_viewPageDelayedCacheItem = 0;
 
-    if ( p->isDeletable() ) {
+    if ( p && p->isDeletable() ) {
         NewClosure( item, SIGNAL( removed() ), this, SLOT( onViewPageRemoved( Tomahawk::ViewPage* ) ), p );
     }
 }
