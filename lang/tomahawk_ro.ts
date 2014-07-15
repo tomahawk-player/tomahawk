@@ -224,7 +224,7 @@ se conecteze și să redea de la tine?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="146"/>
         <source>0.8</source>
-        <translation type="unfinished"/>
+        <translation>0.8</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="156"/>
@@ -245,7 +245,7 @@ se conecteze și să redea de la tine?</translation>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="180"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="247"/>
         <source>What&apos;s new in ..</source>
-        <translation type="unfinished"/>
+        <translation>Ce este nou în ..</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="205"/>
@@ -1515,18 +1515,18 @@ Password (OTP)</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="543"/>
         <source>Songs </source>
         <comment>Beginning of a sentence summary</comment>
-        <translation type="unfinished"/>
+        <translation>Cântece</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="572"/>
         <source>No configured filters!</source>
-        <translation type="unfinished"/>
+        <translation>Niciun filtru configurat!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="586"/>
         <source> and </source>
         <comment>Inserted between items in a list of two</comment>
-        <translation type="unfinished"/>
+        <translation> și </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="588"/>
@@ -1535,7 +1535,7 @@ Password (OTP)</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="617"/>
         <source>, </source>
         <comment>Inserted between items in a list</comment>
-        <translation type="unfinished"/>
+        <translation>, </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="590"/>
@@ -1544,25 +1544,25 @@ Password (OTP)</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="622"/>
         <source>.</source>
         <comment>Inserted when ending a sentence summary</comment>
-        <translation type="unfinished"/>
+        <translation>.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="603"/>
         <source>, and </source>
         <comment>Inserted between the last two items in a list of more than two</comment>
-        <translation type="unfinished"/>
+        <translation>, și </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="614"/>
         <source>and </source>
         <comment>Inserted before the last item in a list</comment>
-        <translation type="unfinished"/>
+        <translation>și </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="622"/>
         <source>and </source>
         <comment>Inserted before the sorting summary in a sentence summary</comment>
-        <translation type="unfinished"/>
+        <translation>și </translation>
     </message>
 </context>
 <context>
@@ -2931,7 +2931,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="165"/>
         <source>Similar To</source>
-        <translation type="unfinished"/>
+        <translation>Similar cu</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="166"/>
@@ -2941,7 +2941,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="170"/>
         <source>Artist name</source>
-        <translation type="unfinished"/>
+        <translation>Numele artistitului</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="193"/>
@@ -3031,13 +3031,13 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="362"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="369"/>
         <source>-180%1</source>
-        <translation type="unfinished"/>
+        <translation>-180%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="362"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="369"/>
         <source>180%1</source>
-        <translation type="unfinished"/>
+        <translation>180%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="378"/>
@@ -3222,12 +3222,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="526"/>
         <source>At Least</source>
-        <translation type="unfinished"/>
+        <translation>Cel puțin</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="527"/>
         <source>At Most</source>
-        <translation type="unfinished"/>
+        <translation>Cel mult</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="879"/>
@@ -3396,26 +3396,26 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::FdoNotifyPlugin</name>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="256"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="269"/>
         <source>on</source>
         <comment>'on' is followed by an album name</comment>
         <translation>pe</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="258"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="272"/>
         <source>%1%4 %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist ('by' in english)</comment>
         <translation>%1%4 %2%3.</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="201"/>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="262"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="213"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="276"/>
         <source>by</source>
         <comment>preposition to link track and artist</comment>
         <translation>de</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="197"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="209"/>
         <source>%1 sent you
 %2%4 %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist ('by' in english)</comment>
@@ -3423,19 +3423,19 @@ Try tweaking the filters for a new set of songs to play.</source>
 %2%4 %3.</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="208"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="220"/>
         <source>%1 sent you &quot;%2&quot; by %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist</comment>
         <translation>%1 ți-a trimis &quot;%2&quot; de %3.</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="271"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="285"/>
         <source>on &quot;%1&quot;</source>
         <comment>%1 is an album name</comment>
         <translation>pe &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="273"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="287"/>
         <source>&quot;%1&quot; by %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing</comment>
         <translation>&quot;%1&quot; de %2%3.</translation>
@@ -3514,7 +3514,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="204"/>
         <source>%1%4 %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist ('by' in english)</comment>
-        <translation type="unfinished"/>
+        <translation>%1%4 %2%3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="208"/>
@@ -3832,7 +3832,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNew_0_8.h" line="88"/>
         <source>What&apos;s new in 0.8?</source>
-        <translation type="unfinished"/>
+        <translation>Ce este nou în 0.8?</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNew_0_8.h" line="89"/>
@@ -4088,7 +4088,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1336"/>
         <source>Copyright 2010 - 2014</source>
-        <translation type="unfinished"/>
+        <translation>Copyright 2010 - 2014 {2010 ?}</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="901"/>
@@ -4242,7 +4242,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="75"/>
         <source>Artist</source>
-        <translation type="unfinished"/>
+        <translation>Artist</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="75"/>
@@ -4257,12 +4257,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="76"/>
         <source>Song</source>
-        <translation type="unfinished"/>
+        <translation>Cântec</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="77"/>
         <source>Genre</source>
-        <translation type="unfinished"/>
+        <translation>Gen</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="77"/>
@@ -4272,7 +4272,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="78"/>
         <source>Style</source>
-        <translation type="unfinished"/>
+        <translation>Stil</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="78"/>
@@ -4403,7 +4403,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="135"/>
         <source>Inbox</source>
-        <translation type="unfinished"/>
+        <translation>Inbox</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="208"/>
@@ -4438,7 +4438,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="622"/>
         <source>Android</source>
-        <translation type="unfinished"/>
+        <translation>Android</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="719"/>
@@ -4482,7 +4482,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="1285"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk for Android is now in beta!  The majority of the same resolvers are supported in the Android app - plus a couple of additional ones in Rdio &amp;amp; Deezer.  Create a &lt;a href=&quot;https://hatchet.is/beta&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#fff;&quot;&gt;Hatchet&lt;/span&gt;&lt;/a&gt; account to sync all of your playlists from your desktop to your mobile.  Find current and future music influencers with Hatchet accounts (from across a range of music service providers) and follow them to discover and hear what they love.  Even when you are listening to other music apps, Tomahawk can capture all of that playback data and add it to your Hatchet profile.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk for Android is now in beta!  All of the same resolvers are supported in the Android app - plus a couple of additional ones in Rdio &amp;amp; Deezer.  Create a &lt;a href=&quot;https://hatchet.is/beta&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#fff;&quot;&gt;Hatchet&lt;/span&gt;&lt;/a&gt; account to sync all of your playlists from your desktop to your mobile.  Find current and future music influencers with Hatchet accounts (from across a range of music service providers) and follow them to discover and hear what they love.  Even when you are listening to other music apps, Tomahawk can capture all of that playback data and add it to your Hatchet profile.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
 </context>

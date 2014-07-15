@@ -3393,26 +3393,26 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>Tomahawk::InfoSystem::FdoNotifyPlugin</name>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="256"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="269"/>
         <source>on</source>
         <comment>'on' is followed by an album name</comment>
         <translation>na</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="258"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="272"/>
         <source>%1%4 %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist ('by' in english)</comment>
         <translation>%1%4 %2%3.</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="201"/>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="262"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="213"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="276"/>
         <source>by</source>
         <comment>preposition to link track and artist</comment>
         <translation>od</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="197"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="209"/>
         <source>%1 sent you
 %2%4 %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist ('by' in english)</comment>
@@ -3420,19 +3420,19 @@ Zkuste vyladit filtry pro nové písně.</translation>
 %2%4 %3.</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="208"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="220"/>
         <source>%1 sent you &quot;%2&quot; by %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist</comment>
         <translation>%1 vám poslán &quot;%2&quot; od %3.</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="271"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="285"/>
         <source>on &quot;%1&quot;</source>
         <comment>%1 is an album name</comment>
         <translation>na &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="273"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="287"/>
         <source>&quot;%1&quot; by %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing</comment>
         <translation>&quot;%1&quot; od %2%3.</translation>
@@ -4480,8 +4480,8 @@ Zkuste vyladit filtry pro nové písně.</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="1285"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk for Android is now in beta!  The majority of the same resolvers are supported in the Android app - plus a couple of additional ones in Rdio &amp;amp; Deezer.  Create a &lt;a href=&quot;https://hatchet.is/beta&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#fff;&quot;&gt;Hatchet&lt;/span&gt;&lt;/a&gt; account to sync all of your playlists from your desktop to your mobile.  Find current and future music influencers with Hatchet accounts (from across a range of music service providers) and follow them to discover and hear what they love.  Even when you are listening to other music apps, Tomahawk can capture all of that playback data and add it to your Hatchet profile.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk pro Android je nyní ve verzi beta!  Většina těchže řešitelů je podporována v aplikacích pro Android - plus několik dalších v Rdio &amp;amp; Deezer.  Vytvořte si účet u &lt;a href=&quot;https://hatchet.is/beta&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#fff;&quot;&gt;Hatchet&lt;/span&gt;&lt;/a&gt; (válečná sekera) pro seřízení všech vašich seznamů skladeb nacházejících se ve vašem stolním počítači s přenosným telefonem.  Nalezněte nynější a budoucí vlivné osoby pomocí účtů u Hatchet (napříč řadou poskytovatelů hudebních služeb) a sledujte je, abyste zjistili, co se jim líbí.  Dokonce i když posloucháte jiné hudební aplikace, Tomahawk umí zachytit všechna ta přehrávaná data a přidat je do vašeho profilu u Hatchet.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk for Android is now in beta!  All of the same resolvers are supported in the Android app - plus a couple of additional ones in Rdio &amp;amp; Deezer.  Create a &lt;a href=&quot;https://hatchet.is/beta&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#fff;&quot;&gt;Hatchet&lt;/span&gt;&lt;/a&gt; account to sync all of your playlists from your desktop to your mobile.  Find current and future music influencers with Hatchet accounts (from across a range of music service providers) and follow them to discover and hear what they love.  Even when you are listening to other music apps, Tomahawk can capture all of that playback data and add it to your Hatchet profile.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk pro Android je nyní ve verzi beta!  Většina těchže řešitelů je podporována v aplikacích pro Android - plus několik dalších v Rdio &amp; Deezer.  Vytvořte si účet u &lt;a href=&quot;https://hatchet.is/beta&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#fff;&quot;&gt;Hatchet&lt;/span&gt;&lt;/a&gt; (válečná sekera) pro seřízení všech vašich seznamů skladeb nacházejících se ve vašem stolním počítači s přenosným telefonem.  Nalezněte nynější a budoucí vlivné osoby pomocí účtů u Hatchet (napříč řadou poskytovatelů hudebních služeb) a sledujte je, abyste zjistili, co se jim líbí.  Dokonce i když posloucháte jiné hudební aplikace, Tomahawk umí zachytit všechna ta přehrávaná data a přidat je do vašeho profilu u Hatchet.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
