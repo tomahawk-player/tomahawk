@@ -39,6 +39,7 @@
 #include "playlist/TreeView.h"
 #include "playlist/PlaylistView.h"
 #include "playlist/dynamic/widgets/DynamicWidget.h"
+#include "utils/Closure.h"
 #include "utils/ImageRegistry.h"
 #include "utils/Logger.h"
 #include "utils/PluginLoader.h"
@@ -574,6 +575,13 @@ SourcesModel::onScriptCollectionRemoved( const collection_ptr& collection )
 }
 
 
+void
+SourcesModel::onViewPageRemoved( Tomahawk::ViewPage *p )
+{
+    p->onItemDeleted();
+}
+
+
 ViewPage*
 SourcesModel::scriptCollectionClicked( const Tomahawk::collection_ptr& collection )
 {
@@ -665,6 +673,10 @@ SourcesModel::linkSourceItemToPage( SourceTreeItem* item, ViewPage* p )
             connect( obj, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ), Qt::UniqueConnection );
     }
     m_viewPageDelayedCacheItem = 0;
+
+    if ( p->isDeletable() ) {
+        NewClosure( item, SIGNAL( removed() ), this, SLOT( onViewPageRemoved( Tomahawk::ViewPage* ) ), p );
+    }
 }
 
 

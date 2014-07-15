@@ -57,3 +57,10 @@ bool
 ViewPage::addPageItem() const {
     return true;
 }
+
+
+void
+ViewPage::onItemDeleted()
+{
+    // no-op
+}

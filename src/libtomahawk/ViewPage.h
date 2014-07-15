@@ -86,6 +86,12 @@ public:
      * page will not be listed in the search history.
      */
     virtual bool isDeletable() const { return false; }
+
+    /**
+     * The ViewPage item in the SourcesModel was deleted.
+     */
+    virtual void onItemDeleted();
+
     virtual bool isBeingPlayed() const { return false; }
 
     virtual QList<PlaylistUpdaterInterface*> updaters() const { return QList<PlaylistUpdaterInterface*>(); }
@@ -107,5 +113,7 @@ private:
 };
 
 } // ns
+
+Q_DECLARE_METATYPE( Tomahawk::ViewPage* )
 
 #endif //VIEWPAGE_H

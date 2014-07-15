@@ -21,6 +21,7 @@
 
 #include "utils/ImageRegistry.h"
 #include "utils/TomahawkStyle.h"
+#include "TomahawkSettings.h"
 
 #include <QLayout>
 #include <QScrollArea>
@@ -58,6 +59,19 @@ WhatsNew_0_8::WhatsNew_0_8( QWidget* parent )
 WhatsNew_0_8::~WhatsNew_0_8()
 {
 
+}
+
+bool
+WhatsNew_0_8::addPageItem() const
+{
+    return !TomahawkSettings::instance()->value( "whatsnew/deleted-for-0.8", false ).toBool();
+}
+
+
+void
+WhatsNew_0_8::onItemDeleted()
+{
+    TomahawkSettings::instance()->setValue( "whatsnew/deleted-for-0.8", true );
 }
 
 

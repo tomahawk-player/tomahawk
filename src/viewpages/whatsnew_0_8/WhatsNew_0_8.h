@@ -88,7 +88,10 @@ public:
     QString title() const { return tr( "What's new in 0.8?" ); }
     QString description() const { return tr( "An overview of the changes and additions since 0.7." ); }
     const QString pixmapPath() const { return ( RESPATH "images/whatsnew.png" ); }
+
+    bool addPageItem() const;
     bool isDeletable() const { return true; }
+    void onItemDeleted();
 
     int sortValue() { return 1; }
 

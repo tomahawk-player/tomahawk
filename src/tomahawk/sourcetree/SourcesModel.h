@@ -24,6 +24,7 @@
 
 #include "Typedefs.h"
 #include "Source.h"
+#include "ViewPage.h"
 
 #include <QModelIndex>
 #include <QStringList>
@@ -38,7 +39,6 @@ class GroupItem;
 namespace Tomahawk {
     class Source;
     class Playlist;
-    class ViewPage;
 }
 
 class SourcesModel : public QAbstractItemModel
@@ -140,6 +140,8 @@ private slots:
 
     void onScriptCollectionAdded( const Tomahawk::collection_ptr& collection );
     void onScriptCollectionRemoved( const Tomahawk::collection_ptr& collection );
+
+    void onViewPageRemoved( Tomahawk::ViewPage* p );
 
     Tomahawk::ViewPage* scriptCollectionClicked( const Tomahawk::collection_ptr& collection );
     Tomahawk::ViewPage* getScriptCollectionPage( const Tomahawk::collection_ptr& collection ) const;
