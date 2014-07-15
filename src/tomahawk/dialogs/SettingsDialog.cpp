@@ -96,7 +96,7 @@ SettingsDialog::SettingsDialog(QObject *parent )
     m_advancedWidgetUi->checkBoxHttp->setChecked( s->httpEnabled() );
     m_advancedWidgetUi->checkBoxListenApi->setChecked( s->httpBindAll() );
     m_advancedWidgetUi->checkBoxSongChangeNotifications->setChecked( s->songChangeNotificationEnabled() );
-    #ifndef Q_OS_LINUX // no backends on OSX or Win so far
+    #ifdef Q_OS_MAC // no backends on OSX so far
         m_advancedWidgetUi->checkBoxSongChangeNotifications->setVisible( false );
     #endif
 
