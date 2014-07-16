@@ -148,7 +148,10 @@ Pipeline::removeResolver( Resolver* r )
 
     tDebug() << "Removed resolver:" << r->name();
     d->resolvers.removeAll( r );
-    emit resolverRemoved( r );
+    if ( d->running ) {
+        // Only notify if Pipeline is still active.
+        emit resolverRemoved( r );
+    }
 }
 
 
