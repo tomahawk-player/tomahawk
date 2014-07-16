@@ -99,6 +99,10 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
     query.prepare( sql );
     query.exec();
 
+    // Small cache to keep already created source objects.
+    // This saves some mutex locking.
+    std::map<uint, Tomahawk::source_ptr> sourceCache;
+
     while( query.next() )
     {
         QString artist = query.value( 1 ).toString();
@@ -115,7 +119,17 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         uint albumpos = query.value( 13 ).toUInt();
         uint trackId = query.value( 16 ).toUInt();
 
-        Tomahawk::source_ptr s = SourceList::instance()->get( sourceId );
+        std::map<uint, Tomahawk::source_ptr>::const_iterator _s = sourceCache.find( sourceId );
+        Tomahawk::source_ptr s;
+        if ( _s == sourceCache.end() )
+        {
+            s = SourceList::instance()->get( sourceId );
+            sourceCache[sourceId] = s;
+        }
+        else
+        {
+            s = _s->second;
+        }
         if ( !s )
         {
             Q_ASSERT( false );
