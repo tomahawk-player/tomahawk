@@ -139,13 +139,12 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
             url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
 
         Tomahawk::result_ptr result = Tomahawk::Result::get( url );
-        // This possibly creates a Track object and a Track Id worker, we all know this already!
-        Tomahawk::query_ptr qry = Tomahawk::Query::get( artist, track, album );
-
         Tomahawk::track_ptr t = Tomahawk::Track::get( trackId,
                                                       artist, track, album,
                                                       duration, composer,
                                                       albumpos, discnumber );
+        Tomahawk::query_ptr qry = Tomahawk::Query::get( t );
+
         if ( m_album || m_artist ) {
             t->loadAttributes();
         }
