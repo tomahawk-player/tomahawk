@@ -381,7 +381,7 @@ Track::toQuery()
 }
 
 
-QString
+const QString&
 Track::composerSortname() const
 {
     Q_D( const Track );
@@ -389,7 +389,7 @@ Track::composerSortname() const
 }
 
 
-QString
+const QString&
 Track::albumSortname() const
 {
     Q_D( const Track );
@@ -749,7 +749,7 @@ Track::share( const Tomahawk::source_ptr& source )
 }
 
 
-QString
+const QString&
 Track::artistSortname() const
 {
     Q_D( const Track );
@@ -757,7 +757,7 @@ Track::artistSortname() const
 }
 
 
-QString
+const QString&
 Track::trackSortname() const
 {
     Q_D( const Track );

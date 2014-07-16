@@ -530,9 +530,9 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
 {
     Q_D( Query );
     // result values
-    const QString rArtistname = r->track()->artistSortname();
+    const QString& rArtistname = r->track()->artistSortname();
     const QString rAlbumname  = r->track()->albumSortname();
-    const QString rTrackname  = r->track()->trackSortname();
+    const QString& rTrackname  = r->track()->trackSortname();
 
     QString qArtistname;
     QString qAlbumname;
