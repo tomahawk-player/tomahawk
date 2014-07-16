@@ -82,6 +82,18 @@ public:
 
     void setResolveFinished( bool resolved );
 
+    /**
+     * Allow contacting the Pipeline if the state of this Query changes to
+     * not solved.
+     */
+    void allowReresolve();
+
+    /**
+     * Disallow contacting the Pipeline if the state of this Query changes to
+     * not solved.
+     */
+    void disallowReresolve();
+
     void setSaveHTTPResultHint( bool saveResultHint );
     bool saveHTTPResultHint() const;
 

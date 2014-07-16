@@ -212,7 +212,7 @@ void
 Query::refreshResults()
 {
     Q_D( Query );
-    if ( d->resolveFinished )
+    if ( d->resolveFinished && d->allowReresolve )
     {
         d->resolveFinished = false;
         query_ptr q = d->ownRef.toStrongRef();
@@ -417,6 +417,22 @@ Query::setResolveFinished( bool resolved )
 {
     Q_D( Query );
     d->resolveFinished = resolved;
+}
+
+
+void
+Query::allowReresolve()
+{
+    Q_D( Query );
+    d->allowReresolve = true;
+}
+
+
+void
+Query::disallowReresolve()
+{
+    Q_D( Query );
+    d->allowReresolve = false;
 }
 
 

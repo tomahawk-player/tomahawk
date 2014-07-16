@@ -161,6 +161,8 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         results << result;
         qry->addResults( results );
         qry->setResolveFinished( true );
+        // These tracks are fixed to the Source. Do not re-resolve.
+        qry->disallowReresolve();
 
         ql << qry;
     }
