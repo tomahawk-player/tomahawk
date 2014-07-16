@@ -76,8 +76,7 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
     QString sql = QString(
             "SELECT file.id, artist.name, album.name, track.name, composer.name, file.size, "   //0
                    "file.duration, file.bitrate, file.url, file.source, file.mtime, "           //6
-                   "file.mimetype, file_join.discnumber, file_join.albumpos, artist.id, "       //11
-                   "album.id, track.id, composer.id "                                           //15
+                   "file.mimetype, file_join.discnumber, file_join.albumpos, track.id "       //11
             "FROM file, artist, track, file_join "
             "LEFT OUTER JOIN album "
             "ON file_join.album = album.id "
@@ -111,13 +110,14 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         QString composer = query.value( 4 ).toString();
         uint size = query.value( 5 ).toUInt();
         uint duration = query.value( 6 ).toUInt();
+        uint bitrate = query.value( 7 ).toUInt();
         QString url = query.value( 8 ).toString();
         uint sourceId = query.value( 9 ).toUInt();
         uint modificationTime = query.value( 10 ).toUInt();
         QString mimetype = query.value( 11 ).toString();
         uint discnumber = query.value( 12 ).toUInt();
         uint albumpos = query.value( 13 ).toUInt();
-        uint trackId = query.value( 16 ).toUInt();
+        uint trackId = query.value( 14 ).toUInt();
 
         std::map<uint, Tomahawk::source_ptr>::const_iterator _s = sourceCache.find( sourceId );
         Tomahawk::source_ptr s;
@@ -151,7 +151,6 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         result->setTrack( t );
 
         result->setSize( size );
-        uint bitrate = query.value( 7 ).toUInt();
         result->setBitrate( bitrate );
         result->setModificationTime( modificationTime );
         result->setMimetype( mimetype );
