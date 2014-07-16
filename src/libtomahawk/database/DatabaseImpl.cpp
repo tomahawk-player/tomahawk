@@ -538,7 +538,7 @@ Tomahawk::DatabaseImpl::getTrackFids( int tid )
 QString
 Tomahawk::DatabaseImpl::sortname( const QString& str, bool replaceArticle )
 {
-    QString s = str.toLower().trimmed().replace( QRegExp( "[\\s]{2,}" ), " " );
+    QString s = str.simplified().toLower();
 
     if ( replaceArticle && s.startsWith( "the " ) )
     {
