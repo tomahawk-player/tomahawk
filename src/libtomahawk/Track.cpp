@@ -49,9 +49,24 @@ static QMutex s_nameCacheMutex;
 inline QString
 cacheKey( const QString& artist, const QString& track, const QString& album, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber )
 {
+    const QString durationStr = QString::number( duration );
+    const QString albumposStr = QString::number( albumpos );
+    const QString discnumberStr = QString::number( discnumber );
     QString str;
-    QTextStream stream( &str );
-    stream << artist << track << album << composer << duration << albumpos << discnumber;
+    // Preallocate space so that we will only call malloc once.
+    // With Qt5 we can possibly revert back to just "+" these strings.
+    // The "+" implementation in Qt4 differs slighty depending on compile
+    // options which could drastically reduce the performance.
+    str.reserve( artist.size() + track.size() + album.size()
+                 + composer.size() + durationStr.size()
+                 + albumposStr.size() + discnumberStr.size() );
+    str += artist;
+    str += track;
+    str += album;
+    str += composer;
+    str += durationStr;
+    str += albumposStr;
+    str += discnumberStr;
     return str;
 }
 
