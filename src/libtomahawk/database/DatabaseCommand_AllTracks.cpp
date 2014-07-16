@@ -155,7 +155,7 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         result->setModificationTime( modificationTime );
         result->setMimetype( mimetype );
         result->setScore( 1.0 );
-        result->setCollection( s->dbCollection() );
+        result->setCollection( s->dbCollection(), false );
 
         QList<Tomahawk::result_ptr> results;
         results << result;

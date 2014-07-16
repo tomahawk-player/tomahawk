@@ -281,11 +281,14 @@ Result::onOffline()
 
 
 void
-Result::setCollection( const Tomahawk::collection_ptr& collection )
+Result::setCollection( const Tomahawk::collection_ptr& collection , bool emitOnlineEvents )
 {
     m_collection = collection;
-    connect( m_collection->source().data(), SIGNAL( online() ), SLOT( onOnline() ), Qt::QueuedConnection );
-    connect( m_collection->source().data(), SIGNAL( offline() ), SLOT( onOffline() ), Qt::QueuedConnection );
+    if ( emitOnlineEvents )
+    {
+        connect( m_collection->source().data(), SIGNAL( online() ), SLOT( onOnline() ), Qt::QueuedConnection );
+        connect( m_collection->source().data(), SIGNAL( offline() ), SLOT( onOffline() ), Qt::QueuedConnection );
+    }
 }
 
 void
