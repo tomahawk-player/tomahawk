@@ -31,6 +31,7 @@ class TrackView;
 class TreeView;
 class ColumnView;
 class TreeModel;
+class PlayableModel;
 class ModeHeader;
 class PlaylistModel;
 class FilterHeader;
@@ -70,6 +71,7 @@ public:
     void setTrackView( TrackView* view );
 
     void setTreeModel( TreeModel* model );
+    void setFlatModel( PlayableModel* model );
 
     void setPixmap( const QPixmap& pixmap );
     void setEmptyTip( const QString& tip );
@@ -97,6 +99,7 @@ private:
     TrackView* m_trackView;
 
     TreeModel* m_model;
+    PlayableModel* m_flatModel;
     QStackedWidget* m_stack;
 
     FlexibleTreeViewMode m_mode;

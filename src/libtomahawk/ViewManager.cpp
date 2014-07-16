@@ -305,10 +305,13 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
 
         view->columnView()->proxyModel()->setStyle( PlayableProxyModel::Collection );
         TreeModel* model = new TreeModel();
+        PlayableModel* flatModel = new PlayableModel();
 
         view->setTreeModel( model );
+        view->setFlatModel( flatModel );
 
         model->addCollection( collection );
+        flatModel->appendTracks( collection );
         setPage( view );
 
         if ( !collection.isNull() )

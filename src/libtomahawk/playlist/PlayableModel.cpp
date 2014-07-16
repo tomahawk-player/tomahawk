@@ -904,20 +904,26 @@ PlayableModel::onDataChanged()
 void
 PlayableModel::startLoading()
 {
-    tDebug() << Q_FUNC_INFO;
     Q_D( PlayableModel );
-    d->loading = true;
-    emit loadingStarted();
+    if ( !d->loading )
+    {
+        tDebug() << Q_FUNC_INFO;
+        d->loading = true;
+        emit loadingStarted();
+    }
 }
 
 
 void
 PlayableModel::finishLoading()
 {
-    tDebug() << Q_FUNC_INFO;
     Q_D( PlayableModel );
-    d->loading = false;
-    emit loadingFinished();
+    if ( d->loading )
+    {
+        tDebug() << Q_FUNC_INFO;
+        d->loading = false;
+        emit loadingFinished();
+    }
 }
 
 
@@ -1001,6 +1007,13 @@ PlayableModel::appendTracks( const QList< Tomahawk::track_ptr >& tracks, const Q
 
 
 void
+PlayableModel::appendTracks( const Tomahawk::collection_ptr& collection )
+{
+    insertTracks( collection, rowCount( QModelIndex() ) );
+}
+
+
+void
 PlayableModel::insertArtist( const Tomahawk::artist_ptr& artist, int row )
 {
     QList< artist_ptr > artists;
@@ -1050,6 +1063,25 @@ void
 PlayableModel::insertQueries( const QList< Tomahawk::query_ptr >& queries, int row, const QList< Tomahawk::PlaybackLog >& logs )
 {
     insertInternal( queries, row, logs );
+}
+
+
+void
+PlayableModel::insertTracks( const Tomahawk::collection_ptr& collection, int row )
+{
+    Tomahawk::TracksRequest* req = collection->requestTracks( Tomahawk::album_ptr() );
+    connect( dynamic_cast< QObject* >( req ), SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ),
+             this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ), Qt::UniqueConnection );
+    req->enqueue();
+
+//    connect( collection.data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
+}
+
+
+void
+PlayableModel::onTracksAdded( const QList< Tomahawk::query_ptr >& queries )
+{
+    appendQueries( queries );
 }
 
 
