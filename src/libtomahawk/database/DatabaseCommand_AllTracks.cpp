@@ -101,8 +101,21 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
 
     while( query.next() )
     {
+        QString artist = query.value( 1 ).toString();
+        QString album = query.value( 2 ).toString();
+        QString track = query.value( 3 ).toString();
+        QString composer = query.value( 4 ).toString();
+        uint size = query.value( 5 ).toUInt();
+        uint duration = query.value( 6 ).toUInt();
         QString url = query.value( 8 ).toString();
-        Tomahawk::source_ptr s = SourceList::instance()->get( query.value( 9 ).toUInt() );
+        uint sourceId = query.value( 9 ).toUInt();
+        uint modificationTime = query.value( 10 ).toUInt();
+        QString mimetype = query.value( 11 ).toString();
+        uint discnumber = query.value( 12 ).toUInt();
+        uint albumpos = query.value( 13 ).toUInt();
+        uint trackId = query.value( 16 ).toUInt();
+
+        Tomahawk::source_ptr s = SourceList::instance()->get( sourceId );
         if ( !s )
         {
             Q_ASSERT( false );
@@ -111,23 +124,24 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         if ( !s->isLocal() )
             url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
 
-        QString artist, track, album, composer;
-        artist = query.value( 1 ).toString();
-        album = query.value( 2 ).toString();
-        track = query.value( 3 ).toString();
-        composer = query.value( 4 ).toString();
-
         Tomahawk::result_ptr result = Tomahawk::Result::get( url );
+        // This possibly creates a Track object and a Track Id worker, we all know this already!
         Tomahawk::query_ptr qry = Tomahawk::Query::get( artist, track, album );
 
-        Tomahawk::track_ptr t = Tomahawk::Track::get( query.value( 16 ).toUInt(), artist, track, album, query.value( 6 ).toUInt(), composer, query.value( 13 ).toUInt(), query.value( 12 ).toUInt() );
-        t->loadAttributes();
+        Tomahawk::track_ptr t = Tomahawk::Track::get( trackId,
+                                                      artist, track, album,
+                                                      duration, composer,
+                                                      albumpos, discnumber );
+        if ( m_album || m_artist ) {
+            t->loadAttributes();
+        }
         result->setTrack( t );
 
-        result->setSize( query.value( 5 ).toUInt() );
-        result->setBitrate( query.value( 7 ).toUInt() );
-        result->setModificationTime( query.value( 10 ).toUInt() );
-        result->setMimetype( query.value( 11 ).toString() );
+        result->setSize( size );
+        uint bitrate = query.value( 7 ).toUInt();
+        result->setBitrate( bitrate );
+        result->setModificationTime( modificationTime );
+        result->setMimetype( mimetype );
         result->setScore( 1.0 );
         result->setCollection( s->dbCollection() );
 
