@@ -2161,62 +2161,62 @@ heslo</translation>
 <context>
     <name>SourcesModel</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="100"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="101"/>
         <source>Group</source>
         <translation>Skupina</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="103"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="104"/>
         <source>Collection</source>
         <translation>Sbírka</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="106"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="107"/>
         <source>Playlist</source>
         <translation>Seznam skladeb</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="109"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="110"/>
         <source>Automatic Playlist</source>
         <translation>Automatický seznam skladeb</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="112"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="113"/>
         <source>Station</source>
         <translation>Stanice</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="301"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="302"/>
         <source>Browse</source>
         <translation>Procházet</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="302"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="303"/>
         <source>Search History</source>
         <translation>Historie hledání</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="304"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="305"/>
         <source>My Music</source>
         <translation>Moje hudba</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="326"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="327"/>
         <source>Cloud</source>
         <translation>Mračno</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="320"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="321"/>
         <source>Recently Played</source>
         <translation>Nedávno poslouchané</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="315"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="316"/>
         <source>New Releases</source>
         <translation>Novinky</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="325"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="326"/>
         <source>Friends</source>
         <translation>Přátelé</translation>
     </message>
@@ -4469,17 +4469,12 @@ Zkuste vyladit filtry pro nové písně.</translation>
         <translation>Tomahawk nyní podporuje více adres IP (IPv6).  To zlepšuje objevitelnost a spojení mezi uživateli Tomahawku na stejné místní síti - obzvláště je to nastavení velkých sítí nacházejících se často v práci a na univerzitách.</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="1153"/>
-        <source>Display an Image here</source>
-        <translation>Zobrazit obrázek zde</translation>
-    </message>
-    <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="1192"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="1195"/>
         <source>Lots of new views - artist pages, album pages, track pages and more. A new Loved Widget shows what friends have loved tracks throughout the app. Some cleaner fonts, some new colors. Retina display support and more.</source>
         <translation>Mnoho nových pohledů - stránky umělců, stránky alb, stránky skladeb a další. Nové okno s oblíbenými písněmi ukazuje, jaké skladby si oblíbili přátelé - uživatelé aplikace. Nějaká čistější písma, nějaké nové barvy. Podpora pro zobrazení sítnice a další.</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="1285"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="1288"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk for Android is now in beta!  All of the same resolvers are supported in the Android app - plus a couple of additional ones in Rdio &amp;amp; Deezer.  Create a &lt;a href=&quot;https://hatchet.is/beta&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#fff;&quot;&gt;Hatchet&lt;/span&gt;&lt;/a&gt; account to sync all of your playlists from your desktop to your mobile.  Find current and future music influencers with Hatchet accounts (from across a range of music service providers) and follow them to discover and hear what they love.  Even when you are listening to other music apps, Tomahawk can capture all of that playback data and add it to your Hatchet profile.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk pro Android je nyní ve verzi beta!  Většina těchže řešitelů je podporována v aplikacích pro Android - plus několik dalších v Rdio &amp; Deezer.  Vytvořte si účet u &lt;a href=&quot;https://hatchet.is/beta&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#fff;&quot;&gt;Hatchet&lt;/span&gt;&lt;/a&gt; (válečná sekera) pro seřízení všech vašich seznamů skladeb nacházejících se ve vašem stolním počítači s přenosným telefonem.  Nalezněte nynější a budoucí vlivné osoby pomocí účtů u Hatchet (napříč řadou poskytovatelů hudebních služeb) a sledujte je, abyste zjistili, co se jim líbí.  Dokonce i když posloucháte jiné hudební aplikace, Tomahawk umí zachytit všechna ta přehrávaná data a přidat je do vašeho profilu u Hatchet.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
