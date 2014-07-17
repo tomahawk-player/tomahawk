@@ -295,52 +295,22 @@ PlayableProxyModel::setMaxVisibleItems( int items )
 bool
 PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const Tomahawk::query_ptr& q2 ) const
 {
+    // Attention: This function may be called very often!
+    // So be aware of its performance.
     const Tomahawk::track_ptr& t1 = q1->track();
     const Tomahawk::track_ptr& t2 = q2->track();
-    const QString artist1 = t1->artistSortname();
-    const QString artist2 = t2->artistSortname();
-    const QString album1 = t1->albumSortname();
-    const QString album2 = t2->albumSortname();
-    const QString track1 = t1->trackSortname();
-    const QString track2 = t2->trackSortname();
-    const QString composer1 = t1->composerSortname();
-    const QString composer2 = t2->composerSortname();
+    const QString& artist1 = t1->artistSortname();
+    const QString& artist2 = t2->artistSortname();
+    const QString& album1 = t1->albumSortname();
+    const QString& album2 = t2->albumSortname();
     const unsigned int albumpos1 = t1->albumpos();
     const unsigned int albumpos2 = t2->albumpos();
     const unsigned int discnumber1 = t1->discnumber();
     const unsigned int discnumber2 = t2->discnumber();
-    unsigned int duration1 = t1->duration(), duration2 = t2->duration();
-    unsigned int bitrate1 = 0, bitrate2 = 0;
-    unsigned int mtime1 = 0, mtime2 = 0;
-    unsigned int size1 = 0, size2 = 0;
-    unsigned int year1 = 0, year2 = 0;
-    float score1 = 0, score2 = 0;
-    QString origin1;
-    QString origin2;
     qint64 id1 = 0, id2 = 0;
 
-    if ( !q1->results().isEmpty() )
-    {
-        Tomahawk::result_ptr r = q1->results().first();
-        bitrate1 = r->bitrate();
-        mtime1 = r->modificationTime();
-        size1 = r->size();
-        year1 = r->track()->year();
-        score1 = r->score();
-        origin1 = r->friendlySource().toLower();
-    }
-    if ( !q2->results().isEmpty() )
-    {
-        Tomahawk::result_ptr r = q2->results().first();
-        bitrate2 = r->bitrate();
-        mtime2 = r->modificationTime();
-        size2 = r->size();
-        year2 = r->track()->year();
-        score2 = r->score();
-        origin2 = r->friendlySource().toLower();
-    }
-
     // This makes it a stable sorter and prevents items from randomly jumping about.
+    // FIXME: This always true.
     if ( id1 == id2 )
     {
         id1 = (qint64)&q1;
@@ -369,7 +339,11 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
 
         return QString::localeAwareCompare( artist1, artist2 ) < 0;
     }
-    else if ( column == PlayableModel::Composer ) // sort by composer
+
+    // Sort by Composer
+    const QString& composer1 = t1->composerSortname();
+    const QString& composer2 = t2->composerSortname();
+    if ( column == PlayableModel::Composer )
     {
         if ( composer1 == composer2 )
         {
@@ -391,7 +365,9 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
 
         return QString::localeAwareCompare( composer1, composer2 ) < 0;
     }
-    else if ( column == PlayableModel::Album ) // sort by album
+
+    // Sort by Album
+    if ( column == PlayableModel::Album ) // sort by album
     {
         if ( album1 == album2 )
         {
@@ -408,7 +384,38 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
 
         return QString::localeAwareCompare( album1, album2 ) < 0;
     }
-    else if ( column == PlayableModel::Bitrate ) // sort by bitrate
+
+    // Lazy load these variables, they are not used before.
+    unsigned int bitrate1 = 0, bitrate2 = 0;
+    unsigned int mtime1 = 0, mtime2 = 0;
+    unsigned int size1 = 0, size2 = 0;
+    unsigned int year1 = 0, year2 = 0;
+    float score1 = 0, score2 = 0;
+    QString origin1;
+    QString origin2;
+    if ( !q1->results().isEmpty() )
+    {
+        Tomahawk::result_ptr r = q1->results().first();
+        bitrate1 = r->bitrate();
+        mtime1 = r->modificationTime();
+        size1 = r->size();
+        year1 = r->track()->year();
+        score1 = r->score();
+        origin1 = r->friendlySource().toLower();
+    }
+    if ( !q2->results().isEmpty() )
+    {
+        Tomahawk::result_ptr r = q2->results().first();
+        bitrate2 = r->bitrate();
+        mtime2 = r->modificationTime();
+        size2 = r->size();
+        year2 = r->track()->year();
+        score2 = r->score();
+        origin2 = r->friendlySource().toLower();
+    }
+
+    // Sort by bitrate
+    if ( column == PlayableModel::Bitrate )
     {
         if ( bitrate1 == bitrate2 )
             return id1 < id2;
@@ -417,6 +424,9 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
     }
     else if ( column == PlayableModel::Duration ) // sort by duration
     {
+        unsigned int duration1 = t1->duration();
+        unsigned int duration2 = t2->duration();
+
         if ( duration1 == duration2 )
             return id1 < id2;
 

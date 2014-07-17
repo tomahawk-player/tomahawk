@@ -68,10 +68,10 @@ public:
     QString toString() const;
     Tomahawk::query_ptr toQuery();
 
-    QString composerSortname() const;
-    QString albumSortname() const;
-    QString artistSortname() const;
-    QString trackSortname() const;
+    const QString& composerSortname() const;
+    const QString& albumSortname() const;
+    const QString& artistSortname() const;
+    const QString& trackSortname() const;
 
     QString artist() const;
     QString track() const;

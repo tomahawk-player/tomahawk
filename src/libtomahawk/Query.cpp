@@ -212,7 +212,7 @@ void
 Query::refreshResults()
 {
     Q_D( Query );
-    if ( d->resolveFinished )
+    if ( d->resolveFinished && d->allowReresolve )
     {
         d->resolveFinished = false;
         query_ptr q = d->ownRef.toStrongRef();
@@ -421,6 +421,22 @@ Query::setResolveFinished( bool resolved )
 
 
 void
+Query::allowReresolve()
+{
+    Q_D( Query );
+    d->allowReresolve = true;
+}
+
+
+void
+Query::disallowReresolve()
+{
+    Q_D( Query );
+    d->allowReresolve = false;
+}
+
+
+void
 Query::clearResults()
 {
     foreach( const result_ptr& rp, results() )
@@ -530,9 +546,9 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
 {
     Q_D( Query );
     // result values
-    const QString rArtistname = r->track()->artistSortname();
+    const QString& rArtistname = r->track()->artistSortname();
     const QString rAlbumname  = r->track()->albumSortname();
-    const QString rTrackname  = r->track()->trackSortname();
+    const QString& rTrackname  = r->track()->trackSortname();
 
     QString qArtistname;
     QString qAlbumname;

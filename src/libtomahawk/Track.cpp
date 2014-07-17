@@ -49,9 +49,24 @@ static QMutex s_nameCacheMutex;
 inline QString
 cacheKey( const QString& artist, const QString& track, const QString& album, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber )
 {
+    const QString durationStr = QString::number( duration );
+    const QString albumposStr = QString::number( albumpos );
+    const QString discnumberStr = QString::number( discnumber );
     QString str;
-    QTextStream stream( &str );
-    stream << artist << track << album << composer << duration << albumpos << discnumber;
+    // Preallocate space so that we will only call malloc once.
+    // With Qt5 we can possibly revert back to just "+" these strings.
+    // The "+" implementation in Qt4 differs slighty depending on compile
+    // options which could drastically reduce the performance.
+    str.reserve( artist.size() + track.size() + album.size()
+                 + composer.size() + durationStr.size()
+                 + albumposStr.size() + discnumberStr.size() );
+    str += artist;
+    str += track;
+    str += album;
+    str += composer;
+    str += durationStr;
+    str += albumposStr;
+    str += discnumberStr;
     return str;
 }
 
@@ -195,11 +210,19 @@ Track::init()
     Q_D( Track );
     updateSortNames();
 
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    QObject::connect( d->trackData.data(), &TrackData::attributesLoaded, this, &Track::attributesLoaded );
+    QObject::connect( d->trackData.data(), &TrackData::socialActionsLoaded, this, &Track::socialActionsLoaded );
+    QObject::connect( d->trackData.data(), &TrackData::statsLoaded, this, &Track::statsLoaded );
+    QObject::connect( d->trackData.data(), &TrackData::similarTracksLoaded, this, &Track::similarTracksLoaded );
+    QObject::connect( d->trackData.data(), &TrackData::lyricsLoaded, this, &Track::lyricsLoaded );
+#else
     connect( d->trackData.data(), SIGNAL( attributesLoaded() ), SIGNAL( attributesLoaded() ) );
     connect( d->trackData.data(), SIGNAL( socialActionsLoaded() ), SIGNAL( socialActionsLoaded() ) );
     connect( d->trackData.data(), SIGNAL( statsLoaded() ), SIGNAL( statsLoaded() ) );
     connect( d->trackData.data(), SIGNAL( similarTracksLoaded() ), SIGNAL( similarTracksLoaded() ) );
     connect( d->trackData.data(), SIGNAL( lyricsLoaded() ), SIGNAL( lyricsLoaded() ) );
+#endif
 }
 
 
@@ -381,7 +404,7 @@ Track::toQuery()
 }
 
 
-QString
+const QString&
 Track::composerSortname() const
 {
     Q_D( const Track );
@@ -389,7 +412,7 @@ Track::composerSortname() const
 }
 
 
-QString
+const QString&
 Track::albumSortname() const
 {
     Q_D( const Track );
@@ -749,7 +772,7 @@ Track::share( const Tomahawk::source_ptr& source )
 }
 
 
-QString
+const QString&
 Track::artistSortname() const
 {
     Q_D( const Track );
@@ -757,7 +780,7 @@ Track::artistSortname() const
 }
 
 
-QString
+const QString&
 Track::trackSortname() const
 {
     Q_D( const Track );

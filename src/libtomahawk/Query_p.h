@@ -18,6 +18,7 @@ public:
 
     QueryPrivate( Query* q, const track_ptr& track, const QID& _qid )
         : q_ptr( q )
+        , allowReresolve( true )
         , qid( _qid )
         , queryTrack( track )
     {
@@ -25,6 +26,7 @@ public:
 
     QueryPrivate( Query* q, const QString& query, const QID& _qid )
         : q_ptr( q )
+        , allowReresolve( true )
         , qid( _qid )
         , fullTextQuery( query )
     {
@@ -40,6 +42,7 @@ private:
     bool solved;
     bool playable;
     bool resolveFinished;
+    bool allowReresolve;
     mutable QID qid;
 
     QString fullTextQuery;

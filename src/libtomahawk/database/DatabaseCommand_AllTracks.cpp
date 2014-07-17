@@ -76,8 +76,7 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
     QString sql = QString(
             "SELECT file.id, artist.name, album.name, track.name, composer.name, file.size, "   //0
                    "file.duration, file.bitrate, file.url, file.source, file.mtime, "           //6
-                   "file.mimetype, file_join.discnumber, file_join.albumpos, artist.id, "       //11
-                   "album.id, track.id, composer.id "                                           //15
+                   "file.mimetype, file_join.discnumber, file_join.albumpos, track.id "       //11
             "FROM file, artist, track, file_join "
             "LEFT OUTER JOIN album "
             "ON file_join.album = album.id "
@@ -99,10 +98,38 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
     query.prepare( sql );
     query.exec();
 
+    // Small cache to keep already created source objects.
+    // This saves some mutex locking.
+    std::map<uint, Tomahawk::source_ptr> sourceCache;
+
     while( query.next() )
     {
+        QString artist = query.value( 1 ).toString();
+        QString album = query.value( 2 ).toString();
+        QString track = query.value( 3 ).toString();
+        QString composer = query.value( 4 ).toString();
+        uint size = query.value( 5 ).toUInt();
+        uint duration = query.value( 6 ).toUInt();
+        uint bitrate = query.value( 7 ).toUInt();
         QString url = query.value( 8 ).toString();
-        Tomahawk::source_ptr s = SourceList::instance()->get( query.value( 9 ).toUInt() );
+        uint sourceId = query.value( 9 ).toUInt();
+        uint modificationTime = query.value( 10 ).toUInt();
+        QString mimetype = query.value( 11 ).toString();
+        uint discnumber = query.value( 12 ).toUInt();
+        uint albumpos = query.value( 13 ).toUInt();
+        uint trackId = query.value( 14 ).toUInt();
+
+        std::map<uint, Tomahawk::source_ptr>::const_iterator _s = sourceCache.find( sourceId );
+        Tomahawk::source_ptr s;
+        if ( _s == sourceCache.end() )
+        {
+            s = SourceList::instance()->get( sourceId );
+            sourceCache[sourceId] = s;
+        }
+        else
+        {
+            s = _s->second;
+        }
         if ( !s )
         {
             Q_ASSERT( false );
@@ -111,30 +138,31 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         if ( !s->isLocal() )
             url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
 
-        QString artist, track, album, composer;
-        artist = query.value( 1 ).toString();
-        album = query.value( 2 ).toString();
-        track = query.value( 3 ).toString();
-        composer = query.value( 4 ).toString();
-
         Tomahawk::result_ptr result = Tomahawk::Result::get( url );
-        Tomahawk::query_ptr qry = Tomahawk::Query::get( artist, track, album );
+        Tomahawk::track_ptr t = Tomahawk::Track::get( trackId,
+                                                      artist, track, album,
+                                                      duration, composer,
+                                                      albumpos, discnumber );
+        Tomahawk::query_ptr qry = Tomahawk::Query::get( t );
 
-        Tomahawk::track_ptr t = Tomahawk::Track::get( query.value( 16 ).toUInt(), artist, track, album, query.value( 6 ).toUInt(), composer, query.value( 13 ).toUInt(), query.value( 12 ).toUInt() );
-        t->loadAttributes();
+        if ( m_album || m_artist ) {
+            t->loadAttributes();
+        }
         result->setTrack( t );
 
-        result->setSize( query.value( 5 ).toUInt() );
-        result->setBitrate( query.value( 7 ).toUInt() );
-        result->setModificationTime( query.value( 10 ).toUInt() );
-        result->setMimetype( query.value( 11 ).toString() );
+        result->setSize( size );
+        result->setBitrate( bitrate );
+        result->setModificationTime( modificationTime );
+        result->setMimetype( mimetype );
         result->setScore( 1.0 );
-        result->setCollection( s->dbCollection() );
+        result->setCollection( s->dbCollection(), false );
 
         QList<Tomahawk::result_ptr> results;
         results << result;
         qry->addResults( results );
         qry->setResolveFinished( true );
+        // These tracks are fixed to the Source. Do not re-resolve.
+        qry->disallowReresolve();
 
         ql << qry;
     }

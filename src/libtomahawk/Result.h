@@ -92,7 +92,12 @@ public:
     void setScore( float score );
     void setFileId( unsigned int id );
     void setRID( RID id ) { m_rid = id; }
-    void setCollection( const Tomahawk::collection_ptr& collection );
+    /**
+     * Associate the used collection for this result.
+     *
+     * @param emitOnlineEvents disableing this will not emit statusChanged anymore thus the query will not update (use with care!, only when this is the sole result)
+     */
+    void setCollection( const Tomahawk::collection_ptr& collection, bool emitOnlineEvents = true );
     void setFriendlySource( const QString& s );
     void setPurchaseUrl( const QString& u );
     void setLinkUrl( const QString& u );

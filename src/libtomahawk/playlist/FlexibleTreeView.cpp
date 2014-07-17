@@ -48,14 +48,14 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
     , m_modeHeader( new ModeHeader( this ) )
     , m_columnView( new ColumnView() )
     , m_treeView( new TreeView() )
-    , m_trackView( 0 )
+    , m_trackView( new TrackView() )
     , m_model( 0 )
+    , m_flatModel( 0 )
     , m_temporary( false )
 {
     qRegisterMetaType< FlexibleTreeViewMode >( "FlexibleTreeViewMode" );
 
     m_treeView->proxyModel()->setStyle( PlayableProxyModel::Collection );
-
     m_treeView->proxyModel()->setPlaylistInterface( m_columnView->proxyModel()->playlistInterface() );
 
 //    m_trackView->setPlaylistInterface( m_playlistInterface );
@@ -93,8 +93,7 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
 
     m_stack->addWidget( m_columnView );
     m_stack->addWidget( m_treeView );
-    /*    m_stack->addWidget( m_gridView );
-    m_stack->addWidget( m_trackView );*/
+    m_stack->addWidget( m_trackView );
 
     connect( m_header, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
 
@@ -182,7 +181,6 @@ FlexibleTreeView::setTreeModel( TreeModel* model )
 //    m_trackView->setPlayableModel( model );
     m_columnView->setTreeModel( model );
     m_treeView->setTreeModel( model );
-    //    m_gridView->setPlayableModel( model );
 
 /*    m_trackView->setSortingEnabled( false );
     m_trackView->sortByColumn( -1 );
@@ -192,6 +190,27 @@ FlexibleTreeView::setTreeModel( TreeModel* model )
 
     connect( model, SIGNAL( changed() ), SLOT( onModelChanged() ), Qt::UniqueConnection );
     onModelChanged();
+}
+
+
+void
+FlexibleTreeView::setFlatModel( PlayableModel* model )
+{
+    if ( m_flatModel )
+    {
+//        disconnect( m_flatModel, SIGNAL( changed() ), this, SLOT( onModelChanged() ) );
+        delete m_flatModel;
+    }
+
+    m_flatModel = model;
+
+    m_trackView->setPlayableModel( model );
+
+    m_trackView->setSortingEnabled( true );
+    m_trackView->sortByColumn( 0 );
+
+/*    connect( model, SIGNAL( changed() ), SLOT( onModelChanged() ), Qt::UniqueConnection );
+    onModelChanged();*/
 }
 
 
@@ -224,7 +243,7 @@ FlexibleTreeView::setCurrentMode( FlexibleTreeViewMode mode )
 
         case Albums:
         {
-//            m_stack->setCurrentWidget( m_gridView );
+            m_stack->setCurrentWidget( m_trackView );
             break;
         }
     }
@@ -270,7 +289,7 @@ FlexibleTreeView::jumpToCurrentTrack()
 
     // note: the order of comparison is important here, if we'd write "b || foo" then foo will not be executed if b is already true!
     b = m_columnView->jumpToCurrentTrack() || b;
-//    b = m_trackView->jumpToCurrentTrack() || b;
+    b = m_trackView->jumpToCurrentTrack() || b;
     b = m_treeView->jumpToCurrentTrack() || b;
 
     return b;
@@ -284,8 +303,7 @@ FlexibleTreeView::setFilter( const QString& pattern )
 
     m_columnView->setFilter( pattern );
     m_treeView->proxyModel()->setFilter( pattern );
-    /*    m_gridView->setFilter( pattern );
-    m_trackView->setFilter( pattern );*/
+    m_trackView->setFilter( pattern );
 
     return true;
 }
@@ -318,8 +336,7 @@ FlexibleTreeView::setEmptyTip( const QString& tip )
 {
     m_columnView->setEmptyTip( tip );
     m_treeView->setEmptyTip( tip );
-    /*    m_gridView->setEmptyTip( tip );
-    m_trackView->setEmptyTip( tip );*/
+    m_trackView->setEmptyTip( tip );
 }
 
 
