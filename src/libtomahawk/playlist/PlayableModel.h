@@ -132,6 +132,7 @@ public:
     void finishLoading();
 
 signals:
+    void appendingTracks();
     void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 

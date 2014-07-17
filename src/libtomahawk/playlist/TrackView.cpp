@@ -204,6 +204,16 @@ TrackView::setPlaylistItemDelegate( PlaylistItemDelegate* delegate )
 void
 TrackView::setPlayableModel( PlayableModel* model )
 {
+    if ( m_model ) {
+        disconnect( m_model, SIGNAL( appendingTracks() ),
+                m_loadingSpinner, SLOT( fadeIn() ) );
+        disconnect( m_model, SIGNAL( loadingStarted() ),
+                 m_loadingSpinner, SLOT( fadeIn() ) );
+        disconnect( m_model, SIGNAL( loadingFinished() ),
+                 m_loadingSpinner, SLOT( fadeOut() ) );
+
+    }
+
     m_model = model;
 
     if ( m_proxyModel )
@@ -227,6 +237,13 @@ TrackView::setPlayableModel( PlayableModel* model )
             setHeaderHidden( false );
             setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
     }
+
+    connect( m_model, SIGNAL( appendingTracks() ),
+            m_loadingSpinner, SLOT( fadeIn() ) );
+    connect( m_model, SIGNAL( loadingStarted() ),
+             m_loadingSpinner, SLOT( fadeIn() ) );
+    connect( m_model, SIGNAL( loadingFinished() ),
+             m_loadingSpinner, SLOT( fadeOut() ) );
 
     onViewChanged();
     emit modelChanged();
