@@ -141,7 +141,7 @@ AlbumPlaylistInterface::tracks() const
 
             const_cast< int& >( m_lastQueryTimestamp ) = QDateTime::currentMSecsSinceEpoch();
         }
-        else if ( m_mode == DatabaseMode && !m_databaseLoaded )
+        else if ( m_mode == DatabaseMode && !m_databaseLoaded && !m_finished )
         {
             if ( m_collection.isNull() ) //we do a dbcmd directly, for the SuperCollection I guess?
             {
