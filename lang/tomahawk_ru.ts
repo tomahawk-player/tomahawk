@@ -673,12 +673,12 @@ connect and stream from you?</source>
 <context>
     <name>FlexibleTreeView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="342"/>
+        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="359"/>
         <source>This playlist is currently empty.</source>
         <translation>Этот плей-лист в данный момент пуст.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="344"/>
+        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="361"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation>Этот плей-лист в данный момент пуст. Добавьте в него композиции и наслаждайтесь музыкой!</translation>
     </message>
@@ -1198,42 +1198,42 @@ Password (OTP)</source>
         <translation>Совпадение</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="866"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="876"/>
         <source>Perfect match</source>
         <translation>Превосходное</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="867"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="877"/>
         <source>Very good match</source>
         <translation>Очень Хорошое</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="868"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="878"/>
         <source>Good match</source>
         <translation>Хорошое</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="869"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="879"/>
         <source>Vague match</source>
         <translation>Расплывчатое</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="870"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="880"/>
         <source>Bad match</source>
         <translation>Плохое совпадение</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="871"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="881"/>
         <source>Very bad match</source>
         <translation>Очень плохое совпадение</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="872"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="882"/>
         <source>Not available</source>
         <translation>Недоступно</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="873"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="883"/>
         <source>Searching...</source>
         <translation>Ищу...</translation>
     </message>
@@ -3692,42 +3692,42 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Track</name>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="534"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="557"/>
         <source> and </source>
         <translation>и</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="542"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="565"/>
         <source>You</source>
         <translation>Вы</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="544"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="567"/>
         <source>you</source>
         <translation>Вы</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="557"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="580"/>
         <source>and</source>
         <translation>и</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="557"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="580"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n других</numerusform><numerusform>%n других</numerusform><numerusform>%n других</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="560"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="583"/>
         <source>%n people</source>
         <translation><numerusform>%n человек</numerusform><numerusform>%n человек</numerusform><numerusform>%n человека</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="564"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="587"/>
         <source>loved this track</source>
         <translation>полюбить эту композицию</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="566"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="589"/>
         <source>sent you this track %1</source>
         <translation>отправил Вам эту композицию %1</translation>
     </message>
@@ -4366,32 +4366,32 @@ Try tweaking the filters for a new set of songs to play.</source>
         <translation>Музыкальные рекомендации от Ваших друзей</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="373"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="376"/>
         <source>SuperCollection</source>
         <translation>Общая Коллекция</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="374"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="377"/>
         <source>Combined libraries of all your online friends</source>
         <translation>Комбинированная библиотека всех ваших друзей онлайн</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="421"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="424"/>
         <source>Recently Played Tracks</source>
         <translation>Последние Воспроизводимые Песни</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="422"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="425"/>
         <source>Recently played tracks from all your friends</source>
         <translation>Последние воспроизводимые песни все ваших друзей</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="428"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="431"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>К сожалению, мы не смогли найти никаких воспроизвидений песен!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="455"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="458"/>
         <source>No listening suggestions here.</source>
         <translation>Музыкальных рекомендаций нет.</translation>
     </message>

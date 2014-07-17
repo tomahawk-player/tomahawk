@@ -671,12 +671,12 @@ se conecteze și să redea de la tine?</translation>
 <context>
     <name>FlexibleTreeView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="342"/>
+        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="359"/>
         <source>This playlist is currently empty.</source>
         <translation>Această listă de redare este momentan goală.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="344"/>
+        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="361"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation>Această listă de redare este momentan goală. Adaugă niște piese și bucură-te de muzică!</translation>
     </message>
@@ -1196,42 +1196,42 @@ Password (OTP)</translation>
         <translation>Acuratețe</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="866"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="876"/>
         <source>Perfect match</source>
         <translation>Potrvire perfectă</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="867"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="877"/>
         <source>Very good match</source>
         <translation>Potrivire foarte bună</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="868"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="878"/>
         <source>Good match</source>
         <translation>Potrivire bună</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="869"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="879"/>
         <source>Vague match</source>
         <translation>Potrivire vagă</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="870"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="880"/>
         <source>Bad match</source>
         <translation>Potrivire slabă</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="871"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="881"/>
         <source>Very bad match</source>
         <translation>Potrivire foarte slabă</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="872"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="882"/>
         <source>Not available</source>
         <translation>Nu este disponibil</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="873"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="883"/>
         <source>Searching...</source>
         <translation>Se caută...</translation>
     </message>
@@ -3692,42 +3692,42 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Track</name>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="534"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="557"/>
         <source> and </source>
         <translation>și</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="542"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="565"/>
         <source>You</source>
         <translation>Tu</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="544"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="567"/>
         <source>you</source>
         <translation>tu</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="557"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="580"/>
         <source>and</source>
         <translation>și</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="557"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="580"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n altă</numerusform><numerusform>%n alte</numerusform><numerusform>%n alte</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="560"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="583"/>
         <source>%n people</source>
         <translation><numerusform>%n persoană</numerusform><numerusform>%n persoane</numerusform><numerusform>%n de persoane</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="564"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="587"/>
         <source>loved this track</source>
         <translation>îndrăgești această piesă</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="566"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="589"/>
         <source>sent you this track %1</source>
         <translation>ți-au trimis această piesă %1</translation>
     </message>
@@ -4368,32 +4368,32 @@ Try tweaking the filters for a new set of songs to play.</source>
         <translation>Sugestii de ascultare de la prietenii tăi</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="373"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="376"/>
         <source>SuperCollection</source>
         <translation>SuperColecție</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="374"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="377"/>
         <source>Combined libraries of all your online friends</source>
         <translation>Bibliotecile combinate ale tuturor prietenilor tăi conectați</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="421"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="424"/>
         <source>Recently Played Tracks</source>
         <translation>Piese redate recent</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="422"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="425"/>
         <source>Recently played tracks from all your friends</source>
         <translation>Piese redate recent de la toți pritenii tăi</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="428"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="431"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Ne pare rău, nu am găsit redări recente!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="455"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="458"/>
         <source>No listening suggestions here.</source>
         <translation>Nu există sugestii de ascultare aici.</translation>
     </message>
