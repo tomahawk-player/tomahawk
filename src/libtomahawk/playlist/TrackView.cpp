@@ -205,8 +205,6 @@ void
 TrackView::setPlayableModel( PlayableModel* model )
 {
     if ( m_model ) {
-        disconnect( m_model, SIGNAL( appendingTracks() ),
-                m_loadingSpinner, SLOT( fadeIn() ) );
         disconnect( m_model, SIGNAL( loadingStarted() ),
                  m_loadingSpinner, SLOT( fadeIn() ) );
         disconnect( m_model, SIGNAL( loadingFinished() ),
@@ -238,8 +236,6 @@ TrackView::setPlayableModel( PlayableModel* model )
             setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
     }
 
-    connect( m_model, SIGNAL( appendingTracks() ),
-            m_loadingSpinner, SLOT( fadeIn() ) );
     connect( m_model, SIGNAL( loadingStarted() ),
              m_loadingSpinner, SLOT( fadeIn() ) );
     connect( m_model, SIGNAL( loadingFinished() ),
