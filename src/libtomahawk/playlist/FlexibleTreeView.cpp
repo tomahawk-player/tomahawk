@@ -229,7 +229,7 @@ FlexibleTreeView::setCurrentMode( FlexibleTreeViewMode mode )
 
     switch ( mode )
     {
-        case Flat:
+        case Albums:
         {
             m_stack->setCurrentWidget( m_treeView );
             break;
@@ -241,7 +241,7 @@ FlexibleTreeView::setCurrentMode( FlexibleTreeViewMode mode )
             break;
         }
 
-        case Albums:
+        case Flat:
         {
             m_stack->setCurrentWidget( m_trackView );
             break;
