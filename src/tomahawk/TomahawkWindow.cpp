@@ -802,8 +802,7 @@ TomahawkWindow::keyPressEvent( QKeyEvent* e )
 }
 
 
-#ifdef Q_OS_WIN
-#if QT_VERSION < QT_VERSION_CHECK( 5, 2, 0 )
+#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK( 5, 2, 0 )
 bool
 TomahawkWindow::winEvent( MSG* msg, long* result )
 {
@@ -844,12 +843,15 @@ TomahawkWindow::winEvent( MSG* msg, long* result )
 
     return false;
 }
-#endif
+#endif//defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK( 5, 2, 0 )
 
 void
 TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
 {
     Q_UNUSED(oldState);
+#ifndef Q_OS_WIN
+    Q_UNUSED(newState);
+#else
 #if QT_VERSION < QT_VERSION_CHECK( 5, 2, 0 )
     if ( m_taskbarList == 0 )
         return;
@@ -930,14 +932,15 @@ TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
     default:
         return;
     }
-#endif
+#endif//QT_VERSION < QT_VERSION_CHECK( 5, 2, 0 )
+#endif//Q_OS_WIN
 }
 
 
 void
 TomahawkWindow::updateWindowsLoveButton()
 {
-#if QT_VERSION < QT_VERSION_CHECK( 5, 2, 0 )
+#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK( 5, 2, 0 )
     if ( m_taskbarList == 0 )
         return;
     if ( !AudioEngine::instance()->currentTrack().isNull() && AudioEngine::instance()->currentTrack()->track()->loved() )
@@ -953,7 +956,7 @@ TomahawkWindow::updateWindowsLoveButton()
 
     m_thumbButtons[TP_LOVE].dwFlags = THBF_ENABLED;
     m_taskbarList->ThumbBarUpdateButtons( (HWND)winId(), ARRAYSIZE( m_thumbButtons ), m_thumbButtons );
-#else
+#elif defined(Q_OS_WIN)
     QWinThumbnailToolButton *love = m_taskbarList->buttons()[ TP_LOVE ];
 
     if ( !AudioEngine::instance()->currentTrack().isNull() )
@@ -976,11 +979,8 @@ TomahawkWindow::updateWindowsLoveButton()
         love->setIcon( thumbIcon(TomahawkUtils::NotLoved) );
         love->setToolTip( tr( "Love" ) );
     }
-#endif//QT_VERSION < QT_VERSION_CHECK( 5, 2, 0 )
+#endif//defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK( 5, 2, 0 )
 }
-
-#endif // Q_OS_WIN
-
 
 void
 TomahawkWindow::onHistoryBackAvailable( bool avail )
