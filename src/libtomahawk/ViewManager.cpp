@@ -45,7 +45,7 @@
 #include "playlist/PlaylistLargeItemDelegate.h"
 #include "playlist/RecentlyPlayedModel.h"
 #include "playlist/dynamic/widgets/DynamicWidget.h"
-
+#include "resolvers/ScriptCollection.h"
 #include "widgets/NewReleasesWidget.h"
 #include "widgets/infowidgets/SourceInfoWidget.h"
 #include "widgets/infowidgets/ArtistInfoWidget.h"
@@ -316,6 +316,9 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
 
         if ( !collection.isNull() )
             view->setEmptyTip( collection->emptyText() );
+
+        if ( collection.objectCast<ScriptCollection>() )
+            view->trackView()->setEmptyTip( tr( "Cloud collections aren't supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them." ) );
 
         m_collectionViews.insert( collection, view );
     }
