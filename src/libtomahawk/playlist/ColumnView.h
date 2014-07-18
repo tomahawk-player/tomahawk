@@ -98,8 +98,10 @@ private slots:
     void onCustomContextMenu( const QPoint& pos );
     void onMenuTriggered( int action );
 
-private:
+private slots:
     void fixScrollBars();
+
+private:
 
     OverlayWidget* m_overlay;
     TreeModel* m_model;

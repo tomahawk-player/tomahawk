@@ -79,6 +79,7 @@ ColumnView::ColumnView( QWidget* parent )
     setPreviewWidget( m_previewWidget );
 
     m_timer.setInterval( SCROLL_TIMEOUT );
+    connect( verticalScrollBar(), SIGNAL( sliderMoved( int ) ), SLOT( onViewChanged() ) );
     connect( verticalScrollBar(), SIGNAL( rangeChanged( int, int ) ), SLOT( onViewChanged() ) );
     connect( verticalScrollBar(), SIGNAL( valueChanged( int ) ), SLOT( onViewChanged() ) );
     connect( &m_timer, SIGNAL( timeout() ), SLOT( onScrollTimeout() ) );
@@ -132,6 +133,7 @@ ColumnView::setTreeModel( TreeModel* model )
 
     connect( m_proxyModel, SIGNAL( filteringFinished() ), SLOT( onFilterChangeFinished() ) );
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
+    connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( fixScrollBars() ) );
 
     guid(); // this will set the guid on the header
 
@@ -478,6 +480,10 @@ ColumnView::fixScrollBars()
                     if ( sb && sb->orientation() == Qt::Vertical )
                     {
                         sb->setSingleStep( 6 );
+                        connect( sb, SIGNAL( sliderMoved( int ) ), SLOT( onViewChanged() ) );
+                        connect( sb, SIGNAL( rangeChanged( int, int ) ), SLOT( onViewChanged() ) );
+                        connect( sb, SIGNAL( valueChanged( int ) ), SLOT( onViewChanged() ) );
+
 
                         break;
                     }
