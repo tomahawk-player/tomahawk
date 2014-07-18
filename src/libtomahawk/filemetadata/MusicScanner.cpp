@@ -362,6 +362,8 @@ MusicScanner::scanFile( const QFileInfo& fi )
 QVariant
 MusicScanner::readFile( const QFileInfo& fi )
 {
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Parsing tags for file:" << fi.absoluteFilePath();
+
     const QString suffix = fi.suffix().toLower();
 
     if ( !m_ext2mime.contains( suffix ) )
