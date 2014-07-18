@@ -207,7 +207,7 @@ FlexibleTreeView::setFlatModel( PlayableModel* model )
     m_trackView->setPlayableModel( model );
 
     m_trackView->setSortingEnabled( true );
-    m_trackView->sortByColumn( 0 );
+    m_trackView->sortByColumn( 0, Qt::AscendingOrder );
 
 /*    connect( model, SIGNAL( changed() ), SLOT( onModelChanged() ), Qt::UniqueConnection );
     onModelChanged();*/
