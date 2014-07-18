@@ -3992,8 +3992,8 @@ Proba a trocar os filtros para ter outra lista música para escoitar. </translat
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="591"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="910"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="922"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="912"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="924"/>
         <source>Play</source>
         <translation type="unfinished"/>
     </message>
@@ -4004,13 +4004,13 @@ Proba a trocar os filtros para ter outra lista música para escoitar. </translat
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="610"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="970"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="977"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="973"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="980"/>
         <source>Love</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="965"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="968"/>
         <source>Unlove</source>
         <translation type="unfinished"/>
     </message>
@@ -4087,7 +4087,7 @@ Proba a trocar os filtros para ter outra lista música para escoitar. </translat
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="901"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="903"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1262"/>
         <source>Pause</source>
         <translation>Pausa</translation>
@@ -4189,7 +4189,7 @@ Proba a trocar os filtros para ter outra lista música para escoitar. </translat
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="621"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="634"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>O filtro «%1» non dá ningún resultado. </translation>
     </message>
@@ -4364,32 +4364,37 @@ Proba a trocar os filtros para ter outra lista música para escoitar. </translat
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="376"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="321"/>
+        <source>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="379"/>
         <source>SuperCollection</source>
         <translation>Supercolección</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="377"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="380"/>
         <source>Combined libraries of all your online friends</source>
         <translation>Bibliotecas combinadas de todas as túas amizades</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="424"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="427"/>
         <source>Recently Played Tracks</source>
         <translation>Pistas recentemente reproducidas</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="425"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="428"/>
         <source>Recently played tracks from all your friends</source>
         <translation>Pistas escoitadas recentemente polas túas amizades</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="431"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="434"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Non se atoparan reproducións recentes!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="458"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="461"/>
         <source>No listening suggestions here.</source>
         <translation type="unfinished"/>
     </message>

@@ -3995,8 +3995,8 @@ Try tweaking the filters for a new set of songs to play.</source>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="591"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="910"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="922"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="912"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="924"/>
         <source>Play</source>
         <translation>播放</translation>
     </message>
@@ -4007,13 +4007,13 @@ Try tweaking the filters for a new set of songs to play.</source>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="610"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="970"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="977"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="973"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="980"/>
         <source>Love</source>
         <translation>喜欢</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="965"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="968"/>
         <source>Unlove</source>
         <translation>不喜欢</translation>
     </message>
@@ -4089,7 +4089,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <translation>版权所有 2010 - 2014 {2010 ?}</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="901"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="903"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1262"/>
         <source>Pause</source>
         <translation>暂停</translation>
@@ -4191,7 +4191,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="621"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="634"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>抱歉，未找到任何匹配 &apos;%1&apos; 的结果。</translation>
     </message>
@@ -4366,32 +4366,37 @@ Try tweaking the filters for a new set of songs to play.</source>
         <translation>朋友发来的推荐曲目</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="376"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="321"/>
+        <source>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="379"/>
         <source>SuperCollection</source>
         <translation>超级收藏</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="377"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="380"/>
         <source>Combined libraries of all your online friends</source>
         <translation>当前在线的朋友的音乐库集合</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="424"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="427"/>
         <source>Recently Played Tracks</source>
         <translation>最近播放歌曲</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="425"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="428"/>
         <source>Recently played tracks from all your friends</source>
         <translation>所有朋友最近播放的歌曲</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="431"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="434"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>对不起，找不到任何最近播放项目！</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="458"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="461"/>
         <source>No listening suggestions here.</source>
         <translation>没有推荐曲目</translation>
     </message>

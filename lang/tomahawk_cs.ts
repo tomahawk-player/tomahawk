@@ -2203,7 +2203,7 @@ heslo</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="327"/>
         <source>Cloud</source>
-        <translation>Mračno</translation>
+        <translation>Oblak</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="321"/>
@@ -3995,8 +3995,8 @@ Zkuste vyladit filtry pro nové písně.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="591"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="910"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="922"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="912"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="924"/>
         <source>Play</source>
         <translation>Přehrát</translation>
     </message>
@@ -4007,13 +4007,13 @@ Zkuste vyladit filtry pro nové písně.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="610"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="970"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="977"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="973"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="980"/>
         <source>Love</source>
         <translation>Oblíbit</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="965"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="968"/>
         <source>Unlove</source>
         <translation>Zrušit zalíbení</translation>
     </message>
@@ -4089,7 +4089,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
         <translation>Copyright 2010 - 2014</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="901"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="903"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1262"/>
         <source>Pause</source>
         <translation>Pozastavit</translation>
@@ -4191,7 +4191,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="621"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="634"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Promiňte, vašemu filtru &apos;%1&apos; se nepodařilo najít žádné výsledky.</translation>
     </message>
@@ -4366,32 +4366,37 @@ Zkuste vyladit filtry pro nové písně.</translation>
         <translation>Sledování návrhů od vašich přátel</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="376"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="321"/>
+        <source>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</source>
+        <translation>Sbírky oblaků nejsou v jednotném pohledu ještě podporovány. Toto však bude zajištěno brzy. Přepněte do jiného pohledu pro pohyb v nich.</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="379"/>
         <source>SuperCollection</source>
         <translation>Supersbírka</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="377"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="380"/>
         <source>Combined libraries of all your online friends</source>
         <translation>Spojená sbírka všech vašich přátel</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="424"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="427"/>
         <source>Recently Played Tracks</source>
         <translation>Nedávno poslouchané skladby</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="425"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="428"/>
         <source>Recently played tracks from all your friends</source>
         <translation>Naposledy poslouchané skladby všech vašich přátel</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="431"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="434"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Promiňte, ale nepodařilo se najít žádné nedávno poslouchané skladby!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="458"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="461"/>
         <source>No listening suggestions here.</source>
         <translation>Žádné sledování návrhů.</translation>
     </message>
