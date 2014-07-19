@@ -451,7 +451,7 @@ se conecteze și să redea de la tine?</translation>
 <context>
     <name>ColumnView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="307"/>
+        <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="309"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Ne pare rău, filtrul tău &apos;%1&apos; nu are niciun rezultat.</translation>
     </message>

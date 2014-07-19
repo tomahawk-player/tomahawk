@@ -451,7 +451,7 @@ conectarse a usted y transmitir música?</translation>
 <context>
     <name>ColumnView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="307"/>
+        <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="309"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>No se encontraron resultados con el filtro «%1».</translation>
     </message>

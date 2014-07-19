@@ -451,7 +451,7 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>ColumnView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="307"/>
+        <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="309"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Tyvärr kunde inte ditt filter &apos;%1&apos; matcha några resultat</translation>
     </message>

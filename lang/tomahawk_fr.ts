@@ -451,7 +451,7 @@ de se connecter et streamer de vous?</translation>
 <context>
     <name>ColumnView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="307"/>
+        <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="309"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Désolé, votre filtre &apos;%1&apos; ne correspond à aucun résultat</translation>
     </message>
