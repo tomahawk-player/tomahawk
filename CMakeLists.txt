@@ -411,7 +411,8 @@ CONFIGURE_FILE(
 
 IF( NOT APPLE )
     # Make linking as strict on linux as it is on osx. Then we don't break linking on mac so often
-    SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--no-undefined" )
+    SET( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-undefined" )
+    SET( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-undefined" )
 ENDIF( NOT APPLE )
 
 # Early configure these files as we need them later on
