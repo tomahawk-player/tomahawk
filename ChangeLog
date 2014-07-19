@@ -32,6 +32,7 @@ Version 0.8.0:
     * Fuzzy search indices for JS Resolvers
     * Add metadata retrieval of HTTP(S) streams in JavaScript resolvers
     * New Dependencies: google-sparsehash, GnuTLS
+    * Flat Collection View
 
 Version 0.7.0:
     * JavaScript Resolvers can now expose collections.
