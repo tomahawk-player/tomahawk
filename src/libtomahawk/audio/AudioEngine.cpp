@@ -146,6 +146,15 @@ AudioEnginePrivate::onStateChanged( Phonon::State newState, Phonon::State oldSta
                 q_ptr->stop();
             }
         }
+        else
+        {
+            // We did not expect a Stop here, so do not go to the next track
+            // but change the AudioEngine state
+            //
+            // A possible scenario where we can reach this is point if we pause
+            // an stream that cannot be paused.
+            q_ptr->setState( AudioEngine::Stopped );
+        }
     }
 }
 
