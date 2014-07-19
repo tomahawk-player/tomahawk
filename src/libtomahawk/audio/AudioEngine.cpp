@@ -146,7 +146,7 @@ AudioEnginePrivate::onStateChanged( Phonon::State newState, Phonon::State oldSta
                 q_ptr->stop();
             }
         }
-        else
+        else if ( stopped )
         {
             // We did not expect a Stop here, so do not go to the next track
             // but change the AudioEngine state
