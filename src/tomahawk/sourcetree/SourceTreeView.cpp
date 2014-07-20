@@ -44,6 +44,8 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "widgets/SourceTreePopupDialog.h"
 #include "PlaylistEntry.h"
+#include "Pipeline.h"
+#include "resolvers/ExternalResolver.h"
 
 #include "../../viewpages/dashboard/Dashboard.h"
 #include "../../viewpages/whatsnew_0_8/WhatsNew_0_8.h"
@@ -242,8 +244,15 @@ SourceTreeView::setupMenus()
         connect( exportPlaylist, SIGNAL( triggered() ), this, SLOT( exportPlaylist() ) );
 
         QMenu* playlistSyncMenu = m_playlistMenu.addMenu( tr( "Sync with .." ) );
-        // TODO: List Services that can sync a playlist
-        // TODO: Add a checkmark to the service that syncs this playlist
+        foreach ( const QPointer<ExternalResolver>& resolver, Tomahawk::Pipeline::instance()->scriptResolvers() )
+        {
+            if ( resolver->capabilities().testFlag( ExternalResolver::PlaylistSync ) )
+            {
+                // TODO: Add a checkmark to the service that syncs this playlist
+                // TODO: Actually add an action to sync
+                playlistSyncMenu->addAction( resolver->icon(), resolver->name() );
+            }
+        }
     }
 
     QAction* deletePlaylistAction = m_playlistMenu.addAction( tr( "&Delete %1" ).arg( SourcesModel::rowTypeToString( type ) ) );
