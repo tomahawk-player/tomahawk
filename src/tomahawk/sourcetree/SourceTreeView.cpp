@@ -240,6 +240,10 @@ SourceTreeView::setupMenus()
     {
         QAction* exportPlaylist = m_playlistMenu.addAction( tr( "&Export Playlist") );
         connect( exportPlaylist, SIGNAL( triggered() ), this, SLOT( exportPlaylist() ) );
+
+        QMenu* playlistSyncMenu = m_playlistMenu.addMenu( tr( "Sync with .." ) );
+        // TODO: List Services that can sync a playlist
+        // TODO: Add a checkmark to the service that syncs this playlist
     }
 
     QAction* deletePlaylistAction = m_playlistMenu.addAction( tr( "&Delete %1" ).arg( SourcesModel::rowTypeToString( type ) ) );
