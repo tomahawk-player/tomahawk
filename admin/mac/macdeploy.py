@@ -219,7 +219,7 @@ TOMAHAWK_PLUGINS = [
 ]
 
 QT_PLUGINS_SEARCH_PATH=[
-    '/usr/local/Cellar/qt/4.8.5/plugins',
+    '/usr/local/Cellar/qt/4.8.6/plugins',
 ]
 
 
