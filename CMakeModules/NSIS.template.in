@@ -548,7 +548,9 @@ Section Uninstall
    DeleteRegValue HKLM "Software\Tomahawk" "VersionRevision"
    DeleteRegValue HKLM "Software\Tomahawk" ""
    DeleteRegKey HKLM "Software\Tomahawk"
-
+   
+   DeleteRegKey HKCR "Software\Tomahawk"
+   DeleteRegKey HKCR "Software\TomahawkSpotify"
    DeleteRegKey HKCR "tomahawk"
 
    ;Start menu shortcuts.
