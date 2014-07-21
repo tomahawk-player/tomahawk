@@ -216,6 +216,7 @@ TOMAHAWK_PLUGINS = [
   'libtomahawk_viewpage_dashboard.so',
   'libtomahawk_viewpage_networkactivity.so',
   'libtomahawk_viewpage_whatshot.so',
+  'libtomahawk_viewpage_whatsnew_0_8.so',
 ]
 
 QT_PLUGINS_SEARCH_PATH=[
