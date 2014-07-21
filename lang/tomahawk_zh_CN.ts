@@ -244,7 +244,7 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="180"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="247"/>
         <source>What&apos;s new in ..</source>
-        <translation type="unfinished"/>
+        <translation>有什么新东西 ...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="205"/>
@@ -4368,7 +4368,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="321"/>
         <source>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</source>
-        <translation type="unfinished"/>
+        <translation>云收藏暂不支持扁平视图。我们将会尽快解决这个问题。请使用别的视图来操控它们。</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="379"/>
@@ -4456,32 +4456,32 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message utf8="true">
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="889"/>
         <source>Get a quick look at all of the songs, playlists and artists that are trending across your network. Check out the hot songs your friends are listening to, and their playlists that are trending with their friends.  Or just listen to a dynamic playlist of your network’s latest Loves, most Loved or top played songs - from last week to all-time. </source>
-        <translation type="unfinished"/>
+        <translation>快速浏览下网络中的所有热门歌曲，播放列表和艺术家。看看您的好友正在听的热门歌曲，以及他们的热门播放列表。或者，试听您网络中受喜欢的歌曲的动态列表，即最多喜欢或播放次数最多的歌-从上周到全部时间。</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="973"/>
         <source>Beats Music (recently acquired by Apple) is now available as a resolver.  This means that Beats Music subscribers can enjoy Tomahawk Stations playlists from their friends that use other services, and can easily drop Spotify, Rdio and other service links into Tomahawk and have those playlists, albums and tracks stream from your Beats account. Welcome Beats Music subscribers!</source>
-        <translation type="unfinished"/>
+        <translation>Beats Music (最近被苹果收购)现在可被最为解析器使用。这意味着 Beat Music 订阅者可以利用 Tomahawk 电台播放使用其他音乐服务的好友的播放列表，并且可以非常方便地将 Spotify ，Rdio和其他网络服务链接的地址放到 Tomahawk，自动获取 Beats 账户中的播放列表，专辑以及曲目流。欢迎你们，Beats Music 订阅者们。</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="1047"/>
         <source>Google Music is another of our latest supported services - both for your music you&apos;ve uploaded to the Google Music &quot;locker&quot; as well as their full streaming catalog for your Google Play Music All Access subscribers.</source>
-        <translation type="unfinished"/>
+        <translation>谷歌音乐是另一个新增支持的服务 - 不仅支持您网谷歌音乐 “locker” 上传的音乐，还支持“Google Play Music All Access” 用户的完整的流媒体目录。</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="1121"/>
         <source>Tomahawk now supports multiple IP addresses (IPv6).  This improves the discoverability and connection between Tomahawk users on the same local network - particularly large networks often found in work and university settings.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk 现在支持多IP地址(IPv6)。这能很大改善同一本地网内不同 Tomahawk 用户间相互发现以及连接 - 尤其是工作场合和高校环境中的大型网络。</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="1195"/>
         <source>Lots of new views - artist pages, album pages, track pages and more. A new Loved Widget shows what friends have loved tracks throughout the app. Some cleaner fonts, some new colors. Retina display support and more.</source>
-        <translation type="unfinished"/>
+        <translation>新增很多新视图 - 艺术家页面，专辑页，曲目页和其他更多。新增一个喜欢插件，可以通过应用自动获取您的好友喜欢的歌曲。换用一些更加清爽的字体，新色彩。支持视网膜屏，等等其他。</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="1288"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk for Android is now in beta!  All of the same resolvers are supported in the Android app - plus a couple of additional ones in Rdio &amp;amp; Deezer.  Create a &lt;a href=&quot;https://hatchet.is/beta&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#fff;&quot;&gt;Hatchet&lt;/span&gt;&lt;/a&gt; account to sync all of your playlists from your desktop to your mobile.  Find current and future music influencers with Hatchet accounts (from across a range of music service providers) and follow them to discover and hear what they love.  Even when you are listening to other music apps, Tomahawk can capture all of that playback data and add it to your Hatchet profile.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk Android 版已出公测版！支持所有解析器 - 还支持 Rdio &amp;amp; Deezer 中附加的。只需创建一个 &lt;a href=&quot;https://hatchet.is/beta&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#fff;&quot;&gt;Hatchet&lt;/span&gt;&lt;/a&gt; 账号便能将桌面的所有播放列表同步到手机上。使用 Hatchet 账号发现当前/将来的音乐领军人物 (会从一些音乐服务提供商中获得) ，并关注他们，追寻他们喜欢的歌。甚至是您使用其他音乐程序听音乐时，Tomahawk 也能抓取回放数据，并添加到您的 Hatchet 资料中。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
