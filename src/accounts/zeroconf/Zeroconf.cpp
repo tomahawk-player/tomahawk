@@ -122,13 +122,11 @@ ZeroconfPlugin::disconnectPlugin()
 }
 
 
-#ifndef ENABLE_HEADLESS
 QIcon
 ZeroconfPlugin::icon() const
 {
     return account()->icon();
 }
-#endif
 
 
 void

@@ -591,7 +591,6 @@ AudioEngine::sendNowPlayingNotification( const Tomahawk::InfoSystem::InfoType ty
     if ( d->currentTrack.isNull() )
         return;
 
-#ifndef ENABLE_HEADLESS
     if ( d->currentTrack->track()->coverLoaded() )
     {
         onNowPlayingInfoReady( type );
@@ -601,7 +600,6 @@ AudioEngine::sendNowPlayingNotification( const Tomahawk::InfoSystem::InfoType ty
         NewClosure( d->currentTrack->track().data(), SIGNAL( coverChanged() ), const_cast< AudioEngine* >( this ), SLOT( sendNowPlayingNotification( const Tomahawk::InfoSystem::InfoType ) ), type );
         d->currentTrack->track()->cover( QSize( 0, 0 ), true );
     }
-#endif
 }
 
 
@@ -616,7 +614,6 @@ AudioEngine::onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type )
 
     QVariantMap playInfo;
 
-#ifndef ENABLE_HEADLESS
     QImage cover;
     cover = d->currentTrack->track()->cover( QSize( 0, 0 ) ).toImage();
     if ( !cover.isNull() )
@@ -643,7 +640,6 @@ AudioEngine::onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type )
     }
     else
         tDebug() << Q_FUNC_INFO << "Cover from query is null!";
-#endif
 
     Tomahawk::InfoSystem::InfoStringHash trackInfo;
     trackInfo["title"] = d->currentTrack->track()->track();

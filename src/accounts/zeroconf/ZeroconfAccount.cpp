@@ -29,10 +29,8 @@ QPixmap* s_icon = 0;
 
 ZeroconfFactory::ZeroconfFactory()
 {
-#ifndef ENABLE_HEADLESS
     if ( s_icon == 0 )
         s_icon = new QPixmap( ":/zeroconf-account/zeroconf-icon.png" );
-#endif
 }
 
 

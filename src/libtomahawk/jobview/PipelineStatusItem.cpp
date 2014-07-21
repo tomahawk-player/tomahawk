@@ -22,14 +22,11 @@
 
 #include "utils/TomahawkUtilsGui.h"
 
+#include "JobStatusModel.h"
+#include "JobStatusView.h"
 #include "Pipeline.h"
 #include "Source.h"
 #include "Track.h"
-
-#ifndef ENABLE_HEADLESS
-#include "JobStatusModel.h"
-#include "JobStatusView.h"
-#endif
 
 
 PipelineStatusItem::PipelineStatusItem( const Tomahawk::query_ptr& q )
@@ -103,12 +100,10 @@ PipelineStatusManager::resolving( const Tomahawk::query_ptr& p )
 {
     Q_UNUSED( p );
 
-#ifndef ENABLE_HEADLESS
     if ( m_curItem.isNull() )
     {
         // No current query item and we're resolving something, so show it
         m_curItem = QPointer< PipelineStatusItem >( new PipelineStatusItem( p ) );
         JobStatusView::instance()->model()->addJob( m_curItem.data() );
     }
-#endif
 }

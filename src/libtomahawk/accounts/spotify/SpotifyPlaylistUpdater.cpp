@@ -32,9 +32,7 @@
 using namespace Tomahawk;
 using namespace Accounts;
 
-#ifndef ENABLE_HEADLESS
 QPixmap* SpotifyPlaylistUpdater::s_typePixmap = 0;
-#endif
 
 Tomahawk::PlaylistUpdaterInterface*
 SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl, const QVariantHash &settings )
@@ -206,7 +204,6 @@ SpotifyPlaylistUpdater::type() const
 }
 
 
-#ifndef ENABLE_HEADLESS
 QPixmap
 SpotifyPlaylistUpdater::typeIcon() const
 {
@@ -221,7 +218,6 @@ SpotifyPlaylistUpdater::typeIcon() const
 
     return *s_typePixmap;
 }
-#endif
 
 
 void

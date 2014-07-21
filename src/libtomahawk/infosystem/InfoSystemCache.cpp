@@ -18,11 +18,7 @@
  */
 
 #include <QtDebug>
-
-
-#ifndef ENABLE_HEADLESS
-    #include <QDesktopServices>
-#endif
+#include <QDesktopServices>
 
 #include "InfoSystemCache.h"
 #include "TomahawkSettings.h"

@@ -643,7 +643,6 @@ Track::composerPtr() const
 }
 
 
-#ifndef ENABLE_HEADLESS
 QPixmap
 Track::cover( const QSize& size, bool forceLoad ) const
 {
@@ -672,8 +671,6 @@ Track::coverLoaded() const
 
     return d->artistPtr->coverLoaded();
 }
-
-#endif
 
 
 QList<Tomahawk::query_ptr>

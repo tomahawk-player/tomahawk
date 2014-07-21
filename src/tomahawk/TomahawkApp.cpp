@@ -91,10 +91,6 @@
     #include "linux/GnomeShortcutHandler.h"
 #endif
 
-#ifndef ENABLE_HEADLESS
-    #include <QMessageBox>
-#endif
-
 #ifdef Q_OS_MAC
     #include "mac/MacShortcutHandler.h"
 
@@ -105,6 +101,7 @@
 #include <QDir>
 #include <QMetaType>
 #include <QTime>
+#include <QMessageBox>
 #include <QNetworkReply>
 #include <QFile>
 #include <QFileInfo>
@@ -143,9 +140,7 @@ using namespace Tomahawk;
 
 TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     : TOMAHAWK_APPLICATION( argc, argv )
-#ifndef ENABLE_HEADLESS
     , m_mainwindow( 0 )
-#endif
     , m_splashWidget( 0 )
     , m_headless( false )
 {
@@ -174,9 +169,7 @@ TomahawkApp::init()
 
     tLog() << "Starting Tomahawk...";
 
-#ifdef ENABLE_HEADLESS
     m_headless = true;
-#else
     m_headless = arguments().contains( "--headless" );
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
     setQuitOnLastWindowClosed( false );
@@ -199,7 +192,6 @@ TomahawkApp::init()
     tDebug() << "Font height:" << QFontMetrics( f ).height();
 #endif
     TomahawkUtils::setDefaultFontSize( f.pointSize() );
-#endif
 
     TomahawkUtils::setHeadless( m_headless );
     new ACLRegistryImpl( this );
@@ -302,10 +294,8 @@ TomahawkApp::~TomahawkApp()
 
     delete Tomahawk::Accounts::AccountManager::instance();
 
-#ifndef ENABLE_HEADLESS
     delete AtticaManager::instance();
     delete m_mainwindow;
-#endif
 
     // Main Window uses the AudioEngine, so delete it later.
     if ( !m_audioEngine.isNull() )
@@ -364,13 +354,11 @@ TomahawkApp::printHelp()
 }
 
 
-#ifndef ENABLE_HEADLESS
 AudioControls*
 TomahawkApp::audioControls()
 {
     return m_mainwindow->audioControls();
 }
-#endif
 
 
 void
@@ -615,7 +603,6 @@ TomahawkApp::onInfoSystemReady()
     TomahawkSettings* s = TomahawkSettings::instance();
 
     Echonest::Config::instance()->setNetworkAccessManager( Tomahawk::Utils::nam() );
-#ifndef ENABLE_HEADLESS
     EchonestGenerator::setupCatalogs();
 
     if ( !m_headless )
@@ -629,17 +616,14 @@ TomahawkApp::onInfoSystemReady()
             m_mainwindow->show();
         }
     }
-#endif
 
     tDebug() << "Init Local Collection.";
     initLocalCollection();
     tDebug() << "Init Pipeline.";
     initPipeline();
 
-#ifndef ENABLE_HEADLESS
     // load remote list of resolvers able to be installed
     AtticaManager::instance();
-#endif
 
     if ( arguments().contains( "--http" ) || TomahawkSettings::instance()->value( "network/http", true ).toBool() )
     {
@@ -647,12 +631,10 @@ TomahawkApp::onInfoSystemReady()
     }
     connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( initHTTP() ) );
 
-#ifndef ENABLE_HEADLESS
     if ( !s->hasScannerPaths() )
     {
         m_mainwindow->showSettingsDialog();
     }
-#endif
 
 #ifdef LIBLASTFM_FOUND
     tDebug() << "Init Scrobbler.";
@@ -679,14 +661,12 @@ TomahawkApp::onInfoSystemReady()
         QApplication::setWheelScrollLines( qt_settings.value( "wheelScrollLines", QApplication::wheelScrollLines() ).toInt() );
     }
 
-#ifndef ENABLE_HEADLESS
     // Make sure to init GAM in the gui thread
     GlobalActionManager::instance();
 
     // check if our spotify playlist api server is up and running, and enable spotify playlist drops if so
     QNetworkReply* r = Tomahawk::Utils::nam()->get( QNetworkRequest( QUrl( SPOTIFY_PLAYLIST_API_URL "/pong" ) ) );
     connect( r, SIGNAL( finished() ), this, SLOT( spotifyApiCheckFinished() ) );
-#endif
 
 #ifdef Q_OS_MAC
     // Make sure to do this after main window is inited
@@ -768,21 +748,17 @@ TomahawkApp::ipDetectionFailed( QNetworkReply::NetworkError error, QString error
 void
 TomahawkApp::spotifyApiCheckFinished()
 {
-#ifndef ENABLE_HEADLESS
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( reply );
 
     DropJob::setCanParseSpotifyPlaylists( !reply->error() );
-#endif
 }
 
 
 void
 TomahawkApp::activate()
 {
-#ifndef ENABLE_HEADLESS
     TomahawkUtils::bringToFront();
-#endif
 }
 
 

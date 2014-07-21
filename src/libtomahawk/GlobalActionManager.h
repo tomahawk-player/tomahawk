@@ -48,8 +48,6 @@ public:
 
 public slots:
 
-#ifndef ENABLE_HEADLESS
-
     /**
      * Try to open a URL as Playlist/Album/Artist/Track
      */
@@ -74,13 +72,11 @@ public slots:
     void handleOpenTracks( const QList< Tomahawk::query_ptr >& queries );
 
     void handlePlayTrack( const Tomahawk::query_ptr& qry );
-#endif
 
 private slots:
     void informationForUrl( const QString& url, const QSharedPointer<QObject>& information );
     void copyToClipboardReady( const QUrl& longUrl, const QUrl& shortUrl, const QVariant& callbackObj );
 
-#ifndef ENABLE_HEADLESS
     void showPlaylist();
 
     void playlistCreatedToShow( const Tomahawk::playlist_ptr& pl );
@@ -90,13 +86,11 @@ private slots:
 
     void playOrQueueNow( const Tomahawk::query_ptr& );
     void playNow( const Tomahawk::query_ptr& );
-#endif
 
 private:
     explicit GlobalActionManager( QObject* parent = 0 );
 
     /// handle opening of urls
-#ifndef ENABLE_HEADLESS
     bool handlePlaylistCommand( const QUrl& url );
     bool handleViewCommand( const QUrl& url );
     bool handleStationCommand( const QUrl& url );
@@ -108,7 +102,6 @@ private:
 
     bool playSpotify( const QUrl& url );
     bool queueSpotify( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems );
-#endif
 
     bool handleCollectionCommand( const QUrl& url );
     bool handlePlayCommand( const QUrl& url );

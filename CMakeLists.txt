@@ -114,13 +114,7 @@ INCLUDE( TomahawkCPack.cmake )
 INCLUDE( MacroOptionalFindPackage )
 INCLUDE( MacroLogFeature )
 
-# headless mode
-if( NOT BUILD_GUI )
-    add_definitions( -DENABLE_HEADLESS )
-    message( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} in HEADLESS mode ***" )
-else()
-    message( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} full GUI version ***" )
-endif()
+message( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} ***" )
 
 if( NOT BUILD_WITH_QT4 )
     find_package(Qt5Core QUIET)

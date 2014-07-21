@@ -95,12 +95,11 @@ public:
     /**
      * Configuration widgets can have a "dataError( bool )" signal to enable/disable the OK button in their wrapper dialogs.
      */
-#ifndef ENABLE_HEADLESS
     virtual AccountConfigWidget* configurationWidget() = 0;
     virtual QWidget* aboutWidget() { return 0; }
     virtual QWidget* aclWidget() = 0;
     virtual QPixmap icon() const = 0;
-#endif
+
     virtual QString description() const { return QString(); }
     virtual QString author() const { return QString(); }
     virtual QString version() const { return QString(); }

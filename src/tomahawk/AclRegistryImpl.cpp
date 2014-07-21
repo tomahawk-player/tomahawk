@@ -24,14 +24,11 @@
 #include "TomahawkApp.h"
 #include "Source.h"
 
-#ifndef ENABLE_HEADLESS
-    #include "accounts/AccountManager.h"
-    #include "accounts/Account.h"
-    #include "jobview/AclJobItem.h"
-    #include "jobview/JobStatusView.h"
-    #include "jobview/JobStatusModel.h"
-#endif
-
+#include "accounts/AccountManager.h"
+#include "accounts/Account.h"
+#include "jobview/AclJobItem.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
 #include "utils/Logger.h"
 
 #include <QThread>
@@ -63,7 +60,6 @@ ACLRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username,
         return Tomahawk::ACLStatus::NotFound;
     }
 
-#ifndef ENABLE_HEADLESS
     if ( Tomahawk::Accounts::AccountManager::instance() )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Checking account friendly names against" << username;
@@ -82,7 +78,6 @@ ACLRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username,
             }
         }
     }
-#endif
 
     bool found = false;
     QMutableListIterator< ACLRegistry::User > i( m_cache );
@@ -127,9 +122,7 @@ ACLRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username,
     user.knownAccountIds.append( username );
     if ( globalType != Tomahawk::ACLStatus::NotFound )
         user.acl = globalType;
-#ifdef ENABLE_HEADLESS
-    user.acl = Tomahawk::ACLStatus::Stream;
-#else
+
     if ( !TomahawkUtils::headless() )
     {
         getUserDecision( user, username );
@@ -137,7 +130,7 @@ ACLRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username,
     }
     else
         user.acl = Tomahawk::ACLStatus::Stream;
-#endif
+
     m_cache.append( user );
     save();
     emit aclResult( dbid, username, user.acl );
@@ -145,7 +138,6 @@ ACLRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username,
 }
 
 
-#ifndef ENABLE_HEADLESS
 void
 ACLRegistryImpl::getUserDecision( ACLRegistry::User user, const QString &username )
 {
@@ -224,7 +216,6 @@ ACLRegistryImpl::queueNextJob()
         }
     }
 }
-#endif
 
 
 void

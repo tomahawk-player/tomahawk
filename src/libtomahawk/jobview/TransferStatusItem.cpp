@@ -24,14 +24,12 @@
 #include "utils/TomahawkUtilsGui.h"
 
 #include "Artist.h"
+#include "JobStatusModel.h"
+#include "JobStatusView.h"
 #include "Result.h"
 #include "Source.h"
 #include "Track.h"
 
-#ifndef ENABLE_HEADLESS
-    #include "JobStatusModel.h"
-    #include "JobStatusView.h"
-#endif
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
@@ -119,9 +117,7 @@ TransferStatusManager::TransferStatusManager( QObject* parent )
 void
 TransferStatusManager::streamRegistered( StreamConnection* sc )
 {
-#ifndef ENABLE_HEADLESS
     JobStatusView::instance()->model()->addJob( new TransferStatusItem( this, sc ) );
-#endif
 }
 
 

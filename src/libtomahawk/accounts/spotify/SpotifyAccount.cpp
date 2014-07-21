@@ -21,6 +21,9 @@
 
 #include "accounts/AccountManager.h"
 #include "infosystem/InfoSystem.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
 #include "playlist/PlaylistUpdaterInterface.h"
 #include "resolvers/ScriptResolver.h"
 #include "utils/Closure.h"
@@ -38,12 +41,6 @@
 #include "SpotifyPlaylistUpdater.h"
 #include "TomahawkSettings.h"
 #include "Track.h"
-
-#ifndef ENABLE_HEADLESS
-#include "jobview/JobStatusView.h"
-#include "jobview/JobStatusModel.h"
-#include "jobview/ErrorStatusMessage.h"
-#endif
 
 #include <QAction>
 #include <QCoreApplication>
@@ -1036,10 +1033,8 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
 
         if ( msg.value( "isDebugMsg" ).toBool() )
             tDebug( LOGVERBOSE ) << "SpotifyResolverError: " << error;
-#ifndef ENABLE_HEADLESS
         else
             JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( QString( "Spotify: %1" ).arg( error ) ) );
-#endif
     }
     else if ( msgType == "userChanged" )
     {

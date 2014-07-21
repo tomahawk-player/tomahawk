@@ -46,10 +46,8 @@ const QString c_accessTokenServer("https://auth.hatchet.is/v1");
 
 HatchetAccountFactory::HatchetAccountFactory()
 {
-#ifndef ENABLE_HEADLESS
     if ( s_icon == 0 )
         s_icon = new QPixmap( ":/hatchet-account/hatchet-icon-512x512.png" );
-#endif
 }
 
 

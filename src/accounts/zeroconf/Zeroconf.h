@@ -51,9 +51,7 @@ public:
     virtual const QString serviceName() const;
     virtual Account::ConnectionState connectionState() const;
     virtual bool isValid() const { return true; }
-#ifndef ENABLE_HEADLESS
     virtual QIcon icon() const;
-#endif
     virtual void checkSettings() {}
     virtual void configurationChanged() {}
 

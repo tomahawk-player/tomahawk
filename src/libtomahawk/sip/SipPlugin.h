@@ -26,11 +26,8 @@
 #include "Typedefs.h"
 
 #include <QObject>
+#include <QMenu>
 #include <QString>
-
-#ifndef ENABLE_HEADLESS
-    #include <QMenu>
-#endif
 
 #include "DllMacro.h"
 
@@ -64,9 +61,7 @@ public:
     virtual const QString friendlyName() const;
     virtual const QString serviceName() const;
     virtual QString inviteString() const;
-#ifndef ENABLE_HEADLESS
     virtual QMenu* menu();
-#endif
     virtual Tomahawk::Accounts::Account* account() const;
 
     // peer infos
@@ -91,13 +86,11 @@ signals:
     void inviteSentSuccess( const QString& inviteId );
     void inviteSentFailure( const QString& inviteId );
 
-#ifndef ENABLE_HEADLESS
     // new data for own source
     void avatarReceived ( const QPixmap& avatar );
 
     void addMenu( QMenu* menu );
     void removeMenu( QMenu* menu );
-#endif
 
 protected:
     void setAllPeersOffline();

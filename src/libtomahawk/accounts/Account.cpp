@@ -67,8 +67,6 @@ Account::~Account()
 }
 
 
-#ifndef ENABLE_HEADLESS
-
 AccountConfigWidget*
 Account::configurationWidget()
 {
@@ -88,8 +86,6 @@ Account::icon() const
 {
     return QPixmap();
 }
-
-#endif
 
 
 void

@@ -26,9 +26,7 @@
 #include "TomahawkSettings.h"
 #include "utils/Logger.h"
 
-#ifndef ENABLE_HEADLESS
 #include <QMessageBox>
-#endif
 
 #include <attica/content.h>
 
@@ -551,7 +549,7 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
         else if( state == Qt::Unchecked )
             AccountManager::instance()->disableAccount( acct );
 
-#if defined(Q_OS_LINUX) && !defined(ENABLE_HEADLESS)
+#if defined(Q_OS_LINUX)
         if ( acct->preventEnabling() )
         {
             // Can't install from attica yet on linux, so show a warning if the user tries to turn it on.

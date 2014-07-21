@@ -88,10 +88,8 @@ ShortenedLinkParser::lookupUrl( const QString& url )
 
     m_queries.insert( reply );
 
-#ifndef ENABLE_HEADLESS
     m_expandJob = new DropJobNotifier( pixmap(), "shortened", DropJob::Track, reply );
     JobStatusView::instance()->model()->addJob( m_expandJob );
-#endif
 }
 
 
@@ -101,10 +99,8 @@ ShortenedLinkParser::lookupFinished( const QUrl& url )
     NetworkReply* r = qobject_cast< NetworkReply* >( sender() );
     Q_ASSERT( r );
 
-#ifndef ENABLE_HEADLESS
     if ( r->reply()->error() != QNetworkReply::NoError )
         JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Network error parsing shortened link!" ) ) );
-#endif
 
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Got an un-shortened url:" << r->reply()->url().toString();
     m_links << url.toString();
@@ -127,12 +123,8 @@ ShortenedLinkParser::checkFinished()
 }
 
 
-#ifndef ENABLE_HEADLESS
-
 QPixmap
 ShortenedLinkParser::pixmap()
 {
     return TomahawkUtils::defaultPixmap( TomahawkUtils::Add );
 }
-
-#endif

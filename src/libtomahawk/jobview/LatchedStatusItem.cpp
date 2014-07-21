@@ -24,11 +24,6 @@
 #include "JobStatusModel.h"
 #include "utils/TomahawkUtilsGui.h"
 
-#ifndef ENABLE_HEADLESS
-#include "JobStatusModel.h"
-#include "JobStatusView.h"
-#endif
-
 LatchedStatusItem::LatchedStatusItem( const Tomahawk::source_ptr& from, const Tomahawk::source_ptr& to, LatchedStatusManager* parent )
     : JobStatusItem()
     , m_from( from )
@@ -80,11 +75,9 @@ LatchedStatusManager::latchedOn( const Tomahawk::source_ptr& from, const Tomahaw
 
     if ( to->isLocal() )
     {
-#ifndef ENABLE_HEADLESS
         LatchedStatusItem* item = new LatchedStatusItem( from, to, this );
         m_jobs[ from->nodeId() ] = item;
         JobStatusView::instance()->model()->addJob( item );
-#endif
 
         connect( from.data(), SIGNAL( offline() ), this, SLOT( sourceOffline() ), Qt::UniqueConnection );
     }

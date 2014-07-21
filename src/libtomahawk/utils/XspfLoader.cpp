@@ -20,12 +20,9 @@
 
 #include "XspfLoader.h"
 
-#ifndef ENABLE_HEADLESS
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
-#endif
-
 #include "playlist/XspfUpdater.h"
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtils.h"
@@ -173,13 +170,11 @@ void
 XSPFLoader::reportError()
 {
     emit error( FetchError );
-#ifndef ENABLE_HEADLESS
     const QString errorMsg = errorToString( FetchError );
     if ( !m_errorTitle.isEmpty() )
         JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( QString( "%1: %2" ).arg( m_errorTitle ).arg( errorMsg ) ) );
     else
         JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( errorMsg ) );
-#endif
     deleteLater();
 }
 

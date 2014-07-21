@@ -26,12 +26,9 @@
 #include "JobStatusDelegate.h"
 #include "utils/Logger.h"
 #include "Source.h"
-
-#ifndef ENABLE_HEADLESS
 #include "PipelineStatusItem.h"
 #include "TransferStatusItem.h"
 #include "LatchedStatusItem.h"
-#endif
 
 #include <QHeaderView>
 #include <QVBoxLayout>
@@ -95,11 +92,9 @@ JobStatusView::JobStatusView( AnimatedSplitter* parent )
     m_view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     m_view->setUniformItemSizes( false );
 
-#ifndef ENABLE_HEADLESS
     new PipelineStatusManager( this );
     new TransferStatusManager( this );
     new LatchedStatusManager( this );
-#endif
 
     setMouseTracking( true );
     m_view->setMouseTracking( true );

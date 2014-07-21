@@ -39,9 +39,7 @@ public:
 
     virtual QString type() const { return "xspf"; }
 
-#ifndef ENABLE_HEADLESS
     virtual QWidget* configurationWidget() const;
-#endif
 
     bool autoUpdate() const { return m_autoUpdate; }
 
@@ -64,9 +62,7 @@ private:
     bool m_autoUpdate;
     QString m_url;
 
-#ifndef ENABLE_HEADLESS
     QCheckBox* m_toggleCheckbox;
-#endif
 };
 
 class DLLEXPORT XspfUpdaterFactory : public PlaylistUpdaterFactory

@@ -60,13 +60,11 @@ protected:
     virtual void load();
     virtual void save();
 
-#ifndef ENABLE_HEADLESS
     void getUserDecision( ACLRegistry::User user, const QString &username );
 
 private slots:
     void userDecision( ACLRegistry::User user );
     void queueNextJob();
-#endif
 
 private:
     QQueue< ACLJobItem* > m_jobQueue;

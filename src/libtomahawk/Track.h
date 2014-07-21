@@ -86,9 +86,7 @@ public:
     Tomahawk::album_ptr albumPtr() const;
     Tomahawk::artist_ptr composerPtr() const;
 
-#ifndef ENABLE_HEADLESS
     QPixmap cover( const QSize& size, bool forceLoad = true ) const;
-#endif
     bool coverLoaded() const;
 
     void setLoved( bool loved, bool postToInfoSystem = true );

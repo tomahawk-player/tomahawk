@@ -25,11 +25,9 @@
 
 #include "PlaylistEntry.h"
 #include "SourceList.h"
+#include "ViewManager.h"
 #include <TomahawkSettings.h>
 
-#ifndef ENABLE_HEADLESS
-    #include "ViewManager.h"
-#endif
 
 using namespace Tomahawk;
 

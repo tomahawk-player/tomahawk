@@ -1176,9 +1176,7 @@ TomahawkWindow::onAudioEngineError( AudioEngine::AudioErrorCode /* error */ )
 
     tLog() << msg;
 
-#ifndef ENABLE_HEADLESS
     JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( msg, 15 ) );
-#endif
 
     if ( m_audioRetryCounter < 3 )
         AudioEngine::instance()->play();

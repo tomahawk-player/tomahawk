@@ -27,11 +27,9 @@
 #include "PlaylistEntry.h"
 #include "Source.h"
 
+#include <QCheckBox>
 #include <QTimer>
 
-#ifndef ENABLE_HEADLESS
-#include <QCheckBox>
-#endif
 
 using namespace Tomahawk;
 
@@ -58,7 +56,6 @@ XspfUpdater::XspfUpdater( const playlist_ptr& pl, int interval, bool autoUpdate,
 
     connect( m_timer, SIGNAL( timeout() ), this, SLOT( updateNow() ) );
 
-#ifndef ENABLE_HEADLESS
     m_toggleCheckbox = new QCheckBox( );
     m_toggleCheckbox->setText( tr( "Automatically update from XSPF" ) );
     m_toggleCheckbox->setLayoutDirection( Qt::RightToLeft );
@@ -66,7 +63,6 @@ XspfUpdater::XspfUpdater( const playlist_ptr& pl, int interval, bool autoUpdate,
     m_toggleCheckbox->hide();
 
     connect( m_toggleCheckbox, SIGNAL( toggled( bool ) ), this, SLOT( setAutoUpdate( bool ) ) );
-#endif
 
     QVariantHash s = settings();
     s[ "autoupdate" ] = m_autoUpdate;
@@ -84,15 +80,11 @@ XspfUpdater::~XspfUpdater()
 }
 
 
-#ifndef ENABLE_HEADLESS
-
 QWidget*
 XspfUpdater::configurationWidget() const
 {
     return m_toggleCheckbox;
 }
-
-#endif
 
 
 void

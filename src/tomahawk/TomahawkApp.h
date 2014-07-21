@@ -68,9 +68,7 @@ namespace Tomahawk
 #include "Scrobbler.h"
 #endif
 
-#ifndef TOMAHAWK_HEADLESS
 class TomahawkWindow;
-#endif
 
 
 // this also acts as a a container for important top-level objects
@@ -87,10 +85,8 @@ public:
     void init();
     static TomahawkApp* instance();
 
-#ifndef ENABLE_HEADLESS
     AudioControls* audioControls();
     TomahawkWindow* mainWindow() const;
-#endif
 
     // PlatformInterface
     virtual bool loadUrl( const QString& url );
@@ -150,9 +146,7 @@ private:
     Scrobbler* m_scrobbler;
 #endif
 
-#ifndef TOMAHAWK_HEADLESS
     TomahawkWindow* m_mainwindow;
-#endif
     QPointer<PlaydarApi> playdarApi;
 
     SplashWidget* m_splashWidget;

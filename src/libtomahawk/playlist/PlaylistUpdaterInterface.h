@@ -26,10 +26,7 @@
 #include <QTimer>
 #include <QMutex>
 #include <QPair>
-
-#ifndef ENABLE_HEADLESS
 #include <QPixmap>
-#endif
 
 namespace Tomahawk
 {
@@ -60,14 +57,12 @@ public:
     // What type you are. If you add a new updater, add the creation code as well.
     virtual QString type() const = 0;
 
-#ifndef ENABLE_HEADLESS
     // Small widget to show in playlist header that configures the updater
     virtual QWidget* configurationWidget() const = 0;
 
     // Small overlay over playlist icon in the sidebar to indicate that it has this updater type
     // Should be around 16x16 or something
     virtual QPixmap typeIcon() const { return QPixmap(); }
-#endif
 
     void remove();
 

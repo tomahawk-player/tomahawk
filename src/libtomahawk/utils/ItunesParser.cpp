@@ -116,10 +116,8 @@ ItunesParser::lookupItunesUri( const QString& link )
     NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( QNetworkRequest( url ) ) );
     connect( reply, SIGNAL( finished() ), SLOT( itunesResponseLookupFinished() ) );
 
-#ifndef ENABLE_HEADLESS
     DropJobNotifier* j = new DropJobNotifier( pixmap(), QString( "Itunes" ), type, reply );
     JobStatusView::instance()->model()->addJob( j );
-#endif
 
     m_queries.insert( reply );
 }
@@ -180,9 +178,7 @@ ItunesParser::itunesResponseLookupFinished()
     }
     else
     {
-#ifndef ENABLE_HEADLESS
         JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Error fetching iTunes information from the network!" ) ) );
-#endif
         tLog() << "Error in network request to Itunes for track decoding:" << r->reply()->errorString();
     }
 

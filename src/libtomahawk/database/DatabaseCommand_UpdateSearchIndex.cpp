@@ -22,16 +22,13 @@
 #include <QSqlRecord>
 
 #include "DatabaseImpl.h"
-#include "fuzzyindex/DatabaseFuzzyIndex.h"
 #include "Source.h"
 #include "TomahawkSqlQuery.h"
+
+#include "fuzzyindex/DatabaseFuzzyIndex.h"
 #include "jobview/IndexingJobItem.h"
-
-#ifndef ENABLE_HEADLESS
-    #include "jobview/JobStatusView.h"
-    #include "jobview/JobStatusModel.h"
-#endif
-
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
 #include "utils/Logger.h"
 
 namespace Tomahawk
