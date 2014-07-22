@@ -381,17 +381,17 @@ connect and stream from you?</source>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="965"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="961"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>К сожалению, Tomahawk не смог найти песню &apos;%1&apos; %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="989"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="985"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>К сожалению, Tomahawk не смог найти исполнителя &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1015"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1011"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>К сожалению, Tomahawk не смог найти альбом  &apos;%1&apos; %2</translation>
     </message>
@@ -894,7 +894,7 @@ Password (OTP)</source>
 <context>
     <name>LatchedStatusItem</name>
     <message>
-        <location filename="../src/libtomahawk/jobview/LatchedStatusItem.cpp" line="38"/>
+        <location filename="../src/libtomahawk/jobview/LatchedStatusItem.cpp" line="33"/>
         <source>%1 is listening along with you!</source>
         <translation>%1 слушает вместе с вами!</translation>
     </message>
@@ -2297,7 +2297,7 @@ Password (OTP)</source>
 <context>
     <name>SpotifyPlaylistUpdater</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="355"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="351"/>
         <source>Delete associated Spotify playlist?</source>
         <translation>Удалить связанные со Spotify плей-листы?</translation>
     </message>
@@ -2365,12 +2365,12 @@ Password (OTP)</source>
 <context>
     <name>Tomahawk::Accounts::AccountModel</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="560"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="558"/>
         <source>Manual Install Required</source>
         <translation>Ручная установка обязательно</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="563"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="561"/>
         <source>Unfortunately, automatic installation of this resolver is not available or disabled for your platform.&lt;br /&gt;&lt;br /&gt;Please use &quot;Install from file&quot; above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</source>
         <translation>К сожалению, автоматическая установка этого расширения не доступна или недоступна для вашей платформы. &lt;br /&gt; &lt;br /&gt; Пожалуйста, используйте &quot;Установить из файла&quot;, по получении его из дистрибутива или скомпилируйте его самостоятельно. Дальнейшие инструкции можно найти здесь: &lt;br /&gt; &lt;br /&gt; http://www.tomahawk-player.org/resolvers/%1</translation>
     </message>
@@ -2555,47 +2555,47 @@ Password (OTP)</source>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="513"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="510"/>
         <source>Sync with Spotify</source>
         <translation>Синхронизировать с Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="517"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="514"/>
         <source>Re-enable syncing with Spotify</source>
         <translation>Повторно включить синхронизацию с Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="525"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="522"/>
         <source>Create local copy</source>
         <translation>Создать локальную копию</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="541"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="538"/>
         <source>Subscribe to playlist changes</source>
         <translation>Следить за изменением плей-листа</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="545"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="542"/>
         <source>Re-enable playlist subscription</source>
         <translation>Повторно включить слежение за плей-листом</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="549"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="546"/>
         <source>Stop subscribing to changes</source>
         <translation>Прекратить следить за изменением плейлиста</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="569"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="566"/>
         <source>Enable Spotify collaborations</source>
         <translation>Включить сотрудничество с Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="571"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="568"/>
         <source>Disable Spotify collaborations</source>
         <translation>Выключить сотрудничество с Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="527"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="524"/>
         <source>Stop syncing with Spotify</source>
         <translation>Прекратить синхронизацию с Spotify</translation>
     </message>
@@ -2690,8 +2690,8 @@ username@jabber.org</translation>
 <context>
     <name>Tomahawk::Accounts::ZeroconfAccount</name>
     <message>
-        <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="65"/>
-        <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="66"/>
+        <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="63"/>
+        <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="64"/>
         <source>Local Network</source>
         <translation>Домашняя сеть</translation>
     </message>
@@ -3370,7 +3370,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::GroovesharkParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/GroovesharkParser.cpp" line="243"/>
+        <location filename="../src/libtomahawk/utils/GroovesharkParser.cpp" line="238"/>
         <source>Error fetching Grooveshark information from the network!</source>
         <translation>Ошибка выборки информации из сети Grooveshark!</translation>
     </message>
@@ -3552,7 +3552,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::ItunesParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="184"/>
+        <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="181"/>
         <source>Error fetching iTunes information from the network!</source>
         <translation>Возникла ошибка при получении информации из iTunes!</translation>
     </message>
@@ -3602,12 +3602,12 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::LocalCollection</name>
     <message>
-        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="46"/>
+        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="44"/>
         <source>My Collection</source>
         <translation>Моя Коллекция</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="53"/>
+        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="51"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>После сканирования Вашей музыкальной коллекции, Вы найдете Ваши композиции прямо здесь.</translation>
     </message>
@@ -3632,7 +3632,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::ShortenedLinkParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="106"/>
+        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="103"/>
         <source>Network error parsing shortened link!</source>
         <translation>Ошибка сети при создании короткой ссылки!</translation>
     </message>
@@ -3684,7 +3684,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::SpotifyParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="284"/>
+        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="280"/>
         <source>Error fetching Spotify information from the network!</source>
         <translation>Возникла ошибка при получении информации из Spotify!</translation>
     </message>
@@ -3843,7 +3843,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::XspfUpdater</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/XspfUpdater.cpp" line="63"/>
+        <location filename="../src/libtomahawk/playlist/XspfUpdater.cpp" line="60"/>
         <source>Automatically update from XSPF</source>
         <translation>Автоматическое обновление из XSPF</translation>
     </message>
@@ -3851,24 +3851,24 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="523"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="511"/>
         <source>My Collection</source>
         <translation>Моя Коллекция</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="704"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="684"/>
         <source>Updating database
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="711"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="691"/>
         <source>Updating database
 %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="761"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="741"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Не удалось автоматически определить внешний IP.</translation>
     </message>
@@ -3973,13 +3973,13 @@ Try tweaking the filters for a new set of songs to play.</source>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="224"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1472"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1470"/>
         <source>Hide Menu Bar</source>
         <translation>Спрятать Строку Меню</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="224"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1466"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1464"/>
         <source>Show Menu Bar</source>
         <translation>Показать Строку Меню</translation>
     </message>
@@ -4058,76 +4058,76 @@ Try tweaking the filters for a new set of songs to play.</source>
         <translation>К сожалению, есть проблемы с доступом к аудио устройству или данной песне, текущая песня будет пропущена.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1192"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1190"/>
         <source>Station</source>
         <translation>Станция</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1194"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1192"/>
         <source>Create New Station</source>
         <translation>Создать Новую Станцию</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1194"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1229"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1192"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1227"/>
         <source>Name:</source>
         <translation>Имя:</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1227"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1225"/>
         <source>Playlist</source>
         <translation>Плей-лист</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1229"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1227"/>
         <source>Create New Playlist</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1336"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1334"/>
         <source>Copyright 2010 - 2014</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="903"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1262"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1260"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1284"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1282"/>
         <source>&amp;Play</source>
         <translation>&amp;Играть</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1316"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1314"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1317"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1315"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1328"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1326"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1332"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1330"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1337"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1335"/>
         <source>Thanks to:</source>
         <translation>Благодарность</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1344"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1342"/>
         <source>About Tomahawk</source>
         <translation>О Tomahawk</translation>
     </message>
@@ -4199,13 +4199,13 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TransferStatusItem</name>
     <message>
-        <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="70"/>
+        <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="68"/>
         <source>from</source>
         <comment>streaming artist - track from friend</comment>
         <translation>из</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="70"/>
+        <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="68"/>
         <source>to</source>
         <comment>streaming artist - track to friend</comment>
         <translation>к</translation>
@@ -4541,22 +4541,22 @@ Lyrics for &quot;%1&quot; by %2:
 <context>
     <name>XSPFLoader</name>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="51"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="48"/>
         <source>Failed to parse contents of XSPF playlist</source>
         <translation>Невозможно разобрать содержимое XSPF плей-листа</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="53"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="50"/>
         <source>Some playlist entries were found without artist and track name, they will be omitted</source>
         <translation>Некоторые песни в плей-листе были найдены без названия песни и исполнителя, они будут пропущены</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="55"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="52"/>
         <source>Failed to fetch the desired playlist from the network, or the desired file does not exist</source>
         <translation>Не удалось получить желаемый плей-лист из сети, или нужный файл не существует</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="244"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="239"/>
         <source>New Playlist</source>
         <translation>Новый Плей-лист</translation>
     </message>

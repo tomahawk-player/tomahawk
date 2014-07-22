@@ -379,17 +379,17 @@ se conecteze și să redea de la tine?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="965"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="961"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Ne pare rău, Tomahawk nu a găsit piesa &apos;%1&apos; de %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="989"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="985"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Ne pare rău, Tomahawk nu a găsit artistul &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1015"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1011"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Ne pare rău, Tomahawk nu a găsit albumul &apos;%1&apos; de la %2</translation>
     </message>
@@ -892,7 +892,7 @@ Password (OTP)</translation>
 <context>
     <name>LatchedStatusItem</name>
     <message>
-        <location filename="../src/libtomahawk/jobview/LatchedStatusItem.cpp" line="38"/>
+        <location filename="../src/libtomahawk/jobview/LatchedStatusItem.cpp" line="33"/>
         <source>%1 is listening along with you!</source>
         <translation>%1 ascultă împreună cu tine!</translation>
     </message>
@@ -2295,7 +2295,7 @@ Password (OTP)</translation>
 <context>
     <name>SpotifyPlaylistUpdater</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="355"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="351"/>
         <source>Delete associated Spotify playlist?</source>
         <translation>Ștergi lista de redare Spotify asociată?</translation>
     </message>
@@ -2363,12 +2363,12 @@ Password (OTP)</translation>
 <context>
     <name>Tomahawk::Accounts::AccountModel</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="560"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="558"/>
         <source>Manual Install Required</source>
         <translation>Este necesară instalarea manuală</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="563"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="561"/>
         <source>Unfortunately, automatic installation of this resolver is not available or disabled for your platform.&lt;br /&gt;&lt;br /&gt;Please use &quot;Install from file&quot; above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</source>
         <translation>Din nefericire, instalarea automată a acestui rezolvator nu este disponibilă sau este dezactivată pe platforma ta.&lt;br /&gt;&lt;br /&gt;Te rog folosește &quot;Instalează din fișier&quot; mai sus, și descarcă-l din distribuția ta sau compilează-l personal. Mai multe instrucțiuni pot fi găsite aici:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</translation>
     </message>
@@ -2553,47 +2553,47 @@ Password (OTP)</translation>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="513"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="510"/>
         <source>Sync with Spotify</source>
         <translation>Sincronizează cu Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="517"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="514"/>
         <source>Re-enable syncing with Spotify</source>
         <translation>Re-activează sincronizarea cu Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="525"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="522"/>
         <source>Create local copy</source>
         <translation>Creează copie locală</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="541"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="538"/>
         <source>Subscribe to playlist changes</source>
         <translation>Abonează-te la modificările listei de redare</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="545"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="542"/>
         <source>Re-enable playlist subscription</source>
         <translation>Re-activează abonarea la lista de redare</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="549"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="546"/>
         <source>Stop subscribing to changes</source>
         <translation>Oprește abonarea la modificări</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="569"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="566"/>
         <source>Enable Spotify collaborations</source>
         <translation>Activează colaborările Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="571"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="568"/>
         <source>Disable Spotify collaborations</source>
         <translation>Dezactivează colaborările Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="527"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="524"/>
         <source>Stop syncing with Spotify</source>
         <translation>Oprește sincronizarea cu Spotify</translation>
     </message>
@@ -2688,8 +2688,8 @@ utilizator@jabber.org</translation>
 <context>
     <name>Tomahawk::Accounts::ZeroconfAccount</name>
     <message>
-        <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="65"/>
-        <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="66"/>
+        <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="63"/>
+        <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="64"/>
         <source>Local Network</source>
         <translation>Rețea locală</translation>
     </message>
@@ -3370,7 +3370,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::GroovesharkParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/GroovesharkParser.cpp" line="243"/>
+        <location filename="../src/libtomahawk/utils/GroovesharkParser.cpp" line="238"/>
         <source>Error fetching Grooveshark information from the network!</source>
         <translation>Eroare la descărcarea informațiilor Grooveshark din rețea!</translation>
     </message>
@@ -3552,7 +3552,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::ItunesParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="184"/>
+        <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="181"/>
         <source>Error fetching iTunes information from the network!</source>
         <translation>Eroare la descărcarea informațiilor iTunes din rețea!</translation>
     </message>
@@ -3602,12 +3602,12 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::LocalCollection</name>
     <message>
-        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="46"/>
+        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="44"/>
         <source>My Collection</source>
         <translation>Colecția mea</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="53"/>
+        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="51"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>După ce vei scana colecția ta muzicală vei găsi piesele tale aici.</translation>
     </message>
@@ -3632,7 +3632,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::ShortenedLinkParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="106"/>
+        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="103"/>
         <source>Network error parsing shortened link!</source>
         <translation>Eroare de rețea la interpretarea legăturii scurtate!</translation>
     </message>
@@ -3684,7 +3684,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::SpotifyParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="284"/>
+        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="280"/>
         <source>Error fetching Spotify information from the network!</source>
         <translation>Eroare la descărcarea informațiilor Spotify din rețea!</translation>
     </message>
@@ -3843,7 +3843,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::XspfUpdater</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/XspfUpdater.cpp" line="63"/>
+        <location filename="../src/libtomahawk/playlist/XspfUpdater.cpp" line="60"/>
         <source>Automatically update from XSPF</source>
         <translation>Actualizează automat din XSPF</translation>
     </message>
@@ -3851,26 +3851,26 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="523"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="511"/>
         <source>My Collection</source>
         <translation>Colecția mea</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="704"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="684"/>
         <source>Updating database
 </source>
         <translation>Se actualizează baza de date
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="711"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="691"/>
         <source>Updating database
 %1</source>
         <translation>Se actualizează baza de date
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="761"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="741"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Detectarea automată a IP-ului extern a eșuat.</translation>
     </message>
@@ -3975,13 +3975,13 @@ Try tweaking the filters for a new set of songs to play.</source>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="224"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1472"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1470"/>
         <source>Hide Menu Bar</source>
         <translation>Ascunde bara de meniu</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="224"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1466"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1464"/>
         <source>Show Menu Bar</source>
         <translation>Arată bara de meniu</translation>
     </message>
@@ -4060,76 +4060,76 @@ Try tweaking the filters for a new set of songs to play.</source>
         <translation>Ne pare rău, a apărut o problemă la accesarea dispozitivului audio sau a piesei dorite, piesa curentă va fi sărită.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1192"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1190"/>
         <source>Station</source>
         <translation>Stație</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1194"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1192"/>
         <source>Create New Station</source>
         <translation>Creează o nouă stație</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1194"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1229"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1192"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1227"/>
         <source>Name:</source>
         <translation>Nume:</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1227"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1225"/>
         <source>Playlist</source>
         <translation>Listă de redare</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1229"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1227"/>
         <source>Create New Playlist</source>
         <translation>Creează o nouă listă de redare</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1336"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1334"/>
         <source>Copyright 2010 - 2014</source>
         <translation>Copyright 2010 - 2014 {2010 ?}</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="903"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1262"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1260"/>
         <source>Pause</source>
         <translation>Pauză</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1284"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1282"/>
         <source>&amp;Play</source>
         <translation>&amp;Redare</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1316"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1314"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
         <translation>%1 de %2</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1317"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1315"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1328"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1326"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1332"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1330"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1337"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1335"/>
         <source>Thanks to:</source>
         <translation>Mulțumiri:</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1344"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1342"/>
         <source>About Tomahawk</source>
         <translation>Despre Tomahawk</translation>
     </message>
@@ -4201,13 +4201,13 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TransferStatusItem</name>
     <message>
-        <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="70"/>
+        <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="68"/>
         <source>from</source>
         <comment>streaming artist - track from friend</comment>
         <translation>de la</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="70"/>
+        <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="68"/>
         <source>to</source>
         <comment>streaming artist - track to friend</comment>
         <translation>către</translation>
@@ -4545,22 +4545,22 @@ Versuri pentru &quot;%1&quot; de %2:
 <context>
     <name>XSPFLoader</name>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="51"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="48"/>
         <source>Failed to parse contents of XSPF playlist</source>
         <translation>Eșec la interpretarea conținutului listei de redare XSPF</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="53"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="50"/>
         <source>Some playlist entries were found without artist and track name, they will be omitted</source>
         <translation>Unele piese din lista de redare nu conțin un artist și un titlu. Vor fi omise</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="55"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="52"/>
         <source>Failed to fetch the desired playlist from the network, or the desired file does not exist</source>
         <translation>A eșuat descărcarea listei de redare dorite din rețea sau fișierul dorit nu există</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="244"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="239"/>
         <source>New Playlist</source>
         <translation>Listă de redare nouă</translation>
     </message>
