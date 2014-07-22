@@ -144,7 +144,7 @@ VLC_PLUGINS=[
   'misc/libexport_plugin.dylib',
   #'libfreetype_plugin.dylib',
   #'libgnutls_plugin.dylib',
-  #'liblogger_plugin.dylib',
+  'misc/liblogger_plugin.dylib',
   'lua/liblua_plugin.dylib',
   #'libosd_parser_plugin.dylib',
   #'libquartztext_plugin.dylib',
