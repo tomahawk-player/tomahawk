@@ -21,7 +21,7 @@ Start the application on OS X:
 
 Detailed building instructions for Ubuntu
 -----------------------------------------
-See: http://wiki.tomahawk-player.org/index.php/Building_Binary_on_Ubuntu_Precise_(12.04)
+See: http://wiki.tomahawk-player.org/index.php/Building_on_Ubuntu
 
 Detailed building instructions for OS X
 ---------------------------------------
