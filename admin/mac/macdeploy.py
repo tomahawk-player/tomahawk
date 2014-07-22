@@ -203,6 +203,7 @@ TOMAHAWK_PLUGINS = [
   'libtomahawk_account_xmpp.dylib',
   'libtomahawk_account_google.so',
   'libtomahawk_account_zeroconf.so',
+  'libtomahawk_account_hatchet.so',
   'libtomahawk_infoplugin_adium.so',
   'libtomahawk_infoplugin_charts.so',
   'libtomahawk_infoplugin_discogs.so',
