@@ -26,7 +26,7 @@ FRAMEWORK_SEARCH_PATH=[
     os.path.join(os.environ['HOME'], 'Library/Frameworks')
 ]
 
-LIBRARY_SEARCH_PATH=['/usr/local/lib', '/usr/local/Cellar/gettext/0.18.3.2/lib', '.']
+LIBRARY_SEARCH_PATH=['/usr/local/lib', '/usr/local/Cellar/gettext/0.19.2/lib', '.']
 
 VLC_PLUGINS=[
   'access/libattachment_plugin.dylib',
