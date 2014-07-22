@@ -261,6 +261,8 @@ commands = []
 binary_dir = os.path.join(bundle_dir, 'Contents', 'MacOS')
 frameworks_dir = os.path.join(bundle_dir, 'Contents', 'Frameworks')
 commands.append(['mkdir', '-p', frameworks_dir])
+vlcplugins_dir = os.path.join(frameworks_dir, 'vlc', 'plugins')
+commands.append(['mkdir', '-p', vlcplugins_dir])
 resources_dir = os.path.join(bundle_dir, 'Contents', 'Resources')
 commands.append(['mkdir', '-p', resources_dir])
 plugins_dir = os.path.join(bundle_dir, 'Contents', 'qt-plugins')
@@ -372,12 +374,12 @@ def FixLibrary(path):
   for library in broken_libs['libs']:
     FixLibraryInstallPath(library, new_path)
 
-def FixVLCPlugin(abs_path, subdir):
+def FixVLCPlugin(abs_path):
   broken_libs = GetBrokenLibraries(abs_path)
   FixAllLibraries(broken_libs)
 
   #print "Copying plugin....%s %s %s" % (plugins_dir, subdir, os.path.join(abs_path.split('/')[-2:]))
-  new_path = os.path.join(plugins_dir, subdir, os.path.basename(abs_path))
+  new_path = os.path.join(vlcplugins_dir, os.path.basename(abs_path))
   args = ['mkdir', '-p', os.path.dirname(new_path)]
   commands.append(args)
   args = ['ditto', '--arch=i386', '--arch=x86_64', abs_path, new_path]
@@ -503,7 +505,7 @@ def FindVLCPlugin(name):
 FixBinary(binary)
 
 for plugin in VLC_PLUGINS:
-  FixVLCPlugin(FindVLCPlugin(plugin), '../plugins')
+  FixVLCPlugin(FindVLCPlugin(plugin))
 
 for plugin in TOMAHAWK_PLUGINS:
   FixPlugin(plugin, '../MacOS')
