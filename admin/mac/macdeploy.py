@@ -199,6 +199,10 @@ QT_PLUGINS = [
     'imageformats/libqmng.dylib',
 ]
 
+SNORE_PLUGINS = [
+    'libsnore_backend_growl.so',
+]
+
 TOMAHAWK_PLUGINS = [
   'libtomahawk_account_xmpp.dylib',
   'libtomahawk_account_google.so',
@@ -213,8 +217,8 @@ TOMAHAWK_PLUGINS = [
   'libtomahawk_infoplugin_musixmatch.so',
   'libtomahawk_infoplugin_newreleases.so',
   'libtomahawk_infoplugin_rovi.so',
-  'libtomahawk_infoplugin_spotify.so',
   'libtomahawk_infoplugin_snorenotify.so',
+  'libtomahawk_infoplugin_spotify.so',
   'libtomahawk_viewpage_dashboard.so',
   'libtomahawk_viewpage_networkactivity.so',
   'libtomahawk_viewpage_whatshot.so',
@@ -225,6 +229,9 @@ QT_PLUGINS_SEARCH_PATH=[
     '/usr/local/Cellar/qt/4.8.6/plugins',
 ]
 
+SNORE_PLUGINS_SEARCH_PATH=[
+    '/usr/local/Cellar/snorenotify/HEAD/lib/libsnore',
+]
 
 class Error(Exception):
   pass
@@ -242,6 +249,10 @@ class CouldNotFindQtPluginError(Error):
   pass
 
 
+class CouldNotFindSnorePluginError(Error):
+  pass
+
+
 class CouldNotFindVLCPluginError(Error):
   pass
 
@@ -250,12 +261,10 @@ class CouldNotFindScriptPluginError(Error):
   pass
 
 
-
 if len(sys.argv) < 2:
   print 'Usage: %s <bundle.app>' % sys.argv[0]
 
 bundle_dir = sys.argv[1]
-
 bundle_name = os.path.basename(bundle_dir).split('.')[0]
 
 commands = []
@@ -265,6 +274,8 @@ frameworks_dir = os.path.join(bundle_dir, 'Contents', 'Frameworks')
 commands.append(['mkdir', '-p', frameworks_dir])
 vlcplugins_dir = os.path.join(frameworks_dir, 'vlc', 'plugins')
 commands.append(['mkdir', '-p', vlcplugins_dir])
+snoreplugins_dir = os.path.join(binary_dir, 'libsnore')
+commands.append(['mkdir', '-p', snoreplugins_dir])
 resources_dir = os.path.join(bundle_dir, 'Contents', 'Resources')
 commands.append(['mkdir', '-p', resources_dir])
 plugins_dir = os.path.join(bundle_dir, 'Contents', 'qt-plugins')
@@ -496,6 +507,12 @@ def FindQtPlugin(name):
         return os.path.join(path, name)
   raise CouldNotFindQtPluginError(name)
 
+def FindSnorePlugin(name):
+  for path in SNORE_PLUGINS_SEARCH_PATH:
+    if os.path.exists(path):
+      if os.path.exists(os.path.join(path, name)):
+        return os.path.join(path, name)
+  raise CouldNotFindSnorePluginError(name)
 
 def FindVLCPlugin(name):
   for path in VLC_SEARCH_PATH:
@@ -511,6 +528,9 @@ for plugin in VLC_PLUGINS:
 
 for plugin in TOMAHAWK_PLUGINS:
   FixPlugin(plugin, '../MacOS')
+
+for plugin in SNORE_PLUGINS:
+  FixPlugin(FindSnorePlugin(plugin), '../MacOS/libsnore')
 
 try:
   FixPlugin('tomahawk_crash_reporter', '../MacOS')
