@@ -214,6 +214,7 @@ TOMAHAWK_PLUGINS = [
   'libtomahawk_infoplugin_newreleases.so',
   'libtomahawk_infoplugin_rovi.so',
   'libtomahawk_infoplugin_spotify.so',
+  'libtomahawk_infoplugin_snorenotify.so'.
   'libtomahawk_viewpage_dashboard.so',
   'libtomahawk_viewpage_networkactivity.so',
   'libtomahawk_viewpage_whatshot.so',
