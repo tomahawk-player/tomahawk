@@ -55,6 +55,7 @@ Required dependencies:
 The following dependencies are optional, but recommended:
 
 * Jreen 1.0.5 (1.1.0 will fail, 1.1.1 is fine) - http://qutim.org/jreen/
+* Snorenotify - https://github.com/Snorenotify/Snorenotify/
 
 Third party libraries that we ship with our source:
 
