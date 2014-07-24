@@ -201,6 +201,7 @@ QT_PLUGINS = [
 
 SNORE_PLUGINS = [
     'libsnore_backend_growl.so',
+    'libsnore_backend_osxnotificationcenter.so',
 ]
 
 TOMAHAWK_PLUGINS = [
