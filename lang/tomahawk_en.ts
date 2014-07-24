@@ -4089,7 +4089,7 @@ Try tweaking the filters for a new set of songs to play.</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1334"/>
         <source>Copyright 2010 - 2014</source>
-        <translation>Copyright 2010 - 2014 {2010 ?}</translation>
+        <translation>Copyright 2010 - 2014</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="903"/>
