@@ -297,7 +297,7 @@ SourcesModel::flags( const QModelIndex& index ) const
 void
 SourcesModel::appendGroups()
 {
-    beginInsertRows( QModelIndex(), rowCount(), rowCount() + 4 );
+    beginInsertRows( QModelIndex(), rowCount(), rowCount() + 5 );
 
     m_browse = new GroupItem( this, m_rootItem, tr( "Browse" ), 0 );
     new HistoryItem( this, m_rootItem, tr( "Search History" ), 1 );
@@ -318,10 +318,10 @@ SourcesModel::appendGroups()
                                                 boost::bind( &ViewManager::newReleasesWidget, ViewManager::instance() ) );
     newReleases->setSortValue( 7 );
 
-    GenericPageItem* recent = new GenericPageItem( this, m_browse, tr( "Recently Played" ), ImageRegistry::instance()->icon( RESPATH "images/recently-played.svg" ),
+/*    GenericPageItem* recent = new GenericPageItem( this, m_browse, tr( "Recently Played" ), ImageRegistry::instance()->icon( RESPATH "images/recently-played.svg" ),
                                                 boost::bind( &ViewManager::showRecentPlaysPage, ViewManager::instance() ),
                                                 boost::bind( &ViewManager::recentPlaysWidget, ViewManager::instance() ) );
-    recent->setSortValue( 8 );
+    recent->setSortValue( 8 );*/
 
     m_collectionsGroup = new GroupItem( this, m_rootItem, tr( "Friends" ), 4 );
     m_cloudGroup = new GroupItem( this, m_rootItem, tr( "Cloud" ), 5 );
