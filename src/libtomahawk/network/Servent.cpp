@@ -384,7 +384,7 @@ Servent::lookupControlConnection( const SipInfo& sipInfo )
 {
     Q_D( Servent );
     QMutexLocker locker( &d->controlconnectionsMutex );
-    
+
     foreach ( ControlConnection* c, d_func()->controlconnections )
     {
         tLog() << sipInfo.port() << c->peerPort() << sipInfo.host() << c->peerIpAddress().toString();
@@ -401,7 +401,7 @@ Servent::lookupControlConnection( const QString& nodeid )
 {
     Q_D( Servent );
     QMutexLocker locker( &d->controlconnectionsMutex );
-    
+
     foreach ( ControlConnection* c, d_func()->controlconnections )
     {
         if ( c->id() == nodeid )
@@ -898,13 +898,13 @@ Servent::initiateConnection( const SipInfo& sipInfo, Connection* conn )
 
     foreach ( QHostAddress ha, addresses )
     {
-        if ( sipInfo.host() == ha.toString() )
+        if ( sipInfo.host() == ha.toString() && sipInfo.port() == d_func()->port )
         {
             tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Tomahawk won't try to connect to" << sipInfo.host() << ":" << sipInfo.port() << ": same IP as ourselves.";
             return;
         }
     }
-    if ( sipInfo.host() == d_func()->externalHostname )
+    if ( sipInfo.host() == d_func()->externalHostname && sipInfo.port() == d_func()->port )
     {
         tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Tomahawk won't try to connect to" << sipInfo.host() << ":" << sipInfo.port() << ": same IP as ourselves.";
         return;
@@ -1131,7 +1131,7 @@ Connection*
 Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString &key, const QHostAddress peer )
 {
     Q_D( Servent );
-    
+
     // magic key for stream connections:
     if ( key.startsWith( "FILE_REQUEST_KEY:" ) )
     {
