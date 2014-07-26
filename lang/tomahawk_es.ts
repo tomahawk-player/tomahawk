@@ -2209,11 +2209,6 @@ y estaciones basadas en sus gustos personales.</translation>
         <translation>Nube</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="321"/>
-        <source>Recently Played</source>
-        <translation>Reproducido recientemente</translation>
-    </message>
-    <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="316"/>
         <source>New Releases</source>
         <translation>Últimas novedades</translation>
@@ -4088,7 +4083,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1334"/>
         <source>Copyright 2010 - 2014</source>
-        <translation>Copyright 2010 - 2014 {2010 ?}</translation>
+        <translation>Copyright 2010 - 2014</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="903"/>

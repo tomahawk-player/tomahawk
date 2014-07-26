@@ -2207,11 +2207,6 @@ Password (OTP)</source>
         <translation>云</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="321"/>
-        <source>Recently Played</source>
-        <translation>最近播放</translation>
-    </message>
-    <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="316"/>
         <source>New Releases</source>
         <translation>新专辑</translation>
@@ -4086,7 +4081,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1334"/>
         <source>Copyright 2010 - 2014</source>
-        <translation>版权所有 2010 - 2014 {2010 ?}</translation>
+        <translation>版权所有 2010 - 2014</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="903"/>

@@ -2211,11 +2211,6 @@ Password (OTP)</source>
         <translation>Облако</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="321"/>
-        <source>Recently Played</source>
-        <translation>Последние Воспроизводимые</translation>
-    </message>
-    <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="316"/>
         <source>New Releases</source>
         <translation>Новые Релизы</translation>

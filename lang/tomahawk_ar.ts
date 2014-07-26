@@ -2208,11 +2208,6 @@ Password (OTP)</source>
         <translation>سحابة</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="321"/>
-        <source>Recently Played</source>
-        <translation>تم الاستماع لها مؤخرا</translation>
-    </message>
-    <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="316"/>
         <source>New Releases</source>
         <translation>جديد الاصدارات</translation>

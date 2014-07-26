@@ -2206,11 +2206,6 @@ Password (OTP)</source>
         <translation>Σύννεφο</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="321"/>
-        <source>Recently Played</source>
-        <translation>Τελευταίες Αναπαραγωγές</translation>
-    </message>
-    <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="316"/>
         <source>New Releases</source>
         <translation>Νέες Κυκλοφορίες</translation>
