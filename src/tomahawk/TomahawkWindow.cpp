@@ -1243,8 +1243,8 @@ TomahawkWindow::createPlaylist()
         }
     }
 
-    QString info  = ""; // FIXME
-    QString creator = "someone"; // FIXME
+    QString info  = ""; // FIXME?
+    QString creator = ""; // FIXME?
 
     playlist_ptr playlist = Tomahawk::Playlist::create( SourceList::instance()->getLocal(), uuid(), playlistName, info, creator, false, QList< query_ptr>() );
     ViewManager::instance()->show( playlist );

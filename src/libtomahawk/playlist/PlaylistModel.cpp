@@ -135,7 +135,9 @@ PlaylistModel::onPlaylistChanged()
     Q_D( PlaylistModel );
     QString age = TomahawkUtils::ageToString( QDateTime::fromTime_t( d->playlist->createdOn() ), true );
     QString desc;
-    if ( d->playlist->creator().isEmpty() )
+
+    // we check for "someone" to work-around an old bug
+    if ( d->playlist->creator().isEmpty() || d->playlist->creator() == "someone" )
     {
         if ( d->playlist->author()->isLocal() )
         {
