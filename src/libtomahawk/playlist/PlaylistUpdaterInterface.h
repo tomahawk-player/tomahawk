@@ -123,7 +123,7 @@ public:
 
 }
 
-Q_DECLARE_METATYPE( Tomahawk::SerializedUpdater );
-Q_DECLARE_METATYPE( Tomahawk::SerializedUpdaters );
+Q_DECLARE_METATYPE( Tomahawk::SerializedUpdater )
+Q_DECLARE_METATYPE( Tomahawk::SerializedUpdaters )
 
 #endif // PLAYLISTUPDATERINTERFACE_H
