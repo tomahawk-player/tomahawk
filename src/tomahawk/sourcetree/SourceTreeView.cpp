@@ -243,14 +243,24 @@ SourceTreeView::setupMenus()
         QAction* exportPlaylist = m_playlistMenu.addAction( tr( "&Export Playlist") );
         connect( exportPlaylist, SIGNAL( triggered() ), this, SLOT( exportPlaylist() ) );
 
-        QMenu* playlistSyncMenu = m_playlistMenu.addMenu( tr( "Sync with .." ) );
-        foreach ( const QPointer<ExternalResolver>& resolver, Tomahawk::Pipeline::instance()->scriptResolvers() )
+        const PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
+        const playlist_ptr playlist = item->playlist();
+        if ( playlist )
         {
-            if ( resolver->capabilities().testFlag( ExternalResolver::PlaylistSync ) )
+            QMenu* playlistSyncMenu = m_playlistMenu.addMenu( tr( "Sync with .." ) );
+
+            foreach ( const QPointer<ExternalResolver>& resolver, Tomahawk::Pipeline::instance()->scriptResolvers() )
             {
-                // TODO: Add a checkmark to the service that syncs this playlist
-                // TODO: Actually add an action to sync
-                playlistSyncMenu->addAction( resolver->icon(), resolver->name() );
+                if ( resolver->capabilities().testFlag( ExternalResolver::PlaylistSync ) )
+                {
+                    // TODO: Add a checkmark to the service that syncs this playlist
+                    // TODO: Actually add an action to sync
+                    QAction* plSync = playlistSyncMenu->addAction( resolver->icon(), resolver->name() );
+                    NewClosure( plSync, SIGNAL( triggered() ),
+                                Pipeline::instance(),
+                                SLOT( startPlaylistSync( ExternalResolver* , playlist_ptr ) ),
+                                resolver, playlist );
+                }
             }
         }
     }
