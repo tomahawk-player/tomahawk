@@ -110,8 +110,9 @@ private:
 };
 
 
-class DLLEXPORT PlaylistUpdaterFactory
+class DLLEXPORT PlaylistUpdaterFactory : public QObject
 {
+    Q_OBJECT
 public:
     PlaylistUpdaterFactory() {}
     virtual ~PlaylistUpdaterFactory() {}
