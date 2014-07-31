@@ -1285,23 +1285,23 @@ heslo</translation>
 <context>
     <name>PlaylistModel</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="142"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="144"/>
         <source>A playlist you created %1.</source>
         <translation>Seznam skladeb, který jste vytvořil %1.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="147"/>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="154"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="149"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="156"/>
         <source>A playlist by %1, created %2.</source>
         <translation>Seznam skladeb od %1, vytvořen %2.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="203"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="205"/>
         <source>All tracks by %1 on album %2</source>
         <translation>Seznam skladeb od %1 na albu. %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="230"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="232"/>
         <source>All tracks by %1</source>
         <translation>Všechny skladby od %1</translation>
     </message>

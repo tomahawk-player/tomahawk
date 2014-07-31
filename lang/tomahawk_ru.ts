@@ -1287,23 +1287,23 @@ Password (OTP)</source>
 <context>
     <name>PlaylistModel</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="142"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="144"/>
         <source>A playlist you created %1.</source>
         <translation>Плей-лист, который вы создали %1.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="147"/>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="154"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="149"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="156"/>
         <source>A playlist by %1, created %2.</source>
         <translation>Плей-лист %1, создан %2.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="203"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="205"/>
         <source>All tracks by %1 on album %2</source>
         <translation>Все песни %1 альбома %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="230"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="232"/>
         <source>All tracks by %1</source>
         <translation>Все песни %1</translation>
     </message>
