@@ -442,7 +442,11 @@ SpotifyAccount::privateModeChanged()
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Sending privateMode";
     QVariantMap msg;
     msg[ "_msgtype" ] = "setPrivacyMode";
-    msg[ "private" ] = ( m_configWidget.data()->persitentPrivacy() || TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::PublicListening );
+    bool _private = TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::PublicListening;
+    if ( m_configWidget) {
+      _private |= m_configWidget->persitentPrivacy();
+    }
+    msg[ "private" ] = _private;
     sendMessage( msg );
 }
 
