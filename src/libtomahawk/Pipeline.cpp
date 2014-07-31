@@ -328,6 +328,13 @@ Pipeline::resolve( QID qid, bool prioritized, bool temporaryQuery )
 
 
 void
+Pipeline::startPlaylistSync( ExternalResolver* r, playlist_ptr playlist )
+{
+    // TODO
+}
+
+
+void
 Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 {
     Q_D( Pipeline );

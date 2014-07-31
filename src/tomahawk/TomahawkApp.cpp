@@ -62,6 +62,7 @@
 #include "jobview/ErrorStatusMessage.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/JobStatusView.h"
+#include "resolvers/playlist/ExternalResolverPlaylistUpdaterFactory.h"
 #include "utils/XspfLoader.h"
 #include "utils/JspfLoader.h"
 #include "utils/Logger.h"
@@ -655,7 +656,7 @@ TomahawkApp::onInfoSystemReady()
     Tomahawk::EchonestCatalogSynchronizer::instance();
 
     PlaylistUpdaterInterface::registerUpdaterFactory( new XspfUpdaterFactory );
-//    PlaylistUpdaterInterface::registerUpdaterFactory( new SpotifyUpdaterFactory );
+    PlaylistUpdaterInterface::registerUpdaterFactory( new ExternalResolverPlaylistUpdaterFactory );
 
     // Following work-around/fix taken from Clementine rev. 13e13ccd9a95 and courtesy of David Sansome
     // A bug in Qt means the wheel_scroll_lines setting gets ignored and replaced

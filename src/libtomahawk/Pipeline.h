@@ -78,6 +78,11 @@ public slots:
     void resolve( const QList<query_ptr>& qlist, bool prioritized = true, bool temporaryQuery = false );
     void resolve( QID qid, bool prioritized = true, bool temporaryQuery = false );
 
+    /**
+     * Initiate syncing of a playlist with a reslover.
+     */
+    void startPlaylistSync( ExternalResolver* r, playlist_ptr playlist );
+
     void start();
     void stop();
     void databaseReady();
