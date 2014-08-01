@@ -2546,47 +2546,47 @@ Password (OTP)</source>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="510"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="514"/>
         <source>Sync with Spotify</source>
         <translation>Συγχρονισμός με Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="514"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="518"/>
         <source>Re-enable syncing with Spotify</source>
         <translation>Επαναλειτουργια συγχρονισμου με το Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="522"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="526"/>
         <source>Create local copy</source>
         <translation>Δημιουργία τοπικού αντιγράφου</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="538"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="542"/>
         <source>Subscribe to playlist changes</source>
         <translation>Εγγραφή σε μεταβολές λίστας αναπαραγωγής</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="542"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="546"/>
         <source>Re-enable playlist subscription</source>
         <translation>Επανενεργοποίηση εγγραφής στην λίστα αναπαραγωγής</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="546"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="550"/>
         <source>Stop subscribing to changes</source>
         <translation>Διακοπή εγγραφής σε μεταβολές</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="566"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="570"/>
         <source>Enable Spotify collaborations</source>
         <translation>Ενεργοποιηση των Spotify συνεργασειων</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="568"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="572"/>
         <source>Disable Spotify collaborations</source>
         <translation>Απενεργοποιηση των Spotify συνεργασειων</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="524"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="528"/>
         <source>Stop syncing with Spotify</source>
         <translation>Διακοπή συγχρονισμού με Spotify</translation>
     </message>

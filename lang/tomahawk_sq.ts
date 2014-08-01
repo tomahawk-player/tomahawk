@@ -2543,47 +2543,47 @@ Password (OTP)</source>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="510"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="514"/>
         <source>Sync with Spotify</source>
         <translation>Synk me Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="514"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="518"/>
         <source>Re-enable syncing with Spotify</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="522"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="526"/>
         <source>Create local copy</source>
         <translation>Krijo kopje vendore</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="538"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="542"/>
         <source>Subscribe to playlist changes</source>
         <translation>Abonohu në listën e ndryshimeve</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="542"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="546"/>
         <source>Re-enable playlist subscription</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="546"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="550"/>
         <source>Stop subscribing to changes</source>
         <translation>Ndalo abonimin tek ndryshimet</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="566"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="570"/>
         <source>Enable Spotify collaborations</source>
         <translation>Mundëso Bashkëpunimin Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="568"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="572"/>
         <source>Disable Spotify collaborations</source>
         <translation>Gjymto Bashkëpunimin Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="524"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="528"/>
         <source>Stop syncing with Spotify</source>
         <translation>Ndalo sinkronizimin me Spotify</translation>
     </message>

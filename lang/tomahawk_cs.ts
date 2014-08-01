@@ -2545,47 +2545,47 @@ heslo</translation>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="510"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="514"/>
         <source>Sync with Spotify</source>
         <translation>Seřídit se Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="514"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="518"/>
         <source>Re-enable syncing with Spotify</source>
         <translation>Zapnout znovu seřizování se Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="522"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="526"/>
         <source>Create local copy</source>
         <translation>Vytvořit místní kopii</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="538"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="542"/>
         <source>Subscribe to playlist changes</source>
         <translation>Odebírat změny seznamu skladeb</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="542"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="546"/>
         <source>Re-enable playlist subscription</source>
         <translation>Zapnout znovu odběr seznamu skladeb</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="546"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="550"/>
         <source>Stop subscribing to changes</source>
         <translation>Zastavit odběr změn</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="566"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="570"/>
         <source>Enable Spotify collaborations</source>
         <translation>Zapnout spolupráci se Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="568"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="572"/>
         <source>Disable Spotify collaborations</source>
         <translation>Vypnout spolupráci se Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="524"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="528"/>
         <source>Stop syncing with Spotify</source>
         <translation>Zastavit seřizování se Spotify</translation>
     </message>

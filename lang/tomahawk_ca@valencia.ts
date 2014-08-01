@@ -2546,47 +2546,47 @@ i emissores basades en els vostres gusts musicals.</translation>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="510"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="514"/>
         <source>Sync with Spotify</source>
         <translation>Sincronitza amb Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="514"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="518"/>
         <source>Re-enable syncing with Spotify</source>
         <translation>Torna a habilitar la sincronització amb l&apos;Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="522"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="526"/>
         <source>Create local copy</source>
         <translation>Crea una còpia local</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="538"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="542"/>
         <source>Subscribe to playlist changes</source>
         <translation>Subscriu-me als canvis de la llista de reproducció</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="542"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="546"/>
         <source>Re-enable playlist subscription</source>
         <translation>Torna a habilitar la subscripció a la llista de reproducció</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="546"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="550"/>
         <source>Stop subscribing to changes</source>
         <translation>Atura la subscripció als canvis</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="566"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="570"/>
         <source>Enable Spotify collaborations</source>
         <translation>Habilita les col·laboracions amb l&apos;Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="568"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="572"/>
         <source>Disable Spotify collaborations</source>
         <translation>Inhabilita les col·laboracions amb l&apos;Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="524"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="528"/>
         <source>Stop syncing with Spotify</source>
         <translation>Atura la sincronització amb Spotify</translation>
     </message>
