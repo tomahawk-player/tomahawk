@@ -224,7 +224,7 @@ connect and stream from you?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="146"/>
         <source>0.8</source>
-        <translation type="unfinished"/>
+        <translation>0.8</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="156"/>
@@ -245,7 +245,7 @@ connect and stream from you?</translation>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="180"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="247"/>
         <source>What&apos;s new in ..</source>
-        <translation type="unfinished"/>
+        <translation>What&apos;s new in ..</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="205"/>
@@ -3828,12 +3828,12 @@ Try tweaking the filters for a new set of songs to play.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNew_0_8.h" line="88"/>
         <source>What&apos;s new in 0.8?</source>
-        <translation type="unfinished"/>
+        <translation>What&apos;s new in 0.8?</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNew_0_8.h" line="89"/>
         <source>An overview of the changes and additions since 0.7.</source>
-        <translation type="unfinished"/>
+        <translation>An overview of the changes and additions since 0.7.</translation>
     </message>
 </context>
 <context>
@@ -4366,7 +4366,7 @@ Try tweaking the filters for a new set of songs to play.</translation>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="321"/>
         <source>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</source>
-        <translation type="unfinished"/>
+        <translation>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="379"/>
@@ -4404,82 +4404,82 @@ Try tweaking the filters for a new set of songs to play.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="135"/>
         <source>Inbox</source>
-        <translation type="unfinished"/>
+        <translation>Inbox</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="208"/>
         <source>Open URL</source>
-        <translation type="unfinished"/>
+        <translation>Open URL</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="280"/>
         <source>Trending</source>
-        <translation type="unfinished"/>
+        <translation>Trending</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="346"/>
         <source>Beats</source>
-        <translation type="unfinished"/>
+        <translation>Beats</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="412"/>
         <source>GMusic</source>
-        <translation type="unfinished"/>
+        <translation>GMusic</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="484"/>
         <source>IPv6+</source>
-        <translation type="unfinished"/>
+        <translation>IPv6+</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="550"/>
         <source>Design</source>
-        <translation type="unfinished"/>
+        <translation>Design</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="622"/>
         <source>Android</source>
-        <translation type="unfinished"/>
+        <translation>Android</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="719"/>
         <source>Send your friends songs you think they should check out.  Just drag and drop them onto your friend&apos;s avatar to send.  All of the songs your friends send you will show up in your Inbox.</source>
-        <translation type="unfinished"/>
+        <translation>Send your friends songs you think they should check out.  Just drag and drop them onto your friend&apos;s avatar to send.  All of the songs your friends send you will show up in your Inbox.</translation>
     </message>
     <message utf8="true">
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="812"/>
         <source>Love that your friends and influencers are posting music links across the web and your social networks but hate that they are links for music services you don’t use?  Just drag Rdio, Deezer, Beats Music and other music service URLs into Tomahawk and have them automatically play from your preferred source.</source>
-        <translation type="unfinished"/>
+        <translation>Love that your friends and influencers are posting music links across the Web and your social networks but hate that they are links for music services you don’t use?  Just drag Rdio, Deezer, Beats Music and other music service URLs into Tomahawk and have them automatically play from your preferred source.</translation>
     </message>
     <message utf8="true">
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="889"/>
         <source>Get a quick look at all of the songs, playlists and artists that are trending across your network. Check out the hot songs your friends are listening to, and their playlists that are trending with their friends.  Or just listen to a dynamic playlist of your network’s latest Loves, most Loved or top played songs - from last week to all-time. </source>
-        <translation type="unfinished"/>
+        <translation>Get a quick look at all of the songs, playlists and artists that are trending across your network. Check out the hot songs your friends are listening to, and their playlists that are trending with their friends.  Or just listen to a dynamic playlist of your network’s latest Loves, most Loved or top played songs - from last week to all-time. </translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="973"/>
         <source>Beats Music (recently acquired by Apple) is now available as a resolver.  This means that Beats Music subscribers can enjoy Tomahawk Stations playlists from their friends that use other services, and can easily drop Spotify, Rdio and other service links into Tomahawk and have those playlists, albums and tracks stream from your Beats account. Welcome Beats Music subscribers!</source>
-        <translation type="unfinished"/>
+        <translation>Beats Music (recently acquired by Apple) is now available as a resolver.  This means that Beats Music subscribers can enjoy Tomahawk Stations playlists from their friends that use other services, and can easily drop Spotify, Rdio and other service links into Tomahawk and have those playlists, albums and tracks stream from your Beats account. Welcome Beats Music subscribers!</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="1047"/>
         <source>Google Music is another of our latest supported services - both for your music you&apos;ve uploaded to the Google Music &quot;locker&quot; as well as their full streaming catalog for your Google Play Music All Access subscribers.</source>
-        <translation type="unfinished"/>
+        <translation>Google Music is another of our latest supported services - both for your music you&apos;ve uploaded to the Google Music &quot;locker&quot; as well as their full streaming catalog for your Google Play Music All Access subscribers.</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="1121"/>
         <source>Tomahawk now supports multiple IP addresses (IPv6).  This improves the discoverability and connection between Tomahawk users on the same local network - particularly large networks often found in work and university settings.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk now supports multiple IP addresses (IPv6).  This improves the discoverability and connection between Tomahawk users on the same local network - particularly large networks often found in work and university settings.</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="1195"/>
         <source>Lots of new views - artist pages, album pages, track pages and more. A new Loved Widget shows what friends have loved tracks throughout the app. Some cleaner fonts, some new colors. Retina display support and more.</source>
-        <translation type="unfinished"/>
+        <translation>Lots of new views - artist pages, album pages, track pages and more. A new Loved Widget shows what friends have loved tracks throughout the app. Some cleaner fonts, some new colours. Retina display support and more.</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="1288"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk for Android is now in beta!  All of the same resolvers are supported in the Android app - plus a couple of additional ones in Rdio &amp;amp; Deezer.  Create a &lt;a href=&quot;https://hatchet.is/beta&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#fff;&quot;&gt;Hatchet&lt;/span&gt;&lt;/a&gt; account to sync all of your playlists from your desktop to your mobile.  Find current and future music influencers with Hatchet accounts (from across a range of music service providers) and follow them to discover and hear what they love.  Even when you are listening to other music apps, Tomahawk can capture all of that playback data and add it to your Hatchet profile.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk for Android is now in beta!  All of the same resolvers are supported in the Android app - plus a couple of additional ones in Rdio &amp;amp; Deezer.  Create a &lt;a href=&quot;https://hatchet.is/beta&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#fff;&quot;&gt;Hatchet&lt;/span&gt;&lt;/a&gt; account to sync all of your playlists from your desktop to your mobile.  Find current and future music influencers with Hatchet accounts (from across a range of music service providers) and follow them to discover and hear what they love.  Even when you are listening to other music apps, Tomahawk can capture all of that playback data and add it to your Hatchet profile.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
