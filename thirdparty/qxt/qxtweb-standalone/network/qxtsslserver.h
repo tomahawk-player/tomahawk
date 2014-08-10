@@ -60,9 +60,12 @@ public:
     void setAutoEncrypt(bool on);
     bool autoEncrypt() const;
 
+    void setProtocol(QSsl::SslProtocol proto);
+    QSsl::SslProtocol protocol() const;
+
 protected:
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-    virtual void incomingConnection(qintptr socketDescriptor);
+#if QT_VERSION >= 0x050000
+	virtual void incomingConnection(qintptr socketDescriptor);
 #else
     virtual void incomingConnection(int socketDescriptor);
 #endif

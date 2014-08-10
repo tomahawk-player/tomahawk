@@ -131,7 +131,9 @@ bool QxtScgiServerConnector::canParseRequest(const QByteArray& buffer)
         return false;
     }
 
-    return (buffer.size() > expectedsize.toInt());
+    // The SCGI header is [len]":"[key/value pairs]","
+    int headersize = expectedsize.count() + expectedsize.toInt() + 2;
+    return (buffer.size() >= headersize);
 }
 
 /*!
@@ -159,25 +161,26 @@ QHttpRequestHeader QxtScgiServerConnector::parseRequest(QByteArray& buffer)
     }
 
 
-    buffer = buffer.right(buffer.size() - (expectedsize_s.count() + 1));
-
+    int expectedsize = expectedsize_s.toInt();
+    QByteArray requestheaders = buffer.mid(expectedsize_s.count() + 1, expectedsize);
+    buffer = buffer.mid(expectedsize_s.count() + expectedsize + 2);
 
     QHttpRequestHeader request_m;
 
     QByteArray name;
     int i = 0;
-    while ((i = buffer.indexOf('\0')) > -1)
+    while ((i = requestheaders.indexOf('\0')) > -1)
     {
         if (name.isEmpty())
         {
-            name = buffer.left(i);
+            name = requestheaders.left(i);
         }
         else
         {
-            request_m.setValue(QString::fromLatin1(name).toLower(), QString::fromLatin1(buffer.left(i)));
+            request_m.setValue(QString::fromLatin1(name).toLower(), QString::fromLatin1(requestheaders.left(i)));
             name = "";
         }
-        buffer = buffer.mid(i + 1);
+        requestheaders = requestheaders.mid(i + 1);
     }
 
 
@@ -188,15 +191,12 @@ QHttpRequestHeader QxtScgiServerConnector::parseRequest(QByteArray& buffer)
     {
         if (key.startsWith(QString("http_")))
         {
-            request_m.setValue(key.right(key.size() - 5), request_m.value(key));
+            QString realKey = key.right(key.size() - 5).replace(QLatin1Char('_'), QLatin1Char('-'));
+            request_m.setValue(realKey, request_m.value(key));
         }
     }
 
     request_m.setValue("Connection", "close");
-
-
-    buffer.chop(1);
-
 
     return request_m;
 }
