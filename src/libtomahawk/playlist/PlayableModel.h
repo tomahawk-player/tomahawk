@@ -161,16 +161,16 @@ public slots:
     virtual void appendAlbum( const Tomahawk::album_ptr& album );
     virtual void appendTracks( const Tomahawk::collection_ptr& collection );
 
-    virtual void insertQueries( const QList< Tomahawk::query_ptr >& queries, int row = 0, const QList< Tomahawk::PlaybackLog >& logs = QList< Tomahawk::PlaybackLog >() );
+    virtual void insertQueries( const QList< Tomahawk::query_ptr >& queries, int row = 0, const QList< Tomahawk::PlaybackLog >& logs = QList< Tomahawk::PlaybackLog >(), const QModelIndex& parent = QModelIndex() );
     virtual void insertArtists( const QList< Tomahawk::artist_ptr >& artists, int row = 0 );
     virtual void insertAlbums( const QList< Tomahawk::album_ptr >& albums, int row = 0 );
-    virtual void insertQuery( const Tomahawk::query_ptr& query, int row = 0, const Tomahawk::PlaybackLog& log = Tomahawk::PlaybackLog() );
+    virtual void insertQuery( const Tomahawk::query_ptr& query, int row = 0, const Tomahawk::PlaybackLog& log = Tomahawk::PlaybackLog(), const QModelIndex& parent = QModelIndex() );
     virtual void insertArtist( const Tomahawk::artist_ptr& artist, int row = 0 );
     virtual void insertAlbum( const Tomahawk::album_ptr& album, int row = 0 );
     virtual void insertTracks( const Tomahawk::collection_ptr& collection, int row = 0 );
 
     virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
-    virtual void remove( int row, bool moreToCome = false );
+    virtual void remove( int row, bool moreToCome = false, const QModelIndex& parent = QModelIndex() );
     virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
     virtual void removeIndexes( const QList<QModelIndex>& indexes );
     virtual void removeIndexes( const QList<QPersistentModelIndex>& indexes );
@@ -199,7 +199,7 @@ private slots:
 private:
     void init();
     template <typename T>
-    void insertInternal( const QList< T >& items, int row, const QList< Tomahawk::PlaybackLog >& logs = QList< Tomahawk::PlaybackLog >() );
+    void insertInternal( const QList< T >& items, int row, const QList< Tomahawk::PlaybackLog >& logs = QList< Tomahawk::PlaybackLog >(), const QModelIndex& parent = QModelIndex() );
 
     QString scoreText( float score ) const;
     Qt::Alignment columnAlignment( int column ) const;

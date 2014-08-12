@@ -656,7 +656,7 @@ PlayableModel::queries() const
 
 template <typename T>
 void
-PlayableModel::insertInternal( const QList< T >& items, int row, const QList< Tomahawk::PlaybackLog >& logs )
+PlayableModel::insertInternal( const QList< T >& items, int row, const QList< Tomahawk::PlaybackLog >& logs, const QModelIndex& parent )
 {
     Q_D( PlayableModel );
     if ( !items.count() )
@@ -672,14 +672,16 @@ PlayableModel::insertInternal( const QList< T >& items, int row, const QList< To
     crows.first = c;
     crows.second = c + items.count() - 1;
 
-    emit beginInsertRows( QModelIndex(), crows.first, crows.second );
+    emit beginInsertRows( parent, crows.first, crows.second );
 
     int i = 0;
     PlayableItem* plitem;
     foreach ( const T& item, items )
     {
-        plitem = new PlayableItem( item, d->rootItem, row + i );
+        PlayableItem* pItem = itemFromIndex( parent );
+        plitem = new PlayableItem( item, pItem, row + i );
         plitem->index = createIndex( row + i, 0, plitem );
+
         if ( plitem->query() )
         {
             if ( !plitem->query()->playable() )
@@ -709,6 +711,7 @@ PlayableModel::insertInternal( const QList< T >& items, int row, const QList< To
 
     emit endInsertRows();
     emit itemCountChanged( rowCount( QModelIndex() ) );
+
     finishLoading();
 }
 
@@ -729,9 +732,9 @@ PlayableModel::removeRows( int row, int count, const QModelIndex& parent )
 
 
 void
-PlayableModel::remove( int row, bool moreToCome )
+PlayableModel::remove( int row, bool moreToCome, const QModelIndex& parent )
 {
-    removeIndex( index( row, 0, QModelIndex() ), moreToCome );
+    removeIndex( index( row, 0, parent ), moreToCome );
 }
 
 
@@ -1046,14 +1049,14 @@ PlayableModel::insertAlbum( const Tomahawk::album_ptr& album, int row )
 
 
 void
-PlayableModel::insertQuery( const Tomahawk::query_ptr& query, int row, const Tomahawk::PlaybackLog& log )
+PlayableModel::insertQuery( const Tomahawk::query_ptr& query, int row, const Tomahawk::PlaybackLog& log, const QModelIndex& parent )
 {
     QList< query_ptr > queries;
     queries << query;
     QList< Tomahawk::PlaybackLog > logs;
     logs << log;
 
-    insertQueries( queries, row, logs );
+    insertQueries( queries, row, logs, parent );
 }
 
 
@@ -1072,9 +1075,9 @@ PlayableModel::insertAlbums( const QList< Tomahawk::album_ptr >& albums, int row
 
 
 void
-PlayableModel::insertQueries( const QList< Tomahawk::query_ptr >& queries, int row, const QList< Tomahawk::PlaybackLog >& logs )
+PlayableModel::insertQueries( const QList< Tomahawk::query_ptr >& queries, int row, const QList< Tomahawk::PlaybackLog >& logs, const QModelIndex& parent )
 {
-    insertInternal( queries, row, logs );
+    insertInternal( queries, row, logs, parent );
 }
 
 
