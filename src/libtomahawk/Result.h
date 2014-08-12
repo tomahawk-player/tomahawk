@@ -157,4 +157,6 @@ private:
 
 } //ns
 
+Q_DECLARE_METATYPE( Tomahawk::result_ptr )
+
 #endif // RESULT_H
