@@ -154,6 +154,10 @@
         <file>data/fonts/TitilliumWeb-Bold.ttf</file>
         <file>data/fonts/TitilliumWeb-Regular.ttf</file>
         <file>data/fonts/PathwayGothicOne-Regular.ttf</file>
+        <file>data/fonts/Roboto-Bold.ttf</file>
+        <file>data/fonts/Roboto-Medium.ttf</file>
+        <file>data/fonts/Roboto-Regular.ttf</file>
+        <file>data/fonts/Roboto-Thin.ttf</file>
         <file>data/sql/dbmigrate-29_to_30.sql</file>
         <file>data/sql/dbmigrate-30_to_31.sql</file>
         <file>data/images/trending.svg</file>
