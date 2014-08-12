@@ -73,6 +73,8 @@ namespace TomahawkUtils
     DLLEXPORT QPixmap addDropShadow( const QPixmap& sourceImage, const QSize& targetSize );
     DLLEXPORT QPixmap squareCenterPixmap( const QPixmap& sourceImage );
 
+    DLLEXPORT QImage blurred( const QImage& image, const QRect& rect, int radius, bool alphaOnly = false, bool blackWhite = false );
+
     DLLEXPORT void drawCompositedPopup( QWidget* widget, const QPainterPath& outline, const QColor& lineColor, const QBrush& backgroundBrush, qreal opacity );
 }
 
