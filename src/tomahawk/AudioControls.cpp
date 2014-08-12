@@ -31,6 +31,7 @@
 #include "database/Database.h"
 #include "playlist/PlaylistView.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/ImageRegistry.h"
 #include "utils/Logger.h"
 #include "widgets/ImageButton.h"
 #include "widgets/SocialWidget.h"
@@ -47,7 +48,7 @@ using namespace Tomahawk;
 
 
 AudioControls::AudioControls( QWidget* parent )
-    : QWidget( parent )
+    : BackgroundWidget( parent )
     , TomahawkUtils::DpiScaler( this )
     , ui( new Ui::AudioControls )
     , m_repeatMode( PlaylistModes::NoRepeat )
@@ -56,60 +57,65 @@ AudioControls::AudioControls( QWidget* parent )
     , m_parent( parent )
 {
     ui->setupUi( this );
+    setAutoFillBackground( false );
     setAcceptDrops( true );
+    setBackgroundColor( Qt::black );
 
-    QFont font( ui->artistTrackLabel->font() );
-    font.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
-    font.setWeight( QFont::Bold );
+    QFont f = font();
+    f.setPointSize( 13 );
 
-    ui->artistTrackLabel->setFont( font );
-    ui->artistTrackLabel->setElideMode( Qt::ElideMiddle );
-    ui->artistTrackLabel->setType( QueryLabel::Track );
+    ui->dashLabel->setFont( f );
+    ui->artistLabel->setFont( f );
+    ui->trackLabel->setFont( f );
+    ui->artistLabel->setElideMode( Qt::ElideNone );
+    ui->trackLabel->setElideMode( Qt::ElideNone );
+    ui->artistLabel->setType( QueryLabel::Artist );
+    ui->trackLabel->setType( QueryLabel::Track );
 
-    font.setPointSize( TomahawkUtils::defaultFontSize() );
-    ui->albumLabel->setFont( font );
-    ui->albumLabel->setType( QueryLabel::ArtistAndAlbum );
+    f.setPointSize( 11 );
 
-    QPalette queryLabelsPalette = ui->artistTrackLabel->palette();
-    queryLabelsPalette.setColor( QPalette::Foreground, Qt::black );
-    ui->artistTrackLabel->setPalette( queryLabelsPalette );
-    ui->albumLabel->setPalette( queryLabelsPalette );
+    QPalette queryLabelsPalette = ui->artistLabel->palette();
+    queryLabelsPalette.setColor( QPalette::Foreground, Qt::white );
+    ui->artistLabel->setPalette( queryLabelsPalette );
+    ui->trackLabel->setPalette( queryLabelsPalette );
+    ui->dashLabel->setPalette( queryLabelsPalette );
 
-    font.setWeight( QFont::Normal );
-    ui->timeLabel->setFont( font );
-    ui->timeLeftLabel->setFont( font );
+    ui->timeLabel->setPalette( queryLabelsPalette );
+    ui->timeLeftLabel->setPalette( queryLabelsPalette );
+    ui->timeLabel->setFont( f );
+    ui->timeLeftLabel->setFont( f );
 
-    ui->ownerButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, scaled( 34, 34 ) ) );
-    ui->prevButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PrevButton, TomahawkUtils::Original, scaled( 35, 35 ) ) );
-    ui->prevButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PrevButtonPressed, TomahawkUtils::Original, scaled( 35, 35 ) ), QIcon::Off, QIcon::Active );
-    ui->playPauseButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButton, TomahawkUtils::Original, scaled( 48, 48 ) ) );
-    ui->playPauseButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButtonPressed, TomahawkUtils::Original, scaled( 48, 48 ) ), QIcon::Off, QIcon::Active );
-    ui->pauseButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButton, TomahawkUtils::Original, scaled( 48, 48 ) ) );
-    ui->pauseButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButtonPressed, TomahawkUtils::Original, scaled( 48, 48 ) ), QIcon::Off, QIcon::Active );
-    ui->nextButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NextButton, TomahawkUtils::Original, scaled( 35, 35 ) ) );
-    ui->nextButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NextButtonPressed, TomahawkUtils::Original, scaled( 35, 35 ) ), QIcon::Off, QIcon::Active );
-    ui->shuffleButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::ShuffleOff, TomahawkUtils::Original, scaled( 34, 21 ) ) );
-    ui->shuffleButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::ShuffleOffPressed, TomahawkUtils::Original, scaled( 34, 21 ) ), QIcon::Off, QIcon::Active );
-    ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatOff, TomahawkUtils::Original, scaled( 34, 21 ) ) );
-    ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatOffPressed, TomahawkUtils::Original, scaled( 34, 21 ) ), QIcon::Off, QIcon::Active );
-    ui->volumeLowButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::VolumeMuted, TomahawkUtils::Original, scaled( 18, 18 ) ) );
-    ui->volumeHighButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::VolumeFull, TomahawkUtils::Original, scaled( 22, 18 ) ) );
-    ui->socialButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::Share, TomahawkUtils::Original, scaled( 20, 20 ) ) );
-    ui->loveButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NotLoved, TomahawkUtils::Original, scaled( 20, 20 ) ) );
-    ui->loveButton->setCheckable( true );
+    ui->ownerButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, scaled( 12, 12 ) ) );
+    ui->prevButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PrevButton, TomahawkUtils::Original, scaled( 16, 16 ) ) );
+    ui->prevButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PrevButtonPressed, TomahawkUtils::Original, scaled( 16, 16 ) ), QIcon::Off, QIcon::Active );
+    ui->playPauseButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButton, TomahawkUtils::Original, scaled( 16, 16 ) ) );
+    ui->playPauseButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButtonPressed, TomahawkUtils::Original, scaled( 16, 16 ) ), QIcon::Off, QIcon::Active );
+    ui->pauseButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButton, TomahawkUtils::Original, scaled( 16, 16 ) ) );
+    ui->pauseButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButtonPressed, TomahawkUtils::Original, scaled( 16, 16 ) ), QIcon::Off, QIcon::Active );
+    ui->nextButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NextButton, TomahawkUtils::Original, scaled( 16, 16 ) ) );
+    ui->nextButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NextButtonPressed, TomahawkUtils::Original, scaled( 16, 16 ) ), QIcon::Off, QIcon::Active );
+    ui->shuffleButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::ShuffleOff, TomahawkUtils::Original, scaled( 16, 16 ) ) );
+    ui->shuffleButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::ShuffleOffPressed, TomahawkUtils::Original, scaled( 16, 16 ) ), QIcon::Off, QIcon::Active );
+    ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatOff, TomahawkUtils::Original, scaled( 16, 16 ) ) );
+    ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatOffPressed, TomahawkUtils::Original, scaled( 16, 16 ) ), QIcon::Off, QIcon::Active );
+    ui->volumeLowButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::VolumeMuted, TomahawkUtils::Original, scaled( 16, 16 ) ) );
+//    ui->volumeHighButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::VolumeFull, TomahawkUtils::Original, scaled( 16, 16 ) ) );
+//    ui->socialButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::Share, TomahawkUtils::Original, scaled( 20, 20 ) ) );
+//    ui->loveButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NotLoved, TomahawkUtils::Original, scaled( 20, 20 ) ) );
+//    ui->loveButton->setCheckable( true );
 
-    ui->socialButton->setFixedSize( scaled( 20, 20 ) );
-    ui->loveButton->setFixedSize( scaled( 20, 20 ) );
-    ui->ownerButton->setFixedSize( scaled( 34, 34 ) );
+//    ui->socialButton->setFixedSize( scaled( 20, 20 ) );
+//    ui->loveButton->setFixedSize( scaled( 20, 20 ) );
+    ui->ownerButton->setFixedSize( scaled( 12, 12 ) );
 
-    ui->metaDataArea->setStyleSheet( QString( "QWidget#metaDataArea {\nborder-width: %1px;\nborder-image: url(" RESPATH "images/now-playing-panel.png) %1 %1 %1 %1 stretch stretch; }" ).arg( scaledX( 4 ) ) );
+//    ui->metaDataArea->setStyleSheet( QString( "QWidget#metaDataArea {\nborder-width: %1px;\nborder-image: url(" RESPATH "images/now-playing-panel.png) %1 %1 %1 %1 stretch stretch; }" ).arg( scaledX( 4 ) ) );
 
     ui->seekSlider->setEnabled( true );
     ui->seekSlider->setTimeLine( &m_sliderTimeLine );
     ui->volumeSlider->setRange( 0, 100 );
     ui->volumeSlider->setValue( AudioEngine::instance()->volume() );
 
-    ui->horizontalLayout_3->setContentsMargins( scaledX( 10 ), 0, scaledX( 8 ), 0 );
+    //ui->horizontalLayout_3->setContentsMargins( scaledX( 10 ), 0, scaledX( 8 ), 0 );
 
     m_phononTickCheckTimer.setSingleShot( true );
 
@@ -122,8 +128,8 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->playPauseButton,  SIGNAL( clicked() ), AudioEngine::instance(), SLOT( play() ) );
     connect( ui->pauseButton,      SIGNAL( clicked() ), AudioEngine::instance(), SLOT( pause() ) );
     connect( ui->nextButton,       SIGNAL( clicked() ), AudioEngine::instance(), SLOT( next() ) );
-    connect( ui->volumeLowButton,  SIGNAL( clicked() ), AudioEngine::instance(), SLOT( lowerVolume() ) );
-    connect( ui->volumeHighButton, SIGNAL( clicked() ), AudioEngine::instance(), SLOT( raiseVolume() ) );
+//    connect( ui->volumeLowButton,  SIGNAL( clicked() ), AudioEngine::instance(), SLOT( lowerVolume() ) );
+//    connect( ui->volumeHighButton, SIGNAL( clicked() ), AudioEngine::instance(), SLOT( raiseVolume() ) );
 
     connect( ui->playPauseButton,  SIGNAL( clicked() ), SIGNAL( playPressed() ) );
     connect( ui->pauseButton,      SIGNAL( clicked() ), SIGNAL( pausePressed() ) );
@@ -131,11 +137,8 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->repeatButton,     SIGNAL( clicked() ), SLOT( onRepeatClicked() ) );
     connect( ui->shuffleButton,    SIGNAL( clicked() ), SLOT( onShuffleClicked() ) );
 
-    connect( ui->albumLabel,       SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
-    connect( ui->artistTrackLabel, SIGNAL( clickedTrack() ),  SLOT( onTrackClicked() ) );
-    connect( ui->albumLabel,       SIGNAL( clickedAlbum() ),  SLOT( onAlbumClicked() ) );
-    connect( ui->socialButton,     SIGNAL( clicked() ),       SLOT( onSocialButtonClicked() ) );
-    connect( ui->loveButton,       SIGNAL( clicked( bool ) ), SLOT( onLoveButtonClicked( bool ) ) );
+//    connect( ui->socialButton,     SIGNAL( clicked() ),       SLOT( onSocialButtonClicked() ) );
+//    connect( ui->loveButton,       SIGNAL( clicked( bool ) ), SLOT( onLoveButtonClicked( bool ) ) );
     connect( ui->ownerButton,      SIGNAL( clicked() ),       SLOT( onOwnerButtonClicked() ) );
 
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( onPlaybackLoading( Tomahawk::result_ptr ) ) );
@@ -152,7 +155,9 @@ AudioControls::AudioControls( QWidget* parent )
 
     connect( ViewManager::instance(), SIGNAL( viewPageDestroyed() ), SLOT( onControlStateChanged() ) );
 
-    ui->buttonAreaLayout->setSpacing( 0 );
+//    TomahawkUtils::unmarginLayout( ui->horizontalLayout );
+//    TomahawkUtils::unmarginLayout( ui->buttonAreaLayout );
+//    ui->buttonAreaLayout->setSpacing( 0 );
     ui->stackedLayout->setSpacing( 0 );
     ui->stackedLayout->setContentsMargins( 0, 0, 0, 0 );
     ui->stackedLayout->setMargin( 0 );
@@ -161,14 +166,14 @@ AudioControls::AudioControls( QWidget* parent )
     ui->stackedLayout->setSizeConstraint( QLayout::SetFixedSize );
 
     // setFixedSize corrections for stuff in .ui :(
-    ui->buttonArea->setFixedSize( scaled( 170, 66 ) );
-    ui->coverImage->setFixedSize( scaled( 60, 60 ) );
-    ui->metaDataArea->setMaximumHeight( scaledY( 74 ) );
-    ui->widget_4->setFixedSize( scaled( 170, 66 ) );
-    ui->volumeSlider->setFixedHeight( 20 );
-    ui->verticalLayout->setContentsMargins( scaledX( 2 ), scaledY( 6 ),
-                                            0, scaledY( 6 ) );
-    setFixedHeight( scaledY( 80 ) );
+//    ui->buttonArea->setFixedSize( scaled( 170, 66 ) );
+    //ui->coverImage->setFixedSize( scaled( 60, 60 ) );
+    //ui->metaDataArea->setMaximumHeight( scaledY( 74 ) );
+    //ui->widget_4->setFixedSize( scaled( 170, 66 ) );
+//    ui->volumeSlider->setFixedHeight( 20 );
+//    ui->verticalLayout->setContentsMargins( scaledX( 2 ), scaledY( 6 ),
+//                                            0, scaledY( 6 ) );
+    setFixedHeight( scaledY( 75 ) );
 
     connect( InfoSystem::InfoSystem::instance(), SIGNAL( updatedSupportedPushTypes( Tomahawk::InfoSystem::InfoTypeSet ) ),
              this, SLOT( onInfoSystemPushTypesUpdated( Tomahawk::InfoSystem::InfoTypeSet ) ) );
@@ -231,8 +236,8 @@ AudioControls::onControlStateChanged()
     ui->nextButton->setEnabled( AudioEngine::instance()->canGoNext() );
 
     // If the ViewManager doesn't know a page for the current interface, we can't offer the jump link
-    ui->artistTrackLabel->setJumpLinkVisible( AudioEngine::instance()->currentTrackPlaylist()
-                                                && ViewManager::instance()->pageForInterface( AudioEngine::instance()->currentTrackPlaylist() ) );
+//    ui->artistTrackLabel->setJumpLinkVisible( AudioEngine::instance()->currentTrackPlaylist()
+//                                                && ViewManager::instance()->pageForInterface( AudioEngine::instance()->currentTrackPlaylist() ) );
 }
 
 
@@ -285,8 +290,8 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr result )
     connect( m_currentTrack->track().data(), SIGNAL( coverChanged() ), SLOT( onCoverUpdated() ) );
     connect( m_currentTrack->track().data(), SIGNAL( socialActionsLoaded() ), SLOT( onSocialActionsLoaded() ) );
 
-    ui->artistTrackLabel->setResult( result );
-    ui->albumLabel->setResult( result );
+    ui->artistLabel->setResult( result );
+    ui->trackLabel->setResult( result );
 
     const QString duration = TomahawkUtils::timeToString( result.data()->track()->duration() );
     ui->timeLabel->setFixedWidth( ui->timeLabel->fontMetrics().width( QString( duration.length(), QChar( '0' ) ) ) );
@@ -297,10 +302,16 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr result )
 
     ui->stackedLayout->setCurrentWidget( ui->pauseButton );
 
-    ui->loveButton->setEnabled( true );
+/*    ui->loveButton->setEnabled( true );
     ui->loveButton->setVisible( true );
     ui->socialButton->setEnabled( true );
-    ui->socialButton->setVisible( m_shouldShowShareAction );
+    ui->socialButton->setVisible( m_shouldShowShareAction );*/
+    delete ui->horizontalLayout->takeAt( 1 );
+    ui->horizontalSpacer = new QSpacerItem( 162, 8, QSizePolicy::Minimum, QSizePolicy::Minimum );
+    ui->horizontalLayout->insertSpacerItem( 1, ui->horizontalSpacer );
+    ui->horizontalLayout->invalidate();
+
+    ui->dashLabel->setVisible( true );
     ui->ownerButton->setEnabled( true );
     ui->ownerButton->setVisible( true );
 
@@ -308,8 +319,8 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr result )
     ui->timeLeftLabel->setToolTip( tr( "Time Remaining" ) );
     ui->shuffleButton->setToolTip( tr( "Shuffle" ) );
     ui->repeatButton->setToolTip( tr( "Repeat" ) );
-    ui->socialButton->setToolTip( tr( "Share" ) );
-    ui->loveButton->setToolTip( tr( "Love" ) );
+//    ui->socialButton->setToolTip( tr( "Share" ) );
+//    ui->loveButton->setToolTip( tr( "Love" ) );
     ui->ownerButton->setToolTip( QString( tr( "Playing from %1" ) ).arg( result->friendlySource() ) );
 
     ui->seekSlider->setRange( 0, 0 );
@@ -354,14 +365,16 @@ AudioControls::onCoverUpdated()
 void
 AudioControls::setCover()
 {
-    if ( !m_currentTrack->track()->cover( ui->coverImage->size() ).isNull() )
+    if ( !m_currentTrack->track()->cover( QSize( 0, 0 ) ).isNull() )
     {
-        QPixmap cover;
-        cover = m_currentTrack->track()->cover( ui->coverImage->size() );
-        ui->coverImage->setPixmap( TomahawkUtils::createRoundedImage( cover, QSize( 0, 0 ) ), false );
+        QPixmap cover = m_currentTrack->track()->cover( QSize( 0, 0 ) );
+        setBackground( QPixmap::fromImage( TomahawkUtils::blurred( cover.toImage(), cover.rect(), 10, false, true ) ) );
     }
     else
-        ui->coverImage->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::Original, ui->coverImage->size() ), true );
+    {
+        setBackground( QPixmap() );
+    }
+//        ui->coverImage->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::Original, ui->coverImage->size() ), true );
 }
 
 
@@ -388,10 +401,10 @@ AudioControls::onInfoSystemPushTypesUpdated( InfoSystem::InfoTypeSet supportedTy
         m_shouldShowShareAction = false;
     }
 
-    if ( AudioEngine::instance()->state() == AudioEngine::Stopped )
+/*    if ( AudioEngine::instance()->state() == AudioEngine::Stopped )
         ui->socialButton->setVisible( false );
     else
-        ui->socialButton->setVisible( m_shouldShowShareAction );
+        ui->socialButton->setVisible( m_shouldShowShareAction );*/
 }
 
 
@@ -400,13 +413,13 @@ AudioControls::setSocialActions()
 {
     if ( m_currentTrack->track()->loved() )
     {
-        ui->loveButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::Loved, TomahawkUtils::Original, scaled( 20, 20 ) ) );
-        ui->loveButton->setChecked( true );
+/*        ui->loveButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::Loved, TomahawkUtils::Original, scaled( 20, 20 ) ) );
+        ui->loveButton->setChecked( true );*/
     }
     else
     {
-        ui->loveButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NotLoved, TomahawkUtils::Original, scaled( 20, 20 ) ) );
-        ui->loveButton->setChecked( false );
+/*        ui->loveButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NotLoved, TomahawkUtils::Original, scaled( 20, 20 ) ) );
+        ui->loveButton->setChecked( false );*/
     }
 }
 
@@ -445,11 +458,12 @@ AudioControls::onPlaybackStopped()
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     m_currentTrack.clear();
 
-    ui->artistTrackLabel->setText( "" );
-    ui->albumLabel->setText( "" );
+    ui->artistLabel->setText( "" );
+    ui->trackLabel->setText( "" );
+    ui->dashLabel->setVisible( false );
     ui->timeLabel->setText( "" );
     ui->timeLeftLabel->setText( "" );
-    ui->coverImage->setPixmap( QPixmap(), false );
+//    ui->coverImage->setPixmap( QPixmap(), false );
     ui->seekSlider->setVisible( false );
     m_sliderTimeLine.stop();
     m_sliderTimeLine.setCurrentTime( 0 );
@@ -457,10 +471,10 @@ AudioControls::onPlaybackStopped()
     ui->ownerButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, QSize( 34, 34 ) ) );
 
     ui->stackedLayout->setCurrentWidget( ui->playPauseButton );
-    ui->loveButton->setEnabled( false );
+/*    ui->loveButton->setEnabled( false );
     ui->loveButton->setVisible( false );
     ui->socialButton->setEnabled( false );
-    ui->socialButton->setVisible( false );
+    ui->socialButton->setVisible( false );*/
     ui->ownerButton->setEnabled( false );
     ui->ownerButton->setVisible( false );
 
@@ -468,11 +482,16 @@ AudioControls::onPlaybackStopped()
     ui->timeLeftLabel->setToolTip( "" );
     ui->shuffleButton->setToolTip( "" );
     ui->repeatButton->setToolTip( "" );
-    ui->socialButton->setToolTip( "" );
-    ui->loveButton->setToolTip( "" );
+//    ui->socialButton->setToolTip( "" );
+//    ui->loveButton->setToolTip( "" );
     ui->ownerButton->setToolTip( "" );
 
     onControlStateChanged();
+
+    delete ui->horizontalLayout->takeAt( 1 );
+    ui->horizontalSpacer = new QSpacerItem( 162, 8, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    ui->horizontalLayout->insertSpacerItem( 1, ui->horizontalSpacer );
+    ui->horizontalLayout->invalidate();
 }
 
 
@@ -575,24 +594,24 @@ AudioControls::onRepeatModeChanged( PlaylistModes::RepeatMode mode )
         case PlaylistModes::NoRepeat:
         {
             // switch to RepeatOne
-            ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatOff, TomahawkUtils::Original, scaled( 34, 21 ) ) );
-            ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatOffPressed, TomahawkUtils::Original, scaled( 34, 21 ) ), QIcon::Off, QIcon::Active );
+            ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatOff, TomahawkUtils::Original, scaled( 16, 16 ) ) );
+            ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatOffPressed, TomahawkUtils::Original, scaled( 16, 16 ) ), QIcon::Off, QIcon::Active );
         }
         break;
 
         case PlaylistModes::RepeatOne:
         {
             // switch to RepeatAll
-            ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatOne, TomahawkUtils::Original, scaled( 34, 21 ) ) );
-            ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatOnePressed, TomahawkUtils::Original, scaled( 34, 21 ) ), QIcon::Off, QIcon::Active );
+            ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatOne, TomahawkUtils::Original, scaled( 16, 16 ) ) );
+            ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatOnePressed, TomahawkUtils::Original, scaled( 16, 16 ) ), QIcon::Off, QIcon::Active );
         }
         break;
 
         case PlaylistModes::RepeatAll:
         {
             // switch to NoRepeat
-            ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatAll, TomahawkUtils::Original, scaled( 34, 21 ) ) );
-            ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatAllPressed, TomahawkUtils::Original, scaled( 34, 21 ) ), QIcon::Off, QIcon::Active );
+            ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatAll, TomahawkUtils::Original, scaled( 16, 16 ) ) );
+            ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatAllPressed, TomahawkUtils::Original, scaled( 16, 16 ) ), QIcon::Off, QIcon::Active );
         }
         break;
 
@@ -643,15 +662,15 @@ AudioControls::onShuffleModeChanged( bool enabled )
 
     if ( m_shuffled )
     {
-        ui->shuffleButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::ShuffleOn, TomahawkUtils::Original, scaled( 34, 21 ) ) );
-        ui->shuffleButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::ShuffleOnPressed, TomahawkUtils::Original, scaled( 34, 21 ) ), QIcon::Off, QIcon::Active );
+        ui->shuffleButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::ShuffleOn, TomahawkUtils::Original, scaled( 16, 16 ) ) );
+        ui->shuffleButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::ShuffleOnPressed, TomahawkUtils::Original, scaled( 16, 16 ) ), QIcon::Off, QIcon::Active );
 
         ui->repeatButton->setEnabled( false );
     }
     else
     {
-        ui->shuffleButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::ShuffleOff, TomahawkUtils::Original, scaled( 34, 21 ) ) );
-        ui->shuffleButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::ShuffleOffPressed, TomahawkUtils::Original, scaled( 34, 21 ) ), QIcon::Off, QIcon::Active );
+        ui->shuffleButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::ShuffleOff, TomahawkUtils::Original, scaled( 16, 16 ) ) );
+        ui->shuffleButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::ShuffleOffPressed, TomahawkUtils::Original, scaled( 16, 16 ) ), QIcon::Off, QIcon::Active );
 
         ui->repeatButton->setEnabled( true );
     }
@@ -664,27 +683,6 @@ void
 AudioControls::onShuffleClicked()
 {
     AudioEngine::instance()->setShuffled( m_shuffled ^ true );
-}
-
-
-void
-AudioControls::onArtistClicked()
-{
-    ViewManager::instance()->show( m_currentTrack->track()->artistPtr() );
-}
-
-
-void
-AudioControls::onAlbumClicked()
-{
-    ViewManager::instance()->show( m_currentTrack->track()->albumPtr() );
-}
-
-
-void
-AudioControls::onTrackClicked()
-{
-    ViewManager::instance()->show( m_currentTrack->toQuery() );
 }
 
 
@@ -735,6 +733,7 @@ AudioControls::droppedTracks( QList< query_ptr > tracks )
 void
 AudioControls::onSocialButtonClicked()
 {
+/*
     if ( !m_socialWidget.isNull() )
         m_socialWidget.data()->close();
 
@@ -743,9 +742,9 @@ AudioControls::onSocialButtonClicked()
     socialWidgetPos.rx() += ui->socialButton->width() / 2;
     socialWidgetPos.ry() += scaled( 0, 6 ).height();
 
-    m_socialWidget.data()->setPosition( ui->metaDataArea->mapToGlobal( socialWidgetPos ) );
+//    m_socialWidget.data()->setPosition( ui->metaDataArea->mapToGlobal( socialWidgetPos ) );
     m_socialWidget.data()->setQuery( m_currentTrack->toQuery() );
-    m_socialWidget.data()->show();
+    m_socialWidget.data()->show();*/
 }
 
 
@@ -754,13 +753,13 @@ AudioControls::onLoveButtonClicked( bool checked )
 {
     if ( checked )
     {
-        ui->loveButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::Loved, TomahawkUtils::Original, scaled( 20, 20 ) ) );
+//        ui->loveButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::Loved, TomahawkUtils::Original, scaled( 20, 20 ) ) );
 
         m_currentTrack->track()->setLoved( true );
     }
     else
     {
-        ui->loveButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NotLoved, TomahawkUtils::Original, scaled( 20, 20 ) ) );
+//        ui->loveButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NotLoved, TomahawkUtils::Original, scaled( 20, 20 ) ) );
 
         m_currentTrack->track()->setLoved( false );
     }

@@ -25,8 +25,8 @@
 #include "PlaylistInterface.h"
 #include "Query.h"
 #include "utils/DpiScaler.h"
+#include "widgets/BackgroundWidget.h"
 
-#include <QWidget>
 #include <QTimer>
 #include <QTimeLine>
 
@@ -40,7 +40,7 @@ namespace Ui
     class AudioControls;
 }
 
-class AudioControls : public QWidget, private TomahawkUtils::DpiScaler
+class AudioControls : public BackgroundWidget, private TomahawkUtils::DpiScaler
 {
 Q_OBJECT
 
@@ -79,9 +79,6 @@ private slots:
     void onRepeatClicked();
     void onShuffleClicked();
 
-    void onArtistClicked();
-    void onAlbumClicked();
-    void onTrackClicked();
     void onSocialButtonClicked();
     void onLoveButtonClicked( bool );
     void onOwnerButtonClicked();
@@ -92,6 +89,8 @@ private slots:
     void onSocialActionsLoaded();
 
     void onInfoSystemPushTypesUpdated( Tomahawk::InfoSystem::InfoTypeSet supportedTypes );
+
+protected:
 
 private:
     void setCover();
