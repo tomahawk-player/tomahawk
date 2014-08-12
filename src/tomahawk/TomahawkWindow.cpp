@@ -473,7 +473,10 @@ TomahawkWindow::setupSideBar()
 void
 TomahawkWindow::setupStatusBar()
 {
-    statusBar()->addPermanentWidget( m_audioControls, 1 );
+    statusBar()->hide();
+    setStatusBar( 0 );
+
+    ui->centralWidget->layout()->addWidget( m_audioControls );
 }
 
 
@@ -1067,13 +1070,13 @@ void
 TomahawkWindow::fullScreenEntered()
 {
     TomahawkSettings::instance()->setFullscreenEnabled( true );
-    statusBar()->setSizeGripEnabled( false );
+//    statusBar()->setSizeGripEnabled( false );
 
     // Since we just disabled the size-grip the entire statusbar will shift a bit to the right
     // The volume bar would now have no margin to the right screen edge. Prevent that.
-    QMargins margins = statusBar()->contentsMargins();
-    margins.setRight( 24 );
-    statusBar()->setContentsMargins( margins );
+//    QMargins margins = statusBar()->contentsMargins();
+//    margins.setRight( 24 );
+//    statusBar()->setContentsMargins( margins );
 
 #if defined( Q_WS_MAC )
     ActionCollection::instance()->getAction( "fullscreen" )->setText( tr( "Exit Full Screen" ) );
@@ -1085,13 +1088,13 @@ void
 TomahawkWindow::fullScreenExited()
 {
     TomahawkSettings::instance()->setFullscreenEnabled( false );
-    statusBar()->setSizeGripEnabled( true );
+//    statusBar()->setSizeGripEnabled( true );
 
     // Since we just enabled the size-grip the entire statusbar will shift a bit to the left
     // The volume bar would now have too big a margin to the right screen edge. Prevent that.
-    QMargins margins = statusBar()->contentsMargins();
-    margins.setRight( 0 );
-    statusBar()->setContentsMargins( margins );
+//    QMargins margins = statusBar()->contentsMargins();
+//    margins.setRight( 0 );
+//    statusBar()->setContentsMargins( margins );
 
 #if defined( Q_WS_MAC )
     ActionCollection::instance()->getAction( "fullscreen" )->setText( tr( "Enter Full Screen" ) );
