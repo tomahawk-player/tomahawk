@@ -754,7 +754,7 @@ prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, Pl
     else
     {
         float opacity = 0.0;
-        if ( !item->query()->results().isEmpty() && item->query()->results().first()->isOnline() )
+        if ( item->query() && !item->query()->results().isEmpty() && item->query()->results().first()->isOnline() )
             opacity = item->query()->results().first()->score();
 
         opacity = qMax( (float)0.3, opacity );
