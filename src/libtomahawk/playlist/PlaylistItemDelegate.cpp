@@ -43,6 +43,8 @@
 #include "ViewHeader.h"
 #include "ViewManager.h"
 
+#include "audio/AudioEngine.h"
+#include "utils/ImageRegistry.h"
 #include "utils/PixmapDelegateFader.h"
 #include "utils/Closure.h"
 #include "utils/TomahawkUtilsGui.h"
@@ -520,6 +522,132 @@ PlaylistItemDelegate::drawSourceIcon( QPainter* painter, const QRect& rect, Play
     painter->setOpacity( 1.0 );
 
     return resultRect;
+}
+
+
+QRect
+PlaylistItemDelegate::drawSource( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index, const QRect& rect, PlayableItem* item ) const
+{
+    painter->save();
+
+    QRect avatarRect = rect.adjusted( 32, rect.height() - 48, 0, -16 );
+    QRect textRect = avatarRect.adjusted( avatarRect.height() + 32, 0, -32, 0 );
+    avatarRect.setWidth( avatarRect.height() );
+
+    QPixmap avatar = item->source()->avatar( TomahawkUtils::RoundedCorners, avatarRect.size() ) ;
+    if ( avatar.isNull() )
+    {
+        avatar = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::RoundedCorners );
+    }
+    painter->drawPixmap( avatarRect, avatar );
+
+    QFont f = painter->font();
+    f.setPointSize( 12 );
+    painter->setFont( f );
+    painter->setOpacity( 0.8 );
+    painter->setPen( QColor( "#000000" ) );
+    painter->drawText( textRect, item->source()->friendlyName(), QTextOption( Qt::AlignVCenter ) );
+
+    painter->setOpacity( 0.15 );
+    painter->setBrush( QColor( "#000000" ) );
+    painter->drawRect( rect.adjusted( 32, rect.height() - 8, -32, -8 ) );
+
+    painter->restore();
+
+    return rect;
+}
+
+
+QRect
+PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index, const QRect& rect, PlayableItem* item ) const
+{
+    const track_ptr track = item->query()->track();
+
+    painter->save();
+    painter->setRenderHint( QPainter::Antialiasing, true );
+
+    if ( option.state & QStyle::State_Selected )
+    {
+        painter->setPen( QColor( "#f8f8f8" ) );
+        painter->setBrush( QColor( "#f8f8f8" ) );
+        painter->drawRect( rect.adjusted( 0, 4, 0, -4 ) );
+    }
+    painter->setPen( QColor( "#000000" ) );
+
+    QRect r = rect.adjusted( 32, 6, -32, -6 );
+    int margin = 8;
+
+    QRect numberRect = QRect( r.x(), r.y(), (double)r.width() * 0.1, r.height() );
+    QRect titleRect = QRect( numberRect.x() + numberRect.width(), r.y(), (double)r.width() * 0.4, r.height() );
+    QRect artistRect = QRect( titleRect.x() + titleRect.width(), r.y(), (double)r.width() * 0.4, r.height() );
+    QRect extraRect = QRect( artistRect.x() + artistRect.width(), r.y(), (double)r.width() * 0.1, r.height() );
+
+    QFont f = painter->font();
+    f.setPointSize( 11 );
+    f.setWeight( QFont::DemiBold );
+    painter->setFont( f );
+
+    // draw title
+    painter->setOpacity( 1 );
+    QString text = painter->fontMetrics().elidedText( track->track(), Qt::ElideRight, titleRect.width() - margin );
+    painter->drawText( titleRect, text, m_centerOption );
+
+    // draw artist
+    f.setWeight( QFont::Normal );
+    painter->setOpacity( 0.8 );
+    painter->setFont( f );
+    text = painter->fontMetrics().elidedText( track->artist(), Qt::ElideRight, artistRect.width() - margin );
+    painter->drawText( artistRect, text, m_centerOption );
+
+    // draw number
+    painter->setOpacity( 0.6 );
+    QString number = QString::number( index.row() + 1 );
+    if ( number.length() < 2 )
+        number = "0" + number;
+    painter->drawText( numberRect, number, m_centerOption );
+
+    if ( item->isPlaying() )
+    {
+        int h = extraRect.height() / 2;
+        painter->drawPixmap( extraRect.adjusted( extraRect.width() - h - 4, h / 2, -4, -h / 2 ), ImageRegistry::instance()->pixmap( RESPATH "images/play.svg", QSize( extraRect.height() / 2, extraRect.height() / 2 ) ) );
+
+        painter->save();
+        painter->setPen( Qt::transparent );
+        painter->setBrush( Qt::darkRed );
+
+        QRect playBar = r.adjusted( 0, r.height() + 2, 0, 0 );
+        playBar.setHeight( 2 );
+        painter->setOpacity( 0.1 );
+        painter->drawRect( playBar );
+
+        playBar.setWidth( ( (double)AudioEngine::instance()->currentTime() / (double)AudioEngine::instance()->currentTrackTotalTime() ) * (double)playBar.width() );
+        painter->setOpacity( 1 );
+        painter->drawRect( playBar );
+
+        painter->restore();
+    }
+    else if ( track->duration() > 0 )
+    {
+        painter->setOpacity( 0.5 );
+        painter->drawText( extraRect, TomahawkUtils::timeToString( track->duration() ), m_centerRightOption );
+    }
+
+    if ( option.state & QStyle::State_Selected || hoveringOver() == index )
+    {
+        if ( track->loved() )
+        {
+            painter->setOpacity( 0.5 );
+            int h = extraRect.height() / 3;
+            QRect stateRect = extraRect.adjusted( -32, extraRect.height() / 2  - h / 2, 0, 0 );
+            stateRect.setHeight( h );
+            stateRect.setWidth( stateRect.height() );
+            painter->drawPixmap( stateRect, ImageRegistry::instance()->pixmap( RESPATH "images/love.svg", stateRect.size() ) );
+        }
+    }
+
+    painter->restore();
+
+    return r;
 }
 
 
