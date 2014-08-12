@@ -1238,3 +1238,21 @@ PlayableModel::itemFromResult( const Tomahawk::result_ptr& result ) const
     tDebug() << "Could not find item for result:" << result->toString();
     return 0;
 }
+
+
+QModelIndex
+PlayableModel::indexFromSource( const Tomahawk::source_ptr& source ) const
+{
+    for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
+    {
+        QModelIndex idx = index( i, 0, QModelIndex() );
+        PlayableItem* item = itemFromIndex( idx );
+        if ( item && item->source() == source )
+        {
+            return idx;
+        }
+    }
+
+    tDebug() << "Could not find item for source:" << source->friendlyName();
+    return QModelIndex();
+}
