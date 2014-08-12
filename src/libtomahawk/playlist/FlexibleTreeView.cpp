@@ -34,6 +34,7 @@
 #include "playlist/PlaylistLargeItemDelegate.h"
 #include "PlayableProxyModelPlaylistInterface.h"
 #include "TomahawkSettings.h"
+#include "utils/ImageRegistry.h"
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Closure.h"
@@ -54,6 +55,9 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
     , m_temporary( false )
 {
     qRegisterMetaType< FlexibleTreeViewMode >( "FlexibleTreeViewMode" );
+
+    m_header->setBackgroundColor( Qt::black );
+    m_header->setBackground( ImageRegistry::instance()->pixmap( RESPATH "images/collection_background.png", QSize( 0, 0 ) ), false );
 
     m_treeView->proxyModel()->setStyle( PlayableProxyModel::Collection );
     m_treeView->proxyModel()->setPlaylistInterface( m_columnView->proxyModel()->playlistInterface() );
