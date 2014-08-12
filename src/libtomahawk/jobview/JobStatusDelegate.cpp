@@ -49,7 +49,7 @@ JobStatusDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 {
     QStyleOptionViewItemV4 opt = option;
     initStyleOption( &opt, index );
-    QFontMetrics fm( opt.font );
+    QFontMetrics fm( painter->font() );
     const bool allowMultiLine = index.data( JobStatusModel::AllowMultiLineRole ).toBool();
 
     opt.state &= ~QStyle::State_MouseOver;
@@ -84,7 +84,10 @@ JobStatusDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     QString mainText = index.data( Qt::DisplayRole ).toString();
     QTextOption to( Qt::AlignLeft | Qt::AlignVCenter );
     if ( !allowMultiLine )
+    {
+        to.setWrapMode( QTextOption::NoWrap );
         mainText = fm.elidedText( mainText, Qt::ElideRight, mainW );
+    }
     else
         to.setWrapMode( QTextOption::WrapAtWordBoundaryOrAnywhere );
 
