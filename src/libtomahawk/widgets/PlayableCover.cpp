@@ -38,6 +38,7 @@ using namespace Tomahawk;
 PlayableCover::PlayableCover( QWidget* parent )
     : QLabel( parent )
     , m_showText( false )
+    , m_showControls( true )
 {
     setMouseTracking( true );
 
@@ -67,7 +68,8 @@ PlayableCover::enterEvent( QEvent* event )
 {
     QLabel::enterEvent( event );
 
-    m_button->show();
+    if ( m_showControls )
+        m_button->show();
 }
 
 
@@ -204,7 +206,7 @@ PlayableCover::contextMenuEvent( QContextMenuEvent* event )
 void
 PlayableCover::setPixmap( const QPixmap& pixmap )
 {
-    m_pixmap = TomahawkUtils::createRoundedImage( pixmap, size() );
+    m_pixmap = pixmap; // TomahawkUtils::createRoundedImage( pixmap, size() );
     repaint();
 }
 
@@ -384,5 +386,12 @@ PlayableCover::setQuery( const Tomahawk::query_ptr& query )
 void PlayableCover::setShowText( bool b )
 {
     m_showText = b;
+    repaint();
+}
+
+
+void PlayableCover::setShowControls( bool b )
+{
+    m_showControls = b;
     repaint();
 }

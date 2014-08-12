@@ -47,7 +47,6 @@ public:
     virtual ~PlayableCover();
 
     bool showText() const { return m_showText; }
-    void setShowText( bool b );
 
     QPixmap pixmap() const { return m_pixmap; }
 
@@ -56,6 +55,8 @@ public slots:
     virtual void setAlbum( const Tomahawk::album_ptr& album );
     virtual void setQuery( const Tomahawk::query_ptr& query );
 
+    void setShowText( bool b );
+    void setShowControls( bool b );
     void setPixmap( const QPixmap& pixmap );
 
 protected:
@@ -67,7 +68,7 @@ protected:
     virtual void mouseReleaseEvent( QMouseEvent* event );
 
     virtual void contextMenuEvent( QContextMenuEvent* event );
-    
+
     void leaveEvent( QEvent* event );
     void enterEvent( QEvent* event );
 
@@ -90,6 +91,7 @@ private:
     QRect m_hoveredRect;
 
     bool m_showText;
+    bool m_showControls;
 };
 
 #endif
