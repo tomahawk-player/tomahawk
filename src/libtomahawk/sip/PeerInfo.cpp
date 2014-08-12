@@ -225,6 +225,7 @@ PeerInfo::contactId() const
     return d_func()->contactId;
 }
 
+
 const QString
 PeerInfo::nodeId() const
 {
@@ -240,6 +241,7 @@ PeerInfo::nodeId() const
     return d->sipInfos.first().nodeId();
 }
 
+
 const QString
 PeerInfo::key() const
 {
@@ -247,7 +249,6 @@ PeerInfo::key() const
     // All sip infos share the same key
     return d_func()->sipInfos.first().key();
 }
-
 
 
 void
