@@ -299,10 +299,10 @@ SourcesModel::appendGroups()
 {
     beginInsertRows( QModelIndex(), rowCount(), rowCount() + 5 );
 
-    m_browse = new GroupItem( this, m_rootItem, tr( "Browse" ), 0 );
-    new HistoryItem( this, m_rootItem, tr( "Search History" ), 1 );
+    m_browse = new GroupItem( this, m_rootItem, tr( "Discover" ), 0 );
+    new HistoryItem( this, m_rootItem, tr( "Open Pages" ), 1 );
 //    new SourceTreeItem( this, m_rootItem, SourcesModel::Divider, 2 );
-    m_myMusicGroup = new GroupItem( this, m_rootItem, tr( "My Music" ), 3 );
+    m_myMusicGroup = new GroupItem( this, m_rootItem, tr( "Your Music" ), 3 );
 
     InboxItem* inbox = new InboxItem( this, m_browse );
     inbox->setSortValue( 4 );
