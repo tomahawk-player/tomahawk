@@ -442,6 +442,7 @@ TomahawkWindow::setupSideBar()
     jobsView->setModel( m_jobsModel );
 
     m_queueView = new QueueView( m_sidebar );
+    m_queueView->setVisible( false );
     AudioEngine::instance()->setQueue( m_queueView->queue()->proxyModel()->playlistInterface() );
 
     m_sidebar->addWidget( m_sourcetree );
