@@ -135,7 +135,7 @@ PlayableModel::hasChildren( const QModelIndex& parent ) const
     if ( parentItem == d->rootItem )
         return true;
 
-    return ( !parentItem->artist().isNull() || !parentItem->album().isNull() );
+    return ( !parentItem->artist().isNull() || !parentItem->album().isNull() || !parentItem->source().isNull() );
 }
 
 
