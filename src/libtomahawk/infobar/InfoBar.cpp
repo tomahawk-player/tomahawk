@@ -105,7 +105,7 @@ InfoBar::InfoBar( QWidget* parent )
     m_queryLabel->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
     m_queryLabel->setFont( font );
     m_queryLabel->hide();
-    connect( m_queryLabel, SIGNAL( clickedArtist() ), this, SLOT( artistClicked() ) );
+    connect( m_queryLabel, SIGNAL( clicked() ), this, SLOT( artistClicked() ) );
 
     m_searchWidget = new QSearchField( this );
     m_searchWidget->setPlaceholderText( tr( "Filter..." ) );
@@ -171,7 +171,6 @@ void
 InfoBar::setDescription( const artist_ptr& artist )
 {
     m_queryLabel->setArtist( artist );
-    m_queryLabel->setExtraContentsMargins( 4, 0, 0, 0 );
 
     if ( !m_queryLabel->isVisible() )
     {
