@@ -100,16 +100,16 @@ ProxyStyle::drawControl( ControlElement ce, const QStyleOption* opt, QPainter* p
             {
                 if ( splitter->handleWidth() == 1 )
                 {
-                    p->setPen( TomahawkStyle::BORDER_LINE );
+                    p->setPen( Qt::black );
+                    p->setOpacity( 0.05 );
                     p->drawLine( opt->rect.topLeft(), opt->rect.bottomLeft() );
                 }
                 else if ( splitter->handleWidth() == 3 )
                 {
-                    p->setPen( TomahawkStyle::BORDER_LINE );
+                    p->setPen( Qt::black );
+                    p->setOpacity( 0.05 );
                     p->drawLine( opt->rect.topLeft(), opt->rect.bottomLeft() );
-                    p->setPen( TomahawkStyle::BORDER_LINE.darker() );
                     p->drawLine( opt->rect.topLeft() + QPoint( 1, 0 ), opt->rect.bottomLeft() + QPoint( 1, 0 ) );
-                    p->setPen( TomahawkStyle::BORDER_LINE );
                     p->drawLine( opt->rect.topLeft() + QPoint( 2, 0 ), opt->rect.bottomLeft() + QPoint( 2, 0 ) );
                 }
             }
