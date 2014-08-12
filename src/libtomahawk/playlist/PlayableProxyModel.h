@@ -115,6 +115,7 @@ private:
     PlayableModel* m_model;
 
     bool m_showOfflineResults;
+    bool m_hideEmptyParents;
     bool m_hideDupeItems;
     int m_maxVisibleItems;
 

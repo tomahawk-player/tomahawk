@@ -35,6 +35,7 @@ PlayableProxyModel::PlayableProxyModel( QObject* parent )
     : QSortFilterProxyModel( parent )
     , m_model( 0 )
     , m_showOfflineResults( true )
+    , m_hideEmptyParents( true )
     , m_hideDupeItems( false )
     , m_maxVisibleItems( -1 )
     , m_style( Detailed )
@@ -135,6 +136,14 @@ PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePa
     PlayableItem* pi = itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
     if ( !pi )
         return false;
+
+    if ( m_hideEmptyParents && pi->source() )
+    {
+        if ( !sourceModel()->rowCount( sourceModel()->index( sourceRow, 0, sourceParent ) ) )
+        {
+            return false;
+        }
+    }
 
     if ( m_maxVisibleItems > 0 && sourceRow > m_maxVisibleItems - 1 )
         return false;
