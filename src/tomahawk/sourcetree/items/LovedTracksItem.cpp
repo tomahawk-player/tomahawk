@@ -27,7 +27,7 @@
 #include "playlist/FlexibleView.h"
 #include "playlist/TrackView.h"
 #include "playlist/TopLovedTracksModel.h"
-#include "playlist/PlaylistLargeItemDelegate.h"
+#include "playlist/TrackItemDelegate.h"
 
 #include "utils/ImageRegistry.h"
 #include "utils/Logger.h"
@@ -79,7 +79,7 @@ LovedTracksItem::activate()
         TopLovedTracksModel* raModel = new TopLovedTracksModel( pv );
         raModel->setTitle( text() );
 
-        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, pv->trackView(), pv->trackView()->proxyModel() );
+        TrackItemDelegate* del = new TrackItemDelegate( TrackItemDelegate::LovedTracks, pv->trackView(), pv->trackView()->proxyModel() );
         pv->trackView()->setPlaylistItemDelegate( del );
 
         pv->setEmptyTip( tr( "Sorry, we could not find any loved tracks!" ) );
