@@ -292,27 +292,27 @@ Source::avatar( TomahawkUtils::ImageMode style, const QSize& size )
         }
     }
 
+    // Try to get the avatar from the cache
+    // Hint: We store the avatar for each xmpp peer using its contactId, the dbFriendlyName is a contactId of a peer
+    if ( !d->avatarLoaded )
+    {
+        d->avatarLoaded = true;
+        QByteArray avatarBuffer = TomahawkUtils::Cache::instance()->getData( "Sources", dbFriendlyName() ).toByteArray();
+        if ( !avatarBuffer.isNull() )
+        {
+            tDebug() << Q_FUNC_INFO << QThread::currentThread();
+            QPixmap avatar;
+            avatar.loadFromData( avatarBuffer );
+            avatarBuffer.clear();
+
+            d->avatar = new QPixmap( TomahawkUtils::createRoundedImage( avatar, QSize( 0, 0 ) ) );
+        }
+    }
+
     if ( d->avatarLoaded )
     {
         if ( d->avatar )
-            return *d->avatar;
-        else
-            return QPixmap();
-    }
-
-    // Try to get the avatar from the cache
-    // Hint: We store the avatar for each xmpp peer using its contactId, the dbFriendlyName is a contactId of a peer
-    d->avatarLoaded = true;
-    QByteArray avatarBuffer = TomahawkUtils::Cache::instance()->getData( "Sources", dbFriendlyName() ).toByteArray();
-    if ( !avatarBuffer.isNull() )
-    {
-        tDebug() << Q_FUNC_INFO << QThread::currentThread();
-        QPixmap avatar;
-        avatar.loadFromData( avatarBuffer );
-        avatarBuffer.clear();
-
-        d->avatar = new QPixmap( TomahawkUtils::createRoundedImage( avatar, QSize( 0, 0 ) ) );
-        return *d->avatar;
+            return d->avatar->scaled( size, Qt::KeepAspectRatio, Qt::SmoothTransformation );
     }
 
     return QPixmap();
