@@ -349,13 +349,13 @@ TrackView::currentChanged( const QModelIndex& current, const QModelIndex& previo
 {
     QTreeView::currentChanged( current, previous );
 
-    if ( !m_updateContextView )
-        return;
-
     PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
-    if ( item )
+    if ( item && item->query() )
     {
-        ViewManager::instance()->context()->setQuery( item->query() );
+//        if ( m_updateContextView )
+//            ViewManager::instance()->context()->setQuery( item->query() );
+
+        emit querySelected( item->query() );
     }
 }
 

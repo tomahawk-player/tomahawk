@@ -43,7 +43,6 @@ class AlbumInfoWidget;
 class ArtistInfoWidget;
 class TreeWidget;
 class CollectionModel;
-class ContextWidget;
 class FlexibleView;
 class FlexibleTreeView;
 class PlaylistModel;
@@ -77,7 +76,6 @@ public:
 
     QWidget* widget() const { return m_widget; }
     InfoBar* infobar() const { return m_infobar; }
-    ContextWidget* context() const { return m_contextWidget; }
 
     PlaylistView* queue() const { return m_queue->queue(); }
     void setQueue( QueueView* queue ) { m_queue = queue; }
@@ -183,7 +181,6 @@ private:
 
     QWidget* m_widget;
     InfoBar* m_infobar;
-    ContextWidget* m_contextWidget;
     QStackedWidget* m_stack;
     AnimatedSplitter* m_splitter;
 

@@ -213,7 +213,7 @@ TreeView::currentChanged( const QModelIndex& current, const QModelIndex& previou
     if ( !m_updateContextView )
         return;
 
-    PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
+/*    PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
     if ( item )
     {
         if ( !item->result().isNull() )
@@ -224,7 +224,7 @@ TreeView::currentChanged( const QModelIndex& current, const QModelIndex& previou
             ViewManager::instance()->context()->setAlbum( item->album() );
         else if ( !item->query().isNull() )
             ViewManager::instance()->context()->setQuery( item->query() );
-    }
+    }*/
 }
 
 

@@ -162,8 +162,8 @@ GridView::currentChanged( const QModelIndex& current, const QModelIndex& previou
     PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
     if ( item )
     {
-        if ( !item->album().isNull() )
-            ViewManager::instance()->context()->setAlbum( item->album() );
+//        if ( !item->album().isNull() )
+//            ViewManager::instance()->context()->setAlbum( item->album() );
     }
 }
 

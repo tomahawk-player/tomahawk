@@ -102,6 +102,7 @@ public slots:
 
 signals:
     void itemActivated( const QModelIndex& index );
+    void querySelected( const Tomahawk::query_ptr& query );
     void modelChanged();
 
 protected:
