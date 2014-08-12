@@ -41,11 +41,13 @@ public:
     explicit PlayableItem( const Tomahawk::result_ptr& result, PlayableItem* parent = 0, int row = -1 );
     explicit PlayableItem( const Tomahawk::query_ptr& query, PlayableItem* parent = 0, int row = -1 );
     explicit PlayableItem( const Tomahawk::plentry_ptr& entry, PlayableItem* parent = 0, int row = -1 );
+    explicit PlayableItem( const Tomahawk::source_ptr& source, PlayableItem* parent = 0, int row = -1 );
 
     const Tomahawk::artist_ptr& artist() const { return m_artist; }
     const Tomahawk::album_ptr& album() const { return m_album; }
     const Tomahawk::query_ptr& query() const { return m_query; }
     const Tomahawk::plentry_ptr& entry() const { return m_entry; }
+    const Tomahawk::source_ptr& source() const { return m_source; }
     const Tomahawk::result_ptr& result() const;
 
     Tomahawk::PlaybackLog playbackLog() const;
@@ -82,6 +84,7 @@ private:
     Tomahawk::result_ptr m_result;
     Tomahawk::query_ptr m_query;
     Tomahawk::plentry_ptr m_entry;
+    Tomahawk::source_ptr m_source;
 
     PlayableItem* m_parent;
     bool m_fetchingMore;

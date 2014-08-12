@@ -133,6 +133,14 @@ PlayableItem::PlayableItem( const Tomahawk::plentry_ptr& entry, PlayableItem* pa
 }
 
 
+PlayableItem::PlayableItem( const Tomahawk::source_ptr& source, PlayableItem* parent, int row )
+    : QObject( parent )
+    , m_source( source )
+{
+    init( parent, row );
+}
+
+
 void
 PlayableItem::init( PlayableItem* parent, int row )
 {
