@@ -36,22 +36,19 @@
 #include <QDrag>
 #include <QMimeData>
 
-#define BOXMARGIN 2
-#define DASH "  -  "
-
 using namespace Tomahawk;
 
 
 QueryLabel::QueryLabel( QWidget* parent, Qt::WindowFlags flags )
-    : QFrame( parent, flags )
-    , m_type( Complete )
+    : QLabel( parent, flags )
+    , m_type( None )
 {
     init();
 }
 
 
 QueryLabel::QueryLabel( DisplayType type, QWidget* parent, Qt::WindowFlags flags )
-    : QFrame( parent, flags )
+    : QLabel( parent, flags )
     , m_type( type )
 {
     init();
@@ -59,7 +56,7 @@ QueryLabel::QueryLabel( DisplayType type, QWidget* parent, Qt::WindowFlags flags
 
 
 QueryLabel::QueryLabel( const Tomahawk::result_ptr& result, DisplayType type, QWidget* parent, Qt::WindowFlags flags )
-    : QFrame( parent, flags )
+    : QLabel( parent, flags )
     , m_type( type )
     , m_result( result )
 {
@@ -68,7 +65,7 @@ QueryLabel::QueryLabel( const Tomahawk::result_ptr& result, DisplayType type, QW
 
 
 QueryLabel::QueryLabel( const Tomahawk::query_ptr& query, DisplayType type, QWidget* parent, Qt::WindowFlags flags )
-    : QFrame( parent, flags )
+    : QLabel( parent, flags )
     , m_type( type )
     , m_query( query )
 {
@@ -87,22 +84,17 @@ QueryLabel::init()
     m_contextMenu = new ContextMenu( this );
     m_contextMenu->setSupportedActions( ContextMenu::ActionQueue | ContextMenu::ActionCopyLink | ContextMenu::ActionStopAfter | ContextMenu::ActionLove | ContextMenu::ActionPage );
 
-    m_hoverType = None;
-    setContentsMargins( 0, 0, 0, 0 );
     setMouseTracking( true );
 
-    m_align = Qt::AlignLeft | Qt::AlignVCenter;
+    setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
     m_mode = Qt::ElideMiddle;
-
-    m_jumpLinkVisible = false;
+    m_hovering = false;
 }
 
 
 QString
 QueryLabel::text() const
 {
-    QString text;
-
     if ( m_result.isNull() && m_query.isNull() && m_artist.isNull() && m_album.isNull() )
         return m_text;
 
@@ -110,70 +102,58 @@ QueryLabel::text() const
     {
         if ( m_type & Artist )
         {
-            text += m_result->track()->artist();
+            return m_result->track()->artist();
         }
         if ( m_type & Album && !m_result->track()->album().isEmpty() )
         {
-            smartAppend( text, m_result->track()->album() );
+            return m_result->track()->album();
         }
         if ( m_type & Track )
         {
-            smartAppend( text, m_result->track()->track() );
+            return m_result->track()->track();
         }
     }
     else if ( !m_query.isNull() )
     {
         if ( m_type & Artist )
         {
-            text += m_query->track()->artist();
+            return m_query->track()->artist();
         }
         if ( m_type & Album && !m_query->track()->album().isEmpty() )
         {
-            smartAppend( text, m_query->track()->album() );
+            return m_query->track()->album();
         }
         if ( m_type & Track )
         {
-            smartAppend( text, m_query->track()->track() );
+            return m_query->track()->track();
         }
     }
-    else if ( !m_artist.isNull() )
+    else if ( m_type & Artist && !m_artist.isNull() )
     {
-        text += m_artist->name();
+        return m_artist->name();
     }
-    else if ( !m_album.isNull() )
+    else if ( m_type & Album && !m_album.isNull() )
     {
-        text += m_album->name();
+        return m_album->name();
     }
 
-    return text;
-}
-
-
-QString
-QueryLabel::track() const
-{
-    if ( m_result.isNull() && m_query.isNull() )
-        return QString();
-
-    if ( !m_result.isNull() )
-        return m_result->track()->track();
-    else
-        return m_query->track()->track();
+    return QString();
 }
 
 
 void
 QueryLabel::setText( const QString& text )
 {
-    setContentsMargins( m_textMargins );
-
     m_result.clear();
     m_query.clear();
     m_artist.clear();
     m_album.clear();
+
+    QLabel::setText( m_text );
     m_text = text;
 
-    updateLabel();
+    updateGeometry();
+    update();
 
     emit textChanged( m_text );
     emit resultChanged( m_result );
@@ -187,7 +167,8 @@ QueryLabel::onResultChanged()
     m_artist = m_result->track()->artistPtr();
     m_album = m_result->track()->albumPtr();
 
-    updateLabel();
+    updateGeometry();
+    update();
 
     emit textChanged( text() );
 }
@@ -198,11 +179,6 @@ QueryLabel::setResult( const Tomahawk::result_ptr& result )
 {
     if ( result.isNull() )
         return;
-
-    if ( !m_text.isEmpty() && contentsMargins().left() != 0 ) // FIXME: hacky
-        m_textMargins = contentsMargins();
-
-    setContentsMargins( BOXMARGIN * 2, BOXMARGIN / 2, BOXMARGIN * 2, BOXMARGIN / 2);
 
     if ( m_result.isNull() || m_result.data() != result.data() )
     {
@@ -221,8 +197,6 @@ QueryLabel::setQuery( const Tomahawk::query_ptr& query )
     if ( query.isNull() )
         return;
 
-    setContentsMargins( BOXMARGIN * 2, BOXMARGIN / 2, BOXMARGIN * 2, BOXMARGIN / 2 );
-
     if ( m_query.isNull() || m_query.data() != query.data() )
     {
         m_query = query;
@@ -230,7 +204,8 @@ QueryLabel::setQuery( const Tomahawk::query_ptr& query )
         m_album = Album::get( m_artist, query->track()->album() );
         m_result.clear();
 
-        updateLabel();
+        updateGeometry();
+        update();
 
         emit textChanged( text() );
         emit queryChanged( m_query );
@@ -243,7 +218,8 @@ QueryLabel::setArtist( const artist_ptr& artist )
 {
     m_artist = artist;
 
-    updateLabel();
+    updateGeometry();
+    update();
     emit textChanged( text() );
 }
 
@@ -253,35 +229,11 @@ QueryLabel::setAlbum( const album_ptr& album )
 {
     m_album = album;
 
-    updateLabel();
+    updateGeometry();
+    update();
     emit textChanged( text() );
 }
 
-
-void
-QueryLabel::setJumpLinkVisible( bool visible )
-{
-    m_jumpLinkVisible = visible;
-    repaint();
-}
-
-
-Qt::Alignment
-QueryLabel::alignment() const
-{
-    return m_align;
-}
-
-
-void
-QueryLabel::setAlignment( Qt::Alignment alignment )
-{
-    if ( m_align != alignment )
-    {
-        m_align = alignment;
-        update(); // no geometry change, repaint is sufficient
-    }
-}
 
 
 Qt::TextElideMode
@@ -297,31 +249,9 @@ QueryLabel::setElideMode( Qt::TextElideMode mode )
     if ( m_mode != mode )
     {
         m_mode = mode;
-        updateLabel();
+        updateGeometry();
+        update();
     }
-}
-
-
-void
-QueryLabel::updateLabel()
-{
-    m_hoverArea = QRect();
-    m_hoverType = None;
-
-    updateGeometry();
-    update();
-}
-
-
-void
-QueryLabel::setExtraContentsMargins( int left, int top, int right, int bottom )
-{
-    QMargins margins = contentsMargins();
-    margins.setLeft( margins.left() + left );
-    margins.setTop( margins.top() + top );
-    margins.setRight( margins.right() + right );
-    margins.setBottom( margins.bottom() + bottom );
-    setContentsMargins( margins );
 }
 
 
@@ -345,7 +275,7 @@ QueryLabel::minimumSizeHint() const
         default:
         {
             const QFontMetrics& fm = fontMetrics();
-            QSize size( fm.width( "..." ), fm.height() + contentsMargins().top() * 2  );
+            QSize size( fm.width( "..." ), fm.height() + contentsMargins().top() * 2 );
             return size;
         }
     }
@@ -353,125 +283,33 @@ QueryLabel::minimumSizeHint() const
 
 
 void
-QueryLabel::paintEvent( QPaintEvent* event )
+QueryLabel::paintEvent( QPaintEvent* /* event */ )
 {
-    QFrame::paintEvent( event );
     QPainter p( this );
     QRect r = contentsRect();
-    QString s = text();
-    const QFontMetrics& fm = fontMetrics();
-    const QString elidedText = fm.elidedText( s, m_mode, r.width() );
 
-    p.save();
-    p.setRenderHint( QPainter::Antialiasing );
-
-    if ( m_hoverArea.width() )
+    if ( m_hovering )
     {
-        if ( elidedText != s )
-        {
-            m_hoverArea.setLeft( 0 );
-            m_hoverArea.setRight( fm.width( elidedText ) + contentsMargins().left() * 2 );
-        }
-
-        TomahawkUtils::drawQueryBackground( &p, m_hoverArea );
+        QFont f = p.font();
+        f.setUnderline( true );
+        p.setFont( f );
     }
 
-    if ( elidedText != s || ( m_result.isNull() && m_query.isNull() && m_artist.isNull() && m_album.isNull() ) )
-    {
-        if ( m_hoverArea.width() )
-        {
-            p.setBrush( TomahawkStyle::SELECTION_BACKGROUND );
-            p.setPen( TomahawkStyle::SELECTION_FOREGROUND );
-        }
-        else
-        {
-            p.setBrush( palette().window() );
-            p.setPen( palette().color( foregroundRole() ) );
-        }
-
-        p.drawText( r, m_align, elidedText );
-    }
-    else
-    {
-        int dashX = fm.width( DASH );
-        int artistX = m_type & Artist ? fm.width( artist()->name() ) : 0;
-        int albumX = m_type & Album ? fm.width( album()->name() ) : 0;
-        int trackX = m_type & Track ? fm.width( track() ) : 0;
-
-        if ( m_type & Artist )
-        {
-            p.setBrush( palette().window() );
-            p.setPen( palette().color( foregroundRole() ) );
-
-            if ( m_hoverType == Artist )
-            {
-                p.setBrush( TomahawkStyle::SELECTION_BACKGROUND );
-                p.setPen( TomahawkStyle::SELECTION_FOREGROUND );
-            }
-
-            p.drawText( r, m_align, artist()->name() );
-            r.adjust( artistX, 0, 0, 0 );
-        }
-        if ( m_type & Album && !album()->name().isEmpty() )
-        {
-            p.setBrush( palette().window() );
-            p.setPen( palette().color( foregroundRole() ) );
-
-            if ( m_type & Artist )
-            {
-                p.drawText( r, m_align, DASH );
-                r.adjust( dashX, 0, 0, 0 );
-            }
-            if ( m_hoverType == Album )
-            {
-                p.setBrush( TomahawkStyle::SELECTION_BACKGROUND );
-                p.setPen( TomahawkStyle::SELECTION_FOREGROUND );
-            }
-
-            p.drawText( r, m_align, album()->name() );
-            r.adjust( albumX, 0, 0, 0 );
-        }
-        if ( m_type & Track )
-        {
-            p.setBrush( palette().window() );
-            p.setPen( palette().color( foregroundRole() ) );
-
-            if ( m_type & Artist || ( m_type & Album && !album()->name().isEmpty() ) )
-            {
-                p.drawText( r, m_align, DASH );
-                r.adjust( dashX, 0, 0, 0 );
-            }
-            if ( m_hoverType == Track )
-            {
-                p.setBrush( TomahawkStyle::SELECTION_BACKGROUND );
-                p.setPen( TomahawkStyle::SELECTION_FOREGROUND );
-            }
-
-            p.drawText( r, m_align, track() );
-            r.adjust( trackX, 0, 0, 0 );
-        }
-
-        if ( m_jumpLinkVisible )
-        {
-            r.adjust( 6, 0, 0, 0 );
-            r.setWidth( r.height() );
-            p.drawPixmap( r, TomahawkUtils::defaultPixmap( TomahawkUtils::JumpLink, TomahawkUtils::Original, r.size() ) );
-        }
-    }
-
-    p.restore();
+    const QFontMetrics fm( p.font() );
+    p.drawText( r, alignment(), fm.elidedText( text(), m_mode, r.width() ) );
 }
 
 
 void
 QueryLabel::changeEvent( QEvent* event )
 {
-    QFrame::changeEvent( event );
+    QLabel::changeEvent( event );
     switch ( event->type() )
     {
         case QEvent::FontChange:
         case QEvent::ApplicationFontChange:
-            updateLabel();
+            updateGeometry();
+            update();
             break;
 
         default:
@@ -485,7 +323,7 @@ QueryLabel::contextMenuEvent( QContextMenuEvent* event )
 {
     m_contextMenu->clear();
 
-    switch( m_hoverType )
+    switch( m_type )
     {
         case Artist:
         {
@@ -509,7 +347,7 @@ QueryLabel::contextMenuEvent( QContextMenuEvent* event )
 void
 QueryLabel::mousePressEvent( QMouseEvent* event )
 {
-    QFrame::mousePressEvent( event );
+    QLabel::mousePressEvent( event );
     m_time.restart();
     m_dragPos = event->pos();
 }
@@ -518,30 +356,28 @@ QueryLabel::mousePressEvent( QMouseEvent* event )
 void
 QueryLabel::mouseReleaseEvent( QMouseEvent* event )
 {
-    QFrame::mouseReleaseEvent( event );
+    QLabel::mouseReleaseEvent( event );
 
     m_dragPos = QPoint();
     if ( m_time.elapsed() < qApp->doubleClickInterval() )
     {
-        switch( m_hoverType )
+        switch ( m_type )
         {
             case Artist:
-                emit clickedArtist();
+            {
+                ViewManager::instance()->show( artist() );
                 break;
+            }
             case Album:
-                emit clickedAlbum();
+            {
+                ViewManager::instance()->show( album() );
                 break;
-            case Track:
-                emit clickedTrack();
-                break;
-
-            case Complete:
-                ViewManager::instance()->showCurrentTrack();
-                break;
+            }
 
             default:
-                emit clicked();
+                ViewManager::instance()->show( m_query );
         }
+        emit clicked();
     }
 }
 
@@ -549,8 +385,7 @@ QueryLabel::mouseReleaseEvent( QMouseEvent* event )
 void
 QueryLabel::mouseMoveEvent( QMouseEvent* event )
 {
-    QFrame::mouseMoveEvent( event );
-    int x = event->x();
+    QLabel::mouseMoveEvent( event );
 
     if ( event->buttons() & Qt::LeftButton &&
        ( m_dragPos - event->pos() ).manhattanLength() >= QApplication::startDragDistance() )
@@ -560,93 +395,10 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
         return;
     }
 
-    if ( m_query.isNull() && m_result.isNull() && m_artist.isNull() && m_album.isNull() )
+    if ( !m_hovering )
     {
-        m_hoverArea = QRect();
-        m_hoverType = None;
-        return;
-    }
-
-    QFontMetrics fm = fontMetrics();
-
-    int dashX = fm.width( DASH );
-    int artistX = m_type & Artist ? fm.width( artist()->name() ) : 0;
-    int albumX = m_type & Album ? fm.width( album()->name() ) : 0;
-    int trackX = m_type & Track ? fm.width( track() ) : 0;
-
-    if ( m_type & Track )
-    {
-        trackX += contentsMargins().left();
-    }
-    if ( m_type & Album && !album()->name().isEmpty() )
-    {
-        trackX += albumX + dashX;
-        albumX += contentsMargins().left();
-    }
-    if ( m_type & Artist )
-    {
-        albumX += artistX + dashX;
-        trackX += artistX + dashX;
-        artistX += contentsMargins().left();
-    }
-
-    QRect hoverArea;
-    m_hoverType = None;
-
-    if ( m_align & Qt::AlignLeft )
-    {
-        if ( m_type & Artist && x < artistX )
-        {
-            m_hoverType = Artist;
-            hoverArea.setLeft( 0 );
-            hoverArea.setRight( artistX + contentsMargins().left() - 1 );
-        }
-        else if ( m_type & Album && !album()->name().isEmpty() && x < albumX && x > artistX )
-        {
-            m_hoverType = Album;
-            int spacing = ( m_type & Artist ) ? dashX : 0;
-            hoverArea.setLeft( artistX + spacing - contentsMargins().left() );
-            hoverArea.setRight( albumX + contentsMargins().left() - 1 );
-        }
-        else if ( m_type & Track && x < trackX && x > albumX )
-        {
-            m_hoverType = Track;
-            int spacing = ( m_type & Album && !album()->name().isEmpty() ) ? dashX : 0;
-            hoverArea.setLeft( albumX + spacing );
-            hoverArea.setRight( trackX + contentsMargins().left() - 1 );
-        }
-        else if ( m_jumpLinkVisible && x < trackX + 6 + fm.height() && x > trackX + 6 )
-        {
-            m_hoverType = Complete;
-        }
-    }
-    else
-    {
-        hoverArea.setLeft( 0 );
-        hoverArea.setRight( width() - 1 );
-
-        if ( m_type & Artist )
-            m_hoverType = Artist;
-        else if ( m_type & Album )
-            m_hoverType = Album;
-        else if ( m_type & Track )
-            m_hoverType = Track;
-    }
-
-    if ( hoverArea.width() )
-    {
-        hoverArea.setY( 1 );
-        hoverArea.setHeight( height() - 2 );
-    }
-
-    if ( m_hoverType != None )
+        m_hovering = true;
         setCursor( Qt::PointingHandCursor );
-    else
-        setCursor( Qt::ArrowCursor );
-
-    if ( hoverArea != m_hoverArea )
-    {
-        m_hoverArea = hoverArea;
         repaint();
     }
 }
@@ -655,9 +407,9 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
 void
 QueryLabel::leaveEvent( QEvent* event )
 {
-    Q_UNUSED( event );
-    m_hoverArea = QRect();
-    m_hoverType = None;
+    QLabel::leaveEvent( event );
+
+    m_hovering = false;
     repaint();
 }
 
@@ -674,7 +426,7 @@ QueryLabel::startDrag()
     QMimeData* mimeData = new QMimeData();
     mimeData->setText( text() );
 
-    switch( m_hoverType )
+    switch( m_type )
     {
             case Artist:
             {
@@ -710,13 +462,10 @@ QueryLabel::startDrag()
 }
 
 
-QString
-QueryLabel::smartAppend( QString& text, const QString& appendage ) const
+void
+QueryLabel::setType( DisplayType type )
 {
-    QString s;
-    if ( !text.isEmpty() )
-        s = DASH;
-
-    text += s + appendage;
-    return text;
+    m_type = type;
+    updateGeometry();
+    update();
 }

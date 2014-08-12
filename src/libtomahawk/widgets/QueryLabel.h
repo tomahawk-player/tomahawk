@@ -19,10 +19,8 @@
 #ifndef QUERYLABEL_H
 #define QUERYLABEL_H
 
-#include <QFrame>
+#include <QLabel>
 #include <QTime>
-#include <QPen>
-#include <QPixmap>
 
 #include "Result.h"
 #include "Query.h"
@@ -34,7 +32,7 @@ namespace Tomahawk
     class ContextMenu;
 };
 
-class DLLEXPORT QueryLabel : public QFrame
+class DLLEXPORT QueryLabel : public QLabel
 {
 Q_OBJECT
 
@@ -45,20 +43,15 @@ public:
         Artist = 1,
         Album = 2,
         Track = 4,
-        ArtistAndAlbum = 3,
-        ArtistAndTrack = 5,
-        AlbumAndTrack = 6,
-        Complete = 7
     };
 
     explicit QueryLabel( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
-    explicit QueryLabel( DisplayType type = Complete, QWidget* parent = 0, Qt::WindowFlags flags = 0 );
-    explicit QueryLabel( const Tomahawk::result_ptr& result, DisplayType type = Complete, QWidget* parent = 0, Qt::WindowFlags flags = 0 );
-    explicit QueryLabel( const Tomahawk::query_ptr& query, DisplayType type = Complete, QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+    explicit QueryLabel( DisplayType type, QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+    explicit QueryLabel( const Tomahawk::result_ptr& result, DisplayType type = None, QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+    explicit QueryLabel( const Tomahawk::query_ptr& query, DisplayType type = None, QWidget* parent = 0, Qt::WindowFlags flags = 0 );
     virtual ~QueryLabel();
 
     QString text() const;
-    QString track() const;
 
     Tomahawk::result_ptr result() const { return m_result; }
     Tomahawk::query_ptr query() const { return m_query; }
@@ -66,22 +59,15 @@ public:
     Tomahawk::album_ptr album() const { return m_album; }
 
     DisplayType type() const { return m_type; }
-    void setType( DisplayType type ) { m_type = type; }
-
-    Qt::Alignment alignment() const;
-    void setAlignment( Qt::Alignment alignment );
+    void setType( DisplayType type );
 
     Qt::TextElideMode elideMode() const;
     void setElideMode( Qt::TextElideMode mode );
-
-    void setExtraContentsMargins( int left, int top, int right, int bottom );
-    void setJumpLinkVisible( bool visible );
 
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
 
     void init();
-    void updateLabel();
 
 public slots:
     void setText( const QString& text );
@@ -92,9 +78,6 @@ public slots:
 
 signals:
     void clicked();
-    void clickedArtist();
-    void clickedAlbum();
-    void clickedTrack();
 
     void textChanged( const QString& text );
     void resultChanged( const Tomahawk::result_ptr& result );
@@ -117,7 +100,6 @@ private slots:
     void onResultChanged();
 
 private:
-    QString smartAppend( QString& text, const QString& appendage ) const;
     QTime m_time;
 
     DisplayType m_type;
@@ -130,15 +112,10 @@ private:
 
     Tomahawk::ContextMenu* m_contextMenu;
 
-    Qt::Alignment m_align;
     Qt::TextElideMode m_mode;
-
-    DisplayType m_hoverType;
-    QRect m_hoverArea;
     QPoint m_dragPos;
-    QMargins m_textMargins;
 
-    bool m_jumpLinkVisible;
+    bool m_hovering;
 };
 
 #endif // QUERYLABEL_H
