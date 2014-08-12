@@ -148,7 +148,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     setupShortcuts();
 
 #ifdef Q_OS_WIN
-    connect( AudioEngine::instance(), SIGNAL( stateChanged( AudioState, AudioState) ), SLOT( audioStateChanged( AudioState, AudioState) ) );
+    connect( AudioEngine::instance(), SIGNAL( stateChanged( AudioState, AudioState ) ), SLOT( audioStateChanged( AudioState, AudioState ) ) );
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 2, 0 )
     setupWindowsButtons();
 #endif
