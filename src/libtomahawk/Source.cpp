@@ -76,12 +76,14 @@ Source::~Source()
     delete d_ptr;
 }
 
+
 bool
 Source::isLocal() const
 {
     Q_D( const Source );
     return d->isLocal;
 }
+
 
 bool
 Source::isOnline() const
@@ -160,6 +162,7 @@ Source::dbCollection() const
     collection_ptr tmp;
     return tmp;
 }
+
 
 QList<collection_ptr>
 Source::collections() const
@@ -384,6 +387,7 @@ Source::removeCollection( const collection_ptr& c )
     emit collectionRemoved( c );
 }
 
+
 int
 Source::id() const
 {
@@ -392,6 +396,7 @@ Source::id() const
     return d->id;
 }
 
+
 ControlConnection*
 Source::controlConnection() const
 {
@@ -399,6 +404,7 @@ Source::controlConnection() const
 
     return d->cc.data();
 }
+
 
 void
 Source::handleDisconnect( Tomahawk::Accounts::Account*, Tomahawk::Accounts::AccountManager::DisconnectReason reason )
@@ -555,6 +561,7 @@ Source::trackCount() const
     return d->stats.value( "numfiles", 0 ).toUInt();
 }
 
+
 query_ptr
 Source::currentTrack() const
 {
@@ -577,6 +584,7 @@ Source::playlistInterface()
 
     return d->playlistInterface;
 }
+
 
 QSharedPointer<QMutexLocker>
 Source::acquireLock()
@@ -805,6 +813,7 @@ Source::textStatus() const
         return tr( "Offline" );
     }
 }
+
 
 DBSyncConnectionState
 Source::state() const
