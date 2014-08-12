@@ -74,7 +74,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setAttribute( Qt::WA_MacShowFocusRect, 0 );
     setContentsMargins( 0, 0, 0, 0 );
 
-    QFont fnt;
+    QFont fnt = font();
     QFontMetrics fm( fnt );
     // This is sort of the longest string in there. With translations
     // we will never get it right so setting it to something reasonable for the average case
@@ -134,11 +134,8 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 
     showOfflineSources( TomahawkSettings::instance()->showOfflineSources() );
 
-    // Light-blue sourcetree on osx
-#ifdef Q_OS_MAC
-    setStyleSheet( "SourceTreeView:active { background: #DDE4EB; } "
-                   "SourceTreeView        { background: #EDEDED; } " );
-#endif
+    setStyleSheet( "SourceTreeView:active { background: #F2F2F2; } "
+                   "SourceTreeView        { background: #F2F2F2; } " );
 
     connect( this, SIGNAL( latchRequest( Tomahawk::source_ptr ) ), m_latchManager, SLOT( latchRequest( Tomahawk::source_ptr ) ) );
     connect( this, SIGNAL( unlatchRequest( Tomahawk::source_ptr ) ), m_latchManager, SLOT( unlatchRequest( Tomahawk::source_ptr ) ) );
