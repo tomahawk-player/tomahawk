@@ -48,6 +48,7 @@ set( libGuiSources
     playlist/InboxView.cpp
     playlist/FlexibleHeader.cpp
     playlist/ModeHeader.cpp
+    playlist/ContextView.cpp
     playlist/FlexibleView.cpp
     playlist/FlexibleTreeView.cpp
     playlist/TreeModel.cpp
@@ -79,10 +80,12 @@ set( libGuiSources
     playlist/RecentlyPlayedModel.cpp
     playlist/AlbumItemDelegate.cpp
     playlist/PlaylistLargeItemDelegate.cpp
+    playlist/TrackItemDelegate.cpp
     playlist/PlaylistChartItemDelegate.cpp
     playlist/PlayableItem.cpp
     playlist/SingleTrackPlaylistInterface.cpp
     playlist/RevisionQueueItem.cpp
+    playlist/TrackDetailView.cpp
 
     playlist/dynamic/DynamicPlaylist.cpp
     playlist/dynamic/DynamicView.cpp
@@ -134,6 +137,8 @@ set( libGuiSources
     widgets/AnimatedCounterLabel.cpp
     widgets/AnimatedSplitter.cpp
     widgets/BasicHeader.cpp
+    widgets/HoverControls.cpp
+    widgets/BackgroundWidget.cpp
     widgets/Breadcrumb.cpp
     widgets/BreadcrumbButton.cpp
     widgets/ChartDataLoader.cpp
@@ -143,6 +148,7 @@ set( libGuiSources
     widgets/ElidedLabel.cpp
     widgets/FadingPixmap.cpp
     widgets/FilterHeader.cpp
+    widgets/CaptionLabel.cpp
     widgets/HeaderLabel.cpp
     widgets/HeaderWidget.cpp
     widgets/HistoryWidget.cpp
@@ -389,6 +395,7 @@ set( libUI ${libUI}
     widgets/PlaylistTypeSelectorDialog.ui
     widgets/NewPlaylistWidget.ui
     widgets/SearchWidget.ui
+    widgets/HeaderWidget.ui
     widgets/NewReleasesWidget.ui
     widgets/infowidgets/SourceInfoWidget.ui
     widgets/infowidgets/ArtistInfoWidget.ui
