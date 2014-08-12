@@ -28,6 +28,8 @@
         <file>data/images/seek-and-volume-knob-rest.png</file>
         <file>data/images/seek-slider-bkg.png</file>
         <file>data/images/seek-slider-level.png</file>
+        <file>data/images/shuffle.svg</file>
+        <file>data/images/repeat.svg</file>
         <file>data/images/shuffle-off-pressed.svg</file>
         <file>data/images/shuffle-off-rest.svg</file>
         <file>data/images/shuffle-on-pressed.svg</file>
@@ -151,6 +153,8 @@
         <file>data/images/outbox.svg</file>
         <file>data/images/inbox-512x512.png</file>
         <file>data/images/network-activity.svg</file>
+        <file>data/images/play.svg</file>
+        <file>data/images/pause.svg</file>
         <file>data/fonts/TitilliumWeb-Bold.ttf</file>
         <file>data/fonts/TitilliumWeb-Regular.ttf</file>
         <file>data/fonts/PathwayGothicOne-Regular.ttf</file>

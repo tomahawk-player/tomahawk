@@ -18,10 +18,6 @@
 <g id="Layer_9">
 </g>
 <g id="Layer_10">
-	<g>
-		<rect x="2.4" y="0.7" width="2.9" height="12.6"/>
-		<rect x="8.6" y="0.7" width="2.9" height="12.6"/>
-	</g>
 </g>
 <g id="Layer_11">
 </g>
@@ -54,6 +50,7 @@
 <g id="Layer_27">
 </g>
 <g id="Layer_28">
+	<path d="M2.4,0.7L11.6,7l-9.1,6.3V0.7z"/>
 </g>
 <g id="Layer_29">
 </g>
