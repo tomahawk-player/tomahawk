@@ -35,28 +35,28 @@ SeekSlider::SeekSlider( QWidget* parent )
     setFixedHeight( scaledY( 20 ) );
     setStyleSheet( QString(
                    "QSlider::groove:horizontal {"
-                   "margin: %1px; border-width: %2px;"
-                   "border-image: url(" RESPATH "images/seek-slider-bkg.png) %2 %2 %2 %2 stretch stretch;"
+                   "margin: %1px; border: %2px solid rgba(200, 200, 200, 40); background: rgba(200, 200, 200, 40);"
+//                   "border-image: url(" RESPATH "images/seek-slider-bkg.png) %2 %2 %2 %2 stretch stretch;"
                    "}"
 
                    "QSlider::sub-page:horizontal {"
-                   "margin: %1px; border-width: %2px;"
-                   "border-image: url(" RESPATH "images/seek-slider-level.png) %2 %2 %2 %2 stretch stretch;"
+                   "margin: %1px; border: %2px solid #ffffff; background: #ffffff;"
+//                   "border-image: url(" RESPATH "images/seek-slider-level.png) %2 %2 %2 %2 stretch stretch;"
                    "}" )
-                   .arg( 5 /*margin*/)
+                   .arg( 0 /*margin*/)
                    .arg( 3 /*border*/) +
                    QString(
                    "QSlider::handle:horizontal {"
                    "margin-bottom: -%1px; margin-top: -%1px;"
                    "margin-left: -%2px; margin-right: -%2px;"
                    "height: %3px; width: %4px;"
-                   "background-image: url(" RESPATH "images/seek-and-volume-knob-rest.png);"
+//                   "background-image: url(" RESPATH "images/seek-and-volume-knob-rest.png);"
                    "background-repeat: no-repeat;"
                    "}" )
-                   .arg( /*margin top&bottom*/ 7 )
-                   .arg( /*margin left&right*/ 4 )
-                   .arg( /*height*/ 17 )
-                   .arg( /*width*/ 16 ) );
+                   .arg( /*margin top&bottom*/ 0 )
+                   .arg( /*margin left&right*/ 0 )
+                   .arg( /*height*/ 1 )
+                   .arg( /*width*/ 1 ) );
 }
 
 
@@ -82,8 +82,8 @@ void
 SeekSlider::setValue( int value )
 {
 //    int newVal = qBound( minimum(), value, maximum() );
-    
-    if ( !m_timeLine || sender() != m_timeLine ) 
+
+    if ( !m_timeLine || sender() != m_timeLine )
     {
         QSlider::setValue( value );
         return;
