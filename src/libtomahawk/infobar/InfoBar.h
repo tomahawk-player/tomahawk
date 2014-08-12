@@ -80,7 +80,7 @@ private:
 
     QPalette m_whitePal;
 
-    QList<Tomahawk::PlaylistUpdaterInterface*> m_updaters;;
+    QList<Tomahawk::PlaylistUpdaterInterface*> m_updaters;
     QList<QWidget*> m_updaterConfigurations;
 
     QSearchField* m_searchWidget;

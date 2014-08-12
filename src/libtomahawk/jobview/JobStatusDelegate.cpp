@@ -41,7 +41,6 @@ JobStatusDelegate::JobStatusDelegate( QObject* parent )
 
 JobStatusDelegate::~JobStatusDelegate()
 {
-
 }
 
 
