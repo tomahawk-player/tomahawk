@@ -45,8 +45,7 @@ InboxModel::InboxModel( QObject* parent )
     // Every time a ShareTrack dbcmd is created, we keep track of it until it's committed,
     // so we can react with post-commit changes in the UI
     Tomahawk::DatabaseCommandFactory* factory = Tomahawk::Database::instance()->commandFactory<Tomahawk::DatabaseCommand_ShareTrack>();
-    connect( factory, SIGNAL(created(Tomahawk::dbcmd_ptr)),
-             this, SLOT(onDbcmdCreated(Tomahawk::dbcmd_ptr)));
+    connect( factory, SIGNAL( created( Tomahawk::dbcmd_ptr ) ), SLOT( onDbcmdCreated( Tomahawk::dbcmd_ptr ) ) );
 }
 
 
@@ -201,7 +200,7 @@ InboxModel::loadTracks()
     startLoading();
 
     Tomahawk::DatabaseCommand_LoadInboxEntries* cmd = new Tomahawk::DatabaseCommand_LoadInboxEntries();
-    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksLoaded( QList<Tomahawk::query_ptr> ) ) );
+    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), SLOT( tracksLoaded( QList<Tomahawk::query_ptr> ) ) );
     Tomahawk::Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
@@ -246,8 +245,7 @@ InboxModel::tracksLoaded( QList< Tomahawk::query_ptr > incoming )
 void
 InboxModel::onDbcmdCreated( const Tomahawk::dbcmd_ptr& cmd )
 {
-    connect( cmd.data(), SIGNAL( committed( Tomahawk::dbcmd_ptr ) ),
-             this, SLOT( onDbcmdCommitted( Tomahawk::dbcmd_ptr ) ) );
+    connect( cmd.data(), SIGNAL( committed( Tomahawk::dbcmd_ptr ) ), SLOT( onDbcmdCommitted( Tomahawk::dbcmd_ptr ) ) );
 }
 
 

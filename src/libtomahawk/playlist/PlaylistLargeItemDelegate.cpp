@@ -93,6 +93,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
     }
 
     opt.text.clear();
+
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
 
     if ( m_view->header()->visualIndex( index.column() ) > 0 )
