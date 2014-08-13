@@ -840,6 +840,8 @@ PlayableModel::ensureResolved()
     for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
     {
         query_ptr query = itemFromIndex( index( i, 0, QModelIndex() ) )->query();
+        if ( !query )
+            continue;
 
         if ( !query->resolvingFinished() )
             ql << query;
