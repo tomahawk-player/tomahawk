@@ -66,7 +66,7 @@ GridView::GridView( QWidget* parent )
     setDropIndicatorShown( false );
     setDragDropOverwriteMode( false );
     setUniformItemSizes( true );
-    setSpacing( 0 );
+    setSpacing( 16 );
     setContentsMargins( 0, 0, 0, 0 );
     setMouseTracking( true );
     setContextMenuPolicy( Qt::CustomContextMenu );
@@ -75,10 +75,11 @@ GridView::GridView( QWidget* parent )
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 
-    setStyleSheet( "QListView { background-color: #272b2e; }" );
+    setStyleSheet( "QListView { background-color: #ffffff; }" );
 
     setAutoFitItems( true );
     setAutoResize( false );
+    setItemSize( QSize( 170, 170 + 48 ) );
     setProxyModel( new PlayableProxyModel( this ) );
 
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
@@ -115,6 +116,7 @@ GridView::setProxyModel( PlayableProxyModel* model )
     m_delegate = new GridItemDelegate( this, m_proxyModel );
     connect( m_delegate, SIGNAL( startedPlaying( QPersistentModelIndex ) ), this, SLOT( onDelegatePlaying( QPersistentModelIndex ) ) );
     connect( m_delegate, SIGNAL( stoppedPlaying( QPersistentModelIndex ) ), this, SLOT( onDelegateStopped( QPersistentModelIndex ) ) );
+    m_delegate->setItemSize( m_itemSize );
     setItemDelegate( m_delegate );
 
     QListView::setModel( m_proxyModel );
@@ -159,12 +161,10 @@ GridView::currentChanged( const QModelIndex& current, const QModelIndex& previou
 {
     QListView::currentChanged( current, previous );
 
-    PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
+/*    PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
     if ( item )
     {
-//        if ( !item->album().isNull() )
-//            ViewManager::instance()->context()->setAlbum( item->album() );
-    }
+    }*/
 }
 
 
@@ -174,9 +174,6 @@ GridView::onItemActivated( const QModelIndex& index )
     PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
     if ( item )
     {
-//        qDebug() << "Result activated:" << item->album()->tracks().first()->toString() << item->album()->tracks().first()->results().first()->url();
-//        APP->audioEngine()->playItem( item->album().data(), item->album()->tracks().first()->results().first() );
-
         if ( !item->album().isNull() )
             ViewManager::instance()->show( item->album() );
         else if ( !item->artist().isNull() )
@@ -217,6 +214,7 @@ GridView::resizeEvent( QResizeEvent* event )
 {
     QListView::resizeEvent( event );
     layoutItems();
+    verifySize();
 
     emit resized();
 }
@@ -246,18 +244,53 @@ GridView::verifySize()
     if ( rect().width() - contentsRect().width() > scrollbar ) //HACK: if the contentsRect includes the scrollbar
         scrollbar = 0; //don't count it any more
 
-    const int rectWidth = contentsRect().width() - scrollbar - 3;
-    const int itemWidth = 160;
+    const int rectWidth = contentsRect().width() - scrollbar - 3 - spacing();
+    const int itemWidth = m_itemSize.width() + spacing();
     const int itemsPerRow = qMax( 1, qFloor( rectWidth / itemWidth ) );
 
     const int overlapRows = m_model->rowCount( QModelIndex() ) % itemsPerRow;
     const int rows = qMax( 1.0, floor( (double)m_model->rowCount( QModelIndex() ) / (double)itemsPerRow ) );
-    const int newHeight = rows * m_delegate->itemSize().height();
+    const int newHeight = rows * ( m_delegate->itemSize().height() + spacing() );
 
-    m_proxyModel->setMaxVisibleItems( m_model->rowCount( QModelIndex() ) - overlapRows );
+    if ( !isWrapping() )
+    {
+        m_proxyModel->setMaxVisibleItems( qMin( itemsPerRow, m_model->rowCount( QModelIndex() ) ) );
+    }
+    else if ( newHeight > 0 )
+    {
+        m_proxyModel->setMaxVisibleItems( m_model->rowCount( QModelIndex() ) - overlapRows );
+        setFixedHeight( newHeight + spacing() );
+    }
+}
 
-    if ( newHeight > 0 )
-        setFixedHeight( newHeight );
+
+void
+GridView::layoutItems()
+{
+    if ( autoFitItems() && m_model )
+    {
+        int scrollbar = verticalScrollBar()->rect().width();
+
+        if ( rect().width() - contentsRect().width() >= scrollbar ) //HACK: if the contentsRect includes the scrollbar
+            scrollbar = 0; //don't count it any more
+
+        const int rectWidth = contentsRect().width() - scrollbar - 3 - spacing();
+        const int itemWidth = m_itemSize.width() + spacing();
+        const int itemsPerRow = qMax( 1, qFloor( rectWidth / itemWidth ) );
+
+        const int remSpace = rectWidth - ( itemsPerRow * itemWidth );
+        const int extraSpace = remSpace / itemsPerRow;
+        const int newItemWidth = itemWidth + extraSpace - spacing();
+
+        m_delegate->setItemSize( QSize( newItemWidth, newItemWidth + 32 ) );
+        verifySize();
+
+        if ( !m_inited )
+        {
+            m_inited = true;
+            repaint();
+        }
+    }
 }
 
 
@@ -273,36 +306,6 @@ GridView::onDelegateStopped( const QPersistentModelIndex& index )
 {
     if ( m_playing == index )
         m_playing = QPersistentModelIndex();
-}
-
-
-void
-GridView::layoutItems()
-{
-    if ( autoFitItems() && m_model )
-    {
-        int scrollbar = verticalScrollBar()->rect().width();
-
-        if ( rect().width() - contentsRect().width() >= scrollbar ) //HACK: if the contentsRect includes the scrollbar
-            scrollbar = 0; //don't count it any more
-
-        const int rectWidth = contentsRect().width() - scrollbar - 3;
-        const int itemWidth = 160;
-        const int itemsPerRow = qMax( 1, qFloor( rectWidth / itemWidth ) );
-
-        const int remSpace = rectWidth - ( itemsPerRow * itemWidth );
-        const int extraSpace = remSpace / itemsPerRow;
-        const int newItemWidth = itemWidth + extraSpace;
-
-        m_delegate->setItemSize( QSize( newItemWidth, newItemWidth ) );
-        verifySize();
-
-        if ( !m_inited )
-        {
-            m_inited = true;
-            repaint();
-        }
-    }
 }
 
 
@@ -427,4 +430,15 @@ void
 GridView::setPlaylistInterface( const Tomahawk::playlistinterface_ptr& playlistInterface )
 {
     proxyModel()->setPlaylistInterface( playlistInterface );
+}
+
+
+void
+GridView::setItemSize( const QSize& size )
+{
+    m_itemSize = size;
+    if ( m_delegate )
+        m_delegate->setItemSize( m_itemSize );
+
+    layoutItems();
 }
