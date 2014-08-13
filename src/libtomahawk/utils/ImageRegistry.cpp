@@ -47,6 +47,13 @@ ImageRegistry::icon( const QString& image, TomahawkUtils::ImageMode mode )
 }
 
 
+qint64
+ImageRegistry::cacheKey( const QSize& size, float opacity, QColor tint )
+{
+    return size.width() * 100 + size.height() * 10 + ( opacity * 100.0 ) + tint.value();
+}
+
+
 QPixmap
 ImageRegistry::pixmap( const QString& image, const QSize& size, TomahawkUtils::ImageMode mode, float opacity, QColor tint )
 {
@@ -61,9 +68,10 @@ ImageRegistry::pixmap( const QString& image, const QSize& size, TomahawkUtils::I
         {
             subsubcache = subcache.value( mode );
 
-            if ( subsubcache.contains( size.width() * 100 + size.height() * 10 + ( opacity * 100.0 ) ) )
+            const qint64 ck = cacheKey( size, opacity, tint );
+            if ( subsubcache.contains( ck ) )
             {
-                return subsubcache.value( size.width() * 100 + size.height() * 10 + ( opacity * 100.0 ) );
+                return subsubcache.value( ck );
             }
         }
     }
@@ -114,7 +122,7 @@ ImageRegistry::pixmap( const QString& image, const QSize& size, TomahawkUtils::I
         if ( !size.isNull() && pixmap.size() != size )
             pixmap = pixmap.scaled( size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
 
-        putInCache( image, size, mode, opacity, pixmap );
+        putInCache( image, size, mode, opacity, pixmap, tint );
     }
 
     return pixmap;
@@ -122,7 +130,7 @@ ImageRegistry::pixmap( const QString& image, const QSize& size, TomahawkUtils::I
 
 
 void
-ImageRegistry::putInCache( const QString& image, const QSize& size, TomahawkUtils::ImageMode mode, float opacity, const QPixmap& pixmap )
+ImageRegistry::putInCache( const QString& image, const QSize& size, TomahawkUtils::ImageMode mode, float opacity, const QPixmap& pixmap, QColor tint )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Adding to image cache:" << image << size << mode;
 
@@ -144,7 +152,7 @@ ImageRegistry::putInCache( const QString& image, const QSize& size, TomahawkUtil
         }
     }
 
-    subsubcache.insert( size.width() * 100 + size.height() * 10 + ( opacity * 100.0 ), pixmap );
+    subsubcache.insert( cacheKey( size, opacity, tint ), pixmap );
     subcache.insert( mode, subsubcache );
     s_cache.insert( image, subcache );
 }
