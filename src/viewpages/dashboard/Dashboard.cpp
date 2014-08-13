@@ -20,6 +20,7 @@
 
 #include "Dashboard.h"
 #include "ui_DashboardWidget.h"
+#include "ui_HeaderWidget.h"
 
 #include "libtomahawk-widgets/PlaylistDelegate.h"
 
@@ -30,6 +31,7 @@
 #include "widgets/RecentlyPlayedPlaylistsModel.h"
 #include "MetaPlaylistInterface.h"
 #include "audio/AudioEngine.h"
+#include "playlist/TrackView.h"
 #include "playlist/AlbumModel.h"
 #include "playlist/RecentlyPlayedModel.h"
 #include "playlist/dynamic/GeneratorInterface.h"
@@ -65,129 +67,62 @@ Dashboard::~Dashboard()
 DashboardWidget::DashboardWidget( QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::DashboardWidget )
+    , uiHeader( new Ui::HeaderWidget )
 {
     QWidget* widget = new QWidget;
+    QWidget* headerWidget = new QWidget;
     ui->setupUi( widget );
-
-    ui->lineAbove->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
-    ui->lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
+    uiHeader->setupUi( headerWidget );
+    headerWidget->setFixedHeight( 160 );
 
     {
-        m_tracksModel = new RecentlyPlayedModel( ui->tracksView, HISTORY_TRACK_ITEMS );
-        ui->tracksView->proxyModel()->setStyle( PlayableProxyModel::Short );
-        ui->tracksView->overlay()->setEnabled( false );
-        ui->tracksView->setPlaylistModel( m_tracksModel );
-        ui->tracksView->setAutoResize( true );
-        ui->tracksView->setAlternatingRowColors( false );
+        m_tracksModel = new RecentlyPlayedModel( ui->trackView->trackView(), HISTORY_TRACK_ITEMS );
+        ui->trackView->setPlayableModel( m_tracksModel );
+        ui->trackView->setCaption( tr( "Recently Played Tracks" ) );
+        ui->trackView->trackView()->setUniformRowHeights( false );
+
+//        ui->trackView->trackView()->setAutoResize( true );
         m_tracksModel->setSource( source_ptr() );
-
-        QPalette p = ui->tracksView->palette();
-        p.setColor( QPalette::Text, TomahawkStyle::PAGE_TRACKLIST_TRACK_SOLVED );
-        p.setColor( QPalette::BrightText, TomahawkStyle::PAGE_TRACKLIST_TRACK_UNRESOLVED );
-        p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_TRACKLIST_NUMBER );
-        p.setColor( QPalette::Highlight, TomahawkStyle::PAGE_TRACKLIST_HIGHLIGHT );
-        p.setColor( QPalette::HighlightedText, TomahawkStyle::PAGE_TRACKLIST_HIGHLIGHT_TEXT );
-
-        ui->tracksView->setPalette( p );
-        TomahawkStyle::stylePageFrame( ui->tracksView );
-        TomahawkStyle::stylePageFrame( ui->trackFrame );
     }
 
     {
-        RecentPlaylistsModel* model = new RecentPlaylistsModel( HISTORY_PLAYLIST_ITEMS, this );
+        QFont f = uiHeader->artistLabel->font();
+        f.setBold( true );
+        f.setPointSize( 16 );
 
-        ui->playlistWidget->setFrameShape( QFrame::NoFrame );
-        ui->playlistWidget->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-        ui->playlistWidget->setItemDelegate( new PlaylistDelegate() );
-        ui->playlistWidget->setModel( model );
-        ui->playlistWidget->overlay()->resize( 380, 86 );
-        ui->playlistWidget->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
+        QPalette p = uiHeader->artistLabel->palette();
+        p.setColor( QPalette::Foreground, Qt::white );
 
-        QPalette p = ui->playlistWidget->palette();
-        p.setColor( QPalette::Text, TomahawkStyle::HEADER_TEXT );
-        p.setColor( QPalette::BrightText, TomahawkStyle::HEADER_TEXT );
-        p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
-        p.setColor( QPalette::Highlight, TomahawkStyle::HEADER_TEXT );
-        p.setColor( QPalette::HighlightedText, TomahawkStyle::HEADER_BACKGROUND );
-
-        ui->playlistWidget->setPalette( p );
-        ui->playlistWidget->setMinimumHeight( 400 );
-        TomahawkStyle::styleScrollBar( ui->playlistWidget->verticalScrollBar() );
-        TomahawkStyle::stylePageFrame( ui->playlistWidget );
-        TomahawkStyle::stylePageFrame( ui->playlistFrame );
-
-        updatePlaylists();
-        connect( ui->playlistWidget, SIGNAL( activated( QModelIndex ) ), SLOT( onPlaylistActivated( QModelIndex ) ) );
-        connect( model, SIGNAL( emptinessChanged( bool ) ), this, SLOT( updatePlaylists() ) );
-    }
-
-    {
-        m_recentAlbumsModel = new AlbumModel( ui->additionsView );
-        ui->additionsView->setPlayableModel( m_recentAlbumsModel );
-        ui->additionsView->proxyModel()->sort( -1 );
-
-        TomahawkStyle::styleScrollBar( ui->additionsView->verticalScrollBar() );
-        TomahawkStyle::stylePageFrame( ui->additionsView );
-        TomahawkStyle::stylePageFrame( ui->additionsFrame );
-    }
-
-    {
-        QFont f = ui->label->font();
-        f.setFamily( "Pathway Gothic One" );
-
-        QPalette p = ui->label->palette();
-        p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_CAPTION );
-
-        ui->label->setFont( f );
-        ui->label_2->setFont( f );
-        ui->label->setPalette( p );
-        ui->label_2->setPalette( p );
-    }
-
-    {
-        QFont f = ui->playlistLabel->font();
-        f.setFamily( "Pathway Gothic One" );
-
-        QPalette p = ui->playlistLabel->palette();
-        p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
-
-        ui->playlistLabel->setFont( f );
-        ui->playlistLabel->setPalette( p );
+        uiHeader->artistLabel->setFont( f );
+        uiHeader->artistLabel->setPalette( p );
+        uiHeader->artistLabel->setText( tr( "Dashboard" ).toUpper() );
     }
 
     {
         QScrollArea* area = new QScrollArea();
         area->setWidgetResizable( true );
-        area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+        area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         area->setWidget( widget );
 
         QPalette pal = palette();
-        pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_BACKGROUND );
+        pal.setBrush( backgroundRole(), Qt::white );
         area->setPalette( pal );
         area->setAutoFillBackground( true );
         area->setFrameShape( QFrame::NoFrame );
         area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
         QVBoxLayout* layout = new QVBoxLayout();
+        layout->addWidget( headerWidget );
         layout->addWidget( area );
         setLayout( layout );
         TomahawkUtils::unmarginLayout( layout );
     }
 
-    {
-        QPalette pal = palette();
-        pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
-        ui->widget->setPalette( pal );
-        ui->widget->setAutoFillBackground( true );
-    }
-
     MetaPlaylistInterface* mpl = new MetaPlaylistInterface();
-    mpl->addChildInterface( ui->tracksView->playlistInterface() );
-    mpl->addChildInterface( ui->additionsView->playlistInterface() );
+    mpl->addChildInterface( ui->trackView->trackView()->playlistInterface() );
     m_playlistInterface = playlistinterface_ptr( mpl );
 
-    connect( SourceList::instance(), SIGNAL( ready() ), SLOT( onSourcesReady() ) );
-    connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
+    connect( ui->trackView, SIGNAL( pixmapChanged( QPixmap ) ), uiHeader->headerWidget, SLOT( setBackground( QPixmap ) ) );
 }
 
 
@@ -207,10 +142,7 @@ DashboardWidget::playlistInterface() const
 bool
 DashboardWidget::jumpToCurrentTrack()
 {
-    if ( ui->tracksView->jumpToCurrentTrack() )
-        return true;
-
-    if ( ui->additionsView->jumpToCurrentTrack() )
+    if ( ui->trackView->trackView()->jumpToCurrentTrack() )
         return true;
 
     return false;
@@ -220,59 +152,7 @@ DashboardWidget::jumpToCurrentTrack()
 bool
 DashboardWidget::isBeingPlayed() const
 {
-    if ( ui->additionsView->isBeingPlayed() )
-        return true;
-
-    return AudioEngine::instance()->currentTrackPlaylist() == ui->tracksView->playlistInterface();
-}
-
-
-void
-DashboardWidget::onSourcesReady()
-{
-    foreach ( const source_ptr& source, SourceList::instance()->sources() )
-        onSourceAdded( source );
-
-    updateRecentAdditions();
-}
-
-
-void
-DashboardWidget::onSourceAdded( const Tomahawk::source_ptr& source )
-{
-    connect( source->dbCollection().data(), SIGNAL( changed() ), SLOT( updateRecentAdditions() ), Qt::UniqueConnection );
-}
-
-
-void
-DashboardWidget::updateRecentAdditions()
-{
-    m_recentAlbumsModel->addFilteredCollection( collection_ptr(), 20, DatabaseCommand_AllAlbums::ModificationTime, true );
-}
-
-
-void
-DashboardWidget::updatePlaylists()
-{
-    int num = ui->playlistWidget->model()->rowCount( QModelIndex() );
-    if ( num == 0 )
-    {
-        ui->playlistWidget->overlay()->setText( tr( "No recently created playlists in your network." ) );
-        ui->playlistWidget->overlay()->show();
-    }
-    else
-        ui->playlistWidget->overlay()->hide();
-}
-
-
-void
-DashboardWidget::onPlaylistActivated( const QModelIndex& item )
-{
-    Tomahawk::playlist_ptr pl = item.data( RecentlyPlayedPlaylistsModel::PlaylistRole ).value< Tomahawk::playlist_ptr >();
-    if ( Tomahawk::dynplaylist_ptr dynplaylist = pl.dynamicCast< Tomahawk::DynamicPlaylist >() )
-        ViewManager::instance()->show( dynplaylist );
-    else
-        ViewManager::instance()->show( pl );
+    return AudioEngine::instance()->currentTrackPlaylist() == ui->trackView->trackView()->playlistInterface();
 }
 
 

@@ -43,6 +43,7 @@ class BasicHeader;
 namespace Ui
 {
     class DashboardWidget;
+    class HeaderWidget;
 }
 
 namespace Tomahawk
@@ -66,19 +67,15 @@ public:
     virtual bool jumpToCurrentTrack();
 
 public slots:
-    void updatePlaylists();
-    void updateRecentAdditions();
 
 private slots:
-    void onSourcesReady();
-    void onSourceAdded( const Tomahawk::source_ptr& source );
-    void onPlaylistActivated( const QModelIndex& );
 
 protected:
     void changeEvent( QEvent* e );
 
 private:
     Ui::DashboardWidget *ui;
+    Ui::HeaderWidget *uiHeader;
 
     RecentlyPlayedModel* m_tracksModel;
     AlbumModel* m_recentAlbumsModel;
@@ -104,7 +101,7 @@ public:
 
     int sortValue() Q_DECL_OVERRIDE { return 2; }
 
-    bool showInfoBar() const Q_DECL_OVERRIDE { return true; }
+    bool showInfoBar() const Q_DECL_OVERRIDE { return false; }
 };
 
 
