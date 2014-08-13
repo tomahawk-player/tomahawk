@@ -21,13 +21,17 @@
 
 #include <QApplication>
 #include <QMouseEvent>
+#include <QPainter>
+
 
 ClickableLabel::ClickableLabel( QWidget* parent )
   : QLabel( parent )
   , m_pressed( false )
   , m_moved( false )
 {
+    setCursor( Qt::PointingHandCursor );
 }
+
 
 ClickableLabel::~ClickableLabel()
 {
@@ -76,3 +80,11 @@ ClickableLabel::mouseMoveEvent( QMouseEvent* event )
     }
 }
 
+
+void
+ClickableLabel::paintEvent( QPaintEvent* event )
+{
+    QPainter painter( this );
+    painter.setOpacity( 0.5 );
+    painter.drawText( contentsRect(), text() );
+}

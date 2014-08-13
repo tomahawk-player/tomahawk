@@ -36,18 +36,17 @@ public:
     virtual ~ClickableLabel();
 
 signals:
-
     void clicked();
     void resized( const QPoint& delta );
 
-public slots:
-
+protected:
     void mousePressEvent( QMouseEvent* event );
     void mouseReleaseEvent( QMouseEvent* event );
     void mouseMoveEvent( QMouseEvent* event );
 
-private:
+    void paintEvent( QPaintEvent* event );
 
+private:
     QPoint m_dragPoint;
     bool m_pressed;
     bool m_moved;
