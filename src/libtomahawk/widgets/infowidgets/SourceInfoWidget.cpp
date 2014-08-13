@@ -57,7 +57,7 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
 
     m_historyModel = new RecentlyPlayedModel( ui->historyView );
     ui->historyView->proxyModel()->setStyle( PlayableProxyModel::Short );
-    ui->historyView->setPlaylistModel( m_historyModel );
+    ui->historyView->setPlayableModel( m_historyModel );
     m_historyModel->setSource( source );
 
     m_recentAlbumModel = new AlbumModel( ui->recentAlbumView );
