@@ -71,8 +71,8 @@ public slots:
 
     virtual void insertAlbums( const QList< Tomahawk::album_ptr >& album, int row = 0 );
     virtual void insertArtists( const QList< Tomahawk::artist_ptr >& artist, int row = 0 );
-    virtual void insertQueries( const QList< Tomahawk::query_ptr >& queries, int row = 0, const QList< Tomahawk::PlaybackLog >& logs = QList< Tomahawk::PlaybackLog >() );
-    virtual void insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int row = 0, const QList< Tomahawk::PlaybackLog >& logs = QList< Tomahawk::PlaybackLog >() );
+    virtual void insertQueries( const QList< Tomahawk::query_ptr >& queries, int row = 0, const QList< Tomahawk::PlaybackLog >& logs = QList< Tomahawk::PlaybackLog >(), const QModelIndex& parent = QModelIndex() );
+    virtual void insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int row = 0, const QModelIndex& parent = QModelIndex(), const QList< Tomahawk::PlaybackLog >& logs = QList< Tomahawk::PlaybackLog >() );
 
     virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
 

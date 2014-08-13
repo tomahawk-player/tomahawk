@@ -236,7 +236,7 @@ PlaylistModel::insertArtists( const QList< Tomahawk::artist_ptr >& artists, int 
 
 
 void
-PlaylistModel::insertQueries( const QList< Tomahawk::query_ptr >& queries, int row, const QList< Tomahawk::PlaybackLog >& logs )
+PlaylistModel::insertQueries( const QList< Tomahawk::query_ptr >& queries, int row, const QList< Tomahawk::PlaybackLog >& logs, const QModelIndex& /* parent */ )
 {
     Q_D( PlaylistModel );
     QList< Tomahawk::plentry_ptr > entries;
@@ -260,12 +260,12 @@ PlaylistModel::insertQueries( const QList< Tomahawk::query_ptr >& queries, int r
         entries << entry;
     }
 
-    insertEntries( entries, row, logs );
+    insertEntries( entries, row, QModelIndex(), logs );
 }
 
 
 void
-PlaylistModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int row, const QList< Tomahawk::PlaybackLog >& logs )
+PlaylistModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int row, const QModelIndex& parent, const QList< Tomahawk::PlaybackLog >& logs )
 {
     Q_D( PlaylistModel );
     if ( !entries.count() )
@@ -286,14 +286,15 @@ PlaylistModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int
         d->savedInsertTracks = entries;
     }
 
-    emit beginInsertRows( QModelIndex(), crows.first, crows.second );
+    emit beginInsertRows( parent, crows.first, crows.second );
 
     QList< Tomahawk::query_ptr > queries;
     int i = 0;
     PlayableItem* plitem;
     foreach( const plentry_ptr& entry, entries )
     {
-        plitem = new PlayableItem( entry, rootItem(), row + i );
+        PlayableItem* pItem = itemFromIndex( parent );
+        plitem = new PlayableItem( entry, pItem, row + i );
         plitem->index = createIndex( row + i, 0, plitem );
 
         if ( logs.count() > i )
@@ -578,7 +579,7 @@ PlaylistModel::playlistEntries() const
             continue;
 
         PlayableItem* item = itemFromIndex( idx );
-        if ( item )
+        if ( item && item->entry() )
             l << item->entry();
     }
 
