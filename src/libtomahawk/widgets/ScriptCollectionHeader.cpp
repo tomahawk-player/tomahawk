@@ -31,7 +31,7 @@ ScriptCollectionHeader::ScriptCollectionHeader( QWidget* parent )
     m_refreshButton->setFlat( true );
     m_refreshButton->setStyleSheet( "QPushButton { border: 0px; background: transparent; }" );
     QHBoxLayout* descLayout = new QHBoxLayout;
-    m_verticalLayout->insertLayout( m_verticalLayout->indexOf( m_descriptionLabel ),
+    m_mainLayout->insertLayout( m_mainLayout->indexOf( m_descriptionLabel ),
                                     descLayout );
     descLayout->addWidget( m_descriptionLabel );
     TomahawkUtils::unmarginLayout( descLayout );
