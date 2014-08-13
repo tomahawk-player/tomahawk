@@ -62,7 +62,7 @@ TrackView::TrackView( QWidget* parent )
     , m_resizing( false )
     , m_dragging( false )
     , m_updateContextView( true )
-    , m_alternatingRowColors( true )
+    , m_alternatingRowColors( false )
     , m_contextMenu( new ContextMenu( this ) )
 {
     setFrameShape( QFrame::NoFrame );
@@ -80,7 +80,7 @@ TrackView::TrackView( QWidget* parent )
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     setRootIsDecorated( false );
     setUniformRowHeights( true );
-    setAlternatingRowColors( true );
+    setAlternatingRowColors( m_alternatingRowColors );
     setAutoResize( false );
 
     setHeader( m_header );
@@ -303,6 +303,7 @@ TrackView::onScrollTimeout()
     if ( !max )
         return;
 
+    //FIXME
     for ( int i = left.row(); i <= max; i++ )
     {
         m_proxyModel->updateDetailedInfo( m_proxyModel->index( i, 0 ) );
