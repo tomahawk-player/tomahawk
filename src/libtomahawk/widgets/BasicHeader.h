@@ -20,8 +20,7 @@
 #ifndef BASICHEADER_H
 #define BASICHEADER_H
 
-#include <QWidget>
-
+#include "widgets/BackgroundWidget.h"
 #include "DllMacro.h"
 
 class QLabel;
@@ -29,7 +28,7 @@ class ElidedLabel;
 class QPaintEvent;
 class QBoxLayout;
 
-class DLLEXPORT BasicHeader : public QWidget
+class DLLEXPORT BasicHeader : public BackgroundWidget
 {
     Q_OBJECT
 public:
@@ -42,14 +41,12 @@ public slots:
     virtual void setPixmap( const QPixmap& p );
 
 protected:
-    virtual void paintEvent( QPaintEvent* event );
-
     QLabel* m_imageLabel;
     ElidedLabel* m_captionLabel;
     ElidedLabel* m_descriptionLabel;
 
     QBoxLayout* m_mainLayout;
-    QBoxLayout* m_verticalLayout;
+//    QBoxLayout* m_verticalLayout;
 };
 
 #endif // BASICHEADER_H
