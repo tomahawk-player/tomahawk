@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011-2012, Leo Franchi            <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -37,6 +37,7 @@ class QEvent;
 class QTimeLine;
 class PlayableProxyModel;
 class ImageButton;
+class HoverControls;
 
 class DLLEXPORT GridItemDelegate : public QStyledItemDelegate
 {
@@ -79,13 +80,8 @@ private slots:
     void fadingFrameChanged( const QPersistentModelIndex& );
     void fadingFrameFinished( const QPersistentModelIndex& );
 
-    void updatePlayPauseButton(ImageButton* button , bool setState = false );
-    void onPlayPauseHover( const QPersistentModelIndex& index );
-    void onPlayPausedClicked();
-
 private:
-    QTimeLine* createTimeline( QTimeLine::Direction direction );
-    void createPauseButton( const QPersistentModelIndex& index );
+    QTimeLine* createTimeline( QTimeLine::Direction direction, int startFrame = 0 );
     void clearButtons();
 
     QAbstractItemView* m_view;
@@ -101,8 +97,7 @@ private:
 
     QPixmap m_shadowPixmap;
     mutable QHash< QPersistentModelIndex, QWidget* > m_spinner;
-    mutable QHash< QPersistentModelIndex, ImageButton* > m_playButton;
-    mutable QHash< QPersistentModelIndex, ImageButton* > m_pauseButton;
+    mutable QHash< QPersistentModelIndex, HoverControls* > m_hoverControls;
     mutable QHash< QPersistentModelIndex, QTimeLine* > m_hoverFaders;
 };
 
