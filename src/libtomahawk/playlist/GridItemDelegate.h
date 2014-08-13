@@ -93,7 +93,6 @@ private:
 
     QPersistentModelIndex m_hoverIndex;
     QPersistentModelIndex m_hoveringOver;
-    mutable QRect m_playButtonRect;
 
     QPixmap m_shadowPixmap;
     mutable QHash< QPersistentModelIndex, QWidget* > m_spinner;
