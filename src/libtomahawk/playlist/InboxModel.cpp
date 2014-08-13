@@ -76,10 +76,8 @@ InboxModel::unlistenedCount() const
 
 
 void
-InboxModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int row, const QList< Tomahawk::PlaybackLog >& logs )
+InboxModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int row, const QModelIndex& /* parent */, const QList< Tomahawk::PlaybackLog >& /* logs */ )
 {
-    Q_UNUSED( logs ); // <- this is merely to silence GCC
-
     QList< Tomahawk::plentry_ptr > toInsert;
     for ( QList< Tomahawk::plentry_ptr >::const_iterator it = entries.constBegin();
           it != entries.constEnd(); ++it )

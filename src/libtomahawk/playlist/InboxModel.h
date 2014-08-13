@@ -40,7 +40,7 @@ public slots:
      * On top of PlaylistModel functionality, adds deduplication/grouping of equivalent tracks
      * sent from different sources.
      */
-    virtual void insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int row = 0, const QList< Tomahawk::PlaybackLog >& logs = QList< Tomahawk::PlaybackLog >() );
+    virtual void insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int row = 0, const QModelIndex& parent = QModelIndex(), const QList< Tomahawk::PlaybackLog >& logs = QList< Tomahawk::PlaybackLog >() );
 
     virtual void removeIndex( const QModelIndex &index, bool moreToCome );
 
