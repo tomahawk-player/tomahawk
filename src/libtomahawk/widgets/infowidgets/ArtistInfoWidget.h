@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -38,6 +38,7 @@
 
 #include "DllMacro.h"
 
+class QStackedWidget;
 class PlayableModel;
 class PlaylistModel;
 class StatsGauge;
@@ -45,6 +46,7 @@ class StatsGauge;
 namespace Ui
 {
     class ArtistInfoWidget;
+    class HeaderWidget;
 }
 
 class MetaArtistInfoInterface;
@@ -101,17 +103,21 @@ private slots:
     void onSimilarArtistsLoaded();
 
     void onBiographyLinkClicked( const QUrl& url );
+    void onTopHitsMoreClicked();
+    void onTopHitsMoreClosed();
 
 private:
     Ui::ArtistInfoWidget *ui;
+    Ui::HeaderWidget* uiHeader;
 
     Tomahawk::artist_ptr m_artist;
 
     PlayableModel* m_relatedModel;
     PlayableModel* m_albumsModel;
-    PlaylistModel* m_topHitsModel;
+    PlayableModel* m_topHitsModel;
     Tomahawk::playlistinterface_ptr m_plInterface;
 
+    QStackedWidget* m_stackedWidget;
     StatsGauge* m_playStatsGauge;
 
     QString m_title;
