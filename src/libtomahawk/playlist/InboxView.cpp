@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2013, Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -21,10 +22,12 @@
 #include "InboxModel.h"
 #include "PlayableProxyModel.h"
 #include "ContextMenu.h"
+#include "playlist/TrackItemDelegate.h"
+#include "ViewManager.h"
 #include "utils/Logger.h"
 
-InboxView::InboxView(QWidget *parent) :
-    TrackView(parent)
+InboxView::InboxView( QWidget* parent ) :
+    TrackView( parent )
 {
 }
 
@@ -62,4 +65,27 @@ InboxView::onMenuTriggered( int action )
     }
     else
         TrackView::onMenuTriggered( action );
+}
+
+
+InboxPage::InboxPage( QWidget* parent ) :
+    FlexibleView( parent )
+{
+    InboxView* inboxView = new InboxView( this );
+    setTrackView( inboxView );
+    setCurrentMode( Flat );
+
+    inboxView->proxyModel()->setStyle( PlayableProxyModel::Large );
+    /*        inboxView->proxyModel()->setGroupBy( true );
+     *        inboxView->setSortingEnabled( true );
+     *        inboxView->proxyModel()->sort( 0 );*/
+    inboxView->setEmptyTip( tr( "No listening suggestions here." ) );
+
+    inboxView->setGuid( "inbox" );
+    inboxView->setHeaderHidden( true );
+
+    setPlayableModel( ViewManager::instance()->inboxModel() );
+
+    TrackItemDelegate* delegate = new TrackItemDelegate( TrackItemDelegate::Inbox, inboxView, inboxView->proxyModel() );
+    inboxView->setPlaylistItemDelegate( delegate );
 }

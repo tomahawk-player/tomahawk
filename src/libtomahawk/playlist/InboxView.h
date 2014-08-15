@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2013, Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -21,6 +22,7 @@
 #define INBOXVIEW_H
 
 #include "TrackView.h"
+#include "FlexibleView.h"
 
 class InboxView : public TrackView
 {
@@ -35,6 +37,14 @@ public slots:
     virtual void deleteSelectedItems();
 
     virtual void onMenuTriggered( int action );
+};
+
+class InboxPage : public FlexibleView
+{
+    Q_OBJECT
+
+public:
+    explicit InboxPage( QWidget* parent = 0 );
 };
 
 #endif // INBOXVIEW_H
