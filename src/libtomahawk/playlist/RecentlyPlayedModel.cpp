@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ using namespace Tomahawk;
 
 
 RecentlyPlayedModel::RecentlyPlayedModel( QObject* parent, unsigned int maxItems )
-    : PlaylistModel( parent )
+    : PlayableModel( parent )
     , m_limit( maxItems > 0 ? maxItems : HISTORY_TRACK_ITEMS )
 {
 }
@@ -61,7 +61,7 @@ RecentlyPlayedModel::loadHistory()
     cmd->setLimit( m_limit );
 
     connect( cmd, SIGNAL( tracks( QList<Tomahawk::track_ptr>, QList<Tomahawk::PlaybackLog> ) ),
-                    SLOT( appendTracks( QList<Tomahawk::track_ptr>, QList<Tomahawk::PlaybackLog> ) ), Qt::QueuedConnection );
+                    SLOT( onTracksLoaded( QList<Tomahawk::track_ptr>, QList<Tomahawk::PlaybackLog> ) ), Qt::QueuedConnection );
 
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
@@ -94,8 +94,8 @@ RecentlyPlayedModel::setSource( const Tomahawk::source_ptr& source )
     }
     else
     {
-        onSourceAdded( source );
         loadHistory();
+        onSourceAdded( source );
     }
 }
 
@@ -105,46 +105,71 @@ RecentlyPlayedModel::onSourceAdded( const Tomahawk::source_ptr& source )
 {
     connect( source.data(), SIGNAL( playbackFinished( Tomahawk::track_ptr, Tomahawk::PlaybackLog ) ),
                               SLOT( onPlaybackFinished( Tomahawk::track_ptr, Tomahawk::PlaybackLog ) ), Qt::UniqueConnection );
+
+    QPair< int, int > crows;
+    int c = rowCount( QModelIndex() );
+    crows.first = c;
+    crows.second = c;
+
+    emit beginInsertRows( QModelIndex(), crows.first, crows.second );
+
+    PlayableItem* item = new PlayableItem( source, rootItem() );
+    item->index = createIndex( rootItem()->children.count() - 1, 0, item );
+    connect( item, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
+
+    emit endInsertRows();
 }
 
 
 void
 RecentlyPlayedModel::onPlaybackFinished( const Tomahawk::track_ptr& track, const Tomahawk::PlaybackLog& log )
 {
-    int count = trackCount();
-
+    const QModelIndex parent = indexFromSource( log.source );
+    const int count = rowCount( parent );
     if ( count )
     {
-        PlayableItem* oldestItem = itemFromIndex( index( count - 1, 0, QModelIndex() ) );
+        PlayableItem* oldestItem = itemFromIndex( index( count - 1, 0, parent ) );
         if ( oldestItem->playbackLog().timestamp >= log.timestamp )
             return;
 
-        PlayableItem* youngestItem = itemFromIndex( index( 0, 0, QModelIndex() ) );
+        PlayableItem* youngestItem = itemFromIndex( index( 0, 0, parent ) );
         if ( youngestItem->playbackLog().timestamp <= log.timestamp )
-            insertQuery( track->toQuery(), 0, log );
+            insertQuery( track->toQuery(), 0, log, parent );
         else
         {
             for ( int i = 0; i < count - 1; i++ )
             {
-                PlayableItem* item1 = itemFromIndex( index( i, 0, QModelIndex() ) );
-                PlayableItem* item2 = itemFromIndex( index( i + 1, 0, QModelIndex() ) );
+                PlayableItem* item1 = itemFromIndex( index( i, 0, parent ) );
+                PlayableItem* item2 = itemFromIndex( index( i + 1, 0, parent ) );
 
                 if ( item1->playbackLog().timestamp >= log.timestamp && item2->playbackLog().timestamp <= log.timestamp )
                 {
-                    insertQuery( track->toQuery(), i + 1, log );
+                    insertQuery( track->toQuery(), i + 1, log, parent );
                     break;
                 }
             }
         }
     }
     else
-        insertQuery( track->toQuery(), 0, log );
+        insertQuery( track->toQuery(), 0, log, parent );
 
-    if ( trackCount() > (int)m_limit )
-        remove( m_limit );
+    if ( rowCount( parent ) > (int)m_limit )
+        remove( m_limit, false, parent );
 
+    emit dataChanged( parent, parent );
     ensureResolved();
 }
+
+
+void
+RecentlyPlayedModel::onTracksLoaded( QList<Tomahawk::track_ptr> tracks, QList<Tomahawk::PlaybackLog> logs )
+{
+    for ( int i = tracks.count() - 1; i >= 0; i-- )
+    {
+        onPlaybackFinished( tracks.at( i ), logs.at( i ) );
+    }
+}
+
 
 
 bool

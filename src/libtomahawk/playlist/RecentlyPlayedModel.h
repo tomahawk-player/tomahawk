@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -25,10 +25,11 @@
 
 #include "Typedefs.h"
 #include "PlaylistModel.h"
+#include "Source.h"
 
 #include "DllMacro.h"
 
-class DLLEXPORT RecentlyPlayedModel : public PlaylistModel
+class DLLEXPORT RecentlyPlayedModel : public PlayableModel
 {
 Q_OBJECT
 
@@ -52,6 +53,8 @@ private slots:
 
     void onPlaybackFinished( const Tomahawk::track_ptr& track, const Tomahawk::PlaybackLog& log );
     void loadHistory();
+
+    void onTracksLoaded( QList<Tomahawk::track_ptr> tracks, QList<Tomahawk::PlaybackLog> logs );
 
 private:
     Tomahawk::source_ptr m_source;
