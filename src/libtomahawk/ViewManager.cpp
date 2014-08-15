@@ -42,6 +42,7 @@
 
 #include "playlist/InboxModel.h"
 #include "playlist/InboxView.h"
+#include "playlist/TrackItemDelegate.h"
 #include "playlist/PlaylistLargeItemDelegate.h"
 #include "playlist/RecentlyPlayedModel.h"
 #include "playlist/dynamic/widgets/DynamicWidget.h"
@@ -448,23 +449,7 @@ ViewManager::showInboxPage()
 {
     if ( !m_inboxWidget )
     {
-        TrackView* inboxView = new InboxView( m_widget );
-
-        PlaylistLargeItemDelegate* delegate =
-                new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::Inbox,
-                                               inboxView,
-                                               inboxView->proxyModel() );
-        inboxView->setPlaylistItemDelegate( delegate );
-
-        inboxView->proxyModel()->setStyle( PlayableProxyModel::Large );
-        inboxView->setPlayableModel( m_inboxModel );
-        inboxView->setEmptyTip( tr( "No listening suggestions here." ) );
-
-        inboxView->setGuid( "inbox" );
-
-        inboxView->setSortingEnabled( false );
-        inboxView->setHeaderHidden( true );
-
+        FlexibleView* inboxView = new InboxPage( m_widget );
         m_inboxWidget = inboxView;
     }
 
