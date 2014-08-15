@@ -111,9 +111,36 @@ InboxModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int ro
                 ++i;
         }
     }
-    changed();
 
-    PlaylistModel::insertEntries( toInsert, row );
+    foreach ( const Tomahawk::plentry_ptr& entry, toInsert )
+    {
+        foreach ( const Tomahawk::SocialAction& sa, entry->query()->queryTrack()->socialActions( "Inbox", QVariant() /*neither true nor false!*/, true ) )
+        {
+            QModelIndex parent = indexFromSource( sa.source );
+            if ( !parent.isValid() )
+            {
+                QPair< int, int > crows;
+                int c = rowCount( QModelIndex() );
+                crows.first = c;
+                crows.second = c;
+
+                emit beginInsertRows( QModelIndex(), crows.first, crows.second );
+
+                PlayableItem* item = new PlayableItem( sa.source, rootItem() );
+                item->index = createIndex( rootItem()->children.count() - 1, 0, item );
+                connect( item, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
+
+                emit endInsertRows();
+                parent = item->index;
+            }
+
+            QList< Tomahawk::plentry_ptr > el;
+            el << entry;
+            PlaylistModel::insertEntries( el, rowCount( parent ), parent );
+        }
+    }
+
+    changed();
 }
 
 
