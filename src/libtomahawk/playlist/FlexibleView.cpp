@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2012-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include <QVBoxLayout>
 
 #include "audio/AudioEngine.h"
+#include "widgets/CaptionLabel.h"
 #include "widgets/FilterHeader.h"
 #include "playlist/ModeHeader.h"
 #include "playlist/PlayableModel.h"
@@ -30,9 +31,12 @@
 #include "playlist/TrackView.h"
 #include "playlist/GridView.h"
 #include "playlist/PlaylistLargeItemDelegate.h"
+#include "playlist/TrackItemDelegate.h"
+#include "playlist/TrackDetailView.h"
 #include "PlayableProxyModelPlaylistInterface.h"
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/ImageRegistry.h"
 #include "utils/Closure.h"
 #include "utils/Logger.h"
 
@@ -42,7 +46,7 @@ using namespace Tomahawk;
 FlexibleView::FlexibleView( QWidget* parent, QWidget* extraHeader )
     : QWidget( parent )
     , m_header( new FilterHeader( this ) )
-    , m_modeHeader( new ModeHeader( this ) )
+//    , m_modeHeader( new ModeHeader( this ) )
     , m_trackView( new TrackView() )
     , m_detailedView( new TrackView() )
     , m_gridView( new GridView() )
@@ -50,6 +54,8 @@ FlexibleView::FlexibleView( QWidget* parent, QWidget* extraHeader )
     , m_temporary( false )
 {
     qRegisterMetaType< FlexibleViewMode >( "FlexibleViewMode" );
+
+    m_header->setBackground( ImageRegistry::instance()->pixmap( RESPATH "images/playlist_background.png", QSize( 0, 0 ) ) );
 
 //    m_trackView->setPlaylistInterface( m_playlistInterface );
     m_detailedView->setPlaylistInterface( m_trackView->proxyModel()->playlistInterface() );
@@ -59,7 +65,7 @@ FlexibleView::FlexibleView( QWidget* parent, QWidget* extraHeader )
     m_detailedView->setColumnHidden( PlayableModel::Filesize, true ); // Hide filesize column per default
     m_detailedView->setColumnHidden( PlayableModel::Composer, true ); // Hide composer column per default
 
-    PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, m_trackView, m_trackView->proxyModel() );
+    TrackItemDelegate* del = new TrackItemDelegate( TrackItemDelegate::LovedTracks, m_trackView, m_trackView->proxyModel() );
     m_trackView->setPlaylistItemDelegate( del );
     m_trackView->proxyModel()->setStyle( PlayableProxyModel::Large );
 
@@ -67,24 +73,43 @@ FlexibleView::FlexibleView( QWidget* parent, QWidget* extraHeader )
     setLayout( new QVBoxLayout() );
     TomahawkUtils::unmarginLayout( layout() );
 
-    QFrame* lineBelow = new QFrame( this );
-    lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
-    lineBelow->setFrameShape( QFrame::HLine );
-    lineBelow->setMaximumHeight( 1 );
-    QFrame* lineBelow2 = new QFrame( this );
-    lineBelow2->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
-    lineBelow2->setFrameShape( QFrame::HLine );
-    lineBelow2->setMaximumHeight( 1 );
-
-    m_gridView->setStyleSheet( QString( "QListView { background-color: black; }" ) );
+    m_trackView->setStyleSheet( QString( "QTreeView { background-color: white; }" ) );
+    m_gridView->setStyleSheet( QString( "QListView { background-color: white; }" ) );
 
     layout()->addWidget( m_header );
-    layout()->addWidget( m_modeHeader );
+//    layout()->addWidget( m_modeHeader );
     if ( extraHeader )
         layout()->addWidget( extraHeader );
-    layout()->addWidget( lineBelow );
-    layout()->addWidget( lineBelow2 );
-    layout()->addWidget( m_stack );
+
+    CaptionLabel* caption = new CaptionLabel( this );
+    caption->setText( tr( "Playlist Details" ) );
+
+    QWidget* vbox = new QWidget;
+    QPalette pal = vbox->palette();
+    pal.setBrush( vbox->backgroundRole(), Qt::white );
+    vbox->setPalette( pal );
+    vbox->setAutoFillBackground( true );
+
+    QVBoxLayout* vboxl = new QVBoxLayout;
+    TomahawkUtils::unmarginLayout( vboxl );
+    vboxl->setContentsMargins( 32, 32, 32, 32 );
+    vboxl->setSpacing( 32 );
+
+    vbox->setLayout( vboxl );
+
+    QWidget* hbox = new QWidget;
+    QHBoxLayout* hboxl = new QHBoxLayout;
+    TomahawkUtils::unmarginLayout( hboxl );
+    hboxl->setSpacing( 32 );
+
+    m_detailView = new TrackDetailView;
+    hboxl->addWidget( m_detailView );
+    hboxl->addWidget( m_stack );
+    hbox->setLayout( hboxl );
+
+    vboxl->addWidget( caption );
+    vboxl->addWidget( hbox );
+    layout()->addWidget( vbox );
 
     m_stack->addWidget( m_trackView );
     m_stack->addWidget( m_detailedView );
@@ -92,11 +117,12 @@ FlexibleView::FlexibleView( QWidget* parent, QWidget* extraHeader )
 
     setCurrentMode( Flat );
 
+    connect( m_trackView, SIGNAL( querySelected( Tomahawk::query_ptr ) ), m_detailView, SLOT( setQuery( Tomahawk::query_ptr ) ) );
     connect( m_header, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
 
-    NewClosure( m_modeHeader, SIGNAL( flatClicked() ), const_cast< FlexibleView* >( this ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Flat )->setAutoDelete( false );
+/*    NewClosure( m_modeHeader, SIGNAL( flatClicked() ), const_cast< FlexibleView* >( this ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Flat )->setAutoDelete( false );
     NewClosure( m_modeHeader, SIGNAL( detailedClicked() ), const_cast< FlexibleView* >( this ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Detailed )->setAutoDelete( false );
-    NewClosure( m_modeHeader, SIGNAL( gridClicked() ), const_cast< FlexibleView* >( this ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Grid )->setAutoDelete( false );
+    NewClosure( m_modeHeader, SIGNAL( gridClicked() ), const_cast< FlexibleView* >( this ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Grid )->setAutoDelete( false );*/
 }
 
 
@@ -119,6 +145,8 @@ FlexibleView::setTrackView( TrackView* view )
 {
     if ( m_trackView )
     {
+        disconnect( m_trackView, SIGNAL( querySelected( Tomahawk::query_ptr ) ), m_detailView, SLOT( setQuery( Tomahawk::query_ptr ) ) );
+
         m_stack->removeWidget( m_trackView );
         delete m_trackView;
     }
@@ -127,6 +155,9 @@ FlexibleView::setTrackView( TrackView* view )
 
     m_trackView = view;
     m_stack->addWidget( view );
+
+    m_trackView->setStyleSheet( QString( "QTreeView { background-color: white; }" ) );
+    connect( m_trackView, SIGNAL( querySelected( Tomahawk::query_ptr ) ), m_detailView, SLOT( setQuery( Tomahawk::query_ptr ) ) );
 }
 
 
