@@ -335,7 +335,6 @@ endif()
     macro_log_feature(LIBSNORE_FOUND "Libsnore" "Library for notifications" "https://github.com/TheOneRing/Snorenotify" FALSE "" "")
 endif()
 
-#TODO: support external qxt
 set(QXTWEB_FOUND TRUE)
 set(QXTWEB_LIBRARIES qxtweb-standalone)
 set(QXTWEB_INCLUDE_DIRS ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/web ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/network ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/core ${CMAKE_CURRENT_BINARY_DIR})
