@@ -588,12 +588,34 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
     const QFontMetrics fm = painter->fontMetrics();
     const int numberWidth = fm.width( "00" ) + 32;
     const int durationWidth = fm.width( "00:00" ) + 32;
-    const int remWidth = r.width() - numberWidth - durationWidth;
+    int stateWidth = 0;
 
     QRect numberRect = QRect( r.x(), r.y(), numberWidth, r.height() );
+    QRect extraRect = QRect( r.x() + r.width() - durationWidth, r.y(), durationWidth, r.height() );
+    QRect stateRect;
+    if ( option.state & QStyle::State_Selected || hoveringOver() == index )
+    {
+        if ( track->loved() )
+        {
+            painter->setOpacity( 0.5 );
+            int h = extraRect.height() / 3;
+            stateRect = extraRect.adjusted( -16, extraRect.height() / 2  - h / 2, 0, 0 );
+            stateRect.setHeight( h );
+            stateRect.setWidth( stateRect.height() );
+            painter->drawPixmap( stateRect, ImageRegistry::instance()->pixmap( RESPATH "images/love.svg", stateRect.size() ) );
+
+            stateWidth = stateRect.width() + 16;
+        }
+    }
+    const int remWidth = r.width() - numberWidth - durationWidth;
+
     QRect titleRect = QRect( numberRect.x() + numberRect.width(), r.y(), (double)remWidth * 0.5, r.height() );
     QRect artistRect = QRect( titleRect.x() + titleRect.width(), r.y(), (double)remWidth * 0.5, r.height() );
-    QRect extraRect = QRect( artistRect.x() + artistRect.width(), r.y(), durationWidth, r.height() );
+    if ( stateWidth > 0 )
+    {
+        // Make sure we don't draw over the state icons
+        artistRect.setWidth( artistRect.width() - stateWidth );
+    }
 
     // draw title
     painter->setOpacity( 1 );
@@ -639,19 +661,6 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
     {
         painter->setOpacity( 0.5 );
         painter->drawText( extraRect, TomahawkUtils::timeToString( track->duration() ), m_centerRightOption );
-    }
-
-    if ( option.state & QStyle::State_Selected || hoveringOver() == index )
-    {
-        if ( track->loved() )
-        {
-            painter->setOpacity( 0.5 );
-            int h = extraRect.height() / 3;
-            QRect stateRect = extraRect.adjusted( -32, extraRect.height() / 2  - h / 2, 0, 0 );
-            stateRect.setHeight( h );
-            stateRect.setWidth( stateRect.height() );
-            painter->drawPixmap( stateRect, ImageRegistry::instance()->pixmap( RESPATH "images/love.svg", stateRect.size() ) );
-        }
     }
 
     painter->restore();
