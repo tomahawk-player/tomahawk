@@ -575,17 +575,23 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
     painter->setPen( QColor( "#000000" ) );
 
     QRect r = rect.adjusted( 32, 6, -32, -6 );
-    int margin = 8;
-
-    QRect numberRect = QRect( r.x(), r.y(), (double)r.width() * 0.1, r.height() );
-    QRect titleRect = QRect( numberRect.x() + numberRect.width(), r.y(), (double)r.width() * 0.4, r.height() );
-    QRect artistRect = QRect( titleRect.x() + titleRect.width(), r.y(), (double)r.width() * 0.4, r.height() );
-    QRect extraRect = QRect( artistRect.x() + artistRect.width(), r.y(), (double)r.width() * 0.1, r.height() );
+    const int margin = 8;
 
     QFont f = painter->font();
     f.setPointSize( 11 );
     f.setWeight( QFont::DemiBold );
     painter->setFont( f );
+
+    QFontMetrics fm( painter->font() );
+
+    const int numberWidth = fm.width( "00" ) + 32;
+    const int durationWidth = fm.width( "00:00" ) + 32;
+    const int remWidth = r.width() - numberWidth - durationWidth;
+
+    QRect numberRect = QRect( r.x(), r.y(), numberWidth, r.height() );
+    QRect titleRect = QRect( numberRect.x() + numberRect.width(), r.y(), (double)remWidth * 0.5, r.height() );
+    QRect artistRect = QRect( titleRect.x() + titleRect.width(), r.y(), (double)remWidth * 0.5, r.height() );
+    QRect extraRect = QRect( artistRect.x() + artistRect.width(), r.y(), durationWidth, r.height() );
 
     // draw title
     painter->setOpacity( 1 );
@@ -609,7 +615,8 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
     if ( item->isPlaying() )
     {
         int h = extraRect.height() / 2;
-        painter->drawPixmap( extraRect.adjusted( extraRect.width() - h - 4, h / 2, -4, -h / 2 ), ImageRegistry::instance()->pixmap( RESPATH "images/play.svg", QSize( extraRect.height() / 2, extraRect.height() / 2 ) ) );
+        QRect playIconRect = extraRect.adjusted( extraRect.width() - h - 8, h / 2, -8, -h / 2 );
+        painter->drawPixmap( playIconRect, ImageRegistry::instance()->pixmap( RESPATH "images/play.svg", playIconRect.size() ) );
 
         painter->save();
         painter->setPen( Qt::transparent );
