@@ -541,12 +541,15 @@ PlaylistItemDelegate::drawSource( QPainter* painter, const QStyleOptionViewItem&
     }
     painter->drawPixmap( avatarRect, avatar );
 
+    QTextOption to = QTextOption( Qt::AlignVCenter );
+    to.setWrapMode( QTextOption::NoWrap );
     QFont f = painter->font();
     f.setPointSize( 12 );
     painter->setFont( f );
+
     painter->setOpacity( 0.8 );
     painter->setPen( QColor( "#000000" ) );
-    painter->drawText( textRect, item->source()->friendlyName(), QTextOption( Qt::AlignVCenter ) );
+    painter->drawText( textRect, painter->fontMetrics().elidedText( item->source()->friendlyName(), Qt::ElideRight, textRect.width() ), to );
 
     painter->setOpacity( 0.15 );
     painter->setBrush( QColor( "#000000" ) );
