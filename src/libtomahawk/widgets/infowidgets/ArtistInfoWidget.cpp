@@ -126,13 +126,14 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     {
         QFont f = ui->biography->font();
-        f.setPointSize( 14 );
+        f.setWeight( QFont::Light );
+        f.setPointSize( 13 );
 
         ui->biography->setFont( f );
         ui->biography->setOpenLinks( false );
         ui->biography->setOpenExternalLinks( true );
 
-        ui->biography->document()->setDefaultStyleSheet( QString( "a { text-decoration: none; font-weight: bold; color: %1; }" ).arg( TomahawkStyle::HEADER_LINK.name() ) );
+        ui->biography->document()->setDefaultStyleSheet( QString( "a { text-decoration: none; font-weight: bold; color: #000000; }" ) );
         TomahawkStyle::stylePageFrame( ui->biography );
         TomahawkStyle::stylePageFrame( ui->bioFrame );
         TomahawkStyle::styleScrollBar( ui->biography->verticalScrollBar() );
