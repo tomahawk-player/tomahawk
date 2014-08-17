@@ -74,6 +74,7 @@ InboxPage::InboxPage( QWidget* parent ) :
     InboxView* inboxView = new InboxView( this );
     setTrackView( inboxView );
     setCurrentMode( Flat );
+//    setCaption( tr( "Inbox Details" ) );
 
     inboxView->proxyModel()->setStyle( PlayableProxyModel::Large );
     /*        inboxView->proxyModel()->setGroupBy( true );
@@ -83,6 +84,7 @@ InboxPage::InboxPage( QWidget* parent ) :
 
     inboxView->setGuid( "inbox" );
     inboxView->setHeaderHidden( true );
+    inboxView->setUniformRowHeights( false );
 
     setPlayableModel( ViewManager::instance()->inboxModel() );
 
