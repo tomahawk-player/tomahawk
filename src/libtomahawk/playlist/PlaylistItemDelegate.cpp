@@ -585,8 +585,7 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
     f.setWeight( QFont::DemiBold );
     painter->setFont( f );
 
-    QFontMetrics fm( painter->font() );
-
+    const QFontMetrics fm = painter->fontMetrics();
     const int numberWidth = fm.width( "00" ) + 32;
     const int durationWidth = fm.width( "00:00" ) + 32;
     const int remWidth = r.width() - numberWidth - durationWidth;
@@ -598,14 +597,14 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
 
     // draw title
     painter->setOpacity( 1 );
-    QString text = painter->fontMetrics().elidedText( track->track(), Qt::ElideRight, titleRect.width() - margin );
+    QString text = fm.elidedText( track->track(), Qt::ElideRight, titleRect.width() - margin );
     painter->drawText( titleRect, text, m_centerOption );
 
     // draw artist
     f.setWeight( QFont::Normal );
     painter->setOpacity( 0.8 );
     painter->setFont( f );
-    text = painter->fontMetrics().elidedText( track->artist(), Qt::ElideRight, artistRect.width() - margin );
+    text = fm.elidedText( track->artist(), Qt::ElideRight, artistRect.width() - margin );
     painter->drawText( artistRect, text, m_centerOption );
 
     // draw number
