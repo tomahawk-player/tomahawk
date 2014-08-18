@@ -21,8 +21,6 @@
 
 #include "TomahawkApp.h"
 
-#include <boost/bind.hpp>
-
 #include "TomahawkVersion.h"
 #include "AclRegistryImpl.h"
 #include "Album.h"
@@ -226,8 +224,8 @@ TomahawkApp::init()
     tDebug() << "Init Database.";
     initDatabase();
 
-    Pipeline::instance()->addExternalResolverFactory( boost::bind( &JSResolver::factory, _1, _2, _3 ) );
-    Pipeline::instance()->addExternalResolverFactory( boost::bind( &ScriptResolver::factory, _1, _2, _3 ) );
+    Pipeline::instance()->addExternalResolverFactory( bind( &JSResolver::factory, _1, _2, _3 ) );
+    Pipeline::instance()->addExternalResolverFactory( bind( &ScriptResolver::factory, _1, _2, _3 ) );
 
     new ActionCollection( this );
     connect( ActionCollection::instance()->getAction( "quit" ), SIGNAL( triggered() ), SLOT( quit() ), Qt::UniqueConnection );
