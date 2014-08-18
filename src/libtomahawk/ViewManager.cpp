@@ -680,7 +680,7 @@ ViewManager::addDynamicPage( Tomahawk::ViewPagePlugin* viewPage, const QString& 
 
 
 /*void
-ViewManager::addDynamicPage( const QString& pageName, const QString& text, const QIcon& icon, boost::function<Tomahawk::ViewPage*()> instanceLoader, int sortValue )
+ViewManager::addDynamicPage( const QString& pageName, const QString& text, const QIcon& icon, function<Tomahawk::ViewPage*()> instanceLoader, int sortValue )
 {
     tLog() << Q_FUNC_INFO << "Trying to add" << pageName;
 

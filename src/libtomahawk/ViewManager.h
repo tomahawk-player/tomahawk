@@ -21,18 +21,16 @@
 #define VIEWMANAGER_H
 
 #include "Artist.h"
+#include "ViewPage.h"
+#include "ViewPagePlugin.h"
 #include "collection/Collection.h"
 #include "PlaylistInterface.h"
 #include "playlist/QueueView.h"
-#include "ViewPage.h"
-#include "ViewPagePlugin.h"
+#include "utils/tr1-functional.h"
 
 #include <QObject>
 #include <QHash>
 #include <QStackedWidget>
-
-// best regards to you, mr. pimple aka xhochy :)
-#include <boost/function.hpp>
 
 #include "DllMacro.h"
 
@@ -119,7 +117,7 @@ public slots:
     Tomahawk::ViewPage* showInboxPage();
     Tomahawk::ViewPage* showQueuePage();
 
-//    void addDynamicPage( const QString& pageName, const QString& text, const QIcon& icon, boost::function< Tomahawk::ViewPage*() > instanceLoader, int sortValue = 0 );
+//    void addDynamicPage( const QString& pageName, const QString& text, const QIcon& icon, function< Tomahawk::ViewPage*() > instanceLoader, int sortValue = 0 );
     Tomahawk::ViewPage* showDynamicPage( const QString& pageName );
 
     void showCurrentTrack();
@@ -161,7 +159,7 @@ private:
 
     QHash< QString, Tomahawk::ViewPage* > m_dynamicPages;
     QHash< QString, QPointer< Tomahawk::ViewPagePlugin > > m_dynamicPagePlugins;
-    QHash< QString, boost::function< Tomahawk::ViewPage*() > > m_dynamicPagesInstanceLoaders;
+    QHash< QString, function< Tomahawk::ViewPage*() > > m_dynamicPagesInstanceLoaders;
 
     QHash< Tomahawk::dynplaylist_ptr, QPointer<Tomahawk::DynamicWidget> > m_dynamicWidgets;
     QHash< Tomahawk::collection_ptr, QPointer<FlexibleTreeView> > m_collectionViews;
