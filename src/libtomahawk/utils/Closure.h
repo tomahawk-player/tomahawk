@@ -23,14 +23,7 @@
 
 #include "config.h"
 #include "DllMacro.h"
-
-#if defined(_WEBSOCKETPP_CPP11_STL_) || defined(CXX_STD_FUNCTIONAL)
-#include <functional>
-using std::function;
-#else
-#include <tr1/functional>
-using std::tr1::function;
-#endif
+#include "utils/tr1-functional.h"
 
 #include <QMetaMethod>
 #include <QObject>
