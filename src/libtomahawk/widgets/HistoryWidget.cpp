@@ -92,6 +92,7 @@ HistoryWidget::HistoryWidget( const source_ptr& source, QWidget* parent )
 /*    PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, trackView(), trackView()->proxyModel() );
     trackView()->setPlaylistItemDelegate( del );*/
 
+    trackView()->setIndentation( 0 );
     setPlayableModel( m_model );
     setEmptyTip( tr( "Sorry, we could not find any recent plays!" ) );
     m_model->setSource( source );

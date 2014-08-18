@@ -80,6 +80,7 @@ DashboardWidget::DashboardWidget( QWidget* parent )
         ui->trackView->setPlayableModel( m_tracksModel );
         ui->trackView->setCaption( tr( "Recently Played Tracks" ) );
         ui->trackView->trackView()->setUniformRowHeights( false );
+        ui->trackView->trackView()->setIndentation( 0 );
 
 //        ui->trackView->trackView()->setAutoResize( true );
         m_tracksModel->setSource( source_ptr() );
