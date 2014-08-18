@@ -33,9 +33,6 @@
 #include "SourceList.h"
 #include "UrlHandler.h"
 
-#include <boost/bind.hpp>
-#include <boost/function.hpp>
-
 #include <QFile>
 #include <QTimer>
 
@@ -188,8 +185,8 @@ StreamConnection::startSending( const Tomahawk::result_ptr& result )
     m_result = result;
     qDebug() << "Starting to transmit" << m_result->url();
 
-    boost::function< void ( const QString, QSharedPointer< QIODevice > ) > callback =
-            boost::bind( &StreamConnection::reallyStartSending, this, result, _1, _2 );
+    function< void ( const QString, QSharedPointer< QIODevice > ) > callback =
+            bind( &StreamConnection::reallyStartSending, this, result, _1, _2 );
     Tomahawk::UrlHandler::getIODeviceForUrl( m_result, m_result->url(), callback );
 }
 

@@ -56,8 +56,6 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 
-#include <boost/bind.hpp>
-
 
 typedef QPair< QList< SipInfo >, Connection* > sipConnectionPair;
 Q_DECLARE_METATYPE( sipConnectionPair )
@@ -89,7 +87,7 @@ Servent::Servent( QObject* parent )
 
     setProxy( QNetworkProxy::NoProxy );
 
-    IODeviceFactoryFunc fac = boost::bind( &Servent::remoteIODeviceFactory, this, _1, _2, _3 );
+    IODeviceFactoryFunc fac = bind( &Servent::remoteIODeviceFactory, this, _1, _2, _3 );
     Tomahawk::UrlHandler::registerIODeviceFactory( "servent", fac );
 }
 
@@ -1245,7 +1243,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
 
 void
 Servent::remoteIODeviceFactory( const Tomahawk::result_ptr& result, const QString& url,
-                                boost::function< void ( const QString&, QSharedPointer< QIODevice >& ) > callback )
+                                function< void ( const QString&, QSharedPointer< QIODevice >& ) > callback )
 {
     QSharedPointer<QIODevice> sp;
 

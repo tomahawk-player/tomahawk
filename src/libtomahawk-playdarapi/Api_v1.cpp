@@ -36,8 +36,6 @@
 #include "StatResponseHandler.h"
 #include "UrlHandler.h"
 
-#include <boost/bind.hpp>
-
 #include <QHash>
 
 using namespace Tomahawk;
@@ -242,8 +240,8 @@ Api_v1::sid( QxtWebRequestEvent* event, QString unused )
         return send404( event );
     }
 
-    boost::function< void ( const QString, QSharedPointer< QIODevice > ) > callback =
-            boost::bind( &Api_v1::processSid, this, event, rp, _1, _2 );
+    function< void ( const QString, QSharedPointer< QIODevice > ) > callback =
+            bind( &Api_v1::processSid, this, event, rp, _1, _2 );
     Tomahawk::UrlHandler::getIODeviceForUrl( rp, rp->url(), callback );
 }
 

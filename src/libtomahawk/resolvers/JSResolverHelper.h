@@ -27,15 +27,14 @@
 #include "UrlHandler.h"
 #include "database/fuzzyindex/FuzzyIndex.h"
 #include "utils/NetworkReply.h"
-
-#include <boost/function.hpp>
+#include "utils/tr1-functional.h"
 
 #include <QObject>
 #include <QVariantMap>
 
 
 class JSResolver;
-Q_DECLARE_METATYPE( boost::function< void( QSharedPointer< QIODevice >& ) >  )
+Q_DECLARE_METATYPE( function< void( QSharedPointer< QIODevice >& ) >  )
 
 class DLLEXPORT JSResolverHelper : public QObject
 {
@@ -109,7 +108,7 @@ public:
      * INTERNAL USE ONLY!
      */
     void customIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
-                                boost::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback ); // async
+                                function< void( const QString&, QSharedPointer< QIODevice >& ) > callback ); // async
 
 public slots:
     QByteArray readRaw( const QString& fileName );
@@ -142,7 +141,7 @@ private slots:
 private:
     Tomahawk::query_ptr parseTrack( const QVariantMap& track );
     void returnStreamUrl( const QString& streamUrl, const QMap<QString, QString>& headers,
-                          boost::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback );
+                          function< void( const QString&, QSharedPointer< QIODevice >& ) > callback );
 
     bool indexDataFromVariant( const QVariantMap& map, struct Tomahawk::IndexData& indexData );
     QVariantList searchInFuzzyIndex( const Tomahawk::query_ptr& query );
@@ -150,8 +149,8 @@ private:
     QVariantMap m_resolverConfig;
     JSResolver* m_resolver;
     QString m_scriptPath, m_urlCallback, m_urlTranslator;
-    QHash< QString, boost::function< void( const QString&, QSharedPointer< QIODevice >& ) > > m_streamCallbacks;
-    QHash< QString, boost::function< void( const QString& ) > > m_translatorCallbacks;
+    QHash< QString, function< void( const QString&, QSharedPointer< QIODevice >& ) > > m_streamCallbacks;
+    QHash< QString, function< void( const QString& ) > > m_translatorCallbacks;
     bool m_urlCallbackIsAsync;
     QString m_pendingUrl;
     Tomahawk::album_ptr m_pendingAlbum;

@@ -24,14 +24,13 @@
 
 #include "DllMacro.h"
 #include "Typedefs.h"
+#include "utils/tr1-functional.h"
 
-#include <boost/function.hpp>
-
-typedef boost::function< void( const Tomahawk::result_ptr&, const QString&,
-                               boost::function< void( const QString&, QSharedPointer< QIODevice >& ) > )> IODeviceFactoryFunc;
-typedef boost::function< void( const Tomahawk::result_ptr&, const QString&,
-                               boost::function< void( const QString& ) > )> UrlTranslatorFunc;
-typedef boost::function< void ( const QString&, QSharedPointer< QIODevice >& ) > IODeviceCallback;
+typedef function< void( const Tomahawk::result_ptr&, const QString&,
+                               function< void( const QString&, QSharedPointer< QIODevice >& ) > )> IODeviceFactoryFunc;
+typedef function< void( const Tomahawk::result_ptr&, const QString&,
+                               function< void( const QString& ) > )> UrlTranslatorFunc;
+typedef function< void ( const QString&, QSharedPointer< QIODevice >& ) > IODeviceCallback;
 
 
 namespace Tomahawk
@@ -41,12 +40,12 @@ namespace UrlHandler
 {
 
     DLLEXPORT void getIODeviceForUrl( const Tomahawk::result_ptr&, const QString& url,
-                                      boost::function< void ( const QString, QSharedPointer< QIODevice > ) > callback );
+                                      function< void ( const QString, QSharedPointer< QIODevice > ) > callback );
     DLLEXPORT void registerIODeviceFactory( const QString& proto, IODeviceFactoryFunc fac );
     DLLEXPORT void localFileIODeviceFactory( const Tomahawk::result_ptr& result, const QString& url,
-                                             boost::function< void ( const QString&, QSharedPointer< QIODevice >& ) > callback );
+                                             function< void ( const QString&, QSharedPointer< QIODevice >& ) > callback );
     DLLEXPORT void httpIODeviceFactory( const Tomahawk::result_ptr& result, const QString& url,
-                                       boost::function< void ( const QString&, QSharedPointer< QIODevice >& ) > callback );
+                                       function< void ( const QString&, QSharedPointer< QIODevice >& ) > callback );
 } // namespace UrlHandler
 
 } // namespace Tomahawk

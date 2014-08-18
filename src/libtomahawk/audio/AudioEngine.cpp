@@ -43,8 +43,6 @@
 
 #include <QDir>
 
-#include <boost/bind.hpp>
-
 using namespace Tomahawk;
 
 #define AUDIO_VOLUME_STEP 5
@@ -711,8 +709,8 @@ AudioEngine::performLoadIODevice( const result_ptr& result, const QString& url )
     if ( !TomahawkUtils::isLocalResult( url ) && !TomahawkUtils::isHttpResult( url )
          && !TomahawkUtils::isRtmpResult( url ) )
     {
-        boost::function< void ( const QString, QSharedPointer< QIODevice > ) > callback =
-                boost::bind( &AudioEngine::performLoadTrack, this, result, _1, _2 );
+        function< void ( const QString, QSharedPointer< QIODevice > ) > callback =
+                bind( &AudioEngine::performLoadTrack, this, result, _1, _2 );
         Tomahawk::UrlHandler::getIODeviceForUrl( result, url, callback );
     }
     else

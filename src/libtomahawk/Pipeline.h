@@ -24,12 +24,11 @@
 #include "DllMacro.h"
 #include "Typedefs.h"
 #include "Query.h"
+#include "utils/tr1-functional.h"
 
 #include <QObject>
 #include <QList>
 #include <QStringList>
-
-#include <boost/function.hpp>
 
 namespace Tomahawk
 {
@@ -37,7 +36,7 @@ namespace Tomahawk
 class PipelinePrivate;
 class Resolver;
 class ExternalResolver;
-typedef boost::function<Tomahawk::ExternalResolver*( QString, QString, QStringList )> ResolverFactoryFunc;
+typedef function<Tomahawk::ExternalResolver*( QString, QString, QStringList )> ResolverFactoryFunc;
 
 class DLLEXPORT Pipeline : public QObject
 {
