@@ -63,6 +63,7 @@ TrackView::TrackView( QWidget* parent )
     , m_dragging( false )
     , m_updateContextView( true )
     , m_alternatingRowColors( false )
+    , m_autoExpanding( true )
     , m_contextMenu( new ContextMenu( this ) )
 {
     setFrameShape( QFrame::NoFrame );
@@ -162,6 +163,7 @@ TrackView::setProxyModel( PlayableProxyModel* model )
         disconnect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( onViewChanged() ) );
         disconnect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
         disconnect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
+        disconnect( m_proxyModel, SIGNAL( expandRequest( QPersistentModelIndex ) ), this, SLOT( expand( QPersistentModelIndex ) ) );
     }
 
     m_proxyModel = model;
@@ -172,6 +174,7 @@ TrackView::setProxyModel( PlayableProxyModel* model )
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( verifySize() ) );
     connect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( verifySize() ) );
+    connect( m_proxyModel, SIGNAL( expandRequest( QPersistentModelIndex ) ), SLOT( expand( QPersistentModelIndex ) ) );
 
     m_delegate = new PlaylistItemDelegate( this, m_proxyModel );
     QTreeView::setItemDelegate( m_delegate );
@@ -205,11 +208,8 @@ void
 TrackView::setPlayableModel( PlayableModel* model )
 {
     if ( m_model ) {
-        disconnect( m_model, SIGNAL( loadingStarted() ),
-                 m_loadingSpinner, SLOT( fadeIn() ) );
-        disconnect( m_model, SIGNAL( loadingFinished() ),
-                 m_loadingSpinner, SLOT( fadeOut() ) );
-
+        disconnect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
+        disconnect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
     }
 
     m_model = model;
@@ -236,10 +236,13 @@ TrackView::setPlayableModel( PlayableModel* model )
             setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
     }
 
-    connect( m_model, SIGNAL( loadingStarted() ),
-             m_loadingSpinner, SLOT( fadeIn() ) );
-    connect( m_model, SIGNAL( loadingFinished() ),
-             m_loadingSpinner, SLOT( fadeOut() ) );
+    connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
+    connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
+
+    if ( m_autoExpanding )
+    {
+        expandAll();
+    }
 
     onViewChanged();
     emit modelChanged();
@@ -841,4 +844,11 @@ TrackView::setAlternatingRowColors( bool enable )
 {
     m_alternatingRowColors = enable;
     QTreeView::setAlternatingRowColors( enable );
+}
+
+
+void
+TrackView::expand( const QPersistentModelIndex& idx )
+{
+    QTreeView::expand( idx );
 }

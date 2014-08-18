@@ -85,6 +85,7 @@ public:
     void setAutoResize( bool b );
 
     void setAlternatingRowColors( bool enable );
+    void setAutoExpanding( bool enable );
 
     // Starts playing from the beginning if resolved, or waits until a track is playable
     void startPlayingFromStart();
@@ -99,6 +100,8 @@ public slots:
 
     void onViewChanged();
     void onScrollTimeout();
+
+    void expand( const QPersistentModelIndex& idx );
 
 signals:
     void itemActivated( const QModelIndex& index );
@@ -155,6 +158,7 @@ private:
     bool m_updateContextView;
     bool m_autoResize;
     bool m_alternatingRowColors;
+    bool m_autoExpanding;
 
     QModelIndex m_contextMenuIndex;
 

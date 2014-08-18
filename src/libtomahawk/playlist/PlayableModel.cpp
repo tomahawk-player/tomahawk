@@ -711,6 +711,8 @@ PlayableModel::insertInternal( const QList< T >& items, int row, const QList< To
 
     emit endInsertRows();
     emit itemCountChanged( rowCount( QModelIndex() ) );
+    if ( parent.isValid() )
+        emit expandRequest( parent );
 
     finishLoading();
 }
