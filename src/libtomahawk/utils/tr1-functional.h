@@ -19,14 +19,24 @@
 #ifndef TOMAHAWK_TR1_FUNCTIONAL
 #define TOMAHAWK_TR1_FUNCTIONAL
 
+#include "config.h"
+
 #if defined(_WEBSOCKETPP_CPP11_STL_) || defined(CXX_STD_FUNCTIONAL)
 #include <functional>
 using std::function;
 using std::bind;
+using std::placeholders::_1;
+using std::placeholders::_2;
+using std::placeholders::_3;
+using std::placeholders::_4;
 #else
 #include <tr1/functional>
 using std::tr1::function;
 using std::tr1::bind;
+using std::tr1::placeholders::_1;
+using std::tr1::placeholders::_2;
+using std::tr1::placeholders::_3;
+using std::tr1::placeholders::_4;
 #endif
 
 #endif
