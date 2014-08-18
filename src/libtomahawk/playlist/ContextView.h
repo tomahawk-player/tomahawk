@@ -82,6 +82,7 @@ private slots:
     void onWidgetDestroyed( QWidget* widget );
 
     void onQuerySelected( const Tomahawk::query_ptr& query );
+    void onCoverUpdated();
 
 private:
     FilterHeader* m_header;
@@ -93,6 +94,8 @@ private:
 
     PlayableModel* m_model;
     QStackedWidget* m_stack;
+
+    Tomahawk::query_ptr m_query;
 
     bool m_temporary;
 };

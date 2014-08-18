@@ -153,10 +153,24 @@ ContextView::setCaption( const QString& caption )
 void
 ContextView::onQuerySelected( const Tomahawk::query_ptr& query )
 {
-    if ( query->track()->cover( QSize( 0, 0 ) ).isNull() )
+    if ( m_query )
+    {
+        disconnect( m_query->track().data(), SIGNAL( updated() ), this, SLOT( onCoverUpdated() ) );
+    }
+
+    m_query = query;
+    connect( m_query->track().data(), SIGNAL( updated() ), SLOT( onCoverUpdated() ) );
+    onCoverUpdated();
+}
+
+
+void
+ContextView::onCoverUpdated()
+{
+    if ( m_query->track()->cover( QSize( 0, 0 ) ).isNull() )
         return;
 
-    m_pixmap = query->track()->cover( QSize( 0, 0 ) );
+    m_pixmap = m_query->track()->cover( QSize( 0, 0 ) );
     emit pixmapChanged( m_pixmap );
 }
 
