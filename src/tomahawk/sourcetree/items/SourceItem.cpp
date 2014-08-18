@@ -74,16 +74,16 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
     }
 
 /*    m_sourceInfoItem = new GenericPageItem( model(), this, tr( "New Additions" ), QIcon( RESPATH "images/new-additions.png" ),
-                                            boost::bind( &SourceItem::sourceInfoClicked, this ),
-                                            boost::bind( &SourceItem::getSourceInfoPage, this ) );*/
+                                            bind( &SourceItem::sourceInfoClicked, this ),
+                                            bind( &SourceItem::getSourceInfoPage, this ) );*/
 
     m_latestAdditionsItem = new GenericPageItem( model(), this, tr( "Latest Additions" ), ImageRegistry::instance()->icon( RESPATH "images/new-additions.svg" ),
-                                                 boost::bind( &SourceItem::latestAdditionsClicked, this ),
-                                                 boost::bind( &SourceItem::getLatestAdditionsPage, this ) );
+                                                 bind( &SourceItem::latestAdditionsClicked, this ),
+                                                 bind( &SourceItem::getLatestAdditionsPage, this ) );
 
     m_recentPlaysItem = new GenericPageItem( model(), this, tr( "History" ), ImageRegistry::instance()->icon( RESPATH "images/recently-played.svg" ),
-                                             boost::bind( &SourceItem::recentPlaysClicked, this ),
-                                             boost::bind( &SourceItem::getRecentPlaysPage, this ) );
+                                             bind( &SourceItem::recentPlaysClicked, this ),
+                                             bind( &SourceItem::getRecentPlaysPage, this ) );
 
     new LovedTracksItem( model(), this );
 

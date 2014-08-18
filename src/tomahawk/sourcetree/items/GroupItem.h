@@ -22,9 +22,6 @@
 
 #include "SourceTreeItem.h"
 
-#include "boost/function.hpp"
-#include "boost/bind.hpp"
-
 class GroupItem : public SourceTreeItem
 {
     Q_OBJECT
