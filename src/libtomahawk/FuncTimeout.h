@@ -22,17 +22,15 @@
 #include <QObject>
 #include <QPointer>
 
-#include <boost/function.hpp>
+#include "utils/tr1-functional.h"
 
 #include "DllMacro.h"
 
 /*
-#include <boost/bind.hpp>
-
     I want to do:
         QTimer::singleShot(1000, this, SLOT(doSomething(x)));
     instead, I'm doing:
-        new FuncTimeout(1000, boost::bind(&MyClass::doSomething, this, x));
+        new FuncTimeout(1000, bind(&MyClass::doSomething, this, x));
 
  */
 namespace Tomahawk
@@ -43,7 +41,7 @@ class DLLEXPORT FuncTimeout : public QObject
 Q_OBJECT
 
 public:
-    FuncTimeout( int ms, boost::function<void()> func, QObject* besafe );
+    FuncTimeout( int ms, function<void()> func, QObject* besafe );
 
     ~FuncTimeout();
 
@@ -51,7 +49,7 @@ public slots:
     void exec();
 
 private:
-    boost::function<void()> m_func;
+    function<void()> m_func;
     QPointer< QObject > m_watch;
 };
 

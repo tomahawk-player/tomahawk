@@ -25,7 +25,7 @@
 using namespace Tomahawk;
 
 
-FuncTimeout::FuncTimeout( int ms, boost::function< void() > func, QObject* besafe )
+FuncTimeout::FuncTimeout( int ms, function< void() > func, QObject* besafe )
     : m_func( func )
     , m_watch( QPointer< QObject >( besafe ) )
 {

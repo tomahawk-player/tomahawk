@@ -32,8 +32,6 @@
 #include "Source.h"
 #include "SourceList.h"
 
-#include <boost/bind.hpp>
-
 #define DEFAULT_CONCURRENT_QUERIES 4
 #define MAX_CONCURRENT_QUERIES 16
 #define CLEANUP_TIMEOUT 5 * 60 * 1000
@@ -566,7 +564,7 @@ Pipeline::shunt( const query_ptr& q )
         if ( r->timeout() > 0 )
         {
             d->qidsTimeout.insert( q->id(), true );
-            new FuncTimeout( r->timeout(), boost::bind( &Pipeline::timeoutShunt, this, q ), this );
+            new FuncTimeout( r->timeout(), bind( &Pipeline::timeoutShunt, this, q ), this );
         }
     }
     else
@@ -618,7 +616,7 @@ Pipeline::setQIDState( const Tomahawk::query_ptr& query, int state )
     {
         d->qidsState.insert( query->id(), state );
 
-        new FuncTimeout( 0, boost::bind( &Pipeline::shunt, this, query ), this );
+        new FuncTimeout( 0, bind( &Pipeline::shunt, this, query ), this );
     }
     else
     {
@@ -628,7 +626,7 @@ Pipeline::setQIDState( const Tomahawk::query_ptr& query, int state )
         if ( !d->queries_temporary.contains( query ) )
             d->qids.remove( query->id() );
 
-        new FuncTimeout( 0, boost::bind( &Pipeline::shuntNext, this ), this );
+        new FuncTimeout( 0, bind( &Pipeline::shuntNext, this ), this );
     }
 }
 
