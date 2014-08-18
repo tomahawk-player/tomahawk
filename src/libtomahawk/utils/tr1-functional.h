@@ -22,9 +22,11 @@
 #if defined(_WEBSOCKETPP_CPP11_STL_) || defined(CXX_STD_FUNCTIONAL)
 #include <functional>
 using std::function;
+using std::bind;
 #else
 #include <tr1/functional>
 using std::tr1::function;
+using std::tr1::bind;
 #endif
 
 #endif
