@@ -168,7 +168,11 @@ void
 ContextView::onCoverUpdated()
 {
     if ( m_query->track()->cover( QSize( 0, 0 ) ).isNull() )
+    {
+        m_pixmap = QPixmap();
+        emit pixmapChanged( m_pixmap );
         return;
+    }
 
     m_pixmap = m_query->track()->cover( QSize( 0, 0 ) );
     emit pixmapChanged( m_pixmap );
