@@ -41,7 +41,6 @@
 #include <QScrollBar>
 #include <QDrag>
 #include <QMimeData>
-#include <boost/concept_check.hpp>
 
 #define SCROLL_TIMEOUT 280
 

@@ -48,8 +48,6 @@
     #include "collection/Collection.h"
 #endif
 
-#include <boost/concept_check.hpp>
-
 #define DEFAULT_WORKER_THREADS 4
 #define MAX_WORKER_THREADS 16
 
