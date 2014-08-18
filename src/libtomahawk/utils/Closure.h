@@ -38,7 +38,6 @@ using std::tr1::function;
 #include <QSharedPointer>
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
 
 namespace _detail {
 
@@ -101,10 +100,10 @@ class DLLEXPORT Closure : public QObject, boost::noncopyable {
   bool autoDelete_;
   QPointer<QObject> outOfThreadReceiver_;
 
-  boost::scoped_ptr<const ClosureArgumentWrapper> val0_;
-  boost::scoped_ptr<const ClosureArgumentWrapper> val1_;
-  boost::scoped_ptr<const ClosureArgumentWrapper> val2_;
-  boost::scoped_ptr<const ClosureArgumentWrapper> val3_;
+  QScopedPointer<const ClosureArgumentWrapper> val0_;
+  QScopedPointer<const ClosureArgumentWrapper> val1_;
+  QScopedPointer<const ClosureArgumentWrapper> val2_;
+  QScopedPointer<const ClosureArgumentWrapper> val3_;
 };
 
 class DLLEXPORT SharedPointerWrapper {
@@ -146,7 +145,7 @@ class SharedClosure : public Closure {
   }
 
  private:
-  boost::scoped_ptr<SharedPointerWrapper> shared_sender_;
+  QScopedPointer<SharedPointerWrapper> shared_sender_;
 };
 
 }  // namespace _detail
