@@ -31,8 +31,6 @@
 #include "ScriptCommand_LookupUrl.h"
 #include "Typedefs.h"
 
-#include <boost/function.hpp>
-
 #include <QObject>
 
 class QWidget;

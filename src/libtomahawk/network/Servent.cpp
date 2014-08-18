@@ -1261,7 +1261,7 @@ Servent::remoteIODeviceFactory( const Tomahawk::result_ptr& result, const QStrin
     StreamConnection* sc = new StreamConnection( this, cc, fileId, result );
     createParallelConnection( cc, sc, QString( "FILE_REQUEST_KEY:%1" ).arg( fileId ) );
 
-    //boost::functions cannot accept temporaries as parameters
+    // std::functions cannot accept temporaries as parameters
     sp = sc->iodevice();
     callback( result->url(), sp );
 }

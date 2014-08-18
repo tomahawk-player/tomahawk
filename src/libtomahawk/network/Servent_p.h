@@ -27,8 +27,6 @@
 #include <QMutex>
 #include <QStringList>
 
-#include <boost/function.hpp>
-
 class ServentPrivate : public QObject
 {
 Q_OBJECT

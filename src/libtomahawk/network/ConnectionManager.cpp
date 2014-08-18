@@ -33,7 +33,6 @@
 #include "Servent.h"
 #include "Source.h"
 
-#include <boost/bind.hpp>
 #include <qtconcurrentrun.h>
 
 /* Management of ConnectionManagers */

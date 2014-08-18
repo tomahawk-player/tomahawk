@@ -103,7 +103,7 @@ localFileIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
     if ( io )
         io->open( QIODevice::ReadOnly );
 
-    //boost::functions cannot accept temporaries as parameters
+    // std::functions cannot accept temporaries as parameters
     QSharedPointer< QIODevice > sp = QSharedPointer<QIODevice>( io );
     callback( url, sp );
 }

@@ -900,7 +900,7 @@ Q_DECLARE_METATYPE( IODeviceCallback )
 void
 JSResolverHelper::gotStreamUrl( function< void( const QString&, QSharedPointer< QIODevice >& ) > callback, NetworkReply* reply )
 {
-    //boost::functions cannot accept temporaries as parameters
+    // std::functions cannot accept temporaries as parameters
     QSharedPointer< QIODevice > sp = QSharedPointer< QIODevice >( reply->reply(), &QObject::deleteLater );
     QString url = reply->reply()->url().toString();
     reply->disconnectFromReply();
