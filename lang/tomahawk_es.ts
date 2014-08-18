@@ -343,7 +343,7 @@ conectarse a usted y transmitir música?</translation>
         <translation>No se encontraron éxitos de este artista.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="179"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="180"/>
         <source>Songs</source>
         <translation type="unfinished"/>
     </message>
@@ -863,7 +863,7 @@ de un solo uso (OTP)</translation>
 <context>
     <name>InboxPage</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="82"/>
+        <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="83"/>
         <source>No listening suggestions here.</source>
         <translation type="unfinished"/>
     </message>

@@ -343,7 +343,7 @@ połączyć się i strumieniować od ciebie?</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="179"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="180"/>
         <source>Songs</source>
         <translation type="unfinished"/>
     </message>
@@ -862,7 +862,7 @@ Password (OTP)</source>
 <context>
     <name>InboxPage</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="82"/>
+        <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="83"/>
         <source>No listening suggestions here.</source>
         <translation type="unfinished"/>
     </message>

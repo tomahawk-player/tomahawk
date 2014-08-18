@@ -342,7 +342,7 @@ connect and stream from you?</source>
         <translation>抱歉，没有找到该艺术家的任何人气歌曲！</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="179"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="180"/>
         <source>Songs</source>
         <translation>曲目</translation>
     </message>
@@ -862,7 +862,7 @@ Password (OTP)</source>
 <context>
     <name>InboxPage</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="82"/>
+        <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="83"/>
         <source>No listening suggestions here.</source>
         <translation>没有推荐曲目。</translation>
     </message>

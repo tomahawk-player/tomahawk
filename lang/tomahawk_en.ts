@@ -343,7 +343,7 @@ connect and stream from you?</translation>
         <translation>Sorry, we could not find any top hits for this artist!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="179"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="180"/>
         <source>Songs</source>
         <translation>Songs</translation>
     </message>
@@ -863,7 +863,7 @@ Password (OTP)</translation>
 <context>
     <name>InboxPage</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="82"/>
+        <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="83"/>
         <source>No listening suggestions here.</source>
         <translation>No listening suggestions here.</translation>
     </message>
