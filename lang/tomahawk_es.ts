@@ -510,12 +510,12 @@ conectarse a usted y transmitir música?</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="292"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="310"/>
         <source>This playlist is currently empty.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="294"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="312"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation type="unfinished"/>
     </message>
@@ -806,7 +806,7 @@ de un solo uso (OTP)</translation>
         <translation>Pistas reproducidas recientemente por %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="96"/>
+        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="97"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>No se encontraron reproducciones recientes.</translation>
     </message>
@@ -1243,42 +1243,42 @@ de un solo uso (OTP)</translation>
         <translation>Precisión</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="881"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="883"/>
         <source>Perfect match</source>
         <translation>Coincidencia perfecta</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="882"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="884"/>
         <source>Very good match</source>
         <translation>Coincidencia muy buena</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="883"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="885"/>
         <source>Good match</source>
         <translation>Coincidencia buena</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="884"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="886"/>
         <source>Vague match</source>
         <translation>Coincidencia vaga</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="885"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="887"/>
         <source>Bad match</source>
         <translation>Mala coincidencia</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="886"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="888"/>
         <source>Very bad match</source>
         <translation>Muy mala coincidencia</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="887"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="889"/>
         <source>Not available</source>
         <translation>No disponible</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="888"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="890"/>
         <source>Searching...</source>
         <translation>Buscando…</translation>
     </message>
@@ -3795,7 +3795,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/viewpages/dashboard/Dashboard.cpp" line="98"/>
+        <location filename="../src/viewpages/dashboard/Dashboard.cpp" line="99"/>
         <source>Dashboard</source>
         <translation type="unfinished"/>
     </message>
@@ -4253,7 +4253,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="635"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="638"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>No se encontraron resultados con el filtro «%1».</translation>
     </message>

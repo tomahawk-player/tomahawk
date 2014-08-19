@@ -509,12 +509,12 @@ connect and stream from you?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="292"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="310"/>
         <source>This playlist is currently empty.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="294"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="312"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation type="unfinished"/>
     </message>
@@ -805,7 +805,7 @@ Password (OTP)</source>
         <translation>%1&apos;s τελευταίες αναπαραγωγές τραγουδιων</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="96"/>
+        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="97"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Συγγνωμη, δεν βρεθηκαν προσφατες αναπαραγωγες!</translation>
     </message>
@@ -1242,42 +1242,42 @@ Password (OTP)</source>
         <translation>Ακρίβεια</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="881"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="883"/>
         <source>Perfect match</source>
         <translation>Τέλειο ταίριασμα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="882"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="884"/>
         <source>Very good match</source>
         <translation>Πολύ καλό ταίριασμα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="883"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="885"/>
         <source>Good match</source>
         <translation>Καλό ταίριασμα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="884"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="886"/>
         <source>Vague match</source>
         <translation>Ασαφές ταίριασμα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="885"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="887"/>
         <source>Bad match</source>
         <translation>Κακό ταίριασμα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="886"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="888"/>
         <source>Very bad match</source>
         <translation>Πολύ κακό ταίριασμα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="887"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="889"/>
         <source>Not available</source>
         <translation>Μη διαθέσιμο</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="888"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="890"/>
         <source>Searching...</source>
         <translation>Αναζήτηση...</translation>
     </message>
@@ -3793,7 +3793,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/viewpages/dashboard/Dashboard.cpp" line="98"/>
+        <location filename="../src/viewpages/dashboard/Dashboard.cpp" line="99"/>
         <source>Dashboard</source>
         <translation type="unfinished"/>
     </message>
@@ -4249,7 +4249,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="635"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="638"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Συγγνώμη, το φίλτρο «%1» δεν αντιστοίχισε αποτελέσματα.</translation>
     </message>
