@@ -109,8 +109,7 @@ protected:
 protected slots:
     virtual void modelChanged();
     virtual void onAudioEngineTick( qint64 ms );
-    virtual void onPlaybackStarted();
-    virtual void onPlaybackStopped();
+    virtual void onPlaybackChange();
 
 private:
     mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_pixmaps;

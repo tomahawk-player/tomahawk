@@ -91,9 +91,6 @@ PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, PlayableProxyMode
     connect( this, SIGNAL( updateIndex( QModelIndex ) ), parent, SLOT( update( QModelIndex ) ) );
     connect( proxy, SIGNAL( modelReset() ), SLOT( modelChanged() ) );
     connect( parent, SIGNAL( modelChanged() ), SLOT( modelChanged() ) );
-
-    connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted() ) );
-    connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ) );
 }
 
 
@@ -653,6 +650,8 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
     {
         if ( m_nowPlaying != index )
         {
+            connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackChange() ), Qt::UniqueConnection );
+            connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackChange() ), Qt::UniqueConnection );
             connect( AudioEngine::instance(), SIGNAL( timerMilliSeconds( qint64 ) ), SLOT( onAudioEngineTick( qint64 ) ), Qt::UniqueConnection );
             m_nowPlaying = QPersistentModelIndex( index );
         }
@@ -895,17 +894,10 @@ PlaylistItemDelegate::onAudioEngineTick( qint64 /* ms */ )
 
 
 void
-PlaylistItemDelegate::onPlaybackStarted()
+PlaylistItemDelegate::onPlaybackChange()
 {
-    disconnect( AudioEngine::instance(), SIGNAL( timerMilliSeconds( qint64 ) ), this, SLOT( onAudioEngineTick( qint64 ) ) );
-    doUpdateIndex( m_nowPlaying );
-    m_nowPlaying = QModelIndex();
-}
-
-
-void
-PlaylistItemDelegate::onPlaybackStopped()
-{
+    disconnect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), this, SLOT( onPlaybackChange() ) );
+    disconnect( AudioEngine::instance(), SIGNAL( stopped() ), this, SLOT( onPlaybackChange() ) );
     disconnect( AudioEngine::instance(), SIGNAL( timerMilliSeconds( qint64 ) ), this, SLOT( onAudioEngineTick( qint64 ) ) );
     doUpdateIndex( m_nowPlaying );
     m_nowPlaying = QModelIndex();
