@@ -101,14 +101,14 @@ GridView::setProxyModel( PlayableProxyModel* model )
         disconnect( m_proxyModel, SIGNAL( filterChanged( QString ) ), this, SLOT( onFilterChanged( QString ) ) );
         disconnect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
         disconnect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
-        disconnect( proxyModel(), SIGNAL( modelReset() ), this, SLOT( layoutItems() ) );
+        disconnect( m_proxyModel, SIGNAL( modelReset() ), this, SLOT( layoutItems() ) );
     }
 
     m_proxyModel = model;
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
-    connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( verifySize() ) );
-    connect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( verifySize() ) );
-    connect( proxyModel(), SIGNAL( modelReset() ), SLOT( layoutItems() ), Qt::QueuedConnection );
+    connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( verifySize() ), Qt::QueuedConnection );
+    connect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( verifySize() ), Qt::QueuedConnection );
+    connect( m_proxyModel, SIGNAL( modelReset() ), SLOT( layoutItems() ), Qt::QueuedConnection );
 
     if ( m_delegate )
         delete m_delegate;
@@ -283,13 +283,14 @@ GridView::layoutItems()
         const int newItemWidth = itemWidth + extraSpace - spacing();
 
         m_delegate->setItemSize( QSize( newItemWidth, newItemWidth + ( m_itemSize.height() - m_itemSize.width() ) ) );
-        verifySize();
+    }
 
-        if ( !m_inited )
-        {
-            m_inited = true;
-            repaint();
-        }
+    verifySize();
+
+    if ( !m_inited )
+    {
+        m_inited = true;
+        repaint();
     }
 }
 
