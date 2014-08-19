@@ -79,7 +79,7 @@ GridView::GridView( QWidget* parent )
 
     setAutoFitItems( true );
     setAutoResize( false );
-    setItemSize( QSize( 170, 170 + 48 ) );
+    setItemSize( QSize( 170, 170 + 56 ) );
     setProxyModel( new PlayableProxyModel( this ) );
 
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
