@@ -113,8 +113,10 @@ private:
     mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_pixmaps;
     mutable QHash< QPersistentModelIndex, QRect > m_infoButtonRects;
     mutable QHash< QPersistentModelIndex, QRect > m_loveButtonRects;
+    mutable QHash< QPersistentModelIndex, QRect > m_artistNameRects;
     mutable QHash< QPersistentModelIndex, QHash< Tomahawk::source_ptr, QRect > > m_avatarBoxRects;
     QPersistentModelIndex m_hoveringOver;
+    QPersistentModelIndex m_hoveringOverArtist;
 
     TrackView* m_view;
     PlayableProxyModel* m_model;

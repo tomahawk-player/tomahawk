@@ -627,7 +627,17 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
     painter->setOpacity( 0.8 );
     painter->setFont( f );
     text = fm.elidedText( track->artist(), Qt::ElideRight, artistRect.width() - margin );
+
+    painter->save();
+    if ( m_hoveringOverArtist == index )
+    {
+        QFont f = painter->font();
+        f.setUnderline( true );
+        painter->setFont( f );
+    }
     painter->drawText( artistRect, text, m_centerOption );
+    m_artistNameRects[ index ] = painter->fontMetrics().boundingRect( artistRect, Qt::AlignLeft | Qt::AlignVCenter, text );
+    painter->restore();
 
     // draw number
     painter->setOpacity( 0.6 );
@@ -681,6 +691,7 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
         return false;
     }
 
+    bool hoveringArtist = false;
     bool hoveringInfo = false;
     bool hoveringLove = false;
     Tomahawk::source_ptr hoveredAvatar;
@@ -690,6 +701,12 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
         const QRect infoRect = m_infoButtonRects[ index ];
         const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
         hoveringInfo = infoRect.contains( ev->pos() );
+    }
+    if ( m_artistNameRects.contains( index ) )
+    {
+        const QRect nameRect = m_artistNameRects[ index ];
+        const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
+        hoveringArtist = nameRect.contains( ev->pos() );
     }
     if ( m_loveButtonRects.contains( index ) )
     {
@@ -714,7 +731,7 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
 
     if ( event->type() == QEvent::MouseMove )
     {
-        if ( hoveringInfo || hoveringLove )
+        if ( hoveringInfo || hoveringLove || hoveringArtist )
             m_view->setCursor( Qt::PointingHandCursor );
         else
             m_view->setCursor( Qt::ArrowCursor );
@@ -725,6 +742,24 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
                                 hoveredAvatar->friendlyName(),
                                 m_view,
                                 hoveredAvatarRect );
+        }
+
+        if ( hoveringArtist && m_hoveringOverArtist != index )
+        {
+            QPersistentModelIndex ti = m_hoveringOverArtist;
+            m_hoveringOverArtist = index;
+
+            PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( ti ) );
+            item->requestRepaint();
+            emit updateIndex( m_hoveringOverArtist );
+        }
+        if ( !hoveringArtist && m_hoveringOverArtist.isValid() )
+        {
+            QPersistentModelIndex ti = m_hoveringOverArtist;
+            m_hoveringOverArtist = QModelIndex();
+
+            PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( ti ) );
+            item->requestRepaint();
         }
 
         if ( m_hoveringOver != index )
@@ -750,7 +785,11 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
         if ( !item )
             return false;
 
-        if ( hoveringLove )
+        if ( hoveringArtist )
+        {
+            ViewManager::instance()->show( item->query()->track()->artistPtr() );
+        }
+        else if ( hoveringLove )
         {
             item->query()->queryTrack()->setLoved( !item->query()->queryTrack()->loved() );
         }
@@ -806,8 +845,10 @@ PlaylistItemDelegate::resetHoverIndex()
     QPersistentModelIndex idx = m_hoveringOver;
 
     m_hoveringOver = QModelIndex();
+    m_hoveringOverArtist = QModelIndex();
     m_infoButtonRects.clear();
     m_loveButtonRects.clear();
+    m_artistNameRects.clear();
 
     QModelIndex itemIdx = m_model->mapToSource( idx );
     if ( itemIdx.isValid() )
