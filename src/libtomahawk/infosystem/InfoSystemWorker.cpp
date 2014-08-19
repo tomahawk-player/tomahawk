@@ -30,6 +30,7 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "utils/PluginLoader.h"
+#include "utils/Closure.h"
 #include "Source.h"
 
 #include <QCoreApplication>
@@ -225,8 +226,15 @@ InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     QList< InfoPluginPtr > providers = determineOrderedMatches( requestData.type );
     if ( providers.isEmpty() )
     {
-        emit info( requestData, QVariant() );
-        checkFinished( requestData );
+        // We're not ready yet, retry this request in a bit
+        QTimer* timer = new QTimer();
+        timer->setInterval( 500 );
+        timer->setSingleShot( true );
+        NewClosure( timer, SIGNAL( timeout() ), this, SLOT( getInfo( Tomahawk::InfoSystem::InfoRequestData ) ), requestData );
+        timer->start();
+
+/*        emit info( requestData, QVariant() );
+        checkFinished( requestData );*/
         return;
     }
 
