@@ -490,18 +490,18 @@ Query::checkResults()
 
 
 bool
-Query::equals( const Tomahawk::query_ptr& other, bool ignoreCase ) const
+Query::equals( const Tomahawk::query_ptr& other, bool ignoreCase, bool ignoreAlbum ) const
 {
     if ( other.isNull() )
         return false;
 
     if ( ignoreCase )
         return ( queryTrack()->artist().toLower() == other->queryTrack()->artist().toLower() &&
-                 queryTrack()->album().toLower() == other->queryTrack()->album().toLower() &&
+                 ( ignoreAlbum || queryTrack()->album().toLower() == other->queryTrack()->album().toLower() ) &&
                  queryTrack()->track().toLower() == other->queryTrack()->track().toLower() );
     else
         return ( queryTrack()->artist() == other->queryTrack()->artist() &&
-                 queryTrack()->album() == other->queryTrack()->album() &&
+                 ( ignoreAlbum || queryTrack()->album() == other->queryTrack()->album() ) &&
                  queryTrack()->track() == other->queryTrack()->track() );
 }
 

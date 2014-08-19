@@ -51,7 +51,7 @@ public:
 
     virtual ~Query();
 
-    bool equals( const Tomahawk::query_ptr& other, bool ignoreCase = false ) const;
+    bool equals( const Tomahawk::query_ptr& other, bool ignoreCase = false, bool ignoreAlbum = false ) const;
     float howSimilar( const Tomahawk::result_ptr& r );
 
     QVariant toVariant() const;
