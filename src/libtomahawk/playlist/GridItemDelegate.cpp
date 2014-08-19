@@ -256,7 +256,7 @@ GridItemDelegate::onPlayClicked( const QPersistentModelIndex& index )
 
     PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
 
-    NewClosure(  AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ),
+    NewClosure( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ),
                 const_cast<GridItemDelegate*>(this), SLOT( onPlaybackStarted( QPersistentModelIndex ) ), QPersistentModelIndex( index ) );
 
     if ( item )

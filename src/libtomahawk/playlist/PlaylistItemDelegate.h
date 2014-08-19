@@ -108,6 +108,9 @@ protected:
 
 protected slots:
     virtual void modelChanged();
+    virtual void onAudioEngineTick( qint64 ms );
+    virtual void onPlaybackStarted();
+    virtual void onPlaybackStopped();
 
 private:
     mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_pixmaps;
@@ -117,6 +120,7 @@ private:
     mutable QHash< QPersistentModelIndex, QHash< Tomahawk::source_ptr, QRect > > m_avatarBoxRects;
     QPersistentModelIndex m_hoveringOver;
     QPersistentModelIndex m_hoveringOverArtist;
+    mutable QPersistentModelIndex m_nowPlaying;
 
     TrackView* m_view;
     PlayableProxyModel* m_model;

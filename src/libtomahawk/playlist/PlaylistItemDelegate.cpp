@@ -91,6 +91,9 @@ PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, PlayableProxyMode
     connect( this, SIGNAL( updateIndex( QModelIndex ) ), parent, SLOT( update( QModelIndex ) ) );
     connect( proxy, SIGNAL( modelReset() ), SLOT( modelChanged() ) );
     connect( parent, SIGNAL( modelChanged() ), SLOT( modelChanged() ) );
+
+    connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted() ) );
+    connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ) );
 }
 
 
@@ -648,6 +651,12 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
 
     if ( item->isPlaying() )
     {
+        if ( m_nowPlaying != index )
+        {
+            connect( AudioEngine::instance(), SIGNAL( timerMilliSeconds( qint64 ) ), SLOT( onAudioEngineTick( qint64 ) ), Qt::UniqueConnection );
+            m_nowPlaying = QPersistentModelIndex( index );
+        }
+
         int h = extraRect.height() / 2;
         QRect playIconRect = extraRect.adjusted( extraRect.width() - h - 8, h / 2, -8, -h / 2 );
         painter->drawPixmap( playIconRect, ImageRegistry::instance()->pixmap( RESPATH "images/play.svg", playIconRect.size() ) );
@@ -875,4 +884,29 @@ PlaylistItemDelegate::doUpdateIndex( const QPersistentModelIndex& index )
 {
     if ( index.isValid() )
         emit updateIndex( index );
+}
+
+
+void
+PlaylistItemDelegate::onAudioEngineTick( qint64 /* ms */ )
+{
+    doUpdateIndex( m_nowPlaying );
+}
+
+
+void
+PlaylistItemDelegate::onPlaybackStarted()
+{
+    disconnect( AudioEngine::instance(), SIGNAL( timerMilliSeconds( qint64 ) ), this, SLOT( onAudioEngineTick( qint64 ) ) );
+    doUpdateIndex( m_nowPlaying );
+    m_nowPlaying = QModelIndex();
+}
+
+
+void
+PlaylistItemDelegate::onPlaybackStopped()
+{
+    disconnect( AudioEngine::instance(), SIGNAL( timerMilliSeconds( qint64 ) ), this, SLOT( onAudioEngineTick( qint64 ) ) );
+    doUpdateIndex( m_nowPlaying );
+    m_nowPlaying = QModelIndex();
 }
