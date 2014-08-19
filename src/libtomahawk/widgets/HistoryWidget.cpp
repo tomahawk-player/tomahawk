@@ -93,6 +93,8 @@ HistoryWidget::HistoryWidget( const source_ptr& source, QWidget* parent )
     trackView()->setPlaylistItemDelegate( del );*/
 
     trackView()->setIndentation( 0 );
+    trackView()->setUniformRowHeights( false );
+
     setPlayableModel( m_model );
     setEmptyTip( tr( "Sorry, we could not find any recent plays!" ) );
     m_model->setSource( source );
