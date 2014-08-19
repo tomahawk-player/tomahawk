@@ -102,6 +102,8 @@ public slots:
     void onScrollTimeout();
 
     void expand( const QPersistentModelIndex& idx );
+    void select( const QPersistentModelIndex& idx );
+    void selectFirstTrack();
 
 signals:
     void itemActivated( const QModelIndex& index );

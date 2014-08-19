@@ -164,6 +164,7 @@ TrackView::setProxyModel( PlayableProxyModel* model )
         disconnect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
         disconnect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
         disconnect( m_proxyModel, SIGNAL( expandRequest( QPersistentModelIndex ) ), this, SLOT( expand( QPersistentModelIndex ) ) );
+        disconnect( m_proxyModel, SIGNAL( selectRequest( QPersistentModelIndex ) ), this, SLOT( select( QPersistentModelIndex ) ) );
     }
 
     m_proxyModel = model;
@@ -175,6 +176,7 @@ TrackView::setProxyModel( PlayableProxyModel* model )
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( verifySize() ) );
     connect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( verifySize() ) );
     connect( m_proxyModel, SIGNAL( expandRequest( QPersistentModelIndex ) ), SLOT( expand( QPersistentModelIndex ) ) );
+    connect( m_proxyModel, SIGNAL( selectRequest( QPersistentModelIndex ) ), SLOT( select( QPersistentModelIndex ) ) );
 
     m_delegate = new PlaylistItemDelegate( this, m_proxyModel );
     QTreeView::setItemDelegate( m_delegate );
@@ -207,7 +209,8 @@ TrackView::setPlaylistItemDelegate( PlaylistItemDelegate* delegate )
 void
 TrackView::setPlayableModel( PlayableModel* model )
 {
-    if ( m_model ) {
+    if ( m_model )
+    {
         disconnect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
         disconnect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
     }
@@ -242,6 +245,7 @@ TrackView::setPlayableModel( PlayableModel* model )
     if ( m_autoExpanding )
     {
         expandAll();
+        selectFirstTrack();
     }
 
     onViewChanged();
@@ -851,4 +855,39 @@ void
 TrackView::expand( const QPersistentModelIndex& idx )
 {
     QTreeView::expand( idx );
+}
+
+
+void
+TrackView::select( const QPersistentModelIndex& idx )
+{
+    if ( selectedIndexes().count() )
+        return;
+
+//    selectionModel()->select( idx, QItemSelectionModel::SelectCurrent );
+    currentChanged( idx, QModelIndex() );
+}
+
+
+void
+TrackView::selectFirstTrack()
+{
+    if ( !m_proxyModel->rowCount() )
+        return;
+    if ( selectedIndexes().count() )
+        return;
+
+    QModelIndex idx = m_proxyModel->index( 0, 0, QModelIndex() );
+    PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( idx ) );
+    if ( item->source() )
+    {
+        idx = m_proxyModel->index( 0, 0, idx );
+        item = m_model->itemFromIndex( m_proxyModel->mapToSource( idx ) );
+    }
+
+    if ( item->query() )
+    {
+//        selectionModel()->select( idx, QItemSelectionModel::SelectCurrent );
+        currentChanged( idx, QModelIndex() );
+    }
 }

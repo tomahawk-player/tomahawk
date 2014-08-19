@@ -148,6 +148,7 @@ signals:
     void currentIndexChanged();
 
     void expandRequest( const QPersistentModelIndex& index );
+    void selectRequest( const QPersistentModelIndex& index );
 
 public slots:
     virtual void setCurrentIndex( const QModelIndex& index );

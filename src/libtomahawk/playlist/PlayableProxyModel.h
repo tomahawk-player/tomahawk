@@ -100,6 +100,7 @@ signals:
     void itemCountChanged( unsigned int items );
 
     void expandRequest( const QPersistentModelIndex& index );
+    void selectRequest( const QPersistentModelIndex& index );
 
 protected:
     virtual bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
@@ -112,6 +113,7 @@ private slots:
     void onIndexResolved( const QModelIndex& index );
 
     void expandRequested( const QPersistentModelIndex& index );
+    void selectRequested( const QPersistentModelIndex& index );
 
 private:
     virtual bool lessThan( int column, const Tomahawk::query_ptr& left, const Tomahawk::query_ptr& right ) const;
