@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2012       Leo Franchi            <lfranchi@kde.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -31,12 +31,14 @@
 #include "DllMacro.h"
 
 class QPushButton;
+class QStackedWidget;
 class PlayableModel;
 class PlaylistModel;
 
 namespace Ui
 {
     class SearchWidget;
+    class HeaderWidget;
 }
 
 class DLLEXPORT SearchWidget : public QWidget, public Tomahawk::ViewPage
@@ -54,7 +56,7 @@ public:
     virtual QString description() const { return tr( "Results for '%1'" ).arg( m_search ); }
     virtual QPixmap pixmap() const;
 
-    virtual bool showInfoBar() const { return true; }
+    virtual bool showInfoBar() const { return false; }
     virtual bool isBeingPlayed() const;
     virtual bool isTemporaryPage() const { return true; }
     virtual bool jumpToCurrentTrack();
@@ -72,21 +74,30 @@ private slots:
 
     void onQueryFinished();
 
+    void onArtistsMoreClicked();
+    void onAlbumsMoreClicked();
+    void onTopHitsMoreClicked();
+    void onTopHitsMoreClosed();
+
 private:
     void updateArtists();
     void updateAlbums();
 
     Ui::SearchWidget *ui;
+    Ui::HeaderWidget* uiHeader;
 
+    QStackedWidget* m_stackedWidget;
     QString m_search;
 
     PlayableModel* m_artistsModel;
     PlayableModel* m_albumsModel;
-    PlaylistModel* m_resultsModel;
+    PlayableModel* m_resultsModel;
+    Tomahawk::playlistinterface_ptr m_plInterface;
 
     QList< Tomahawk::query_ptr > m_queries;
-    QMap< float, Tomahawk::artist_ptr > m_artists;
-    QMap< float, Tomahawk::album_ptr > m_albums;
+    QMap< Tomahawk::artist_ptr, float > m_artists;
+    QMap< Tomahawk::album_ptr, float > m_albums;
+    QMap< Tomahawk::query_ptr, float > m_results;
 };
 
 #endif // NEWPLAYLISTWIDGET_H
