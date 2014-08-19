@@ -80,6 +80,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
         ui->similarTracksView->setEmptyTip( tr( "Sorry, but we could not find similar tracks for this song!" ) );
         ui->similarTracksView->setAutoResize( true );
         ui->similarTracksView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+        ui->similarTracksView->setItemSize( QSize( 190, 190 + 56 ) );
         //    TomahawkUtils::styleScrollBar( ui->similarTracksView->verticalScrollBar() );
         //    ui->similarTracksView->setStyleSheet( "QListView { background-color: transparent; } QListView::item { background-color: transparent; }" );
 

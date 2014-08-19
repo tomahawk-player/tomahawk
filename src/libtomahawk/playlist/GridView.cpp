@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -282,7 +282,7 @@ GridView::layoutItems()
         const int extraSpace = remSpace / itemsPerRow;
         const int newItemWidth = itemWidth + extraSpace - spacing();
 
-        m_delegate->setItemSize( QSize( newItemWidth, newItemWidth + 32 ) );
+        m_delegate->setItemSize( QSize( newItemWidth, newItemWidth + ( m_itemSize.height() - m_itemSize.width() ) ) );
         verifySize();
 
         if ( !m_inited )
