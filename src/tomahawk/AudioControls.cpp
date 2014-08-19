@@ -60,6 +60,7 @@ AudioControls::AudioControls( QWidget* parent )
     setAutoFillBackground( false );
     setAcceptDrops( true );
     setBackgroundColor( Qt::black );
+    setFixedHeight( scaledY( 85 ) );
 
     QFont f = font();
     f.setPointSize( 13 );
@@ -85,30 +86,33 @@ AudioControls::AudioControls( QWidget* parent )
     ui->timeLabel->setFont( f );
     ui->timeLeftLabel->setFont( f );
 
-    ui->ownerButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, scaled( 12, 12 ) ) );
-    ui->prevButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PrevButton, TomahawkUtils::Original, scaled( 16, 16 ) ) );
-    ui->prevButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PrevButtonPressed, TomahawkUtils::Original, scaled( 16, 16 ) ), QIcon::Off, QIcon::Active );
-    ui->playPauseButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButton, TomahawkUtils::Original, scaled( 16, 16 ) ) );
-    ui->playPauseButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButtonPressed, TomahawkUtils::Original, scaled( 16, 16 ) ), QIcon::Off, QIcon::Active );
-    ui->pauseButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButton, TomahawkUtils::Original, scaled( 16, 16 ) ) );
-    ui->pauseButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButtonPressed, TomahawkUtils::Original, scaled( 16, 16 ) ), QIcon::Off, QIcon::Active );
-    ui->nextButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NextButton, TomahawkUtils::Original, scaled( 16, 16 ) ) );
-    ui->nextButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NextButtonPressed, TomahawkUtils::Original, scaled( 16, 16 ) ), QIcon::Off, QIcon::Active );
-    ui->shuffleButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::ShuffleOff, TomahawkUtils::Original, scaled( 16, 16 ) ) );
-    ui->shuffleButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::ShuffleOffPressed, TomahawkUtils::Original, scaled( 16, 16 ) ), QIcon::Off, QIcon::Active );
-    ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatOff, TomahawkUtils::Original, scaled( 16, 16 ) ) );
-    ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatOffPressed, TomahawkUtils::Original, scaled( 16, 16 ) ), QIcon::Off, QIcon::Active );
-    ui->volumeLowButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::VolumeMuted, TomahawkUtils::Original, scaled( 16, 16 ) ) );
+    ui->ownerButton->setFixedSize( scaled( 12, 12 ) );
+    ui->prevButton->setFixedSize( scaled( 16, 16 ) );
+    ui->playPauseButton->setFixedSize( scaled( 16, 16 ) );
+    ui->pauseButton->setFixedSize( scaled( 16, 16 ) );
+    ui->nextButton->setFixedSize( scaled( 16, 16 ) );
+    ui->shuffleButton->setFixedSize( scaled( 16, 16 ) );
+    ui->repeatButton->setFixedSize( scaled( 16, 16 ) );
+    ui->volumeLowButton->setFixedSize( scaled( 16, 16 ) );
+
+    ui->ownerButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, ui->ownerButton->size() ) );
+    ui->prevButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PrevButton, TomahawkUtils::Original, ui->prevButton->size() ) );
+    ui->prevButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PrevButtonPressed, TomahawkUtils::Original, ui->prevButton->size() ), QIcon::Off, QIcon::Active );
+    ui->playPauseButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButton, TomahawkUtils::Original, ui->playPauseButton->size() ) );
+    ui->playPauseButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButtonPressed, TomahawkUtils::Original, ui->playPauseButton->size() ), QIcon::Off, QIcon::Active );
+    ui->pauseButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButton, TomahawkUtils::Original, ui->pauseButton->size() ) );
+    ui->pauseButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButtonPressed, TomahawkUtils::Original, ui->pauseButton->size() ), QIcon::Off, QIcon::Active );
+    ui->nextButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NextButton, TomahawkUtils::Original, ui->nextButton->size() ) );
+    ui->nextButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NextButtonPressed, TomahawkUtils::Original, ui->nextButton->size() ), QIcon::Off, QIcon::Active );
+    ui->shuffleButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::ShuffleOff, TomahawkUtils::Original, ui->shuffleButton->size() ) );
+    ui->shuffleButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::ShuffleOffPressed, TomahawkUtils::Original, ui->shuffleButton->size() ), QIcon::Off, QIcon::Active );
+    ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatOff, TomahawkUtils::Original, ui->repeatButton->size() ) );
+    ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatOffPressed, TomahawkUtils::Original, ui->repeatButton->size() ), QIcon::Off, QIcon::Active );
+    ui->volumeLowButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::VolumeMuted, TomahawkUtils::Original, ui->volumeLowButton->size() ) );
 //    ui->volumeHighButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::VolumeFull, TomahawkUtils::Original, scaled( 16, 16 ) ) );
 //    ui->socialButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::Share, TomahawkUtils::Original, scaled( 20, 20 ) ) );
 //    ui->loveButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NotLoved, TomahawkUtils::Original, scaled( 20, 20 ) ) );
 //    ui->loveButton->setCheckable( true );
-
-//    ui->socialButton->setFixedSize( scaled( 20, 20 ) );
-//    ui->loveButton->setFixedSize( scaled( 20, 20 ) );
-    ui->ownerButton->setFixedSize( scaled( 12, 12 ) );
-
-//    ui->metaDataArea->setStyleSheet( QString( "QWidget#metaDataArea {\nborder-width: %1px;\nborder-image: url(" RESPATH "images/now-playing-panel.png) %1 %1 %1 %1 stretch stretch; }" ).arg( scaledX( 4 ) ) );
 
     ui->seekSlider->setEnabled( true );
     ui->seekSlider->setTimeLine( &m_sliderTimeLine );
@@ -173,7 +177,6 @@ AudioControls::AudioControls( QWidget* parent )
 //    ui->volumeSlider->setFixedHeight( 20 );
 //    ui->verticalLayout->setContentsMargins( scaledX( 2 ), scaledY( 6 ),
 //                                            0, scaledY( 6 ) );
-    setFixedHeight( scaledY( 75 ) );
 
     connect( InfoSystem::InfoSystem::instance(), SIGNAL( updatedSupportedPushTypes( Tomahawk::InfoSystem::InfoTypeSet ) ),
              this, SLOT( onInfoSystemPushTypesUpdated( Tomahawk::InfoSystem::InfoTypeSet ) ) );
