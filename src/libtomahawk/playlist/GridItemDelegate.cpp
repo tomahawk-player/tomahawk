@@ -310,20 +310,23 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
          event->type() != QEvent::Leave )
         return false;
 
+    const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
     bool hoveringArtist = false;
     bool hoveringAlbum = false;
     if ( m_artistNameRects.contains( index ) )
     {
         const QRect artistNameRect = m_artistNameRects[ index ];
-        const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
         hoveringArtist = artistNameRect.contains( ev->pos() );
     }
     if ( m_albumNameRects.contains( index ) )
     {
         const QRect albumNameRect = m_albumNameRects[ index ];
-        const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
         hoveringAlbum = albumNameRect.contains( ev->pos() );
     }
+
+    QRect coverRect = m_view->visualRect( index );
+    coverRect.setHeight( coverRect.width() );
+    const bool hoveringCover = coverRect.contains( ev->pos() );
 
     if ( event->type() == QEvent::MouseMove )
     {
@@ -338,7 +341,7 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
                 m_hoverControls.take( idx )->deleteLater();
         }
 
-        if ( !m_hoverControls.contains( index ) && !m_spinner.contains( index ) )
+        if ( hoveringCover && !m_hoverControls.contains( index ) && !m_spinner.contains( index ) )
         {
             foreach ( HoverControls* control, m_hoverControls )
                 control->deleteLater();
@@ -406,7 +409,10 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
                 fadeOut->start();
             }
             emit updateIndex( m_hoverIndex );
+        }
 
+        if ( hoveringCover && m_hoverIndex != index )
+        {
             m_hoverIndex = index;
             int startFrame = 0;
             if ( m_hoverFaders.contains( index ) )
@@ -427,6 +433,8 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
 
             emit updateIndex( index );
         }
+        else if ( !hoveringCover )
+            resetHoverIndex();
 
         event->accept();
         return true;
