@@ -19,6 +19,8 @@
 #include "TrackDetailView.h"
 
 #include <QLabel>
+#include <QScrollArea>
+#include <QSizePolicy>
 #include <QVBoxLayout>
 
 #include "Album.h"
@@ -86,9 +88,18 @@ TrackDetailView::TrackDetailView( QWidget* parent )
     QVBoxLayout* resultsLayout = new QVBoxLayout;
     TomahawkUtils::unmarginLayout( resultsLayout );
     resultsLayout->setSpacing( 8 );
-    resultsLayout->setContentsMargins( 0, 32, 0, 0 );
+    resultsLayout->setContentsMargins( 0, 0, 0, 0 );
+    resultsLayout->setSizeConstraint( QLayout::SetMinAndMaxSize );
     m_resultsBox->setLayout( resultsLayout );
     m_resultsBox->hide();
+
+    QScrollArea* resultsScrollArea = new QScrollArea;
+    resultsScrollArea->setWidgetResizable( false );
+    resultsScrollArea->setWidget( m_resultsBox );
+    resultsScrollArea->setFrameShape( QFrame::NoFrame );
+    resultsScrollArea->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    resultsScrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    resultsScrollArea->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
 
     QVBoxLayout* layout = new QVBoxLayout;
     TomahawkUtils::unmarginLayout( layout );
@@ -97,8 +108,10 @@ TrackDetailView::TrackDetailView( QWidget* parent )
     layout->addWidget( m_nameLabel );
     layout->addWidget( m_dateLabel );
     layout->addWidget( m_infoBox );
-    layout->addWidget( m_resultsBox );
-    layout->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
+    layout->addSpacerItem( new QSpacerItem( 0, 32, QSizePolicy::Minimum, QSizePolicy::Fixed ) );
+    layout->addWidget( resultsScrollArea );
+    layout->addSpacerItem( new QSpacerItem( 0, 32, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
+    layout->setStretchFactor( resultsScrollArea, 1 );
 
     setLayout( layout );
 
