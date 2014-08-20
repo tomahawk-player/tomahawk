@@ -223,6 +223,7 @@ TrackDetailView::onResultsChanged()
     {
         if ( !result->isOnline() )
             continue;
+
         QFont f = font();
         f.setWeight( QFont::DemiBold );
         f.setPointSize( 11 );
@@ -254,6 +255,6 @@ TrackDetailView::onResultsChanged()
         m_resultsBox->layout()->addWidget( hbox );
     }
 
-    if ( m_query->numResults() )
+    if ( m_query->numResults() > 1 )
         m_resultsBox->show();
 }
