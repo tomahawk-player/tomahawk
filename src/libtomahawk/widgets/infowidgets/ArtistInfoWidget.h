@@ -103,6 +103,7 @@ private slots:
     void onSimilarArtistsLoaded();
 
     void onBiographyLinkClicked( const QUrl& url );
+    void onAlbumsMoreClicked();
     void onTopHitsMoreClicked();
     void onTopHitsMoreClosed();
 

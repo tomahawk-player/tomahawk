@@ -42,7 +42,7 @@
        <number>32</number>
       </property>
       <property name="bottomMargin">
-       <number>8</number>
+       <number>16</number>
       </property>
       <item>
        <widget class="CaptionLabel" name="albumLabel">
@@ -71,17 +71,11 @@
        </widget>
       </item>
       <item>
-       <spacer name="verticalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
+       <widget class="ClickableLabel" name="albumsMoreLabel">
+        <property name="text">
+         <string>Show More</string>
         </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>0</height>
-         </size>
-        </property>
-       </spacer>
+       </widget>
       </item>
      </layout>
     </widget>

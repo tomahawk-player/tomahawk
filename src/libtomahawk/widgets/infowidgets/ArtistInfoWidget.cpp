@@ -142,7 +142,9 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
         f.setPointSize( 11 );
         ui->topHitsMoreLabel->setFont( f );
+        ui->albumsMoreLabel->setFont( f );
 
+        connect( ui->albumsMoreLabel, SIGNAL( clicked() ), SLOT( onAlbumsMoreClicked() ) );
         connect( ui->topHitsMoreLabel, SIGNAL( clicked() ), SLOT( onTopHitsMoreClicked() ) );
     }
 
@@ -183,6 +185,38 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         m_stackedWidget->addWidget( topHitsFullView );
 
         connect( topHitsFullView, SIGNAL( closeClicked() ), SLOT( onTopHitsMoreClosed() ) );
+    }
+    {
+        GridView* albumsFullView = new GridView( m_stackedWidget );
+        //        albumsFullView->setCaption( tr( "Albums" ) );
+        //        albumsFullView->setShowCloseButton( true );
+        albumsFullView->setPlayableModel( m_albumsModel );
+        albumsFullView->proxyModel()->setHideDupeItems( true );
+
+        CaptionLabel* captionLabel = new CaptionLabel( this );
+        captionLabel->setText( tr( "Albums" ) );
+        captionLabel->setShowCloseButton( true );
+
+        QWidget* vbox = new QWidget;
+        QPalette pal = vbox->palette();
+        pal.setBrush( vbox->backgroundRole(), Qt::white );
+        vbox->setPalette( pal );
+        vbox->setAutoFillBackground( true );
+
+        QVBoxLayout* vboxl = new QVBoxLayout;
+        TomahawkUtils::unmarginLayout( vboxl );
+        vboxl->setContentsMargins( 32, 32, 32, 32 );
+        vboxl->setSpacing( 8 );
+        vbox->setLayout( vboxl );
+
+        vboxl->addWidget( captionLabel );
+        vboxl->addWidget( albumsFullView );
+        vboxl->addStretch();
+        vboxl->setStretchFactor( albumsFullView, 1 );
+
+        m_stackedWidget->addWidget( vbox );
+
+        connect( captionLabel, SIGNAL( clicked() ), SLOT( onTopHitsMoreClosed() ) );
     }
 
     {
@@ -304,6 +338,7 @@ ArtistInfoWidget::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, Model
 {
     Q_UNUSED( mode );
 
+//    m_albumsModel->clear();
     m_albumsModel->appendAlbums( albums );
 }
 
@@ -407,6 +442,13 @@ void
 ArtistInfoWidget::onTopHitsMoreClicked()
 {
     m_stackedWidget->setCurrentIndex( 1 );
+}
+
+
+void
+ArtistInfoWidget::onAlbumsMoreClicked()
+{
+    m_stackedWidget->setCurrentIndex( 2 );
 }
 
 
