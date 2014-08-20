@@ -112,6 +112,8 @@ private slots:
     void onBioAnchorClicked();
     void onRelatedArtistsAnchorClicked();
 
+    void onSliderValueChanged( int value );
+
 private:
     Ui::ArtistInfoWidget *ui;
     Ui::HeaderWidget* uiHeader;

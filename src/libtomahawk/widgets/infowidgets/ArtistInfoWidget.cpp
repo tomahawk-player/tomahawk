@@ -71,13 +71,13 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         ui->relatedArtists->setAutoResize( true );
         ui->relatedArtists->setAutoFitItems( true );
         ui->relatedArtists->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+        ui->relatedArtists->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         ui->relatedArtists->setItemSize( QSize( 170, 170 + 32 ) );
 
         m_relatedModel = new PlayableModel( ui->relatedArtists );
         ui->relatedArtists->setPlayableModel( m_relatedModel );
         ui->relatedArtists->proxyModel()->sort( -1 );
         ui->relatedArtists->setEmptyTip( tr( "Sorry, we could not find any related artists!" ) );
-        ui->relatedArtists->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 
         TomahawkStyle::stylePageFrame( ui->relatedArtists );
         TomahawkStyle::stylePageFrame( ui->artistFrame );
@@ -199,6 +199,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         m_area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
         m_stackedWidget->addWidget( m_area );
+
+        connect( m_area->verticalScrollBar(), SIGNAL( valueChanged(int ) ), SLOT( onSliderValueChanged( int ) ) );
     }
     {
         ContextView* topHitsFullView = new ContextView( m_stackedWidget );
@@ -256,6 +258,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     mpl->addChildInterface( ui->albums->playlistInterface() );
     m_plInterface = playlistinterface_ptr( mpl );
 
+    onSliderValueChanged( 0 );
     load( artist );
 }
 
@@ -504,4 +507,33 @@ ArtistInfoWidget::onRelatedArtistsAnchorClicked()
 {
     m_area->verticalScrollBar()->setValue( ui->relatedArtistsLabel->mapTo( m_widget, QPoint( 0, 0 ) ).y() - 32 );
     onPageClosed();
+}
+
+
+void
+ArtistInfoWidget::onSliderValueChanged( int value )
+{
+    const int midPoint = m_area->viewport()->size().height() / 2;
+    const bool bio = ( ( ui->biographyLabel->mapTo( m_widget, QPoint( 0, 0 ) ).y() - 32 ) - value ) < midPoint ;
+    const bool ra = ( ( ui->relatedArtistsLabel->mapTo( m_widget, QPoint( 0, 0 ) ).y() - 32 ) - value ) < midPoint;
+
+    const float lowOpacity = 0.7;
+    if ( ra )
+    {
+        uiHeader->anchor3Label->setOpacity( 1 );
+        uiHeader->anchor1Label->setOpacity( lowOpacity );
+        uiHeader->anchor2Label->setOpacity( lowOpacity );
+    }
+    else if ( bio )
+    {
+        uiHeader->anchor2Label->setOpacity( 1 );
+        uiHeader->anchor1Label->setOpacity( lowOpacity );
+        uiHeader->anchor3Label->setOpacity( lowOpacity );
+    }
+    else
+    {
+        uiHeader->anchor1Label->setOpacity( 1 );
+        uiHeader->anchor2Label->setOpacity( lowOpacity );
+        uiHeader->anchor3Label->setOpacity( lowOpacity );
+    }
 }
