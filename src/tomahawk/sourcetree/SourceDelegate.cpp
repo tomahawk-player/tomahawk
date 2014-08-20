@@ -984,7 +984,7 @@ SourceDelegate::hovered( const QModelIndex& index, const QMimeData* mimeData )
         }
         return;
     }
-    if ( ( type == SourcesModel::StaticPlaylist || type == SourcesModel::CategoryAdd ) &&
+/*    if ( ( type == SourcesModel::StaticPlaylist || type == SourcesModel::CategoryAdd ) &&
          !m_expandedMap.contains( index ) )
     {
         foreach ( AnimationHelper* helper, m_expandedMap )
@@ -1002,7 +1002,7 @@ SourceDelegate::hovered( const QModelIndex& index, const QMimeData* mimeData )
         m_expandedMap.insert( m_newDropHoverIndex, new AnimationHelper( m_newDropHoverIndex ) );
         connect( m_expandedMap.value( m_newDropHoverIndex ), SIGNAL( finished( QModelIndex ) ), SLOT( animationFinished( QModelIndex ) ) );
     }
-    else if ( type == SourcesModel::Collection )
+    else*/ if ( type == SourcesModel::Collection )
     {
         m_dropMimeData->clear();
         foreach ( const QString& mimeDataFormat, mimeData->formats() )
