@@ -67,6 +67,7 @@ public:
     bool isPlaying() const;
     bool isPaused() const;
     bool isStopped() const;
+    bool isMuted() const;
 
     /**
      * Returns the PlaylistInterface of the currently playing track.
@@ -133,6 +134,7 @@ public slots:
     void lowerVolume();
     void raiseVolume();
     void mute();
+    void toggleMute();
 
     void playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::result_ptr& result, const Tomahawk::query_ptr& fromQuery = Tomahawk::query_ptr() );
     void playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::query_ptr& query );

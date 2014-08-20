@@ -541,6 +541,9 @@ AudioEngine::setVolume( int percentage )
 
     percentage = qBound( 0, percentage, 100 );
     d->audioOutput->setVolume( (qreal)percentage / 100.0 );
+
+    if ( percentage > 0 )
+        d->audioOutput->setMuted( false );
     emit volumeChanged( percentage );
 }
 
@@ -559,10 +562,28 @@ AudioEngine::raiseVolume()
 }
 
 
+bool
+AudioEngine::isMuted() const
+{
+    return d_func()->audioOutput->isMuted();
+}
+
+
 void
 AudioEngine::mute()
 {
-    setVolume( 0 );
+    Q_D( AudioEngine );
+    d->audioOutput->setMuted( true );
+    emit volumeChanged( 0 );
+}
+
+
+void
+AudioEngine::toggleMute()
+{
+    Q_D( AudioEngine );
+    d->audioOutput->setMuted( !d->audioOutput->isMuted() );
+    emit volumeChanged( d->audioOutput->isMuted() ? 0 : volume() );
 }
 
 
