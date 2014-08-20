@@ -38,6 +38,7 @@
 
 #include "DllMacro.h"
 
+class QScrollArea;
 class QStackedWidget;
 class PlayableModel;
 class PlaylistModel;
@@ -107,12 +108,18 @@ private slots:
     void onTopHitsMoreClicked();
     void onTopHitsMoreClosed();
 
+    void onMusicAnchorClicked();
+    void onBioAnchorClicked();
+    void onRelatedArtistsAnchorClicked();
+
 private:
     Ui::ArtistInfoWidget *ui;
     Ui::HeaderWidget* uiHeader;
 
-    Tomahawk::artist_ptr m_artist;
+    QWidget* m_widget;
+    QScrollArea* m_area;
 
+    Tomahawk::artist_ptr m_artist;
     PlayableModel* m_relatedModel;
     PlayableModel* m_albumsModel;
     PlayableModel* m_topHitsModel;

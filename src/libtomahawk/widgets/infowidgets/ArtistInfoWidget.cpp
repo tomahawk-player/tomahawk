@@ -55,9 +55,9 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     , uiHeader( new Ui::HeaderWidget )
     , m_artist( artist )
 {
-    QWidget* widget = new QWidget;
+    m_widget = new QWidget;
     QWidget* headerWidget = new QWidget;
-    ui->setupUi( widget );
+    ui->setupUi( m_widget );
     uiHeader->setupUi( headerWidget );
     headerWidget->setFixedHeight( 160 );
 
@@ -162,24 +162,43 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
         uiHeader->artistLabel->setFont( f );
         uiHeader->artistLabel->setPalette( p );
+
+        f.setPointSize( 11 );
+        uiHeader->anchor1Label->setFont( f );
+        uiHeader->anchor1Label->setPalette( p );
+        uiHeader->anchor2Label->setFont( f );
+        uiHeader->anchor2Label->setPalette( p );
+        uiHeader->anchor3Label->setFont( f );
+        uiHeader->anchor3Label->setPalette( p );
+
+        uiHeader->anchor1Label->setOpacity( 1 );
+        uiHeader->anchor2Label->setOpacity( 1 );
+        uiHeader->anchor3Label->setOpacity( 1 );
+        uiHeader->anchor1Label->setText( tr( "Music" ) );
+        uiHeader->anchor2Label->setText( tr( "Biography" ) );
+        uiHeader->anchor3Label->setText( tr( "Related Artists" ) );
+
+        connect( uiHeader->anchor1Label, SIGNAL( clicked() ), SLOT( onMusicAnchorClicked() ) );
+        connect( uiHeader->anchor2Label, SIGNAL( clicked() ), SLOT( onBioAnchorClicked() ) );
+        connect( uiHeader->anchor3Label, SIGNAL( clicked() ), SLOT( onRelatedArtistsAnchorClicked() ) );
     }
 
     m_stackedWidget = new QStackedWidget();
 
     {
-        QScrollArea* area = new QScrollArea();
-        area->setWidgetResizable( true );
-        area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-        area->setWidget( widget );
+        m_area = new QScrollArea();
+        m_area->setWidgetResizable( true );
+        m_area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+        m_area->setWidget( m_widget );
 
         QPalette pal = palette();
         pal.setBrush( backgroundRole(), Qt::white );
-        area->setPalette( pal );
-        area->setAutoFillBackground( true );
-        area->setFrameShape( QFrame::NoFrame );
-        area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+        m_area->setPalette( pal );
+        m_area->setAutoFillBackground( true );
+        m_area->setFrameShape( QFrame::NoFrame );
+        m_area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
-        m_stackedWidget->addWidget( area );
+        m_stackedWidget->addWidget( m_area );
     }
     {
         ContextView* topHitsFullView = new ContextView( m_stackedWidget );
@@ -310,6 +329,7 @@ ArtistInfoWidget::load( const artist_ptr& artist )
     m_artist = artist;
     m_title = artist->name();
     uiHeader->artistLabel->setText( artist->name().toUpper() );
+    uiHeader->balanceSpacer->changeSize( uiHeader->artistLabel->sizeHint().width(), 1, QSizePolicy::Fixed, QSizePolicy::Fixed );
 
     connect( m_artist.data(), SIGNAL( biographyLoaded() ), SLOT( onBiographyLoaded() ) );
     connect( m_artist.data(), SIGNAL( similarArtistsLoaded() ), SLOT( onSimilarArtistsLoaded() ) );
@@ -460,4 +480,25 @@ void
 ArtistInfoWidget::onTopHitsMoreClosed()
 {
     m_stackedWidget->setCurrentIndex( 0 );
+}
+
+
+void
+ArtistInfoWidget::onMusicAnchorClicked()
+{
+    m_area->verticalScrollBar()->setValue( 0 );
+}
+
+
+void
+ArtistInfoWidget::onBioAnchorClicked()
+{
+    m_area->verticalScrollBar()->setValue( ui->biographyLabel->mapTo( m_widget, QPoint( 0, 0 ) ).y() - 32 );
+}
+
+
+void
+ArtistInfoWidget::onRelatedArtistsAnchorClicked()
+{
+    m_area->verticalScrollBar()->setValue( ui->relatedArtistsLabel->mapTo( m_widget, QPoint( 0, 0 ) ).y() - 32 );
 }

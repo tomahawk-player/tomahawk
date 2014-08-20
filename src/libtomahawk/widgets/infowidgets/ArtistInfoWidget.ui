@@ -168,7 +168,7 @@
        <number>32</number>
       </property>
       <item>
-       <widget class="CaptionLabel" name="label_4">
+       <widget class="CaptionLabel" name="biographyLabel">
         <property name="text">
          <string>Biography</string>
         </property>
@@ -250,7 +250,7 @@
        <number>4</number>
       </property>
       <item>
-       <widget class="CaptionLabel" name="label_3">
+       <widget class="CaptionLabel" name="relatedArtistsLabel">
         <property name="text">
          <string>Related Artists</string>
         </property>
@@ -282,6 +282,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>ClickableLabel</class>
+   <extends>QLabel</extends>
+   <header>widgets/ClickableLabel.h</header>
+  </customwidget>
+  <customwidget>
    <class>GridView</class>
    <extends>QListView</extends>
    <header>playlist/GridView.h</header>
@@ -290,11 +295,6 @@
    <class>CaptionLabel</class>
    <extends>QLabel</extends>
    <header>widgets/CaptionLabel.h</header>
-  </customwidget>
-  <customwidget>
-   <class>ClickableLabel</class>
-   <extends>QLabel</extends>
-   <header>widgets/ClickableLabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
