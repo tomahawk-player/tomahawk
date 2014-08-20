@@ -127,7 +127,7 @@ SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem
     const bool selected = ( option.state & QStyle::State_Selected ) == QStyle::State_Selected;
     const bool enabled = ( option.state & QStyle::State_Enabled ) == QStyle::State_Enabled;
 
-    painter->setOpacity( 0.6 );
+    painter->setOpacity( 0.7 );
     QIcon::Mode iconMode = QIcon::Normal;
     if ( !enabled )
     {
@@ -307,7 +307,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     {
         QTextOption to;
         to.setWrapMode( QTextOption::NoWrap );
-        painter->setOpacity( 0.6 );
+        painter->setOpacity( 0.7 );
         painter->drawText( textRect, text, to );
     }
 
@@ -691,7 +691,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
                 QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 16, 0, -14, -option.rect.height() + option.fontMetrics.height() * 1.1 );
                 int hd = ( option.rect.height() - figRect.height() ) / 2;
                 figRect.adjust( 0, hd, 0, hd );
-                painter->setOpacity( 0.6 );
+                painter->setOpacity( 0.7 );
                 painter->drawText( figRect, count, QTextOption( Qt::AlignVCenter | Qt::AlignRight ) );
                 painter->restore();
             }
