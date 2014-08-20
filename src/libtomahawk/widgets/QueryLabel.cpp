@@ -375,9 +375,9 @@ QueryLabel::mouseReleaseEvent( QMouseEvent* event )
             }
 
             default:
-                ViewManager::instance()->show( m_query );
+                emit clicked();
+//                ViewManager::instance()->show( m_query );
         }
-        emit clicked();
     }
 }
 
