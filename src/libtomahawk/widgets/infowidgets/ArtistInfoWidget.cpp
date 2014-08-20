@@ -207,7 +207,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         topHitsFullView->setPlayableModel( m_topHitsModel );
         m_stackedWidget->addWidget( topHitsFullView );
 
-        connect( topHitsFullView, SIGNAL( closeClicked() ), SLOT( onTopHitsMoreClosed() ) );
+        connect( topHitsFullView, SIGNAL( closeClicked() ), SLOT( onPageClosed() ) );
     }
     {
         GridView* albumsFullView = new GridView( m_stackedWidget );
@@ -239,7 +239,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
         m_stackedWidget->addWidget( vbox );
 
-        connect( captionLabel, SIGNAL( clicked() ), SLOT( onTopHitsMoreClosed() ) );
+        connect( captionLabel, SIGNAL( clicked() ), SLOT( onPageClosed() ) );
     }
 
     {
@@ -477,7 +477,7 @@ ArtistInfoWidget::onAlbumsMoreClicked()
 
 
 void
-ArtistInfoWidget::onTopHitsMoreClosed()
+ArtistInfoWidget::onPageClosed()
 {
     m_stackedWidget->setCurrentIndex( 0 );
 }
@@ -487,6 +487,7 @@ void
 ArtistInfoWidget::onMusicAnchorClicked()
 {
     m_area->verticalScrollBar()->setValue( 0 );
+    onPageClosed();
 }
 
 
@@ -494,6 +495,7 @@ void
 ArtistInfoWidget::onBioAnchorClicked()
 {
     m_area->verticalScrollBar()->setValue( ui->biographyLabel->mapTo( m_widget, QPoint( 0, 0 ) ).y() - 32 );
+    onPageClosed();
 }
 
 
@@ -501,4 +503,5 @@ void
 ArtistInfoWidget::onRelatedArtistsAnchorClicked()
 {
     m_area->verticalScrollBar()->setValue( ui->relatedArtistsLabel->mapTo( m_widget, QPoint( 0, 0 ) ).y() - 32 );
+    onPageClosed();
 }

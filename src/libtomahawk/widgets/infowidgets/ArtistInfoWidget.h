@@ -106,7 +106,7 @@ private slots:
     void onBiographyLinkClicked( const QUrl& url );
     void onAlbumsMoreClicked();
     void onTopHitsMoreClicked();
-    void onTopHitsMoreClosed();
+    void onPageClosed();
 
     void onMusicAnchorClicked();
     void onBioAnchorClicked();
