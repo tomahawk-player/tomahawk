@@ -257,4 +257,6 @@ TrackDetailView::onResultsChanged()
 
     if ( m_query->numResults() > 1 )
         m_resultsBox->show();
+    else
+        m_resultsBox->hide();
 }
