@@ -387,7 +387,7 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
             emit updateIndex( index );
         }
 
-        if ( m_hoverIndex != index )
+        if ( m_hoverIndex != index || !hoveringCover )
         {
             if ( m_hoverIndex.isValid() )
             {
@@ -409,6 +409,11 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
                 fadeOut->start();
             }
             emit updateIndex( m_hoverIndex );
+
+            foreach ( HoverControls* controls, m_hoverControls )
+                controls->deleteLater();
+            m_hoverControls.clear();
+            m_hoverIndex = QPersistentModelIndex();
         }
 
         if ( hoveringCover && m_hoverIndex != index )
@@ -433,8 +438,6 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
 
             emit updateIndex( index );
         }
-        else if ( !hoveringCover )
-            resetHoverIndex();
 
         event->accept();
         return true;
