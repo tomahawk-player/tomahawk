@@ -1,20 +1,78 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="365px" height="365px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
-    <title>album-icon</title>
+<svg width="60px" height="60px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>Slice 1</title>
     <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
-    <defs>
-        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="70.6690133%" id="radialGradient-1">
-            <stop stop-color="rgb(187,190,185)" offset="0%"></stop>
-            <stop stop-color="rgb(213,211,209)" offset="0.923389476%"></stop>
-            <stop stop-color="rgb(241,240,240)" offset="100%"></stop>
-        </radialGradient>
-        <path d="M183,243 C216.137087,243 243,216.137087 243,183 C243,149.862913 216.137087,123 183,123 C149.862913,123 123,149.862913 123,183 C123,216.137087 149.862913,243 183,243 Z M182.5,360 C84.4694521,360 5,280.530548 5,182.5 C5,84.4694521 84.4694521,5 182.5,5 C280.530548,5 360,84.4694521 360,182.5 C360,280.530548 280.530548,360 182.5,360 Z M182.5,360" id="path-2"></path>
-    </defs>
-    <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
-        <g id="Group">
-            <use id="Oval 1" stroke="rgb(49,54,58)" stroke-width="5" fill="url(#radialGradient-1)" xlink:href="#path-2"></use>
-            <use id="Oval 1-1" stroke="none" fill="none" xlink:href="#path-2"></use>
-            <path d="M183,243 C149.862913,243 123,216.137087 123,183 C123,149.862913 149.862913,123 183,123 C216.137087,123 243,149.862913 243,183 C243,216.137087 216.137087,243 183,243 Z M183.5,209 C198.135547,209 210,197.359404 210,183 C210,168.640596 198.135547,157 183.5,157 C168.864453,157 157,168.640596 157,183 C157,197.359404 168.864453,209 183.5,209 Z M183.5,209" id="Oval 2" stroke="rgb(150,150,150)" stroke-width="1" fill="rgb(137,137,137)"></path>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="album-icon" sketch:type="MSLayerGroup">
+            <g id="Page-1">
+                <g id="icon_Playlist">
+                    <g id="Layer_2"></g>
+                    <g id="Layer_3"></g>
+                    <g id="Layer_4"></g>
+                    <g id="Layer_5"></g>
+                    <g id="Layer_6"></g>
+                    <g id="Layer_8"></g>
+                    <g id="Layer_9"></g>
+                    <g id="Layer_10"></g>
+                    <g id="Layer_11"></g>
+                    <g id="Layer_12"></g>
+                    <g id="Layer_13"></g>
+                    <g id="Layer_14"></g>
+                    <g id="Layer_15"></g>
+                    <g id="Layer_16"></g>
+                    <g id="Layer_17"></g>
+                    <g id="Layer_18"></g>
+                    <g id="Layer_19"></g>
+                    <g id="Layer_20"></g>
+                    <g id="Layer_21"></g>
+                    <g id="Layer_24"></g>
+                    <g id="Layer_25"></g>
+                    <g id="Layer_26"></g>
+                    <g id="Layer_27"></g>
+                    <g id="Layer_28"></g>
+                    <g id="Layer_29"></g>
+                    <g id="Layer_47"></g>
+                    <g id="Layer_30"></g>
+                    <g id="Layer_31"></g>
+                    <g id="Layer_32"></g>
+                    <g id="Layer_33"></g>
+                    <g id="Layer_34"></g>
+                    <g id="Layer_35"></g>
+                    <g id="Layer_36"></g>
+                    <g id="Layer_37"></g>
+                    <g id="Layer_38"></g>
+                    <g id="Layer_39"></g>
+                    <g id="Layer_40" fill="#000000" sketch:type="MSShapeGroup">
+                        <path d="M30,0 C13.5,0 0,13.5 0,30 C0,46.5 13.5,60 30,60 C46.5,60 60,46.5 60,30 C59.5,13.5 46.5,0 30,0 L30,0 L30,0 Z M30,40 C24.5,40 20,35.5 20,30 C20,24.5 24.5,20 30,20 C35.5,20 39.5,24.5 39.5,30 C39.5,35.5 35,40 30,40 L30,40 L30,40 Z" id="Shape"></path>
+                    </g>
+                    <g id="Layer_41"></g>
+                    <g id="Layer_42"></g>
+                    <g id="Layer_43"></g>
+                    <g id="Layer_44"></g>
+                    <g id="Layer_45"></g>
+                    <g id="Layer_46"></g>
+                    <g id="Layer_48"></g>
+                    <g id="Layer_49"></g>
+                    <g id="Layer_51"></g>
+                    <g id="Layer_52"></g>
+                    <g id="Layer_53"></g>
+                    <g id="Layer_54"></g>
+                    <g id="Layer_55"></g>
+                    <g id="Layer_56"></g>
+                    <g id="Layer_57"></g>
+                    <g id="Layer_58"></g>
+                    <g id="Layer_59"></g>
+                    <g id="Layer_60"></g>
+                    <g id="Layer_61"></g>
+                    <g id="Layer_62"></g>
+                    <g id="Layer_63"></g>
+                    <g id="Layer_64"></g>
+                    <g id="Layer_65"></g>
+                    <g id="Layer_66"></g>
+                    <g id="Layer_50"></g>
+                </g>
+            </g>
         </g>
     </g>
 </svg>
