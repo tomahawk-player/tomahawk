@@ -66,9 +66,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QueryLabel" name="artistLabel">
+        <widget class="QueryLabel" name="trackLabel">
          <property name="text">
-          <string notr="true">Artist</string>
+          <string notr="true">Track</string>
          </property>
         </widget>
        </item>
@@ -80,9 +80,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QueryLabel" name="trackLabel">
+        <widget class="QueryLabel" name="artistLabel">
          <property name="text">
-          <string notr="true">Track</string>
+          <string notr="true">Artist</string>
          </property>
         </widget>
        </item>

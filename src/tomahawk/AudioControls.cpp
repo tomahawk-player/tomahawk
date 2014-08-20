@@ -64,16 +64,15 @@ AudioControls::AudioControls( QWidget* parent )
 
     QFont f = font();
     f.setPointSize( 13 );
+    ui->trackLabel->setFont( f );
 
+    f.setPointSize( 11 );
     ui->dashLabel->setFont( f );
     ui->artistLabel->setFont( f );
-    ui->trackLabel->setFont( f );
     ui->artistLabel->setElideMode( Qt::ElideNone );
     ui->trackLabel->setElideMode( Qt::ElideNone );
     ui->artistLabel->setType( QueryLabel::Artist );
     ui->trackLabel->setType( QueryLabel::Track );
-
-    f.setPointSize( 11 );
 
     QPalette queryLabelsPalette = ui->artistLabel->palette();
     queryLabelsPalette.setColor( QPalette::Foreground, Qt::white );
@@ -83,6 +82,7 @@ AudioControls::AudioControls( QWidget* parent )
 
     ui->timeLabel->setPalette( queryLabelsPalette );
     ui->timeLeftLabel->setPalette( queryLabelsPalette );
+    f.setPointSize( 11 );
     ui->timeLabel->setFont( f );
     ui->timeLeftLabel->setFont( f );
 
