@@ -164,6 +164,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         uiHeader->artistLabel->setPalette( p );
 
         f.setPointSize( 11 );
+        f.setBold( true );
         uiHeader->anchor1Label->setFont( f );
         uiHeader->anchor1Label->setPalette( p );
         uiHeader->anchor2Label->setFont( f );
@@ -177,6 +178,11 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         uiHeader->anchor1Label->setText( tr( "Music" ) );
         uiHeader->anchor2Label->setText( tr( "Biography" ) );
         uiHeader->anchor3Label->setText( tr( "Related Artists" ) );
+
+        QFontMetrics fm( f );
+        uiHeader->anchor1Label->setFixedWidth( fm.width( uiHeader->anchor1Label->text() + uiHeader->anchor1Label->contentsMargins().left() * 2 ) );
+        uiHeader->anchor2Label->setFixedWidth( fm.width( uiHeader->anchor2Label->text() + uiHeader->anchor1Label->contentsMargins().left() * 2 ) );
+        uiHeader->anchor3Label->setFixedWidth( fm.width( uiHeader->anchor3Label->text() + uiHeader->anchor1Label->contentsMargins().left() * 2 ) );
 
         connect( uiHeader->anchor1Label, SIGNAL( clicked() ), SLOT( onMusicAnchorClicked() ) );
         connect( uiHeader->anchor2Label, SIGNAL( clicked() ), SLOT( onBioAnchorClicked() ) );
@@ -518,24 +524,41 @@ ArtistInfoWidget::onSliderValueChanged( int value )
     const int midPoint = m_area->viewport()->size().height() / 2;
     const bool bio = ( ( ui->biographyLabel->mapTo( m_widget, QPoint( 0, 0 ) ).y() - 32 ) - value ) < midPoint ;
     const bool ra = ( ( ui->relatedArtistsLabel->mapTo( m_widget, QPoint( 0, 0 ) ).y() - 32 ) - value ) < midPoint;
+    const float lowOpacity = 0.8;
 
-    const float lowOpacity = 0.7;
+    QFont inactive = uiHeader->anchor1Label->font();
+    inactive.setBold( false );
+    QFont active = uiHeader->anchor1Label->font();
+    active.setBold( true );
+
     if ( ra )
     {
         uiHeader->anchor3Label->setOpacity( 1 );
         uiHeader->anchor1Label->setOpacity( lowOpacity );
         uiHeader->anchor2Label->setOpacity( lowOpacity );
+
+        uiHeader->anchor3Label->setFont( active );
+        uiHeader->anchor1Label->setFont( inactive );
+        uiHeader->anchor2Label->setFont( inactive );
     }
     else if ( bio )
     {
         uiHeader->anchor2Label->setOpacity( 1 );
         uiHeader->anchor1Label->setOpacity( lowOpacity );
         uiHeader->anchor3Label->setOpacity( lowOpacity );
+
+        uiHeader->anchor2Label->setFont( active );
+        uiHeader->anchor1Label->setFont( inactive );
+        uiHeader->anchor3Label->setFont( inactive );
     }
     else
     {
         uiHeader->anchor1Label->setOpacity( 1 );
         uiHeader->anchor2Label->setOpacity( lowOpacity );
         uiHeader->anchor3Label->setOpacity( lowOpacity );
+
+        uiHeader->anchor1Label->setFont( active );
+        uiHeader->anchor2Label->setFont( inactive );
+        uiHeader->anchor3Label->setFont( inactive );
     }
 }
