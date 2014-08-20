@@ -234,7 +234,10 @@ TrackDetailView::onResultsChanged()
         QLabel* resolverLabel = new ClickableLabel( this );
         resolverLabel->setFont( f );
         resolverLabel->setStyleSheet( "QLabel { color: rgba( 0, 0, 0, 50% ) }" );
-        resolverLabel->setText( QString( "%1 - %2" ).arg( result->track()->artist() ).arg( result->track()->track() ) );
+        resolverLabel->setText( QString( "%1 - %2" ).arg( result->track()->track() ).arg( result->track()->artist() ) );
+        resolverLabel->setToolTip( QString( "%1 by %2%3" ).arg( result->track()->track() ).arg( result->track()->artist() )
+                                                          .arg( !result->track()->album().isEmpty() ? QString( " " ) + tr( "on %1" ).arg( result->track()->album() ) : QString() ) );
+        resolverLabel->setFixedWidth( width() - 32 - 4 );
 
         NewClosure( resolverLabel, SIGNAL( clicked() ), const_cast< AudioEngine* >( AudioEngine::instance() ),
                                      SLOT( playItem( Tomahawk::playlistinterface_ptr, Tomahawk::result_ptr, Tomahawk::query_ptr ) ),
