@@ -351,27 +351,27 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>AudioControls</name>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="320"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="323"/>
         <source>Shuffle</source>
         <translation>Sekoita</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="321"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="324"/>
         <source>Repeat</source>
         <translation>Toista</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="318"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="321"/>
         <source>Time Elapsed</source>
         <translation>Kulunut aika</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="319"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="322"/>
         <source>Time Remaining</source>
         <translation>Jäljellä oleva aika</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="324"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="327"/>
         <source>Playing from %1</source>
         <translation>Soitetaan lähteestä %1</translation>
     </message>
@@ -806,7 +806,7 @@ salasana (OTP)</translation>
         <translation>Käyttäjän %1 viime aikoina kuuntelemat kappaleet</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="97"/>
+        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="99"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Valitettavasti emme löytäneet yhtään viimeaikaisia soittoja!</translation>
     </message>
@@ -1243,42 +1243,42 @@ salasana (OTP)</translation>
         <translation>Tarkkuus</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="883"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="886"/>
         <source>Perfect match</source>
         <translation>Täysosuma</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="884"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="887"/>
         <source>Very good match</source>
         <translation>Erittäin hyvä osuma</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="885"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="888"/>
         <source>Good match</source>
         <translation>Hyvä osuma</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="886"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="889"/>
         <source>Vague match</source>
         <translation>Epämääräinen osuma</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="887"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="890"/>
         <source>Bad match</source>
         <translation>Kehno osuma</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="888"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="891"/>
         <source>Very bad match</source>
         <translation>Erittäin kehno osuma</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="889"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="892"/>
         <source>Not available</source>
         <translation>Ei saatavilla</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="890"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="893"/>
         <source>Searching...</source>
         <translation>Haetaan…</translation>
     </message>
@@ -1707,34 +1707,59 @@ salasana (OTP)</translation>
 <context>
     <name>SearchWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/SearchWidget.h" line="53"/>
+        <location filename="../src/libtomahawk/widgets/SearchWidget.h" line="55"/>
         <source>Search: %1</source>
         <translation>Haku: %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/SearchWidget.h" line="54"/>
+        <location filename="../src/libtomahawk/widgets/SearchWidget.h" line="56"/>
         <source>Results for &apos;%1&apos;</source>
         <translation>Tulokset haulle ”%1”</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="72"/>
-        <source>Tracks</source>
-        <translation>Kappaleet</translation>
+        <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="173"/>
+        <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="41"/>
+        <location filename="../src/libtomahawk/widgets/SearchWidget.cpp" line="157"/>
+        <source>Songs</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="67"/>
+        <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="127"/>
+        <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="187"/>
+        <source>Show More</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="101"/>
+        <location filename="../src/libtomahawk/widgets/SearchWidget.cpp" line="171"/>
         <source>Artists</source>
         <translation>Artistit</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="242"/>
+        <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="161"/>
+        <location filename="../src/libtomahawk/widgets/SearchWidget.cpp" line="202"/>
         <source>Albums</source>
         <translation>Albumit</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/SearchWidget.cpp" line="68"/>
-        <source>Sorry, we could not find any tracks!</source>
-        <translation>Valitettavasti emme löytäneet yhtään kappaletta!</translation>
+        <location filename="../src/libtomahawk/widgets/SearchWidget.cpp" line="66"/>
+        <source>Sorry, we could not find any artists!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/SearchWidget.cpp" line="86"/>
+        <source>Sorry, we could not find any albums!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/SearchWidget.cpp" line="107"/>
+        <source>Sorry, we could not find any songs!</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -4229,27 +4254,27 @@ kappaleen %2%4 %3.</translation>
         <translation>KAPPALEEN SIJOITUS</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="275"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="276"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
         <translation><numerusform>Olet kuunnellut tätä kappaletta %n kerran.</numerusform><numerusform>Olet kuunnellut tätä kappaletta %n kertaa.</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="277"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="278"/>
         <source>You&apos;ve never listened to this track before.</source>
         <translation>Et ole kuunnellut tätä kappaletta aiemmin.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="281"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="282"/>
         <source>You first listened to it on %1.</source>
         <translation>Kuuntelit sitä ensi kerran %1.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="286"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="287"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
         <translation><numerusform>Olet kuunnellut artistia %1 %n kerran.</numerusform><numerusform>Olet kuunnellut artistia %1 %n kertaa.</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="292"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="293"/>
         <source>You&apos;ve never listened to %1 before.</source>
         <translation>Et ole kuunnellut artistia %1 aiemmin.</translation>
     </message>
@@ -4257,7 +4282,7 @@ kappaleen %2%4 %3.</translation>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="638"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="642"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Valitettavasti suodattimesi ”%1” ei tuottanut yhtään tuloksia.</translation>
     </message>
