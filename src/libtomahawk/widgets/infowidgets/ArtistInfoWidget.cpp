@@ -251,12 +251,6 @@ ArtistInfoWidget::jumpToCurrentTrack()
     if ( ui->topHits && ui->topHits->jumpToCurrentTrack() )
         return true;
 
-    if ( ui->albums && ui->albums->jumpToCurrentTrack() )
-        return true;
-
-    if ( ui->relatedArtists && ui->relatedArtists->jumpToCurrentTrack() )
-        return true;
-
     return false;
 }
 
