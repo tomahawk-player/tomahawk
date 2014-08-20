@@ -201,7 +201,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     if ( oneLiner )
     {
         // If the user is hovering over an artist rect, draw a background so they knows it's clickable
-        if ( m_hoveringOver == index )
+        if ( m_hoveringOverArtist == index )
         {
             QFont f = painter->font();
             f.setUnderline( true );
@@ -213,19 +213,35 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         painter->drawText( textRect, text, to );
 
         // Calculate rect of artist on-hover button click area
-        m_artistNameRects[ index ] = painter->fontMetrics().boundingRect( textRect, Qt::AlignLeft | Qt::AlignVCenter, text );
+        m_artistNameRects[ index ] = painter->fontMetrics().boundingRect( textRect, Qt::AlignLeft | Qt::AlignTop, text );
     }
     else
     {
+        painter->save();
+        // If the user is hovering over an album rect, underline the album name
+        if ( m_hoveringOverAlbum == index )
+        {
+            QFont f = painter->font();
+            f.setUnderline( true );
+            painter->setFont( f );
+        }
+
         to.setAlignment( Qt::AlignLeft | Qt::AlignTop );
         text = painter->fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - 3 );
         painter->drawText( textRect, text, to );
 
+        if ( item->album() )
+        {
+            // Calculate rect of album on-hover button click area
+            m_albumNameRects[ index ] = painter->fontMetrics().boundingRect( textRect, Qt::AlignLeft | Qt::AlignTop, text );
+        }
+        painter->restore();
+
         painter->setOpacity( 0.5 );
         painter->setFont( smallFont );
 
-        // If the user is hovering over an artist rect, draw a background so they knows it's clickable
-        if ( m_hoveringOver == index )
+        // If the user is hovering over an artist rect, underline the artist name
+        if ( m_hoveringOverArtist == index )
         {
             QFont f = painter->font();
             f.setUnderline( true );
@@ -295,16 +311,23 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
         return false;
 
     bool hoveringArtist = false;
+    bool hoveringAlbum = false;
     if ( m_artistNameRects.contains( index ) )
     {
         const QRect artistNameRect = m_artistNameRects[ index ];
         const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
         hoveringArtist = artistNameRect.contains( ev->pos() );
     }
+    if ( m_albumNameRects.contains( index ) )
+    {
+        const QRect albumNameRect = m_albumNameRects[ index ];
+        const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
+        hoveringAlbum = albumNameRect.contains( ev->pos() );
+    }
 
     if ( event->type() == QEvent::MouseMove )
     {
-        if ( hoveringArtist )
+        if ( hoveringArtist || hoveringAlbum )
             m_view->setCursor( Qt::PointingHandCursor );
         else
             m_view->setCursor( Qt::ArrowCursor );
@@ -338,14 +361,25 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
             m_hoverControls[ index ] = controls;
         }
 
-        if ( m_hoveringOver != index || ( !hoveringArtist && m_hoveringOver.isValid() ) )
+        if ( m_hoveringOverArtist != index || ( !hoveringArtist && m_hoveringOverArtist.isValid() ) )
         {
-            emit updateIndex( m_hoveringOver );
+            emit updateIndex( m_hoveringOverArtist );
 
             if ( hoveringArtist )
-                m_hoveringOver = index;
+                m_hoveringOverArtist = index;
             else
-                m_hoveringOver = QPersistentModelIndex();
+                m_hoveringOverArtist = QPersistentModelIndex();
+
+            emit updateIndex( index );
+        }
+        if ( m_hoveringOverAlbum != index || ( !hoveringAlbum && m_hoveringOverAlbum.isValid() ) )
+        {
+            emit updateIndex( m_hoveringOverAlbum );
+
+            if ( hoveringAlbum )
+                m_hoveringOverAlbum = index;
+            else
+                m_hoveringOverAlbum = QPersistentModelIndex();
 
             emit updateIndex( index );
         }
@@ -426,6 +460,29 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
             return true;
         }
     }
+    if ( hoveringAlbum )
+    {
+        if ( event->type() == QEvent::MouseButtonRelease )
+        {
+            PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
+            if ( !item )
+                return false;
+
+            if ( item->query() )
+                ViewManager::instance()->show( item->query()->track()->albumPtr() );
+            else if ( item->album() )
+                ViewManager::instance()->show( item->album() );
+
+            event->accept();
+            return true;
+        }
+        else if ( event->type() == QEvent::MouseButtonPress )
+        {
+            // Stop the whole album from having a down click action as we just want the album name to be clicked
+            event->accept();
+            return true;
+        }
+    }
 
     return false;
 }
@@ -435,7 +492,9 @@ void
 GridItemDelegate::modelChanged()
 {
     m_artistNameRects.clear();
-    m_hoveringOver = QPersistentModelIndex();
+    m_albumNameRects.clear();
+    m_hoveringOverArtist = QPersistentModelIndex();
+    m_hoveringOverAlbum = QPersistentModelIndex();
     m_hoverIndex = QPersistentModelIndex();
 
     clearButtons();
@@ -552,9 +611,14 @@ GridItemDelegate::resetHoverIndex()
     }
     emit updateIndex( m_hoverIndex );
 
-    QModelIndex idx = m_hoveringOver;
-    m_hoveringOver = QPersistentModelIndex();
     m_hoverIndex = QPersistentModelIndex();
+
+    QModelIndex idx = m_hoveringOverArtist;
+    m_hoveringOverArtist = QPersistentModelIndex();
+    doUpdateIndex( idx );
+
+    idx = m_hoveringOverAlbum;
+    m_hoveringOverAlbum = QPersistentModelIndex();
     doUpdateIndex( idx );
 }
 

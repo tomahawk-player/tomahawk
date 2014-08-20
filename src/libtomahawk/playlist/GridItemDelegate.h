@@ -89,10 +89,12 @@ private:
     QSize m_itemSize;
 
     mutable QHash< QPersistentModelIndex, QRect > m_artistNameRects;
+    mutable QHash< QPersistentModelIndex, QRect > m_albumNameRects;
     mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_covers;
 
     QPersistentModelIndex m_hoverIndex;
-    QPersistentModelIndex m_hoveringOver;
+    QPersistentModelIndex m_hoveringOverArtist;
+    QPersistentModelIndex m_hoveringOverAlbum;
 
     QPixmap m_shadowPixmap;
     mutable QHash< QPersistentModelIndex, QWidget* > m_spinner;
