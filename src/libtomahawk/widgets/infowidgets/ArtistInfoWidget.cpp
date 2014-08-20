@@ -469,6 +469,7 @@ void
 ArtistInfoWidget::onTopHitsMoreClicked()
 {
     m_stackedWidget->setCurrentIndex( 1 );
+    onSliderValueChanged( 0 );
 }
 
 
@@ -476,6 +477,7 @@ void
 ArtistInfoWidget::onAlbumsMoreClicked()
 {
     m_stackedWidget->setCurrentIndex( 2 );
+    onSliderValueChanged( 0 );
 }
 
 
