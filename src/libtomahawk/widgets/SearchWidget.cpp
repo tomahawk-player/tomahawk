@@ -133,6 +133,10 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
 
         uiHeader->artistLabel->setFont( f );
         uiHeader->artistLabel->setPalette( p );
+
+        uiHeader->anchor1Label->hide();
+        uiHeader->anchor2Label->hide();
+        uiHeader->anchor3Label->hide();
     }
 
     m_stackedWidget = new QStackedWidget();

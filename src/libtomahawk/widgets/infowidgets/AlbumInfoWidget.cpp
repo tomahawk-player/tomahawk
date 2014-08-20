@@ -76,6 +76,10 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
 
         uiHeader->artistLabel->setFont( f );
         uiHeader->artistLabel->setPalette( p );
+
+        uiHeader->anchor1Label->hide();
+        uiHeader->anchor2Label->hide();
+        uiHeader->anchor3Label->hide();
     }
 
     ui->topHits->setStyleSheet( QString( "QListView { background-color: #f9f9f9; }" ) );
