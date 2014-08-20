@@ -56,7 +56,7 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
 {
     qRegisterMetaType< FlexibleTreeViewMode >( "FlexibleTreeViewMode" );
 
-    m_header->setBackgroundColor( Qt::black );
+    m_header->setBackgroundColor( QColor( "#333333" ) );
     m_header->setBackground( ImageRegistry::instance()->pixmap( RESPATH "images/collection_background.png", QSize( 0, 0 ) ), false );
 
     m_treeView->proxyModel()->setStyle( PlayableProxyModel::Collection );

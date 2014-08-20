@@ -59,7 +59,7 @@ AudioControls::AudioControls( QWidget* parent )
     ui->setupUi( this );
     setAutoFillBackground( false );
     setAcceptDrops( true );
-    setBackgroundColor( Qt::black );
+    setBackgroundColor( QColor( "#333333" ) );
     setFixedHeight( scaledY( 85 ) );
 
     QFont f = font();
