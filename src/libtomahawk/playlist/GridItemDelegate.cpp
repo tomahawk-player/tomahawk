@@ -117,7 +117,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     }
 
     painter->save();
-    painter->setRenderHint( QPainter::Antialiasing );
+//    painter->setRenderHint( QPainter::Antialiasing );
 
     if ( !m_covers.contains( index ) )
     {
@@ -200,9 +200,20 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     painter->setPen( Qt::black );
     if ( oneLiner )
     {
+        // If the user is hovering over an artist rect, draw a background so they knows it's clickable
+        if ( m_hoveringOver == index )
+        {
+            QFont f = painter->font();
+            f.setUnderline( true );
+            painter->setFont( f );
+        }
+
         to.setAlignment( Qt::AlignLeft | Qt::AlignTop );
         text = painter->fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - 3 );
         painter->drawText( textRect, text, to );
+
+        // Calculate rect of artist on-hover button click area
+        m_artistNameRects[ index ] = painter->fontMetrics().boundingRect( textRect, Qt::AlignLeft | Qt::AlignVCenter, text );
     }
     else
     {
@@ -212,22 +223,22 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
 
         painter->setOpacity( 0.5 );
         painter->setFont( smallFont );
+
         // If the user is hovering over an artist rect, draw a background so they knows it's clickable
-/*        QRect r = textRect;
-        r.setTop( r.bottom() - painter->fontMetrics().height() );
-        r.adjust( 4, 0, -4, -1 );
         if ( m_hoveringOver == index )
         {
-            TomahawkUtils::drawQueryBackground( painter, r );
-            painter->setPen( TomahawkStyle::SELECTION_FOREGROUND );
-        }*/
+            QFont f = painter->font();
+            f.setUnderline( true );
+            painter->setFont( f );
+        }
 
+        textRect.adjust( 0, 2, 0, 2 );
         to.setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
-        text = painter->fontMetrics().elidedText( bottom, Qt::ElideRight, textRect.width() - 10 );
-        painter->drawText( textRect.adjusted( 0, 2, 0, 2 ), text, to );
+        text = painter->fontMetrics().elidedText( bottom, Qt::ElideRight, textRect.width() - 3 );
+        painter->drawText( textRect, text, to );
 
         // Calculate rect of artist on-hover button click area
-//        m_artistNameRects[ index ] = r;
+        m_artistNameRects[ index ] = painter->fontMetrics().boundingRect( textRect, Qt::AlignLeft | Qt::AlignVCenter, text );
     }
 
     painter->restore();
@@ -402,6 +413,8 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
                 ViewManager::instance()->show( item->query()->track()->artistPtr() );
             else if ( item->album() && item->album()->artist() )
                 ViewManager::instance()->show( item->album()->artist() );
+            else if ( item->artist() )
+                ViewManager::instance()->show( item->artist() );
 
             event->accept();
             return true;
