@@ -42,6 +42,7 @@ ClickableLabel::~ClickableLabel()
 void ClickableLabel::setOpacity( float opacity )
 {
     m_opacity = opacity;
+    repaint();
 }
 
 
