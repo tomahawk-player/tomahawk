@@ -133,6 +133,10 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         ui->biography->setOpenLinks( false );
         ui->biography->setOpenExternalLinks( true );
 
+        QPalette p = ui->biography->palette();
+        p.setColor( QPalette::Foreground, Qt::black );
+        ui->biography->setPalette( p );
+
         ui->biography->document()->setDefaultStyleSheet( QString( "a { text-decoration: none; font-weight: bold; color: #000000; }" ) );
         TomahawkStyle::stylePageFrame( ui->biography );
         TomahawkStyle::stylePageFrame( ui->bioFrame );
