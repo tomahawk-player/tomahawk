@@ -181,9 +181,9 @@ PlayableProxyModelPlaylistInterface::siblingIndex( int itemsAway, qint64 rootInd
                         item = proxyModel->itemFromIndex( proxyModel->mapToSource( idx ) );
                     }
                     while ( safetyCounter < proxyModel->rowCount() &&
-                          ( !item || !item->query()->playable() || m_shuffleHistory.contains( item->query() ) ) );
+                          ( !item || !item->query() || !item->query()->playable() || m_shuffleHistory.contains( item->query() ) ) );
 
-                    if ( item && item->query()->playable() )
+                    if ( item && item->query() && item->query()->playable() )
                     {
                         m_shuffleCache = idx;
                         tDebug( LOGVERBOSE ) << "Next shuffled PlaylistItem cached:" << item->query()->toString() << item->query()->results().at( 0 )->url()
