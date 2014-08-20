@@ -35,6 +35,8 @@ public:
     ClickableLabel( QWidget* parent );
     virtual ~ClickableLabel();
 
+    void setOpacity( float opacity );
+
 signals:
     void clicked();
     void resized( const QPoint& delta );
@@ -51,6 +53,7 @@ private:
     bool m_pressed;
     bool m_moved;
     QTime m_time;
+    float m_opacity;
 };
 
 #endif // CLICKABLELABEL_H

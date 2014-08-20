@@ -28,6 +28,7 @@ ClickableLabel::ClickableLabel( QWidget* parent )
   : QLabel( parent )
   , m_pressed( false )
   , m_moved( false )
+  , m_opacity( 0.5 )
 {
     setCursor( Qt::PointingHandCursor );
 }
@@ -35,6 +36,12 @@ ClickableLabel::ClickableLabel( QWidget* parent )
 
 ClickableLabel::~ClickableLabel()
 {
+}
+
+
+void ClickableLabel::setOpacity( float opacity )
+{
+    m_opacity = opacity;
 }
 
 
@@ -85,6 +92,6 @@ void
 ClickableLabel::paintEvent( QPaintEvent* event )
 {
     QPainter painter( this );
-    painter.setOpacity( 0.5 );
+    painter.setOpacity( m_opacity );
     painter.drawText( contentsRect(), text() );
 }
