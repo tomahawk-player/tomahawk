@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2013-2014, Teo Mrnjavac <teo@kde.org>
  *
@@ -530,7 +530,7 @@ PlaylistItemDelegate::drawSource( QPainter* painter, const QStyleOptionViewItem&
 {
     painter->save();
 
-    QRect avatarRect = rect.adjusted( 32, rect.height() - 48, 0, -16 );
+    QRect avatarRect = rect.adjusted( 12, rect.height() - 48, 0, -16 );
     QRect textRect = avatarRect.adjusted( avatarRect.height() + 32, 0, -32, 0 );
     avatarRect.setWidth( avatarRect.height() );
 
@@ -553,7 +553,7 @@ PlaylistItemDelegate::drawSource( QPainter* painter, const QStyleOptionViewItem&
 
     painter->setOpacity( 0.15 );
     painter->setBrush( QColor( "#000000" ) );
-    painter->drawRect( rect.adjusted( 32, rect.height() - 8, -32, -8 ) );
+    painter->drawRect( rect.adjusted( 0, rect.height() - 8, -32, -8 ) );
 
     painter->restore();
 
