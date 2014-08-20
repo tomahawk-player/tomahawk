@@ -19,6 +19,7 @@
 #include "DpiScaler.h"
 #include "TomahawkUtilsGui.h"
 
+#include "utils/Logger.h"
 
 namespace TomahawkUtils
 {
@@ -140,6 +141,9 @@ DpiScaler::ratioX( const QPaintDevice* pd )
     qreal ratioFromFH = ratioFromFontHeight();
     qreal ratioYFromDpi = pd->logicalDpiY() / s_baseDpi; //using Y because we compare with height
 
+    //HACK: don't trust font settings
+    return ratioYFromDpi;
+
     //if the error is less than 1%, we trust that the logical DPI setting has the best value
     if ( qAbs( ratioFromFH / ratioYFromDpi - 1 ) < 0.01 )
         return pd->logicalDpiX() / s_baseDpi;
@@ -153,6 +157,9 @@ DpiScaler::ratioY( const QPaintDevice* pd )
 {
     qreal ratioFromFH = ratioFromFontHeight();
     qreal ratioYFromDpi = pd->logicalDpiY() / s_baseDpi; //using Y because we compare with height
+
+    //HACK: don't trust font settings
+    return ratioYFromDpi;
 
     //if the error is less than 1%, we trust that the logical DPI setting has the best value
     if ( qAbs( ratioFromFH / ratioYFromDpi - 1 ) < 0.01 )
