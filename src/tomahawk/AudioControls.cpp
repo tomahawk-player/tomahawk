@@ -95,6 +95,11 @@ AudioControls::AudioControls( QWidget* parent )
     ui->repeatButton->setFixedSize( scaled( 16, 16 ) );
     ui->volumeLowButton->setFixedSize( scaled( 16, 16 ) );
 
+//    ui->prevButton->setToolTip( tr( "Previous Track" ) );
+//    ui->nextButton->setToolTip( tr( "Next Track" ) );
+    ui->shuffleButton->setToolTip( tr( "Shuffle" ) );
+    ui->repeatButton->setToolTip( tr( "Repeat" ) );
+
     ui->ownerButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, ui->ownerButton->size() ) );
     ui->prevButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PrevButton, TomahawkUtils::Original, ui->prevButton->size() ) );
     ui->prevButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PrevButtonPressed, TomahawkUtils::Original, ui->prevButton->size() ), QIcon::Off, QIcon::Active );
