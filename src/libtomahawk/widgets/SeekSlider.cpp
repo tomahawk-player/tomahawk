@@ -44,7 +44,7 @@ SeekSlider::SeekSlider( QWidget* parent )
 //                   "border-image: url(" RESPATH "images/seek-slider-level.png) %2 %2 %2 %2 stretch stretch;"
                    "}" )
                    .arg( 0 /*margin*/)
-                   .arg( 0 /*border*/) +
+                   .arg( 3 /*border*/) +
                    QString(
                    "QSlider::handle:horizontal {"
                    "margin-bottom: -%1px; margin-top: -%1px;"
