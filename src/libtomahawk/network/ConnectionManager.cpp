@@ -42,6 +42,7 @@ static QMutex nodeMapMutex;
 static Tomahawk::Utils::WeakObjectHash< ConnectionManager > connectionManagers;
 static QHash< QString, QSharedPointer< ConnectionManager > > activeConnectionManagers;
 
+
 QSharedPointer<ConnectionManager>
 ConnectionManager::getManagerForNodeId( const QString &nodeid )
 {
@@ -57,6 +58,7 @@ ConnectionManager::getManagerForNodeId( const QString &nodeid )
     return manager;
 }
 
+
 void
 ConnectionManager::setActive( bool active, const QString& nodeid, const QSharedPointer<ConnectionManager>& manager )
 {
@@ -71,6 +73,7 @@ ConnectionManager::setActive( bool active, const QString& nodeid, const QSharedP
     }
 }
 
+
 /* ConnectionManager Implementation */
 
 ConnectionManager::ConnectionManager( const QString &nodeid )
@@ -79,10 +82,12 @@ ConnectionManager::ConnectionManager( const QString &nodeid )
     // TODO sth?
 }
 
+
 ConnectionManager::~ConnectionManager()
 {
     delete d_ptr;
 }
+
 
 void
 ConnectionManager::handleSipInfo( const Tomahawk::peerinfo_ptr &peerInfo )
@@ -91,11 +96,13 @@ ConnectionManager::handleSipInfo( const Tomahawk::peerinfo_ptr &peerInfo )
     QtConcurrent::run( &ConnectionManager::handleSipInfoPrivateS, peerInfo, weakRef().toStrongRef() );
 }
 
+
 QWeakPointer<ConnectionManager>
 ConnectionManager::weakRef() const
 {
     return d_func()->ownRef;
 }
+
 
 void
 ConnectionManager::setWeakRef( QWeakPointer<ConnectionManager> weakRef )
@@ -302,7 +309,9 @@ ConnectionManager::connectToPeer( const Tomahawk::peerinfo_ptr &peerInfo, bool l
     tryConnect();
 }
 
-void ConnectionManager::tryConnect()
+
+void
+ConnectionManager::tryConnect()
 {
     // ATTENTION: mutex should be already locked by the calling function.
     Q_ASSERT( !d_func()->controlConnection.isNull() );
@@ -365,6 +374,7 @@ void ConnectionManager::tryConnect()
     sock->moveToThread( Servent::instance()->thread() );
 }
 
+
 void
 ConnectionManager::socketError( QAbstractSocket::SocketError error )
 {
@@ -379,11 +389,13 @@ ConnectionManager::socketError( QAbstractSocket::SocketError error )
     tryConnect();
 }
 
+
 void
 ConnectionManager::handleSipInfoPrivateS( const Tomahawk::peerinfo_ptr &peerInfo, const QSharedPointer<ConnectionManager> &connectionManager )
 {
     connectionManager->handleSipInfoPrivate( peerInfo );
 }
+
 
 void
 ConnectionManager::activate()
@@ -391,6 +403,7 @@ ConnectionManager::activate()
     d_func()->mutex.lock();
     setActive( true, d_func()->nodeid, weakRef().toStrongRef() );
 }
+
 
 void
 ConnectionManager::deactivate()
@@ -418,6 +431,7 @@ ConnectionManager::socketConnected()
     connect( d->controlConnection.data(), SIGNAL( authFailed()) , SLOT( authFailed() ) );
     connect( d->controlConnection.data(), SIGNAL( authTimeout() ), SLOT( authFailed() ) );
 }
+
 
 void
 ConnectionManager::handoverSocket( QTcpSocketExtra* sock )
