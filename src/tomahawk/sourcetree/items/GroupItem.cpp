@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -74,7 +74,7 @@ GroupItem::text() const
 
 
 bool
-GroupItem::willAcceptDrag(const QMimeData* data) const
+GroupItem::willAcceptDrag( const QMimeData* data ) const
 {
     Q_UNUSED( data );
     return false;
@@ -96,7 +96,7 @@ GroupItem::isBeingPlayed() const
 
 
 void
-GroupItem::setDefaultExpanded(bool b)
+GroupItem::setDefaultExpanded( bool b )
 {
     m_defaultExpanded = b;
 }
