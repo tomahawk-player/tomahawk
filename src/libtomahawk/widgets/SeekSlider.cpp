@@ -44,7 +44,7 @@ SeekSlider::SeekSlider( QWidget* parent )
 //                   "border-image: url(" RESPATH "images/seek-slider-level.png) %2 %2 %2 %2 stretch stretch;"
                    "}" )
                    .arg( 0 /*margin*/)
-                   .arg( 3 /*border*/) +
+                   .arg( 0 /*border*/) +
                    QString(
                    "QSlider::handle:horizontal {"
                    "margin-bottom: -%1px; margin-top: -%1px;"
@@ -53,7 +53,7 @@ SeekSlider::SeekSlider( QWidget* parent )
 //                   "background-image: url(" RESPATH "images/seek-and-volume-knob-rest.png);"
                    "background-repeat: no-repeat;"
                    "}" )
-                   .arg( /*margin top&bottom*/ 4 )
+                   .arg( /*margin top&bottom*/ 0 )
                    .arg( /*margin left&right*/ 0 )
                    .arg( /*height*/ 0 )
                    .arg( /*width*/ 0 ) );
