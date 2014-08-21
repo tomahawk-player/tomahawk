@@ -154,7 +154,6 @@ SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem
         f.setBold( true );
 //        f.setPointSize( 10 );
         painter->setFont( f );
-        painter->setPen( Qt::black );
     }
 
     QRect textRect = opt.rect.adjusted( iconRect.width() + 22, 0, -32, 0 );
@@ -163,7 +162,7 @@ SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem
         QTextOption to( Qt::AlignVCenter );
         to.setWrapMode( QTextOption::NoWrap );
 
-        if ( !enabled )
+        if ( !enabled && !selected )
         {
             painter->setPen( opt.palette.color( QPalette::Disabled, QPalette::Text ) );
         }
