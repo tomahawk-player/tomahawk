@@ -426,8 +426,6 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
 
     if ( shouldPaintTrackCount || shouldDrawDropHint )
     {
-        painter->setRenderHint( QPainter::Antialiasing );
-
         if ( shouldDrawDropHint )
         {
             QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - iconRectVertMargin, iconRectVertMargin, -iconRectVertMargin, -iconRectVertMargin );
@@ -525,6 +523,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     QStyleOptionViewItemV4 opt = option;
 
     painter->save();
+    painter->setRenderHint( QPainter::TextAntialiasing );
 
     SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
     SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
@@ -663,7 +662,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     else if ( type == SourcesModel::Divider )
     {
         QRect middle = optIndentation.rect.adjusted( 0, 2, 0, -2 );
-        painter->setRenderHint( QPainter::Antialiasing, false );
 
         QColor bgcolor = opt.palette.color( QPalette::Base );
 
@@ -684,7 +682,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             if ( ii && ii->unlistenedCount() )
             {
                 painter->save();
-                painter->setRenderHint( QPainter::Antialiasing );
 
                 QString count = QString::number( ii->unlistenedCount() );
                 int figWidth = QFontMetrics( painter->font() ).width( count );

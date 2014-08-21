@@ -567,7 +567,7 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
     const track_ptr track = item->query()->track();
 
     painter->save();
-//    painter->setRenderHint( QPainter::Antialiasing, true );
+    painter->setRenderHint( QPainter::TextAntialiasing, true );
 
     if ( option.state & QStyle::State_Selected )
     {
