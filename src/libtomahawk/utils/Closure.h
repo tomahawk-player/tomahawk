@@ -30,8 +30,6 @@
 #include <QPointer>
 #include <QSharedPointer>
 
-#include <boost/noncopyable.hpp>
-
 namespace _detail {
 
 class DLLEXPORT ClosureArgumentWrapper {
@@ -54,7 +52,7 @@ class ClosureArgument : public ClosureArgumentWrapper {
   T data_;
 };
 
-class DLLEXPORT Closure : public QObject, boost::noncopyable {
+class DLLEXPORT Closure : public QObject {
   Q_OBJECT
 
  public:
@@ -86,6 +84,9 @@ class DLLEXPORT Closure : public QObject, boost::noncopyable {
   void Cleanup();
 
  private:
+  Closure( const Closure& );
+  Closure& operator=( const Closure& );
+
   void Connect(QObject* sender, const char* signal);
 
   QMetaMethod slot_;
