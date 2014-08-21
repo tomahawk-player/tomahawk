@@ -63,10 +63,10 @@ AudioControls::AudioControls( QWidget* parent )
     setFixedHeight( scaledY( 85 ) );
 
     QFont f = font();
-    f.setPointSize( 13 );
+    f.setPointSize( TomahawkUtils::defaultFontSize() + 3 );
     ui->trackLabel->setFont( f );
 
-    f.setPointSize( 11 );
+    f.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
     ui->dashLabel->setFont( f );
     ui->artistLabel->setFont( f );
     ui->artistLabel->setElideMode( Qt::ElideNone );
@@ -82,7 +82,7 @@ AudioControls::AudioControls( QWidget* parent )
 
     ui->timeLabel->setPalette( queryLabelsPalette );
     ui->timeLeftLabel->setPalette( queryLabelsPalette );
-    f.setPointSize( 11 );
+    f.setPointSize( TomahawkUtils::defaultFontSize() );
     ui->timeLabel->setFont( f );
     ui->timeLeftLabel->setFont( f );
 
