@@ -167,6 +167,7 @@ SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem
         {
             QFont f = painter->font();
             f.setBold( true );
+            f.setPointSize( 10 );
             painter->setFont( f );
             painter->setPen( Qt::black );
             //            opt.palette.setColor( QPalette::Text, option.palette.color( QPalette::HighlightedText ) );
