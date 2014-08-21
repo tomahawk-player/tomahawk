@@ -304,8 +304,8 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     if ( type == SourcesModel::ScriptCollection && //you cannot select a non-script collection anyway
         option.state.testFlag( QStyle::State_Selected ) )
     {
-        painter->setPen( option.palette.color( QPalette::HighlightedText ) );
-        descColor = option.palette.color( QPalette::HighlightedText );
+//        painter->setPen( option.palette.color( QPalette::HighlightedText ) );
+//        descColor = option.palette.color( QPalette::HighlightedText );
     }
 
     QRect textRect = option.rect.adjusted( iconRect.width() + 28, 6, -figWidth - ( figWidth ? 28 : 0 ), 0 );
