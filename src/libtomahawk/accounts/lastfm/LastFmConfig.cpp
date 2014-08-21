@@ -34,8 +34,6 @@
 #include <lastfm/XmlQuery.h>
 #include <lastfm/Track.h>
 
-#include <boost/ref.hpp>
-
 using namespace Tomahawk::Accounts;
 
 
@@ -337,7 +335,7 @@ LastFmConfig::onLovedFinished( QNetworkReply* reply )
 
 
 bool
-trackEquality( const Tomahawk::track_ptr& first, const Tomahawk::track_ptr& second )
+trackEquality( Tomahawk::track_ptr first, const Tomahawk::track_ptr& second )
 {
     qDebug() << "Comparing:" << first->track() << second->track();
     qDebug() << "==========" << first->artist() << second->artist();
@@ -367,7 +365,7 @@ LastFmConfig::syncLoved()
 
     foreach ( const Tomahawk::track_ptr& lastfmLoved, m_lastfmLoved )
     {
-        QSet< Tomahawk::track_ptr >::const_iterator iter = std::find_if( myLoved.begin(), myLoved.end(), bind( &trackEquality, _1, boost::ref( lastfmLoved ) ) );
+        QSet< Tomahawk::track_ptr >::const_iterator iter = std::find_if( myLoved.begin(), myLoved.end(), bind( &trackEquality, _1, lastfmLoved ) );
         if ( iter == myLoved.constEnd() )
         {
 //             qDebug() << "Found last.fm loved track that we didn't have loved locally:" << lastfmLoved->track() << lastfmLoved->artist();
@@ -378,7 +376,7 @@ LastFmConfig::syncLoved()
     foreach ( const Tomahawk::track_ptr& localLoved, myLoved )
     {
         qDebug() << "CHECKING FOR LOCAL LOVED ON LAST.FM TOO:" << m_localLoved[ localLoved ].value.toString() << localLoved->track() << localLoved->artist();
-        QSet< Tomahawk::track_ptr >::const_iterator iter = std::find_if( m_lastfmLoved.begin(), m_lastfmLoved.end(), bind( &trackEquality, _1, boost::ref( localLoved ) ) );
+        QSet< Tomahawk::track_ptr >::const_iterator iter = std::find_if( m_lastfmLoved.begin(), m_lastfmLoved.end(), bind( &trackEquality, _1, localLoved ) );
 
         qDebug() << "Result:" << (iter == m_lastfmLoved.constEnd());
         // If we unloved it locally, but it's still loved on last.fm, unlove it
