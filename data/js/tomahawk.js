@@ -419,5 +419,5 @@ Tomahawk.hmac = function (key, message) {
 // some aliases
 Tomahawk.setTimeout = Tomahawk.setTimeout || window.setTimeout;
 Tomahawk.setInterval = Tomahawk.setInterval || window.setInterval;
-Tomahawk.base64Decode = window.atob;
-Tomahawk.base64Encode = window.btoa;
+Tomahawk.base64Decode = function(a) { return window.atob(a); };
+Tomahawk.base64Encode = function(b) { return window.btoa(b); };
