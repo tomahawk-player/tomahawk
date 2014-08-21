@@ -303,27 +303,30 @@ connect and stream from you?</translation>
         <translation>Top Albums</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="116"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="110"/>
         <source>Top Hits</source>
         <translation>Top Hits</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="142"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="76"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="136"/>
         <source>Show More</source>
         <translation>Show More</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="179"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="173"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="179"/>
         <source>Biography</source>
         <translation>Biography</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="225"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="219"/>
         <source>TextLabel</source>
         <translation>TextLabel</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="261"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="255"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="180"/>
         <source>Related Artists</source>
         <translation>Related Artists</translation>
     </message>
@@ -333,7 +336,7 @@ connect and stream from you?</translation>
         <translation>Sorry, we could not find any albums for this artist!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="79"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="80"/>
         <source>Sorry, we could not find any related artists!</source>
         <translation>Sorry, we could not find any related artists!</translation>
     </message>
@@ -343,35 +346,47 @@ connect and stream from you?</translation>
         <translation>Sorry, we could not find any top hits for this artist!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="180"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="178"/>
+        <source>Music</source>
+        <translation>Music</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="213"/>
         <source>Songs</source>
         <translation>Songs</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="228"/>
+        <source>Albums</source>
+        <translation>Albums</translation>
     </message>
 </context>
 <context>
     <name>AudioControls</name>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="323"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="100"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="329"/>
         <source>Shuffle</source>
         <translation>Shuffle</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="324"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="101"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="330"/>
         <source>Repeat</source>
         <translation>Repeat</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="321"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="327"/>
         <source>Time Elapsed</source>
         <translation>Time Elapsed</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="322"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="328"/>
         <source>Time Remaining</source>
         <translation>Time Remaining</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="327"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="333"/>
         <source>Playing from %1</source>
         <translation>Playing from %1</translation>
     </message>
@@ -384,17 +399,17 @@ connect and stream from you?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="961"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="982"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="985"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1006"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1011"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1032"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</translation>
     </message>
@@ -773,7 +788,10 @@ Password (OTP)</translation>
         <translation>Form</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="51"/>
+        <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="56"/>
+        <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="76"/>
+        <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="99"/>
+        <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="122"/>
         <source>TextLabel</source>
         <translation>TextLabel</translation>
     </message>
@@ -1723,7 +1741,7 @@ Password (OTP)</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="41"/>
-        <location filename="../src/libtomahawk/widgets/SearchWidget.cpp" line="157"/>
+        <location filename="../src/libtomahawk/widgets/SearchWidget.cpp" line="161"/>
         <source>Songs</source>
         <translation>Songs</translation>
     </message>
@@ -1736,13 +1754,13 @@ Password (OTP)</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="101"/>
-        <location filename="../src/libtomahawk/widgets/SearchWidget.cpp" line="171"/>
+        <location filename="../src/libtomahawk/widgets/SearchWidget.cpp" line="175"/>
         <source>Artists</source>
         <translation>Artists</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="161"/>
-        <location filename="../src/libtomahawk/widgets/SearchWidget.cpp" line="202"/>
+        <location filename="../src/libtomahawk/widgets/SearchWidget.cpp" line="206"/>
         <source>Albums</source>
         <translation>Albums</translation>
     </message>
@@ -4218,14 +4236,19 @@ Try tweaking the filters for a new set of songs to play.</translation>
 <context>
     <name>TrackDetailView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="73"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="75"/>
         <source>Marked as Favorite</source>
         <translation>Marked as Favorite</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="133"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="146"/>
         <source>Unknown Release-Date</source>
         <translation>Unknown Release-Date</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="240"/>
+        <source>on %1</source>
+        <translation>on %1</translation>
     </message>
 </context>
 <context>
