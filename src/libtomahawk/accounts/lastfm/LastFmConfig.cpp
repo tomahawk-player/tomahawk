@@ -335,7 +335,7 @@ LastFmConfig::onLovedFinished( QNetworkReply* reply )
 
 
 bool
-trackEquality( Tomahawk::track_ptr first, const Tomahawk::track_ptr& second )
+trackEquality( const Tomahawk::track_ptr first, const Tomahawk::track_ptr& second )
 {
     qDebug() << "Comparing:" << first->track() << second->track();
     qDebug() << "==========" << first->artist() << second->artist();
