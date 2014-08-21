@@ -35,16 +35,16 @@ SeekSlider::SeekSlider( QWidget* parent )
 {
     setStyleSheet( QString(
                    "QSlider::groove:horizontal {"
-                   "margin: %1px; border: %2px solid rgba(200, 200, 200, 40); background: rgba(200, 200, 200, 40);"
+                   "height: 4px; margin: %1px; border: %2px solid rgba(0, 0, 0, 0); background: rgba(0, 0, 0, 0);"
 //                   "border-image: url(" RESPATH "images/seek-slider-bkg.png) %2 %2 %2 %2 stretch stretch;"
                    "}"
 
                    "QSlider::sub-page:horizontal {"
-                   "margin: %1px; border: %2px solid #ffffff; background: #ffffff;"
+                   "height: 4px; margin: %1px; border: %2px solid rgba(0, 0, 0, 0); background: #ffffff;"
 //                   "border-image: url(" RESPATH "images/seek-slider-level.png) %2 %2 %2 %2 stretch stretch;"
                    "}" )
-                   .arg( 4 /*margin*/)
-                   .arg( 2 /*border*/) +
+                   .arg( 0 /*margin*/)
+                   .arg( 0 /*border*/) +
                    QString(
                    "QSlider::handle:horizontal {"
                    "margin-bottom: -%1px; margin-top: -%1px;"
@@ -53,10 +53,10 @@ SeekSlider::SeekSlider( QWidget* parent )
 //                   "background-image: url(" RESPATH "images/seek-and-volume-knob-rest.png);"
                    "background-repeat: no-repeat;"
                    "}" )
-                   .arg( /*margin top&bottom*/ 4 )
+                   .arg( /*margin top&bottom*/ 0 )
                    .arg( /*margin left&right*/ 0 )
-                   .arg( /*height*/ 1 )
-                   .arg( /*width*/ 1 ) );
+                   .arg( /*height*/ 0 )
+                   .arg( /*width*/ 0 ) );
 }
 
 
