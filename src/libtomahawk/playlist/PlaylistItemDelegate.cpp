@@ -539,7 +539,7 @@ PlaylistItemDelegate::drawSource( QPainter* painter, const QStyleOptionViewItem&
     QPixmap avatar = item->source()->avatar( TomahawkUtils::RoundedCorners, avatarRect.size() ) ;
     if ( avatar.isNull() )
     {
-        avatar = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::RoundedCorners );
+        avatar = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::RoundedCorners, avatarRect.size() );
     }
     painter->drawPixmap( avatarRect, avatar );
 
