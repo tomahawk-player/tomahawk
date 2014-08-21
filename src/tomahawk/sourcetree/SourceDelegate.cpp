@@ -188,17 +188,17 @@ SourceDelegate::paintDecorations( QPainter* painter, const QStyleOptionViewItem&
 
     if ( playable && playing && item->isBeingPlayed() )
     {
-        int iconW = option.rect.height() - 4;
+        int iconW = option.rect.height() - 8;
         if ( m_expandedMap.contains( index ) )
         {
             AnimationHelper* ah = m_expandedMap.value( index );
             if ( ah->initialized() )
             {
-                iconW = ah->originalSize().height() - 4;
+                iconW = ah->originalSize().height() - 8;
             }
         }
 
-        QRect iconRect = QRect( 6, option.rect.y() + 2, iconW, iconW );
+        QRect iconRect = QRect( 8, option.rect.y() + 4, iconW, iconW );
         QPixmap speaker = TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeakerDark, TomahawkUtils::Original, iconRect.size() );
 
         painter->drawPixmap( iconRect, speaker );
