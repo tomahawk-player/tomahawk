@@ -529,6 +529,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
     painter->save();
     painter->setRenderHint( QPainter::TextAntialiasing );
+    painter->setRenderHint( QPainter::SmoothPixmapTransform );
 
     SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
     SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
