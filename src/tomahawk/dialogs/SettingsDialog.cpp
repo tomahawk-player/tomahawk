@@ -30,6 +30,7 @@
 
 #include "AtticaManager.h"
 #include "network/acl/AclRegistry.h"
+#include "GlobalActionManager.h"
 #include "TomahawkApp.h"
 #include "TomahawkSettings.h"
 #include "accounts/DelegateConfigWrapper.h"
@@ -510,54 +511,9 @@ SettingsDialog::installFromFile()
                                                            0,
                                                            QFileDialog::ReadOnly );
 
-    if ( !resolver.isEmpty() )
+    if ( !resolver.isEmpty() && QFileInfo( resolver ).exists() )
     {
-        const QFileInfo resolverAbsoluteFilePath( resolver );
-        TomahawkSettings::instance()->setScriptDefaultPath( resolverAbsoluteFilePath.absolutePath() );
-
-        if ( resolverAbsoluteFilePath.baseName() == "spotify_tomahawkresolver" )
-        {
-            // HACK if this is a spotify resolver, we treat it specially.
-            // usually we expect the user to just download the spotify resolver from attica,
-            // however developers, those who build their own tomahawk, can't do that, or linux
-            // users can't do that. However, we have an already-existing SpotifyAccount that we
-            // know exists that we need to use this resolver path.
-            //
-            // Hence, we special-case the spotify resolver and directly set the path on it here.
-            SpotifyAccount* acct = 0;
-            foreach ( Account* account, AccountManager::instance()->accounts() )
-            {
-                if ( SpotifyAccount* spotify = qobject_cast< SpotifyAccount* >( account ) )
-                {
-                    acct = spotify;
-                    break;
-                }
-            }
-
-            if ( acct )
-            {
-                acct->setManualResolverPath( resolver );
-                return;
-            }
-        }
-
-        Account* acct = AccountManager::instance()->accountFromPath( resolver );
-
-        if ( !acct )
-        {
-            QFileInfo fi( resolver );
-
-            JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
-                                    tr( "Resolver installation from file %1 failed." )
-                                    .arg( fi.fileName() ) ) );
-
-            tDebug() << "Resolver was not installed:" << resolver;
-            return;
-        }
-
-        AccountManager::instance()->addAccount( acct );
-        TomahawkSettings::instance()->addAccount( acct->accountId() );
-        AccountManager::instance()->enableAccount( acct );
+        GlobalActionManager::instance()->installResolverFromFile( resolver );
     }
 }
 

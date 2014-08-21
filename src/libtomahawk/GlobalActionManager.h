@@ -46,6 +46,8 @@ public:
 
     QUrl openLink( const QString& title, const QString& artist, const QString& album ) const;
 
+    void installResolverFromFile( const QString& resolverPath );
+
 public slots:
 
     /**

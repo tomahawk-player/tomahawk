@@ -790,6 +790,17 @@ TomahawkApp::loadUrl( const QString& url )
 
             return true;
         }
+        else if ( info.suffix() == "axe" )
+        {
+            QFileInfo fi( url );
+            if ( fi.exists() )
+            {
+                tDebug( LOGINFO ) << "Loading AXE from file:" << url;
+                GlobalActionManager::instance()->installResolverFromFile( fi.absoluteFilePath() );
+
+                return true;
+            }
+        }
     }
 
     return GlobalActionManager::instance()->openUrl( url );

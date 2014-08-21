@@ -23,8 +23,14 @@
 
 #include "GlobalActionManager.h"
 
+#include "accounts/AccountManager.h"
+#include "accounts/spotify/SpotifyAccount.h"
+#include "accounts/ResolverAccount.h"
 #include "audio/AudioEngine.h"
 #include "database/LocalCollection.h"
+#include "jobview/ErrorStatusMessage.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/JobStatusView.h"
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "playlist/PlaylistTemplate.h"
 #include "playlist/PlaylistView.h"
@@ -133,6 +139,60 @@ GlobalActionManager::openLink( const QString& title, const QString& artist, cons
         TomahawkUtils::urlAddQueryItem( link, "album", album );
 
     return link;
+}
+
+
+
+void
+GlobalActionManager::installResolverFromFile( const QString& resolverPath )
+{
+    const QFileInfo resolverAbsoluteFilePath( resolverPath );
+    TomahawkSettings::instance()->setScriptDefaultPath( resolverAbsoluteFilePath.absolutePath() );
+
+    if ( resolverAbsoluteFilePath.baseName() == "spotify_tomahawkresolver" )
+    {
+        // HACK if this is a spotify resolver, we treat it specially.
+        // usually we expect the user to just download the spotify resolver from attica,
+        // however developers, those who build their own tomahawk, can't do that, or linux
+        // users can't do that. However, we have an already-existing SpotifyAccount that we
+        // know exists that we need to use this resolver path.
+        //
+        // Hence, we special-case the spotify resolver and directly set the path on it here.
+        Accounts::SpotifyAccount* acct = 0;
+        foreach ( Accounts::Account* account, Accounts::AccountManager::instance()->accounts() )
+        {
+            if ( Accounts::SpotifyAccount* spotify = qobject_cast< Accounts::SpotifyAccount* >( account ) )
+            {
+                acct = spotify;
+                break;
+            }
+        }
+
+        if ( acct )
+        {
+            acct->setManualResolverPath( resolverPath );
+            return;
+        }
+    }
+
+    Accounts::Account* acct =
+        Accounts::AccountManager::instance()->accountFromPath( resolverPath );
+
+    if ( !acct )
+    {
+        QFileInfo fi( resolverPath );
+
+        JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
+                                tr( "Resolver installation from file %1 failed." )
+                                .arg( fi.fileName() ) ) );
+
+        tDebug() << "Resolver was not installed:" << resolverPath;
+        return;
+    }
+
+    Accounts::AccountManager::instance()->addAccount( acct );
+    TomahawkSettings::instance()->addAccount( acct->accountId() );
+    Accounts::AccountManager::instance()->enableAccount( acct );
 }
 
 
