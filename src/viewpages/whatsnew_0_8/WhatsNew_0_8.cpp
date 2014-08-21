@@ -20,6 +20,7 @@
 #include "WhatsNew_0_8.h"
 #include "ui_WhatsNewWidget_0_8.h"
 
+#include "utils/Logger.h"
 #include "utils/ImageRegistry.h"
 #include "utils/TomahawkStyle.h"
 #include "TomahawkSettings.h"
@@ -83,7 +84,10 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
         TomahawkUtils::unmarginLayout( layout );
     }
 
+    int width = ui->widget->minimumSize().width() - ( ui->widget->layout()->contentsMargins().left() + ui->widget->layout()->contentsMargins().right() );
     {
+        ui->inboxImage->setPixmap( ui->inboxImage->pixmap()->scaledToWidth( width, Qt::SmoothTransformation ) );
+        ui->inboxImage->setFixedHeight( ui->inboxImage->pixmap()->height() );
         ui->inboxButton->setFixedSize( QSize( 80, 80 ) );
         QPixmap inboxPixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/inboxbutton.png", ui->inboxButton->size() );
         ui->inboxButton->setPixmap( inboxPixmap );
@@ -91,6 +95,8 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
     }
 
     {
+        ui->linkImage->setPixmap( ui->linkImage->pixmap()->scaledToWidth( width, Qt::SmoothTransformation ) );
+        ui->linkImage->setFixedHeight( ui->linkImage->pixmap()->height() );
         ui->linkButton->setFixedSize( QSize( 80, 80 ) );
         QPixmap pixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/connectivitybutton.png", ui->inboxButton->size() );
         ui->linkButton->setPixmap( pixmap );
@@ -98,6 +104,8 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
     }
 
     {
+        ui->beatsImage->setPixmap( ui->beatsImage->pixmap()->scaledToWidth( width, Qt::SmoothTransformation ) );
+        ui->beatsImage->setFixedHeight( ui->beatsImage->pixmap()->height() );
         ui->beatsButton->setFixedSize( QSize( 80, 80 ) );
         QPixmap beatsPixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/beatsbutton.png", ui->inboxButton->size() );
         ui->beatsButton->setPixmap( beatsPixmap );
@@ -105,6 +113,8 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
     }
 
     {
+        ui->googleImage->setPixmap( ui->googleImage->pixmap()->scaledToWidth( width, Qt::SmoothTransformation ) );
+        ui->googleImage->setFixedHeight( ui->googleImage->pixmap()->height() );
         ui->googleButton->setFixedSize( QSize( 80, 80 ) );
         QPixmap pixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/googlebutton.png", ui->inboxButton->size() );
         ui->googleButton->setPixmap( pixmap );
@@ -112,6 +122,8 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
     }
 
     {
+        ui->androidImage->setPixmap( ui->androidImage->pixmap()->scaledToWidth( width, Qt::SmoothTransformation ) );
+        ui->androidImage->setFixedHeight( ui->androidImage->pixmap()->height() );
         ui->androidButton->setFixedSize( QSize( 80, 80 ) );
         QPixmap pixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/androidbutton.png", ui->inboxButton->size() );
         ui->androidButton->setPixmap( pixmap );
@@ -119,6 +131,8 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
     }
 
     {
+        ui->networkImage->setPixmap( ui->networkImage->pixmap()->scaledToWidth( width, Qt::SmoothTransformation ) );
+        ui->networkImage->setFixedHeight( ui->networkImage->pixmap()->height() );
         ui->networkButton->setFixedSize( QSize( 80, 80 ) );
         QPixmap networkingPixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/networkbutton.png", ui->inboxButton->size() );
         ui->networkButton->setPixmap( networkingPixmap );

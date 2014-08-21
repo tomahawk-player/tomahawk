@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_2">
+  <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1,0">
    <property name="spacing">
     <number>0</number>
    </property>
@@ -155,7 +155,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_4">
+         <widget class="QLabel" name="inboxImage">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -174,6 +174,9 @@ border-color: #ccc;
           </property>
           <property name="pixmap">
            <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/inbox-screenshot.png</pixmap>
+          </property>
+          <property name="scaledContents">
+           <bool>false</bool>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -211,7 +214,7 @@ border-color: #ccc;
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_22">
+         <widget class="QLabel" name="linkImage">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -220,6 +223,9 @@ border-color: #ccc;
           </property>
           <property name="pixmap">
            <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/universal-link-network.png</pixmap>
+          </property>
+          <property name="scaledContents">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -251,7 +257,7 @@ border-color: #ccc;
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_23">
+         <widget class="QLabel" name="beatsImage">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -260,6 +266,9 @@ border-color: #ccc;
           </property>
           <property name="pixmap">
            <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/beatsmusic.png</pixmap>
+          </property>
+          <property name="scaledContents">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -291,7 +300,7 @@ border-color: #ccc;
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_24">
+         <widget class="QLabel" name="googleImage">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -300,6 +309,9 @@ border-color: #ccc;
           </property>
           <property name="pixmap">
            <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/gmusic-banner.png</pixmap>
+          </property>
+          <property name="scaledContents">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -331,7 +343,7 @@ border-color: #ccc;
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_25">
+         <widget class="QLabel" name="androidImage">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -340,6 +352,9 @@ border-color: #ccc;
           </property>
           <property name="pixmap">
            <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/tomahawk-android.png</pixmap>
+          </property>
+          <property name="scaledContents">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -371,7 +386,7 @@ border-color: #ccc;
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_26">
+         <widget class="QLabel" name="networkImage">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -380,6 +395,9 @@ border-color: #ccc;
           </property>
           <property name="pixmap">
            <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/networking.png</pixmap>
+          </property>
+          <property name="scaledContents">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
