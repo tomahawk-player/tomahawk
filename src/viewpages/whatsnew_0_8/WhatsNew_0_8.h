@@ -85,7 +85,7 @@ public:
     const QString defaultName() { return WHATSNEW_0_8_VIEWPAGE_NAME; }
     QString title() const { return tr( "What's new in 0.8?" ); }
     QString description() const { return tr( "An overview of the changes and additions since 0.7." ); }
-    const QString pixmapPath() const { return ( RESPATH "images/whatsnew.png" ); }
+    const QString pixmapPath() const { return ( RESPATH "images/whatsnew.svg" ); }
 
     bool addPageItem() const;
     bool isDeletable() const { return true; }
