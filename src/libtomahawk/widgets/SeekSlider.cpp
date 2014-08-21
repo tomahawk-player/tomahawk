@@ -53,7 +53,7 @@ SeekSlider::SeekSlider( QWidget* parent )
 //                   "background-image: url(" RESPATH "images/seek-and-volume-knob-rest.png);"
                    "background-repeat: no-repeat;"
                    "}" )
-                   .arg( /*margin top&bottom*/ 0 )
+                   .arg( /*margin top&bottom*/ 4 )
                    .arg( /*margin left&right*/ 0 )
                    .arg( /*height*/ 0 )
                    .arg( /*width*/ 0 ) );
