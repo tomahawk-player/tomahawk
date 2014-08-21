@@ -33,7 +33,6 @@ SeekSlider::SeekSlider( QWidget* parent )
     , m_timeLine( 0 )
     , m_acceptWheelEvents( true )
 {
-    setFixedHeight( scaledY( 20 ) );
     setStyleSheet( QString(
                    "QSlider::groove:horizontal {"
                    "margin: %1px; border: %2px solid rgba(200, 200, 200, 40); background: rgba(200, 200, 200, 40);"
