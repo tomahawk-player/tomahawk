@@ -704,14 +704,13 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         {
             if ( opt.state & QStyle::State_MouseOver )
             {
-                int padding = 3;
-                m_iconHeight = ( opt.rect.height() - 2 * padding );
+                m_iconHeight = ( opt.rect.height() / 2 );
 
-                optIndentation.rect.adjust( 0, 0, -( padding + m_iconHeight ), 0 );
+                optIndentation.rect.adjust( 0, 0, -( 4 + m_iconHeight ), 0 );
                 paintStandardItem( painter, optIndentation, index );
 
                 // draw close icon
-                QRect r( opt.rect.right() - padding - m_iconHeight, padding + opt.rect.y(), m_iconHeight, m_iconHeight );
+                QRect r( opt.rect.right() - 4 - m_iconHeight, opt.rect.y() + ( opt.rect.height() - m_iconHeight ) / 2, m_iconHeight, m_iconHeight );
                 painter->drawPixmap( r, TomahawkUtils::defaultPixmap( TomahawkUtils::ListRemove, TomahawkUtils::Original, r.size() ) );
             }
             else
@@ -724,18 +723,15 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             PlaylistItem* plItem = qobject_cast< PlaylistItem* >( item );
             if ( plItem->canSubscribe() && !plItem->subscribedIcon().isNull() )
             {
-                const int padding = 2;
-                const int imgWidth = optIndentation.rect.height() - 2 * padding;
-
+                const int imgWidth = optIndentation.rect.height() / 2;
                 const QPixmap icon = plItem->subscribedIcon().scaled( imgWidth, imgWidth, Qt::KeepAspectRatio, Qt::SmoothTransformation );
-                const QRect subRect( optIndentation.rect.right() - padding - imgWidth, optIndentation.rect.top() + padding, imgWidth, imgWidth );
+                const QRect subRect( optIndentation.rect.right() - 4 - imgWidth, optIndentation.rect.top() + ( optIndentation.rect.height() - imgWidth ) / 2, imgWidth, imgWidth );
                 painter->drawPixmap( subRect, icon );
             }
 
             if ( plItem->collaborative() )
             {
-                const int padding = 2;
-                const int imgWidth = optIndentation.rect.height() - 2 * padding;
+                const int imgWidth = optIndentation.rect.height() / 2;
                 const QRect subRect( optIndentation.rect.left(), optIndentation.rect.top(), imgWidth, imgWidth );
 
                 painter->drawPixmap( subRect, TomahawkUtils::defaultPixmap( TomahawkUtils::GreenDot, TomahawkUtils::Original, subRect.size() ) );
