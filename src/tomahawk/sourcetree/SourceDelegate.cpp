@@ -138,7 +138,7 @@ SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem
         painter->setOpacity( 1.0 );
     }
 
-    QRect iconRect = opt.rect.adjusted( 14, 1, 0, -1 );
+    QRect iconRect = opt.rect.adjusted( 14, 4, 0, -4 );
     iconRect.setWidth( iconRect.height() );
     painter->drawPixmap( iconRect, opt.icon.pixmap( iconRect.size(), iconMode ) );
 
