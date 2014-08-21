@@ -95,7 +95,7 @@ public:
     virtual ~Dashboard();
 
     const QString defaultName() Q_DECL_OVERRIDE { return DASHBOARD_VIEWPAGE_NAME; }
-    QString title() const Q_DECL_OVERRIDE { return tr( "Dashboard" ); }
+    QString title() const Q_DECL_OVERRIDE { return tr( "Feed" ); }
     QString description() const Q_DECL_OVERRIDE { return tr( "An overview of your friends' recent activity" ); }
     const QString pixmapPath() const Q_DECL_OVERRIDE { return ( RESPATH "images/dashboard.svg" ); }
 

@@ -96,7 +96,7 @@ DashboardWidget::DashboardWidget( QWidget* parent )
 
         uiHeader->artistLabel->setFont( f );
         uiHeader->artistLabel->setPalette( p );
-        uiHeader->artistLabel->setText( tr( "Dashboard" ).toUpper() );
+        uiHeader->artistLabel->setText( tr( "Feed" ).toUpper() );
 
         uiHeader->anchor1Label->hide();
         uiHeader->anchor2Label->hide();
