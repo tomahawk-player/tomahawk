@@ -84,8 +84,7 @@ class DLLEXPORT Closure : public QObject {
   void Cleanup();
 
  private:
-  Closure( const Closure& );
-  Closure& operator=( const Closure& );
+  Q_DISABLE_COPY(Closure)
 
   void Connect(QObject* sender, const char* signal);
 

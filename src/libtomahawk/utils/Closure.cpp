@@ -112,20 +112,6 @@ void Closure::Cleanup() {
   deleteLater();
 }
 
-Closure::Closure(const Closure &)
-    : QObject()
-{
-    // This should not be called.
-    Q_ASSERT( false );
-}
-
-Closure &Closure::operator=(const Closure &)
-{
-    // This should not be called.
-    Q_ASSERT( false );
-    return *this;
-}
-
 }  // namespace _detail
 
 _detail::Closure* NewClosure(
