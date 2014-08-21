@@ -120,6 +120,7 @@ AudioControls::AudioControls( QWidget* parent )
 //    ui->loveButton->setCheckable( true );
 
     ui->seekSlider->setEnabled( true );
+    ui->seekSlider->setAcceptWheelEvents( false );
     ui->seekSlider->setTimeLine( &m_sliderTimeLine );
     ui->volumeSlider->setRange( 0, 100 );
     ui->volumeSlider->setValue( AudioEngine::instance()->volume() );

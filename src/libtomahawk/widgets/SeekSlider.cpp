@@ -31,6 +31,7 @@ SeekSlider::SeekSlider( QWidget* parent )
     : QSlider( parent )
     , TomahawkUtils::DpiScaler( this )
     , m_timeLine( 0 )
+    , m_acceptWheelEvents( true )
 {
     setStyleSheet( QString(
                    "QSlider::groove:horizontal {"
@@ -91,4 +92,16 @@ SeekSlider::setValue( int value )
     blockSignals( true );
     QSlider::setValue( value );
     blockSignals( false );
+}
+
+
+void
+SeekSlider::wheelEvent( QWheelEvent* event )
+{
+    if ( m_acceptWheelEvents )
+    {
+        QAbstractSlider::wheelEvent(event);
+        return;
+    }
+    event->ignore();
 }

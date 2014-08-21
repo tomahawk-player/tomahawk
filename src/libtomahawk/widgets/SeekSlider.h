@@ -37,14 +37,18 @@ public:
 
     void setTimeLine( QTimeLine* timeline ) { m_timeLine = timeline; }
 
+    void setAcceptWheelEvents( bool b ) { m_acceptWheelEvents = b; }
+
 public slots:
     void setValue( int value );
-    
+
 protected:
     void mousePressEvent( QMouseEvent* event );
+    void wheelEvent( QWheelEvent* event );
 
 private:
     QTimeLine* m_timeLine;
+    bool m_acceptWheelEvents;
 };
 
 #endif // SEEKSLIDER_H
