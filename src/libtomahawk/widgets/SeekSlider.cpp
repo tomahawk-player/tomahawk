@@ -32,7 +32,6 @@ SeekSlider::SeekSlider( QWidget* parent )
     , TomahawkUtils::DpiScaler( this )
     , m_timeLine( 0 )
 {
-    setFixedHeight( scaledY( 20 ) );
     setStyleSheet( QString(
                    "QSlider::groove:horizontal {"
                    "margin: %1px; border: %2px solid rgba(200, 200, 200, 40); background: rgba(200, 200, 200, 40);"
@@ -43,8 +42,8 @@ SeekSlider::SeekSlider( QWidget* parent )
                    "margin: %1px; border: %2px solid #ffffff; background: #ffffff;"
 //                   "border-image: url(" RESPATH "images/seek-slider-level.png) %2 %2 %2 %2 stretch stretch;"
                    "}" )
-                   .arg( 0 /*margin*/)
-                   .arg( 3 /*border*/) +
+                   .arg( 4 /*margin*/)
+                   .arg( 2 /*border*/) +
                    QString(
                    "QSlider::handle:horizontal {"
                    "margin-bottom: -%1px; margin-top: -%1px;"
@@ -53,7 +52,7 @@ SeekSlider::SeekSlider( QWidget* parent )
 //                   "background-image: url(" RESPATH "images/seek-and-volume-knob-rest.png);"
                    "background-repeat: no-repeat;"
                    "}" )
-                   .arg( /*margin top&bottom*/ 0 )
+                   .arg( /*margin top&bottom*/ 4 )
                    .arg( /*margin left&right*/ 0 )
                    .arg( /*height*/ 1 )
                    .arg( /*width*/ 1 ) );

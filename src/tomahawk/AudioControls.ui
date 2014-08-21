@@ -262,13 +262,13 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>4</height>
+           <height>12</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>4</height>
+           <height>12</height>
           </size>
          </property>
          <property name="orientation">
@@ -409,13 +409,13 @@
             <property name="minimumSize">
              <size>
               <width>80</width>
-              <height>4</height>
+              <height>12</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>80</width>
-              <height>4</height>
+              <height>12</height>
              </size>
             </property>
             <property name="orientation">
