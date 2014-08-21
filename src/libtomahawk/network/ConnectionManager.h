@@ -79,7 +79,7 @@ private:
     /**
      * Create a new ControlConnection for talking to a peer.
      */
-    void newControlConnection(const Tomahawk::peerinfo_ptr &peerInfo);
+    void newControlConnection( const Tomahawk::peerinfo_ptr& peerInfo );
 
     /**
      * Proxy handleSipInfoPrivate to hand over a strong reference to the connectionManager
@@ -100,7 +100,7 @@ private:
     /**
      * Try to connect to a peer with a given SipInfo.
      */
-    void connectToPeer(const Tomahawk::peerinfo_ptr& peerInfo , bool lock);
+    void connectToPeer( const Tomahawk::peerinfo_ptr& peerInfo , bool lock );
 
     /**
      * Look for existing connections and try to connect if there is none.

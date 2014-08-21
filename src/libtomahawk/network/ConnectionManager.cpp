@@ -44,10 +44,11 @@ static QHash< QString, QSharedPointer< ConnectionManager > > activeConnectionMan
 
 
 QSharedPointer<ConnectionManager>
-ConnectionManager::getManagerForNodeId( const QString &nodeid )
+ConnectionManager::getManagerForNodeId( const QString& nodeid )
 {
     QMutexLocker locker( &nodeMapMutex );
-    if ( connectionManagers.hash().contains( nodeid ) && !connectionManagers.hash().value( nodeid ).isNull() ) {
+    if ( connectionManagers.hash().contains( nodeid ) && !connectionManagers.hash().value( nodeid ).isNull() )
+    {
         return connectionManagers.hash().value( nodeid ).toStrongRef();
     }
 
@@ -76,7 +77,7 @@ ConnectionManager::setActive( bool active, const QString& nodeid, const QSharedP
 
 /* ConnectionManager Implementation */
 
-ConnectionManager::ConnectionManager( const QString &nodeid )
+ConnectionManager::ConnectionManager( const QString& nodeid )
     : d_ptr( new ConnectionManagerPrivate( this, nodeid ) )
 {
     // TODO sth?
@@ -90,7 +91,7 @@ ConnectionManager::~ConnectionManager()
 
 
 void
-ConnectionManager::handleSipInfo( const Tomahawk::peerinfo_ptr &peerInfo )
+ConnectionManager::handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo )
 {
     // Start handling in a separate thread so that we do not block the event loop.
     QtConcurrent::run( &ConnectionManager::handleSipInfoPrivateS, peerInfo, weakRef().toStrongRef() );
@@ -139,7 +140,8 @@ ConnectionManager::authFailed()
     peerInfoDebug( d->currentPeerInfo ) << Q_FUNC_INFO << "Connection authentication failed";
 
     // Only retry if we have any retries left.
-    if (!d->currentPeerInfo->sipInfos().isEmpty()) {
+    if ( !d->currentPeerInfo->sipInfos().isEmpty() )
+    {
       // If auth failed, we need to setup a new controlconnection as the old will be destroyed.
       newControlConnection( d->currentPeerInfo );
       // Try to connect with the next available SipInfo.
@@ -149,19 +151,19 @@ ConnectionManager::authFailed()
 
 
 void
-ConnectionManager::handleSipInfoPrivate( const Tomahawk::peerinfo_ptr &peerInfo )
+ConnectionManager::handleSipInfoPrivate( const Tomahawk::peerinfo_ptr& peerInfo )
 {
     activate();
     // Respect different behaviour before 0.7.100
     peerInfoDebug( peerInfo ) << Q_FUNC_INFO << "Trying to connect to client with version " << peerInfo->versionString().split(' ').last() << TomahawkUtils::compareVersionStrings( peerInfo->versionString().split(' ').last(), "0.7.99" );
-    if ( !peerInfo->versionString().isEmpty() && TomahawkUtils::compareVersionStrings( peerInfo->versionString().split(' ').last(), "0.7.100" ) < 0)
+    if ( !peerInfo->versionString().isEmpty() && TomahawkUtils::compareVersionStrings( peerInfo->versionString().split(' ').last(), "0.7.100" ) < 0 )
     {
         peerInfoDebug( peerInfo ) << Q_FUNC_INFO << "Using old-style (<0.7.100) connection order.";
         SipInfo we = Servent::getSipInfoForOldVersions( Servent::instance()->getLocalSipInfos( QString( "default" ), QString( "default" ) ) );
         SipInfo they = peerInfo->sipInfos().first();
         if ( they.isVisible() )
         {
-            if ( !we.isVisible() || we.host() < they.host() || (we.host() == they.host() && we.port() < they.port()))
+            if ( !we.isVisible() || we.host() < they.host() || (we.host() == they.host() && we.port() < they.port() ) )
             {
                 tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Initiate connection to" << peerInfo->id() << "at" << they.host() << "peer of:" << peerInfo->sipPlugin()->account()->accountFriendlyName();
                 connectToPeer( peerInfo, false );
@@ -174,7 +176,7 @@ ConnectionManager::handleSipInfoPrivate( const Tomahawk::peerinfo_ptr &peerInfo 
     }
     foreach ( SipInfo info, peerInfo->sipInfos() )
     {
-        if (info.isVisible())
+        if ( info.isVisible() )
         {
             // There is at least one SipInfo that may be visible. Try connecting.
             // Duplicate Connections are checked by connectToPeer, so we do not need to take care of this
@@ -214,10 +216,10 @@ ConnectionManager::newControlConnection( const Tomahawk::peerinfo_ptr& peerInfo 
 
 
 void
-ConnectionManager::connectToPeer( const Tomahawk::peerinfo_ptr &peerInfo, bool lock )
+ConnectionManager::connectToPeer( const Tomahawk::peerinfo_ptr& peerInfo, bool lock )
 {
     // Lock, so that we will not attempt to do two parallell connects.
-    if (lock)
+    if ( lock )
     {
         activate();
     }
@@ -391,7 +393,7 @@ ConnectionManager::socketError( QAbstractSocket::SocketError error )
 
 
 void
-ConnectionManager::handleSipInfoPrivateS( const Tomahawk::peerinfo_ptr &peerInfo, const QSharedPointer<ConnectionManager> &connectionManager )
+ConnectionManager::handleSipInfoPrivateS( const Tomahawk::peerinfo_ptr& peerInfo, const QSharedPointer<ConnectionManager>& connectionManager )
 {
     connectionManager->handleSipInfoPrivate( peerInfo );
 }
