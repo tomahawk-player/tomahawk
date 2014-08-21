@@ -529,6 +529,8 @@ QRect
 PlaylistItemDelegate::drawSource( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index, const QRect& rect, PlayableItem* item ) const
 {
     painter->save();
+    painter->setRenderHint( QPainter::TextAntialiasing );
+    painter->setRenderHint( QPainter::SmoothPixmapTransform );
 
     QRect avatarRect = rect.adjusted( 12, rect.height() - 48, 0, -16 );
     QRect textRect = avatarRect.adjusted( avatarRect.height() + 32, 0, -32, 0 );
@@ -567,7 +569,7 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
     const track_ptr track = item->query()->track();
 
     painter->save();
-    painter->setRenderHint( QPainter::TextAntialiasing, true );
+    painter->setRenderHint( QPainter::TextAntialiasing );
 
     if ( option.state & QStyle::State_Selected )
     {
