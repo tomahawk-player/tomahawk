@@ -121,6 +121,7 @@ if( NOT BUILD_WITH_QT4 )
     if( Qt5Core_DIR )
         # CMAKE 2.8.13+/3.0.0+ requires these for IMPORTed targets
         find_package(Qt5Concurrent REQUIRED)
+        find_package(Qt5Svg REQUIRED)
         find_package(Qt5UiTools REQUIRED)
         find_package(Qt5WebKitWidgets REQUIRED)
         find_package(Qt5Widgets REQUIRED)
