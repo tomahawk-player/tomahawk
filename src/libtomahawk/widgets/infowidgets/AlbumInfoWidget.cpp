@@ -27,8 +27,6 @@
 #include "database/Database.h"
 #include "playlist/TreeModel.h"
 #include "playlist/PlayableModel.h"
-#include "playlist/AlbumItemDelegate.h"
-#include "playlist/GridItemDelegate.h"
 #include "Source.h"
 #include "MetaPlaylistInterface.h"
 #include "playlist/TrackView.h"

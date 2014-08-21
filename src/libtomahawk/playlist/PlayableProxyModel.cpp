@@ -117,7 +117,6 @@ PlayableProxyModel::setSourcePlayableModel( PlayableModel* sourceModel )
     }
 
     m_model = sourceModel;
-
     if ( m_model )
     {
         connect( m_model, SIGNAL( loadingStarted() ), SIGNAL( loadingStarted() ) );

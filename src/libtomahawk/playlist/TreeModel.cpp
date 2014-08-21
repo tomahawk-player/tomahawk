@@ -375,6 +375,7 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QModel
     }
 
     emit endInsertRows();
+    emit selectRequest( index( 0, 0, parent ) );
 }
 
 
