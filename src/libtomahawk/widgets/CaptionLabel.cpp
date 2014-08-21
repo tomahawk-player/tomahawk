@@ -59,12 +59,14 @@ CaptionLabel::paintEvent( QPaintEvent* /* event */ )
     QRect r = contentsRect();
 
     QPainter p( this );
+    p.setRenderHint( QPainter::TextAntialiasing );
     p.setPen( Qt::black );
     p.setBrush( Qt::black );
 
     QTextOption to( alignment() );
-    p.setOpacity( 0.15 );
+    p.setOpacity( 0.8 );
     p.drawText( r.adjusted( 0, 0, 0, -8 ), text().toUpper(), to );
+    p.setOpacity( 0.15 );
 
     if ( m_showCloseButton )
     {
