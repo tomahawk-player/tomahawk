@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="55px" height="55px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
     <title>account-offline</title>
     <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
-    <defs>
-        <radialGradient cx="50%" cy="40.9965298%" fx="50%" fy="40.9965298%" r="132.924116%" id="radialGradient-1">
-            <stop stop-color="rgb(254,255,254)" offset="0%"></stop>
-            <stop stop-color="rgb(178,177,177)" offset="100%"></stop>
-        </radialGradient>
-    </defs>
-    <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
-        <g id="g430" fill="rgb(0,0,0)">
-            <path d="M6.25636752,11.5187741 C4.20816486,14.5775092 3,18.3321999 3,22.3856982 C3,31.7567891 9.30999994,39.4618424 17.6929998,40.778919 L17.6929998,49.303531 C17.6929998,50.1410367 18.2039998,50.8957889 18.9839998,51.2088565 C19.2339998,51.3085596 19.4939998,51.356417 19.7519999,51.356417 C20.3029999,51.356417 20.8429998,51.1360733 21.2399999,50.7242996 L22.9542104,48.9393602 L30.5949994,40.98331 L35.5949994,40.98331 C45.0989991,40.98331 52.8309995,32.6411552 52.8309995,22.385698 C52.8319998,12.131227 45.0989981,3.78908268 35.5950003,3.78908268 L20.2360001,3.78908268 C14.488848,3.78908268 9.3896678,6.83958098 6.25636752,11.5187741 Z M6.25636752,11.5187741" id="path432" stroke="rgb(0,0,0)" stroke-width="0.25" fill="url(#radialGradient-1)"></path>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="account-offline" sketch:type="MSLayerGroup" transform="translate(0.000000, 1.000000)" fill="#EAEAEA">
+            <g id="Page-1" sketch:type="MSShapeGroup">
+                <g id="g430">
+                    <path d="M3.25636752,7.5187741 C1.20816486,10.5775092 0,14.3321999 0,18.3856982 C0,27.7567891 6.30999994,35.4618424 14.6929998,36.778919 L14.6929998,45.303531 C14.6929998,46.1410367 15.2039998,46.8957889 15.9839998,47.2088565 C16.2339998,47.3085596 16.4939998,47.356417 16.7519999,47.356417 C17.3029999,47.356417 17.8429998,47.1360733 18.2399999,46.7242996 L19.9542104,44.9393602 L27.5949994,36.98331 L32.5949994,36.98331 C42.0989991,36.98331 49.8309995,28.6411552 49.8309995,18.385698 C49.8319998,8.131227 42.0989981,-0.21091732 32.5950003,-0.21091732 L17.2360001,-0.21091732 C11.488848,-0.21091732 6.3896678,2.83958098 3.25636752,7.5187741 L3.25636752,7.5187741 Z" id="path432"></path>
+                </g>
+            </g>
         </g>
     </g>
 </svg>
