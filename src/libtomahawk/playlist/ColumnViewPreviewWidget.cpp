@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2013,      Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2013-2014, Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -31,7 +31,6 @@
 
 #include <QLabel>
 #include <QVBoxLayout>
-#include <boost/concept_check.hpp>
 
 using namespace Tomahawk;
 
@@ -242,12 +241,7 @@ ColumnViewPreviewWidget::setQuery( const Tomahawk::query_ptr& query )
         m_ageValue->setVisible( false );
     }
 
-#ifndef Q_OS_MAC //we don't need to scale on OSX anyway
-    TomahawkUtils::DpiScaler dpi( this );
-    setMinimumHeight( dpi.scaledY( 400 ) );
-#else
-    setMinimumHeight( 400 );
-#endif
+    setMinimumHeight( sizeHint().height() );
 }
 
 
