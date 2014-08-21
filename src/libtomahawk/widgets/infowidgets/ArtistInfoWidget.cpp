@@ -127,7 +127,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     {
         QFont f = ui->biography->font();
         f.setWeight( QFont::Light );
-        f.setPointSize( 13 );
+        f.setPointSize( TomahawkUtils::defaultFontSize() + 3 );
 
         ui->biography->setFont( f );
         ui->biography->setOpenLinks( false );
@@ -144,7 +144,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
         connect( ui->biography, SIGNAL( anchorClicked( QUrl ) ), SLOT( onBiographyLinkClicked( QUrl ) ) );
 
-        f.setPointSize( 11 );
+        f.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
         ui->topHitsMoreLabel->setFont( f );
         ui->albumsMoreLabel->setFont( f );
 
@@ -155,7 +155,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     {
         QFont f = uiHeader->artistLabel->font();
         f.setBold( true );
-        f.setPointSize( 16 );
+        f.setPointSize( TomahawkUtils::defaultFontSize() + 6 );
 
         QPalette p = uiHeader->artistLabel->palette();
         p.setColor( QPalette::Foreground, Qt::white );
@@ -163,7 +163,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         uiHeader->artistLabel->setFont( f );
         uiHeader->artistLabel->setPalette( p );
 
-        f.setPointSize( 11 );
+        f.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
         f.setBold( true );
         uiHeader->anchor1Label->setFont( f );
         uiHeader->anchor1Label->setPalette( p );
@@ -180,9 +180,9 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         uiHeader->anchor3Label->setText( tr( "Related Artists" ) );
 
         QFontMetrics fm( f );
-        uiHeader->anchor1Label->setFixedWidth( fm.width( uiHeader->anchor1Label->text() + uiHeader->anchor1Label->contentsMargins().left() * 2 ) );
-        uiHeader->anchor2Label->setFixedWidth( fm.width( uiHeader->anchor2Label->text() + uiHeader->anchor1Label->contentsMargins().left() * 2 ) );
-        uiHeader->anchor3Label->setFixedWidth( fm.width( uiHeader->anchor3Label->text() + uiHeader->anchor1Label->contentsMargins().left() * 2 ) );
+        uiHeader->anchor1Label->setFixedWidth( fm.width( uiHeader->anchor1Label->text() ) + 16 );
+        uiHeader->anchor2Label->setFixedWidth( fm.width( uiHeader->anchor2Label->text() ) + 16 );
+        uiHeader->anchor3Label->setFixedWidth( fm.width( uiHeader->anchor3Label->text() ) + 16 );
 
         connect( uiHeader->anchor1Label, SIGNAL( clicked() ), SLOT( onMusicAnchorClicked() ) );
         connect( uiHeader->anchor2Label, SIGNAL( clicked() ), SLOT( onBioAnchorClicked() ) );

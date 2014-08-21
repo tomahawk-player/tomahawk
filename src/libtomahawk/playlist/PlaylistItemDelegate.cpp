@@ -546,7 +546,7 @@ PlaylistItemDelegate::drawSource( QPainter* painter, const QStyleOptionViewItem&
     QTextOption to = QTextOption( Qt::AlignVCenter );
     to.setWrapMode( QTextOption::NoWrap );
     QFont f = painter->font();
-    f.setPointSize( 12 );
+    f.setPointSize( TomahawkUtils::defaultFontSize() + 2 );
     painter->setFont( f );
 
     painter->setOpacity( 0.8 );
@@ -583,7 +583,7 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
     const int margin = 8;
 
     QFont f = painter->font();
-    f.setPointSize( 11 );
+    f.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
     f.setWeight( QFont::DemiBold );
     painter->setFont( f );
 

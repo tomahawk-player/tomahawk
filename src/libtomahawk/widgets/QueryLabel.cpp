@@ -259,7 +259,8 @@ QSize
 QueryLabel::sizeHint() const
 {
     const QFontMetrics& fm = fontMetrics();
-    QSize size( fm.width( text() ) + contentsMargins().left() * 2, fm.height() + contentsMargins().top() * 2 );
+    QSize size( fm.width( text() ) + contentsMargins().left() + contentsMargins().right(),
+                fm.height() + contentsMargins().top() + contentsMargins().bottom() );
     return size;
 }
 
@@ -275,7 +276,7 @@ QueryLabel::minimumSizeHint() const
         default:
         {
             const QFontMetrics& fm = fontMetrics();
-            QSize size( fm.width( "..." ), fm.height() + contentsMargins().top() * 2 );
+            QSize size( fm.width( "..." ), fm.height() + contentsMargins().top() + contentsMargins().bottom() );
             return size;
         }
     }
