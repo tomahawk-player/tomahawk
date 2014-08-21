@@ -46,6 +46,7 @@ DatabaseWorkerThread::DatabaseWorkerThread( Database* db, bool mutates )
     , m_db( db )
     , m_mutates( mutates )
 {
+    m_startupMutex.lock();
 }
 
 
@@ -54,6 +55,7 @@ DatabaseWorkerThread::run()
 {
     tDebug() << Q_FUNC_INFO << "DatabaseWorkerThread starting...";
     m_worker = QPointer< DatabaseWorker >( new DatabaseWorker( m_db, m_mutates ) );
+    m_startupMutex.unlock();
     exec();
     tDebug() << Q_FUNC_INFO << "DatabaseWorkerThread finishing...";
     if ( m_worker )
@@ -70,6 +72,15 @@ QPointer< DatabaseWorker >
 DatabaseWorkerThread::worker() const
 {
     return m_worker;
+}
+
+
+void
+DatabaseWorkerThread::waitForEventLoopStart()
+{
+    m_startupMutex.lock();
+    // no-op just to block on locking.
+    m_startupMutex.unlock();
 }
 
 

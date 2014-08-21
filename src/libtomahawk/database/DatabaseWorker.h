@@ -70,6 +70,13 @@ public:
 
     QPointer< DatabaseWorker > worker() const;
 
+    /**
+     * Waits until the event loop was started.
+     *
+     * Blocking, i.e. do not call from within the DatabaseWorkerThread thread.
+     */
+    void waitForEventLoopStart();
+
 protected:
     void run();
 
@@ -77,6 +84,11 @@ private:
     QPointer< DatabaseWorker > m_worker;
     Database* m_db;
     bool m_mutates;
+
+    /**
+     * Locks until we've started the event loop.
+     */
+    QMutex m_startupMutex;
 };
 
 }

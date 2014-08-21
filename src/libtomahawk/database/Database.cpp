@@ -143,11 +143,17 @@ Database::~Database()
     delete m_idWorker;
 
     if ( m_workerRW )
+    {
+        // Ensure event loop was started so quit() has any effect.
+        m_workerRW->waitForEventLoopStart();
         m_workerRW.data()->quit();
+    }
     foreach ( QPointer< DatabaseWorkerThread > workerThread, m_workerThreads )
     {
-        if ( workerThread && workerThread.data()->worker() )
-            workerThread.data()->quit();
+        // Ensure event loop was started so quit() has any effect.
+        workerThread->waitForEventLoopStart();
+        // If event loop already was killed, the following is just a no-op.
+        workerThread->quit();
     }
 
     if ( m_workerRW )
