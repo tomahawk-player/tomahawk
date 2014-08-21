@@ -112,12 +112,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     , m_trayIcon( 0 )
     , m_audioRetryCounter( 0 )
 {
-    TomahawkStyle::loadFonts();
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
-
-    QFont f = font();
-    f.setFamily( "Roboto" );
-    QApplication::setFont( f );
 
     ViewManager* vm = new ViewManager( this );
     m_audioControls = new AudioControls( this );

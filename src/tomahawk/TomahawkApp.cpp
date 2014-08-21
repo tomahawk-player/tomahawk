@@ -80,6 +80,7 @@
 #include "ActionCollection.h"
 #include "widgets/HeaderLabel.h"
 #include "TomahawkSettings.h"
+#include "utils/TomahawkStyle.h"
 
 #include "config.h"
 
@@ -180,11 +181,13 @@ TomahawkApp::init()
         updateSplashWidgetMessage( "Splash screen test\n2/7" );
     }
 
+    TomahawkStyle::loadFonts();
     QFont f = font();
+    f.setFamily( "Roboto" );
 #ifdef Q_OS_MAC
     f.setPointSize( f.pointSize() - 2 );
-    setFont( f );
 #endif
+    setFont( f );
 
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
     tDebug() << "Default font:" << f.pixelSize() << f.pointSize() << f.pointSizeF() << f.family();
