@@ -34,7 +34,7 @@ CaptionLabel::CaptionLabel( QWidget* parent )
     f.setPointSize( 10 );
     setFont( f );
 
-    setFixedHeight( TomahawkUtils::defaultFontHeight() * 1.4 );
+    setFixedHeight( QFontMetrics( f ).height() + 12 );
     setMouseTracking( true );
 
     setShowCloseButton( m_showCloseButton );
