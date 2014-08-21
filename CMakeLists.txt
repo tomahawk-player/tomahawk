@@ -421,6 +421,11 @@ ADD_SUBDIRECTORY( thirdparty )
 ADD_SUBDIRECTORY( src )
 ADD_SUBDIRECTORY( admin )
 
+IF(BUILD_TESTS)
+  enable_testing()
+  ADD_SUBDIRECTORY( src/tests )
+ENDIF()
+
 # Add all targets to the build-tree export set
 set(CMAKE_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/Tomahawk" CACHE PATH  "Installation directory for CMake files")
 set(CMAKE_INSTALL_FULL_CMAKEDIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_CMAKEDIR}")

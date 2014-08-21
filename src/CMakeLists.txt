@@ -26,5 +26,3 @@ if(WITH_CRASHREPORTER)
     add_subdirectory( crashreporter )
 endif()
 
-# tests
-add_subdirectory( tests )
