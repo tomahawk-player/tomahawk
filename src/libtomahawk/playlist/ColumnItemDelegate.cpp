@@ -219,7 +219,7 @@ ColumnItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option
         return;
 
     painter->save();
-    painter->setRenderHint( QPainter::Antialiasing );
+    painter->setRenderHint( QPainter::TextAntialiasing );
     painter->setPen( opt.palette.color( QPalette::Text ) );
 
     QRect r = option.rect.adjusted( 8, 2, -option.rect.width() + option.rect.height() + 4, -2 );

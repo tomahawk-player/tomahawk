@@ -117,7 +117,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     }
 
     painter->save();
-//    painter->setRenderHint( QPainter::Antialiasing );
+    painter->setRenderHint( QPainter::TextAntialiasing );
 
     if ( !m_covers.contains( index ) )
     {

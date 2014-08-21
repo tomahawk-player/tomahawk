@@ -176,6 +176,8 @@ ElidedLabel::paintEvent( QPaintEvent* event )
 {
     QFrame::paintEvent( event );
     QPainter p( this );
+    p.setRenderHint( QPainter::TextAntialiasing );
+
     QRect r = contentsRect();
     r.adjust( m_margin, m_margin, -m_margin, -m_margin );
 

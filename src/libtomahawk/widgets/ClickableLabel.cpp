@@ -93,6 +93,7 @@ void
 ClickableLabel::paintEvent( QPaintEvent* event )
 {
     QPainter painter( this );
+    painter.setRenderHint( QPainter::TextAntialiasing );
     painter.setOpacity( m_opacity );
 
     const QString elidedText = fontMetrics().elidedText( text(), Qt::ElideRight, contentsRect().width() );

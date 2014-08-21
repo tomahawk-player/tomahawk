@@ -286,6 +286,7 @@ void
 QueryLabel::paintEvent( QPaintEvent* /* event */ )
 {
     QPainter p( this );
+    p.setRenderHint( QPainter::TextAntialiasing );
     QRect r = contentsRect();
 
     if ( m_hovering )
