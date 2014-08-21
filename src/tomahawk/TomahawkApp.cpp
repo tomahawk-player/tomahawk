@@ -183,6 +183,7 @@ TomahawkApp::init()
 
     TomahawkStyle::loadFonts();
     QFont f = font();
+    TomahawkUtils::setSystemFont( f );
     f.setFamily( "Roboto" );
 #ifndef Q_OS_MAC
     f.setPointSize( 10 );
@@ -237,7 +238,7 @@ TomahawkApp::init()
     QByteArray magic = QByteArray::fromBase64( enApiSecret );
     QByteArray wand = QByteArray::fromBase64( QCoreApplication::applicationName().toLatin1() );
     int length = magic.length(), n2 = wand.length();
-    for ( int i=0; i<length; i++ ) magic[i] = magic[i] ^ wand[i%n2];
+    for ( int i = 0; i < length; i++ ) magic[i] = magic[i] ^ wand[i%n2];
     Echonest::Config::instance()->setAPIKey( magic );
 
     tDebug() << "Init Echonest Factory.";
@@ -274,7 +275,7 @@ TomahawkApp::init()
     }
 
     connect( Playlist::removalHandler().data(), SIGNAL( aboutToBeDeletePlaylist( Tomahawk::playlist_ptr ) ),
-                SLOT( playlistRemoved( Tomahawk::playlist_ptr ) ));
+             SLOT( playlistRemoved( Tomahawk::playlist_ptr ) ));
 
     tDebug() << "Init InfoSystem.";
     m_infoSystem = QPointer<Tomahawk::InfoSystem::InfoSystem>( Tomahawk::InfoSystem::InfoSystem::instance() );
@@ -298,7 +299,6 @@ TomahawkApp::~TomahawkApp()
         delete m_scanManager.data();
 
     delete Tomahawk::Accounts::AccountManager::instance();
-
     delete AtticaManager::instance();
     delete m_mainwindow;
 

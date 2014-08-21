@@ -152,8 +152,10 @@ QMenuBar*
 ActionCollection::createMenuBar( QWidget *parent )
 {
     QMenuBar* menuBar = new QMenuBar( parent );
+    menuBar->setFont( TomahawkUtils::systemFont() );
 
     QMenu* controlsMenu = new QMenu( tr( "&Controls" ), menuBar );
+    controlsMenu->setFont( TomahawkUtils::systemFont() );
     controlsMenu->addAction( m_actionCollection[ "playPause" ] );
     controlsMenu->addAction( m_actionCollection[ "previousTrack" ] );
     controlsMenu->addAction( m_actionCollection[ "nextTrack" ] );
@@ -168,16 +170,19 @@ ActionCollection::createMenuBar( QWidget *parent )
     controlsMenu->addAction( m_actionCollection[ "quit" ] );
 
     QMenu* settingsMenu = new QMenu( tr( "&Settings" ), menuBar );
+    settingsMenu->setFont( TomahawkUtils::systemFont() );
 #ifndef Q_OS_MAC
     settingsMenu->addAction( m_actionCollection[ "toggleMenuBar" ] );
 #endif
     settingsMenu->addAction( m_actionCollection[ "preferences" ] );
 
     QMenu* helpMenu = new QMenu( tr( "&Help" ), menuBar );
+    helpMenu->setFont( TomahawkUtils::systemFont() );
     helpMenu->addAction( m_actionCollection[ "diagnostics" ] );
     helpMenu->addAction( m_actionCollection[ "openLogfile" ] );
     helpMenu->addAction( m_actionCollection[ "legalInfo" ] );
     QMenu* whatsNew = helpMenu->addMenu( ImageRegistry::instance()->icon( RESPATH "images/whatsnew.svg" ), tr( "What's new in ..." ) );
+    whatsNew->setFont( TomahawkUtils::systemFont() );
     whatsNew->addAction( m_actionCollection[ "whatsnew_0_8" ] );
     helpMenu->addAction( m_actionCollection[ "aboutTomahawk" ] );
 
@@ -203,6 +208,7 @@ ActionCollection::createMenuBar( QWidget *parent )
 
 #if defined( Q_OS_MAC )
     QMenu* windowMenu = new QMenu( tr( "&Window" ), menuBar );
+    windowMenu->setFont( TomahawkUtils::systemFont() );
     windowMenu->addAction( m_actionCollection[ "minimize" ] );
     windowMenu->addAction( m_actionCollection[ "zoom" ] );
     windowMenu->addAction( m_actionCollection[ "fullscreen" ] );
@@ -219,6 +225,7 @@ QMenu*
 ActionCollection::createCompactMenu( QWidget *parent )
 {
     QMenu* compactMenu = new QMenu( tr( "Main Menu" ), parent );
+    compactMenu->setFont( TomahawkUtils::systemFont() );
 
     compactMenu->addAction( m_actionCollection[ "playPause" ] );
     compactMenu->addAction( m_actionCollection[ "previousTrack" ] );

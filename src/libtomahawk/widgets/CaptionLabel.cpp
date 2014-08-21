@@ -30,7 +30,7 @@ CaptionLabel::CaptionLabel( QWidget* parent )
     , m_parent( parent )
     , m_showCloseButton( false )
 {
-    QFont f( "Roboto" );
+    QFont f = font();
     f.setPointSize( 10 );
     setFont( f );
 

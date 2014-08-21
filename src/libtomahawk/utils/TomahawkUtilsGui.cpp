@@ -61,6 +61,7 @@ extern void qt_blurImage( QPainter *p, QImage &blurImage, qreal radius, bool qua
 
 namespace TomahawkUtils
 {
+static QFont s_systemFont;
 static int s_defaultFontSize = 0;
 static int s_defaultFontHeight = 0;
 
@@ -394,6 +395,20 @@ void
 setDefaultFontSize( int points )
 {
     s_defaultFontSize = points;
+}
+
+
+QFont
+systemFont()
+{
+    return s_systemFont;
+}
+
+
+void
+setSystemFont( QFont font )
+{
+    s_systemFont = font;
 }
 
 

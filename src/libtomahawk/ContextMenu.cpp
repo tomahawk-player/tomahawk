@@ -44,6 +44,8 @@ ContextMenu::ContextMenu( QWidget* parent )
     , m_sources_sigmap( 0 )
     , m_loveAction( 0 )
 {
+    setFont( TomahawkUtils::systemFont() );
+
     m_sigmap = new QSignalMapper( this );
     connect( m_sigmap, SIGNAL( mapped( int ) ), SLOT( onTriggered( int ) ) );
 

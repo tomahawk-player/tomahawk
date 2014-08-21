@@ -688,6 +688,8 @@ TomahawkWindow::setupMenuBar()
 {
     // Always create a menubar, but only create a compactMenu on Windows and X11
     m_menuBar = ActionCollection::instance()->createMenuBar( this );
+    m_menuBar->setFont( TomahawkUtils::systemFont() );
+
     setMenuBar( m_menuBar );
 #ifndef Q_OS_MAC
     m_compactMainMenu = ActionCollection::instance()->createCompactMenu( this );

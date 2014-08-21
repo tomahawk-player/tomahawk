@@ -22,6 +22,7 @@
 #include <QMenu>
 
 #include "TomahawkSettings.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
 
@@ -32,6 +33,8 @@ ViewHeader::ViewHeader( QAbstractItemView* parent )
     , m_sigmap( new QSignalMapper( this ) )
     , m_init( false )
 {
+    m_menu->setFont( TomahawkUtils::systemFont() );
+
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     setSectionResizeMode( QHeaderView::Interactive );
     setSectionsMovable( true );

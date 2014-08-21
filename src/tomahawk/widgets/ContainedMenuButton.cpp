@@ -20,6 +20,8 @@
 
 #include <QMouseEvent>
 
+#include "utils/TomahawkUtilsGui.h"
+
 ContainedMenuButton::ContainedMenuButton( QWidget *parent )
     : QToolButton( parent )
 {
@@ -29,6 +31,7 @@ void
 ContainedMenuButton::setMenu( QMenu *menu )
 {
     m_menu = menu;
+    m_menu->setFont( TomahawkUtils::systemFont() );
     connect( m_menu, SIGNAL( aboutToHide() ), SLOT( menuHidden() ) );
 }
 

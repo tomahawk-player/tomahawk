@@ -52,6 +52,7 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     refreshToolTip();
 
     m_contextMenu = new QMenu();
+    m_contextMenu->setFont( TomahawkUtils::systemFont() );
     setContextMenu( m_contextMenu );
 
     m_loveTrackAction = new QAction( this );

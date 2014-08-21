@@ -74,6 +74,11 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setAttribute( Qt::WA_MacShowFocusRect, 0 );
     setContentsMargins( 0, 0, 0, 0 );
 
+    m_playlistMenu.setFont( TomahawkUtils::systemFont() );
+    m_roPlaylistMenu.setFont( TomahawkUtils::systemFont() );
+    m_latchMenu.setFont( TomahawkUtils::systemFont() );
+    m_privacyMenu.setFont( TomahawkUtils::systemFont() );
+
     QFont fnt = font();
     QFontMetrics fm( fnt );
     // This is sort of the longest string in there. With translations
@@ -724,6 +729,7 @@ SourceTreeView::onCustomContextMenu( const QPoint& pos )
     else if ( !customActions.isEmpty() )
     {
         QMenu customMenu;
+        customMenu.setFont( TomahawkUtils::systemFont() );
         customMenu.addActions( customActions );
         customMenu.exec( mapToGlobal( pos ) );
     }

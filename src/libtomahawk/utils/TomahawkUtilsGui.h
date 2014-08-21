@@ -23,12 +23,13 @@
 #include "TomahawkUtils.h"
 #include "DllMacro.h"
 
-#include <QSize>
-#include <QModelIndex>
 #include <QColor>
-#include <QRect>
-#include <QTextOption>
+#include <QFont>
 #include <QImage>
+#include <QModelIndex>
+#include <QRect>
+#include <QSize>
+#include <QTextOption>
 
 // include contains typedefs for Qt4/Qt5 compatibility
 #include <QStyleOption>
@@ -63,6 +64,8 @@ namespace TomahawkUtils
     DLLEXPORT int defaultFontSize();
     DLLEXPORT int defaultFontHeight();
     DLLEXPORT QSize defaultIconSize();
+    DLLEXPORT void setSystemFont( QFont font );
+    DLLEXPORT QFont systemFont();
 
     DLLEXPORT void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item );
 
