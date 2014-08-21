@@ -143,7 +143,7 @@ SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem
     painter->drawPixmap( iconRect, opt.icon.pixmap( iconRect.size(), iconMode ) );
 
     QRect textRect = opt.rect.adjusted( iconRect.width() + 22, 0, -32, 0 );
-    QString text = painter->fontMetrics().elidedText( opt.text, Qt::ElideRight, textRect.width() );
+    QString text = painter->fontMetrics().elidedText( opt.text.toUpper(), Qt::ElideRight, textRect.width() );
     {
         QTextOption to( Qt::AlignVCenter );
         to.setWrapMode( QTextOption::NoWrap );
