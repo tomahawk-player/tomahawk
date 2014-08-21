@@ -120,6 +120,12 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
 void
 SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
+    SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
+    const bool upperCase = !( type == SourcesModel::StaticPlaylist ||
+        type == SourcesModel::AutomaticPlaylist ||
+        type == SourcesModel::Station ||
+        type == SourcesModel::TemporaryPage );
+
     QStyleOptionViewItemV4 opt = option;
     initStyleOption( &opt, index );
     opt.showDecorationSelected = false;
@@ -143,7 +149,7 @@ SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem
     painter->drawPixmap( iconRect, opt.icon.pixmap( iconRect.size(), iconMode ) );
 
     QRect textRect = opt.rect.adjusted( iconRect.width() + 22, 0, -32, 0 );
-    QString text = painter->fontMetrics().elidedText( opt.text.toUpper(), Qt::ElideRight, textRect.width() );
+    QString text = painter->fontMetrics().elidedText( upperCase ? opt.text.toUpper() : opt.text, Qt::ElideRight, textRect.width() );
     {
         QTextOption to( Qt::AlignVCenter );
         to.setWrapMode( QTextOption::NoWrap );
