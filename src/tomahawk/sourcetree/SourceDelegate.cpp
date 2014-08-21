@@ -771,12 +771,24 @@ SourceDelegate::updateEditorGeometry( QWidget* editor, const QStyleOptionViewIte
 bool
 SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
 {
+    QMouseEvent* mEvent = 0;
+    switch ( event->type() )
+    {
+//        case QEvent::MouseTrackingChange:
+        case QEvent::MouseButtonDblClick:
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonRelease:
+        case QEvent::MouseMove:
+            mEvent = static_cast< QMouseEvent* >( event );
+        default:
+            break;
+    }
+
     bool hoveringTrack = false;
-    if ( m_trackRects.contains( index ) )
+    if ( m_trackRects.contains( index ) && mEvent )
     {
         const QRect trackRect = m_trackRects[ index ];
-        const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
-        hoveringTrack = trackRect.contains( ev->pos() );
+        hoveringTrack = trackRect.contains( mEvent->pos() );
 
         if ( hoveringTrack )
         {
@@ -796,17 +808,15 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
     }
 
     bool lockRectContainsClick = false, headphonesRectContainsClick = false;
-    if ( m_headphoneRects.contains( index ) )
+    if ( m_headphoneRects.contains( index ) && mEvent )
     {
         const QRect headphoneRect = m_headphoneRects[ index ];
-        const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
-        headphonesRectContainsClick = headphoneRect.contains( ev->pos() );
+        headphonesRectContainsClick = headphoneRect.contains( mEvent->pos() );
     }
-    if ( m_lockRects.contains( index ) )
+    if ( m_lockRects.contains( index ) && mEvent )
     {
         const QRect lockRect = m_lockRects[ index ];
-        const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
-        lockRectContainsClick = lockRect.contains( ev->pos() );
+        lockRectContainsClick = lockRect.contains( mEvent->pos() );
     }
 
     if ( event->type() == QEvent::MouseMove )
@@ -824,16 +834,15 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
         {
             SourceTreeItem* gpi = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
             Q_ASSERT( gpi );
-            QMouseEvent* ev = static_cast< QMouseEvent* >( event );
 
             QStyleOptionViewItemV4 o = option;
             initStyleOption( &o, index );
             int padding = 3;
             QRect r ( o.rect.right() - padding - m_iconHeight, padding + o.rect.y(), m_iconHeight, m_iconHeight );
 
-            if ( r.contains( ev->pos() ) )
+            if ( r.contains( mEvent->pos() ) )
             {
-                if ( event->type() == QEvent::MouseButtonRelease )
+                if ( event->type() == QEvent::MouseButtonRelease && mEvent->button() == Qt::LeftButton )
                 {
                     gpi->removeFromList();
 
@@ -852,13 +861,12 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
 
             if ( hoveringTrack && colItem->source() && colItem->source()->currentTrack() )
             {
-                const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
-                if ( event->type() == QEvent::MouseButtonRelease && ev->button() == Qt::LeftButton )
+                if ( event->type() == QEvent::MouseButtonRelease && mEvent->button() == Qt::LeftButton )
                 {
                     ViewManager::instance()->show( colItem->source()->currentTrack() );
                     return true;
                 }
-                else if ( event->type() == QEvent::MouseButtonPress && ev->button() == Qt::RightButton )
+                else if ( event->type() == QEvent::MouseButtonPress && mEvent->button() == Qt::RightButton )
                 {
                     Tomahawk::ContextMenu* contextMenu = new Tomahawk::ContextMenu( m_parent );
                     contextMenu->setQuery( colItem->source()->currentTrack() );
@@ -871,7 +879,7 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
             {
                 if ( headphonesRectContainsClick || lockRectContainsClick )
                 {
-                    if ( event->type() == QEvent::MouseButtonRelease )
+                    if ( event->type() == QEvent::MouseButtonRelease && mEvent->button() == Qt::LeftButton )
                     {
                         if ( headphonesRectContainsClick )
                         {
@@ -888,19 +896,18 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
                 }
             }
         }
-        else if ( event->type() == QEvent::MouseButtonRelease && type == SourcesModel::StaticPlaylist )
+        else if ( event->type() == QEvent::MouseButtonRelease && mEvent->button() == Qt::LeftButton && type == SourcesModel::StaticPlaylist )
         {
             PlaylistItem* plItem = qobject_cast< PlaylistItem* >( index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
             Q_ASSERT( plItem );
 
-            QMouseEvent* mev = static_cast< QMouseEvent* >( event );
             if ( plItem->canSubscribe() && !plItem->subscribedIcon().isNull() )
             {
                 const int padding = 2;
                 const int imgWidth = option.rect.height() - 2*padding;
                 const QRect subRect( option.rect.right() - padding - imgWidth, option.rect.top() + padding, imgWidth, imgWidth );
 
-                if ( subRect.contains( mev->pos() ) )
+                if ( subRect.contains( mEvent->pos() ) )
                 {
                     // Toggle playlist subscription
                     plItem->setSubscribed( !plItem->subscribed() );
@@ -912,7 +919,7 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
     // We emit our own clicked() signal instead of relying on QTreeView's, because that is fired whether or not a delegate accepts
     // a mouse press event. Since we want to swallow click events when they are on headphones other action items, here we make sure we only
     // emit if we really want to
-    if ( event->type() == QEvent::MouseButtonRelease )
+    if ( event->type() == QEvent::MouseButtonRelease && mEvent->button() == Qt::LeftButton )
     {
         if ( m_lastClicked == -1 )
         {
