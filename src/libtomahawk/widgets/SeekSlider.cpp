@@ -35,7 +35,7 @@ SeekSlider::SeekSlider( QWidget* parent )
 {
     setStyleSheet( QString(
                    "QSlider::groove:horizontal {"
-                   "height: 4px; margin: %1px; border: %2px solid rgba(0, 0, 0, 0); background: rgba(0, 0, 0, 0);"
+                   "height: 4px; margin: %1px; border: %2px solid rgba(200, 200, 200, 0); background: rgba(200, 200, 200, 40);"
 //                   "border-image: url(" RESPATH "images/seek-slider-bkg.png) %2 %2 %2 %2 stretch stretch;"
                    "}"
 
