@@ -148,6 +148,15 @@ SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem
     iconRect.setWidth( iconRect.height() );
     painter->drawPixmap( iconRect, opt.icon.pixmap( iconRect.size(), iconMode ) );
 
+    if ( selected )
+    {
+        QFont f = painter->font();
+        f.setBold( true );
+//        f.setPointSize( 10 );
+        painter->setFont( f );
+        painter->setPen( Qt::black );
+    }
+
     QRect textRect = opt.rect.adjusted( iconRect.width() + 22, 0, -32, 0 );
     QString text = painter->fontMetrics().elidedText( upperCase ? opt.text.toUpper() : opt.text, Qt::ElideRight, textRect.width() );
     {
@@ -161,16 +170,6 @@ SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem
         else
         {
             painter->setPen( Qt::black );
-        }
-
-        if ( selected )
-        {
-            QFont f = painter->font();
-            f.setBold( true );
-            f.setPointSize( 10 );
-            painter->setFont( f );
-            painter->setPen( Qt::black );
-            //            opt.palette.setColor( QPalette::Text, option.palette.color( QPalette::HighlightedText ) );
         }
 
         painter->drawText( textRect, text, to );
