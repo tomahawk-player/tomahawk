@@ -183,6 +183,7 @@ TomahawkApp::init()
 
     TomahawkStyle::loadFonts();
     QFont f = font();
+    f.setPointSize( 10 );
     f.setFamily( "Roboto" );
 #ifdef Q_OS_MAC
     f.setPointSize( f.pointSize() - 2 );
