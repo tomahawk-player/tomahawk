@@ -632,7 +632,7 @@ TomahawkWindow::thumbIcon( TomahawkUtils::ImageType type )
     static QMap<TomahawkUtils::ImageType,HICON> thumbIcons;
     if ( !thumbIcons.contains( type ) )
     {
-        QPixmap pix ( TomahawkUtils::defaultPixmap(type , TomahawkUtils::Original, QSize( 20, 20 ) ) );
+        QPixmap pix ( TomahawkUtils::defaultPixmap(type , TomahawkUtils::Original, QSize( 40, 40 ) ) );
         thumbIcons[type] = pix.toWinHICON();
     }
     return thumbIcons[type];
@@ -641,7 +641,7 @@ TomahawkWindow::thumbIcon( TomahawkUtils::ImageType type )
 
 QIcon TomahawkWindow::thumbIcon(TomahawkUtils::ImageType type)
 {
-    return  TomahawkUtils::defaultPixmap( type , TomahawkUtils::Original, QSize( 20, 20 ) );
+    return  TomahawkUtils::defaultPixmap( type , TomahawkUtils::Original, QSize( 40, 40 ) );
 }
 
 #endif//QT_VERSION < QT_VERSION_CHECK( 5, 2, 0 )
