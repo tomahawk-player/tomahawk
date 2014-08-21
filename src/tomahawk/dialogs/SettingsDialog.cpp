@@ -511,7 +511,7 @@ SettingsDialog::installFromFile()
                                                            0,
                                                            QFileDialog::ReadOnly );
 
-    if ( !resolver.isEmpty() && QFileInfo( resolver ).exists() )
+    if ( !resolver.isEmpty() )
     {
         GlobalActionManager::instance()->installResolverFromFile( resolver );
     }
