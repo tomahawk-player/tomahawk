@@ -12,5 +12,11 @@
         <file>data/images/android.png</file>
         <file>data/images/tomahawk-android.png</file>
         <file>data/images/networking.png</file>
+        <file>data/images/connectivitybutton.png</file>
+        <file>data/images/androidbutton.png</file>
+        <file>data/images/googlebutton.png</file>
+        <file>data/images/beatsbutton.png</file>
+        <file>data/images/networkbutton.png</file>
+        <file>data/images/inboxbutton.png</file>
     </qresource>
 </RCC>

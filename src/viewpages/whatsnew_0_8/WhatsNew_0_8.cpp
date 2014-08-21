@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2014, Uwe L. Korn <uwelk@xhochy.com>
+ *   Copyright 2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -30,25 +31,6 @@
 using namespace Tomahawk;
 using namespace Tomahawk::Widgets;
 
-const char* activeWidgetThumbStylesheet = "QWidget {"
-        "border-width: 2px;"
-        "border-style: solid;"
-        "border-radius: 4px;"
-        "border-color: white;"
-        "color: white;"
-        "border-bottom: none;"
-        "border-bottom-right-radius: 0px;"
-        "border-bottom-left-radius: 0px;"
-        "background-color:#292f34;"
-        "}";
-
-const char* inactiveWidgetThumbStylesheet = " QWidget {"
-        "border-width: 2px;"
-        "border-style: solid;"
-        "border-radius: 4px;"
-        "border-color: grey;"
-        "color: grey;"
-        "}";
 
 WhatsNew_0_8::WhatsNew_0_8( QWidget* parent )
 {
@@ -60,6 +42,7 @@ WhatsNew_0_8::~WhatsNew_0_8()
 {
 
 }
+
 
 bool
 WhatsNew_0_8::addPageItem() const
@@ -82,17 +65,13 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
     QWidget* widget = new QWidget;
     ui->setupUi( widget );
 
-    ui->lineAbove->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
-    ui->lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
-
-
     {
         QScrollArea* area = new QScrollArea();
         area->setWidgetResizable( true );
         area->setWidget( widget );
 
         QPalette pal = palette();
-        pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_BACKGROUND );
+        pal.setBrush( backgroundRole(), Qt::white );
         area->setPalette( pal );
         area->setAutoFillBackground( true );
         area->setFrameShape( QFrame::NoFrame );
@@ -105,81 +84,72 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
     }
 
     {
-        QPalette pal = palette();
-        pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
-        ui->widget->setPalette( pal );
-        ui->widget->setAutoFillBackground( true );
+        ui->inboxButton->setFixedSize( QSize( 80, 80 ) );
+        QPixmap inboxPixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/inboxbutton.png", ui->inboxButton->size() );
+        ui->inboxButton->setPixmap( inboxPixmap );
+        connect( ui->inboxButton, SIGNAL( clicked() ), SLOT( inboxBoxClicked() ) );
     }
 
     {
-        QPixmap inboxPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/inbox.svg", QSize( 64, 64 ) );
-        ui->inboxBoxImage->setPixmap( inboxPixmap );
-
-        connect( ui->inboxBoxHeader, SIGNAL( clicked() ), SLOT( inboxBoxClicked() ) );
-        connect( ui->inboxBoxImage, SIGNAL( clicked() ), SLOT( inboxBoxClicked() ) );
+        ui->linkButton->setFixedSize( QSize( 80, 80 ) );
+        QPixmap pixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/connectivitybutton.png", ui->inboxButton->size() );
+        ui->linkButton->setPixmap( pixmap );
+        connect( ui->linkButton, SIGNAL( clicked() ), SLOT( urlLookupBoxClicked() ) );
     }
 
     {
-        connect( ui->urlLookupBoxHeader, SIGNAL( clicked() ), SLOT( urlLookupBoxClicked() ) );
-        connect( ui->urlLookupBoxImage, SIGNAL( clicked() ), SLOT( urlLookupBoxClicked() ) );
+        ui->beatsButton->setFixedSize( QSize( 80, 80 ) );
+        QPixmap beatsPixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/beatsbutton.png", ui->inboxButton->size() );
+        ui->beatsButton->setPixmap( beatsPixmap );
+        connect( ui->beatsButton, SIGNAL( clicked() ), SLOT( beatsBoxClicked() ) );
     }
 
     {
-        QPixmap trendingPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/trending.svg", QSize( 64, 64 ) );
-        ui->trendingBoxImage->setPixmap( trendingPixmap );
-
-        connect( ui->trendingBoxHeader, SIGNAL( clicked() ), SLOT( trendingBoxClicked() ) );
-        connect( ui->trendingBoxImage, SIGNAL( clicked() ), SLOT( trendingBoxClicked() ) );
+        ui->googleButton->setFixedSize( QSize( 80, 80 ) );
+        QPixmap pixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/googlebutton.png", ui->inboxButton->size() );
+        ui->googleButton->setPixmap( pixmap );
+        connect( ui->googleButton, SIGNAL( clicked() ), SLOT( gmusicBoxClicked() ) );
     }
 
     {
-        QPixmap beatsPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/beatsmusic.svg", QSize( 64, 64 ) );
-        ui->beatsBoxImage->setPixmap( beatsPixmap );
-
-        connect( ui->beatsBoxHeader, SIGNAL( clicked() ), SLOT( beatsBoxClicked() ) );
-        connect( ui->beatsBoxImage, SIGNAL( clicked() ), SLOT( beatsBoxClicked() ) );
+        ui->androidButton->setFixedSize( QSize( 80, 80 ) );
+        QPixmap pixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/androidbutton.png", ui->inboxButton->size() );
+        ui->androidButton->setPixmap( pixmap );
+        connect( ui->androidButton, SIGNAL( clicked() ), SLOT( androidBoxClicked() ) );
     }
 
     {
-        // TODO: Add GMusic Pixmap
-
-        connect( ui->gmusicBoxHeader, SIGNAL( clicked() ), SLOT( gmusicBoxClicked() ) );
-        connect( ui->gmusicBoxImage, SIGNAL( clicked() ), SLOT( gmusicBoxClicked() ) );
+        ui->networkButton->setFixedSize( QSize( 80, 80 ) );
+        QPixmap networkingPixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/networkbutton.png", ui->inboxButton->size() );
+        ui->networkButton->setPixmap( networkingPixmap );
+        connect( ui->networkButton, SIGNAL( clicked() ), SLOT( networkingBoxClicked() ) );
     }
 
     {
-        QPixmap networkingPixmap = ImageRegistry::instance()->pixmap( RESPATH "images/ipv6-logo.svg", QSize( 64, 64 ) );
-        ui->networkingBoxImage->setPixmap( networkingPixmap );
+        QFont font = ui->label->font();
+        font.setWeight( QFont::Light );
+        font.setPointSize( 48 );
+        ui->label->setFont( font );
+        ui->label->setStyleSheet( "QLabel { color: rgba( 0, 0, 0, 60% ) }" );
 
-        connect( ui->networkingBoxHeader, SIGNAL( clicked() ), SLOT( networkingBoxClicked() ) );
-        connect( ui->networkingBoxImage, SIGNAL( clicked() ), SLOT( networkingBoxClicked() ) );
-    }
-
-    {
-        connect( ui->designBoxHeader, SIGNAL( clicked() ), SLOT( designBoxClicked() ) );
-        connect( ui->designBoxImage, SIGNAL( clicked() ), SLOT( designBoxClicked() ) );
-    }
-
-    {
-        connect( ui->androidBoxHeader, SIGNAL( clicked() ), SLOT( androidBoxClicked() ) );
-        connect( ui->androidBoxImage, SIGNAL( clicked() ), SLOT( androidBoxClicked() ) );
-    }
-
-    {
-        QFont font = ui->label_2->font();
-
-        int fontSize = TomahawkUtils::defaultFontSize() + 2;
-        font.setPointSize( fontSize );
-        font.setFamily( "Titillium Web" );
-
+        font.setWeight( QFont::Normal );
+        font.setPointSize( 11 );
         ui->label_2->setFont( font );
+        ui->label_2->setStyleSheet( "QLabel { color: rgba( 0, 0, 0, 30% ) }" );
+
+        font.setPointSize( 12 );
         ui->label_3->setFont( font );
+        ui->label_3->setStyleSheet( "QLabel { color: rgba( 0, 0, 0, 65% ) }" );
         ui->label_5->setFont( font );
+        ui->label_5->setStyleSheet( "QLabel { color: rgba( 0, 0, 0, 65% ) }" );
+        ui->label_6->setFont( font );
+        ui->label_6->setStyleSheet( "QLabel { color: rgba( 0, 0, 0, 65% ) }" );
         ui->label_7->setFont( font );
+        ui->label_7->setStyleSheet( "QLabel { color: rgba( 0, 0, 0, 65% ) }" );
+        ui->label_8->setFont( font );
+        ui->label_8->setStyleSheet( "QLabel { color: rgba( 0, 0, 0, 65% ) }" );
         ui->label_9->setFont( font );
-        ui->label_11->setFont( font );
-        ui->label_13->setFont( font );
-        ui->label_17->setFont( font );
+        ui->label_9->setStyleSheet( "QLabel { color: rgba( 0, 0, 0, 65% ) }" );
     }
 }
 
@@ -230,56 +200,38 @@ WhatsNewWidget_0_8::changeEvent( QEvent* e )
 void
 WhatsNewWidget_0_8::inboxBoxClicked()
 {
-    activateBox( ui->inboxBox, 0 );
+    activateBox( ui->inboxCaption, 0 );
 }
 
 
 void
 WhatsNewWidget_0_8::urlLookupBoxClicked()
 {
-    activateBox( ui->urlLookupBox, 1 );
-}
-
-
-void
-WhatsNewWidget_0_8::trendingBoxClicked()
-{
-    activateBox( ui->trendingBox, 2 );
+    activateBox( ui->linkCaption, 1 );
 }
 
 
 void
 WhatsNewWidget_0_8::beatsBoxClicked()
 {
-    activateBox( ui->beatsBox, 3 );
 }
 
 
 void
 WhatsNewWidget_0_8::gmusicBoxClicked()
 {
-    activateBox( ui->gmusicBox, 4 );
 }
 
 
 void
 WhatsNewWidget_0_8::networkingBoxClicked()
 {
-    activateBox( ui->networkingBox, 5 );
-}
-
-
-void
-WhatsNewWidget_0_8::designBoxClicked()
-{
-    activateBox( ui->designBox, 6 );
 }
 
 
 void
 WhatsNewWidget_0_8::androidBoxClicked()
 {
-    activateBox( ui->androidBox, 8 );
 }
 
 
@@ -288,32 +240,32 @@ WhatsNewWidget_0_8::activateBox( QWidget* widget, int activeIndex )
 {
     deactivateAllBoxes();
 
-    widget->layout()->setContentsMargins( 8, 8, 8, 16 );
+/*    widget->layout()->setContentsMargins( 8, 8, 8, 16 );
     widget->setStyleSheet( activeWidgetThumbStylesheet );
 
-    ui->stackedWidget->setCurrentIndex( activeIndex );
+    ui->stackedWidget->setCurrentIndex( activeIndex );*/
 }
 
 
 void
 WhatsNewWidget_0_8::deactivateBox( QWidget* widget )
 {
-    widget->layout()->setContentsMargins( 8, 8, 8, 8 );
-    widget->setStyleSheet( inactiveWidgetThumbStylesheet );
+/*    widget->layout()->setContentsMargins( 8, 8, 8, 8 );
+    widget->setStyleSheet( inactiveWidgetThumbStylesheet );*/
 }
 
 
 void
 WhatsNewWidget_0_8::deactivateAllBoxes()
 {
-    deactivateBox( ui->inboxBox );
+/*    deactivateBox( ui->inboxBox );
     deactivateBox( ui->urlLookupBox );
     deactivateBox( ui->trendingBox );
     deactivateBox( ui->beatsBox );
     deactivateBox( ui->gmusicBox );
     deactivateBox( ui->networkingBox );
     deactivateBox( ui->designBox );
-    deactivateBox( ui->androidBox );
+    deactivateBox( ui->androidBox );*/
 }
 
 

@@ -57,11 +57,9 @@ protected:
 private slots:
     void inboxBoxClicked();
     void urlLookupBoxClicked();
-    void trendingBoxClicked();
     void beatsBoxClicked();
     void gmusicBoxClicked();
     void networkingBoxClicked();
-    void designBoxClicked();
     void androidBoxClicked();
 
 private:
@@ -95,7 +93,7 @@ public:
 
     int sortValue() { return 1; }
 
-    bool showInfoBar() const { return true; }
+    bool showInfoBar() const { return false; }
 };
 
 
