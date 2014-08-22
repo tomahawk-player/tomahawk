@@ -79,6 +79,20 @@ public:
         return s_instance;
     }
 
+    /**
+     * Delete the AtticaManager if initialised.
+     *
+     * Note that <code>delete AtticaManager::instance()</code> will create an
+     * instance if none existed before.
+     */
+    static void deleteInstace()
+    {
+        if ( s_instance )
+        {
+            delete s_instance;
+        }
+    }
+
     explicit AtticaManager ( QObject* parent = 0 );
     virtual ~AtticaManager();
 

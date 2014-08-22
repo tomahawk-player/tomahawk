@@ -302,7 +302,7 @@ TomahawkApp::~TomahawkApp()
         delete m_scanManager.data();
 
     delete Tomahawk::Accounts::AccountManager::instance();
-    delete AtticaManager::instance();
+    AtticaManager::deleteInstace();
     delete m_mainwindow;
 
     // Main Window uses the AudioEngine, so delete it later.
