@@ -17,7 +17,16 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -51,7 +60,16 @@
       <property name="spacing">
        <number>64</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>64</number>
+      </property>
+      <property name="topMargin">
+       <number>64</number>
+      </property>
+      <property name="rightMargin">
+       <number>64</number>
+      </property>
+      <property name="bottomMargin">
        <number>64</number>
       </property>
       <item>
@@ -59,13 +77,16 @@
         <property name="spacing">
          <number>1</number>
         </property>
-        <property name="margin">
-         <number>0</number>
+        <property name="sizeConstraint">
+         <enum>QLayout::SetNoConstraint</enum>
         </property>
         <item>
          <widget class="QLabel" name="label">
           <property name="text">
            <string>WHAT'S NEW</string>
+          </property>
+          <property name="wordWrap">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -73,6 +94,9 @@
          <widget class="QLabel" name="label_2">
           <property name="text">
            <string>If you are reading this it likely means you have already noticed the biggest change since our last release - a shiny new interface and design. New views, fonts, icons, header images and animations at every turn. Below you can find an overview of the functional changes and additions since 0.7 too:</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
           </property>
           <property name="indent">
            <number>8</number>
@@ -144,9 +168,6 @@
         <property name="spacing">
          <number>24</number>
         </property>
-        <property name="margin">
-         <number>0</number>
-        </property>
         <item>
          <widget class="CaptionLabel" name="inboxCaption">
           <property name="text">
@@ -203,9 +224,6 @@ border-color: #ccc;
         <property name="spacing">
          <number>24</number>
         </property>
-        <property name="margin">
-         <number>0</number>
-        </property>
         <item>
          <widget class="CaptionLabel" name="linkCaption">
           <property name="text">
@@ -245,9 +263,6 @@ border-color: #ccc;
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <property name="spacing">
          <number>24</number>
-        </property>
-        <property name="margin">
-         <number>0</number>
         </property>
         <item>
          <widget class="CaptionLabel" name="beatsCaption">
@@ -289,9 +304,6 @@ border-color: #ccc;
         <property name="spacing">
          <number>24</number>
         </property>
-        <property name="margin">
-         <number>0</number>
-        </property>
         <item>
          <widget class="CaptionLabel" name="googleCaption">
           <property name="text">
@@ -332,9 +344,6 @@ border-color: #ccc;
         <property name="spacing">
          <number>24</number>
         </property>
-        <property name="margin">
-         <number>0</number>
-        </property>
         <item>
          <widget class="CaptionLabel" name="androidCaption">
           <property name="text">
@@ -374,9 +383,6 @@ border-color: #ccc;
        <layout class="QVBoxLayout" name="verticalLayout_7">
         <property name="spacing">
          <number>24</number>
-        </property>
-        <property name="margin">
-         <number>0</number>
         </property>
         <item>
          <widget class="CaptionLabel" name="networkCaption">
