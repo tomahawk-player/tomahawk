@@ -218,6 +218,8 @@ ConnectionManager::newControlConnection( const Tomahawk::peerinfo_ptr& peerInfo 
 void
 ConnectionManager::connectToPeer( const Tomahawk::peerinfo_ptr& peerInfo, bool lock )
 {
+    Q_D( ConnectionManager );
+
     // Lock, so that we will not attempt to do two parallell connects.
     if ( lock )
     {
@@ -225,14 +227,14 @@ ConnectionManager::connectToPeer( const Tomahawk::peerinfo_ptr& peerInfo, bool l
     }
     // Check that we are not already connected to this peer
     ControlConnection* cconn = Servent::instance()->lookupControlConnection( peerInfo->nodeId() );
-    if ( cconn != NULL || !d_func()->controlConnection.isNull() )
+    if ( cconn != NULL || !d->controlConnection.isNull() )
     {
         // We are already connected to this peer, so just add some more details.
         peerInfoDebug( peerInfo ) << "Existing connection found, not connecting.";
         if ( cconn != NULL )
         {
             cconn->addPeerInfo( peerInfo );
-            d_func()->controlConnection = QPointer<ControlConnection>( cconn );
+            d->controlConnection = QPointer<ControlConnection>( cconn );
         }
         deactivate();
         return;
@@ -241,7 +243,7 @@ ConnectionManager::connectToPeer( const Tomahawk::peerinfo_ptr& peerInfo, bool l
     }
 
     // If we are not connected, try to connect
-    d_func()->currentPeerInfo = peerInfo;
+    d->currentPeerInfo = peerInfo;
     peerInfoDebug( peerInfo ) << "No existing connection found, trying to connect.";
     // Sort SipInfos
     QList< SipInfo > anyOther;
@@ -291,20 +293,20 @@ ConnectionManager::connectToPeer( const Tomahawk::peerinfo_ptr& peerInfo, bool l
     if ( Servent::instance()->ipv6ConnectivityLikely() && !publicIPv6.isEmpty() )
     {
         // Prefer IPv6 over IPv4
-        d_func()->sipCandidates.append( anyOther );
-        d_func()->sipCandidates.append( publicIPv6 );
-        d_func()->sipCandidates.append( publicIPv4 );
-        d_func()->sipCandidates.append( privateIPv6 );
-        d_func()->sipCandidates.append( privateIPv4 );
+        d->sipCandidates.append( anyOther );
+        d->sipCandidates.append( publicIPv6 );
+        d->sipCandidates.append( publicIPv4 );
+        d->sipCandidates.append( privateIPv6 );
+        d->sipCandidates.append( privateIPv4 );
     }
     else
     {
         // First try all IPv4 before trying IPv6
-        d_func()->sipCandidates.append( anyOther );
-        d_func()->sipCandidates.append( publicIPv4 );
-        d_func()->sipCandidates.append( privateIPv4 );
-        d_func()->sipCandidates.append( publicIPv6 );
-        d_func()->sipCandidates.append( privateIPv6 );
+        d->sipCandidates.append( anyOther );
+        d->sipCandidates.append( publicIPv4 );
+        d->sipCandidates.append( privateIPv4 );
+        d->sipCandidates.append( publicIPv6 );
+        d->sipCandidates.append( privateIPv6 );
     }
 
     newControlConnection( peerInfo );
@@ -315,31 +317,39 @@ ConnectionManager::connectToPeer( const Tomahawk::peerinfo_ptr& peerInfo, bool l
 void
 ConnectionManager::tryConnect()
 {
-    // ATTENTION: mutex should be already locked by the calling function.
-    Q_ASSERT( !d_func()->controlConnection.isNull() );
+    Q_D( ConnectionManager );
 
-    if ( d_func()->sipCandidates.isEmpty() )
+    // ATTENTION: mutex should be already locked by the calling function.
+    Q_ASSERT( !d->controlConnection.isNull() );
+
+    if ( d->sipCandidates.isEmpty() )
     {
         // No more possibilities to connect.
-        peerInfoDebug( d_func()->currentPeerInfo ) << Q_FUNC_INFO << "No more possible SIP endpoints for " << d_func()->controlConnection->name() << " skipping.";
+        peerInfoDebug( d->currentPeerInfo ) << Q_FUNC_INFO
+                                            << "No more possible SIP endpoints for "
+                                            << d->controlConnection->name()
+                                            << " skipping.";
 
         // Clean up.
-        d_func()->currentPeerInfo.clear();
-        delete d_func()->controlConnection.data();
+        d->currentPeerInfo.clear();
+        delete d->controlConnection.data();
         deactivate();
         return;
     }
 
     // Use first available SIP endpoint and remove it from the list
-    SipInfo info = d_func()->sipCandidates.takeFirst();
+    SipInfo info = d->sipCandidates.takeFirst();
     if ( !info.isVisible() )
     {
-        peerInfoDebug( d_func()->currentPeerInfo ) << Q_FUNC_INFO << "Try next SipInfo, we can't connect to this one";
+        peerInfoDebug( d->currentPeerInfo ) << Q_FUNC_INFO
+                                            << "Try next SipInfo, we can't connect to this one";
         tryConnect();
         return;
     }
 
-    peerInfoDebug( d_func()->currentPeerInfo ) << Q_FUNC_INFO << "Connecting to " << info.host() << ":" << info.port();
+    peerInfoDebug( d->currentPeerInfo ) << Q_FUNC_INFO
+                                        << "Connecting to " << info.host()
+                                        << ":" << info.port();
     Q_ASSERT( info.port() > 0 );
 
     // Check that we are not connecting to ourselves
@@ -347,31 +357,40 @@ ConnectionManager::tryConnect()
     {
         if ( info.host() == ha.toString() && info.port() == Servent::instance()->port() )
         {
-            peerInfoDebug( d_func()->currentPeerInfo ) << Q_FUNC_INFO << "Tomahawk won't try to connect to" << info.host() << ":" << info.port() << ": same ip:port as ourselves.";
+            peerInfoDebug( d->currentPeerInfo ) << Q_FUNC_INFO
+                                                << "Tomahawk won't try to connect to"
+                                                << info.host() << ":" << info.port()
+                                                << ": same ip:port as ourselves.";
             tryConnect();
             return;
         }
     }
-    if ( info.host() == Servent::instance()->additionalAddress() && info.port() == Servent::instance()->additionalPort() )
+    if ( info.host() == Servent::instance()->additionalAddress()
+         && info.port() == Servent::instance()->additionalPort() )
     {
-        peerInfoDebug( d_func()->currentPeerInfo ) << Q_FUNC_INFO << "Tomahawk won't try to connect to" << info.host() << ":" << info.port() << ": same ip:port as ourselves.";
+        peerInfoDebug( d->currentPeerInfo ) << Q_FUNC_INFO
+                                            << "Tomahawk won't try to connect to"
+                                            << info.host() << ":" << info.port()
+                                            << ": same ip:port as ourselves.";
         tryConnect();
         return;
     }
 
     // We should have already setup a first message in connectToPeer
-    Q_ASSERT( !d_func()->controlConnection->firstMessage().isNull() );
+    Q_ASSERT( d->controlConnection->firstMessage() );
 
     QTcpSocketExtra* sock = new QTcpSocketExtra();
     sock->setConnectTimeout( CONNECT_TIMEOUT );
     sock->_disowned = false;
-    sock->_conn = d_func()->controlConnection.data();
+    sock->_conn = d->controlConnection.data();
     sock->_outbound = true;
 
     connect( sock, SIGNAL( connected() ), this, SLOT( socketConnected() ) );
     connect( sock, SIGNAL( error( QAbstractSocket::SocketError ) ), this, SLOT( socketError( QAbstractSocket::SocketError ) ) );
 
-    peerInfoDebug( d_func()->currentPeerInfo ) << Q_FUNC_INFO << "Connecting socket to " << info.host() << ":" << info.port();
+    peerInfoDebug( d->currentPeerInfo ) << Q_FUNC_INFO
+                                        << "Connecting socket to "
+                                        << info.host() << ":" << info.port();
     sock->connectToHost( info.host(), info.port(), QTcpSocket::ReadWrite );
     sock->moveToThread( Servent::instance()->thread() );
 }
@@ -380,11 +399,16 @@ ConnectionManager::tryConnect()
 void
 ConnectionManager::socketError( QAbstractSocket::SocketError error )
 {
+    Q_D( ConnectionManager );
+
     Q_UNUSED( error );
-    Q_ASSERT( !d_func()->controlConnection.isNull() );
+    Q_ASSERT( d->controlConnection );
 
     QTcpSocketExtra* sock = (QTcpSocketExtra*)sender();
-    peerInfoDebug( d_func()->currentPeerInfo ) << Q_FUNC_INFO << "Connecting to " << sock->peerAddress().toString() << " failed: " << sock->errorString();
+    peerInfoDebug( d->currentPeerInfo ) << Q_FUNC_INFO
+                                        << "Connecting to "
+                                        << sock->peerAddress().toString()
+                                        << " failed: " << sock->errorString();
     sock->deleteLater();
 
     // Try to connect with the next available SipInfo.
@@ -402,16 +426,20 @@ ConnectionManager::handleSipInfoPrivateS( const Tomahawk::peerinfo_ptr& peerInfo
 void
 ConnectionManager::activate()
 {
-    d_func()->mutex.lock();
-    setActive( true, d_func()->nodeid, weakRef().toStrongRef() );
+    Q_D( ConnectionManager );
+
+    d->mutex.lock();
+    setActive( true, d->nodeid, weakRef().toStrongRef() );
 }
 
 
 void
 ConnectionManager::deactivate()
 {
+    Q_D( ConnectionManager );
+
     QSharedPointer<ConnectionManager> strongRef = weakRef().toStrongRef();
-    setActive( false, d_func()->nodeid, strongRef );
+    setActive( false, d->nodeid, strongRef );
     strongRef->d_func()->mutex.unlock();
 }
 
@@ -422,7 +450,10 @@ ConnectionManager::socketConnected()
     Q_D( ConnectionManager );
     QTcpSocketExtra* sock = (QTcpSocketExtra*)sender();
 
-    peerInfoDebug( d->currentPeerInfo ) << Q_FUNC_INFO << "Connected to hostaddr: " << sock->peerAddress() << ", hostname:" << sock->peerName();
+    peerInfoDebug( d->currentPeerInfo ) << Q_FUNC_INFO
+                                        << "Connected to hostaddr: "
+                                        << sock->peerAddress()
+                                        << ", hostname:" << sock->peerName();
 
     Q_ASSERT( !sock->_conn.isNull() );
 
@@ -438,19 +469,21 @@ ConnectionManager::socketConnected()
 void
 ConnectionManager::handoverSocket( QTcpSocketExtra* sock )
 {
-    Q_ASSERT( !d_func()->controlConnection.isNull() );
+    Q_D( ConnectionManager );
+
+    Q_ASSERT( d->controlConnection );
     Q_ASSERT( sock );
-    Q_ASSERT( d_func()->controlConnection->socket().isNull() );
+    Q_ASSERT( d->controlConnection->socket().isNull() );
     Q_ASSERT( sock->isValid() );
 
     disconnect( sock, SIGNAL( disconnected() ), sock, SLOT( deleteLater() ) );
     disconnect( sock, SIGNAL( error( QAbstractSocket::SocketError ) ), this, SLOT( socketError( QAbstractSocket::SocketError ) ) );
 
     sock->_disowned = true;
-    d_func()->controlConnection->setOutbound( sock->_outbound );
-    d_func()->controlConnection->setPeerPort( sock->peerPort() );
+    d->controlConnection->setOutbound( sock->_outbound );
+    d->controlConnection->setPeerPort( sock->peerPort() );
 
-    QMetaObject::invokeMethod( d_func()->controlConnection, "start", Qt::QueuedConnection, Q_ARG( QTcpSocket*, sock ) );
+    QMetaObject::invokeMethod( d->controlConnection, "start", Qt::QueuedConnection, Q_ARG( QTcpSocket*, sock ) );
     // ControlConntection is now connected, now it can be destroyed if the PeerInfos disappear
-    d_func()->controlConnection->setShutdownOnEmptyPeerInfos( true );
+    d->controlConnection->setShutdownOnEmptyPeerInfos( true );
 }
