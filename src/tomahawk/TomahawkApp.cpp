@@ -287,6 +287,9 @@ TomahawkApp::~TomahawkApp()
 {
     tDebug( LOGVERBOSE ) << "Shutting down Tomahawk...";
 
+    // Notify Logger that we are shutting down so we skip the locale
+    tLogNotifyShutdown();
+
     if ( Pipeline::instance() )
         Pipeline::instance()->stop();
 

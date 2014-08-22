@@ -41,6 +41,7 @@ using namespace std;
 ofstream logfile;
 static int s_threshold = -1;
 QMutex s_mutex;
+bool shutdownInProgress = false;
 
 namespace Logger
 {
@@ -77,11 +78,26 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
             logfile << "TSQLQUERY: ";
         #endif
 
-        logfile << QDate::currentDate().toString().toUtf8().data()
-                << " - "
-                << QTime::currentTime().toString().toUtf8().data()
-                << " [" << QString::number( debugLevel ).toUtf8().data() << "]: "
-                << msg << endl;
+        if ( shutdownInProgress )
+        {
+            // Do not use locales anymore in shutdown
+            logfile << QDate::currentDate().day() << "."
+                    << QDate::currentDate().month() << "."
+                    << QDate::currentDate().year() << " - "
+                    << QTime::currentTime().hour() << ":"
+                    << QTime::currentTime().minute() << ":"
+                    << QTime::currentTime().second()
+                    << " [" << QString::number( debugLevel ).toUtf8().data() << "]: "
+                    << msg << endl;
+        }
+        else
+        {
+            logfile << QDate::currentDate().toString().toUtf8().data()
+                    << " - "
+                    << QTime::currentTime().toString().toUtf8().data()
+                    << " [" << QString::number( debugLevel ).toUtf8().data() << "]: "
+                    << msg << endl;
+        }
 
         logfile.flush();
     }
@@ -90,9 +106,20 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
     {
         QMutexLocker lock( &s_mutex );
 
-        cout << QTime::currentTime().toString().toUtf8().data()
-             << " [" << QString::number( debugLevel ).toUtf8().data() << "]: "
-             << msg << endl;
+        if ( shutdownInProgress )
+        {
+            cout << QTime::currentTime().hour() << ":"
+                 << QTime::currentTime().minute() << ":"
+                 << QTime::currentTime().second()
+                 << " [" << QString::number( debugLevel ).toUtf8().data() << "]: "
+                 << msg << endl;
+        }
+        else
+        {
+            cout << QTime::currentTime().toString().toUtf8().data()
+                 << " [" << QString::number( debugLevel ).toUtf8().data() << "]: "
+                 << msg << endl;
+        }
 
         cout.flush();
     }
@@ -191,3 +218,10 @@ TLog::~TLog()
     log( m_msg.toUtf8().data(), m_debugLevel );
 }
 
+
+void
+tLogNotifyShutdown()
+{
+    QMutexLocker locker( &s_mutex );
+    shutdownInProgress = true;
+}

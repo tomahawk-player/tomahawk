@@ -34,11 +34,22 @@ Q_OBJECT
 class TestDatabase : public QObject
 {
     Q_OBJECT
+private:
+    Tomahawk::Database* db;
 
 private slots:
+    void initTestCase()
+    {
+        db = new Tomahawk::Database("test");
+    }
+
+    void cleanupTestCase()
+    {
+        delete db;
+    }
+
     void testFactories()
     {
-        Tomahawk::Database* db = new Tomahawk::Database("test");
         Tomahawk::dbcmd_ptr command;
 
         // can we check that his ASSERTs?, it's a build in type, one must not register it again
@@ -61,8 +72,6 @@ private slots:
         command = db->commandFactory<TestDatabaseCommand>()->newInstance();
         TestDatabaseCommand* tCmd = qobject_cast< TestDatabaseCommand* >( command.data() );
         QVERIFY( tCmd );
-
-        delete db;
     }
 };
 

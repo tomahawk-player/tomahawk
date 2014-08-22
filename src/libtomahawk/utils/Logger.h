@@ -67,5 +67,6 @@ namespace Logger
 #define tLog Logger::TLog
 #define tDebug Logger::TDebug
 #define tSqlLog Logger::TSqlLog
+DLLEXPORT void tLogNotifyShutdown();
 
 #endif // TOMAHAWK_LOGGER_H
