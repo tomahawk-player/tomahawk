@@ -72,7 +72,7 @@
         <item>
          <widget class="QLabel" name="label_2">
           <property name="text">
-           <string>An overview of the changes and additions since 0.7</string>
+           <string>If you are reading this it likely means you have already noticed the biggest change since our last release - a shiny new interface and design. New views, fonts, icons, header images and animations at every turn. Below you can find an overview of the functional changes and additions since 0.7 too:</string>
           </property>
           <property name="indent">
            <number>8</number>
