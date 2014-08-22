@@ -32,6 +32,7 @@ public:
     NetworkReply* reply;
     IODeviceCallback callback;
     QWeakPointer<HttpIODeviceReadyHandler> ref;
+    bool once = false;
 
     HttpIODeviceReadyHandler( NetworkReply* _reply, IODeviceCallback _callback )
         : reply( _reply )
@@ -44,7 +45,13 @@ public slots:
 
     void called()
     {
-        QSharedPointer< QIODevice > sp = QSharedPointer< QIODevice >( reply->reply(), &QObject::deleteLater );
+        // Sometimes Qt calls this function twice. Weird.
+        if (once) {
+            deleteLater();
+        }
+        once = true;
+
+        QSharedPointer< QIODevice > sp( reply->reply(), &QObject::deleteLater );
         callback( reply->reply()->url().toString(), sp );
 
         // Call once, then self-destruct
