@@ -333,9 +333,7 @@ PlaylistModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int
     emit itemCountChanged( rowCount( QModelIndex() ) );
     emit selectRequest( index( 0, 0, parent ) );
     if ( parent.isValid() )
-    {
         emit expandRequest( parent );
-    }
 }
 
 
