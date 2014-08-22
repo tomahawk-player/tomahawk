@@ -171,7 +171,7 @@ PlayableItem::init( PlayableItem* parent, int row )
 void
 PlayableItem::onResultsChanged()
 {
-    if ( !m_query->results().isEmpty() )
+    if ( m_query && !m_query->results().isEmpty() )
         m_result = m_query->results().first();
     else
         m_result = result_ptr();
