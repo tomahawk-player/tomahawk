@@ -78,17 +78,7 @@ PlayableItem::PlayableItem( const Tomahawk::result_ptr& result, PlayableItem* pa
 {
     init( parent, row );
 
-    connect( result->track().data(), SIGNAL( socialActionsLoaded() ),
-                                     SIGNAL( dataChanged() ) );
-
-    connect( result->track().data(), SIGNAL( attributesLoaded() ),
-                                     SIGNAL( dataChanged() ) );
-
-    connect( result->track().data(), SIGNAL( updated() ),
-                                     SIGNAL( dataChanged() ) );
-
-    connect( result.data(), SIGNAL( updated() ),
-                            SIGNAL( dataChanged() ) );
+    connect( result.data(), SIGNAL( updated() ), SIGNAL( dataChanged() ) );
 }
 
 
@@ -97,39 +87,15 @@ PlayableItem::PlayableItem( const Tomahawk::query_ptr& query, PlayableItem* pare
     , m_query( query )
 {
     init( parent, row );
-
-    connect( query->track().data(), SIGNAL( socialActionsLoaded() ),
-                                    SIGNAL( dataChanged() ) );
-
-    connect( query->track().data(), SIGNAL( attributesLoaded() ),
-                                    SIGNAL( dataChanged() ) );
-
-    connect( query->track().data(), SIGNAL( updated() ),
-                                    SIGNAL( dataChanged() ) );
-
-    connect( query.data(), SIGNAL( resultsChanged() ),
-                             SLOT( onResultsChanged() ) );
 }
 
 
 PlayableItem::PlayableItem( const Tomahawk::plentry_ptr& entry, PlayableItem* parent, int row )
     : QObject( parent )
     , m_entry( entry )
+    , m_query( entry->query() )
 {
-    m_query = entry->query();
     init( parent, row );
-
-    connect( m_query->track().data(), SIGNAL( socialActionsLoaded() ),
-                                      SIGNAL( dataChanged() ) );
-
-    connect( m_query->track().data(), SIGNAL( attributesLoaded() ),
-                                      SIGNAL( dataChanged() ) );
-
-    connect( m_query->track().data(), SIGNAL( updated() ),
-                                      SIGNAL( dataChanged() ) );
-
-    connect( m_query.data(), SIGNAL( resultsChanged() ),
-                               SLOT( onResultsChanged() ) );
 }
 
 
@@ -148,6 +114,24 @@ PlayableItem::init( PlayableItem* parent, int row )
     m_isPlaying = false;
     m_parent = parent;
 
+    track_ptr track;
+    if ( m_query )
+    {
+        connect( m_query.data(), SIGNAL( resultsChanged() ), SLOT( onResultsChanged() ) );
+        track = m_query->track();
+    }
+    else if ( m_result )
+    {
+        track = m_result->track();
+    }
+
+    if ( track )
+    {
+        connect( track.data(), SIGNAL( socialActionsLoaded() ), SIGNAL( dataChanged() ) );
+        connect( track.data(), SIGNAL( attributesLoaded() ), SIGNAL( dataChanged() ) );
+        connect( track.data(), SIGNAL( updated() ), SIGNAL( dataChanged() ) );
+    }
+
     if ( parent )
     {
         if ( row < 0 )
@@ -161,7 +145,7 @@ PlayableItem::init( PlayableItem* parent, int row )
         }
     }
 
-    if ( !m_query.isNull() )
+    if ( m_query )
     {
         onResultsChanged();
     }
@@ -183,19 +167,19 @@ PlayableItem::onResultsChanged()
 QString
 PlayableItem::name() const
 {
-    if ( !m_artist.isNull() )
+    if ( m_artist )
     {
         return m_artist->name();
     }
-    else if ( !m_album.isNull() )
+    else if ( m_album )
     {
         return m_album->name();
     }
-    else if ( !m_result.isNull() )
+    else if ( m_result )
     {
         return m_result->track()->track();
     }
-    else if ( !m_query.isNull() )
+    else if ( m_query )
     {
         return m_query->track()->track();
     }
@@ -208,11 +192,11 @@ PlayableItem::name() const
 QString
 PlayableItem::artistName() const
 {
-    if ( !m_result.isNull() )
+    if ( m_result )
     {
         return m_result->track()->artist();
     }
-    else if ( !m_query.isNull() )
+    else if ( m_query )
     {
         return m_query->track()->artist();
     }
@@ -224,11 +208,11 @@ PlayableItem::artistName() const
 QString
 PlayableItem::albumName() const
 {
-    if ( !m_result.isNull() )
+    if ( m_result )
     {
         return m_result->track()->album();
     }
-    else if ( !m_query.isNull() )
+    else if ( m_query )
     {
         return m_query->track()->album();
     }
@@ -240,7 +224,7 @@ PlayableItem::albumName() const
 const Tomahawk::result_ptr&
 PlayableItem::result() const
 {
-    if ( m_result.isNull() && !m_query.isNull() )
+    if ( !m_result && m_query )
     {
         if ( m_query->numResults() )
             return m_query->results().first();

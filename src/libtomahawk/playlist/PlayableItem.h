@@ -81,9 +81,9 @@ private:
 
     Tomahawk::artist_ptr m_artist;
     Tomahawk::album_ptr m_album;
+    Tomahawk::plentry_ptr m_entry;
     Tomahawk::result_ptr m_result;
     Tomahawk::query_ptr m_query;
-    Tomahawk::plentry_ptr m_entry;
     Tomahawk::source_ptr m_source;
 
     PlayableItem* m_parent;
