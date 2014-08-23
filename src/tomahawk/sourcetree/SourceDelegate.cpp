@@ -242,14 +242,11 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
 
         SourceItem* colItem = qobject_cast< SourceItem* >( item );
         Q_ASSERT( colItem );
-        bool status = !( !colItem || colItem->source().isNull() || !colItem->source()->isOnline() );
+        bool status = !( !colItem->source() || !colItem->source()->isOnline() );
 
-        if ( !colItem->source()->isLocal() )
+        if ( colItem->source() && !colItem->source()->isLocal() )
         {
-            if ( !colItem->source().isNull() && colItem->source()->isLocal() )
-                shouldDrawDropHint = false; //can't send tracks to our own inbox
-
-            if ( status && colItem && !colItem->source().isNull() )
+            if ( status )
             {
                 tracks = QString::number( colItem->source()->trackCount() );
                 figWidth = painter->fontMetrics().width( tracks );
@@ -414,10 +411,8 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
         else
         {
             QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 16, 0, -14, -option.rect.height() + option.fontMetrics.height() * 1.1 );
-
             int hd = ( option.rect.height() - figRect.height() ) / 2;
             figRect.adjust( 0, hd, 0, hd );
-
             painter->drawText( figRect, tracks, QTextOption( Qt::AlignVCenter | Qt::AlignRight ) );
         }
     }
