@@ -113,7 +113,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
     {
         QFont f = ui->topHitsMoreLabel->font();
         f.setWeight( QFont::Light );
-        f.setPointSize( 11 );
+        f.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
         ui->topHitsMoreLabel->setFont( f );
         ui->artistsMoreLabel->setFont( f );
         ui->albumsMoreLabel->setFont( f );
@@ -126,7 +126,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
     {
         QFont f = uiHeader->artistLabel->font();
         f.setBold( true );
-        f.setPointSize( 16 );
+        f.setPointSize( TomahawkUtils::defaultFontSize() + 6 );
 
         QPalette p = uiHeader->artistLabel->palette();
         p.setColor( QPalette::Foreground, Qt::white );

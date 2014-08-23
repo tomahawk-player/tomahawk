@@ -416,7 +416,7 @@ SourceDelegate::paintCategory( QPainter* painter, const QStyleOptionViewItem& op
     painter->save();
 
     QFont font = painter->font();
-    font.setPointSize( 9 );
+    font.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
     painter->setFont( font );
 
     QTextOption to( Qt::AlignVCenter );
@@ -450,7 +450,7 @@ SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& optio
     painter->save();
 
     QFont font = painter->font();
-    font.setPointSize( 9 );
+    font.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
     painter->setFont( font );
 
     QTextOption to( Qt::AlignBottom );

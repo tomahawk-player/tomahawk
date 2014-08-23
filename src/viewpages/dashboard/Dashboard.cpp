@@ -89,7 +89,7 @@ DashboardWidget::DashboardWidget( QWidget* parent )
     {
         QFont f = uiHeader->artistLabel->font();
         f.setBold( true );
-        f.setPointSize( 16 );
+        f.setPointSize( TomahawkUtils::defaultFontSize() + 6 );
 
         QPalette p = uiHeader->artistLabel->palette();
         p.setColor( QPalette::Foreground, Qt::white );

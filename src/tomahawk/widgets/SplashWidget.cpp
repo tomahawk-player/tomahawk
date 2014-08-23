@@ -53,7 +53,7 @@ SplashWidget::SplashWidget()
 
     QFont font = this->font();
 
-    font.setPointSize( 9 );
+    font.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
     font.setBold( true );
     font.setFamily( "Titillium Web" );
     setFont( font );

@@ -57,19 +57,19 @@ TrackDetailView::TrackDetailView( QWidget* parent )
 
     QFont f = font();
     m_nameLabel = new QueryLabel( this );
-    f.setPointSize( 13 );
+    f.setPointSize( TomahawkUtils::defaultFontSize() + 3 );
     m_nameLabel->setFont( f );
 
     m_dateLabel = new QLabel( this );
-    f.setPointSize( 11 );
+    f.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
     m_dateLabel->setFont( f );
     m_dateLabel->setStyleSheet( "QLabel { color: rgba( 0, 0, 0, 70% ) }" );
 
     m_lovedIcon = new QLabel( this );
-    m_lovedIcon->setFixedWidth( 12 );
+    m_lovedIcon->setFixedWidth( TomahawkUtils::defaultFontSize() + 2 );
     m_lovedLabel = new QLabel( this );
     f.setWeight( QFont::DemiBold );
-    f.setPointSize( 11 );
+    f.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
     m_lovedLabel->setFont( f );
     m_lovedLabel->setStyleSheet( "QLabel { color: rgba( 0, 0, 0, 50% ) }" );
     m_lovedIcon->setPixmap( ImageRegistry::instance()->pixmap( RESPATH "images/love.svg", QSize( m_lovedIcon->width(), m_lovedIcon->width() ) ) );

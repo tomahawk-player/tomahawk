@@ -142,16 +142,16 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
     {
         QFont font = ui->label->font();
         font.setWeight( QFont::Light );
-        font.setPointSize( 48 );
+        font.setPointSize( TomahawkUtils::defaultFontSize() + 38 );
         ui->label->setFont( font );
         ui->label->setStyleSheet( "QLabel { color: rgba( 0, 0, 0, 60% ) }" );
 
         font.setWeight( QFont::Normal );
-        font.setPointSize( 11 );
+        font.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
         ui->label_2->setFont( font );
         ui->label_2->setStyleSheet( "QLabel { color: rgba( 0, 0, 0, 30% ) }" );
 
-        font.setPointSize( 12 );
+        font.setPointSize( TomahawkUtils::defaultFontSize() + 2 );
         ui->label_3->setFont( font );
         ui->label_3->setStyleSheet( "QLabel { color: rgba( 0, 0, 0, 65% ) }" );
         ui->label_5->setFont( font );
