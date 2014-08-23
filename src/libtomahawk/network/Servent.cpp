@@ -117,24 +117,24 @@ Servent::startListening( QHostAddress ha, bool upnp, int port, Tomahawk::Network
 {
     Q_D( Servent );
 
-    d_func()->externalAddresses = QList<QHostAddress>();
-    d_func()->port = port;
+    d->externalAddresses = QList<QHostAddress>();
+    d->port = port;
 
     // Listen on both the selected port and, if not the same, the default port -- the latter sometimes necessary for zeroconf
     // TODO: only listen on both when zeroconf sip is enabled
     // TODO: use a real zeroconf system instead of a simple UDP broadcast?
-    if ( !listen( ha, d_func()->port ) )
+    if ( !listen( ha, d->port ) )
     {
-        if ( d_func()->port != defaultPort )
+        if ( d->port != defaultPort )
         {
             if ( !listen( ha, defaultPort ) )
             {
-                tLog() << Q_FUNC_INFO << "Failed to listen on both port" << d_func()->port << "and port" << defaultPort;
+                tLog() << Q_FUNC_INFO << "Failed to listen on both port" << d->port << "and port" << defaultPort;
                 tLog() << Q_FUNC_INFO << "Error string is:" << errorString();
                 return false;
             }
             else
-                d_func()->port = defaultPort;
+                d->port = defaultPort;
         }
     }
 
@@ -162,11 +162,11 @@ Servent::startListening( QHostAddress ha, bool upnp, int port, Tomahawk::Network
     else if ( ( ha.toString() != "127.0.0.1" ) && ( ha.toString() != "::1" ) && ( ha.toString() != "::7F00:1" ) )
     {
         // We listen only to one specific Address, only announce this.
-        d_func()->externalAddresses.append( ha );
+        d->externalAddresses.append( ha );
     }
     // If we only accept connections via localhost, we'll announce nothing.
 
-    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Servent listening on port" << d_func()->port << "- servent thread:" << thread()
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Servent listening on port" << d->port << "- servent thread:" << thread()
                        << "- address mode:" << (int)( mode );
 
     switch ( mode )
@@ -190,7 +190,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port, Tomahawk::Network
 
         case Tomahawk::Network::ExternalAddress::Lan:
             // Nothing has to be done here.
-            d_func()->ready = true;
+            d->ready = true;
             emit ready();
             break;
 
@@ -199,15 +199,15 @@ Servent::startListening( QHostAddress ha, bool upnp, int port, Tomahawk::Network
             {
                 // upnp could be turned off on the cli with --noupnp
                 tLog( LOGVERBOSE ) << Q_FUNC_INFO << "External address mode set to upnp...";
-                d_func()->portfwd = QPointer< PortFwdThread >( new PortFwdThread( d_func()->port ) );
-                Q_ASSERT( d_func()->portfwd );
-                connect( d_func()->portfwd.data(), SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ),
+                d->portfwd = QPointer< PortFwdThread >( new PortFwdThread( d->port ) );
+                Q_ASSERT( d->portfwd );
+                connect( d->portfwd.data(), SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ),
                                       SLOT( setExternalAddress( QHostAddress, unsigned int ) ) );
-                d_func()->portfwd.data()->start();
+                d->portfwd.data()->start();
             }
             else
             {
-                d_func()->ready = true;
+                d->ready = true;
                 emit ready();
             }
             break;
