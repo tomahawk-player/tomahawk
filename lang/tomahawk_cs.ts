@@ -3942,26 +3942,26 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="516"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="519"/>
         <source>My Collection</source>
         <translation>Moje sbírka</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="689"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="692"/>
         <source>Updating database
 </source>
         <translation>Obnovit databázi
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="696"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="699"/>
         <source>Updating database
 %1</source>
         <translation>Obnovit databázi
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="746"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="749"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Automatické zjištění vnější adresy IP se nezdařilo.</translation>
     </message>
@@ -4515,82 +4515,82 @@ Zkuste vyladit filtry pro nové písně.</translation>
         <translation>Formulář</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="68"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="86"/>
         <source>WHAT&apos;S NEW</source>
         <translation>CO JE NOVÉHO</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="75"/>
-        <source>An overview of the changes and additions since 0.7</source>
-        <translation>Přehled změn a přírůstků od verze 0.7.</translation>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="96"/>
+        <source>If you are reading this it likely means you have already noticed the biggest change since our last release - a shiny new interface and design. New views, fonts, icons, header images and animations at every turn. Below you can find an overview of the functional changes and additions since 0.7 too:</source>
+        <translation>Pokud toto čtete, znamená to, že jste si již všiml největší změny od našeho posledního vydání - zářícího nového rozhraní a vzhledu. Nové pohledy, písma, ikony, obrázky v záhlaví a animace na každém kroku. Níže naleznete přehled funkčních změn a přírůstků od verze 0.7:</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="101"/>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="108"/>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="115"/>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="122"/>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="129"/>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="136"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="125"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="132"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="139"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="146"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="153"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="160"/>
         <source>PushButton</source>
         <translation>Tlačítko</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="153"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="174"/>
         <source>Inbox</source>
         <translation>Doručené</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="192"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="213"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Send tracks to your friends just by dragging it onto their avatar in the Tomahawk sidebar. Check out what your friends think you should listen to in your inbox.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Posílejte skladby svým přátelům jednoduše jejich přetažením na jejich zosobňující obrázky v postranním panelu Tomahawku. Podívejte se na to, co si vaši přátelé myslí o tom, že byste měl poslouchat, ve schránce s doručenou poštou.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="212"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="230"/>
         <source>Universal Link Support</source>
         <translation>Podpora pro universální odkazy</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="235"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="253"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Love that your friends and influencers are posting music links  but hate that they are links for music services you don&apos;t use? Just drag Rdio, Deezer, Beats or other music service URLs into your Tomahawk queue or playlists and have them automatically play from your preferred source.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Máte rádi, když vaši přátelé a vlivné osobnosti vyvěšují odkazy na hudbu po celém internetu a vašich společenských sítích, ale vůbec se vám nelíbí, že jde i o odkazy na hudební služby, jež nevyužíváte? Jednoduše přetáhněte adresy (URL) hudebních služeb Rdio, Deezer, Beats nebo jiných do řady nebo seznamu skladeb ve vašem Tomahawku a nechte je automaticky přehrávat z vámi upředňostňovaného zdroje.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="255"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="270"/>
         <source>Beats Music</source>
         <translation>Beats Music</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="278"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="293"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beats Music (recently aquired by Apple) is now supported. This means that Beats Music subscribers can also benefit by resolving other music service links so they stream from their Beats Music account. Welcome aboard!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beats Music (nedávno získaný Apple) je nyní podporován.  To znamená, že odběratelé Beats Music mouhou mít užitek také z odkazů na jiné hudební služby, takže vysílají ze svého účtu u Beats Music. Vítejte na palubě!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="298"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="310"/>
         <source>Google Music</source>
         <translation>Google Music</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="321"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Google Music is another of our latest supported services - both for the music you&apos;ve uploaded to Google Music as well as their full streaming catalog for Google Play Music All Access subscribers. Not only is all of your Google Play Music a potential source for streaming - you entire online collection is browseable too.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Google Music je další z našich nejnověji podporovaných služeb - jak pro hudbu, kterou jste nahrál do Google Music, tak pro úplný přehled jejich vysílání pro odběratele Google Play Music All Access. Nejen že je veškerý váš obsah u Google Play Music možným zdrojem pro vysílání - je možné procházet celou vaši  sbírku na internetu.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="333"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Google Music is another of our latest supported services - both for the music you&apos;ve uploaded to Google Music as well as their full streaming catalog for Google Play Music All Access subscribers. Not only is all of your Google Play Music a potential source for streaming - your entire online collection is browseable too.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Google Music je další z našich nejnověji podporovaných služeb - jak pro hudbu, kterou jste nahrál do Google Music, tak pro úplný přehled jejich vysílání pro odběratele Google Play Music All Access. Nejen že je veškerý váš obsah u Google Play Music možným zdrojem pro vysílání - je možné procházet celou vaši sbírku na internetu.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="364"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="373"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk for Android is now in beta! The majority of the same resolvers are supported in the Android app - plus a couple of additional ones in Rdio &amp;amp; Deezer. Create a Hatchet account to sync all of your playlists from your desktop to your mobile. Find current and future music influencers and follow them to discover and hear what they love. Just like on the desktop, Tomahawk on Android can open other music service links and play them from yours. Even when you are listening to other music apps, Tomahawk can capture all of that playback data and add it to your Hatchet profile.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk pro Android je nyní ve verzi beta!  Většina těchže řešitelů je podporována v aplikacích pro Android - plus několik dalších v Rdio &amp; Deezer.  Vytvořte si účet u Hatchet (válečná sekera) pro seřízení všech vašich seznamů skladeb nacházejících se ve vašem stolním počítači s přenosným telefonem.  Nalezněte nynější a budoucí vlivné osoby a sledujte je, abyste zjistili, co se jim líbí. Právě tak jako ve stolním počítači může Tomahawk na Androidu otevřít odkazy na jiné hudební služby a přehrávat je. Dokonce i když posloucháte jiné hudební aplikace, Tomahawk umí zachytit všechna ta přehrávaná data a přidat je do vašeho profilu u Hatchet.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="384"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="390"/>
         <source>Connectivity</source>
         <translation>Propojitelnost</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="407"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="413"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk now supports IPv6 and multiple local IP addresses. This improves the discoverability and connection between Tomahawk users - particularly large local networks often found in work and university settings. The more friends, the more music, the more playlists and the more curation from those people whose musical tastes you value. Sit back and just Listen Along!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk nyní podporuje IPv6 a více místních adres IP.  To zlepšuje objevitelnost a spojení mezi uživateli Tomahawku - obzvláště velké místní sítě se často nacházejí v práci a na univerzitách. Čím více přátel, tím více hudby, více seznamů skladeb od lidí, jejichž citu pro hudbu si ceníte. Pohodlně se usaďte a zaposlouchejte se.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="341"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="350"/>
         <source>Android</source>
         <translation>Android</translation>
     </message>

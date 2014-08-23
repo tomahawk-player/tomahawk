@@ -3945,26 +3945,26 @@ Try tweaking the filters for a new set of songs to play.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="516"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="519"/>
         <source>My Collection</source>
         <translation>My Collection</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="689"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="692"/>
         <source>Updating database
 </source>
         <translation>Updating database
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="696"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="699"/>
         <source>Updating database
 %1</source>
         <translation>Updating database
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="746"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="749"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Automatically detecting external IP failed.</translation>
     </message>
@@ -4518,82 +4518,82 @@ Try tweaking the filters for a new set of songs to play.</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="68"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="86"/>
         <source>WHAT&apos;S NEW</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="75"/>
-        <source>An overview of the changes and additions since 0.7</source>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="96"/>
+        <source>If you are reading this it likely means you have already noticed the biggest change since our last release - a shiny new interface and design. New views, fonts, icons, header images and animations at every turn. Below you can find an overview of the functional changes and additions since 0.7 too:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="101"/>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="108"/>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="115"/>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="122"/>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="129"/>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="136"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="125"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="132"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="139"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="146"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="153"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="160"/>
         <source>PushButton</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="153"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="174"/>
         <source>Inbox</source>
         <translation>Inbox</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="192"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="213"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Send tracks to your friends just by dragging it onto their avatar in the Tomahawk sidebar. Check out what your friends think you should listen to in your inbox.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="212"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="230"/>
         <source>Universal Link Support</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="235"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="253"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Love that your friends and influencers are posting music links  but hate that they are links for music services you don&apos;t use? Just drag Rdio, Deezer, Beats or other music service URLs into your Tomahawk queue or playlists and have them automatically play from your preferred source.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="255"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="270"/>
         <source>Beats Music</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="278"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="293"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beats Music (recently aquired by Apple) is now supported. This means that Beats Music subscribers can also benefit by resolving other music service links so they stream from their Beats Music account. Welcome aboard!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="298"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="310"/>
         <source>Google Music</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="321"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Google Music is another of our latest supported services - both for the music you&apos;ve uploaded to Google Music as well as their full streaming catalog for Google Play Music All Access subscribers. Not only is all of your Google Play Music a potential source for streaming - you entire online collection is browseable too.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="333"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Google Music is another of our latest supported services - both for the music you&apos;ve uploaded to Google Music as well as their full streaming catalog for Google Play Music All Access subscribers. Not only is all of your Google Play Music a potential source for streaming - your entire online collection is browseable too.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="364"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="373"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk for Android is now in beta! The majority of the same resolvers are supported in the Android app - plus a couple of additional ones in Rdio &amp;amp; Deezer. Create a Hatchet account to sync all of your playlists from your desktop to your mobile. Find current and future music influencers and follow them to discover and hear what they love. Just like on the desktop, Tomahawk on Android can open other music service links and play them from yours. Even when you are listening to other music apps, Tomahawk can capture all of that playback data and add it to your Hatchet profile.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="384"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="390"/>
         <source>Connectivity</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="407"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="413"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk now supports IPv6 and multiple local IP addresses. This improves the discoverability and connection between Tomahawk users - particularly large local networks often found in work and university settings. The more friends, the more music, the more playlists and the more curation from those people whose musical tastes you value. Sit back and just Listen Along!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="341"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="350"/>
         <source>Android</source>
         <translation>Android</translation>
     </message>
