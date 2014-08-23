@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2013, Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -54,22 +55,32 @@ InboxModel::~InboxModel()
 
 
 int
-InboxModel::unlistenedCount() const
+InboxModel::unlistenedCount( const QModelIndex& parent ) const
 {
     int count = 0;
-    foreach ( const Tomahawk::plentry_ptr& plentry, playlistEntries() )
+    for ( int i = 0; i < rowCount( parent ); i++ )
     {
-        bool isUnlistened = true;
-        foreach ( Tomahawk::SocialAction sa, plentry->query()->queryTrack()->allSocialActions() )
+        const QModelIndex idx = index( i, 0, parent );
+
+        PlayableItem* item = itemFromIndex( idx );
+        if ( item && item->source() )
         {
-            if ( sa.action == "Inbox" && sa.value.toBool() == false )
-            {
-                isUnlistened = false;
-                break;
-            }
+            count += unlistenedCount( idx );
         }
-        if ( isUnlistened )
-            count++;
+        else if ( item && item->query() )
+        {
+            bool isUnlistened = true;
+            foreach ( Tomahawk::SocialAction sa, item->query()->queryTrack()->allSocialActions() )
+            {
+                if ( sa.action == "Inbox" && sa.value.toBool() == false )
+                {
+                    isUnlistened = false;
+                    break;
+                }
+            }
+            if ( isUnlistened )
+                count++;
+        }
     }
     return count;
 }
@@ -148,7 +159,7 @@ void
 InboxModel::removeIndex( const QModelIndex& index, bool moreToCome )
 {
     PlayableItem* item = itemFromIndex( index );
-    if ( item && !item->query().isNull() )
+    if ( item && item->query() )
     {
         Tomahawk::DatabaseCommand_DeleteInboxEntry* cmd = new Tomahawk::DatabaseCommand_DeleteInboxEntry( item->query() );
         Tomahawk::Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );

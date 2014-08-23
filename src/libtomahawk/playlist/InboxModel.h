@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2013, Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -32,7 +33,7 @@ public:
     explicit InboxModel( QObject* parent = 0 );
     virtual ~InboxModel();
 
-    virtual int unlistenedCount() const;
+    virtual int unlistenedCount( const QModelIndex& parent = QModelIndex() ) const;
 
 public slots:
     /**
