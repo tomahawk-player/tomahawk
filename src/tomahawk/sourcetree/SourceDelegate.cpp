@@ -221,7 +221,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
 
     const int iconRectVertMargin = 6;
-    QRect iconRect = option.rect.adjusted( 20, iconRectVertMargin, -option.rect.width() + option.rect.height() - 12 + 20, -iconRectVertMargin );
+    const QRect iconRect = option.rect.adjusted( 20, iconRectVertMargin, -option.rect.width() + option.rect.height() - 12 + 20, -iconRectVertMargin );
     QString name = index.data().toString();
     QPixmap avatar;
     int figWidth = 0;
@@ -288,14 +288,6 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
 
     painter->setOpacity( 1.0 );
     painter->drawPixmap( iconRect, avatar );
-
-    QColor descColor = option.palette.color( QPalette::Text ).lighter( 180 );
-    if ( type == SourcesModel::ScriptCollection && //you cannot select a non-script collection anyway
-        option.state.testFlag( QStyle::State_Selected ) )
-    {
-//        painter->setPen( option.palette.color( QPalette::HighlightedText ) );
-//        descColor = option.palette.color( QPalette::HighlightedText );
-    }
 
     QRect textRect = option.rect.adjusted( iconRect.width() + 28, 6, -figWidth - ( figWidth ? 28 : 0 ), 0 );
     QString text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() );
@@ -365,9 +357,6 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
             }
             else
                 m_lockRects.remove( index );
-
-            if ( isPlaying )
-                descColor = option.palette.color( QPalette::Text );
         }
     }
 
@@ -382,17 +371,14 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
 
     if ( shouldDrawDropHint )
     {
-        descColor = option.palette.color( QPalette::Text ).lighter( 180 );
         desc = tr( "Drop to send tracks" );
     }
 
     text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() - 8 );
     {
         QTextOption to( Qt::AlignVCenter );
-
         to.setWrapMode( QTextOption::NoWrap );
 
-//        painter->setPen( descColor );
         painter->setOpacity( 0.4 );
         painter->drawText( textRect, text, to );
     }
@@ -423,9 +409,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
         if ( shouldDrawDropHint )
         {
             QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - iconRectVertMargin, iconRectVertMargin, -iconRectVertMargin, -iconRectVertMargin );
-            painter->drawPixmap( figRect, TomahawkUtils::defaultPixmap( TomahawkUtils::Inbox,
-                                                                        TomahawkUtils::Original,
-                                                                        figRect.size() ) );
+            painter->drawPixmap( figRect, TomahawkUtils::defaultPixmap( TomahawkUtils::Inbox, TomahawkUtils::Original, figRect.size() ) );
         }
         else
         {
