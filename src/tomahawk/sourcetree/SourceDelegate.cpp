@@ -135,9 +135,7 @@ SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem
 
     QIcon::Mode iconMode = QIcon::Normal;
     if ( !enabled )
-    {
         iconMode = QIcon::Disabled;
-    }
 
     QRect iconRect = opt.rect.adjusted( 14, 4, 0, -4 );
     iconRect.setWidth( iconRect.height() );
@@ -147,7 +145,6 @@ SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem
     {
         QFont f = painter->font();
         f.setBold( true );
-//        f.setPointSize( 10 );
         painter->setFont( f );
     }
 
@@ -156,14 +153,11 @@ SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem
     {
         QTextOption to( Qt::AlignVCenter );
         to.setWrapMode( QTextOption::NoWrap );
+        painter->setPen( Qt::black );
 
         if ( !enabled && !selected )
         {
-            painter->setPen( opt.palette.color( QPalette::Disabled, QPalette::Text ) );
-        }
-        else
-        {
-            painter->setPen( Qt::black );
+            painter->setOpacity( 0.4 );
         }
 
         painter->drawText( textRect, text, to );
