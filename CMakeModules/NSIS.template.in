@@ -380,8 +380,8 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_LIB}\libsnore\libsnore_backend_snoretoast.dll"
 
    ; Snoregrowl
-   File "${MING_LIB}\libsnoregrowl++.dll"
-   File "${MING_LIB}\libsnoregrowl.dll"
+   File "${MING_BIN}\libsnoregrowl++.dll"
+   File "${MING_BIN}\libsnoregrowl.dll"
 
    ; Jabber
    File "${MING_BIN}\libjreen.dll"
