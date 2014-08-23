@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2013-2014, Teo Mrnjavac <teo@kde.org>
@@ -201,8 +201,6 @@ TomahawkApp::init()
 
     TomahawkUtils::setHeadless( m_headless );
     new ACLRegistryImpl( this );
-
-    tDebug( LOGINFO ) << "Setting NAM.";
 
     TomahawkSettings *s = TomahawkSettings::instance();
     Tomahawk::Utils::setProxyDns( s->proxyDns() );
@@ -689,7 +687,7 @@ TomahawkApp::onInfoSystemReady()
 void
 TomahawkApp::onSchemaUpdateStarted()
 {
-    startSplashWidget( tr( "Updating database\n") );
+    startSplashWidget( tr( "Updating database\n" ) );
 }
 
 
@@ -874,7 +872,7 @@ TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
 
 
 void
-TomahawkApp::playlistRemoved(const playlist_ptr &playlist)
+TomahawkApp::playlistRemoved( const playlist_ptr& playlist )
 {
     TomahawkSettings::instance()->removePlaylistSettings( playlist->guid() );
 }
