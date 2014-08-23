@@ -69,9 +69,6 @@ public:
 
     virtual bool jumpToCurrentTrack();
 
-    bool updatesContextView() const { return m_updateContextView; }
-    void setUpdatesContextView( bool b ) { m_updateContextView = b; }
-
 public slots:
     void onItemActivated( const QModelIndex& index );
 
@@ -109,8 +106,6 @@ private:
     ColumnItemDelegate* m_delegate;
     AnimatedSpinner* m_loadingSpinner;
     ColumnViewPreviewWidget* m_previewWidget;
-
-    bool m_updateContextView;
 
     QModelIndex m_contextMenuIndex;
     Tomahawk::ContextMenu* m_contextMenu;

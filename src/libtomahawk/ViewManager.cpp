@@ -22,7 +22,6 @@
 #include "ViewManager.h"
 
 #include "audio/AudioEngine.h"
-#include "context/ContextWidget.h"
 #include "infobar/InfoBar.h"
 
 #include "playlist/FlexibleView.h"
@@ -95,11 +94,8 @@ ViewManager::ViewManager( QObject* parent )
     m_inboxModel->setDescription( tr( "Listening suggestions from your friends" ) );
     m_inboxModel->setIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::Inbox ) );
 
-//    m_contextWidget = new ContextWidget();
-
     m_widget->layout()->addWidget( m_infobar );
     m_widget->layout()->addWidget( m_stack );
-//    m_widget->layout()->addWidget( m_contextWidget );
 
     m_superCollectionView = new TreeWidget();
     m_superCollectionView->view()->proxyModel()->setStyle( PlayableProxyModel::Collection );
@@ -129,7 +125,6 @@ ViewManager::~ViewManager()
     delete m_newReleasesWidget;
     delete m_recentPlaysWidget;
     delete m_inboxWidget;
-//    delete m_contextWidget;
     delete m_widget;
 }
 

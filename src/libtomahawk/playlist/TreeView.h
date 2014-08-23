@@ -66,9 +66,6 @@ public:
 
     virtual bool jumpToCurrentTrack();
 
-    bool updatesContextView() const { return m_updateContextView; }
-    void setUpdatesContextView( bool b ) { m_updateContextView = b; }
-
 public slots:
     void onItemActivated( const QModelIndex& index );
 
@@ -101,8 +98,6 @@ private:
     TreeProxyModel* m_proxyModel;
     TreeItemDelegate* m_delegate;
     AnimatedSpinner* m_loadingSpinner;
-
-    bool m_updateContextView;
 
     QModelIndex m_contextMenuIndex;
     Tomahawk::ContextMenu* m_contextMenu;

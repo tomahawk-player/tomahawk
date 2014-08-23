@@ -23,13 +23,6 @@ set( libGuiSources
     ViewManager.cpp
     LatchManager.cpp
 
-    context/ContextPage.cpp
-    context/ContextWidget.cpp
-    context/pages/TopTracksContext.cpp
-    context/pages/RelatedArtistsContext.cpp
-    context/pages/WikipediaContext.cpp
-    context/pages/WebContext.cpp
-
     jobview/JobStatusView.cpp
     jobview/JobStatusModel.cpp
     jobview/JobStatusDelegate.cpp
@@ -403,7 +396,6 @@ set( libUI ${libUI}
     widgets/infowidgets/TrackInfoWidget.ui
     playlist/QueueView.ui
     filemetadata/MetadataEditor.ui
-    context/ContextWidget.ui
     infobar/InfoBar.ui
     accounts/AccountFactoryWrapper.ui
     accounts/spotify/SpotifyAccountConfig.ui

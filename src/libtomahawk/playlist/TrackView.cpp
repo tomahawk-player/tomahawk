@@ -20,7 +20,6 @@
 #include "TrackView.h"
 
 #include "ViewHeader.h"
-#include "ViewManager.h"
 #include "PlayableModel.h"
 #include "PlayableProxyModel.h"
 #include "PlayableItem.h"
@@ -28,7 +27,6 @@
 #include "Source.h"
 #include "TomahawkSettings.h"
 #include "audio/AudioEngine.h"
-#include "context/ContextWidget.h"
 #include "widgets/OverlayWidget.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Closure.h"
@@ -61,7 +59,6 @@ TrackView::TrackView( QWidget* parent )
     , m_loadingSpinner( new LoadingSpinner( this ) )
     , m_resizing( false )
     , m_dragging( false )
-    , m_updateContextView( true )
     , m_alternatingRowColors( false )
     , m_autoExpanding( true )
     , m_contextMenu( new ContextMenu( this ) )
@@ -360,9 +357,6 @@ TrackView::currentChanged( const QModelIndex& current, const QModelIndex& previo
     PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
     if ( item && item->query() )
     {
-//        if ( m_updateContextView )
-//            ViewManager::instance()->context()->setQuery( item->query() );
-
         emit querySelected( item->query() );
     }
 }
@@ -441,7 +435,6 @@ TrackView::keyPressEvent( QKeyEvent* event )
 void
 TrackView::onItemResized( const QModelIndex& index )
 {
-    tDebug() << Q_FUNC_INFO;
     m_delegate->updateRowSize( index );
 }
 
@@ -460,8 +453,6 @@ TrackView::resizeEvent( QResizeEvent* event )
 
     int sortSection = m_header->sortIndicatorSection();
     Qt::SortOrder sortOrder = m_header->sortIndicatorOrder();
-
-//    tDebug() << Q_FUNC_INFO << width();
 
     if ( m_header->checkState() && sortSection >= 0 )
     {

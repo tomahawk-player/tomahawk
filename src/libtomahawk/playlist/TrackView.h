@@ -78,9 +78,6 @@ public:
     QModelIndex contextMenuIndex() const { return m_contextMenuIndex; }
     void setContextMenuIndex( const QModelIndex& idx ) { m_contextMenuIndex = idx; }
 
-    bool updatesContextView() const { return m_updateContextView; }
-    void setUpdatesContextView( bool b ) { m_updateContextView = b; }
-
     bool autoResize() const { return m_autoResize; }
     void setAutoResize( bool b );
 
@@ -157,7 +154,6 @@ private:
     bool m_dragging;
     QRect m_dropRect;
 
-    bool m_updateContextView;
     bool m_autoResize;
     bool m_alternatingRowColors;
     bool m_autoExpanding;

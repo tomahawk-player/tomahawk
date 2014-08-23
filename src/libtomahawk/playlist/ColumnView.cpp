@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2014,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -20,7 +20,6 @@
 #include "ColumnView.h"
 
 #include "audio/AudioEngine.h"
-#include "context/ContextWidget.h"
 #include "utils/AnimatedSpinner.h"
 #include "widgets/OverlayWidget.h"
 
@@ -57,7 +56,6 @@ ColumnView::ColumnView( QWidget* parent )
     , m_delegate( 0 )
     , m_loadingSpinner( new LoadingSpinner( this ) )
     , m_previewWidget( new ColumnViewPreviewWidget( this ) )
-    , m_updateContextView( true )
     , m_contextMenu( new ContextMenu( this ) )
     , m_scrollDelta( 0 )
 {
@@ -221,22 +219,6 @@ void
 ColumnView::currentChanged( const QModelIndex& current, const QModelIndex& previous )
 {
     QColumnView::currentChanged( current, previous );
-
-    if ( !m_updateContextView )
-        return;
-
-/*    PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
-    if ( item )
-    {
-        if ( !item->result().isNull() )
-            ViewManager::instance()->context()->setQuery( item->result()->toQuery() );
-        else if ( !item->artist().isNull() )
-            ViewManager::instance()->context()->setArtist( item->artist() );
-        else if ( !item->album().isNull() )
-            ViewManager::instance()->context()->setAlbum( item->album() );
-        else if ( !item->query().isNull() )
-            ViewManager::instance()->context()->setQuery( item->query() );
-    }*/
 }
 
 

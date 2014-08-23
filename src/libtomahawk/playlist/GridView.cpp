@@ -20,7 +20,6 @@
 #include "GridView.h"
 
 #include "audio/AudioEngine.h"
-#include "context/ContextWidget.h"
 #include "TomahawkSettings.h"
 #include "Artist.h"
 #include "Source.h"
