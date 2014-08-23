@@ -32,11 +32,12 @@ public:
     NetworkReply* reply;
     IODeviceCallback callback;
     QWeakPointer<HttpIODeviceReadyHandler> ref;
-    bool once = false;
+    bool once;
 
     HttpIODeviceReadyHandler( NetworkReply* _reply, IODeviceCallback _callback )
         : reply( _reply )
         , callback( _callback )
+        , once( false )
     {
         // Do Nothing
     }
