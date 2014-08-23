@@ -25,8 +25,9 @@
 #include "DllMacro.h"
 
 class QLabel;
-class QueryLabel;
+class CaptionLabel;
 class PlayableCover;
+class QueryLabel;
 
 class DLLEXPORT TrackDetailView : public QWidget
 {
@@ -58,6 +59,7 @@ private:
     QLabel* m_dateLabel;
     QLabel* m_lovedIcon;
     QLabel* m_lovedLabel;
+    CaptionLabel* m_resultsBoxLabel;
 
     QWidget* m_infoBox;
     QWidget* m_resultsBox;

@@ -29,6 +29,7 @@
 #include "widgets/PlayableCover.h"
 #include "widgets/QueryLabel.h"
 #include "widgets/ClickableLabel.h"
+#include "widgets/CaptionLabel.h"
 #include "PlaylistInterface.h"
 #include "utils/ImageRegistry.h"
 #include "utils/TomahawkUtilsGui.h"
@@ -84,6 +85,17 @@ TrackDetailView::TrackDetailView( QWidget* parent )
     m_infoBox->setLayout( hboxl );
     m_infoBox->hide();
 
+    f.setWeight( QFont::Normal );
+    f.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
+
+    m_resultsBoxLabel = new CaptionLabel( this );
+    m_resultsBoxLabel->setFont( f );
+    m_resultsBoxLabel->setStyleSheet( "QLabel { color: rgba( 0, 0, 0, 50% ) }" );
+    m_resultsBoxLabel->setText( tr( "Alternative versions:" ) );
+    m_resultsBoxLabel->setFixedWidth( width() - 4 );
+    m_resultsBoxLabel->setFixedHeight( m_resultsBoxLabel->sizeHint().height() * 0.8 );
+    m_resultsBoxLabel->hide();
+
     m_resultsBox = new QWidget;
     QVBoxLayout* resultsLayout = new QVBoxLayout;
     TomahawkUtils::unmarginLayout( resultsLayout );
@@ -109,8 +121,9 @@ TrackDetailView::TrackDetailView( QWidget* parent )
     layout->addWidget( m_dateLabel );
     layout->addWidget( m_infoBox );
     layout->addSpacerItem( new QSpacerItem( 0, 32, QSizePolicy::Minimum, QSizePolicy::Fixed ) );
+    layout->addWidget( m_resultsBoxLabel );
+    layout->addSpacerItem( new QSpacerItem( 0, 8, QSizePolicy::Minimum, QSizePolicy::Fixed ) );
     layout->addWidget( resultsScrollArea );
-    layout->addSpacerItem( new QSpacerItem( 0, 32, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
     layout->setStretchFactor( resultsScrollArea, 1 );
 
     setLayout( layout );
@@ -216,47 +229,52 @@ TrackDetailView::onResultsChanged()
         delete child;
     }
 
-    if ( !m_query )
-        return;
-
-    foreach ( const Tomahawk::result_ptr& result, m_query->results() )
+    if ( m_query )
     {
-        if ( !result->isOnline() )
-            continue;
-
         QFont f = font();
-        f.setWeight( QFont::DemiBold );
-        f.setPointSize( 11 );
+        f.setPointSize( TomahawkUtils::defaultFontSize() );
 
-        QLabel* resolverIcon = new QLabel( this );
-        resolverIcon->setFixedWidth( 12 );
-        resolverIcon->setPixmap( result->sourceIcon( TomahawkUtils::RoundedCorners, QSize( 12, 12 ) ) );
+        foreach ( const Tomahawk::result_ptr& result, m_query->results() )
+        {
+            if ( !result->isOnline() )
+                continue;
 
-        QLabel* resolverLabel = new ClickableLabel( this );
-        resolverLabel->setFont( f );
-        resolverLabel->setStyleSheet( "QLabel { color: rgba( 0, 0, 0, 50% ) }" );
-        resolverLabel->setText( QString( "%1 - %2" ).arg( result->track()->track() ).arg( result->track()->artist() ) );
-        resolverLabel->setToolTip( QString( "%1 by %2%3" ).arg( result->track()->track() ).arg( result->track()->artist() )
-                                                          .arg( !result->track()->album().isEmpty() ? QString( " " ) + tr( "on %1" ).arg( result->track()->album() ) : QString() ) );
-        resolverLabel->setFixedWidth( width() - 32 - 4 );
+            QLabel* resolverIcon = new QLabel( this );
+            resolverIcon->setFixedWidth( 12 );
+            resolverIcon->setPixmap( result->sourceIcon( TomahawkUtils::RoundedCorners, QSize( 12, 12 ) ) );
 
-        NewClosure( resolverLabel, SIGNAL( clicked() ), const_cast< AudioEngine* >( AudioEngine::instance() ),
-                                     SLOT( playItem( Tomahawk::playlistinterface_ptr, Tomahawk::result_ptr, Tomahawk::query_ptr ) ),
-                                     Tomahawk::playlistinterface_ptr(), result, m_query )->setAutoDelete( false );
+            QLabel* resolverLabel = new ClickableLabel( this );
+            resolverLabel->setFont( f );
+            resolverLabel->setStyleSheet( "QLabel { color: rgba( 0, 0, 0, 50% ) }" );
+            resolverLabel->setText( QString( "%1 - %2" ).arg( result->track()->track() ).arg( result->track()->artist() ) );
+            resolverLabel->setToolTip( QString( "%1 by %2%3" ).arg( result->track()->track() ).arg( result->track()->artist() )
+                                                            .arg( !result->track()->album().isEmpty() ? QString( " " ) + tr( "on %1" ).arg( result->track()->album() ) : QString() ) );
+            resolverLabel->setFixedWidth( width() - 32 - 4 );
 
-        QWidget* hbox = new QWidget;
-        QHBoxLayout* hboxl = new QHBoxLayout;
-        TomahawkUtils::unmarginLayout( hboxl );
-        hboxl->setSpacing( 8 );
-        hboxl->addWidget( resolverIcon );
-        hboxl->addWidget( resolverLabel );
-        hbox->setLayout( hboxl );
+            NewClosure( resolverLabel, SIGNAL( clicked() ), const_cast< AudioEngine* >( AudioEngine::instance() ),
+                                        SLOT( playItem( Tomahawk::playlistinterface_ptr, Tomahawk::result_ptr, Tomahawk::query_ptr ) ),
+                                        Tomahawk::playlistinterface_ptr(), result, m_query )->setAutoDelete( false );
 
-        m_resultsBox->layout()->addWidget( hbox );
+            QWidget* hbox = new QWidget;
+            QHBoxLayout* hboxl = new QHBoxLayout;
+            TomahawkUtils::unmarginLayout( hboxl );
+            hboxl->setSpacing( 8 );
+            hboxl->addWidget( resolverIcon );
+            hboxl->addWidget( resolverLabel );
+            hbox->setLayout( hboxl );
+
+            m_resultsBox->layout()->addWidget( hbox );
+        }
     }
 
-    if ( m_query->numResults() > 1 )
+    if ( m_query && m_query->numResults() > 1 )
+    {
+        m_resultsBoxLabel->show();
         m_resultsBox->show();
+    }
     else
+    {
+        m_resultsBoxLabel->hide();
         m_resultsBox->hide();
+    }
 }
