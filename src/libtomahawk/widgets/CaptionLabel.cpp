@@ -30,11 +30,6 @@ CaptionLabel::CaptionLabel( QWidget* parent )
     , m_parent( parent )
     , m_showCloseButton( false )
 {
-    QFont f = font();
-    f.setPointSize( 10 );
-    setFont( f );
-
-    setFixedHeight( QFontMetrics( f ).height() + 12 );
     setMouseTracking( true );
 
     setShowCloseButton( m_showCloseButton );
@@ -49,7 +44,8 @@ CaptionLabel::~CaptionLabel()
 QSize
 CaptionLabel::sizeHint() const
 {
-    return QLabel::sizeHint();
+    QFontMetrics fm( font() );
+    return QSize( fm.width( text().toUpper() ), fm.height() * 1.7 );
 }
 
 
