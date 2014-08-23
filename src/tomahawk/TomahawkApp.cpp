@@ -481,11 +481,7 @@ TomahawkApp::initHTTP()
         }
         if ( TomahawkSettings::instance()->httpBindAll() )
         {
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
             playdarApi = new PlaydarApi( QHostAddress::Any, 60210, 60211, this ); // TODO Auth
-#else
-            playdarApi = new PlaydarApi( QHostAddress::AnyIPv6, 60210, 60211, this ); // TODO Auth
-#endif
         }
         else
         {
