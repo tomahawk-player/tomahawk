@@ -537,13 +537,13 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
             break;
 
         case RepeatOne:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/repeat.svg", size, TomahawkUtils::Original, 0.7, Qt::white );
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/repeat.svg", size, TomahawkUtils::Original, 1.0, Qt::white );
             break;
         case RepeatOnePressed:
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/repeat.svg", size, TomahawkUtils::Original, 1.0, Qt::white );
             break;
         case RepeatAll:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/repeat.svg", size, TomahawkUtils::Original, 0.7, Qt::white );
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/repeat.svg", size, TomahawkUtils::Original, 1.0, Qt::white );
             break;
         case RepeatAllPressed:
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/repeat.svg", size, TomahawkUtils::Original, 1.0, Qt::white );
