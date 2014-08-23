@@ -664,8 +664,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             if ( opt.state & QStyle::State_MouseOver )
             {
                 m_iconHeight = ( opt.rect.height() / 2 );
-
-                optIndentation.rect.adjust( 0, 0, -( 4 + m_iconHeight ), 0 );
                 paintStandardItem( painter, optIndentation, index );
 
                 // draw close icon
