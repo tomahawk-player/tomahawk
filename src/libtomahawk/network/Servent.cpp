@@ -153,7 +153,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port, Tomahawk::Network
                 continue; // IPv4 localhost as IPv6 address
             if ( addr.isInSubnet( QHostAddress::parseSubnet( "fe80::/10" ) ) )
                 continue; // Skip link local addresses
-            tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Listening to " << addr.toString();
+            tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Listening to" << addr.toString();
             d->externalAddresses.append( addr );
             d->externalListenAll = true;
         }
@@ -265,46 +265,46 @@ Servent::isValidExternalIP( const QHostAddress& addr )
     if (addr.protocol() == QAbstractSocket::IPv4Protocol)
     {
         // private network
-        if ( addr.isInSubnet(QHostAddress::parseSubnet("10.0.0.0/8")) )
+        if ( addr.isInSubnet(QHostAddress::parseSubnet( "10.0.0.0/8" ) ) )
             return false;
         // localhost
-        if ( addr.isInSubnet(QHostAddress::parseSubnet("127.0.0.0/8")) )
+        if ( addr.isInSubnet(QHostAddress::parseSubnet( "127.0.0.0/8" ) ) )
             return false;
         // private network
-        if ( addr.isInSubnet(QHostAddress::parseSubnet("169.254.0.0/16")) )
+        if ( addr.isInSubnet(QHostAddress::parseSubnet( "169.254.0.0/16" ) ) )
             return false;
         // private network
-        if ( addr.isInSubnet(QHostAddress::parseSubnet("172.16.0.0/12")) )
+        if ( addr.isInSubnet(QHostAddress::parseSubnet( "172.16.0.0/12" ) ) )
             return false;
         // private network
-        if ( addr.isInSubnet(QHostAddress::parseSubnet("192.168.0.0/16")) )
+        if ( addr.isInSubnet(QHostAddress::parseSubnet( "192.168.0.0/16" ) ) )
             return false;
         // multicast
-        if ( addr.isInSubnet(QHostAddress::parseSubnet("224.0.0.0/4")) )
+        if ( addr.isInSubnet(QHostAddress::parseSubnet( "224.0.0.0/4" ) ) )
             return false;
     }
     else if (addr.protocol() == QAbstractSocket::IPv4Protocol)
     {
         // "unspecified address"
-        if ( addr.isInSubnet(QHostAddress::parseSubnet("::/128")) )
+        if ( addr.isInSubnet(QHostAddress::parseSubnet( "::/128" ) ) )
             return false;
         // link-local
-        if ( addr.isInSubnet(QHostAddress::parseSubnet("fe80::/10")) )
+        if ( addr.isInSubnet(QHostAddress::parseSubnet( "fe80::/10" ) ) )
             return false;
         // unique local addresses
-        if ( addr.isInSubnet(QHostAddress::parseSubnet("fc00::/7")) )
+        if ( addr.isInSubnet(QHostAddress::parseSubnet( "fc00::/7" ) ) )
             return false;
         // benchmarking only
-        if ( addr.isInSubnet(QHostAddress::parseSubnet("2001:2::/48")) )
+        if ( addr.isInSubnet(QHostAddress::parseSubnet( "2001:2::/48" ) ) )
             return false;
         // non-routed IPv6 addresses used for Cryptographic Hash Identifiers
-        if ( addr.isInSubnet(QHostAddress::parseSubnet("2001:10::/28")) )
+        if ( addr.isInSubnet(QHostAddress::parseSubnet( "2001:10::/28" ) ) )
             return false;
         // documentation prefix
-        if ( addr.isInSubnet(QHostAddress::parseSubnet("2001:db8::/32")) )
+        if ( addr.isInSubnet(QHostAddress::parseSubnet( "2001:db8::/32" ) ) )
             return false;
         // multicast
-        if ( addr.isInSubnet(QHostAddress::parseSubnet("ff00::0/8 ")) )
+        if ( addr.isInSubnet(QHostAddress::parseSubnet( "ff00::0/8" ) ) )
             return false;
     }
     else
