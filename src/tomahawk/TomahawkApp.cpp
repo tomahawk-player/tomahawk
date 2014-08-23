@@ -192,11 +192,9 @@ TomahawkApp::init()
 #endif
     setFont( f );
 
-#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
     tDebug() << "Default font:" << f.pixelSize() << f.pointSize() << f.pointSizeF() << f.family();
     // The following line blocks for 15s on Qt 5.1.0
     tDebug() << "Font height:" << QFontMetrics( f ).height();
-#endif
     TomahawkUtils::setDefaultFontSize( f.pointSize() );
 
     TomahawkUtils::setHeadless( m_headless );
