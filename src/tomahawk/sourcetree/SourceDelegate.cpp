@@ -133,15 +133,10 @@ SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem
     const bool selected = ( option.state & QStyle::State_Selected ) == QStyle::State_Selected;
     const bool enabled = ( option.state & QStyle::State_Enabled ) == QStyle::State_Enabled;
 
-    painter->setOpacity( 0.7 );
     QIcon::Mode iconMode = QIcon::Normal;
     if ( !enabled )
     {
         iconMode = QIcon::Disabled;
-    }
-    else if ( selected )
-    {
-        painter->setOpacity( 1.0 );
     }
 
     QRect iconRect = opt.rect.adjusted( 14, 4, 0, -4 );
@@ -499,6 +494,12 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     painter->setRenderHint( QPainter::TextAntialiasing );
     painter->setRenderHint( QPainter::SmoothPixmapTransform );
 
+    const bool selected = ( option.state & QStyle::State_Selected ) == QStyle::State_Selected;
+    if ( selected )
+        painter->setOpacity( 1.0 );
+    else
+        painter->setOpacity( 0.7 );
+
     SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
     SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
     Q_ASSERT( item );
@@ -655,16 +656,12 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             InboxItem* ii = qobject_cast< InboxItem* >( item );
             if ( ii && ii->unlistenedCount() )
             {
-                painter->save();
-
-                QString count = QString::number( ii->unlistenedCount() );
+                const QString count = QString::number( ii->unlistenedCount() );
                 int figWidth = QFontMetrics( painter->font() ).width( count );
                 QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 16, 0, -14, -option.rect.height() + option.fontMetrics.height() * 1.1 );
                 int hd = ( option.rect.height() - figRect.height() ) / 2;
                 figRect.adjust( 0, hd, 0, hd );
-                painter->setOpacity( 0.7 );
                 painter->drawText( figRect, count, QTextOption( Qt::AlignVCenter | Qt::AlignRight ) );
-                painter->restore();
             }
             paintStandardItem( painter, optIndentation, index );
         }
