@@ -159,7 +159,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port, Tomahawk::Network
         }
 
     }
-    else if ( ( ha.toString() != "127.0.0.1" ) && ( ha.toString() != "::1" ) && ( ha.toString() !=  "::7F00:1" ) )
+    else if ( ( ha.toString() != "127.0.0.1" ) && ( ha.toString() != "::1" ) && ( ha.toString() != "::7F00:1" ) )
     {
         // We listen only to one specific Address, only announce this.
         d_func()->externalAddresses.append( ha );
@@ -167,7 +167,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port, Tomahawk::Network
     // If we only accept connections via localhost, we'll announce nothing.
 
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Servent listening on port" << d_func()->port << "- servent thread:" << thread()
-           << "- address mode:" << (int)( mode );
+                       << "- address mode:" << (int)( mode );
 
     switch ( mode )
     {
