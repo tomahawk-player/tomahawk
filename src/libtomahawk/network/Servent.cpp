@@ -140,7 +140,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port, Tomahawk::Network
 
     d->externalListenAll = false;
 
-    if ( ha == QHostAddress::Any )
+    if ( ha == QHostAddress::Any || ha == QHostAddress::AnyIPv6 )
     {
         // We are listening on all available addresses, so we should send a SipInfo for all of them.
         foreach ( QHostAddress addr, QNetworkInterface::allAddresses() )
