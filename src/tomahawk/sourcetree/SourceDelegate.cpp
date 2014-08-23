@@ -215,11 +215,7 @@ void
 SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     painter->save();
-
-    QFont normal = option.font;
-    QFont bold = option.font;
     painter->setPen( Qt::black );
-    //    bold.setBold( true );
 
     SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
     SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
@@ -256,16 +252,13 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
             if ( status && colItem && !colItem->source().isNull() )
             {
                 tracks = QString::number( colItem->source()->trackCount() );
-                figWidth = QFontMetrics( normal ).width( tracks );
+                figWidth = painter->fontMetrics().width( tracks );
                 if ( shouldDrawDropHint )
                     figWidth = iconRect.width();
                 name = colItem->source()->friendlyName();
             }
 
             avatar = colItem->pixmap( iconRect.size() );
-
-    /*        if ( status || colItem->source().isNull() )
-                painter->setFont( bold );*/
 
             isPlaying = !( colItem->source()->currentTrack().isNull() );
             desc = colItem->source()->textStatus();
@@ -284,15 +277,12 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
             if ( trackCount >= 0 )
             {
                 tracks = QString::number( trackCount );
-                figWidth = QFontMetrics( normal ).width( tracks );
+                figWidth = painter->fontMetrics().width( tracks );
             }
             name = scItem->collection()->itemName();
         }
 
         avatar = scItem->icon().pixmap( iconRect.size() );
-
-        painter->setFont( bold );
-
         desc = qobject_cast< Tomahawk::ScriptCollection* >( scItem->collection().data() )->description();
     }
 
@@ -316,7 +306,6 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
         painter->drawText( textRect, text, to );
     }
 
-    painter->setFont( normal );
     textRect = option.rect.adjusted( iconRect.width() + 28, option.rect.height() / 2, -figWidth - ( figWidth ? 24 : 0 ), -6 );
 
     if ( type == SourcesModel::Collection )
