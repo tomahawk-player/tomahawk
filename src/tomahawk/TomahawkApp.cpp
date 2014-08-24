@@ -536,9 +536,9 @@ TomahawkApp::initServent()
     int externalPort = TomahawkSettings::instance()->externalPort();
     bool autodetectIp = TomahawkSettings::instance()->autoDetectExternalIp();
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-    if ( !Servent::instance()->startListening( QHostAddress( QHostAddress::Any ), upnp, port, mode, defaultPort, autodetectIp, externalHostname, externalPort ) )
+    if ( !Servent::instance()->startListening( QHostAddress::Any, upnp, port, mode, defaultPort, autodetectIp, externalHostname, externalPort ) )
 #else
-    if ( !Servent::instance()->startListening( QHostAddress( QHostAddress::AnyIPv6 ), upnp, port, mode, defaultPort, autodetectIp, externalHostname, externalPort ) )
+    if ( !Servent::instance()->startListening( QHostAddress::AnyIPv6, upnp, port, mode, defaultPort, autodetectIp, externalHostname, externalPort ) )
 #endif
     {
         tLog() << "Failed to start listening with servent";
