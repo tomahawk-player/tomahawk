@@ -21,6 +21,7 @@
 
 #include "UrlHandler.h"
 
+#include "utils/Logger.h"
 #include "utils/NetworkReply.h"
 
 class HttpIODeviceReadyHandler : public QObject
@@ -29,15 +30,12 @@ class HttpIODeviceReadyHandler : public QObject
 
 public:
 
-    NetworkReply* reply;
+    QSharedPointer<NetworkReply> reply;
     IODeviceCallback callback;
-    QWeakPointer<HttpIODeviceReadyHandler> ref;
-    bool once;
 
-    HttpIODeviceReadyHandler( NetworkReply* _reply, IODeviceCallback _callback )
+    HttpIODeviceReadyHandler( const QSharedPointer<NetworkReply>& _reply, IODeviceCallback _callback )
         : reply( _reply )
         , callback( _callback )
-        , once( false )
     {
         // Do Nothing
     }
@@ -46,14 +44,11 @@ public slots:
 
     void called()
     {
-        // Sometimes Qt calls this function twice. Weird.
-        if (once) {
-            deleteLater();
-        }
-        once = true;
-
-        QSharedPointer< QIODevice > sp( reply->reply(), &QObject::deleteLater );
-        callback( reply->reply()->url().toString(), sp );
+        tLog() << Q_FUNC_INFO << reply->reply();
+        QSharedPointer< QNetworkReply > sp( reply->reply(), &QObject::deleteLater );
+        reply->disconnectFromReply();
+        QSharedPointer< QIODevice > spIO = sp.staticCast< QIODevice>();
+        callback( sp->url().toString(), spIO );
 
         // Call once, then self-destruct
         deleteLater();

@@ -117,11 +117,11 @@ httpIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
 {
     QNetworkRequest req( url );
     // Follow HTTP Redirects
-    NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( req ) );
+    QSharedPointer< NetworkReply > reply( new NetworkReply( Tomahawk::Utils::nam()->get( req ) ) );
     qRegisterMetaType<NetworkReply*>("NetworkReply*");
     qRegisterMetaType<IODeviceCallback>("IODeviceCallback");
     HttpIODeviceReadyHandler* handler = new HttpIODeviceReadyHandler( reply, callback );
-    reply->connect( reply, SIGNAL( finalUrlReached() ),
+    reply->connect( reply.data(), SIGNAL( finalUrlReached() ),
                     handler, SLOT( called() ));
 }
 
