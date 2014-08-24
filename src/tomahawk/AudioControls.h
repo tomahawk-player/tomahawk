@@ -74,6 +74,7 @@ private slots:
 
     void onPlaybackTimer( qint64 msElapsed );
     void onVolumeChanged( int volume );
+    void onMutedChanged( bool muted );
     void onControlStateChanged();
 
     void onRepeatClicked();

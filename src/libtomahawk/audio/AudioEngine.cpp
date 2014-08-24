@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
@@ -234,9 +234,9 @@ AudioEngine::AudioEngine()
     connect( d->mediaObject, SIGNAL( tick( qint64 ) ), SLOT( timerTriggered( qint64 ) ) );
     connect( d->mediaObject, SIGNAL( aboutToFinish() ), SLOT( onAboutToFinish() ) );
     connect( d->audioOutput, SIGNAL( volumeChanged( qreal ) ), SLOT( onVolumeChanged( qreal ) ) );
+    connect( d->audioOutput, SIGNAL( mutedChanged( bool ) ), SIGNAL( mutedChanged( bool ) ) );
 
     onVolumeChanged( d->audioOutput->volume() );
-
     setVolume( TomahawkSettings::instance()->volume() );
 
     initEqualizer();
@@ -574,7 +574,6 @@ AudioEngine::mute()
 {
     Q_D( AudioEngine );
     d->audioOutput->setMuted( true );
-    emit volumeChanged( 0 );
 }
 
 
@@ -583,7 +582,6 @@ AudioEngine::toggleMute()
 {
     Q_D( AudioEngine );
     d->audioOutput->setMuted( !d->audioOutput->isMuted() );
-    emit volumeChanged( d->audioOutput->isMuted() ? 0 : volume() );
 }
 
 

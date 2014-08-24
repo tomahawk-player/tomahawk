@@ -160,6 +160,7 @@ AudioControls::AudioControls( QWidget* parent )
     connect( AudioEngine::instance(), SIGNAL( seeked( qint64 ) ), SLOT( onPlaybackSeeked( qint64 ) ) );
     connect( AudioEngine::instance(), SIGNAL( timerMilliSeconds( qint64 ) ), SLOT( onPlaybackTimer( qint64 ) ) );
     connect( AudioEngine::instance(), SIGNAL( volumeChanged( int ) ), SLOT( onVolumeChanged( int ) ) );
+    connect( AudioEngine::instance(), SIGNAL( mutedChanged( bool ) ), SLOT( onMutedChanged( bool ) ) );
     connect( AudioEngine::instance(), SIGNAL( controlStateChanged() ), SLOT( onControlStateChanged() ) );
     connect( AudioEngine::instance(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ), SLOT( onRepeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
     connect( AudioEngine::instance(), SIGNAL( shuffleModeChanged( bool ) ), SLOT( onShuffleModeChanged( bool ) ) );
@@ -227,6 +228,24 @@ AudioControls::onVolumeChanged( int volume )
 {
     ui->volumeSlider->blockSignals( true );
     ui->volumeSlider->setValue( volume );
+    ui->volumeSlider->blockSignals( false );
+}
+
+
+void
+AudioControls::onMutedChanged( bool muted )
+{
+    ui->volumeSlider->blockSignals( true );
+
+    if ( muted )
+    {
+        ui->volumeSlider->setValue( 0 );
+    }
+    else
+    {
+        ui->volumeSlider->setValue( AudioEngine::instance()->volume() );
+    }
+
     ui->volumeSlider->blockSignals( false );
 }
 
