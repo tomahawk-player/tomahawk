@@ -166,7 +166,9 @@ Servent::startListening( QHostAddress ha, bool upnp, int port, Tomahawk::Network
     }
     // If we only accept connections via localhost, we'll announce nothing.
 
-    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Servent listening on port" << d->port << "- servent thread:" << thread()
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Servent listening on port" << d->port
+                       << "using address" << ha.toString()
+                       << "- servent thread:" << thread()
                        << "- address mode:" << (int)( mode );
 
     switch ( mode )
