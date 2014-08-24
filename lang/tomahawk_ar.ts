@@ -365,28 +365,28 @@ connect and stream from you?</source>
     <name>AudioControls</name>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="100"/>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="330"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="349"/>
         <source>Shuffle</source>
         <translation>خلط</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="101"/>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="331"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="350"/>
         <source>Repeat</source>
         <translation>إعادة</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="328"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="347"/>
         <source>Time Elapsed</source>
         <translation>الوقت المنقضي</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="329"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="348"/>
         <source>Time Remaining</source>
         <translation>الوقت المتبقي</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="334"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="353"/>
         <source>Playing from %1</source>
         <translation>يتم الاستماع من %1</translation>
     </message>
@@ -399,17 +399,17 @@ connect and stream from you?</source>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="982"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="980"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>نعتذر، لم نستطيع إيجاد الأغنية &apos;%1&apos; ل%2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1006"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1004"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>نعتذر، لم نستطيع إيجاد الفنان &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1032"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1030"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>نعتذر، لم نستطيع إيجاد الألبوم &apos;%1&apos; ل%2</translation>
     </message>
@@ -417,7 +417,7 @@ connect and stream from you?</source>
 <context>
     <name>CaptionLabel</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/CaptionLabel.cpp" line="75"/>
+        <location filename="../src/libtomahawk/widgets/CaptionLabel.cpp" line="71"/>
         <source>Close</source>
         <translation type="unfinished"/>
     </message>
@@ -479,7 +479,7 @@ connect and stream from you?</source>
 <context>
     <name>ColumnView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="309"/>
+        <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="291"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>عذراً، ترشيحك &quot;%1&quot; لم يطابق أي نتائج.</translation>
     </message>
@@ -533,20 +533,6 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="312"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>ContextWidget</name>
-    <message>
-        <location filename="../src/libtomahawk/context/ContextWidget.ui" line="38"/>
-        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="348"/>
-        <source>Show Footnotes</source>
-        <translation>أظهر الحاشية</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="342"/>
-        <source>Hide Footnotes</source>
-        <translation>إخفي الحاشية</translation>
     </message>
 </context>
 <context>
@@ -953,14 +939,6 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="87"/>
         <source>Synchronize Loved Tracks</source>
         <translation>مزامنة الأغاني المحبوبة</translation>
-    </message>
-</context>
-<context>
-    <name>LastfmContext</name>
-    <message>
-        <location filename="../src/libtomahawk/context/pages/WikipediaContext.h" line="67"/>
-        <source>Last.fm</source>
-        <translation>Last.fm</translation>
     </message>
 </context>
 <context>
@@ -1673,14 +1651,6 @@ Password (OTP)</source>
     </message>
 </context>
 <context>
-    <name>RelatedArtistsContext</name>
-    <message>
-        <location filename="../src/libtomahawk/context/pages/RelatedArtistsContext.h" line="47"/>
-        <source>Related Artists</source>
-        <translation>الفنانين ذات الذوق القريب</translation>
-    </message>
-</context>
-<context>
     <name>ResolverConfigDelegate</name>
     <message>
         <location filename="../src/tomahawk/ResolverConfigDelegate.cpp" line="111"/>
@@ -2095,24 +2065,24 @@ Password (OTP)</source>
         <translation>توب ١٠</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="273"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="252"/>
         <source>All available tracks</source>
         <translation>جميع الأغاني المتاحة</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="397"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="360"/>
         <source>Drop to send tracks</source>
         <translation>أنزل لإرسال الأغاني</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="473"/>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="507"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="430"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="464"/>
         <source>Show</source>
         <translation>أظهر</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="475"/>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="509"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="432"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="466"/>
         <source>Hide</source>
         <translation>إخفي</translation>
     </message>
@@ -3942,24 +3912,24 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="519"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="509"/>
         <source>My Collection</source>
         <translation>مجموعتي الخاصة</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="692"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="682"/>
         <source>Updating database
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="699"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="689"/>
         <source>Updating database
 %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="749"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="739"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>الكشف التلقائي عن عنوان IP الخارجي فشل.</translation>
     </message>
@@ -4224,27 +4194,24 @@ Try tweaking the filters for a new set of songs to play.</source>
     </message>
 </context>
 <context>
-    <name>TopTracksContext</name>
-    <message>
-        <location filename="../src/libtomahawk/context/pages/TopTracksContext.h" line="47"/>
-        <source>Top Hits</source>
-        <translation>الأكثر شهرة</translation>
-    </message>
-</context>
-<context>
     <name>TrackDetailView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="75"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="76"/>
         <source>Marked as Favorite</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="146"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="94"/>
+        <source>Alternative versions:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="159"/>
         <source>Unknown Release-Date</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="240"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="251"/>
         <source>on %1</source>
         <translation type="unfinished"/>
     </message>
@@ -4300,7 +4267,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="642"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="633"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>عذراً، ترشيحك &quot;%1&quot; لم يطابق أي نتائج.</translation>
     </message>
@@ -4339,7 +4306,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TreeView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="306"/>
+        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="288"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>نتأسف، نظام الترشيح لم يجد شيئا تحت عنوان &apos;%1&apos;.</translation>
     </message>
@@ -4465,42 +4432,42 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="94"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="93"/>
         <source>Inbox</source>
         <translation>البريد الوارد</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="95"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="94"/>
         <source>Listening suggestions from your friends</source>
         <translation>إقتراحات للإستماع من قبل اصدقاءك</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="322"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="317"/>
         <source>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="380"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="375"/>
         <source>SuperCollection</source>
         <translation>سوبر كولكشن</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="381"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="376"/>
         <source>Combined libraries of all your online friends</source>
         <translation>مكتبات مجمعة لكل اصحابك المتصلين</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="428"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="423"/>
         <source>Recently Played Tracks</source>
         <translation>الأغاني التي إستمعت إليها مؤخرا</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="429"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="424"/>
         <source>Recently played tracks from all your friends</source>
         <translation>جميع الأغاني التي استمع إليها أصدقائك مؤخرا</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="435"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="430"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>نعتذر، لم نستطيع إيجاد أغاني مسموعة مؤخرا!</translation>
     </message>
@@ -4591,14 +4558,6 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="350"/>
         <source>Android</source>
         <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>WikipediaContext</name>
-    <message>
-        <location filename="../src/libtomahawk/context/pages/WikipediaContext.h" line="42"/>
-        <source>Wikipedia</source>
-        <translation>ويكيبيديا</translation>
     </message>
 </context>
 <context>

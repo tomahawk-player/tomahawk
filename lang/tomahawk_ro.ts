@@ -365,28 +365,28 @@ se conecteze și să redea de la tine?</translation>
     <name>AudioControls</name>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="100"/>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="330"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="349"/>
         <source>Shuffle</source>
         <translation>Amestecă</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="101"/>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="331"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="350"/>
         <source>Repeat</source>
         <translation>Repetă</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="328"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="347"/>
         <source>Time Elapsed</source>
         <translation>Timp scurs</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="329"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="348"/>
         <source>Time Remaining</source>
         <translation>Timp rămas</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="334"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="353"/>
         <source>Playing from %1</source>
         <translation>Se redă de la %1</translation>
     </message>
@@ -399,17 +399,17 @@ se conecteze și să redea de la tine?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="982"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="980"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Ne pare rău, Tomahawk nu a găsit piesa &apos;%1&apos; de %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1006"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1004"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Ne pare rău, Tomahawk nu a găsit artistul &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1032"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1030"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Ne pare rău, Tomahawk nu a găsit albumul &apos;%1&apos; de la %2</translation>
     </message>
@@ -417,7 +417,7 @@ se conecteze și să redea de la tine?</translation>
 <context>
     <name>CaptionLabel</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/CaptionLabel.cpp" line="75"/>
+        <location filename="../src/libtomahawk/widgets/CaptionLabel.cpp" line="71"/>
         <source>Close</source>
         <translation type="unfinished"/>
     </message>
@@ -479,7 +479,7 @@ se conecteze și să redea de la tine?</translation>
 <context>
     <name>ColumnView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="309"/>
+        <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="291"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Ne pare rău, filtrul tău &apos;%1&apos; nu are niciun rezultat.</translation>
     </message>
@@ -533,20 +533,6 @@ se conecteze și să redea de la tine?</translation>
         <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="312"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>ContextWidget</name>
-    <message>
-        <location filename="../src/libtomahawk/context/ContextWidget.ui" line="38"/>
-        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="348"/>
-        <source>Show Footnotes</source>
-        <translation>Arată note de subsol</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="342"/>
-        <source>Hide Footnotes</source>
-        <translation>Ascunde note de subsol</translation>
     </message>
 </context>
 <context>
@@ -952,14 +938,6 @@ Password (OTP)</translation>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="87"/>
         <source>Synchronize Loved Tracks</source>
         <translation>Sincronizează piesele îndrăgite</translation>
-    </message>
-</context>
-<context>
-    <name>LastfmContext</name>
-    <message>
-        <location filename="../src/libtomahawk/context/pages/WikipediaContext.h" line="67"/>
-        <source>Last.fm</source>
-        <translation>Last.fm</translation>
     </message>
 </context>
 <context>
@@ -1671,14 +1649,6 @@ Password (OTP)</translation>
     </message>
 </context>
 <context>
-    <name>RelatedArtistsContext</name>
-    <message>
-        <location filename="../src/libtomahawk/context/pages/RelatedArtistsContext.h" line="47"/>
-        <source>Related Artists</source>
-        <translation>Artiști similari</translation>
-    </message>
-</context>
-<context>
     <name>ResolverConfigDelegate</name>
     <message>
         <location filename="../src/tomahawk/ResolverConfigDelegate.cpp" line="111"/>
@@ -2096,24 +2066,24 @@ Password (OTP)</translation>
         <translation>Top 10</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="273"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="252"/>
         <source>All available tracks</source>
         <translation>Toate piesele disponibile</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="397"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="360"/>
         <source>Drop to send tracks</source>
         <translation>Trage aici ca să trimiți piese</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="473"/>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="507"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="430"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="464"/>
         <source>Show</source>
         <translation>Arată</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="475"/>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="509"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="432"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="466"/>
         <source>Hide</source>
         <translation>Ascunde</translation>
     </message>
@@ -3944,26 +3914,26 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="519"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="509"/>
         <source>My Collection</source>
         <translation>Colecția mea</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="692"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="682"/>
         <source>Updating database
 </source>
         <translation>Se actualizează baza de date
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="699"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="689"/>
         <source>Updating database
 %1</source>
         <translation>Se actualizează baza de date
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="749"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="739"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Detectarea automată a IP-ului extern a eșuat.</translation>
     </message>
@@ -4228,27 +4198,24 @@ Try tweaking the filters for a new set of songs to play.</source>
     </message>
 </context>
 <context>
-    <name>TopTracksContext</name>
-    <message>
-        <location filename="../src/libtomahawk/context/pages/TopTracksContext.h" line="47"/>
-        <source>Top Hits</source>
-        <translation>Hituri de top</translation>
-    </message>
-</context>
-<context>
     <name>TrackDetailView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="75"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="76"/>
         <source>Marked as Favorite</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="146"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="94"/>
+        <source>Alternative versions:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="159"/>
         <source>Unknown Release-Date</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="240"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="251"/>
         <source>on %1</source>
         <translation type="unfinished"/>
     </message>
@@ -4304,7 +4271,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="642"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="633"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Ne pare rău, căutarea ta &apos;%1&apos; nu a avut rezultate.</translation>
     </message>
@@ -4343,7 +4310,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TreeView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="306"/>
+        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="288"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Ne pare rău, filtrul tău &apos;%1&apos; nu are niciun rezultat.</translation>
     </message>
@@ -4469,42 +4436,42 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="94"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="93"/>
         <source>Inbox</source>
         <translation>Intrare</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="95"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="94"/>
         <source>Listening suggestions from your friends</source>
         <translation>Sugestii de ascultare de la prietenii tăi</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="322"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="317"/>
         <source>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="380"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="375"/>
         <source>SuperCollection</source>
         <translation>SuperColecție</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="381"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="376"/>
         <source>Combined libraries of all your online friends</source>
         <translation>Bibliotecile combinate ale tuturor prietenilor tăi conectați</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="428"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="423"/>
         <source>Recently Played Tracks</source>
         <translation>Piese redate recent</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="429"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="424"/>
         <source>Recently played tracks from all your friends</source>
         <translation>Piese redate recent de la toți pritenii tăi</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="435"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="430"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Ne pare rău, nu am găsit redări recente!</translation>
     </message>
@@ -4595,14 +4562,6 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="350"/>
         <source>Android</source>
         <translation>Android</translation>
-    </message>
-</context>
-<context>
-    <name>WikipediaContext</name>
-    <message>
-        <location filename="../src/libtomahawk/context/pages/WikipediaContext.h" line="42"/>
-        <source>Wikipedia</source>
-        <translation>Wikipedia</translation>
     </message>
 </context>
 <context>
