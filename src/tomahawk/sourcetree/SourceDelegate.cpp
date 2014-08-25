@@ -120,7 +120,7 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
 
 
 void
-SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index, const QString& count ) const
 {
     SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
     const bool upperCase = !( type == SourcesModel::StaticPlaylist ||
@@ -150,7 +150,17 @@ SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem
         painter->setFont( f );
     }
 
-    QRect textRect = opt.rect.adjusted( iconRect.width() + 22, 0, -32, 0 );
+    int figWidth = 0;
+    if ( !count.isEmpty() )
+    {
+        figWidth = QFontMetrics( painter->font() ).width( count );
+        QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 16, 0, -14, -option.rect.height() + option.fontMetrics.height() * 1.1 );
+        int hd = ( option.rect.height() - figRect.height() ) / 2;
+        figRect.adjust( 0, hd, 0, hd );
+        painter->drawText( figRect, count, QTextOption( Qt::AlignVCenter | Qt::AlignRight ) );
+    }
+
+    QRect textRect = opt.rect.adjusted( iconRect.width() + 22, 0, -32 - figWidth, 0 );
     QString text = painter->fontMetrics().elidedText( upperCase ? opt.text.toUpper() : opt.text, Qt::ElideRight, textRect.width() );
     {
         QTextOption to( Qt::AlignVCenter );
@@ -664,15 +674,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
                     count = QString::number( ci->trackCount() );
             }
 
-            if ( !count.isEmpty() )
-            {
-                int figWidth = QFontMetrics( painter->font() ).width( count );
-                QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 16, 0, -14, -option.rect.height() + option.fontMetrics.height() * 1.1 );
-                int hd = ( option.rect.height() - figRect.height() ) / 2;
-                figRect.adjust( 0, hd, 0, hd );
-                painter->drawText( figRect, count, QTextOption( Qt::AlignVCenter | Qt::AlignRight ) );
-            }
-            paintStandardItem( painter, optIndentation, index );
+            paintStandardItem( painter, optIndentation, index, count );
         }
         else if ( type == SourcesModel::TemporaryPage )
         {
@@ -697,7 +699,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             {
                 const int imgWidth = optIndentation.rect.height() / 2;
                 const QPixmap icon = plItem->subscribedIcon().scaled( imgWidth, imgWidth, Qt::KeepAspectRatio, Qt::SmoothTransformation );
-                const QRect subRect( optIndentation.rect.right() - 4 - imgWidth, optIndentation.rect.top() + ( optIndentation.rect.height() - imgWidth ) / 2, imgWidth, imgWidth );
+                const QRect subRect( optIndentation.rect.right() - 14 - imgWidth, optIndentation.rect.top() + ( optIndentation.rect.height() - imgWidth ) / 2, imgWidth, imgWidth );
                 painter->drawPixmap( subRect, icon );
             }
 

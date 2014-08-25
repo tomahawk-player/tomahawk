@@ -60,7 +60,7 @@ private slots:
     void animationFinished( const QModelIndex& );
 
 private:
-    void paintStandardItem( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    void paintStandardItem( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index, const QString& count = QString() ) const;
     void paintDecorations( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     void paintSource( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     void paintCategory( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
