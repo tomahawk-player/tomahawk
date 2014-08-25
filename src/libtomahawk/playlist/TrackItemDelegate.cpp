@@ -90,6 +90,8 @@ TrackItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelInd
 void
 TrackItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
+    painter->setRenderHint( QPainter::TextAntialiasing );
+
     PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     Q_ASSERT( item );
 
