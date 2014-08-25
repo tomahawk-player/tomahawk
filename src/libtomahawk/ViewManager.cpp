@@ -79,7 +79,6 @@ ViewManager::ViewManager( QObject* parent )
     , m_widget( new QWidget() )
     , m_queue( 0 )
     , m_newReleasesWidget( 0 )
-    , m_recentPlaysWidget( 0 )
     , m_inboxWidget( 0 )
     , m_currentPage( 0 )
 {
@@ -123,7 +122,6 @@ ViewManager::ViewManager( QObject* parent )
 ViewManager::~ViewManager()
 {
     delete m_newReleasesWidget;
-    delete m_recentPlaysWidget;
     delete m_inboxWidget;
     delete m_widget;
 }
@@ -412,34 +410,6 @@ ViewManager::showQueuePage()
         return 0;
 
     return show( m_queue );
-}
-
-
-Tomahawk::ViewPage*
-ViewManager::showRecentPlaysPage()
-{
-    if ( !m_recentPlaysWidget )
-    {
-        FlexibleView* pv = new FlexibleView( m_widget );
-        pv->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RecentlyPlayed ) );
-
-        RecentlyPlayedModel* raModel = new RecentlyPlayedModel( pv );
-        raModel->setTitle( tr( "Recently Played Tracks" ) );
-        raModel->setDescription( tr( "Recently played tracks from all your friends" ) );
-
-        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv->trackView(), pv->trackView()->proxyModel() );
-        pv->trackView()->setPlaylistItemDelegate( del );
-
-        pv->setPlayableModel( raModel );
-        pv->setEmptyTip( tr( "Sorry, we could not find any recent plays!" ) );
-        raModel->setSource( source_ptr() );
-
-        pv->setGuid( "recentlyplayed" );
-
-        m_recentPlaysWidget = pv;
-    }
-
-    return show( m_recentPlaysWidget );
 }
 
 
@@ -824,12 +794,6 @@ ViewManager::newReleasesWidget() const
     return m_newReleasesWidget;
 }
 
-
-Tomahawk::ViewPage*
-ViewManager::recentPlaysWidget() const
-{
-    return m_recentPlaysWidget;
-}
 
 Tomahawk::ViewPage*
 ViewManager::inboxWidget() const

@@ -90,7 +90,6 @@ public:
     Tomahawk::ViewPage* show( Tomahawk::ViewPage* page );
 
     Tomahawk::ViewPage* newReleasesWidget() const;
-    Tomahawk::ViewPage* recentPlaysWidget() const;
     Tomahawk::ViewPage* superCollectionView() const;
     Tomahawk::ViewPage* inboxWidget() const;
 
@@ -133,7 +132,6 @@ signals:
 public slots:
     Tomahawk::ViewPage* showSuperCollection();
     Tomahawk::ViewPage* showNewReleasesPage();
-    Tomahawk::ViewPage* showRecentPlaysPage();
     Tomahawk::ViewPage* showInboxPage();
     Tomahawk::ViewPage* showQueuePage();
 
@@ -183,7 +181,6 @@ private:
     TreeWidget* m_superCollectionView;
     QueueView* m_queue;
     NewReleasesWidget* m_newReleasesWidget;
-    Tomahawk::ViewPage* m_recentPlaysWidget;
     Tomahawk::ViewPage* m_inboxWidget;
     InboxModel* m_inboxModel;
 
