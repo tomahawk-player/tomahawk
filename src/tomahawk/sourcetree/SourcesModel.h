@@ -49,7 +49,7 @@ public:
         Invalid = -1,
         Divider = 9,
 
-        Collection = 0,
+        Source = 0,
         Group = 8,
 
         Category = 1,
@@ -63,7 +63,9 @@ public:
         TemporaryPage = 7,
         LovedTracksPage = 10,
 
+        Collection = 14,
         ScriptCollection = 11,
+
         Inbox = 12,
         Queue = 13
     };

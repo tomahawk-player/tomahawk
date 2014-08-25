@@ -30,6 +30,7 @@
 #include "ViewManager.h"
 #include "Playlist.h"
 #include "GenericPageItems.h"
+#include "CollectionItem.h"
 #include "LovedTracksItem.h"
 #include "Source.h"
 #include "SourceList.h"
@@ -52,7 +53,7 @@
 using namespace Tomahawk;
 
 SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahawk::source_ptr& source )
-    : SourceTreeItem( mdl, parent, SourcesModel::Collection )
+    : SourceTreeItem( mdl, parent, SourcesModel::Source )
     , m_source( source )
     , m_playlists( 0 )
     , m_stations( 0 )
@@ -320,7 +321,7 @@ SourceItem::onCollectionAdded( const collection_ptr& collection )
 void
 SourceItem::onCollectionRemoved( const collection_ptr& collection )
 {
-    GenericPageItem* item = m_collectionItems.value( collection );
+    SourceTreeItem* item = m_collectionItems.value( collection );
     int row = model()->indexFromItem( item ).row();
 
     beginRowsRemoved( row, row );
@@ -374,17 +375,24 @@ SourceItem::playlistsAddedInternal( SourceTreeItem* parent, const QList< dynplay
 void
 SourceItem::performAddCollectionItem( const collection_ptr& collection )
 {
-    GenericPageItem* item = new GenericPageItem( model(),
-                                                 this,
-                                                 collection->itemName(),
-                                                 collection->icon(),
-                                                 boost::bind( &SourceItem::collectionClicked, this, collection ),
-                                                 boost::bind( &SourceItem::getCollectionPage, this, collection ) );
-
+    SourceTreeItem* item;
     if ( collection->backendType() == Collection::DatabaseCollectionType )
-        item->setSortValue( -350 );
+    {
+        CollectionItem* i = new CollectionItem( model(), this, collection );
+        i->setSortValue( -350 );
+        item = i;
+    }
     else
-        item->setSortValue( -340 );
+    {
+        GenericPageItem* i = new GenericPageItem( model(),
+                                                     this,
+                                                     collection->itemName(),
+                                                     collection->icon(),
+                                                     boost::bind( &SourceItem::collectionClicked, this, collection ),
+                                                     boost::bind( &SourceItem::getCollectionPage, this, collection ) );
+        i->setSortValue( -340 );
+        item = i;
+    }
 
     m_collectionItems.insert( collection, item );
 }

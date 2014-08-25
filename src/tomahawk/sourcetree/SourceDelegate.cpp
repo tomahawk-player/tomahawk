@@ -28,6 +28,7 @@
 #include "items/CategoryItems.h"
 #include "items/TemporaryPageItem.h"
 #include "items/ScriptCollectionItem.h"
+#include "items/CollectionItem.h"
 #include "items/InboxItem.h"
 #include "items/QueueItem.h"
 
@@ -86,7 +87,7 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
     SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
     SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
 
-    if ( type == SourcesModel::Collection || type == SourcesModel::ScriptCollection )
+    if ( type == SourcesModel::Source || type == SourcesModel::ScriptCollection )
     {
         SourceItem* colItem = qobject_cast< SourceItem* >( item );
         return QSize( option.rect.width(), ( colItem && colItem->source() && colItem->source()->isLocal() ) ? 0 : option.fontMetrics.height() * 3.0 );
@@ -221,7 +222,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
 
     bool shouldDrawDropHint = false;
 
-    if ( type == SourcesModel::Collection )
+    if ( type == SourcesModel::Source )
     {
         // If the user is about to drop a track on a peer
         QRect itemsRect = option.rect;
@@ -239,7 +240,6 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
             if ( status )
             {
                 tracks = QString::number( colItem->source()->trackCount() );
-                figWidth = painter->fontMetrics().width( tracks );
                 if ( shouldDrawDropHint )
                     figWidth = iconRect.width();
                 name = colItem->source()->friendlyName();
@@ -286,7 +286,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
 
     textRect = option.rect.adjusted( iconRect.width() + 28, option.rect.height() / 2, -figWidth - ( figWidth ? 24 : 0 ), -6 );
 
-    if ( type == SourcesModel::Collection )
+    if ( type == SourcesModel::Source )
     {
         SourceItem* colItem = qobject_cast< SourceItem* >( item );
         Q_ASSERT( colItem );
@@ -371,18 +371,15 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     painter->restore();
 
     bool shouldPaintTrackCount = false;
-    if ( type == SourcesModel::Collection )
+    if ( type == SourcesModel::Source )
     {
         SourceItem* colItem = qobject_cast< SourceItem* >( item );
         Q_ASSERT( colItem );
-        bool status = !( !colItem || colItem->source().isNull() || !colItem->source()->isOnline() );
 
         if ( colItem->source() && colItem->source()->currentTrack() && colItem->source()->state() == Tomahawk::SYNCED )
             m_trackRects[ index ] = textRect.adjusted( 0, 0, -textRect.width() + painter->fontMetrics().width( text ), 0 );
         else
             m_trackRects.remove( index );
-        if ( status && !tracks.isEmpty() )
-            shouldPaintTrackCount = true;
     }
     else if ( type == SourcesModel::ScriptCollection )
     {
@@ -517,7 +514,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         opt.rect.setX( 0 );
     }
 
-    if ( type == SourcesModel::Collection || type == SourcesModel::ScriptCollection )
+    if ( type == SourcesModel::Source || type == SourcesModel::ScriptCollection )
     {
         paintCollection( painter, optIndentation, index );
     }
@@ -645,29 +642,35 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         if ( !index.parent().parent().isValid() )
             optIndentation.rect.adjust( 7, 0, 0, 0 );
 
-        if ( type == SourcesModel::Inbox || type == SourcesModel::Queue )
+        if ( type == SourcesModel::Inbox || type == SourcesModel::Queue || type == SourcesModel::Collection )
         {
-            int count = 0;
+            QString count;
             if ( type == SourcesModel::Inbox )
             {
                 InboxItem* ii = qobject_cast< InboxItem* >( item );
-                if ( ii )
-                    count = ii->unlistenedCount();
+                if ( ii && ii->unlistenedCount() )
+                    count = QString::number( ii->unlistenedCount() );
             }
             else if ( type == SourcesModel::Queue )
             {
                 QueueItem* qi = qobject_cast< QueueItem* >( item );
-                if ( qi )
-                    count = qi->unlistenedCount();
+                if ( qi && qi->unlistenedCount() )
+                    count = QString::number( qi->unlistenedCount() );
             }
-            if ( count > 0 )
+            else if ( type == SourcesModel::Collection )
             {
-                const QString scount = QString::number( count );
-                int figWidth = QFontMetrics( painter->font() ).width( scount );
+                CollectionItem* ci = qobject_cast< CollectionItem* >( item );
+                if ( ci )
+                    count = QString::number( ci->trackCount() );
+            }
+
+            if ( !count.isEmpty() )
+            {
+                int figWidth = QFontMetrics( painter->font() ).width( count );
                 QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 16, 0, -14, -option.rect.height() + option.fontMetrics.height() * 1.1 );
                 int hd = ( option.rect.height() - figRect.height() ) / 2;
                 figRect.adjust( 0, hd, 0, hd );
-                painter->drawText( figRect, scount, QTextOption( Qt::AlignVCenter | Qt::AlignRight ) );
+                painter->drawText( figRect, count, QTextOption( Qt::AlignVCenter | Qt::AlignRight ) );
             }
             paintStandardItem( painter, optIndentation, index );
         }
@@ -825,7 +828,7 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
                 return true;
             }
         }
-        else if ( type == SourcesModel::Collection )
+        else if ( type == SourcesModel::Source )
         {
             SourceItem* colItem = qobject_cast< SourceItem* >( index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
             Q_ASSERT( colItem );
@@ -977,7 +980,7 @@ SourceDelegate::hovered( const QModelIndex& index, const QMimeData* mimeData )
         m_expandedMap.insert( m_newDropHoverIndex, new AnimationHelper( m_newDropHoverIndex ) );
         connect( m_expandedMap.value( m_newDropHoverIndex ), SIGNAL( finished( QModelIndex ) ), SLOT( animationFinished( QModelIndex ) ) );
     }
-    else*/ if ( type == SourcesModel::Collection )
+    else*/ if ( type == SourcesModel::Source )
     {
         m_dropMimeData->clear();
         foreach ( const QString& mimeDataFormat, mimeData->formats() )

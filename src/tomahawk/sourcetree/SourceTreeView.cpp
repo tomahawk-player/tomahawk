@@ -196,7 +196,7 @@ SourceTreeView::setupMenus()
     m_latchMenu.addAction( latchOnAction );
     m_privacyMenu.addAction( ActionCollection::instance()->getAction( "togglePrivacy" ) );
 
-    if ( type == SourcesModel::Collection )
+    if ( type == SourcesModel::Source )
     {
         SourceItem* item = itemFromIndex< SourceItem >( m_contextMenuIndex );
         source_ptr source = item->source();
@@ -333,7 +333,7 @@ void
 SourceTreeView::onItemExpanded( const QModelIndex& idx )
 {
     // make sure to expand children nodes for collections
-    if ( idx.data( SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Collection )
+    if ( idx.data( SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Source )
     {
        for ( int i = 0; i < model()->rowCount( idx ); i++ )
        {
@@ -588,7 +588,7 @@ SourceTreeView::latchOnOrCatchUp()
         return;
 
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
-    if ( type != SourcesModel::Collection )
+    if ( type != SourcesModel::Source )
         return;
 
     SourceItem* item = itemFromIndex< SourceItem >( m_contextMenuIndex );
@@ -606,7 +606,7 @@ SourceTreeView::latchOff()
         return;
 
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
-    if ( type != SourcesModel::Collection )
+    if ( type != SourcesModel::Source )
         return;
 
     const SourceItem* item = itemFromIndex< SourceItem >( m_contextMenuIndex );
@@ -642,7 +642,7 @@ SourceTreeView::latchModeToggled( bool checked )
         return;
 
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
-    if ( type != SourcesModel::Collection )
+    if ( type != SourcesModel::Source )
         return;
 
     const SourceItem* item = itemFromIndex< SourceItem >( m_contextMenuIndex );
@@ -718,7 +718,7 @@ SourceTreeView::onCustomContextMenu( const QPoint& pos )
         else
             m_roPlaylistMenu.exec( mapToGlobal( pos ) );
     }
-    else if ( model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Collection )
+    else if ( model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Source )
     {
         SourceItem* item = itemFromIndex< SourceItem >( m_contextMenuIndex );
         if ( !item->source().isNull() && !item->source()->isLocal() )
@@ -806,7 +806,7 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
                 {
                     case SourcesModel::StaticPlaylist:
                     case SourcesModel::CategoryAdd:
-                    case SourcesModel::Collection: //drop to send tracks to peers
+                    case SourcesModel::Source: //drop to send tracks to peers
                         m_delegate->hovered( index, event->mimeData() );
                         dataChanged( index, index );
                         break;
