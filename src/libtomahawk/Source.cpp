@@ -813,7 +813,7 @@ Source::textStatus() const
 
     if ( !currentTrack().isNull() )
     {
-        return currentTrack()->queryTrack()->artist() + " - " + currentTrack()->queryTrack()->track();
+        return currentTrack()->queryTrack()->track() + " - " + currentTrack()->queryTrack()->artist();
     }
 
     // do not use isOnline() here - it will always return true for the local source
