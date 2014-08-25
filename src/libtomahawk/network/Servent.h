@@ -64,7 +64,24 @@ public:
     explicit Servent( QObject* parent = 0 );
     virtual ~Servent();
 
-    bool startListening( QHostAddress ha, bool upnp, int port, Tomahawk::Network::ExternalAddress::Mode mode, int defaultPort, bool autoDetectExternalIp = false, const QString& externalHost = "", int externalPort = -1 );
+    /**
+     * Start listening for connections.
+     *
+     * @param ha The address to listen on, pass QHostAddress::Any or QHostAddress::AnyIPv6 depending on your Qt version to listen on all interfaces.
+     * @param upnp If true, try to create a port forward on the next router through UPnP.
+     * @param port The port we should listen on, if not possible fallback to defaultPort.
+     * @param mode How the external IP address should be determined.
+     * @param defaultPort If we cannot listen on the port the user configured try this port as fallback.
+     * @param autoDetectExternalIp If true, try to automatically detect the external port by querying a remote server.
+     * @param externalHost manually supplied external hostname (only with mode == Tomahawk::Network::ExternalAddress::Static)
+     * @param externalPort manually supplied external port (only with mode == Tomahawk::Network::ExternalAddress::Static)
+     * @return True if we could listen on any of the supplied ports.
+     */
+    bool startListening( QHostAddress ha, bool upnp, int port,
+                         Tomahawk::Network::ExternalAddress::Mode mode,
+                         int defaultPort, bool autoDetectExternalIp = false,
+                         const QString& externalHost = "",
+                         int externalPort = -1 );
 
     // creates new token that allows a controlconnection to be set up
     QString createConnectionKey( const QString& name = "", const QString &nodeid = "", const QString &key = "", bool onceOnly = true );
