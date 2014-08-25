@@ -246,8 +246,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
             }
 
             avatar = colItem->pixmap( iconRect.size() );
-
-            isPlaying = !( colItem->source()->currentTrack().isNull() );
+            isPlaying = !colItem->source()->currentTrack().isNull();
             desc = colItem->source()->textStatus();
             if ( colItem->source().isNull() )
                 desc = tr( "All available tracks" );
