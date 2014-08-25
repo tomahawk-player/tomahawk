@@ -1091,7 +1091,7 @@ Servent::addresses() const
         return QNetworkInterface::allAddresses();
     }
 
-    return d_func()->externalAddresses;
+    return d->externalAddresses;
 }
 
 
