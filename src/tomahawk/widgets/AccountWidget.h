@@ -27,7 +27,7 @@
 class AnimatedSpinner;
 class ElidedLabel;
 class SlideSwitchButton;
-class UnstyledFrame;
+class QFrame;
 class QLabel;
 class QLineEdit;
 class QPushButton;
@@ -63,7 +63,7 @@ private:
     SlideSwitchButton* m_statusToggle;
     QLineEdit*         m_inviteEdit;
     QPushButton*       m_inviteButton;
-    UnstyledFrame*     m_inviteContainer;
+    QFrame*            m_inviteContainer;
     QLabel*            m_addAccountIcon;
 
     QPersistentModelIndex m_myFactoryIdx;

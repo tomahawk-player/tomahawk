@@ -18,7 +18,6 @@
 
 #include "AccountWidget.h"
 
-#include "UnstyledFrame.h"
 #include "SlideSwitchButton.h"
 #include "accounts/Account.h"
 #include "accounts/AccountModel.h"
@@ -102,13 +101,13 @@ AccountWidget::AccountWidget( QWidget* parent )
     statusToggleLayout->addStretch();
     statusToggleLayout->addWidget( m_statusToggle );
 
-    m_inviteContainer = new UnstyledFrame( this );
+    m_inviteContainer = new QFrame( this );
+    m_inviteContainer->setObjectName( "inviteContainer" );
     vLayout->addWidget( m_inviteContainer, 1, 0 );
-    m_inviteContainer->setFrameColor( TomahawkStyle::BORDER_LINE );
+    m_inviteContainer->setStyleSheet( QString( "QWidget { background: white; } QFrame#%1 { border: 1px solid %2; }" ).arg( m_inviteContainer->objectName() ).arg( TomahawkStyle::BORDER_LINE.name() ) );
     m_inviteContainer->setMinimumWidth( m_inviteContainer->logicalDpiX() * 2 );
     m_inviteContainer->setContentsMargins( 1, 1, 1, 2 );
     m_inviteContainer->setAttribute( Qt::WA_TranslucentBackground, false );
-    m_inviteContainer->setStyleSheet( "background: white" );
 
     QHBoxLayout* containerLayout = new QHBoxLayout( m_inviteContainer );
     m_inviteContainer->setLayout( containerLayout );
