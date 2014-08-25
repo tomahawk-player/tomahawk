@@ -310,10 +310,9 @@ Source::avatar( TomahawkUtils::ImageMode style, const QSize& size, bool defaultA
         }
     }
 
-    if ( d->avatarLoaded )
+    if ( d->avatarLoaded && d->avatar )
     {
-        if ( d->avatar )
-            return d->avatar->scaled( size, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+        return d->avatar->scaled( size, Qt::KeepAspectRatio, Qt::SmoothTransformation );
     }
 
     if ( defaultAvatarFallback )
