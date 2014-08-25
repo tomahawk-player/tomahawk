@@ -34,7 +34,7 @@ QueueItem::QueueItem( SourcesModel* model, SourceTreeItem* parent )
     , m_sortValue( -150 )
 {
     m_text = tr( "Queue" );
-    m_icon = ImageRegistry::instance()->icon( RESPATH "images/new-releases.svg" );
+    m_icon = ImageRegistry::instance()->icon( RESPATH "images/queue.svg" );
 }
 
 
