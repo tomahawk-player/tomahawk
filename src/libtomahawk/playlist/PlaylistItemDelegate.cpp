@@ -571,15 +571,19 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
     painter->save();
     painter->setRenderHint( QPainter::TextAntialiasing );
 
+    int rightMargin = 32;
+    if ( !index.parent().isValid() )
+        rightMargin = 0;
+
     if ( option.state & QStyle::State_Selected )
     {
         painter->setPen( QColor( "#f8f8f8" ) );
         painter->setBrush( QColor( "#f8f8f8" ) );
-        painter->drawRect( rect.adjusted( 0, 4, 0, -4 ) );
+        painter->drawRect( rect.adjusted( 0, 4, -rightMargin, -4 ) );
     }
     painter->setPen( QColor( "#000000" ) );
 
-    QRect r = rect.adjusted( 32, 6, -32, -6 );
+    QRect r = rect.adjusted( 32, 6, -32 -rightMargin, -6 );
     const int margin = 8;
 
     QFont f = painter->font();
