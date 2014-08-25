@@ -30,7 +30,6 @@
 #include "playlist/PlaylistModel.h"
 #include "playlist/TrackView.h"
 #include "playlist/GridView.h"
-#include "playlist/PlaylistLargeItemDelegate.h"
 #include "playlist/TrackItemDelegate.h"
 #include "playlist/TrackDetailView.h"
 #include "PlayableProxyModelPlaylistInterface.h"

@@ -42,7 +42,6 @@
 #include "playlist/InboxModel.h"
 #include "playlist/InboxView.h"
 #include "playlist/TrackItemDelegate.h"
-#include "playlist/PlaylistLargeItemDelegate.h"
 #include "playlist/RecentlyPlayedModel.h"
 #include "playlist/dynamic/widgets/DynamicWidget.h"
 #include "resolvers/ScriptCollection.h"

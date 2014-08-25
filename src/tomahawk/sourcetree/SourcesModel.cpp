@@ -322,11 +322,6 @@ SourcesModel::appendGroups()
                                                 boost::bind( &ViewManager::newReleasesWidget, ViewManager::instance() ) );
     newReleases->setSortValue( 7 );
 
-/*    GenericPageItem* recent = new GenericPageItem( this, m_browse, tr( "Recently Played" ), ImageRegistry::instance()->icon( RESPATH "images/recently-played.svg" ),
-                                                boost::bind( &ViewManager::showRecentPlaysPage, ViewManager::instance() ),
-                                                boost::bind( &ViewManager::recentPlaysWidget, ViewManager::instance() ) );
-    recent->setSortValue( 8 );*/
-
     m_collectionsGroup = new GroupItem( this, m_rootItem, tr( "Friends" ), 4 );
     m_cloudGroup = new GroupItem( this, m_rootItem, tr( "Cloud" ), 5 );
 

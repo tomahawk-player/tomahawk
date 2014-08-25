@@ -31,7 +31,6 @@
 #include "playlist/TreeView.h"
 #include "playlist/GridView.h"
 #include "playlist/ModeHeader.h"
-#include "playlist/PlaylistLargeItemDelegate.h"
 #include "PlayableProxyModelPlaylistInterface.h"
 #include "TomahawkSettings.h"
 #include "utils/ImageRegistry.h"
@@ -69,10 +68,6 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
 /*    m_columnView->setColumnHidden( PlayableModel::Age, true ); // Hide age column per default
     m_columnView->setColumnHidden( PlayableModel::Filesize, true ); // Hide filesize column per default
     m_columnView->setColumnHidden( PlayableModel::Composer, true ); // Hide composer column per default*/
-
-/*    PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, m_trackView, m_trackView->proxyModel() );
-    m_trackView->setPlaylistItemDelegate( del );
-    m_trackView->proxyModel()->setStyle( PlayableProxyModel::Large );*/
 
     m_stack = new QStackedWidget();
     setLayout( new QVBoxLayout() );

@@ -72,7 +72,6 @@ set( libGuiSources
     playlist/RecentlyAddedModel.cpp
     playlist/RecentlyPlayedModel.cpp
     playlist/AlbumItemDelegate.cpp
-    playlist/PlaylistLargeItemDelegate.cpp
     playlist/TrackItemDelegate.cpp
     playlist/PlaylistChartItemDelegate.cpp
     playlist/PlayableItem.cpp

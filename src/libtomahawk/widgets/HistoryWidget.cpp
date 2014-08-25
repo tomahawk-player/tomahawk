@@ -25,7 +25,6 @@
 
 #include "playlist/RecentlyPlayedModel.h"
 #include "playlist/TrackView.h"
-#include "playlist/PlaylistLargeItemDelegate.h"
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
@@ -88,9 +87,6 @@ HistoryWidget::HistoryWidget( const source_ptr& source, QWidget* parent )
         m_model->setDescription( tr( "Your recently played tracks" ) );
     else
         m_model->setDescription( tr( "%1's recently played tracks" ).arg( source->friendlyName() ) );
-
-/*    PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, trackView(), trackView()->proxyModel() );
-    trackView()->setPlaylistItemDelegate( del );*/
 
     trackView()->setIndentation( 0 );
     trackView()->setUniformRowHeights( false );
