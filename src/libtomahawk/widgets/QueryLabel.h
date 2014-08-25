@@ -70,6 +70,7 @@ public:
     void init();
 
 public slots:
+    void clear();
     void setText( const QString& text );
     void setResult( const Tomahawk::result_ptr& result );
     void setQuery( const Tomahawk::query_ptr& query );

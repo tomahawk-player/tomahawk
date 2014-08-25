@@ -144,11 +144,7 @@ QueryLabel::text() const
 void
 QueryLabel::setText( const QString& text )
 {
-    m_result.clear();
-    m_query.clear();
-    m_artist.clear();
-    m_album.clear();
-
+    clear();
     QLabel::setText( m_text );
     m_text = text;
 
@@ -157,6 +153,20 @@ QueryLabel::setText( const QString& text )
 
     emit textChanged( m_text );
     emit resultChanged( m_result );
+}
+
+
+void
+QueryLabel::clear()
+{
+    m_type = None;
+
+    m_result.clear();
+    m_query.clear();
+    m_artist.clear();
+    m_album.clear();
+
+    QLabel::clear();
 }
 
 
