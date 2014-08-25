@@ -241,10 +241,6 @@ OverlayWidget::paintEvent( QPaintEvent* event )
     }
 
     p.setFont( f );
-#ifdef Q_OS_MAC
     p.setPen( Qt::gray );
-#else
-    p.setPen( palette().text().color().lighter( 100 ) );
-#endif
     p.drawText( r.adjusted( 8, 8, -8, -8 ), text(), to );
 }
