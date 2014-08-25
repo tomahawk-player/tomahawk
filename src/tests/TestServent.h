@@ -47,12 +47,11 @@ private:
             "Link-local IPv6 address detected" );
     }
 
-private slots:
-    void testListenAll()
+    void listenAllBasic( Servent** servent )
     {
         // Instantiate a new instance for each test so we have a sane state.
-        Servent* servent = new Servent();
-        QVERIFY( servent != NULL );
+        *servent = new Servent();
+        QVERIFY( *servent != NULL );
 
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
         QHostAddress anyAddress = QHostAddress::Any;
@@ -64,9 +63,16 @@ private slots:
         // With (upnp == false) and (mode ==
         // Tomahawk::Network::ExternalAddress::Upnp) we should not do
         // any external address detection.
-        bool ok = servent->startListening( anyAddress, false, 52222,
+        bool ok = (*servent)->startListening( anyAddress, false, 52222,
              Tomahawk::Network::ExternalAddress::Upnp, 52222);
         QVERIFY( ok );
+    }
+
+private slots:
+    void testListenAll()
+    {
+        Servent* servent;
+        listenAllBasic( &servent );
 
         // Verify that computed external addresses are ok
         QList<QHostAddress> externalAddresses = servent->addresses();
