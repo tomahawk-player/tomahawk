@@ -80,7 +80,7 @@ public:
     QString dbFriendlyName() const;
     void setDbFriendlyName( const QString& dbFriendlyName );
 
-    QPixmap avatar( TomahawkUtils::ImageMode style = TomahawkUtils::Original, const QSize& size = QSize() );
+    QPixmap avatar( TomahawkUtils::ImageMode style = TomahawkUtils::Original, const QSize& size = QSize(), bool defaultAvatarFallback = false );
 
     collection_ptr dbCollection() const;
     QList< Tomahawk::collection_ptr > collections() const;

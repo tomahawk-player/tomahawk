@@ -41,6 +41,7 @@
 
 #include <QCoreApplication>
 #include <QtAlgorithms>
+#include <QPainter>
 
 using namespace Tomahawk;
 
@@ -280,7 +281,7 @@ Source::friendlyNamesLessThan( const QString& first, const QString& second )
 
 
 QPixmap
-Source::avatar( TomahawkUtils::ImageMode style, const QSize& size )
+Source::avatar( TomahawkUtils::ImageMode style, const QSize& size, bool defaultAvatarFallback )
 {
     Q_D( Source );
 
@@ -315,7 +316,20 @@ Source::avatar( TomahawkUtils::ImageMode style, const QSize& size )
             return d->avatar->scaled( size, Qt::KeepAspectRatio, Qt::SmoothTransformation );
     }
 
-    return QPixmap();
+    if ( defaultAvatarFallback )
+    {
+        QPixmap px = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, style, size );
+        QPainter p( &px );
+        p.setRenderHint( QPainter::Antialiasing );
+        QFont f = p.font();
+        f.setPixelSize( px.size().height() - 8 );
+        p.setFont( f );
+        p.setPen( Qt::white );
+        p.drawText( px.rect().adjusted( 0, 2, 0, 0 ), friendlyName().left( 1 ).toUpper(), QTextOption( Qt::AlignCenter ) );
+        return px;
+    }
+    else
+        return QPixmap();
 }
 
 
