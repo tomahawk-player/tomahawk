@@ -80,7 +80,7 @@ public:
     bool startListening( QHostAddress ha, bool upnp, int port,
                          Tomahawk::Network::ExternalAddress::Mode mode,
                          int defaultPort, bool autoDetectExternalIp = false,
-                         const QString& externalHost = "",
+                         const QString& externalHost = QString(),
                          int externalPort = -1 );
 
     // creates new token that allows a controlconnection to be set up
