@@ -143,21 +143,10 @@ Servent::startListening( QHostAddress ha, bool upnp, int port, Tomahawk::Network
     if ( ha == QHostAddress::Any || ha == QHostAddress::AnyIPv6 )
     {
         // We are listening on all available addresses, so we should send a SipInfo for all of them.
-        foreach ( QHostAddress addr, QNetworkInterface::allAddresses() )
-        {
-            if ( addr.toString() == "127.0.0.1" )
-                continue; // IPv4 localhost
-            if ( addr.toString() == "::1" )
-                continue; // IPv6 localhost
-            if ( addr.toString() ==  "::7F00:1" )
-                continue; // IPv4 localhost as IPv6 address
-            if ( addr.isInSubnet( QHostAddress::parseSubnet( "fe80::/10" ) ) )
-                continue; // Skip link local addresses
-            tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Listening to" << addr.toString();
-            d->externalAddresses.append( addr );
-            d->externalListenAll = true;
-        }
-
+        d->externalAddresses = QNetworkInterface::allAddresses();
+        cleanAddresses( d->externalAddresses );
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Listening to" << d->externalAddresses;
+        d->externalListenAll = true;
     }
     else if ( ( ha.toString() != "127.0.0.1" ) && ( ha.toString() != "::1" ) && ( ha.toString() != "::7F00:1" ) )
     {
@@ -420,6 +409,7 @@ Servent::getLocalSipInfos( const QString& nodeid, const QString& key )
     if ( d->externalListenAll )
     {
         addresses = QNetworkInterface::allAddresses();
+        cleanAddresses( addresses );
     }
 
     foreach ( QHostAddress ha, addresses )
@@ -1088,7 +1078,9 @@ Servent::addresses() const
 
     if ( d->externalListenAll )
     {
-        return QNetworkInterface::allAddresses();
+        QList<QHostAddress> addresses( QNetworkInterface::allAddresses() );
+        cleanAddresses( addresses );
+        return addresses;
     }
 
     return d->externalAddresses;
@@ -1316,6 +1308,37 @@ Servent::printCurrentTransfers()
         qDebug() << k << ") " << i->id();
     }
     qDebug() << endl;
+}
+
+
+void
+Servent::cleanAddresses( QList<QHostAddress>& addresses ) const
+{
+    QList<QHostAddress>::iterator iter = addresses.begin();
+    while ( iter != addresses.end() )
+    {
+        QString hostString = iter->toString();
+        if ( hostString.startsWith( QLatin1String( "127.0.0." ) ) //< IPv4 localhost
+             // IPv6 localhost
+             || hostString == "::1"
+             // IPv4 localhost as IPv6 address
+             || hostString == "::7F00:1" )
+        {
+            iter = addresses.erase( iter );
+            // Always continue if we changed iter as we might have reached the end
+            continue;
+        }
+
+        // Remove IPv6 link local addresses
+        if ( iter->isInSubnet( QHostAddress::parseSubnet( "fe80::/10" ) ) )
+        {
+            iter = addresses.erase( iter );
+            continue;
+        }
+
+        // Advance to next element
+        ++iter;
+    }
 }
 
 

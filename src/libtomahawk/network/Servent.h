@@ -196,6 +196,14 @@ private:
     void cleanupSocket( QTcpSocketExtra* sock );
     void printCurrentTransfers();
 
+    /**
+     * Remove addresses from the list that we shall not use in Tomahawk (e.g.
+     * for sending to other peers).
+     *
+     * @param addresses The list that shall be cleanded.
+     */
+    void cleanAddresses( QList<QHostAddress>& addresses ) const;
+
     static Servent* s_instance;
 };
 
