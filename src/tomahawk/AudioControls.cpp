@@ -487,11 +487,11 @@ AudioControls::onPlaybackStopped()
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     m_currentTrack.clear();
 
-    ui->artistLabel->setText( "" );
-    ui->trackLabel->setText( "" );
+    ui->artistLabel->clear();
+    ui->trackLabel->clear();
     ui->dashLabel->setVisible( false );
-    ui->timeLabel->setText( "" );
-    ui->timeLeftLabel->setText( "" );
+    ui->timeLabel->clear();
+    ui->timeLeftLabel->clear();
 //    ui->coverImage->setPixmap( QPixmap(), false );
     ui->seekSlider->setVisible( false );
     m_sliderTimeLine.stop();
