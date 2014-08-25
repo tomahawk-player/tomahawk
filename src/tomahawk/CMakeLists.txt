@@ -70,7 +70,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      widgets/SlideSwitchButton.cpp
      widgets/SocialWidget.cpp
      widgets/SplashWidget.cpp
-     widgets/UnstyledFrame.cpp
 )
 
 SET( tomahawkUI ${tomahawkUI}
