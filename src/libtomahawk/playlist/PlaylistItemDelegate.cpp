@@ -529,8 +529,8 @@ PlaylistItemDelegate::drawSource( QPainter* painter, const QStyleOptionViewItem&
     painter->setRenderHint( QPainter::TextAntialiasing );
     painter->setRenderHint( QPainter::SmoothPixmapTransform );
 
-    QRect avatarRect = rect.adjusted( 12, rect.height() - 48, 0, -16 );
-    QRect textRect = avatarRect.adjusted( avatarRect.height() + 32, 0, -32, 0 );
+    QRect avatarRect = rect.adjusted( 22, rect.height() - 48, 0, -16 );
+    QRect textRect = avatarRect.adjusted( avatarRect.height() + 24, 0, -32, 0 );
     avatarRect.setWidth( avatarRect.height() );
 
     QPixmap avatar = item->source()->avatar( TomahawkUtils::RoundedCorners, avatarRect.size(), true ) ;
