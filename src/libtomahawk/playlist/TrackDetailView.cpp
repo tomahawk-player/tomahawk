@@ -127,9 +127,7 @@ TrackDetailView::TrackDetailView( QWidget* parent )
     layout->setStretchFactor( resultsScrollArea, 1 );
 
     setLayout( layout );
-
-    m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Original, QSize( 48, 48 ) );
-    m_playableCover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Grid, m_playableCover->size() ) );
+    setQuery( query_ptr() );
 }
 
 
@@ -141,10 +139,7 @@ TrackDetailView::~TrackDetailView()
 void
 TrackDetailView::setQuery( const Tomahawk::query_ptr& query )
 {
-    if ( query.isNull() )
-        return;
-
-    if ( !m_query.isNull() )
+    if ( m_query )
     {
         disconnect( m_query->track().data(), SIGNAL( updated() ), this, SLOT( onCoverUpdated() ) );
         disconnect( m_query->track().data(), SIGNAL( socialActionsLoaded() ), this, SLOT( onSocialActionsLoaded() ) );
@@ -153,8 +148,16 @@ TrackDetailView::setQuery( const Tomahawk::query_ptr& query )
 
     m_query = query;
     m_playableCover->setQuery( query );
-    onCoverUpdated();
     onResultsChanged();
+    setSocialActions();
+    onCoverUpdated();
+
+    if ( !query )
+    {
+        m_dateLabel->setText( QString() );
+        m_nameLabel->clear();
+        return;
+    }
 
     m_dateLabel->setText( tr( "Unknown Release-Date" ) );
     if ( m_query->track()->albumPtr() && !m_query->track()->albumPtr()->name().isEmpty() )
@@ -177,7 +180,7 @@ TrackDetailView::setQuery( const Tomahawk::query_ptr& query )
 void
 TrackDetailView::onCoverUpdated()
 {
-    if ( m_query->track()->cover( QSize( 0, 0 ) ).isNull() )
+    if ( !m_query || m_query->track()->cover( QSize( 0, 0 ) ).isNull() )
     {
         m_playableCover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Grid, m_playableCover->size() ) );
         return;
@@ -185,8 +188,6 @@ TrackDetailView::onCoverUpdated()
 
     m_pixmap = m_query->track()->cover( m_playableCover->size() );
     m_playableCover->setPixmap( m_pixmap );
-
-    setSocialActions();
 }
 
 
@@ -204,7 +205,7 @@ TrackDetailView::onSocialActionsLoaded()
 void
 TrackDetailView::setSocialActions()
 {
-    if ( m_query->track()->loved() )
+    if ( m_query && m_query->track()->loved() )
     {
         m_lovedIcon->setVisible( true );
         m_lovedLabel->setVisible( true );
