@@ -72,6 +72,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 
     setFrameShape( QFrame::NoFrame );
     setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    setStyleSheet( QString( "QTreeView { outline: 0; }" ) );
     setContentsMargins( 0, 0, 0, 0 );
 
     m_playlistMenu.setFont( TomahawkUtils::systemFont() );
