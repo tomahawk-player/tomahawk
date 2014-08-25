@@ -91,9 +91,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     figFont.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
 
     QRect pixmapRect = option.rect.adjusted( 12, 12, -option.rect.width() + option.rect.height() - 12, -12 );
-    QPixmap avatar = index.data( RecentlyPlayedPlaylistsModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->avatar( TomahawkUtils::RoundedCorners, pixmapRect.size() );
-    if ( avatar.isNull() )
-        avatar = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::RoundedCorners, pixmapRect.size() );
+    QPixmap avatar = index.data( RecentlyPlayedPlaylistsModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->avatar( TomahawkUtils::RoundedCorners, pixmapRect.size(), true );
     painter->drawPixmap( pixmapRect, avatar );
 
     pixmapRect = QRect( option.rect.width() - option.fontMetrics.height() * 2.5 - 10, option.rect.top() + option.rect.height() / 4, option.fontMetrics.height() * 2.5, option.fontMetrics.height() * 2.5 );

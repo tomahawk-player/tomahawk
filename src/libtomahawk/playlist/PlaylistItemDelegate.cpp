@@ -463,11 +463,8 @@ PlaylistItemDelegate::drawAvatarsForBox( QPainter* painter,
         QRect r = avatarsRect.adjusted( ( avatarSize + avatarMargin ) * i, 0, 0, 0 );
         r.setWidth( avatarSize + avatarMargin );
 
-        QPixmap pixmap = s->avatar( TomahawkUtils::Original, QSize( avatarSize, avatarSize ) );
-
-        if ( pixmap.isNull() )
-            pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::Original, QSize( r.height(), r.height() ) );
-        painter->drawPixmap( r.adjusted( avatarMargin/2, 0, -(avatarMargin/2), 0 ), pixmap );
+        QPixmap pixmap = s->avatar( TomahawkUtils::Original, QSize( avatarSize, avatarSize ), true );
+        painter->drawPixmap( r.adjusted( avatarMargin / 2, 0, -( avatarMargin / 2 ), 0 ), pixmap );
 
         rectsToSave.insert( s, r );
 
@@ -536,11 +533,7 @@ PlaylistItemDelegate::drawSource( QPainter* painter, const QStyleOptionViewItem&
     QRect textRect = avatarRect.adjusted( avatarRect.height() + 32, 0, -32, 0 );
     avatarRect.setWidth( avatarRect.height() );
 
-    QPixmap avatar = item->source()->avatar( TomahawkUtils::RoundedCorners, avatarRect.size() ) ;
-    if ( avatar.isNull() )
-    {
-        avatar = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::RoundedCorners, avatarRect.size() );
-    }
+    QPixmap avatar = item->source()->avatar( TomahawkUtils::RoundedCorners, avatarRect.size(), true ) ;
     painter->drawPixmap( avatarRect, avatar );
 
     QTextOption to = QTextOption( Qt::AlignVCenter );

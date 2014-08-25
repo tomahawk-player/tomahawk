@@ -234,16 +234,13 @@ SourceItem::icon() const
 QPixmap
 SourceItem::pixmap( const QSize& size ) const
 {
-    if ( m_source.isNull() )
+    if ( !m_source )
     {
-       return TomahawkUtils::defaultPixmap( TomahawkUtils::SuperCollection, TomahawkUtils::Original, size );
+        return TomahawkUtils::defaultPixmap( TomahawkUtils::SuperCollection, TomahawkUtils::Original, size );
     }
     else
     {
-        if ( m_source->avatar().isNull() )
-            return TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::RoundedCorners );
-        else
-            return m_source->avatar( TomahawkUtils::RoundedCorners, size );
+        return m_source->avatar( TomahawkUtils::RoundedCorners, size, true );
     }
 }
 

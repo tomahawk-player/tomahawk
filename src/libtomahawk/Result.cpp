@@ -422,11 +422,7 @@ Result::sourceIcon( TomahawkUtils::ImageMode style, const QSize& desiredSize ) c
     }
     else
     {
-        QPixmap avatar = collection()->source()->avatar( TomahawkUtils::RoundedCorners, desiredSize );
-        if ( !avatar )
-        {
-            avatar = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::RoundedCorners, desiredSize );
-        }
+        QPixmap avatar = collection()->source()->avatar( TomahawkUtils::RoundedCorners, desiredSize, true );
         return avatar;
     }
 }
