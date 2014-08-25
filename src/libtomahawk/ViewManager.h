@@ -77,7 +77,7 @@ public:
     QWidget* widget() const { return m_widget; }
     InfoBar* infobar() const { return m_infobar; }
 
-    PlaylistView* queue() const { return m_queue->queue(); }
+    QueueView* queue() const { return m_queue; }
     void setQueue( QueueView* queue ) { m_queue = queue; }
 
     bool isSuperCollectionVisible() const;
@@ -125,9 +125,6 @@ signals:
     void viewPageAboutToBeDestroyed( Tomahawk::ViewPage* );
     void viewPageDestroyed();
 
-    void showQueueRequested();
-    void hideQueueRequested();
-
     void historyBackAvailable( bool avail );
     void historyForwardAvailable( bool avail );
 
@@ -138,6 +135,7 @@ public slots:
     Tomahawk::ViewPage* showNewReleasesPage();
     Tomahawk::ViewPage* showRecentPlaysPage();
     Tomahawk::ViewPage* showInboxPage();
+    Tomahawk::ViewPage* showQueuePage();
 
 //    void addDynamicPage( const QString& pageName, const QString& text, const QIcon& icon, boost::function< Tomahawk::ViewPage*() > instanceLoader, int sortValue = 0 );
     Tomahawk::ViewPage* showDynamicPage( const QString& pageName );
@@ -160,9 +158,6 @@ public slots:
     QList< Tomahawk::ViewPage* > historyPages() const;
     void destroyPage( Tomahawk::ViewPage* page );
     bool destroyCurrentPage();
-
-    void showQueue() { emit showQueueRequested(); }
-    void hideQueue() { emit hideQueueRequested(); }
 
     void playlistInterfaceChanged( Tomahawk::playlistinterface_ptr );
 

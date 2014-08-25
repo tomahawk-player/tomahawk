@@ -78,6 +78,7 @@ ViewManager::instance()
 ViewManager::ViewManager( QObject* parent )
     : QObject( parent )
     , m_widget( new QWidget() )
+    , m_queue( 0 )
     , m_newReleasesWidget( 0 )
     , m_recentPlaysWidget( 0 )
     , m_inboxWidget( 0 )
@@ -222,11 +223,6 @@ ViewManager::show( const Tomahawk::dynplaylist_ptr& playlist )
     }
 
     setPage( m_dynamicWidgets.value( playlist ).data() );
-
-/*    if ( playlist->mode() == Tomahawk::OnDemand )
-        hideQueue();
-    else
-        showQueue();*/
 
     return m_dynamicWidgets.value( playlist ).data();
 }
@@ -400,7 +396,6 @@ ViewManager::playlistInterfaceChanged( Tomahawk::playlistinterface_ptr interface
 Tomahawk::ViewPage*
 ViewManager::showNewReleasesPage()
 {
-
     if ( !m_newReleasesWidget )
     {
         m_newReleasesWidget = new NewReleasesWidget();
@@ -408,6 +403,16 @@ ViewManager::showNewReleasesPage()
     }
 
     return show( m_newReleasesWidget );
+}
+
+
+Tomahawk::ViewPage*
+ViewManager::showQueuePage()
+{
+    if ( !m_queue )
+        return 0;
+
+    return show( m_queue );
 }
 
 
@@ -444,8 +449,7 @@ ViewManager::showInboxPage()
 {
     if ( !m_inboxWidget )
     {
-        FlexibleView* inboxView = new InboxPage( m_widget );
-        m_inboxWidget = inboxView;
+        m_inboxWidget = new InboxPage( m_widget );
     }
 
     return show( m_inboxWidget );
@@ -652,11 +656,6 @@ ViewManager::updateView()
     {
         m_infobar->setFilter( currentPage()->filter() );
     }
-
-/*    if ( currentPage()->queueVisible() )
-        showQueue();
-    else
-        hideQueue();*/
 
     emit filterAvailable( currentPage()->showFilter() );
 

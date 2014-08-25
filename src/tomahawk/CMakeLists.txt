@@ -53,6 +53,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/items/GroupItem.cpp
      sourcetree/items/HistoryItem.cpp
      sourcetree/items/InboxItem.cpp
+     sourcetree/items/QueueItem.cpp
 
      TomahawkTrayIcon.cpp
      AudioControls.cpp

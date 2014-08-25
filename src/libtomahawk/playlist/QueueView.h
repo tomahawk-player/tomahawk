@@ -19,55 +19,27 @@
 #ifndef QUEUEVIEW_H
 #define QUEUEVIEW_H
 
-#include <QPushButton>
-
-#include "widgets/AnimatedSplitter.h"
+#include "playlist/FlexibleView.h"
 
 #include "DllMacro.h"
 
-class QTimer;
-class PlaylistView;
-
-namespace Ui
-{
-    class QueueView;
-}
-
-class DLLEXPORT QueueView : public AnimatedWidget
+class DLLEXPORT QueueView : public FlexibleView
 {
 Q_OBJECT
 
 public:
-    explicit QueueView( AnimatedSplitter* parent );
+    explicit QueueView( QWidget* parent = 0 );
     ~QueueView();
 
-    PlaylistView* queue() const;
-
-    QSize sizeHint() const { return QSize( 0, 200 ); }
-
-    virtual bool eventFilter( QObject* , QEvent* );
-
 public slots:
-    virtual void onShown( QWidget*, bool animated );
-    virtual void onHidden( QWidget*, bool animated );
-
-    virtual void show();
-    virtual void hide();
 
 protected:
-    void changeEvent( QEvent* e );
 
 private slots:
-    void updateLabel();
-    void onAnimationFinished();
-
     void restoreState();
 
 private:
     void saveState();
-
-    Ui::QueueView* ui;
-    QTimer* m_dragTimer;
 };
 
 #endif // QUEUEVIEW_H

@@ -213,7 +213,6 @@ ContextView::setPlayableModel( PlayableModel* model )
     m_model = model;
 
     m_trackView->setPlayableModel( model );
-
     m_trackView->setSortingEnabled( false );
     m_trackView->sortByColumn( -1 );
     m_trackView->proxyModel()->sort( -1 );

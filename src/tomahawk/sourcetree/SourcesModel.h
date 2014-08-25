@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -64,7 +64,8 @@ public:
         LovedTracksPage = 10,
 
         ScriptCollection = 11,
-        Inbox = 12
+        Inbox = 12,
+        Queue = 13
     };
 
     enum CategoryType {

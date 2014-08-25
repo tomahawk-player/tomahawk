@@ -29,6 +29,7 @@
 #include "items/TemporaryPageItem.h"
 #include "items/ScriptCollectionItem.h"
 #include "items/InboxItem.h"
+#include "items/QueueItem.h"
 
 #include "audio/AudioEngine.h"
 #include "AnimationHelper.h"
@@ -645,17 +646,29 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         if ( !index.parent().parent().isValid() )
             optIndentation.rect.adjust( 7, 0, 0, 0 );
 
-        if ( type == SourcesModel::Inbox )
+        if ( type == SourcesModel::Inbox || type == SourcesModel::Queue )
         {
-            InboxItem* ii = qobject_cast< InboxItem* >( item );
-            if ( ii && ii->unlistenedCount() )
+            int count = 0;
+            if ( type == SourcesModel::Inbox )
             {
-                const QString count = QString::number( ii->unlistenedCount() );
-                int figWidth = QFontMetrics( painter->font() ).width( count );
+                InboxItem* ii = qobject_cast< InboxItem* >( item );
+                if ( ii )
+                    count = ii->unlistenedCount();
+            }
+            else if ( type == SourcesModel::Queue )
+            {
+                QueueItem* qi = qobject_cast< QueueItem* >( item );
+                if ( qi )
+                    count = qi->unlistenedCount();
+            }
+            if ( count > 0 )
+            {
+                const QString scount = QString::number( count );
+                int figWidth = QFontMetrics( painter->font() ).width( scount );
                 QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 16, 0, -14, -option.rect.height() + option.fontMetrics.height() * 1.1 );
                 int hd = ( option.rect.height() - figRect.height() ) / 2;
                 figRect.adjust( 0, hd, 0, hd );
-                painter->drawText( figRect, count, QTextOption( Qt::AlignVCenter | Qt::AlignRight ) );
+                painter->drawText( figRect, scount, QTextOption( Qt::AlignVCenter | Qt::AlignRight ) );
             }
             paintStandardItem( painter, optIndentation, index );
         }

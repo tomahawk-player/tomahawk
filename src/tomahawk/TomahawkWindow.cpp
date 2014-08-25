@@ -117,9 +117,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     ViewManager* vm = new ViewManager( this );
     m_audioControls = new AudioControls( this );
 
-    connect( vm, SIGNAL( showQueueRequested() ), SLOT( showQueue() ) );
-    connect( vm, SIGNAL( hideQueueRequested() ), SLOT( hideQueue() ) );
-
     ui->setupUi( this );
 
     applyPlatformTweaks();
@@ -156,8 +153,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     // set initial state
     audioStopped();
-
-    vm->setQueue( m_queueView );
 
     if ( TomahawkSettings::instance()->fullscreenEnabled() )
     {
@@ -436,18 +431,16 @@ TomahawkWindow::setupSideBar()
     m_jobsModel->setJobModel( sourceModel );
     jobsView->setModel( m_jobsModel );
 
-    m_queueView = new QueueView( m_sidebar );
-    m_queueView->setVisible( false );
-    AudioEngine::instance()->setQueue( m_queueView->queue()->proxyModel()->playlistInterface() );
+    m_queueView = new QueueView();
+    ViewManager::instance()->setQueue( m_queueView );
+    AudioEngine::instance()->setQueue( m_queueView->trackView()->proxyModel()->playlistInterface() );
 
     m_sidebar->addWidget( m_sourcetree );
     m_sidebar->addWidget( jobsView );
-    m_sidebar->addWidget( m_queueView );
 
 //    m_sidebar->setGreedyWidget( 1 );
     m_sidebar->hide( 1, false );
     m_sidebar->hide( 2, false );
-    m_sidebar->hide( 3, false );
 
     sidebarWidget->layout()->addWidget( m_sidebar );
     sidebarWidget->setContentsMargins( 0, 0, 0, 0 );
@@ -1382,34 +1375,6 @@ TomahawkWindow::onFilterEdited()
 {
     onSearch( m_searchWidget->text() );
     m_searchWidget->clear();
-}
-
-
-void
-TomahawkWindow::showQueue()
-{
-    if ( QThread::currentThread() != thread() )
-    {
-        qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
-        QMetaObject::invokeMethod( this, "showQueue", Qt::QueuedConnection );
-        return;
-    }
-
-    m_queueView->show();
-}
-
-
-void
-TomahawkWindow::hideQueue()
-{
-    if ( QThread::currentThread() != thread() )
-    {
-        qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
-        QMetaObject::invokeMethod( this, "hideQueue", Qt::QueuedConnection );
-        return;
-    }
-
-    m_queueView->hide();
 }
 
 

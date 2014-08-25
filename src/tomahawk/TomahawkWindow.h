@@ -135,9 +135,6 @@ private slots:
 
     void loadXspfFinished( int );
 
-    void showQueue();
-    void hideQueue();
-
     void minimize();
     void maximize();
     void toggleFullscreen();
@@ -172,7 +169,7 @@ private:
     HICON thumbIcon(TomahawkUtils::ImageType type);
     ITaskbarList3* m_taskbarList;
     THUMBBUTTON m_thumbButtons[5];
-#else    
+#else
     QIcon thumbIcon(TomahawkUtils::ImageType type);
     QWinThumbnailToolBar *m_taskbarList;
 #endif

@@ -401,18 +401,18 @@ ContextMenu::addToQueue()
 {
     foreach ( const query_ptr& query, m_queries )
     {
-        ViewManager::instance()->queue()->model()->appendQuery( query );
+        ViewManager::instance()->queue()->trackView()->model()->appendQuery( query );
     }
     foreach ( const artist_ptr& artist, m_artists )
     {
-        ViewManager::instance()->queue()->model()->appendArtist( artist );
+        ViewManager::instance()->queue()->trackView()->model()->appendArtist( artist );
     }
     foreach ( const album_ptr& album, m_albums )
     {
-        ViewManager::instance()->queue()->model()->appendAlbum( album );
+        ViewManager::instance()->queue()->trackView()->model()->appendAlbum( album );
     }
 
-    ViewManager::instance()->showQueue();
+    ViewManager::instance()->showQueuePage();
 }
 
 

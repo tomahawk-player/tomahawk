@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -28,6 +28,7 @@
 #include "sourcetree/items/HistoryItem.h"
 #include "sourcetree/items/LovedTracksItem.h"
 #include "sourcetree/items/InboxItem.h"
+#include "sourcetree/items/QueueItem.h"
 #include "SourceList.h"
 #include "Playlist.h"
 #include "collection/Collection.h"
@@ -303,6 +304,9 @@ SourcesModel::appendGroups()
     new HistoryItem( this, m_rootItem, tr( "Open Pages" ), 1 );
 //    new SourceTreeItem( this, m_rootItem, SourcesModel::Divider, 2 );
     m_myMusicGroup = new GroupItem( this, m_rootItem, tr( "Your Music" ), 3 );
+
+    QueueItem* queue = new QueueItem( this, m_browse );
+    queue->setSortValue( 3 );
 
     InboxItem* inbox = new InboxItem( this, m_browse );
     inbox->setSortValue( 4 );
