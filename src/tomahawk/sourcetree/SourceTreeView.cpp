@@ -72,7 +72,9 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 
     setFrameShape( QFrame::NoFrame );
     setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    setStyleSheet( QString( "QTreeView { outline: 0; }" ) );
+    setStyleSheet( "QTreeView { outline: 0; }"
+                   "SourceTreeView:active { background: #F2F2F2; } "
+                   "SourceTreeView        { background: #F2F2F2; } " );
     setContentsMargins( 0, 0, 0, 0 );
 
     m_playlistMenu.setFont( TomahawkUtils::systemFont() );
@@ -140,9 +142,6 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 
     showOfflineSources( TomahawkSettings::instance()->showOfflineSources() );
 
-    setStyleSheet( "SourceTreeView:active { background: #F2F2F2; } "
-                   "SourceTreeView        { background: #F2F2F2; } " );
-
     connect( this, SIGNAL( latchRequest( Tomahawk::source_ptr ) ), m_latchManager, SLOT( latchRequest( Tomahawk::source_ptr ) ) );
     connect( this, SIGNAL( unlatchRequest( Tomahawk::source_ptr ) ), m_latchManager, SLOT( unlatchRequest( Tomahawk::source_ptr ) ) );
     connect( this, SIGNAL( catchUpRequest() ), m_latchManager, SLOT( catchUpRequest() ) );
@@ -157,10 +156,13 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     connect( renamePlaylistAction, SIGNAL( triggered() ), SLOT( renamePlaylist() ) );
 
     // On the first run with 0.8 show the What's New page.
-    if ( !TomahawkSettings::instance()->value( "whatsnew/shownfor08" , false).toBool() ) {
+    if ( !TomahawkSettings::instance()->value( "whatsnew/shownfor08", false).toBool() )
+    {
         ViewManager::instance()->showDynamicPage( Tomahawk::Widgets::WHATSNEW_0_8_VIEWPAGE_NAME );
         TomahawkSettings::instance()->setValue( "whatsnew/shownfor08", true );
-    } else {
+    }
+    else
+    {
         ViewManager::instance()->showDynamicPage( Tomahawk::Widgets::DASHBOARD_VIEWPAGE_NAME );
     }
 }
