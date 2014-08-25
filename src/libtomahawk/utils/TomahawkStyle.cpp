@@ -178,7 +178,7 @@ TomahawkStyle::stylePageFrame( QFrame* frame )
 void
 TomahawkStyle::stylePageWidget( QWidget* widget )
 {
-    widget->setStyleSheet( QString( "QWidget%1 { background-color: transparent; }" )
+    widget->setStyleSheet( QString( "QWidget#%1 { background-color: transparent; }" )
                               .arg( widget->objectName() ) );
 }
 
