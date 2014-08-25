@@ -29,16 +29,28 @@ class TestServent : public QObject
     Q_OBJECT
 private:
 
-    bool plainIPAddress( const QString& address )
+    void saneHostAddress( const QString& address )
     {
-        // TODO: Add real checks
-        return true;
+        // We do not use QHostAddress here as we use it inside our code.
+        // (Do not use the same code to test and generate)
+
+        // No loopback IPv4 addresses
+        QVERIFY2( !address.startsWith( QLatin1String( "127.0.0." ) ),
+            "Loopback IPv4 address detected" );
+        // No IPv6 localhost address
+        QVERIFY2( address != "::1", "IPv6 localhost address detected" );
+        // No IPv4 localhost as IPv6 address
+        QVERIFY2( address != "::7F00:1",
+            "IPv4 localhost as IPv6 address detected" );
+        // No link-local IPv6 addresses
+        QVERIFY2( !address.startsWith( QLatin1String( "fe80::" ) ),
+            "Link-local IPv6 address detected" );
     }
 
 private slots:
     void testListenAll()
     {
-        // Instatiante a new instance for each test so we have a sane state.
+        // Instantiate a new instance for each test so we have a sane state.
         Servent* servent = new Servent();
         QVERIFY( servent != NULL );
 
@@ -60,14 +72,14 @@ private slots:
         QList<QHostAddress> externalAddresses = servent->addresses();
         foreach ( QHostAddress addr, externalAddresses )
         {
-            QVERIFY( plainIPAddress( addr.toString() ) );
+            saneHostAddress( addr.toString() );
         }
 
         // Verify that the local SipInfos contain valid addresses
         QList<SipInfo> sipInfos = servent->getLocalSipInfos( uuid(), uuid() );
         foreach ( SipInfo sipInfo, sipInfos )
         {
-            QVERIFY( plainIPAddress( sipInfo.host() ) );
+            saneHostAddress( sipInfo.host() );
         }
 
         delete servent;
