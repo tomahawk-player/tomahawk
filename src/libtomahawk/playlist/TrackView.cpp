@@ -359,6 +359,10 @@ TrackView::currentChanged( const QModelIndex& current, const QModelIndex& previo
     {
         emit querySelected( item->query() );
     }
+    else
+    {
+        emit querySelected( query_ptr() );
+    }
 }
 
 
