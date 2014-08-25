@@ -198,6 +198,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
 
     painter->setFont( font );
     painter->setPen( Qt::black );
+    painter->setOpacity( 0.8 );
     if ( oneLiner )
     {
         // If the user is hovering over an artist rect, draw a background so they knows it's clickable
