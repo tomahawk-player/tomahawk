@@ -203,7 +203,7 @@ SourceDelegate::paintDecorations( QPainter* painter, const QStyleOptionViewItem&
 
 
 void
-SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+SourceDelegate::paintSource( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     painter->save();
     painter->setPen( Qt::black );
@@ -516,7 +516,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
     if ( type == SourcesModel::Source || type == SourcesModel::ScriptCollection )
     {
-        paintCollection( painter, optIndentation, index );
+        paintSource( painter, optIndentation, index );
     }
     else if ( ( type == SourcesModel::StaticPlaylist || type == SourcesModel::CategoryAdd ) &&
               m_expandedMap.contains( index ) && m_expandedMap.value( index )->partlyExpanded() && dropTypeCount( item ) > 0 )
