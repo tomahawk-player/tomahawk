@@ -51,6 +51,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/items/LovedTracksItem.cpp
      sourcetree/items/TemporaryPageItem.cpp
      sourcetree/items/GroupItem.cpp
+     sourcetree/items/CollectionItem.cpp
      sourcetree/items/HistoryItem.cpp
      sourcetree/items/InboxItem.cpp
      sourcetree/items/QueueItem.cpp
