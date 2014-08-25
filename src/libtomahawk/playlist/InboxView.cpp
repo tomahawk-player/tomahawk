@@ -29,6 +29,13 @@
 InboxView::InboxView( QWidget* parent ) :
     TrackView( parent )
 {
+    proxyModel()->setStyle( PlayableProxyModel::Large );
+    setEmptyTip( tr( "No listening suggestions here." ) );
+
+    setGuid( "inbox" );
+    setHeaderHidden( true );
+    setUniformRowHeights( false );
+    setIndentation( 0 );
 }
 
 
@@ -75,16 +82,6 @@ InboxPage::InboxPage( QWidget* parent ) :
     setTrackView( inboxView );
     setCurrentMode( Flat );
 //    setCaption( tr( "Inbox Details" ) );
-
-    inboxView->proxyModel()->setStyle( PlayableProxyModel::Large );
-    /*        inboxView->proxyModel()->setGroupBy( true );
-     *        inboxView->setSortingEnabled( true );
-     *        inboxView->proxyModel()->sort( 0 );*/
-    inboxView->setEmptyTip( tr( "No listening suggestions here." ) );
-
-    inboxView->setGuid( "inbox" );
-    inboxView->setHeaderHidden( true );
-    inboxView->setUniformRowHeights( false );
 
     setPlayableModel( ViewManager::instance()->inboxModel() );
 
