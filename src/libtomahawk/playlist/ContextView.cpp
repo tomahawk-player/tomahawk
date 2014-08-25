@@ -159,7 +159,12 @@ ContextView::onQuerySelected( const Tomahawk::query_ptr& query )
     }
 
     m_query = query;
-    connect( m_query->track().data(), SIGNAL( updated() ), SLOT( onCoverUpdated() ) );
+
+    if ( m_query )
+    {
+        connect( m_query->track().data(), SIGNAL( updated() ), SLOT( onCoverUpdated() ) );
+    }
+
     onCoverUpdated();
 }
 
@@ -167,7 +172,7 @@ ContextView::onQuerySelected( const Tomahawk::query_ptr& query )
 void
 ContextView::onCoverUpdated()
 {
-    if ( m_query->track()->cover( QSize( 0, 0 ) ).isNull() )
+    if ( !m_query || m_query->track()->cover( QSize( 0, 0 ) ).isNull() )
     {
         m_pixmap = QPixmap();
         emit pixmapChanged( m_pixmap );
