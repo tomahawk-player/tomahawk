@@ -114,7 +114,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 {
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
 
-    ViewManager* vm = new ViewManager( this );
+    new ViewManager( this );
     m_audioControls = new AudioControls( this );
 
     ui->setupUi( this );
