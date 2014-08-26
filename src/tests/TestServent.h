@@ -107,6 +107,24 @@ private slots:
         foreach ( QHostAddress addr, QNetworkInterface::allAddresses() )
         {
             QVERIFY( servent->isIPWhitelisted( addr ) );
+
+            if ( addr.protocol() == QAbstractSocket::IPv4Protocol )
+            {
+                // Convert to IPv6 mapped address
+                quint32 ipv4 = addr.toIPv4Address();
+                Q_IPV6ADDR ipv6;
+                for (int i = 0; i < 16; ++i) {
+                    ipv6[i] = 0;
+                }
+                ipv6[10] = 0xff;
+                ipv6[11] = 0xff;
+                ipv6[12] = 0xff & (ipv4 >> 24);
+                ipv6[13] = 0xff & (ipv4 >> 16);
+                ipv6[14] = 0xff & (ipv4 >> 8);
+                ipv6[15] = 0xff & ipv4;
+                QHostAddress ipv6Addr( ipv6 );
+                QVERIFY( servent->isIPWhitelisted( ipv6Addr ) );
+            }
         }
 
         delete servent;
