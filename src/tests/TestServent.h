@@ -19,6 +19,7 @@
 #ifndef TOMAHAWK_TESTDATABASE_H
 #define TOMAHAWK_TESTDATABASE_H
 
+#include <QNetworkInterface>
 #include <QtTest>
 
 #include "network/Servent.h"
@@ -101,6 +102,12 @@ private slots:
 
         // Check for IPv6 localhost
         QVERIFY( servent->isIPWhitelisted( QHostAddress::LocalHostIPv6 ) );
+
+        // Verify that all interface addresses are whitelisted.
+        foreach ( QHostAddress addr, QNetworkInterface::allAddresses() )
+        {
+            QVERIFY( servent->isIPWhitelisted( addr ) );
+        }
 
         delete servent;
     }
