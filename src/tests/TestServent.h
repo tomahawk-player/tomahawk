@@ -90,6 +90,20 @@ private slots:
 
         delete servent;
     }
+
+    void testWhitelist()
+    {
+        Servent* servent;
+        listenAllBasic( &servent );
+
+        // Check for IPv4 localhost
+        QVERIFY( servent->isIPWhitelisted( QHostAddress::LocalHost ) );
+
+        // Check for IPv6 localhost
+        QVERIFY( servent->isIPWhitelisted( QHostAddress::LocalHostIPv6 ) );
+
+        delete servent;
+    }
 };
 
 #endif // TOMAHAWK_TESTDATABASE_H
