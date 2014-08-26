@@ -1364,6 +1364,35 @@ Servent::isIPWhitelisted( QHostAddress ip )
             }
         }
     }
+
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+    // Qt4 cannot cope correctly with IPv4 addresses mapped into the IPv6
+    // address space
+    if ( ip.protocol() == QAbstractSocket::IPv6Protocol )
+    {
+        Q_IPV6ADDR ipv6 = ip.toIPv6Address();
+        // Check if it is actually an IPv4 address
+        // First 80 bits are zero, then 16 bits 1s
+        bool isIPv4 = true;
+        for ( int i = 0; i < 9; i++) {
+            isIPv4 &= ( ipv6[i] == 0 );
+        }
+        isIPv4 &= ( ipv6[10] == 0xff );
+        isIPv4 &= ( ipv6[11] == 0xff );
+
+        if ( isIPv4 )
+        {
+            // Convert to a real IPv4 address and rerun checks
+            quint32 ipv4 = (static_cast<quint32>(ipv6[12]) << 24)
+                    & (static_cast<quint32>(ipv6[13]) << 16)
+                    & (static_cast<quint32>(ipv6[14]) << 8)
+                    & static_cast<quint32>(ipv6[15]);
+            QHostAddress addr( ipv4 );
+            return isIPWhitelisted( addr );
+        }
+    }
+#endif
+
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "failure";
     return false;
 }
