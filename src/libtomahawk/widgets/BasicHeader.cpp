@@ -42,11 +42,11 @@ BasicHeader::BasicHeader( QWidget* parent )
 
     {
         QFont f = ui->captionLabel->font();
-        f.setBold( true );
         f.setPointSize( TomahawkUtils::defaultFontSize() + 6 );
+        f.setLetterSpacing( QFont::PercentageSpacing, 110 );
 
         QPalette p = ui->captionLabel->palette();
-        p.setColor( QPalette::Foreground, Qt::white );
+        p.setColor( QPalette::Foreground, QColor( 255, 255, 255, 235 ) );
 
         ui->captionLabel->setFont( f );
         ui->captionLabel->setPalette( p );
