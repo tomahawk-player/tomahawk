@@ -142,7 +142,6 @@ set( libGuiSources
     widgets/FilterHeader.cpp
     widgets/CaptionLabel.cpp
     widgets/HeaderLabel.cpp
-    widgets/HeaderWidget.cpp
     widgets/HistoryWidget.cpp
     widgets/ImageButton.cpp
     widgets/NewPlaylistWidget.cpp
