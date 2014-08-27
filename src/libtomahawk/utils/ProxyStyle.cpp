@@ -76,7 +76,7 @@ ProxyStyle::drawPrimitive( PrimitiveElement pe, const QStyleOption* opt, QPainte
         return;
     }
 
-    if ( pe != PE_FrameStatusBar )
+    if ( pe != PE_FrameStatusBar && pe != PE_FrameFocusRect )
         QProxyStyle::drawPrimitive( pe, opt, p, w );
 }
 

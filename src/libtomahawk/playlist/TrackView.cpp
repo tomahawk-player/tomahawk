@@ -74,7 +74,7 @@ TrackView::TrackView( QWidget* parent )
     setDropIndicatorShown( false );
     setDragDropMode( QAbstractItemView::InternalMove );
     setDragDropOverwriteMode( false );
-    setAllColumnsShowFocus( false );
+    setAllColumnsShowFocus( true );
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     setRootIsDecorated( false );
     setUniformRowHeights( true );
