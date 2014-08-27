@@ -30,7 +30,6 @@
 #include "playlist/TrackView.h"
 #include "playlist/TreeView.h"
 #include "playlist/GridView.h"
-#include "playlist/ModeHeader.h"
 #include "PlayableProxyModelPlaylistInterface.h"
 #include "TomahawkSettings.h"
 #include "utils/ImageRegistry.h"
@@ -45,7 +44,6 @@ using namespace Tomahawk;
 FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
     : QWidget( parent )
     , m_header( new FilterHeader( this ) )
-    , m_modeHeader( new ModeHeader( this ) )
     , m_columnView( new ColumnView() )
     , m_treeView( new TreeView() )
     , m_trackView( new TrackView() )
@@ -56,7 +54,7 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
     qRegisterMetaType< FlexibleTreeViewMode >( "FlexibleTreeViewMode" );
 
     m_header->setBackgroundColor( Qt::black );
-    m_header->setBackground( ImageRegistry::instance()->pixmap( RESPATH "images/collection_background.png", QSize( 0, 0 ) ), false );
+    m_header->setBackground( ImageRegistry::instance()->pixmap( RESPATH "images/collection_background_small.png", QSize( 0, 0 ) ), false );
 
     m_treeView->proxyModel()->setStyle( PlayableProxyModel::Collection );
     m_treeView->proxyModel()->setPlaylistInterface( m_columnView->proxyModel()->playlistInterface() );
@@ -73,21 +71,32 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
     setLayout( new QVBoxLayout() );
     TomahawkUtils::unmarginLayout( layout() );
 
-    QFrame* lineBelow = new QFrame( this );
-    lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
-    lineBelow->setFrameShape( QFrame::HLine );
-    lineBelow->setMaximumHeight( 1 );
-    QFrame* lineBelow2 = new QFrame( this );
-    lineBelow2->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
-    lineBelow2->setFrameShape( QFrame::HLine );
-    lineBelow2->setMaximumHeight( 1 );
+    {
+        m_header->ui->anchor1Label->setText( tr( "Artists" ) );
+        m_header->ui->anchor2Label->setText( tr( "Albums" ) );
+        m_header->ui->anchor3Label->setText( tr( "Songs" ) );
+        m_header->ui->anchor1Label->show();
+        m_header->ui->anchor2Label->show();
+        m_header->ui->anchor3Label->show();
+
+        const float lowOpacity = 0.8;
+        m_header->ui->anchor1Label->setOpacity( 1 );
+        m_header->ui->anchor2Label->setOpacity( lowOpacity );
+        m_header->ui->anchor3Label->setOpacity( lowOpacity );
+
+        QFontMetrics fm( m_header->ui->anchor1Label->font() );
+        m_header->ui->anchor1Label->setFixedWidth( fm.width( m_header->ui->anchor1Label->text() ) + 16 );
+        m_header->ui->anchor2Label->setFixedWidth( fm.width( m_header->ui->anchor2Label->text() ) + 16 );
+        m_header->ui->anchor3Label->setFixedWidth( fm.width( m_header->ui->anchor3Label->text() ) + 16 );
+
+        NewClosure( m_header->ui->anchor1Label, SIGNAL( clicked() ), const_cast< FlexibleTreeView* >( this ), SLOT( setCurrentMode( FlexibleTreeViewMode ) ), FlexibleTreeView::Columns )->setAutoDelete( false );
+        NewClosure( m_header->ui->anchor2Label, SIGNAL( clicked() ), const_cast< FlexibleTreeView* >( this ), SLOT( setCurrentMode( FlexibleTreeViewMode ) ), FlexibleTreeView::Albums )->setAutoDelete( false );
+        NewClosure( m_header->ui->anchor3Label, SIGNAL( clicked() ), const_cast< FlexibleTreeView* >( this ), SLOT( setCurrentMode( FlexibleTreeViewMode ) ), FlexibleTreeView::Flat )->setAutoDelete( false );
+    }
 
     layout()->addWidget( m_header );
-    layout()->addWidget( m_modeHeader );
     if ( extraHeader )
         layout()->addWidget( extraHeader );
-    layout()->addWidget( lineBelow );
-    layout()->addWidget( lineBelow2 );
     layout()->addWidget( m_stack );
 
     m_stack->addWidget( m_columnView );
@@ -95,10 +104,6 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
     m_stack->addWidget( m_trackView );
 
     connect( m_header, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
-
-    NewClosure( m_modeHeader, SIGNAL( flatClicked() ), const_cast< FlexibleTreeView* >( this ), SLOT( setCurrentMode( FlexibleTreeViewMode ) ), FlexibleTreeView::Columns )->setAutoDelete( false );
-    NewClosure( m_modeHeader, SIGNAL( detailedClicked() ), const_cast< FlexibleTreeView* >( this ), SLOT( setCurrentMode( FlexibleTreeViewMode ) ), FlexibleTreeView::Flat )->setAutoDelete( false );
-    NewClosure( m_modeHeader, SIGNAL( gridClicked() ), const_cast< FlexibleTreeView* >( this ), SLOT( setCurrentMode( FlexibleTreeViewMode ) ), FlexibleTreeView::Albums )->setAutoDelete( false );
 }
 
 
@@ -226,22 +231,52 @@ FlexibleTreeView::setCurrentMode( FlexibleTreeViewMode mode )
         m_mode = mode;
     }
 
+    QFont inactive = m_header->ui->anchor1Label->font();
+    inactive.setBold( false );
+    QFont active = m_header->ui->anchor1Label->font();
+    active.setBold( true );
+    const float lowOpacity = 0.8;
+
     switch ( mode )
     {
         case Albums:
         {
+            m_header->ui->anchor2Label->setOpacity( 1 );
+            m_header->ui->anchor1Label->setOpacity( lowOpacity );
+            m_header->ui->anchor3Label->setOpacity( lowOpacity );
+
+            m_header->ui->anchor2Label->setFont( active );
+            m_header->ui->anchor1Label->setFont( inactive );
+            m_header->ui->anchor3Label->setFont( inactive );
+
             m_stack->setCurrentWidget( m_treeView );
             break;
         }
 
         case Columns:
         {
+            m_header->ui->anchor1Label->setOpacity( 1 );
+            m_header->ui->anchor2Label->setOpacity( lowOpacity );
+            m_header->ui->anchor3Label->setOpacity( lowOpacity );
+
+            m_header->ui->anchor1Label->setFont( active );
+            m_header->ui->anchor2Label->setFont( inactive );
+            m_header->ui->anchor3Label->setFont( inactive );
+
             m_stack->setCurrentWidget( m_columnView );
             break;
         }
 
         case Flat:
         {
+            m_header->ui->anchor3Label->setOpacity( 1 );
+            m_header->ui->anchor1Label->setOpacity( lowOpacity );
+            m_header->ui->anchor2Label->setOpacity( lowOpacity );
+
+            m_header->ui->anchor3Label->setFont( active );
+            m_header->ui->anchor1Label->setFont( inactive );
+            m_header->ui->anchor2Label->setFont( inactive );
+
             m_stack->setCurrentWidget( m_trackView );
             break;
         }
@@ -316,17 +351,7 @@ FlexibleTreeView::restoreViewMode()
     m_mode = static_cast< FlexibleTreeViewMode >( modeNumber );
     TomahawkSettings::instance()->endGroup();
 
-    switch ( m_mode )
-    {
-    case Columns:
-        m_modeHeader->switchTo( 0 );
-        break;
-    case Flat:
-        m_modeHeader->switchTo( 1 );
-        break;
-    case Albums:
-        m_modeHeader->switchTo( 2 );
-    }
+    setCurrentMode( (FlexibleTreeViewMode)modeNumber );
 }
 
 

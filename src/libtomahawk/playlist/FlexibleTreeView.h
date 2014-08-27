@@ -32,7 +32,6 @@ class TreeView;
 class ColumnView;
 class TreeModel;
 class PlayableModel;
-class ModeHeader;
 class PlaylistModel;
 class FilterHeader;
 
@@ -91,7 +90,6 @@ private slots:
 
 private:
     FilterHeader* m_header;
-    ModeHeader* m_modeHeader;
     QPixmap m_pixmap;
 
     ColumnView* m_columnView;
