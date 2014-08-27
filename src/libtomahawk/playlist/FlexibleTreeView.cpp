@@ -1,7 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
- *   Copyright 2014, Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2013-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2014,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -47,6 +47,7 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
     , m_columnView( new ColumnView() )
     , m_treeView( new TreeView() )
     , m_trackView( new TrackView() )
+    , m_albumView( new GridView() )
     , m_model( 0 )
     , m_flatModel( 0 )
     , m_temporary( false )
@@ -66,6 +67,21 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
 /*    m_columnView->setColumnHidden( PlayableModel::Age, true ); // Hide age column per default
     m_columnView->setColumnHidden( PlayableModel::Filesize, true ); // Hide filesize column per default
     m_columnView->setColumnHidden( PlayableModel::Composer, true ); // Hide composer column per default*/
+
+    {
+        m_albumView->setAutoResize( false );
+        m_albumView->setAutoFitItems( true );
+//        m_albumView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+        m_albumView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+        m_albumView->setItemSize( QSize( 170, 170 + 56 ) );
+
+        m_albumView->proxyModel()->sort( -1 );
+        m_albumView->setEmptyTip( tr( "Sorry, there are no albums in this collection!" ) );
+
+        TomahawkStyle::stylePageFrame( m_albumView );
+
+        m_albumView->setStyleSheet( QString( "QListView { background-color: white; }" ) );
+    }
 
     m_stack = new QStackedWidget();
     setLayout( new QVBoxLayout() );
@@ -100,7 +116,7 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
     layout()->addWidget( m_stack );
 
     m_stack->addWidget( m_columnView );
-    m_stack->addWidget( m_treeView );
+    m_stack->addWidget( m_albumView );
     m_stack->addWidget( m_trackView );
 
     connect( m_header, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
@@ -219,6 +235,17 @@ FlexibleTreeView::setFlatModel( PlayableModel* model )
 
 
 void
+FlexibleTreeView::setAlbumModel( PlayableModel* model )
+{
+    m_albumModel = model;
+    m_albumView->setPlayableModel( model );
+
+    /*    connect( model, SIGNAL( changed() ), SLOT( onModelChanged() ), Qt::UniqueConnection );
+     *    onModelChanged();*/
+}
+
+
+void
 FlexibleTreeView::setCurrentMode( FlexibleTreeViewMode mode )
 {
     if ( m_mode != mode )
@@ -249,7 +276,7 @@ FlexibleTreeView::setCurrentMode( FlexibleTreeViewMode mode )
             m_header->ui->anchor1Label->setFont( inactive );
             m_header->ui->anchor3Label->setFont( inactive );
 
-            m_stack->setCurrentWidget( m_treeView );
+            m_stack->setCurrentWidget( m_albumView );
             break;
         }
 

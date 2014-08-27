@@ -1,7 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
- *   Copyright 2014, Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2012-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2014,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -71,6 +71,7 @@ public:
 
     void setTreeModel( TreeModel* model );
     void setFlatModel( PlayableModel* model );
+    void setAlbumModel( PlayableModel* model );
 
     void setPixmap( const QPixmap& pixmap );
     void setEmptyTip( const QString& tip );
@@ -95,9 +96,11 @@ private:
     ColumnView* m_columnView;
     TreeView* m_treeView;
     TrackView* m_trackView;
+    GridView* m_albumView;
 
     TreeModel* m_model;
     PlayableModel* m_flatModel;
+    PlayableModel* m_albumModel;
     QStackedWidget* m_stack;
 
     FlexibleTreeViewMode m_mode;
