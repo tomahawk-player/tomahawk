@@ -183,7 +183,6 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QFont font = opt.font;
     font.setPointSize( TomahawkUtils::defaultFontSize() + 2 );
     QFont smallFont = font;
-    smallFont.setBold( true );
     smallFont.setPointSize( TomahawkUtils::defaultFontSize() );
 
     int bottomHeight = QFontMetrics( smallFont ).boundingRect( bottom ).height();
@@ -238,7 +237,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         }
         painter->restore();
 
-        painter->setOpacity( 0.5 );
+        painter->setOpacity( 0.6 );
         painter->setFont( smallFont );
 
         // If the user is hovering over an artist rect, underline the artist name
