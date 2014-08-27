@@ -537,12 +537,12 @@ AudioEngine::setVolume( int percentage )
 {
     Q_D( AudioEngine );
 
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << percentage;
+    tDebug() << Q_FUNC_INFO << percentage;
 
     percentage = qBound( 0, percentage, 100 );
     d->audioOutput->setVolume( (qreal)percentage / 100.0 );
 
-    if ( percentage > 0 )
+    if ( percentage > 0 && d->audioOutput->isMuted() )
         d->audioOutput->setMuted( false );
     emit volumeChanged( percentage );
 }
