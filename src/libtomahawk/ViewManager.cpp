@@ -295,12 +295,16 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
         view->columnView()->proxyModel()->setStyle( PlayableProxyModel::Collection );
         TreeModel* model = new TreeModel();
         PlayableModel* flatModel = new PlayableModel();
+        PlayableModel* albumModel = new PlayableModel();
 
         view->setTreeModel( model );
         view->setFlatModel( flatModel );
+        view->setAlbumModel( albumModel );
 
         model->addCollection( collection );
         flatModel->appendTracks( collection );
+        albumModel->appendAlbums( collection );
+
         setPage( view );
 
         if ( !collection.isNull() )
