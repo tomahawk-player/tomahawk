@@ -24,6 +24,7 @@
 #include <QList>
 #include <QHash>
 
+#include "collection/Collection.h"
 #include "Playlist.h"
 #include "Query.h"
 #include "PlaylistInterface.h"
@@ -70,6 +71,7 @@ public slots:
     virtual void appendEntries( const QList< Tomahawk::plentry_ptr >& entries );
 
     virtual void insertAlbums( const QList< Tomahawk::album_ptr >& album, int row = 0 );
+    virtual void insertAlbums( const Tomahawk::collection_ptr&, int row = 0 ) { Q_UNUSED( row ); }
     virtual void insertArtists( const QList< Tomahawk::artist_ptr >& artist, int row = 0 );
     virtual void insertQueries( const QList< Tomahawk::query_ptr >& queries, int row = 0, const QList< Tomahawk::PlaybackLog >& logs = QList< Tomahawk::PlaybackLog >(), const QModelIndex& parent = QModelIndex() );
     virtual void insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int row = 0, const QModelIndex& parent = QModelIndex(), const QList< Tomahawk::PlaybackLog >& logs = QList< Tomahawk::PlaybackLog >() );
