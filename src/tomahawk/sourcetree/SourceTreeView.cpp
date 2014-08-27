@@ -72,8 +72,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 
     setFrameShape( QFrame::NoFrame );
     setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    setStyleSheet( "QTreeView { outline: 0; }"
-                   "SourceTreeView:active { background: #F2F2F2; } "
+    setStyleSheet( "SourceTreeView:active { background: #F2F2F2; } "
                    "SourceTreeView        { background: #F2F2F2; } " );
     setContentsMargins( 0, 0, 0, 0 );
 
@@ -96,7 +95,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setDragDropMode( QAbstractItemView::DropOnly );
     setAcceptDrops( true );
     setDropIndicatorShown( false );
-    setAllColumnsShowFocus( true );
+    setAllColumnsShowFocus( false );
     setUniformRowHeights( false );
     setIndentation( 0 );
     setSortingEnabled( true );
@@ -953,8 +952,7 @@ SourceTreeView::drawRow( QPainter* painter, const QStyleOptionViewItem& option, 
 void
 SourceTreeView::drawBranches( QPainter* painter, const QRect& rect, const QModelIndex& index ) const
 {
-    if ( !QString( qApp->style()->metaObject()->className() ).toLower().contains( "qtcurve" ) )
-        QTreeView::drawBranches( painter, rect, index );
+    return;
 }
 
 

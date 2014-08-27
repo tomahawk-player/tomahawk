@@ -65,7 +65,6 @@ TrackView::TrackView( QWidget* parent )
 {
     setFrameShape( QFrame::NoFrame );
     setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    setStyleSheet( QString( "QTreeView::item { outline: 0; }" ) );
 
     setContentsMargins( 0, 0, 0, 0 );
     setMouseTracking( true );
@@ -75,7 +74,7 @@ TrackView::TrackView( QWidget* parent )
     setDropIndicatorShown( false );
     setDragDropMode( QAbstractItemView::InternalMove );
     setDragDropOverwriteMode( false );
-    setAllColumnsShowFocus( true );
+    setAllColumnsShowFocus( false );
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     setRootIsDecorated( false );
     setUniformRowHeights( true );
