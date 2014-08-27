@@ -46,7 +46,7 @@ BasicHeader::BasicHeader( QWidget* parent )
         f.setLetterSpacing( QFont::PercentageSpacing, 110 );
 
         QPalette p = ui->captionLabel->palette();
-        p.setColor( QPalette::Foreground, QColor( 255, 255, 255, 235 ) );
+        p.setColor( QPalette::Foreground, QColor( 255, 255, 255, 240 ) );
 
         ui->captionLabel->setFont( f );
         ui->captionLabel->setPalette( p );
