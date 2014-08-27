@@ -28,7 +28,7 @@ FilterHeader::FilterHeader( QWidget* parent )
     m_filterField = new QSearchField( this );
     m_filterField->setPlaceholderText( tr( "Filter..." ) );
     m_filterField->setFixedWidth( 220 );
-    m_mainLayout->addWidget( m_filterField );
+    ui->horizontalLayout->addWidget( m_filterField );
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
     connect( m_filterField, SIGNAL( textChanged( QString ) ), SLOT( onFilterEdited() ) );
