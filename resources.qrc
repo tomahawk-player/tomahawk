@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>data/images/collection_background.png</file>
+        <file>data/images/collection_background_small.png</file>
         <file>data/images/playlist_background.png</file>
         <file>data/images/back-pressed.svg</file>
         <file>data/images/back-rest.svg</file>
