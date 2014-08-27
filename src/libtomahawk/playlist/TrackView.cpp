@@ -65,7 +65,7 @@ TrackView::TrackView( QWidget* parent )
 {
     setFrameShape( QFrame::NoFrame );
     setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    setStyleSheet( QString( "QTreeView { outline: 0; }" ) );
+    setStyleSheet( QString( "QTreeView::item { outline: 0; }" ) );
 
     setContentsMargins( 0, 0, 0, 0 );
     setMouseTracking( true );
