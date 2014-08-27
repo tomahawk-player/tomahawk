@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2012,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -20,6 +20,8 @@
 #ifndef BASICHEADER_H
 #define BASICHEADER_H
 
+#include "ui_HeaderWidget.h"
+
 #include "widgets/BackgroundWidget.h"
 #include "DllMacro.h"
 
@@ -35,18 +37,12 @@ public:
     explicit BasicHeader( QWidget* parent = 0 );
     virtual ~BasicHeader();
 
+    Ui::HeaderWidget* ui;
+
 public slots:
     virtual void setCaption( const QString& s );
     virtual void setDescription( const QString& s );
     virtual void setPixmap( const QPixmap& p );
-
-protected:
-    QLabel* m_imageLabel;
-    ElidedLabel* m_captionLabel;
-    ElidedLabel* m_descriptionLabel;
-
-    QBoxLayout* m_mainLayout;
-//    QBoxLayout* m_verticalLayout;
 };
 
 #endif // BASICHEADER_H

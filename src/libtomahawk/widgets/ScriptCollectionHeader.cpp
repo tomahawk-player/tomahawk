@@ -31,21 +31,19 @@ ScriptCollectionHeader::ScriptCollectionHeader( QWidget* parent )
     m_refreshButton->setFlat( true );
     m_refreshButton->setStyleSheet( "QPushButton { border: 0px; background: transparent; }" );
     QHBoxLayout* descLayout = new QHBoxLayout;
-    m_mainLayout->insertLayout( m_mainLayout->indexOf( m_descriptionLabel ),
-                                    descLayout );
-    descLayout->addWidget( m_descriptionLabel );
+    ui->horizontalLayout->addLayout( descLayout );
+//    descLayout->addWidget( m_descriptionLabel );
     TomahawkUtils::unmarginLayout( descLayout );
-    descLayout->addSpacing( m_descriptionLabel->fontMetrics().height() / 2 );
+//    descLayout->addSpacing( m_descriptionLabel->fontMetrics().height() / 2 );
     descLayout->addWidget( m_refreshButton );
     descLayout->addStretch();
 
-    m_refreshButton->setIcon( ImageRegistry::instance()->pixmap( RESPATH "images/refresh.svg", QSize( m_descriptionLabel->fontMetrics().height(),
-                                                                                                    m_descriptionLabel->fontMetrics().height() ), TomahawkUtils::DropShadow ) );
-    m_refreshButton->setFixedSize( m_descriptionLabel->fontMetrics().height() + m_descriptionLabel->margin() * 2,
-                                   m_descriptionLabel->fontMetrics().height() + m_descriptionLabel->margin() * 2 );
+    m_refreshButton->setIcon( ImageRegistry::instance()->pixmap( RESPATH "images/refresh.svg", QSize( ui->captionLabel->fontMetrics().height(),
+                                                                                                      ui->captionLabel->fontMetrics().height() ), TomahawkUtils::DropShadow ) );
+    m_refreshButton->setFixedSize( ui->captionLabel->fontMetrics().height() + ui->captionLabel->margin() * 2,
+                                   ui->captionLabel->fontMetrics().height() + ui->captionLabel->margin() * 2 );
 
-    connect( m_refreshButton, SIGNAL( clicked() ),
-             this, SIGNAL( refreshClicked() ) );
+    connect( m_refreshButton, SIGNAL( clicked() ), SIGNAL( refreshClicked() ) );
     m_refreshButton->hide();
     m_refreshButton->setToolTip( tr( "Reload Collection" ) );
 }

@@ -51,7 +51,7 @@ FlexibleHeader::FlexibleHeader( FlexibleView* parent )
     f.close();
 
     QHBoxLayout* outerModeLayout = new QHBoxLayout;
-    m_mainLayout->addLayout( outerModeLayout );
+    ui->horizontalLayout->addLayout( outerModeLayout );
     outerModeLayout->addSpacing( 156 );
     outerModeLayout->addStretch();
 
