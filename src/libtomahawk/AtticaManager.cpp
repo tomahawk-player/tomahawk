@@ -83,7 +83,6 @@ AtticaManager::~AtticaManager()
 {
     savePixmapsToCache();
 
-
     foreach( const QString& id, m_resolverStates.keys() )
     {
         if ( !m_resolverStates[ id ].pixmap )
@@ -118,6 +117,7 @@ AtticaManager::hostname() const
 {
     return "http://bakery.tomahawk-player.org";
 }
+
 
 void
 AtticaManager::loadPixmapsFromCache()
