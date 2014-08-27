@@ -1006,6 +1006,14 @@ PlayableModel::appendAlbums( const QList< Tomahawk::album_ptr >& albums )
 
 
 void
+PlayableModel::appendAlbums( const Tomahawk::collection_ptr& collection )
+{
+    emit loadingStarted();
+    insertAlbums( collection, rowCount( QModelIndex() ) );
+}
+
+
+void
 PlayableModel::appendQueries( const QList< Tomahawk::query_ptr >& queries )
 {
     insertQueries( queries, rowCount( QModelIndex() ) );
@@ -1081,6 +1089,16 @@ PlayableModel::insertAlbums( const QList< Tomahawk::album_ptr >& albums, int row
 
 
 void
+PlayableModel::insertAlbums( const Tomahawk::collection_ptr& collection, int row )
+{
+    Tomahawk::AlbumsRequest* req = collection->requestAlbums( Tomahawk::artist_ptr() );
+    connect( dynamic_cast< QObject* >( req ), SIGNAL( albums( QList< Tomahawk::album_ptr > ) ),
+             this, SLOT( appendAlbums( QList< Tomahawk::album_ptr > ) ), Qt::UniqueConnection );
+    req->enqueue();
+}
+
+
+void
 PlayableModel::insertQueries( const QList< Tomahawk::query_ptr >& queries, int row, const QList< Tomahawk::PlaybackLog >& logs, const QModelIndex& parent )
 {
     insertInternal( queries, row, logs, parent );
@@ -1092,17 +1110,10 @@ PlayableModel::insertTracks( const Tomahawk::collection_ptr& collection, int row
 {
     Tomahawk::TracksRequest* req = collection->requestTracks( Tomahawk::album_ptr() );
     connect( dynamic_cast< QObject* >( req ), SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ),
-             this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ), Qt::UniqueConnection );
+             this, SLOT( appendQueries( QList< Tomahawk::query_ptr > ) ), Qt::UniqueConnection );
     req->enqueue();
 
 //    connect( collection.data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
-}
-
-
-void
-PlayableModel::onTracksAdded( const QList< Tomahawk::query_ptr >& queries )
-{
-    appendQueries( queries );
 }
 
 

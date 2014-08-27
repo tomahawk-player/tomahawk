@@ -159,6 +159,7 @@ public slots:
     virtual void appendQueries( const QList< Tomahawk::query_ptr >& queries );
     virtual void appendArtists( const QList< Tomahawk::artist_ptr >& artists );
     virtual void appendAlbums( const QList< Tomahawk::album_ptr >& albums );
+    virtual void appendAlbums( const Tomahawk::collection_ptr& collection );
     virtual void appendQuery( const Tomahawk::query_ptr& query );
     virtual void appendArtist( const Tomahawk::artist_ptr& artist );
     virtual void appendAlbum( const Tomahawk::album_ptr& album );
@@ -167,6 +168,7 @@ public slots:
     virtual void insertQueries( const QList< Tomahawk::query_ptr >& queries, int row = 0, const QList< Tomahawk::PlaybackLog >& logs = QList< Tomahawk::PlaybackLog >(), const QModelIndex& parent = QModelIndex() );
     virtual void insertArtists( const QList< Tomahawk::artist_ptr >& artists, int row = 0 );
     virtual void insertAlbums( const QList< Tomahawk::album_ptr >& albums, int row = 0 );
+    virtual void insertAlbums( const Tomahawk::collection_ptr& collection, int row = 0 );
     virtual void insertQuery( const Tomahawk::query_ptr& query, int row = 0, const Tomahawk::PlaybackLog& log = Tomahawk::PlaybackLog(), const QModelIndex& parent = QModelIndex() );
     virtual void insertArtist( const Tomahawk::artist_ptr& artist, int row = 0 );
     virtual void insertAlbum( const Tomahawk::album_ptr& album, int row = 0 );
@@ -196,8 +198,6 @@ private slots:
 
     void onPlaybackStarted( const Tomahawk::result_ptr result );
     void onPlaybackStopped();
-
-    void onTracksAdded( const QList< Tomahawk::query_ptr >& queries );
 
 private:
     void init();
