@@ -239,7 +239,7 @@ AudioEngine::AudioEngine()
     onVolumeChanged( d->audioOutput->volume() );
     setVolume( TomahawkSettings::instance()->volume() );
 
-    initEqualizer();
+    // initEqualizer();
 }
 
 
