@@ -31,7 +31,6 @@ class TrackView;
 class PlayableModel;
 class PlaylistModel;
 class FilterHeader;
-class ModeHeader;
 
 class DLLEXPORT FlexibleView : public QWidget, public Tomahawk::ViewPage
 {
@@ -87,7 +86,6 @@ private slots:
 
 private:
     FilterHeader* m_header;
-    ModeHeader* m_modeHeader;
     QPixmap m_pixmap;
 
     TrackView* m_trackView;

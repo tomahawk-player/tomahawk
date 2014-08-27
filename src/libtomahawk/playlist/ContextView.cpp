@@ -25,7 +25,6 @@
 #include "audio/AudioEngine.h"
 #include "widgets/CaptionLabel.h"
 #include "widgets/FilterHeader.h"
-#include "playlist/ModeHeader.h"
 #include "playlist/PlayableModel.h"
 #include "playlist/PlaylistModel.h"
 #include "playlist/TrackView.h"
@@ -45,7 +44,6 @@ using namespace Tomahawk;
 ContextView::ContextView( QWidget* parent, const QString& caption, QWidget* extraHeader )
     : QWidget( parent )
 //    , m_header( new FilterHeader( this ) )
-//    , m_modeHeader( new ModeHeader( this ) )
     , m_trackView( new TrackView() )
     , m_model( 0 )
     , m_temporary( false )
@@ -80,7 +78,6 @@ ContextView::ContextView( QWidget* parent, const QString& caption, QWidget* extr
 //    m_gridView->setStyleSheet( QString( "QListView { background-color: white; }" ) );
 
 //    layout()->addWidget( m_header );
-//    layout()->addWidget( m_modeHeader );
 //    if ( extraHeader )
 //        layout()->addWidget( extraHeader );
 //    layout()->addWidget( lineBelow );
@@ -126,10 +123,6 @@ ContextView::ContextView( QWidget* parent, const QString& caption, QWidget* extr
     connect( m_trackView, SIGNAL( querySelected( Tomahawk::query_ptr ) ), SLOT( onQuerySelected( Tomahawk::query_ptr ) ) );
     connect( m_trackView, SIGNAL( querySelected( Tomahawk::query_ptr ) ), detailView, SLOT( setQuery( Tomahawk::query_ptr ) ) );
 //    connect( m_header, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
-
-/*    NewClosure( m_modeHeader, SIGNAL( flatClicked() ), const_cast< ContextView* >( this ), SLOT( setCurrentMode( ContextViewMode ) ), ContextView::Flat )->setAutoDelete( false );
-    NewClosure( m_modeHeader, SIGNAL( detailedClicked() ), const_cast< ContextView* >( this ), SLOT( setCurrentMode( ContextViewMode ) ), ContextView::Detailed )->setAutoDelete( false );
-    NewClosure( m_modeHeader, SIGNAL( gridClicked() ), const_cast< ContextView* >( this ), SLOT( setCurrentMode( ContextViewMode ) ), ContextView::Grid )->setAutoDelete( false );*/
 }
 
 

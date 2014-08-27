@@ -25,7 +25,6 @@
 #include "audio/AudioEngine.h"
 #include "widgets/CaptionLabel.h"
 #include "widgets/FilterHeader.h"
-#include "playlist/ModeHeader.h"
 #include "playlist/PlayableModel.h"
 #include "playlist/PlaylistModel.h"
 #include "playlist/TrackView.h"
@@ -45,7 +44,6 @@ using namespace Tomahawk;
 FlexibleView::FlexibleView( QWidget* parent, QWidget* extraHeader )
     : QWidget( parent )
     , m_header( new FilterHeader( this ) )
-//    , m_modeHeader( new ModeHeader( this ) )
     , m_trackView( new TrackView() )
     , m_detailedView( new TrackView() )
     , m_gridView( new GridView() )
@@ -76,7 +74,6 @@ FlexibleView::FlexibleView( QWidget* parent, QWidget* extraHeader )
     m_gridView->setStyleSheet( QString( "QListView { background-color: white; }" ) );
 
     layout()->addWidget( m_header );
-//    layout()->addWidget( m_modeHeader );
     if ( extraHeader )
         layout()->addWidget( extraHeader );
 
@@ -118,10 +115,6 @@ FlexibleView::FlexibleView( QWidget* parent, QWidget* extraHeader )
 
     connect( m_trackView, SIGNAL( querySelected( Tomahawk::query_ptr ) ), m_detailView, SLOT( setQuery( Tomahawk::query_ptr ) ) );
     connect( m_header, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
-
-/*    NewClosure( m_modeHeader, SIGNAL( flatClicked() ), const_cast< FlexibleView* >( this ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Flat )->setAutoDelete( false );
-    NewClosure( m_modeHeader, SIGNAL( detailedClicked() ), const_cast< FlexibleView* >( this ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Detailed )->setAutoDelete( false );
-    NewClosure( m_modeHeader, SIGNAL( gridClicked() ), const_cast< FlexibleView* >( this ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Grid )->setAutoDelete( false );*/
 }
 
 
