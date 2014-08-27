@@ -501,8 +501,8 @@ ArtistInfoWidget::onSliderValueChanged( int value )
     const int midPoint = m_area->viewport()->size().height() / 2;
     const bool bio = ( ( ui->biographyLabel->mapTo( m_widget, QPoint( 0, 0 ) ).y() - 32 ) - value ) < midPoint ;
     const bool ra = ( ( ui->relatedArtistsLabel->mapTo( m_widget, QPoint( 0, 0 ) ).y() - 32 ) - value ) < midPoint;
-    const float lowOpacity = 0.8;
 
+    const float lowOpacity = 0.8;
     QFont inactive = m_headerWidget->ui->anchor1Label->font();
     inactive.setBold( false );
     QFont active = m_headerWidget->ui->anchor1Label->font();
