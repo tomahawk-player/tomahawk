@@ -85,7 +85,6 @@ ColumnViewPreviewWidget::ColumnViewPreviewWidget( ColumnView* parent )
     m_artistLabel->setElideMode( Qt::ElideMiddle );
     m_artistLabel->setType( QueryLabel::Artist );
     m_artistLabel->setAlignment( Qt::AlignCenter );
-    connect( m_artistLabel, SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
     font.setPointSize( TomahawkUtils::defaultFontSize() + 5 );
     m_artistLabel->setFont( font );
     QHBoxLayout* artistLayout = new QHBoxLayout;
