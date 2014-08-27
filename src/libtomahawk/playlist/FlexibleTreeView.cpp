@@ -342,6 +342,7 @@ FlexibleTreeView::setFilter( const QString& pattern )
 
     m_columnView->setFilter( pattern );
     m_trackView->setFilter( pattern );
+    m_albumView->setFilter( pattern );
 
     return true;
 }
@@ -382,10 +383,7 @@ FlexibleTreeView::onModelChanged()
     m_header->setCaption( m_model->title() );
     m_header->setDescription( m_model->description() );
 
-    if ( m_model->isReadOnly() )
-        setEmptyTip( tr( "This playlist is currently empty." ) );
-    else
-        setEmptyTip( tr( "This playlist is currently empty. Add some tracks to it and enjoy the music!" ) );
+    setEmptyTip( tr( "This collection is currently empty." ) );
 }
 
 
