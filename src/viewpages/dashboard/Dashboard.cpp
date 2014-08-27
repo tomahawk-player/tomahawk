@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -20,7 +20,6 @@
 
 #include "Dashboard.h"
 #include "ui_DashboardWidget.h"
-#include "ui_HeaderWidget.h"
 
 #include "libtomahawk-widgets/PlaylistDelegate.h"
 
@@ -67,13 +66,11 @@ Dashboard::~Dashboard()
 DashboardWidget::DashboardWidget( QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::DashboardWidget )
-    , uiHeader( new Ui::HeaderWidget )
 {
     QWidget* widget = new QWidget;
-    QWidget* headerWidget = new QWidget;
+    BasicHeader* headerWidget = new BasicHeader;
+    headerWidget->setCaption( tr( "Feed" ) );
     ui->setupUi( widget );
-    uiHeader->setupUi( headerWidget );
-    headerWidget->setFixedHeight( 160 );
 
     {
         m_tracksModel = new RecentlyPlayedModel( ui->trackView->trackView(), HISTORY_TRACK_ITEMS );
@@ -84,23 +81,6 @@ DashboardWidget::DashboardWidget( QWidget* parent )
 
 //        ui->trackView->trackView()->setAutoResize( true );
         m_tracksModel->setSource( source_ptr() );
-    }
-
-    {
-        QFont f = uiHeader->artistLabel->font();
-        f.setBold( true );
-        f.setPointSize( TomahawkUtils::defaultFontSize() + 6 );
-
-        QPalette p = uiHeader->artistLabel->palette();
-        p.setColor( QPalette::Foreground, Qt::white );
-
-        uiHeader->artistLabel->setFont( f );
-        uiHeader->artistLabel->setPalette( p );
-        uiHeader->artistLabel->setText( tr( "Feed" ).toUpper() );
-
-        uiHeader->anchor1Label->hide();
-        uiHeader->anchor2Label->hide();
-        uiHeader->anchor3Label->hide();
     }
 
     {
@@ -127,7 +107,7 @@ DashboardWidget::DashboardWidget( QWidget* parent )
     mpl->addChildInterface( ui->trackView->trackView()->playlistInterface() );
     m_playlistInterface = playlistinterface_ptr( mpl );
 
-    connect( ui->trackView, SIGNAL( pixmapChanged( QPixmap ) ), uiHeader->headerWidget, SLOT( setBackground( QPixmap ) ) );
+    connect( ui->trackView, SIGNAL( pixmapChanged( QPixmap ) ), headerWidget, SLOT( setBackground( QPixmap ) ) );
 }
 
 

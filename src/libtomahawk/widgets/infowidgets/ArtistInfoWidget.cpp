@@ -19,7 +19,6 @@
 
 #include "ArtistInfoWidget.h"
 #include "ui_ArtistInfoWidget.h"
-#include "ui_HeaderWidget.h"
 
 #include <QDesktopServices>
 #include <QScrollArea>
@@ -41,7 +40,7 @@
 #include "Pipeline.h"
 #include "SourceList.h"
 #include "MetaPlaylistInterface.h"
-#include "widgets/StatsGauge.h"
+#include "widgets/BasicHeader.h"
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
@@ -52,14 +51,11 @@ using namespace Tomahawk;
 ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::ArtistInfoWidget )
-    , uiHeader( new Ui::HeaderWidget )
     , m_artist( artist )
 {
     m_widget = new QWidget;
-    QWidget* headerWidget = new QWidget;
+    m_headerWidget = new BasicHeader;
     ui->setupUi( m_widget );
-    uiHeader->setupUi( headerWidget );
-    headerWidget->setFixedHeight( 160 );
 
     artist->loadStats();
     connect( artist.data(), SIGNAL( statsLoaded() ), SLOT( onArtistStatsLoaded() ) );
@@ -153,40 +149,21 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     }
 
     {
-        QFont f = uiHeader->artistLabel->font();
-        f.setBold( true );
-        f.setPointSize( TomahawkUtils::defaultFontSize() + 6 );
+        m_headerWidget->ui->anchor1Label->setText( tr( "Music" ) );
+        m_headerWidget->ui->anchor2Label->setText( tr( "Biography" ) );
+        m_headerWidget->ui->anchor3Label->setText( tr( "Related Artists" ) );
+        m_headerWidget->ui->anchor1Label->show();
+        m_headerWidget->ui->anchor2Label->show();
+        m_headerWidget->ui->anchor3Label->show();
 
-        QPalette p = uiHeader->artistLabel->palette();
-        p.setColor( QPalette::Foreground, Qt::white );
+        QFontMetrics fm( m_headerWidget->ui->anchor1Label->font() );
+        m_headerWidget->ui->anchor1Label->setFixedWidth( fm.width( m_headerWidget->ui->anchor1Label->text() ) + 16 );
+        m_headerWidget->ui->anchor2Label->setFixedWidth( fm.width( m_headerWidget->ui->anchor2Label->text() ) + 16 );
+        m_headerWidget->ui->anchor3Label->setFixedWidth( fm.width( m_headerWidget->ui->anchor3Label->text() ) + 16 );
 
-        uiHeader->artistLabel->setFont( f );
-        uiHeader->artistLabel->setPalette( p );
-
-        f.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
-        f.setBold( true );
-        uiHeader->anchor1Label->setFont( f );
-        uiHeader->anchor1Label->setPalette( p );
-        uiHeader->anchor2Label->setFont( f );
-        uiHeader->anchor2Label->setPalette( p );
-        uiHeader->anchor3Label->setFont( f );
-        uiHeader->anchor3Label->setPalette( p );
-
-        uiHeader->anchor1Label->setOpacity( 1 );
-        uiHeader->anchor2Label->setOpacity( 1 );
-        uiHeader->anchor3Label->setOpacity( 1 );
-        uiHeader->anchor1Label->setText( tr( "Music" ) );
-        uiHeader->anchor2Label->setText( tr( "Biography" ) );
-        uiHeader->anchor3Label->setText( tr( "Related Artists" ) );
-
-        QFontMetrics fm( f );
-        uiHeader->anchor1Label->setFixedWidth( fm.width( uiHeader->anchor1Label->text() ) + 16 );
-        uiHeader->anchor2Label->setFixedWidth( fm.width( uiHeader->anchor2Label->text() ) + 16 );
-        uiHeader->anchor3Label->setFixedWidth( fm.width( uiHeader->anchor3Label->text() ) + 16 );
-
-        connect( uiHeader->anchor1Label, SIGNAL( clicked() ), SLOT( onMusicAnchorClicked() ) );
-        connect( uiHeader->anchor2Label, SIGNAL( clicked() ), SLOT( onBioAnchorClicked() ) );
-        connect( uiHeader->anchor3Label, SIGNAL( clicked() ), SLOT( onRelatedArtistsAnchorClicked() ) );
+        connect( m_headerWidget->ui->anchor1Label, SIGNAL( clicked() ), SLOT( onMusicAnchorClicked() ) );
+        connect( m_headerWidget->ui->anchor2Label, SIGNAL( clicked() ), SLOT( onBioAnchorClicked() ) );
+        connect( m_headerWidget->ui->anchor3Label, SIGNAL( clicked() ), SLOT( onRelatedArtistsAnchorClicked() ) );
     }
 
     m_stackedWidget = new QStackedWidget();
@@ -252,7 +229,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     {
         QVBoxLayout* layout = new QVBoxLayout();
-        layout->addWidget( headerWidget );
+        layout->addWidget( m_headerWidget );
         layout->addWidget( m_stackedWidget );
         setLayout( layout );
         TomahawkUtils::unmarginLayout( layout );
@@ -337,8 +314,8 @@ ArtistInfoWidget::load( const artist_ptr& artist )
 
     m_artist = artist;
     m_title = artist->name();
-    uiHeader->artistLabel->setText( artist->name().toUpper() );
-    uiHeader->balanceSpacer->changeSize( uiHeader->artistLabel->sizeHint().width(), 1, QSizePolicy::Fixed, QSizePolicy::Fixed );
+    m_headerWidget->ui->captionLabel->setText( artist->name().toUpper() );
+    m_headerWidget->ui->balanceSpacer->changeSize( m_headerWidget->ui->captionLabel->sizeHint().width(), 1, QSizePolicy::Fixed, QSizePolicy::Fixed );
 
     connect( m_artist.data(), SIGNAL( biographyLoaded() ), SLOT( onBiographyLoaded() ) );
     connect( m_artist.data(), SIGNAL( similarArtistsLoaded() ), SLOT( onSimilarArtistsLoaded() ) );
@@ -424,7 +401,7 @@ ArtistInfoWidget::onArtistImageUpdated()
     m_pixmap = m_artist->cover( QSize( 0, 0 ) );
     emit pixmapChanged( m_pixmap );
 
-    uiHeader->headerWidget->setBackground( m_pixmap, true, false );
+    m_headerWidget->setBackground( m_pixmap, true, false );
     ui->cover->setPixmap( m_artist->cover( QSize( ui->cover->width(), ui->cover->width() ) ) );
 }
 
@@ -526,39 +503,39 @@ ArtistInfoWidget::onSliderValueChanged( int value )
     const bool ra = ( ( ui->relatedArtistsLabel->mapTo( m_widget, QPoint( 0, 0 ) ).y() - 32 ) - value ) < midPoint;
     const float lowOpacity = 0.8;
 
-    QFont inactive = uiHeader->anchor1Label->font();
+    QFont inactive = m_headerWidget->ui->anchor1Label->font();
     inactive.setBold( false );
-    QFont active = uiHeader->anchor1Label->font();
+    QFont active = m_headerWidget->ui->anchor1Label->font();
     active.setBold( true );
 
     if ( ra )
     {
-        uiHeader->anchor3Label->setOpacity( 1 );
-        uiHeader->anchor1Label->setOpacity( lowOpacity );
-        uiHeader->anchor2Label->setOpacity( lowOpacity );
+        m_headerWidget->ui->anchor3Label->setOpacity( 1 );
+        m_headerWidget->ui->anchor1Label->setOpacity( lowOpacity );
+        m_headerWidget->ui->anchor2Label->setOpacity( lowOpacity );
 
-        uiHeader->anchor3Label->setFont( active );
-        uiHeader->anchor1Label->setFont( inactive );
-        uiHeader->anchor2Label->setFont( inactive );
+        m_headerWidget->ui->anchor3Label->setFont( active );
+        m_headerWidget->ui->anchor1Label->setFont( inactive );
+        m_headerWidget->ui->anchor2Label->setFont( inactive );
     }
     else if ( bio )
     {
-        uiHeader->anchor2Label->setOpacity( 1 );
-        uiHeader->anchor1Label->setOpacity( lowOpacity );
-        uiHeader->anchor3Label->setOpacity( lowOpacity );
+        m_headerWidget->ui->anchor2Label->setOpacity( 1 );
+        m_headerWidget->ui->anchor1Label->setOpacity( lowOpacity );
+        m_headerWidget->ui->anchor3Label->setOpacity( lowOpacity );
 
-        uiHeader->anchor2Label->setFont( active );
-        uiHeader->anchor1Label->setFont( inactive );
-        uiHeader->anchor3Label->setFont( inactive );
+        m_headerWidget->ui->anchor2Label->setFont( active );
+        m_headerWidget->ui->anchor1Label->setFont( inactive );
+        m_headerWidget->ui->anchor3Label->setFont( inactive );
     }
     else
     {
-        uiHeader->anchor1Label->setOpacity( 1 );
-        uiHeader->anchor2Label->setOpacity( lowOpacity );
-        uiHeader->anchor3Label->setOpacity( lowOpacity );
+        m_headerWidget->ui->anchor1Label->setOpacity( 1 );
+        m_headerWidget->ui->anchor2Label->setOpacity( lowOpacity );
+        m_headerWidget->ui->anchor3Label->setOpacity( lowOpacity );
 
-        uiHeader->anchor1Label->setFont( active );
-        uiHeader->anchor2Label->setFont( inactive );
-        uiHeader->anchor3Label->setFont( inactive );
+        m_headerWidget->ui->anchor1Label->setFont( active );
+        m_headerWidget->ui->anchor2Label->setFont( inactive );
+        m_headerWidget->ui->anchor3Label->setFont( inactive );
     }
 }

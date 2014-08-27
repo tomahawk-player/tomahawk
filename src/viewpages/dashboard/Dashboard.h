@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -43,7 +43,6 @@ class BasicHeader;
 namespace Ui
 {
     class DashboardWidget;
-    class HeaderWidget;
 }
 
 namespace Tomahawk
@@ -75,7 +74,6 @@ protected:
 
 private:
     Ui::DashboardWidget *ui;
-    Ui::HeaderWidget *uiHeader;
 
     RecentlyPlayedModel* m_tracksModel;
     AlbumModel* m_recentAlbumsModel;

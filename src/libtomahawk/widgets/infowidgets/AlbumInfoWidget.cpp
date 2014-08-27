@@ -20,7 +20,6 @@
 
 #include "AlbumInfoWidget.h"
 #include "ui_AlbumInfoWidget.h"
-#include "ui_HeaderWidget.h"
 
 #include "audio/AudioEngine.h"
 #include "ViewManager.h"
@@ -30,6 +29,7 @@
 #include "Source.h"
 #include "MetaPlaylistInterface.h"
 #include "playlist/TrackView.h"
+#include "widgets/BasicHeader.h"
 
 #include "database/DatabaseCommand_AllTracks.h"
 #include "database/DatabaseCommand_AllAlbums.h"
@@ -47,13 +47,10 @@ using namespace Tomahawk;
 AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::AlbumInfoWidget )
-    , uiHeader( new Ui::HeaderWidget )
 {
     QWidget* widget = new QWidget;
-    QWidget* headerWidget = new QWidget;
+    m_headerWidget = new BasicHeader;
     ui->setupUi( widget );
-    uiHeader->setupUi( headerWidget );
-    headerWidget->setFixedHeight( 160 );
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::Original, QSize( 48, 48 ) );
 
@@ -63,22 +60,6 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     // We need to set the model on the view before loading the playlist, so spinners & co are connected
     ui->albumView->setPlayableModel( m_tracksModel );
     ui->albumView->setCaption( tr( "Album Details" ) );
-
-    {
-        QFont f = uiHeader->artistLabel->font();
-        f.setBold( true );
-        f.setPointSize( TomahawkUtils::defaultFontSize() + 6 );
-
-        QPalette p = uiHeader->artistLabel->palette();
-        p.setColor( QPalette::Foreground, Qt::white );
-
-        uiHeader->artistLabel->setFont( f );
-        uiHeader->artistLabel->setPalette( p );
-
-        uiHeader->anchor1Label->hide();
-        uiHeader->anchor2Label->hide();
-        uiHeader->anchor3Label->hide();
-    }
 
     ui->topHits->setStyleSheet( QString( "QListView { background-color: #f9f9f9; }" ) );
     TomahawkStyle::stylePageFrame( ui->trackFrame );
@@ -99,7 +80,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
         area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
         QVBoxLayout* layout = new QVBoxLayout();
-        layout->addWidget( headerWidget );
+        layout->addWidget( m_headerWidget );
         layout->addWidget( area );
         setLayout( layout );
         TomahawkUtils::unmarginLayout( layout );
@@ -168,7 +149,7 @@ AlbumInfoWidget::load( const album_ptr& album )
 
     connect( m_album.data(), SIGNAL( updated() ), SLOT( onAlbumImageUpdated() ) );
 
-    uiHeader->artistLabel->setText( album->artist()->name().toUpper() );
+    m_headerWidget->ui->captionLabel->setText( album->artist()->name().toUpper() );
 
     m_tracksModel->startLoading();
     m_tracksModel->addTracks( album, QModelIndex(), true );
@@ -186,7 +167,7 @@ AlbumInfoWidget::onAlbumImageUpdated()
     m_pixmap = m_album->cover( QSize( 0, 0 ) );
     emit pixmapChanged( m_pixmap );
 
-    uiHeader->headerWidget->setBackground( m_pixmap, true, false );
+    m_headerWidget->setBackground( m_pixmap, true, false );
 }
 
 

@@ -38,7 +38,6 @@ class PlaylistModel;
 namespace Ui
 {
     class SearchWidget;
-    class HeaderWidget;
 }
 
 class DLLEXPORT SearchWidget : public QWidget, public Tomahawk::ViewPage
@@ -84,7 +83,6 @@ private:
     void updateAlbums();
 
     Ui::SearchWidget *ui;
-    Ui::HeaderWidget* uiHeader;
 
     QStackedWidget* m_stackedWidget;
     QString m_search;

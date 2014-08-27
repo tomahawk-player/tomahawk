@@ -42,12 +42,11 @@ class QScrollArea;
 class QStackedWidget;
 class PlayableModel;
 class PlaylistModel;
-class StatsGauge;
+class BasicHeader;
 
 namespace Ui
 {
     class ArtistInfoWidget;
-    class HeaderWidget;
 }
 
 class MetaArtistInfoInterface;
@@ -116,9 +115,9 @@ private slots:
 
 private:
     Ui::ArtistInfoWidget *ui;
-    Ui::HeaderWidget* uiHeader;
 
     QWidget* m_widget;
+    BasicHeader* m_headerWidget;
     QScrollArea* m_area;
 
     Tomahawk::artist_ptr m_artist;
@@ -128,7 +127,6 @@ private:
     Tomahawk::playlistinterface_ptr m_plInterface;
 
     QStackedWidget* m_stackedWidget;
-    StatsGauge* m_playStatsGauge;
 
     QString m_title;
     QString m_description;

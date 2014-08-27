@@ -42,11 +42,11 @@
 class PlayableModel;
 class TreeModel;
 class MetaAlbumInfoInterface;
+class BasicHeader;
 
 namespace Ui
 {
     class AlbumInfoWidget;
-    class HeaderWidget;
 }
 
 class DLLEXPORT AlbumInfoWidget : public QWidget, public Tomahawk::ViewPage
@@ -97,7 +97,7 @@ private slots:
 
 private:
     Ui::AlbumInfoWidget* ui;
-    Ui::HeaderWidget* uiHeader;
+    BasicHeader* m_headerWidget;
 
     Tomahawk::album_ptr m_album;
 

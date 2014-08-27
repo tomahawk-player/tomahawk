@@ -19,7 +19,6 @@
 
 #include "SearchWidget.h"
 #include "ui_SearchWidget.h"
-#include "ui_HeaderWidget.h"
 
 #include "SourceList.h"
 #include "MetaPlaylistInterface.h"
@@ -32,6 +31,7 @@
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "widgets/BasicHeader.h"
 
 #include <QPushButton>
 #include <QScrollArea>
@@ -42,14 +42,11 @@ using namespace Tomahawk;
 SearchWidget::SearchWidget( const QString& search, QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::SearchWidget )
-    , uiHeader( new Ui::HeaderWidget )
     , m_search( search )
 {
     QWidget* widget = new QWidget;
-    QWidget* headerWidget = new QWidget;
+    BasicHeader* headerWidget = new BasicHeader;
     ui->setupUi( widget );
-    uiHeader->setupUi( headerWidget );
-    headerWidget->setFixedHeight( 160 );
 
     {
         ui->artists->setAutoResize( true );
@@ -121,22 +118,6 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
         connect( ui->artistsMoreLabel, SIGNAL( clicked() ), SLOT( onArtistsMoreClicked() ) );
         connect( ui->albumsMoreLabel, SIGNAL( clicked() ), SLOT( onAlbumsMoreClicked() ) );
         connect( ui->topHitsMoreLabel, SIGNAL( clicked() ), SLOT( onTopHitsMoreClicked() ) );
-    }
-
-    {
-        QFont f = uiHeader->artistLabel->font();
-        f.setBold( true );
-        f.setPointSize( TomahawkUtils::defaultFontSize() + 6 );
-
-        QPalette p = uiHeader->artistLabel->palette();
-        p.setColor( QPalette::Foreground, Qt::white );
-
-        uiHeader->artistLabel->setFont( f );
-        uiHeader->artistLabel->setPalette( p );
-
-        uiHeader->anchor1Label->hide();
-        uiHeader->anchor2Label->hide();
-        uiHeader->anchor3Label->hide();
     }
 
     m_stackedWidget = new QStackedWidget();
@@ -253,7 +234,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
     m_resultsModel->startLoading();
 
     m_queries << Tomahawk::Query::get( search, uuid() );
-    uiHeader->artistLabel->setText( title().toUpper() );
+    headerWidget->ui->captionLabel->setText( title().toUpper() );
 
     foreach ( const Tomahawk::query_ptr& query, m_queries )
     {
