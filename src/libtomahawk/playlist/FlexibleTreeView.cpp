@@ -45,7 +45,6 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
     : QWidget( parent )
     , m_header( new FilterHeader( this ) )
     , m_columnView( new ColumnView() )
-    , m_treeView( new TreeView() )
     , m_trackView( new TrackView() )
     , m_albumView( new GridView() )
     , m_model( 0 )
@@ -56,9 +55,6 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
 
     m_header->setBackgroundColor( Qt::black );
     m_header->setBackground( ImageRegistry::instance()->pixmap( RESPATH "images/collection_background_small.png", QSize( 0, 0 ) ), false );
-
-    m_treeView->proxyModel()->setStyle( PlayableProxyModel::Collection );
-    m_treeView->proxyModel()->setPlaylistInterface( m_columnView->proxyModel()->playlistInterface() );
 
 //    m_trackView->setPlaylistInterface( m_playlistInterface );
 //    m_columnView->setPlaylistInterface( m_trackView->proxyModel()->playlistInterface() );
@@ -132,7 +128,6 @@ FlexibleTreeView::~FlexibleTreeView()
 void
 FlexibleTreeView::setGuid( const QString& guid )
 {
-    m_treeView->setGuid( guid );
     m_columnView->setGuid( guid );
 }
 
@@ -172,22 +167,6 @@ FlexibleTreeView::setColumnView( ColumnView* view )
 
 
 void
-FlexibleTreeView::setTreeView( TreeView* view )
-{
-    if ( m_treeView )
-    {
-        m_stack->removeWidget( m_treeView );
-        delete m_treeView;
-    }
-
-//    view->setPlaylistInterface( m_columnView->proxyModel()->playlistInterface() );
-
-    m_treeView = view;
-    m_stack->addWidget( view );
-}
-
-
-void
 FlexibleTreeView::setTreeModel( TreeModel* model )
 {
     if ( m_model )
@@ -200,7 +179,6 @@ FlexibleTreeView::setTreeModel( TreeModel* model )
 
 //    m_trackView->setPlayableModel( model );
     m_columnView->setTreeModel( model );
-    m_treeView->setTreeModel( model );
 
 /*    m_trackView->setSortingEnabled( false );
     m_trackView->sortByColumn( -1 );
@@ -351,7 +329,7 @@ FlexibleTreeView::jumpToCurrentTrack()
     // note: the order of comparison is important here, if we'd write "b || foo" then foo will not be executed if b is already true!
     b = m_columnView->jumpToCurrentTrack() || b;
     b = m_trackView->jumpToCurrentTrack() || b;
-    b = m_treeView->jumpToCurrentTrack() || b;
+    b = m_albumView->jumpToCurrentTrack() || b;
 
     return b;
 }
@@ -363,7 +341,6 @@ FlexibleTreeView::setFilter( const QString& pattern )
     ViewPage::setFilter( pattern );
 
     m_columnView->setFilter( pattern );
-    m_treeView->proxyModel()->setFilter( pattern );
     m_trackView->setFilter( pattern );
 
     return true;
@@ -386,7 +363,6 @@ void
 FlexibleTreeView::setEmptyTip( const QString& tip )
 {
     m_columnView->setEmptyTip( tip );
-    m_treeView->setEmptyTip( tip );
     m_trackView->setEmptyTip( tip );
 }
 

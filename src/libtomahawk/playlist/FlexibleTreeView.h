@@ -28,7 +28,6 @@ class QStackedWidget;
 
 class GridView;
 class TrackView;
-class TreeView;
 class ColumnView;
 class TreeModel;
 class PlayableModel;
@@ -60,13 +59,11 @@ public:
     void setTemporaryPage( bool b );
 
     ColumnView* columnView() const { return m_columnView; }
-    TreeView* treeView() const { return m_treeView; }
     TrackView* trackView() const { return m_trackView; }
 
     void setGuid( const QString& guid );
 
     void setColumnView( ColumnView* view );
-    void setTreeView( TreeView* view );
     void setTrackView( TrackView* view );
 
     void setTreeModel( TreeModel* model );
@@ -94,7 +91,6 @@ private:
     QPixmap m_pixmap;
 
     ColumnView* m_columnView;
-    TreeView* m_treeView;
     TrackView* m_trackView;
     GridView* m_albumView;
 
