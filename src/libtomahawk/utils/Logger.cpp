@@ -180,6 +180,7 @@ setupLogfile()
         {
             QFile f( logFile().toLocal8Bit() );
             f.open( QIODevice::ReadOnly | QIODevice::Text );
+            f.seek( f.size() - ( LOGFILE_SIZE - ( LOGFILE_SIZE / 4 ) ) );
             lc = f.readAll();
             f.close();
         }
@@ -189,7 +190,7 @@ setupLogfile()
         {
             QFile f( logFile().toLocal8Bit() );
             f.open( QIODevice::WriteOnly | QIODevice::Text );
-            f.write( lc.right( LOGFILE_SIZE - ( LOGFILE_SIZE / 4 ) ) );
+            f.write( lc );
             f.close();
         }
     }
