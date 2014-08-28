@@ -67,7 +67,7 @@ ScriptCommand_AllAlbums::exec()
         return;
     }
 
-    if ( m_artist.isNull() )
+    if ( !m_artist )
     {
         reportFailure();
         return;
@@ -83,7 +83,9 @@ ScriptCommand_AllAlbums::exec()
 void
 ScriptCommand_AllAlbums::reportFailure()
 {
-    tDebug() << Q_FUNC_INFO << "for collection" << m_collection->name() << "and artist" << m_artist->name();
+    if ( m_artist )
+        tDebug() << Q_FUNC_INFO << "for collection" << m_collection->name() << "and artist" << m_artist->name();
+
     emit albums( QList< Tomahawk::album_ptr >() );
     emit done();
 }
