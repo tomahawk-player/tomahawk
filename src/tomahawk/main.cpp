@@ -154,13 +154,21 @@ main( int argc, char *argv[] )
 
     TomahawkApp a( argc, argv );
 
+    #ifdef WITH_CRASHREPORTER
+    CrashReporter::Handler* handler = new CrashReporter::Handler( QDir::tempPath(), !TomahawkUtils::headless(), "tomahawk_crash_reporter" );
+    #endif
+
     // MUST register StateHash ****before*** initing TomahawkSettingsGui as constructor of settings does upgrade before Gui subclass registers type
     TomahawkSettings::registerCustomSettingsHandlers();
     new TomahawkSettings( &a );
 
-#ifdef WITH_CRASHREPORTER
-//     new CrashReporter::Handler( QDir::tempPath(), TomahawkSettings::instance()->crashReporterEnabled() && !TomahawkUtils::headless(), "tomahawk_crash_reporter" );
-#endif
+    #ifdef WITH_CRASHREPORTER
+    if( !TomahawkUtils::headless() )
+    {
+        handler->setActive( TomahawkSettings::instance()->crashReporterEnabled() );
+    }
+    #endif
+
 
     KDSingleApplicationGuard guard( KDSingleApplicationGuard::AutoKillOtherInstances );
     QObject::connect( &guard, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ), &a, SLOT( instanceStarted( KDSingleApplicationGuard::Instance ) ) );
