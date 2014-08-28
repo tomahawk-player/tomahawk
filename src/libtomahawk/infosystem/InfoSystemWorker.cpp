@@ -246,6 +246,7 @@ InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     {
         if ( !ptr )
             continue;
+        // tDebug() << "Dispatching to worker:" << ptr->friendlyName() << requestData.type;
 
         foundOne = true;
 
