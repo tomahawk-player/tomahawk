@@ -613,21 +613,24 @@ PlayableProxyModel::columnWeights() const
 void
 PlayableProxyModel::updateDetailedInfo( const QModelIndex& index )
 {
-    if ( style() != PlayableProxyModel::Short && style() != PlayableProxyModel::Large )
-        return;
-
     PlayableItem* item = itemFromIndex( mapToSource( index ) );
-    if ( item->query().isNull() )
-        return;
 
-    if ( style() == PlayableProxyModel::Short || style() == PlayableProxyModel::Large )
+    if ( item->album() )
     {
-        item->query()->track()->cover( QSize( 0, 0 ) );
+        item->album()->cover( QSize( 0, 0 ) );
     }
-
-    if ( style() == PlayableProxyModel::Large )
+    else if ( item->artist() )
     {
-        item->query()->track()->loadSocialActions();
+        item->artist()->cover( QSize( 0, 0 ) );
+    }
+    else if ( item->query() )
+    {
+//        item->query()->track()->cover( QSize( 0, 0 ) );
+
+        if ( style() == PlayableProxyModel::Large )
+        {
+            item->query()->track()->loadSocialActions();
+        }
     }
 }
 
