@@ -540,7 +540,9 @@ GridItemDelegate::onViewChanged()
     {
         QRect rect = m_view->visualRect( index );
         rect.setHeight( rect.width() );
-        m_hoverControls.value( index )->move( rect.center() - QPoint( m_hoverControls[ index ]->width() / 2 -1, m_hoverControls[ index ]->height() / 2 -1 ) );
+
+        HoverControls* controls = m_hoverControls.value( index );
+        controls->move( rect.center() - QPoint( controls->width() / 2 -1, controls->height() / 2 -1 ) );
     }
 }
 
