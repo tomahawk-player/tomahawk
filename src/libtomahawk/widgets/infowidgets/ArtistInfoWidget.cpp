@@ -24,6 +24,7 @@
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QStackedWidget>
+#include <QWheelEvent>
 
 #include "audio/AudioEngine.h"
 #include "playlist/GridItemDelegate.h"
@@ -121,25 +122,18 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     }
 
     {
-        QFont f = ui->biography->font();
-        f.setWeight( QFont::Light );
-        f.setPointSize( TomahawkUtils::defaultFontSize() + 3 );
+        ui->biography->setObjectName( "biography" );
+        ui->biography->setContentsMargins( 0, 0, 0, 0 );
+        ui->biography->page()->setLinkDelegationPolicy( QWebPage::DelegateAllLinks );
+        ui->biography->installEventFilter( this );
 
-        ui->biography->setFont( f );
-        ui->biography->setOpenLinks( false );
-        ui->biography->setOpenExternalLinks( true );
-
-        QPalette p = ui->biography->palette();
-        p.setColor( QPalette::Foreground, Qt::black );
-        ui->biography->setPalette( p );
-
-        ui->biography->document()->setDefaultStyleSheet( QString( "a { text-decoration: none; font-weight: bold; color: #000000; }" ) );
-        TomahawkStyle::stylePageFrame( ui->biography );
+        TomahawkStyle::stylePageWidget( ui->biography );
         TomahawkStyle::stylePageFrame( ui->bioFrame );
-        TomahawkStyle::styleScrollBar( ui->biography->verticalScrollBar() );
 
-        connect( ui->biography, SIGNAL( anchorClicked( QUrl ) ), SLOT( onBiographyLinkClicked( QUrl ) ) );
+        connect( ui->biography, SIGNAL( linkClicked( QUrl ) ), SLOT( onBiographyLinkClicked( QUrl ) ) );
 
+        QFont f = ui->topHitsMoreLabel->font();
+        f.setWeight( QFont::Light );
         f.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
         ui->topHitsMoreLabel->setFont( f );
         ui->albumsMoreLabel->setFont( f );
@@ -377,7 +371,19 @@ ArtistInfoWidget::onBiographyLoaded()
     m_longDescription = m_artist->biography();
     emit longDescriptionChanged( m_longDescription );
 
-    ui->biography->setHtml( m_artist->biography().trimmed().replace( '\n', "<br>" ) );
+    ui->biography->setFixedHeight( ui->cover->width() );
+
+    QString html =
+        QString( "<html><head><style type=text/css>"
+                 "body { margin: 0; padding: 0; color: black; text-decoration: none; font-size: %1pt; font-family: \"Roboto\"; font-weight: 200; }"
+                    "a { color: black; text-decoration: none; font-weight: normal; }"
+                    "a:hover { color: black; text-decoration: underline; font-weight: normal; }"
+                 "</style></head>"
+                 "<body>%2</body></html>" )
+               .arg( TomahawkUtils::defaultFontSize() + 3 )
+               .arg( m_artist->biography().trimmed().replace( '\n', "<br>" ) );
+
+    ui->biography->setHtml( html );
 }
 
 
@@ -538,4 +544,27 @@ ArtistInfoWidget::onSliderValueChanged( int value )
         m_headerWidget->ui->anchor2Label->setFont( inactive );
         m_headerWidget->ui->anchor3Label->setFont( inactive );
     }
+}
+
+
+bool
+ArtistInfoWidget::eventFilter( QObject* obj, QEvent* event )
+{
+    if ( event->type() == QEvent::Wheel )
+    {
+        QWheelEvent* we = static_cast<QWheelEvent*>( event );
+        QWheelEvent* wheelEvent = new QWheelEvent(
+            we->pos(),
+            we->globalPos(),
+            we->delta(),
+            we->buttons(),
+            we->modifiers(),
+            we->orientation() );
+
+        qApp->postEvent( m_area->viewport(), wheelEvent );
+        event->accept();
+        return true;
+    }
+    else
+        return QObject::eventFilter( obj, event );
 }

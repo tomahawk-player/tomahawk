@@ -198,7 +198,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QTextBrowser" name="biography">
+         <widget class="QWebView" name="biography">
           <property name="sizePolicy">
            <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
