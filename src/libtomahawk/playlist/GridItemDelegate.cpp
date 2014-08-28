@@ -185,16 +185,12 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QFont smallFont = font;
     smallFont.setPointSize( TomahawkUtils::defaultFontSize() );
 
-    int bottomHeight = QFontMetrics( smallFont ).boundingRect( bottom ).height();
-    int topHeight = QFontMetrics( font ).boundingRect( top ).height();
-
-    painter->setPen( TomahawkStyle::SELECTION_FOREGROUND );
-
     QRect textRect = option.rect.adjusted( 0, r.height() + 8, 0, 0 );
     bool oneLiner = false;
     if ( bottom.isEmpty() )
         oneLiner = true;
 
+    painter->setPen( TomahawkStyle::SELECTION_FOREGROUND );
     painter->setFont( font );
     painter->setPen( Qt::black );
     painter->setOpacity( 0.8 );
