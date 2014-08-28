@@ -380,7 +380,7 @@ ArtistInfoWidget::onBiographyLoaded()
                     "a:hover { color: black; text-decoration: underline; font-weight: 300; }"
                  "</style></head>"
                  "<body>%2</body></html>" )
-               .arg( TomahawkUtils::defaultFontSize() + 3 )
+               .arg( TomahawkUtils::defaultFontSize() + 1 )
                .arg( m_artist->biography().trimmed().replace( '\n', "<br>" ) );
 
     ui->biography->setHtml( html );
