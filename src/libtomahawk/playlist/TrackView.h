@@ -95,9 +95,6 @@ public slots:
     void playItem();
     virtual void onMenuTriggered( int action );
 
-    void onViewChanged();
-    void onScrollTimeout();
-
     void expand( const QPersistentModelIndex& idx );
     void select( const QPersistentModelIndex& idx );
     void selectFirstTrack();
@@ -123,6 +120,9 @@ protected:
 
 protected slots:
     virtual void currentChanged( const QModelIndex& current, const QModelIndex& previous );
+
+    void onViewChanged();
+    void onScrollTimeout();
 
 private slots:
     void onItemResized( const QModelIndex& index );

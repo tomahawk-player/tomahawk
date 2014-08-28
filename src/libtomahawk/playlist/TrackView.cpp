@@ -276,9 +276,6 @@ TrackView::onModelEmptyCheck()
 void
 TrackView::onViewChanged()
 {
-    if ( m_proxyModel->style() != PlayableProxyModel::Short && m_proxyModel->style() != PlayableProxyModel::Large ) // eventual FIXME?
-        return;
-
     if ( m_timer.isActive() )
         m_timer.stop();
 
