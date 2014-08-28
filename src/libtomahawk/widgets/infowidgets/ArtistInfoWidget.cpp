@@ -375,12 +375,12 @@ ArtistInfoWidget::onBiographyLoaded()
 
     QString html =
         QString( "<html><head><style type=text/css>"
-                 "body { margin: 0; padding: 0; color: black; text-decoration: none; font-size: %1pt; font-family: \"Roboto\"; font-weight: 200; }"
-                    "a { color: black; text-decoration: none; font-weight: 300; }"
-                    "a:hover { color: black; text-decoration: underline; font-weight: 300; }"
+                 "body { margin: 0; padding: 0; color: #333333; text-decoration: none; font-size: %1pt; font-weight: 200; }"
+                    "a { color: black; text-decoration: none; font-weight: 600; }"
+                    "a:hover { color: black; text-decoration: underline; font-weight: 600; }"
                  "</style></head>"
                  "<body>%2</body></html>" )
-               .arg( TomahawkUtils::defaultFontSize() + 1 )
+               .arg( TomahawkUtils::defaultFontSize() + 2 )
                .arg( m_artist->biography().trimmed().replace( '\n', "<br>" ) );
 
     ui->biography->setHtml( html );
