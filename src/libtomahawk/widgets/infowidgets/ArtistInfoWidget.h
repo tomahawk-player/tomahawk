@@ -92,6 +92,7 @@ signals:
 
 protected:
     void changeEvent( QEvent* e );
+    bool eventFilter( QObject* obj, QEvent* event );
 
 private slots:
     void onArtistStatsLoaded();
