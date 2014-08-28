@@ -53,7 +53,7 @@ HoverControls::resizeEvent( QResizeEvent* event )
 
 
 void
-HoverControls::paintEvent( QPaintEvent* event )
+HoverControls::paintEvent( QPaintEvent* /* event */ )
 {
     QPainter painter( this );
     painter.setRenderHint( QPainter::Antialiasing );
@@ -64,7 +64,7 @@ HoverControls::paintEvent( QPaintEvent* event )
     painter.setPen( Qt::transparent );
     painter.setBrush( Qt::transparent );
 
-    QRect figRect = event->rect().adjusted( 18, 2, -18, -2 );
+    QRect figRect = contentsRect().adjusted( 18, 2, -18, -2 );
     if ( m_hovering )
     {
         painter.setBrush( Qt::white );
