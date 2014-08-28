@@ -100,6 +100,9 @@ protected:
 protected slots:
     virtual void currentChanged( const QModelIndex& current, const QModelIndex& previous );
 
+    void onViewChanged();
+    void onScrollTimeout();
+
 private slots:
     void onFilterChanged( const QString& filter );
     void onCustomContextMenu( const QPoint& pos );
@@ -127,8 +130,9 @@ private:
     bool m_autoFitItems;
     bool m_autoResize;
     QSize m_itemSize;
-
     QRect m_paintRect;
+
+    QTimer m_timer;
 
     friend class ::GridPlaylistInterface;
 };

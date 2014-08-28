@@ -81,6 +81,11 @@ GridView::GridView( QWidget* parent )
     setItemSize( QSize( 170, 170 + 56 ) );
     setProxyModel( new PlayableProxyModel( this ) );
 
+    m_timer.setInterval( SCROLL_TIMEOUT );
+    connect( verticalScrollBar(), SIGNAL( rangeChanged( int, int ) ), SLOT( onViewChanged() ) );
+    connect( verticalScrollBar(), SIGNAL( valueChanged( int ) ), SLOT( onViewChanged() ) );
+    connect( &m_timer, SIGNAL( timeout() ), SLOT( onScrollTimeout() ) );
+
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), SLOT( onCustomContextMenu( QPoint ) ) );
 }
@@ -441,4 +446,66 @@ GridView::setItemSize( const QSize& size )
         m_delegate->setItemSize( m_itemSize );
 
     layoutItems();
+}
+
+
+void
+GridView::onViewChanged()
+{
+    if ( m_timer.isActive() )
+        m_timer.stop();
+
+    m_timer.start();
+}
+
+
+void
+GridView::onScrollTimeout()
+{
+    if ( m_timer.isActive() )
+        m_timer.stop();
+
+    QModelIndex left, right;
+    for ( int y = viewport()->rect().topLeft().y(); y <= viewport()->rect().bottomLeft().y(); y += ( spacing() + 1 ) )
+    {
+        for ( int x = viewport()->rect().topLeft().x(); x <= viewport()->rect().topRight().x(); x += ( spacing() + 1 ) )
+        {
+            left = indexAt( QPoint( x, y ) );
+            if ( left.isValid() )
+                break;
+        }
+        if ( left.isValid() )
+            break;
+    }
+    if ( !left.isValid() )
+    {
+        tDebug() << "Could not find first visible index!";
+        return;
+    }
+    while ( left.isValid() && left.parent().isValid() )
+        left = left.parent();
+
+    for ( int y = viewport()->rect().bottomLeft().y(); y >= viewport()->rect().topLeft().y(); y -= ( spacing() + 1 ) )
+    {
+        for ( int x = viewport()->rect().topRight().x(); x >= viewport()->rect().topLeft().x(); x -= ( spacing() + 1 ) )
+        {
+            right = indexAt( QPoint( x, y ) );
+            if ( right.isValid() )
+                break;
+        }
+        if ( right.isValid() )
+            break;
+    }
+    while ( right.isValid() && right.parent().isValid() )
+        right = right.parent();
+    if ( !right.isValid() )
+    {
+        tDebug() << "Could not find last visible index!";
+        return;
+    }
+
+    for ( int i = left.row(); i <= right.row(); i++ )
+    {
+        m_proxyModel->updateDetailedInfo( m_proxyModel->index( i, 0 ) );
+    }
 }
