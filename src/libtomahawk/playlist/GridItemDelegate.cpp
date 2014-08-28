@@ -529,7 +529,12 @@ GridItemDelegate::onViewChanged()
     {
         QRect rect = m_view->visualRect( index );
         rect.setHeight( rect.width() );
-        m_spinner.value( index )->move( rect.center() - QPoint( 15, 15 ) );
+
+        QWidget* spinner = m_spinner.value( index );
+        QPoint pos = rect.center() - QPoint( ( spinner->width() ) / 2 - 1,
+                                             ( spinner->height() ) / 2 - 1 );
+
+        spinner->move( pos );
     }
     foreach ( const QPersistentModelIndex& index, m_hoverControls.keys() )
     {
