@@ -290,7 +290,7 @@ Album::cover( const QSize& size, bool forceLoad ) const
         const QString cacheKey = QString( "%1_%2_%3" ).arg( infoid() ).arg( size.width() ).arg( size.height() );
         QPixmap cover;
 
-        if ( !QPixmapCache::find( cacheKey, cover ) )
+        if ( !QPixmapCache::find( cacheKey, &cover ) )
         {
             cover = d->cover->scaled( size, Qt::KeepAspectRatio, Qt::SmoothTransformation );
             QPixmapCache::insert( cacheKey, cover );
