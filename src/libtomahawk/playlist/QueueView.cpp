@@ -25,6 +25,7 @@
 #include "utils/Logger.h"
 #include "Pipeline.h"
 #include "Source.h"
+#include "SourceList.h"
 #include "TomahawkSettings.h"
 #include "utils/TomahawkUtilsGui.h"
 
@@ -52,12 +53,13 @@ QueueView::QueueView( QWidget* parent )
     TrackItemDelegate* delegate = new TrackItemDelegate( TrackItemDelegate::LovedTracks, trackView(), trackView()->proxyModel() );
     trackView()->setPlaylistItemDelegate( delegate );
 
-    if ( Pipeline::instance()->isRunning() )
+    if ( Pipeline::instance()->isRunning() && SourceList::instance()->isReady() )
     {
         restoreState();
     }
     else
     {
+        connect( SourceList::instance(), SIGNAL( ready() ), SLOT( restoreState() ) );
         connect( Pipeline::instance(), SIGNAL( running() ), SLOT( restoreState() ) );
     }
 }
@@ -73,6 +75,9 @@ QueueView::~QueueView()
 void
 QueueView::restoreState()
 {
+    if ( !Pipeline::instance()->isRunning() || !SourceList::instance()->isReady() )
+        return;
+
     QVariantList vl = TomahawkSettings::instance()->queueState().toList();
     QList< query_ptr > ql;
 
