@@ -315,7 +315,7 @@ se conecte e faça o stream de você?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="173"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="153"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="147"/>
         <source>Biography</source>
         <translation type="unfinished"/>
     </message>
@@ -326,37 +326,37 @@ se conecte e faça o stream de você?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="255"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="154"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="148"/>
         <source>Related Artists</source>
         <translation>Artistas Relacionados</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="96"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="97"/>
         <source>Sorry, we could not find any albums for this artist!</source>
         <translation>Desculpe, mas não conseguimos encontrar outros álbuns para este artista!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="76"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="77"/>
         <source>Sorry, we could not find any related artists!</source>
         <translation>Desculpe, mas não conseguimos encontrar outros artistas relacionados a este!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="117"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="118"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
         <translation>Desculpe, mas não conseguimos encontrar outras faixas mais tocadas deste artista!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="152"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="146"/>
         <source>Music</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="190"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="184"/>
         <source>Songs</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="205"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="199"/>
         <source>Albums</source>
         <translation type="unfinished"/>
     </message>
@@ -4264,7 +4264,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="637"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="634"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Desculpe, o seu filtro &apos;%1&apos; não encontreou nenhum resultado.</translation>
     </message>

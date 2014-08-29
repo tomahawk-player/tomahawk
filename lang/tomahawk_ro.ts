@@ -315,7 +315,7 @@ se conecteze și să redea de la tine?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="173"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="153"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="147"/>
         <source>Biography</source>
         <translation type="unfinished"/>
     </message>
@@ -326,37 +326,37 @@ se conecteze și să redea de la tine?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="255"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="154"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="148"/>
         <source>Related Artists</source>
         <translation>Artiști similari</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="96"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="97"/>
         <source>Sorry, we could not find any albums for this artist!</source>
         <translation>Ne pare rău, nu am găsit albume de la acest artist!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="76"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="77"/>
         <source>Sorry, we could not find any related artists!</source>
         <translation>Ne pare rău, nu am putut găsi artiști similari!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="117"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="118"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
         <translation>Ne pare rău, nu am găsit vreun hit de top pentru acest artist!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="152"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="146"/>
         <source>Music</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="190"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="184"/>
         <source>Songs</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="205"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="199"/>
         <source>Albums</source>
         <translation type="unfinished"/>
     </message>
@@ -4274,7 +4274,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="637"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="634"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Ne pare rău, căutarea ta &apos;%1&apos; nu a avut rezultate.</translation>
     </message>
