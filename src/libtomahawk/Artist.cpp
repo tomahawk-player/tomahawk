@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
@@ -626,7 +626,7 @@ Artist::cover( const QSize& size, bool forceLoad ) const
 
     if ( m_cover && !m_cover->isNull() && !size.isEmpty() )
     {
-        const QString cacheKey = infoid() + "_" + size.width();
+        const QString cacheKey = QString( "%1_%2_%3" ).arg( infoid() ).arg( size.width() ).arg( size.height() );
         QPixmap cover;
 
         if ( !QPixmapCache::find( cacheKey, cover ) )
