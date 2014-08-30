@@ -130,11 +130,19 @@ RecentlyPlayedModel::onPlaybackFinished( const Tomahawk::track_ptr& track, const
     {
         PlayableItem* oldestItem = itemFromIndex( index( count - 1, 0, parent ) );
         if ( oldestItem->playbackLog().timestamp >= log.timestamp )
+        {
+            if ( count >= m_limit )
+                return;
+
+            insertQuery( track->toQuery(), count, log, parent );
             return;
+        }
 
         PlayableItem* youngestItem = itemFromIndex( index( 0, 0, parent ) );
         if ( youngestItem->playbackLog().timestamp <= log.timestamp )
+        {
             insertQuery( track->toQuery(), 0, log, parent );
+        }
         else
         {
             for ( int i = 0; i < count - 1; i++ )
@@ -164,8 +172,9 @@ RecentlyPlayedModel::onPlaybackFinished( const Tomahawk::track_ptr& track, const
 void
 RecentlyPlayedModel::onTracksLoaded( QList<Tomahawk::track_ptr> tracks, QList<Tomahawk::PlaybackLog> logs )
 {
-    for ( int i = tracks.count() - 1; i >= 0; i-- )
+    for ( int i = 0; i < tracks.count(); i++ )
     {
+        tDebug() << tracks.at( i )->toString();
         onPlaybackFinished( tracks.at( i ), logs.at( i ) );
     }
 }
