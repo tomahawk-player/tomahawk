@@ -33,7 +33,6 @@
 #include "items/QueueItem.h"
 
 #include "audio/AudioEngine.h"
-#include "AnimationHelper.h"
 #include "Source.h"
 #include "TomahawkSettings.h"
 #include "ActionCollection.h"
