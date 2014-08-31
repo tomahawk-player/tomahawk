@@ -36,6 +36,7 @@ SourceTreeItem::SourceTreeItem( SourcesModel* model, SourceTreeItem* parent, Sou
     , m_parent( parent )
     , m_model( model )
     , m_peerSortValue( peerSortValue )
+    , m_dropType( DropTypesNone )
 {
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( checkPlayingStatus() ) );
 
