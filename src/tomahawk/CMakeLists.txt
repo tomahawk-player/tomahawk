@@ -41,7 +41,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/SourcesProxyModel.cpp
      sourcetree/SourceTreeView.cpp
      sourcetree/SourceDelegate.cpp
-     sourcetree/AnimationHelper.cpp
      sourcetree/items/ScriptCollectionItem.cpp
      sourcetree/items/SourceTreeItem.cpp
      sourcetree/items/SourceItem.cpp
