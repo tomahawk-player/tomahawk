@@ -59,18 +59,6 @@ SourceDelegate::SourceDelegate( QAbstractItemView* parent )
     , m_parent( parent )
     , m_lastClicked( -1 )
 {
-    m_dropTypeMap.insert( 0, SourceTreeItem::DropTypeThisTrack );
-    m_dropTypeMap.insert( 1, SourceTreeItem::DropTypeThisAlbum );
-    m_dropTypeMap.insert( 2, SourceTreeItem::DropTypeAllFromArtist );
-    m_dropTypeMap.insert( 3, SourceTreeItem::DropTypeLocalItems );
-    m_dropTypeMap.insert( 4, SourceTreeItem::DropTypeTop50 );
-
-    m_dropTypeTextMap.insert( 0, tr( "Track" ) );
-    m_dropTypeTextMap.insert( 1, tr( "Album" ) );
-    m_dropTypeTextMap.insert( 2, tr( "Artist" ) );
-    m_dropTypeTextMap.insert( 3, tr( "Local" ) );
-    m_dropTypeTextMap.insert( 4, tr( "Top 10" ) );
-
     m_dropMimeData = new QMimeData();
 }
 
@@ -100,19 +88,6 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
     {
         int groupSpacer = index.row() > 0 ? option.fontMetrics.height() * 2.5 : option.fontMetrics.height() * 0.8;
         return QSize( option.rect.width(), option.fontMetrics.height() + groupSpacer );
-    }
-    else if ( m_expandedMap.contains( index ) )
-    {
-        if ( !m_expandedMap.value( index )->initialized() )
-        {
-            int dropTypes = dropTypeCount( item );
-            QSize originalSize = QSize( option.rect.width(), option.fontMetrics.height() * 1.8 );
-            QSize targetSize = originalSize + QSize( 0, dropTypes == 0 ? 0 : 38 + option.fontMetrics.height() * 1.8 );
-            m_expandedMap.value( index )->initialize( originalSize, targetSize, 600 );
-            m_expandedMap.value( index )->expand();
-        }
-        QMetaObject::invokeMethod( m_parent, "update", Qt::QueuedConnection, Q_ARG( QModelIndex, index ) );
-        return m_expandedMap.value( index )->size();
     }
     else
         return QSize( option.rect.width(), option.fontMetrics.height() * 1.8 ); //QStyledItemDelegate::sizeHint( option, index ) );
@@ -195,15 +170,6 @@ SourceDelegate::paintDecorations( QPainter* painter, const QStyleOptionViewItem&
     if ( playable && playing && item->isBeingPlayed() )
     {
         int iconW = option.rect.height() - 8;
-        if ( m_expandedMap.contains( index ) )
-        {
-            AnimationHelper* ah = m_expandedMap.value( index );
-            if ( ah->initialized() )
-            {
-                iconW = ah->originalSize().height() - 8;
-            }
-        }
-
         QRect iconRect = QRect( 8, option.rect.y() + 4, iconW, iconW );
         QPixmap speaker = TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeakerDark, TomahawkUtils::Original, iconRect.size() );
 
@@ -528,105 +494,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     {
         paintSource( painter, optIndentation, index );
     }
-    else if ( ( type == SourcesModel::StaticPlaylist || type == SourcesModel::CategoryAdd ) &&
-              m_expandedMap.contains( index ) && m_expandedMap.value( index )->partlyExpanded() && dropTypeCount( item ) > 0 )
-    {
-        optIndentation.rect.adjust( 0, 0, 0, - option.rect.height() + m_expandedMap.value( index )->originalSize().height() );
-        paintStandardItem( painter, optIndentation, index );
-
-        // Get whole rect for the menu
-        QRect itemsRect = option.rect.adjusted( -option.rect.x(), m_expandedMap.value( index )->originalSize().height(), 0, 0 );
-        QPoint cursorPos = m_parent->mapFromGlobal( QCursor::pos() );
-        bool cursorInRect = itemsRect.contains( cursorPos );
-
-        // draw the background
-        if ( m_gradient.finalStop() != itemsRect.bottomLeft() )
-        {
-            m_gradient = QLinearGradient( itemsRect.topLeft(), itemsRect.bottomLeft() );
-            m_gradient.setColorAt( 0.0, TomahawkStyle::SIDEBAR_LAZYLIST_UPPER );
-            m_gradient.setColorAt( 0.9, TomahawkStyle::SIDEBAR_LAZYLIST_LOWER );
-            m_gradient.setColorAt( 1.0, TomahawkStyle::SIDEBAR_LAZYLIST_LOWEST );
-        }
-
-        QPen pen = painter->pen();
-        painter->setPen( QPen( Qt::NoPen ) );
-        painter->setBrush( m_gradient );
-        painter->drawRect( itemsRect );
-
-        // calculate sizes for the icons
-        int totalCount = dropTypeCount( item );
-        int itemWidth = itemsRect.width() / totalCount;
-        int iconSpacing = ( itemWidth - 32 ) / 2;
-
-        // adjust to one single entry
-        itemsRect.adjust( 0, 0, -itemsRect.width() + itemWidth, 0 );
-
-        pen.setColor( Qt::white );
-        painter->setPen( pen );
-
-        QFont font = painter->font();
-        font.setPointSize( option.font.pointSize() - 1 );
-        painter->setFont( font );
-        QFont fontBold = painter->font();
-
-        QRect textRect;
-        QRect imageRect;
-        SourceTreeItem::DropTypes dropTypes = item->supportedDropTypes( m_dropMimeData );
-
-        int count = 0;
-        for ( int i = 0; i < 5; ++i )
-        {
-            if ( !dropTypes.testFlag( m_dropTypeMap.value( i ) ) )
-                continue;
-
-            if ( count > 0 )
-                itemsRect.adjust( itemWidth, 0, itemWidth, 0 );
-
-            if ( itemsRect.contains( cursorPos ) | !cursorInRect )
-            {
-                painter->setFont( fontBold );
-                m_hoveredDropType = m_dropTypeMap.value( i );
-                cursorInRect = true;
-            }
-            else
-                painter->setFont( font );
-
-            int textSpacing = ( itemWidth - painter->fontMetrics().width( m_dropTypeTextMap.value( i ) ) ) / 2;
-            textRect = itemsRect.adjusted( textSpacing - 1, itemsRect.height() - painter->fontMetrics().height() - 2, 0, 0 );
-            painter->drawText( textRect, m_dropTypeTextMap.value( i ) );
-
-            int maxHeight = itemsRect.height() - textRect.height() - 2;
-            int verticalOffset = qMax( 0, maxHeight - 32 );
-            if ( itemsRect.bottom() - textRect.height() - 2 > itemsRect.top() )
-            {
-                imageRect = itemsRect.adjusted( iconSpacing, verticalOffset, -iconSpacing, -textRect.height() - 2 );
-
-                QPixmap pixmap;
-                switch ( i )
-                {
-                    case 0:
-                        pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DropSong, TomahawkUtils::Original, imageRect.size() );
-                        break;
-                    case 1:
-                        pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DropAlbum, TomahawkUtils::Original, imageRect.size() );
-                        break;
-                    case 2:
-                        pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DropAllSongs, TomahawkUtils::Original, imageRect.size() );
-                        break;
-                    case 3:
-                        pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DropLocalSongs, TomahawkUtils::Original, imageRect.size() );
-                        break;
-                    case 4:
-                        pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DropTopSongs, TomahawkUtils::Original, imageRect.size() );
-                        break;
-                }
-
-                painter->drawPixmap( imageRect, pixmap );
-            }
-
-            count++;
-        }
-    }
     else if ( type == SourcesModel::Group )
     {
         paintGroup( painter, opt, index );
@@ -944,45 +811,14 @@ SourceDelegate::dropTypeCount( SourceTreeItem* item ) const
 }
 
 
-SourceTreeItem::DropType
-SourceDelegate::hoveredDropType() const
-{
-    return m_hoveredDropType;
-}
-
-
 void
 SourceDelegate::hovered( const QModelIndex& index, const QMimeData* mimeData )
 {
-    SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
-
     if ( !index.isValid() )
-    {
-        foreach ( AnimationHelper* helper, m_expandedMap )
-        {
-            helper->collapse( true );
-        }
         return;
-    }
-/*    if ( ( type == SourcesModel::StaticPlaylist || type == SourcesModel::CategoryAdd ) &&
-         !m_expandedMap.contains( index ) )
-    {
-        foreach ( AnimationHelper* helper, m_expandedMap )
-        {
-            helper->collapse( true );
-        }
 
-        m_newDropHoverIndex = index;
-        m_dropMimeData->clear();
-        foreach ( const QString& mimeDataFormat, mimeData->formats() )
-        {
-            m_dropMimeData->setData( mimeDataFormat, mimeData->data( mimeDataFormat ) );
-        }
-
-        m_expandedMap.insert( m_newDropHoverIndex, new AnimationHelper( m_newDropHoverIndex ) );
-        connect( m_expandedMap.value( m_newDropHoverIndex ), SIGNAL( finished( QModelIndex ) ), SLOT( animationFinished( QModelIndex ) ) );
-    }
-    else*/ if ( type == SourcesModel::Source )
+    SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
+    if ( type == SourcesModel::Source )
     {
         m_dropMimeData->clear();
         foreach ( const QString& mimeDataFormat, mimeData->formats() )
@@ -991,24 +827,11 @@ SourceDelegate::hovered( const QModelIndex& index, const QMimeData* mimeData )
         }
         m_dropHoverIndex = index;
     }
-    else
-        qDebug() << "expandedMap already contains index" << index;
 }
 
 
 void
 SourceDelegate::dragLeaveEvent()
 {
-    foreach ( AnimationHelper* helper, m_expandedMap )
-    {
-        helper->collapse( true );
-    }
     m_dropHoverIndex = QModelIndex();
-}
-
-
-void
-SourceDelegate::animationFinished( const QModelIndex& index )
-{
-    delete m_expandedMap.take( index );
 }

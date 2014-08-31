@@ -26,9 +26,6 @@
 #include "items/SourceTreeItem.h"
 
 #include <QStyledItemDelegate>
-#include <QPropertyAnimation>
-
-class AnimationHelper;
 
 class SourceDelegate : public QStyledItemDelegate
 {
@@ -39,8 +36,6 @@ public:
 
     void hovered( const QModelIndex& index, const QMimeData* mimeData );
     void dragLeaveEvent();
-
-    SourceTreeItem::DropType hoveredDropType() const;
 
 signals:
     void clicked( const QModelIndex& idx );
@@ -57,7 +52,6 @@ protected:
     virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
 
 private slots:
-    void animationFinished( const QModelIndex& );
 
 private:
     void paintStandardItem( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index, const QString& count = QString() ) const;
@@ -69,20 +63,13 @@ private:
     QAbstractItemView* m_parent;
     mutable int m_iconHeight;
     QModelIndex m_dropHoverIndex;
-    QModelIndex m_newDropHoverIndex;
     QMimeData* m_dropMimeData;
-    mutable SourceTreeItem::DropType m_hoveredDropType; // Hack to keep easily track of the current highlighted DropType in paint()
-    QMap< QModelIndex, AnimationHelper* > m_expandedMap;
     qint64 m_lastClicked;
-    QMap< int, SourceTreeItem::DropType > m_dropTypeMap;
-    QMap< int, QString > m_dropTypeTextMap;
 
     mutable QPersistentModelIndex m_trackHovered;
     mutable QHash< QPersistentModelIndex, QRect > m_trackRects;
     mutable QHash< QPersistentModelIndex, QRect > m_headphoneRects;
     mutable QHash< QPersistentModelIndex, QRect > m_lockRects;
-
-    mutable QLinearGradient m_gradient;
 };
 
 #endif // SOURCEDELEGATE_H

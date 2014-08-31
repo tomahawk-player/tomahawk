@@ -854,19 +854,8 @@ SourceTreeView::dropEvent( QDropEvent* event )
     const QPoint pos = event->pos();
     const QModelIndex index = indexAt( pos );
 
-    if ( model()->data( index, SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::StaticPlaylist
-         || model()->data( index, SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::LovedTracksPage
-         || model()->data( index, SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::CategoryAdd )
-    {
-        SourceTreeItem* item = itemFromIndex< SourceTreeItem >( index );
-        Q_ASSERT( item );
-
-        item->setDropType( m_delegate->hoveredDropType() );
-        tDebug() << Q_FUNC_INFO << "dropType is" << m_delegate->hoveredDropType();
-    }
-
     // if it's a playlist drop, accept it anywhere in the sourcetree by manually parsing it.
-    if ( DropJob::isDropType( DropJob::Playlist, event->mimeData()  ) )
+    if ( DropJob::isDropType( DropJob::Playlist, event->mimeData() ) )
     {
         DropJob* dropThis = new DropJob;
         dropThis->setDropTypes( DropJob::Playlist );
