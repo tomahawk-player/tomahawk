@@ -939,7 +939,7 @@ SourceTreeView::drawRow( QPainter* painter, const QStyleOptionViewItem& option, 
 
 
 void
-SourceTreeView::drawBranches( QPainter* painter, const QRect& rect, const QModelIndex& index ) const
+SourceTreeView::drawBranches( QPainter* /* painter */, const QRect& /* rect */, const QModelIndex& /* index */ ) const
 {
     return;
 }
