@@ -20,10 +20,12 @@
 #include "QueueItem.h"
 
 #include "utils/ImageRegistry.h"
+#include "utils/Logger.h"
 #include "playlist/TrackView.h"
 #include "playlist/PlayableProxyModel.h"
 #include "ViewManager.h"
 #include "ViewPage.h"
+#include "DropJob.h"
 
 #include <QString>
 #include <QIcon>
@@ -82,4 +84,90 @@ QueueItem::activate()
 {
     Tomahawk::ViewPage* page = ViewManager::instance()->showQueuePage();
     model()->linkSourceItemToPage( this, page );
+}
+
+
+bool
+QueueItem::willAcceptDrag( const QMimeData* data ) const
+{
+    return DropJob::acceptsMimeData( data, DropJob::Track );
+}
+
+
+SourceTreeItem::DropTypes
+QueueItem::supportedDropTypes( const QMimeData* data ) const
+{
+    if ( data->hasFormat( "application/tomahawk.mixed" ) )
+    {
+        // If this is mixed but only queries/results, we can still handle them
+        bool mixedQueries = true;
+
+        QByteArray itemData = data->data( "application/tomahawk.mixed" );
+        QDataStream stream( &itemData, QIODevice::ReadOnly );
+        QString mimeType;
+        qlonglong val;
+
+        while ( !stream.atEnd() )
+        {
+            stream >> mimeType;
+            if ( mimeType != "application/tomahawk.query.list" &&
+                 mimeType != "application/tomahawk.result.list" )
+            {
+                mixedQueries = false;
+                break;
+            }
+            stream >> val;
+        }
+
+        if ( mixedQueries )
+            return (DropTypes)(DropTypeThisTrack | DropTypeThisAlbum | DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50);
+        else
+            return DropTypesNone;
+    }
+
+    if ( data->hasFormat( "application/tomahawk.query.list" ) )
+        return (DropTypes)(DropTypeThisTrack | DropTypeThisAlbum | DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50);
+    else if ( data->hasFormat( "application/tomahawk.result.list" ) )
+        return (DropTypes)(DropTypeThisTrack | DropTypeThisAlbum | DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50);
+    else if ( data->hasFormat( "application/tomahawk.metadata.album" ) )
+        return (DropTypes)(DropTypeThisAlbum | DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50);
+    else if ( data->hasFormat( "application/tomahawk.metadata.artist" ) )
+        return (DropTypes)(DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50);
+    else if ( data->hasFormat( "text/plain" ) )
+    {
+        return DropTypesNone;
+    }
+    return DropTypesNone;
+}
+
+
+bool
+QueueItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
+{
+    Q_UNUSED( action );
+
+    if ( !DropJob::acceptsMimeData( data, DropJob::Track ) )
+        return false;
+
+    DropJob *dj = new DropJob();
+    connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
+
+    dj->setDropTypes( DropJob::Track );
+    dj->setDropAction( DropJob::Append );
+    dj->tracksFromMimeData( data, false, false );
+
+    // TODO can't know if it works or not yet...
+    return true;
+}
+
+
+void
+QueueItem::parsedDroppedTracks( const QList< Tomahawk::query_ptr >& tracks )
+{
+    if ( tracks.count() )
+    {
+        ViewManager::instance()->queue()->trackView()->model()->appendQueries( tracks );
+    }
+    else
+        tDebug() << "ERROR: Could not add empty track list to queue!";
 }

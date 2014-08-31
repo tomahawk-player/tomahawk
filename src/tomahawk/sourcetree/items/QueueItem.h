@@ -36,8 +36,15 @@ public:
 
     int unlistenedCount() const;
 
+    virtual bool willAcceptDrag( const QMimeData* data ) const;
+    virtual DropTypes supportedDropTypes( const QMimeData* data ) const;
+    virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action );
+
 public slots:
     virtual void activate();
+
+private slots:
+    void parsedDroppedTracks( const QList<Tomahawk::query_ptr>& tracks );
 
 private:
     int m_sortValue;
