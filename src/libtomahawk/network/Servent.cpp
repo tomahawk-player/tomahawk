@@ -1345,21 +1345,21 @@ Servent::cleanAddresses( QList<QHostAddress>& addresses ) const
 bool
 Servent::isIPWhitelisted( QHostAddress ip )
 {
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Performing checks against ip" << ip.toString();
+    tLog() << Q_FUNC_INFO << "Performing checks against ip" << ip.toString();
     typedef QPair< QHostAddress, int > range;
     QList< range > subnetEntries;
 
     QList< QNetworkInterface > networkInterfaces = QNetworkInterface::allInterfaces();
     foreach ( QNetworkInterface interface, networkInterfaces )
     {
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Checking interface" << interface.humanReadableName();
+        tLog() << Q_FUNC_INFO << "Checking interface" << interface.humanReadableName();
         QList< QNetworkAddressEntry > addressEntries = interface.addressEntries();
         foreach ( QNetworkAddressEntry addressEntry, addressEntries )
         {
-            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Checking address entry with ip" << addressEntry.ip().toString() << "and prefix length" << addressEntry.prefixLength();
+            tLog() << Q_FUNC_INFO << "Checking address entry with ip" << addressEntry.ip().toString() << "and prefix length" << addressEntry.prefixLength() << addressEntry.netmask();
             if ( ip.isInSubnet( addressEntry.ip(), addressEntry.prefixLength() ) )
             {
-                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "success";
+                tLog( ) << Q_FUNC_INFO << "success";
                 return true;
             }
         }
