@@ -745,15 +745,15 @@ SourceTreeView::dragEnterEvent( QDragEnterEvent* event )
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     QTreeView::dragEnterEvent( event );
 
-    if ( DropJob::acceptsMimeData( event->mimeData(), DropJob::Track | DropJob::Artist | DropJob::Album | DropJob::Playlist,  DropJob::Create ) )
+    if ( DropJob::acceptsMimeData( event->mimeData(), DropJob::Track | DropJob::Artist | DropJob::Album | DropJob::Playlist, DropJob::Create ) )
     {
-           m_dragging = true;
-           m_dropRect = QRect();
-           m_dropIndex = QPersistentModelIndex();
+        m_dragging = true;
+        m_dropRect = QRect();
+        m_dropIndex = QPersistentModelIndex();
 
-           event->setDropAction( Qt::CopyAction );
-           event->acceptProposedAction();
-     }
+        event->setDropAction( Qt::CopyAction );
+        event->acceptProposedAction();
+    }
 }
 
 
@@ -777,7 +777,7 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
     bool accept = false;
 
     // Don't highlight the drop for a playlist, as it won't get added to the playlist but created generally
-    if ( DropJob::isDropType( DropJob::Playlist, event->mimeData()  ) )
+    if ( DropJob::isDropType( DropJob::Playlist, event->mimeData() ) )
     {
         event->accept();
         return;
@@ -839,7 +839,7 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
             event->ignore();
         }
     }
-    else if ( DropJob::acceptsMimeData( event->mimeData(),  DropJob::Playlist | DropJob::Artist | DropJob::Album, DropJob::Create ) )
+    else if ( DropJob::acceptsMimeData( event->mimeData(), DropJob::Playlist | DropJob::Artist | DropJob::Album, DropJob::Create ) )
     {
         event->setDropAction( Qt::CopyAction );
         event->accept();

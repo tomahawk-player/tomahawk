@@ -142,7 +142,6 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
         if ( !data->hasFormat( "text/uri-list" ) )
             return false;
 
-
     const QString url = data->data( "text/plain" );
     const QString urlList = data->data( "text/uri-list" ).trimmed();
 
@@ -205,7 +204,6 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
             if ( resolver->canParseUrl( url, ExternalResolver::Track ) )
                 return true;
         }
-
     }
 
     if ( acceptedType.testFlag( Album ) )
@@ -223,7 +221,6 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
             if ( resolver->canParseUrl( url, ExternalResolver::Album ) )
                 return true;
         }
-
     }
 
     if ( acceptedType.testFlag( Artist ) )
@@ -241,7 +238,6 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
             if ( resolver->canParseUrl( url, ExternalResolver::Artist ) )
                 return true;
         }
-
     }
 
     // We whitelist certain url-shorteners since they do some link checking. Often playable (e.g. spotify) links hide behind them,
