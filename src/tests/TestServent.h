@@ -123,7 +123,10 @@ private slots:
                 ipv6[14] = 0xff & (ipv4 >> 8);
                 ipv6[15] = 0xff & ipv4;
                 QHostAddress ipv6Addr( ipv6 );
-                QVERIFY( servent->isIPWhitelisted( ipv6Addr ) );
+                QString error = QString( "%1 converted to IPv6 %2" )
+                    .arg( addr.toString() ).arg( ipv6Addr.toString() );
+                QVERIFY2( servent->isIPWhitelisted( ipv6Addr ),
+                    error.toLatin1().constData() );
             }
         }
 
