@@ -1384,9 +1384,9 @@ Servent::isIPWhitelisted( QHostAddress ip )
         {
             // Convert to a real IPv4 address and rerun checks
             quint32 ipv4 = (static_cast<quint32>(ipv6[12]) << 24)
-                    & (static_cast<quint32>(ipv6[13]) << 16)
-                    & (static_cast<quint32>(ipv6[14]) << 8)
-                    & static_cast<quint32>(ipv6[15]);
+                    | (static_cast<quint32>(ipv6[13]) << 16)
+                    | (static_cast<quint32>(ipv6[14]) << 8)
+                    | static_cast<quint32>(ipv6[15]);
             QHostAddress addr( ipv4 );
             return isIPWhitelisted( addr );
         }
