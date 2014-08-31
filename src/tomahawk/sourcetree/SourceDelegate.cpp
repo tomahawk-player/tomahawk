@@ -128,9 +128,7 @@ SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem
     if ( !count.isEmpty() )
     {
         figWidth = QFontMetrics( painter->font() ).width( count );
-        QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 16, 0, -14, -option.rect.height() + option.fontMetrics.height() * 1.1 );
-        int hd = ( option.rect.height() - figRect.height() ) / 2;
-        figRect.adjust( 0, hd, 0, hd );
+        const QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 16, 0, -14, 0 );
         painter->drawText( figRect, count, QTextOption( Qt::AlignVCenter | Qt::AlignRight ) );
     }
 
