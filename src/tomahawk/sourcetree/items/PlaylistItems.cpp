@@ -221,8 +221,6 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
     if ( m_playlist->busy() )
         return false;
 
-    QList< Tomahawk::query_ptr > queries;
-
     if ( data->hasFormat( "application/tomahawk.playlist.id" ) &&
          data->data( "application/tomahawk.playlist.id" ) == m_playlist->guid() )
     {
