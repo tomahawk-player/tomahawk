@@ -1640,12 +1640,12 @@ Password (OTP)</source>
         <translation>Abrir Lista</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="47"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="48"/>
         <source>Queue</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="50"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="51"/>
         <source>The queue is currently empty. Drop something to enqueue it!</source>
         <translation type="unfinished"/>
     </message>

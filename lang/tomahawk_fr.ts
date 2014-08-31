@@ -1640,12 +1640,12 @@ Password (OTP)</source>
         <translation>Ouvrir la file d&apos;attente</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="47"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="48"/>
         <source>Queue</source>
         <translation>File d&apos;attente</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="50"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="51"/>
         <source>The queue is currently empty. Drop something to enqueue it!</source>
         <translation>La file d&apos;attente est vide, Dépose quelque chose ici pour l&apos;ajouter à la file !</translation>
     </message>

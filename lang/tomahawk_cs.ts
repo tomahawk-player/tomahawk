@@ -1641,12 +1641,12 @@ heslo</translation>
         <translation>Otevřít řadu</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="47"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="48"/>
         <source>Queue</source>
         <translation>Řada</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="50"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="51"/>
         <source>The queue is currently empty. Drop something to enqueue it!</source>
         <translation>Řada je v současnosti prázdná. Něco nad ní upusťte, aby se to zařadilo!</translation>
     </message>
