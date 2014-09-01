@@ -1089,7 +1089,7 @@ PlayableModel::insertAlbums( const QList< Tomahawk::album_ptr >& albums, int row
 
 
 void
-PlayableModel::insertAlbums( const Tomahawk::collection_ptr& collection, int row )
+PlayableModel::insertAlbums( const Tomahawk::collection_ptr& collection, int /* row */ )
 {
     Tomahawk::AlbumsRequest* req = collection->requestAlbums( Tomahawk::artist_ptr() );
     connect( dynamic_cast< QObject* >( req ), SIGNAL( albums( QList< Tomahawk::album_ptr > ) ),
@@ -1106,7 +1106,7 @@ PlayableModel::insertQueries( const QList< Tomahawk::query_ptr >& queries, int r
 
 
 void
-PlayableModel::insertTracks( const Tomahawk::collection_ptr& collection, int row )
+PlayableModel::insertTracks( const Tomahawk::collection_ptr& collection, int /* row */ )
 {
     Tomahawk::TracksRequest* req = collection->requestTracks( Tomahawk::album_ptr() );
     connect( dynamic_cast< QObject* >( req ), SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ),
