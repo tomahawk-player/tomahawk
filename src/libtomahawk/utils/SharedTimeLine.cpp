@@ -50,6 +50,7 @@ SharedTimeLine::connectNotify( const QMetaMethod& signal )
         }
     }
 #else
+    Q_UNUSED( signal );
     Q_ASSERT( false );
 #endif
 }
@@ -82,6 +83,7 @@ SharedTimeLine::disconnectNotify( const QMetaMethod& signal )
         }
     }
 #else
+    Q_UNUSED( signal );
     Q_ASSERT( false );
 #endif
 }
