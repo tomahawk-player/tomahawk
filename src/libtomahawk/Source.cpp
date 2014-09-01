@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
  *
@@ -301,7 +301,6 @@ Source::avatar( TomahawkUtils::ImageMode style, const QSize& size, bool defaultA
         QByteArray avatarBuffer = TomahawkUtils::Cache::instance()->getData( "Sources", dbFriendlyName() ).toByteArray();
         if ( !avatarBuffer.isNull() )
         {
-            tDebug() << Q_FUNC_INFO << QThread::currentThread();
             QPixmap avatar;
             avatar.loadFromData( avatarBuffer );
             avatarBuffer.clear();
