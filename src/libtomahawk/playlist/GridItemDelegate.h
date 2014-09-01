@@ -100,6 +100,8 @@ private:
     mutable QHash< QPersistentModelIndex, QWidget* > m_spinner;
     mutable QHash< QPersistentModelIndex, HoverControls* > m_hoverControls;
     mutable QHash< QPersistentModelIndex, QTimeLine* > m_hoverFaders;
+
+    const int m_margin;
 };
 
 #endif // GRIDITEMDELEGATE_H

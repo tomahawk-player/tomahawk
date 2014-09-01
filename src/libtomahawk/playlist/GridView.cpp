@@ -31,6 +31,7 @@
 #include "ContextMenu.h"
 #include "ViewManager.h"
 #include "MetaPlaylistInterface.h"
+#include "utils/DpiScaler.h"
 #include "utils/Logger.h"
 #include "utils/AnimatedSpinner.h"
 #include "utils/PixmapDelegateFader.h"
@@ -65,7 +66,7 @@ GridView::GridView( QWidget* parent )
     setDropIndicatorShown( false );
     setDragDropOverwriteMode( false );
     setUniformItemSizes( true );
-    setSpacing( 16 );
+    setSpacing( TomahawkUtils::DpiScaler::scaledX( this, 16 ) );
     setContentsMargins( 0, 0, 0, 0 );
     setMouseTracking( true );
     setContextMenuPolicy( Qt::CustomContextMenu );
@@ -78,7 +79,8 @@ GridView::GridView( QWidget* parent )
 
     setAutoFitItems( true );
     setAutoResize( false );
-    setItemSize( QSize( 170, 170 + 56 ) );
+
+    setItemSize( TomahawkUtils::DpiScaler::scaled( this, QSize( 170, 170 + 56 ) ) );
     setProxyModel( new PlayableProxyModel( this ) );
 
     m_timer.setInterval( SCROLL_TIMEOUT );

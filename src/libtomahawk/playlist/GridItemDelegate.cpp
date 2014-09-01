@@ -41,6 +41,7 @@
 #include "utils/PixmapDelegateFader.h"
 #include "utils/Closure.h"
 #include "utils/AnimatedSpinner.h"
+#include "utils/DpiScaler.h"
 #include "utils/Logger.h"
 
 namespace {
@@ -52,6 +53,7 @@ GridItemDelegate::GridItemDelegate( QAbstractItemView* parent, PlayableProxyMode
     : QStyledItemDelegate( (QObject*)parent )
     , m_view( parent )
     , m_model( proxy )
+    , m_margin( TomahawkUtils::DpiScaler::scaledY( parent, 32 ) )
 {
     if ( m_view && m_view->metaObject()->indexOfSignal( "modelChanged()" ) > -1 )
         connect( m_view, SIGNAL( modelChanged() ), this, SLOT( modelChanged() ) );
@@ -185,7 +187,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QFont smallFont = font;
     smallFont.setPointSize( TomahawkUtils::defaultFontSize() );
 
-    QRect textRect = option.rect.adjusted( 0, r.height() + 8, 0, 0 );
+    QRect textRect = option.rect.adjusted( 0, r.height() + m_margin / 4, 0, 0 );
     bool oneLiner = false;
     if ( bottom.isEmpty() )
         oneLiner = true;
@@ -205,7 +207,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         }
 
         to.setAlignment( Qt::AlignLeft | Qt::AlignTop );
-        text = painter->fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - 3 );
+        text = painter->fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - m_margin / 8 );
         painter->drawText( textRect, text, to );
 
         // Calculate rect of artist on-hover button click area
@@ -223,7 +225,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         }
 
         to.setAlignment( Qt::AlignLeft | Qt::AlignTop );
-        text = painter->fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - 3 );
+        text = painter->fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - m_margin / 8 );
         painter->drawText( textRect, text, to );
 
         if ( item->album() )
@@ -244,9 +246,9 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
             painter->setFont( f );
         }
 
-        textRect.adjust( 0, 2, 0, 2 );
+        textRect.adjust( 0, m_margin / 16, 0, m_margin / 16 );
         to.setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
-        text = painter->fontMetrics().elidedText( bottom, Qt::ElideRight, textRect.width() - 3 );
+        text = painter->fontMetrics().elidedText( bottom, Qt::ElideRight, textRect.width() - m_margin / 8 );
         painter->drawText( textRect, text, to );
 
         // Calculate rect of artist on-hover button click area
@@ -347,7 +349,7 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
             cRect.setHeight( cRect.width() );
 
             HoverControls* controls = new HoverControls( m_view );
-            controls->setFixedSize( 64, 40 );
+            controls->setFixedSize( m_margin * 2, m_margin + m_margin / 4 );
             controls->move( cRect.center() - QPoint( controls->width() / 2 -1, controls->height() / 2 -1 ) );
             controls->setContentsMargins( 0, 0, 0, 0 );
             controls->setFocusPolicy( Qt::NoFocus );
