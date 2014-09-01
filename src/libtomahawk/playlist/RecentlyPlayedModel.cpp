@@ -131,7 +131,7 @@ RecentlyPlayedModel::onPlaybackFinished( const Tomahawk::track_ptr& track, const
         PlayableItem* oldestItem = itemFromIndex( index( count - 1, 0, parent ) );
         if ( oldestItem->playbackLog().timestamp >= log.timestamp )
         {
-            if ( count >= m_limit )
+            if ( count >= (int)m_limit )
                 return;
 
             insertQuery( track->toQuery(), count, log, parent );
