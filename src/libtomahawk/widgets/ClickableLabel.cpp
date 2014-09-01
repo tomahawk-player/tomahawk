@@ -90,7 +90,7 @@ ClickableLabel::mouseMoveEvent( QMouseEvent* event )
 
 
 void
-ClickableLabel::paintEvent( QPaintEvent* event )
+ClickableLabel::paintEvent( QPaintEvent* /* event */ )
 {
     QPainter painter( this );
     painter.setRenderHint( QPainter::TextAntialiasing );
