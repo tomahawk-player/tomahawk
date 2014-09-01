@@ -27,6 +27,7 @@
 
 #include <QLayout>
 #include <QScrollArea>
+#include <QScrollBar>
 #include <QStackedWidget>
 
 using namespace Tomahawk;
@@ -63,23 +64,23 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::WhatsNewWidget_0_8 )
 {
-    QWidget* widget = new QWidget;
-    ui->setupUi( widget );
+    m_widget = new QWidget;
+    ui->setupUi( m_widget );
 
     {
-        QScrollArea* area = new QScrollArea();
-        area->setWidgetResizable( true );
-        area->setWidget( widget );
+        m_area = new QScrollArea();
+        m_area->setWidgetResizable( true );
+        m_area->setWidget( m_widget );
 
         QPalette pal = palette();
         pal.setBrush( backgroundRole(), Qt::white );
-        area->setPalette( pal );
-        area->setAutoFillBackground( true );
-        area->setFrameShape( QFrame::NoFrame );
-        area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+        m_area->setPalette( pal );
+        m_area->setAutoFillBackground( true );
+        m_area->setFrameShape( QFrame::NoFrame );
+        m_area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
         QVBoxLayout* layout = new QVBoxLayout();
-        layout->addWidget( area );
+        layout->addWidget( m_area );
         setLayout( layout );
         TomahawkUtils::unmarginLayout( layout );
     }
@@ -89,6 +90,7 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
         ui->inboxImage->setPixmap( ui->inboxImage->pixmap()->scaledToWidth( width, Qt::SmoothTransformation ) );
         ui->inboxImage->setFixedHeight( ui->inboxImage->pixmap()->height() );
         ui->inboxButton->setFixedSize( QSize( 80, 80 ) );
+        ui->inboxButton->setCursor( Qt::PointingHandCursor );
         QPixmap inboxPixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/inboxbutton.png", ui->inboxButton->size() );
         ui->inboxButton->setPixmap( inboxPixmap );
         connect( ui->inboxButton, SIGNAL( clicked() ), SLOT( inboxBoxClicked() ) );
@@ -98,6 +100,7 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
         ui->linkImage->setPixmap( ui->linkImage->pixmap()->scaledToWidth( width, Qt::SmoothTransformation ) );
         ui->linkImage->setFixedHeight( ui->linkImage->pixmap()->height() );
         ui->linkButton->setFixedSize( QSize( 80, 80 ) );
+        ui->linkButton->setCursor( Qt::PointingHandCursor );
         QPixmap pixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/connectivitybutton.png", ui->inboxButton->size() );
         ui->linkButton->setPixmap( pixmap );
         connect( ui->linkButton, SIGNAL( clicked() ), SLOT( urlLookupBoxClicked() ) );
@@ -107,6 +110,7 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
         ui->beatsImage->setPixmap( ui->beatsImage->pixmap()->scaledToWidth( width, Qt::SmoothTransformation ) );
         ui->beatsImage->setFixedHeight( ui->beatsImage->pixmap()->height() );
         ui->beatsButton->setFixedSize( QSize( 80, 80 ) );
+        ui->beatsButton->setCursor( Qt::PointingHandCursor );
         QPixmap beatsPixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/beatsbutton.png", ui->inboxButton->size() );
         ui->beatsButton->setPixmap( beatsPixmap );
         connect( ui->beatsButton, SIGNAL( clicked() ), SLOT( beatsBoxClicked() ) );
@@ -116,6 +120,7 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
         ui->googleImage->setPixmap( ui->googleImage->pixmap()->scaledToWidth( width, Qt::SmoothTransformation ) );
         ui->googleImage->setFixedHeight( ui->googleImage->pixmap()->height() );
         ui->googleButton->setFixedSize( QSize( 80, 80 ) );
+        ui->googleButton->setCursor( Qt::PointingHandCursor );
         QPixmap pixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/googlebutton.png", ui->inboxButton->size() );
         ui->googleButton->setPixmap( pixmap );
         connect( ui->googleButton, SIGNAL( clicked() ), SLOT( gmusicBoxClicked() ) );
@@ -125,6 +130,7 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
         ui->androidImage->setPixmap( ui->androidImage->pixmap()->scaledToWidth( width, Qt::SmoothTransformation ) );
         ui->androidImage->setFixedHeight( ui->androidImage->pixmap()->height() );
         ui->androidButton->setFixedSize( QSize( 80, 80 ) );
+        ui->androidButton->setCursor( Qt::PointingHandCursor );
         QPixmap pixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/androidbutton.png", ui->inboxButton->size() );
         ui->androidButton->setPixmap( pixmap );
         connect( ui->androidButton, SIGNAL( clicked() ), SLOT( androidBoxClicked() ) );
@@ -134,6 +140,7 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
         ui->networkImage->setPixmap( ui->networkImage->pixmap()->scaledToWidth( width, Qt::SmoothTransformation ) );
         ui->networkImage->setFixedHeight( ui->networkImage->pixmap()->height() );
         ui->networkButton->setFixedSize( QSize( 80, 80 ) );
+        ui->networkButton->setCursor( Qt::PointingHandCursor );
         QPixmap networkingPixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/networkbutton.png", ui->inboxButton->size() );
         ui->networkButton->setPixmap( networkingPixmap );
         connect( ui->networkButton, SIGNAL( clicked() ), SLOT( networkingBoxClicked() ) );
@@ -228,31 +235,35 @@ WhatsNewWidget_0_8::urlLookupBoxClicked()
 void
 WhatsNewWidget_0_8::beatsBoxClicked()
 {
+    activateAnchor( ui->beatsCaption );
 }
 
 
 void
 WhatsNewWidget_0_8::gmusicBoxClicked()
 {
+    activateAnchor( ui->googleCaption );
 }
 
 
 void
 WhatsNewWidget_0_8::networkingBoxClicked()
 {
+    activateAnchor( ui->networkCaption );
 }
 
 
 void
 WhatsNewWidget_0_8::androidBoxClicked()
 {
+    activateAnchor( ui->androidCaption );
 }
 
 
 void
-WhatsNewWidget_0_8::activateAnchor( QWidget* /* widget */ )
+WhatsNewWidget_0_8::activateAnchor( QWidget* widget )
 {
-    //FIXME
+    m_area->verticalScrollBar()->setValue( widget->mapTo( m_widget, QPoint( 0, 0 ) ).y() - 32 );
 }
 
 

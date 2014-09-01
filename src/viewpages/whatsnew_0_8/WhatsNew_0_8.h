@@ -26,6 +26,8 @@
 
 #include "../ViewPageDllMacro.h"
 
+class QScrollArea;
+
 namespace Ui
 {
     class WhatsNewWidget_0_8;
@@ -64,6 +66,9 @@ private slots:
 
 private:
     void activateAnchor( QWidget* widget );
+
+    QWidget* m_widget;
+    QScrollArea* m_area;
 
     Ui::WhatsNewWidget_0_8 *ui;
 };
