@@ -37,6 +37,8 @@ QueueItem::QueueItem( SourcesModel* model, SourceTreeItem* parent )
 {
     m_text = tr( "Queue" );
     m_icon = ImageRegistry::instance()->icon( RESPATH "images/queue.svg" );
+
+    connect( ViewManager::instance()->queue()->trackView()->proxyModel(), SIGNAL( itemCountChanged( uint ) ), SIGNAL( updated() ) );
 }
 
 
@@ -137,6 +139,7 @@ QueueItem::supportedDropTypes( const QMimeData* data ) const
     {
         return DropTypesNone;
     }
+
     return DropTypesNone;
 }
 
