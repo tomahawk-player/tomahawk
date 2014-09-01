@@ -101,7 +101,7 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
         ui->linkImage->setFixedHeight( ui->linkImage->pixmap()->height() );
         ui->linkButton->setFixedSize( QSize( 80, 80 ) );
         ui->linkButton->setCursor( Qt::PointingHandCursor );
-        QPixmap pixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/connectivitybutton.png", ui->inboxButton->size() );
+        QPixmap pixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/connectivitybutton.png", ui->linkButton->size() );
         ui->linkButton->setPixmap( pixmap );
         connect( ui->linkButton, SIGNAL( clicked() ), SLOT( urlLookupBoxClicked() ) );
     }
@@ -111,7 +111,7 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
         ui->beatsImage->setFixedHeight( ui->beatsImage->pixmap()->height() );
         ui->beatsButton->setFixedSize( QSize( 80, 80 ) );
         ui->beatsButton->setCursor( Qt::PointingHandCursor );
-        QPixmap beatsPixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/beatsbutton.png", ui->inboxButton->size() );
+        QPixmap beatsPixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/beatsbutton.png", ui->beatsButton->size() );
         ui->beatsButton->setPixmap( beatsPixmap );
         connect( ui->beatsButton, SIGNAL( clicked() ), SLOT( beatsBoxClicked() ) );
     }
@@ -121,7 +121,7 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
         ui->googleImage->setFixedHeight( ui->googleImage->pixmap()->height() );
         ui->googleButton->setFixedSize( QSize( 80, 80 ) );
         ui->googleButton->setCursor( Qt::PointingHandCursor );
-        QPixmap pixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/googlebutton.png", ui->inboxButton->size() );
+        QPixmap pixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/googlebutton.png", ui->googleButton->size() );
         ui->googleButton->setPixmap( pixmap );
         connect( ui->googleButton, SIGNAL( clicked() ), SLOT( gmusicBoxClicked() ) );
     }
@@ -131,7 +131,7 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
         ui->androidImage->setFixedHeight( ui->androidImage->pixmap()->height() );
         ui->androidButton->setFixedSize( QSize( 80, 80 ) );
         ui->androidButton->setCursor( Qt::PointingHandCursor );
-        QPixmap pixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/androidbutton.png", ui->inboxButton->size() );
+        QPixmap pixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/androidbutton.png", ui->androidButton->size() );
         ui->androidButton->setPixmap( pixmap );
         connect( ui->androidButton, SIGNAL( clicked() ), SLOT( androidBoxClicked() ) );
     }
@@ -141,7 +141,7 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
         ui->networkImage->setFixedHeight( ui->networkImage->pixmap()->height() );
         ui->networkButton->setFixedSize( QSize( 80, 80 ) );
         ui->networkButton->setCursor( Qt::PointingHandCursor );
-        QPixmap networkingPixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/networkbutton.png", ui->inboxButton->size() );
+        QPixmap networkingPixmap = ImageRegistry::instance()->pixmap( ":/whatsnew_0_8/data/images/networkbutton.png", ui->networkButton->size() );
         ui->networkButton->setPixmap( networkingPixmap );
         connect( ui->networkButton, SIGNAL( clicked() ), SLOT( networkingBoxClicked() ) );
     }
