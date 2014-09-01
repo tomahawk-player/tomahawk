@@ -41,7 +41,7 @@
 using namespace Tomahawk;
 
 
-ContextView::ContextView( QWidget* parent, const QString& caption, QWidget* extraHeader )
+ContextView::ContextView( QWidget* parent, const QString& caption )
     : QWidget( parent )
 //    , m_header( new FilterHeader( this ) )
     , m_trackView( new TrackView() )
@@ -180,22 +180,6 @@ void
 ContextView::setGuid( const QString& guid )
 {
     m_trackView->setGuid( guid );
-}
-
-
-void
-ContextView::setTrackView( TrackView* view )
-{
-/*    if ( m_trackView )
-    {
-        m_stack->removeWidget( m_trackView );
-        delete m_trackView;
-    }
-
-//    view->setPlaylistInterface( m_playlistInterface );
-
-    m_trackView = view;
-    m_stack->addWidget( view );*/
 }
 
 

@@ -37,7 +37,7 @@ class DLLEXPORT ContextView : public QWidget, public Tomahawk::ViewPage
 Q_OBJECT
 
 public:
-    explicit ContextView( QWidget* parent = 0, const QString& caption = QString(), QWidget* extraHeader = 0 );
+    explicit ContextView( QWidget* parent = 0, const QString& caption = QString() );
     ~ContextView();
 
     virtual QWidget* widget() { return this; }
@@ -58,8 +58,6 @@ public:
     void setCaption( const QString& caption );
 
     void setGuid( const QString& guid );
-
-    void setTrackView( TrackView* view );
 
     void setPlayableModel( PlayableModel* model );
     void setPlaylistModel( PlaylistModel* model );
