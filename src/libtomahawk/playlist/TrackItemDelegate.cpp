@@ -108,6 +108,7 @@ TrackItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 
     if ( item->query() )
     {
+        //FIXME
         bool isUnlistened = true;
         if ( m_mode == Inbox )
         {

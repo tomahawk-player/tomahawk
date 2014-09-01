@@ -523,7 +523,7 @@ PlaylistItemDelegate::drawSourceIcon( QPainter* painter, const QRect& rect, Play
 
 
 QRect
-PlaylistItemDelegate::drawSource( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index, const QRect& rect, PlayableItem* item ) const
+PlaylistItemDelegate::drawSource( QPainter* painter, const QStyleOptionViewItem& /* option */, const QModelIndex& /* index */, const QRect& rect, PlayableItem* item ) const
 {
     painter->save();
     painter->setRenderHint( QPainter::TextAntialiasing );
