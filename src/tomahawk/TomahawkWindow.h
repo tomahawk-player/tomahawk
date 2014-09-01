@@ -60,7 +60,6 @@ class MusicScanner;
 class AudioControls;
 class TomahawkTrayIcon;
 class PlaylistModel;
-class QueueView;
 class AnimatedSplitter;
 
 class AccountsToolButton;
@@ -182,8 +181,6 @@ private:
     TomahawkTrayIcon* m_trayIcon;
     SourceTreeView* m_sourcetree;
     QPushButton* m_statusButton;
-    QPushButton* m_queueButton;
-    QueueView* m_queueView;
     AnimatedSplitter* m_sidebar;
     JobStatusSortModel* m_jobsModel;
 

@@ -115,6 +115,10 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
 
     new ViewManager( this );
+    QueueView* queueView = new QueueView();
+    ViewManager::instance()->setQueue( queueView );
+    AudioEngine::instance()->setQueue( queueView->trackView()->proxyModel()->playlistInterface() );
+
     m_audioControls = new AudioControls( this );
 
     ui->setupUi( this );
@@ -430,10 +434,6 @@ TomahawkWindow::setupSideBar()
     m_jobsModel = new JobStatusSortModel( jobsView );
     m_jobsModel->setJobModel( sourceModel );
     jobsView->setModel( m_jobsModel );
-
-    m_queueView = new QueueView();
-    ViewManager::instance()->setQueue( m_queueView );
-    AudioEngine::instance()->setQueue( m_queueView->trackView()->proxyModel()->playlistInterface() );
 
     m_sidebar->addWidget( m_sourcetree );
     m_sidebar->addWidget( jobsView );
