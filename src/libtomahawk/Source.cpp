@@ -52,9 +52,7 @@ Source::Source( int id, const QString& nodeId )
 {
     Q_D( Source );
     d->scrubFriendlyName = qApp->arguments().contains( "--demo" );
-
-    if ( id == 0 )
-        d->isLocal = true;
+    d->isLocal = ( id == 0 );
 
     d->currentTrackTimer.setSingleShot( true );
     connect( &d->currentTrackTimer, SIGNAL( timeout() ), this, SLOT( trackTimerFired() ) );
@@ -160,8 +158,7 @@ Source::dbCollection() const
         }
     }
 
-    collection_ptr tmp;
-    return tmp;
+    return collection_ptr();
 }
 
 
@@ -327,7 +324,7 @@ Source::avatar( TomahawkUtils::ImageMode style, const QSize& size, bool defaultA
 #ifdef Q_OS_MAC
         const QRect pxRect = px.rect();
 #else
-        const QRect pxRect = pxRect.adjusted( 0, 2, 0, 0 );
+        const QRect pxRect = px.rect().adjusted( 0, 2, 0, 0 );
 #endif
         p.drawText( pxRect, friendlyName().left( 1 ).toUpper(), QTextOption( Qt::AlignCenter ) );
         return px;
