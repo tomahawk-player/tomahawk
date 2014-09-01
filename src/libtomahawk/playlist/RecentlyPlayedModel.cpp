@@ -174,11 +174,9 @@ RecentlyPlayedModel::onTracksLoaded( QList<Tomahawk::track_ptr> tracks, QList<To
 {
     for ( int i = 0; i < tracks.count(); i++ )
     {
-        tDebug() << tracks.at( i )->toString();
         onPlaybackFinished( tracks.at( i ), logs.at( i ) );
     }
 }
-
 
 
 bool
