@@ -85,7 +85,7 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
     }
     else if ( type == SourcesModel::Group )
     {
-        int groupSpacer = index.row() > 0 ? option.fontMetrics.height() * 2.5 : option.fontMetrics.height() * 0.8;
+        const int groupSpacer = index.row() > 0 ? option.fontMetrics.height() * 2.5 : option.fontMetrics.height() * 0.8;
         return QSize( option.rect.width(), option.fontMetrics.height() + groupSpacer );
     }
     else
@@ -133,7 +133,7 @@ SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem
     }
 
     QRect textRect = opt.rect.adjusted( iconRect.width() + 22, 0, -32 - figWidth, 0 );
-    QString text = painter->fontMetrics().elidedText( upperCase ? opt.text.toUpper() : opt.text, Qt::ElideRight, textRect.width() );
+    const QString text = painter->fontMetrics().elidedText( upperCase ? opt.text.toUpper() : opt.text, Qt::ElideRight, textRect.width() );
     {
         QTextOption to( Qt::AlignVCenter );
         to.setWrapMode( QTextOption::NoWrap );
@@ -166,9 +166,9 @@ SourceDelegate::paintDecorations( QPainter* painter, const QStyleOptionViewItem&
 
     if ( playable && playing && item->isBeingPlayed() )
     {
-        int iconW = option.rect.height() - 8;
-        QRect iconRect = QRect( 8, option.rect.y() + 4, iconW, iconW );
-        QPixmap speaker = TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeakerDark, TomahawkUtils::Original, iconRect.size() );
+        const int iconW = option.rect.height() - 8;
+        const QRect iconRect( 8, option.rect.y() + 4, iconW, iconW );
+        const QPixmap speaker = TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeakerDark, TomahawkUtils::Original, iconRect.size() );
 
         painter->drawPixmap( iconRect, speaker );
     }
@@ -364,14 +364,12 @@ SourceDelegate::paintSource( QPainter* painter, const QStyleOptionViewItem& opti
     {
         if ( shouldDrawDropHint )
         {
-            QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - iconRectVertMargin, iconRectVertMargin, -iconRectVertMargin, -iconRectVertMargin );
+            const QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - iconRectVertMargin, iconRectVertMargin, -iconRectVertMargin, -iconRectVertMargin );
             painter->drawPixmap( figRect, TomahawkUtils::defaultPixmap( TomahawkUtils::Inbox, TomahawkUtils::Original, figRect.size() ) );
         }
         else
         {
-            QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 16, 0, -14, -option.rect.height() + option.fontMetrics.height() * 1.1 );
-            int hd = ( option.rect.height() - figRect.height() ) / 2;
-            figRect.adjust( 0, hd, 0, hd );
+            const QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 16, 0, -14, 0 );
             painter->drawText( figRect, tracks, QTextOption( Qt::AlignVCenter | Qt::AlignRight ) );
         }
     }
@@ -389,11 +387,9 @@ SourceDelegate::paintCategory( QPainter* painter, const QStyleOptionViewItem& op
     font.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
     painter->setFont( font );
 
-    QTextOption to( Qt::AlignVCenter );
-
     painter->setPen( Qt::black );
     painter->setOpacity( 0.5 );
-    painter->drawText( option.rect.translated( 16, 0 ), index.data().toString().toUpper(), to );
+    painter->drawText( option.rect.translated( 16, 0 ), index.data().toString().toUpper(), QTextOption( Qt::AlignVCenter ) );
 
     if ( option.state & QStyle::State_MouseOver )
     {
@@ -401,13 +397,11 @@ SourceDelegate::paintCategory( QPainter* painter, const QStyleOptionViewItem& op
         if ( option.state & QStyle::State_Open )
             text = tr( "Hide" );
 
-        QFont font = option.font;
-        painter->setFont( font );
-        QTextOption to( Qt::AlignVCenter | Qt::AlignRight );
+        painter->setFont( option.font );
 
         // draw close icon
         painter->setPen( TomahawkStyle::GROUP_HEADER );
-        painter->drawText( option.rect.translated( -4, 0 ), text, to );
+        painter->drawText( option.rect.translated( -4, 0 ), text, QTextOption( Qt::AlignVCenter | Qt::AlignRight ) );
     }
 
     painter->restore();
@@ -423,11 +417,9 @@ SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& optio
     font.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
     painter->setFont( font );
 
-    QTextOption to( Qt::AlignBottom );
-
     painter->setPen( Qt::black );
     painter->setOpacity( 0.5 );
-    painter->drawText( option.rect.adjusted( 32, 0, -32, -8 ), index.data().toString().toUpper(), to );
+    painter->drawText( option.rect.adjusted( 32, 0, -32, -8 ), index.data().toString().toUpper(), QTextOption( Qt::AlignBottom ) );
 
     if ( option.state & QStyle::State_MouseOver )
     {
@@ -435,13 +427,11 @@ SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& optio
         if ( option.state & QStyle::State_Open )
             text = tr( "Hide" );
 
-        QFont font = option.font;
-        painter->setFont( font );
-        QTextOption to( Qt::AlignBottom | Qt::AlignRight );
+        painter->setFont( option.font );
 
         // draw close icon
         painter->setPen( TomahawkStyle::GROUP_HEADER );
-        painter->drawText( option.rect.translated( -4, -6 ), text, to );
+        painter->drawText( option.rect.translated( -4, -6 ), text, QTextOption( Qt::AlignBottom | Qt::AlignRight ) );
     }
 
     painter->restore();
@@ -482,7 +472,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             counter = counter.parent();
         }
 
-        int indentDelta = optIndentation.rect.x() - m_parent->viewport()->x();
+        const int indentDelta = optIndentation.rect.x() - m_parent->viewport()->x();
         optIndentation.rect.setX( optIndentation.rect.x() - indentDelta + indentMult * TREEVIEW_INDENT_ADD );
         opt.rect.setX( 0 );
     }
@@ -501,9 +491,8 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     }
     else if ( type == SourcesModel::Divider )
     {
-        QRect middle = optIndentation.rect.adjusted( 0, 2, 0, -2 );
-
-        QColor bgcolor = opt.palette.color( QPalette::Base );
+        const QRect middle = optIndentation.rect.adjusted( 0, 2, 0, -2 );
+        const QColor bgcolor = opt.palette.color( QPalette::Base );
 
         painter->setPen( bgcolor.darker( 120 ) );
         painter->drawLine( middle.topLeft(), middle.topRight() );
@@ -548,7 +537,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
                 paintStandardItem( painter, optIndentation, index );
 
                 // draw close icon
-                QRect r( opt.rect.right() - 4 - m_iconHeight, opt.rect.y() + ( opt.rect.height() - m_iconHeight ) / 2, m_iconHeight, m_iconHeight );
+                const QRect r( opt.rect.right() - 4 - m_iconHeight, opt.rect.y() + ( opt.rect.height() - m_iconHeight ) / 2, m_iconHeight, m_iconHeight );
                 painter->drawPixmap( r, TomahawkUtils::defaultPixmap( TomahawkUtils::ListRemove, TomahawkUtils::Original, r.size() ) );
             }
             else
@@ -677,8 +666,8 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
 
             QStyleOptionViewItemV4 o = option;
             initStyleOption( &o, index );
-            int padding = 3;
-            QRect r ( o.rect.right() - padding - m_iconHeight, padding + o.rect.y(), m_iconHeight, m_iconHeight );
+            const int padding = 3;
+            const QRect r( o.rect.right() - padding - m_iconHeight, padding + o.rect.y(), m_iconHeight, m_iconHeight );
 
             if ( r.contains( mEvent->pos() ) )
             {
