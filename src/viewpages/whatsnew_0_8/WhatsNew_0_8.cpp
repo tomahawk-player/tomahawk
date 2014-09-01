@@ -214,14 +214,14 @@ WhatsNewWidget_0_8::changeEvent( QEvent* e )
 void
 WhatsNewWidget_0_8::inboxBoxClicked()
 {
-    activateBox( ui->inboxCaption, 0 );
+    activateAnchor( ui->inboxCaption );
 }
 
 
 void
 WhatsNewWidget_0_8::urlLookupBoxClicked()
 {
-    activateBox( ui->linkCaption, 1 );
+    activateAnchor( ui->linkCaption );
 }
 
 
@@ -250,36 +250,9 @@ WhatsNewWidget_0_8::androidBoxClicked()
 
 
 void
-WhatsNewWidget_0_8::activateBox( QWidget* widget, int activeIndex )
+WhatsNewWidget_0_8::activateAnchor( QWidget* /* widget */ )
 {
-    deactivateAllBoxes();
-
-/*    widget->layout()->setContentsMargins( 8, 8, 8, 16 );
-    widget->setStyleSheet( activeWidgetThumbStylesheet );
-
-    ui->stackedWidget->setCurrentIndex( activeIndex );*/
-}
-
-
-void
-WhatsNewWidget_0_8::deactivateBox( QWidget* widget )
-{
-/*    widget->layout()->setContentsMargins( 8, 8, 8, 8 );
-    widget->setStyleSheet( inactiveWidgetThumbStylesheet );*/
-}
-
-
-void
-WhatsNewWidget_0_8::deactivateAllBoxes()
-{
-/*    deactivateBox( ui->inboxBox );
-    deactivateBox( ui->urlLookupBox );
-    deactivateBox( ui->trendingBox );
-    deactivateBox( ui->beatsBox );
-    deactivateBox( ui->gmusicBox );
-    deactivateBox( ui->networkingBox );
-    deactivateBox( ui->designBox );
-    deactivateBox( ui->androidBox );*/
+    //FIXME
 }
 
 

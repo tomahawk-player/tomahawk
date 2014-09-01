@@ -63,9 +63,7 @@ private slots:
     void androidBoxClicked();
 
 private:
-    void activateBox( QWidget* widget, int activeIndex );
-    void deactivateBox( QWidget* widget );
-    void deactivateAllBoxes();
+    void activateAnchor( QWidget* widget );
 
     Ui::WhatsNewWidget_0_8 *ui;
 };
