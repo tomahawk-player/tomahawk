@@ -316,17 +316,18 @@ Source::avatar( TomahawkUtils::ImageMode style, const QSize& size, bool defaultA
         QPixmap px = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, style, size );
         QPainter p( &px );
         p.setRenderHint( QPainter::Antialiasing );
+
         QFont f = p.font();
         f.setPixelSize( px.size().height() - 8 );
         p.setFont( f );
         p.setPen( Qt::white );
 
-#ifdef Q_OS_MAC
-        const QRect pxRect = px.rect();
-#else
-        const QRect pxRect = px.rect().adjusted( 0, 2, 0, 0 );
-#endif
-        p.drawText( pxRect, friendlyName().left( 1 ).toUpper(), QTextOption( Qt::AlignCenter ) );
+        const QString initial = friendlyName().left( 1 ).toUpper();
+        const QFontMetricsF fm( f );
+        const qreal w = fm.width( initial );
+        const QPointF pxp = QPointF( px.rect().topLeft() ) + QPointF( px.rect().width() / 2.0 - w / 2.0, px.rect().height() / 2.0 - fm.height() / 2.0 + fm.ascent() );
+
+        p.drawText( pxp, initial );
         return px;
     }
     else
