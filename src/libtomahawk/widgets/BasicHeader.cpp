@@ -51,6 +51,8 @@ BasicHeader::BasicHeader( QWidget* parent )
         ui->captionLabel->setFont( f );
         ui->captionLabel->setPalette( p );
 
+        ui->iconLabel->hide();
+
         ui->anchor1Label->hide();
         ui->anchor2Label->hide();
         ui->anchor3Label->hide();
@@ -97,8 +99,11 @@ BasicHeader::setDescription( const QString& /* s */ )
 
 
 void
-BasicHeader::setPixmap( const QPixmap& /* p */ )
+BasicHeader::setPixmap( const QPixmap& p )
 {
-    //FIXME
-//    m_imageLabel->setPixmap( p.scaledToHeight( m_imageLabel->height(), Qt::SmoothTransformation ) );
+    ui->iconLabel->setFixedHeight( 20 );
+    ui->iconLabel->setPixmap( p.scaledToHeight( ui->iconLabel->height(), Qt::SmoothTransformation ) );
+
+    if ( !p.isNull() )
+        ui->iconLabel->show();
 }

@@ -41,13 +41,26 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>8</number>
+     </property>
      <property name="margin">
       <number>0</number>
      </property>
      <item>
+      <widget class="QLabel" name="iconLabel">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QLabel" name="captionLabel">
        <property name="text">
         <string>TextLabel</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeft|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
@@ -69,6 +82,9 @@
        <property name="text">
         <string>TextLabel</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
       </widget>
      </item>
      <item>
@@ -81,7 +97,7 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>32</width>
+         <width>24</width>
          <height>20</height>
         </size>
        </property>
@@ -91,6 +107,9 @@
       <widget class="ClickableLabel" name="anchor2Label">
        <property name="text">
         <string>TextLabel</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
@@ -104,7 +123,7 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>32</width>
+         <width>24</width>
          <height>20</height>
         </size>
        </property>
@@ -114,6 +133,9 @@
       <widget class="ClickableLabel" name="anchor3Label">
        <property name="text">
         <string>TextLabel</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
