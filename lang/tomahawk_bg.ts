@@ -1632,7 +1632,7 @@ Password (OTP)</source>
 <context>
     <name>QueueItem</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/items/QueueItem.cpp" line="36"/>
+        <location filename="../src/tomahawk/sourcetree/items/QueueItem.cpp" line="38"/>
         <source>Queue</source>
         <translation type="unfinished"/>
     </message>
@@ -2046,49 +2046,24 @@ Password (OTP)</source>
 <context>
     <name>SourceDelegate</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="68"/>
-        <source>Track</source>
-        <translation>Песен</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="69"/>
-        <source>Album</source>
-        <translation>Албум</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="70"/>
-        <source>Artist</source>
-        <translation>Изпълнител</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="71"/>
-        <source>Local</source>
-        <translation>Локално</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="72"/>
-        <source>Top 10</source>
-        <translation>Първите 10</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="262"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="225"/>
         <source>All available tracks</source>
         <translation>Всички налични изпълнения</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="370"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="333"/>
         <source>Drop to send tracks</source>
         <translation>Пусни при изпратените</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="437"/>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="471"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="396"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="426"/>
         <source>Show</source>
         <translation>Покажи</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="439"/>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="473"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="398"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="428"/>
         <source>Hide</source>
         <translation>Скрий</translation>
     </message>

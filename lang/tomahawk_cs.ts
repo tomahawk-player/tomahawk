@@ -1628,7 +1628,7 @@ heslo</translation>
 <context>
     <name>QueueItem</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/items/QueueItem.cpp" line="36"/>
+        <location filename="../src/tomahawk/sourcetree/items/QueueItem.cpp" line="38"/>
         <source>Queue</source>
         <translation>Řada</translation>
     </message>
@@ -2041,49 +2041,24 @@ heslo</translation>
 <context>
     <name>SourceDelegate</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="68"/>
-        <source>Track</source>
-        <translation>Skladba</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="69"/>
-        <source>Album</source>
-        <translation>Album</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="70"/>
-        <source>Artist</source>
-        <translation>Umělec</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="71"/>
-        <source>Local</source>
-        <translation>Místní</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="72"/>
-        <source>Top 10</source>
-        <translation>Nejlepších deset</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="262"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="225"/>
         <source>All available tracks</source>
         <translation>Všechny dostupné skladby</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="370"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="333"/>
         <source>Drop to send tracks</source>
         <translation>Upustit pro poslání skladeb</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="437"/>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="471"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="396"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="426"/>
         <source>Show</source>
         <translation>Ukázat</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="439"/>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="473"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="398"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="428"/>
         <source>Hide</source>
         <translation>Skrýt</translation>
     </message>

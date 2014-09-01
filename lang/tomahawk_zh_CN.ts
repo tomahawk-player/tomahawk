@@ -702,27 +702,27 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="75"/>
         <source>Sorry, there are no albums in this collection!</source>
-        <translation type="unfinished"/>
+        <translation>抱歉，此收藏中没有任何专辑！</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="87"/>
         <source>Artists</source>
-        <translation type="unfinished"/>
+        <translation>艺术家</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="88"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>专辑</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="89"/>
         <source>Songs</source>
-        <translation type="unfinished"/>
+        <translation>曲目</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="386"/>
         <source>This collection is currently empty.</source>
-        <translation type="unfinished"/>
+        <translation>此收藏目前为空。</translation>
     </message>
 </context>
 <context>
@@ -1627,7 +1627,7 @@ Password (OTP)</source>
 <context>
     <name>QueueItem</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/items/QueueItem.cpp" line="36"/>
+        <location filename="../src/tomahawk/sourcetree/items/QueueItem.cpp" line="38"/>
         <source>Queue</source>
         <translation>队列</translation>
     </message>
@@ -2042,49 +2042,24 @@ Password (OTP)</source>
 <context>
     <name>SourceDelegate</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="68"/>
-        <source>Track</source>
-        <translation>曲目</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="69"/>
-        <source>Album</source>
-        <translation>专辑</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="70"/>
-        <source>Artist</source>
-        <translation>艺术家</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="71"/>
-        <source>Local</source>
-        <translation>本地</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="72"/>
-        <source>Top 10</source>
-        <translation>Top 10</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="262"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="225"/>
         <source>All available tracks</source>
         <translation>所有可用的歌曲</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="370"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="333"/>
         <source>Drop to send tracks</source>
         <translation>拖到此处发送歌曲</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="437"/>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="471"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="396"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="426"/>
         <source>Show</source>
         <translation>显示</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="439"/>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="473"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="398"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="428"/>
         <source>Hide</source>
         <translation>隐藏 </translation>
     </message>
