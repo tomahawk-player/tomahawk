@@ -70,6 +70,8 @@ private:
     mutable QHash< QPersistentModelIndex, QRect > m_trackRects;
     mutable QHash< QPersistentModelIndex, QRect > m_headphoneRects;
     mutable QHash< QPersistentModelIndex, QRect > m_lockRects;
+
+    const int m_margin;
 };
 
 #endif // SOURCEDELEGATE_H
