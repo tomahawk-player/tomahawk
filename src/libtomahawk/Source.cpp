@@ -324,7 +324,13 @@ Source::avatar( TomahawkUtils::ImageMode style, const QSize& size, bool defaultA
         f.setPixelSize( px.size().height() - 8 );
         p.setFont( f );
         p.setPen( Qt::white );
-        p.drawText( px.rect().adjusted( 0, 2, 0, 0 ), friendlyName().left( 1 ).toUpper(), QTextOption( Qt::AlignCenter ) );
+
+#ifdef Q_OS_MAC
+        const QRect pxRect = px.rect();
+#else
+        const QRect pxRect = pxRect.adjusted( 0, 2, 0, 0 );
+#endif
+        p.drawText( pxRect, friendlyName().left( 1 ).toUpper(), QTextOption( Qt::AlignCenter ) );
         return px;
     }
     else
