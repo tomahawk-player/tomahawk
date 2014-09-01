@@ -89,14 +89,16 @@ BasicHeader::setCaption( const QString& s )
 
 
 void
-BasicHeader::setDescription( const QString& s )
+BasicHeader::setDescription( const QString& /* s */ )
 {
+    //FIXME
 //    m_descriptionLabel->setText( s );
 }
 
 
 void
-BasicHeader::setPixmap( const QPixmap& p )
+BasicHeader::setPixmap( const QPixmap& /* p */ )
 {
+    //FIXME
 //    m_imageLabel->setPixmap( p.scaledToHeight( m_imageLabel->height(), Qt::SmoothTransformation ) );
 }
