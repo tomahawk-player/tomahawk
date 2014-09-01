@@ -35,6 +35,7 @@
 #include "Typedefs.h"
 #include "PlaylistInterface.h"
 #include "ViewPage.h"
+#include "utils/DpiScaler.h"
 
 #include "DllMacro.h"
 
@@ -51,7 +52,7 @@ namespace Ui
 
 class MetaArtistInfoInterface;
 
-class DLLEXPORT ArtistInfoWidget : public QWidget, public Tomahawk::ViewPage
+class DLLEXPORT ArtistInfoWidget : public QWidget, public Tomahawk::ViewPage, private TomahawkUtils::DpiScaler
 {
 Q_OBJECT
 

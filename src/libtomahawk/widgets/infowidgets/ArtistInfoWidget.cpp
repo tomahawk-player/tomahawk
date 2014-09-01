@@ -51,6 +51,7 @@ using namespace Tomahawk;
 
 ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget* parent )
     : QWidget( parent )
+    , TomahawkUtils::DpiScaler( this )
     , ui( new Ui::ArtistInfoWidget )
     , m_artist( artist )
 {
@@ -61,7 +62,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     artist->loadStats();
     connect( artist.data(), SIGNAL( statsLoaded() ), SLOT( onArtistStatsLoaded() ) );
 
-    m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Original, QSize( 48, 48 ) );
+    m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Original, scaled( QSize( 48, 48 ) ) );
     ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Grid, ui->cover->size() ) );
 
     {
@@ -69,7 +70,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         ui->relatedArtists->setAutoFitItems( true );
         ui->relatedArtists->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         ui->relatedArtists->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-        ui->relatedArtists->setItemSize( QSize( 170, 170 + 32 ) );
+        ui->relatedArtists->setItemSize( scaled( QSize( 170, 170 + 34 ) ) );
 
         m_relatedModel = new PlayableModel( ui->relatedArtists );
         ui->relatedArtists->setPlayableModel( m_relatedModel );
@@ -87,9 +88,9 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         ui->albums->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         ui->albums->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         ui->albums->setWrapping( false );
-        ui->albums->setItemSize( QSize( 190, 190 + 56 ) );
+        ui->albums->setItemSize( scaled( QSize( 190, 190 + 56 ) ) );
         ui->albums->proxyModel()->setHideDupeItems( true );
-        ui->albums->setFixedHeight( 190 + 56 + 32 );
+        ui->albums->setFixedHeight( scaledY( 190 + 56 + 34 ) );
 
         m_albumsModel = new PlayableModel( ui->albums );
         ui->albums->setPlayableModel( m_albumsModel );
@@ -108,9 +109,9 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         ui->topHits->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         ui->topHits->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         ui->topHits->setWrapping( false );
-        ui->topHits->setItemSize( QSize( 140, 140 + 56 ) );
+        ui->topHits->setItemSize( scaled( QSize( 140, 140 + 56 ) ) );
         ui->topHits->proxyModel()->setHideDupeItems( true );
-        ui->topHits->setFixedHeight( 140 + 56 + 32 );
+        ui->topHits->setFixedHeight( scaledY( 140 + 56 + 34 ) );
 
         m_topHitsModel = new PlayableModel( ui->topHits );
         ui->topHits->setPlayableModel( m_topHitsModel );
@@ -207,8 +208,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
         QVBoxLayout* vboxl = new QVBoxLayout;
         TomahawkUtils::unmarginLayout( vboxl );
-        vboxl->setContentsMargins( 32, 32, 32, 32 );
-        vboxl->setSpacing( 8 );
+        vboxl->setContentsMargins( scaled( 32, 32, 32, 32 ) );
+        vboxl->setSpacing( scaledY( 8 ) );
         vbox->setLayout( vboxl );
 
         vboxl->addWidget( captionLabel );
