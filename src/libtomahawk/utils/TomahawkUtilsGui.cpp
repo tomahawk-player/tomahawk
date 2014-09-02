@@ -947,6 +947,21 @@ squareCenterPixmap( const QPixmap& sourceImage )
 }
 
 
+QPixmap
+tinted( const QPixmap& p, const QColor& tint )
+{
+    QImage resultImage( p.size(), QImage::Format_ARGB32_Premultiplied );
+    QPainter painter( &resultImage );
+    painter.drawPixmap( 0, 0, p );
+    painter.setCompositionMode( QPainter::CompositionMode_Screen );
+    painter.fillRect( resultImage.rect(), tint );
+    painter.end();
+
+    resultImage.setAlphaChannel( p.toImage().alphaChannel() );
+    return QPixmap::fromImage( resultImage );
+}
+
+
 QImage
 blurred( const QImage& image, const QRect& rect, int radius, bool alphaOnly, bool blackWhite )
 {
