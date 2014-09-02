@@ -93,7 +93,8 @@ Collection::bigIcon() const
 {
     if ( !source()->avatar().isNull() )
         return source()->avatar( TomahawkUtils::RoundedCorners );
-    return TomahawkUtils::defaultPixmap( TomahawkUtils::SuperCollection );
+
+    return TomahawkUtils::tinted( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultCollection ), Qt::white );
 }
 
 
