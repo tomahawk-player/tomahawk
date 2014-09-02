@@ -1126,12 +1126,12 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
     if ( key.startsWith( "FILE_REQUEST_KEY:" ) )
     {
         // check if the source IP matches an existing, authenticated connection
-        if ( !d_func()->noAuth && peer != QHostAddress::Any && !isIPWhitelisted( peer ) )
+        if ( !d->noAuth && peer != QHostAddress::Any && !isIPWhitelisted( peer ) )
         {
             bool authed = false;
             tDebug() << Q_FUNC_INFO << "Checking for ControlConnection with IP" << peer;
             QMutexLocker locker( &d->controlconnectionsMutex );
-            foreach ( ControlConnection* cc, d_func()->controlconnections )
+            foreach ( ControlConnection* cc, d->controlconnections )
             {
                 tDebug() << Q_FUNC_INFO << "Probing:" << cc->name();
                 // Always compare IPv6 addresses as IPv4 address are sometime simply IPv4 addresses, sometimes mapped IPv6 addresses
@@ -1182,12 +1182,12 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
         }
     }
 
-    if ( d_func()->lazyoffers.contains( key ) )
+    if ( d->lazyoffers.contains( key ) )
     {
         ControlConnection* conn = new ControlConnection( this );
-        conn->setName( d_func()->lazyoffers.value( key ).first->contactId() );
-        conn->addPeerInfo( d_func()->lazyoffers.value( key ).first );
-        conn->setId( d_func()->lazyoffers.value( key ).second );
+        conn->setName( d->lazyoffers.value( key ).first->contactId() );
+        conn->addPeerInfo( d->lazyoffers.value( key ).first );
+        conn->setId( d->lazyoffers.value( key ).second );
 
         if ( !nodeid.isEmpty() )
         {
@@ -1198,9 +1198,9 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
 
         return conn;
     }
-    else if ( d_func()->offers.contains( key ) )
+    else if ( d->offers.contains( key ) )
     {
-        QPointer<Connection> conn = d_func()->offers.value( key );
+        QPointer<Connection> conn = d->offers.value( key );
         if ( conn.isNull() )
         {
             // This can happen if it's a streamconnection, but the audioengine has
@@ -1220,7 +1220,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
 
         if ( conn.data()->onceOnly() )
         {
-            d_func()->offers.remove( key );
+            d->offers.remove( key );
             return conn.data();
         }
         else
@@ -1228,7 +1228,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
             return conn.data()->clone();
         }
     }
-    else if ( d_func()->noAuth )
+    else if ( d->noAuth )
     {
         Connection* conn;
         conn = new ControlConnection( this );
