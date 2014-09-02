@@ -90,17 +90,7 @@ ImageRegistry::pixmap( const QString& image, const QSize& size, TomahawkUtils::I
         pixPainter.end();
 
         if ( tint.alpha() > 0 )
-        {
-            QImage resultImage( p.size(), QImage::Format_ARGB32_Premultiplied );
-            QPainter painter( &resultImage );
-            painter.drawPixmap( 0, 0, p );
-            painter.setCompositionMode( QPainter::CompositionMode_Screen );
-            painter.fillRect( resultImage.rect(), tint );
-            painter.end();
-
-            resultImage.setAlphaChannel( p.toImage().alphaChannel() );
-            p = QPixmap::fromImage( resultImage );
-        }
+            p = TomahawkUtils::tinted( p, tint );
 
         pixmap = p;
     }
