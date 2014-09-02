@@ -102,7 +102,7 @@ void
 BasicHeader::setPixmap( const QPixmap& p )
 {
     ui->iconLabel->setFixedHeight( 20 );
-    ui->iconLabel->setPixmap( p.scaledToHeight( ui->iconLabel->height(), Qt::SmoothTransformation ) );
+    ui->iconLabel->setPixmap( TomahawkUtils::tinted( p, Qt::white ).scaledToHeight( ui->iconLabel->height(), Qt::SmoothTransformation ) );
 
     if ( !p.isNull() )
         ui->iconLabel->show();
