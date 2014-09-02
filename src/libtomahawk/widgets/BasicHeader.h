@@ -42,7 +42,7 @@ public:
 public slots:
     virtual void setCaption( const QString& s );
     virtual void setDescription( const QString& s );
-    virtual void setPixmap( const QPixmap& p );
+    virtual void setPixmap( const QPixmap& p, bool tinted = true );
 };
 
 #endif // BASICHEADER_H

@@ -99,10 +99,14 @@ BasicHeader::setDescription( const QString& /* s */ )
 
 
 void
-BasicHeader::setPixmap( const QPixmap& p )
+BasicHeader::setPixmap( const QPixmap& pixmap, bool tinted )
 {
     ui->iconLabel->setFixedHeight( 20 );
-    ui->iconLabel->setPixmap( TomahawkUtils::tinted( p, Qt::white ).scaledToHeight( ui->iconLabel->height(), Qt::SmoothTransformation ) );
+
+    QPixmap p = pixmap;
+    if ( tinted )
+        p = TomahawkUtils::tinted( p, Qt::white );
+    ui->iconLabel->setPixmap( p.scaledToHeight( ui->iconLabel->height(), Qt::SmoothTransformation ) );
 
     if ( !p.isNull() )
         ui->iconLabel->show();
