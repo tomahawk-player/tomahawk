@@ -250,7 +250,7 @@ SourceDelegate::paintSource( QPainter* painter, const QStyleOptionViewItem& opti
     painter->setOpacity( 1.0 );
     painter->drawPixmap( iconRect, avatar );
 
-    QRect textRect = option.rect.adjusted( iconRect.width() + m_margin, m_margin / 4, -figWidth - ( figWidth ? m_margin : 0 ), 0 );
+    QRect textRect = option.rect.adjusted( iconRect.width() + m_margin, m_margin / 6 + m_margin / 32, -figWidth - ( figWidth ? m_margin : 0 ), 0 );
     QString text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() );
     {
         QTextOption to;
