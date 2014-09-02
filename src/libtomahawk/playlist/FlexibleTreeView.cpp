@@ -55,6 +55,7 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
 
     m_header->setBackgroundColor( Qt::black );
     m_header->setBackground( ImageRegistry::instance()->pixmap( RESPATH "images/collection_background_small.png", QSize( 0, 0 ) ), false );
+    setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultCollection, TomahawkUtils::Original, QSize( 256, 256 ) ) );
 
 //    m_trackView->setPlaylistInterface( m_playlistInterface );
 //    m_columnView->setPlaylistInterface( m_trackView->proxyModel()->playlistInterface() );
@@ -369,17 +370,17 @@ FlexibleTreeView::setEmptyTip( const QString& tip )
 
 
 void
-FlexibleTreeView::setPixmap( const QPixmap& pixmap )
+FlexibleTreeView::setPixmap( const QPixmap& pixmap, bool tinted )
 {
     m_pixmap = pixmap;
-    m_header->setPixmap( pixmap );
+    m_header->setPixmap( pixmap, tinted );
 }
 
 
 void
 FlexibleTreeView::onModelChanged()
 {
-    setPixmap( m_model->icon() );
+    setPixmap( m_model->icon(), false );
     m_header->setCaption( m_model->title() );
     m_header->setDescription( m_model->description() );
 

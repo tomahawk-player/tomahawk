@@ -70,7 +70,7 @@ public:
     void setFlatModel( PlayableModel* model );
     void setAlbumModel( PlayableModel* model );
 
-    void setPixmap( const QPixmap& pixmap );
+    void setPixmap( const QPixmap& pixmap, bool tinted = true );
     void setEmptyTip( const QString& tip );
 
 public slots:
