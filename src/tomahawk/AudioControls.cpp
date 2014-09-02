@@ -95,6 +95,11 @@ AudioControls::AudioControls( QWidget* parent )
     ui->repeatButton->setFixedSize( scaled( 16, 16 ) );
     ui->volumeLowButton->setFixedSize( scaled( 16, 16 ) );
 
+    ui->seekSlider->setFixedHeight( scaledY( 20 ) );
+    ui->volumeSlider->setFixedHeight( scaledY( 20 ) );
+    ui->timeLabel->setFixedHeight( scaledY( 20 ) );
+    ui->timeLeftLabel->setFixedHeight( scaledY( 20 ) );
+
 //    ui->prevButton->setToolTip( tr( "Previous Track" ) );
 //    ui->nextButton->setToolTip( tr( "Next Track" ) );
     ui->shuffleButton->setToolTip( tr( "Shuffle" ) );

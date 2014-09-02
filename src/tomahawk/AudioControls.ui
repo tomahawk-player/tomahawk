@@ -125,7 +125,7 @@
        <item>
         <widget class="QWidget" name="buttonArea" native="true">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -247,7 +247,7 @@
           <string notr="true" extracomment="not translatable because is placeholder text">Time</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
          </property>
         </widget>
        </item>
@@ -282,20 +282,11 @@
           <string notr="true" extracomment="not translatable because is placeholder text">Time Left</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignTop</set>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QWidget" name="widget_5" native="true">
-         <layout class="QHBoxLayout" name="horizontalLayout_6">
-          <property name="spacing">
-           <number>2</number>
-          </property>
-          <property name="margin">
-           <number>0</number>
-          </property>
-          <item>
            <spacer name="horizontalSpacer_6">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -422,9 +413,6 @@
              <enum>Qt::Horizontal</enum>
             </property>
            </widget>
-          </item>
-         </layout>
-        </widget>
        </item>
       </layout>
      </item>

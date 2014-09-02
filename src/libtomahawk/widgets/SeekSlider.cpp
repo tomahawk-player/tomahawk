@@ -35,15 +35,15 @@ SeekSlider::SeekSlider( QWidget* parent )
 {
     setStyleSheet( QString(
                    "QSlider::groove:horizontal {"
-                   "height: 4px; margin: %1px; border: %2px solid rgba(200, 200, 200, 0); background: rgba(200, 200, 200, 40);"
+                   "margin-top: %1px; margin-bottom: %1px; border: %2px solid rgba(200, 200, 200, 0); background: rgba(200, 200, 200, 40);"
 //                   "border-image: url(" RESPATH "images/seek-slider-bkg.png) %2 %2 %2 %2 stretch stretch;"
                    "}"
 
                    "QSlider::sub-page:horizontal {"
-                   "height: 4px; margin: %1px; border: %2px solid rgba(0, 0, 0, 0); background: #ffffff;"
+                   "margin-top: %1px; margin-bottom: %1px; border: %2px solid rgba(0, 0, 0, 0); background: #ffffff;"
 //                   "border-image: url(" RESPATH "images/seek-slider-level.png) %2 %2 %2 %2 stretch stretch;"
                    "}" )
-                   .arg( 0 /*margin*/)
+                   .arg( scaledX( 7 ) /*margin*/)
                    .arg( 0 /*border*/) +
                    QString(
                    "QSlider::handle:horizontal {"
