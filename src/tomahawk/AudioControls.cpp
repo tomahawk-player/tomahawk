@@ -172,27 +172,8 @@ AudioControls::AudioControls( QWidget* parent )
 
     connect( ViewManager::instance(), SIGNAL( viewPageDestroyed() ), SLOT( onControlStateChanged() ) );
 
-//    TomahawkUtils::unmarginLayout( ui->horizontalLayout );
-//    TomahawkUtils::unmarginLayout( ui->buttonAreaLayout );
-//    ui->buttonAreaLayout->setSpacing( 0 );
-    ui->stackedLayout->setSpacing( 0 );
-    ui->stackedLayout->setContentsMargins( 0, 0, 0, 0 );
-    ui->stackedLayout->setMargin( 0 );
-    ui->playPauseButton->setContentsMargins( 0, 0, 0, 0 );
-    ui->pauseButton->setContentsMargins( 0, 0, 0, 0 );
-    ui->stackedLayout->setSizeConstraint( QLayout::SetFixedSize );
-
-    // setFixedSize corrections for stuff in .ui :(
-//    ui->buttonArea->setFixedSize( scaled( 170, 66 ) );
-    //ui->coverImage->setFixedSize( scaled( 60, 60 ) );
-    //ui->metaDataArea->setMaximumHeight( scaledY( 74 ) );
-    //ui->widget_4->setFixedSize( scaled( 170, 66 ) );
-//    ui->volumeSlider->setFixedHeight( 20 );
-//    ui->verticalLayout->setContentsMargins( scaledX( 2 ), scaledY( 6 ),
-//                                            0, scaledY( 6 ) );
-
     connect( InfoSystem::InfoSystem::instance(), SIGNAL( updatedSupportedPushTypes( Tomahawk::InfoSystem::InfoTypeSet ) ),
-             this, SLOT( onInfoSystemPushTypesUpdated( Tomahawk::InfoSystem::InfoTypeSet ) ) );
+             SLOT( onInfoSystemPushTypesUpdated( Tomahawk::InfoSystem::InfoTypeSet ) ) );
     onInfoSystemPushTypesUpdated( InfoSystem::InfoSystem::instance()->supportedPushTypes() );
 
     onPlaybackStopped(); // initial state
@@ -334,7 +315,8 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr result )
     ui->timeLeftLabel->setText( "-" + duration );
     m_lastTextSecondShown = 0;
 
-    ui->stackedLayout->setCurrentWidget( ui->pauseButton );
+    ui->playPauseButton->setVisible( false );
+    ui->pauseButton->setVisible( true );
 
 /*    ui->loveButton->setEnabled( true );
     ui->loveButton->setVisible( true );
@@ -462,7 +444,8 @@ void
 AudioControls::onPlaybackPaused()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
-    ui->stackedLayout->setCurrentWidget( ui->playPauseButton );
+    ui->playPauseButton->setVisible( true );
+    ui->pauseButton->setVisible( false );
     m_sliderTimeLine.setPaused( true );
 }
 
@@ -471,7 +454,8 @@ void
 AudioControls::onPlaybackResumed()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
-    ui->stackedLayout->setCurrentWidget( ui->pauseButton );
+    ui->playPauseButton->setVisible( false );
+    ui->pauseButton->setVisible( true );
     m_seeked = true;
     onPlaybackTimer( m_lastSliderCheck );
 }
@@ -504,7 +488,8 @@ AudioControls::onPlaybackStopped()
     m_phononTickCheckTimer.stop();
     ui->ownerButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, QSize( 34, 34 ) ) );
 
-    ui->stackedLayout->setCurrentWidget( ui->playPauseButton );
+    ui->playPauseButton->setVisible( true );
+    ui->pauseButton->setVisible( false );
 /*    ui->loveButton->setEnabled( false );
     ui->loveButton->setVisible( false );
     ui->socialButton->setEnabled( false );
