@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
@@ -481,12 +481,12 @@ AudioControls::onPlaybackStopped()
     ui->dashLabel->setVisible( false );
     ui->timeLabel->clear();
     ui->timeLeftLabel->clear();
-//    ui->coverImage->setPixmap( QPixmap(), false );
+    ui->ownerButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, QSize( 34, 34 ) ) );
+
     ui->seekSlider->setVisible( false );
     m_sliderTimeLine.stop();
     m_sliderTimeLine.setCurrentTime( 0 );
     m_phononTickCheckTimer.stop();
-    ui->ownerButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, QSize( 34, 34 ) ) );
 
     ui->playPauseButton->setVisible( true );
     ui->pauseButton->setVisible( false );
