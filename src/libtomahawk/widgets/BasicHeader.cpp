@@ -74,7 +74,7 @@ BasicHeader::BasicHeader( QWidget* parent )
         ui->anchor3Label->setPalette( p );
     }
 
-    setFixedHeight( 160 );
+    setFixedHeight( 140 );
 }
 
 
