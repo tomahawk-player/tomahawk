@@ -364,29 +364,29 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>AudioControls</name>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="100"/>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="349"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="105"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="354"/>
         <source>Shuffle</source>
         <translation>Zufall</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="101"/>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="350"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="106"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="355"/>
         <source>Repeat</source>
         <translation>Wiederholen</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="347"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="352"/>
         <source>Time Elapsed</source>
         <translation>Abgelaufene Zeit</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="348"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="353"/>
         <source>Time Remaining</source>
         <translation>Verbleibende Zeit</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="353"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="358"/>
         <source>Playing from %1</source>
         <translation>Wiedergabe von %1</translation>
     </message>
@@ -701,27 +701,27 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>FlexibleTreeView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="75"/>
+        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="76"/>
         <source>Sorry, there are no albums in this collection!</source>
         <translation>Sorry, es sind keine Alben in dieser Sammlung!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="87"/>
+        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="88"/>
         <source>Artists</source>
         <translation>Künstler</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="88"/>
+        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="89"/>
         <source>Albums</source>
         <translation>Alben</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="89"/>
+        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="90"/>
         <source>Songs</source>
         <translation>Lieder</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="386"/>
+        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="387"/>
         <source>This collection is currently empty.</source>
         <translation>Diese Sammlung ist momentan leer.</translation>
     </message>
@@ -2746,7 +2746,7 @@ username@jabber.org</source>
         <translation>Sammlung</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/collection/Collection.cpp" line="103"/>
+        <location filename="../src/libtomahawk/collection/Collection.cpp" line="104"/>
         <source>This collection is empty.</source>
         <translation>Diese Sammlung ist leer.</translation>
     </message>
