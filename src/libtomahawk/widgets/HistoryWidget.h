@@ -42,7 +42,6 @@ private slots:
     void onDateClicked( const QDate& date );
 
 private:
-    QWidget* m_header;
     RecentlyPlayedModel* m_model;
 
 /*    QCalendarWidget* m_calendarFrom;
