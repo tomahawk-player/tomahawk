@@ -41,7 +41,7 @@ using namespace Tomahawk;
 TrackDetailView::TrackDetailView( QWidget* parent )
     : QWidget( parent )
 {
-    setFixedWidth( 230 );
+    setFixedWidth( 210 );
     setContentsMargins( 0, 0, 0, 0 );
 
     QPalette pal( palette() );
@@ -52,8 +52,7 @@ TrackDetailView::TrackDetailView( QWidget* parent )
     m_playableCover = new PlayableCover( this );
     m_playableCover->setShowText( false );
     m_playableCover->setShowControls( false );
-    m_playableCover->setFixedWidth( 230 );
-    m_playableCover->setFixedHeight( 230 );
+    m_playableCover->setFixedSize( QSize( width(), width() ) );
 
     QFont f = font();
     m_nameLabel = new QueryLabel( this );
