@@ -14,7 +14,6 @@
         <file>data/images/artist-placeholder-grid.svg</file>
         <file>data/images/album-placeholder-grid.svg</file>
         <file>data/images/track-placeholder-grid.svg</file>
-        <file>data/images/now-playing-panel.png</file>
         <file>data/images/now-playing-speaker.svg</file>
         <file>data/images/now-playing-speaker-dark.svg</file>
         <file>data/images/pause-pressed.svg</file>
@@ -28,10 +27,6 @@
         <file>data/images/repeat-all-on-rest.svg</file>
         <file>data/images/repeat-off-pressed.svg</file>
         <file>data/images/repeat-off-rest.svg</file>
-        <file>data/images/seek-and-volume-knob-pressed.png</file>
-        <file>data/images/seek-and-volume-knob-rest.png</file>
-        <file>data/images/seek-slider-bkg.png</file>
-        <file>data/images/seek-slider-level.png</file>
         <file>data/images/shuffle.svg</file>
         <file>data/images/repeat.svg</file>
         <file>data/images/shuffle-off-pressed.svg</file>
@@ -64,8 +59,6 @@
         <file>data/images/view-refresh.svg</file>
         <file>data/images/volume-icon-muted.svg</file>
         <file>data/images/volume-icon-full.svg</file>
-        <file>data/images/volume-slider-bkg.png</file>
-        <file>data/images/volume-slider-level.png</file>
         <file>data/images/echonest_logo.png</file>
         <file>data/images/info.svg</file>
         <file>data/images/back.svg</file>
