@@ -444,8 +444,8 @@ void
 AudioControls::onPlaybackPaused()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
-    ui->playPauseButton->setVisible( true );
     ui->pauseButton->setVisible( false );
+    ui->playPauseButton->setVisible( true );
     m_sliderTimeLine.setPaused( true );
 }
 
