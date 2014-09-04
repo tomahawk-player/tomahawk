@@ -364,28 +364,28 @@ connect and stream from you?</source>
     <name>AudioControls</name>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="105"/>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="354"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="336"/>
         <source>Shuffle</source>
         <translation>无序播放</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="106"/>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="355"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="337"/>
         <source>Repeat</source>
         <translation>重复播放</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="352"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="334"/>
         <source>Time Elapsed</source>
         <translation>已播放时间</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="353"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="335"/>
         <source>Time Remaining</source>
         <translation>剩余时间</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="358"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="340"/>
         <source>Playing from %1</source>
         <translation>歌曲来自 %1</translation>
     </message>
@@ -815,32 +815,22 @@ Password (OTP)</source>
 <context>
     <name>HistoryWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="65"/>
-        <source>From:</source>
-        <translation>从：</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="67"/>
-        <source>To:</source>
-        <translation>至：</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="84"/>
+        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="45"/>
         <source>Recently Played Tracks</source>
         <translation>最近播放曲目</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="87"/>
+        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="48"/>
         <source>Your recently played tracks</source>
         <translation>最近播放曲目</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="89"/>
+        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="50"/>
         <source>%1&apos;s recently played tracks</source>
         <translation>%1 的最近播放曲目</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="95"/>
+        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="56"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>抱歉，未找到任何播放记录</translation>
     </message>
@@ -4176,22 +4166,22 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TrackDetailView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="76"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="75"/>
         <source>Marked as Favorite</source>
         <translation>标记为喜欢</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="94"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="93"/>
         <source>Alternative versions:</source>
         <translation>替代版本：</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="162"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="161"/>
         <source>Unknown Release-Date</source>
         <translation>未知发布日期</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="252"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="251"/>
         <source>on %1</source>
         <translation>在 %1</translation>
     </message>

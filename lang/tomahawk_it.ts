@@ -364,28 +364,28 @@ connect and stream from you?</source>
     <name>AudioControls</name>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="105"/>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="354"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="336"/>
         <source>Shuffle</source>
         <translation>Riproduzione casuale</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="106"/>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="355"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="337"/>
         <source>Repeat</source>
         <translation>Ripeti</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="352"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="334"/>
         <source>Time Elapsed</source>
         <translation>Tempo trascorso</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="353"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="335"/>
         <source>Time Remaining</source>
         <translation>Tempo rimanente</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="358"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="340"/>
         <source>Playing from %1</source>
         <translation>Riproducendo da %1</translation>
     </message>
@@ -815,32 +815,22 @@ temporanea (OTP)</translation>
 <context>
     <name>HistoryWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="65"/>
-        <source>From:</source>
-        <translation>Da:</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="67"/>
-        <source>To:</source>
-        <translation>A:</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="84"/>
+        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="45"/>
         <source>Recently Played Tracks</source>
         <translation>Tracce ascoltate di recente</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="87"/>
+        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="48"/>
         <source>Your recently played tracks</source>
         <translation>Tracce da te ascoltate di recente</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="89"/>
+        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="50"/>
         <source>%1&apos;s recently played tracks</source>
         <translation>Tracce ascoltate di recente da %1&apos;s</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="95"/>
+        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="56"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Spiacente, non è stato possibile trovare ascolti recenti!</translation>
     </message>
@@ -4164,22 +4154,22 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TrackDetailView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="76"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="75"/>
         <source>Marked as Favorite</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="94"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="93"/>
         <source>Alternative versions:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="162"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="161"/>
         <source>Unknown Release-Date</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="252"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="251"/>
         <source>on %1</source>
         <translation type="unfinished"/>
     </message>

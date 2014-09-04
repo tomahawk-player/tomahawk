@@ -365,28 +365,28 @@ ansluta och strömma från dig?</translation>
     <name>AudioControls</name>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="105"/>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="354"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="336"/>
         <source>Shuffle</source>
         <translation>Blanda</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="106"/>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="355"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="337"/>
         <source>Repeat</source>
         <translation>Upprepa</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="352"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="334"/>
         <source>Time Elapsed</source>
         <translation>Förfluten tid</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="353"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="335"/>
         <source>Time Remaining</source>
         <translation>Tid kvar</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="358"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="340"/>
         <source>Playing from %1</source>
         <translation>Spelar från %1</translation>
     </message>
@@ -815,32 +815,22 @@ Password (OTP)</source>
 <context>
     <name>HistoryWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="65"/>
-        <source>From:</source>
-        <translation>Från: </translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="67"/>
-        <source>To:</source>
-        <translation>Till: </translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="84"/>
+        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="45"/>
         <source>Recently Played Tracks</source>
         <translation>Nyligen uppspelade spår</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="87"/>
+        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="48"/>
         <source>Your recently played tracks</source>
         <translation>Dina nyligen uppspelade spår</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="89"/>
+        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="50"/>
         <source>%1&apos;s recently played tracks</source>
         <translation>%1&apos;s nyligen uppspelade spår</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="95"/>
+        <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="56"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Tyvärr kunde vi inte hitta några nyligen uppspelningar</translation>
     </message>
@@ -4176,22 +4166,22 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>TrackDetailView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="76"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="75"/>
         <source>Marked as Favorite</source>
         <translation>Markera som favorit</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="94"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="93"/>
         <source>Alternative versions:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="162"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="161"/>
         <source>Unknown Release-Date</source>
         <translation>Otillgängligt släppdatum</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="252"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="251"/>
         <source>on %1</source>
         <translation>på %1</translation>
     </message>
