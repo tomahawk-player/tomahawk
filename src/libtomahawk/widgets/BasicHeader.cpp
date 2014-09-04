@@ -101,7 +101,8 @@ BasicHeader::setDescription( const QString& /* s */ )
 void
 BasicHeader::setPixmap( const QPixmap& pixmap, bool tinted )
 {
-    ui->iconLabel->setFixedHeight( 20 );
+    QFontMetrics fm( ui->captionLabel->font() );
+    ui->iconLabel->setFixedHeight( fm.ascent() );
 
     QPixmap p = pixmap;
     if ( tinted )
