@@ -453,16 +453,16 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
             if ( mode == Grid )
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/artist-placeholder-grid.svg", size );
             else
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/artist-icon.svg", size );
+                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/artist-placeholder-grid.svg", size );
             break;
 
         case DefaultTrackImage:
             if ( mode == Grid )
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-placeholder-grid.svg", size );
             else if ( mode == RoundedCorners )
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-icon.svg", size, TomahawkUtils::RoundedCorners );
+                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-placeholder-grid.svg", size, TomahawkUtils::RoundedCorners );
             else
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-icon.svg", size );
+                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-placeholder-grid.svg", size );
             break;
 
         case DefaultSourceAvatar:
