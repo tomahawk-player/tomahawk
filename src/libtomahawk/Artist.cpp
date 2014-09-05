@@ -249,6 +249,7 @@ Artist::albums( ModelMode mode, const Tomahawk::collection_ptr& collection ) con
         requestData.caller = infoid();
         requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( artistInfo );
         requestData.type = Tomahawk::InfoSystem::InfoArtistReleases;
+        requestData.allSources = true;
 
         connect( Tomahawk::InfoSystem::InfoSystem::instance(),
                  SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
