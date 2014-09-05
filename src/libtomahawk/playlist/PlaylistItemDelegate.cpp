@@ -617,13 +617,17 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
     }
 
     // draw title
-    painter->setOpacity( 1 );
+    qreal opacityCo = 1.0;
+    if ( item->query()->numResults() == 0 )
+        opacityCo = 0.5;
+
+    painter->setOpacity( 1.0 * opacityCo );
     QString text = fm.elidedText( track->track(), Qt::ElideRight, titleRect.width() - margin );
     painter->drawText( titleRect, text, m_centerOption );
 
     // draw artist
     f.setWeight( QFont::Normal );
-    painter->setOpacity( 0.8 );
+    painter->setOpacity( 0.8 * opacityCo );
     painter->setFont( f );
     text = fm.elidedText( track->artist(), Qt::ElideRight, artistRect.width() - margin );
 
@@ -639,7 +643,7 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
     painter->restore();
 
     // draw number
-    painter->setOpacity( 0.6 );
+    painter->setOpacity( 0.6 * opacityCo );
     QString number = QString::number( index.row() + 1 );
     if ( number.length() < 2 )
         number = "0" + number;
@@ -676,7 +680,7 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
     }
     else if ( track->duration() > 0 )
     {
-        painter->setOpacity( 0.5 );
+        painter->setOpacity( 0.5 * opacityCo );
         painter->drawText( extraRect, TomahawkUtils::timeToString( track->duration() ), m_centerRightOption );
     }
 
