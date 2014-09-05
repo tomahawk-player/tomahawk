@@ -145,11 +145,11 @@ FlexibleView::setTrackView( TrackView* view )
         delete m_trackView;
     }
 
-//    view->setPlaylistInterface( m_playlistInterface );
-    m_detailView->setPlaylistInterface( playlistInterface() );
-
     m_trackView = view;
     m_stack->addWidget( view );
+
+    //    view->setPlaylistInterface( m_playlistInterface );
+    m_detailView->setPlaylistInterface( playlistInterface() );
 
     m_trackView->setStyleSheet( QString( "QTreeView { background-color: white; }" ) );
     TomahawkStyle::styleScrollBar( m_trackView->verticalScrollBar() );
