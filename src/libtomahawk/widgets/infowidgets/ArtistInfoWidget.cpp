@@ -309,8 +309,7 @@ ArtistInfoWidget::load( const artist_ptr& artist )
 
     m_artist = artist;
     m_title = artist->name();
-    m_headerWidget->ui->captionLabel->setText( artist->name().toUpper() );
-    m_headerWidget->ui->balanceSpacer->changeSize( m_headerWidget->ui->captionLabel->sizeHint().width(), 1, QSizePolicy::Fixed, QSizePolicy::Fixed );
+    m_headerWidget->setCaption( artist->name() );
 
     connect( m_artist.data(), SIGNAL( biographyLoaded() ), SLOT( onBiographyLoaded() ) );
     connect( m_artist.data(), SIGNAL( similarArtistsLoaded() ), SLOT( onSimilarArtistsLoaded() ) );

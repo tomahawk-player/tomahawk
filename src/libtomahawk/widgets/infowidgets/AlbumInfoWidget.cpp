@@ -149,7 +149,7 @@ AlbumInfoWidget::load( const album_ptr& album )
 
     connect( m_album.data(), SIGNAL( updated() ), SLOT( onAlbumImageUpdated() ) );
 
-    m_headerWidget->ui->captionLabel->setText( album->artist()->name().toUpper() );
+    m_headerWidget->setCaption( album->artist()->name() );
 
     m_tracksModel->startLoading();
     m_tracksModel->addTracks( album, QModelIndex(), true );

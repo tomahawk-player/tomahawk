@@ -50,6 +50,7 @@ BasicHeader::BasicHeader( QWidget* parent )
 
         ui->captionLabel->setFont( f );
         ui->captionLabel->setPalette( p );
+        ui->captionLabel->setWordWrap( true );
 
         ui->iconLabel->hide();
 
@@ -87,6 +88,7 @@ void
 BasicHeader::setCaption( const QString& s )
 {
     ui->captionLabel->setText( s.toUpper() );
+    resizeEvent( 0 );
 }
 
 
@@ -111,4 +113,12 @@ BasicHeader::setPixmap( const QPixmap& pixmap, bool tinted )
 
     if ( !p.isNull() )
         ui->iconLabel->show();
+}
+
+
+void
+BasicHeader::resizeEvent( QResizeEvent* /* event */)
+{
+    ui->captionLabel->setFixedWidth( width() * 0.33 );
+    ui->balanceSpacer->changeSize( ui->captionLabel->width(), 1, QSizePolicy::Expanding, QSizePolicy::Fixed );
 }

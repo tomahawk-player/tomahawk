@@ -234,7 +234,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
     m_resultsModel->startLoading();
 
     m_queries << Tomahawk::Query::get( search, uuid() );
-    headerWidget->ui->captionLabel->setText( title().toUpper() );
+    headerWidget->setCaption( title() );
 
     foreach ( const Tomahawk::query_ptr& query, m_queries )
     {
