@@ -93,6 +93,7 @@ ContextView::ContextView( QWidget* parent, const QString& caption )
     vboxInner->setStretchFactor( m_trackView, 1 );
 
     TrackDetailView* detailView = new TrackDetailView;
+    detailView->setPlaylistInterface( playlistInterface() );
     hboxl->addWidget( detailView );
     hboxl->addLayout( vboxInner );
     hbox->setLayout( hboxl );

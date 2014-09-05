@@ -39,6 +39,7 @@ public:
 
 public slots:
     virtual void setQuery( const Tomahawk::query_ptr& query );
+    void setPlaylistInterface( const Tomahawk::playlistinterface_ptr& playlistInterface );
 
 signals:
 
@@ -53,6 +54,8 @@ private slots:
 
 private:
     void setSocialActions();
+
+    Tomahawk::playlistinterface_ptr m_playlistInterface;
 
     PlayableCover* m_playableCover;
     QueryLabel* m_nameLabel;

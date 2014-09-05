@@ -100,6 +100,7 @@ FlexibleView::FlexibleView( QWidget* parent, QWidget* extraHeader )
     hboxl->setSpacing( 32 );
 
     m_detailView = new TrackDetailView;
+    m_detailView->setPlaylistInterface( playlistInterface() );
     hboxl->addWidget( m_detailView );
     hboxl->addWidget( m_stack );
     hbox->setLayout( hboxl );
@@ -145,6 +146,7 @@ FlexibleView::setTrackView( TrackView* view )
     }
 
 //    view->setPlaylistInterface( m_playlistInterface );
+    m_detailView->setPlaylistInterface( playlistInterface() );
 
     m_trackView = view;
     m_stack->addWidget( view );

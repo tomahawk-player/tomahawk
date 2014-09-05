@@ -136,6 +136,13 @@ TrackDetailView::~TrackDetailView()
 
 
 void
+TrackDetailView::setPlaylistInterface( const Tomahawk::playlistinterface_ptr& playlistInterface )
+{
+    m_playlistInterface = playlistInterface;
+}
+
+
+void
 TrackDetailView::setQuery( const Tomahawk::query_ptr& query )
 {
     if ( m_query )
@@ -253,7 +260,7 @@ TrackDetailView::onResultsChanged()
 
             NewClosure( resolverLabel, SIGNAL( clicked() ), const_cast< AudioEngine* >( AudioEngine::instance() ),
                                         SLOT( playItem( Tomahawk::playlistinterface_ptr, Tomahawk::result_ptr, Tomahawk::query_ptr ) ),
-                                        Tomahawk::playlistinterface_ptr(), result, m_query )->setAutoDelete( false );
+                                        m_playlistInterface, result, m_query )->setAutoDelete( false );
 
             QWidget* hbox = new QWidget;
             QHBoxLayout* hboxl = new QHBoxLayout;
