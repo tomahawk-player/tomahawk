@@ -50,10 +50,6 @@ ContextView::ContextView( QWidget* parent, const QString& caption )
 {
 //    qRegisterMetaType< ContextViewMode >( "ContextViewMode" );
 
-//    m_header->setBackground( ImageRegistry::instance()->pixmap( RESPATH "images/playlist_background.png", QSize( 0, 0 ) ) );
-
-//    m_trackView->setPlaylistInterface( m_playlistInterface );
-
 /*    m_detailedView->setColumnHidden( PlayableModel::Age, true ); // Hide age column per default
     m_detailedView->setColumnHidden( PlayableModel::Filesize, true ); // Hide filesize column per default
     m_detailedView->setColumnHidden( PlayableModel::Composer, true ); // Hide composer column per default*/
@@ -61,27 +57,13 @@ ContextView::ContextView( QWidget* parent, const QString& caption )
     TrackItemDelegate* del = new TrackItemDelegate( TrackItemDelegate::LovedTracks, m_trackView, m_trackView->proxyModel() );
     m_trackView->setPlaylistItemDelegate( del );
     m_trackView->proxyModel()->setStyle( PlayableProxyModel::Large );
+    TomahawkStyle::styleScrollBar( m_trackView->verticalScrollBar() );
 
     setLayout( new QVBoxLayout() );
     TomahawkUtils::unmarginLayout( layout() );
 
-/*    QFrame* lineBelow = new QFrame( this );
-    lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
-    lineBelow->setFrameShape( QFrame::HLine );
-    lineBelow->setMaximumHeight( 1 );
-    QFrame* lineBelow2 = new QFrame( this );
-    lineBelow2->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
-    lineBelow2->setFrameShape( QFrame::HLine );
-    lineBelow2->setMaximumHeight( 1 );*/
-
     m_trackView->setStyleSheet( QString( "QTreeView { background-color: white; }" ) );
 //    m_gridView->setStyleSheet( QString( "QListView { background-color: white; }" ) );
-
-//    layout()->addWidget( m_header );
-//    if ( extraHeader )
-//        layout()->addWidget( extraHeader );
-//    layout()->addWidget( lineBelow );
-//    layout()->addWidget( lineBelow2 );
 
     m_captionLabel = new CaptionLabel( this );
     setCaption( caption );

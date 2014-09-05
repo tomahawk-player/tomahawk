@@ -72,6 +72,7 @@ FlexibleView::FlexibleView( QWidget* parent, QWidget* extraHeader )
 
     m_trackView->setStyleSheet( QString( "QTreeView { background-color: white; }" ) );
     m_gridView->setStyleSheet( QString( "QListView { background-color: white; }" ) );
+    TomahawkStyle::styleScrollBar( m_trackView->verticalScrollBar() );
 
     layout()->addWidget( m_header );
     if ( extraHeader )
@@ -149,6 +150,7 @@ FlexibleView::setTrackView( TrackView* view )
     m_stack->addWidget( view );
 
     m_trackView->setStyleSheet( QString( "QTreeView { background-color: white; }" ) );
+    TomahawkStyle::styleScrollBar( m_trackView->verticalScrollBar() );
     connect( m_trackView, SIGNAL( querySelected( Tomahawk::query_ptr ) ), m_detailView, SLOT( setQuery( Tomahawk::query_ptr ) ) );
 }
 
