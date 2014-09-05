@@ -41,7 +41,7 @@ LocalCollection::LocalCollection( const Tomahawk::source_ptr& source, QObject* p
 QString
 LocalCollection::prettyName() const
 {
-    return tr( "My Collection" );
+    return tr( "Your Collection" );
 }
 
 

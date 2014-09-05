@@ -506,7 +506,7 @@ TomahawkApp::initLocalCollection()
     connect( SourceList::instance(), SIGNAL( ready() ), SLOT( initServent() ) );
 
     source_ptr src( new Source( 0, Database::instance()->impl()->dbid() ) );
-    src->setFriendlyName( tr( "My Collection" ) );
+    src->setFriendlyName( tr( "You" ) );
     collection_ptr coll( new LocalCollection( src ) );
 
     src->addCollection( coll );

@@ -894,7 +894,7 @@ Tomahawk::EchonestControl::calculateSummary()
             else
             {
                 QString subSum;
-                if ( b->currentText() == tr( "My Collection" ) )
+                if ( b->currentText() == tr( "You" ) )
                     summary = tr( "from my radio" );
                 else
                     summary = tr( "from %1 radio" ).arg( b->currentText() );
