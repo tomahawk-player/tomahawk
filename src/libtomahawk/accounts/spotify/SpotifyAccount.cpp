@@ -307,6 +307,12 @@ SpotifyAccount::authenticate()
     }
     else if ( m_spotifyResolver.isNull() || manualResolverRemoved )
     {
+/*        Mon Sep 1 2014 - 02:03:56 [8]: void Tomahawk::Accounts::AccountManager::hookupAndEnable(Tomahawk::Accounts::Account*, bool)
+        Mon Sep 1 2014 - 02:03:56 [8]: Spotify account authenticating...
+        Mon Sep 1 2014 - 02:03:56 [1]: virtual void Tomahawk::Accounts::SpotifyAccount::authenticate() "spotify-linux-x64" true false true
+        Mon Sep 1 2014 - 02:03:56 [8]: Got null resolver but asked to authenticate, so installing if we have one from attica: false "" */
+
+        tDebug() << Q_FUNC_INFO << s_resolverId << m_spotifyResolver.isNull() << manualResolverRemoved << AtticaManager::instance()->resolversLoaded();
         tLog( LOGVERBOSE ) << "Got null resolver but asked to authenticate, so installing if we have one from attica:" << res.isValid() << res.id();
         if ( res.isValid() && !res.id().isEmpty() )
             AtticaManager::instance()->installResolver( res, false );
