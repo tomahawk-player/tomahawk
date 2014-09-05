@@ -376,9 +376,9 @@ ArtistInfoWidget::onBiographyLoaded()
 
     QString html =
         QString( "<html><head><style type=text/css>"
-                 "body { margin: 0; padding: 0; color: #333333; text-decoration: none; font-size: %1pt; font-weight: 200; }"
-                    "a { color: black; text-decoration: none; font-weight: 600; }"
-                    "a:hover { color: black; text-decoration: underline; font-weight: 600; }"
+                 "body { margin: 0; padding: 0; color: #333333; font-family: Times New Roman; font-size: %1pt; font-weight: normal; }"
+                    "a { color: #000000; text-decoration: none; font-weight: bold; }"
+                    "a:hover { color: #000000; text-decoration: underline; font-weight: bold; }"
                  "</style></head>"
                  "<body>%2</body></html>" )
                .arg( TomahawkUtils::defaultFontSize() + 2 )
