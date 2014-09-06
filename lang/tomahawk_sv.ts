@@ -528,17 +528,17 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>ContextView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="139"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="122"/>
         <source>Playlist Details</source>
         <translation>Spellist-detaljer</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="290"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="273"/>
         <source>This playlist is currently empty.</source>
         <translation>Denna spellistan är för tillfället tom.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="292"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="275"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation>Denna spellistan är för tillfället tom. Lägg till några låtar och njut av musiken</translation>
     </message>
@@ -729,17 +729,17 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>FlexibleView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="81"/>
+        <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="82"/>
         <source>Playlist Details</source>
         <translation>Spellistdetaljer</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="341"/>
+        <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="345"/>
         <source>This playlist is currently empty.</source>
         <translation>Spellistan är för närvarande tom.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="343"/>
+        <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="347"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation>Spellistan är för tillfället tom. Lägg till några låtar och avnjut musiken!</translation>
     </message>
@@ -2577,47 +2577,47 @@ och radiostationer baserat på din personliga profil</translation>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="514"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="520"/>
         <source>Sync with Spotify</source>
         <translation>Synkronisera med Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="518"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="524"/>
         <source>Re-enable syncing with Spotify</source>
         <translation>Återaktivera syncronisering mot Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="526"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="532"/>
         <source>Create local copy</source>
         <translation>Skapa lokal kopia</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="542"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="548"/>
         <source>Subscribe to playlist changes</source>
         <translation>Prenummerera på spellist-ändringar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="546"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="552"/>
         <source>Re-enable playlist subscription</source>
         <translation>Återaktivera spellisteprenummeration</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="550"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="556"/>
         <source>Stop subscribing to changes</source>
         <translation>Sluta prenummerera på ändringar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="570"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="576"/>
         <source>Enable Spotify collaborations</source>
         <translation>Aktivera Spotify-samverkare</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="572"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="578"/>
         <source>Disable Spotify collaborations</source>
         <translation>Avaktivera Spotify-samverkare</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="528"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="534"/>
         <source>Stop syncing with Spotify</source>
         <translation>Sluta syncronisera med Spotify</translation>
     </message>
@@ -3276,8 +3276,8 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="897"/>
-        <source>My Collection</source>
-        <translation>Min samling</translation>
+        <source>You</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="898"/>
@@ -3627,8 +3627,8 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
     <name>Tomahawk::LocalCollection</name>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="44"/>
-        <source>My Collection</source>
-        <translation>Min samling</translation>
+        <source>Your Collection</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="51"/>
@@ -3881,8 +3881,8 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
     <name>TomahawkApp</name>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="509"/>
-        <source>My Collection</source>
-        <translation>Min samling</translation>
+        <source>You</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="682"/>
@@ -4176,12 +4176,12 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="161"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="168"/>
         <source>Unknown Release-Date</source>
         <translation>Otillgängligt släppdatum</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="251"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="258"/>
         <source>on %1</source>
         <translation>på %1</translation>
     </message>
