@@ -148,8 +148,6 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
     }
     {
         GridView* artistsFullView = new GridView();
-        //        artistsFullView->setCaption( tr( "Artists" ) );
-        //        artistsFullView->setShowCloseButton( true );
         artistsFullView->setPlayableModel( m_artistsModel );
 
         CaptionLabel* captionLabel = new CaptionLabel( this );
@@ -179,8 +177,6 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
     }
     {
         GridView* albumsFullView = new GridView( m_stackedWidget );
-//        albumsFullView->setCaption( tr( "Albums" ) );
-//        albumsFullView->setShowCloseButton( true );
         albumsFullView->setPlayableModel( m_albumsModel );
 
         CaptionLabel* captionLabel = new CaptionLabel( this );
@@ -223,18 +219,13 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
     mpl->addChildInterface( ui->albums->playlistInterface() );
     m_plInterface = playlistinterface_ptr( mpl );
 
-//        ui->albumView->proxyModel()->sort( -1 );
-//        ui->albumView->proxyModel()->setHideDupeItems( true );
-
-//        ui->artistView->proxyModel()->sort( -1 );
-//        ui->artistView->proxyModel()->setHideDupeItems( true );
+    headerWidget->setCaption( title() );
 
     m_artistsModel->startLoading();
     m_albumsModel->startLoading();
     m_resultsModel->startLoading();
 
     m_queries << Tomahawk::Query::get( search, uuid() );
-    headerWidget->setCaption( title() );
 
     foreach ( const Tomahawk::query_ptr& query, m_queries )
     {
@@ -419,12 +410,12 @@ SearchWidget::onQueryFinished()
 {
     tDebug() << Q_FUNC_INFO;
 
+    updateArtists();
+    updateAlbums();
+
     m_artistsModel->finishLoading();
     m_albumsModel->finishLoading();
     m_resultsModel->finishLoading();
-
-    updateArtists();
-    updateAlbums();
 }
 
 
