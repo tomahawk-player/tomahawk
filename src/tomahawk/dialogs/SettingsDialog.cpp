@@ -85,6 +85,10 @@ SettingsDialog::SettingsDialog(QObject *parent )
     , m_accountModel( 0 )
     , m_sipSpinner( 0 )
 {
+    m_accountsWidget->setFont( TomahawkUtils::systemFont() );
+    m_collectionWidget->setFont( TomahawkUtils::systemFont() );
+    m_advancedWidget->setFont( TomahawkUtils::systemFont() );
+
     m_accountsWidgetUi->setupUi( m_accountsWidget );
     m_collectionWidgetUi->setupUi( m_collectionWidget );
     m_advancedWidgetUi->setupUi( m_advancedWidget );
