@@ -101,6 +101,9 @@ SourcesModel::rowTypeToString( RowType type )
         case Group:
             return tr( "Group" );
 
+        case Source:
+            return tr( "Source" );
+
         case Collection:
             return tr( "Collection" );
 
@@ -148,7 +151,7 @@ SourcesModel::data( const QModelIndex& index, int role ) const
         return item->IDValue();
     case SourcesModel::LatchedOnRole:
     {
-        if ( item->type() == Collection )
+        if ( item->type() == Source )
         {
             SourceItem* cItem = qobject_cast< SourceItem* >( item );
             return cItem->localLatchedOn();
@@ -157,7 +160,7 @@ SourcesModel::data( const QModelIndex& index, int role ) const
     }
     case SourcesModel::LatchedRealtimeRole:
     {
-        if ( item->type() == Collection )
+        if ( item->type() == Source )
         {
             SourceItem* cItem = qobject_cast< SourceItem* >( item );
             return cItem->localLatchMode() == Tomahawk::PlaylistModes::RealTime;
