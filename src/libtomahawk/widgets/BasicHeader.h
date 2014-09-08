@@ -22,6 +22,7 @@
 
 #include "ui_HeaderWidget.h"
 
+#include "utils/DpiScaler.h"
 #include "widgets/BackgroundWidget.h"
 #include "DllMacro.h"
 
@@ -30,7 +31,7 @@ class ElidedLabel;
 class QPaintEvent;
 class QBoxLayout;
 
-class DLLEXPORT BasicHeader : public BackgroundWidget
+class DLLEXPORT BasicHeader : public BackgroundWidget, private TomahawkUtils::DpiScaler
 {
     Q_OBJECT
 public:

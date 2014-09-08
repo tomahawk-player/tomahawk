@@ -35,6 +35,7 @@ using namespace Tomahawk;
 
 BasicHeader::BasicHeader( QWidget* parent )
     : BackgroundWidget( parent )
+    , DpiScaler( this )
     , ui( new Ui::HeaderWidget )
 {
     setAutoFillBackground( false );
@@ -75,7 +76,8 @@ BasicHeader::BasicHeader( QWidget* parent )
         ui->anchor3Label->setPalette( p );
     }
 
-    setFixedHeight( 140 );
+    setFixedHeight( scaledY( 140 ) );
+    TomahawkUtils::fixMargins( this );
 }
 
 
