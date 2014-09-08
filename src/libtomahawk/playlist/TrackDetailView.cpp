@@ -40,8 +40,9 @@ using namespace Tomahawk;
 
 TrackDetailView::TrackDetailView( QWidget* parent )
     : QWidget( parent )
+    , DpiScaler( this )
 {
-    setFixedWidth( 210 );
+    setFixedWidth( scaledX( 210 ) );
     setContentsMargins( 0, 0, 0, 0 );
 
     QPalette pal( palette() );

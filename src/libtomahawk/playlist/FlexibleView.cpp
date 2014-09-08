@@ -117,6 +117,8 @@ FlexibleView::FlexibleView( QWidget* parent, QWidget* extraHeader )
 
     connect( m_trackView, SIGNAL( querySelected( Tomahawk::query_ptr ) ), m_detailView, SLOT( setQuery( Tomahawk::query_ptr ) ) );
     connect( m_header, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
+
+    TomahawkUtils::fixMargins( this );
 }
 
 

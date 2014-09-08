@@ -22,6 +22,7 @@
 #include <QWidget>
 
 #include "Query.h"
+#include "utils/DpiScaler.h"
 #include "DllMacro.h"
 
 class QLabel;
@@ -29,7 +30,7 @@ class CaptionLabel;
 class PlayableCover;
 class QueryLabel;
 
-class DLLEXPORT TrackDetailView : public QWidget
+class DLLEXPORT TrackDetailView : public QWidget, private TomahawkUtils::DpiScaler
 {
 Q_OBJECT
 
