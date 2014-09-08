@@ -120,7 +120,7 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
     m_queries << queries;
 
     if ( m_supportedActions & ActionPlay && itemCount() == 1 )
-        m_sigmap->setMapping( addAction( tr( "&Play" ) ), ActionPlay );
+        m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/play.svg" ), tr( "&Play" ) ), ActionPlay );
 
     if ( m_supportedActions & ActionQueue )
         m_sigmap->setMapping( addAction( tr( "Add to &Queue" ) ), ActionQueue );
@@ -140,7 +140,7 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
         for ( int i = 0; i < m_playlists.length(); ++i )
         {
             QAction* action = new QAction( m_playlists.at( i )->title() , this );
-            playlistMenu->addAction(action);
+            playlistMenu->addAction( action );
             m_playlists_sigmap->setMapping( action, i );
             connect( action, SIGNAL( triggered() ), m_playlists_sigmap, SLOT( map() ) );
         }
