@@ -239,6 +239,9 @@ TrackView::setPlayableModel( PlayableModel* model )
     connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
     connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
 
+    if ( m_model->isLoading() )
+        m_loadingSpinner->fadeIn();
+
     if ( m_autoExpanding )
     {
         expandAll();

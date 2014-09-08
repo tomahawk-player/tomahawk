@@ -141,6 +141,12 @@ GridView::setModel( QAbstractItemModel* model )
 void
 GridView::setPlayableModel( PlayableModel* model )
 {
+    if ( m_model )
+    {
+        disconnect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
+        disconnect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
+    }
+
     m_inited = false;
     m_model = model;
 
@@ -149,6 +155,12 @@ GridView::setPlayableModel( PlayableModel* model )
         m_proxyModel->setSourcePlayableModel( m_model );
         m_proxyModel->sort( -1 );
     }
+
+    connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
+    connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
+
+    if ( m_model->isLoading() )
+        m_loadingSpinner->fadeIn();
 
     emit modelChanged();
 }
