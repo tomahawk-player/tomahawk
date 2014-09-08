@@ -86,15 +86,15 @@ ActionCollection::initActions()
     m_actionCollection[ "renameStation" ] = new QAction( tr( "&Rename Station" ), this );
     m_actionCollection[ "copyPlaylist" ] =   new QAction( tr( "&Copy Playlist Link" ), this );
     m_actionCollection[ "playPause" ] =      new QAction( tr( "&Play" ), this );
-    m_actionCollection[ "playPause" ]->setIcon( ImageRegistry::instance()->icon( RESPATH "images/play-rest.svg" ) );
+    m_actionCollection[ "playPause" ]->setIcon( ImageRegistry::instance()->icon( RESPATH "images/play.svg" ) );
     m_actionCollection[ "playPause" ]->setShortcut( Qt::Key_Space );
     m_actionCollection[ "playPause" ]->setShortcutContext( Qt::ApplicationShortcut );
     m_actionCollection[ "stop" ] =           new QAction( tr( "&Stop" ), this );
     m_actionCollection[ "previousTrack" ] =  new QAction( tr( "&Previous Track" ), this );
-    m_actionCollection[ "previousTrack" ]->setIcon( ImageRegistry::instance()->icon( RESPATH "images/back-rest.svg" ) );
+    m_actionCollection[ "previousTrack" ]->setIcon( ImageRegistry::instance()->icon( RESPATH "images/back.svg" ) );
     m_actionCollection[ "previousTrack" ]->setShortcut( QKeySequence( "Left" ) );
     m_actionCollection[ "nextTrack" ] =      new QAction( tr( "&Next Track" ), this );
-    m_actionCollection[ "nextTrack" ]->setIcon( ImageRegistry::instance()->icon( RESPATH "images/skip-rest.svg" ) );
+    m_actionCollection[ "nextTrack" ]->setIcon( ImageRegistry::instance()->icon( RESPATH "images/forward.svg" ) );
     m_actionCollection[ "nextTrack" ]->setShortcut( QKeySequence( "Right" ) );
     m_actionCollection[ "quit" ] =           new QAction( tr( "&Quit" ), this );
     m_actionCollection[ "quit" ]->setShortcut( QKeySequence::Quit );

@@ -1254,7 +1254,7 @@ TomahawkWindow::audioStarted()
 {
     m_audioRetryCounter = 0;
 
-    ActionCollection::instance()->getAction( "playPause" )->setIcon( ImageRegistry::instance()->icon( RESPATH "images/pause-rest.svg" ) );
+    ActionCollection::instance()->getAction( "playPause" )->setIcon( ImageRegistry::instance()->icon( RESPATH "images/pause.svg" ) );
     ActionCollection::instance()->getAction( "playPause" )->setText( tr( "Pause" ) );
     ActionCollection::instance()->getAction( "stop" )->setEnabled( true );
 
@@ -1276,7 +1276,7 @@ TomahawkWindow::audioFinished()
 void
 TomahawkWindow::audioPaused()
 {
-    ActionCollection::instance()->getAction( "playPause" )->setIcon( ImageRegistry::instance()->icon( RESPATH "images/play-rest.svg" ) );
+    ActionCollection::instance()->getAction( "playPause" )->setIcon( ImageRegistry::instance()->icon( RESPATH "images/play.svg" ) );
     ActionCollection::instance()->getAction( "playPause" )->setText( tr( "&Play" ) );
 }
 
