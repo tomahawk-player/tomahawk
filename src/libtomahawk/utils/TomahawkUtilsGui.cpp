@@ -235,10 +235,10 @@ void
 fixLayoutMargins( QLayout* layout, QWidget* parent )
 {
     DpiScaler scaler( parent );
-    tDebug() << "FIX MARGINS Found layout:" << layout << parent << layout->contentsMargins() << scaler.scaled( layout->contentsMargins() );
-    layout->setMargin( scaler.scaledX( layout->margin() ) );
     layout->setContentsMargins( scaler.scaled( layout->contentsMargins() ) );
     layout->setSpacing( scaler.scaledX( layout->spacing() ) );
+
+    parent->setContentsMargins( scaler.scaled( parent->contentsMargins() ) );
 
     for ( int i = 0; i < layout->count(); i++ )
     {
