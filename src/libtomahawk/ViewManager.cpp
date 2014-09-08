@@ -568,7 +568,7 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
     emit historyBackAvailable( m_pageHistoryBack.count() );
     emit historyForwardAvailable( m_pageHistoryFwd.count() );
 
-    qDebug() << "View page shown:" << page->title();
+    tDebug() << "View page shown:" << page->title();
     emit viewPageActivated( page );
 
     if ( page->isTemporaryPage() )
@@ -581,25 +581,25 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
     if ( QObject* obj = dynamic_cast< QObject* >( currentPage() ) )
     {
         // if the signal exists (just to hide the qobject runtime warning...)
-        if( obj->metaObject()->indexOfSignal( "descriptionChanged(QString)" ) > -1 )
+        if ( obj->metaObject()->indexOfSignal( "descriptionChanged(QString)" ) > -1 )
             connect( obj, SIGNAL( descriptionChanged( QString ) ), m_infobar, SLOT( setDescription( QString ) ), Qt::UniqueConnection );
 
-        if( obj->metaObject()->indexOfSignal( "descriptionChanged(Tomahawk::artist_ptr)" ) > -1 )
+        if ( obj->metaObject()->indexOfSignal( "descriptionChanged(Tomahawk::artist_ptr)" ) > -1 )
             connect( obj, SIGNAL( descriptionChanged( Tomahawk::artist_ptr ) ), m_infobar, SLOT( setDescription( Tomahawk::artist_ptr ) ), Qt::UniqueConnection );
 
-        if( obj->metaObject()->indexOfSignal( "descriptionChanged(Tomahawk::album_ptr)" ) > -1 )
+        if ( obj->metaObject()->indexOfSignal( "descriptionChanged(Tomahawk::album_ptr)" ) > -1 )
             connect( obj, SIGNAL( descriptionChanged( Tomahawk::album_ptr ) ), m_infobar, SLOT( setDescription( Tomahawk::album_ptr ) ), Qt::UniqueConnection );
 
-        if( obj->metaObject()->indexOfSignal( "longDescriptionChanged(QString)" ) > -1 )
+        if ( obj->metaObject()->indexOfSignal( "longDescriptionChanged(QString)" ) > -1 )
             connect( obj, SIGNAL( longDescriptionChanged( QString ) ), m_infobar, SLOT( setLongDescription( QString ) ), Qt::UniqueConnection );
 
-        if( obj->metaObject()->indexOfSignal( "nameChanged(QString)" ) > -1 )
+        if ( obj->metaObject()->indexOfSignal( "nameChanged(QString)" ) > -1 )
             connect( obj, SIGNAL( nameChanged( QString ) ), m_infobar, SLOT( setCaption( QString ) ), Qt::UniqueConnection );
 
-        if( obj->metaObject()->indexOfSignal( "pixmapChanged(QPixmap)" ) > -1 )
+        if ( obj->metaObject()->indexOfSignal( "pixmapChanged(QPixmap)" ) > -1 )
             connect( obj, SIGNAL( pixmapChanged( QPixmap ) ), m_infobar, SLOT( setPixmap( QPixmap ) ), Qt::UniqueConnection );
 
-        if( obj->metaObject()->indexOfSignal( "destroyed(QWidget*)" ) > -1 )
+        if ( obj->metaObject()->indexOfSignal( "destroyed(QWidget*)" ) > -1 )
             connect( obj, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ), Qt::UniqueConnection );
     }
 

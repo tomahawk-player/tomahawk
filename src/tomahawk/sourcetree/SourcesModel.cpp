@@ -436,12 +436,13 @@ SourcesModel::viewPageActivated( Tomahawk::ViewPage* page )
     {
         Q_ASSERT( m_sourceTreeLinks[ page ] );
         tDebug() << "Got view page activated for item:" << m_sourceTreeLinks[ page ]->text();
-        QModelIndex idx = indexFromItem( m_sourceTreeLinks[ page ] );
+        QPersistentModelIndex idx = indexFromItem( m_sourceTreeLinks[ page ] );
+        tDebug() << "Got view page activated for index:" << idx;
 
         if ( !idx.isValid() )
             m_sourceTreeLinks.remove( page );
         else
-            emit selectRequest( QPersistentModelIndex( idx ) );
+            emit selectRequest( idx );
     }
     else
     {
@@ -683,7 +684,7 @@ void
 SourcesModel::onWidgetDestroyed( QWidget* w )
 {
     int ret = m_sourceTreeLinks.remove( dynamic_cast< Tomahawk::ViewPage* > ( w ) );
-    qDebug() << "REMOVED STALE SOURCE PAGE?" << ret;
+    tDebug() << "Removed stale source page:" << ret;
 }
 
 

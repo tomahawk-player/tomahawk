@@ -274,9 +274,13 @@ SourceTreeItem::removeFromList()
 void
 SourceTreeItem::pageDestroyed()
 {
+    //FIXME: this seems to be triggered twice for temporary pages
     model()->removeSourceItemLink( this );
 
     int idx = parent()->children().indexOf( this );
+    if ( idx < 0 )
+        return;
+
     parent()->beginRowsRemoved( idx, idx );
     parent()->removeChild( this );
     parent()->endRowsRemoved();
@@ -284,5 +288,3 @@ SourceTreeItem::pageDestroyed()
     emit removed();
     deleteLater();
 }
-
-
