@@ -42,7 +42,7 @@ TrackDetailView::TrackDetailView( QWidget* parent )
     : QWidget( parent )
     , DpiScaler( this )
 {
-    setFixedWidth( scaledX( 210 ) );
+    setFixedWidth( scaledX( 200 ) );
     setContentsMargins( 0, 0, 0, 0 );
 
     QPalette pal( palette() );

@@ -76,7 +76,7 @@ BasicHeader::BasicHeader( QWidget* parent )
         ui->anchor3Label->setPalette( p );
     }
 
-    setFixedHeight( scaledY( 140 ) );
+    setFixedHeight( scaledY( 130 ) );
     TomahawkUtils::fixMargins( this );
 }
 

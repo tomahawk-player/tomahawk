@@ -234,10 +234,14 @@ unmarginLayout( QLayout* layout )
 void
 fixLayoutMargins( QLayout* layout, QWidget* parent )
 {
+    if ( parent->property( "scalingDone" ).toBool() )
+        return;
+
     DpiScaler scaler( parent );
     layout->setContentsMargins( scaler.scaled( layout->contentsMargins() ) );
     layout->setSpacing( scaler.scaledX( layout->spacing() ) );
 
+    parent->setProperty( "scalingDone", true );
     parent->setContentsMargins( scaler.scaled( parent->contentsMargins() ) );
 
     for ( int i = 0; i < layout->count(); i++ )
@@ -252,7 +256,6 @@ fixLayoutMargins( QLayout* layout, QWidget* parent )
 void
 fixMargins( QWidget* widget )
 {
-    tDebug() << "FIX MARGINS Found widget:" << widget->objectName() << widget;
     if ( widget->layout() )
     {
         fixLayoutMargins( widget->layout(), widget );
