@@ -201,5 +201,6 @@
         <file>data/images/beatsmusic.svg</file>
         <file>data/images/ipv6-logo.svg</file>
         <file>data/images/whatsnew.svg</file>
+        <file>data/images/copy.svg</file>
     </qresource>
 </RCC>

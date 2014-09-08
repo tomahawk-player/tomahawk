@@ -123,7 +123,7 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
         m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/play.svg" ), tr( "&Play" ) ), ActionPlay );
 
     if ( m_supportedActions & ActionQueue )
-        m_sigmap->setMapping( addAction( tr( "Add to &Queue" ) ), ActionQueue );
+        m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/queue.svg" ), tr( "Add to &Queue" ) ), ActionQueue );
 
     if ( m_supportedActions & ActionPlaylist )
     {
@@ -136,7 +136,7 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
         m_playlists_sigmap = new QSignalMapper( this );
 
         // Build the menu listing all available playlists
-        QMenu* playlistMenu = addMenu( tr( "Add to &Playlist" ) );
+        QMenu* playlistMenu = addMenu( ImageRegistry::instance()->icon( RESPATH "images/playlist-icon.svg" ), tr( "Add to &Playlist" ) );
         for ( int i = 0; i < m_playlists.length(); ++i )
         {
             QAction* action = new QAction( m_playlists.at( i )->title() , this );
@@ -157,7 +157,7 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
             m_sources_sigmap->deleteLater();
         m_sources_sigmap = new QSignalMapper( this );
 
-        QMenu* sourcesMenu = addMenu( tr( "Send to &Friend" ) );
+        QMenu* sourcesMenu = addMenu( ImageRegistry::instance()->icon( RESPATH "images/inbox.svg" ), tr( "Send to &Friend" ) );
         for ( int i = 0; i < m_sources.length(); ++i )
         {
             QAction* action = new QAction( m_sources.at( i )->friendlyName(), this );
@@ -209,10 +209,10 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
     addSeparator();
 
     if ( m_supportedActions & ActionCopyLink && itemCount() == 1 )
-        m_sigmap->setMapping( addAction( tr( "&Copy Track Link" ) ), ActionCopyLink );
+        m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/copy.svg" ), tr( "&Copy Track Link" ) ), ActionCopyLink );
 
     if ( m_supportedActions & ActionEditMetadata && itemCount() == 1 )
-        m_sigmap->setMapping( addAction( tr( "Properties..." ) ), ActionEditMetadata );
+        m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/info.svg" ), tr( "Properties..." ) ), ActionEditMetadata );
 
     addSeparator();
 
