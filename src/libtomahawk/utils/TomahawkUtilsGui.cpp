@@ -80,7 +80,7 @@ createDragPixmap( MediaType type, int itemCount )
         xCount = 5;
         size = 16;
     }
-    else if( itemCount > 9 )
+    else if ( itemCount > 9 )
     {
         xCount = 4;
         size = 22;
@@ -125,7 +125,6 @@ createDragPixmap( MediaType type, int itemCount )
     int y = 0;
     for ( int i = 0; i < itemCount; ++i )
     {
-
         painter.drawPixmap( x, y, pixmap );
 
         x += size + 1;
