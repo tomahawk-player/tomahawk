@@ -176,6 +176,8 @@ AudioControls::AudioControls( QWidget* parent )
              SLOT( onInfoSystemPushTypesUpdated( Tomahawk::InfoSystem::InfoTypeSet ) ) );
     onInfoSystemPushTypesUpdated( InfoSystem::InfoSystem::instance()->supportedPushTypes() );
 
+    TomahawkUtils::fixMargins( this );
+
     onPlaybackStopped(); // initial state
 }
 

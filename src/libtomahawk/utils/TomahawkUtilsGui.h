@@ -59,6 +59,8 @@ namespace TomahawkUtils
     DLLEXPORT void drawBackgroundAndNumbers( QPainter* p, const QString& text, const QRect& rect );
 
     DLLEXPORT void unmarginLayout( QLayout* layout );
+    DLLEXPORT void fixLayoutMargins( QLayout* layout );
+    DLLEXPORT void fixMargins( QWidget* widget );
 
     DLLEXPORT void setDefaultFontSize( int points );
     DLLEXPORT int defaultFontSize();

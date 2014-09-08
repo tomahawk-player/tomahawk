@@ -22,6 +22,7 @@
 
 #include "playlist/PlayableItem.h"
 #include "config.h"
+#include "DpiScaler.h"
 #include "Query.h"
 #include "Result.h"
 #include "Source.h"
@@ -226,6 +227,42 @@ unmarginLayout( QLayout* layout )
         QLayout* childLayout = layout->itemAt( i )->layout();
         if ( childLayout )
             unmarginLayout( childLayout );
+    }
+}
+
+
+void
+fixLayoutMargins( QLayout* layout, QWidget* parent )
+{
+    DpiScaler scaler( parent );
+    layout->setContentsMargins( scaler.scaled( layout->contentsMargins() ) );
+    layout->setMargin( scaler.scaledX( layout->margin() ) );
+    layout->setSpacing( scaler.scaledX( layout->spacing() ) );
+
+    for ( int i = 0; i < layout->count(); i++ )
+    {
+        QLayout* childLayout = layout->itemAt( i )->layout();
+        if ( childLayout )
+            fixLayoutMargins( childLayout, parent );
+    }
+}
+
+
+void
+fixMargins( QWidget* widget )
+{
+    if ( widget->layout() )
+    {
+        fixLayoutMargins( widget->layout(), widget );
+    }
+
+    foreach ( QObject* c, widget->children() )
+    {
+        QWidget* w = qobject_cast<QWidget*>(c);
+        if ( w )
+        {
+            fixMargins( w );
+        }
     }
 }
 
