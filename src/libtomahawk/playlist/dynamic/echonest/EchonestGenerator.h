@@ -31,8 +31,10 @@
 
 #if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
 #include <echonest5/Playlist.h>
+#include <echonest5/Genre.h>
 #else
 #include <echonest/Playlist.h>
+#include <echonest/Genre.h>
 #endif
 
 namespace Tomahawk
@@ -88,7 +90,7 @@ public:
 
     static QStringList styles();
     static QStringList moods();
-    static QStringList genres();
+    static Echonest::Genres genres();
     static QStringList userCatalogs();
     static QByteArray catalogId( const QString& collectionId );
 
@@ -133,7 +135,7 @@ private:
 
     static QStringList s_styles;
     static QStringList s_moods;
-    static QStringList s_genres;
+    static Echonest::Genres s_genres;
     static QNetworkReply* s_stylesJob;
     static QNetworkReply* s_moodsJob;
     static QNetworkReply* s_genresJob;

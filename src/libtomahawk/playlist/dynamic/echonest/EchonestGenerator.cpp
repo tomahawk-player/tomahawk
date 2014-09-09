@@ -33,14 +33,13 @@
 #include <QDir>
 #include <QReadWriteLock>
 #include <EchonestCatalogSynchronizer.h>
-#include <echonest/Genre.h>
 
 using namespace Tomahawk;
 
 
 QStringList EchonestGenerator::s_moods = QStringList();
 QStringList EchonestGenerator::s_styles = QStringList();
-QStringList EchonestGenerator::s_genres = QStringList();
+Echonest::Genres EchonestGenerator::s_genres = Echonest::Genres();
 QNetworkReply* EchonestGenerator::s_moodsJob = 0;
 QNetworkReply* EchonestGenerator::s_stylesJob = 0;
 QNetworkReply* EchonestGenerator::s_genresJob = 0;
@@ -707,9 +706,9 @@ EchonestGenerator::loadGenres()
         {
             QVariant genres = TomahawkUtils::Cache::instance()->getData( "EchonestGenerator", "genres" );
             s_genres_lock.unlock();
-            if ( genres.isValid() && genres.canConvert< QStringList >() )
+            if ( genres.isValid() && genres.canConvert< Echonest::Genres >() )
             {
-                s_genres = genres.toStringList();
+                s_genres = genres.value< Echonest::Genres >();
             }
             else
             {
@@ -785,7 +784,7 @@ EchonestGenerator::stylesReceived()
     emit stylesSaved();
 }
 
-QStringList
+Echonest::Genres
 EchonestGenerator::genres()
 {
     return s_genres;
@@ -800,7 +799,7 @@ EchonestGenerator::genresReceived()
 
     try
     {
-        s_genres = Echonest::Artist::parseGenreList( r ).toList();
+        s_genres = Echonest::Genre::parseList( r );
     }
     catch( Echonest::ParseError& e )
     {
@@ -808,7 +807,7 @@ EchonestGenerator::genresReceived()
     }
     s_genresJob = 0;
 
-    TomahawkUtils::Cache::instance()->putData( "EchonestGenerator", 1209600000 /* 2 weeks */, "genres", QVariant::fromValue< QStringList >( s_genres ) );
+    TomahawkUtils::Cache::instance()->putData( "EchonestGenerator", 1209600000 /* 2 weeks */, "genres", QVariant::fromValue< Echonest::Genres >( s_genres ) );
     s_genres_lock.unlock();
     emit genresSaved();
 }
