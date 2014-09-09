@@ -795,6 +795,21 @@ TomahawkApp::loadUrl( const QString& url )
                 return true;
             }
         }
+        else if ( TomahawkUtils::supportedExtensions().contains( info.suffix().toLower() ) )
+        {
+            if ( info.exists() )
+            {
+                QString furl = url;
+                if ( furl.startsWith( "file://" ) )
+                    furl = furl.right( furl.length() - 7 );
+
+                AudioEngine::instance()->play( QUrl::fromLocalFile( furl ) );
+                return true;
+            }
+            tDebug() << Q_FUNC_INFO << "Unable to find:" << info.absoluteFilePath();
+
+            return false;
+        }
     }
 
     return GlobalActionManager::instance()->openUrl( url );
