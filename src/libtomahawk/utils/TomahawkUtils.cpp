@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
@@ -314,6 +314,34 @@ filesizeToString( unsigned int size )
     }
     else
         return QString::number( size );
+}
+
+
+QStringList
+supportedExtensions()
+{
+    //TODO supportedExtensions() and extensionToMimetype could share a QMap
+    //TODO and this method should just return map.keys()
+    static QStringList s_extensions;
+    if ( s_extensions.isEmpty() )
+    {
+        s_extensions << "mp3"
+                     << "ogg" << "oga"
+                     << "mpc"
+                     << "wma"
+                     << "aac" << "m4a" << "mp4"
+                     << "flac"
+                     << "aiff" << "aif"
+                     << "wv";
+
+        #if defined(TAGLIB_MAJOR_VERSION) && defined(TAGLIB_MINOR_VERSION)
+        #if TAGLIB_MAJOR_VERSION >= 1 && TAGLIB_MINOR_VERSION >= 9
+            s_extensions << "opus";
+        #endif
+        #endif
+    }
+
+    return s_extensions;
 }
 
 
