@@ -102,6 +102,8 @@ public:
     enum ScanMode { DirScan, FileScan };
     enum ScanType { None, Full, Normal, File };
 
+    static QVariant readTags( const QFileInfo& fi );
+
     MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& paths, quint32 bs = 0 );
     ~MusicScanner();
 
@@ -129,7 +131,6 @@ private:
 
     MusicScanner::ScanMode m_scanMode;
     QStringList m_paths;
-    QMap<QString, QString> m_ext2mime; // eg: mp3 -> audio/mpeg
     unsigned int m_scanned;
     unsigned int m_skipped;
 
