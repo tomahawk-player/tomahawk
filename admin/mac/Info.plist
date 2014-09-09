@@ -98,6 +98,23 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>oga</string>
+				<string>ogg</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>ogg.icns</string>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>audio/ogg</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Ogg Audio File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>opus</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
