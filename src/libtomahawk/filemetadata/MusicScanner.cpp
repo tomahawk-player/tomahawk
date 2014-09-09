@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -139,23 +139,10 @@ MusicScanner::MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& 
     , m_batchsize( bs )
     , m_dirListerThreadController( 0 )
 {
-    m_ext2mime.insert( "mp3",  TomahawkUtils::extensionToMimetype( "mp3" ) );
-    m_ext2mime.insert( "ogg",  TomahawkUtils::extensionToMimetype( "ogg" ) );
-    m_ext2mime.insert( "oga",  TomahawkUtils::extensionToMimetype( "oga" ) );
-#if defined(TAGLIB_MAJOR_VERSION) && defined(TAGLIB_MINOR_VERSION)
-#if TAGLIB_MAJOR_VERSION >= 1 && TAGLIB_MINOR_VERSION >= 9
-    m_ext2mime.insert( "opus",  TomahawkUtils::extensionToMimetype( "opus" ) );
-#endif
-#endif
-    m_ext2mime.insert( "mpc",  TomahawkUtils::extensionToMimetype( "mpc" ) );
-    m_ext2mime.insert( "wma",  TomahawkUtils::extensionToMimetype( "wma" ) );
-    m_ext2mime.insert( "aac",  TomahawkUtils::extensionToMimetype( "aac" ) );
-    m_ext2mime.insert( "m4a",  TomahawkUtils::extensionToMimetype( "m4a" ) );
-    m_ext2mime.insert( "mp4",  TomahawkUtils::extensionToMimetype( "mp4" ) );
-    m_ext2mime.insert( "flac", TomahawkUtils::extensionToMimetype( "flac" ) );
-    m_ext2mime.insert( "aiff", TomahawkUtils::extensionToMimetype( "aiff" ) );
-    m_ext2mime.insert( "aif",  TomahawkUtils::extensionToMimetype( "aif" ) );
-    m_ext2mime.insert( "wv",   TomahawkUtils::extensionToMimetype( "wv" ) );
+    foreach ( const QString& extension, TomahawkUtils::supportedExtensions() )
+    {
+        m_ext2mime.insert( extension,  TomahawkUtils::extensionToMimetype( extension ) );
+    }
 }
 
 
