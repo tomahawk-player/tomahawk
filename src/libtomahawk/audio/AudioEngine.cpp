@@ -23,6 +23,7 @@
 
 #include "config.h"
 
+#include "filemetadata/MusicScanner.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
@@ -36,6 +37,7 @@
 #include "Artist.h"
 #include "Pipeline.h"
 #include "PlaylistEntry.h"
+#include "SourceList.h"
 #include "TomahawkSettings.h"
 #include "UrlHandler.h"
 
@@ -191,7 +193,6 @@ AudioEnginePrivate::onAudioDataArrived( QMap<Phonon::AudioDataOutput::Channel, Q
 
     s_instance->audioDataArrived( result );
 }
-
 
 
 AudioEngine* AudioEnginePrivate::s_instance = 0;
@@ -670,7 +671,7 @@ AudioEngine::onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type )
     playInfo["trackinfo"] = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
     playInfo["private"] = TomahawkSettings::instance()->privateListeningMode();
 
-    Tomahawk::InfoSystem::InfoPushData pushData ( s_aeInfoIdentifier, type, playInfo, Tomahawk::InfoSystem::PushShortUrlFlag );
+    Tomahawk::InfoSystem::InfoPushData pushData( s_aeInfoIdentifier, type, playInfo, Tomahawk::InfoSystem::PushShortUrlFlag );
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
 }
 
@@ -926,6 +927,41 @@ AudioEngine::loadNextTrack()
 
         stop();
     }
+}
+
+
+void
+AudioEngine::play( const QUrl& url )
+{
+    tDebug() << Q_FUNC_INFO << url;
+
+    result_ptr result = Result::get( url.toString() );
+    const QVariantMap tags = MusicScanner::readTags( QFileInfo( url.toLocalFile() ) ).toMap();
+
+    track_ptr t;
+    if ( !tags.isEmpty() )
+    {
+        t = Track::get( tags["artist"].toString(), tags["track"].toString(), tags["album"].toString(),
+                        tags["duration"].toInt(), tags["composer"].toString(),
+                        tags["albumpos"].toUInt(), tags["discnumber"].toUInt() );
+
+        result->setSize( tags["size"].toUInt() );
+        result->setBitrate( tags["bitrate"].toUInt() );
+        result->setModificationTime( tags["mtime"].toUInt() );
+        result->setMimetype( tags["mimetype"].toString() );
+    }
+    else
+    {
+        t = Tomahawk::Track::get( "Unknown Artist", "Unknown Track" );
+    }
+
+
+    result->setTrack( t );
+    result->setScore( 1.0 );
+    result->setCollection( SourceList::instance()->getLocal()->collections().first(), false );
+
+    //    Tomahawk::query_ptr qry = Tomahawk::Query::get( t );
+    playItem( playlistinterface_ptr(), result, query_ptr() );
 }
 
 

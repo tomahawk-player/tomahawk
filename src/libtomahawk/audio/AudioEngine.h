@@ -136,6 +136,7 @@ public slots:
     void mute();
     void toggleMute();
 
+    void play( const QUrl& url );
     void playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::result_ptr& result, const Tomahawk::query_ptr& fromQuery = Tomahawk::query_ptr() );
     void playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::query_ptr& query );
     void playItem( const Tomahawk::artist_ptr& artist );
