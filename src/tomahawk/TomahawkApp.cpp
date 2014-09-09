@@ -768,7 +768,7 @@ TomahawkApp::loadUrl( const QString& url )
     {
         QFile f( url );
         QFileInfo info( f );
-        if ( info.suffix() == "xspf" )
+        if ( info.suffix().toLower() == "xspf" )
         {
             XSPFLoader* l = new XSPFLoader( true, this );
             tDebug( LOGINFO ) << "Loading spiff:" << url;
@@ -776,7 +776,7 @@ TomahawkApp::loadUrl( const QString& url )
 
             return true;
         }
-        else if ( info.suffix() == "jspf" )
+        else if ( info.suffix().toLower() == "jspf" )
         {
             JSPFLoader* l = new JSPFLoader( true, this );
             tDebug( LOGINFO ) << "Loading j-spiff:" << url;
@@ -784,7 +784,7 @@ TomahawkApp::loadUrl( const QString& url )
 
             return true;
         }
-        else if ( info.suffix() == "axe" )
+        else if ( info.suffix().toLower() == "axe" )
         {
             QFileInfo fi( url );
             if ( fi.exists() )
