@@ -28,6 +28,7 @@
 #include "database/Database.h"
 #include "utils/Logger.h"
 #include "SourceList.h"
+
 #include <QFile>
 #include <QDir>
 #include <QReadWriteLock>
@@ -84,7 +85,8 @@ EchonestFactory::typeSelectors() const
                           << QT_TRANSLATE_NOOP( "Type selector", "Song Hotttnesss" ) << QT_TRANSLATE_NOOP( "Type selector", "Longitude" )
                           << QT_TRANSLATE_NOOP( "Type selector", "Latitude" ) << QT_TRANSLATE_NOOP( "Type selector", "Mode" )
                           << QT_TRANSLATE_NOOP( "Type selector", "Key" ) << QT_TRANSLATE_NOOP( "Type selector", "Sorting" )
-                          << QT_TRANSLATE_NOOP( "Type selector", "Song Type" );
+                          << QT_TRANSLATE_NOOP( "Type selector", "Song Type" ) << QT_TRANSLATE_NOOP( "Type selector", "Distribution" )
+                          << QT_TRANSLATE_NOOP( "Type selector", "Genre Preset" );
 
     return types;
 }
@@ -713,7 +715,7 @@ EchonestGenerator::loadGenres()
             {
                 s_genres_lock.lockForWrite();
                 tLog() << "Genres not in cache or too old, refetching genres ...";
-                s_genresJob = Echonest::Artist::fetchGenres();
+                s_genresJob = Echonest::Genre::fetchList( Echonest::GenreInformation(), 2000 );
                 connect( s_genresJob, SIGNAL( finished() ), this, SLOT( genresReceived() ) );
             }
         }
@@ -798,7 +800,11 @@ EchonestGenerator::genresReceived()
 
     try
     {
-        s_genres = Echonest::Artist::parseGenreList( r ).toList();
+        Echonest::Genres genrelist = Echonest::Genre::parseList( r );
+        foreach( const Echonest::Genre& genre, genrelist )
+        {
+            s_genres << genre.name();
+        }
     }
     catch( Echonest::ParseError& e )
     {
