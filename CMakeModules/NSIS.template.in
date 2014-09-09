@@ -495,6 +495,72 @@ Section -post
    WriteRegStr HKCR "tomahawk\shell" "" "open"
    WriteRegStr HKCR "tomahawk\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
 
+   ; Register file associations
+   WriteRegStr HKCR ".mp3" "" "MPEG Audio Layer 3"
+   WriteRegStr HKCR ".mp3\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".mp3\shell" "" "open"
+   WriteRegStr HKCR ".mp3\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+
+   WriteRegStr HKCR ".oga" "" "Ogg Audio File"
+   WriteRegStr HKCR ".oga\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".oga\shell" "" "open"
+   WriteRegStr HKCR ".oga\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+
+   WriteRegStr HKCR ".ogg" "" "Ogg Audio File"
+   WriteRegStr HKCR ".ogg\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".ogg\shell" "" "open"
+   WriteRegStr HKCR ".ogg\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+
+   WriteRegStr HKCR ".opus" "" "OPUS File"
+   WriteRegStr HKCR ".opus\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".opus\shell" "" "open"
+   WriteRegStr HKCR ".opus\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+
+   WriteRegStr HKCR ".mp4" "" "AAC File"
+   WriteRegStr HKCR ".mp4\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".mp4\shell" "" "open"
+   WriteRegStr HKCR ".mp4\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+
+   WriteRegStr HKCR ".aac" "" "AAC File"
+   WriteRegStr HKCR ".aac\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".aac\shell" "" "open"
+   WriteRegStr HKCR ".aac\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+
+   WriteRegStr HKCR ".m4a" "" "AAC File"
+   WriteRegStr HKCR ".m4a\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".m4a\shell" "" "open"
+   WriteRegStr HKCR ".m4a\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+
+   WriteRegStr HKCR ".mpc" "" "Musepack Audio File"
+   WriteRegStr HKCR ".mpc\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".mpc\shell" "" "open"
+   WriteRegStr HKCR ".mpc\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+
+   WriteRegStr HKCR ".wma" "" "Windows Media Audio"
+   WriteRegStr HKCR ".wma\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".wma\shell" "" "open"
+   WriteRegStr HKCR ".wma\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+
+   WriteRegStr HKCR ".aiff" "" "AIFF File"
+   WriteRegStr HKCR ".aiff\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".aiff\shell" "" "open"
+   WriteRegStr HKCR ".aiff\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+
+   WriteRegStr HKCR ".aif" "" "AIFF File"
+   WriteRegStr HKCR ".aif\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".aif\shell" "" "open"
+   WriteRegStr HKCR ".aif\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+
+   WriteRegStr HKCR ".wv" "" "WavePack Audio File"
+   WriteRegStr HKCR ".wv\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".wv\shell" "" "open"
+   WriteRegStr HKCR ".wv\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+
+   WriteRegStr HKCR ".flac" "" "FLAC Audio File"
+   WriteRegStr HKCR ".flac\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".flac\shell" "" "open"
+   WriteRegStr HKCR ".flac\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+
    SetDetailsPrint textonly
    DetailPrint "Finsihed."
 SectionEnd
