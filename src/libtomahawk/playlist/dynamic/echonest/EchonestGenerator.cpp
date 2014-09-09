@@ -28,10 +28,12 @@
 #include "database/Database.h"
 #include "utils/Logger.h"
 #include "SourceList.h"
+
 #include <QFile>
 #include <QDir>
 #include <QReadWriteLock>
 #include <EchonestCatalogSynchronizer.h>
+#include <echonest/Genre.h>
 
 using namespace Tomahawk;
 
@@ -713,7 +715,7 @@ EchonestGenerator::loadGenres()
             {
                 s_genres_lock.lockForWrite();
                 tLog() << "Genres not in cache or too old, refetching genres ...";
-                s_genresJob = Echonest::Artist::fetchGenres();
+                s_genresJob = Echonest::Genre::fetchList();
                 connect( s_genresJob, SIGNAL( finished() ), this, SLOT( genresReceived() ) );
             }
         }
