@@ -60,6 +60,9 @@ public:
     uint infoSystemCacheVersion() const;
     void setInfoSystemCacheVersion( uint version );
 
+    uint genericCacheVersion() const;
+    void setGenericCacheVersion( uint version );
+
     bool watchForChanges() const;
     void setWatchForChanges( bool watch );
 

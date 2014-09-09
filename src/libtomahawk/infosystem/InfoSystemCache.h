@@ -34,6 +34,8 @@ namespace Tomahawk
 namespace InfoSystem
 {
 
+#define INFOSYSTEM_CACHE_VERSION 4
+
 class DLLEXPORT InfoSystemCache : public QObject
 {
 Q_OBJECT

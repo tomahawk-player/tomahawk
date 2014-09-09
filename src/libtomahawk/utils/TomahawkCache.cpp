@@ -45,6 +45,16 @@ Cache::Cache()
     , m_cacheBaseDir( TomahawkSettings::instance()->storageCacheLocation() + "/GenericCache/" )
     , m_cacheManifest( m_cacheBaseDir + "cachemanifest.ini", QSettings::IniFormat )
 {
+    if ( TomahawkSettings::instance()->genericCacheVersion() < CACHE_VERSION )
+    {
+        #if QT_VERSION <= QT_VERSION_CHECK( 5, 0, 0 )
+            removeDirectoryRecursively( m_cacheBaseDir );
+        #else
+            QDir( m_cacheBaseDir )::removeRecursively();
+        #endif
+        TomahawkSettings::instance()->setGenericCacheVersion( CACHE_VERSION );
+    }
+
     m_pruneTimer.setInterval( 300000 );
     m_pruneTimer.setSingleShot( false );
     connect( &m_pruneTimer, SIGNAL( timeout() ), SLOT( pruneTimerFired() ) );
@@ -114,6 +124,33 @@ Cache::getData( const QString& identifier, const QString& key )
     tDebug() << Q_FUNC_INFO << "No such key" << key;
     return QVariant();
 }
+
+
+#if QT_VERSION <= QT_VERSION_CHECK( 5, 0, 0 )
+bool
+Cache::removeDirectoryRecursively(const QString& dirName)
+{
+    bool result = true;
+
+    QDir dir(dirName);
+    if (dir.exists(dirName)) {
+        foreach( QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst) ) {
+            if (info.isDir()) {
+                result = removeDirectoryRecursively(info.absoluteFilePath());
+            }
+            else {
+                result = QFile::remove(info.absoluteFilePath());
+            }
+
+            if (!result) {
+                return result;
+            }
+        }
+        result = dir.rmdir(dirName);
+    }
+    return result;
+}
+#endif
 
 
 void
