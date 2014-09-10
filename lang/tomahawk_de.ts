@@ -399,17 +399,17 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="980"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1016"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Sorry, Tomahawk konnte das Lied &apos;%1&apos; von %2 nicht finden</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1004"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1040"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Sorry, Tomahawk konnte den Künstler &apos;%1&apos; nicht finden</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1030"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1066"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Sorry, Tomahawk konnte das Album &apos;%1&apos; von %2 nicht finden</translation>
     </message>

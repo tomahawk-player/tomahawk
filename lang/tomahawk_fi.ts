@@ -399,17 +399,17 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="980"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1016"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Valitettavasti Tomahawk ei löytänyt artistin %2 kappaletta ”%1”</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1004"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1040"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Valitettavasti Tomahawk ei löytänyt artistia ”%1”</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1030"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1066"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Valitettavasti Tomahawk ei löytänyt artistin %2 albumia ”%1”</translation>
     </message>

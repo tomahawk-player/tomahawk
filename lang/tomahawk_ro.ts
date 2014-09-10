@@ -399,17 +399,17 @@ se conecteze și să redea de la tine?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="980"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1016"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Ne pare rău, Tomahawk nu a găsit piesa &apos;%1&apos; de %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1004"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1040"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Ne pare rău, Tomahawk nu a găsit artistul &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1030"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1066"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Ne pare rău, Tomahawk nu a găsit albumul &apos;%1&apos; de la %2</translation>
     </message>
