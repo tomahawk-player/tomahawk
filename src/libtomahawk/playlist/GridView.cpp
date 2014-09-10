@@ -37,11 +37,12 @@
 #include "utils/PixmapDelegateFader.h"
 #include "utils/TomahawkUtilsGui.h"
 
+#include <QDrag>
 #include <QHeaderView>
 #include <QKeyEvent>
+#include <QMimeData>
 #include <QPainter>
 #include <QScrollBar>
-#include <QDrag>
 #include <qmath.h>
 
 #define SCROLL_TIMEOUT 280
