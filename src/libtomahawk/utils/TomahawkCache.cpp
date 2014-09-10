@@ -50,7 +50,7 @@ Cache::Cache()
         #if QT_VERSION <= QT_VERSION_CHECK( 5, 0, 0 )
             TomahawkUtils::removeDirectory( m_cacheBaseDir );
         #else
-            QDir( m_cacheBaseDir )::removeRecursively();
+            QDir( m_cacheBaseDir ).removeRecursively();
         #endif
         TomahawkSettings::instance()->setGenericCacheVersion( CACHE_VERSION );
     }
