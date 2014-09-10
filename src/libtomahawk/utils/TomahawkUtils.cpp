@@ -532,7 +532,7 @@ bool
 removeDirectory( const QString& dir )
 {
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-    return QDir aDir( dir ).removeRecursively();
+    return QDir( dir ).removeRecursively();
 #else
     const QDir aDir( dir );
 
