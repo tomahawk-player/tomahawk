@@ -782,7 +782,7 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
 
     if ( pixmap.isNull() )
     {
-        tDebug() << "Invalid image for type:" << type;
+        tDebug() << "Invalid image for type:" << type << size;
         Q_ASSERT( false );
         return QPixmap();
     }
