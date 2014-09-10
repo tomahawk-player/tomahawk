@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="45px" height="45px" viewBox="0 0 45 45" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>arrow-right-double</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs></defs>
+    <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
+        <g id="arrow-up-double" fill="rgb(0,0,0)" transform="translate(22.000000, 22.500000) rotate(-270.000000) translate(-22.000000, -22.500000)">
+            <g id="Page 1" fill="rgb(222,223,222)">
+                <g id="Group" fill="rgb(0,0,0)">
+                    <path d="M3.76020197,38.3028483 L40.9212013,38.3028483 C42.0771995,38.3028483 43.1372009,37.65385 43.6622024,36.6218485 C43.8891998,36.1828494 43.9992004,35.7028498 43.9992004,35.2248492 C43.9992004,34.5878481 43.7991996,33.9508471 43.4101997,33.4168467 L24.8282009,7.83484741 C24.2492004,7.03584762 23.3231998,6.56584783 22.3382011,6.56584783 C21.3532005,6.56584783 20.4271999,7.03784748 19.8492008,7.83484741 L1.26820104,33.4168467 C0.588201029,34.3518481 0.49320106,35.5948481 1.01720105,36.6218485 C1.5421844,37.6539225 2.60321955,38.3028483 3.76020197,38.3028483 C3.76020197,38.3028483 2.60321955,38.3028483 3.76020197,38.3028483 L3.76020197,38.3028483" id="Shape" fill="rgb(99,100,99)"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
