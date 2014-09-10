@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="44px" height="32px" viewBox="0 0 44 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+<svg width="45px" height="45px" viewBox="0 0 45 45" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
     <title>arrow-down-double</title>
     <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
     <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-        <g id="arrow-down-double" sketch:type="MSLayerGroup" transform="translate(1.000000, 0.000000)" fill="#000000">
-            <g id="Page-1" sketch:type="MSShapeGroup">
-                <g id="arrow-up-double" transform="translate(21.500000, 16.000000) rotate(180.000000) translate(-21.500000, -16.000000) translate(0.000000, -0.000000)">
-                    <g id="Page-1" transform="translate(0.000000, 0.000000)">
-                        <g id="Group">
-                            <path d="M3.48530778,31.7090464 L40.6463071,31.7090464 C41.8023053,31.7090464 42.8623067,31.0600481 43.3873082,30.0280466 C43.6143056,29.5890474 43.7243062,29.1090479 43.7243062,28.6310472 C43.7243062,27.9940462 43.5243054,27.3570452 43.1353055,26.8230448 L24.5533067,1.24104548 C23.9743062,0.44204569 23.0483056,-0.0279541 22.0633069,-0.0279541 C21.0783063,-0.0279541 20.1523057,0.44404554 19.5743066,1.24104548 L0.993306841,26.8230448 C0.313306834,27.7580462 0.218306865,29.0010462 0.742306854,30.0280466 C1.2672902,31.0601206 2.32832536,31.7090464 3.48530778,31.7090464 C3.48530778,31.7090464 2.32832536,31.7090464 3.48530778,31.7090464 L3.48530778,31.7090464" id="Shape"></path>
-                        </g>
-                    </g>
+    <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
+        <g id="arrow-up-double" fill="rgb(0,0,0)" transform="translate(22.000000, 23.500000) rotate(-180.000000) translate(-22.000000, -23.500000)">
+            <g id="Page 1" fill="rgb(222,223,222)">
+                <g id="Group" fill="rgb(0,0,0)">
+                    <path d="M3.48530778,39.7090464 L40.6463071,39.7090464 C41.8023053,39.7090464 42.8623067,39.0600481 43.3873082,38.0280466 C43.6143056,37.5890474 43.7243062,37.1090479 43.7243062,36.6310472 C43.7243062,35.9940462 43.5243054,35.3570452 43.1353055,34.8230448 L24.5533067,9.24104548 C23.9743062,8.44204569 23.0483056,7.9720459 22.0633069,7.9720459 C21.0783063,7.9720459 20.1523057,8.44404554 19.5743066,9.24104548 L0.993306841,34.8230448 C0.313306834,35.7580462 0.218306865,37.0010462 0.742306854,38.0280466 C1.2672902,39.0601206 2.32832536,39.7090464 3.48530778,39.7090464 C3.48530778,39.7090464 2.32832536,39.7090464 3.48530778,39.7090464 L3.48530778,39.7090464" id="Shape" fill="rgb(99,100,99)"></path>
                 </g>
             </g>
         </g>
