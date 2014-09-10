@@ -531,6 +531,9 @@ mergePlaylistChanges( const QList< Tomahawk::query_ptr >& orig, const QList< Tom
 bool
 removeDirectory( const QString& dir )
 {
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    return QDir aDir( dir ).removeRecursively();
+#else
     const QDir aDir( dir );
 
     tLog() << "Deleting DIR:" << dir;
@@ -556,6 +559,7 @@ removeDirectory( const QString& dir )
     }
 
     return !has_err;
+#endif
 }
 
 
