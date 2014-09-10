@@ -81,15 +81,6 @@ public:
      * @return the data, if found, if not found an invalid QVariant is returned.
      */
     QVariant getData( const QString& identifier, const QString& key );
-#if QT_VERSION <= QT_VERSION_CHECK( 5, 0, 0 )
-    /**
-     * Recursively deletes all files & directories in a folder
-     * Only needed in Qt4
-     * @param dirName the directory which should be deleted
-     * @return if the removal was successfull or not
-     */
-    bool removeDirectoryRecursively( const QString& dirName );
-#endif
 
 private slots:
     void pruneTimerFired();

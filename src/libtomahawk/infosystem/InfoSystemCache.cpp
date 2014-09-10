@@ -25,10 +25,6 @@
 #include "utils/Logger.h"
 #include "Source.h"
 
-#if QT_VERSION <= QT_VERSION_CHECK( 5, 0, 0 )
-    #include "utils/TomahawkCache.h"
-#endif
-
 #include <QDir>
 #include <QSettings>
 #include <QCryptographicHash>
@@ -49,7 +45,7 @@ InfoSystemCache::InfoSystemCache( QObject* parent )
     if ( TomahawkSettings::instance()->infoSystemCacheVersion() < INFOSYSTEM_CACHE_VERSION )
     {
         #if QT_VERSION <= QT_VERSION_CHECK( 5, 0, 0 )
-            TomahawkUtils::Cache::instance()->removeDirectoryRecursively( m_cacheBaseDir );
+            TomahawkUtils::removeDirectory( m_cacheBaseDir );
         #else
             QDir(m_cacheBaseDir)::removeRecursively();
         #endif
