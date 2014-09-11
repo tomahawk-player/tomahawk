@@ -87,7 +87,7 @@ public:
      * \brief Returns the name of this database command.
      * \return QString containing the database command name 'socialaction'.
      */
-    virtual QString commandname() const { return "socialaction"; }
+    QString commandname() const Q_DECL_OVERRIDE { return "socialaction"; }
 
     /**
      * \brief Executes the database command.
@@ -96,12 +96,12 @@ public:
      * This method prepares an sql query to write this social action
      * into the local database.
      */
-    virtual void exec( DatabaseImpl* dbi );
+    void exec( DatabaseImpl* dbi ) Q_DECL_OVERRIDE;
 
     /**
      * \brief Triggers a Database Sync.
      */
-    virtual void postCommitHook();
+    void postCommitHook() Q_DECL_OVERRIDE;
 
     /**
      * \brief Returns the artist associated with this database command.
@@ -173,8 +173,8 @@ public:
      */
     virtual void setTimestamp( const int ts ) { m_timestamp = ts; }
 
-    virtual bool doesMutates() const { return true; }
-    virtual bool groupable() const { return true; }
+    bool doesMutates() const Q_DECL_OVERRIDE { return true; }
+    bool groupable() const Q_DECL_OVERRIDE { return true; }
 
 protected:
     Tomahawk::trackdata_ptr m_track;
