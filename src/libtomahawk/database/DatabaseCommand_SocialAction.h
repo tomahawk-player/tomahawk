@@ -75,14 +75,14 @@ public:
     explicit DatabaseCommand_SocialAction( const Tomahawk::trackdata_ptr& track, QString action, QString comment = "", QObject* parent = 0 )
         : DatabaseCommandLoggable( parent )
         , m_track( track )
+        , m_comment( comment )
         , m_action( action )
     {
         setSource( SourceList::instance()->getLocal() );
 
-        setArtist( track->artist() );
-        setTrack( track->track() );
-        setComment( comment );
-        setTimestamp( QDateTime::currentDateTime().toTime_t() );
+        m_artist = track->artist();
+        m_title = track->track();
+        m_timestamp = QDateTime::currentDateTime().toTime_t();
     }
 
     /**
