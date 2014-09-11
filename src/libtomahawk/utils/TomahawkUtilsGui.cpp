@@ -478,6 +478,11 @@ QPixmap
 defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
 {
     QPixmap pixmap;
+    if ( size.width() < 0 || size.height() < 0 )
+    {
+        Q_ASSERT( false );
+        return pixmap;
+    }
 
     switch ( type )
     {

@@ -57,6 +57,12 @@ ImageRegistry::cacheKey( const QSize& size, float opacity, QColor tint )
 QPixmap
 ImageRegistry::pixmap( const QString& image, const QSize& size, TomahawkUtils::ImageMode mode, float opacity, QColor tint )
 {
+    if ( size.width() < 0 || size.height() < 0 )
+    {
+        Q_ASSERT( false );
+        return QPixmap();
+    }
+
     QHash< qint64, QPixmap > subsubcache;
     QHash< int, QHash< qint64, QPixmap > > subcache;
 
