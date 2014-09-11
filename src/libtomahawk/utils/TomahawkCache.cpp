@@ -79,7 +79,7 @@ Cache::pruneTimerFired()
             if ( data.maxAge < currentMSecsSinceEpoch )
             {
                 cached_settings.remove( key );
-                tLog() << Q_FUNC_INFO << "Removed stale entry: " << client_identifier << key;
+                tLog() << Q_FUNC_INFO << "Removed stale entry:" << client_identifier << key;
             }
         }
         cached_settings.sync();

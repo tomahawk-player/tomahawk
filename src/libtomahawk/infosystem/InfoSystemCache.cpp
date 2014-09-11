@@ -215,7 +215,7 @@ InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria,
     QDir dir( cacheDir );
     if( !dir.exists( cacheDir ) )
     {
-        qDebug() << "Creating cache directory " << cacheDir;
+        qDebug() << "Creating cache directory" << cacheDir;
         if( !dir.mkpath( cacheDir ) )
         {
             tLog() << "Failed to create cache dir! Bailing...";
