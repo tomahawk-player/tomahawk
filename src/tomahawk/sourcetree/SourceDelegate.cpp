@@ -443,6 +443,9 @@ SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& optio
 void
 SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
+    if ( option.rect.height() == 0 )
+        return;
+
     QStyleOptionViewItemV4 optIndentation = option;
     QStyleOptionViewItemV4 opt = option;
 
