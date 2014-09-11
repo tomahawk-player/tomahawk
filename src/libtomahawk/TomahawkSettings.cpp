@@ -701,9 +701,20 @@ TomahawkSettings::setInfoSystemCacheVersion( uint version )
 uint
 TomahawkSettings::infoSystemCacheVersion() const
 {
-    return value( "infosystemcacheversion", 3 ).toUInt();
+    return value( "infosystemcacheversion", 0 ).toUInt();
 }
 
+void
+TomahawkSettings::setGenericCacheVersion( uint version )
+{
+    setValue( "genericcacheversion", version );
+}
+
+uint
+TomahawkSettings::genericCacheVersion() const
+{
+    return value( "genericcacheversion", 0 ).toUInt();
+}
 
 QString
 TomahawkSettings::storageCacheLocation() const
