@@ -3,38 +3,19 @@
         <file>data/images/collection_background.png</file>
         <file>data/images/collection_background_small.png</file>
         <file>data/images/playlist_background.png</file>
-        <file>data/images/back-pressed.svg</file>
-        <file>data/images/back-rest.svg</file>
         <file>data/images/filter.svg</file>
         <file>data/images/loved.svg</file>
         <file>data/images/love.svg</file>
         <file>data/images/not-loved.svg</file>
         <file>data/images/no-album-art-placeholder.svg</file>
-        <file>data/images/no-artist-image-placeholder.svg</file>
         <file>data/images/artist-placeholder-grid.svg</file>
         <file>data/images/album-placeholder-grid.svg</file>
         <file>data/images/track-placeholder-grid.svg</file>
         <file>data/images/now-playing-speaker.svg</file>
         <file>data/images/now-playing-speaker-dark.svg</file>
-        <file>data/images/pause-pressed.svg</file>
-        <file>data/images/pause-rest.svg</file>
-        <file>data/images/play-pressed.svg</file>
-        <file>data/images/play-rest.svg</file>
         <file>data/images/playlist-icon.svg</file>
-        <file>data/images/repeat-1-on-pressed.svg</file>
-        <file>data/images/repeat-1-on-rest.svg</file>
-        <file>data/images/repeat-all-on-pressed.svg</file>
-        <file>data/images/repeat-all-on-rest.svg</file>
-        <file>data/images/repeat-off-pressed.svg</file>
-        <file>data/images/repeat-off-rest.svg</file>
         <file>data/images/shuffle.svg</file>
         <file>data/images/repeat.svg</file>
-        <file>data/images/shuffle-off-pressed.svg</file>
-        <file>data/images/shuffle-off-rest.svg</file>
-        <file>data/images/shuffle-on-pressed.svg</file>
-        <file>data/images/shuffle-on-rest.svg</file>
-        <file>data/images/skip-pressed.svg</file>
-        <file>data/images/skip-rest.svg</file>
         <file>data/images/user-avatar.svg</file>
         <file>data/images/view-toggle-active-centre.png</file>
         <file>data/images/view-toggle-active-left.png</file>
@@ -53,9 +34,7 @@
         <file>data/images/view-toggle-pressed-right.png</file>
         <file>data/images/list-add.svg</file>
         <file>data/images/list-remove.svg</file>
-        <file>data/images/arrow-up-double.svg</file>
         <file>data/images/arrow-down-double.svg</file>
-        <file>data/images/arrow-right-double.svg</file>
         <file>data/images/view-refresh.svg</file>
         <file>data/images/volume-icon-muted.svg</file>
         <file>data/images/volume-icon-full.svg</file>
@@ -117,7 +96,6 @@
         <file>data/images/closed-padlock.svg</file>
         <file>data/images/open-padlock.svg</file>
         <file>data/images/headphones.svg</file>
-        <file>data/images/no-album-no-case.svg</file>
         <file>data/images/rdio.png</file>
         <file>data/images/grooveshark.png</file>
         <file>data/images/lastfm-icon.svg</file>
