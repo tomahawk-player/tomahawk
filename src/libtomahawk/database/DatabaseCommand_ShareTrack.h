@@ -43,15 +43,15 @@ public:
                                          const QString& recipientDbid,
                                          QObject* parent = 0 );
 
-    virtual QString commandname() const;
+    QString commandname() const Q_DECL_OVERRIDE;
 
-    virtual void exec( DatabaseImpl* );
-    virtual void postCommitHook();
+    void exec( DatabaseImpl* ) Q_DECL_OVERRIDE;
+    void postCommitHook() Q_DECL_OVERRIDE;
 
-    virtual bool doesMutates() const;
-    virtual bool singletonCmd() const;
-    virtual bool localOnly() const;
-    virtual bool groupable() const;
+    bool doesMutates() const Q_DECL_OVERRIDE;
+    bool singletonCmd() const Q_DECL_OVERRIDE;
+    bool localOnly() const Q_DECL_OVERRIDE;
+    bool groupable() const Q_DECL_OVERRIDE;
 
     virtual QString recipient() const;
     virtual void setRecipient( const QString& s );
