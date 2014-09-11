@@ -370,7 +370,7 @@ extensionToMimetype( const QString& extension )
         s_ext2mime.insert( "wv",   "audio/x-wavpack" );
     }
 
-    return s_ext2mime.value( extension, "unknown" );
+    return s_ext2mime.value( extension.toLower(), "unknown" );
 }
 
 
