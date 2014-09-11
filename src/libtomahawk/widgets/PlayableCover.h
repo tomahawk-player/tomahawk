@@ -43,10 +43,21 @@ class DLLEXPORT PlayableCover : public QLabel
 Q_OBJECT
 
 public:
+    enum DisplayType
+    {
+        Artist = 0,
+        Album = 1,
+        Track = 2,
+    };
+
     PlayableCover( QWidget* parent = 0 );
     virtual ~PlayableCover();
 
     bool showText() const { return m_showText; }
+    bool showControls() const { return m_showControls; }
+
+    DisplayType type() const { return m_type; }
+    void setType( DisplayType type );
 
     QPixmap pixmap() const { return m_pixmap; }
 
@@ -66,6 +77,7 @@ protected:
     virtual void mousePressEvent( QMouseEvent* event );
     virtual void mouseMoveEvent( QMouseEvent* event );
     virtual void mouseReleaseEvent( QMouseEvent* event );
+    virtual void mouseDoubleClickEvent( QMouseEvent* event );
 
     virtual void contextMenuEvent( QContextMenuEvent* event );
 
@@ -92,6 +104,8 @@ private:
 
     bool m_showText;
     bool m_showControls;
+
+    DisplayType m_type;
 };
 
 #endif
