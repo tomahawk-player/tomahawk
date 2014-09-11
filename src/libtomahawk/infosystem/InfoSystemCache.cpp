@@ -35,6 +35,7 @@ namespace Tomahawk
 namespace InfoSystem
 {
 
+const int InfoSystemCache::s_infosystemCacheVersion = 4;
 
 InfoSystemCache::InfoSystemCache( QObject* parent )
     : QObject( parent )
@@ -42,14 +43,10 @@ InfoSystemCache::InfoSystemCache( QObject* parent )
 {
     tDebug() << Q_FUNC_INFO;
 
-    if ( TomahawkSettings::instance()->infoSystemCacheVersion() < INFOSYSTEM_CACHE_VERSION )
+    if ( TomahawkSettings::instance()->infoSystemCacheVersion() < s_infosystemCacheVersion )
     {
-        #if QT_VERSION <= QT_VERSION_CHECK( 5, 0, 0 )
-            TomahawkUtils::removeDirectory( m_cacheBaseDir );
-        #else
-            QDir(m_cacheBaseDir).removeRecursively();
-        #endif
-        TomahawkSettings::instance()->setInfoSystemCacheVersion( INFOSYSTEM_CACHE_VERSION );
+        TomahawkUtils::removeDirectory( m_cacheBaseDir );
+        TomahawkSettings::instance()->setInfoSystemCacheVersion( s_infosystemCacheVersion );
     }
 
     m_pruneTimer.setInterval( 300000 );

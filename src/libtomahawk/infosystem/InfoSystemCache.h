@@ -34,8 +34,6 @@ namespace Tomahawk
 namespace InfoSystem
 {
 
-#define INFOSYSTEM_CACHE_VERSION 4
-
 class DLLEXPORT InfoSystemCache : public QObject
 {
 Q_OBJECT
@@ -56,6 +54,13 @@ private slots:
     void pruneTimerFired();
 
 private:
+    /**
+     * Version number of the infosystem cache.
+     * If you change existing cached data,
+     * increase this number.
+     */
+    static const int s_infosystemCacheVersion;
+
     void notInCache( QObject *receiver, Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
     const QString criteriaMd5( const Tomahawk::InfoSystem::InfoStringHash &criteria, Tomahawk::InfoSystem::InfoType type = Tomahawk::InfoSystem::InfoNoInfo ) const;
 

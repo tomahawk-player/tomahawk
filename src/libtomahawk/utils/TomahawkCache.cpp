@@ -29,6 +29,7 @@
 using namespace TomahawkUtils;
 
 Cache*Cache::s_instance = 0;
+const int Cache::s_cacheVersion = 1;
 
 
 Cache* Cache::instance()
@@ -45,14 +46,10 @@ Cache::Cache()
     , m_cacheBaseDir( TomahawkSettings::instance()->storageCacheLocation() + "/GenericCache/" )
     , m_cacheManifest( m_cacheBaseDir + "cachemanifest.ini", QSettings::IniFormat )
 {
-    if ( TomahawkSettings::instance()->genericCacheVersion() < CACHE_VERSION )
+    if ( TomahawkSettings::instance()->genericCacheVersion() < s_cacheVersion )
     {
-        #if QT_VERSION <= QT_VERSION_CHECK( 5, 0, 0 )
-            TomahawkUtils::removeDirectory( m_cacheBaseDir );
-        #else
-            QDir( m_cacheBaseDir ).removeRecursively();
-        #endif
-        TomahawkSettings::instance()->setGenericCacheVersion( CACHE_VERSION );
+        TomahawkUtils::removeDirectory( m_cacheBaseDir );
+        TomahawkSettings::instance()->setGenericCacheVersion( s_cacheVersion );
     }
 
     m_pruneTimer.setInterval( 300000 );

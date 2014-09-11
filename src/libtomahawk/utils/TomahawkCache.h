@@ -31,8 +31,6 @@
 namespace TomahawkUtils
 {
 
-#define CACHE_VERSION 1
-
 /**
  * Internal data structure. Don't use.
  */
@@ -88,6 +86,13 @@ private slots:
 private:
     Cache();
     static Cache* s_instance;
+
+    /**
+     * Version number of the cache.
+     * If you change existing cached data,
+     * increase this number.
+     */
+    static const int s_cacheVersion;
 
     /**
      * Adds a client to the manifest.
