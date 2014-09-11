@@ -53,6 +53,7 @@ TrackDetailView::TrackDetailView( QWidget* parent )
     m_playableCover = new PlayableCover( this );
     m_playableCover->setShowText( false );
     m_playableCover->setShowControls( false );
+    m_playableCover->setType( PlayableCover::Album );
     m_playableCover->setFixedSize( QSize( width(), width() ) );
 
     QFont f = font();
