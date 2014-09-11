@@ -53,8 +53,8 @@ public:
     bool localOnly() const Q_DECL_OVERRIDE;
     bool groupable() const Q_DECL_OVERRIDE;
 
-    virtual QString recipient() const;
-    virtual void setRecipient( const QString& s );
+    QString recipient() const;
+    void setRecipient( const QString& s );
 
 private:
     QString m_recipient;
