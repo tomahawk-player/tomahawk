@@ -41,41 +41,41 @@ public:
     virtual ~ScriptResolver();
     static ExternalResolver* factory( const QString& accountId, const QString& exe, const QStringList& );
 
-    virtual QString name() const              { return m_name; }
-    virtual QPixmap icon() const              { return m_icon; }
-    virtual unsigned int weight() const       { return m_weight; }
-    virtual unsigned int preference() const   { return m_preference; }
-    virtual unsigned int timeout() const      { return m_timeout; }
-    virtual Capabilities capabilities() const { return m_capabilities; }
+    QString name() const Q_DECL_OVERRIDE { return m_name; }
+    QPixmap icon() const Q_DECL_OVERRIDE { return m_icon; }
+    unsigned int weight() const Q_DECL_OVERRIDE { return m_weight; }
+    virtual unsigned int preference() const { return m_preference; }
+    unsigned int timeout() const Q_DECL_OVERRIDE { return m_timeout; }
+    Capabilities capabilities() const Q_DECL_OVERRIDE { return m_capabilities; }
 
-    virtual void setIcon( const QPixmap& icon );
+    void setIcon( const QPixmap& icon ) Q_DECL_OVERRIDE;
 
-    virtual AccountConfigWidget* configUI() const;
-    virtual void saveConfig();
+    AccountConfigWidget* configUI() const Q_DECL_OVERRIDE;
+    void saveConfig() Q_DECL_OVERRIDE;
 
-    virtual ExternalResolver::ErrorState error() const;
-    virtual void reload();
+    ExternalResolver::ErrorState error() const Q_DECL_OVERRIDE;
+    void reload() Q_DECL_OVERRIDE;
 
-    virtual bool running() const;
+    bool running() const Q_DECL_OVERRIDE;
 
     void sendMessage( const QVariantMap& map );
 
-    virtual bool canParseUrl( const QString&, UrlType ) { return false; }
+    bool canParseUrl( const QString&, UrlType ) Q_DECL_OVERRIDE { return false; }
 
 signals:
     void terminated();
     void customMessage( const QString& msgType, const QVariantMap& msg );
 
 public slots:
-    virtual void stop();
-    virtual void resolve( const Tomahawk::query_ptr& query );
-    virtual void start();
+    void stop() Q_DECL_OVERRIDE;
+    void resolve( const Tomahawk::query_ptr& query ) Q_DECL_OVERRIDE;
+    void start() Q_DECL_OVERRIDE;
 
     // TODO: implement. Or not. Not really an issue while Spotify doesn't do browsable personal cloud storage.
-    virtual void artists( const Tomahawk::collection_ptr& ) {}
-    virtual void albums( const Tomahawk::collection_ptr&, const Tomahawk::artist_ptr& ) {}
-    virtual void tracks( const Tomahawk::collection_ptr&, const Tomahawk::album_ptr& ) {}
-    virtual void lookupUrl( const QString&  ) {}
+    void artists( const Tomahawk::collection_ptr& ) Q_DECL_OVERRIDE {}
+    void albums( const Tomahawk::collection_ptr&, const Tomahawk::artist_ptr& ) Q_DECL_OVERRIDE {}
+    void tracks( const Tomahawk::collection_ptr&, const Tomahawk::album_ptr& ) Q_DECL_OVERRIDE {}
+    void lookupUrl( const QString&  ) Q_DECL_OVERRIDE {}
 
 
 private slots:

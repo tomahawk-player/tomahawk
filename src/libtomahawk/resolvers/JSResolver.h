@@ -42,35 +42,35 @@ public:
     virtual ~JSResolver();
     static ExternalResolver* factory( const QString& accountId, const QString& scriptPath, const QStringList& additionalScriptPaths = QStringList() );
 
-    virtual Capabilities capabilities() const;
+    Capabilities capabilities() const Q_DECL_OVERRIDE;
 
-    virtual QString name() const;
-    virtual QPixmap icon() const;
-    virtual unsigned int weight() const;
-    virtual unsigned int timeout() const;
+    QString name() const Q_DECL_OVERRIDE;
+    QPixmap icon() const Q_DECL_OVERRIDE;
+    unsigned int weight() const Q_DECL_OVERRIDE;
+    unsigned int timeout() const Q_DECL_OVERRIDE;
 
-    virtual AccountConfigWidget* configUI() const;
-    virtual void saveConfig();
+    AccountConfigWidget* configUI() const Q_DECL_OVERRIDE;
+    void saveConfig() Q_DECL_OVERRIDE;
 
-    virtual ExternalResolver::ErrorState error() const;
-    virtual bool running() const;
-    virtual void reload();
+    ExternalResolver::ErrorState error() const Q_DECL_OVERRIDE;
+    bool running() const Q_DECL_OVERRIDE;
+    void reload() Q_DECL_OVERRIDE;
 
-    virtual void setIcon( const QPixmap& icon );
+    void setIcon( const QPixmap& icon ) Q_DECL_OVERRIDE;
 
-    virtual bool canParseUrl( const QString& url, UrlType type );
+    bool canParseUrl( const QString& url, UrlType type ) Q_DECL_OVERRIDE;
 
 public slots:
-    virtual void resolve( const Tomahawk::query_ptr& query );
-    virtual void stop();
-    virtual void start();
+    void resolve( const Tomahawk::query_ptr& query ) Q_DECL_OVERRIDE;
+    void stop() Q_DECL_OVERRIDE;
+    void start() Q_DECL_OVERRIDE;
 
     // For ScriptCollection
-    virtual void artists( const Tomahawk::collection_ptr& collection );
-    virtual void albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist );
-    virtual void tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album );
+    void artists( const Tomahawk::collection_ptr& collection ) Q_DECL_OVERRIDE;
+    void albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist ) Q_DECL_OVERRIDE;
+    void tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album ) Q_DECL_OVERRIDE;
     // For UrlLookup
-    virtual void lookupUrl( const QString& url );
+    void lookupUrl( const QString& url ) Q_DECL_OVERRIDE;
 
 signals:
     void stopped();
