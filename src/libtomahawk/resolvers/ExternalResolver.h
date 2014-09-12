@@ -89,7 +89,7 @@ public:
         : m_commandQueue( new ScriptCommandQueue( this ) )
     { m_filePath = filePath; }
 
-    virtual QString filePath() const { return m_filePath; }
+    QString filePath() const { return m_filePath; }
     virtual QPixmap icon() const { return QPixmap(); }
     virtual void setIcon( const QPixmap& ) {}
 
