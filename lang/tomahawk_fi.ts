@@ -4177,22 +4177,22 @@ kappaleen %2%4 %3.</translation>
 <context>
     <name>TrackDetailView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="76"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="77"/>
         <source>Marked as Favorite</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="94"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="95"/>
         <source>Alternative versions:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="169"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="170"/>
         <source>Unknown Release-Date</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="259"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="260"/>
         <source>on %1</source>
         <translation type="unfinished"/>
     </message>

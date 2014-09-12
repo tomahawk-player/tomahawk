@@ -4170,22 +4170,22 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
 <context>
     <name>TrackDetailView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="76"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="77"/>
         <source>Marked as Favorite</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="94"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="95"/>
         <source>Alternative versions:</source>
         <translation>Versions alternatives : </translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="169"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="170"/>
         <source>Unknown Release-Date</source>
         <translation>Date de sortie inconnue</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="259"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="260"/>
         <source>on %1</source>
         <translation>sur %1</translation>
     </message>

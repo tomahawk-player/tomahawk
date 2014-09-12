@@ -4171,22 +4171,22 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>TrackDetailView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="76"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="77"/>
         <source>Marked as Favorite</source>
         <translation>Označeno jako oblíbené</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="94"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="95"/>
         <source>Alternative versions:</source>
         <translation>Jiné verze:</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="169"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="170"/>
         <source>Unknown Release-Date</source>
         <translation>Neznámé datum vydání</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="259"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="260"/>
         <source>on %1</source>
         <translation>na %1</translation>
     </message>

@@ -4171,22 +4171,22 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TrackDetailView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="76"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="77"/>
         <source>Marked as Favorite</source>
         <translation>标记为喜欢</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="94"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="95"/>
         <source>Alternative versions:</source>
         <translation>替代版本：</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="169"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="170"/>
         <source>Unknown Release-Date</source>
         <translation>未知发布日期</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="259"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="260"/>
         <source>on %1</source>
         <translation>在 %1</translation>
     </message>
