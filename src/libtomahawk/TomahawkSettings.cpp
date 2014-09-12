@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011  Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -708,17 +708,20 @@ TomahawkSettings::infoSystemCacheVersion() const
     return value( "infosystemcacheversion", 0 ).toUInt();
 }
 
+
 void
 TomahawkSettings::setGenericCacheVersion( uint version )
 {
     setValue( "genericcacheversion", version );
 }
 
+
 uint
 TomahawkSettings::genericCacheVersion() const
 {
     return value( "genericcacheversion", 0 ).toUInt();
 }
+
 
 QString
 TomahawkSettings::storageCacheLocation() const

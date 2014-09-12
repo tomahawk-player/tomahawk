@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012  Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -59,7 +59,6 @@ public:
 
     uint infoSystemCacheVersion() const;
     void setInfoSystemCacheVersion( uint version );
-
     uint genericCacheVersion() const;
     void setGenericCacheVersion( uint version );
 
@@ -241,7 +240,6 @@ public:
     void setPlaydarCertificate( const QByteArray& cert );
     QByteArray playdarKey() const;
     void setPlaydarKey( const QByteArray& key );
-
 
 signals:
     void changed();
