@@ -46,6 +46,7 @@
 
 #ifdef Q_OS_WIN
 #include <windows.h>
+
 // code from patch attached to QTBUG-19064 by Honglei Zhang
 LRESULT QT_WIN_CALLBACK qt_LowLevelKeyboardHookProc( int nCode, WPARAM wParam, LPARAM lParam );
 HHOOK hKeyboardHook;
@@ -93,6 +94,7 @@ LRESULT QT_WIN_CALLBACK qt_LowLevelKeyboardHookProc( int nCode, WPARAM wParam, L
     return CallNextHookEx( 0, nCode, wParam, lParam );
 }
 
+
 #include <io.h>
 #define argc __argc
 #define argv __argv
@@ -124,6 +126,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine
         }
     }
 #else // Q_OS_WIN
+
 
 int
 main( int argc, char *argv[] )

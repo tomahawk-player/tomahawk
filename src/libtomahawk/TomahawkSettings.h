@@ -243,7 +243,7 @@ public:
 
 signals:
     void changed();
-    void recentlyPlayedPlaylistAdded( const QString& playlistId, int sourceId  );
+    void recentlyPlayedPlaylistAdded( const QString& playlistId, int sourceId );
 
 private slots:
     void updateIndex();
