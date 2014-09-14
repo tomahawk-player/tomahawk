@@ -222,8 +222,6 @@ TomahawkApp::init()
     tDebug() << "Init Database.";
     initDatabase();
 
-    m_scanManager = QPointer<ScanManager>( new ScanManager( this ) );
-
     Pipeline::instance()->addExternalResolverFactory( boost::bind( &JSResolver::factory, _1, _2, _3 ) );
     Pipeline::instance()->addExternalResolverFactory( boost::bind( &ScriptResolver::factory, _1, _2, _3 ) );
 
@@ -621,6 +619,12 @@ TomahawkApp::onInfoSystemReady()
     tDebug() << "Init Pipeline.";
     initPipeline();
 
+    m_scanManager = QPointer<ScanManager>( new ScanManager( this ) );
+    if ( arguments().contains( "--filescan" ) )
+    {
+        m_scanManager.data()->runFullRescan();
+    }
+
     // load remote list of resolvers able to be installed
     AtticaManager::instance();
 
@@ -639,11 +643,6 @@ TomahawkApp::onInfoSystemReady()
     tDebug() << "Init Scrobbler.";
     m_scrobbler = new Scrobbler( this );
 #endif
-
-    if ( arguments().contains( "--filescan" ) )
-    {
-        m_scanManager.data()->runFullRescan();
-    }
 
     // Set up echonest catalog synchronizer
     Tomahawk::EchonestCatalogSynchronizer::instance();
