@@ -36,7 +36,8 @@ SourcesProxyModel::SourcesProxyModel( SourcesModel* model, QObject* parent )
     setDynamicSortFilter( true );
     setSortRole( SourcesModel::SortRole );
 
-    setSourceModel( model );
+    // Use direct implementation and do not call virtuals in the constructor.
+    QSortFilterProxyModel::setSourceModel( model );
 
     connect( model, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onModelChanged() ) );
     connect( model, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( onModelChanged() ) );
