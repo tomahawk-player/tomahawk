@@ -112,7 +112,7 @@ FuzzyIndex::beginIndexing()
 
     try
     {
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Starting indexing.";
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Starting indexing:" << m_lucenePath;
         if ( m_luceneReader != 0 )
         {
             tDebug( LOGVERBOSE ) << "Deleting old lucene stuff.";
