@@ -32,7 +32,7 @@ InboxView::InboxView( QWidget* parent ) :
     proxyModel()->setStyle( PlayableProxyModel::Large );
     setEmptyTip( tr( "No listening suggestions here." ) );
 
-    setGuid( "inbox" );
+    TrackView::setGuid( "inbox" );
     setHeaderHidden( true );
     setUniformRowHeights( false );
     setIndentation( 0 );

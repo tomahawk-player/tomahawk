@@ -37,7 +37,7 @@ ClearButton::ClearButton(QWidget *parent)
     setFocusPolicy(Qt::NoFocus);
     setToolTip(tr("Clear"));
     setMinimumSize(22, 22);
-    setVisible(false);
+    QWidget::setVisible(false);
 
 #if QT_VERSION >= 0x040600
     // First check for a style icon, current KDE provides one

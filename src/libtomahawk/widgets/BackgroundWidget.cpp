@@ -33,7 +33,7 @@ BackgroundWidget::BackgroundWidget( QWidget* parent )
     : QWidget( parent )
 {
     setAutoFillBackground( false );
-    setBackgroundColor( QColor( "#333333" ) );
+    BackgroundWidget::setBackgroundColor( QColor( "#333333" ) );
 }
 
 

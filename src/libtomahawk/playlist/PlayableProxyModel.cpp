@@ -46,7 +46,7 @@ PlayableProxyModel::PlayableProxyModel( QObject* parent )
     setSortCaseSensitivity( Qt::CaseInsensitive );
     setDynamicSortFilter( true );
 
-    setSourcePlayableModel( 0 );
+    PlayableProxyModel::setSourcePlayableModel( NULL );
 
     m_headerStyle[ Large ]      << PlayableModel::Name;
     m_headerStyle[ Detailed ]   << PlayableModel::Artist << PlayableModel::Track << PlayableModel::Composer << PlayableModel::Album << PlayableModel::AlbumPos << PlayableModel::Duration << PlayableModel::Bitrate << PlayableModel::Age << PlayableModel::Year << PlayableModel::Filesize << PlayableModel::Origin << PlayableModel::Score;

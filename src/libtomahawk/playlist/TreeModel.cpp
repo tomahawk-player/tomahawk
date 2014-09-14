@@ -42,8 +42,11 @@ TreeModel::TreeModel( QObject* parent )
     : PlayableModel( parent )
     , m_mode( DatabaseMode )
 {
-    setIcon( TomahawkUtils::tinted( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultCollection, TomahawkUtils::Original,
-                                           /*big enough for the ViewPage header on retina*/ QSize( 256, 256 ) ), Qt::white ) );
+    PlayableModel::setIcon( TomahawkUtils::tinted( TomahawkUtils::defaultPixmap(
+                                                       TomahawkUtils::DefaultCollection,
+                                                       TomahawkUtils::Original,
+                                                       // big enough for the ViewPage header on retina
+                                                       QSize( 256, 256 ) ), Qt::white ) );
 
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ), Qt::DirectConnection );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );

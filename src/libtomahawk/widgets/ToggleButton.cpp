@@ -36,7 +36,7 @@ ToggleButton::ToggleButton( QWidget* parent )
     f.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
 
     setFont( f );
-    setFixedHeight( sizeHint().height() + 8 );
+    setFixedHeight( QLabel::sizeHint().height() + 8 );
 
     setCursor( Qt::PointingHandCursor );
 }

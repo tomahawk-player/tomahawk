@@ -40,13 +40,13 @@ ACLRegistryImpl::ACLRegistryImpl( QObject* parent )
     , m_jobCount( 0 )
 {
     ACLRegistry::setInstance( this );
-    load();
+    ACLRegistryImpl::load();
 }
 
 
 ACLRegistryImpl::~ACLRegistryImpl()
 {
-    save();
+    ACLRegistryImpl::save();
 }
 
 

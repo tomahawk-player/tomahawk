@@ -39,7 +39,7 @@ ScriptCollection::ScriptCollection( const source_ptr& source,
     , m_trackCount( -1 ) //null value
 {
     Q_ASSERT( resolver );
-    qDebug() << Q_FUNC_INFO << resolver->name() << name();
+    qDebug() << Q_FUNC_INFO << resolver->name() << Collection::name();
 
     m_resolver = resolver;
 

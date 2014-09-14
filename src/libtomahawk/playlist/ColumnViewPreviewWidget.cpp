@@ -38,7 +38,7 @@ using namespace Tomahawk;
 ColumnViewPreviewWidget::ColumnViewPreviewWidget( ColumnView* parent )
     : QWidget( parent )
 {
-    setVisible( false );
+    QWidget::setVisible( false );
 
     QBoxLayout* mainLayout = new QVBoxLayout;
     setLayout( mainLayout );
