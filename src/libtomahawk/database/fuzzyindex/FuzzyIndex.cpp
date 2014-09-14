@@ -88,7 +88,7 @@ FuzzyIndex::~FuzzyIndex()
 bool
 FuzzyIndex::wipeIndex()
 {
-    tLog( LOGVERBOSE ) << "Wiping fuzzy index...";
+    tLog( LOGVERBOSE ) << "Wiping fuzzy index:" << m_lucenePath;
     beginIndexing();
     endIndexing();
 
