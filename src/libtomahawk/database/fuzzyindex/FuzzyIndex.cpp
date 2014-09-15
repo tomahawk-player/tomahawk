@@ -140,7 +140,7 @@ void
 FuzzyIndex::endIndexing()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Finishing indexing:" << m_lucenePath;
-    m_luceneWriter->optimize();
+//    m_luceneWriter->optimize();
     m_luceneWriter->close();
     delete m_luceneWriter;
     m_luceneWriter = 0;
