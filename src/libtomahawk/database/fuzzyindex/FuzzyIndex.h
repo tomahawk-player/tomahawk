@@ -68,7 +68,7 @@ private:
     QMutex m_mutex;
     QString m_lucenePath;
 
-    boost::shared_ptr<Lucene::StandardAnalyzer> m_analyzer;
+    boost::shared_ptr<Lucene::SimpleAnalyzer> m_analyzer;
     Lucene::IndexWriterPtr m_luceneWriter;
     Lucene::IndexReaderPtr m_luceneReader;
     Lucene::DirectoryPtr m_luceneDir;

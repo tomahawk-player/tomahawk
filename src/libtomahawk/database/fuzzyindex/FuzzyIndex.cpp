@@ -43,7 +43,7 @@ FuzzyIndex::FuzzyIndex( QObject* parent, const QString& filename, bool wipe )
     tDebug() << "Opening Lucene directory:" << m_lucenePath;
     try
     {
-        m_analyzer = newLucene<StandardAnalyzer>(LuceneVersion::LUCENE_CURRENT);
+        m_analyzer = newLucene<SimpleAnalyzer>();
         m_luceneDir = FSDirectory::open( m_lucenePath.toStdWString() );
     }
     catch ( LuceneException& error )
@@ -127,7 +127,7 @@ void
 FuzzyIndex::endIndexing()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Finishing indexing:" << m_lucenePath;
-//    m_luceneWriter->optimize();
+    m_luceneWriter->optimize();
     m_luceneWriter->close();
     m_luceneWriter.reset();
 
@@ -146,13 +146,13 @@ FuzzyIndex::appendFields( const Tomahawk::IndexData& data )
         if ( !data.track.isEmpty() )
         {
             doc->add(newLucene<Field>(L"fulltext", Tomahawk::DatabaseImpl::sortname( QString( "%1 %2" ).arg( data.artist ).arg( data.track ) ).toStdWString(),
-                                      Field::STORE_NO, Field::INDEX_NOT_ANALYZED ) );
+                                      Field::STORE_NO, Field::INDEX_ANALYZED ) );
 
             doc->add(newLucene<Field>(L"track", Tomahawk::DatabaseImpl::sortname( data.track ).toStdWString(),
-                                      Field::STORE_NO, Field::INDEX_NOT_ANALYZED ) );
+                                      Field::STORE_NO, Field::INDEX_ANALYZED ) );
 
             doc->add(newLucene<Field>(L"artist", Tomahawk::DatabaseImpl::sortname( data.artist ).toStdWString(),
-                                      Field::STORE_NO, Field::INDEX_NOT_ANALYZED ) );
+                                      Field::STORE_NO, Field::INDEX_ANALYZED ) );
 
             doc->add(newLucene<Field>(L"artistid", QString::number( data.artistId ).toStdWString(),
                                       Field::STORE_YES, Field::INDEX_NO ) );
@@ -163,7 +163,7 @@ FuzzyIndex::appendFields( const Tomahawk::IndexData& data )
         else if ( !data.album.isEmpty() )
         {
             doc->add(newLucene<Field>(L"album", Tomahawk::DatabaseImpl::sortname( data.album ).toStdWString(),
-                                      Field::STORE_NO, Field::INDEX_NOT_ANALYZED ) );
+                                      Field::STORE_NO, Field::INDEX_ANALYZED ) );
 
             doc->add(newLucene<Field>(L"albumid", QString::number( data.id ).toStdWString(),
                                       Field::STORE_YES, Field::INDEX_NO ) );
@@ -268,11 +268,11 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
             minScore = 0.00;
         }
 
-        TopScoreDocCollectorPtr collector = TopScoreDocCollector::create( 99999, false );
+        TopScoreDocCollectorPtr collector = TopScoreDocCollector::create( 50, false );
         m_luceneSearcher->search( qry, collector );
         Collection<ScoreDocPtr> hits = collector->topDocs()->scoreDocs;
 
-        for ( uint i = 0; i < collector->getTotalHits(); i++ )
+        for ( uint i = 0; i < collector->getTotalHits() && i < 50; i++ )
         {
             DocumentPtr d = m_luceneSearcher->doc( hits[i]->doc );
             float score = hits[i]->score;
