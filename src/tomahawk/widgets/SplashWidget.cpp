@@ -46,7 +46,7 @@ SplashWidget::SplashWidget()
     else
         imagePath = RESPATH "images/splash-unrounded.svg";
 
-    QSize size( 304, 333 );
+    QSize size( 600, 350 );
 
     setPixmap( ImageRegistry::instance()->pixmap( imagePath,
         TomahawkUtils::DpiScaler::scaled( this, size ), TomahawkUtils::Original ) );
