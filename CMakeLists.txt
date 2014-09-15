@@ -250,6 +250,9 @@ macro_log_feature(ECHONEST_FOUND "Echonest" "Qt library for communicating with T
 macro_optional_find_package(CLucene 0.9.23)
 macro_log_feature(CLucene_FOUND "CLucene" "The open-source, C++ search engine" "http://clucene.sf.net" TRUE "" "CLucene is used for indexing the collection")
 
+macro_optional_find_package(Lucene++ 3.0.0)
+macro_log_feature(LUCENEPP_FOUND "Lucene++" "The open-source, C++ search engine" "https://github.com/luceneplusplus/LucenePlusPlus/" TRUE "" "Lucene++ is used for indexing the collection")
+
 if( NOT TOMAHAWK_QT5 )
     macro_optional_find_package(QJSON 0.8.1)
     macro_log_feature(QJSON_FOUND "QJson" "Qt library that maps JSON data to QVariant objects" "http://qjson.sf.net" TRUE "" "libqjson is used for encoding communication between Tomahawk instances")

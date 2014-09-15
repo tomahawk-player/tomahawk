@@ -19,8 +19,8 @@
  */
 
 #pragma once
-#ifndef QUERY_H
-#define QUERY_H
+#ifndef TOMAHAWK_QUERY_H
+#define TOMAHAWK_QUERY_H
 
 #include <QObject>
 #include <QList>
@@ -154,4 +154,4 @@ private:
 
 Q_DECLARE_METATYPE( Tomahawk::query_ptr )
 
-#endif // QUERY_H
+#endif // TOMAHAWK_QUERY_H

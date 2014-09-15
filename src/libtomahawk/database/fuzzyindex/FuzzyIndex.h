@@ -25,29 +25,10 @@
 #include <QString>
 #include <QMutex>
 
+#include <lucene++/LuceneHeaders.h>
+
 #include "Query.h"
 #include "database/DatabaseCommand_UpdateSearchIndex.h"
-
-namespace lucene
-{
-    namespace analysis
-    {
-      class SimpleAnalyzer;
-    }
-    namespace store
-    {
-      class Directory;
-    }
-    namespace index
-    {
-      class IndexReader;
-      class IndexWriter;
-    }
-    namespace search
-    {
-      class IndexSearcher;
-    }
-}
 
 class FuzzyIndex : public QObject
 {
@@ -87,11 +68,11 @@ private:
     QMutex m_mutex;
     QString m_lucenePath;
 
-    lucene::analysis::SimpleAnalyzer* m_analyzer;
-    lucene::store::Directory* m_luceneDir;
-    lucene::index::IndexReader* m_luceneReader;
-    lucene::index::IndexWriter* m_luceneWriter;
-    lucene::search::IndexSearcher* m_luceneSearcher;
+    boost::shared_ptr<Lucene::StandardAnalyzer> m_analyzer;
+    Lucene::IndexWriterPtr m_luceneWriter;
+    Lucene::IndexReaderPtr m_luceneReader;
+    Lucene::DirectoryPtr m_luceneDir;
+    Lucene::IndexSearcherPtr m_luceneSearcher;
 };
 
 #endif // FUZZYINDEX_H
