@@ -180,5 +180,6 @@
         <file>data/images/ipv6-logo.svg</file>
         <file>data/images/whatsnew.svg</file>
         <file>data/images/copy.svg</file>
+        <file>data/icons/tomahawk-icon-1024x1024.png</file>
     </qresource>
 </RCC>
