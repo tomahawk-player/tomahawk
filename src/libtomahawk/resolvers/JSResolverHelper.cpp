@@ -790,8 +790,10 @@ JSResolverHelper::addToFuzzyIndex( const QVariantList& list )
 
     m_resolver->d_func()->fuzzyIndex->beginIndexing();
 
+    int x = 0;
     foreach ( const QVariant& variant, list )
     {
+        tDebug() << "Adding" << x++;
         // Convert each entry to IndexData
         if ( variant.canConvert( QVariant::Map ) ) {
             QVariantMap map = variant.toMap();
