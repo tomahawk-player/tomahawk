@@ -429,7 +429,6 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 
             setValue( "configuration", configuration );
             endGroup();
-
         }
 
         // Add a Last.Fm account since we now moved the infoplugin into the account
@@ -673,6 +672,11 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             endGroup();
         }
 #endif //Q_OS_MAC
+    }
+    else if ( oldVersion == 15 )
+    {
+        // 0.8.0 switches to Lucene++. Force a reindex.
+        QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
     }
 }
 

@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
@@ -95,7 +95,7 @@ public:
                                          const QVariantMap& options );
 
     /**
-     * Clucene indices for JS resolvers
+     * Lucene++ indices for JS resolvers
      **/
 
     Q_INVOKABLE bool hasFuzzyIndex();

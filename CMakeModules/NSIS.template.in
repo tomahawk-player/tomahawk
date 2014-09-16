@@ -394,8 +394,8 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_BIN}\libssl-10.dll"
    File "${MING_BIN}\libcrypto-10.dll"
 
-   File "${MING_BIN}\libclucene-core.dll"
-   File "${MING_BIN}\libclucene-shared.dll"
+   File "${MING_BIN}\liblucene++.dll"
+   File "${MING_BIN}\liblucene++-contrib.dll"
 
    File "${MING_BIN}\libqtsparkle.dll"
    File "${MING_BIN}\libattica.dll"
