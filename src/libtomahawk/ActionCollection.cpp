@@ -69,7 +69,7 @@ ActionCollection::initActions()
     latchOff->setIcon( ImageRegistry::instance()->icon( RESPATH "images/headphones-off.svg" ) );
     m_actionCollection[ "latchOff" ] = latchOff;
 
-    QAction *realtimeFollowingAlong = new QAction( tr( "&Follow in real-time" ), this );
+    QAction *realtimeFollowingAlong = new QAction( tr( "&Follow in Real-Time" ), this );
     realtimeFollowingAlong->setCheckable( true );
     m_actionCollection[ "realtimeFollowingAlong" ] = realtimeFollowingAlong;
 
