@@ -65,10 +65,7 @@ FuzzyIndex::FuzzyIndex( QObject* parent, const QString& filename, bool wipe )
 
 FuzzyIndex::~FuzzyIndex()
 {
-/*    delete m_luceneSearcher;
-    delete m_luceneReader;
-    delete m_analyzer;
-    delete m_luceneDir;*/
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
 }
 
 
@@ -200,7 +197,7 @@ FuzzyIndex::deleteIndex()
 void
 FuzzyIndex::updateIndex()
 {
-    // NO-OP
+    // virtual NO-OP
 }
 
 
@@ -232,7 +229,7 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
         }
 
         float minScore;
-        Collection<String> fields;// = newCollection<String>();
+        Collection<String> fields; // = newCollection<String>();
         MultiFieldQueryParserPtr parser = newLucene<MultiFieldQueryParser>(LuceneVersion::LUCENE_CURRENT, fields, m_analyzer );
         BooleanQueryPtr qry = newLucene<BooleanQuery>();
 
@@ -255,7 +252,7 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
         {
             QString track = Tomahawk::DatabaseImpl::sortname( query->queryTrack()->track() );
             QString artist = Tomahawk::DatabaseImpl::sortname( query->queryTrack()->artist() );
-//            QString album = QString::fromWCharArray( parser.escape( query->album().toStdWString().c_str() ) );
+            //QString album = Tomahawk::DatabaseImpl::sortname( query->queryTrack()->album() );
 
             FuzzyQueryPtr fqry = newLucene<FuzzyQuery>( newLucene<Term>( L"track", track.toStdWString() ) );
             qry->add( boost::dynamic_pointer_cast<Query>( fqry ), BooleanClause::MUST );
@@ -282,9 +279,6 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
 //                tDebug() << "Index hit:" << id << score << QString::fromWCharArray( ((Query*)qry)->toString() );
             }
         }
-
-//        delete hits;
-//        delete qry;
     }
     catch( LuceneException& error )
     {
@@ -339,9 +333,6 @@ FuzzyIndex::searchAlbum( const Tomahawk::query_ptr& query )
 //                tDebug() << "Index hit:" << id << score;
             }
         }
-
-//        delete hits;
-//        delete qry;
     }
     catch( LuceneException& error )
     {
