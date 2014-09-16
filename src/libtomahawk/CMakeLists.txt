@@ -525,8 +525,6 @@ TARGET_LINK_LIBRARIES( tomahawklib
     ${LIBPORTFWD_LIBRARIES}
     ${QTKEYCHAIN_LIBRARIES}
 
-    boost_system
-
     LINK_PUBLIC
     # External deps
     ${QJSON_LIBRARIES}
