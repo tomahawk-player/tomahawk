@@ -267,7 +267,7 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
         m_luceneSearcher->search( qry, collector );
         Collection<ScoreDocPtr> hits = collector->topDocs()->scoreDocs;
 
-        for ( uint i = 0; i < collector->getTotalHits() && i < 50; i++ )
+        for ( int i = 0; i < collector->getTotalHits() && i < 50; i++ )
         {
             DocumentPtr d = m_luceneSearcher->doc( hits[i]->doc );
             float score = hits[i]->score;
@@ -321,7 +321,7 @@ FuzzyIndex::searchAlbum( const Tomahawk::query_ptr& query )
         m_luceneSearcher->search( boost::dynamic_pointer_cast<Query>( qry ), collector );
         Collection<ScoreDocPtr> hits = collector->topDocs()->scoreDocs;
 
-        for ( uint i = 0; i < collector->getTotalHits(); i++ )
+        for ( int i = 0; i < collector->getTotalHits(); i++ )
         {
             DocumentPtr d = m_luceneSearcher->doc( hits[i]->doc );
             float score = hits[i]->score;
