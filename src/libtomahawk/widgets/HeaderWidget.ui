@@ -20,11 +20,14 @@
    <property name="leftMargin">
     <number>32</number>
    </property>
+   <property name="topMargin">
+    <number>16</number>
+   </property>
    <property name="rightMargin">
     <number>32</number>
    </property>
    <property name="bottomMargin">
-    <number>64</number>
+    <number>16</number>
    </property>
    <item>
     <spacer name="verticalSpacer">
@@ -34,7 +37,7 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>0</height>
+       <height>1</height>
       </size>
      </property>
     </spacer>
@@ -60,7 +63,7 @@
         <string>TextLabel</string>
        </property>
        <property name="alignment">
-        <set>Qt::AlignLeft|Qt::AlignVCenter</set>
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
@@ -169,6 +172,19 @@
       </spacer>
      </item>
     </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>1</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
