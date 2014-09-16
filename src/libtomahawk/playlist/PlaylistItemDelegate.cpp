@@ -643,11 +643,19 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
     painter->restore();
 
     // draw number
-    painter->setOpacity( 0.6 * opacityCo );
-    QString number = QString::number( index.row() + 1 );
-    if ( number.length() < 2 )
-        number = "0" + number;
-    painter->drawText( numberRect, number, m_centerOption );
+    if ( ( option.state & QStyle::State_Selected || hoveringOver() == index ) && item->query()->numResults() > 0 )
+    {
+        const QRect sourceIconRect( numberRect.x(), numberRect.y() + 10, numberRect.size().height() - 20, numberRect.size().height() - 20 );
+        painter->drawPixmap( sourceIconRect, item->query()->results().first()->sourceIcon( TomahawkUtils::Original, sourceIconRect.size() ) );
+    }
+    else
+    {
+        painter->setOpacity( 0.6 * opacityCo );
+        QString number = QString::number( index.row() + 1 );
+        if ( number.length() < 2 )
+            number = "0" + number;
+        painter->drawText( numberRect, number, m_centerOption );
+    }
 
     if ( item->isPlaying() )
     {
