@@ -645,7 +645,8 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
     // draw number
     if ( ( option.state & QStyle::State_Selected || hoveringOver() == index ) && item->query()->numResults() > 0 )
     {
-        const QRect sourceIconRect( numberRect.x(), numberRect.y() + 10, numberRect.size().height() - 20, numberRect.size().height() - 20 );
+        const int iconHeight = numberRect.size().height() / 2;
+        const QRect sourceIconRect( numberRect.x(), numberRect.y() + ( numberRect.size().height() - iconHeight ) / 2, iconHeight, iconHeight );
         painter->drawPixmap( sourceIconRect, item->query()->results().first()->sourceIcon( TomahawkUtils::Original, sourceIconRect.size() ) );
     }
     else
