@@ -509,6 +509,25 @@ Tomahawk::EchonestControl::updateWidgets()
         m_match = QPointer< QWidget >( match );
         m_input = QPointer< QWidget >( combo );
     }
+    else if( selectedType() == "Distribution" )
+    {
+        m_currentType = Echonest::DynamicPlaylist::Distribution;
+
+        QLabel* match = new QLabel( tr( "is" ) );
+
+        QComboBox* combo = new QComboBox();
+        combo->addItem( tr( "Focused", "Distribution: Songs that are tightly clustered around the seeds"), "focused" );
+        combo->addItem( tr( "Wandering", "Distribution: Songs from a broader range of artists"), "wandering" );
+
+        m_matchString = match->text();
+        m_matchData = match->text();
+
+        connect( combo, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
+        connect( combo, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
+
+        m_match = QPointer<QWidget>( match );
+        m_input = QPointer<QWidget>( combo );
+    }
     else
     {
         m_match = QPointer<QWidget>( new QWidget );
@@ -627,6 +646,15 @@ Tomahawk::EchonestControl::updateData()
         }
 
     }
+    else if( selectedType() == "Distribution" )
+    {
+        QComboBox* combo = qobject_cast< QComboBox* >( m_input.data() );
+        if ( combo )
+        {
+            m_data.first = Echonest::DynamicPlaylist::Distribution;
+            m_data.second = combo->itemData( combo->currentIndex() ).toString();
+        }
+    }
 
     calculateSummary();
 }
@@ -743,6 +771,13 @@ Tomahawk::EchonestControl::updateWidgetsFromData()
 
             QString songType = m_data.second.toString().split( ":" ).at( 0 );
             combo->setCurrentIndex( combo->findData( songType ) );
+        }
+    }
+    else if( selectedType() == "Distribution" )
+    {
+        QComboBox* combo = qobject_cast< QComboBox* >( m_input.data() );
+        if ( combo ) {
+            combo->setCurrentIndex( combo->findData( m_data.second.toString() ));
         }
     }
     calculateSummary();
@@ -1005,7 +1040,14 @@ Tomahawk::EchonestControl::calculateSummary()
         else
             summary = tr( "where song type is not %1" ).arg( text );
     }
+    else if ( selectedType() == "Distribution" )
+    {
+        Q_ASSERT( !m_input.isNull() );
+        Q_ASSERT( qobject_cast< QComboBox* >( m_input.data() ) );
+        QString text = qobject_cast< QComboBox* >( m_input.data() )->currentText().toLower();
 
+        summary = tr( "with a %1 distribution" ).arg( text );
+    }
     m_summary = summary;
 }
 

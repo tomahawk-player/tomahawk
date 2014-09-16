@@ -85,7 +85,8 @@ EchonestFactory::typeSelectors() const
                           << QT_TRANSLATE_NOOP( "Type selector", "Song Hotttnesss" ) << QT_TRANSLATE_NOOP( "Type selector", "Longitude" )
                           << QT_TRANSLATE_NOOP( "Type selector", "Latitude" ) << QT_TRANSLATE_NOOP( "Type selector", "Mode" )
                           << QT_TRANSLATE_NOOP( "Type selector", "Key" ) << QT_TRANSLATE_NOOP( "Type selector", "Sorting" )
-                          << QT_TRANSLATE_NOOP( "Type selector", "Song Type" );
+                          << QT_TRANSLATE_NOOP( "Type selector", "Song Type" ) << QT_TRANSLATE_NOOP( "Type selector", "Distribution" )
+                          << QT_TRANSLATE_NOOP( "Type selector", "Genre Preset" );
 
     return types;
 }
