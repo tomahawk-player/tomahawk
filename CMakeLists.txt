@@ -238,6 +238,18 @@ if( BUILD_GUI AND UNIX AND NOT APPLE )
     find_package( X11 )
 endif()
 
+include(CheckCXXCompilerFlag)
+check_cxx_compiler_flag( "-std=c++11" CXX11_FOUND )
+check_cxx_compiler_flag( "-std=c++0x" CXX0X_FOUND )
+if(CXX11_FOUND)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+elseif(CXX0X_FOUND)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+else()
+    message(STATUS "${CMAKE_CXX_COMPILER} does not support C++11, please use a
+    different compiler")
+endif()
+
 # Check if we can use <functional> or need <tr1/functional>
 include( CheckStdFunctional )
 check_std_functional( CXX_STD_FUNCTIONAL )
