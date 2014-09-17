@@ -395,7 +395,6 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_BIN}\libcrypto-10.dll"
 
    File "${MING_BIN}\liblucene++.dll"
-   File "${MING_BIN}\liblucene++-contrib.dll"
 
    File "${MING_BIN}\libqtsparkle.dll"
    File "${MING_BIN}\libattica.dll"
@@ -619,7 +618,7 @@ Section Uninstall
    DeleteRegValue HKLM "Software\Tomahawk" "VersionRevision"
    DeleteRegValue HKLM "Software\Tomahawk" ""
    DeleteRegKey HKLM "Software\Tomahawk"
-   
+
    DeleteRegKey HKCR "Software\Tomahawk"
    DeleteRegKey HKCR "Software\TomahawkSpotify"
    DeleteRegKey HKCR "tomahawk"
