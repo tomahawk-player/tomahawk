@@ -52,7 +52,7 @@ public:
     PlayableProxyModel::PlayableItemStyle style() const { return m_style; }
     void setStyle( PlayableProxyModel::PlayableItemStyle style ) { m_style = style; }
 
-    virtual QPersistentModelIndex currentIndex() const { return mapFromSource( m_model->currentItem() ); }
+    virtual QPersistentModelIndex currentIndex() const;
     virtual void setCurrentIndex( const QModelIndex& index );
 
     virtual void removeIndex( const QModelIndex& index );

@@ -91,6 +91,15 @@ PlayableProxyModel::isLoading() const
     return false;
 }
 
+QPersistentModelIndex
+PlayableProxyModel::currentIndex() const
+{
+    if ( !m_model )
+        return QPersistentModelIndex();
+
+    return mapFromSource( m_model->currentItem() );
+}
+
 
 void
 PlayableProxyModel::setSourceModel( QAbstractItemModel* model )

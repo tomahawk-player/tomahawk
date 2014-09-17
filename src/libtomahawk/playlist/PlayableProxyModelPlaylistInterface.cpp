@@ -262,7 +262,7 @@ PlayableProxyModelPlaylistInterface::currentItem() const
     PlayableProxyModel* proxyModel = m_proxyModel.data();
 
     PlayableItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( proxyModel->currentIndex() ) );
-    if ( item && !item->query().isNull() && item->query()->playable() )
+    if ( item && item->query() && item->query()->playable() )
         return item->query()->results().at( 0 );
 
     return result_ptr();

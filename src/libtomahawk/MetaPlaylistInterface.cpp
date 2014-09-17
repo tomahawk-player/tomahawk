@@ -75,7 +75,7 @@ MetaPlaylistInterface::trackCount() const
 result_ptr
 MetaPlaylistInterface::currentItem() const
 {
-    if ( m_childInterfaces.count() )
+    if ( m_childInterfaces.count() && m_childInterfaces.first() )
         return m_childInterfaces.first()->currentItem();
     else
         return Tomahawk::result_ptr();
