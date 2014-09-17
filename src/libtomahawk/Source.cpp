@@ -101,7 +101,11 @@ Source::setControlConnection( ControlConnection* cc )
     if ( !d->cc.isNull() && d->cc->isReady() && d->cc->isRunning() )
     {
         const QString& nodeid = Database::instance()->impl()->dbid();
-        peerInfoDebug( (*cc->peerInfos().begin()) ) << Q_FUNC_INFO << "Comparing" << cc->id() << "and" << nodeid << "to detect duplicate connection, outbound:" << cc->outbound();
+        peerInfoDebug( (*cc->peerInfos().begin()) ) << Q_FUNC_INFO
+                                                    << "Comparing" << cc->id()
+                                                    << "and" << nodeid
+                                                    << "to detect duplicate connections"
+                                                    << "outbound:" << cc->outbound();
         // If our nodeid is "higher" than the other, we prefer inbound connection, else outbound.
         if ( ( cc->id() < nodeid && d->cc->outbound() ) || ( cc->id() > nodeid && !d->cc->outbound() ) )
         {
