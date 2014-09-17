@@ -240,8 +240,10 @@ Api_v1::sid( QxtWebRequestEvent* event, QString unused )
         return send404( event );
     }
 
-    function< void ( const QString, QSharedPointer< QIODevice > ) > callback =
-            bind( &Api_v1::processSid, this, event, rp, _1, _2 );
+    std::function< void ( const QString, QSharedPointer< QIODevice > ) > callback =
+            std::bind( &Api_v1::processSid, this, event, rp,
+                       std::placeholders::_1,
+                       std::placeholders::_2 );
     Tomahawk::UrlHandler::getIODeviceForUrl( rp, rp->url(), callback );
 }
 

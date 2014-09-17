@@ -87,7 +87,10 @@ Servent::Servent( QObject* parent )
 
     setProxy( QNetworkProxy::NoProxy );
 
-    IODeviceFactoryFunc fac = bind( &Servent::remoteIODeviceFactory, this, _1, _2, _3 );
+    IODeviceFactoryFunc fac = std::bind( &Servent::remoteIODeviceFactory, this,
+                                         std::placeholders::_1,
+                                         std::placeholders::_2,
+                                         std::placeholders::_3 );
     Tomahawk::UrlHandler::registerIODeviceFactory( "servent", fac );
 }
 
@@ -1243,7 +1246,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
 
 void
 Servent::remoteIODeviceFactory( const Tomahawk::result_ptr& result, const QString& url,
-                                function< void ( const QString&, QSharedPointer< QIODevice >& ) > callback )
+                                std::function< void ( const QString&, QSharedPointer< QIODevice >& ) > callback )
 {
     QSharedPointer<QIODevice> sp;
 

@@ -709,8 +709,10 @@ AudioEngine::performLoadIODevice( const result_ptr& result, const QString& url )
     if ( !TomahawkUtils::isLocalResult( url ) && !TomahawkUtils::isHttpResult( url )
          && !TomahawkUtils::isRtmpResult( url ) )
     {
-        function< void ( const QString, QSharedPointer< QIODevice > ) > callback =
-                bind( &AudioEngine::performLoadTrack, this, result, _1, _2 );
+        std::function< void ( const QString, QSharedPointer< QIODevice > ) > callback =
+                std::bind( &AudioEngine::performLoadTrack, this, result,
+                           std::placeholders::_1,
+                           std::placeholders::_2 );
         Tomahawk::UrlHandler::getIODeviceForUrl( result, url, callback );
     }
     else

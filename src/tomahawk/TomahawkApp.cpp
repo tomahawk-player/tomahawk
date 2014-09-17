@@ -224,8 +224,12 @@ TomahawkApp::init()
     tDebug() << "Init Database.";
     initDatabase();
 
-    Pipeline::instance()->addExternalResolverFactory( bind( &JSResolver::factory, _1, _2, _3 ) );
-    Pipeline::instance()->addExternalResolverFactory( bind( &ScriptResolver::factory, _1, _2, _3 ) );
+    Pipeline::instance()->addExternalResolverFactory(
+                std::bind( &JSResolver::factory, std::placeholders::_1,
+                           std::placeholders::_2, std::placeholders::_3 ) );
+    Pipeline::instance()->addExternalResolverFactory(
+                std::bind( &ScriptResolver::factory, std::placeholders::_1,
+                           std::placeholders::_2, std::placeholders::_3 ) );
 
     new ActionCollection( this );
     connect( ActionCollection::instance()->getAction( "quit" ), SIGNAL( triggered() ), SLOT( quit() ), Qt::UniqueConnection );

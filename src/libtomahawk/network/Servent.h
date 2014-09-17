@@ -29,10 +29,11 @@
 
 #include "DllMacro.h"
 #include "Typedefs.h"
-#include "utils/tr1-functional.h"
 
 #include <QHostAddress>
 #include <QTcpServer>
+
+#include <functional>
 
 class Connection;
 class Connector;
@@ -91,7 +92,7 @@ public:
     ControlConnection* lookupControlConnection( const QString& nodeid );
 
     void remoteIODeviceFactory( const Tomahawk::result_ptr& result, const QString& url,
-                                    function< void ( const QString&, QSharedPointer< QIODevice >& ) > callback );
+                                    std::function< void ( const QString&, QSharedPointer< QIODevice >& ) > callback );
 
     // you may call this method as often as you like for the same peerInfo, dupe checking is done inside
     void registerPeer( const Tomahawk::peerinfo_ptr& peerInfo );

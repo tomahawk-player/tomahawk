@@ -23,12 +23,13 @@
 
 #include "config.h"
 #include "DllMacro.h"
-#include "utils/tr1-functional.h"
 
 #include <QMetaMethod>
 #include <QObject>
 #include <QPointer>
 #include <QSharedPointer>
+
+#include <functional>
 
 namespace _detail {
 
@@ -64,7 +65,7 @@ class DLLEXPORT Closure : public QObject {
           const ClosureArgumentWrapper* val3 = 0);
 
   Closure(QObject* sender, const char* signal,
-          function<void()> callback);
+          std::function<void()> callback);
 
   void setAutoDelete( bool autoDelete ) { autoDelete_ = autoDelete; }
 
@@ -89,7 +90,7 @@ class DLLEXPORT Closure : public QObject {
   void Connect(QObject* sender, const char* signal);
 
   QMetaMethod slot_;
-  function<void()> callback_;
+  std::function<void()> callback_;
   bool autoDelete_;
   QPointer<QObject> outOfThreadReceiver_;
 

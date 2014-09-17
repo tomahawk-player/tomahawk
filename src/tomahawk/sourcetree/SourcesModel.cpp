@@ -330,9 +330,10 @@ SourcesModel::appendPageItem( const QString& name, ViewPage* page, int sortValue
 
     QModelIndex parentIndex = indexFromItem( m_browse );
     beginInsertRows( parentIndex, rowCount( parentIndex ), rowCount( parentIndex ) );
-    GenericPageItem* pageItem = new GenericPageItem( this, m_browse, page->title(), page->pixmap(),
-                                            bind( &ViewManager::showDynamicPage, ViewManager::instance(), name ),
-                                            bind( &ViewManager::dynamicPageWidget, ViewManager::instance(), name ) );
+    GenericPageItem* pageItem = new GenericPageItem( this, m_browse, page->title(),
+                                                     page->pixmap(),
+                                                     std::bind( &ViewManager::showDynamicPage, ViewManager::instance(), name ),
+                                                     std::bind( &ViewManager::dynamicPageWidget, ViewManager::instance(), name ) );
     pageItem->setDeletable( page->isDeletable() );
 
     if ( sortValue )

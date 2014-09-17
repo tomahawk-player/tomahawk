@@ -185,8 +185,9 @@ StreamConnection::startSending( const Tomahawk::result_ptr& result )
     m_result = result;
     qDebug() << "Starting to transmit" << m_result->url();
 
-    function< void ( const QString, QSharedPointer< QIODevice > ) > callback =
-            bind( &StreamConnection::reallyStartSending, this, result, _1, _2 );
+    std::function< void ( const QString, QSharedPointer< QIODevice > ) > callback =
+            std::bind( &StreamConnection::reallyStartSending, this, result,
+                       std::placeholders::_1, std::placeholders::_2 );
     Tomahawk::UrlHandler::getIODeviceForUrl( m_result, m_result->url(), callback );
 }
 

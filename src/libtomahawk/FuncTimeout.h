@@ -19,10 +19,10 @@
 #ifndef FUNCTIMEOUT_H
 #define FUNCTIMEOUT_H
 
+#include <functional>
+
 #include <QObject>
 #include <QPointer>
-
-#include "utils/tr1-functional.h"
 
 #include "DllMacro.h"
 
@@ -41,7 +41,7 @@ class DLLEXPORT FuncTimeout : public QObject
 Q_OBJECT
 
 public:
-    FuncTimeout( int ms, function<void()> func, QObject* besafe );
+    FuncTimeout( int ms, std::function<void()> func, QObject* besafe );
 
     ~FuncTimeout();
 
@@ -49,7 +49,7 @@ public slots:
     void exec();
 
 private:
-    function<void()> m_func;
+    std::function<void()> m_func;
     QPointer< QObject > m_watch;
 };
 

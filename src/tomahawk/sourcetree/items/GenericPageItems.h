@@ -20,7 +20,8 @@
 #define GENERIC_PAGE_ITEM_H
 
 #include "SourceTreeItem.h"
-#include "utils/tr1-functional.h"
+
+#include <functional>
 
 // generic item that has some name, some text, and calls a certain slot when activated. badabing!
 class GenericPageItem : public SourceTreeItem
@@ -28,7 +29,10 @@ class GenericPageItem : public SourceTreeItem
     Q_OBJECT
 public:
     // takes 2 function pointers: show: called when wanting to show the desired view page. get: called to get the view page from ViewManager if it exists
-    GenericPageItem( SourcesModel* model, SourceTreeItem* parent, const QString& text, const QIcon& icon, function<Tomahawk::ViewPage*()> show, function<Tomahawk::ViewPage*()> get );
+    GenericPageItem( SourcesModel* model, SourceTreeItem* parent,
+                     const QString& text, const QIcon& icon,
+                     std::function<Tomahawk::ViewPage*()> show,
+                     std::function<Tomahawk::ViewPage*()> get );
     virtual ~GenericPageItem();
 
     virtual QString text() const;
@@ -53,8 +57,8 @@ private:
     QIcon m_icon;
     QString m_text;
     int m_sortValue;
-    function< Tomahawk::ViewPage*() > m_show;
-    function< Tomahawk::ViewPage*() > m_get;
+    std::function< Tomahawk::ViewPage*() > m_show;
+    std::function< Tomahawk::ViewPage*() > m_get;
 };
 
 #endif

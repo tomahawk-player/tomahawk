@@ -26,13 +26,14 @@
 #include "collection/Collection.h"
 #include "PlaylistInterface.h"
 #include "playlist/QueueView.h"
-#include "utils/tr1-functional.h"
 
 #include <QObject>
 #include <QHash>
 #include <QStackedWidget>
 
 #include "DllMacro.h"
+
+#include <functional>
 
 class AlbumModel;
 class GridView;
@@ -159,7 +160,7 @@ private:
 
     QHash< QString, Tomahawk::ViewPage* > m_dynamicPages;
     QHash< QString, QPointer< Tomahawk::ViewPagePlugin > > m_dynamicPagePlugins;
-    QHash< QString, function< Tomahawk::ViewPage*() > > m_dynamicPagesInstanceLoaders;
+    QHash< QString, std::function< Tomahawk::ViewPage*() > > m_dynamicPagesInstanceLoaders;
 
     QHash< Tomahawk::dynplaylist_ptr, QPointer<Tomahawk::DynamicWidget> > m_dynamicWidgets;
     QHash< Tomahawk::collection_ptr, QPointer<FlexibleTreeView> > m_collectionViews;
