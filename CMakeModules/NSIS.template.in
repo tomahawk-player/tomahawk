@@ -396,7 +396,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
 
    ; LucenePlusPlus
    File "${MING_BIN}\liblucene++.dll"
-   File "${MING_BIN}\libboost_system-mt.dll.dll"
+   File "${MING_BIN}\libboost_system-mt.dll"
    File "${MING_BIN}\libboost_filesystem-mt.dll"
    File "${MING_BIN}\libboost_iostreams-mt.dll"
    File "${MING_BIN}\libboost_regex-mt.dll"
