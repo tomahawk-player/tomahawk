@@ -250,16 +250,6 @@ else()
     different compiler")
 endif()
 
-# Check if we can use <functional> or need <tr1/functional>
-include( CheckStdFunctional )
-check_std_functional( CXX_STD_FUNCTIONAL )
-include( CheckStdTr1Functional )
-check_std_tr1_functional( CXX_STD_TR1_FUNCTIONAL )
-if ( NOT CXX_STD_FUNCTIONAL AND NOT CXX_STD_TR1_FUNCTIONAL )
-    message( FATAL_ERROR
-        "Used compiler neither provides std::function nor std::tr1::function")
-endif()
-
 macro_optional_find_package(Echonest 2.2.0)
 macro_log_feature(ECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest 2.2.0 is needed for dynamic playlists and the infosystem")
 
