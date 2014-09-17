@@ -49,7 +49,7 @@ signals:
     void stateChanged( Tomahawk::DBSyncConnectionState newstate, Tomahawk::DBSyncConnectionState oldstate, const QString& info );
 
 protected slots:
-    virtual void handleMsg( msg_ptr msg );
+    void handleMsg( msg_ptr msg ) Q_DECL_OVERRIDE;
 
 public slots:
     void sendOps();
