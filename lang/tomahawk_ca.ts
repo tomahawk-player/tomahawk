@@ -85,8 +85,8 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="72"/>
-        <source>&amp;Follow in real-time</source>
-        <translation>&amp;Segueix en temps real</translation>
+        <source>&amp;Follow in Real-Time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
@@ -803,10 +803,10 @@ Password (OTP)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="60"/>
-        <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="83"/>
-        <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="109"/>
-        <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="135"/>
+        <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="63"/>
+        <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="86"/>
+        <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="112"/>
+        <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="138"/>
         <source>TextLabel</source>
         <translation type="unfinished"/>
     </message>
