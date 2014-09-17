@@ -23,15 +23,7 @@
 #include "network/acl/AclRegistry.h"
 #include "HeadlessCheck.h"
 
-#include <QObject>
-#include <QString>
-#include <QHash>
-#include <QTimer>
-#include <QMutex>
-#include <QVariant>
-#include <QQueue>
-#include <QStringList>
-#include <QUuid>
+#include <queue>
 
 class ACLJobItem;
 
@@ -53,12 +45,15 @@ public slots:
      * @param username If not empty, will store the given username along with the new ACL value. Defaults to QString().
      * @return Tomahawk::ACLStatus::Type
      **/
-    virtual Tomahawk::ACLStatus::Type isAuthorizedUser( const QString &dbid, const QString &username, Tomahawk::ACLStatus::Type globalType = Tomahawk::ACLStatus::NotFound, bool skipEmission = false );
-    virtual void wipeEntries();
+    Tomahawk::ACLStatus::Type isAuthorizedUser( const QString &dbid,
+                                                const QString &username,
+                                                Tomahawk::ACLStatus::Type globalType = Tomahawk::ACLStatus::NotFound,
+                                                bool skipEmission = false ) override;
+    void wipeEntries() override;
 
 protected:
-    virtual void load();
-    virtual void save();
+    void load() override;
+    void save() override;
 
     void getUserDecision( ACLRegistry::User user, const QString &username );
 
@@ -67,7 +62,7 @@ private slots:
     void queueNextJob();
 
 private:
-    QQueue< ACLJobItem* > m_jobQueue;
+    std::queue< ACLJobItem* > m_jobQueue;
     int m_jobCount;
 };
 

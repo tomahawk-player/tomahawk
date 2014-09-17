@@ -146,7 +146,7 @@ ACLRegistryImpl::getUserDecision( ACLRegistry::User user, const QString &usernam
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     ACLJobItem* job = new ACLJobItem( user, username );
-    m_jobQueue.enqueue( job );
+    m_jobQueue.push( job );
     QTimer::singleShot( 0, this, SLOT( queueNextJob() ) );
 }
 
@@ -163,7 +163,7 @@ ACLRegistryImpl::userDecision( ACLRegistry::User user )
     emit aclResult( user.knownDbids.first(), user.knownAccountIds.first(), user.acl );
 
     m_jobCount--;
-    if ( !m_jobQueue.isEmpty() )
+    if ( !m_jobQueue.empty() )
         QTimer::singleShot( 0, this, SLOT( queueNextJob() ) );
 }
 
@@ -181,13 +181,14 @@ ACLRegistryImpl::queueNextJob()
     }
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "jobCount =" << m_jobCount;
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "jobQueue size =" << m_jobQueue.length();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "jobQueue size =" << m_jobQueue.size();
     if ( m_jobCount != 0 )
         return;
 
-    if ( !m_jobQueue.isEmpty() )
+    if ( !m_jobQueue.empty() )
     {
-        ACLJobItem* job = m_jobQueue.dequeue();
+        ACLJobItem* job = m_jobQueue.front();
+        m_jobQueue.pop();
         ACLRegistry::User user = job->user();
         bool found = false;
         foreach( QString dbid, user.knownDbids )
