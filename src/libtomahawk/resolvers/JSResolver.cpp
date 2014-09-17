@@ -176,7 +176,7 @@ JSResolver::reload()
 
 
 void
-JSResolver::setIcon( const QPixmap &icon )
+JSResolver::setIcon( const QPixmap& icon )
 {
     Q_D( JSResolver );
 
@@ -197,7 +197,7 @@ JSResolver::init()
     }
 
     QFile scriptFile( filePath() );
-    if( !scriptFile.open( QIODevice::ReadOnly ) )
+    if ( !scriptFile.open( QIODevice::ReadOnly ) )
     {
         qWarning() << "Failed to read contents of file:" << filePath() << scriptFile.errorString();
         return;
@@ -243,7 +243,7 @@ JSResolver::init()
     foreach ( const QString& s, d->requiredScriptPaths )
     {
         QFile reqFile( s );
-        if( !reqFile.open( QIODevice::ReadOnly ) )
+        if ( !reqFile.open( QIODevice::ReadOnly ) )
         {
             qWarning() << "Failed to read contents of file:" << s << reqFile.errorString();
             return;
@@ -678,7 +678,7 @@ JSResolver::loadUi()
 
     QByteArray uiData = m[ "widget" ].toByteArray();
 
-    if( compressed )
+    if ( compressed )
         uiData = qUncompress( QByteArray::fromBase64( uiData ) );
     else
         uiData = QByteArray::fromBase64( uiData );
@@ -691,7 +691,7 @@ JSResolver::loadUi()
         images[key] = value;
     }
 
-    if( m.contains( "images" ) )
+    if ( m.contains( "images" ) )
         uiData = fixDataImagePaths( uiData, compressed, images );
 
     d->configWidget = QPointer< AccountConfigWidget >( widgetFromData( uiData, 0 ) );
@@ -705,7 +705,7 @@ JSResolver::configUI() const
 {
     Q_D( const JSResolver );
 
-    if( d->configWidget.isNull() )
+    if ( d->configWidget.isNull() )
         return 0;
     else
         return d->configWidget.data();
@@ -726,11 +726,11 @@ JSResolver::saveConfig()
 
 
 QVariant
-JSResolver::widgetData(QWidget* widget, const QString& property)
+JSResolver::widgetData( QWidget* widget, const QString& property )
 {
-    for( int i = 0; i < widget->metaObject()->propertyCount(); i++ )
+    for ( int i = 0; i < widget->metaObject()->propertyCount(); i++ )
     {
-        if( widget->metaObject()->property( i ).name() == property )
+        if ( widget->metaObject()->property( i ).name() == property )
         {
             return widget->property( property.toLatin1() );
         }
@@ -741,13 +741,13 @@ JSResolver::widgetData(QWidget* widget, const QString& property)
 
 
 void
-JSResolver::setWidgetData(const QVariant& value, QWidget* widget, const QString& property)
+JSResolver::setWidgetData( const QVariant& value, QWidget* widget, const QString& property )
 {
-    for( int i = 0; i < widget->metaObject()->propertyCount(); i++ )
+    for ( int i = 0; i < widget->metaObject()->propertyCount(); i++ )
     {
-        if( widget->metaObject()->property( i ).name() == property )
+        if ( widget->metaObject()->property( i ).name() == property )
         {
-            widget->metaObject()->property( i ).write( widget, value);
+            widget->metaObject()->property( i ).write( widget, value );
             return;
         }
     }
@@ -785,7 +785,7 @@ JSResolver::fillDataInWidgets( const QVariantMap& data )
     {
         QString widgetName = dataWidget.toMap()["widget"].toString();
         QWidget* widget= d->configWidget.data()->findChild<QWidget*>( widgetName );
-        if( !widget )
+        if ( !widget )
         {
             tLog() << Q_FUNC_INFO << "Widget specified in resolver was not found:" << widgetName;
             Q_ASSERT(false);

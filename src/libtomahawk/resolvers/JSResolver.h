@@ -102,7 +102,6 @@ private:
 
     Q_DECLARE_PRIVATE( JSResolver )
     QScopedPointer<JSResolverPrivate> d_ptr;
-
 };
 
 #endif // JSRESOLVER_H
