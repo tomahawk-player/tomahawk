@@ -459,12 +459,12 @@ Source::setOffline()
 
 
 void
-Source::setOnline()
+Source::setOnline( bool force )
 {
     Q_D( Source );
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << friendlyName();
-    if ( d->online )
+    if ( d->online && !force )
         return;
 
     d->online = true;

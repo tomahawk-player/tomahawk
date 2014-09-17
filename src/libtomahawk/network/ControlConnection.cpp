@@ -135,7 +135,7 @@ ControlConnection::setup()
         connect( d->source.data(), SIGNAL( syncedWithDatabase() ),
                                     SLOT( registerSource() ), Qt::QueuedConnection );
 
-        d->source->setOnline();
+        d->source->setOnline( true );
 
         d->pingtimer = new QTimer;
         d->pingtimer->setInterval( 5000 );

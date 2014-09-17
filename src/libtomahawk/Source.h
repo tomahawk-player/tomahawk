@@ -140,7 +140,7 @@ private slots:
 
     void handleDisconnect( Tomahawk::Accounts::Account*, Tomahawk::Accounts::AccountManager::DisconnectReason reason );
     void setOffline();
-    void setOnline();
+    void setOnline( bool force = false );
 
     void onStateChanged( Tomahawk::DBSyncConnectionState newstate, Tomahawk::DBSyncConnectionState oldstate, const QString& info );
 
