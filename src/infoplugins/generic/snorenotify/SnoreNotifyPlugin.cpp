@@ -88,7 +88,7 @@ SnoreNotifyPlugin::SnoreNotifyPlugin()
     addAlert( InfoNowPlaying, tr( "Now Playing" ) );
     addAlert( InfoTrackUnresolved, tr( "Unresolved track" ) );
     addAlert( InfoNowStopped, tr( "Playback Stopped" ) );
-    addAlert( InfoInboxReceived, tr( "You received a Song recomondation" ) );
+    addAlert( InfoInboxReceived, tr( "You received a Song recommendation" ) );
 
     m_snore->registerApplication( m_application );
 
