@@ -143,8 +143,6 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
                                                       artist, track, album,
                                                       duration, composer,
                                                       albumpos, discnumber );
-        Tomahawk::query_ptr qry = Tomahawk::Query::get( t );
-
         if ( m_album || m_artist ) {
             t->loadAttributes();
         }
@@ -154,17 +152,10 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         result->setBitrate( bitrate );
         result->setModificationTime( modificationTime );
         result->setMimetype( mimetype );
-        result->setScore( 1.0 );
+        result->setScore( 1.0f );
         result->setCollection( s->dbCollection(), false );
 
-        QList<Tomahawk::result_ptr> results;
-        results << result;
-        qry->addResults( results );
-        qry->setResolveFinished( true );
-        // These tracks are fixed to the Source. Do not re-resolve.
-        qry->disallowReresolve();
-
-        ql << qry;
+        ql << Tomahawk::Query::getFixed( t, result );
     }
 
     emit tracks( ql, data() );

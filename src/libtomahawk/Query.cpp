@@ -87,6 +87,16 @@ Query::get( const QString& query, const QID& qid )
 }
 
 
+query_ptr
+Query::getFixed( const track_ptr& track, const result_ptr& result )
+{
+    query_ptr q = query_ptr( new Query( track, result ), &QObject::deleteLater );
+    q->setWeakRef( q.toWeakRef() );
+
+    return q;
+}
+
+
 Query::Query( const track_ptr& track, const QID& qid, bool autoResolve )
     : d_ptr( new QueryPrivate( this, track, qid ) )
 {
@@ -98,6 +108,21 @@ Query::Query( const track_ptr& track, const QID& qid, bool autoResolve )
     }
 
     connect( Pipeline::instance(), SIGNAL( resolverAdded( Tomahawk::Resolver* ) ), SLOT( onResolverAdded() ), Qt::QueuedConnection );
+}
+
+
+Query::Query( const track_ptr& track, const result_ptr& result )
+    : d_ptr( new QueryPrivate( this, track, QString() ) )
+{
+    Q_D( Query );
+
+    init();
+    d->allowReresolve = false;
+    d->resolveFinished = true;
+    d->results << result;
+    d->playable = result->playable();
+    d->solved = true;
+    connect( result.data(), SIGNAL( statusChanged() ), SLOT( onResultStatusChanged() ) );
 }
 
 

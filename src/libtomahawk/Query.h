@@ -49,6 +49,11 @@ public:
     static query_ptr get( const Tomahawk::track_ptr& track, const QID& qid = QString() );
     static query_ptr get( const QString& query, const QID& qid );
 
+    /**
+     * Get a Query object with a fixed Result reference which is not re-resolved.
+     */
+    static query_ptr getFixed( const Tomahawk::track_ptr& track, const Tomahawk::result_ptr& result );
+
     virtual ~Query();
 
     bool equals( const Tomahawk::query_ptr& other, bool ignoreCase = false, bool ignoreAlbum = false ) const;
@@ -139,6 +144,10 @@ private slots:
 private:
     Query();
     explicit Query( const track_ptr& track, const QID& qid, bool autoResolve );
+    /**
+     * Respective constructor for getFixed
+     */
+    explicit Query( const track_ptr& track, const result_ptr& result );
     explicit Query( const QString& query, const QID& qid );
 
     Q_DECLARE_PRIVATE( Query )
