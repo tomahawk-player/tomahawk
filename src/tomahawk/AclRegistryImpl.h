@@ -33,7 +33,7 @@ class ACLRegistryImpl : public ACLRegistry
 
 public:
 
-    ACLRegistryImpl( QObject *parent = 0 );
+    ACLRegistryImpl( QObject *parent = nullptr );
     virtual ~ACLRegistryImpl();
 
 public slots:
