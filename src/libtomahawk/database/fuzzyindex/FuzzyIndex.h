@@ -71,7 +71,7 @@ private:
     boost::shared_ptr<Lucene::SimpleAnalyzer> m_analyzer;
     Lucene::IndexWriterPtr m_luceneWriter;
     Lucene::IndexReaderPtr m_luceneReader;
-    Lucene::DirectoryPtr m_luceneDir;
+    Lucene::FSDirectoryPtr m_luceneDir;
     Lucene::IndexSearcherPtr m_luceneSearcher;
 };
 

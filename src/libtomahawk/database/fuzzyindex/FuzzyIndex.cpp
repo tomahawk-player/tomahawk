@@ -44,8 +44,7 @@ FuzzyIndex::FuzzyIndex( QObject* parent, const QString& filename, bool wipe )
     try
     {
         m_analyzer = newLucene<SimpleAnalyzer>();
-        m_luceneDir = FSDirectory::open( StringUtils::toString( m_lucenePath.utf16() ) );
-//        m_luceneDir = FSDirectory::open( m_lucenePath.toStdWString() );
+        m_luceneDir = FSDirectory::open( m_lucenePath.toStdWString() );
     }
     catch ( LuceneException& error )
     {
