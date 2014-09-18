@@ -166,8 +166,12 @@ track_ptr
 Query::track() const
 {
     Q_D( const Query );
-    if ( !results().isEmpty() )
-        return results().first()->track();
+
+    {
+        QMutexLocker lock( &d->mutex );
+        if ( !d->results.isEmpty() )
+            return d->results.first()->track();
+    }
 
     return d->queryTrack;
 }
