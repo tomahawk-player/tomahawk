@@ -242,14 +242,14 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
 
         case AlbumPos:
         {
-            QString tPos;
-            if ( query->track()->albumpos() != 0 )
+            const uint tPos = query->track()->albumpos();
+            if ( tPos != 0 )
             {
-                tPos = QString::number( query->track()->albumpos() );
+                const uint discnumber = query->track()->discnumber();
                 if ( query->track()->discnumber() == 0 )
-                    return tPos;
+                    return QString::number( tPos );
                 else
-                    return QString( "%1.%2" ).arg( QString::number( query->track()->discnumber() ) )
+                    return QString( "%1.%2" ).arg( discnumber )
                                              .arg( tPos );
             }
         }
