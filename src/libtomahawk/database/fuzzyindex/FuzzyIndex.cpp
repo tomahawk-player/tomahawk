@@ -141,13 +141,13 @@ FuzzyIndex::appendFields( const Tomahawk::IndexData& data )
         if ( !data.track.isEmpty() )
         {
             doc->add(newLucene<Field>( L"fulltext", Tomahawk::DatabaseImpl::sortname( QString( "%1 %2" ).arg( data.artist ).arg( data.track ) ).toStdWString(),
-                                       Field::STORE_NO, Field::INDEX_ANALYZED ) );
+                                       Field::STORE_NO, Field::INDEX_NOT_ANALYZED ) );
 
             doc->add(newLucene<Field>( L"track", Tomahawk::DatabaseImpl::sortname( data.track ).toStdWString(),
-                                       Field::STORE_NO, Field::INDEX_ANALYZED ) );
+                                       Field::STORE_NO, Field::INDEX_NOT_ANALYZED ) );
 
             doc->add(newLucene<Field>( L"artist", Tomahawk::DatabaseImpl::sortname( data.artist ).toStdWString(),
-                                       Field::STORE_NO, Field::INDEX_ANALYZED ) );
+                                       Field::STORE_NO, Field::INDEX_NOT_ANALYZED ) );
 
             doc->add(newLucene<Field>( L"artistid", QString::number( data.artistId ).toStdWString(),
                                        Field::STORE_YES, Field::INDEX_NO ) );
@@ -158,7 +158,7 @@ FuzzyIndex::appendFields( const Tomahawk::IndexData& data )
         else if ( !data.album.isEmpty() )
         {
             doc->add(newLucene<Field>( L"album", Tomahawk::DatabaseImpl::sortname( data.album ).toStdWString(),
-                                       Field::STORE_NO, Field::INDEX_ANALYZED ) );
+                                       Field::STORE_NO, Field::INDEX_NOT_ANALYZED ) );
 
             doc->add(newLucene<Field>( L"albumid", QString::number( data.id ).toStdWString(),
                                        Field::STORE_YES, Field::INDEX_NO ) );
@@ -240,11 +240,11 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
             FuzzyQueryPtr fqry = newLucene<FuzzyQuery>( newLucene<Term>( L"track", q.toStdWString() ) );
             qry->add( boost::dynamic_pointer_cast<Query>( fqry ), BooleanClause::SHOULD );
 
-            fqry = newLucene<FuzzyQuery>( newLucene<Term>( L"artist", q.toStdWString() ) );
-            qry->add( boost::dynamic_pointer_cast<Query>( fqry ), BooleanClause::SHOULD );
+            FuzzyQueryPtr fqry2 = newLucene<FuzzyQuery>( newLucene<Term>( L"artist", q.toStdWString() ) );
+            qry->add( boost::dynamic_pointer_cast<Query>( fqry2 ), BooleanClause::SHOULD );
 
-            fqry = newLucene<FuzzyQuery>( newLucene<Term>( L"fulltext", q.toStdWString() ) );
-            qry->add( boost::dynamic_pointer_cast<Query>( fqry ), BooleanClause::SHOULD );
+            FuzzyQueryPtr fqry3 = newLucene<FuzzyQuery>( newLucene<Term>( L"fulltext", q.toStdWString() ) );
+            qry->add( boost::dynamic_pointer_cast<Query>( fqry3 ), BooleanClause::SHOULD );
 
             minScore = 0.00;
         }
@@ -257,8 +257,8 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
             FuzzyQueryPtr fqry = newLucene<FuzzyQuery>( newLucene<Term>( L"track", track.toStdWString() ) );
             qry->add( boost::dynamic_pointer_cast<Query>( fqry ), BooleanClause::MUST );
 
-            fqry = newLucene<FuzzyQuery>( newLucene<Term>( L"artist", artist.toStdWString() ) );
-            qry->add( boost::dynamic_pointer_cast<Query>( fqry ), BooleanClause::MUST );
+            FuzzyQueryPtr fqry2 = newLucene<FuzzyQuery>( newLucene<Term>( L"artist", artist.toStdWString() ) );
+            qry->add( boost::dynamic_pointer_cast<Query>( fqry2 ), BooleanClause::MUST );
 
             minScore = 0.00;
         }
