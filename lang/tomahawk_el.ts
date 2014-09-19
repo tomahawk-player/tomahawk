@@ -3530,7 +3530,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="91"/>
-        <source>You received a Song recomondation</source>
+        <source>You received a Song recommendation</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3669,43 +3669,43 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="498"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="553"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="502"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="557"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Σάρωση (%L1 τραγούδια)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="500"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="504"/>
         <source>Scanning</source>
         <translation>Σάρωση</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="538"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="542"/>
         <source>Checking</source>
         <translation>Έλεγχος</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="543"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="547"/>
         <source>Syncing</source>
         <translation>Συγχρονισμος</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="548"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="552"/>
         <source>Importing</source>
         <translation>Εισαγωγη</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="738"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="742"/>
         <source>Saving (%1%)</source>
         <translation>Αποθήκευση (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="825"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="829"/>
         <source>Online</source>
         <translation>Συνδεδεμένος</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="829"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="833"/>
         <source>Offline</source>
         <translation>Εκτός Σύνδεσης</translation>
     </message>
