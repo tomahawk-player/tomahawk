@@ -411,8 +411,6 @@ ContextMenu::addToQueue()
     {
         ViewManager::instance()->queue()->trackView()->model()->appendAlbum( album );
     }
-
-    ViewManager::instance()->showQueuePage();
 }
 
 
