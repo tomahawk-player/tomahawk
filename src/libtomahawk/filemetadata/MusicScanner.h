@@ -94,7 +94,7 @@ private:
     QStringList m_paths;
 };
 
-class MusicScanner : public QObject
+class DLLEXPORT MusicScanner : public QObject
 {
 Q_OBJECT
 
