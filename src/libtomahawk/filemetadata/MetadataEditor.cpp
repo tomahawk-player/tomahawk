@@ -93,7 +93,7 @@ MetadataEditor::writeMetadata( bool closeDlg )
         const char *encodedName = fileName.constData();
 
         TagLib::FileRef f( encodedName );
-        Tomahawk::Tag* tag = Tomahawk::Tag::fromFile( f );
+        QSharedPointer<Tomahawk::Tag> tag( Tomahawk::Tag::fromFile( f ) );
 
         if ( title() != m_result->track()->track() )
         {

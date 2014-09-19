@@ -364,7 +364,7 @@ MusicScanner::readTags( const QFileInfo& fi )
 
     int bitrate = 0;
     int duration = 0;
-    Tag* tag = Tag::fromFile( f );
+    QSharedPointer<Tag> tag( Tag::fromFile( f ) );
     if ( f.audioProperties() )
     {
         TagLib::AudioProperties *properties = f.audioProperties();

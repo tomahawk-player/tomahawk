@@ -21,6 +21,7 @@
 
 #include "DllMacro.h"
 
+#include <QSharedPointer>
 #include <QtCore/QString>
 
 #include <taglib/tag.h>
@@ -32,7 +33,7 @@ namespace Tomahawk
 class DLLEXPORT Tag
 {
 public:
-    static Tag *fromFile( const TagLib::FileRef &f );
+    static QSharedPointer<Tag> fromFile( const TagLib::FileRef &f );
 
     //getter-setters for common TagLib items
     virtual QString title() const { return TStringToQString( m_tag->title() ).trimmed(); }
