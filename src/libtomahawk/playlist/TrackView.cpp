@@ -785,6 +785,9 @@ bool
 TrackView::jumpToCurrentTrack()
 {
     scrollTo( proxyModel()->currentIndex(), QAbstractItemView::PositionAtCenter );
+    selectionModel()->select( QModelIndex(), QItemSelectionModel::SelectCurrent );
+    select( proxyModel()->currentIndex() );
+    selectionModel()->select( proxyModel()->currentIndex(), QItemSelectionModel::SelectCurrent );
     return true;
 }
 
