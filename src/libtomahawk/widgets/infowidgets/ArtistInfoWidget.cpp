@@ -167,6 +167,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         m_area = new QScrollArea();
         m_area->setWidgetResizable( true );
         m_area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+        m_area->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         m_area->setWidget( m_widget );
 
         QPalette pal = palette();

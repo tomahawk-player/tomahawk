@@ -200,7 +200,7 @@
         <item>
          <widget class="QWebView" name="biography">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+           <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
