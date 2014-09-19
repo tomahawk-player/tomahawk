@@ -950,6 +950,7 @@ percentEncode( const QUrl& url )
     return data;
 }
 
+
 QByteArray
 encodedQuery( const QUrl& url )
 {
