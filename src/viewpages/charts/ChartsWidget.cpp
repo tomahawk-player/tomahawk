@@ -143,13 +143,7 @@ ChartsWidget::playlistInterface() const
 bool
 ChartsWidget::isBeingPlayed() const
 {
-    if ( AudioEngine::instance()->currentTrackPlaylist() == ui->artistsViewLeft->proxyModel()->playlistInterface() )
-        return true;
-
-    if ( AudioEngine::instance()->currentTrackPlaylist() == ui->tracksViewLeft->playlistInterface() )
-        return true;
-
-    if ( AudioEngine::instance()->currentTrackPlaylist() == ui->albumsView->playlistInterface() )
+    if ( playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
         return true;
 
     return false;
