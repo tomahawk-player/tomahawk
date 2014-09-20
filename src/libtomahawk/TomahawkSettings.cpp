@@ -312,7 +312,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
     else if ( oldVersion == 4 || oldVersion == 5 )
     {
         // 0.3.0 contained a bug which prevent indexing local files. Force a reindex.
-        QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
+        updateIndex();
     }
     else if ( oldVersion == 6 )
     {
@@ -676,7 +676,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
     else if ( oldVersion == 15 )
     {
         // 0.8.0 switches to Lucene++. Force a reindex.
-        QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
+        updateIndex();
     }
 }
 
