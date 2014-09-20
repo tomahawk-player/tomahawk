@@ -79,7 +79,6 @@
 #include "dialogs/SettingsDialog.h"
 #include "ActionCollection.h"
 #include "widgets/HeaderLabel.h"
-#include "TomahawkSettings.h"
 #include "utils/TomahawkStyle.h"
 
 #include "config.h"

@@ -1524,6 +1524,12 @@ TomahawkSettings::setPrivateListeningMode( TomahawkSettings::PrivateListeningMod
 void
 TomahawkSettings::updateIndex()
 {
+    if ( !Database::instance() || !Database::instance()->isReady() )
+    {
+        QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
+        return;
+    }
+
     Tomahawk::DatabaseCommand* cmd = new Tomahawk::DatabaseCommand_UpdateSearchIndex();
     Database::instance()->enqueue( QSharedPointer<Tomahawk::DatabaseCommand>( cmd ) );
 }
