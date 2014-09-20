@@ -143,10 +143,7 @@ ChartsWidget::playlistInterface() const
 bool
 ChartsWidget::isBeingPlayed() const
 {
-    if ( playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
-        return true;
-
-    return false;
+    return playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() );
 }
 
 
