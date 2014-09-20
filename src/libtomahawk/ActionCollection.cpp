@@ -109,7 +109,7 @@ ActionCollection::initActions()
     connect( m_actionCollection[ "nextTrack" ],     SIGNAL( triggered() ), ae,   SLOT( next() ),      Qt::UniqueConnection );
 
     // main menu actions
-    m_actionCollection[ "loadXSPF" ] = new QAction( tr( "Load &XSPF..." ), this );
+    m_actionCollection[ "loadXSPF" ] = new QAction( tr( "Import Playlist..." ), this );
     m_actionCollection[ "updateCollection" ] = new QAction( tr( "U&pdate Collection" ), this );
     m_actionCollection[ "rescanCollection" ] = new QAction( tr( "Fully &Rescan Collection" ), this );
     m_actionCollection[ "showOfflineSources" ] = new QAction( tr( "Show Offline Sources" ), this );

@@ -7,13 +7,23 @@
     <x>0</x>
     <y>0</y>
     <width>444</width>
-    <height>121</height>
+    <height>241</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Load XSPF</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="helperText">
+     <property name="text">
+      <string>Enter the URL of the hosted playlist (e.g. .xspf format) or click the button to select a local M3U of XSPF playlist to import.</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
@@ -48,9 +58,24 @@
    <item>
     <widget class="QCheckBox" name="autoUpdate">
      <property name="text">
-      <string>Automatically update</string>
+      <string>Automatically Update (upon changes to hosted playlist)</string>
      </property>
      <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_2">
+     <property name="font">
+      <font>
+       <italic>true</italic>
+      </font>
+     </property>
+     <property name="text">
+      <string>Note: to import a playlist from Spotify, Rdio, Beats, etc. - simply drag the the link into Tomahawk</string>
+     </property>
+     <property name="wordWrap">
       <bool>true</bool>
      </property>
     </widget>
