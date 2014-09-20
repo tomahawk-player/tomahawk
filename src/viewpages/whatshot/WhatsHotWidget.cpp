@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2012, Hugo Lindström <hugolm84@gmail.com>
@@ -44,12 +44,12 @@
 using namespace Tomahawk;
 using namespace Tomahawk::Widgets;
 
-static QString s_whatsHotIdentifier = QString( "WhatsHotWidget" );
+static QString s_chartsIdentifier = QString( "ChartsWidget" );
 
 
-WhatsHotWidget::WhatsHotWidget( QWidget* parent )
+ChartsWidget::ChartsWidget( QWidget* parent )
     : QWidget( parent )
-    , ui( new Ui::WhatsHotWidget )
+    , ui( new Ui::ChartsWidget )
     , m_sortedProxy( 0 )
     , m_workerThread( 0 )
     , m_spinner( 0 )
@@ -117,7 +117,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 }
 
 
-WhatsHotWidget::~WhatsHotWidget()
+ChartsWidget::~ChartsWidget()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
 
@@ -134,14 +134,14 @@ WhatsHotWidget::~WhatsHotWidget()
 
 
 Tomahawk::playlistinterface_ptr
-WhatsHotWidget::playlistInterface() const
+ChartsWidget::playlistInterface() const
 {
     return m_playlistInterface;
 }
 
 
 bool
-WhatsHotWidget::isBeingPlayed() const
+ChartsWidget::isBeingPlayed() const
 {
     if ( AudioEngine::instance()->currentTrackPlaylist() == ui->artistsViewLeft->proxyModel()->playlistInterface() )
         return true;
@@ -149,7 +149,7 @@ WhatsHotWidget::isBeingPlayed() const
     if ( AudioEngine::instance()->currentTrackPlaylist() == ui->tracksViewLeft->playlistInterface() )
         return true;
 
-    if ( ui->albumsView->isBeingPlayed() )
+    if ( AudioEngine::instance()->currentTrackPlaylist() == ui->albumsView->playlistInterface() )
         return true;
 
     return false;
@@ -157,7 +157,7 @@ WhatsHotWidget::isBeingPlayed() const
 
 
 bool
-WhatsHotWidget::jumpToCurrentTrack()
+ChartsWidget::jumpToCurrentTrack()
 {
     if ( ui->artistsViewLeft->model() && ui->artistsViewLeft->jumpToCurrentTrack() )
         return true;
@@ -173,12 +173,12 @@ WhatsHotWidget::jumpToCurrentTrack()
 
 
 void
-WhatsHotWidget::fetchData()
+ChartsWidget::fetchData()
 {
     Tomahawk::InfoSystem::InfoStringHash criteria;
 
     Tomahawk::InfoSystem::InfoRequestData requestData;
-    requestData.caller = s_whatsHotIdentifier;
+    requestData.caller = s_chartsIdentifier;
     requestData.customData = QVariantMap();
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( criteria );
     requestData.type = Tomahawk::InfoSystem::InfoChartCapabilities;
@@ -186,14 +186,14 @@ WhatsHotWidget::fetchData()
     requestData.allSources = true;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
-    tDebug( LOGVERBOSE ) << "WhatsHot: requested InfoChartCapabilities";
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "requested InfoChartCapabilities";
 }
 
 
 void
-WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
+ChartsWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
-    if ( requestData.caller != s_whatsHotIdentifier )
+    if ( requestData.caller != s_chartsIdentifier )
         return;
 
     if ( output.isNull() )
@@ -204,7 +204,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
 
     if ( !output.canConvert< QVariantMap >() )
     {
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "WhatsHot: Could not parse output into a map";
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Could not parse output into a map";
         return;
     }
 
@@ -225,7 +225,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 criteria.insert( "chart_refetch", returnedData[ "chart_source" ].value< QString >() );
 
                 Tomahawk::InfoSystem::InfoRequestData requestData;
-                requestData.caller = s_whatsHotIdentifier;
+                requestData.caller = s_chartsIdentifier;
                 requestData.customData = QVariantMap();
                 requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( criteria );
                 requestData.type = Tomahawk::InfoSystem::InfoChartCapabilities;
@@ -233,7 +233,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 requestData.allSources = false;
                 Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
-                tDebug( LOGVERBOSE ) << "WhatsHot: re-requesting InfoChartCapabilities";
+                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "re-requesting InfoChartCapabilities";
                 break;
             }
 
@@ -311,7 +311,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
 
 
 void
-WhatsHotWidget::setViewData( const QVariantMap& data )
+ChartsWidget::setViewData( const QVariantMap& data )
 {
     QStandardItem* rootItem = m_crumbModelLeft->invisibleRootItem();
     QVariantMap returnedData = data;
@@ -365,11 +365,11 @@ WhatsHotWidget::setViewData( const QVariantMap& data )
 
 
 void
-WhatsHotWidget::infoSystemFinished( QString target )
+ChartsWidget::infoSystemFinished( QString target )
 {
     if ( m_loading )
     {
-        if ( target != s_whatsHotIdentifier )
+        if ( target != s_chartsIdentifier )
         {
             return;
         }
@@ -386,9 +386,9 @@ WhatsHotWidget::infoSystemFinished( QString target )
 
 
 void
-WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
+ChartsWidget::leftCrumbIndexChanged( QModelIndex index )
 {
-    tDebug( LOGVERBOSE ) << "WhatsHot: left crumb changed" << index.data();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "left crumb changed" << index.data();
     QStandardItem* item = m_crumbModelLeft->itemFromIndex( m_sortedProxy->mapToSource( index ) );
     if ( !item )
         return;
@@ -447,7 +447,7 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
     Tomahawk::InfoSystem::InfoRequestData requestData;
     QVariantMap customData;
     customData.insert( "whatshot_side", "left" );
-    requestData.caller = s_whatsHotIdentifier;
+    requestData.caller = s_chartsIdentifier;
     requestData.customData = customData;
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( criteria );
     requestData.type = Tomahawk::InfoSystem::InfoChart;
@@ -463,7 +463,7 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
 
 
 void
-WhatsHotWidget::changeEvent( QEvent* e )
+ChartsWidget::changeEvent( QEvent* e )
 {
     QWidget::changeEvent( e );
     switch ( e->type() )
@@ -479,10 +479,10 @@ WhatsHotWidget::changeEvent( QEvent* e )
 
 
 QStandardItem*
-WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString& label, const QVariant& data )
+ChartsWidget::parseNode( QStandardItem* parentItem, const QString& label, const QVariant& data )
 {
     Q_UNUSED( parentItem );
-//     tDebug( LOGVERBOSE ) << "WhatsHot: parsing" << label;
+//     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "parsing" << label;
 
     QStandardItem* sourceItem = new QStandardItem( label );
 
@@ -536,7 +536,7 @@ WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString& label, cons
 
 
 void
-WhatsHotWidget::setLeftViewAlbums( PlayableModel* model )
+ChartsWidget::setLeftViewAlbums( PlayableModel* model )
 {
     ui->albumsView->setPlayableModel( model );
     ui->albumsView->proxyModel()->sort( -1 ); // disable sorting, must be called after artistsViewLeft->setTreeModel
@@ -545,7 +545,7 @@ WhatsHotWidget::setLeftViewAlbums( PlayableModel* model )
 
 
 void
-WhatsHotWidget::setLeftViewArtists( TreeModel* model )
+ChartsWidget::setLeftViewArtists( TreeModel* model )
 {
     ui->artistsViewLeft->proxyModel()->setStyle( PlayableProxyModel::Collection );
     ui->artistsViewLeft->setTreeModel( model );
@@ -555,7 +555,7 @@ WhatsHotWidget::setLeftViewArtists( TreeModel* model )
 
 
 void
-WhatsHotWidget::setLeftViewTracks( PlaylistModel* model )
+ChartsWidget::setLeftViewTracks( PlaylistModel* model )
 {
     ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
     ui->tracksViewLeft->setPlaylistModel( model );
@@ -565,7 +565,7 @@ WhatsHotWidget::setLeftViewTracks( PlaylistModel* model )
 
 
 void
-WhatsHotWidget::chartArtistsLoaded( ChartDataLoader* loader, const QList< artist_ptr >& artists )
+ChartsWidget::chartArtistsLoaded( ChartDataLoader* loader, const QList< artist_ptr >& artists )
 {
     QString chartId = loader->property( "chartid" ).toString();
     Q_ASSERT( m_artistModels.contains( chartId ) );
@@ -585,7 +585,7 @@ WhatsHotWidget::chartArtistsLoaded( ChartDataLoader* loader, const QList< artist
 
 
 void
-WhatsHotWidget::chartTracksLoaded( ChartDataLoader* loader, const QList< query_ptr >& tracks )
+ChartsWidget::chartTracksLoaded( ChartDataLoader* loader, const QList< query_ptr >& tracks )
 {
     QString chartId = loader->property( "chartid" ).toString();
     Q_ASSERT( m_trackModels.contains( chartId ) );
@@ -603,7 +603,7 @@ WhatsHotWidget::chartTracksLoaded( ChartDataLoader* loader, const QList< query_p
 
 
 void
-WhatsHotWidget::chartAlbumsLoaded( ChartDataLoader* loader, const QList< album_ptr >& albums )
+ChartsWidget::chartAlbumsLoaded( ChartDataLoader* loader, const QList< album_ptr >& albums )
 {
     QString chartId = loader->property( "chartid" ).toString();
     Q_ASSERT( m_albumModels.contains( chartId ) );
@@ -619,14 +619,14 @@ WhatsHotWidget::chartAlbumsLoaded( ChartDataLoader* loader, const QList< album_p
 }
 
 
-WhatsHot::WhatsHot( QWidget* parent )
+ChartsPage::ChartsPage( QWidget* parent )
 {
     Q_UNUSED( parent )
 }
 
 
-WhatsHot::~WhatsHot()
+ChartsPage::~ChartsPage()
 {
 }
 
-Q_EXPORT_PLUGIN2( ViewPagePlugin, WhatsHot )
+Q_EXPORT_PLUGIN2( ViewPagePlugin, ChartsPage )

@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2014, Uwe L. Korn <uwelk@xhochy.com>
@@ -19,13 +19,12 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef WHATSHOTWIDGET_H
-#define WHATSHOTWIDGET_H
+#ifndef TOMAHAWK_CHARTSWIDGET_H
+#define TOMAHAWK_CHARTSWIDGET_H
 
 #include "../ViewPageDllMacro.h"
 #include "ViewPagePlugin.h"
 #include "ViewPageLazyLoader.h"
-
 
 class AnimatedSpinner;
 class PlayableModel;
@@ -36,7 +35,7 @@ class TreeModel;
 
 namespace Ui
 {
-    class WhatsHotWidget;
+    class ChartsWidget;
 }
 
 namespace Tomahawk
@@ -55,13 +54,13 @@ namespace Widgets
  * \class
  * \brief The tomahawk page that shows music charts.
  */
-class WhatsHotWidget : public QWidget
+class ChartsWidget : public QWidget
 {
 Q_OBJECT
 
 public:
-    WhatsHotWidget( QWidget* parent = 0 );
-    ~WhatsHotWidget();
+    ChartsWidget( QWidget* parent = 0 );
+    ~ChartsWidget();
 
     Tomahawk::playlistinterface_ptr playlistInterface() const;
     bool isBeingPlayed() const;
@@ -93,7 +92,7 @@ private:
 
     QStandardItem* parseNode( QStandardItem* parentItem, const QString& label, const QVariant& data );
 
-    Ui::WhatsHotWidget* ui;
+    Ui::ChartsWidget* ui;
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 
     QStandardItemModel* m_crumbModelLeft;
@@ -118,19 +117,19 @@ private:
     friend class Tomahawk::ChartsPlaylistInterface;
 };
 
-const QString WHATSHOT_VIEWPAGE_NAME = "whatshot";
+const QString CHARTS_VIEWPAGE_NAME = "charts";
 
-class TOMAHAWK_VIEWPAGE_EXPORT WhatsHot : public Tomahawk::ViewPageLazyLoader< WhatsHotWidget >
+class TOMAHAWK_VIEWPAGE_EXPORT ChartsPage : public Tomahawk::ViewPageLazyLoader< ChartsWidget >
 {
 Q_OBJECT
 Q_INTERFACES( Tomahawk::ViewPagePlugin )
 Q_PLUGIN_METADATA( IID "org.tomahawk-player.Player.ViewPagePlugin" )
 
 public:
-    WhatsHot( QWidget* parent = 0 );
-    virtual ~WhatsHot();
+    ChartsPage( QWidget* parent = 0 );
+    virtual ~ChartsPage();
 
-    const QString defaultName() Q_DECL_OVERRIDE { return WHATSHOT_VIEWPAGE_NAME; }
+    const QString defaultName() Q_DECL_OVERRIDE { return CHARTS_VIEWPAGE_NAME; }
     QString title() const Q_DECL_OVERRIDE { return tr( "Charts" ); }
     QString description() const Q_DECL_OVERRIDE { return QString(); }
 
@@ -145,4 +144,4 @@ public:
 } // Widgets
 } // Tomahawk
 
-#endif // WHATSHOTWIDGET_H
+#endif // TOMAHAWK_CHARTSWIDGET_H
