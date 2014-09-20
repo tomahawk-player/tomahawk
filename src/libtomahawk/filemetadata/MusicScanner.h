@@ -107,6 +107,9 @@ public:
     MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& paths, quint32 bs = 0 );
     ~MusicScanner();
 
+    void showProgress( bool _showProgress );
+    bool showingProgress();
+
 signals:
     //void fileScanned( QVariantMap );
     void finished();
@@ -133,6 +136,7 @@ private:
     QStringList m_paths;
     unsigned int m_scanned;
     unsigned int m_skipped;
+    bool m_showProgress;
 
     QList<QString> m_skippedFiles;
     QMap<QString, QMap< unsigned int, unsigned int > > m_filemtimes;

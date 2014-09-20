@@ -136,6 +136,7 @@ MusicScanner::MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& 
     : QObject()
     , m_scanMode( scanMode )
     , m_paths( paths )
+    , m_showProgress( true )
     , m_batchsize( bs )
     , m_dirListerThreadController( 0 )
 {
@@ -158,13 +159,30 @@ MusicScanner::~MusicScanner()
 
 
 void
+MusicScanner::showProgress( bool _showProgress )
+{
+    m_showProgress = _showProgress;
+}
+
+
+bool
+MusicScanner::showingProgress()
+{
+    return m_showProgress;
+}
+
+
+void
 MusicScanner::startScan()
 {
     tDebug( LOGVERBOSE ) << "Loading mtimes...";
     m_scanned = m_skipped = m_cmdQueue = 0;
     m_skippedFiles.clear();
 
-    SourceList::instance()->getLocal()->scanningProgress( m_scanned );
+    if ( m_showProgress )
+    {
+        SourceList::instance()->getLocal()->scanningProgress( m_scanned );
+    }
 
     // trigger the scan once we've loaded old filemtimes
     //FIXME: For multiple collection support make sure the right prefix gets passed in...or not...
@@ -412,7 +430,7 @@ MusicScanner::readFile( const QFileInfo& fi )
     const QVariant m = readTags( fi );
 
     if ( m_scanned )
-        if ( m_scanned % 3 == 0 )
+        if ( m_scanned % 3 == 0 && m_showProgress )
             SourceList::instance()->getLocal()->scanningProgress( m_scanned );
     if ( m_scanned % 100 == 0 )
         tDebug( LOGINFO ) << "Scan progress:" << m_scanned << fi.canonicalFilePath();
