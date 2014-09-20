@@ -512,6 +512,12 @@ TrackView::dragEnterEvent( QDragEnterEvent* event )
     tDebug() << Q_FUNC_INFO;
     QTreeView::dragEnterEvent( event );
 
+    if ( !model() || model()->isReadOnly() || model()->isLoading() )
+    {
+        event->ignore();
+        return;
+    }
+
     if ( DropJob::acceptsMimeData( event->mimeData() ) )
     {
         m_dragging = true;
@@ -527,7 +533,7 @@ TrackView::dragMoveEvent( QDragMoveEvent* event )
 {
     QTreeView::dragMoveEvent( event );
 
-    if ( model()->isReadOnly() )
+    if ( !model() || model()->isReadOnly() || model()->isLoading() )
     {
         event->ignore();
         return;
@@ -593,11 +599,10 @@ TrackView::dropEvent( QDropEvent* event )
             const QPoint pos = event->pos();
             const QModelIndex index = indexAt( pos );
 
-            tDebug() << Q_FUNC_INFO << "Drop Event accepted at row:" << index.row();
-            event->acceptProposedAction();
-
-            if ( !model()->isReadOnly() )
+            if ( !model()->isReadOnly() && !model()->isLoading() )
             {
+                tDebug() << Q_FUNC_INFO << "Drop Event accepted at row:" << index.row();
+                event->acceptProposedAction();
                 model()->dropMimeData( event->mimeData(), event->proposedAction(), index.row(), 0, index.parent() );
             }
         }
