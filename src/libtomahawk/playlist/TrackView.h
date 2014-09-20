@@ -106,6 +106,7 @@ signals:
 
 protected:
     virtual void resizeEvent( QResizeEvent* event );
+    virtual bool eventFilter( QObject* obj, QEvent* event );
 
     virtual void startDrag( Qt::DropActions supportedActions );
     virtual void dragEnterEvent( QDragEnterEvent* event );

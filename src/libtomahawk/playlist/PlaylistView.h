@@ -50,7 +50,6 @@ signals:
 
 protected:
     void keyPressEvent( QKeyEvent* event );
-    bool eventFilter( QObject* obj, QEvent* event );
 
 private slots:
     void onMenuTriggered( int action );

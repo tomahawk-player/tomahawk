@@ -474,6 +474,38 @@ TrackView::resizeEvent( QResizeEvent* event )
 }
 
 
+bool
+TrackView::eventFilter( QObject* obj, QEvent* event )
+{
+    if ( event->type() == QEvent::DragEnter )
+    {
+        QDragEnterEvent* e = static_cast<QDragEnterEvent*>(event);
+        dragEnterEvent( e );
+        return true;
+    }
+    if ( event->type() == QEvent::DragMove )
+    {
+        QDragMoveEvent* e = static_cast<QDragMoveEvent*>(event);
+        dragMoveEvent( e );
+        return true;
+    }
+    if ( event->type() == QEvent::DragLeave )
+    {
+        QDragLeaveEvent* e = static_cast<QDragLeaveEvent*>(event);
+        dragLeaveEvent( e );
+        return true;
+    }
+    if ( event->type() == QEvent::Drop )
+    {
+        QDropEvent* e = static_cast<QDropEvent*>(event);
+        dropEvent( e );
+        return true;
+    }
+
+    return QObject::eventFilter( obj, event );
+}
+
+
 void
 TrackView::dragEnterEvent( QDragEnterEvent* event )
 {
