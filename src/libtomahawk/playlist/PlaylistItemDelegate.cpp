@@ -672,20 +672,27 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
         QRect playIconRect = extraRect.adjusted( extraRect.width() - h - 8, h / 2, -8, -h / 2 );
         painter->drawPixmap( playIconRect, ImageRegistry::instance()->pixmap( RESPATH "images/play.svg", playIconRect.size() ) );
 
-        painter->save();
-        painter->setPen( Qt::transparent );
-        painter->setBrush( Qt::darkRed );
+        double duration = (double)AudioEngine::instance()->currentTrackTotalTime();
+        if ( duration <= 0 )
+            duration = item->query()->track()->duration() * 1000;
 
-        QRect playBar = r.adjusted( 0, r.height() + 2, 0, 0 );
-        playBar.setHeight( 2 );
-        painter->setOpacity( 0.1 );
-        painter->drawRect( playBar );
+        if ( duration > 0 )
+        {
+            painter->save();
+            painter->setPen( Qt::transparent );
+            painter->setBrush( Qt::darkRed );
 
-        playBar.setWidth( ( (double)AudioEngine::instance()->currentTime() / (double)AudioEngine::instance()->currentTrackTotalTime() ) * (double)playBar.width() );
-        painter->setOpacity( 1 );
-        painter->drawRect( playBar );
+            QRect playBar = r.adjusted( 0, r.height() + 2, 0, 0 );
+            playBar.setHeight( 2 );
+            painter->setOpacity( 0.1 );
+            painter->drawRect( playBar );
 
-        painter->restore();
+            playBar.setWidth( ( (double)AudioEngine::instance()->currentTime() / duration ) * (double)playBar.width() );
+            painter->setOpacity( 1 );
+            painter->drawRect( playBar );
+
+            painter->restore();
+        }
     }
     else if ( track->duration() > 0 )
     {
