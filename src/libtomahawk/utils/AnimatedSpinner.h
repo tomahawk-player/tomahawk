@@ -52,7 +52,7 @@ public:
     QSize sizeHint() const;
 
     QPixmap pixmap() const { return m_pixmap; }
-    
+
     void setAutoCenter( bool enabled ) { m_autoCenter = enabled; }
 
 public slots:
@@ -98,8 +98,8 @@ class DLLEXPORT LoadingSpinner : public AnimatedSpinner
     Q_OBJECT
 
 public:
-    explicit LoadingSpinner( QAbstractItemView* parent = 0 ); // widget mode
-    
+    explicit LoadingSpinner( QAbstractItemView* parent ); // widget mode
+
 private slots:
     void onViewModelChanged();
 

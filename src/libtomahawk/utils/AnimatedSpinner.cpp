@@ -39,6 +39,7 @@ AnimatedSpinner::AnimatedSpinner( QWidget* parent )
     init();
 }
 
+
 AnimatedSpinner::AnimatedSpinner( const QSize& size, QWidget *parent )
     : QWidget( parent )
     , m_showHide( new QTimeLine )
@@ -275,6 +276,8 @@ LoadingSpinner::LoadingSpinner( QAbstractItemView* parent )
     : AnimatedSpinner( parent )
     , m_parent( parent )
 {
+    installEventFilter( m_parent );
+
     if ( m_parent->model() )
     {
         connect( m_parent->model(), SIGNAL( loadingStarted() ), SLOT( fadeIn() ), Qt::UniqueConnection );
