@@ -351,12 +351,12 @@ połączyć się i strumieniować od ciebie?</translation>
         <translation>Muzyka</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="185"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="186"/>
         <source>Songs</source>
         <translation>Utwory</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="200"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="201"/>
         <source>Albums</source>
         <translation>Albumy</translation>
     </message>
