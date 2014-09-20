@@ -112,7 +112,7 @@ ActionCollection::initActions()
     m_actionCollection[ "loadXSPF" ] = new QAction( tr( "Import Playlist..." ), this );
     m_actionCollection[ "updateCollection" ] = new QAction( tr( "U&pdate Collection" ), this );
     m_actionCollection[ "rescanCollection" ] = new QAction( tr( "Fully &Rescan Collection" ), this );
-    m_actionCollection[ "showOfflineSources" ] = new QAction( tr( "Show Offline Sources" ), this );
+    m_actionCollection[ "showOfflineSources" ] = new QAction( tr( "Show Offline Friends" ), this );
     m_actionCollection[ "showOfflineSources" ]->setCheckable( true );
     m_actionCollection[ "preferences" ] = new QAction( tr( "&Configure Tomahawk..." ), this );
     m_actionCollection[ "preferences" ]->setIcon( ImageRegistry::instance()->icon( RESPATH "images/configure.svg" ) );
