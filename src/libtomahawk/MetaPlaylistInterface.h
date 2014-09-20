@@ -38,6 +38,7 @@ public:
     virtual ~MetaPlaylistInterface();
 
     void addChildInterface( const Tomahawk::playlistinterface_ptr& interface );
+    void removeChildInterface( const Tomahawk::playlistinterface_ptr& interface );
 
     virtual QList< Tomahawk::query_ptr > tracks() const;
     virtual int trackCount() const;
