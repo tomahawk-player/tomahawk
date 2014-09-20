@@ -63,7 +63,6 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
     , m_coolPlaylistsPage( 0 )
     , m_latestAdditionsPage( 0 )
     , m_recentPlaysPage( 0 )
-    , m_whatsHotPage( 0 )
 {
     if ( !m_source )
         return;

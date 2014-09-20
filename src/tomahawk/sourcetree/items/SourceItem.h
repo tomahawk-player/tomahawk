@@ -123,7 +123,6 @@ private:
     Tomahawk::ViewPage* m_coolPlaylistsPage;
     Tomahawk::ViewPage* m_latestAdditionsPage;
     Tomahawk::ViewPage* m_recentPlaysPage;
-    Tomahawk::ViewPage* m_whatsHotPage;
 };
 
 
