@@ -43,6 +43,7 @@
     #include <X11/Xlib.h>
 #endif
 
+#include <exception>
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -177,13 +178,39 @@ main( int argc, char *argv[] )
     QObject::connect( &guard, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ), &a, SLOT( instanceStarted( KDSingleApplicationGuard::Instance ) ) );
 
     int returnCode = 0;
-    if ( guard.isPrimaryInstance() )
+
+    // catch unhandled exceptions to log them
+    // setupLogfile must be called from TomahawkApp.init to have the logging working
+    // unfortunately MinGW does not catch std::exceptions as system exceptions
+    // so we need to crash to make the crashreporter come up
+    try
     {
-        a.init();
-        returnCode = a.exec();
+        if ( guard.isPrimaryInstance() )
+        {
+            a.init();
+            returnCode = a.exec();
+        }
+        else
+            qDebug() << "Tomahawk is already running, shutting down.";
     }
-    else
-        qDebug() << "Tomahawk is already running, shutting down.";
+    catch( std::exception& exception )
+    {
+        tLog() << "Uncaught exception: what(): " << exception.what();
+        #ifdef __MINGW32__
+        TomahawkUtils::crash();
+        #else
+        throw;
+        #endif
+    }
+    catch ( ... )
+    {
+        tLog() << "Uncaught non std::exception";
+        #ifdef __MINGW32__
+        TomahawkUtils::crash();
+        #else
+        throw;
+        #endif
+    }
 
 #ifdef Q_OS_WIN
     // clean up keyboard hook
