@@ -32,12 +32,12 @@
 namespace Tomahawk
 {
     class ContextMenu;
+    class MetaPlaylistInterface;
 };
 
 class AnimatedSpinner;
 class GridItemDelegate;
 class PlayableModel;
-class GridPlaylistInterface;
 
 class DLLEXPORT GridView : public QListView, public Tomahawk::ViewPage
 {
@@ -120,6 +120,9 @@ private:
     AnimatedSpinner* m_loadingSpinner;
     OverlayWidget* m_overlay;
 
+    Tomahawk::MetaPlaylistInterface* m_mpl;
+    Tomahawk::playlistinterface_ptr m_playlistInterface;
+
     QModelIndex m_contextMenuIndex;
     QPersistentModelIndex m_playing;
 
@@ -133,8 +136,6 @@ private:
     QRect m_paintRect;
 
     QTimer m_timer;
-
-    friend class ::GridPlaylistInterface;
 };
 
 #endif // GRIDVIEW_H

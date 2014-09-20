@@ -91,6 +91,10 @@ GridView::GridView( QWidget* parent )
 
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), SLOT( onCustomContextMenu( QPoint ) ) );
+
+    m_mpl = new Tomahawk::MetaPlaylistInterface();
+    m_mpl->addChildInterface( proxyModel()->playlistInterface() );
+    m_playlistInterface = playlistinterface_ptr( m_mpl );
 }
 
 
@@ -318,6 +322,7 @@ void
 GridView::onDelegatePlaying( const QPersistentModelIndex& index )
 {
     m_playing = index;
+    m_mpl->addChildInterface( AudioEngine::instance()->currentTrackPlaylist() );
 }
 
 
@@ -326,6 +331,7 @@ GridView::onDelegateStopped( const QPersistentModelIndex& index )
 {
     if ( m_playing == index )
         m_playing = QPersistentModelIndex();
+    m_mpl->removeChildInterface( AudioEngine::instance()->currentTrackPlaylist() );
 }
 
 
@@ -450,14 +456,16 @@ GridView::currentTrackRect() const
 playlistinterface_ptr
 GridView::playlistInterface() const
 {
-    return proxyModel()->playlistInterface();
+    return m_playlistInterface;
 }
 
 
 void
 GridView::setPlaylistInterface( const Tomahawk::playlistinterface_ptr& playlistInterface )
 {
+    m_mpl->removeChildInterface( proxyModel()->playlistInterface() );
     proxyModel()->setPlaylistInterface( playlistInterface );
+    m_mpl->addChildInterface( proxyModel()->playlistInterface() );
 }
 
 
