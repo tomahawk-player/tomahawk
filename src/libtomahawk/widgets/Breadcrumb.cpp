@@ -68,14 +68,14 @@ Breadcrumb::setModel( QAbstractItemModel* model )
 void
 Breadcrumb::setRootIcon( const QPixmap& pm )
 {
-    m_rootIcon = pm;
+    m_rootIcon = TomahawkUtils::tinted( pm, Qt::white );
 
     QPushButton* button = new QPushButton( QIcon( m_rootIcon ), "", this );
     button->setFlat( true );
-    button->setStyleSheet( "QPushButton{ background-color: transparent; border: none; width:36px; height:36px;}" );
+    button->setStyleSheet( "QPushButton{ background-color: transparent; border: none; width:36px; height:36px; }" );
     m_buttonlayout->insertWidget( 0, button );
-    m_buttonlayout->insertSpacing( 0,5 );
-    m_buttonlayout->insertSpacing( 2,5 );
+    m_buttonlayout->insertSpacing( 0, 5 );
+    m_buttonlayout->insertSpacing( 2, 5 );
 }
 
 
