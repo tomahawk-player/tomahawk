@@ -828,7 +828,7 @@ ViewManager::addDynamicPage( Tomahawk::ViewPagePlugin* viewPage, const QString& 
 
     if ( m_dynamicPages.contains( pageId ) || m_dynamicPagePlugins.contains( pageId ) )
     {
-        tLog() << "Not adding a second ViewPage with name" << pageName;
+        tDebug() << Q_FUNC_INFO << "Not adding a second page with id" << pageId << "- old colliding plugin found, please clean your install dir.";
         Q_ASSERT( false );
     }
 

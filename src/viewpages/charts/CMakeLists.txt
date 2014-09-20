@@ -1,10 +1,10 @@
-tomahawk_add_plugin(whatshot
+tomahawk_add_plugin(charts
     TYPE viewpage
     EXPORT_MACRO TOMAHAWK_VIEWPAGE_EXPORT_PRO
     SOURCES
-        WhatsHotWidget.cpp
+        ChartsWidget.cpp
     UI
-        WhatsHotWidget.ui
+        ChartsWidget.ui
     LINK_LIBRARIES
         tomahawk-widgets
 )

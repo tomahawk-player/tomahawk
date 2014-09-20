@@ -20,8 +20,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "WhatsHotWidget.h"
-#include "ui_WhatsHotWidget.h"
+#include "ChartsWidget.h"
+#include "ui_ChartsWidget.h"
 
 #include "MetaPlaylistInterface.h"
 #include "TomahawkSettings.h"
