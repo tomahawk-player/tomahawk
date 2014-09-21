@@ -49,7 +49,7 @@ XmppAccount::XmppAccount( const QString &accountId )
     m_configWidget = QPointer< AccountConfigWidget >( new XmppConfigWidget( this, 0 ) );
 
     XmppConfigWidget* config = static_cast< XmppConfigWidget* >( m_configWidget.data() );
-    config->m_ui->googleHint->hide();
+    config->m_ui->serviceHint->hide();
 
     m_onlinePixmap = QPixmap( ":/xmpp-account/xmpp-icon.png" );
     m_offlinePixmap = QPixmap( ":/xmpp-account/xmpp-offline-icon.png" );
