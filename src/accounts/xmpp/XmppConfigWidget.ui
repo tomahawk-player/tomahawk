@@ -55,7 +55,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Configure this Xmpp account</string>
+        <string>Configure this Jabber/XMPP account</string>
        </property>
       </widget>
      </item>
@@ -101,7 +101,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Enter your Xmpp login to connect with your friends using Tomahawk!</string>
+        <string>Enter your XMPP login to connect with your friends using Tomahawk!</string>
        </property>
        <property name="wordWrap">
         <bool>false</bool>
@@ -228,7 +228,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Xmpp ID:</string>
+           <string>XMPP ID:</string>
           </property>
           <property name="buddy">
            <cstring>xmppUsername</cstring>
@@ -244,7 +244,7 @@
            </sizepolicy>
           </property>
           <property name="placeholderText">
-           <string>e.g. user@example.com</string>
+           <string>e.g. user@jabber.org</string>
           </property>
          </widget>
         </item>
@@ -399,7 +399,7 @@
          <string>Lots of servers don't support this (e.g. GTalk, jabber.org)</string>
         </property>
         <property name="text">
-         <string>Publish currently playing track</string>
+         <string>Display currently playing track</string>
         </property>
        </widget>
       </item>
@@ -416,7 +416,7 @@
    <item>
     <widget class="QLabel" name="serviceHint">
      <property name="text">
-      <string></string>
+      <string/>
      </property>
      <property name="textFormat">
       <enum>Qt::RichText</enum>
