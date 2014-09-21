@@ -116,6 +116,14 @@ public:
     void updateIndex( bool _updateIndex );
     bool updatingIndex();
 
+    /**
+     * Adjust the verbosity of logging.
+     *
+     * For example in verbose mode we will log each file we have scanned.
+     */
+    void setVerbose( bool _verbose );
+    bool verbose();
+
 signals:
     //void fileScanned( QVariantMap );
     void finished();
@@ -144,6 +152,7 @@ private:
     unsigned int m_skipped;
     bool m_showProgress;
     bool m_updateIndex;
+    bool m_verbose;
 
     QList<QString> m_skippedFiles;
     QMap<QString, QMap< unsigned int, unsigned int > > m_filemtimes;

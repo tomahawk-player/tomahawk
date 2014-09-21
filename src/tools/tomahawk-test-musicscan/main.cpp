@@ -49,6 +49,7 @@ main( int argc, char* argv[] )
         // We want a dry-run of the scanner and not update any internal data.
         scanner.showProgress( false );
         scanner.updateIndex( false );
+        scanner.setVerbose( true );
 
         // Start the MusicScanner in its own thread
         QThread scannerThread( 0 );

@@ -139,6 +139,7 @@ MusicScanner::MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& 
     , m_scanned( 0 )
     , m_showProgress( true )
     , m_updateIndex( true )
+    , m_verbose( false )
     , m_cmdQueue( 0 )
     , m_batchsize( bs )
     , m_dirListerThreadController( 0 )
@@ -186,6 +187,20 @@ bool
 MusicScanner::updatingIndex()
 {
     return m_updateIndex;
+}
+
+
+void
+MusicScanner::setVerbose( bool _verbose )
+{
+    m_verbose = _verbose;
+}
+
+
+bool
+MusicScanner::verbose()
+{
+    return m_verbose;
 }
 
 
@@ -452,7 +467,8 @@ MusicScanner::readFile( const QFileInfo& fi )
     if ( m_scanned )
         if ( m_scanned % 3 == 0 && m_showProgress )
             SourceList::instance()->getLocal()->scanningProgress( m_scanned );
-    tDebug( LOGINFO ) << "Scanning file:" << m_scanned << fi.canonicalFilePath();
+    if ( m_scanned % 100 == 0 || m_verbose )
+      tDebug( LOGINFO ) << "Scanning file:" << m_scanned << fi.canonicalFilePath();
 
     if ( m.toMap().isEmpty() )
     {
