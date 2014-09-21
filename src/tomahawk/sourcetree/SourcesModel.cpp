@@ -326,7 +326,7 @@ SourcesModel::appendGroups()
     newReleases->setSortValue( 7 );
 
     m_collectionsGroup = new GroupItem( this, m_rootItem, tr( "Friends" ), 4 );
-    m_cloudGroup = new GroupItem( this, m_rootItem, tr( "Cloud" ), 5 );
+    m_cloudGroup = new GroupItem( this, m_rootItem, tr( "Cloud Collections" ), 5 );
 
     endInsertRows();
 
