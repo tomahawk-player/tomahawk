@@ -303,7 +303,10 @@ GridView::verifySize()
     else if ( newHeight > 0 )
     {
         m_proxyModel->setMaxVisibleItems( m_model->rowCount( QModelIndex() ) - overlapRows );
-        setFixedHeight( newHeight + spacing() );
+
+        m_sizeHint = QSize( QListView::sizeHint().width(), newHeight + spacing() );
+        updateGeometry();
+        setMinimumHeight( newHeight + spacing() );
     }
 }
 
