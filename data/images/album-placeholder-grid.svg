@@ -1,87 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg width="200px" height="200px" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
-    <title>Slice 1</title>
+    <title>album-placeholder-grid</title>
     <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
     <defs></defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-        <g id="album-placeholder-grid" sketch:type="MSLayerGroup">
-            <g id="Page-1">
-                <rect id="Rectangle-1" fill="#D8D8D8" sketch:type="MSShapeGroup" x="0" y="0" width="200" height="200"></rect>
-                <g id="album-placeholder-grid" transform="translate(75.000000, 75.000000)">
-                    <g id="Page-1">
-                        <g id="album-icon">
-                            <g id="Page-1">
-                                <g id="icon_Playlist">
-                                    <g id="Layer_2"></g>
-                                    <g id="Layer_3"></g>
-                                    <g id="Layer_4"></g>
-                                    <g id="Layer_5"></g>
-                                    <g id="Layer_6"></g>
-                                    <g id="Layer_8"></g>
-                                    <g id="Layer_9"></g>
-                                    <g id="Layer_10"></g>
-                                    <g id="Layer_11"></g>
-                                    <g id="Layer_12"></g>
-                                    <g id="Layer_13"></g>
-                                    <g id="Layer_14"></g>
-                                    <g id="Layer_15"></g>
-                                    <g id="Layer_16"></g>
-                                    <g id="Layer_17"></g>
-                                    <g id="Layer_18"></g>
-                                    <g id="Layer_19"></g>
-                                    <g id="Layer_20"></g>
-                                    <g id="Layer_21"></g>
-                                    <g id="Layer_24"></g>
-                                    <g id="Layer_25"></g>
-                                    <g id="Layer_26"></g>
-                                    <g id="Layer_27"></g>
-                                    <g id="Layer_28"></g>
-                                    <g id="Layer_29"></g>
-                                    <g id="Layer_47"></g>
-                                    <g id="Layer_30"></g>
-                                    <g id="Layer_31"></g>
-                                    <g id="Layer_32"></g>
-                                    <g id="Layer_33"></g>
-                                    <g id="Layer_34"></g>
-                                    <g id="Layer_35"></g>
-                                    <g id="Layer_36"></g>
-                                    <g id="Layer_37"></g>
-                                    <g id="Layer_38"></g>
-                                    <g id="Layer_39"></g>
-                                    <g id="Layer_40" fill="#606060" sketch:type="MSShapeGroup">
-                                        <path d="M25,0 C11.25,0 0,11.25 0,25 C0,38.75 11.25,50 25,50 C38.75,50 50,38.75 50,25 C49.5833333,11.25 38.75,0 25,0 L25,0 L25,0 Z M25,33.3333333 C20.4166667,33.3333333 16.6666667,29.5833333 16.6666667,25 C16.6666667,20.4166667 20.4166667,16.6666667 25,16.6666667 C29.5833333,16.6666667 32.9166667,20.4166667 32.9166667,25 C32.9166667,29.5833333 29.1666667,33.3333333 25,33.3333333 L25,33.3333333 L25,33.3333333 Z" id="Shape"></path>
-                                    </g>
-                                    <g id="Layer_41"></g>
-                                    <g id="Layer_42"></g>
-                                    <g id="Layer_43"></g>
-                                    <g id="Layer_44"></g>
-                                    <g id="Layer_45"></g>
-                                    <g id="Layer_46"></g>
-                                    <g id="Layer_48"></g>
-                                    <g id="Layer_49"></g>
-                                    <g id="Layer_51"></g>
-                                    <g id="Layer_52"></g>
-                                    <g id="Layer_53"></g>
-                                    <g id="Layer_54"></g>
-                                    <g id="Layer_55"></g>
-                                    <g id="Layer_56"></g>
-                                    <g id="Layer_57"></g>
-                                    <g id="Layer_58"></g>
-                                    <g id="Layer_59"></g>
-                                    <g id="Layer_60"></g>
-                                    <g id="Layer_61"></g>
-                                    <g id="Layer_62"></g>
-                                    <g id="Layer_63"></g>
-                                    <g id="Layer_64"></g>
-                                    <g id="Layer_65"></g>
-                                    <g id="Layer_66"></g>
-                                    <g id="Layer_50"></g>
-                                </g>
-                            </g>
-                        </g>
-                    </g>
-                </g>
-            </g>
+        <rect id="Rectangle-1" fill="#D8D8D8" sketch:type="MSShapeGroup" x="0" y="0" width="200" height="200"></rect>
+        <g id="icon_Playlist" sketch:type="MSLayerGroup" transform="translate(70.000000, 70.000000)">
+            <path id="Shape" stroke="#449FDB" opacity="0" fill="#000000" sketch:type="MSShapeGroup"></path>
+            <path d="M30,0 C13.5,0 0,13.5 0,30 C0,46.5 13.5,60 30,60 C46.5,60 60,46.5 60,30 C59.499375,13.5 46.5,0 30,0 L30,0 Z M30,39.999375 C24.500625,39.999375 20.000625,35.499375 20.000625,30 C20.000625,24.500625 24.500625,20.000625 30,20.000625 C35.499375,20.000625 39.500625,24.500625 39.500625,30 C39.500625,35.499375 35.000625,39.999375 30,39.999375 L30,39.999375 Z" id="Shape" fill="#606060" sketch:type="MSShapeGroup"></path>
         </g>
     </g>
 </svg>

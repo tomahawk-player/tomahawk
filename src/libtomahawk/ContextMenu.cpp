@@ -157,7 +157,7 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
             m_sources_sigmap->deleteLater();
         m_sources_sigmap = new QSignalMapper( this );
 
-        QMenu* sourcesMenu = addMenu( ImageRegistry::instance()->icon( RESPATH "images/inbox.svg" ), tr( "Send to &Friend" ) );
+        QMenu* sourcesMenu = addMenu( ImageRegistry::instance()->icon( RESPATH "images/share.svg" ), tr( "Send to &Friend" ) );
         for ( int i = 0; i < m_sources.length(); ++i )
         {
             QAction* action = new QAction( m_sources.at( i )->friendlyName(), this );
@@ -209,10 +209,10 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
     addSeparator();
 
     if ( m_supportedActions & ActionCopyLink && itemCount() == 1 )
-        m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/copy.svg" ), tr( "&Copy Track Link" ) ), ActionCopyLink );
+        m_sigmap->setMapping( addAction( tr( "&Copy Track Link" ) ), ActionCopyLink );
 
     if ( m_supportedActions & ActionEditMetadata && itemCount() == 1 )
-        m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/info.svg" ), tr( "Properties..." ) ), ActionEditMetadata );
+        m_sigmap->setMapping( addAction( tr( "Properties..." ) ), ActionEditMetadata );
 
     addSeparator();
 
