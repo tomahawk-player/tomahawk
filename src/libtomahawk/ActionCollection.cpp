@@ -115,7 +115,6 @@ ActionCollection::initActions()
     m_actionCollection[ "showOfflineSources" ] = new QAction( tr( "Show Offline Friends" ), this );
     m_actionCollection[ "showOfflineSources" ]->setCheckable( true );
     m_actionCollection[ "preferences" ] = new QAction( tr( "&Configure Tomahawk..." ), this );
-    m_actionCollection[ "preferences" ]->setIcon( ImageRegistry::instance()->icon( RESPATH "images/configure.svg" ) );
     m_actionCollection[ "preferences" ]->setMenuRole( QAction::PreferencesRole );
 #ifdef Q_OS_MAC
     m_actionCollection[ "minimize" ] = new QAction( tr( "Minimize" ), this );
@@ -132,7 +131,6 @@ ActionCollection::initActions()
     m_actionCollection[ "diagnostics" ] = new QAction( tr( "Diagnostics..." ), this );
     m_actionCollection[ "diagnostics" ]->setMenuRole( QAction::ApplicationSpecificRole );
     m_actionCollection[ "aboutTomahawk" ] = new QAction( tr( "About &Tomahawk..." ), this );
-    m_actionCollection[ "aboutTomahawk" ]->setIcon( ImageRegistry::instance()->icon( RESPATH "images/info.svg" ) );
     m_actionCollection[ "aboutTomahawk" ]->setMenuRole( QAction::AboutRole );
     m_actionCollection[ "legalInfo" ] = new QAction( tr( "&Legal Information..." ), this );
     m_actionCollection[ "legalInfo" ]->setMenuRole( QAction::ApplicationSpecificRole );
