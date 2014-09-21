@@ -14,7 +14,16 @@
    <string notr="true" extracomment="not translatable because not shown to the user">Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>2</number>
+   </property>
+   <property name="topMargin">
+    <number>2</number>
+   </property>
+   <property name="rightMargin">
+    <number>2</number>
+   </property>
+   <property name="bottomMargin">
     <number>2</number>
    </property>
    <item>
@@ -45,7 +54,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Filter by capability:</string>
+        <string>Filter by Capability:</string>
        </property>
       </widget>
      </item>

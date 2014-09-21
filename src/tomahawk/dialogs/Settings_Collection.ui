@@ -20,7 +20,16 @@
    <string notr="true" extracomment="not translatable because not shown to the user">Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>2</number>
+   </property>
+   <property name="topMargin">
+    <number>2</number>
+   </property>
+   <property name="rightMargin">
+    <number>2</number>
+   </property>
+   <property name="bottomMargin">
     <number>2</number>
    </property>
    <item>
@@ -35,9 +44,6 @@
      <property name="spacing">
       <number>8</number>
      </property>
-     <property name="margin">
-      <number>0</number>
-     </property>
      <item>
       <widget class="QListWidget" name="pathListWidget"/>
      </item>
@@ -45,9 +51,6 @@
       <layout class="QVBoxLayout" name="verticalLayout">
        <property name="spacing">
         <number>4</number>
-       </property>
-       <property name="margin">
-        <number>0</number>
        </property>
        <item>
         <widget class="QToolButton" name="addLibraryPathButton">
@@ -91,7 +94,7 @@
  and stations based on your personal taste profile.</string>
        </property>
        <property name="text">
-        <string>Upload collection list to The Echo Nest to enable user radio</string>
+        <string>Upload Collection info to enable personalized &quot;User Radio&quot;</string>
        </property>
       </widget>
      </item>
@@ -113,7 +116,7 @@
        <item>
         <widget class="QLabel" name="scanTimeLabel">
          <property name="text">
-          <string>Time between scans, in seconds:</string>
+          <string>Time between scans (in seconds):</string>
          </property>
         </widget>
        </item>

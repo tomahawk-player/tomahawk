@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>473</width>
+    <width>515</width>
     <height>475</height>
    </rect>
   </property>
@@ -20,7 +20,16 @@
    <string notr="true" extracomment="not translatable because not shown to the user">Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>2</number>
+   </property>
+   <property name="topMargin">
+    <number>2</number>
+   </property>
+   <property name="rightMargin">
+    <number>2</number>
+   </property>
+   <property name="bottomMargin">
     <number>2</number>
    </property>
    <item>
@@ -39,7 +48,7 @@
       <item>
        <widget class="QRadioButton" name="upnpRadioButton">
         <property name="text">
-         <string>Automatic port forward with UPnP (recommended)</string>
+         <string>UPnP / Automatic Port Forwarding (recommended)</string>
         </property>
        </widget>
       </item>
@@ -57,7 +66,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Manual port forward</string>
+           <string>Manual Port Forwarding</string>
           </property>
          </widget>
         </item>
@@ -194,7 +203,7 @@
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="text">
-         <string>Send reports after Tomahawk crashed</string>
+         <string>Send Tomahawk Crash Reports</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -204,7 +213,7 @@
       <item>
        <widget class="QCheckBox" name="checkBoxSongChangeNotifications">
         <property name="text">
-         <string>Show notification when a new song starts to play</string>
+         <string>Show Notifications on song change</string>
         </property>
         <property name="checked">
          <bool>true</bool>

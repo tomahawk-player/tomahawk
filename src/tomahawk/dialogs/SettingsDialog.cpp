@@ -130,7 +130,7 @@ SettingsDialog::SettingsDialog(QObject *parent )
     p->setFixedSize( 0, 0 );
 #endif
 
-    m_accountsWidgetUi->installFromFileBtn->setText( tr( "Install from file" ) );
+    m_accountsWidgetUi->installFromFileBtn->setText( tr( "Add New PlugIn" ) );
 
     // Accounts
     AccountDelegate* accountDelegate = new AccountDelegate( this );
@@ -236,7 +236,7 @@ SettingsDialog::SettingsDialog(QObject *parent )
 // #endif
 
     m_dialog->addTab( m_accountsWidget, TomahawkUtils::defaultPixmap( TomahawkUtils::AccountSettings ),
-                      tr( "Services" ), tr( "Configure the accounts and services used by Tomahawk "
+                      tr( "PlugIns" ), tr( "Configure the accounts and services used by Tomahawk "
                                              "to search and retrieve music, find your friends and "
                                              "update your status." ) );
 
