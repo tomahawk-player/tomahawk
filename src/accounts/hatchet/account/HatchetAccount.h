@@ -48,7 +48,7 @@ public:
 
     virtual QString factoryId() const { return "hatchetaccount"; }
     virtual QString prettyName() const { return "Hatchet"; }
-    virtual QString description() const { return tr( "Connect to your Hatchet account" ); }
+    virtual QString description() const { return tr( "Connect to your Hatchet account to record you playback history, sync your playlists to Android and more." ); }
     virtual bool isUnique() const { return true; }
     AccountTypes types() const { return AccountTypes( SipType ); }
 //    virtual bool allowUserCreation() const { return false; }

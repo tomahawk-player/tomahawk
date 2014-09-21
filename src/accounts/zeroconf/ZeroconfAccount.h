@@ -43,7 +43,7 @@ public:
 
     virtual QString factoryId() const { return "zeroconfaccount"; }
     virtual QString prettyName() const { return tr( "Local Network" ); }
-    QString description() const { return tr( "Automatically connect to Tomahawks on the local network" ); }
+    QString description() const { return tr( "Automatically connect to Tomahawk users on the same local network." ); }
     virtual bool isUnique() const { return true; }
     AccountTypes types() const { return AccountTypes( SipType ); };
 virtual QPixmap icon() const;
