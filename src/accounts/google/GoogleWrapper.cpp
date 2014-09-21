@@ -94,12 +94,13 @@ GoogleWrapper::GoogleWrapper ( const QString& pluginID )
     config->m_ui->xmppServer->setText( "talk.google.com" );
     config->m_ui->xmppPort->setValue( 5222 );
     config->m_ui->groupBoxXmppAdvanced->hide();
+
+    config->m_ui->serviceHint->setText( QString( "<html><head/><body><p>" ) +
+                                          tr( "You may need to change your %1Google Account Settings%2 to login.", "%1 is <a href>, %2 is </a>" )
+                                        .arg( "<a href=\"https://www.google.com/settings/security/lesssecureapps\"><span style=\" text-decoration: underline; color:#0000ff;\">" )
+                                        .arg( "</span></a>" )
+                                        + QString( "</p></body></html>" ) );
     config->m_ui->serviceHint->show();
-    config->m_ui->serviceHint->setText("<html><head/><body><p>" +
-                                       tr( "You may need to change your " ) +
-                                       "<a href=\"https://www.google.com/settings/security/lesssecureapps\"><span style=\" text-decoration: underline; color:#0000ff;\">" +
-                                       tr( "Google Account settings" ) + "</span></a>" +
-                                       tr( " to login." ) + "</p></body></html>");
 
     m_onlinePixmap = QPixmap( ":/google-account/gmail-logo.png" );
     m_offlinePixmap = QPixmap( ":/google-account/gmail-offline-logo.png" );
