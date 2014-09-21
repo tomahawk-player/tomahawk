@@ -258,7 +258,6 @@ void GridView::wheelEvent( QWheelEvent* e )
 QSize
 GridView::minimumSizeHint() const
 {
-    tDebug() << Q_FUNC_INFO << m_sizeHint;
     if ( !m_sizeHint.isEmpty() )
         return m_sizeHint;
 
@@ -269,7 +268,6 @@ GridView::minimumSizeHint() const
 QSize
 GridView::sizeHint() const
 {
-    tDebug() << Q_FUNC_INFO << m_sizeHint;
     if ( !m_sizeHint.isEmpty() )
         return m_sizeHint;
 
