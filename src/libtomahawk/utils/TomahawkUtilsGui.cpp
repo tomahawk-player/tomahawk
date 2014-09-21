@@ -716,7 +716,7 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/advanced-settings.svg", size );
             break;
         case AccountSettings:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/account-settings.svg", size );
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/plugins.svg", size );
             break;
         case MusicSettings:
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/music-settings.svg", size );

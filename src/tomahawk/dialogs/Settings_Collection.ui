@@ -35,7 +35,7 @@
    <item>
     <widget class="QLabel" name="label_6">
      <property name="text">
-      <string>Path to scan for music files:</string>
+      <string>Folderss to scan for music files:</string>
      </property>
     </widget>
    </item>

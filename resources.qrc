@@ -50,7 +50,6 @@
         <file>data/images/sipplugin-online.svg</file>
         <file>data/images/sipplugin-offline.svg</file>
         <file>data/images/advanced-settings.svg</file>
-        <file>data/images/account-settings.svg</file>
         <file>data/images/music-settings.svg</file>
         <file>data/images/automatic-playlist.svg</file>
         <file>data/images/station.svg</file>
@@ -181,5 +180,6 @@
         <file>data/images/whatsnew.svg</file>
         <file>data/images/copy.svg</file>
         <file>data/icons/tomahawk-icon-1024x1024.png</file>
+        <file>data/images/plugins.svg</file>
     </qresource>
 </RCC>
