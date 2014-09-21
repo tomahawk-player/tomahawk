@@ -37,7 +37,30 @@ main( int argc, char* argv[] )
     }
     else if ( pathInfo.isDir() )
     {
-        // TODO: Run MusicScanner recursively
+        // Register needed metatypes
+        qRegisterMetaType< QDir >( "QDir" );
+        qRegisterMetaType< QFileInfo >( "QFileInfo" );
+
+        // Create the MusicScanner instance
+        QStringList paths;
+        paths << pathInfo.canonicalFilePath();
+        MusicScanner scanner( MusicScanner::DirScan, paths, 0 );
+
+        // We want a dry-run of the scanner and not update any internal data.
+        scanner.showProgress( false );
+        scanner.updateIndex( false );
+
+        // Start the MusicScanner in its own thread
+        QThread scannerThread( 0 );
+        scannerThread.start();
+        // We need to do this or the finished() signal/quit() SLOT is not called.
+        scannerThread.moveToThread( &scannerThread );
+        scanner.moveToThread( &scannerThread );
+        QObject::connect( &scanner, SIGNAL( finished() ), &scannerThread, SLOT( quit() ) );
+        QMetaObject::invokeMethod( &scanner, "scan", Qt::QueuedConnection );
+
+        // Wait until the scanner has done its work.
+        scannerThread.wait();
     }
     else
     {
