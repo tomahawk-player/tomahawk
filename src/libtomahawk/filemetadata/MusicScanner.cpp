@@ -451,8 +451,7 @@ MusicScanner::readFile( const QFileInfo& fi )
     if ( m_scanned )
         if ( m_scanned % 3 == 0 && m_showProgress )
             SourceList::instance()->getLocal()->scanningProgress( m_scanned );
-    if ( m_scanned % 100 == 0 )
-        tDebug( LOGINFO ) << "Scan progress:" << m_scanned << fi.canonicalFilePath();
+    tDebug( LOGINFO ) << "Scanning file:" << m_scanned << fi.canonicalFilePath();
 
     if ( m.toMap().isEmpty() )
     {
