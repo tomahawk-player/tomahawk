@@ -66,6 +66,7 @@ private:
 
     bool m_disableChecksForGoogle;
     friend class GoogleWrapper; // So google wrapper can modify the labels and text
+    friend class XmppAccount; // So xmpp 'wrapper' can modify the labels and text
 };
 
 }

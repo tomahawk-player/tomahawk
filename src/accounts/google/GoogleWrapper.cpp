@@ -94,6 +94,7 @@ GoogleWrapper::GoogleWrapper ( const QString& pluginID )
     config->m_ui->xmppServer->setText( "talk.google.com" );
     config->m_ui->xmppPort->setValue( 5222 );
     config->m_ui->groupBoxXmppAdvanced->hide();
+    config->m_ui->googleHint->show();
 
     m_onlinePixmap = QPixmap( ":/google-account/gmail-logo.png" );
     m_offlinePixmap = QPixmap( ":/google-account/gmail-offline-logo.png" );
