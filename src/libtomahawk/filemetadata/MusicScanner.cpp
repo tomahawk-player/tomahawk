@@ -137,6 +137,7 @@ MusicScanner::MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& 
     , m_scanMode( scanMode )
     , m_paths( paths )
     , m_showProgress( true )
+    , m_cmdQueue( 0 )
     , m_batchsize( bs )
     , m_dirListerThreadController( 0 )
 {
