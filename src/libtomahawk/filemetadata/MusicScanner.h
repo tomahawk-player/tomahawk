@@ -111,10 +111,12 @@ public:
     bool showingProgress();
 
     /**
-     * Specify if the search index should be updated or if we only want a dry run.
+     * Specify if we want a dry run, i.e. not change any of the internal data stores.
+     *
+     * This is useful for testing if the scanner works (while Tomahawk is running).
      */
-    void updateIndex( bool _updateIndex );
-    bool updatingIndex();
+    void setDryRun( bool _dryRun );
+    bool dryRun();
 
     /**
      * Adjust the verbosity of logging.
@@ -151,7 +153,7 @@ private:
     unsigned int m_scanned;
     unsigned int m_skipped;
     bool m_showProgress;
-    bool m_updateIndex;
+    bool m_dryRun;
     bool m_verbose;
 
     QList<QString> m_skippedFiles;
