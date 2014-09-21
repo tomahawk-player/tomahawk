@@ -172,6 +172,7 @@ Database::~Database()
     m_workerThreads.clear();
 
     qDeleteAll( m_implHash.values() );
+    qDeleteAll( m_commandFactories.values() );
     delete m_impl;
 
 }
