@@ -136,6 +136,7 @@ MusicScanner::MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& 
     : QObject()
     , m_scanMode( scanMode )
     , m_paths( paths )
+    , m_scanned( 0 )
     , m_showProgress( true )
     , m_updateIndex( true )
     , m_cmdQueue( 0 )
