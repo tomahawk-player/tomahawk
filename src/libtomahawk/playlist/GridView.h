@@ -47,6 +47,9 @@ public:
     explicit GridView( QWidget* parent = 0 );
     ~GridView();
 
+    virtual QSize minimumSizeHint() const;
+    virtual QSize sizeHint() const;
+
     void setProxyModel( PlayableProxyModel* model );
 
     PlayableModel* model() const { return m_model; }
@@ -136,6 +139,7 @@ private:
     QRect m_paintRect;
 
     QTimer m_timer;
+    QSize m_sizeHint;
 };
 
 #endif // GRIDVIEW_H
