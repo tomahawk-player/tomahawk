@@ -237,7 +237,6 @@ GridView::resizeEvent( QResizeEvent* event )
 {
     QListView::resizeEvent( event );
     layoutItems();
-    verifySize();
 
     emit resized();
 }
