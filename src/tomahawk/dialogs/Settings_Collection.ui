@@ -35,7 +35,7 @@
    <item>
     <widget class="QLabel" name="label_6">
      <property name="text">
-      <string>Folderss to scan for music files:</string>
+      <string>Folders to scan for music files:</string>
      </property>
     </widget>
    </item>
@@ -107,7 +107,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Watch for changes</string>
+        <string>Watch for changes (automatically update Collection)</string>
        </property>
       </widget>
      </item>
