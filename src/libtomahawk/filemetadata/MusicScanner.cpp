@@ -137,6 +137,7 @@ MusicScanner::MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& 
     , m_scanMode( scanMode )
     , m_paths( paths )
     , m_showProgress( true )
+    , m_updateIndex( true )
     , m_cmdQueue( 0 )
     , m_batchsize( bs )
     , m_dirListerThreadController( 0 )
@@ -170,6 +171,20 @@ bool
 MusicScanner::showingProgress()
 {
     return m_showProgress;
+}
+
+
+void
+MusicScanner::updateIndex( bool _updateIndex )
+{
+    m_updateIndex = _updateIndex;
+}
+
+
+bool
+MusicScanner::updatingIndex()
+{
+    return m_updateIndex;
 }
 
 
@@ -264,8 +279,11 @@ MusicScanner::postOps()
 
     if ( m_filesToDelete.length() || m_scannedfiles.length() )
     {
-        SourceList::instance()->getLocal()->updateIndexWhenSynced();
-        commitBatch( m_scannedfiles, m_filesToDelete );
+        if ( m_updateIndex )
+        {
+            SourceList::instance()->getLocal()->updateIndexWhenSynced();
+            commitBatch( m_scannedfiles, m_filesToDelete );
+        }
         m_scannedfiles.clear();
         m_filesToDelete.clear();
     }

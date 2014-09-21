@@ -110,6 +110,12 @@ public:
     void showProgress( bool _showProgress );
     bool showingProgress();
 
+    /**
+     * Specify if the search index should be updated or if we only want a dry run.
+     */
+    void updateIndex( bool _updateIndex );
+    bool updatingIndex();
+
 signals:
     //void fileScanned( QVariantMap );
     void finished();
@@ -137,6 +143,7 @@ private:
     unsigned int m_scanned;
     unsigned int m_skipped;
     bool m_showProgress;
+    bool m_updateIndex;
 
     QList<QString> m_skippedFiles;
     QMap<QString, QMap< unsigned int, unsigned int > > m_filemtimes;
