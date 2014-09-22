@@ -197,7 +197,7 @@ border-color: #ccc;
            <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/inbox-screenshot.png</pixmap>
           </property>
           <property name="scaledContents">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -238,6 +238,9 @@ border-color: #ccc;
           </property>
           <property name="pixmap">
            <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/link-banner.png</pixmap>
+          </property>
+          <property name="scaledContents">
+           <bool>true</bool>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -280,7 +283,7 @@ border-color: #ccc;
            <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/beats-banner.png</pixmap>
           </property>
           <property name="scaledContents">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -319,6 +322,9 @@ border-color: #ccc;
           <property name="pixmap">
            <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/google-banner.png</pixmap>
           </property>
+          <property name="scaledContents">
+           <bool>true</bool>
+          </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
           </property>
@@ -355,6 +361,9 @@ border-color: #ccc;
           </property>
           <property name="pixmap">
            <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/android-banner.png</pixmap>
+          </property>
+          <property name="scaledContents">
+           <bool>true</bool>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -395,6 +404,9 @@ border-color: #ccc;
           </property>
           <property name="pixmap">
            <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/ipv6-banner.png</pixmap>
+          </property>
+          <property name="scaledContents">
+           <bool>true</bool>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
