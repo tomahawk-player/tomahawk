@@ -101,6 +101,8 @@ public slots:
     void showSettingsDialog();
     void showDiagnosticsDialog();
     void legalInfo();
+    void getSupport();
+    void reportBug();
     void openLogfile();
     void updateCollectionManually();
     void rescanCollectionManually();
