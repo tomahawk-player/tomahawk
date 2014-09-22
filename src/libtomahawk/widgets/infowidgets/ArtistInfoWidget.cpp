@@ -385,7 +385,7 @@ ArtistInfoWidget::onBiographyLoaded()
                  "</style></head>"
                  "<body>%2</body></html>" )
                .arg( TomahawkUtils::defaultFontSize() )
-               .arg( m_artist->biography().trimmed().replace( '\n', "<br>" ) );
+               .arg( m_artist->biography().trimmed().replace( '\n', "<br><br>" ) );
 
     ui->biography->setHtml( html );
 }
