@@ -119,8 +119,10 @@ BasicHeader::setPixmap( const QPixmap& pixmap, bool tinted )
 
 
 void
-BasicHeader::resizeEvent( QResizeEvent* /* event */)
+BasicHeader::resizeEvent( QResizeEvent* event )
 {
+    BackgroundWidget::resizeEvent( event );
+
     ui->captionLabel->setFixedWidth( width() * 0.33 );
     ui->balanceSpacer->changeSize( ui->captionLabel->width(), 1, QSizePolicy::Expanding, QSizePolicy::Fixed );
 }
