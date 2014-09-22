@@ -91,13 +91,13 @@ se s vámi spojil?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="343"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="341"/>
         <source>&amp;Listen Privately</source>
         <translation>Zapnout režim &amp;soukromého poslechu</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="343"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="341"/>
         <source>&amp;Listen Publicly</source>
         <translation>Opustit režim sou&amp;kromého poslechu</translation>
     </message>
@@ -177,83 +177,83 @@ se s vámi spojil?</translation>
         <translation>&amp;Nastavit Tomahawk...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="121"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="120"/>
         <source>Minimize</source>
         <translation>Zmenšit</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="123"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="122"/>
         <source>Zoom</source>
         <translation>Zvětšení</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="125"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="124"/>
         <source>Enter Full Screen</source>
         <translation>Vstoupit do režimu na celou obrazovku</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="128"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="127"/>
         <source>Hide Menu Bar</source>
         <translation>Skrýt pruh s hlavní nabídkou</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="132"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="131"/>
         <source>Diagnostics...</source>
         <translation>Diagnostika...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="134"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="133"/>
         <source>About &amp;Tomahawk...</source>
         <translation>&amp;O programu Tomahawk...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="137"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="135"/>
         <source>&amp;Legal Information...</source>
         <translation>&amp;Právní informace...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="139"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="137"/>
         <source>&amp;View Logfile</source>
         <translation>&amp;Zobrazit soubor se zápisem</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="142"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="140"/>
         <source>Check For Updates...</source>
         <translation>Prověřit, zda již je novější vydání...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="146"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="144"/>
         <source>0.8</source>
         <translation>0.8</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="157"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="155"/>
         <source>&amp;Controls</source>
         <translation>&amp;Ovládání</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="172"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="170"/>
         <source>&amp;Settings</source>
         <translation>Na&amp;stavení</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="179"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="177"/>
         <source>&amp;Help</source>
         <translation>Nápo&amp;věda</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="184"/>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="254"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="182"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="252"/>
         <source>What&apos;s new in ...</source>
         <translation>Co je nového v...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="210"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="208"/>
         <source>&amp;Window</source>
         <translation>&amp;Okno</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="227"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="225"/>
         <source>Main Menu</source>
         <translation>Hlavní nabídka</translation>
     </message>
@@ -765,34 +765,39 @@ se s vámi spojil?</translation>
         <translation>Spojit se s účtem u Hatchet</translation>
     </message>
     <message>
-        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="62"/>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="43"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;(&lt;a href=&quot;http://hatchet.is/register&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;create a new account)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="78"/>
         <source>Enter One-time
 Password (OTP)</source>
         <translation>Zadejte jednorázové
 heslo</translation>
     </message>
     <message>
-        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="70"/>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="86"/>
         <source>Username</source>
         <translation>Uživatelské jméno</translation>
     </message>
     <message>
-        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="77"/>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="93"/>
         <source>Hatchet username</source>
         <translation>Uživatelské jméno u Hatchet</translation>
     </message>
     <message>
-        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="84"/>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="100"/>
         <source>Password:</source>
         <translation>Heslo:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="97"/>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="113"/>
         <source>Hatchet password</source>
         <translation>Heslo pro Hatchet</translation>
     </message>
     <message>
-        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="138"/>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="154"/>
         <source>Login</source>
         <translation>Přihlášení</translation>
     </message>
@@ -995,8 +1000,8 @@ heslo</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadXSPFDialog.ui" line="76"/>
-        <source>Note: to import a playlist from Spotify, Rdio, Beats, etc. - simply drag the link into Tomahawk</source>
-        <translation>Poznámka: Pro zavedení seznamu skladeb ze Spotify, Rdio, Beats atd. - jednoduše přetáhněte odkaz do Tomahawku</translation>
+        <source>To import a playlist from Spotify, Rdio, Beats, etc. - simply drag the link into Tomahawk.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1792,24 +1797,24 @@ heslo</translation>
         <translation>Vše</translation>
     </message>
     <message>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="133"/>
+        <source>Install Plug-In...</source>
+        <translation>Nainstalovat přídavný modul...</translation>
+    </message>
+    <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="300"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation>Některá změněná nastavení se neprojeví, dokud Tomahawk nebude spuštěn znovu</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="239"/>
-        <source>Services</source>
-        <translation>Služby</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="133"/>
-        <source>Install from file</source>
-        <translation>Instalovat ze souboru</translation>
+        <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
+        <translation>Nastavit účty a služby, jež Tomahawk používa pro hledání a získávání hudby, ke spojování se s vašimi přáteli a pro aktualizaci vašeho stavu.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="239"/>
-        <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
-        <translation>Nastavit účty a služby, jež Tomahawk používa pro hledání a získávání hudby, ke spojování se s vašimi přáteli a pro aktualizaci vašeho stavu.</translation>
+        <source>Plug-Ins</source>
+        <translation>Přídavné moduly</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="244"/>
@@ -1855,80 +1860,80 @@ heslo</translation>
 <context>
     <name>Settings_Accounts</name>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Accounts.ui" line="48"/>
-        <source>Filter by capability:</source>
+        <location filename="../src/tomahawk/dialogs/Settings_Accounts.ui" line="57"/>
+        <source>Filter by Capability:</source>
         <translation>Filtrovat podle způsobilosti:</translation>
     </message>
 </context>
 <context>
     <name>Settings_Advanced</name>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="29"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="38"/>
         <source>Remote Peer Connection Method</source>
         <translation>Spojení s jinými Tomahawky</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="35"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="44"/>
         <source>Active (your host needs to be directly reachable)</source>
         <translation>Činný (váš hostitel musí být přímo dosažitelný)</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="42"/>
-        <source>Automatic port forward with UPnP (recommended)</source>
-        <translation>Automatické předání přípojky pomocí UPnP (doporučeno)</translation>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="51"/>
+        <source>UPnP / Automatic Port Forwarding (recommended)</source>
+        <translation>UPnP/Automatické předání přípojky (doporučeno)</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="60"/>
-        <source>Manual port forward</source>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="69"/>
+        <source>Manual Port Forwarding</source>
         <translation>Ruční předání přípojky</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="73"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="82"/>
         <source>Host Settings...</source>
         <translation>Nastavení hostitele…</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="101"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="110"/>
         <source>SOCKS Proxy</source>
         <translation>SOCKS Proxy</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="107"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="116"/>
         <source>Use SOCKS Proxy</source>
         <translation>Použít SOCKS Proxy</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="136"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="145"/>
         <source>Proxy Settings...</source>
         <translation>Nastavení Proxy…</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="162"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="171"/>
         <source>Other Settings</source>
         <translation>Další nastavení</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="171"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="180"/>
         <source>Allow web browsers to interact with Tomahawk (recommended)</source>
         <translation>Povolit internetovým prohlížečům komunikaci s Tomahawkem (doporučeno)</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="184"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="193"/>
         <source>Allow other computers to interact with Tomahawk (not recommended yet)</source>
         <translation>Povolit jiným počítačům komunikaci s Tomahawkem (doporučeno)</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="197"/>
-        <source>Send reports after Tomahawk crashed</source>
-        <translation>Odeslat zprávu o chybě, když Tomahawk spadl</translation>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="206"/>
+        <source>Send Tomahawk Crash Reports</source>
+        <translation>Poslat zprávy Tomahawku o pádech</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="207"/>
-        <source>Show notification when a new song starts to play</source>
-        <translation>Ukázat oznámení, když začne hrát nová píseň</translation>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="216"/>
+        <source>Show Notifications on song change</source>
+        <translation>Ukázat oznámení při změně písně</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="235"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="244"/>
         <source>Clear All Access Control Entries</source>
         <translation>Smazat všechna udělená přístupová oprávnění</translation>
     </message>
@@ -1936,22 +1941,27 @@ heslo</translation>
 <context>
     <name>Settings_Collection</name>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="29"/>
-        <source>Path to scan for music files:</source>
-        <translation>Cesta k hudebním souborům:</translation>
+        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="38"/>
+        <source>Folders to scan for music:</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="55"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="53"/>
+        <source>Due to the unique way Tomahawk works, your music files must at least have Artist &amp; Title metadata/ID3 tags to be added to your Collection.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="76"/>
         <source>+</source>
         <translation>+</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="62"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="83"/>
         <source>-</source>
         <translation>-</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="88"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="109"/>
         <source>The Echo Nest supports keeping track of your catalog metadata
  and using it to craft personalized radios. Enabling this option
  will allow you (and all your friends) to create automatic playlists
@@ -1959,18 +1969,18 @@ heslo</translation>
         <translation>Echo Nest může analyzovat popisná data vaší sbírky, aby vám nabídl radiostanice podle vašich potřeb. Když je tato volba zapnuta, můžete vy (a všichni vaši přátelé) vytvářet automatické seznamy skladeb a stanice, jež jsou založeny na vaší osobní hudební chuti.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="94"/>
-        <source>Upload collection list to The Echo Nest to enable user radio</source>
-        <translation>Předat seznam nynější sbírky Echo Nest pro zapnutí uživatelského rádia (User Radio)</translation>
+        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="115"/>
+        <source>Upload Collection info to enable personalized &quot;User Radio&quot;</source>
+        <translation>Předat informace o sbírce pro umožnění uživatelského rádia</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="107"/>
-        <source>Watch for changes</source>
-        <translation>Sledovat změny a aktualizovat automaticky</translation>
+        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="128"/>
+        <source>Watch for changes (automatically update Collection)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="116"/>
-        <source>Time between scans, in seconds:</source>
+        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="137"/>
+        <source>Time between scans (in seconds):</source>
         <translation>Doba mezi dvěma prohlédnutími (v sekundách):</translation>
     </message>
 </context>
@@ -2233,8 +2243,8 @@ heslo</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="329"/>
-        <source>Cloud</source>
-        <translation>Oblak</translation>
+        <source>Cloud Collections</source>
+        <translation>Sbírky v oblacích</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="323"/>
@@ -2433,13 +2443,19 @@ heslo</translation>
         <source>username@gmail.com</source>
         <translation>uživatel@gmail.com</translation>
     </message>
+    <message>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="99"/>
+        <source>You may need to change your %1Google Account Settings%2 to login.</source>
+        <comment>%1 is &lt;a href&gt;, %2 is &lt;/a&gt;</comment>
+        <translation>Možná je potřeba, abyste změnil vaše %1nastavení účtu u Google%2, abyste se mohl přihlásit.</translation>
+    </message>
 </context>
 <context>
     <name>Tomahawk::Accounts::GoogleWrapperFactory</name>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.h" line="44"/>
-        <source>Connect to Google Talk to find your friends</source>
-        <translation>Spojit se s Google Talk kvůli nalezení přátel</translation>
+        <source>Login to directly connect to your Google Talk contacts that also use Tomahawk.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2487,8 +2503,8 @@ heslo</translation>
     <name>Tomahawk::Accounts::HatchetAccountFactory</name>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccount.h" line="51"/>
-        <source>Connect to your Hatchet account</source>
-        <translation>Spojit se s účtem u Hatchet</translation>
+        <source>Connect to Hatchet to capture your playback data, sync your playlists to Android and more.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2690,8 +2706,8 @@ heslo</translation>
     <name>Tomahawk::Accounts::XmppAccountFactory</name>
     <message>
         <location filename="../src/accounts/xmpp/XmppAccount.h" line="53"/>
-        <source>Log on to your Jabber/XMPP account to connect to your friends</source>
-        <translation>Přihlašte se a použijte svůj účet u služby Jabber/XMPP pro spojení se s vašimi přáteli</translation>
+        <source>Login to connect to your Jabber/XMPP contacts that also use Tomahawk.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2741,8 +2757,8 @@ username@jabber.org</translation>
     </message>
     <message>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="46"/>
-        <source>Automatically connect to Tomahawks on the local network</source>
-        <translation>Automaticky se spojit s ostatními Tomahawky v místní síti</translation>
+        <source>Automatically connect to Tomahawk users on the same local network.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -4030,11 +4046,6 @@ Zkuste vyladit filtry pro nové písně.</translation>
         <translation>Ukázat pruh s hlavní nabídkou</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="322"/>
-        <source>Search for any artist, album or song...</source>
-        <translation>Hledat umělce, album nebo píseň...</translation>
-    </message>
-    <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="345"/>
         <source>&amp;Main Menu</source>
         <translation>Hlavní &amp;nabídka</translation>
@@ -4141,6 +4152,11 @@ Zkuste vyladit filtry pro nové písně.</translation>
         <translation>Pozastavit</translation>
     </message>
     <message>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="322"/>
+        <source>Search</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1280"/>
         <source>&amp;Play</source>
         <translation>&amp;Přehrát</translation>
@@ -4187,7 +4203,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="95"/>
-        <source>Alternative versions:</source>
+        <source>Alternate versions:</source>
         <translation>Jiné verze:</translation>
     </message>
     <message>
@@ -4511,16 +4527,16 @@ Zkuste vyladit filtry pro nové písně.</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="373"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk for Android is now in beta! The majority of the same resolvers are supported in the Android app - plus a couple of additional ones in Rdio &amp;amp; Deezer. Create a Hatchet account to sync all of your playlists from your desktop to your mobile. Find current and future music influencers and follow them to discover and hear what they love. Just like on the desktop, Tomahawk on Android can open other music service links and play them from yours. Even when you are listening to other music apps, Tomahawk can capture all of that playback data and add it to your Hatchet profile.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk pro Android je nyní ve verzi beta!  Většina těchže řešitelů je podporována v aplikacích pro Android - plus několik dalších v Rdio &amp; Deezer.  Vytvořte si účet u Hatchet (válečná sekera) pro seřízení všech vašich seznamů skladeb nacházejících se ve vašem stolním počítači s přenosným telefonem.  Nalezněte nynější a budoucí vlivné osoby a sledujte je, abyste zjistili, co se jim líbí. Právě tak jako ve stolním počítači může Tomahawk na Androidu otevřít odkazy na jiné hudební služby a přehrávat je. Dokonce i když posloucháte jiné hudební aplikace, Tomahawk umí zachytit všechna ta přehrávaná data a přidat je do vašeho profilu u Hatchet.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk for Android is now in beta! The majority of the same resolvers are supported in the Android app - plus a couple of additional ones in Rdio &amp;amp; Deezer. &lt;a href=&quot;http://hatchet.is/register&quot;&gt;Create a Hatchet account&lt;/a&gt; to sync all of your playlists from your desktop to your mobile. Find current and future music influencers and follow them to discover and hear what they love. Just like on the desktop, Tomahawk on Android can open other music service links and play them from yours. Even when you are listening to other music apps, Tomahawk can capture all of that playback data and add it to your Hatchet profile.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="390"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="393"/>
         <source>Connectivity</source>
         <translation>Propojitelnost</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="413"/>
+        <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="416"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk now supports IPv6 and multiple local IP addresses. This improves the discoverability and connection between Tomahawk users - particularly large local networks often found in work and university settings. The more friends, the more music, the more playlists and the more curation from those people whose musical tastes you value. Sit back and just Listen Along!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk nyní podporuje IPv6 a více místních adres IP.  To zlepšuje objevitelnost a spojení mezi uživateli Tomahawku - obzvláště velké místní sítě se často nacházejí v práci a na univerzitách. Čím více přátel, tím více hudby, více seznamů skladeb od lidí, jejichž citu pro hudbu si ceníte. Pohodlně se usaďte a zaposlouchejte se.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
@@ -4685,16 +4701,6 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>Nastavení XMPP</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="58"/>
-        <source>Configure this Xmpp account</source>
-        <translation>Nastavit tento účet u XMPP</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="104"/>
-        <source>Enter your Xmpp login to connect with your friends using Tomahawk!</source>
-        <translation>Zadejte své přihlášení u Xmpp a spojte se pomocí Tomahawku s vašimi přáteli!</translation>
-    </message>
-    <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="196"/>
         <source>Configure</source>
         <translation>Nastavit</translation>
@@ -4705,14 +4711,24 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>Informace přihlášení</translation>
     </message>
     <message>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="58"/>
+        <source>Configure this Jabber/XMPP account</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="104"/>
+        <source>Enter your XMPP login to connect with your friends using Tomahawk!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="231"/>
-        <source>Xmpp ID:</source>
-        <translation>Uživatel XMPP:</translation>
+        <source>XMPP ID:</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="247"/>
-        <source>e.g. user@example.com</source>
-        <translation>např. uživatel@příklad.cz</translation>
+        <source>e.g. user@jabber.org</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="260"/>
@@ -4746,8 +4762,8 @@ Lyrics for &quot;%1&quot; by %2:
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="402"/>
-        <source>Publish currently playing track</source>
-        <translation>Zveřejnit nyní přehrávanou skladbu</translation>
+        <source>Display currently playing track</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="409"/>
