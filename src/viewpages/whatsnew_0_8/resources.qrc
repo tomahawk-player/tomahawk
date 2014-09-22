@@ -18,5 +18,10 @@
         <file>data/images/beatsbutton.png</file>
         <file>data/images/networkbutton.png</file>
         <file>data/images/inboxbutton.png</file>
+        <file>data/images/ipv6-banner.png</file>
+        <file>data/images/android-banner.png</file>
+        <file>data/images/google-banner.png</file>
+        <file>data/images/beats-banner.png</file>
+        <file>data/images/link-banner.png</file>
     </qresource>
 </RCC>

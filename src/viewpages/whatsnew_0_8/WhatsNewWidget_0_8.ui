@@ -233,17 +233,14 @@ border-color: #ccc;
         </item>
         <item>
          <widget class="QLabel" name="linkImage">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+          <property name="text">
+           <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/universal-link-network.png</pixmap>
+           <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/link-banner.png</pixmap>
           </property>
-          <property name="scaledContents">
-           <bool>false</bool>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -280,10 +277,13 @@ border-color: #ccc;
            </sizepolicy>
           </property>
           <property name="pixmap">
-           <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/beatsmusic.png</pixmap>
+           <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/beats-banner.png</pixmap>
           </property>
           <property name="scaledContents">
            <bool>false</bool>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -313,17 +313,14 @@ border-color: #ccc;
         </item>
         <item>
          <widget class="QLabel" name="googleImage">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+          <property name="text">
+           <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/gmusic-banner.png</pixmap>
+           <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/google-banner.png</pixmap>
           </property>
-          <property name="scaledContents">
-           <bool>false</bool>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -353,17 +350,14 @@ border-color: #ccc;
         </item>
         <item>
          <widget class="QLabel" name="androidImage">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+          <property name="text">
+           <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/tomahawk-android.png</pixmap>
+           <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/android-banner.png</pixmap>
           </property>
-          <property name="scaledContents">
-           <bool>false</bool>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -396,17 +390,14 @@ border-color: #ccc;
         </item>
         <item>
          <widget class="QLabel" name="networkImage">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+          <property name="text">
+           <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/networking.png</pixmap>
+           <pixmap resource="resources.qrc">:/whatsnew_0_8/data/images/ipv6-banner.png</pixmap>
           </property>
-          <property name="scaledContents">
-           <bool>false</bool>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
