@@ -464,14 +464,12 @@ JSResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr&, const QStr
                                                boost::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback )
 {
     //can be sync or async
-    QString origResultUrl = QString( QUrl( url ).toEncoded() );
-
     if ( m_urlCallbackIsAsync )
     {
         QString qid = uuid();
         QString getUrl = QString( "Tomahawk.resolver.instance.%1( '%2', '%3' );" ).arg( m_urlCallback )
                                                                                   .arg( qid )
-                                                                                  .arg( origResultUrl );
+                                                                                  .arg( url );
 
         m_streamCallbacks.insert( qid, callback );
         m_resolver->d_func()->engine->mainFrame()->evaluateJavaScript( getUrl );
@@ -479,7 +477,7 @@ JSResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr&, const QStr
     else
     {
         QString getUrl = QString( "Tomahawk.resolver.instance.%1( '%2' );" ).arg( m_urlCallback )
-                                                                            .arg( origResultUrl );
+                                                                            .arg( url );
 
         QString urlStr = m_resolver->d_func()->engine->mainFrame()->evaluateJavaScript( getUrl ).toString();
 
