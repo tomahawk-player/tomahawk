@@ -760,7 +760,8 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString 
             d->state = Loading;
             emit loading( d->currentTrack );
 
-            if ( !TomahawkUtils::isLocalResult( url ) && !TomahawkUtils::isHttpResult( url )
+            if ( !TomahawkUtils::isLocalResult( url )
+                 && !( TomahawkUtils::isHttpResult( url ) && io.isNull() )
                  && !TomahawkUtils::isRtmpResult( url ) )
             {
                 QSharedPointer<QNetworkReply> qnr = io.objectCast<QNetworkReply>();
