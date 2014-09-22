@@ -56,7 +56,7 @@ LovedTracksItem::text() const
     if ( !par )
         return QString( tr( "Top Loved Tracks" ) );
     else
-        return QString( tr( "Loved Tracks" ) );
+        return QString( tr( "Favorites" ) );
 }
 
 
@@ -82,7 +82,7 @@ LovedTracksItem::activate()
         TrackItemDelegate* del = new TrackItemDelegate( TrackItemDelegate::LovedTracks, pv->trackView(), pv->trackView()->proxyModel() );
         pv->trackView()->setPlaylistItemDelegate( del );
 
-        pv->setEmptyTip( tr( "Sorry, we could not find any loved tracks!" ) );
+        pv->setEmptyTip( tr( "Sorry, we could not find any of your Favorites!" ) );
         if ( !par )
         {
             raModel->setDescription( tr( "The most loved tracks from all your friends" ) );
