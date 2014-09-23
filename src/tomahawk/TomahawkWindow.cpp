@@ -1023,13 +1023,13 @@ TomahawkWindow::legalInfo()
 void
 TomahawkWindow::getSupport()
 {
-    QDesktopServices::openUrl( QUrl( "http://tomahawk.uservoice.com" ) );
+    QDesktopServices::openUrl( QUrl( "https://tomahawk.uservoice.com" ) );
 }
 
 void
 TomahawkWindow::reportBug()
 {
-    QDesktopServices::openUrl( QUrl( "http://bugs.tomahawk-player.org" ) );
+    QDesktopServices::openUrl( QUrl( "https://bugs.tomahawk-player.org" ) );
 }
 
 void
