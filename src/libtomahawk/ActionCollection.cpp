@@ -144,7 +144,7 @@ ActionCollection::initActions()
     m_actionCollection[ "whatsnew_0_8" ] = new QAction( tr( "0.8" ) , this );
     m_actionCollection[ "whatsnew_0_8" ]->setMenuRole( QAction::ApplicationSpecificRole );
     m_actionCollection[ "reportBug" ] = new QAction( tr( "Report a Bug" ) , this );
-    m_actionCollection[ "getSupport" ] = new QAction( tr( "Get Suport" ) , this );
+    m_actionCollection[ "getSupport" ] = new QAction( tr( "Get Support" ) , this );
 }
 
 
