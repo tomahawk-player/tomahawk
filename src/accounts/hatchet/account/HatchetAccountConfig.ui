@@ -40,7 +40,7 @@
    <item>
     <widget class="QLabel" name="registerLabel">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;(&lt;a href=&quot;http://hatchet.is/register&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;create a new account)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;http://blog.hatchet.is&quot;&gt;Learn More&lt;/a&gt; and/or &lt;a href=&quot;http://hatchet.is/register&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Create Account&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
