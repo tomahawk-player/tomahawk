@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true">Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="spacing">
@@ -60,7 +60,7 @@
      <item>
       <widget class="QLabel" name="captionLabel">
        <property name="text">
-        <string>TextLabel</string>
+        <string notr="true">TextLabel</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -83,7 +83,7 @@
      <item>
       <widget class="ClickableLabel" name="anchor1Label">
        <property name="text">
-        <string>TextLabel</string>
+        <string notr="true">TextLabel</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -109,7 +109,7 @@
      <item>
       <widget class="ClickableLabel" name="anchor2Label">
        <property name="text">
-        <string>TextLabel</string>
+        <string notr="true">TextLabel</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -135,7 +135,7 @@
      <item>
       <widget class="ClickableLabel" name="anchor3Label">
        <property name="text">
-        <string>TextLabel</string>
+        <string notr="true">TextLabel</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
