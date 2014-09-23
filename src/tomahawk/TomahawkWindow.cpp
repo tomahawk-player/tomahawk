@@ -656,6 +656,7 @@ TomahawkWindow::setupSignals()
     connect( ac->getAction( "legalInfo" ), SIGNAL( triggered() ), SLOT( legalInfo() ) );
     connect( ac->getAction( "reportBug" ), SIGNAL( triggered() ), SLOT( reportBug() ) );
     connect( ac->getAction( "getSupport" ), SIGNAL( triggered() ), SLOT( getSupport() ) );
+    connect( ac->getAction( "helpTranslate" ), SIGNAL( triggered() ), SLOT( helpTranslate() ) );
     connect( ac->getAction( "openLogfile" ), SIGNAL( triggered() ), SLOT( openLogfile() ) );
     connect( ac->getAction( "updateCollection" ), SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
     connect( ac->getAction( "rescanCollection" ), SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
@@ -1030,6 +1031,12 @@ void
 TomahawkWindow::reportBug()
 {
     QDesktopServices::openUrl( QUrl( "https://bugs.tomahawk-player.org" ) );
+}
+
+void
+TomahawkWindow::helpTranslate()
+{
+    QDesktopServices::openUrl( QUrl( "https://www.transifex.com/projects/p/tomahawk/" ) );
 }
 
 void

@@ -145,6 +145,7 @@ ActionCollection::initActions()
     m_actionCollection[ "whatsnew_0_8" ]->setMenuRole( QAction::ApplicationSpecificRole );
     m_actionCollection[ "reportBug" ] = new QAction( tr( "Report a Bug" ) , this );
     m_actionCollection[ "getSupport" ] = new QAction( tr( "Get Support" ) , this );
+    m_actionCollection[ "helpTranslate" ] = new QAction( tr( "Help Us Translate" ) , this );
 }
 
 
@@ -183,6 +184,7 @@ ActionCollection::createMenuBar( QWidget *parent )
     helpMenu->addAction( m_actionCollection[ "legalInfo" ] );
     helpMenu->addAction( m_actionCollection["getSupport"] );
     helpMenu->addAction( m_actionCollection["reportBug"] );
+    helpMenu->addAction( m_actionCollection["helpTranslate"] );
     helpMenu->addSeparator();
     QMenu* whatsNew = helpMenu->addMenu( ImageRegistry::instance()->icon( RESPATH "images/whatsnew.svg" ), tr( "What's new in ..." ) );
     whatsNew->setFont( TomahawkUtils::systemFont() );
@@ -277,6 +279,7 @@ ActionCollection::createCompactMenu( QWidget *parent )
     compactMenu->addSeparator();
     compactMenu->addAction( m_actionCollection["getSupport"] );
     compactMenu->addAction( m_actionCollection["reportBug"] );
+    compactMenu->addAction( m_actionCollection["helpTranslate"] );
     compactMenu->addSeparator();
     compactMenu->addAction( m_actionCollection[ "quit" ] );
 

@@ -102,6 +102,7 @@ public slots:
     void showDiagnosticsDialog();
     void legalInfo();
     void getSupport();
+    void helpTranslate();
     void reportBug();
     void openLogfile();
     void updateCollectionManually();
