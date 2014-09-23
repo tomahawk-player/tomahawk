@@ -143,6 +143,8 @@ ActionCollection::initActions()
     m_actionCollection[ "crashNow" ] = new QAction( "Crash now...", this );
     m_actionCollection[ "whatsnew_0_8" ] = new QAction( tr( "0.8" ) , this );
     m_actionCollection[ "whatsnew_0_8" ]->setMenuRole( QAction::ApplicationSpecificRole );
+    m_actionCollection[ "reportBug" ] = new QAction( tr( "Report a Bug" ) , this );
+    m_actionCollection[ "getSupport" ] = new QAction( tr( "Get Suport" ) , this );
 }
 
 
@@ -179,6 +181,9 @@ ActionCollection::createMenuBar( QWidget *parent )
     helpMenu->addAction( m_actionCollection[ "diagnostics" ] );
     helpMenu->addAction( m_actionCollection[ "openLogfile" ] );
     helpMenu->addAction( m_actionCollection[ "legalInfo" ] );
+    helpMenu->addAction( m_actionCollection["getSupport"] );
+    helpMenu->addAction( m_actionCollection["reportBug"] );
+    helpMenu->addSeparator();
     QMenu* whatsNew = helpMenu->addMenu( ImageRegistry::instance()->icon( RESPATH "images/whatsnew.svg" ), tr( "What's new in ..." ) );
     whatsNew->setFont( TomahawkUtils::systemFont() );
     whatsNew->addAction( m_actionCollection[ "whatsnew_0_8" ] );
@@ -269,6 +274,9 @@ ActionCollection::createCompactMenu( QWidget *parent )
         compactMenu->addSeparator();
         compactMenu->addAction( m_actionCollection[ "crashNow" ] );
     }
+    compactMenu->addSeparator();
+    compactMenu->addAction( m_actionCollection["getSupport"] );
+    compactMenu->addAction( m_actionCollection["reportBug"] );
     compactMenu->addSeparator();
     compactMenu->addAction( m_actionCollection[ "quit" ] );
 

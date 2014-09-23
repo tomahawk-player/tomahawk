@@ -654,6 +654,8 @@ TomahawkWindow::setupSignals()
     connect( ac->getAction( "preferences" ), SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
     connect( ac->getAction( "diagnostics" ), SIGNAL( triggered() ), SLOT( showDiagnosticsDialog() ) );
     connect( ac->getAction( "legalInfo" ), SIGNAL( triggered() ), SLOT( legalInfo() ) );
+    connect( ac->getAction( "reportBug" ), SIGNAL( triggered() ), SLOT( reportBug() ) );
+    connect( ac->getAction( "getSupport" ), SIGNAL( triggered() ), SLOT( getSupport() ) );
     connect( ac->getAction( "openLogfile" ), SIGNAL( triggered() ), SLOT( openLogfile() ) );
     connect( ac->getAction( "updateCollection" ), SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
     connect( ac->getAction( "rescanCollection" ), SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
@@ -1018,6 +1020,17 @@ TomahawkWindow::legalInfo()
     QDesktopServices::openUrl( QUrl( "http://www.tomahawk-player.org/legal.html" ) );
 }
 
+void
+TomahawkWindow::getSupport()
+{
+    QDesktopServices::openUrl( QUrl( "http://tomahawk.uservoice.com" ) );
+}
+
+void
+TomahawkWindow::reportBug()
+{
+    QDesktopServices::openUrl( QUrl( "http://bugs.tomahawk-player.org" ) );
+}
 
 void
 TomahawkWindow::openLogfile()
