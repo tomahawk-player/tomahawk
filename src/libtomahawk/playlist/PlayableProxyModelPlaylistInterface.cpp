@@ -218,7 +218,7 @@ PlayableProxyModelPlaylistInterface::siblingIndex( int itemsAway, qint64 rootInd
                     idx = proxyModel->mapFromSource( pitem->index );
                 }
 
-                idx = proxyModel->index( idx.row() + itemsAway, 0 );
+                idx = proxyModel->index( idx.row() + itemsAway, 0, idx.parent() );
             }
         }
     }
@@ -246,7 +246,7 @@ PlayableProxyModelPlaylistInterface::siblingIndex( int itemsAway, qint64 rootInd
             return (qint64)( item->index.internalPointer() );
         }
 
-        idx = proxyModel->index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0 );
+        idx = proxyModel->index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0, idx.parent() );
     }
 
     return -1;
