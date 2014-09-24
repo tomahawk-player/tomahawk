@@ -130,6 +130,7 @@ private slots:
     void onFilterChanged( const QString& filter );
     void onModelFilling();
     void onModelEmptyCheck();
+    void onCurrentIndexChanged( const QModelIndex& newIndex, const QModelIndex& oldIndex );
 
     void onCustomContextMenu( const QPoint& pos );
 

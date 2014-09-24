@@ -162,6 +162,7 @@ TrackView::setProxyModel( PlayableProxyModel* model )
         disconnect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
         disconnect( m_proxyModel, SIGNAL( expandRequest( QPersistentModelIndex ) ), this, SLOT( expand( QPersistentModelIndex ) ) );
         disconnect( m_proxyModel, SIGNAL( selectRequest( QPersistentModelIndex ) ), this, SLOT( select( QPersistentModelIndex ) ) );
+        disconnect( m_proxyModel, SIGNAL( currentIndexChanged( QModelIndex, QModelIndex ) ), this, SLOT( onCurrentIndexChanged( QModelIndex, QModelIndex ) ) );
     }
 
     m_proxyModel = model;
@@ -174,6 +175,7 @@ TrackView::setProxyModel( PlayableProxyModel* model )
     connect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( verifySize() ) );
     connect( m_proxyModel, SIGNAL( expandRequest( QPersistentModelIndex ) ), SLOT( expand( QPersistentModelIndex ) ) );
     connect( m_proxyModel, SIGNAL( selectRequest( QPersistentModelIndex ) ), SLOT( select( QPersistentModelIndex ) ) );
+    connect( m_proxyModel, SIGNAL( currentIndexChanged( QModelIndex, QModelIndex ) ), SLOT( onCurrentIndexChanged( QModelIndex, QModelIndex ) ) );
 
     m_delegate = new PlaylistItemDelegate( this, m_proxyModel );
     QTreeView::setItemDelegate( m_delegate );
@@ -273,6 +275,17 @@ TrackView::onModelEmptyCheck()
 {
     if ( !m_proxyModel->rowCount( QModelIndex() ) )
         QTreeView::setAlternatingRowColors( false );
+}
+
+
+void
+TrackView::onCurrentIndexChanged( const QModelIndex& newIndex, const QModelIndex& oldIndex )
+{
+    if ( selectedIndexes().count() == 1 && currentIndex() == oldIndex )
+    {
+        selectionModel()->select( newIndex, QItemSelectionModel::SelectCurrent );
+        currentChanged( newIndex, oldIndex );
+    }
 }
 
 
