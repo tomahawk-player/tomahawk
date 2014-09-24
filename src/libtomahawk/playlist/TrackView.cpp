@@ -285,6 +285,7 @@ TrackView::onCurrentIndexChanged( const QModelIndex& newIndex, const QModelIndex
     {
         selectionModel()->select( newIndex, QItemSelectionModel::SelectCurrent );
         currentChanged( newIndex, oldIndex );
+        setCurrentIndex( newIndex );
     }
 }
 
