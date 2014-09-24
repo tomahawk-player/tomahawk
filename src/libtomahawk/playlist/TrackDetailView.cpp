@@ -93,7 +93,7 @@ TrackDetailView::TrackDetailView( QWidget* parent )
     m_resultsBoxLabel = new CaptionLabel( this );
     m_resultsBoxLabel->setFont( f );
     m_resultsBoxLabel->setStyleSheet( "QLabel { color: rgba( 0, 0, 0, 50% ) }" );
-    m_resultsBoxLabel->setText( tr( "Alternate versions:" ) );
+    m_resultsBoxLabel->setText( tr( "Alternate Sources:" ) );
     m_resultsBoxLabel->setFixedWidth( width() - 4 );
     m_resultsBoxLabel->setFixedHeight( m_resultsBoxLabel->sizeHint().height() * 0.8 );
     m_resultsBoxLabel->hide();
