@@ -74,10 +74,9 @@ ActionCollection::initActions()
     m_actionCollection[ "realtimeFollowingAlong" ] = realtimeFollowingAlong;
 
     bool isPublic = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening;
-    QAction *privacyToggle = new QAction( ( isPublic ? tr( "&Listen Privately" ) : tr( "&Listen Publicly" ) ), this );
-    privacyToggle->setIcon( ImageRegistry::instance()->icon( RESPATH "images/private-listening.svg" ) );
-    privacyToggle->setIconVisibleInMenu( isPublic );
-    m_actionCollection[ "togglePrivacy" ] = privacyToggle;
+    m_actionCollection[ "togglePrivacy" ] = new QAction( tr( "&Listen Privately" ) , this );
+    m_actionCollection[ "togglePrivacy" ]->setCheckable( true );
+    m_actionCollection[ "togglePrivacy" ]->setChecked( !isPublic );
     connect( m_actionCollection[ "togglePrivacy" ], SIGNAL( triggered() ), SLOT( togglePrivateListeningMode() ), Qt::UniqueConnection );
 
     m_actionCollection[ "loadPlaylist" ] =   new QAction( tr( "&Load Playlist" ), this );
@@ -347,10 +346,8 @@ ActionCollection::togglePrivateListeningMode()
     else
         TomahawkSettings::instance()->setPrivateListeningMode( TomahawkSettings::PublicListening );
 
-    QAction *privacyToggle = m_actionCollection[ "togglePrivacy" ];
     bool isPublic = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening;
-    privacyToggle->setText( ( isPublic ? tr( "&Listen Privately" ) : tr( "&Listen Publicly" ) ) );
-    privacyToggle->setIconVisibleInMenu( isPublic );
+    m_actionCollection[ "togglePrivacy" ]->setChecked( !isPublic );
 
     emit privacyModeChanged();
 }
