@@ -43,15 +43,17 @@ GoogleWrapperFactory::icon() const
     return QPixmap( ":/google-account/gmail-logo.png" );
 }
 
+
 GoogleWrapperSip::GoogleWrapperSip( Account* account )
     : XmppSipPlugin( account )
 {
-
 }
+
 
 GoogleWrapperSip::~GoogleWrapperSip()
 {
 }
+
 
 QString
 GoogleWrapperSip::inviteString() const
@@ -105,6 +107,7 @@ GoogleWrapper::GoogleWrapper ( const QString& pluginID )
     m_onlinePixmap = QPixmap( ":/google-account/gmail-logo.png" );
     m_offlinePixmap = QPixmap( ":/google-account/gmail-offline-logo.png" );
 }
+
 
 GoogleWrapper::~GoogleWrapper()
 {
