@@ -31,6 +31,7 @@
 #include "widgets/ClickableLabel.h"
 #include "widgets/CaptionLabel.h"
 #include "PlaylistInterface.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/ImageRegistry.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Closure.h"
@@ -113,6 +114,7 @@ TrackDetailView::TrackDetailView( QWidget* parent )
     resultsScrollArea->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     resultsScrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     resultsScrollArea->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
+    TomahawkStyle::styleScrollBar( resultsScrollArea->verticalScrollBar() );
 
     QVBoxLayout* layout = new QVBoxLayout;
     TomahawkUtils::unmarginLayout( layout );
