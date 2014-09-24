@@ -95,7 +95,7 @@ signals:
 
     void indexPlayable( const QModelIndex& index );
     void indexResolved( const QModelIndex& index );
-    void currentIndexChanged();
+    void currentIndexChanged( const QModelIndex& newIndex, const QModelIndex& oldIndex );
 
     void itemCountChanged( unsigned int items );
 
@@ -114,6 +114,7 @@ private slots:
 
     void expandRequested( const QPersistentModelIndex& index );
     void selectRequested( const QPersistentModelIndex& index );
+    void onCurrentIndexChanged( const QModelIndex& newIndex, const QModelIndex& oldIndex );
 
 private:
     virtual bool lessThan( int column, const Tomahawk::query_ptr& left, const Tomahawk::query_ptr& right ) const;

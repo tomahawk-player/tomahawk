@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011       Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -411,6 +411,8 @@ void
 PlayableModel::setCurrentIndex( const QModelIndex& index )
 {
     Q_D( PlayableModel );
+
+    const QModelIndex oldIndex = d->currentIndex;
     PlayableItem* oldEntry = itemFromIndex( d->currentIndex );
     if ( oldEntry )
     {
@@ -430,7 +432,7 @@ PlayableModel::setCurrentIndex( const QModelIndex& index )
         d->currentUuid = QString();
     }
 
-    emit currentIndexChanged();
+    emit currentIndexChanged( d->currentIndex, oldIndex );
 }
 
 

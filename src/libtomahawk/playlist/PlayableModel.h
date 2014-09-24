@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011       Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
@@ -145,7 +145,7 @@ signals:
     void indexPlayable( const QModelIndex& index );
 
     void changed();
-    void currentIndexChanged();
+    void currentIndexChanged( const QModelIndex& newIndex, const QModelIndex& oldIndex );
 
     void expandRequest( const QPersistentModelIndex& index );
     void selectRequest( const QPersistentModelIndex& index );
