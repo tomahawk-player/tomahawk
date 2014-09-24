@@ -24,6 +24,7 @@ SET(TRIAL_LIBRARY_PATHS
   ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}
   ${CMAKE_INSTALL_PREFIX}/lib
   /usr/local/lib${LIB_SUFFIX}
+  /usr/local/lib/${CMAKE_LIBRARY_ARCHITECTURE}
   /usr/lib${LIB_SUFFIX}
   /sw/lib${LIB_SUFFIX}
   /usr/pkg/lib${LIB_SUFFIX}
