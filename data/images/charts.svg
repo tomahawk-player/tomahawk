@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="51px" height="51px" viewBox="0 0 51 51" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
     <title>charts</title>
     <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
     <defs></defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-        <g id="dashboard" sketch:type="MSLayerGroup" transform="translate(27.000000, 24.000000) rotate(-90.000000) translate(-27.000000, -24.000000) translate(2.000000, 2.000000)" fill="#000000">
-            <g id="_x2E_svg_6_" sketch:type="MSShapeGroup">
-                <rect id="Rectangle" x="0" y="0" width="47.9166667" height="8.38095238"></rect>
-                <rect id="Rectangle" x="0" y="16.7619048" width="39.5833333" height="8.38095238"></rect>
-                <rect id="Rectangle" x="0" y="33.5238095" width="25" height="8.38095238"></rect>
-            </g>
+        <g id="icon_charts" sketch:type="MSLayerGroup" transform="translate(0.000000, 2.000000)" fill="#000000">
+            <path d="M31.4416667,22 L24.5,13.6 L0,43 L13.8833333,43 L49,43 L49,1 L31.4416667,22 L31.4416667,22 Z" id="Shape" sketch:type="MSShapeGroup"></path>
         </g>
     </g>
 </svg>
