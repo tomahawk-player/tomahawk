@@ -516,12 +516,36 @@ Tomahawk::EchonestControl::updateWidgets()
         QLabel* match = new QLabel( tr( "is" ) );
 
         QComboBox* combo = new QComboBox();
-        combo->addItem( tr( "Focused", "Distribution: Songs that are tightly clustered around the seeds"), "focused" );
+        combo->addItem( tr( "Focused", "Distribution: Songs that are tightly clustered around the seeds" ), "focused" );
         combo->addItem( tr( "Wandering", "Distribution: Songs from a broader range of artists"), "wandering" );
 
         m_matchString = match->text();
         m_matchData = match->text();
 
+        connect( combo, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
+        connect( combo, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
+
+        m_match = QPointer<QWidget>( match );
+        m_input = QPointer<QWidget>( combo );
+    }
+    else if( selectedType() == "Genre Preset" )
+    {
+        m_currentType = Echonest::DynamicPlaylist::GenrePreset;
+
+        QComboBox* match = new QComboBox();
+        match->addItem( tr( "Classics", "Genre preset: songs intended to introduce the genre to a novice listener" ), "core" );
+        match->addItem( tr( "Popular", "Genre preset: most popular songs being played in the genre today" ), "in_rotation" );
+        match->addItem( tr( "Emerging", "Genre preset: songs that are more popular than expected, but which are unfamiliar to most listeners" ), "emerging" );
+
+        QComboBox* combo = new QComboBox();
+        combo->addItem( tr( "Best", "Genre preset: optimal collection of songs" ), "best" );
+        combo->addItem( tr( "Mix", "Genre preset: a varying collection of songs" ), "shuffled" );
+
+        m_matchString = match->currentText();
+        m_matchData = match->itemData( match->currentIndex() ).toString();
+
+        connect( match, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
+        connect( match, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
         connect( combo, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
         connect( combo, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
 
@@ -655,7 +679,22 @@ Tomahawk::EchonestControl::updateData()
             m_data.second = combo->itemData( combo->currentIndex() ).toString();
         }
     }
+    else if( selectedType() == "Genre Preset" )
+    {
+        QComboBox* match = qobject_cast<QComboBox*>( m_match.data() );
+        QComboBox* combo = qobject_cast< QComboBox* >( m_input.data() );
+        if ( match && combo )
+        {
+            m_matchString = match->currentText();
+            m_matchData = match->itemData( match->currentIndex() ).toString();
 
+            QString presetType = m_matchData.append( "_%1" );
+            presetType = presetType.arg( combo->itemData( combo->currentIndex() ).toString() );
+
+            m_data.first = Echonest::DynamicPlaylist::GenrePreset;
+            m_data.second = presetType;
+        }
+    }
     calculateSummary();
 }
 
@@ -1048,6 +1087,35 @@ Tomahawk::EchonestControl::calculateSummary()
 
         summary = tr( "with a %1 distribution" ).arg( text );
     }
+    else if( selectedType() == "Genre Preset" )
+    {
+        Q_ASSERT( !m_input.isNull() );
+        Q_ASSERT( qobject_cast< QComboBox* >( m_input.data() ) );
+        QComboBox* input = qobject_cast< QComboBox* >( m_input.data() );
+
+        Q_ASSERT( !m_match.isNull() );
+        Q_ASSERT( qobject_cast< QComboBox* >( m_match.data() ) );
+        QComboBox* match = qobject_cast< QComboBox* >( m_match.data() );
+
+        summary = tr( "preset to %1 collection of %2 genre songs" );
+        if ( input->itemData( input->currentIndex() ) == "best" )
+            summary = summary.arg( tr( "an optimal" ) );
+        else
+            summary = summary.arg( tr( "a mixed" ) );
+
+        if ( match->itemData( match->currentIndex() ) == "core" )
+        {
+            summary = summary.arg( tr( "classic" ) );
+        }
+        else
+        {
+            if ( match->itemData( match->currentIndex() ) == "in_rotation" )
+                summary = summary.arg( tr( "popular" ) );
+            else
+                summary = summary.arg( tr( "emerging" ) );
+        }
+    }
+
     m_summary = summary;
 }
 

@@ -808,6 +808,8 @@ EchonestGenerator::genresReceived()
     }
     s_genresJob = 0;
 
+    qRegisterMetaType< Echonest::Genre >( "enGenre" );
+    qRegisterMetaType< Echonest::Genres >( "enGenres" );
     TomahawkUtils::Cache::instance()->putData( "EchonestGenerator", 1209600000 /* 2 weeks */, "genres", QVariant::fromValue< Echonest::Genres >( s_genres ) );
     s_genres_lock.unlock();
     emit genresSaved();
