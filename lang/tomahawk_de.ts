@@ -91,184 +91,177 @@ erlauben sich mit dir zu verbinden?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="352"/>
         <source>&amp;Listen Privately</source>
         <translation>&amp;Privat Modus aktivieren</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="352"/>
-        <source>&amp;Listen Publicly</source>
-        <translation>&amp;Privat Modus verlassen</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="83"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="82"/>
         <source>&amp;Load Playlist</source>
         <translation>&amp;Lade Playlist</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="84"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="83"/>
         <source>&amp;Load Station</source>
         <translation>Sender laden</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="85"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="84"/>
         <source>&amp;Rename Playlist</source>
         <translation>Playlist &amp;umbenennen</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="86"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="85"/>
         <source>&amp;Rename Station</source>
         <translation>Sender &amp;umbenennen</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="87"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="86"/>
         <source>&amp;Copy Playlist Link</source>
         <translation>&amp;Kopiere Link zu dieser Playlist</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="88"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="87"/>
         <source>&amp;Play</source>
         <translation>&amp;Abspielen</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="92"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="91"/>
         <source>&amp;Stop</source>
         <translation>&amp;Stop</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="93"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="92"/>
         <source>&amp;Previous Track</source>
         <translation>&amp;Vorheriges Lied</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="96"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="95"/>
         <source>&amp;Next Track</source>
         <translation>&amp;Nächstes Lied</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="99"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="98"/>
         <source>&amp;Quit</source>
         <translation>&amp;Verlassen</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="113"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="112"/>
         <source>U&amp;pdate Collection</source>
         <translation>Samml&amp;ung aktualisieren</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="114"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="113"/>
         <source>Fully &amp;Rescan Collection</source>
         <translation>Sammlung komplett scannen</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="112"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="111"/>
         <source>Import Playlist...</source>
         <translation>Importiere Playlist...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="115"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="114"/>
         <source>Show Offline Friends</source>
         <translation>Zeige Offline-Freunde </translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="117"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="116"/>
         <source>&amp;Configure Tomahawk...</source>
         <translation>&amp;Konfiguriere Tomahawk...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="120"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="119"/>
         <source>Minimize</source>
         <translation>Minimieren</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="122"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="121"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="124"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="123"/>
         <source>Enter Full Screen</source>
         <translation>Vollbildmodus aktivieren</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="127"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="126"/>
         <source>Hide Menu Bar</source>
         <translation>Menüleiste ausblenden</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="131"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="130"/>
         <source>Diagnostics...</source>
         <translation>Diagnose...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="133"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="132"/>
         <source>About &amp;Tomahawk...</source>
         <translation>&amp;Über Tomahawk...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="135"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="134"/>
         <source>&amp;Legal Information...</source>
         <translation>&amp;Rechtliche Informationen...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="137"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="136"/>
         <source>&amp;View Logfile</source>
         <translation>&amp;Log anzeigen</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="140"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="139"/>
         <source>Check For Updates...</source>
         <translation>Nach Updates suchen...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="144"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="143"/>
         <source>0.8</source>
         <translation>0.8</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="146"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="145"/>
         <source>Report a Bug</source>
-        <translation type="unfinished"/>
+        <translation>Einen Fehler melden</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="146"/>
+        <source>Get Support</source>
+        <translation>Unterstützung erhalten</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="147"/>
-        <source>Get Support</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="148"/>
         <source>Help Us Translate</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk übersetzten</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="158"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="157"/>
         <source>&amp;Controls</source>
         <translation>&amp;Steuerung</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="173"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="172"/>
         <source>&amp;Settings</source>
         <translation>&amp;Einstellungen</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="180"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="179"/>
         <source>&amp;Help</source>
         <translation>&amp;Hilfe</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="189"/>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="259"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="188"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="258"/>
         <source>What&apos;s new in ...</source>
         <translation>Was ist neu in ...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="215"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="214"/>
         <source>&amp;Window</source>
         <translation>&amp;Fenster</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="232"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="231"/>
         <source>Main Menu</source>
         <translation>Hauptmenü</translation>
     </message>
@@ -749,7 +742,7 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="43"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;http://blog.hatchet.is&quot;&gt;Learn More&lt;/a&gt; and/or &lt;a href=&quot;http://hatchet.is/register&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Create Account&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;http://blog.hatchet.is&quot;&gt;Erfahre mehr&lt;/a&gt; und/oder &lt;a href=&quot;http://hatchet.is/register&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Erstelle ein Konto&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="78"/>
@@ -993,12 +986,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="59"/>
         <source>Favorites</source>
-        <translation type="unfinished"/>
+        <translation>Favoriten</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="85"/>
         <source>Sorry, we could not find any of your Favorites!</source>
-        <translation type="unfinished"/>
+        <translation>Sorry, wir konnten keine deiner Favoriten finden!</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="88"/>
@@ -1241,42 +1234,42 @@ Password (OTP)</source>
         <translation>Treffsicherheit</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="885"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="887"/>
         <source>Perfect match</source>
         <translation>Perfekt</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="886"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="888"/>
         <source>Very good match</source>
         <translation>Sehr gut</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="887"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="889"/>
         <source>Good match</source>
         <translation>Gut</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="888"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="890"/>
         <source>Vague match</source>
         <translation>Vage</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="889"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="891"/>
         <source>Bad match</source>
         <translation>Schlecht</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="890"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="892"/>
         <source>Very bad match</source>
         <translation>Sehr schlecht</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="891"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="893"/>
         <source>Not available</source>
         <translation>Nicht verfügbar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="892"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="894"/>
         <source>Searching...</source>
         <translation>Suche läuft...</translation>
     </message>
@@ -2385,27 +2378,27 @@ Password (OTP)</source>
 <context>
     <name>Tomahawk::Accounts::GoogleWrapper</name>
     <message>
-        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="89"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="91"/>
         <source>Configure this Google Account</source>
         <translation>Google-Konto einrichten</translation>
     </message>
     <message>
-        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="90"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="92"/>
         <source>Google Address:</source>
         <translation>Google-Adresse:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="91"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="93"/>
         <source>Enter your Google login to connect with your friends using Tomahawk!</source>
         <translation>Gib deinen Google-Login an und verbinde Tomahawk mit deinen Freunden!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="92"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="94"/>
         <source>username@gmail.com</source>
         <translation>nutzer@gmail.com</translation>
     </message>
     <message>
-        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="99"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="101"/>
         <source>You may need to change your %1Google Account Settings%2 to login.</source>
         <comment>%1 is &lt;a href&gt;, %2 is &lt;/a&gt;</comment>
         <translation>Du musst eventuell deine %1Google-Konto-Einstellungen%2 ändern, um dich anmelden zu können.</translation>
@@ -2422,17 +2415,17 @@ Password (OTP)</source>
 <context>
     <name>Tomahawk::Accounts::GoogleWrapperSip</name>
     <message>
-        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="59"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="61"/>
         <source>Enter Google Address</source>
         <translation>Google-Adresse eingeben</translation>
     </message>
     <message>
-        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="67"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="69"/>
         <source>Add Friend</source>
         <translation>Freund hinzufügen</translation>
     </message>
     <message>
-        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="68"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="70"/>
         <source>Enter Google Address:</source>
         <translation>Google-Adresse:</translation>
     </message>
@@ -4155,22 +4148,22 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>TrackDetailView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="77"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="78"/>
         <source>Marked as Favorite</source>
         <translation>Markiert als Favorit</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="95"/>
-        <source>Alternate versions:</source>
-        <translation>Alternative Versionen:</translation>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="96"/>
+        <source>Alternate Sources:</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="170"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="172"/>
         <source>Unknown Release-Date</source>
         <translation>Unbekanntes Erscheinungsdatum</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="260"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="262"/>
         <source>on %1</source>
         <translation>aus %1</translation>
     </message>
@@ -4226,7 +4219,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="674"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="688"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Sorry, dein Filter &apos;%1&apos; liefert keine Ergebnisse.</translation>
     </message>

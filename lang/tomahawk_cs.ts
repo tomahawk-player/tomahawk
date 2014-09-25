@@ -91,184 +91,177 @@ se s vámi spojil?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="352"/>
         <source>&amp;Listen Privately</source>
         <translation>Zapnout režim &amp;soukromého poslechu</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="352"/>
-        <source>&amp;Listen Publicly</source>
-        <translation>Opustit režim sou&amp;kromého poslechu</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="83"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="82"/>
         <source>&amp;Load Playlist</source>
         <translation>&amp;Nahrát seznam skladeb</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="84"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="83"/>
         <source>&amp;Load Station</source>
         <translation>&amp;Nahrát stanici</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="85"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="84"/>
         <source>&amp;Rename Playlist</source>
         <translation>&amp;Přejmenovat seznam skladeb</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="86"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="85"/>
         <source>&amp;Rename Station</source>
         <translation>&amp;Přejmenovat stanici</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="87"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="86"/>
         <source>&amp;Copy Playlist Link</source>
         <translation>&amp;Kopírovat odkaz k tomuto seznamu skladeb</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="88"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="87"/>
         <source>&amp;Play</source>
         <translation>Pře&amp;hrát</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="92"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="91"/>
         <source>&amp;Stop</source>
         <translation>&amp;Zastavit</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="93"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="92"/>
         <source>&amp;Previous Track</source>
         <translation>Před&amp;chozí skladba</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="96"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="95"/>
         <source>&amp;Next Track</source>
         <translation>&amp;Další skladba</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="99"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="98"/>
         <source>&amp;Quit</source>
         <translation>U&amp;končit</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="113"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="112"/>
         <source>U&amp;pdate Collection</source>
         <translation>&amp;Aktualizovat sbírku</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="114"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="113"/>
         <source>Fully &amp;Rescan Collection</source>
         <translation>Sbírku pro&amp;hledat znovu</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="112"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="111"/>
         <source>Import Playlist...</source>
         <translation>Zavést seznam skladeb...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="115"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="114"/>
         <source>Show Offline Friends</source>
         <translation>Ukázat přátele nepřipojené k internetu</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="117"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="116"/>
         <source>&amp;Configure Tomahawk...</source>
         <translation>&amp;Nastavit Tomahawk...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="120"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="119"/>
         <source>Minimize</source>
         <translation>Zmenšit</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="122"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="121"/>
         <source>Zoom</source>
         <translation>Zvětšení</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="124"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="123"/>
         <source>Enter Full Screen</source>
         <translation>Vstoupit do režimu na celou obrazovku</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="127"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="126"/>
         <source>Hide Menu Bar</source>
         <translation>Skrýt pruh s hlavní nabídkou</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="131"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="130"/>
         <source>Diagnostics...</source>
         <translation>Diagnostika...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="133"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="132"/>
         <source>About &amp;Tomahawk...</source>
         <translation>&amp;O programu Tomahawk...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="135"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="134"/>
         <source>&amp;Legal Information...</source>
         <translation>&amp;Právní informace...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="137"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="136"/>
         <source>&amp;View Logfile</source>
         <translation>&amp;Zobrazit soubor se zápisem</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="140"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="139"/>
         <source>Check For Updates...</source>
         <translation>Prověřit, zda již je novější vydání...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="144"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="143"/>
         <source>0.8</source>
         <translation>0.8</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="146"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="145"/>
         <source>Report a Bug</source>
         <translation>Nahlásit chybu</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="147"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="146"/>
         <source>Get Support</source>
-        <translation>Získat podporu</translation>
+        <translation>Podpora</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="148"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="147"/>
         <source>Help Us Translate</source>
-        <translation type="unfinished"/>
+        <translation>Překlad</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="158"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="157"/>
         <source>&amp;Controls</source>
         <translation>&amp;Ovládání</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="173"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="172"/>
         <source>&amp;Settings</source>
         <translation>Na&amp;stavení</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="180"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="179"/>
         <source>&amp;Help</source>
         <translation>Nápo&amp;věda</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="189"/>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="259"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="188"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="258"/>
         <source>What&apos;s new in ...</source>
         <translation>Co je nového v...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="215"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="214"/>
         <source>&amp;Window</source>
         <translation>&amp;Okno</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="232"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="231"/>
         <source>Main Menu</source>
         <translation>Hlavní nabídka</translation>
     </message>
@@ -1241,42 +1234,42 @@ heslo</translation>
         <translation>Přesnost</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="885"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="887"/>
         <source>Perfect match</source>
         <translation>Přesná shoda</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="886"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="888"/>
         <source>Very good match</source>
         <translation>Velmi dobrá shoda</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="887"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="889"/>
         <source>Good match</source>
         <translation>Dobrá shoda</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="888"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="890"/>
         <source>Vague match</source>
         <translation>Mlhavá shoda</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="889"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="891"/>
         <source>Bad match</source>
         <translation>Špatná shoda</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="890"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="892"/>
         <source>Very bad match</source>
         <translation>Velmi špatná shoda</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="891"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="893"/>
         <source>Not available</source>
         <translation>Nedostupné</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="892"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="894"/>
         <source>Searching...</source>
         <translation>Hledá se...</translation>
     </message>
@@ -1886,7 +1879,7 @@ heslo</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="206"/>
         <source>Send Tomahawk Crash Reports</source>
-        <translation>Poslat zprávy Tomahawku o pádech</translation>
+        <translation>Poslat zprávy o pádech Tomahawku</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="216"/>
@@ -2385,27 +2378,27 @@ heslo</translation>
 <context>
     <name>Tomahawk::Accounts::GoogleWrapper</name>
     <message>
-        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="89"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="91"/>
         <source>Configure this Google Account</source>
         <translation>Nastavit tento účet u služby Google</translation>
     </message>
     <message>
-        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="90"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="92"/>
         <source>Google Address:</source>
         <translation>Adresa Google:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="91"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="93"/>
         <source>Enter your Google login to connect with your friends using Tomahawk!</source>
         <translation>Zadejte své přihlášení Google a spojte se pomocí Tomahawku s vašimi přáteli!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="92"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="94"/>
         <source>username@gmail.com</source>
         <translation>uživatel@gmail.com</translation>
     </message>
     <message>
-        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="99"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="101"/>
         <source>You may need to change your %1Google Account Settings%2 to login.</source>
         <comment>%1 is &lt;a href&gt;, %2 is &lt;/a&gt;</comment>
         <translation>Možná je potřeba, abyste změnil vaše %1nastavení účtu u Google%2, abyste se mohl přihlásit.</translation>
@@ -2422,17 +2415,17 @@ heslo</translation>
 <context>
     <name>Tomahawk::Accounts::GoogleWrapperSip</name>
     <message>
-        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="59"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="61"/>
         <source>Enter Google Address</source>
         <translation>Zadat adresu Google</translation>
     </message>
     <message>
-        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="67"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="69"/>
         <source>Add Friend</source>
         <translation>Přidat přítele</translation>
     </message>
     <message>
-        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="68"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="70"/>
         <source>Enter Google Address:</source>
         <translation>Adresa Google:</translation>
     </message>
@@ -4158,22 +4151,22 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>TrackDetailView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="77"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="78"/>
         <source>Marked as Favorite</source>
         <translation>Označeno jako oblíbené</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="95"/>
-        <source>Alternate versions:</source>
-        <translation>Jiné verze:</translation>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="96"/>
+        <source>Alternate Sources:</source>
+        <translation>Náhradní zdroje:</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="170"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="172"/>
         <source>Unknown Release-Date</source>
         <translation>Neznámé datum vydání</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="260"/>
+        <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="262"/>
         <source>on %1</source>
         <translation>na %1</translation>
     </message>
@@ -4229,7 +4222,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="674"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="688"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Promiňte, vašemu filtru &apos;%1&apos; se nepodařilo najít žádné výsledky.</translation>
     </message>
