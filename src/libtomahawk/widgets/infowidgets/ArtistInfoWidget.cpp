@@ -71,7 +71,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         ui->relatedArtists->setAutoFitItems( true );
         ui->relatedArtists->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         ui->relatedArtists->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-        ui->relatedArtists->setItemSize( scaled( QSize( 170, 170 + 34 ) ) );
+        ui->relatedArtists->setItemSize( scaled( QSize( 170, 170 + 38 ) ) );
 
         m_relatedModel = new PlayableModel( ui->relatedArtists );
         ui->relatedArtists->setPlayableModel( m_relatedModel );
@@ -91,7 +91,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         ui->albums->setWrapping( false );
         ui->albums->setItemSize( scaled( QSize( 190, 190 + 56 ) ) );
         ui->albums->proxyModel()->setHideDupeItems( true );
-        ui->albums->setFixedHeight( scaledY( 190 + 56 + 34 ) );
+        ui->albums->setFixedHeight( scaledY( 190 + 56 + 38 ) );
 
         m_albumsModel = new PlayableModel( ui->albums );
         ui->albums->setPlayableModel( m_albumsModel );
@@ -112,7 +112,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         ui->topHits->setWrapping( false );
         ui->topHits->setItemSize( scaled( QSize( 140, 140 + 56 ) ) );
         ui->topHits->proxyModel()->setHideDupeItems( true );
-        ui->topHits->setFixedHeight( scaledY( 140 + 56 + 34 ) );
+        ui->topHits->setFixedHeight( scaledY( 140 + 56 + 38 ) );
 
         m_topHitsModel = new PlayableModel( ui->topHits );
         ui->topHits->setPlayableModel( m_topHitsModel );
