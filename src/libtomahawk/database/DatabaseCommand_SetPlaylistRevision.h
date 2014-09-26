@@ -42,6 +42,7 @@ Q_PROPERTY( bool metadataUpdate       READ metadataUpdate WRITE setMetadataUpdat
 public:
     explicit DatabaseCommand_SetPlaylistRevision( QObject* parent = 0 )
         : DatabaseCommandLoggable( parent )
+        , m_failed( false )
         , m_applied( false )
         , m_localOnly( false )
         , m_metadataUpdate( false )
