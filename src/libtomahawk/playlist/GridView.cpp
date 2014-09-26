@@ -112,12 +112,14 @@ GridView::setProxyModel( PlayableProxyModel* model )
         disconnect( m_proxyModel, SIGNAL( filterChanged( QString ) ), this, SLOT( onFilterChanged( QString ) ) );
         disconnect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
         disconnect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
+        disconnect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( onViewChanged() ) );
         disconnect( m_proxyModel, SIGNAL( modelReset() ), this, SLOT( layoutItems() ) );
     }
 
     m_proxyModel = model;
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( verifySize() ), Qt::QueuedConnection );
+    connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ), Qt::QueuedConnection );
     connect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( verifySize() ), Qt::QueuedConnection );
     connect( m_proxyModel, SIGNAL( modelReset() ), SLOT( layoutItems() ), Qt::QueuedConnection );
 
@@ -362,6 +364,8 @@ GridView::onFilterChanged( const QString& )
 {
     if ( selectedIndexes().count() )
         scrollTo( selectedIndexes().at( 0 ), QAbstractItemView::PositionAtCenter );
+
+    onViewChanged();
 }
 
 
