@@ -131,14 +131,6 @@ FlexibleTreeView::~FlexibleTreeView()
 
 
 void
-FlexibleTreeView::setGuid( const QString& guid )
-{
-    m_trackView->setGuid( guid );
-//    m_columnView->setGuid( guid );
-}
-
-
-void
 FlexibleTreeView::setTrackView( TrackView* view )
 {
     if ( m_trackView )

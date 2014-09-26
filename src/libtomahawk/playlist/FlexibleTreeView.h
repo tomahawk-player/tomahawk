@@ -61,8 +61,6 @@ public:
     ColumnView* columnView() const { return m_columnView; }
     TrackView* trackView() const { return m_trackView; }
 
-    void setGuid( const QString& guid );
-
     void setColumnView( ColumnView* view );
     void setTrackView( TrackView* view );
 
