@@ -346,7 +346,6 @@ ArtistInfoWidget::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, Model
 {
     Q_UNUSED( mode );
 
-//    m_albumsModel->clear();
     m_albumsModel->appendAlbums( albums );
 }
 
