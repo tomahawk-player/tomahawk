@@ -106,6 +106,8 @@ ContextView::ContextView( QWidget* parent, const QString& caption )
     connect( m_trackView, SIGNAL( querySelected( Tomahawk::query_ptr ) ), SLOT( onQuerySelected( Tomahawk::query_ptr ) ) );
     connect( m_trackView, SIGNAL( querySelected( Tomahawk::query_ptr ) ), detailView, SLOT( setQuery( Tomahawk::query_ptr ) ) );
 //    connect( m_header, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
+
+    TomahawkUtils::fixMargins( this );
 }
 
 

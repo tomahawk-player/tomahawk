@@ -234,6 +234,8 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
         connect( query.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ), SLOT( onResultsFound( QList<Tomahawk::result_ptr> ) ) );
         connect( query.data(), SIGNAL( resolvingFinished( bool ) ), SLOT( onQueryFinished() ) );
     }
+
+    TomahawkUtils::fixMargins( this );
 }
 
 

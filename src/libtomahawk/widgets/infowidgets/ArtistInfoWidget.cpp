@@ -212,7 +212,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
         QVBoxLayout* vboxl = new QVBoxLayout;
         TomahawkUtils::unmarginLayout( vboxl );
-        vboxl->setContentsMargins( scaled( 32, 32, 32, 32 ) );
+        vboxl->setContentsMargins( 32, 32, 32, 32 );
         vboxl->setSpacing( scaledY( 8 ) );
         vbox->setLayout( vboxl );
 
@@ -242,6 +242,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     onSliderValueChanged( 0 );
     load( artist );
+
+    TomahawkUtils::fixMargins( this );
 }
 
 
