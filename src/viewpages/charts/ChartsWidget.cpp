@@ -29,7 +29,6 @@
 
 #include "audio/AudioEngine.h"
 #include "playlist/GridItemDelegate.h"
-#include "playlist/PlaylistChartItemDelegate.h"
 #include "widgets/ChartDataLoader.h"
 #include "utils/AnimatedSpinner.h"
 #include "utils/DpiScaler.h"

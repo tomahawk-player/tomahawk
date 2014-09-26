@@ -1,7 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2012, Casey Link <unnamedrambler@gmail.com>
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -32,7 +32,6 @@
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "playlist/PlaylistModel.h"
 #include "playlist/TreeProxyModel.h"
-#include "playlist/PlaylistChartItemDelegate.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "Pipeline.h"
