@@ -66,6 +66,7 @@ TrackDetailView::TrackDetailView( QWidget* parent )
     f.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
     m_dateLabel->setFont( f );
     m_dateLabel->setStyleSheet( "QLabel { color: rgba( 0, 0, 0, 70% ) }" );
+    m_dateLabel->hide(); //TODO
 
     m_lovedIcon = new QLabel( this );
     m_lovedIcon->setFixedWidth( TomahawkUtils::defaultFontSize() + 2 );
@@ -170,6 +171,7 @@ TrackDetailView::setQuery( const Tomahawk::query_ptr& query )
     }
 
     m_dateLabel->setText( tr( "Unknown Release-Date" ) );
+
     if ( m_query->track()->albumPtr() && !m_query->track()->albumPtr()->name().isEmpty() )
     {
         m_nameLabel->setType( QueryLabel::Album );
