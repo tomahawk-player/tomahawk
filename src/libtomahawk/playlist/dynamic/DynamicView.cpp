@@ -90,7 +90,7 @@ DynamicView::setOnDemand( bool onDemand )
 {
     m_onDemand = onDemand;
 
-    if( m_onDemand )
+    if ( m_onDemand )
         setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     else
         setVerticalScrollBarPolicy( Qt::ScrollBarAsNeeded );
@@ -127,7 +127,7 @@ void
 DynamicView::setDynamicWorking( bool working )
 {
     m_working = working;
-    if( working )
+    if ( working )
         overlay()->hide();
     else
         onTrackCountChanged( proxyModel()->rowCount() );
@@ -139,17 +139,18 @@ DynamicView::onTrackCountChanged( unsigned int tracks )
 {
     if ( tracks == 0 && !m_working )
     {
-        if( m_onDemand ) {
-            if( !m_readOnly )
+        if ( m_onDemand )
+        {
+            if ( !m_readOnly )
                 overlay()->setText( tr( "Add some filters above to seed this station!" ) );
             else
                 return; // when viewing a read-only station, don't show anything
         } else
-            if( m_readOnly )
+            if ( m_readOnly )
                 overlay()->setText( tr( "Press Generate to get started!" ) );
             else
                 overlay()->setText( tr( "Add some filters above, and press Generate to get started!" ) );
-        if( !overlay()->shown() )
+        if ( !overlay()->shown() )
             overlay()->show();
     }
     else {
@@ -161,10 +162,10 @@ DynamicView::onTrackCountChanged( unsigned int tracks )
 void
 DynamicView::checkForOverflow()
 {
-    if( !m_onDemand || proxyModel()->rowCount( QModelIndex() ) == 0 )
+    if ( !m_onDemand || proxyModel()->rowCount( QModelIndex() ) == 0 )
         return;
 
-    if( m_fadeOutAnim.state() == QTimeLine::Running )
+    if ( m_fadeOutAnim.state() == QTimeLine::Running )
         m_checkOnCollapse = true;
 
     /// We don't want stations to grow forever, because we don't want the view to have to scroll
@@ -173,7 +174,8 @@ DynamicView::checkForOverflow()
     QModelIndex last = proxyModel()->index( proxyModel()->rowCount( QModelIndex() ) - 1, 0, QModelIndex() );
     QRect lastRect = visualRect( last );
     qDebug() << "Checking viewport height of" << viewport()->height() << "and last track bottom:" << lastRect.bottomLeft().y() << "under threshold" << 4 * lastRect.height();
-    if( viewport()->height() - lastRect.bottomLeft().y() <= ( 4 * lastRect.height() ) ) {
+    if ( viewport()->height() - lastRect.bottomLeft().y() <= ( 4 * lastRect.height() ) )
+    {
         qDebug() << "Deciding to remove some tracks from this station";
 
         // figure out how many to remove. lets get rid of 1/3rd of the backlog, visually.
@@ -188,7 +190,8 @@ void
 DynamicView::collapseEntries( int startRow, int num, int numToKeep )
 {
     qDebug() << "BEGINNING TO COLLAPSE FROM" << startRow << num << numToKeep;
-    if( m_fadeOutAnim.state() == QTimeLine::Running ) {
+    if ( m_fadeOutAnim.state() == QTimeLine::Running )
+    {
         qDebug() << "COLLAPSING TWICE, aborting!";
         return;
     }
@@ -197,7 +200,8 @@ DynamicView::collapseEntries( int startRow, int num, int numToKeep )
     /// went past the limit of the view. Just fade out from the beginning to the end in that case. otherwise, animate a slide
     int realNum = num;
     QModelIndex last = indexAt( QPoint( 3, viewport()->height() - 3 ) );
-    if( last.isValid() && last.row() < startRow + num ) {
+    if ( last.isValid() && last.row() < startRow + num )
+    {
         m_fadeOnly = true;
         realNum = last.row() - startRow;
     } else {
@@ -226,14 +230,18 @@ DynamicView::collapseEntries( int startRow, int num, int numToKeep )
 
     qDebug() << "Grabbed fading indexes from rect:" << fadingRect << m_fadingIndexes.size() << "ANCHORED:" << m_fadingPointAnchor;
 
-    if( !m_fadeOnly ) {
+    if ( !m_fadeOnly )
+    {
     /// sanity checks. make sure we have all the rows we need
         int firstSlider = startRow + realNum;
         qDebug() << "Sliding from" << firstSlider << "number:" << numToKeep - 1 << "rowcount is:" << proxyModel()->rowCount();
         // we may have removed some rows since we first started counting, so adjust
         //Q_ASSERT( firstSlider + numToKeep - 1 <= proxyModel()->rowCount() );
-        if( firstSlider + numToKeep - 1 >= proxyModel()->rowCount() ) {
-            if( numToKeep == 1 ) { // we just want the last row
+        if ( firstSlider + numToKeep - 1 >= proxyModel()->rowCount() )
+        {
+            if (  numToKeep == 1 )
+            {
+                // we just want the last row
                 firstSlider = proxyModel()->rowCount();
             }
         }
@@ -260,8 +268,10 @@ DynamicView::collapseEntries( int startRow, int num, int numToKeep )
 
     // delete the actual indices
     QModelIndexList todel;
-    for( int i = 0; i < num; i++ ) {
-        for( int k = 0; k < proxyModel()->columnCount( QModelIndex() ); k++ ) {
+    for( int i = 0; i < num; i++ )
+    {
+        for( int k = 0; k < proxyModel()->columnCount( QModelIndex() ); k++ )
+        {
             todel << proxyModel()->index( startRow + i, k );
         }
     }
@@ -282,10 +292,12 @@ DynamicView::backgroundBetween( QRect rect, int rowStart )
     int rowHeight = itemDelegate()->sizeHint( opt, QModelIndex() ).height() + 1;
     int y = 0;
     int current = rowStart;
-    while( y <= rect.bottomLeft().y() ) {
+    while( y <= rect.bottomLeft().y() )
+    {
         opt.rect.setRect(0, y, viewport()->width(), rowHeight);
         //  qDebug() << "PAINTING BG ROW IN RECT" << y << "to" << y + rowHeight << ":" << opt.rect;
-        if( current & 1 ) {
+        if ( current & 1 )
+        {
             opt.features |= QStyleOptionViewItemV2::Alternate;
         } else {
             opt.features &= ~QStyleOptionViewItemV2::Alternate;
@@ -302,7 +314,7 @@ DynamicView::backgroundBetween( QRect rect, int rowStart )
 void
 DynamicView::animFinished()
 {
-    if( m_checkOnCollapse )
+    if ( m_checkOnCollapse )
         checkForOverflow();
     m_checkOnCollapse = false;
 }
@@ -314,17 +326,20 @@ DynamicView::paintEvent( QPaintEvent* event )
     TrackView::paintEvent(event);
 
     QPainter p( viewport() );
-    if( m_fadeOutAnim.state() == QTimeLine::Running ) { // both run together
+    if ( m_fadeOutAnim.state() == QTimeLine::Running )
+    { // both run together
         p.save();
         QRect bg = m_fadingIndexes.rect();
         bg.moveTo( m_fadingPointAnchor ); // cover up the background
         p.fillRect( bg, Qt::white );
-        if( m_fadebg ) {
+        if ( m_fadebg )
+        {
             p.save();
             p.setOpacity( 1 - m_fadeOutAnim.currentValue() );
         }
         p.drawPixmap( bg, m_bg );
-        if( m_fadebg ) {
+        if ( m_fadebg )
+        {
             p.restore();
         }
         //         qDebug() << "FAST SETOPACITY:" << p.paintEngine()->hasFeature(QPaintEngine::ConstantOpacity);
@@ -332,10 +347,12 @@ DynamicView::paintEvent( QPaintEvent* event )
         p.drawPixmap( m_fadingPointAnchor, m_fadingIndexes );
         p.restore();
 
-        if( m_slideAnim.state() == QTimeLine::Running ) {
+        if ( m_slideAnim.state() == QTimeLine::Running )
+        {
             // draw the collapsing entry
             p.drawPixmap( 0, m_slideAnim.currentFrame(), m_slidingIndex );
-        } else if( m_fadeOutAnim.state() == QTimeLine::Running && !m_fadeOnly ) {
+        } else if ( m_fadeOutAnim.state() == QTimeLine::Running && !m_fadeOnly )
+        {
             p.drawPixmap( 0, m_bottomAnchor.y(), m_slidingIndex );
         }
     }
