@@ -38,6 +38,8 @@ public:
     PlaylistPrivate( Playlist* q )
         : q_ptr( q )
         , queuedSetPlaylistRevision( false )
+        , loaded( false )
+        , busy( false )
     {
     }
 
@@ -46,6 +48,8 @@ public:
         , source( _author )
         , lastmodified( 0 )
         , queuedSetPlaylistRevision( false )
+        , loaded( false )
+        , busy( false )
     {
     }
 
@@ -69,6 +73,8 @@ public:
         , createdOn( _createdOn )
         , queuedSetPlaylistRevision( false )
         , shared( _shared )
+        , loaded( false )
+        , busy( false )
     {
     }
 
@@ -89,7 +95,9 @@ public:
         , createdOn( 0 ) // will be set by db command
         , queuedSetPlaylistRevision( false )
         , shared( _shared )
+        , loaded( false )
         , initEntries( _entries )
+        , busy( false )
     {
     }
 
