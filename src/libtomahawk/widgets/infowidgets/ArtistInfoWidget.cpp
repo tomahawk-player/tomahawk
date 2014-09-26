@@ -60,9 +60,6 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     m_headerWidget = new BasicHeader;
     ui->setupUi( m_widget );
 
-    artist->loadStats();
-    connect( artist.data(), SIGNAL( statsLoaded() ), SLOT( onArtistStatsLoaded() ) );
-
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Original, scaled( QSize( 48, 48 ) ) );
     ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Grid, ui->cover->size() ) );
 
@@ -389,17 +386,6 @@ ArtistInfoWidget::onBiographyLoaded()
                .arg( m_artist->biography().trimmed().replace( '\n', "<br><br>" ) );
 
     ui->biography->setHtml( html );
-}
-
-
-void
-ArtistInfoWidget::onArtistStatsLoaded()
-{
-/*    m_playStatsGauge->setValue( m_artist->playbackCount( SourceList::instance()->getLocal() ) );
-    m_playStatsGauge->setMaximum( SourceList::instance()->getLocal()->playbackCount() ); */
-
-/*    m_playStatsGauge->setMaximum( m_artist->chartCount() );
-    m_playStatsGauge->setValue( m_artist->chartPosition() );*/
 }
 
 
