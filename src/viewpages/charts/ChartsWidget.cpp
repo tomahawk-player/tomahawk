@@ -74,15 +74,12 @@ ChartsWidget::ChartsWidget( QWidget* parent )
     ui->breadCrumbLeft->setRootIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::Charts, TomahawkUtils::Original ) );
     connect( ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged( QModelIndex ) ) );
 
-    ui->tracksViewLeft->setHeaderHidden( true );
-    ui->tracksViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    PlaylistChartItemDelegate* del = new PlaylistChartItemDelegate( ui->tracksViewLeft, ui->tracksViewLeft->proxyModel() );
-    ui->tracksViewLeft->setPlaylistItemDelegate( del );
-    ui->tracksViewLeft->setUniformRowHeights( false );
-
-    ui->artistsView->setItemSize( TomahawkUtils::DpiScaler::scaled( this, QSize( 170, 170 + 38 ) ) );
+    ui->artistsView->setItemSize( TomahawkUtils::DpiScaler::scaled( this, QSize( 190, 190 + 38 ) ) );
+    ui->albumsView->setItemSize( TomahawkUtils::DpiScaler::scaled( this, QSize( 190, 190 + 56 ) ) );
+    ui->tracksView->setItemSize( TomahawkUtils::DpiScaler::scaled( this, QSize( 190, 190 + 56 ) ) );
     ui->artistsView->delegate()->setShowPosition( true );
     ui->albumsView->delegate()->setShowPosition( true );
+    ui->tracksView->delegate()->setShowPosition( true );
 
     m_workerThread = new QThread( this );
     m_workerThread->start();
@@ -98,7 +95,7 @@ ChartsWidget::ChartsWidget( QWidget* parent )
     tDebug( LOGVERBOSE ) << "Reloading last chartIds:" << m_currentVIds;
 
     MetaPlaylistInterface* mpl = new MetaPlaylistInterface();
-    mpl->addChildInterface( ui->tracksViewLeft->playlistInterface() );
+    mpl->addChildInterface( ui->tracksView->playlistInterface() );
     mpl->addChildInterface( ui->artistsView->playlistInterface() );
     mpl->addChildInterface( ui->albumsView->playlistInterface() );
     m_playlistInterface = playlistinterface_ptr( mpl );
@@ -149,7 +146,7 @@ ChartsWidget::jumpToCurrentTrack()
     if ( ui->artistsView->model() && ui->artistsView->jumpToCurrentTrack() )
         return true;
 
-    if ( ui->tracksViewLeft->model() && ui->tracksViewLeft->jumpToCurrentTrack() )
+    if ( ui->tracksView->model() && ui->tracksView->jumpToCurrentTrack() )
         return true;
 
     if ( ui->albumsView->model() && ui->albumsView->jumpToCurrentTrack() )
@@ -276,7 +273,7 @@ ChartsWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData,
 
                 connect( loader, SIGNAL( tracks( Tomahawk::ChartDataLoader*, QList< Tomahawk::query_ptr > ) ), SLOT( chartTracksLoaded( Tomahawk::ChartDataLoader*, QList< Tomahawk::query_ptr > ) ) );
 
-                PlaylistModel* trackModel = new PlaylistModel( ui->tracksViewLeft );
+                PlayableModel* trackModel = new PlayableModel( ui->tracksView );
                 trackModel->startLoading();
 
                 m_trackModels[ chartId ] = trackModel;
@@ -540,11 +537,10 @@ ChartsWidget::setLeftViewArtists( PlayableModel* model )
 
 
 void
-ChartsWidget::setLeftViewTracks( PlaylistModel* model )
+ChartsWidget::setLeftViewTracks( PlayableModel* model )
 {
-    ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
-    ui->tracksViewLeft->setPlaylistModel( model );
-    ui->tracksViewLeft->proxyModel()->sort( -1 );
+    ui->tracksView->setPlayableModel( model );
+    ui->tracksView->proxyModel()->sort( -1 );
     ui->stackLeft->setCurrentIndex( 0 );
 }
 
@@ -573,7 +569,7 @@ ChartsWidget::chartTracksLoaded( ChartDataLoader* loader, const QList< query_ptr
 
     if ( m_trackModels.contains( chartId ) )
     {
-        Pipeline::instance()->resolve( tracks );
+//        Pipeline::instance()->resolve( tracks );
         m_trackModels[ chartId ]->appendQueries( tracks );
     }
 
