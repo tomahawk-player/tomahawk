@@ -145,6 +145,68 @@ PlayableProxyModel::setSourcePlayableModel( PlayableModel* sourceModel )
 bool
 PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
 {
+    bool dupeFilter = true;
+    bool visibilityFilter = true;
+
+    if ( m_hideDupeItems )
+        dupeFilter = dupeFilterAcceptsRow( sourceRow, sourceParent );
+    if ( m_maxVisibleItems > 0 )
+        visibilityFilter = visibilityFilterAcceptsRow( sourceRow, sourceParent );
+
+    return ( dupeFilter && visibilityFilter && nameFilterAcceptsRow( sourceRow, sourceParent ) );
+}
+
+
+bool
+PlayableProxyModel::dupeFilterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
+{
+    if ( !m_hideDupeItems )
+        return true;
+
+    PlayableItem* pi = itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
+    if ( !pi )
+        return false;
+
+    for ( int i = 0; i < sourceRow; i++ )
+    {
+        PlayableItem* di = itemFromIndex( sourceModel()->index( i, 0, sourceParent ) );
+        if ( !di )
+            continue;
+
+        bool b = ( pi->query() && pi->query()->equals( di->query() ) ) ||
+                 ( pi->album() && pi->album() == di->album() ) ||
+                 ( pi->artist() && pi->artist()->name() == di->artist()->name() );
+
+        if ( b && filterAcceptsRow( i, sourceParent ) )
+            return false;
+    }
+
+    return true;
+}
+
+
+bool
+PlayableProxyModel::visibilityFilterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
+{
+    if ( m_maxVisibleItems <= 0 )
+        return true;
+
+    int items = 0;
+    for ( int i = 0; i < sourceRow; i++ )
+    {
+        if ( dupeFilterAcceptsRow( i, sourceParent ) && nameFilterAcceptsRow( i, sourceParent ) )
+        {
+            items++;
+        }
+    }
+
+    return ( items < m_maxVisibleItems );
+}
+
+
+bool
+PlayableProxyModel::nameFilterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
+{
     PlayableItem* pi = itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
     if ( !pi )
         return false;
@@ -154,26 +216,6 @@ PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePa
         if ( !sourceModel()->rowCount( sourceModel()->index( sourceRow, 0, sourceParent ) ) )
         {
             return false;
-        }
-    }
-
-    if ( m_maxVisibleItems > 0 && sourceRow > m_maxVisibleItems - 1 )
-        return false;
-
-    if ( m_hideDupeItems )
-    {
-        for ( int i = 0; i < sourceRow; i++ )
-        {
-            PlayableItem* di = itemFromIndex( sourceModel()->index( i, 0, sourceParent ) );
-            if ( !di )
-                continue;
-
-            bool b = ( pi->query() && pi->query()->equals( di->query() ) ) ||
-                     ( pi->album() && pi->album() == di->album() ) ||
-                     ( pi->artist() && pi->artist()->name() == di->artist()->name() );
-
-            if ( b && filterAcceptsRow( i, sourceParent ) )
-                return false;
         }
     }
 

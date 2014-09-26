@@ -117,7 +117,10 @@ private slots:
     void onCurrentIndexChanged( const QModelIndex& newIndex, const QModelIndex& oldIndex );
 
 private:
-    virtual bool lessThan( int column, const Tomahawk::query_ptr& left, const Tomahawk::query_ptr& right ) const;
+    bool nameFilterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
+    bool dupeFilterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
+    bool visibilityFilterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
+    bool lessThan( int column, const Tomahawk::query_ptr& left, const Tomahawk::query_ptr& right ) const;
 
     PlayableModel* m_model;
 
