@@ -33,13 +33,7 @@
      <widget class="QWidget" name="page1">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="TreeView" name="artistsViewLeft">
-         <property name="minimumSize">
-          <size>
-           <width>320</width>
-           <height>0</height>
-          </size>
-         </property>
+        <widget class="GridView" name="artistsView">
         </widget>
        </item>
       </layout>
@@ -48,12 +42,6 @@
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="GridView" name="albumsView">
-         <property name="dragEnabled">
-          <bool>true</bool>
-         </property>
-         <property name="selectionMode">
-          <enum>QAbstractItemView::ExtendedSelection</enum>
-         </property>
         </widget>
        </item>
       </layout>

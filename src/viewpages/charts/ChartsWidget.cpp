@@ -28,9 +28,11 @@
 #include "Pipeline.h"
 
 #include "audio/AudioEngine.h"
+#include "playlist/GridItemDelegate.h"
 #include "playlist/PlaylistChartItemDelegate.h"
 #include "widgets/ChartDataLoader.h"
 #include "utils/AnimatedSpinner.h"
+#include "utils/DpiScaler.h"
 #include "utils/Logger.h"
 #include "utils/TomahawkUtilsGui.h"
 
@@ -78,15 +80,9 @@ ChartsWidget::ChartsWidget( QWidget* parent )
     ui->tracksViewLeft->setPlaylistItemDelegate( del );
     ui->tracksViewLeft->setUniformRowHeights( false );
 
-    TreeProxyModel* artistsProxy = new TreeProxyModel( ui->artistsViewLeft );
-    artistsProxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
-    artistsProxy->setDynamicSortFilter( true );
-
-    ui->artistsViewLeft->setProxyModel( artistsProxy );
-    ui->artistsViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    ui->artistsViewLeft->header()->setVisible( true );
-
-//    ui->albumsView->setStyleSheet( QString( "QListView { background-color: black; }" ) );
+    ui->artistsView->setItemSize( TomahawkUtils::DpiScaler::scaled( this, QSize( 170, 170 + 38 ) ) );
+    ui->artistsView->delegate()->setShowPosition( true );
+    ui->albumsView->delegate()->setShowPosition( true );
 
     m_workerThread = new QThread( this );
     m_workerThread->start();
@@ -99,11 +95,11 @@ ChartsWidget::ChartsWidget( QWidget* parent )
 
     // Read last viewed charts, to be used as defaults
     m_currentVIds = TomahawkSettings::instance()->lastChartIds();
-    tDebug( LOGVERBOSE ) << "Re-loading last chartIds:" << m_currentVIds;
+    tDebug( LOGVERBOSE ) << "Reloading last chartIds:" << m_currentVIds;
 
     MetaPlaylistInterface* mpl = new MetaPlaylistInterface();
     mpl->addChildInterface( ui->tracksViewLeft->playlistInterface() );
-    mpl->addChildInterface( ui->artistsViewLeft->proxyModel()->playlistInterface() );
+    mpl->addChildInterface( ui->artistsView->playlistInterface() );
     mpl->addChildInterface( ui->albumsView->playlistInterface() );
     m_playlistInterface = playlistinterface_ptr( mpl );
 
@@ -150,7 +146,7 @@ ChartsWidget::isBeingPlayed() const
 bool
 ChartsWidget::jumpToCurrentTrack()
 {
-    if ( ui->artistsViewLeft->model() && ui->artistsViewLeft->jumpToCurrentTrack() )
+    if ( ui->artistsView->model() && ui->artistsView->jumpToCurrentTrack() )
         return true;
 
     if ( ui->tracksViewLeft->model() && ui->tracksViewLeft->jumpToCurrentTrack() )
@@ -250,8 +246,7 @@ ChartsWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData,
 
                 connect( loader, SIGNAL( artists( Tomahawk::ChartDataLoader*, QList< Tomahawk::artist_ptr > ) ), SLOT( chartArtistsLoaded( Tomahawk::ChartDataLoader*, QList< Tomahawk::artist_ptr > ) ) );
 
-                TreeModel* artistsModel = new TreeModel( ui->artistsViewLeft );
-                artistsModel->setMode( InfoSystemMode );
+                PlayableModel* artistsModel = new PlayableModel( ui->artistsView );
                 artistsModel->startLoading();
 
                 m_artistModels[ chartId ] = artistsModel;
@@ -530,17 +525,16 @@ void
 ChartsWidget::setLeftViewAlbums( PlayableModel* model )
 {
     ui->albumsView->setPlayableModel( model );
-    ui->albumsView->proxyModel()->sort( -1 ); // disable sorting, must be called after artistsViewLeft->setTreeModel
+    ui->albumsView->proxyModel()->sort( -1 ); // disable sorting, must be called after artistsView->setTreeModel
     ui->stackLeft->setCurrentIndex( 2 );
 }
 
 
 void
-ChartsWidget::setLeftViewArtists( TreeModel* model )
+ChartsWidget::setLeftViewArtists( PlayableModel* model )
 {
-    ui->artistsViewLeft->proxyModel()->setStyle( PlayableProxyModel::Collection );
-    ui->artistsViewLeft->setTreeModel( model );
-    ui->artistsViewLeft->proxyModel()->sort( -1 ); // disable sorting, must be called after artistsViewLeft->setTreeModel
+    ui->artistsView->setPlayableModel( model );
+    ui->artistsView->proxyModel()->sort( -1 ); // disable sorting, must be called after artistsView->setTreeModel
     ui->stackLeft->setCurrentIndex( 1 );
 }
 
@@ -563,11 +557,7 @@ ChartsWidget::chartArtistsLoaded( ChartDataLoader* loader, const QList< artist_p
 
     if ( m_artistModels.contains( chartId ) )
     {
-        foreach ( const artist_ptr& artist, artists )
-        {
-            m_artistModels[ chartId ]->addArtists( artist );
-            m_artistModels[ chartId ]->finishLoading();
-        }
+        m_artistModels[ chartId ]->appendArtists( artists );
     }
 
     m_workers.remove( loader );
@@ -585,7 +575,6 @@ ChartsWidget::chartTracksLoaded( ChartDataLoader* loader, const QList< query_ptr
     {
         Pipeline::instance()->resolve( tracks );
         m_trackModels[ chartId ]->appendQueries( tracks );
-        m_trackModels[ chartId ]->finishLoading();
     }
 
     m_workers.remove( loader );
@@ -602,7 +591,6 @@ ChartsWidget::chartAlbumsLoaded( ChartDataLoader* loader, const QList< album_ptr
     if ( m_albumModels.contains( chartId ) )
     {
         m_albumModels[ chartId ]->appendAlbums( albums );
-        m_albumModels[ chartId ]->finishLoading();
     }
 
     m_workers.remove( loader );
