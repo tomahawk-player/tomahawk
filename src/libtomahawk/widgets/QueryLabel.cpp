@@ -87,7 +87,7 @@ QueryLabel::init()
     setMouseTracking( true );
 
     setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
-    m_mode = Qt::ElideMiddle;
+    m_mode = Qt::ElideRight;
     m_hovering = false;
 }
 

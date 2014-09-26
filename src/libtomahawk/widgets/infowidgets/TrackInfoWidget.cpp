@@ -101,7 +101,6 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
 
     {
         ui->artistLabel->setContentsMargins( 6, 2, 6, 2 );
-        ui->artistLabel->setElideMode( Qt::ElideMiddle );
         ui->artistLabel->setType( QueryLabel::Artist );
         connect( ui->artistLabel, SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
 

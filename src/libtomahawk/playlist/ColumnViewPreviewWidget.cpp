@@ -82,7 +82,6 @@ ColumnViewPreviewWidget::ColumnViewPreviewWidget( ColumnView* parent )
 
     m_artistLabel = new QueryLabel( this );
     m_artistLabel->setContentsMargins( 6, 2, 6, 2 );
-    m_artistLabel->setElideMode( Qt::ElideMiddle );
     m_artistLabel->setType( QueryLabel::Artist );
     m_artistLabel->setAlignment( Qt::AlignCenter );
     font.setPointSize( TomahawkUtils::defaultFontSize() + 5 );
