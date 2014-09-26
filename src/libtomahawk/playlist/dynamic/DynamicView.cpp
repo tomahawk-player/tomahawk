@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2014,      Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -49,6 +50,8 @@ DynamicView::DynamicView( QWidget* parent )
         , m_fadebg( false )
         , m_fadeOnly( false )
 {
+    setAcceptDrops( false );
+
     m_fadeOutAnim.setDuration( FADE_LENGTH );
     m_fadeOutAnim.setCurveShape( QTimeLine::LinearCurve );
     m_fadeOutAnim.setFrameRange( 100, 0 );
@@ -75,6 +78,7 @@ DynamicView::setDynamicModel( DynamicModel* model )
 {
     m_model = model;
     PlaylistView::setPlaylistModel( m_model );
+    setAcceptDrops( false );
 
     connect( m_model, SIGNAL( itemCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
     connect( m_model, SIGNAL( checkForOverflow() ), SLOT( checkForOverflow() ) );
