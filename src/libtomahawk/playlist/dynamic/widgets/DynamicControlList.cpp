@@ -81,7 +81,7 @@ DynamicControlList::init()
     m_collapseLayout->setContentsMargins( 0, 0, 0, 0 );
     m_collapseLayout->setMargin( 0 );
     m_collapseLayout->setSpacing( 0 );
-    m_collapse = new QPushButton( tr( "Save Station Settings" ), this );
+    m_collapse = new QPushButton( tr( "Save Settings" ), this );
     m_collapse->setAttribute( Qt::WA_LayoutUsesWidgetRect );
     m_collapseLayout->addWidget( m_collapse );
     m_addControl = new QToolButton( this );
