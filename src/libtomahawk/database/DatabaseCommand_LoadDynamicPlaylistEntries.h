@@ -48,16 +48,16 @@ public:
 signals:
     // used if loading an ondemand playlist
     void done( QString,
-                     bool,
-                     QString,
-                     QList< QVariantMap>,
-                     bool );
+               bool,
+               QString,
+               QList< QVariantMap >,
+               bool );
     // used when loading a static playlist
     void done( QString,
                QList< QString >,
                QList< QString >,
                QString,
-               QList< QVariantMap>,
+               QList< QVariantMap >,
                bool,
                QMap< QString, Tomahawk::plentry_ptr >,
                bool );

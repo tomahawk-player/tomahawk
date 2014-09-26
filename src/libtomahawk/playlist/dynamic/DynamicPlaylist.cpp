@@ -315,7 +315,8 @@ DynamicPlaylist::loadRevision( const QString& rev )
     setBusy( true );
     DatabaseCommand_LoadDynamicPlaylistEntries* cmd = new DatabaseCommand_LoadDynamicPlaylistEntries( rev.isEmpty() ? currentrevision() : rev );
 
-    if ( d->generator->mode() == OnDemand ) {
+    if ( d->generator->mode() == OnDemand )
+    {
         connect( cmd, SIGNAL( done( QString,
                                     bool,
                                     QString,
@@ -325,8 +326,10 @@ DynamicPlaylist::loadRevision( const QString& rev )
                                     bool,
                                     QString,
                                     QList< QVariantMap >,
-                                    bool) ) );
-    } else if ( d->generator->mode() == Static ) {
+                                    bool ) ) );
+    }
+    else if ( d->generator->mode() == Static )
+    {
         connect( cmd, SIGNAL( done( QString,
                                     QList< QString >,
                                     QList< QString >,
@@ -345,6 +348,9 @@ DynamicPlaylist::loadRevision( const QString& rev )
                                     bool ) ) );
 
     }
+    else
+        Q_ASSERT( false );
+
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
