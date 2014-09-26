@@ -51,6 +51,7 @@ public:
 
 public slots:
     void resetHoverIndex();
+    void setShowPosition( bool enabled );
 
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
@@ -87,6 +88,7 @@ private:
     QAbstractItemView* m_view;
     PlayableProxyModel* m_model;
     QSize m_itemSize;
+    bool m_showPosition;
 
     mutable QHash< QPersistentModelIndex, QRect > m_artistNameRects;
     mutable QHash< QPersistentModelIndex, QRect > m_albumNameRects;

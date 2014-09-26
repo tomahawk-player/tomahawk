@@ -53,6 +53,7 @@ GridItemDelegate::GridItemDelegate( QAbstractItemView* parent, PlayableProxyMode
     : QStyledItemDelegate( (QObject*)parent )
     , m_view( parent )
     , m_model( proxy )
+    , m_showPosition( false )
     , m_margin( TomahawkUtils::DpiScaler::scaledY( parent, 32 ) )
 {
     if ( m_view && m_view->metaObject()->indexOfSignal( "modelChanged()" ) > -1 )
@@ -79,6 +80,13 @@ GridItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelInde
     }
     else
         return m_itemSize;
+}
+
+
+void
+GridItemDelegate::setShowPosition( bool enabled )
+{
+    m_showPosition = enabled;
 }
 
 
@@ -187,7 +195,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QFont smallFont = font;
     smallFont.setPointSize( TomahawkUtils::defaultFontSize() );
 
-    QRect textRect = option.rect.adjusted( 0, r.height() + m_margin / 4, 0, 0 );
+    QRect textRect = option.rect.adjusted( 0, r.height() + m_margin / 4, 0, -m_margin / 2 + m_margin / 8 );
     bool oneLiner = false;
     if ( bottom.isEmpty() )
         oneLiner = true;
@@ -196,6 +204,25 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     painter->setFont( font );
     painter->setPen( Qt::black );
     painter->setOpacity( 0.8 );
+
+    if ( m_showPosition )
+    {
+        painter->save();
+
+        if ( !oneLiner )
+        {
+            QFont figFont = font;
+            figFont.setPixelSize( textRect.height() - m_margin / 8 );
+            painter->setFont( figFont );
+        }
+
+        const QString fig = QString::number( index.row() + 1 );
+        painter->drawText( textRect, fig, QTextOption( Qt::AlignLeft | Qt::AlignTop ) );
+
+        textRect.adjust( painter->fontMetrics().boundingRect( textRect, Qt::AlignLeft | Qt::AlignTop, fig ).width() + m_margin / 4, 0, 0, 0 );
+        painter->restore();
+    }
+
     if ( oneLiner )
     {
         // If the user is hovering over an artist rect, draw a background so they knows it's clickable
@@ -207,7 +234,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         }
 
         to.setAlignment( Qt::AlignLeft | Qt::AlignTop );
-        text = painter->fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - m_margin / 8 );
+        text = painter->fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - m_margin / 4 );
         painter->drawText( textRect, text, to );
 
         // Calculate rect of artist on-hover button click area
@@ -225,7 +252,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         }
 
         to.setAlignment( Qt::AlignLeft | Qt::AlignTop );
-        text = painter->fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - m_margin / 8 );
+        text = painter->fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - m_margin / 4 );
         painter->drawText( textRect, text, to );
 
         if ( item->album() )
@@ -246,13 +273,13 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
             painter->setFont( f );
         }
 
-        textRect.adjust( 0, m_margin / 16, 0, m_margin / 16 );
-        to.setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
-        text = painter->fontMetrics().elidedText( bottom, Qt::ElideRight, textRect.width() - m_margin / 8 );
+        textRect.adjust( 0, painter->fontMetrics().height() + m_margin / 16, 0, 0 );
+        to.setAlignment( Qt::AlignLeft | Qt::AlignBottom );
+        text = painter->fontMetrics().elidedText( bottom, Qt::ElideRight, textRect.width() - m_margin / 4 );
         painter->drawText( textRect, text, to );
 
         // Calculate rect of artist on-hover button click area
-        m_artistNameRects[ index ] = painter->fontMetrics().boundingRect( textRect, Qt::AlignLeft | Qt::AlignVCenter, text );
+        m_artistNameRects[ index ] = painter->fontMetrics().boundingRect( textRect, Qt::AlignLeft | Qt::AlignBottom, text );
     }
 
     painter->restore();
