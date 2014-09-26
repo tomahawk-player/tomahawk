@@ -676,7 +676,7 @@ PlayableProxyModel::updateDetailedInfo( const QModelIndex& index )
     }
     else if ( item->query() )
     {
-//        item->query()->track()->cover( QSize( 0, 0 ) );
+        item->query()->track()->cover( QSize( 0, 0 ) );
 
         if ( style() == PlayableProxyModel::Large )
         {
