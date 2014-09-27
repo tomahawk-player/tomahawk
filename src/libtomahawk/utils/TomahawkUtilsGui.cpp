@@ -542,35 +542,35 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
             break;
 
         case PlayButton:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/play.svg", size, TomahawkUtils::Original, 0.7, Qt::white );
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/play.svg", size, TomahawkUtils::Original, 0.8, Qt::white );
             break;
         case PlayButtonPressed:
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/play.svg", size, TomahawkUtils::Original, 1.0, Qt::white );
             break;
 
         case PauseButton:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/pause.svg", size, TomahawkUtils::Original, 0.7, Qt::white );
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/pause.svg", size, TomahawkUtils::Original, 0.8, Qt::white );
             break;
         case PauseButtonPressed:
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/pause.svg", size, TomahawkUtils::Original, 1.0, Qt::white );
             break;
 
         case PrevButton:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/back.svg", size, TomahawkUtils::Original, 0.7, Qt::white );
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/back.svg", size, TomahawkUtils::Original, 0.8, Qt::white );
             break;
         case PrevButtonPressed:
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/back.svg", size, TomahawkUtils::Original, 1.0, Qt::white );
             break;
 
         case NextButton:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/forward.svg", size, TomahawkUtils::Original, 0.7, Qt::white );
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/forward.svg", size, TomahawkUtils::Original, 0.8, Qt::white );
             break;
         case NextButtonPressed:
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/forward.svg", size, TomahawkUtils::Original, 1.0, Qt::white );
             break;
 
         case ShuffleOff:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/shuffle.svg", size, TomahawkUtils::Original, 0.5, Qt::white );
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/shuffle.svg", size, TomahawkUtils::Original, 0.7, Qt::white );
             break;
         case ShuffleOffPressed:
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/shuffle.svg", size, TomahawkUtils::Original, 1.0, Qt::white );
@@ -595,17 +595,17 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/repeat.svg", size, TomahawkUtils::Original, 1.0, Qt::white );
             break;
         case RepeatOff:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/repeat.svg", size, TomahawkUtils::Original, 0.5, Qt::white );
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/repeat.svg", size, TomahawkUtils::Original, 0.7, Qt::white );
             break;
         case RepeatOffPressed:
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/repeat.svg", size, TomahawkUtils::Original, 1.0, Qt::white );
             break;
 
         case VolumeMuted:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/volume-icon-muted.svg", size, TomahawkUtils::Original, 0.5, Qt::white );
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/volume-icon-muted.svg", size, TomahawkUtils::Original, 0.7, Qt::white );
             break;
         case VolumeFull:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/volume-icon-full.svg", size, TomahawkUtils::Original, 0.5, Qt::white );
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/volume-icon-full.svg", size, TomahawkUtils::Original, 0.7, Qt::white );
             break;
 
         case Share:
