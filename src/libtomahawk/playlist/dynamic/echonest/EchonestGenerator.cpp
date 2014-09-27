@@ -705,6 +705,7 @@ EchonestGenerator::loadGenres()
     {
         if ( s_genres_lock.tryLockForRead() )
         {
+            qRegisterMetaTypeStreamOperators< Echonest::Genre >( "enGenre" );
             QVariant genres = TomahawkUtils::Cache::instance()->getData( "EchonestGenerator", "genres" );
             s_genres_lock.unlock();
             if ( genres.isValid() && genres.canConvert< Echonest::Genres >() )
@@ -808,9 +809,28 @@ EchonestGenerator::genresReceived()
     }
     s_genresJob = 0;
 
-    qRegisterMetaType< Echonest::Genre >( "enGenre" );
-    qRegisterMetaType< Echonest::Genres >( "enGenres" );
+    qRegisterMetaTypeStreamOperators< Echonest::Genre >( "enGenre" );
     TomahawkUtils::Cache::instance()->putData( "EchonestGenerator", 1209600000 /* 2 weeks */, "genres", QVariant::fromValue< Echonest::Genres >( s_genres ) );
     s_genres_lock.unlock();
     emit genresSaved();
+}
+
+QDataStream&
+operator<<(QDataStream& out, const Echonest::Genre &genre)
+{
+    //TODO: this should be made more complete and be moved to libechonest
+    return out << genre.name() << genre.description();
+}
+
+QDataStream&
+operator>>(QDataStream& in, Echonest::Genre& genre)
+{
+    //TODO: this should be made more complete and be moved to libechonest
+    QString name;
+    QString description;
+    in >> name;
+    in >> description;
+    genre.setName( name );
+    genre.setDescription( description );
+    return in;
 }

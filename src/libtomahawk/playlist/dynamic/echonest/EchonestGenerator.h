@@ -149,5 +149,10 @@ private:
 
 };
 
+//TODO: this code should be move to libechonest
+//TODO: (delete this when libechonest 2.4 is out)
+QDataStream& operator<<(QDataStream& out, const Echonest::Genre& genre);
+QDataStream& operator>>(QDataStream& in, Echonest::Genre& genre);
+
 #endif
 
