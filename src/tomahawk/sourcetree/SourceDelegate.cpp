@@ -391,7 +391,7 @@ SourceDelegate::paintCategory( QPainter* painter, const QStyleOptionViewItem& op
 
     painter->setPen( Qt::black );
     painter->setOpacity( 0.5 );
-    painter->drawText( option.rect.translated( m_margin / 2, 0 ), index.data().toString().toUpper(), QTextOption( Qt::AlignVCenter ) );
+    painter->drawText( option.rect.adjusted( m_margin / 2, 0, -m_margin, 0 ), index.data().toString().toUpper(), QTextOption( Qt::AlignVCenter ) );
 
     if ( option.state & QStyle::State_MouseOver )
     {
@@ -399,11 +399,9 @@ SourceDelegate::paintCategory( QPainter* painter, const QStyleOptionViewItem& op
         if ( option.state & QStyle::State_Open )
             text = tr( "Hide" );
 
-        painter->setFont( option.font );
-
         // draw close icon
         painter->setPen( TomahawkStyle::GROUP_HEADER );
-        painter->drawText( option.rect.translated( -m_margin / 8, 0 ), text, QTextOption( Qt::AlignVCenter | Qt::AlignRight ) );
+        painter->drawText( option.rect.translated( -m_margin / 4, 0 ), text, QTextOption( Qt::AlignVCenter | Qt::AlignRight ) );
     }
 
     painter->restore();
@@ -429,11 +427,9 @@ SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& optio
         if ( option.state & QStyle::State_Open )
             text = tr( "Hide" );
 
-        painter->setFont( option.font );
-
         // draw close icon
         painter->setPen( TomahawkStyle::GROUP_HEADER );
-        painter->drawText( option.rect.translated( -m_margin / 8, -m_margin / 8 ), text, QTextOption( Qt::AlignBottom | Qt::AlignRight ) );
+        painter->drawText( option.rect.translated( -m_margin / 4, -m_margin / 4 ), text, QTextOption( Qt::AlignBottom | Qt::AlignRight ) );
     }
 
     painter->restore();
