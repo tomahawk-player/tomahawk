@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -77,6 +77,7 @@ ImageButton::clear()
     setIcon( QIcon() );
 }
 
+
 void
 ImageButton::paintEvent( QPaintEvent* event )
 {
@@ -85,13 +86,14 @@ ImageButton::paintEvent( QPaintEvent* event )
 
     QIcon::Mode mode = isDown()
         ? QIcon::Active
-        : isEnabled()
-            ? QIcon::Normal
-            : QIcon::Disabled;
+        : QIcon::Normal;
 
     QIcon::State state = isChecked()
         ? QIcon::On
         : QIcon::Off;
+
+    if ( !isEnabled() )
+        p.setOpacity( 0.4 );
 
     icon().paint( &p, rect(), Qt::AlignCenter, mode, state );
 }
