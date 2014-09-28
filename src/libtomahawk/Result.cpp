@@ -242,7 +242,9 @@ Result::toString() const
                   .arg( m_track->track() )
                   .arg( m_track->album().isEmpty() ? QString() : QString( " on %1" ).arg( m_track->album() ) )
                   .arg( m_url );
-    } else {
+    }
+    else
+    {
         return QString( "Result(%1, score: %2) (%3)" )
                   .arg( id() )
                   .arg( m_score )
