@@ -233,13 +233,21 @@ Result::toVariant() const
 QString
 Result::toString() const
 {
-    return QString( "Result(%1, score: %2) %3 - %4%5 (%6)" )
-              .arg( id() )
-              .arg( m_score )
-              .arg( m_track->artist() )
-              .arg( m_track->track() )
-              .arg( m_track->album().isEmpty() ? QString() : QString( " on %1" ).arg( m_track->album() ) )
-              .arg( m_url );
+    if ( m_track )
+    {
+        return QString( "Result(%1, score: %2) %3 - %4%5 (%6)" )
+                  .arg( id() )
+                  .arg( m_score )
+                  .arg( m_track->artist() )
+                  .arg( m_track->track() )
+                  .arg( m_track->album().isEmpty() ? QString() : QString( " on %1" ).arg( m_track->album() ) )
+                  .arg( m_url );
+    } else {
+        return QString( "Result(%1, score: %2) (%3)" )
+                  .arg( id() )
+                  .arg( m_score )
+                  .arg( m_url );
+    }
 }
 
 
