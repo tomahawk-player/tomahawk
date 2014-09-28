@@ -185,7 +185,7 @@ ActionCollection::createMenuBar( QWidget *parent )
     helpMenu->addAction( m_actionCollection["reportBug"] );
     helpMenu->addAction( m_actionCollection["helpTranslate"] );
     helpMenu->addSeparator();
-    QMenu* whatsNew = helpMenu->addMenu( ImageRegistry::instance()->icon( RESPATH "images/whatsnew.svg" ), tr( "What's new in ..." ) );
+    QMenu* whatsNew = helpMenu->addMenu( ImageRegistry::instance()->icon( RESPATH "images/whatsnew.svg" ), tr( "What's New in ..." ) );
     whatsNew->setFont( TomahawkUtils::systemFont() );
     whatsNew->addAction( m_actionCollection[ "whatsnew_0_8" ] );
     helpMenu->addAction( m_actionCollection[ "aboutTomahawk" ] );
@@ -255,7 +255,7 @@ ActionCollection::createCompactMenu( QWidget *parent )
     compactMenu->addAction( m_actionCollection[ "diagnostics" ] );
     compactMenu->addAction( m_actionCollection[ "openLogfile" ] );
     compactMenu->addAction( m_actionCollection[ "legalInfo" ] );
-    QMenu* whatsNew = compactMenu->addMenu( ImageRegistry::instance()->icon( RESPATH "images/whatsnew.svg" ), tr( "What's new in ..." ) );
+    QMenu* whatsNew = compactMenu->addMenu( ImageRegistry::instance()->icon( RESPATH "images/whatsnew.svg" ), tr( "What's New in ..." ) );
     whatsNew->addAction( m_actionCollection[ "whatsnew_0_8" ] );
     compactMenu->addAction( m_actionCollection[ "aboutTomahawk" ] );
 
