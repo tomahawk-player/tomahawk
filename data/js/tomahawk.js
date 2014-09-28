@@ -46,7 +46,7 @@ Tomahawk.apiVersion = "0.2.1";
  */
 Tomahawk.versionCompare = function (version1, version2) {
     var v1 = version1.split('.').map(function (item) { return parseInt(item); });
-    var v2 = version2.split('.').map(function (item) { return parseInt(item); })
+    var v2 = version2.split('.').map(function (item) { return parseInt(item); });
     var length = Math.max(v1.length, v2.length);
     var i = 0;
 
@@ -84,7 +84,7 @@ Tomahawk.versionCompare = function (version1, version2) {
   * Check if this is at least specified tomahawk-api-version.
   */
 Tomahawk.atLeastVersion = function (version) {
-    return (Tomahawk.versionCompare(Tomahawk.apiVersion, version) >= 0)
+    return (Tomahawk.versionCompare(Tomahawk.apiVersion, version) >= 0);
 };
 
 
@@ -267,7 +267,7 @@ Tomahawk.syncRequest = function (url, extraHeaders, options) {
     }
     xmlHttpRequest.send(null);
     if (xmlHttpRequest.status == 200) {
-		return xmlHttpRequest.responseText;
+        return xmlHttpRequest.responseText;
     } else {
         Tomahawk.log("Failed to do GET request: to: " + url);
         Tomahawk.log("Status Code was: " + xmlHttpRequest.status);
