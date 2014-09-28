@@ -109,8 +109,7 @@ public:
      */
     qint64 currentTrackTotalTime() const;
 
-    int equalizerBandCount();
-    bool setEqualizerBand( int band, int value );
+    void setDspCallback( void ( *cb ) ( signed short* samples, int nb_channels, int nb_samples ) );
 
 public slots:
     void playPause();
@@ -200,9 +199,9 @@ private slots:
 private:
     void setState( AudioState state );
     void setCurrentTrackPlaylist( const Tomahawk::playlistinterface_ptr& playlist );
-    void initEqualizer();
 
-    void initEqualizer();
+    static void dspCallback( signed short* samples, int nb_channels, int nb_samples );
+    void dspCallbackInternal( signed short* samples, int nb_channels, int nb_samples );
     void audioDataArrived( QMap< AudioEngine::AudioChannel, QVector< qint16 > >& data );
 
 

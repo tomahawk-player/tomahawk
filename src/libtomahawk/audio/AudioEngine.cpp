@@ -215,6 +215,7 @@ AudioEngine::AudioEngine()
     d->state = Stopped;
     d->coverTempFile = 0;
     d->audioEffect = 0;
+    d->dspPluginCallback = 0;
 
     d->s_instance = this;
     tDebug() << "Init AudioEngine";
@@ -236,7 +237,7 @@ AudioEngine::AudioEngine()
     onVolumeChanged( d->audioOutput->volume() );
     setVolume( TomahawkSettings::instance()->volume() );
 
-    initEqualizer();
+    d->mediaObject->setCurrentSource(Phonon::MediaSource("PhononDSP::effectCallback=" + QString::number((qulonglong)&AudioEngine::dspCallback, 16)));
 }
 
 
@@ -1384,52 +1385,28 @@ AudioEngine::setCurrentTrackPlaylist( const playlistinterface_ptr& playlist )
 
 
 void
-AudioEngine::initEqualizer()
+AudioEngine::dspCallback( signed short* samples, int nb_channels, int nb_samples )
+{
+    AudioEngine::instance()->dspCallbackInternal( samples, nb_channels, nb_samples );
+}
+
+
+void
+AudioEngine::dspCallbackInternal( signed short* samples, int nb_channels, int nb_samples )
 {
     Q_D( AudioEngine );
 
-    QList< Phonon::EffectDescription > effectDescriptions = Phonon::BackendCapabilities::availableAudioEffects();
-    foreach ( Phonon::EffectDescription effectDesc, effectDescriptions )
+    if ( d->dspPluginCallback != 0 )
     {
-        if ( effectDesc.name().toLower().contains( "eq" ) )
-        {
-            d->audioEffect = new Phonon::Effect( effectDesc );
-            d->audioPath.insertEffect( d->audioEffect );
-            break;
-        }
+        d->dspPluginCallback( samples, nb_channels, nb_samples );
     }
 }
 
 
-int
-AudioEngine::equalizerBandCount()
+void
+AudioEngine::setDspCallback( void ( *cb ) ( signed short*, int, int ) )
 {
     Q_D( AudioEngine );
 
-    if ( d->audioEffect )
-    {
-        QList< Phonon::EffectParameter > params = d->audioEffect->parameters();
-        return params.size();
-    }
-
-    return 0;
-}
-
-
-bool
-AudioEngine::setEqualizerBand( int band, int value )
-{
-    Q_D( AudioEngine );
-
-    if ( d->audioEffect )
-    {
-        QList< Phonon::EffectParameter > params = d->audioEffect->parameters();
-        if ( band < params.size() )
-        {
-            d->audioEffect->setParameterValue( params.at( band ), value );
-            return true;
-        }
-    }
-
-    return false;
+    d->dspPluginCallback = cb;
 }

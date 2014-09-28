@@ -43,8 +43,6 @@ private:
 
     Phonon::MediaObject* mediaObject;
     Phonon::AudioOutput* audioOutput;
-    Phonon::Path audioPath;
-    Phonon::Effect* audioEffect;
 
     Phonon::Path audioPath;
     Phonon::Effect* audioEffect;
@@ -67,6 +65,8 @@ private:
     bool underrunNotified;
 
     QTemporaryFile* coverTempFile;
+
+    void (* dspPluginCallback )( signed short* samples, int nb_channels, int nb_samples );
 
     static AudioEngine* s_instance;
 };
