@@ -936,7 +936,6 @@ AudioEngine::play( const QUrl& url )
 {
     tDebug() << Q_FUNC_INFO << url;
 
-    result_ptr result = Result::get( url.toString() );
     const QVariantMap tags = MusicScanner::readTags( QFileInfo( url.toLocalFile() ) ).toMap();
 
     track_ptr t;
@@ -945,19 +944,22 @@ AudioEngine::play( const QUrl& url )
         t = Track::get( tags["artist"].toString(), tags["track"].toString(), tags["album"].toString(),
                         tags["duration"].toInt(), tags["composer"].toString(),
                         tags["albumpos"].toUInt(), tags["discnumber"].toUInt() );
-
-        result->setSize( tags["size"].toUInt() );
-        result->setBitrate( tags["bitrate"].toUInt() );
-        result->setModificationTime( tags["mtime"].toUInt() );
-        result->setMimetype( tags["mimetype"].toString() );
     }
     else
     {
         t = Tomahawk::Track::get( "Unknown Artist", "Unknown Track" );
     }
 
+    result_ptr result = Result::get( url.toString(), t );
 
-    result->setTrack( t );
+    if ( !tags.isEmpty() )
+    {
+        result->setSize( tags["size"].toUInt() );
+        result->setBitrate( tags["bitrate"].toUInt() );
+        result->setModificationTime( tags["mtime"].toUInt() );
+        result->setMimetype( tags["mimetype"].toString() );
+    }
+
     result->setScore( 1.0 );
     result->setCollection( SourceList::instance()->getLocal()->collections().first(), false );
 

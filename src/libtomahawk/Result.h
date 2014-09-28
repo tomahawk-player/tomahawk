@@ -52,8 +52,24 @@ friend class DatabaseCommand_AddFiles;
 friend class DatabaseCommand_LoadFile;
 
 public:
-    static Tomahawk::result_ptr get( const QString& url );
-    static bool isCached( const QString& url );
+    /**
+     * Get a Result instance for an URL if it is cached, otherwise create a new
+     * instance using the supplied Track object.
+     */
+    static Tomahawk::result_ptr get( const QString& url,
+                                     const Tomahawk::track_ptr& track );
+
+    /**
+     * Get a Result instance for an URL if it is already cached.
+     *
+     * This will not create a new Result instance if there is no matching
+     * Result in the cache, use Result::get for this.
+     *
+     * @param url Unique result identifier
+     * @return nullptr if the Result is not yet cached
+     */
+    static Tomahawk::result_ptr getCached( const QString& url );
+
     virtual ~Result();
 
     bool isValid() const;
@@ -130,7 +146,7 @@ private slots:
 
 private:
     // private constructor
-    explicit Result( const QString& url );
+    explicit Result( const QString& url, const Tomahawk::track_ptr& track );
     explicit Result();
 
     mutable RID m_rid;

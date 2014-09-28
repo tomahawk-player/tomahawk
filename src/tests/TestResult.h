@@ -28,23 +28,23 @@ class TestResult : public QObject
     Q_OBJECT
 
 private slots:
-    void testIsValid()
-    {
-        Tomahawk::result_ptr r = Tomahawk::Result::get( "/tmp/test.mp3" );
-        QVERIFY( !r->isValid() );
-
-        Tomahawk::track_ptr t = Tomahawk::Track::get( "Artist", "Track" );
-        r->setTrack( t );
-        QVERIFY( r->isValid() );
-    }
-
     void testGet()
     {
-        Tomahawk::result_ptr r = Tomahawk::Result::get( "" );
+        Tomahawk::result_ptr r;
+
+        r = Tomahawk::Result::get( "", Tomahawk::track_ptr() );
         QVERIFY( !r );
 
-        Tomahawk::result_ptr vr = Tomahawk::Result::get( "/tmp/test.mp3" );
-        QVERIFY( vr );
+        r = Tomahawk::Result::get( "/tmp/test.mp3", Tomahawk::track_ptr() );
+        QVERIFY( !r);
+
+        Tomahawk::track_ptr t = Tomahawk::Track::get( "Artist", "Track" );
+
+        r = Tomahawk::Result::get( "", t );
+        QVERIFY( !r);
+
+        r = Tomahawk::Result::get( "/tmp/test.mp3", t );
+        QVERIFY( r );
     }
 };
 

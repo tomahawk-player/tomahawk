@@ -136,8 +136,8 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
         if ( !s->isLocal() )
             url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
 
-        Tomahawk::result_ptr result = Tomahawk::Result::get( url );
-        if ( result->isValid() )
+        Tomahawk::result_ptr result = Tomahawk::Result::getCached( url );
+        if ( result )
         {
             tDebug( LOGVERBOSE ) << "Result already cached:" << result->toString();
             res << result;
@@ -146,8 +146,8 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
 
         track_ptr track = Track::get( files_query.value( 9 ).toUInt(), files_query.value( 12 ).toString(), files_query.value( 14 ).toString(), files_query.value( 13 ).toString(), files_query.value( 5 ).toUInt(), files_query.value( 15 ).toString(), files_query.value( 17 ).toUInt(), files_query.value( 11 ).toUInt() );
         track->loadAttributes();
-        result->setTrack( track );
 
+        result = Result::get( url, track );
         result->setModificationTime( files_query.value( 1 ).toUInt() );
         result->setSize( files_query.value( 2 ).toUInt() );
         result->setMimetype( files_query.value( 4 ).toString() );
@@ -244,19 +244,18 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
         if ( !s->isLocal() )
             url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
 
-        bool cached = Tomahawk::Result::isCached( url );
-        Tomahawk::result_ptr result = Tomahawk::Result::get( url );
-        if ( cached )
+        Tomahawk::result_ptr result = Tomahawk::Result::getCached( url );
+        if ( result )
         {
-            qDebug() << "Result already cached:" << result->toString();
+            tDebug( LOGVERBOSE ) << "Result already cached:" << result->toString();
             res << result;
             continue;
         }
 
         track_ptr track = Track::get( files_query.value( 9 ).toUInt(), files_query.value( 12 ).toString(), files_query.value( 14 ).toString(), files_query.value( 13 ).toString(), files_query.value( 5 ).toUInt(), files_query.value( 15 ).toString(), files_query.value( 17 ).toUInt(), files_query.value( 11 ).toUInt() );
         track->loadAttributes();
-        result->setTrack( track );
 
+        result = Result::get( url, track );
         result->setModificationTime( files_query.value( 1 ).toUInt() );
         result->setSize( files_query.value( 2 ).toUInt() );
         result->setMimetype( files_query.value( 4 ).toString() );

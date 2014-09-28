@@ -138,16 +138,16 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         if ( !s->isLocal() )
             url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
 
-        Tomahawk::result_ptr result = Tomahawk::Result::get( url );
         Tomahawk::track_ptr t = Tomahawk::Track::get( trackId,
                                                       artist, track, album,
                                                       duration, composer,
                                                       albumpos, discnumber );
+
         if ( m_album || m_artist ) {
             t->loadAttributes();
         }
-        result->setTrack( t );
 
+        Tomahawk::result_ptr result = Tomahawk::Result::get( url, t );
         result->setSize( size );
         result->setBitrate( bitrate );
         result->setModificationTime( modificationTime );

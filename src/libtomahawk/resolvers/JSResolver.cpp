@@ -563,10 +563,6 @@ JSResolver::parseResultVariantList( const QVariantList& reslist )
             duration = time.secsTo( QTime( 0, 0 ) ) * -1;
         }
 
-        Tomahawk::result_ptr rp = Tomahawk::Result::get( m.value( "url" ).toString() );
-        if ( !rp )
-            continue;
-
         Tomahawk::track_ptr track = Tomahawk::Track::get( m.value( "artist" ).toString(),
                                                           m.value( "track" ).toString(),
                                                           m.value( "album" ).toString(),
@@ -577,7 +573,10 @@ JSResolver::parseResultVariantList( const QVariantList& reslist )
         if ( !track )
             continue;
 
-        rp->setTrack( track );
+        Tomahawk::result_ptr rp = Tomahawk::Result::get( m.value( "url" ).toString(), track );
+        if ( !rp )
+            continue;
+
         rp->setBitrate( m.value( "bitrate" ).toUInt() );
         rp->setSize( m.value( "size" ).toUInt() );
         rp->setRID( uuid() );
