@@ -72,8 +72,6 @@ public:
 
     virtual ~Result();
 
-    bool isValid() const;
-
     QVariant toVariant() const;
     QString toString() const;
     Tomahawk::query_ptr toQuery();

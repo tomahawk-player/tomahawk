@@ -128,13 +128,6 @@ Result::deleteLater()
 }
 
 
-bool
-Result::isValid() const
-{
-    return m_track && !m_track->artist().isEmpty() && !m_track->track().isEmpty();
-}
-
-
 void
 Result::onResolverRemoved( Tomahawk::Resolver* resolver )
 {
