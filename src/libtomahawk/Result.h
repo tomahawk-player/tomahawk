@@ -34,10 +34,6 @@ class MetadataEditor;
 
 namespace Tomahawk
 {
-class DatabaseCommand_Resolve;
-class DatabaseCommand_AllTracks;
-class DatabaseCommand_AddFiles;
-class DatabaseCommand_LoadFile;
 
 class Resolver;
 
@@ -46,10 +42,6 @@ class DLLEXPORT Result : public QObject
 Q_OBJECT
 
 friend class ::MetadataEditor;
-friend class DatabaseCommand_Resolve;
-friend class DatabaseCommand_AllTracks;
-friend class DatabaseCommand_AddFiles;
-friend class DatabaseCommand_LoadFile;
 
 public:
     /**
