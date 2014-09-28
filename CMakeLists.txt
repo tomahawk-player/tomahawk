@@ -58,6 +58,7 @@ option(BUILD_TESTS "Build Tomahawk with unit tests" ON)
 option(BUILD_HATCHET "Build the Hatchet plugin" OFF)
 option(BUILD_WITH_QT4 "Build Tomahawk with Qt4 no matter if Qt5 was found" ON)
 
+option(SANITIZE_ADDRESS "Enable Address Sanitizer for memory error detection" OFF)
 option(WITH_CRASHREPORTER "Build with CrashReporter" ON)
 option(WITH_BINARY_ATTICA "Enable support for downloading binary resolvers automatically" ON)
 option(LEGACY_KDE_INTEGRATION "Install tomahawk.protocol file, deprecated since 4.6.0" OFF)
@@ -403,11 +404,19 @@ CONFIGURE_FILE(
 #     ADD_CUSTOM_TARGET(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 # ENDIF()
 
-IF( NOT APPLE )
+IF( ( NOT APPLE ) AND ( NOT SANITIZE_ADDRESS ))
     # Make linking as strict on linux as it is on osx. Then we don't break linking on mac so often
+    #
+    # On using Address Sanitizer, we cannot link to the ASAN lib, so
+    # --no-undefined would break the build.
     SET( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-undefined" )
     SET( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-undefined" )
-ENDIF( NOT APPLE )
+ENDIF()
+
+IF ( SANITIZE_ADDRESS )
+    SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS}   -fsanitize=address -fno-omit-frame-pointer")
+    SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}   -fsanitize=address -fno-omit-frame-pointer")
+ENDIF()
 
 # Early configure these files as we need them later on
 configure_file(TomahawkUse.cmake.in "${PROJECT_BINARY_DIR}/TomahawkUse.cmake" @ONLY)
