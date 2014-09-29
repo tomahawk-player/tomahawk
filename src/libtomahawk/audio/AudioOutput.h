@@ -30,6 +30,7 @@
 struct libvlc_instance_t;
 struct libvlc_media_player_t;
 struct libvlc_media_t;
+struct libvlc_event_t;
 
 class DLLEXPORT AudioOutput : public QObject
 {
@@ -55,6 +56,8 @@ public:
     void setMuted(bool m);
     void setVolume(qreal vol);
     qreal volume();
+    qint64 currentTime();
+    qint64 totalTime();
 
     void setDspCallback( void ( *cb ) ( signed short*, int, int ) );
 
@@ -64,20 +67,24 @@ public slots:
 
 signals:
     void stateChanged( AudioOutput::AudioState, AudioOutput::AudioState );
+    void tick( qint64 );
 
 private:
     void setState( AudioState state );
+    void setCurrentTime( qint64 time );
 
+    static void vlcEventCallback( const libvlc_event_t *event, void *opaque );
     static void s_dspCallback( signed short* samples, int nb_channels, int nb_samples );
-    void dspCallback( signed short* samples, int nb_channels, int nb_samples );
-
-    void ( *dspPluginCallback ) ( signed short* samples, int nb_channels, int nb_samples );
 
     static AudioOutput* s_instance;
     AudioState currentState;
     MediaStream* currentStream;
     bool muted;
     qreal m_volume;
+    qint64 m_currentTime;
+    qint64 m_totalTime;
+
+    void ( *dspPluginCallback ) ( signed short* samples, int nb_channels, int nb_samples );
 
     libvlc_instance_t* vlcInstance;
     libvlc_media_player_t* vlcPlayer;

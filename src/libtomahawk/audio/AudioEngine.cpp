@@ -192,8 +192,9 @@ AudioEngine::AudioEngine()
 
     d->audioOutput = new AudioOutput(this);
 
-    QObject::connect( d->audioOutput, SIGNAL( stateChanged( AudioOutput::AudioState, AudioOutput::AudioState ) ), d, SLOT( onStateChanged( AudioOutput::AudioState, AudioOutput::AudioState ) ) );
-getchar();
+    connect( d->audioOutput, SIGNAL( stateChanged( AudioOutput::AudioState, AudioOutput::AudioState ) ), d_func(), SLOT( onStateChanged( AudioOutput::AudioState, AudioOutput::AudioState ) ) );
+    connect( d->audioOutput, SIGNAL( tick( qint64 ) ), SLOT( timerTriggered( qint64 ) ) );
+
     qRegisterMetaType< AudioErrorCode >("AudioErrorCode");
     qRegisterMetaType< AudioState >("AudioState");
 }
@@ -1240,16 +1241,14 @@ AudioEngine::setState( AudioState state )
 qint64
 AudioEngine::currentTime() const
 {
-// TODO    return d_func()->mediaObject->currentTime();
-    return 0;
+    return d_func()->audioOutput->currentTime();
 }
 
 
 qint64
 AudioEngine::currentTrackTotalTime() const
 {
-// TODO    return d_func()->mediaObject->totalTime();
-    return 0;
+    return d_func()->audioOutput->totalTime();
 }
 
 

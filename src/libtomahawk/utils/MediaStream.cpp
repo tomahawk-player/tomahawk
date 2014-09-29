@@ -70,6 +70,8 @@ MediaStream::url()
 qint64
 MediaStream::streamSize()
 {
+    tDebug() << Q_FUNC_INFO;
+
     return m_streamSize;
 }
 
@@ -77,6 +79,8 @@ MediaStream::streamSize()
 void
 MediaStream::setStreamSize( qint64 size )
 {
+    tDebug() << Q_FUNC_INFO;
+
     m_streamSize = size;
 }
 

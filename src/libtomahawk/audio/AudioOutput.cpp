@@ -32,6 +32,7 @@
 #include <vlc/libvlc.h>
 #include <vlc/libvlc_media.h>
 #include <vlc/libvlc_media_player.h>
+#include <vlc/libvlc_events.h>
 #include <vlc/libvlc_version.h>
 
 static QString s_aeInfoIdentifier = QString( "AUDIOOUTPUT" );
@@ -49,10 +50,12 @@ AudioOutput::instance()
 
 AudioOutput::AudioOutput( QObject* parent )
     : QObject( parent )
-    , dspPluginCallback( 0 )
     , currentState( Stopped )
     , muted( false )
     , m_volume( 1.0 )
+    , m_currentTime( 0 )
+    , m_totalTime( 0 )
+    , dspPluginCallback( 0 )
 {
     tDebug() << Q_FUNC_INFO;
 
@@ -87,7 +90,37 @@ AudioOutput::AudioOutput( QObject* parent )
     if ( !( vlcInstance = libvlc_new( vlcArgs.size(), vlcArgs.constData() ) ) ) {
         tDebug() << "libVLC: could not initialize";
     }
+
+
     vlcPlayer = libvlc_media_player_new( vlcInstance );
+
+    libvlc_event_manager_t *manager = libvlc_media_player_event_manager( vlcPlayer );
+    libvlc_event_type_t events[] = {
+        libvlc_MediaPlayerMediaChanged,
+        libvlc_MediaPlayerNothingSpecial,
+        libvlc_MediaPlayerOpening,
+        libvlc_MediaPlayerBuffering,
+        libvlc_MediaPlayerPlaying,
+        libvlc_MediaPlayerPaused,
+        libvlc_MediaPlayerStopped,
+        libvlc_MediaPlayerForward,
+        libvlc_MediaPlayerBackward,
+        libvlc_MediaPlayerEndReached,
+        libvlc_MediaPlayerEncounteredError,
+        libvlc_MediaPlayerTimeChanged,
+        libvlc_MediaPlayerPositionChanged,
+        libvlc_MediaPlayerSeekableChanged,
+        libvlc_MediaPlayerPausableChanged,
+        libvlc_MediaPlayerTitleChanged,
+        libvlc_MediaPlayerSnapshotTaken,
+        libvlc_MediaPlayerLengthChanged,
+        libvlc_MediaPlayerVout
+    };
+    const int eventCount = sizeof(events) / sizeof( *events );
+    for ( int i = 0 ; i < eventCount ; i++ ) {
+        libvlc_event_attach( manager, events[ i ], &AudioOutput::vlcEventCallback, this );
+    }
+
 
     getchar();
     tDebug() << "AudioOutput::AudioOutput OK !\n";
@@ -144,7 +177,10 @@ AudioOutput::setCurrentSource(MediaStream* stream)
 
     libvlc_media_player_set_media( vlcPlayer, vlcMedia );
 
-    if ( stream->type() == MediaStream::Stream ) {
+    if ( stream->type() == MediaStream::Url ) {
+        m_totalTime = libvlc_media_get_duration( vlcMedia );
+    }
+    else if ( stream->type() == MediaStream::Stream ) {
         libvlc_media_add_option_flag(vlcMedia, "imem-cat=4", libvlc_media_option_trusted);
         libvlc_media_add_option_flag(vlcMedia, (QString("imem-data=") + QString::number((quint64)stream)).toUtf8().data(), libvlc_media_option_trusted);
         libvlc_media_add_option_flag(vlcMedia, (QString("imem-get=") + QString::number((quint64)&MediaStream::readCallback)).toUtf8().data(), libvlc_media_option_trusted);
@@ -176,6 +212,28 @@ AudioOutput::setState( AudioState state )
     tDebug() << Q_FUNC_INFO;
     emit stateChanged ( state, currentState );
     currentState = state;
+}
+
+
+qint64
+AudioOutput::currentTime()
+{
+    return m_currentTime;
+}
+
+
+void
+AudioOutput::setCurrentTime( qint64 time )
+{
+    m_currentTime = time;
+    emit tick( time );
+}
+
+
+qint64
+AudioOutput::totalTime()
+{
+    return m_totalTime;
 }
 
 
@@ -295,20 +353,55 @@ AudioOutput::setVolume(qreal vol)
 
 
 void
-AudioOutput::s_dspCallback( signed short* samples, int nb_channels, int nb_samples )
+AudioOutput::vlcEventCallback( const libvlc_event_t* event, void* opaque )
 {
-    tDebug() << Q_FUNC_INFO;
+//    tDebug() << Q_FUNC_INFO;
 
-    AudioOutput::instance()->dspCallback( samples, nb_channels, nb_samples );
+    AudioOutput* that = reinterpret_cast < AudioOutput * > ( opaque );
+    Q_ASSERT( that );
+
+    switch (event->type) {
+        case libvlc_MediaPlayerTimeChanged:
+            that->setCurrentTime( event->u.media_player_time_changed.new_time );
+            break;
+        case libvlc_MediaPlayerSeekableChanged:
+            //TODO, bool event->u.media_player_seekable_changed.new_seekable
+            break;
+        case libvlc_MediaPlayerLengthChanged:
+            that->m_totalTime = event->u.media_player_length_changed.new_length;
+            break;
+        case libvlc_MediaPlayerNothingSpecial:
+        case libvlc_MediaPlayerOpening:
+        case libvlc_MediaPlayerBuffering:
+        case libvlc_MediaPlayerPlaying:
+        case libvlc_MediaPlayerPaused:
+        case libvlc_MediaPlayerStopped:
+        case libvlc_MediaPlayerEndReached:
+            break;
+        case libvlc_MediaPlayerEncounteredError:
+            // TODO emit Error
+            break;
+        case libvlc_MediaPlayerVout:
+        case libvlc_MediaPlayerMediaChanged:
+        case libvlc_MediaPlayerForward:
+        case libvlc_MediaPlayerBackward:
+        case libvlc_MediaPlayerPositionChanged:
+        case libvlc_MediaPlayerPausableChanged:
+        case libvlc_MediaPlayerTitleChanged:
+        case libvlc_MediaPlayerSnapshotTaken:
+        default:
+            break;
+    }
 }
 
 
 void
-AudioOutput::dspCallback( signed short* samples, int nb_channels, int nb_samples )
+AudioOutput::s_dspCallback( signed short* samples, int nb_channels, int nb_samples )
 {
-    if ( dspPluginCallback != 0 )
-    {
-        dspPluginCallback( samples, nb_channels, nb_samples );
+    tDebug() << Q_FUNC_INFO;
+
+    if ( AudioOutput::instance()->dspPluginCallback ) {
+        AudioOutput::instance()->dspPluginCallback( samples, nb_channels, nb_samples );
     }
 }
 
