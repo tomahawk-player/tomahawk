@@ -33,11 +33,15 @@ using namespace Tomahawk;
 #define BLOCK_SIZE 1048576
 
 QNR_IODeviceStream::QNR_IODeviceStream( const QSharedPointer<QNetworkReply>& reply, QObject* parent )
-    : Phonon::AbstractMediaStream( parent )
+    : QObject( parent )
+    , MediaStream()
     , m_networkReply( reply )
-    , m_pos( 0 )
     , m_timer( new QTimer( this ) )
 {
+    tDebug() << Q_FUNC_INFO;
+
+    m_type = MediaStream::Stream;
+
     if ( !m_networkReply->isOpen() ) {
         m_networkReply->open(QIODevice::ReadOnly);
     }
@@ -50,7 +54,7 @@ QNR_IODeviceStream::QNR_IODeviceStream( const QSharedPointer<QNetworkReply>& rep
         // All data is ready, read it!
         m_data = m_networkReply->readAll();
         Q_ASSERT( m_networkReply->atEnd() );
-        setStreamSeekable( true );
+//TODO        setStreamSeekable( true );
         setStreamSize( m_data.size() );
     }
     else
@@ -59,7 +63,7 @@ QNR_IODeviceStream::QNR_IODeviceStream( const QSharedPointer<QNetworkReply>& rep
         QVariant contentLength = m_networkReply->header( QNetworkRequest::ContentLengthHeader );
         if ( contentLength.isValid() && contentLength.toLongLong() > 0 )
         {
-            setStreamSize( contentLength.toLongLong() );
+//TODO            setStreamSize( contentLength.toLongLong() );
         }
         // Just consume all data that is already available.
         m_data = m_networkReply->readAll();
@@ -73,53 +77,38 @@ QNR_IODeviceStream::QNR_IODeviceStream( const QSharedPointer<QNetworkReply>& rep
 
 QNR_IODeviceStream::~QNR_IODeviceStream()
 {
-}
-
-
-void
-QNR_IODeviceStream::enoughData()
-{
-    m_timer->stop();
-}
-
-
-void
-QNR_IODeviceStream::needData()
-{
-    m_timer->start();
-    moreData();
-}
-
-void
-QNR_IODeviceStream::reset()
-{
-    m_pos = 0;
+    tDebug() << Q_FUNC_INFO;
 }
 
 
 void
 QNR_IODeviceStream::seekStream( qint64 offset )
 {
+    tDebug() << Q_FUNC_INFO;
+
     m_pos = offset;
 }
 
-void
-QNR_IODeviceStream::moreData()
+
+size_t
+QNR_IODeviceStream::needData ( void** buffer )
 {
+//    tDebug() << Q_FUNC_INFO;
+
     QByteArray data = m_data.mid( m_pos, BLOCK_SIZE );
     m_pos += data.size();
     if ( ( data.size() == 0 ) && m_networkReply->atEnd() && m_networkReply->isFinished() )
     {
         // We're done.
-        endOfData();
-        m_timer->stop();
+//TODO        endOfData();
+        return 0;
     }
-    else
-    {
-        writeData( data );
-    }
+    
+    *buffer = new char[data.size()];
+    memcpy(*buffer, data.data(), data.size());
+    tDebug() << Q_FUNC_INFO << " Returning buffer with size " << data.size();
+    return data.size();
 }
-
 
 void
 QNR_IODeviceStream::readyRead()

@@ -1,10 +1,12 @@
-
+/*
 #include <phonon/MediaObject>
 #include <phonon/AudioOutput>
 #include <phonon/Path>
 #include <phonon/BackendCapabilities>
 #include <phonon/Effect>
 #include <phonon/EffectParameter>
+*/
+#include "AudioOutput.h"
 
 #include <stdint.h>
 
@@ -29,8 +31,8 @@ public:
 
 
 public slots:
-    void onStateChanged( Phonon::State newState, Phonon::State oldState );
-    void onAudioDataArrived( QMap< Phonon::AudioDataOutput::Channel, QVector< qint16 > > data );
+    void onStateChanged( AudioOutput::AudioState newState, AudioOutput::AudioState oldState );
+//    void onAudioDataArrived( QMap< Phonon::AudioDataOutput::Channel, QVector< qint16 > > data );
 
 private:
     QSharedPointer<QIODevice> input;
@@ -41,6 +43,8 @@ private:
     Tomahawk::playlistinterface_ptr currentTrackPlaylist;
     Tomahawk::playlistinterface_ptr queue;
 
+    AudioOutput* audioOutput;
+/*
     Phonon::MediaObject* mediaObject;
     Phonon::AudioOutput* audioOutput;
 
@@ -49,7 +53,7 @@ private:
 
     Phonon::AudioDataOutput* audioDataOutput;
     Phonon::Path audioDataPath;
-
+*/
 
     unsigned int timeElapsed;
     bool expectStop;

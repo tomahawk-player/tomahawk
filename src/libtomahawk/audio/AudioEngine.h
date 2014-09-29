@@ -156,7 +156,7 @@ signals:
     void paused();
     void resumed();
 
-    void audioDataReady( QMap< AudioEngine::AudioChannel, QVector<qint16> > data );
+//    void audioDataReady( QMap< AudioEngine::AudioChannel, QVector<qint16> > data );
 
     void stopAfterTrackChanged();
 
@@ -200,9 +200,7 @@ private:
     void setState( AudioState state );
     void setCurrentTrackPlaylist( const Tomahawk::playlistinterface_ptr& playlist );
 
-    static void dspCallback( signed short* samples, int nb_channels, int nb_samples );
-    void dspCallbackInternal( signed short* samples, int nb_channels, int nb_samples );
-    void audioDataArrived( QMap< AudioEngine::AudioChannel, QVector< qint16 > >& data );
+//    void audioDataArrived( QMap< AudioEngine::AudioChannel, QVector< qint16 > >& data );
 
 
     Q_DECLARE_PRIVATE( AudioEngine )
