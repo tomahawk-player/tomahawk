@@ -68,10 +68,12 @@ public slots:
 signals:
     void stateChanged( AudioOutput::AudioState, AudioOutput::AudioState );
     void tick( qint64 );
+    void aboutToFinish();
 
 private:
     void setState( AudioState state );
     void setCurrentTime( qint64 time );
+    void setTotalTime( qint64 time );
 
     static void vlcEventCallback( const libvlc_event_t *event, void *opaque );
     static void s_dspCallback( signed short* samples, int nb_channels, int nb_samples );
@@ -83,6 +85,7 @@ private:
     qreal m_volume;
     qint64 m_currentTime;
     qint64 m_totalTime;
+    bool m_aboutToFinish;
 
     void ( *dspPluginCallback ) ( signed short* samples, int nb_channels, int nb_samples );
 

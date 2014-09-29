@@ -100,7 +100,7 @@ QNR_IODeviceStream::needData ( void** buffer )
     if ( ( data.size() == 0 ) && m_networkReply->atEnd() && m_networkReply->isFinished() )
     {
         // We're done.
-//TODO        endOfData();
+        endOfData();
         return 0;
     }
     

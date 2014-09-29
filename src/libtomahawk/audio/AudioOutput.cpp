@@ -18,6 +18,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "AudioEngine.h"
 #include "AudioOutput.h"
 
 #include "utils/Logger.h"
@@ -37,6 +38,7 @@
 
 static QString s_aeInfoIdentifier = QString( "AUDIOOUTPUT" );
 
+static const int ABOUT_TO_FINISH_TIME = 2000;
 
 AudioOutput* AudioOutput::s_instance = 0;
 
@@ -55,12 +57,15 @@ AudioOutput::AudioOutput( QObject* parent )
     , m_volume( 1.0 )
     , m_currentTime( 0 )
     , m_totalTime( 0 )
+    , m_aboutToFinish( false )
     , dspPluginCallback( 0 )
 {
     tDebug() << Q_FUNC_INFO;
 
     AudioOutput::s_instance = this;
     currentStream = 0;
+
+    qRegisterMetaType<AudioOutput::AudioState>("AudioOutput::AudioState");
     
     QList<QByteArray> args;
 
@@ -94,7 +99,7 @@ AudioOutput::AudioOutput( QObject* parent )
 
     vlcPlayer = libvlc_media_player_new( vlcInstance );
 
-    libvlc_event_manager_t *manager = libvlc_media_player_event_manager( vlcPlayer );
+    libvlc_event_manager_t* manager = libvlc_media_player_event_manager( vlcPlayer );
     libvlc_event_type_t events[] = {
         libvlc_MediaPlayerMediaChanged,
         libvlc_MediaPlayerNothingSpecial,
@@ -113,7 +118,7 @@ AudioOutput::AudioOutput( QObject* parent )
         libvlc_MediaPlayerPausableChanged,
         libvlc_MediaPlayerTitleChanged,
         libvlc_MediaPlayerSnapshotTaken,
-        libvlc_MediaPlayerLengthChanged,
+        //libvlc_MediaPlayerLengthChanged,
         libvlc_MediaPlayerVout
     };
     const int eventCount = sizeof(events) / sizeof( *events );
@@ -142,9 +147,12 @@ void
 AudioOutput::setCurrentSource(MediaStream* stream)
 {
     tDebug() << Q_FUNC_INFO;
-    currentStream = stream;
 
-    currentState = Loading;
+    setState(Loading);
+
+    currentStream = stream;
+    m_totalTime = 0;
+    m_currentTime = 0;
 
     QByteArray url;
     switch (stream->type()) {
@@ -173,9 +181,20 @@ AudioOutput::setCurrentSource(MediaStream* stream)
 
     tDebug() << "MediaStream::Final Url:" << url;
 
+
     vlcMedia = libvlc_media_new_location( vlcInstance, url.constData() );
 
+    libvlc_event_manager_t* manager = libvlc_media_event_manager( vlcMedia );
+    libvlc_event_type_t events[] = {
+        libvlc_MediaDurationChanged,
+    };
+    const int eventCount = sizeof(events) / sizeof( *events );
+    for ( int i = 0 ; i < eventCount ; i++ ) {
+        libvlc_event_attach( manager, events[ i ], &AudioOutput::vlcEventCallback, this );
+    }
+
     libvlc_media_player_set_media( vlcPlayer, vlcMedia );
+
 
     if ( stream->type() == MediaStream::Url ) {
         m_totalTime = libvlc_media_get_duration( vlcMedia );
@@ -194,7 +213,8 @@ AudioOutput::setCurrentSource(MediaStream* stream)
     libvlc_media_add_option(vlcMedia, ":audio-filter dsp");
     libvlc_media_add_option(vlcMedia, "--audio-filter dsp");
 
-    currentState = Stopped;
+    m_aboutToFinish = false;
+    setState(Stopped);
 }
 
 
@@ -210,8 +230,9 @@ void
 AudioOutput::setState( AudioState state )
 {
     tDebug() << Q_FUNC_INFO;
-    emit stateChanged ( state, currentState );
+    AudioState last = currentState;
     currentState = state;
+    emit stateChanged ( state, last );
 }
 
 
@@ -226,7 +247,20 @@ void
 AudioOutput::setCurrentTime( qint64 time )
 {
     m_currentTime = time;
+    if ( m_totalTime <= 0 ) {
+        m_totalTime = AudioEngine::instance()->currentTrackTotalTime();
+    }
     emit tick( time );
+
+    tDebug() << "Current time : " << m_currentTime << " / " << m_totalTime;
+
+    if ( time < m_totalTime - ABOUT_TO_FINISH_TIME ) {
+        m_aboutToFinish = false;
+    }
+    if ( !m_aboutToFinish && m_totalTime > 0 && time >= m_totalTime - ABOUT_TO_FINISH_TIME ) {
+        m_aboutToFinish = true;
+        emit aboutToFinish();
+    }
 }
 
 
@@ -234,6 +268,17 @@ qint64
 AudioOutput::totalTime()
 {
     return m_totalTime;
+}
+
+
+void
+AudioOutput::setTotalTime( qint64 time )
+{
+    if ( time > 0 ) {
+        m_totalTime = time;
+        // emit current time to refresh total time
+        emit tick( m_currentTime );
+    }
 }
 
 
@@ -367,16 +412,23 @@ AudioOutput::vlcEventCallback( const libvlc_event_t* event, void* opaque )
         case libvlc_MediaPlayerSeekableChanged:
             //TODO, bool event->u.media_player_seekable_changed.new_seekable
             break;
-        case libvlc_MediaPlayerLengthChanged:
-            that->m_totalTime = event->u.media_player_length_changed.new_length;
+        case libvlc_MediaDurationChanged:
+            that->setTotalTime( event->u.media_duration_changed.new_duration );
             break;
+        /*
+        case libvlc_MediaPlayerLengthChanged:
+            that->setTotalTime( event->u.media_player_length_changed.new_length );
+            break;
+        */
         case libvlc_MediaPlayerNothingSpecial:
         case libvlc_MediaPlayerOpening:
         case libvlc_MediaPlayerBuffering:
         case libvlc_MediaPlayerPlaying:
         case libvlc_MediaPlayerPaused:
         case libvlc_MediaPlayerStopped:
+            break;
         case libvlc_MediaPlayerEndReached:
+            that->setState(Stopped);
             break;
         case libvlc_MediaPlayerEncounteredError:
             // TODO emit Error

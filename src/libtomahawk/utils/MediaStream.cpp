@@ -29,6 +29,7 @@ static QString s_aeInfoIdentifier = QString( "MEDIASTREAM" );
 MediaStream::MediaStream()
     : m_type( Unknown )
     , m_url( QUrl() )
+    , m_eos( false )
     , m_pos( 0 )
     , m_streamSize( 0 )
 {
@@ -85,6 +86,15 @@ MediaStream::setStreamSize( qint64 size )
 }
 
 
+void
+MediaStream::endOfData()
+{
+    tDebug() << Q_FUNC_INFO;
+
+    m_eos = true;
+}
+
+
 int
 MediaStream::readCallback ( void* data, const char* cookie, int64_t* dts, int64_t* pts, unsigned* flags, size_t* bufferSize, void** buffer )
 {
@@ -96,6 +106,10 @@ MediaStream::readCallback ( void* data, const char* cookie, int64_t* dts, int64_
     Q_UNUSED(flags);
 
     MediaStream* that = static_cast < MediaStream * > ( data );
+
+    if ( that->m_eos == true ) {
+        return -1;
+    }
 
     *bufferSize = that->needData(buffer);
     return 0;
@@ -110,7 +124,9 @@ MediaStream::readDoneCallback ( void *data, const char *cookie, size_t bufferSiz
     Q_UNUSED(data);
     Q_UNUSED(cookie);
     Q_UNUSED(bufferSize);
-    delete static_cast<char *>(buffer);
+
+//  TODO : causes segfault
+//    delete static_cast<char *>(buffer);
 
     return 0;
 }

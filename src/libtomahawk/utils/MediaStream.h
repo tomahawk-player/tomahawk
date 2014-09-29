@@ -53,9 +53,12 @@ public:
     static int seekCallback ( void *data, const uint64_t pos );
 
 protected:
+    void endOfData();
+
     MediaType m_type;
     QUrl m_url;
 
+    bool m_eos;
     qint64 m_pos;
     qint64 m_streamSize;
 };

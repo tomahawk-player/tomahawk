@@ -109,9 +109,9 @@ AudioEnginePrivate::onStateChanged( AudioOutput::AudioState newState, AudioOutpu
             case AudioOutput::Paused:
             {
                 if ( audioOutput && currentTrack )
-                {/* TODO
+                {
                     qint64 duration = audioOutput->totalTime() > 0 ? audioOutput->totalTime() : currentTrack->track()->duration() * 1000;
-                    stopped = ( duration - 1000 < audioOutput->currentTime() ); */
+                    stopped = ( duration - 1000 < audioOutput->currentTime() );
                 }
                 else
                     stopped = true;
@@ -133,7 +133,7 @@ AudioEnginePrivate::onStateChanged( AudioOutput::AudioState newState, AudioOutpu
         if ( stopped && expectStop )
         {
             expectStop = false;
-            tDebug( LOGVERBOSE ) << "Finding next track.";
+            tDebug() << "Finding next track.";
             if ( q_ptr->canGoNext() )
             {
                 q_ptr->loadNextTrack();
@@ -194,6 +194,7 @@ AudioEngine::AudioEngine()
 
     connect( d->audioOutput, SIGNAL( stateChanged( AudioOutput::AudioState, AudioOutput::AudioState ) ), d_func(), SLOT( onStateChanged( AudioOutput::AudioState, AudioOutput::AudioState ) ) );
     connect( d->audioOutput, SIGNAL( tick( qint64 ) ), SLOT( timerTriggered( qint64 ) ) );
+    connect( d->audioOutput, SIGNAL( aboutToFinish() ), SLOT( onAboutToFinish() ) );
 
     qRegisterMetaType< AudioErrorCode >("AudioErrorCode");
     qRegisterMetaType< AudioState >("AudioState");
@@ -1248,6 +1249,11 @@ AudioEngine::currentTime() const
 qint64
 AudioEngine::currentTrackTotalTime() const
 {
+    // TODO : This is too hacky. The problem is that I don't know why
+    //        libVLC doesn't report total duration for stream data (imem://)
+    if ( d_func()->currentTrack && d_func()->currentTrack->track() ) {
+        return d_func()->currentTrack->track()->duration() * 1000 + 1000;
+    }
     return d_func()->audioOutput->totalTime();
 }
 
