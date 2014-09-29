@@ -59,6 +59,11 @@ SipStatusMessage::SipStatusMessage( SipStatusMessageType statusMessageType, cons
 }
 
 
+SipStatusMessage::~SipStatusMessage()
+{
+}
+
+
 QPixmap
 SipStatusMessage::icon() const
 {

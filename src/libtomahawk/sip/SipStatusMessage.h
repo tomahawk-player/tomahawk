@@ -41,6 +41,7 @@ public:
     };
 
     explicit SipStatusMessage( SipStatusMessageType statusMessageType, const QString& contactId, const QString& message = QString() );
+    virtual ~SipStatusMessage();
 
     QString type() const { return "sipstatusmessage"; }
 
@@ -50,7 +51,7 @@ public:
     bool allowMultiLine() const { return true; }
 private:
     Q_DECLARE_PRIVATE( SipStatusMessage )
-    SipStatusMessagePrivate* d_ptr;
+    QScopedPointer<SipStatusMessagePrivate> d_ptr;
 };
 
 #endif // SIPSTATUSMESSAGE_H
