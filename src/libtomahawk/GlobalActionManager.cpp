@@ -57,6 +57,7 @@
 
 #include <QApplication>
 #include <QClipboard>
+#include <QMessageBox>
 
 #include <echonest/Playlist.h>
 
@@ -189,6 +190,22 @@ GlobalActionManager::installResolverFromFile( const QString& resolverPath )
         tDebug() << "Resolver was not installed:" << resolverPath;
         return;
     }
+
+    int result = QMessageBox::question( JobStatusView::instance(),
+                                        tr( "Install plug-in" ),
+                                        tr( "<b>%1</b> %2<br/>"
+                                            "by <b>%3</b><br/><br/>"
+                                            "You are attempting to install a Tomahawk "
+                                            "plug-in from an unknown source. Plug-ins from "
+                                            "untrusted sources may put your data at risk.<br/>"
+                                            "Do you want to install this plug-in?" )
+                                        .arg( acct->accountFriendlyName() )
+                                        .arg( acct->version() )
+                                        .arg( acct->author() ),
+                                        QMessageBox::Yes,
+                                        QMessageBox::No );
+    if ( result != QMessageBox::Yes )
+        return;
 
     Accounts::AccountManager::instance()->addAccount( acct );
     TomahawkSettings::instance()->addAccount( acct->accountId() );
