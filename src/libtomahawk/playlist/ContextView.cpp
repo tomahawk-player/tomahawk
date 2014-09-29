@@ -152,11 +152,12 @@ ContextView::onCoverUpdated()
     if ( !m_query || m_query->track()->cover( QSize( 0, 0 ) ).isNull() )
     {
         m_pixmap = QPixmap();
-        emit pixmapChanged( m_pixmap );
-        return;
+    }
+    else
+    {
+        m_pixmap = m_query->track()->cover( QSize( 0, 0 ) );
     }
 
-    m_pixmap = m_query->track()->cover( QSize( 0, 0 ) );
     emit pixmapChanged( m_pixmap );
 }
 
