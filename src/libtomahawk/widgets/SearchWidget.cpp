@@ -54,8 +54,8 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
         ui->artists->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         ui->artists->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         ui->artists->setWrapping( false );
-        ui->artists->setItemSize( QSize( 140, 140 + 32 ) );
-        ui->artists->setFixedHeight( 140 + 32 + 32 );
+        ui->artists->setItemSize( QSize( 140, 140 + 38 ) );
+        ui->artists->setFixedHeight( 140 + 32 + 38 );
 
         m_artistsModel = new PlayableModel( ui->artists );
         ui->artists->setPlayableModel( m_artistsModel );
@@ -75,7 +75,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
         ui->albums->setWrapping( false );
         ui->albums->setItemSize( QSize( 140, 140 + 56 ) );
 //        ui->albums->proxyModel()->setHideDupeItems( true );
-        ui->albums->setFixedHeight( 140 + 56 + 32 );
+        ui->albums->setFixedHeight( 140 + 56 + 38 );
 
         m_albumsModel = new PlayableModel( ui->albums );
         ui->albums->setPlayableModel( m_albumsModel );
@@ -96,7 +96,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
         ui->tracks->setWrapping( false );
         ui->tracks->setItemSize( QSize( 140, 140 + 56 ) );
 //        ui->tracks->proxyModel()->setHideDupeItems( true );
-        ui->tracks->setFixedHeight( 140 + 56 + 32 );
+        ui->tracks->setFixedHeight( 140 + 56 + 38 );
 
         m_resultsModel = new PlayableModel( ui->tracks );
         ui->tracks->setPlayableModel( m_resultsModel );
