@@ -252,7 +252,7 @@ lidhuni dhe transmeto nga ju?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="188"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="258"/>
-        <source>What&apos;s new in ...</source>
+        <source>What&apos;s New in ...</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -387,17 +387,17 @@ lidhuni dhe transmeto nga ju?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1017"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1019"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Na vjen keq, Tomahawk nuk mund të gjejë këngën &apos;%1&apos; nga %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1041"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1043"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Na vjen keq, Tomahawk nuk mund të gjejë artistin &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1067"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1069"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Na vjen keq, Tomahawk nuk mund të gjejë albumin &apos;%1&apos; nga %2</translation>
     </message>
