@@ -1251,7 +1251,7 @@ AudioEngine::currentTrackTotalTime() const
 {
     // TODO : This is too hacky. The problem is that I don't know why
     //        libVLC doesn't report total duration for stream data (imem://)
-    if ( d_func()->currentTrack && d_func()->currentTrack->track() ) {
+    if ( d_func()->audioOutput->totalTime() == 0 && d_func()->currentTrack && d_func()->currentTrack->track() ) {
         return d_func()->currentTrack->track()->duration() * 1000 + 1000;
     }
     return d_func()->audioOutput->totalTime();
