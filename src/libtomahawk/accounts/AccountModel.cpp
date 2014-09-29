@@ -49,6 +49,12 @@ AccountModel::AccountModel( QObject* parent )
 }
 
 
+AccountModel::~AccountModel()
+{
+    qDeleteAll( m_accounts );
+}
+
+
 void
 AccountModel::init()
 {
