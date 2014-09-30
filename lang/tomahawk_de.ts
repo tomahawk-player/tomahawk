@@ -253,7 +253,7 @@ erlauben sich mit dir zu verbinden?</translation>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="188"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="258"/>
         <source>What&apos;s New in ...</source>
-        <translation type="unfinished"/>
+        <translation>Was ist neu in ...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="214"/>
@@ -727,9 +727,19 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>GlobalActionManager</name>
     <message>
-        <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="186"/>
+        <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="187"/>
         <source>Resolver installation from file %1 failed.</source>
         <translation>Die Resolver-Installation von der Datei %1 ist fehlgeschlagen.</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="195"/>
+        <source>Install plug-in</source>
+        <translation>Plug-in installieren</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="196"/>
+        <source>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;by &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;You are attempting to install a Tomahawk plug-in from an unknown source. Plug-ins from untrusted sources may put your data at risk.&lt;br/&gt;Do you want to install this plug-in?</source>
+        <translation>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;by &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Du bist dabei ein Tomahawk Plug-in von einer unbekannten Quelle zu installieren. Plug-ins von einer nicht vertrauenswürdigen Quelle könnten so deine Daten gefährden. &lt;br/&gt;Möchtest du wirklich dieses Plug-in installieren?</translation>
     </message>
 </context>
 <context>
@@ -2365,12 +2375,12 @@ Password (OTP)</source>
 <context>
     <name>Tomahawk::Accounts::AccountModel</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="558"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="564"/>
         <source>Manual Install Required</source>
         <translation>Manuelle Installation benötigt</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="561"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="567"/>
         <source>Unfortunately, automatic installation of this resolver is not available or disabled for your platform.&lt;br /&gt;&lt;br /&gt;Please use &quot;Install from file&quot; above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</source>
         <translation>Leider ist die automatische Installation dieses Resolvers auf deinem System nicht möglich.&lt;br/&gt;&lt;br/&gt;Bitte benutze &quot;Von Datei installieren&quot; und installiere ihn manuell. Weitere Informationen findest du hier:&lt;br/&gt;&lt;br/&gt;http://www.tomahawk-player.org/resolvers/%1</translation>
     </message>

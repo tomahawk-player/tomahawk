@@ -727,8 +727,18 @@ connect and stream from you?</source>
 <context>
     <name>GlobalActionManager</name>
     <message>
-        <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="186"/>
+        <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="187"/>
         <source>Resolver installation from file %1 failed.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="195"/>
+        <source>Install plug-in</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="196"/>
+        <source>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;by &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;You are attempting to install a Tomahawk plug-in from an unknown source. Plug-ins from untrusted sources may put your data at risk.&lt;br/&gt;Do you want to install this plug-in?</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -2367,12 +2377,12 @@ Password (OTP)</source>
 <context>
     <name>Tomahawk::Accounts::AccountModel</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="558"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="564"/>
         <source>Manual Install Required</source>
         <translation>مطلوب تثبيت يدوي</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="561"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="567"/>
         <source>Unfortunately, automatic installation of this resolver is not available or disabled for your platform.&lt;br /&gt;&lt;br /&gt;Please use &quot;Install from file&quot; above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</source>
         <translation>لسوء الحظ، التثبيت التلقائي لهذا المحلل لم يتوفر بعد على منصتك. &lt;br /&gt;&lt;br /&gt; الرجاء إستخدام &quot; التثبيت من الملف&quot; أعلاه، بواسطة جلبه من توزيعتك أو تجميعه بنفسك. ويمكن الاطلاع على مزيد من التعليمات هنا: &lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</translation>
     </message>
