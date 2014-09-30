@@ -44,16 +44,6 @@ private:
     Tomahawk::playlistinterface_ptr queue;
 
     AudioOutput* audioOutput;
-/*
-    Phonon::MediaObject* mediaObject;
-    Phonon::AudioOutput* audioOutput;
-
-    Phonon::Path audioPath;
-    Phonon::Effect* audioEffect;
-
-    Phonon::AudioDataOutput* audioDataOutput;
-    Phonon::Path audioDataPath;
-*/
 
     unsigned int timeElapsed;
     bool expectStop;

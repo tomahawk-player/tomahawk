@@ -716,16 +716,14 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString 
                     // and Phonon handles the deletion of the
                     // QNR_IODeviceStream object
                     ioToKeep.clear();
-                // TODO   d->audioOutput->setAutoDelete( true );
+                   d->audioOutput->setAutoDelete( true );
                 }
                 else
                 {
                     tLog() << "CASE 2";
-/* TODO
                     d->audioOutput->setCurrentSource( io.data() );
                     // We handle the deletion via tracking in d->input
                     d->audioOutput->setAutoDelete( false );
-*/
                 }
             }
             else
@@ -758,9 +756,7 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString 
                     d->audioOutput->setCurrentSource( QUrl::fromLocalFile( furl ) );
                 }
 
-/* TODO
                 d->audioOutput->setAutoDelete( true );
-*/
             }
 
             if ( !d->input.isNull() )
@@ -1251,6 +1247,8 @@ AudioEngine::currentTrackTotalTime() const
 {
     // TODO : This is too hacky. The problem is that I don't know why
     //        libVLC doesn't report total duration for stream data (imem://)
+    // But it's not a real problem for playback, since
+    // EndOfStream is emitted by libVLC itself
     if ( d_func()->audioOutput->totalTime() == 0 && d_func()->currentTrack && d_func()->currentTrack->track() ) {
         return d_func()->currentTrack->track()->duration() * 1000 + 1000;
     }

@@ -54,11 +54,15 @@ AudioOutput::AudioOutput( QObject* parent )
     : QObject( parent )
     , currentState( Stopped )
     , muted( false )
+    , m_autoDelete ( true )
     , m_volume( 1.0 )
     , m_currentTime( 0 )
     , m_totalTime( 0 )
     , m_aboutToFinish( false )
     , dspPluginCallback( 0 )
+    , vlcInstance( 0 )
+    , vlcPlayer( 0 )
+    , vlcMedia( 0 )
 {
     tDebug() << Q_FUNC_INFO;
 
@@ -126,8 +130,6 @@ AudioOutput::AudioOutput( QObject* parent )
         libvlc_event_attach( manager, events[ i ], &AudioOutput::vlcEventCallback, this );
     }
 
-
-    getchar();
     tDebug() << "AudioOutput::AudioOutput OK !\n";
 }
 
@@ -135,6 +137,13 @@ AudioOutput::AudioOutput( QObject* parent )
 AudioOutput::~AudioOutput()
 {
     tDebug() << Q_FUNC_INFO;
+}
+
+
+void
+AudioOutput::setAutoDelete ( bool ad )
+{
+    m_autoDelete = ad;
 }
 
 void
@@ -150,6 +159,15 @@ AudioOutput::setCurrentSource(MediaStream* stream)
 
     setState(Loading);
 
+    if ( vlcMedia != 0 ) {
+        // Ensure playback is stopped, then release media
+        libvlc_media_player_stop( vlcPlayer );
+        libvlc_media_release( vlcMedia );
+        vlcMedia = 0;
+    }
+    if ( m_autoDelete && currentStream != 0 ) {
+        delete currentStream;
+    }
     currentStream = stream;
     m_totalTime = 0;
     m_currentTime = 0;
@@ -166,16 +184,18 @@ AudioOutput::setCurrentSource(MediaStream* stream)
 
         case MediaStream::Url:
             tDebug() << "MediaStream::Url:" << stream->url();
-            if (stream->url().scheme().isEmpty()) {
+            if ( stream->url().scheme().isEmpty() ) {
                 url = "file:///";
-                if (stream->url().isRelative())
-                    url.append(QFile::encodeName(QDir::currentPath()) + '/');
+                if ( stream->url().isRelative() ) {
+                    url.append( QFile::encodeName( QDir::currentPath() ) + '/' );
+                }
             }
             url += stream->url().toEncoded();
             break;
 
         case MediaStream::Stream:
-            url = QByteArray("imem://");
+        case MediaStream::IODevice:
+            url = QByteArray( "imem://" );
             break;
     }
 
@@ -199,19 +219,13 @@ AudioOutput::setCurrentSource(MediaStream* stream)
     if ( stream->type() == MediaStream::Url ) {
         m_totalTime = libvlc_media_get_duration( vlcMedia );
     }
-    else if ( stream->type() == MediaStream::Stream ) {
+    else if ( stream->type() == MediaStream::Stream || stream->type() == MediaStream::IODevice ) {
         libvlc_media_add_option_flag(vlcMedia, "imem-cat=4", libvlc_media_option_trusted);
         libvlc_media_add_option_flag(vlcMedia, (QString("imem-data=") + QString::number((quint64)stream)).toUtf8().data(), libvlc_media_option_trusted);
         libvlc_media_add_option_flag(vlcMedia, (QString("imem-get=") + QString::number((quint64)&MediaStream::readCallback)).toUtf8().data(), libvlc_media_option_trusted);
         libvlc_media_add_option_flag(vlcMedia, (QString("imem-release=") + QString::number((quint64)&MediaStream::readDoneCallback)).toUtf8().data(), libvlc_media_option_trusted);
         libvlc_media_add_option_flag(vlcMedia, (QString("imem-seek=") + QString::number((quint64)&MediaStream::seekCallback)).toUtf8().data(), libvlc_media_option_trusted);
     }
-    libvlc_media_add_option(vlcMedia, "audio-filter=dsp");
-    libvlc_media_add_option(vlcMedia, ":audio-filter=dsp");
-    libvlc_media_add_option(vlcMedia, "--audio-filter=dsp");
-    libvlc_media_add_option(vlcMedia, "audio-filter dsp");
-    libvlc_media_add_option(vlcMedia, ":audio-filter dsp");
-    libvlc_media_add_option(vlcMedia, "--audio-filter dsp");
 
     m_aboutToFinish = false;
     setState(Stopped);
@@ -246,13 +260,16 @@ AudioOutput::currentTime()
 void
 AudioOutput::setCurrentTime( qint64 time )
 {
-    m_currentTime = time;
+    // TODO : This is a bit hacky, but m_totalTime is only used to determine
+    // if we are about to finish
     if ( m_totalTime <= 0 ) {
         m_totalTime = AudioEngine::instance()->currentTrackTotalTime();
     }
+
+    m_currentTime = time;
     emit tick( time );
 
-    tDebug() << "Current time : " << m_currentTime << " / " << m_totalTime;
+//    tDebug() << "Current time : " << m_currentTime << " / " << m_totalTime;
 
     if ( time < m_totalTime - ABOUT_TO_FINISH_TIME ) {
         m_aboutToFinish = false;
@@ -329,27 +346,13 @@ AudioOutput::seek( qint64 milliseconds )
         case Buffering:
             break;
         default:
-            // Seeking while not being in a playingish state is cached for later.
-// TODO            m_seekpoint = milliseconds;
             return;
     }
 
     tDebug() << "AudioOutput:: seeking" << milliseconds << "msec";
 
     libvlc_media_player_set_time ( vlcPlayer, milliseconds );
-/*
-    const qint64 time = currentTime();
-    const qint64 total = totalTime();
-*/
-/*
-    // Reset last tick marker so we emit time even after seeking
-    if (time < m_lastTick)
-        m_lastTick = time;
-    if (time < total - m_prefinishMark)
-        m_prefinishEmitted = false;
-    if (time < total - ABOUT_TO_FINISH_TIME)
-        m_aboutToFinishEmitted = false;
-*/
+    setCurrentTime( milliseconds );
 }
 
 

@@ -28,15 +28,17 @@
 #include <stdint.h>
 
 #include <QUrl>
+#include <QIODevice>
 
 class DLLEXPORT MediaStream
 {
 
 public:
-    enum MediaType { Unknown = -1, Empty = 0, Url = 1, Stream = 2 };
+    enum MediaType { Unknown = -1, Empty = 0, Url = 1, Stream = 2, IODevice = 3 };
 
     MediaStream();
     MediaStream( const QUrl &url );
+    MediaStream( QIODevice* device );
     virtual ~MediaStream();
 
     MediaType type();
@@ -57,6 +59,7 @@ protected:
 
     MediaType m_type;
     QUrl m_url;
+    QIODevice* m_ioDevice;
 
     bool m_eos;
     qint64 m_pos;

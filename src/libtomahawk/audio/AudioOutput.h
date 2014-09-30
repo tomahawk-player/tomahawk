@@ -58,6 +58,7 @@ public:
     qreal volume();
     qint64 currentTime();
     qint64 totalTime();
+    void setAutoDelete ( bool ad );
 
     void setDspCallback( void ( *cb ) ( signed short*, int, int ) );
 
@@ -82,6 +83,7 @@ private:
     AudioState currentState;
     MediaStream* currentStream;
     bool muted;
+    bool m_autoDelete;
     qreal m_volume;
     qint64 m_currentTime;
     qint64 m_totalTime;
