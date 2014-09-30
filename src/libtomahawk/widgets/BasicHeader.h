@@ -38,7 +38,7 @@ public:
     explicit BasicHeader( QWidget* parent = 0 );
     virtual ~BasicHeader();
 
-    Ui::HeaderWidget* ui;
+    QScopedPointer<Ui::HeaderWidget> ui;
 
 public slots:
     virtual void setCaption( const QString& s );
