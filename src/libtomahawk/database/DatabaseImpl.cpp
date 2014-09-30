@@ -197,6 +197,13 @@ Tomahawk::DatabaseImpl::dumpDatabase()
 
 
 void
+Tomahawk::DatabaseImpl::wipeIndex()
+{
+    m_fuzzyIndex->deleteIndex();
+}
+
+
+void
 Tomahawk::DatabaseImpl::loadIndex()
 {
     connect( m_fuzzyIndex, SIGNAL( indexReady() ), SIGNAL( indexReady() ) );

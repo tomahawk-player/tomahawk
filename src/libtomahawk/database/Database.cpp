@@ -186,6 +186,13 @@ Database::loadIndex()
 
 
 void
+Database::wipeIndex()
+{
+    m_impl->wipeIndex();
+}
+
+
+void
 Database::enqueue( const QList< Tomahawk::dbcmd_ptr >& lc )
 {
     Q_ASSERT( m_ready );
