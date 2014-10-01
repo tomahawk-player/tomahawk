@@ -164,8 +164,6 @@ MediaStream::readCallback ( void* data, const char* cookie, int64_t* dts, int64_
     qint64 bufsize = 0;
     *bufferSize = 0;
 
-//    tDebug() << Q_FUNC_INFO << " ---- type : " << that->m_type;
-
     if ( that->m_eos == true ) {
         return -1;
     }
@@ -176,7 +174,6 @@ MediaStream::readCallback ( void* data, const char* cookie, int64_t* dts, int64_
     else if ( that->m_type == IODevice ) {
         bufsize = that->m_ioDevice->read( that->m_buffer, BLOCK_SIZE );
         *buffer = that->m_buffer;
-//        tDebug() << "readCallback(QIODevice) returning bufsize : " << bufsize;
     }
 
     if ( bufsize > 0 ) {
@@ -199,8 +196,6 @@ MediaStream::readCallback ( void* data, const char* cookie, int64_t* dts, int64_
 int
 MediaStream::readDoneCallback ( void *data, const char *cookie, size_t bufferSize, void *buffer )
 {
-//    tDebug() << Q_FUNC_INFO;
-
     Q_UNUSED(cookie);
     Q_UNUSED(bufferSize);
 
@@ -217,8 +212,6 @@ MediaStream::readDoneCallback ( void *data, const char *cookie, size_t bufferSiz
 int
 MediaStream::seekCallback ( void *data, const uint64_t pos )
 {
-    tDebug() << Q_FUNC_INFO;
-
     MediaStream* that = static_cast < MediaStream * > ( data );
 
     if ( that->m_type == Stream && static_cast < int64_t > ( pos ) > that->streamSize() ) {

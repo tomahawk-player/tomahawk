@@ -32,7 +32,6 @@ public:
 
 public slots:
     void onStateChanged( AudioOutput::AudioState newState, AudioOutput::AudioState oldState );
-//    void onAudioDataArrived( QMap< Phonon::AudioDataOutput::Channel, QVector< qint16 > > data );
 
 private:
     QSharedPointer<QIODevice> input;

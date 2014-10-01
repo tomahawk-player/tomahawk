@@ -263,7 +263,7 @@ AudioOutput::currentTime()
 void
 AudioOutput::setCurrentTime( qint64 time )
 {
-    // TODO : This is a bit hacky, but m_totalTime is only used to determine
+    // FIXME : This is a bit hacky, but m_totalTime is only used to determine
     // if we are about to finish
     if ( m_totalTime == 0 ) {
         m_totalTime = AudioEngine::instance()->currentTrackTotalTime();
@@ -275,6 +275,8 @@ AudioOutput::setCurrentTime( qint64 time )
 
 //    tDebug() << "Current time : " << m_currentTime << " / " << m_totalTime;
 
+    // FIXME pt 2 : we use temporary variable to avoid overriding m_totalTime
+    // in the case it is < 0 (which means that the media is not seekable)
     qint64 total = m_totalTime;
     if ( total <= 0 ) {
         total = AudioEngine::instance()->currentTrackTotalTime();
@@ -332,7 +334,7 @@ void
 AudioOutput::pause()
 {
     tDebug() << Q_FUNC_INFO;
-//    libvlc_media_player_pause( vlcPlayer );
+
     libvlc_media_player_set_pause ( vlcPlayer, 1 );
 
     setState( Paused );
@@ -442,14 +444,12 @@ AudioOutput::vlcEventCallback( const libvlc_event_t* event, void* opaque )
             break;
         case libvlc_MediaPlayerSeekableChanged:
          //   tDebug() << Q_FUNC_INFO << " : seekable changed : " << event->u.media_player_seekable_changed.new_seekable;
-            //TODO, bool event->u.media_player_seekable_changed.new_seekable
             break;
         case libvlc_MediaDurationChanged:
             that->setTotalTime( event->u.media_duration_changed.new_duration );
             break;
         case libvlc_MediaPlayerLengthChanged:
         //    tDebug() << Q_FUNC_INFO << " : length changed : " << event->u.media_player_length_changed.new_length;
-        //    that->setTotalTime( event->u.media_player_length_changed.new_length );
             break;
         case libvlc_MediaPlayerNothingSpecial:
         case libvlc_MediaPlayerOpening:
