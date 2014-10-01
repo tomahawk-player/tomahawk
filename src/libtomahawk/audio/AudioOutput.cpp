@@ -74,7 +74,7 @@ AudioOutput::AudioOutput( QObject* parent )
     QList<QByteArray> args;
 
     args << "--ignore-config";
-    args << "--verbose=11111";
+    args << "--verbose=42";
     args << "--no-plugins-cache";
     args << "--extraintf=logger";
     args << "--no-media-library";
@@ -84,7 +84,7 @@ AudioOutput::AudioOutput( QObject* parent )
     args << "--no-snapshot-preview";
     args << "--no-xlib";
     args << "--services-discovery=''";
-    args << "--no-one-instance";
+//    args << "--no-one-instance";
     args << "--no-video";
 //    args << "--audio-filter=dsp";
 //    args << QString("--dsp-callback=%1").arg((quint64)&AudioOutput::s_dspCallback, 0, 16).toAscii();
