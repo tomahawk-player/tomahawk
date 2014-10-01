@@ -52,6 +52,7 @@ public:
     void stop();
     void seek(qint64 milliseconds);
 
+    bool isSeekable();
     bool isMuted();
     void setMuted(bool m);
     void setVolume(qreal vol);
@@ -82,6 +83,7 @@ private:
     static AudioOutput* s_instance;
     AudioState currentState;
     MediaStream* currentStream;
+    bool seekable;
     bool muted;
     bool m_autoDelete;
     qreal m_volume;

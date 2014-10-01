@@ -53,6 +53,7 @@ AudioOutput::instance()
 AudioOutput::AudioOutput( QObject* parent )
     : QObject( parent )
     , currentState( Stopped )
+    , seekable( true )
     , muted( false )
     , m_autoDelete ( true )
     , m_volume( 1.0 )
@@ -168,9 +169,11 @@ AudioOutput::setCurrentSource(MediaStream* stream)
     if ( m_autoDelete && currentStream != 0 ) {
         delete currentStream;
     }
+
     currentStream = stream;
     m_totalTime = 0;
     m_currentTime = 0;
+    seekable = true;
 
     QByteArray url;
     switch (stream->type()) {
@@ -262,8 +265,9 @@ AudioOutput::setCurrentTime( qint64 time )
 {
     // TODO : This is a bit hacky, but m_totalTime is only used to determine
     // if we are about to finish
-    if ( m_totalTime <= 0 ) {
+    if ( m_totalTime == 0 ) {
         m_totalTime = AudioEngine::instance()->currentTrackTotalTime();
+        seekable = true;
     }
 
     m_currentTime = time;
@@ -271,10 +275,15 @@ AudioOutput::setCurrentTime( qint64 time )
 
 //    tDebug() << "Current time : " << m_currentTime << " / " << m_totalTime;
 
-    if ( time < m_totalTime - ABOUT_TO_FINISH_TIME ) {
+    qint64 total = m_totalTime;
+    if ( total <= 0 ) {
+        total = AudioEngine::instance()->currentTrackTotalTime();
+    }
+
+    if ( time < total - ABOUT_TO_FINISH_TIME ) {
         m_aboutToFinish = false;
     }
-    if ( !m_aboutToFinish && m_totalTime > 0 && time >= m_totalTime - ABOUT_TO_FINISH_TIME ) {
+    if ( !m_aboutToFinish && total > 0 && time >= total - ABOUT_TO_FINISH_TIME ) {
         m_aboutToFinish = true;
         emit aboutToFinish();
     }
@@ -291,10 +300,15 @@ AudioOutput::totalTime()
 void
 AudioOutput::setTotalTime( qint64 time )
 {
-    if ( time > 0 ) {
+    tDebug() << Q_FUNC_INFO << " " << time;
+
+    if ( time <= 0 ) {
+        seekable = false;
+    } else {
         m_totalTime = time;
+        seekable = true;
         // emit current time to refresh total time
-        emit tick( m_currentTime );
+        emit tick( time );
     }
 }
 
@@ -303,6 +317,7 @@ void
 AudioOutput::play()
 {
     tDebug() << Q_FUNC_INFO;
+
     if ( libvlc_media_player_is_playing ( vlcPlayer ) ) {
         libvlc_media_player_set_pause ( vlcPlayer, 0 );
     } else {
@@ -339,6 +354,10 @@ AudioOutput::seek( qint64 milliseconds )
 {
     tDebug() << Q_FUNC_INFO;
 
+    if ( !seekable ) {
+        return;
+    }
+
     switch ( currentState ) {
         case Playing:
         case Paused:
@@ -353,6 +372,15 @@ AudioOutput::seek( qint64 milliseconds )
 
     libvlc_media_player_set_time ( vlcPlayer, milliseconds );
     setCurrentTime( milliseconds );
+}
+
+
+bool
+AudioOutput::isSeekable()
+{
+    tDebug() << Q_FUNC_INFO;
+
+    return seekable;
 }
 
 
@@ -413,16 +441,16 @@ AudioOutput::vlcEventCallback( const libvlc_event_t* event, void* opaque )
             that->setCurrentTime( event->u.media_player_time_changed.new_time );
             break;
         case libvlc_MediaPlayerSeekableChanged:
+         //   tDebug() << Q_FUNC_INFO << " : seekable changed : " << event->u.media_player_seekable_changed.new_seekable;
             //TODO, bool event->u.media_player_seekable_changed.new_seekable
             break;
         case libvlc_MediaDurationChanged:
             that->setTotalTime( event->u.media_duration_changed.new_duration );
             break;
-        /*
         case libvlc_MediaPlayerLengthChanged:
-            that->setTotalTime( event->u.media_player_length_changed.new_length );
+        //    tDebug() << Q_FUNC_INFO << " : length changed : " << event->u.media_player_length_changed.new_length;
+        //    that->setTotalTime( event->u.media_player_length_changed.new_length );
             break;
-        */
         case libvlc_MediaPlayerNothingSpecial:
         case libvlc_MediaPlayerOpening:
         case libvlc_MediaPlayerBuffering:

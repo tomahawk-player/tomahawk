@@ -437,10 +437,11 @@ bool
 AudioEngine::canSeek()
 {
     Q_D( AudioEngine );
-/*
-    if ( d->playlist.isNull() )
-        return true;
-*/
+
+    if ( !d->audioOutput->isSeekable() ) {
+        return false;
+    }
+
     return !d->playlist.isNull() && ( d->playlist.data()->seekRestrictions() != PlaylistModes::NoSeek );
 }
 
@@ -1249,7 +1250,7 @@ AudioEngine::currentTrackTotalTime() const
     //        libVLC doesn't report total duration for stream data (imem://)
     // But it's not a real problem for playback, since
     // EndOfStream is emitted by libVLC itself
-    if ( d_func()->audioOutput->totalTime() == 0 && d_func()->currentTrack && d_func()->currentTrack->track() ) {
+    if ( d_func()->audioOutput->totalTime() <= 0 && d_func()->currentTrack && d_func()->currentTrack->track() ) {
         return d_func()->currentTrack->track()->duration() * 1000 + 1000;
     }
     return d_func()->audioOutput->totalTime();

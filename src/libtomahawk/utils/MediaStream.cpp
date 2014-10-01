@@ -174,10 +174,6 @@ MediaStream::readCallback ( void* data, const char* cookie, int64_t* dts, int64_
         bufsize = that->needData(buffer);
     }
     else if ( that->m_type == IODevice ) {
-        /*
-        *buffer = new char[BLOCK_SIZE];
-        bufsize = that->m_ioDevice->read( (char*)*buffer, BLOCK_SIZE );
-        */
         bufsize = that->m_ioDevice->read( that->m_buffer, BLOCK_SIZE );
         *buffer = that->m_buffer;
 //        tDebug() << "readCallback(QIODevice) returning bufsize : " << bufsize;
@@ -186,7 +182,7 @@ MediaStream::readCallback ( void* data, const char* cookie, int64_t* dts, int64_
     if ( bufsize > 0 ) {
         that->m_started = true;
     }
-    if ( bufsize == 0 && that->m_started && that->m_bufferingFinished == true ) {
+    if ( that->m_type == IODevice && bufsize == 0 && that->m_started && that->m_bufferingFinished == true ) {
         that->m_eos = true;
         return -1;
     }
@@ -210,9 +206,7 @@ MediaStream::readDoneCallback ( void *data, const char *cookie, size_t bufferSiz
 
     MediaStream* that = static_cast < MediaStream * > ( data );
 
-    if ( ( that->m_type == Stream/* || that->m_type == IODevice*/ ) && buffer != 0 && bufferSize > 0 ) {
-//      TODO : causes segfault
-//        tDebug() << "buffer : " << buffer;
+    if ( ( that->m_type == Stream ) && buffer != 0 && bufferSize > 0 ) {
         delete static_cast<char *>(buffer);
     }
 
