@@ -139,7 +139,7 @@ MediaStream::readCallback ( void* data, const char* cookie, int64_t* dts, int64_
 int
 MediaStream::readDoneCallback ( void *data, const char *cookie, size_t bufferSize, void *buffer )
 {
-    tDebug() << Q_FUNC_INFO;
+//    tDebug() << Q_FUNC_INFO;
 
     Q_UNUSED(cookie);
     Q_UNUSED(bufferSize);

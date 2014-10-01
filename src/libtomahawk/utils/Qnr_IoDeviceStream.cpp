@@ -106,7 +106,7 @@ QNR_IODeviceStream::needData ( void** buffer )
     
     *buffer = new char[data.size()];
     memcpy(*buffer, data.data(), data.size());
-    tDebug() << Q_FUNC_INFO << " Returning buffer with size " << data.size();
+//    tDebug() << Q_FUNC_INFO << " Returning buffer with size " << data.size();
     return data.size();
 }
 
