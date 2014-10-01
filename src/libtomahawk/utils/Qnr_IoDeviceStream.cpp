@@ -33,8 +33,7 @@ using namespace Tomahawk;
 #define BLOCK_SIZE 1048576
 
 QNR_IODeviceStream::QNR_IODeviceStream( const QSharedPointer<QNetworkReply>& reply, QObject* parent )
-    : QObject( parent )
-    , MediaStream()
+    : MediaStream( parent )
     , m_networkReply( reply )
     , m_timer( new QTimer( this ) )
 {
@@ -90,7 +89,7 @@ QNR_IODeviceStream::seekStream( qint64 offset )
 }
 
 
-size_t
+qint64
 QNR_IODeviceStream::needData ( void** buffer )
 {
 //    tDebug() << Q_FUNC_INFO;

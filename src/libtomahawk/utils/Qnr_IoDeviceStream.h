@@ -38,15 +38,16 @@ class QTimer;
 namespace Tomahawk
 {
 
-class DLLEXPORT QNR_IODeviceStream : public QObject, public MediaStream
+class DLLEXPORT QNR_IODeviceStream : public MediaStream
 {
     Q_OBJECT
+
 public:
     explicit QNR_IODeviceStream( const QSharedPointer<QNetworkReply>& reply, QObject *parent = 0 );
     ~QNR_IODeviceStream();
 
     virtual void seekStream( qint64 offset );
-    virtual size_t needData ( void** buffer );
+    virtual qint64 needData ( void** buffer );
 
 private slots:
     void readyRead();

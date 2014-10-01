@@ -27,16 +27,19 @@
 #include "utils/Logger.h"
 #include <stdint.h>
 
+#include <QObject>
 #include <QUrl>
 #include <QIODevice>
 
-class DLLEXPORT MediaStream
+class DLLEXPORT MediaStream : public QObject
 {
+    Q_OBJECT
 
 public:
     enum MediaType { Unknown = -1, Empty = 0, Url = 1, Stream = 2, IODevice = 3 };
 
-    MediaStream();
+    MediaStream( QObject* parent = 0 );
+    MediaStream( const MediaStream& copy );
     MediaStream( const QUrl &url );
     MediaStream( QIODevice* device );
     virtual ~MediaStream();
@@ -48,11 +51,14 @@ public:
     qint64 streamSize();
 
     virtual void seekStream( qint64 offset ) { (void)offset; }
-    virtual size_t needData ( void** buffer ) { (void)buffer; tDebug() << Q_FUNC_INFO; return 0; }
+    virtual qint64 needData ( void** buffer ) { (void)buffer; tDebug() << Q_FUNC_INFO; return 0; }
 
     static int readCallback ( void* data, const char* cookie, int64_t* dts, int64_t* pts, unsigned* flags, size_t* bufferSize, void** buffer );
     static int readDoneCallback ( void *data, const char *cookie, size_t bufferSize, void *buffer );
     static int seekCallback ( void *data, const uint64_t pos );
+
+public slots:
+    void bufferingFinished();
 
 protected:
     void endOfData();
@@ -61,9 +67,13 @@ protected:
     QUrl m_url;
     QIODevice* m_ioDevice;
 
+    bool m_started;
+    bool m_bufferingFinished;
     bool m_eos;
     qint64 m_pos;
     qint64 m_streamSize;
+
+    char m_buffer[1048576];
 };
 
 #endif // MEDIASTREAM_H

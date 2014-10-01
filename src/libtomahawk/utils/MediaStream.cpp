@@ -27,20 +27,31 @@
 static QString s_aeInfoIdentifier = QString( "MEDIASTREAM" );
 
 
-MediaStream::MediaStream()
-    : m_type( Unknown )
+MediaStream::MediaStream( QObject* parent )
+    : QObject( parent )
+    , m_type( Unknown )
     , m_url( QUrl() )
     , m_ioDevice ( 0 )
+    , m_started( false )
+    , m_bufferingFinished( false )
     , m_eos( false )
     , m_pos( 0 )
     , m_streamSize( 0 )
 {
     tDebug() << Q_FUNC_INFO;
+
 }
 
 
 MediaStream::MediaStream( const QUrl &url )
-    : m_type(Url)
+    : QObject( 0 )
+    , m_type(Url)
+    , m_ioDevice ( 0 )
+    , m_started( false )
+    , m_bufferingFinished( false )
+    , m_eos( false )
+    , m_pos( 0 )
+    , m_streamSize( 0 )
 {
     tDebug() << Q_FUNC_INFO;
 
@@ -49,11 +60,38 @@ MediaStream::MediaStream( const QUrl &url )
 
 
 MediaStream::MediaStream( QIODevice* device )
-    : m_type(IODevice)
+    : QObject( 0 )
+    , m_type(IODevice)
+    , m_url( QUrl() )
+    , m_ioDevice ( 0 )
+    , m_started( false )
+    , m_bufferingFinished( false )
+    , m_eos( false )
+    , m_pos( 0 )
+    , m_streamSize( 0 )
 {
     tDebug() << Q_FUNC_INFO;
 
     m_ioDevice = device;
+    QObject::connect( m_ioDevice, SIGNAL( readChannelFinished() ), this, SLOT( bufferingFinished() ) );
+}
+
+
+MediaStream::MediaStream( const MediaStream& copy )
+    : QObject( copy.parent() )
+{
+    m_type = copy.m_type;
+    m_url = copy.m_url;
+    m_ioDevice = copy.m_ioDevice;
+    m_started = copy.m_started;
+    m_bufferingFinished = copy.m_bufferingFinished;
+    m_eos = copy.m_eos;
+    m_pos = copy.m_pos;
+    m_streamSize = copy.m_streamSize;
+
+    if ( m_type == IODevice ) {
+        QObject::connect( m_ioDevice, SIGNAL( readChannelFinished() ), this, SLOT( bufferingFinished() ) );
+    }
 }
 
 
@@ -106,32 +144,58 @@ MediaStream::endOfData()
 }
 
 
+void MediaStream::bufferingFinished()
+{
+    tDebug() << Q_FUNC_INFO;
+
+    m_bufferingFinished = true;
+}
+
+
 int
 MediaStream::readCallback ( void* data, const char* cookie, int64_t* dts, int64_t* pts, unsigned* flags, size_t* bufferSize, void** buffer )
 {
-//    tDebug() << Q_FUNC_INFO;
-
     Q_UNUSED(cookie);
     Q_UNUSED(dts);
     Q_UNUSED(pts);
     Q_UNUSED(flags);
 
     MediaStream* that = static_cast < MediaStream * > ( data );
+    qint64 bufsize = 0;
+    *bufferSize = 0;
+
+//    tDebug() << Q_FUNC_INFO << " ---- type : " << that->m_type;
 
     if ( that->m_eos == true ) {
         return -1;
     }
 
     if ( that->m_type == Stream ) {
-        *bufferSize = that->needData(buffer);
+        bufsize = that->needData(buffer);
     }
     else if ( that->m_type == IODevice ) {
-        QByteArray data = that->m_ioDevice->read(BLOCK_SIZE);
-        *buffer = new char[data.size()];
-        memcpy(*buffer, data.data(), data.size());
-        *bufferSize = data.size();
+        /*
+        *buffer = new char[BLOCK_SIZE];
+        bufsize = that->m_ioDevice->read( (char*)*buffer, BLOCK_SIZE );
+        */
+        bufsize = that->m_ioDevice->read( that->m_buffer, BLOCK_SIZE );
+        *buffer = that->m_buffer;
+//        tDebug() << "readCallback(QIODevice) returning bufsize : " << bufsize;
     }
 
+    if ( bufsize > 0 ) {
+        that->m_started = true;
+    }
+    if ( bufsize == 0 && that->m_started && that->m_bufferingFinished == true ) {
+        that->m_eos = true;
+        return -1;
+    }
+    if ( bufsize < 0 ) {
+        that->m_eos = true;
+        return -1;
+    }
+
+    *bufferSize = bufsize;
     return 0;
 }
 
@@ -146,9 +210,9 @@ MediaStream::readDoneCallback ( void *data, const char *cookie, size_t bufferSiz
 
     MediaStream* that = static_cast < MediaStream * > ( data );
 
-    if ( ( that->m_type == Stream || that->m_type == IODevice ) && buffer != 0 && bufferSize > 0 ) {
+    if ( ( that->m_type == Stream/* || that->m_type == IODevice*/ ) && buffer != 0 && bufferSize > 0 ) {
 //      TODO : causes segfault
-        tDebug() << "buffer : " << buffer;
+//        tDebug() << "buffer : " << buffer;
         delete static_cast<char *>(buffer);
     }
 
@@ -159,7 +223,7 @@ MediaStream::readDoneCallback ( void *data, const char *cookie, size_t bufferSiz
 int
 MediaStream::seekCallback ( void *data, const uint64_t pos )
 {
-//    tDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
 
     MediaStream* that = static_cast < MediaStream * > ( data );
 
@@ -167,6 +231,7 @@ MediaStream::seekCallback ( void *data, const uint64_t pos )
         return -1;
     }
 
+    that->m_started = false;
     that->m_pos = pos;
     if ( that->m_type == IODevice ) {
         that->m_ioDevice->seek(pos);
