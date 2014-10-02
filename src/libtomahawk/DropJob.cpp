@@ -606,13 +606,13 @@ DropJob::handleXspfs( const QString& fileUrls )
 
         if ( xspfFile.exists() )
         {
-            l = new XSPFLoader(  dropAction() == Create, this );
+            l = new XSPFLoader( dropAction() == Create, false, this );
             tDebug( LOGINFO ) << "Loading local XSPF" << xspfFile.fileName();
             l->load( xspfFile );
         }
         else if ( QUrl( url ).isValid() )
         {
-            l = new XSPFLoader(  dropAction() == Create, this );
+            l = new XSPFLoader( dropAction() == Create, false, this );
             tDebug( LOGINFO ) << "Loading remote XSPF" << url;
             l->load( QUrl( url ) );
         }
@@ -741,7 +741,7 @@ DropJob::handleTrackUrls( const QString& urls )
         QStringList tracks = urls.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
 
         tDebug() << "Got a list of spotify urls!" << tracks;
-        SpotifyParser* spot = new SpotifyParser( tracks, this );
+        SpotifyParser* spot = new SpotifyParser( tracks, false, this );
         connect( spot, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
         m_queryCount++;
     }

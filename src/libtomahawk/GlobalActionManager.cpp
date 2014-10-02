@@ -367,7 +367,7 @@ GlobalActionManager::parseTomahawkLink( const QString& urlIn )
             if ( urlHasQueryItem( u, "xspf" ) )
             {
                 QUrl xspf = QUrl::fromUserInput( urlQueryItemValue( u, "xspf" ) );
-                XSPFLoader* l = new XSPFLoader( true, this );
+                XSPFLoader* l = new XSPFLoader( true, true, this );
                 tDebug() << "Loading spiff:" << xspf.toString();
                 l->load( xspf );
                 connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), ViewManager::instance(), SLOT( show( Tomahawk::playlist_ptr ) ) );
@@ -533,7 +533,7 @@ GlobalActionManager::createPlaylistFromUrl( const QString& type, const QString &
     if ( type == "xspf" )
     {
         QUrl xspf = QUrl::fromUserInput( url );
-        XSPFLoader* l= new XSPFLoader( true, this );
+        XSPFLoader* l= new XSPFLoader( true, true, this );
         l->setOverrideTitle( title );
         l->load( xspf );
         connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), this, SLOT( playlistCreatedToShow( Tomahawk::playlist_ptr) ) );
@@ -1269,7 +1269,7 @@ GlobalActionManager::playSpotify( const QUrl& url )
         return false;
 
     QString spotifyUrl = urlHasQueryItem( url, "spotifyURI" ) ? urlQueryItemValue( url, "spotifyURI" ) : urlQueryItemValue( url, "spotifyURL" );
-    SpotifyParser* p = new SpotifyParser( spotifyUrl, this );
+    SpotifyParser* p = new SpotifyParser( spotifyUrl, false, this );
     connect( p, SIGNAL( track( Tomahawk::query_ptr ) ), this, SLOT( playOrQueueNow( Tomahawk::query_ptr ) ) );
 
     return true;
@@ -1345,7 +1345,7 @@ GlobalActionManager::waitingForResolved( bool /* success */ )
 bool
 GlobalActionManager::openSpotifyLink( const QString& link )
 {
-    SpotifyParser* spot = new SpotifyParser( link, this );
+    SpotifyParser* spot = new SpotifyParser( link, false, this );
     connect( spot, SIGNAL( track( Tomahawk::query_ptr ) ), this, SLOT( handleOpenTrack( Tomahawk::query_ptr ) ) );
 
     return true;
