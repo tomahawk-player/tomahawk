@@ -34,7 +34,6 @@
     static pascal OSErr appleEventHandler( const AppleEvent*, AppleEvent*, long );
 #endif
 
-#include "TomahawkSettings.h"
 #ifdef WITH_CRASHREPORTER
     #include "libcrashreporter-handler/Handler.h"
 #endif
@@ -167,12 +166,11 @@ main( int argc, char *argv[] )
     new TomahawkSettings( &a );
 
     #ifdef WITH_CRASHREPORTER
-    if( !TomahawkUtils::headless() )
+    if ( !TomahawkUtils::headless() )
     {
         handler->setActive( TomahawkSettings::instance()->crashReporterEnabled() );
     }
     #endif
-
 
     KDSingleApplicationGuard guard( KDSingleApplicationGuard::AutoKillOtherInstances );
     QObject::connect( &guard, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ), &a, SLOT( instanceStarted( KDSingleApplicationGuard::Instance ) ) );
