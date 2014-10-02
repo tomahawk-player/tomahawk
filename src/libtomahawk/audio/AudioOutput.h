@@ -61,7 +61,7 @@ public:
     qint64 totalTime();
     void setAutoDelete ( bool ad );
 
-    void setDspCallback( void ( *cb ) ( signed short*, int, int ) );
+    void setDspCallback( void ( *cb ) ( float*, int, int ) );
 
     static AudioOutput* instance();
 
@@ -78,7 +78,7 @@ private:
     void setTotalTime( qint64 time );
 
     static void vlcEventCallback( const libvlc_event_t *event, void *opaque );
-    static void s_dspCallback( signed short* samples, int nb_channels, int nb_samples );
+    static void s_dspCallback( float* samples, int nb_channels, int nb_samples );
 
     static AudioOutput* s_instance;
     AudioState currentState;
@@ -91,7 +91,7 @@ private:
     qint64 m_totalTime;
     bool m_aboutToFinish;
 
-    void ( *dspPluginCallback ) ( signed short* samples, int nb_channels, int nb_samples );
+    void ( *dspPluginCallback ) ( float* samples, int nb_channels, int nb_samples );
 
     libvlc_instance_t* vlcInstance;
     libvlc_media_player_t* vlcPlayer;

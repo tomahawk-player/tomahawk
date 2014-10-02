@@ -1341,7 +1341,7 @@ AudioEngine::setCurrentTrackPlaylist( const playlistinterface_ptr& playlist )
 
 
 void
-AudioEngine::setDspCallback( void ( *cb ) ( signed short*, int, int ) )
+AudioEngine::setDspCallback( void ( *cb ) ( float*, int, int ) )
 {
     Q_D( AudioEngine );
 

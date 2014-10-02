@@ -109,7 +109,7 @@ public:
      */
     qint64 currentTrackTotalTime() const;
 
-    void setDspCallback( void ( *cb ) ( signed short* samples, int nb_channels, int nb_samples ) );
+    void setDspCallback( void ( *cb ) ( float* samples, int nb_channels, int nb_samples ) );
 
 public slots:
     void playPause();

@@ -215,6 +215,7 @@ list(APPEND libSources
 
     audio/AudioEngine.cpp
     audio/AudioOutput.cpp
+    audio/VlcDspHack.cpp
 
     collection/Collection.cpp
     collection/ArtistsRequest.cpp
@@ -506,6 +507,7 @@ TARGET_LINK_LIBRARIES( tomahawklib
     LINK_PRIVATE
     ${PHONON_LIBRARY}
     ${LIBVLC_LIBRARY}
+    ${LIBVLCCORE_LIBRARY}
 
     # Thirdparty shipped with tomahawk
     ${LIBPORTFWD_LIBRARIES}

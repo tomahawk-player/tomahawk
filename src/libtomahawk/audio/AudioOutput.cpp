@@ -20,6 +20,7 @@
 
 #include "AudioEngine.h"
 #include "AudioOutput.h"
+#include "VlcDspHack.h"
 
 #include "utils/Logger.h"
 
@@ -85,10 +86,11 @@ AudioOutput::AudioOutput( QObject* parent )
     args << "--no-snapshot-preview";
     args << "--no-xlib";
     args << "--services-discovery=''";
-//    args << "--no-one-instance";
     args << "--no-video";
-//    args << "--audio-filter=dsp";
-//    args << QString("--dsp-callback=%1").arg((quint64)&AudioOutput::s_dspCallback, 0, 16).toAscii();
+#ifdef VLC_DSP_PLUGIN_ENABLED
+    args << "--audio-filter=dsp";
+    args << QString("--dsp-callback=%1").arg((quint64)&AudioOutput::s_dspCallback, 0, 16).toAscii();
+#endif
 
     QVarLengthArray< const char * , 64 > vlcArgs( args.size() );
     for ( int i = 0 ; i < args.size() ; ++i ) {
@@ -138,6 +140,8 @@ AudioOutput::AudioOutput( QObject* parent )
 AudioOutput::~AudioOutput()
 {
     tDebug() << Q_FUNC_INFO;
+
+    // TODO
 }
 
 
@@ -218,6 +222,10 @@ AudioOutput::setCurrentSource(MediaStream* stream)
 
     libvlc_media_player_set_media( vlcPlayer, vlcMedia );
 
+#ifdef VLC_DSP_PLUGIN_ENABLED
+    // This is very, very tricky
+    VlcDspHackInstall( vlcPlayer );
+#endif
 
     if ( stream->type() == MediaStream::Url ) {
         m_totalTime = libvlc_media_get_duration( vlcMedia );
@@ -479,9 +487,9 @@ AudioOutput::vlcEventCallback( const libvlc_event_t* event, void* opaque )
 
 
 void
-AudioOutput::s_dspCallback( signed short* samples, int nb_channels, int nb_samples )
+AudioOutput::s_dspCallback( float* samples, int nb_channels, int nb_samples )
 {
-    tDebug() << Q_FUNC_INFO;
+//    tDebug() << Q_FUNC_INFO;
 
     if ( AudioOutput::instance()->dspPluginCallback ) {
         AudioOutput::instance()->dspPluginCallback( samples, nb_channels, nb_samples );
@@ -490,7 +498,7 @@ AudioOutput::s_dspCallback( signed short* samples, int nb_channels, int nb_sampl
 
 
 void
-AudioOutput::setDspCallback( void ( *cb ) ( signed short*, int, int ) )
+AudioOutput::setDspCallback( void ( *cb ) ( float*, int, int ) )
 {
     dspPluginCallback = cb;
 }
