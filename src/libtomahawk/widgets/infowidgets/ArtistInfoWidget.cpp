@@ -60,9 +60,6 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     m_headerWidget = new BasicHeader;
     ui->setupUi( m_widget );
 
-    m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Original, scaled( QSize( 48, 48 ) ) );
-    ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Grid, ui->cover->size() ) );
-
     {
         ui->relatedArtists->setAutoResize( true );
         ui->relatedArtists->setAutoFitItems( true );
@@ -95,7 +92,6 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         ui->albums->proxyModel()->sort( -1 );
         ui->albums->setEmptyTip( tr( "Sorry, we could not find any albums for this artist!" ) );
 
-        ui->albums->setStyleSheet( QString( "QListView { background-color: white; }" ) );
         TomahawkStyle::stylePageFrame( ui->albumFrame );
         TomahawkStyle::styleScrollBar( ui->albums->verticalScrollBar() );
         TomahawkStyle::styleScrollBar( ui->albums->horizontalScrollBar() );
@@ -116,7 +112,6 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         ui->topHits->proxyModel()->sort( -1 );
         ui->topHits->setEmptyTip( tr( "Sorry, we could not find any top hits for this artist!" ) );
 
-        ui->topHits->setStyleSheet( QString( "QListView { background-color: white; }" ) );
         TomahawkStyle::stylePageFrame( ui->trackFrame );
     }
 
@@ -238,9 +233,11 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     m_plInterface = playlistinterface_ptr( mpl );
 
     onSliderValueChanged( 0 );
-    load( artist );
 
     TomahawkUtils::fixMargins( this );
+
+    m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Original, scaled( QSize( 48, 48 ) ) );
+    load( artist );
 }
 
 
@@ -558,4 +555,23 @@ ArtistInfoWidget::eventFilter( QObject* obj, QEvent* event )
     }
     else
         return QObject::eventFilter( obj, event );
+}
+
+
+void
+ArtistInfoWidget::resizeEvent( QResizeEvent* event )
+{
+    QWidget::resizeEvent( event );
+
+    const QSize coverSize = QSize( ui->cover->width(), ui->cover->width() );
+    if ( !m_artist || m_artist->cover( QSize( 0, 0 ) ).isNull() )
+    {
+        ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Grid, coverSize ) );
+    }
+    else
+    {
+        ui->cover->setPixmap( m_artist->cover( coverSize ) );
+    }
+
+    ui->biography->setFixedHeight( ui->cover->width() );
 }

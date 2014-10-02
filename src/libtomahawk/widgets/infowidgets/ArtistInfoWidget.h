@@ -92,6 +92,7 @@ signals:
     void pixmapChanged( const QPixmap& pixmap );
 
 protected:
+    void resizeEvent( QResizeEvent* event );
     void changeEvent( QEvent* e );
     bool eventFilter( QObject* obj, QEvent* event );
 
