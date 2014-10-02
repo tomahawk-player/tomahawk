@@ -7,6 +7,10 @@
 # (c) Dominik Schmidt <dev@dominik-schmidt.de>
 #
 
+if( TOMAHAWK_QT5 )
+    set(LASTFM_LIB_SUFFIX "5")
+endif()
+
 # Include dir
 find_path(LIBLASTFM_INCLUDE_DIR
   # Track.h doesn't exist in liblastfm-0.3.1, was called Track back then
@@ -16,7 +20,7 @@ find_path(LIBLASTFM_INCLUDE_DIR
 
 # Finally the library itself
 find_library(LIBLASTFM_LIBRARY
-  NAMES lastfm
+  NAMES lastfm${LASTFM_LIB_SUFFIX}
   PATHS ${KDE4_LIB_DIR}
 )
 
