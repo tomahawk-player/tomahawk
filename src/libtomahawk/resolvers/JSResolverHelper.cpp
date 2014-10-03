@@ -764,7 +764,6 @@ JSResolverHelper::indexDataFromVariant( const QVariantMap &map, struct Tomahawk:
 void
 JSResolverHelper::createFuzzyIndex( const QVariantList& list )
 {
-    tDebug() << Q_FUNC_INFO;
     if ( m_resolver->d_func()->fuzzyIndex.isNull() )
     {
         m_resolver->d_func()->fuzzyIndex.reset( new FuzzyIndex( m_resolver, m_resolver->d_func()->accountId + ".lucene" , true ) );

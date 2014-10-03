@@ -88,7 +88,7 @@ FuzzyIndex::~FuzzyIndex()
 bool
 FuzzyIndex::wipeIndex()
 {
-    tDebug() << "Wiping fuzzy index:" << m_lucenePath;
+    tLog( LOGVERBOSE ) << "Wiping fuzzy index:" << m_lucenePath;
     beginIndexing();
     endIndexing();
 
@@ -112,10 +112,10 @@ FuzzyIndex::beginIndexing()
 
     try
     {
-        tDebug() << Q_FUNC_INFO << "Starting indexing:" << m_lucenePath;
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Starting indexing:" << m_lucenePath;
         if ( m_luceneReader != 0 )
         {
-            tDebug() << "Deleting old lucene stuff.";
+            tDebug( LOGVERBOSE ) << "Deleting old lucene stuff.";
 
             m_luceneSearcher->close();
             m_luceneReader->close();
@@ -125,7 +125,7 @@ FuzzyIndex::beginIndexing()
             m_luceneReader = 0;
         }
 
-        tDebug() << "Creating new index writer.";
+        tDebug( LOGVERBOSE ) << "Creating new index writer.";
         m_luceneWriter = new IndexWriter( m_luceneDir, m_analyzer, true );
     }
     catch( CLuceneError& error )
@@ -139,7 +139,7 @@ FuzzyIndex::beginIndexing()
 void
 FuzzyIndex::endIndexing()
 {
-    tDebug() << Q_FUNC_INFO << "Finishing indexing:" << m_lucenePath;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Finishing indexing:" << m_lucenePath;
     m_luceneWriter->optimize();
     m_luceneWriter->close();
     delete m_luceneWriter;
@@ -214,7 +214,6 @@ FuzzyIndex::deleteIndex()
 
     TomahawkUtils::removeDirectory( m_lucenePath );
 }
-
 
 void
 FuzzyIndex::updateIndex()
