@@ -137,7 +137,9 @@ SUPPORT TOMAHAWK
 GET HELP
 ========
 * [Support & Feedback](http://tomahawk.uservoice.com)
-* [Chat with Us (IRC)](irc://irc.freenode.net/tomahawk)
+* Chat with Us (IRC): #tomahawk (on Freenode)
+* [Twitter](http://twitter.com/tomahawk)
+* [Facebook](http://facebook.com/tomahawkplayer)
 
 SCREENSHOTS
 ===========
