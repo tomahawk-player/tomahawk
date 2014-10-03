@@ -238,10 +238,10 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
             const QString artist = Tomahawk::DatabaseImpl::sortname( query->queryTrack()->artist() );
             //QString album = Tomahawk::DatabaseImpl::sortname( query->queryTrack()->album() );
 
-            FuzzyQueryPtr fqry = newLucene<FuzzyQuery>( newLucene<Term>( L"track", track.toStdWString() ) );
+            FuzzyQueryPtr fqry = newLucene<FuzzyQuery>( newLucene<Term>( L"track", track.toStdWString() ), 0.5, 3 );
             qry->add( boost::dynamic_pointer_cast<Query>( fqry ), BooleanClause::MUST );
 
-            FuzzyQueryPtr fqry2 = newLucene<FuzzyQuery>( newLucene<Term>( L"artist", artist.toStdWString() ) );
+            FuzzyQueryPtr fqry2 = newLucene<FuzzyQuery>( newLucene<Term>( L"artist", artist.toStdWString() ), 0.5, 3 );
             qry->add( boost::dynamic_pointer_cast<Query>( fqry2 ), BooleanClause::MUST );
 
             minScore = 0.00;
