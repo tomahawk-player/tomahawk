@@ -312,43 +312,43 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="173"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="148"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="143"/>
         <source>Biography</source>
         <translation>个人简介</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="255"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="149"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="267"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="144"/>
         <source>Related Artists</source>
         <translation>相关艺人</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="96"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="93"/>
         <source>Sorry, we could not find any albums for this artist!</source>
         <translation>抱歉，未找到该艺术家的其他专辑！</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="76"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="73"/>
         <source>Sorry, we could not find any related artists!</source>
         <translation>抱歉，没有找到相关的艺术家！</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="117"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="113"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
         <translation>抱歉，没有找到该艺术家的任何人气歌曲！</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="147"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="142"/>
         <source>Music</source>
         <translation>音乐</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="186"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="181"/>
         <source>Songs</source>
         <translation>曲目</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="201"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="196"/>
         <source>Albums</source>
         <translation>专辑</translation>
     </message>
@@ -520,12 +520,12 @@ connect and stream from you?</source>
         <translation>播放列表详情</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="275"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="276"/>
         <source>This playlist is currently empty.</source>
         <translation>当前播放列表为空。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="277"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="278"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation>该播放列表现在为空。请添加一些歌曲享受吧！</translation>
     </message>

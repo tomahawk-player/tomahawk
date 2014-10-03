@@ -313,43 +313,43 @@ se s vámi spojil?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="173"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="148"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="143"/>
         <source>Biography</source>
         <translation>Životopis</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="255"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="149"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="267"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="144"/>
         <source>Related Artists</source>
         <translation>Podobní umělci</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="96"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="93"/>
         <source>Sorry, we could not find any albums for this artist!</source>
         <translation>Promiňte, nepodařilo se najít žádná alba tohoto umělce!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="76"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="73"/>
         <source>Sorry, we could not find any related artists!</source>
         <translation>Promiňte, nepodařilo se najít žádné podobné umělce!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="117"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="113"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
         <translation>Sorry, wir konnten keine Lieder für diesen Künstler finden!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="147"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="142"/>
         <source>Music</source>
         <translation>Hudba</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="186"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="181"/>
         <source>Songs</source>
         <translation>Písně</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="201"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="196"/>
         <source>Albums</source>
         <translation>Alba</translation>
     </message>
@@ -521,12 +521,12 @@ se s vámi spojil?</translation>
         <translation>Podrobnosti seznamu skladeb</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="275"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="276"/>
         <source>This playlist is currently empty.</source>
         <translation>Tento seznam skladeb je nyní prázdný.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="277"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="278"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation>Tento seznam skladeb je nyní prázdný. Přidejte do něj nějaké skladby a vychutnávejte hudbu!</translation>
     </message>

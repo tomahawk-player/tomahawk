@@ -313,43 +313,43 @@ te verbinden en te streamen vanuit u?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="173"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="148"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="143"/>
         <source>Biography</source>
         <translation>Biografie</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="255"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="149"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="267"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="144"/>
         <source>Related Artists</source>
         <translation>Vergelijkbare artiesten</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="96"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="93"/>
         <source>Sorry, we could not find any albums for this artist!</source>
         <translation>Sorry, we konden geen albums vinden voor deze artiest!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="76"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="73"/>
         <source>Sorry, we could not find any related artists!</source>
         <translation>Sorry, we konden geen vergelijkbare artiesten vinden!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="117"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="113"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
         <translation>Sorry, we konden geen topnummers vinden voor deze artiest!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="147"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="142"/>
         <source>Music</source>
         <translation>Muziek</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="186"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="181"/>
         <source>Songs</source>
         <translation>Nummers</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="201"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="196"/>
         <source>Albums</source>
         <translation>Albums</translation>
     </message>
@@ -521,12 +521,12 @@ te verbinden en te streamen vanuit u?</translation>
         <translation>Afspeellijstdetails</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="275"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="276"/>
         <source>This playlist is currently empty.</source>
         <translation>De afspeellijst is momenteel leeg.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="277"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="278"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation>De afspeellijst is momenteel leeg. Voeg wat nummers toe en geniet van de muziek!</translation>
     </message>

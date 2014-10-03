@@ -158,12 +158,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="111"/>
         <source>Import Playlist...</source>
-        <translation type="unfinished"/>
+        <translation>Импортировать Плейлист</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="114"/>
         <source>Show Offline Friends</source>
-        <translation type="unfinished"/>
+        <translation>Показать друзей не в сети</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="116"/>
@@ -218,22 +218,22 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="143"/>
         <source>0.8</source>
-        <translation type="unfinished"/>
+        <translation>0.8</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="145"/>
         <source>Report a Bug</source>
-        <translation type="unfinished"/>
+        <translation>Сообщить об ошибке</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="146"/>
         <source>Get Support</source>
-        <translation type="unfinished"/>
+        <translation>Запросить поддержку</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="147"/>
         <source>Help Us Translate</source>
-        <translation type="unfinished"/>
+        <translation>Помогите нам с переводом</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="157"/>
@@ -254,7 +254,7 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="188"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="258"/>
         <source>What&apos;s New in ...</source>
-        <translation type="unfinished"/>
+        <translation>Что нового в...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="214"/>
@@ -272,12 +272,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="60"/>
         <source>Top Hits</source>
-        <translation type="unfinished"/>
+        <translation>Популярные хиты</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="62"/>
         <source>Album Details</source>
-        <translation type="unfinished"/>
+        <translation>Подробности альбома</translation>
     </message>
 </context>
 <context>
@@ -299,7 +299,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="50"/>
         <source>Top Albums</source>
-        <translation type="unfinished"/>
+        <translation>Популярные альбомы</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="110"/>
@@ -310,49 +310,49 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="76"/>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="136"/>
         <source>Show More</source>
-        <translation type="unfinished"/>
+        <translation>Показать больше</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="173"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="148"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="143"/>
         <source>Biography</source>
-        <translation type="unfinished"/>
+        <translation>Биография</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="255"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="149"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="267"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="144"/>
         <source>Related Artists</source>
         <translation>Похожие исполнители</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="96"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="93"/>
         <source>Sorry, we could not find any albums for this artist!</source>
         <translation>К сожалению, мы не смогли найти никаких альбомов этого исполнителя!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="76"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="73"/>
         <source>Sorry, we could not find any related artists!</source>
         <translation>К сожалению, мы не смогли найти никаких исполнители!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="117"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="113"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
         <translation>К сожалению, мы не смогли найти никаких хитов этого исполнителя!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="147"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="142"/>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>Музыка</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="186"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="181"/>
         <source>Songs</source>
-        <translation type="unfinished"/>
+        <translation>Песни</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="201"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="196"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Альбомы</translation>
     </message>
 </context>
 <context>
@@ -408,7 +408,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/CaptionLabel.cpp" line="71"/>
         <source>Close</source>
-        <translation type="unfinished"/>
+        <translation>Закрыть</translation>
     </message>
 </context>
 <context>
@@ -462,7 +462,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CollectionItem.cpp" line="37"/>
         <source>Collection</source>
-        <translation type="unfinished"/>
+        <translation>Коллекция</translation>
     </message>
 </context>
 <context>
@@ -519,17 +519,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="124"/>
         <source>Playlist Details</source>
-        <translation type="unfinished"/>
+        <translation>Подробности плейлиста</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="275"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="276"/>
         <source>This playlist is currently empty.</source>
-        <translation type="unfinished"/>
+        <translation>Этот плейлист сейчас пуст.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="277"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="278"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
-        <translation type="unfinished"/>
+        <translation>Этот плейлист сейчас пуст. Добавьте в него треков и наслаждайтесь музыкой!</translation>
     </message>
 </context>
 <context>
@@ -684,27 +684,27 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="80"/>
         <source>Sorry, there are no albums in this collection!</source>
-        <translation type="unfinished"/>
+        <translation>Извините, в этой коллекции нет альбомов!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="92"/>
         <source>Artists</source>
-        <translation type="unfinished"/>
+        <translation>Исполнители</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="93"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Альбомы</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="94"/>
         <source>Songs</source>
-        <translation type="unfinished"/>
+        <translation>Песни</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="384"/>
         <source>This collection is currently empty.</source>
-        <translation type="unfinished"/>
+        <translation>Это коллекция сейчас пуста.</translation>
     </message>
 </context>
 <context>
@@ -712,7 +712,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="82"/>
         <source>Playlist Details</source>
-        <translation type="unfinished"/>
+        <translation>Подробности плейлиста</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="347"/>
@@ -735,7 +735,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="195"/>
         <source>Install plug-in</source>
-        <translation type="unfinished"/>
+        <translation>Установить плагин</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="196"/>
@@ -3857,12 +3857,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNew_0_8.h" line="89"/>
         <source>What&apos;s new in 0.8?</source>
-        <translation type="unfinished"/>
+        <translation>Что нового в 0.8?</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNew_0_8.h" line="90"/>
         <source>An overview of the changes and additions since 0.7.</source>
-        <translation type="unfinished"/>
+        <translation>Обзор изменений и дополнений по сравнению с 0.7.</translation>
     </message>
 </context>
 <context>
@@ -3878,7 +3878,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="507"/>
         <source>You</source>
-        <translation type="unfinished"/>
+        <translation>Вы</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="681"/>
@@ -4280,7 +4280,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="75"/>
         <source>Artist</source>
-        <translation type="unfinished"/>
+        <translation>Исполнитель</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="75"/>
@@ -4426,7 +4426,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="86"/>
         <source>WHAT&apos;S NEW</source>
-        <translation type="unfinished"/>
+        <translation>ЧТО НОВОГО</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="96"/>

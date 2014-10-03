@@ -313,43 +313,43 @@ connettersi e condividere la tua musica?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="173"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="148"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="143"/>
         <source>Biography</source>
         <translation>Biografia</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="255"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="149"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="267"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="144"/>
         <source>Related Artists</source>
         <translation>Artisti simili</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="96"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="93"/>
         <source>Sorry, we could not find any albums for this artist!</source>
         <translation>Ci dispiace, ma non abbiamo trovato nessun album di questo artista!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="76"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="73"/>
         <source>Sorry, we could not find any related artists!</source>
         <translation>Siamo spiacenti, non è stato possibile trovare artisti simili!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="117"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="113"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
         <translation>Ci dispiace, ma non abbiamo trovato alcun risultato top per l&apos;artista!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="147"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="142"/>
         <source>Music</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="186"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="181"/>
         <source>Songs</source>
         <translation>Brani</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="201"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="196"/>
         <source>Albums</source>
         <translation>Albums</translation>
     </message>
@@ -521,12 +521,12 @@ connettersi e condividere la tua musica?</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="275"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="276"/>
         <source>This playlist is currently empty.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="277"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="278"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation type="unfinished"/>
     </message>

@@ -5,13 +5,13 @@
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="67"/>
         <source>Allow %1 to
 connect and stream from you?</source>
-        <translation>¿Permite a %1
-conectarse a usted y transmitir música?</translation>
+        <translation>¿Permitir a %1
+conectarse y transmitir música por usted?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="83"/>
         <source>Allow Streaming</source>
-        <translation>Autorizar streaming</translation>
+        <translation>Autorizar transmisión</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="86"/>
@@ -253,7 +253,7 @@ conectarse a usted y transmitir música?</translation>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="188"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="258"/>
         <source>What&apos;s New in ...</source>
-        <translation type="unfinished"/>
+        <translation>Qué hay de nuevo en…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="214"/>
@@ -271,7 +271,7 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="60"/>
         <source>Top Hits</source>
-        <translation type="unfinished"/>
+        <translation>Mejores éxitos</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="62"/>
@@ -298,7 +298,7 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="50"/>
         <source>Top Albums</source>
-        <translation type="unfinished"/>
+        <translation>Mejores álbumes</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="110"/>
@@ -313,43 +313,43 @@ conectarse a usted y transmitir música?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="173"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="148"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="143"/>
         <source>Biography</source>
         <translation>Biografía</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="255"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="149"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="267"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="144"/>
         <source>Related Artists</source>
         <translation>Artistas relacionados</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="96"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="93"/>
         <source>Sorry, we could not find any albums for this artist!</source>
         <translation>No se encontraron álbumes de este artista.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="76"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="73"/>
         <source>Sorry, we could not find any related artists!</source>
         <translation>No se encontraron artistas relacionados.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="117"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="113"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
         <translation>No se encontraron éxitos de este artista.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="147"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="142"/>
         <source>Music</source>
         <translation>Música</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="186"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="181"/>
         <source>Songs</source>
         <translation>Canciones</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="201"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="196"/>
         <source>Albums</source>
         <translation>Álbumes</translation>
     </message>
@@ -521,12 +521,12 @@ conectarse a usted y transmitir música?</translation>
         <translation>Detalles de la lista</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="275"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="276"/>
         <source>This playlist is currently empty.</source>
         <translation>Esta lista de reproducción está vacía.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="277"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="278"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation type="unfinished"/>
     </message>
@@ -683,27 +683,27 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="80"/>
         <source>Sorry, there are no albums in this collection!</source>
-        <translation type="unfinished"/>
+        <translation>No hay ningún álbum en esta colección.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="92"/>
         <source>Artists</source>
-        <translation type="unfinished"/>
+        <translation>Artistas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="93"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Álbumes</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="94"/>
         <source>Songs</source>
-        <translation type="unfinished"/>
+        <translation>Canciones</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="384"/>
         <source>This collection is currently empty.</source>
-        <translation type="unfinished"/>
+        <translation>Esta colección está vacía actualmente.</translation>
     </message>
 </context>
 <context>
@@ -711,7 +711,7 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="82"/>
         <source>Playlist Details</source>
-        <translation type="unfinished"/>
+        <translation>Detalles de la lista</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="347"/>
@@ -734,7 +734,7 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="195"/>
         <source>Install plug-in</source>
-        <translation type="unfinished"/>
+        <translation>Instalar complemento</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="196"/>
@@ -1604,7 +1604,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/QueueItem.cpp" line="38"/>
         <source>Queue</source>
-        <translation type="unfinished"/>
+        <translation>Cola</translation>
     </message>
 </context>
 <context>
@@ -1617,7 +1617,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="48"/>
         <source>Queue</source>
-        <translation type="unfinished"/>
+        <translation>Cola</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="51"/>
@@ -1693,14 +1693,14 @@ de un solo uso (OTP)</translation>
         <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="41"/>
         <location filename="../src/libtomahawk/widgets/SearchWidget.cpp" line="142"/>
         <source>Songs</source>
-        <translation type="unfinished"/>
+        <translation>Canciones</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="67"/>
         <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="127"/>
         <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="187"/>
         <source>Show More</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar más</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="101"/>
@@ -1763,7 +1763,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="133"/>
         <source>Install Plug-In...</source>
-        <translation type="unfinished"/>
+        <translation>Instalar complemento…</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="300"/>
@@ -1778,7 +1778,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="239"/>
         <source>Plug-Ins</source>
-        <translation type="unfinished"/>
+        <translation>Complementos</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="244"/>
@@ -1907,7 +1907,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="38"/>
         <source>Folders to scan for music:</source>
-        <translation type="unfinished"/>
+        <translation>Carpetas que analizar en busca de música:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="53"/>
@@ -2084,7 +2084,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="88"/>
         <source>History</source>
-        <translation type="unfinished"/>
+        <translation>Historial</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="151"/>
@@ -3052,13 +3052,13 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="362"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="369"/>
         <source>-180%1</source>
-        <translation type="unfinished"/>
+        <translation>-180%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="362"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="369"/>
         <source>180%1</source>
-        <translation type="unfinished"/>
+        <translation>180%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="378"/>
@@ -4469,7 +4469,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="313"/>
         <source>Google Music</source>
-        <translation type="unfinished"/>
+        <translation>Google Music</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="336"/>
