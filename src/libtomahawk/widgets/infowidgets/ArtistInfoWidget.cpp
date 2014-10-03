@@ -136,6 +136,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
         connect( ui->albumsMoreLabel, SIGNAL( clicked() ), SLOT( onAlbumsMoreClicked() ) );
         connect( ui->topHitsMoreLabel, SIGNAL( clicked() ), SLOT( onTopHitsMoreClicked() ) );
+
+        ui->cover->setFixedSize( scaled( QSize( 384, 384 ) ) );
     }
 
     {
@@ -370,6 +372,7 @@ ArtistInfoWidget::onBiographyLoaded()
     m_longDescription = m_artist->biography();
     emit longDescriptionChanged( m_longDescription );
 
+    onArtistImageUpdated();
     ui->biography->setFixedHeight( ui->cover->width() );
 
     QString html =
@@ -389,14 +392,20 @@ ArtistInfoWidget::onBiographyLoaded()
 void
 ArtistInfoWidget::onArtistImageUpdated()
 {
-    if ( m_artist->cover( QSize( 0, 0 ) ).isNull() )
-        return;
+    const QSize coverSize = QSize( ui->cover->width(), ui->cover->width() );
+    if ( !m_artist || m_artist->cover( QSize( 0, 0 ) ).isNull() )
+    {
+        ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Grid, coverSize ) );
+    }
+    else
+    {
+        ui->cover->setPixmap( m_artist->cover( coverSize ) );
+    }
 
     m_pixmap = m_artist->cover( QSize( 0, 0 ) );
     emit pixmapChanged( m_pixmap );
 
     m_headerWidget->setBackground( m_pixmap, true, false );
-    ui->cover->setPixmap( m_artist->cover( QSize( ui->cover->width(), ui->cover->width() ) ) );
 }
 
 
@@ -562,16 +571,4 @@ void
 ArtistInfoWidget::resizeEvent( QResizeEvent* event )
 {
     QWidget::resizeEvent( event );
-
-    const QSize coverSize = QSize( ui->cover->width(), ui->cover->width() );
-    if ( !m_artist || m_artist->cover( QSize( 0, 0 ) ).isNull() )
-    {
-        ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Grid, coverSize ) );
-    }
-    else
-    {
-        ui->cover->setPixmap( m_artist->cover( coverSize ) );
-    }
-
-    ui->biography->setFixedHeight( ui->cover->width() );
 }
