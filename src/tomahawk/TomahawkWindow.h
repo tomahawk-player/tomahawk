@@ -56,12 +56,12 @@ class QSearchField;
 class SourceTreeView;
 class QAction;
 
+class SettingsDialog;
 class MusicScanner;
 class AudioControls;
 class TomahawkTrayIcon;
 class PlaylistModel;
 class AnimatedSplitter;
-
 class AccountsToolButton;
 
 namespace Ui
@@ -179,6 +179,7 @@ private:
 #endif
 
     Ui::TomahawkWindow* ui;
+    QPointer<SettingsDialog> m_settingsDialog;
     QSearchField* m_searchWidget;
     AudioControls* m_audioControls;
     TomahawkTrayIcon* m_trayIcon;

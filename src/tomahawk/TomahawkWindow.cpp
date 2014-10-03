@@ -1000,10 +1000,15 @@ TomahawkWindow::onHistoryForwardAvailable( bool avail )
 void
 TomahawkWindow::showSettingsDialog()
 {
-    SettingsDialog* settingsDialog = new SettingsDialog;
-    connect( settingsDialog, SIGNAL( finished( bool ) ), settingsDialog, SLOT( deleteLater() ) );
+    if ( m_settingsDialog )
+        return;
 
-    settingsDialog->show();
+    m_settingsDialog = new SettingsDialog;
+    // This needs to be a QueuedConnection, so that deleteLater() actually works.
+    connect( m_settingsDialog.data(), SIGNAL( finished( bool ) ),
+             m_settingsDialog.data(), SLOT( deleteLater() ), Qt::QueuedConnection );
+
+    m_settingsDialog->show();
 }
 
 
