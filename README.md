@@ -5,6 +5,18 @@ Tomahawk is a free multi-source and cross-platform music player. An application 
 
 ![Tomahawk Screenshot](/data/screenshots/tomahawk-screenshot.png?raw=true)
 
+
+Downloading our latest nightly builds
+-------------------------------------
+OS X: http://download.tomahawk-player.org/nightly/mac/Tomahawk-latest.dmg
+Windows: http://download.tomahawk-player.org/nightly/windows/tomahawk-latest.exe
+
+Downloading our latest stable builds
+------------------------------------
+Linux: http://www.tomahawk-player.org/download.html#linux
+OS X: http://download.tomahawk-player.org/Tomahawk-0.7.0.dmg
+Windows: http://download.tomahawk-player.org/tomahawk-0.7.0.exe
+
 Compiling and running Tomahawk
 ------------------------------
 
@@ -18,18 +30,16 @@ Start the application on Linux:
 
     $ ./tomahawk
 
-Start the application on OS X:
+Detailed build instructions
+---------------------------
+Arch: http://wiki.tomahawk-player.org/index.php/Building_ArchLinux_package
+Debian: http://wiki.tomahawk-player.org/index.php/Building_on_Debian
+Fedora: http://wiki.tomahawk-player.org/index.php/Building_on_Fedora
+openSUSE: http://wiki.tomahawk-player.org/index.php/Building_on_openSUSE
+Ubuntu: http://wiki.tomahawk-player.org/index.php/Building_on_Ubuntu
 
-    $ open tomahawk.app
-
-
-Detailed building instructions for Ubuntu
------------------------------------------
-See: http://wiki.tomahawk-player.org/index.php/Building_on_Ubuntu
-
-Detailed building instructions for OS X
----------------------------------------
-See: http://wiki.tomahawk-player.org/index.php/Building_OS_X_Application_Bundle
+OS X: http://wiki.tomahawk-player.org/index.php/Building_OS_X_Application_Bundle
+Windows: http://wiki.tomahawk-player.org/index.php/Building_Windows_Binary
 
 Doxygen Documentation
 ---------------------
