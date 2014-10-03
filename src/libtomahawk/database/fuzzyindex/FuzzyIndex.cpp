@@ -267,8 +267,6 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
     catch( LuceneException& error )
     {
         tDebug() << "Caught Lucene error:" << error.what() << query->toString();
-
-        QTimer::singleShot( 0, this, SLOT( wipeIndex() ) );
     }
 
     return resultsmap;
@@ -311,8 +309,6 @@ FuzzyIndex::searchAlbum( const Tomahawk::query_ptr& query )
     catch( LuceneException& error )
     {
         tDebug() << "Caught Lucene error:" << error.what();
-
-        QTimer::singleShot( 0, this, SLOT( wipeIndex() ) );
     }
 
     return resultsmap;
