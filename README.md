@@ -169,7 +169,7 @@ CHARTS - BILLBOARD'S TASTEMAKER ALBUMS
 
 FRIEND FEED
 
-![Feed]https://dchtm6r471mui.cloudfront.net/hackpad.com_ZRZMJDdxrVe_p.242147_1410971283885_heroshot.png)
+![Feed](https://dchtm6r471mui.cloudfront.net/hackpad.com_ZRZMJDdxrVe_p.242147_1410971283885_heroshot.png)
 
 
 DYNAMIC (AUTO-UPDATING) PLAYLIST
