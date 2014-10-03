@@ -37,7 +37,6 @@ Detailed build instructions
 * Fedora: http://wiki.tomahawk-player.org/index.php/Building_on_Fedora
 * openSUSE: http://wiki.tomahawk-player.org/index.php/Building_on_openSUSE
 * Ubuntu: http://wiki.tomahawk-player.org/index.php/Building_on_Ubuntu
-
 * OS X: http://wiki.tomahawk-player.org/index.php/Building_OS_X_Application_Bundle
 * Windows: http://wiki.tomahawk-player.org/index.php/Building_Windows_Binary
 
