@@ -47,9 +47,9 @@ Network/Cloud storage
 
 Third party-developed resolvers have also been written for services like YouTube, Qobuz and others. We've also heard of digital music distributors writing their own for their internal CMSes to help them navigate and preview their content. That's cool.
 
-Packaged binary resolvers (.axes) are available: [here](http://teom.org/axes)
+Packaged binary resolvers (.axes) are available: [here](http://teom.org/axes).
 
-Source code (and examples) can be found in our [Resolver respository](https://github.com/tomahawk-player/tomahawk-resolvers)
+Source code (and examples) can be found in our [Resolver repository](https://github.com/tomahawk-player/tomahawk-resolvers)
 
 DOWNLOAD TOMAHAWK
 =================
