@@ -114,7 +114,7 @@ Required dependencies:
 * [Boost 1.3](http://www.boost.org/)
 * [Lucene++ 3.0.6](https://github.com/luceneplusplus/LucenePlusPlus/)
 * [libechonest 2.2.0](http://projects.kde.org/projects/playground/libs/libechonest/)
-* [Attica 0.4.0](ftp://ftp.kde.org/pub/kde/stable/attica/)
+* Attica 0.4.0 (<ftp://ftp.kde.org/pub/kde/stable/attica/>)
 * [QuaZip 0.4.3](http://quazip.sourceforge.net/)
 * [liblastfm 1.0.1](https://github.com/lastfm/liblastfm/)
 * [QtKeychain 0.1](https://github.com/frankosterfeld/qtkeychain/)
