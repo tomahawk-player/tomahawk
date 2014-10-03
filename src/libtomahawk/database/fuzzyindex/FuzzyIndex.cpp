@@ -135,13 +135,13 @@ FuzzyIndex::appendFields( const Tomahawk::IndexData& data )
         if ( !data.track.isEmpty() )
         {
             doc->add(newLucene<Field>( L"fulltext", Tomahawk::DatabaseImpl::sortname( QString( "%1 %2" ).arg( data.artist ).arg( data.track ) ).toStdWString(),
-                                       Field::STORE_NO, Field::INDEX_ANALYZED_NO_NORMS ) );
+                                       Field::STORE_NO, Field::INDEX_NOT_ANALYZED_NO_NORMS ) );
 
             doc->add(newLucene<Field>( L"track", Tomahawk::DatabaseImpl::sortname( data.track ).toStdWString(),
-                                       Field::STORE_NO, Field::INDEX_ANALYZED_NO_NORMS ) );
+                                       Field::STORE_NO, Field::INDEX_NOT_ANALYZED_NO_NORMS ) );
 
             doc->add(newLucene<Field>( L"artist", Tomahawk::DatabaseImpl::sortname( data.artist ).toStdWString(),
-                                       Field::STORE_NO, Field::INDEX_ANALYZED_NO_NORMS ) );
+                                       Field::STORE_NO, Field::INDEX_NOT_ANALYZED_NO_NORMS ) );
 
             doc->add(newLucene<Field>( L"artistid", QString::number( data.artistId ).toStdWString(),
                                        Field::STORE_YES, Field::INDEX_NO ) );
@@ -152,7 +152,7 @@ FuzzyIndex::appendFields( const Tomahawk::IndexData& data )
         else if ( !data.album.isEmpty() )
         {
             doc->add(newLucene<Field>( L"album", Tomahawk::DatabaseImpl::sortname( data.album ).toStdWString(),
-                                       Field::STORE_NO, Field::INDEX_ANALYZED_NO_NORMS ) );
+                                       Field::STORE_NO, Field::INDEX_NOT_ANALYZED_NO_NORMS ) );
 
             doc->add(newLucene<Field>( L"albumid", QString::number( data.id ).toStdWString(),
                                        Field::STORE_YES, Field::INDEX_NO ) );
