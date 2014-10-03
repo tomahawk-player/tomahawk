@@ -1536,7 +1536,7 @@ TomahawkSettings::updateIndex()
     }
 
     tDebug() << Q_FUNC_INFO << "Wiping index.";
-    Database::instance()->wipeIndex();
+//    Database::instance()->wipeIndex();
     Tomahawk::DatabaseCommand* cmd = new Tomahawk::DatabaseCommand_UpdateSearchIndex();
     Database::instance()->enqueue( QSharedPointer<Tomahawk::DatabaseCommand>( cmd ) );
 }

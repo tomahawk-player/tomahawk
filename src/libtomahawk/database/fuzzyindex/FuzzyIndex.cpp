@@ -97,17 +97,6 @@ FuzzyIndex::beginIndexing()
     try
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Starting indexing:" << m_lucenePath;
-        if ( m_luceneReader )
-        {
-            tDebug( LOGVERBOSE ) << "Deleting old lucene stuff.";
-
-            m_luceneSearcher->close();
-            m_luceneReader->close();
-            m_luceneSearcher.reset();
-            m_luceneReader.reset();
-        }
-
-        tDebug( LOGVERBOSE ) << "Creating new index writer.";
         m_luceneWriter = newLucene<IndexWriter>( m_luceneDir, m_analyzer, true, IndexWriter::MaxFieldLengthLIMITED );
     }
     catch( LuceneException& error )
@@ -125,6 +114,9 @@ FuzzyIndex::endIndexing()
     m_luceneWriter->optimize();
     m_luceneWriter->close();
     m_luceneWriter.reset();
+
+    m_luceneReader = IndexReader::open( m_luceneDir );
+    m_luceneSearcher = newLucene<IndexSearcher>( m_luceneReader );
 
     m_mutex.unlock();
     emit indexReady();
@@ -211,23 +203,13 @@ FuzzyIndex::loadLuceneIndex()
 QMap< int, float >
 FuzzyIndex::search( const Tomahawk::query_ptr& query )
 {
-    QMutexLocker lock( &m_mutex );
-
+//    QMutexLocker lock( &m_mutex );
     QMap< int, float > resultsmap;
+    if ( !m_luceneReader || !m_luceneSearcher )
+        return resultsmap;
+
     try
     {
-        if ( !m_luceneReader )
-        {
-            if ( !IndexReader::indexExists( m_luceneDir ) )
-            {
-                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "index didn't exist.";
-                return resultsmap;
-            }
-
-            m_luceneReader = IndexReader::open( m_luceneDir );
-            m_luceneSearcher = newLucene<IndexSearcher>( m_luceneReader );
-        }
-
         float minScore;
         Collection<String> fields; // = newCollection<String>();
         MultiFieldQueryParserPtr parser = newLucene<MultiFieldQueryParser>( LuceneVersion::LUCENE_CURRENT, fields, m_analyzer );
@@ -296,23 +278,13 @@ FuzzyIndex::searchAlbum( const Tomahawk::query_ptr& query )
 {
     Q_ASSERT( query->isFullTextQuery() );
 
-    QMutexLocker lock( &m_mutex );
-
+//    QMutexLocker lock( &m_mutex );
     QMap< int, float > resultsmap;
+    if ( !m_luceneReader || !m_luceneSearcher )
+        return resultsmap;
+
     try
     {
-        if ( !m_luceneReader )
-        {
-            if ( !IndexReader::indexExists( m_luceneDir ) )
-            {
-                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "index didn't exist.";
-                return resultsmap;
-            }
-
-            m_luceneReader = IndexReader::open( m_luceneDir );
-            m_luceneSearcher = newLucene<IndexSearcher>( m_luceneReader );
-        }
-
         QueryParserPtr parser = newLucene<QueryParser>( LuceneVersion::LUCENE_CURRENT, L"album", m_analyzer );
         QString q = Tomahawk::DatabaseImpl::sortname( query->fullTextQuery() );
 
