@@ -26,10 +26,6 @@ Compile:
     $ cmake ..
     $ make
 
-Start the application on Linux:
-
-    $ ./tomahawk
-
 Detailed build instructions
 ---------------------------
 * Arch: http://wiki.tomahawk-player.org/index.php/Building_ArchLinux_package
