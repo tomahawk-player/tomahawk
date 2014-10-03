@@ -1026,11 +1026,13 @@ TomahawkWindow::legalInfo()
     QDesktopServices::openUrl( QUrl( "http://www.tomahawk-player.org/legal.html" ) );
 }
 
+
 void
 TomahawkWindow::getSupport()
 {
     QDesktopServices::openUrl( QUrl( "https://tomahawk.uservoice.com" ) );
 }
+
 
 void
 TomahawkWindow::reportBug()
@@ -1038,11 +1040,13 @@ TomahawkWindow::reportBug()
     QDesktopServices::openUrl( QUrl( "https://bugs.tomahawk-player.org" ) );
 }
 
+
 void
 TomahawkWindow::helpTranslate()
 {
     QDesktopServices::openUrl( QUrl( "https://www.transifex.com/projects/p/tomahawk/" ) );
 }
+
 
 void
 TomahawkWindow::openLogfile()
