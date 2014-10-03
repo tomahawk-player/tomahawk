@@ -1,24 +1,70 @@
-Tomahawk
-========
+# TOMAHAWK
+
+=====
+## WHAT TOMAHAWK IS
 
 Tomahawk is a free multi-source and cross-platform music player. An application that can play not only your local files, but also stream from services like Spotify, Beats, SoundCloud, Google Music, YouTube and many others. You can even connect with your friends' Tomahawks, share your musical gems or listen along to them. Let the music play!
 
 ![Tomahawk Screenshot](/data/screenshots/tomahawk-screenshot.png?raw=true)
 
-
-Downloading our latest nightly builds
--------------------------------------
-* OS X: http://download.tomahawk-player.org/nightly/mac/Tomahawk-latest.dmg
-* Windows: http://download.tomahawk-player.org/nightly/windows/tomahawk-latest.exe
-
-Downloading our latest stable builds
-------------------------------------
-* Linux: http://www.tomahawk-player.org/download.html#linux
-* OS X: http://download.tomahawk-player.org/Tomahawk-0.7.0.dmg
-* Windows: http://download.tomahawk-player.org/tomahawk-0.7.0.exe
-
-Compiling and running Tomahawk
 ------------------------------
+## HOW TOMAHAWK WORKS
+Tomahawk is basically a **music metadata player**.  At its core it decouples the metadata about a song from the source and reassembles it for each user based on their individual music accessibility and rights. In short, given the name of a song and artist Tomahawk will find the right source, for the right user at the right time.  This fundamentally different approach to music enables a range of new music consumption and sharing experiences previously not possible. 
+<br /><br />
+
+------------------------------
+## MUSIC SOURCES
+It continues to change and evolve, but at the time of this writing:
+
+* Local music (e.g. iTunes) library
+* Networked music libraries (other connected computers)
+
+Subscription Music Services Resolvers
+
+* Spotify
+* Beats Music
+* Google Play Music (on-demand streaming and music locker)
+* Grooveshark 
+* Rdio (Android only)
+* Deezer (Android only)
+
+Free Streaming/Music Promotion Platforms
+
+* Soundcloud
+* Bandcamp
+* Last.fm
+* Jamendo
+* Official.fm
+
+
+Network/Cloud storage
+* Ampache
+* Owncloud
+* Subsonic
+* Beets
+
+Third party-developed resolvers have also been written for services like YouTube, Qobuz and others. We've also heard of digital music distributors writing their own for their internal CMSes to help them navigate and preview their content. That's cool.
+
+Packaged binary resolvers (.axes) are available: [here](http://teom.org/axes)
+
+Source code (and examples) can be found in our [Resolver respository](https://github.com/tomahawk-player/tomahawk-resolvers)
+
+------------------------------
+## DOWNLOAD TOMAHAWK
+
+You can download one our nightly our stable builds:
+
+*BUILD* | MAC / OSX | WINDOWS | LINUX 
+:---------------- | --------------- | ---------------
+**NIGHTLY**     | [**nighlty**](http://download.tomahawk-player.org/nightly/mac/Tomahawk-latest.dmg)       | [**nightly**](http://download.tomahawk-player.org/nightly/windows/tomahawk-latest.exe)  | *N/A*
+**STABLE**      | [**v0.7**](http://download.tomahawk-player.org/Tomahawk-0.7.0.dmg)       | [**v0.7**](http://download.tomahawk-player.org/tomahawk-0.7.0.exe) | [**v0.7**](http://www.tomahawk-player.org/download.html#linux) (various distros)
+
+<br />
+
+------------------------------
+## BUILD TOMAHAWK
+
+... or you can compile it yourself:
 
 Compile:
 
@@ -26,53 +72,115 @@ Compile:
     $ cmake ..
     $ make
 
-Detailed build instructions
----------------------------
-* Arch: http://wiki.tomahawk-player.org/index.php/Building_ArchLinux_package
-* Debian: http://wiki.tomahawk-player.org/index.php/Building_on_Debian
-* Fedora: http://wiki.tomahawk-player.org/index.php/Building_on_Fedora
-* openSUSE: http://wiki.tomahawk-player.org/index.php/Building_on_openSUSE
-* Ubuntu: http://wiki.tomahawk-player.org/index.php/Building_on_Ubuntu
-* OS X: http://wiki.tomahawk-player.org/index.php/Building_OS_X_Application_Bundle
-* Windows: http://wiki.tomahawk-player.org/index.php/Building_Windows_Binary
+### Detailed Build Instructions
 
-Doxygen Documentation
----------------------
-See: http://dev.tomahawk-player.org/api/classes.html
 
-Dependencies
-------------
+**LINUX**
+
+* [Arch](http://wiki.tomahawk-player.org/index.php/Building_ArchLinux_package)
+* [Debian](http://wiki.tomahawk-player.org/index.php/Building_on_Debian)
+* [Fedora](http://wiki.tomahawk-player.org/index.php/Building_on_Fedora)
+* [openSUSE](http://wiki.tomahawk-player.org/index.php/Building_on_openSUSE)
+* [Ubuntu](http://wiki.tomahawk-player.org/index.php/Building_on_Ubuntu)
+
+
+**MAC**
+
+* [OS X](http://wiki.tomahawk-player.org/index.php/Building_OS_X_Application_Bunde)
+
+
+**WINDOWS**
+
+* [Windows](http://wiki.tomahawk-player.org/index.php/Building_Windows_Binary)
+<br /><br />
+
+### Source-Code Documentation
+
+See our [doxygen documentation](http://dev.tomahawk-player.org/api/classes.html)
+<br /><br />
+
+
+### Dependencies
+
 
 Required dependencies:
 
-* CMake 2.8.6 - http://www.cmake.org/
-* Qt 4.7.0 - http://qt-project.org/
-* Phonon 4.6.0 - http://phonon.kde.org/
-* QJson 0.8.1 - http://qjson.sourceforge.net/
-* SQLite 3.6.22 - http://www.sqlite.org/
-* TagLib 1.8 - http://developer.kde.org/~wheeler/taglib.html
-* Boost 1.3 - http://www.boost.org/
-* Lucene++ 3.0.6 - https://github.com/luceneplusplus/LucenePlusPlus/
-* libechonest 2.2.0 - http://projects.kde.org/projects/playground/libs/libechonest/
-* Attica 0.4.0 - ftp://ftp.kde.org/pub/kde/stable/attica/
-* QuaZip 0.4.3 - http://quazip.sourceforge.net/
-* liblastfm 1.0.1 - https://github.com/lastfm/liblastfm/
-* QtKeychain 0.1 - https://github.com/frankosterfeld/qtkeychain/
-* Sparsehash - https://code.google.com/p/sparsehash/
-* GnuTLS - http://gnutls.org/
+* [CMake 2.8.6](http://www.cmake.org/)
+* [Qt 4.7.0](http://qt-project.org/)
+* [Phonon 4.6.0 ](http://phonon.kde.org/)
+* [QJson 0.8.1](http://qjson.sourceforge.net/)
+* [SQLite 3.6.22](http://www.sqlite.org/)
+* [TagLib 1.8](http://developer.kde.org/~wheeler/taglib.html)
+* [Boost 1.3](http://www.boost.org/)
+* [Lucene++ 3.0.6](https://github.com/luceneplusplus/LucenePlusPlus/)
+* [libechonest 2.2.0](http://projects.kde.org/projects/playground/libs/libechonest/)
+* [Attica 0.4.0](ftp://ftp.kde.org/pub/kde/stable/attica/)
+* [QuaZip 0.4.3](http://quazip.sourceforge.net/)
+* [liblastfm 1.0.1](https://github.com/lastfm/liblastfm/)
+* [QtKeychain 0.1](https://github.com/frankosterfeld/qtkeychain/)
+* [Sparsehash](https://code.google.com/p/sparsehash/)
+* [GnuTLS](http://gnutls.org/)
 
-The following dependencies are optional, but recommended:
+The following dependencies are *optional* (but recommended):
 
-* Jreen 1.0.5 (1.1.0 will fail, 1.1.1 is fine) - http://qutim.org/jreen/
-* Snorenotify - https://github.com/Snorenotify/Snorenotify/
+* [Jreen 1.0.5](http://qutim.org/jreen/) (1.1.0 will fail, 1.1.1 is fine)
+* [Snorenotify](https://github.com/Snorenotify/Snorenotify/)
 
 Third party libraries that we ship with our source:
 
-* MiniUPnP 1.6 - http://miniupnp.free.fr/
-* Qocoa - https://github.com/mikemcquaid/Qocoa/
-* libqnetwm - http://code.google.com/p/libqnetwm/
-* libqxt (QxtWeb module) - http://libqxt.org/
-* SPMediaKeyTap - https://github.com/nevyn/SPMediaKeyTap/
-* kdSingleApplicationGuard - http://www.kdab.com/
+* [MiniUPnP 1.6](http://miniupnp.free.fr/)
+* [Qocoa](https://github.com/mikemcquaid/Qocoa/)
+* [libqnetwm](http://code.google.com/p/libqnetwm/)
+* [libqxt](http://libqxt.org/) (QxtWeb module) 
+* [SPMediaKeyTap](https://github.com/nevyn/SPMediaKeyTap/)
+* [kdSingleApplicationGuard](http://www.kdab.com/)
 
-Enjoy!
+------------------------------
+
+## SUPPORT TOMAHAWK
+* [Open Issues](https://bugs.tomahawk-player.org/secure/* Dashboard.jspa)
+* [Translations](https://www.transifex.com/projects/p/tomahawk/)
+* [Donate](https://flattr.com/thing/169312/Tomahawk)
+
+<br />
+
+------------------------------
+## GET HELP
+* [Support & Feedback](http://tomahawk.uservoice.com)
+* [Chat with Us (IRC)](irc://irc.freenode.net/tomahawk)
+
+<br />
+
+
+------------------------------
+## SCREENSHOTS
+
+BROWSE FRIENDS' MUSIC & LISTEN ALONG
+
+![Browse](https://dchtm6r471mui.cloudfront.net/hackpad.com_ZRZMJDdxrVe_p.242147_1410998050088_listen-along.jpg)
+
+INBOX - RECEIVED & FORWARDING
+
+![Inbox](https://dchtm6r471mui.cloudfront.net/hackpad.com_ZRZMJDdxrVe_p.242147_1410997751044_inbox.jpg)
+
+CHARTS - BILLBOARD'S TASTEMAKER ALBUMS
+
+![Charts](https://dchtm6r471mui.cloudfront.net/hackpad.com_ZRZMJDdxrVe_p.242147_1410997901969_charts.jpg)
+
+FRIEND FEED
+
+![Feed]https://dchtm6r471mui.cloudfront.net/hackpad.com_ZRZMJDdxrVe_p.242147_1410971283885_heroshot.png)
+
+
+DYNAMIC (AUTO-UPDATING) PLAYLIST
+
+![Xspf](https://dchtm6r471mui.cloudfront.net/hackpad.com_ZRZMJDdxrVe_p.242147_1410998362549_dynamic-playlist-1.jpg)
+
+
+PLUG-INS / RESOLVER SETTINGS
+
+![Settings](https://dchtm6r471mui.cloudfront.net/hackpad.com_ZRZMJDdxrVe_p.242147_1410998587408_prefs.jpg)
+
+--------------
+
+##Enjoy!
