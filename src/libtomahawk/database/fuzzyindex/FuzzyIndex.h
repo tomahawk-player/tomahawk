@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -25,29 +25,10 @@
 #include <QString>
 #include <QMutex>
 
+#include <lucene++/LuceneHeaders.h>
+
 #include "Query.h"
 #include "database/DatabaseCommand_UpdateSearchIndex.h"
-
-namespace lucene
-{
-    namespace analysis
-    {
-      class SimpleAnalyzer;
-    }
-    namespace store
-    {
-      class Directory;
-    }
-    namespace index
-    {
-      class IndexReader;
-      class IndexWriter;
-    }
-    namespace search
-    {
-      class IndexSearcher;
-    }
-}
 
 class FuzzyIndex : public QObject
 {
@@ -87,11 +68,11 @@ private:
     QMutex m_mutex;
     QString m_lucenePath;
 
-    lucene::analysis::SimpleAnalyzer* m_analyzer;
-    lucene::store::Directory* m_luceneDir;
-    lucene::index::IndexReader* m_luceneReader;
-    lucene::index::IndexWriter* m_luceneWriter;
-    lucene::search::IndexSearcher* m_luceneSearcher;
+    boost::shared_ptr<Lucene::SimpleAnalyzer> m_analyzer;
+    Lucene::IndexWriterPtr m_luceneWriter;
+    Lucene::IndexReaderPtr m_luceneReader;
+    Lucene::FSDirectoryPtr m_luceneDir;
+    Lucene::IndexSearcherPtr m_luceneSearcher;
 };
 
 #endif // FUZZYINDEX_H

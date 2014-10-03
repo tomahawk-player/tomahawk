@@ -84,7 +84,6 @@ public:
     QString dbid() const { return m_dbid; }
 
     void loadIndex();
-    void wipeIndex();
 
 signals:
     void indexReady();

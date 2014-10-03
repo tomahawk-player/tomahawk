@@ -82,7 +82,6 @@ public:
     explicit Database( const QString& dbname, QObject* parent = 0 );
     ~Database();
 
-    void wipeIndex();
     void loadIndex();
     bool isReady() const { return m_ready; }
 
