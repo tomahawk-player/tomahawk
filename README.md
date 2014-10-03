@@ -49,7 +49,7 @@ Third party-developed resolvers have also been written for services like YouTube
 
 Packaged binary resolvers (.axes) are available: [here](http://teom.org/axes).
 
-Source code (and examples) can be found in our [Resolver repository](https://github.com/tomahawk-player/tomahawk-resolvers)
+Source code (and examples) can be found in our [Resolver repository](https://github.com/tomahawk-player/tomahawk-resolvers).
 
 DOWNLOAD TOMAHAWK
 =================
