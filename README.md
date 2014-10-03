@@ -1,19 +1,21 @@
-# TOMAHAWK
+TOMAHAWK
+========
 
-=====
-## WHAT TOMAHAWK IS
+WHAT TOMAHAWK IS
+================
 
 Tomahawk is a free multi-source and cross-platform music player. An application that can play not only your local files, but also stream from services like Spotify, Beats, SoundCloud, Google Music, YouTube and many others. You can even connect with your friends' Tomahawks, share your musical gems or listen along to them. Let the music play!
 
 ![Tomahawk Screenshot](/data/screenshots/tomahawk-screenshot.png?raw=true)
 
-------------------------------
-## HOW TOMAHAWK WORKS
-Tomahawk is basically a **music metadata player**.  At its core it decouples the metadata about a song from the source and reassembles it for each user based on their individual music accessibility and rights. In short, given the name of a song and artist Tomahawk will find the right source, for the right user at the right time.  This fundamentally different approach to music enables a range of new music consumption and sharing experiences previously not possible. 
-<br /><br />
+HOW TOMAHAWK WORKS
+==================
 
-------------------------------
-## MUSIC SOURCES
+Tomahawk is basically a **music metadata player**.  At its core it decouples the metadata about a song from the source and reassembles it for each user based on their individual music accessibility and rights. In short, given the name of a song and artist Tomahawk will find the right source, for the right user at the right time.  This fundamentally different approach to music enables a range of new music consumption and sharing experiences previously not possible. 
+
+MUSIC SOURCES
+=============
+
 It continues to change and evolve, but at the time of this writing:
 
 * Local music (e.g. iTunes) library
@@ -36,8 +38,8 @@ Free Streaming/Music Promotion Platforms
 * Jamendo
 * Official.fm
 
-
 Network/Cloud storage
+
 * Ampache
 * Owncloud
 * Subsonic
@@ -46,23 +48,20 @@ Network/Cloud storage
 Third party-developed resolvers have also been written for services like YouTube, Qobuz and others. We've also heard of digital music distributors writing their own for their internal CMSes to help them navigate and preview their content. That's cool.
 
 Packaged binary resolvers (.axes) are available: [here](http://teom.org/axes)
-
 Source code (and examples) can be found in our [Resolver respository](https://github.com/tomahawk-player/tomahawk-resolvers)
 
-------------------------------
-## DOWNLOAD TOMAHAWK
+DOWNLOAD TOMAHAWK
+=================
 
-You can download one our nightly our stable builds:
+You can download one of our nightly or stable builds:
 
 |*BUILD* | MAC / OSX | WINDOWS | LINUX |
 |---------------- | --------------- | --------------- | --------- |
 |**NIGHTLY**     | [**nighlty**](http://download.tomahawk-player.org/nightly/mac/Tomahawk-latest.dmg) | [**nightly**](http://download.tomahawk-player.org/nightly/windows/tomahawk-latest.exe)  | *N/A* |
 |**STABLE**      | [**v0.7**](http://download.tomahawk-player.org/Tomahawk-0.7.0.dmg)       | [**v0.7**](http://download.tomahawk-player.org/tomahawk-0.7.0.exe) | [**v0.7**](http://www.tomahawk-player.org/download.html#linux) (various distros) |
 
-<br />
-
-------------------------------
-## BUILD TOMAHAWK
+BUILD TOMAHAWK
+==============
 
 ... or you can compile it yourself:
 
@@ -74,7 +73,6 @@ Compile:
 
 ### Detailed Build Instructions
 
-
 **LINUX**
 
 * [Arch](http://wiki.tomahawk-player.org/index.php/Building_ArchLinux_package)
@@ -83,25 +81,19 @@ Compile:
 * [openSUSE](http://wiki.tomahawk-player.org/index.php/Building_on_openSUSE)
 * [Ubuntu](http://wiki.tomahawk-player.org/index.php/Building_on_Ubuntu)
 
-
 **MAC**
 
 * [OS X](http://wiki.tomahawk-player.org/index.php/Building_OS_X_Application_Bunde)
 
-
 **WINDOWS**
 
 * [Windows](http://wiki.tomahawk-player.org/index.php/Building_Windows_Binary)
-<br /><br />
 
 ### Source-Code Documentation
 
 See our [doxygen documentation](http://dev.tomahawk-player.org/api/classes.html)
-<br /><br />
-
 
 ### Dependencies
-
 
 Required dependencies:
 
@@ -114,7 +106,7 @@ Required dependencies:
 * [Boost 1.3](http://www.boost.org/)
 * [Lucene++ 3.0.6](https://github.com/luceneplusplus/LucenePlusPlus/)
 * [libechonest 2.2.0](http://projects.kde.org/projects/playground/libs/libechonest/)
-* Attica 0.4.0 (<ftp://ftp.kde.org/pub/kde/stable/attica/>)
+* [Attica 0.4.0](http://ftp.kde.org/stable/attica/)
 * [QuaZip 0.4.3](http://quazip.sourceforge.net/)
 * [liblastfm 1.0.1](https://github.com/lastfm/liblastfm/)
 * [QtKeychain 0.1](https://github.com/frankosterfeld/qtkeychain/)
@@ -135,25 +127,19 @@ Third party libraries that we ship with our source:
 * [SPMediaKeyTap](https://github.com/nevyn/SPMediaKeyTap/)
 * [kdSingleApplicationGuard](http://www.kdab.com/)
 
-------------------------------
-
-## SUPPORT TOMAHAWK
+SUPPORT TOMAHAWK
+================
 * [Open Issues](https://bugs.tomahawk-player.org/secure/* Dashboard.jspa)
 * [Translations](https://www.transifex.com/projects/p/tomahawk/)
 * [Donate](https://flattr.com/thing/169312/Tomahawk)
 
-<br />
-
-------------------------------
-## GET HELP
+GET HELP
+========
 * [Support & Feedback](http://tomahawk.uservoice.com)
 * [Chat with Us (IRC)](irc://irc.freenode.net/tomahawk)
 
-<br />
-
-
-------------------------------
-## SCREENSHOTS
+SCREENSHOTS
+===========
 
 BROWSE FRIENDS' MUSIC & LISTEN ALONG
 
@@ -171,16 +157,12 @@ FRIEND FEED
 
 ![Feed](https://dchtm6r471mui.cloudfront.net/hackpad.com_ZRZMJDdxrVe_p.242147_1410971283885_heroshot.png)
 
-
 DYNAMIC (AUTO-UPDATING) PLAYLIST
 
 ![Xspf](https://dchtm6r471mui.cloudfront.net/hackpad.com_ZRZMJDdxrVe_p.242147_1410998362549_dynamic-playlist-1.jpg)
 
-
 PLUG-INS / RESOLVER SETTINGS
 
 ![Settings](https://dchtm6r471mui.cloudfront.net/hackpad.com_ZRZMJDdxrVe_p.242147_1410998587408_prefs.jpg)
-
---------------
 
 ##Enjoy!
