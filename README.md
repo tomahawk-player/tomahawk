@@ -17,7 +17,7 @@ It continues to change and evolve, but at the time of this writing:
 * Local music (e.g. iTunes) library
 * Networked music libraries (other connected computers)
 
-### Subscription Music Services Resolvers
+### Subscription Music Services
 
 * Spotify
 * Beats Music
