@@ -160,10 +160,10 @@ QueryLabel::onResultChanged()
 void
 QueryLabel::setResult( const Tomahawk::result_ptr& result )
 {
-    if ( result.isNull() )
+    if ( !result )
         return;
 
-    if ( m_result.isNull() || m_result.data() != result.data() )
+    if ( !m_result || m_result.data() != result.data() )
     {
         m_result = result;
         connect( m_result.data(), SIGNAL( updated() ), SLOT( onResultChanged() ) );
@@ -177,10 +177,10 @@ QueryLabel::setResult( const Tomahawk::result_ptr& result )
 void
 QueryLabel::setQuery( const Tomahawk::query_ptr& query )
 {
-    if ( query.isNull() )
+    if ( !query )
         return;
 
-    if ( m_query.isNull() || m_query.data() != query.data() )
+    if ( !m_query || m_query.data() != query.data() )
     {
         m_query = query;
         m_artist = Artist::get( query->track()->artist() );
