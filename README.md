@@ -14,7 +14,7 @@ Tomahawk is basically a **music metadata player**.  At its core it decouples the
 
 It continues to change and evolve, but at the time of this writing:
 
-* Local music (e.g. iTunes) library
+* Local music library (MP3, Ogg, FLAC and many other formats)
 * Networked music libraries (other connected computers)
 
 ### Subscription Music Services
@@ -51,10 +51,10 @@ Source code (and examples) can be found in our [Resolver repository](https://git
 
 You can download one of our nightly or stable builds:
 
-|*BUILD* | MAC / OSX | WINDOWS | LINUX |
-|:------:| :-------: | :-----: | :---: |
-|*NIGHTLY* | [**latest**](http://download.tomahawk-player.org/nightly/mac/Tomahawk-latest.dmg) | [**latest**](http://download.tomahawk-player.org/nightly/windows/tomahawk-latest.exe) | *N/A* |
-|*STABLE* | [**0.7**](http://download.tomahawk-player.org/Tomahawk-0.7.0.dmg) | [**0.7**](http://download.tomahawk-player.org/tomahawk-0.7.0.exe) | [**0.7**](http://www.tomahawk-player.org/download.html#linux) (various distros) |
+| *BUILD* | MAC / OSX | WINDOWS | LINUX |
+|:-------:|:---------:|:-------:|:-----:|
+|**NIGHTLY** | [**latest**](http://download.tomahawk-player.org/nightly/mac/Tomahawk-latest.dmg) | [**latest**](http://download.tomahawk-player.org/nightly/windows/tomahawk-latest.exe) | *N/A* |
+|**STABLE** | [**0.7**](http://download.tomahawk-player.org/Tomahawk-0.7.0.dmg) | [**0.7**](http://download.tomahawk-player.org/tomahawk-0.7.0.exe) | [**0.7**](http://www.tomahawk-player.org/download.html#linux) (various distros) |
 
 ## BUILD TOMAHAWK
 
@@ -81,10 +81,6 @@ You can download one of our nightly or stable builds:
 **WINDOWS**
 
 * [Windows](http://wiki.tomahawk-player.org/index.php/Building_Windows_Binary)
-
-### Developer Documentation
-
-See our [doxygen documentation](http://dev.tomahawk-player.org/api/classes.html)
 
 ### Dependencies
 
@@ -132,6 +128,7 @@ Third party libraries that we ship with our source:
 * Chat with Us (IRC): #tomahawk (on Freenode)
 * [Twitter](http://twitter.com/tomahawk)
 * [Facebook](http://facebook.com/tomahawkplayer)
+* [Developer API documentation](http://dev.tomahawk-player.org/api/classes.html)
 
 ## SCREENSHOTS
 
