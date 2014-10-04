@@ -52,9 +52,9 @@ Source code (and examples) can be found in our [Resolver repository](https://git
 You can download one of our nightly or stable builds:
 
 |*BUILD* | MAC / OSX | WINDOWS | LINUX |
-|---------------- | --------------- | --------------- | --------- |
-|**NIGHTLY**     | [**nightly**](http://download.tomahawk-player.org/nightly/mac/Tomahawk-latest.dmg) | [**nightly**](http://download.tomahawk-player.org/nightly/windows/tomahawk-latest.exe)  | *N/A* |
-|**STABLE**      | [**v0.7**](http://download.tomahawk-player.org/Tomahawk-0.7.0.dmg)       | [**v0.7**](http://download.tomahawk-player.org/tomahawk-0.7.0.exe) | [**v0.7**](http://www.tomahawk-player.org/download.html#linux) (various distros) |
+|:------:| :-------: | :-----: | :---: |
+|*NIGHTLY* | [**latest**](http://download.tomahawk-player.org/nightly/mac/Tomahawk-latest.dmg) | [**latest**](http://download.tomahawk-player.org/nightly/windows/tomahawk-latest.exe) | *N/A* |
+|*STABLE* | [**0.7**](http://download.tomahawk-player.org/Tomahawk-0.7.0.dmg) | [**0.7**](http://download.tomahawk-player.org/tomahawk-0.7.0.exe) | [**0.7**](http://www.tomahawk-player.org/download.html#linux) (various distros) |
 
 ## BUILD TOMAHAWK
 
