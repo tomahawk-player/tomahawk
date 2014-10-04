@@ -55,8 +55,8 @@ public:
 
     Tomahawk::result_ptr result() const { return m_result; }
     Tomahawk::query_ptr query() const { return m_query; }
-    Tomahawk::artist_ptr artist() const { return m_artist; }
-    Tomahawk::album_ptr album() const { return m_album; }
+    Tomahawk::artist_ptr artist() const;
+    Tomahawk::album_ptr album() const;
 
     DisplayType type() const { return m_type; }
     void setType( DisplayType type );

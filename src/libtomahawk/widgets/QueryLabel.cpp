@@ -480,3 +480,33 @@ QueryLabel::setType( DisplayType type )
     updateGeometry();
     update();
 }
+
+
+Tomahawk::artist_ptr
+QueryLabel::artist() const
+{
+    if ( m_artist )
+        return m_artist;
+    else if ( m_album )
+        return m_album->artist();
+    else if ( m_result )
+        return m_result->track()->artistPtr();
+    else if ( m_query )
+        return m_query->track()->artistPtr();
+
+    return artist_ptr();
+}
+
+
+Tomahawk::album_ptr
+QueryLabel::album() const
+{
+    if ( m_album )
+        return m_album;
+    else if ( m_result )
+        return m_result->track()->albumPtr();
+    else if ( m_query )
+        return m_query->track()->albumPtr();
+
+    return album_ptr();
+}
