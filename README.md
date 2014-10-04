@@ -156,4 +156,4 @@ PLUG-INS / RESOLVER SETTINGS
 
 ![Settings](https://dchtm6r471mui.cloudfront.net/hackpad.com_ZRZMJDdxrVe_p.242147_1410998587408_prefs.jpg)
 
-##Enjoy!
+**Enjoy!**
