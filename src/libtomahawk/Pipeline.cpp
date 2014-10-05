@@ -364,9 +364,9 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
             httpResults << r;
         else
             cleanResults << r;
-    }const
+    }
 
-    ResultUrlChecker* checker = new ResultUrlChecker( q, httpResults );
+    const ResultUrlChecker* checker = new ResultUrlChecker( q, httpResults );
     connect( checker, SIGNAL( done() ), SLOT( onResultUrlCheckerDone() ) );
 
     addResultsToQuery( q, cleanResults );
