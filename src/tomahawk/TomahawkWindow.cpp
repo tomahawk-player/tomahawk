@@ -403,7 +403,9 @@ TomahawkWindow::balanceToolbar()
     }
 }
 
-void TomahawkWindow::toggleLoved()
+
+void
+TomahawkWindow::toggleLoved()
 {
     if ( !AudioEngine::instance()->currentTrack().isNull() )
     {
@@ -413,6 +415,7 @@ void TomahawkWindow::toggleLoved()
 #endif
     }
 }
+
 
 void
 TomahawkWindow::setupSideBar()
@@ -613,6 +616,7 @@ TomahawkWindow::setupWindowsButtons()
 #endif//QT_VERSION < QT_VERSION_CHECK( 5, 2, 0 )
 }
 
+
 #if QT_VERSION < QT_VERSION_CHECK( 5, 2, 0 )
 HICON
 TomahawkWindow::thumbIcon( TomahawkUtils::ImageType type )
@@ -625,9 +629,11 @@ TomahawkWindow::thumbIcon( TomahawkUtils::ImageType type )
     }
     return thumbIcons[type];
 }
+
 #else
 
-QIcon TomahawkWindow::thumbIcon(TomahawkUtils::ImageType type)
+QIcon
+TomahawkWindow::thumbIcon(TomahawkUtils::ImageType type)
 {
     return  TomahawkUtils::defaultPixmap( type , TomahawkUtils::Original, QSize( 40, 40 ) );
 }
@@ -871,6 +877,7 @@ TomahawkWindow::winEvent( MSG* msg, long* result )
 }
 #endif//defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK( 5, 2, 0 )
 
+
 void
 TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
 {
@@ -1007,6 +1014,7 @@ TomahawkWindow::updateWindowsLoveButton()
     }
 #endif//defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK( 5, 2, 0 )
 }
+
 
 void
 TomahawkWindow::onHistoryBackAvailable( bool avail )
