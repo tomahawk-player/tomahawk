@@ -611,6 +611,7 @@ TomahawkApp::onInfoSystemReady()
         {
             m_mainwindow->show();
         }
+        qApp->installEventFilter( m_mainwindow );
     }
 
     tDebug() << "Init Local Collection.";

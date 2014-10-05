@@ -90,6 +90,8 @@ protected:
     void hideEvent( QHideEvent* e );
     void keyPressEvent( QKeyEvent* e );
 
+    bool eventFilter( QObject* obj, QEvent* event );
+
 #if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK( 5, 2, 0 )
     bool winEvent( MSG* message, long* result );
 #endif

@@ -693,6 +693,31 @@ TomahawkWindow::setupMenuBar()
 }
 
 
+bool
+TomahawkWindow::eventFilter( QObject* obj, QEvent* event )
+{
+    if ( event->type() == QEvent::MouseButtonPress )
+    {
+        QMouseEvent* me = static_cast<QMouseEvent*>(event);
+        switch ( me->button() )
+        {
+            case Qt::XButton1:
+                m_backAction->trigger();
+                break;
+
+            case Qt::XButton2:
+                m_forwardAction->trigger();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    return QObject::eventFilter( obj, event );
+}
+
+
 void
 TomahawkWindow::changeEvent( QEvent* e )
 {
