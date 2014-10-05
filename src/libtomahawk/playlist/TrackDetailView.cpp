@@ -280,7 +280,7 @@ TrackDetailView::onResultsChanged()
         }
     }
 
-    if ( m_query && m_query->numResults() > 1 )
+    if ( m_query && m_query->numResults( true ) > 1 )
     {
         m_resultsBoxLabel->show();
         m_resultsBox->show();
