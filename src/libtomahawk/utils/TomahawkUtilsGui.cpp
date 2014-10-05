@@ -492,7 +492,7 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
             else if ( mode == Grid )
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/album-placeholder-grid.svg", size );
             else
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/album-icon.svg", size );
+                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/album-placeholder-grid.svg", size );
             break;
 
         case DefaultArtistImage:
