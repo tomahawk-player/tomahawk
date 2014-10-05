@@ -71,7 +71,7 @@ public:
     QList< result_ptr > results() const;
 
     /// how many results found so far?
-    unsigned int numResults() const;
+    unsigned int numResults( bool onlyPlayableResults = false ) const;
 
     bool resolvingFinished() const;
     /// true when a perfect result has been found (score of 1.0)

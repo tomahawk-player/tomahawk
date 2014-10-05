@@ -322,10 +322,23 @@ Query::results() const
 
 
 unsigned int
-Query::numResults() const
+Query::numResults( bool onlyPlayableResults ) const
 {
     Q_D( const Query );
     QMutexLocker lock( &d->mutex );
+
+    if ( onlyPlayableResults )
+    {
+        unsigned int c = 0;
+        foreach ( const result_ptr& result, d->results )
+        {
+            if ( result->isOnline() )
+                c++;
+        }
+
+        return c;
+    }
+
     return d->results.length();
 }
 
