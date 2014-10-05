@@ -489,23 +489,16 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
         case DefaultAlbumCover:
             if ( mode == CoverInCase )
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/no-album-art-placeholder.svg", size );
-            else if ( mode == Grid )
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/album-placeholder-grid.svg", size );
             else
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/album-placeholder-grid.svg", size );
             break;
 
         case DefaultArtistImage:
-            if ( mode == Grid )
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/artist-placeholder-grid.svg", size );
-            else
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/artist-placeholder-grid.svg", size );
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/artist-placeholder-grid.svg", size );
             break;
 
         case DefaultTrackImage:
-            if ( mode == Grid )
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-placeholder-grid.svg", size );
-            else if ( mode == RoundedCorners )
+            if ( mode == RoundedCorners )
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-placeholder-grid.svg", size, TomahawkUtils::RoundedCorners );
             else
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-placeholder-grid.svg", size );

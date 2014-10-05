@@ -133,7 +133,6 @@ namespace TomahawkUtils
     {
         Original,
         CoverInCase,
-        Grid,
         DropShadow,
         RoundedCorners
     };

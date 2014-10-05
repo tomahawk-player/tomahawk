@@ -55,7 +55,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Original, QSize( 48, 48 ) );
-    ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Grid, ui->cover->size() ) );
+    ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Original, ui->cover->size() ) );
     ui->cover->setShowText( false );
 
     QHBoxLayout* l = new QHBoxLayout( ui->statsWidget );

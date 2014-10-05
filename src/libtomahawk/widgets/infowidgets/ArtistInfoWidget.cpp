@@ -395,7 +395,7 @@ ArtistInfoWidget::onArtistImageUpdated()
     const QSize coverSize = QSize( ui->cover->width(), ui->cover->width() );
     if ( !m_artist || m_artist->cover( QSize( 0, 0 ) ).isNull() )
     {
-        ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Grid, coverSize ) );
+        ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Original, coverSize ) );
     }
     else
     {

@@ -248,7 +248,7 @@ ColumnViewPreviewWidget::onCoverUpdated()
 {
     if ( m_query->track()->cover( QSize( 0, 0 ) ).isNull() )
     {
-        m_cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Grid, m_cover->size() ) );
+        m_cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Original, m_cover->size() ) );
         return;
     }
 

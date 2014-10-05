@@ -194,7 +194,7 @@ TrackDetailView::onCoverUpdated()
 {
     if ( !m_query || m_query->track()->cover( QSize( 0, 0 ) ).isNull() )
     {
-        m_playableCover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Grid, m_playableCover->size() ) );
+        m_playableCover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Original, m_playableCover->size() ) );
         return;
     }
 
