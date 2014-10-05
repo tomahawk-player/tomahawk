@@ -114,7 +114,8 @@ HoverControls::mouseReleaseEvent( QMouseEvent* event )
 {
     QWidget::mouseReleaseEvent( event );
 
-    emit play();
+    if ( event->button() == Qt::LeftButton )
+        emit play();
 }
 
 
