@@ -176,6 +176,7 @@ RecentlyPlayedModel::onTracksLoaded( QList<Tomahawk::track_ptr> tracks, QList<To
     {
         onPlaybackFinished( tracks.at( i ), logs.at( i ) );
     }
+    ensureResolved();
 }
 
 
