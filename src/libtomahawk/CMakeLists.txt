@@ -156,7 +156,6 @@ set( libGuiSources
     widgets/SearchWidget.cpp
     widgets/SeekSlider.cpp
     widgets/SourceTreePopupDialog.cpp
-    widgets/StatsGauge.cpp
     widgets/ToggleButton.cpp
     widgets/infowidgets/SourceInfoWidget.cpp
     widgets/infowidgets/ArtistInfoWidget.cpp
