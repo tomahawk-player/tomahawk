@@ -3883,21 +3883,21 @@ Try tweaking the filters for a new set of songs to play.</source>
         <translation>Ви</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="681"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="682"/>
         <source>Updating database
 </source>
         <translation>Оновлення бази даних
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="688"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="689"/>
         <source>Updating database
 %1</source>
         <translation>Оновлення бази даних
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="738"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="739"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Не вдалося автоматично визначити зовнішню IP.</translation>
     </message>
@@ -3981,7 +3981,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="292"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="580"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="583"/>
         <source>Back</source>
         <translation>Назад</translation>
     </message>
@@ -4002,13 +4002,13 @@ Try tweaking the filters for a new set of songs to play.</source>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="222"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1469"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1502"/>
         <source>Hide Menu Bar</source>
         <translation>Сховати Рядок Меню</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="222"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1463"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1496"/>
         <source>Show Menu Bar</source>
         <translation>Показати Рядок Меню</translation>
     </message>
@@ -4018,103 +4018,103 @@ Try tweaking the filters for a new set of songs to play.</source>
         <translation>&amp;Головне Меню</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="587"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="913"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="925"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="590"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="945"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="957"/>
         <source>Play</source>
         <translation>Відтворити</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="593"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="596"/>
         <source>Next</source>
         <translation>Наступна</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="606"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="974"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="981"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="609"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1006"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1013"/>
         <source>Love</source>
         <translation>Улюблена</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="969"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1001"/>
         <source>Unlove</source>
         <translation>Не улюблена</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1101"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1134"/>
         <source>Exit Full Screen</source>
         <translation>Вийти з Повноекранного режиму</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1119"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1152"/>
         <source>Enter Full Screen</source>
         <translation>Перейти у Повноекранний режим</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1181"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1214"/>
         <source>XSPF Error</source>
         <translation>Помилка XSPF</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1181"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1214"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>Це не є припустимим XSPF списком відтворення.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1185"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1218"/>
         <source>Failed to save tracks</source>
         <translation>Не вдалося зберегти доріжки</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1185"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1218"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>Деякі пісні у списку відтворення не містять виконавця і назву. Вони будуть проігноровані.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1199"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1232"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
         <translation>Нажаль, є проблеми з доступом до аудіо пристрою або даної пісні, поточна пісня буде пропущена. Переконайтеся, що в вас є відповідний Phonon backend і потрібні втулки встановлено.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1201"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1234"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
         <translation>Нажаль, є проблеми з доступом до аудіо пристрою або даної пісні, поточна пісня буде пропущена.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1217"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1250"/>
         <source>Station</source>
         <translation>Станція</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1219"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1252"/>
         <source>Create New Station</source>
         <translation>Створити Нову Станцію</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1219"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1254"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1252"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1287"/>
         <source>Name:</source>
         <translation>Ім’я:</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1252"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1285"/>
         <source>Playlist</source>
         <translation>Список відтворення</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1254"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1287"/>
         <source>Create New Playlist</source>
         <translation>Створити Новий Список відтворення</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1361"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1394"/>
         <source>Copyright 2010 - 2014</source>
         <translation>Авторське право 2010 - 2014</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="904"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1287"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="936"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1320"/>
         <source>Pause</source>
         <translation>Призупинити</translation>
     </message>
@@ -4124,39 +4124,39 @@ Try tweaking the filters for a new set of songs to play.</source>
         <translation>Пошук</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1309"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1342"/>
         <source>&amp;Play</source>
         <translation>&amp;Відтворити</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1341"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1374"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1342"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1375"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1353"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1386"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1357"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1390"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1362"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1395"/>
         <source>Thanks to:</source>
         <translation>Подяки:</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1369"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1402"/>
         <source>About Tomahawk</source>
         <translation>Про Tomahawk</translation>
     </message>
