@@ -30,7 +30,6 @@ InboxView::InboxView( QWidget* parent ) :
     TrackView( parent )
 {
     proxyModel()->setStyle( PlayableProxyModel::Fancy );
-    setEmptyTip( tr( "No listening suggestions here." ) );
 
     TrackView::setGuid( "inbox" );
     setHeaderHidden( true );
@@ -84,6 +83,7 @@ InboxPage::InboxPage( QWidget* parent ) :
 //    setCaption( tr( "Inbox Details" ) );
 
     setPlayableModel( ViewManager::instance()->inboxModel() );
+    setEmptyTip( tr( "Your friends have not shared any recommendations with you yet. Connect with them and share your musical gems!" ) );
 
     TrackItemDelegate* delegate = new TrackItemDelegate( TrackItemDelegate::Inbox, inboxView, inboxView->proxyModel() );
     inboxView->setPlaylistItemDelegate( delegate );
