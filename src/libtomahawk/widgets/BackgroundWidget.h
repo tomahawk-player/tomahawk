@@ -44,6 +44,7 @@ private:
     QColor m_backgroundColor;
     QPixmap m_background;
     QPixmap m_backgroundSlice;
+    bool m_blurred;
 };
 
 #endif // BACKGROUNDWIDGET_H

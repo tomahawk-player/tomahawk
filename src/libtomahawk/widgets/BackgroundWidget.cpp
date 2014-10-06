@@ -31,6 +31,7 @@ using namespace Tomahawk;
 
 BackgroundWidget::BackgroundWidget( QWidget* parent )
     : QWidget( parent )
+    , m_blurred( false )
 {
     setAutoFillBackground( false );
     BackgroundWidget::setBackgroundColor( QColor( "#333333" ) );
@@ -45,6 +46,7 @@ BackgroundWidget::~BackgroundWidget()
 void
 BackgroundWidget::setBackground( const QPixmap& p, bool blurred, bool blackWhite )
 {
+    m_blurred = blurred;
     if ( blurred )
     {
         m_background = QPixmap::fromImage( TomahawkUtils::blurred( p.toImage(), p.rect(), 10, false, blackWhite ) );
@@ -79,12 +81,6 @@ BackgroundWidget::paintEvent( QPaintEvent* event )
 {
     QPainter painter( this );
 
-    painter.save();
-    painter.setPen( m_backgroundColor );
-    painter.setBrush( m_backgroundColor );
-    painter.drawRect( event->rect() );
-    painter.restore();
-
     if ( m_backgroundSlice.isNull() && !m_background.isNull() )
     {
         m_backgroundSlice = m_background.scaledToWidth( contentsRect().width(), Qt::SmoothTransformation );
@@ -94,6 +90,24 @@ BackgroundWidget::paintEvent( QPaintEvent* event )
     if ( !m_backgroundSlice.isNull() )
     {
         painter.drawPixmap( event->rect(), m_backgroundSlice.copy( event->rect() ) );
+
+        if ( m_blurred )
+        {
+            painter.save();
+            painter.setPen( Qt::black );
+            painter.setBrush( Qt::black );
+            painter.setOpacity( 0.25 );
+            painter.drawRect( event->rect() );
+            painter.restore();
+        }
+    }
+    else
+    {
+        painter.save();
+        painter.setPen( m_backgroundColor );
+        painter.setBrush( m_backgroundColor );
+        painter.drawRect( event->rect() );
+        painter.restore();
     }
 
     QWidget::paintEvent( event );
