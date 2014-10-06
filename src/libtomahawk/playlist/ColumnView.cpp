@@ -135,7 +135,7 @@ ColumnView::setTreeModel( TreeModel* model )
 
     guid(); // this will set the guid on the header
 
-    if ( m_proxyModel->style() == PlayableProxyModel::Large )
+    if ( m_proxyModel->style() == PlayableProxyModel::Fancy )
     {
         setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     }

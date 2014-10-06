@@ -29,7 +29,6 @@
 
 #include "audio/AudioEngine.h"
 #include "playlist/GridItemDelegate.h"
-#include "playlist/AlbumItemDelegate.h"
 #include "playlist/PlayableModel.h"
 #include "playlist/TreeModel.h"
 #include "playlist/PlaylistModel.h"

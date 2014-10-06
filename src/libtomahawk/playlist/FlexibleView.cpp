@@ -64,7 +64,7 @@ FlexibleView::FlexibleView( QWidget* parent, QWidget* extraHeader )
 
     TrackItemDelegate* del = new TrackItemDelegate( TrackItemDelegate::LovedTracks, m_trackView, m_trackView->proxyModel() );
     m_trackView->setPlaylistItemDelegate( del );
-    m_trackView->proxyModel()->setStyle( PlayableProxyModel::Large );
+    m_trackView->proxyModel()->setStyle( PlayableProxyModel::Fancy );
 
     m_stack = new QStackedWidget();
     setLayout( new QVBoxLayout() );

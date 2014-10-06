@@ -56,7 +56,7 @@ ContextView::ContextView( QWidget* parent, const QString& caption )
 
     TrackItemDelegate* del = new TrackItemDelegate( TrackItemDelegate::LovedTracks, m_trackView, m_trackView->proxyModel() );
     m_trackView->setPlaylistItemDelegate( del );
-    m_trackView->proxyModel()->setStyle( PlayableProxyModel::Large );
+    m_trackView->proxyModel()->setStyle( PlayableProxyModel::Fancy );
     TomahawkStyle::styleScrollBar( m_trackView->verticalScrollBar() );
 
     setLayout( new QVBoxLayout() );

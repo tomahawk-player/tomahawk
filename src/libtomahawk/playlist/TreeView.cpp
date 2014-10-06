@@ -134,7 +134,7 @@ TreeView::setTreeModel( TreeModel* model )
     guid(); // this will set the guid on the header
 
     m_header->setDefaultColumnWeights( m_proxyModel->columnWeights() );
-    if ( m_proxyModel->style() == PlayableProxyModel::Large )
+    if ( m_proxyModel->style() == PlayableProxyModel::Fancy )
     {
         setHeaderHidden( true );
         setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );

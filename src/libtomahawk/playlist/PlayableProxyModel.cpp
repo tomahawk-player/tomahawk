@@ -48,7 +48,7 @@ PlayableProxyModel::PlayableProxyModel( QObject* parent )
 
     PlayableProxyModel::setSourcePlayableModel( NULL );
 
-    m_headerStyle[ Large ]      << PlayableModel::Name;
+    m_headerStyle[ Fancy ]      << PlayableModel::Name;
     m_headerStyle[ Detailed ]   << PlayableModel::Artist << PlayableModel::Track << PlayableModel::Composer << PlayableModel::Album << PlayableModel::AlbumPos << PlayableModel::Duration << PlayableModel::Bitrate << PlayableModel::Age << PlayableModel::Year << PlayableModel::Filesize << PlayableModel::Origin << PlayableModel::Score;
     m_headerStyle[ Collection ] << PlayableModel::Name << PlayableModel::Composer << PlayableModel::Duration << PlayableModel::Bitrate << PlayableModel::Age << PlayableModel::Year << PlayableModel::Filesize << PlayableModel::Origin;
 }
@@ -579,8 +579,7 @@ PlayableProxyModel::columnCount( const QModelIndex& parent ) const
 
     switch ( m_style )
     {
-        case Short:
-        case Large:
+        case Fancy:
             return 1;
             break;
 
@@ -642,8 +641,7 @@ PlayableProxyModel::columnWeights() const
 
     switch ( m_style )
     {
-        case Short:
-        case Large:
+        case Fancy:
             w << 1.0;
             break;
 
@@ -678,7 +676,7 @@ PlayableProxyModel::updateDetailedInfo( const QModelIndex& index )
     {
         item->query()->track()->cover( QSize( 0, 0 ) );
 
-        if ( style() == PlayableProxyModel::Large )
+        if ( style() == PlayableProxyModel::Fancy )
         {
             item->query()->track()->loadSocialActions();
         }

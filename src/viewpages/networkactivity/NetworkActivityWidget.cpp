@@ -24,7 +24,6 @@
 #include "database/Database.h"
 #include "database/DatabaseCommand_NetworkCharts.h"
 #include "database/DatabaseCommand_TrendingTracks.h"
-#include "playlist/AlbumItemDelegate.h"
 #include "playlist/RecentlyLovedTracksModel.h"
 #include "playlist/TopLovedTracksModel.h"
 #include "playlist/TreeProxyModel.h"
@@ -100,7 +99,7 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     d->ui->breadCrumbLeft->setVisible( true );
 
     {
-        AlbumItemDelegate* del = new AlbumItemDelegate( d->ui->tracksViewLeft, d->ui->tracksViewLeft->proxyModel(), true );
+        TrackItemDelegate* del = new TrackItemDelegate( d->ui->tracksViewLeft, d->ui->tracksViewLeft->proxyModel(), true );
         d->ui->tracksViewLeft->setPlaylistItemDelegate( del );
         d->ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Short );
         d->ui->tracksViewLeft->setAutoResize( true );

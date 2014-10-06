@@ -50,13 +50,13 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
     ui->splitter->setStretchFactor( 1, 1 );
 
     m_recentTracksModel = new RecentlyAddedModel( ui->recentCollectionView );
-    ui->recentCollectionView->proxyModel()->setStyle( PlayableProxyModel::Short );
+    ui->recentCollectionView->proxyModel()->setStyle( PlayableProxyModel::Fancy );
     ui->recentCollectionView->setPlayableModel( m_recentTracksModel );
     ui->recentCollectionView->sortByColumn( PlayableModel::Age, Qt::DescendingOrder );
     m_recentTracksModel->setSource( source );
 
     m_historyModel = new RecentlyPlayedModel( ui->historyView );
-    ui->historyView->proxyModel()->setStyle( PlayableProxyModel::Short );
+    ui->historyView->proxyModel()->setStyle( PlayableProxyModel::Fancy );
     ui->historyView->setPlayableModel( m_historyModel );
     m_historyModel->setSource( source );
 

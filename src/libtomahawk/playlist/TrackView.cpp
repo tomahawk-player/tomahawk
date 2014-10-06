@@ -227,8 +227,7 @@ TrackView::setPlayableModel( PlayableModel* model )
 
     switch( m_proxyModel->style() )
     {
-        case PlayableProxyModel::Short:
-        case PlayableProxyModel::Large:
+        case PlayableProxyModel::Fancy:
             setHeaderHidden( true );
             setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         break;

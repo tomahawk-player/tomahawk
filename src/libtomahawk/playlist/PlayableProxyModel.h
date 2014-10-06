@@ -33,7 +33,7 @@ Q_OBJECT
 
 public:
     enum PlayableItemStyle
-    { Detailed = 0, Short = 1, Large = 3, Collection = 4 };
+    { Detailed = 0, Fancy = 1, Collection = 2 };
 
     enum PlayableProxyModelRole
     { StyleRole = Qt::UserRole + 1, TypeRole };
