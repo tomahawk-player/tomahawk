@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
@@ -40,8 +40,8 @@
 #include <QWidget>
 
 class PlayableModel;
-class StatsGauge;
 class QScrollArea;
+class BasicHeader;
 
 namespace Ui
 {
@@ -75,28 +75,23 @@ public:
 public slots:
     void load( const Tomahawk::query_ptr& query );
 
+signals:
+    void pixmapChanged( const QPixmap& pixmap );
+
 protected:
     void changeEvent( QEvent* e );
 
 private slots:
     void onCoverUpdated();
-    void onStatsLoaded();
-    void onSimilarArtistsLoaded();
     void onSimilarTracksLoaded();
     void onLyricsLoaded();
 
-    void onArtistClicked();
-    void onAlbumClicked();
-
 private:
     Ui::TrackInfoWidget *ui;
-    QScrollArea* m_scrollArea;
+    BasicHeader* m_headerWidget;
 
     Tomahawk::query_ptr m_query;
     Tomahawk::artist_ptr m_artist;
-
-    StatsGauge* m_playStatsGauge;
-    StatsGauge* m_playStatsTotalGauge;
 
     PlayableModel* m_relatedTracksModel;
     QString m_title;
