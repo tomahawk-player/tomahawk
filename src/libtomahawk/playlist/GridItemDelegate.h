@@ -98,7 +98,6 @@ private:
     QPersistentModelIndex m_hoveringOverArtist;
     QPersistentModelIndex m_hoveringOverAlbum;
 
-    QPixmap m_shadowPixmap;
     mutable QHash< QPersistentModelIndex, QWidget* > m_spinner;
     mutable QHash< QPersistentModelIndex, HoverControls* > m_hoverControls;
     mutable QHash< QPersistentModelIndex, QTimeLine* > m_hoverFaders;
