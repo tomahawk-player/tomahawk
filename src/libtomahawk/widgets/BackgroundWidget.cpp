@@ -94,7 +94,7 @@ BackgroundWidget::paintEvent( QPaintEvent* event )
         if ( m_blurred )
         {
             painter.save();
-            painter.setPen( Qt::black );
+            painter.setPen( Qt::transparent );
             painter.setBrush( Qt::black );
             painter.setOpacity( 0.25 );
             painter.drawRect( event->rect() );
