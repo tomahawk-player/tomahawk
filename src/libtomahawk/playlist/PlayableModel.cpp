@@ -840,12 +840,16 @@ PlayableModel::onPlaybackStopped()
 
 
 void
-PlayableModel::ensureResolved()
+PlayableModel::ensureResolved( const QModelIndex& parent )
 {
     QList< query_ptr > ql;
-    for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
+    for ( int i = 0; i < rowCount( parent ); i++ )
     {
-        query_ptr query = itemFromIndex( index( i, 0, QModelIndex() ) )->query();
+        const QModelIndex idx = index( i, 0, parent );
+        if ( hasChildren( idx ) )
+            ensureResolved( idx );
+
+        query_ptr query = itemFromIndex( idx )->query();
         if ( !query )
             continue;
 

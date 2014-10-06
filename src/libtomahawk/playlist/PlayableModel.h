@@ -119,7 +119,7 @@ public:
     virtual Tomahawk::PlaylistModes::RepeatMode repeatMode() const;
     virtual bool shuffled() const { return false; }
 
-    virtual void ensureResolved();
+    virtual void ensureResolved( const QModelIndex& parent = QModelIndex() );
 
     virtual PlayableItem* itemFromIndex( const QModelIndex& index ) const;
     virtual PlayableItem* itemFromQuery( const Tomahawk::query_ptr& query ) const;
