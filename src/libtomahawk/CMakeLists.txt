@@ -70,7 +70,6 @@ set( libGuiSources
     playlist/TopLovedTracksModel.cpp
     playlist/RecentlyAddedModel.cpp
     playlist/RecentlyPlayedModel.cpp
-    playlist/AlbumItemDelegate.cpp
     playlist/TrackItemDelegate.cpp
     playlist/PlayableItem.cpp
     playlist/SingleTrackPlaylistInterface.cpp
