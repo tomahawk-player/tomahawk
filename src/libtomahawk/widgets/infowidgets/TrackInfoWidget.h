@@ -91,7 +91,6 @@ private:
     BasicHeader* m_headerWidget;
 
     Tomahawk::query_ptr m_query;
-    Tomahawk::artist_ptr m_artist;
 
     PlayableModel* m_relatedTracksModel;
     QString m_title;
