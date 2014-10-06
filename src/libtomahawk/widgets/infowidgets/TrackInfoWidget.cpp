@@ -127,7 +127,7 @@ TrackInfoWidget::load( const query_ptr& query )
     m_query = query;
     m_artist = Artist::get( m_query->track()->artist() );
     m_title = QString( "%1 - %2" ).arg( query->track()->artist() ).arg( query->track()->track() );
-    m_headerWidget->setCaption( m_query->track()->track() );
+    m_headerWidget->setCaption( m_title );
 
     connect( m_query->track().data(), SIGNAL( lyricsLoaded() ), SLOT( onLyricsLoaded() ) );
     connect( m_query->track().data(), SIGNAL( similarTracksLoaded() ), SLOT( onSimilarTracksLoaded() ) );
