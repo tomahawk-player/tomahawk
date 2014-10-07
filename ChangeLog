@@ -7,34 +7,25 @@ Version 0.8.0:
     * You will now be asked whether you want to trust invalid SSL certificates.
     * Improved connecting between Tomahawk peers and support having multiple IPs
       (including IPv6).
-    * Added Trending page, showing you the most played tracks of your friends recently,
-      trending songs and playlists.
     * Removed Top Loved from sidebar.
     * JavaScript-Resolver can now handle URLs (e.g. when dropped from a browser)
       and resolve them to Playlists/Tracks/Artists/Albums.
     * HTTP(S) streaming is now done by Tomahawk instead of the Phonon backend
       (fixed HTTPS streaming on MacOS).
     * Heavily reduced memory footprint during and after indexing the database.
-    * New Loved widget shows what friends have loved tracks throughout the app.
-    * New Artist, Album and Track page design - new fonts, colors, layout.
     * Retina display and DPI scaling fixes.
-    * New Dashboard layout.
-    * New Stats widget.
     * New Collection views.
     * Added Telepathy support.
     * Plugin refactoring (and .AXE resolver binaries).
     * Removed Twitter due to change in Twitter's API.
     * Improved error messages.
-    * Support drag & drop of items from Artist and Album page headers.
     * Added basic remote control API.
-    * Add support for Opus codec in local files (requires TagLib 1.9).
+    * Add support for Opus codec (requires TagLib 1.9).
     * Support rtmp:// streams.
-    * Drop QJson as a dependency for Qt5.
+    * Dropped QJson as a dependency for Qt5.
     * Support additional headers in CustomUrlHandler.
     * Fuzzy search indices for JS Resolvers.
     * Add metadata retrieval of HTTP(S) streams in JavaScript resolvers.
-    * New Dependencies: google-sparsehash, GnuTLS.
-    * Flat Collection View.
     * Support for Windows, OS X and Growl notifications.
 
 Version 0.7.0:
