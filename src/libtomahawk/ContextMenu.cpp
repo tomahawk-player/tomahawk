@@ -194,7 +194,7 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
         // Ampersands need to be escaped as they indicate a keyboard shortcut
         const QString track = m_queries.first()->track()->track().replace( QString( "&" ), QString( "&&" ) );
         m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/track-icon.svg" ),
-                                         tr( "&Go to \"%1\"" ).arg( track ) ), ActionTrackPage );
+                                         tr( "View Similar Tracks to \"%1\"" ).arg( track ) ), ActionTrackPage );
         if ( !m_queries.first()->track()->album().isEmpty() )
         {
             const QString album = m_queries.first()->track()->album().replace( QString( "&" ), QString( "&&" ) );
