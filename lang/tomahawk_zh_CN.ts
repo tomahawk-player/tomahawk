@@ -863,7 +863,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="86"/>
         <source>Your friends have not shared any recommendations with you yet. Connect with them and share your musical gems!</source>
-        <translation type="unfinished"/>
+        <translation>您的好友尚未给您分享任何推荐歌曲。立即与他们连接并分享你的爱歌！</translation>
     </message>
 </context>
 <context>
@@ -4188,7 +4188,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="60"/>
         <source>Top Hits</source>
-        <translation type="unfinished"/>
+        <translation>热单</translation>
     </message>
 </context>
 <context>
