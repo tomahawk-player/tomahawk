@@ -308,8 +308,12 @@ Tomahawk::DatabaseImpl::file( int fid )
             url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
 
         Tomahawk::track_ptr track = Tomahawk::Track::get( query.value( 9 ).toUInt(), query.value( 11 ).toString(), query.value( 13 ).toString(), query.value( 12 ).toString(), query.value( 5 ).toUInt(), query.value( 14 ).toString(), 0, 0 );
-
+        if ( !track )
+            return r;
         r = Tomahawk::Result::get( url, track );
+        if ( !r )
+            return r;
+
         r->setModificationTime( query.value( 1 ).toUInt() );
         r->setSize( query.value( 2 ).toUInt() );
         r->setMimetype( query.value( 4 ).toString() );
