@@ -734,12 +734,12 @@ de se connecter et streamer votre flux ?</translation>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="195"/>
         <source>Install plug-in</source>
-        <translation type="unfinished"/>
+        <translation>Installer le plug-in</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="196"/>
         <source>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;by &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;You are attempting to install a Tomahawk plug-in from an unknown source. Plug-ins from untrusted sources may put your data at risk.&lt;br/&gt;Do you want to install this plug-in?</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;par &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Vous êtes sur le point d&apos;installer un plug-in Tomahawk issu d&apos;une source inconnue. De tels plug-ins peuvent présenter une menace pour vos données.&lt;br/&gt;Confirmez-vous l&apos;installation du plug-in ?</translation>
     </message>
 </context>
 <context>
@@ -863,7 +863,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="86"/>
         <source>Your friends have not shared any recommendations with you yet. Connect with them and share your musical gems!</source>
-        <translation type="unfinished"/>
+        <translation>Vos amis n&apos;ont pas encore partagé de recommandation avec vous. Connectez-vous avec eux et partagez vos trouvailles !</translation>
     </message>
 </context>
 <context>
@@ -2772,6 +2772,10 @@ utilisateur@jabber.org</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="197"/>
+        <source>View Similar Tracks to &quot;%1&quot;</source>
+        <translation>Voir les titres similaires à « %1 »</translation>
+    </message>
+    <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="276"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="327"/>
         <source>&amp;Go to &quot;%1&quot;</source>
@@ -4187,7 +4191,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="60"/>
         <source>Top Hits</source>
-        <translation type="unfinished"/>
+        <translation>Top Hits</translation>
     </message>
 </context>
 <context>

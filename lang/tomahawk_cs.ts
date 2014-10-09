@@ -2773,6 +2773,10 @@ username@jabber.org</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="197"/>
+        <source>View Similar Tracks to &quot;%1&quot;</source>
+        <translation>Zobrazit skladby podobné &quot;%1&quot;</translation>
+    </message>
+    <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="276"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="327"/>
         <source>&amp;Go to &quot;%1&quot;</source>
