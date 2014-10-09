@@ -172,7 +172,10 @@ TomahawkApp::init()
     m_headless = true;
     m_headless = arguments().contains( "--headless" );
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
+
+#ifndef Q_OS_MAC
     setQuitOnLastWindowClosed( false );
+#endif
 
     if ( arguments().contains( "--splash" ) )
     {

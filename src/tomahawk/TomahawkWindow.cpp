@@ -751,14 +751,9 @@ TomahawkWindow::closeEvent( QCloseEvent* e )
         e->ignore();
         return;
     }
-#else
-    if ( m_trayIcon )
-    {
-        m_trayIcon->setShowHideWindow( false );
-    }
 #endif
 
-    e->accept();
+    QMainWindow::closeEvent( e );
 }
 
 
