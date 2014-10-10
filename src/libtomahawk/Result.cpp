@@ -145,17 +145,20 @@ Result::collection() const
     return m_collection;
 }
 
+
 QString
 Result::url() const
 {
     return m_url;
 }
 
+
 bool
 Result::checked() const
 {
     return m_checked;
 }
+
 
 QString
 Result::mimetype() const
@@ -304,23 +307,27 @@ Result::setCollection( const Tomahawk::collection_ptr& collection , bool emitOnl
     }
 }
 
+
 void
-Result::setFriendlySource(const QString &s)
+Result::setFriendlySource(const QString& s)
 {
     m_friendlySource = s;
 }
 
+
 void
-Result::setPurchaseUrl(const QString &u)
+Result::setPurchaseUrl(const QString& u)
 {
     m_purchaseUrl = u;
 }
 
+
 void
-Result::setLinkUrl(const QString &u)
+Result::setLinkUrl(const QString& u)
 {
     m_linkUrl = u;
 }
+
 
 void
 Result::setChecked( bool checked )
@@ -328,11 +335,13 @@ Result::setChecked( bool checked )
     m_checked = checked;
 }
 
+
 void
-Result::setMimetype( const QString &mimetype )
+Result::setMimetype( const QString& mimetype )
 {
     m_mimetype = mimetype;
 }
+
 
 void
 Result::setBitrate( unsigned int bitrate )
@@ -340,11 +349,13 @@ Result::setBitrate( unsigned int bitrate )
     m_bitrate = bitrate;
 }
 
+
 void
 Result::setSize( unsigned int size )
 {
     m_size = size;
 }
+
 
 void
 Result::setModificationTime( unsigned int modtime )
@@ -352,11 +363,13 @@ Result::setModificationTime( unsigned int modtime )
     m_modtime = modtime;
 }
 
+
 void
-Result::setTrack(const track_ptr &track)
+Result::setTrack( const track_ptr& track )
 {
     m_track = track;
 }
+
 
 unsigned int
 Result::fileId() const
@@ -376,11 +389,13 @@ Result::friendlySource() const
         return collection()->source()->friendlyName();
 }
 
+
 QString
 Result::purchaseUrl() const
 {
     return m_purchaseUrl;
 }
+
 
 QString
 Result::linkUrl() const
