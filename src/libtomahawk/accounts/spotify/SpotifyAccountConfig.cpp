@@ -274,6 +274,8 @@ SpotifyAccountConfig::showLoggedIn()
 
     m_ui->loginButton->setText( tr( "Log Out" ) );
     m_ui->loginButton->setEnabled( true );
+
+    emit sizeHintChanged();
 }
 
 
@@ -290,6 +292,8 @@ SpotifyAccountConfig::showLoggedOut()
 
     m_ui->loginButton->setText( tr( "Log In" ) );
     m_ui->loginButton->setEnabled( true );
+
+    emit sizeHintChanged();
 }
 
 

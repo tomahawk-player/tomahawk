@@ -68,6 +68,7 @@ signals:
     void login( const QString& username, const QString& pw );
     void logout();
     void updatePrivacy( bool );
+    void sizeHintChanged();
 
 protected:
     void showEvent( QShowEvent* event );
