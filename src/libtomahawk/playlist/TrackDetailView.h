@@ -29,6 +29,7 @@ class QLabel;
 class CaptionLabel;
 class PlayableCover;
 class QueryLabel;
+class QScrollArea;
 
 class DLLEXPORT TrackDetailView : public QWidget, private TomahawkUtils::DpiScaler
 {
@@ -67,6 +68,7 @@ private:
 
     QWidget* m_infoBox;
     QWidget* m_resultsBox;
+    QScrollArea* m_resultsScrollArea;
 
     Tomahawk::query_ptr m_query;
     QPixmap m_pixmap;

@@ -108,14 +108,15 @@ TrackDetailView::TrackDetailView( QWidget* parent )
     m_resultsBox->setLayout( resultsLayout );
     m_resultsBox->hide();
 
-    QScrollArea* resultsScrollArea = new QScrollArea;
-    resultsScrollArea->setWidgetResizable( false );
-    resultsScrollArea->setWidget( m_resultsBox );
-    resultsScrollArea->setFrameShape( QFrame::NoFrame );
-    resultsScrollArea->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    resultsScrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    resultsScrollArea->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
-    TomahawkStyle::styleScrollBar( resultsScrollArea->verticalScrollBar() );
+    m_resultsScrollArea = new QScrollArea;
+    m_resultsScrollArea->setWidgetResizable( true );
+    m_resultsScrollArea->setWidget( m_resultsBox );
+    m_resultsScrollArea->setFrameShape( QFrame::NoFrame );
+    m_resultsScrollArea->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    m_resultsScrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    m_resultsScrollArea->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
+    TomahawkStyle::styleScrollBar( m_resultsScrollArea->verticalScrollBar() );
+    m_resultsScrollArea->hide();
 
     QVBoxLayout* layout = new QVBoxLayout;
     TomahawkUtils::unmarginLayout( layout );
@@ -127,8 +128,9 @@ TrackDetailView::TrackDetailView( QWidget* parent )
     layout->addSpacerItem( new QSpacerItem( 0, 32, QSizePolicy::Minimum, QSizePolicy::Fixed ) );
     layout->addWidget( m_resultsBoxLabel );
     layout->addSpacerItem( new QSpacerItem( 0, 8, QSizePolicy::Minimum, QSizePolicy::Fixed ) );
-    layout->addWidget( resultsScrollArea );
-    layout->setStretchFactor( resultsScrollArea, 1 );
+    layout->addWidget( m_resultsScrollArea );
+    layout->addStretch();
+    layout->setStretchFactor( m_resultsScrollArea, 1 );
 
     setLayout( layout );
     setQuery( query_ptr() );
@@ -278,16 +280,20 @@ TrackDetailView::onResultsChanged()
 
             m_resultsBox->layout()->addWidget( hbox );
         }
+
+        qobject_cast<QVBoxLayout*>(m_resultsBox->layout())->addStretch();
     }
 
     if ( m_query && m_query->numResults( true ) > 1 )
     {
         m_resultsBoxLabel->show();
         m_resultsBox->show();
+        m_resultsScrollArea->show();
     }
     else
     {
         m_resultsBoxLabel->hide();
         m_resultsBox->hide();
+        m_resultsScrollArea->hide();
     }
 }
