@@ -39,7 +39,6 @@ set( libGuiSources
 
     playlist/InboxModel.cpp
     playlist/InboxView.cpp
-    playlist/FlexibleHeader.cpp
     playlist/ContextView.cpp
     playlist/FlexibleView.cpp
     playlist/FlexibleTreeView.cpp
