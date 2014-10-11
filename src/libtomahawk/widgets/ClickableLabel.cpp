@@ -66,8 +66,11 @@ ClickableLabel::mouseReleaseEvent( QMouseEvent* event )
 {
     QLabel::mouseReleaseEvent( event );
 
-    if ( !m_moved && m_time.elapsed() < qApp->doubleClickInterval() )
+    if ( event->button() == Qt::LeftButton &&
+         !m_moved && m_time.elapsed() < qApp->doubleClickInterval() )
+    {
         emit clicked();
+    }
 
     m_pressed = false;
     m_moved = false;
