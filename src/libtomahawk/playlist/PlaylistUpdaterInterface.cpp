@@ -56,7 +56,7 @@ PlaylistUpdaterInterface::loadForPlaylist( const playlist_ptr& pl )
         {
             if ( !s_factories.contains( info.type ) )
             {
-                Q_ASSERT( false );
+//                Q_ASSERT( false );
                 // You forgot to register your new updater type with the factory....
                 continue;
             }
