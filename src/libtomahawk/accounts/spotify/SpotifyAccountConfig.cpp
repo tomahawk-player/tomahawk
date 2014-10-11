@@ -57,7 +57,14 @@ SpotifyAccountConfig::SpotifyAccountConfig( SpotifyAccount *account )
     connect( m_ui->selectAllCheckbox, SIGNAL( stateChanged( int ) ), this, SLOT( selectAllPlaylists() ) );
     loadFromConfig();
 
-    m_playlistsLoading = new AnimatedSpinner( m_ui->playlistList );
+    m_ui->label->setVisible( false );
+    m_ui->label_3->setVisible( false );
+    m_ui->loveSync->setVisible( false );
+    m_ui->selectAllCheckbox->setVisible( false );
+    m_ui->deleteOnUnsync->setVisible( false );
+    m_ui->playlistList->setVisible( false );
+
+//    m_playlistsLoading = new AnimatedSpinner( m_ui->playlistList );
 }
 
 
@@ -162,6 +169,8 @@ SpotifyAccountConfig::persitentPrivacy() const
 void
 SpotifyAccountConfig::setPlaylists( const QList<SpotifyPlaylistInfo *>& playlists )
 {
+    return;
+
     // User always has at least 1 playlist (starred tracks)
     if ( !playlists.isEmpty() )
         m_playlistsLoading->fadeOut();
@@ -193,7 +202,7 @@ SpotifyAccountConfig::doLogin()
         m_ui->loginButton->setText( tr( "Logging in..." ) );
         m_ui->loginButton->setEnabled( false );
 
-        m_playlistsLoading->fadeIn();
+//        m_playlistsLoading->fadeIn();
         m_loggedInManually = true;
 
         emit login( username(), password() );
@@ -224,8 +233,8 @@ SpotifyAccountConfig::loginResponse( bool success, const QString& msg, const QSt
     }
     else
     {
-        setPlaylists( QList< SpotifyPlaylistInfo* >() );
-        m_playlistsLoading->fadeOut();
+/*        setPlaylists( QList< SpotifyPlaylistInfo* >() );
+        m_playlistsLoading->fadeOut();*/
 
         m_ui->loginButton->setText( tr( "Failed: %1" ).arg( msg ) );
         m_ui->loginButton->setEnabled( true );

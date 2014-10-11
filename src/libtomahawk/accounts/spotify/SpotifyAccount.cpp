@@ -38,7 +38,7 @@
 #include "SourceList.h"
 #include "SpotifyAccountConfig.h"
 #include "SpotifyInfoPlugin.h"
-#include "SpotifyPlaylistUpdater.h"
+//#include "SpotifyPlaylistUpdater.h"
 #include "TomahawkSettings.h"
 #include "Track.h"
 
@@ -490,7 +490,7 @@ SpotifyAccount::aboutToShow( QAction* action, const playlist_ptr& playlist )
 
     action->setVisible( true );
 
-    QList<PlaylistUpdaterInterface*> updaters = playlist->updaters();
+/*    QList<PlaylistUpdaterInterface*> updaters = playlist->updaters();
     foreach ( PlaylistUpdaterInterface* updater, updaters )
     {
         if ( SpotifyPlaylistUpdater* spotifyUpdater = qobject_cast< SpotifyPlaylistUpdater* >( updater ) )
@@ -509,7 +509,7 @@ SpotifyAccount::aboutToShow( QAction* action, const playlist_ptr& playlist )
                 sync = true;
 
         }
-    }
+    }*/
 
     const ActionType actionType = static_cast< ActionType >( action->data().toInt() );
 
@@ -583,7 +583,7 @@ SpotifyAccount::aboutToShow( QAction* action, const playlist_ptr& playlist )
 }
 
 
-SpotifyPlaylistUpdater*
+/*SpotifyPlaylistUpdater*
 SpotifyAccount::getPlaylistUpdater( const playlist_ptr plptr )
 {
     SpotifyPlaylistUpdater* updater = 0;
@@ -602,7 +602,6 @@ SpotifyAccount::getPlaylistUpdater( const playlist_ptr plptr )
 SpotifyPlaylistUpdater*
 SpotifyAccount::getPlaylistUpdater( QObject *sender )
 {
-
     if ( !sender )
     {
         tLog() << "uuh noo, null sender!";
@@ -621,7 +620,7 @@ SpotifyAccount::getPlaylistUpdater( QObject *sender )
 
     if ( playlist.isNull() )
     {
-        qWarning() << "Got context menu spotify action " << senderAction->text() << "triggered, but invalid playlist payload!";
+        qWarning() << "Got context menu spotify action" << senderAction->text() << "triggered, but invalid playlist payload!";
         Q_ASSERT( false );
         return 0;
     }
@@ -636,10 +635,10 @@ SpotifyAccount::getPlaylistUpdater( QObject *sender )
         }
     }
     return updater;
-}
+}*/
 
 
-void
+/*void
 SpotifyAccount::subscribeActionTriggered( QAction* action )
 {
     SpotifyPlaylistUpdater* updater = getPlaylistUpdater( action );
@@ -796,17 +795,17 @@ SpotifyAccount::setSubscribedForPlaylist( const playlist_ptr& playlist, bool sub
 
     updater->setSync( subscribed );
     updater->setSubscribedStatus( subscribed );
-}
+}*/
 
 
-playlist_ptr
+/*playlist_ptr
 SpotifyAccount::playlistFromAction( QAction* action ) const
 {
     if ( !action || !m_customActions.contains( action ) )
         return playlist_ptr();
 
     return action->property( "payload" ).value< playlist_ptr >();
-}
+}*/
 
 
 void
@@ -855,7 +854,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
     }
     else if ( msgType == "allPlaylists" )
     {
-        const QVariantList playlists = msg.value( "playlists" ).toList();
+/*        const QVariantList playlists = msg.value( "playlists" ).toList();
         qDeleteAll( m_allSpotifyPlaylists.values() );
         m_allSpotifyPlaylists.clear();
 
@@ -882,11 +881,11 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         if ( !m_configWidget.isNull() )
         {
             m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists.values() );
-        }
+        }*/
     }
     else if ( msgType == "tracksAdded" )
     {
-        const QString plid = msg.value( "playlistid" ).toString();
+/*        const QString plid = msg.value( "playlistid" ).toString();
         // We should already be syncing this playlist if we get updates for it
 //         Q_ASSERT( m_updaters.contains( plid ) );
 
@@ -913,11 +912,11 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         const QString newRev = msg.value( "revid" ).toString();
         const QString oldRev = msg.value( "oldRev" ).toString();
 
-        updater->spotifyTracksAdded( tracksList, startPos, newRev, oldRev );
+        updater->spotifyTracksAdded( tracksList, startPos, newRev, oldRev );*/
     }
     else if ( msgType == "tracksRemoved" )
     {
-        const QString plid = msg.value( "playlistid" ).toString();
+/*        const QString plid = msg.value( "playlistid" ).toString();
 
         if ( !m_updaters.contains( plid ) )
         {
@@ -951,11 +950,11 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         const QString newRev = msg.value( "revid" ).toString();
         const QString oldRev = msg.value( "oldRev" ).toString();
 
-        updater->spotifyTracksRemoved( tracksList, newRev, oldRev );
+        updater->spotifyTracksRemoved( tracksList, newRev, oldRev );*/
     }
     else if ( msgType == "tracksMoved" )
     {
-        const QString plid = msg.value( "playlistid" ).toString();
+/*        const QString plid = msg.value( "playlistid" ).toString();
         // We should already be syncing this playlist if we get updates for it
         // Q_ASSERT( m_updaters.contains( plid ) );
 
@@ -976,11 +975,11 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         const QString newRev = msg.value( "revid" ).toString();
         const QString oldRev = msg.value( "oldRev" ).toString();
 
-        updater->spotifyTracksMoved( tracksList, newStartPos, newRev, oldRev  );
+        updater->spotifyTracksMoved( tracksList, newStartPos, newRev, oldRev  );*/
     }
     else if ( msgType == "starredChanged" )
     {
-        if ( loveSync() )
+/*        if ( loveSync() )
         {
             const QVariantList tracksList = msg.value( "tracks" ).toList();
             const bool love = msg.value( "starred" ).toBool();
@@ -990,11 +989,11 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
             {
                 query->track()->setLoved( love );
             }
-        }
+        }*/
     }
     else if ( msgType == "playlistMetadataChanged" )
     {
-        const QString plid = msg.value( "id" ).toString();
+/*        const QString plid = msg.value( "id" ).toString();
         // We should already be syncing this playlist if we get updates for it
         //Q_ASSERT( m_updaters.contains( plid ) );
 
@@ -1033,7 +1032,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         {
             tLog() << "Updateing number of subscribers" << subscribers;
             updater->setSubscribers( subscribers );
-        }
+        }*/
     }
     else if ( msgType == "spotifyError" )
     {
@@ -1071,7 +1070,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
 
         if ( success )
         {
-            createActions();
+//            createActions();
             s_instance = this;
         }
         configurationWidget(); // ensure it's created so we can set the login button
@@ -1083,13 +1082,13 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
     }
     else if ( msgType == "playlistDeleted" )
     {
-        const QString plid = msg.value( "playlistid" ).toString();
+/*        const QString plid = msg.value( "playlistid" ).toString();
 
         if ( !m_updaters.contains( plid ) )
             return;
 
         SpotifyPlaylistUpdater* updater = m_updaters.take( plid );
-        updater->remove( false );
+        updater->remove( false );*/
     }
     else if ( msgType == "status" )
     {
@@ -1117,15 +1116,15 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
 void
 SpotifyAccount::clearUser( bool permanentlyDelete )
 {
-    foreach( SpotifyPlaylistUpdater* updater, m_updaters.values() )
+/*    foreach( SpotifyPlaylistUpdater* updater, m_updaters.values() )
     {
         if ( permanentlyDelete )
             updater->remove( false );
         else
             updater->deleteLater();
-    }
+    }*/
 
-    m_updaters.clear();
+//    m_updaters.clear();
 
     qDeleteAll( m_allSpotifyPlaylists.values() );
     m_allSpotifyPlaylists.clear();
@@ -1133,7 +1132,7 @@ SpotifyAccount::clearUser( bool permanentlyDelete )
     m_qidToSlotMap.clear();
     m_waitingForCreateReply.clear();
 
-    removeActions();
+//    removeActions();
 }
 
 
@@ -1153,7 +1152,7 @@ SpotifyAccount::configurationWidget()
     if ( m_configWidget.isNull() )
     {
         m_configWidget = QPointer< SpotifyAccountConfig >( new SpotifyAccountConfig( this ) );
-        connect( m_configWidget.data(), SIGNAL( login( QString,QString ) ), this, SLOT( login( QString,QString ) ) );
+        connect( m_configWidget.data(), SIGNAL( login( QString, QString ) ), this, SLOT( login( QString, QString ) ) );
         connect( m_configWidget.data(), SIGNAL( logout() ), this, SLOT( logout() ) );
         connect( m_configWidget.data(), SIGNAL( updatePrivacy( bool ) ), this, SLOT( privateModeChanged() ) );
         m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists.values() );
@@ -1216,7 +1215,7 @@ SpotifyAccount::saveConfig()
     setConfiguration( config );
 
     m_configWidget.data()->saveSettings();
-    foreach ( SpotifyPlaylistInfo* pl, m_allSpotifyPlaylists.values() )
+/*    foreach ( SpotifyPlaylistInfo* pl, m_allSpotifyPlaylists.values() )
     {
 //        tLog( LOGVERBOSE ) << "Checking changed state:" << pl->changed << "name:" << pl->name << "sync" << pl->sync << "starred:" << pl->starContainer;
         if ( pl->changed )
@@ -1231,7 +1230,7 @@ SpotifyAccount::saveConfig()
             else
                 stopPlaylistSync( pl );
         }
-    }
+    }*/
     sync();
 
     if ( !m_configWidget.data()->loggedInManually() && !m_configWidget.data()->username().isEmpty() && !m_configWidget.data()->password().isEmpty() )
@@ -1266,7 +1265,7 @@ SpotifyAccount::logout()
 }
 
 
-void
+/*void
 SpotifyAccount::startPlaylistSync( SpotifyPlaylistInfo* playlist )
 {
     if ( !playlist )
@@ -1288,11 +1287,10 @@ SpotifyAccount::startPlaylistSync( SpotifyPlaylistInfo* playlist )
         msg[ "_msgtype" ] = "getPlaylist";
         sendMessage( msg, this, "startPlaylistSyncWithPlaylist" );
     }
+}*/
 
-}
 
-
-void
+/*void
 SpotifyAccount::startPlaylistSyncWithPlaylist( const QString& msgType, const QVariantMap& msg, const QVariant& )
 {
     Q_UNUSED( msgType );
@@ -1307,7 +1305,7 @@ SpotifyAccount::startPlaylistSyncWithPlaylist( const QString& msgType, const QVa
     QVariantList tracks = msg.value( "tracks" ).toList();
 
     // create a list of query/plentries directly
-    QList< query_ptr > queries = SpotifyPlaylistUpdater::variantToQueries( tracks );
+    QList< query_ptr > queries = SpotifyPlaylistUpdater::variantToQueries( tracks );*/
     /**
      * Begin syncing a playlist. Two options:
      * 1) This is a playlist that has never been synced to tomahawk. Create a new one
@@ -1316,7 +1314,7 @@ SpotifyAccount::startPlaylistSyncWithPlaylist( const QString& msgType, const QVa
      *    with an inactive SpotifyPlaylistUpdater, so just enable it and bring it up to date by merging current with new
      *    TODO: show a warning( "Do you want to overwrite with spotify's version?" )
      */
-    if ( m_updaters.contains( id ) )
+/*    if ( m_updaters.contains( id ) )
     {
         //Q_ASSERT( m_updaters[ id ]->sync() == false ); /// Should have been unchecked/off before, but might not be if the user
         // changed spotify resolver meanwhile, so allow it for now
@@ -1350,10 +1348,10 @@ SpotifyAccount::startPlaylistSyncWithPlaylist( const QString& msgType, const QVa
         updater->setCollaborative( collaborative );
         m_updaters[ id ] = updater;
     }
-}
+}*/
 
 
-void
+/*void
 SpotifyAccount::playlistCopyCreated( const QString& msgType, const QVariantMap& msg, const QVariant& )
 {
     Q_UNUSED( msgType );
@@ -1381,10 +1379,10 @@ SpotifyAccount::playlistCopyCreated( const QString& msgType, const QVariantMap& 
 
     SpotifyPlaylistInfo *info = new SpotifyPlaylistInfo( title, id, revid, true, false, true );
     startPlaylistSync( info );
-}
+}*/
 
 
-void
+/*void
 SpotifyAccount::playlistCreated( const QString& msgType, const QVariantMap& msg, const QVariant& )
 {
     Q_UNUSED( msgType );
@@ -1413,7 +1411,7 @@ SpotifyAccount::playlistCreated( const QString& msgType, const QVariantMap& msg,
     updater->setOwner( true );
     updater->setSync( true );
     m_updaters[ id ] = updater;
-}
+}*/
 
 
 QString
@@ -1437,7 +1435,7 @@ SpotifyAccount::sendMessage( const QVariantMap &m, QObject* obj, const QString& 
 }
 
 
-bool
+/*bool
 SpotifyAccount::hasPlaylist(const QString& plId)
 {
     return m_updaters.contains( plId );
@@ -1454,8 +1452,8 @@ SpotifyAccount::playlistForURI(const QString& plId)
 void
 SpotifyAccount::registerUpdaterForPlaylist( const QString& plId, SpotifyPlaylistUpdater* updater )
 {
-    m_updaters[ plId ] = updater;
-}
+//    m_updaters[ plId ] = updater;
+}*/
 
 
 void
@@ -1472,18 +1470,18 @@ SpotifyAccount::registerPlaylistInfo( SpotifyPlaylistInfo* info )
 }
 
 
-void
+/*void
 SpotifyAccount::unregisterUpdater( const QString& plid )
 {
     m_updaters.remove( plid );
-}
+}*/
 
 
-void
+/*void
 SpotifyAccount::fetchFullPlaylist( SpotifyPlaylistInfo* playlist )
 {
     Q_UNUSED( playlist );
-}
+}*/
 
 
 bool
@@ -1507,7 +1505,7 @@ SpotifyAccount::persitentPrivacy() const
 }
 
 
-void
+/*void
 SpotifyAccount::stopPlaylistSync( SpotifyPlaylistInfo* playlist, bool forceDontDelete )
 {
     if ( !playlist )
@@ -1546,7 +1544,7 @@ SpotifyAccount::stopPlaylistSync( SpotifyPlaylistInfo* playlist, bool forceDontD
 
         updater->save();
     }
-}
+}*/
 
 
 void
@@ -1559,7 +1557,7 @@ SpotifyAccount::loadPlaylists()
 }
 
 
-void
+/*void
 SpotifyAccount::setSyncForPlaylist( const QString& spotifyPlaylistId, bool sync )
 {
     SpotifyPlaylistInfo* info = m_allSpotifyPlaylists.value( spotifyPlaylistId, 0 );
@@ -1570,10 +1568,10 @@ SpotifyAccount::setSyncForPlaylist( const QString& spotifyPlaylistId, bool sync 
 
     if ( !m_configWidget.isNull() )
         m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists.values() );
-}
+}*/
 
 
-void
+/*void
 SpotifyAccount::createActions()
 {
     if ( !m_customActions.isEmpty() )
@@ -1613,5 +1611,5 @@ SpotifyAccount::removeActions()
         ActionCollection::instance()->removeAction( action );
 
     m_customActions.clear();
-}
+}*/
 

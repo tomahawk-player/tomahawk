@@ -24,7 +24,7 @@
 #include "Typedefs.h"
 #include "Query.h"
 #include "jobview/JobStatusItem.h"
-#include "accounts/spotify/SpotifyPlaylistUpdater.h"
+//#include "accounts/spotify/SpotifyPlaylistUpdater.h"
 #include "accounts/spotify/SpotifyAccount.h"
 #include <QObject>
 #include <QSet>
@@ -40,7 +40,6 @@
 
 class NetworkReply;
 class SpotifyAccount;
-class SpotifyPlaylistUpdater;
 
 namespace Tomahawk
 {

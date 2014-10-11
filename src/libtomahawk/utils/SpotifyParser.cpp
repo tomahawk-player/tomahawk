@@ -408,13 +408,13 @@ SpotifyParser::checkBrowseFinished()
                 spotifyUsername = creds.value( "username" ).toString();
             }
 
-            if ( spotifyAccountLoggedIn &&  Accounts::SpotifyAccount::instance()->hasPlaylist( m_browseUri ) )
+/*            if ( spotifyAccountLoggedIn &&  Accounts::SpotifyAccount::instance()->hasPlaylist( m_browseUri ) )
             {
                 // The playlist is already registered with Tomahawk, so just open it instead of adding another instance.
                 m_playlist = Accounts::SpotifyAccount::instance()->playlistForURI( m_browseUri );
                 playlistCreated();
             }
-            else
+            else*/
             {
                 m_playlist = Playlist::create( SourceList::instance()->getLocal(),
                                        uuid(),
@@ -426,7 +426,7 @@ SpotifyParser::checkBrowseFinished()
 
                 connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistCreated() ) );
 
-                if ( spotifyAccountLoggedIn )
+/*                if ( spotifyAccountLoggedIn )
                 {
                     SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater(
                                                         Accounts::SpotifyAccount::instance(), m_playlist->currentrevision(), m_browseUri, m_playlist );
@@ -446,8 +446,7 @@ SpotifyParser::checkBrowseFinished()
                     // On default, set the playlist as subscribed
                     if( !updater->owner() )
                         Accounts::SpotifyAccount::instance()->setSubscribedForPlaylist( m_playlist, true );
-
-                }
+                }*/
             }
             return;
         }
