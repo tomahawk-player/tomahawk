@@ -189,7 +189,7 @@ PlayableProxyModel::visibilityFilterAcceptsRow( int sourceRow, const QModelIndex
         return true;
 
     int items = 0;
-    for ( int i = 0; i < sourceRow; i++ )
+    for ( int i = 0; ( i < sourceRow ) && ( items < m_maxVisibleItems ) ; i++ )
     {
         if ( dupeFilterAcceptsRow( i, sourceParent ) && nameFilterAcceptsRow( i, sourceParent ) )
         {
