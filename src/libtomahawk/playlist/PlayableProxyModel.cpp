@@ -145,15 +145,12 @@ PlayableProxyModel::setSourcePlayableModel( PlayableModel* sourceModel )
 bool
 PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
 {
-    bool dupeFilter = true;
-    bool visibilityFilter = true;
+    if ( m_hideDupeItems && !dupeFilterAcceptsRow( sourceRow, sourceParent ) )
+        return false;
+    if ( m_maxVisibleItems > 0 && !visibilityFilterAcceptsRow( sourceRow, sourceParent ) )
+        return false;
 
-    if ( m_hideDupeItems )
-        dupeFilter = dupeFilterAcceptsRow( sourceRow, sourceParent );
-    if ( m_maxVisibleItems > 0 )
-        visibilityFilter = visibilityFilterAcceptsRow( sourceRow, sourceParent );
-
-    return ( dupeFilter && visibilityFilter && nameFilterAcceptsRow( sourceRow, sourceParent ) );
+    return nameFilterAcceptsRow( sourceRow, sourceParent );
 }
 
 
