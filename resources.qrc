@@ -17,21 +17,6 @@
         <file>data/images/shuffle.svg</file>
         <file>data/images/repeat.svg</file>
         <file>data/images/user-avatar.svg</file>
-        <file>data/images/view-toggle-active-centre.png</file>
-        <file>data/images/view-toggle-active-left.png</file>
-        <file>data/images/view-toggle-active-right.png</file>
-        <file>data/images/view-toggle-icon-artist-active.svg</file>
-        <file>data/images/view-toggle-icon-artist-inactive.svg</file>
-        <file>data/images/view-toggle-icon-grid-active.svg</file>
-        <file>data/images/view-toggle-icon-grid-inactive.svg</file>
-        <file>data/images/view-toggle-icon-list-active.svg</file>
-        <file>data/images/view-toggle-icon-list-inactive.svg</file>
-        <file>data/images/view-toggle-inactive-centre.png</file>
-        <file>data/images/view-toggle-inactive-left.png</file>
-        <file>data/images/view-toggle-inactive-right.png</file>
-        <file>data/images/view-toggle-pressed-centre.png</file>
-        <file>data/images/view-toggle-pressed-left.png</file>
-        <file>data/images/view-toggle-pressed-right.png</file>
         <file>data/images/list-add.svg</file>
         <file>data/images/list-remove.svg</file>
         <file>data/images/arrow-down-double.svg</file>
