@@ -27,10 +27,6 @@ DelegateConfigWrapper::DelegateConfigWrapper( AccountConfigWidget* conf, QWidget
     , m_aboutW( aboutWidget )
     , m_deleted( false )
 {
-    m_widget->setWindowFlags( Qt::Sheet );
-#ifdef Q_WS_MAC
-    m_widget->setVisible( true );
-#endif
     setWindowTitle( title );
     QVBoxLayout* v = new QVBoxLayout( this );
     v->setContentsMargins( 0, 0, 0, 0 );
@@ -57,26 +53,21 @@ DelegateConfigWrapper::DelegateConfigWrapper( AccountConfigWidget* conf, QWidget
 
     QHBoxLayout* h = new QHBoxLayout( this );
     h->addWidget( m_buttons );
-    if( m_widget && m_widget->layout() )
+    if ( m_widget && m_widget->layout() )
         h->setContentsMargins( m_widget->layout()->contentsMargins() );
-    else if( m_widget )
+    else if ( m_widget )
         h->setContentsMargins( m_widget->contentsMargins() );
 
     v->addLayout( h );
-
     setLayout( v );
 
-#ifdef Q_WS_MAC
-    setSizeGripEnabled( false );
-    setMinimumSize( sizeHint() );
-    setMaximumSize( sizeHint() ); // to remove the resize grip on osx this is the only way
-
-    if( conf->metaObject()->indexOfSignal( "sizeHintChanged()" ) > -1 )
-        connect( conf, SIGNAL( sizeHintChanged() ), this, SLOT( updateSizeHint() ) );
-#else
     m_widget->setVisible( true );
-#endif
 
+    setSizeGripEnabled( false );
+    updateSizeHint();
+
+    if ( conf->metaObject()->indexOfSignal( "sizeHintChanged()" ) > -1 )
+        connect( conf, SIGNAL( sizeHintChanged() ), this, SLOT( updateSizeHint() ) );
 }
 
 
@@ -155,9 +146,7 @@ DelegateConfigWrapper::rejected()
 void
 DelegateConfigWrapper::updateSizeHint()
 {
-    setSizeGripEnabled( false );
-    setMinimumSize( sizeHint() );
-    setMaximumSize( sizeHint() );
+    setFixedSize( sizeHint() );
 }
 
 
