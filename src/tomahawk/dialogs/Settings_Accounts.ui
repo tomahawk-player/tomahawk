@@ -27,7 +27,7 @@
     <number>2</number>
    </property>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,1,0,0">
      <item>
       <widget class="QButton" name="installFromFileBtn" native="true">
        <property name="sizePolicy">

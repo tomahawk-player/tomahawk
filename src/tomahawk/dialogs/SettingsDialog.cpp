@@ -216,7 +216,7 @@ SettingsDialog::SettingsDialog(QObject *parent )
 #else
     m_accountsWidget->setContentsMargins( 6, 6, 6, 6 );
     m_accountsWidgetUi->horizontalLayout->setContentsMargins( 0, 0, 0, 0 );
-    m_accountsWidgetUi->installFromFileBtn->setContentsMargins( -4, 0, 0, 0 );
+    m_accountsWidgetUi->installFromFileBtn->setContentsMargins( 0, 0, 0, 0 );
     m_accountsWidget->setMinimumSize( 550, 400 );
     m_accountsWidgetUi->accountsView->setAttribute( Qt::WA_MacShowFocusRect, false );
 
