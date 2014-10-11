@@ -35,6 +35,7 @@ DelegateConfigWrapper::DelegateConfigWrapper( AccountConfigWidget* conf, QWidget
     QVBoxLayout* v = new QVBoxLayout( this );
     v->setContentsMargins( 0, 0, 0, 0 );
     v->addWidget( m_widget );
+    v->addStretch();
 
     QDialogButtonBox::StandardButtons buttons = QDialogButtonBox::Ok | QDialogButtonBox::Cancel;
     if ( m_aboutW )
