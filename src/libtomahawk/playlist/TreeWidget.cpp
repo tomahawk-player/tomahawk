@@ -90,13 +90,6 @@ TreeWidget::pixmap() const
 
 
 bool
-TreeWidget::showFilter() const
-{
-     return true;
-}
-
-
-bool
 TreeWidget::setFilter( const QString& filter )
 {
     ViewPage::setFilter( filter );

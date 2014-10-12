@@ -61,8 +61,6 @@
 #include <QMetaMethod>
 
 
-#define FILTER_TIMEOUT 280
-
 using namespace Tomahawk;
 
 ViewManager* ViewManager::s_instance = 0;
@@ -423,26 +421,6 @@ ViewManager::showInboxPage()
     }
 
     return show( m_inboxWidget );
-}
-
-
-void
-ViewManager::setFilter( const QString& filter )
-{
-    m_filter = filter;
-
-    m_filterTimer.stop();
-    m_filterTimer.setInterval( FILTER_TIMEOUT );
-    m_filterTimer.setSingleShot( true );
-    m_filterTimer.start();
-}
-
-
-void
-ViewManager::applyFilter()
-{
-    if ( m_currentPage )
-        m_currentPage->setFilter( m_filter );
 }
 
 

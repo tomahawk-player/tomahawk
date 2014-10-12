@@ -113,8 +113,6 @@ public:
     void addDynamicPage( Tomahawk::ViewPagePlugin* viewPage, const QString& pageName = QString() );
 
 signals:
-    void filterAvailable( bool b );
-
     void playClicked();
     void pauseClicked();
 
@@ -202,9 +200,6 @@ private:
     Tomahawk::ViewPage* m_currentPage;
 
     Tomahawk::collection_ptr m_currentCollection;
-
-    QTimer m_filterTimer;
-    QString m_filter;
 
     static ViewManager* s_instance;
 };
