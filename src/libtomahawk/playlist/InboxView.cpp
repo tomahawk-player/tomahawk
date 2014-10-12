@@ -80,13 +80,15 @@ InboxView::onMenuTriggered( int action )
 InboxPage::InboxPage( QWidget* parent )
     : PlaylistViewPage( parent )
 {
+    InboxView* inboxView = new InboxView( this );
     view()->setCaption( tr( "Inbox Details" ) );
 
     setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::Inbox ) );
 
-    view()->trackView()->setPlayableModel( ViewManager::instance()->inboxModel() );
-    view()->trackView()->setEmptyTip( tr( "Your friends have not shared any recommendations with you yet. Connect with them and share your musical gems!" ) );
+    TrackItemDelegate* delegate = new TrackItemDelegate( TrackItemDelegate::Inbox, inboxView, inboxView->proxyModel() );
+    inboxView->setPlaylistItemDelegate( delegate );
 
-    TrackItemDelegate* delegate = new TrackItemDelegate( TrackItemDelegate::Inbox, view()->trackView(), view()->trackView()->proxyModel() );
-    view()->trackView()->setPlaylistItemDelegate( delegate );
+    view()->setTrackView( inboxView );
+    inboxView->setPlayableModel( ViewManager::instance()->inboxModel() );
+    inboxView->setEmptyTip( tr( "Your friends have not shared any recommendations with you yet. Connect with them and share your musical gems!" ) );
 }
