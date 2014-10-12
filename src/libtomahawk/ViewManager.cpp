@@ -21,9 +21,11 @@
 
 #include "ViewManager.h"
 
+#include "SourceList.h"
+#include "TomahawkSettings.h"
+
 #include "audio/AudioEngine.h"
 
-#include "playlist/PlaylistViewPage.h"
 #include "playlist/ContextView.h"
 #include "playlist/FlexibleTreeView.h"
 #include "playlist/TreeModel.h"
@@ -34,20 +36,21 @@
 #include "playlist/ColumnView.h"
 #include "playlist/GridView.h"
 #include "playlist/AlbumModel.h"
-#include "SourceList.h"
-#include "TomahawkSettings.h"
-
 #include "playlist/InboxModel.h"
 #include "playlist/InboxView.h"
 #include "playlist/TrackItemDelegate.h"
 #include "playlist/RecentlyPlayedModel.h"
 #include "playlist/dynamic/widgets/DynamicWidget.h"
+
 #include "resolvers/ScriptCollection.h"
-#include "widgets/NewReleasesWidget.h"
+
+#include "viewpages/PlaylistViewPage.h"
 #include "viewpages/SourceViewPage.h"
 #include "viewpages/ArtistViewPage.h"
 #include "viewpages/AlbumViewPage.h"
 #include "viewpages/TrackViewPage.h"
+
+#include "widgets/NewReleasesWidget.h"
 #include "widgets/AnimatedSplitter.h"
 
 #include "utils/Logger.h"

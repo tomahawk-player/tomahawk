@@ -38,7 +38,6 @@ set( libGuiSources
     playlist/InboxModel.cpp
     playlist/InboxView.cpp
     playlist/ContextView.cpp
-    playlist/PlaylistViewPage.cpp
     playlist/FlexibleTreeView.cpp
     playlist/TreeModel.cpp
     playlist/TreeProxyModel.cpp
@@ -116,6 +115,13 @@ set( libGuiSources
     utils/NetworkAccessManager.cpp
     utils/ShortLinkHelper.cpp
 
+    viewpages/SearchViewPage.cpp
+    viewpages/SourceViewPage.cpp
+    viewpages/ArtistViewPage.cpp
+    viewpages/AlbumViewPage.cpp
+    viewpages/TrackViewPage.cpp
+    viewpages/PlaylistViewPage.cpp
+
     widgets/AnimatedCounterLabel.cpp
     widgets/AnimatedSplitter.cpp
     widgets/BasicHeader.cpp
@@ -146,11 +152,7 @@ set( libGuiSources
     widgets/SeekSlider.cpp
     widgets/SourceTreePopupDialog.cpp
     widgets/ToggleButton.cpp
-    viewpages/SearchViewPage.cpp
-    viewpages/SourceViewPage.cpp
-    viewpages/ArtistViewPage.cpp
-    viewpages/AlbumViewPage.cpp
-    viewpages/TrackViewPage.cpp
+
     widgets/searchlineedit/ClearButton.cpp
     widgets/searchlineedit/LineEdit.cpp
     widgets/searchlineedit/SearchButton.cpp

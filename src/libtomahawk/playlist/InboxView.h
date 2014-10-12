@@ -22,7 +22,7 @@
 #define INBOXVIEW_H
 
 #include "TrackView.h"
-#include "PlaylistViewPage.h"
+#include "viewpages/PlaylistViewPage.h"
 
 class InboxView : public TrackView
 {

@@ -19,7 +19,7 @@
 #ifndef QUEUEVIEW_H
 #define QUEUEVIEW_H
 
-#include "playlist/PlaylistViewPage.h"
+#include "viewpages/PlaylistViewPage.h"
 
 #include "DllMacro.h"
 

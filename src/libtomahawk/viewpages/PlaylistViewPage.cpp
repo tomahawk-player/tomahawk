@@ -25,7 +25,7 @@
 #include "widgets/FilterHeader.h"
 #include "playlist/ContextView.h"
 #include "playlist/TrackView.h"
-#include "PlayableProxyModelPlaylistInterface.h"
+#include "playlist/PlayableProxyModelPlaylistInterface.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/ImageRegistry.h"
 #include "utils/Logger.h"

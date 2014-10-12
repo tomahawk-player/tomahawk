@@ -19,7 +19,7 @@
 #ifndef HISTORY_WIDGET_H
 #define HISTORY_WIDGET_H
 
-#include "playlist/PlaylistViewPage.h"
+#include "viewpages/PlaylistViewPage.h"
 #include "Query.h"
 #include "Source.h"
 #include "DllMacro.h"

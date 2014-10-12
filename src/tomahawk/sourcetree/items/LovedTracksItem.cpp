@@ -24,7 +24,7 @@
 #include "DropJob.h"
 #include "ViewManager.h"
 
-#include "playlist/PlaylistViewPage.h"
+#include "viewpages/PlaylistViewPage.h"
 #include "playlist/ContextView.h"
 #include "playlist/TrackView.h"
 #include "playlist/TopLovedTracksModel.h"
