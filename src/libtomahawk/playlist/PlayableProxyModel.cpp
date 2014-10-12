@@ -276,7 +276,7 @@ PlayableProxyModel::nameFilterAcceptsRow( int sourceRow, PlayableItem* pi, const
         return found;
     }
 
-    const Tomahawk::album_ptr& ar = pi->album();
+    const Tomahawk::artist_ptr& ar = pi->artist();
     if ( ar )
     {
         QStringList sl = filterRegExp().pattern().split( " ", QString::SkipEmptyParts );
@@ -284,8 +284,7 @@ PlayableProxyModel::nameFilterAcceptsRow( int sourceRow, PlayableItem* pi, const
         bool found = true;
         foreach( const QString& s, sl )
         {
-            if ( !ar->name().contains( s, Qt::CaseInsensitive ) &&
-                 !ar->artist()->name().contains( s, Qt::CaseInsensitive ) )
+            if ( !ar->name().contains( s, Qt::CaseInsensitive ) )
             {
                 found = false;
             }
