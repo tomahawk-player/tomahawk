@@ -27,6 +27,20 @@
 
 #include "DllMacro.h"
 
+class PlayableProxyModelFilterMemo
+{
+public:
+    PlayableProxyModelFilterMemo()
+    {
+        // First element always has no predecessors.
+        // TODO C++11: Make this a constexpr using initializer lists.
+        visibilty.push_back( 0 );
+    }
+
+    virtual ~PlayableProxyModelFilterMemo() {}
+    std::vector<int> visibilty;
+};
+
 class DLLEXPORT PlayableProxyModel : public QSortFilterProxyModel
 {
 Q_OBJECT
@@ -43,7 +57,7 @@ public:
 
     virtual QString guid() const;
 
-    virtual PlayableModel* sourceModel() const { return m_model; }
+    PlayableModel* sourceModel() const { return m_model; }
     virtual void setSourcePlayableModel( PlayableModel* sourceModel );
     virtual void setSourceModel( QAbstractItemModel* model );
 
@@ -59,18 +73,18 @@ public:
     virtual void removeIndexes( const QModelIndexList& indexes );
     virtual void removeIndexes( const QList< QPersistentModelIndex >& indexes );
 
-    virtual bool showOfflineResults() const { return m_showOfflineResults; }
-    virtual void setShowOfflineResults( bool b );
+    bool showOfflineResults() const { return m_showOfflineResults; }
+    void setShowOfflineResults( bool b );
 
-    virtual bool hideDupeItems() const { return m_hideDupeItems; }
-    virtual void setHideDupeItems( bool b );
+    bool hideDupeItems() const { return m_hideDupeItems; }
+    void setHideDupeItems( bool b );
 
-    virtual int maxVisibleItems() const { return m_maxVisibleItems; }
-    virtual void setMaxVisibleItems( int items );
+    int maxVisibleItems() const { return m_maxVisibleItems; }
+    void setMaxVisibleItems( int items );
 
-    virtual PlayableItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
-    virtual PlayableItem* itemFromQuery( const Tomahawk::query_ptr& query ) const { return sourceModel()->itemFromQuery( query ); }
-    virtual PlayableItem* itemFromResult( const Tomahawk::result_ptr& result ) const { return sourceModel()->itemFromResult( result ); }
+    PlayableItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
+    PlayableItem* itemFromQuery( const Tomahawk::query_ptr& query ) const { return sourceModel()->itemFromQuery( query ); }
+    PlayableItem* itemFromResult( const Tomahawk::result_ptr& result ) const { return sourceModel()->itemFromResult( result ); }
 
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
     void setPlaylistInterface( const Tomahawk::playlistinterface_ptr& playlistInterface );
@@ -103,7 +117,7 @@ signals:
     void selectRequest( const QPersistentModelIndex& index );
 
 protected:
-    virtual bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
+    bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const Q_DECL_OVERRIDE;
     virtual bool lessThan( const QModelIndex& left, const QModelIndex& right ) const;
 
     Tomahawk::playlistinterface_ptr m_playlistInterface;
@@ -117,9 +131,10 @@ private slots:
     void onCurrentIndexChanged( const QModelIndex& newIndex, const QModelIndex& oldIndex );
 
 private:
-    bool nameFilterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
-    bool dupeFilterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
-    bool visibilityFilterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
+    bool filterAcceptsRowInternal( int sourceRow, PlayableItem* pi, const QModelIndex& sourceParent, PlayableProxyModelFilterMemo& memo ) const;
+    bool nameFilterAcceptsRow( int sourceRow, PlayableItem* pi, const QModelIndex& sourceParent ) const;
+    bool dupeFilterAcceptsRow( int sourceRow, PlayableItem* pi, const QModelIndex& sourceParent, PlayableProxyModelFilterMemo& memo ) const;
+    bool visibilityFilterAcceptsRow( int sourceRow, const QModelIndex& sourceParent, PlayableProxyModelFilterMemo& memo ) const;
     bool lessThan( int column, const Tomahawk::query_ptr& left, const Tomahawk::query_ptr& right ) const;
 
     PlayableModel* m_model;
