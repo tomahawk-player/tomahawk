@@ -242,21 +242,21 @@ Database::enqueue( const Tomahawk::dbcmd_ptr& lc )
         {
             workerThread = m_workerThreads.at( i );
 
-            if ( workerThread && workerThread.data()->worker() && !workerThread.data()->worker().data()->busy() )
+            if ( workerThread && workerThread->worker() && !workerThread->worker()->busy() )
             {
-                happyWorker = workerThread.data()->worker();
+                happyWorker = workerThread->worker();
                 break;
             }
             busyThreads++;
 
-            if ( ( !happyWorker && workerThread && workerThread.data()->worker() ) ||
-                 ( workerThread && workerThread.data()->worker() && workerThread.data()->worker().data()->outstandingJobs() < happyWorker.data()->outstandingJobs() ) )
-                happyWorker = workerThread.data()->worker();
+            if ( ( !happyWorker && workerThread && workerThread->worker() ) ||
+                 ( workerThread && workerThread->worker() && workerThread->worker()->outstandingJobs() < happyWorker->outstandingJobs() ) )
+                happyWorker = workerThread->worker();
         }
 
         tDebug( LOGVERBOSE ) << "Enqueueing command to thread:" << happyWorker << busyThreads << lc->commandname();
         Q_ASSERT( happyWorker );
-        happyWorker.data()->enqueue( lc );
+        happyWorker->enqueue( lc );
     }
 }
 
