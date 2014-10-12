@@ -23,10 +23,6 @@
 #include "ui_NewReleasesWidget.h"
 
 #include "ViewManager.h"
-#include "SourceList.h"
-#include "TomahawkSettings.h"
-#include "Pipeline.h"
-
 #include "audio/AudioEngine.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
@@ -36,11 +32,6 @@
 #include <QPainter>
 #include <QStandardItemModel>
 #include <QStandardItem>
-
-
-#define HISTORY_TRACK_ITEMS 25
-#define HISTORY_PLAYLIST_ITEMS 10
-#define HISTORY_RESOLVING_TIMEOUT 2500
 
 using namespace Tomahawk;
 using namespace Tomahawk::Widgets;

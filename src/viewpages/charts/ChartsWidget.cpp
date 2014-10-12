@@ -25,7 +25,6 @@
 
 #include "MetaPlaylistInterface.h"
 #include "TomahawkSettings.h"
-#include "Pipeline.h"
 
 #include "audio/AudioEngine.h"
 #include "playlist/GridItemDelegate.h"
@@ -36,11 +35,6 @@
 #include "utils/TomahawkUtilsGui.h"
 
 #include <QStandardItemModel>
-
-
-#define HISTORY_TRACK_ITEMS 25
-#define HISTORY_PLAYLIST_ITEMS 10
-#define HISTORY_RESOLVING_TIMEOUT 2500
 
 using namespace Tomahawk;
 using namespace Tomahawk::Widgets;
@@ -568,7 +562,6 @@ ChartsWidget::chartTracksLoaded( ChartDataLoader* loader, const QList< query_ptr
 
     if ( m_trackModels.contains( chartId ) )
     {
-//        Pipeline::instance()->resolve( tracks );
         m_trackModels[ chartId ]->appendQueries( tracks );
     }
 
