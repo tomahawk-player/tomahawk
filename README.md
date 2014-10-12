@@ -12,8 +12,6 @@ Tomahawk is basically a **music metadata player**.  At its core it decouples the
 
 ## MUSIC SOURCES
 
-It continues to change and evolve, but at the time of this writing:
-
 * Local music library (MP3, Ogg, FLAC and many other formats)
 * Networked music libraries (other connected computers)
 
