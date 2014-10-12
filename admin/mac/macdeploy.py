@@ -223,6 +223,7 @@ TOMAHAWK_PLUGINS = [
   'libtomahawk_viewpage_dashboard.so',
 #  'libtomahawk_viewpage_networkactivity.so',
   'libtomahawk_viewpage_charts.so',
+  'libtomahawk_viewpage_newreleases.so',
   'libtomahawk_viewpage_whatsnew_0_8.so',
 ]
 
