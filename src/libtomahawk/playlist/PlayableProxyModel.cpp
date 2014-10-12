@@ -156,9 +156,9 @@ PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePa
 bool
 PlayableProxyModel::filterAcceptsRowInternal( int sourceRow, PlayableItem* pi, const QModelIndex& sourceParent ) const
 {
-    if ( m_hideDupeItems && !dupeFilterAcceptsRow( sourceRow, pi, sourceParent ) )
-        return false;
     if ( m_maxVisibleItems > 0 && !visibilityFilterAcceptsRow( sourceRow, sourceParent ) )
+        return false;
+    if ( m_hideDupeItems && !dupeFilterAcceptsRow( sourceRow, pi, sourceParent ) )
         return false;
 
     return nameFilterAcceptsRow( sourceRow, pi, sourceParent );
