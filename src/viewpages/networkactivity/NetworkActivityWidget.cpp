@@ -145,7 +145,7 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     }
     {
         QFont f = d->ui->trendingTracksLabel->font();
-        f.setFamily( "Pathway Gothic One" );
+        f.setFamily( "Roboto" );
 
         QPalette p = d->ui->trendingTracksLabel->palette();
         p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_CAPTION );
@@ -159,7 +159,7 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
         TomahawkStyle::stylePageFrame( d->ui->playlistsFrame );
 
         QFont f = d->ui->hotPlaylistsLabel->font();
-        f.setFamily( "Pathway Gothic One" );
+        f.setFamily( "Roboto" );
 
         QPalette p = d->ui->hotPlaylistsLabel->palette();
         p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_CAPTION );
@@ -205,7 +205,7 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     }
     {
         QFont f = d->ui->trendingArtistsLabel->font();
-        f.setFamily( "Pathway Gothic One" );
+        f.setFamily( "Roboto" );
 
         QPalette p = d->ui->trendingArtistsLabel->palette();
         p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_CAPTION );

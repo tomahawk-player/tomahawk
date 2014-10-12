@@ -55,7 +55,7 @@ SplashWidget::SplashWidget()
 
     font.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
     font.setBold( true );
-    font.setFamily( "Titillium Web" );
+    font.setFamily( "Roboto" );
     setFont( font );
 }
 

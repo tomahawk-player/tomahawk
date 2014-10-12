@@ -114,9 +114,6 @@
         <file>data/images/network-activity.svg</file>
         <file>data/images/play.svg</file>
         <file>data/images/pause.svg</file>
-        <file>data/fonts/TitilliumWeb-Bold.ttf</file>
-        <file>data/fonts/TitilliumWeb-Regular.ttf</file>
-        <file>data/fonts/PathwayGothicOne-Regular.ttf</file>
         <file>data/fonts/Roboto-Bold.ttf</file>
         <file>data/fonts/Roboto-Medium.ttf</file>
         <file>data/fonts/Roboto-Regular.ttf</file>
