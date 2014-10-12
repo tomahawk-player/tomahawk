@@ -32,8 +32,6 @@
 #include "playlist/PlayableProxyModel.h"
 #include "playlist/PlayableModel.h"
 #include "playlist/ColumnView.h"
-#include "playlist/TreeView.h"
-#include "playlist/TreeWidget.h"
 #include "playlist/GridView.h"
 #include "playlist/AlbumModel.h"
 #include "SourceList.h"
@@ -91,12 +89,6 @@ ViewManager::ViewManager( QObject* parent )
     m_inboxModel->setIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::Inbox ) );
 
     m_widget->layout()->addWidget( m_stack );
-
-    m_superCollectionView = new TreeWidget();
-    m_superCollectionView->view()->proxyModel()->setStyle( PlayableProxyModel::Collection );
-    m_superCollectionModel = new TreeModel( m_superCollectionView );
-    m_superCollectionView->view()->setTreeModel( m_superCollectionModel );
-//    m_superCollectionView->proxyModel()->setShowOfflineResults( false );
 
     m_stack->setContentsMargins( 0, 0, 0, 0 );
     m_widget->setContentsMargins( 0, 0, 0, 0 );
@@ -336,29 +328,6 @@ ViewManager::show( ViewPage* page )
     setPage( page );
 
     return page;
-}
-
-
-Tomahawk::ViewPage*
-ViewManager::showSuperCollection()
-{
-    if ( m_superCollections.isEmpty() )
-        m_superCollectionModel->addAllCollections();
-
-    foreach( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
-    {
-        if ( !m_superCollections.contains( source->dbCollection() ) )
-        {
-            m_superCollections.append( source->dbCollection() );
-//            m_superAlbumModel->addCollection( source->collection() );
-        }
-    }
-
-    m_superCollectionModel->setTitle( tr( "SuperCollection" ) );
-    m_superCollectionModel->setDescription( tr( "Combined libraries of all your online friends" ) );
-
-    setPage( m_superCollectionView );
-    return m_superCollectionView;
 }
 
 
@@ -682,14 +651,6 @@ ViewManager::dynamicPlaylistForInterface( Tomahawk::playlistinterface_ptr interf
 }
 
 
-bool
-ViewManager::isSuperCollectionVisible() const
-{
-    return ( currentPage() != 0 &&
-           ( currentPage()->playlistInterface() == m_superCollectionView->playlistInterface() ) );
-}
-
-
 void
 ViewManager::showCurrentTrack()
 {
@@ -788,13 +749,6 @@ ViewManager::showDynamicPage( const QString& pageName )
     }
 
     return show( dynamicPageWidget( pageName ) );
-}
-
-
-Tomahawk::ViewPage*
-ViewManager::superCollectionView() const
-{
-    return m_superCollectionView;
 }
 
 

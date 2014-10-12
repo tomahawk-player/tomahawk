@@ -28,7 +28,6 @@
 #include "playlist/TreeModel.h"
 #include "playlist/ColumnView.h"
 #include "playlist/TrackView.h"
-#include "playlist/TreeView.h"
 #include "playlist/GridView.h"
 #include "PlayableProxyModelPlaylistInterface.h"
 #include "TomahawkSettings.h"

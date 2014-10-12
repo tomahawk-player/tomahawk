@@ -43,7 +43,6 @@ set( libGuiSources
     playlist/TreeModel.cpp
     playlist/TreeProxyModel.cpp
     playlist/TreeProxyModelPlaylistInterface.cpp
-    playlist/TreeItemDelegate.cpp
     playlist/ColumnItemDelegate.cpp
     playlist/ColumnViewPreviewWidget.cpp
     playlist/PlaylistModel.cpp
@@ -57,9 +56,7 @@ set( libGuiSources
     playlist/AlbumModel.cpp
     playlist/GridItemDelegate.cpp
     playlist/GridView.cpp
-    playlist/TreeView.cpp
     playlist/ColumnView.cpp
-    playlist/TreeWidget.cpp
     playlist/ViewHeader.cpp
     playlist/LovedTracksModel.cpp
     playlist/RecentlyLovedTracksModel.cpp

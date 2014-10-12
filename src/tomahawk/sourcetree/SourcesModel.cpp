@@ -37,7 +37,6 @@
 #include "GlobalActionManager.h"
 #include "DropJob.h"
 #include "items/PlaylistItems.h"
-#include "playlist/TreeView.h"
 #include "playlist/dynamic/widgets/DynamicWidget.h"
 #include "utils/Closure.h"
 #include "utils/ImageRegistry.h"

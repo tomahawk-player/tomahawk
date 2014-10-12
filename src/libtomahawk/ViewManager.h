@@ -41,7 +41,6 @@ class AlbumModel;
 class GridView;
 class AlbumInfoWidget;
 class ArtistInfoWidget;
-class TreeWidget;
 class CollectionModel;
 class PlaylistViewPage;
 class FlexibleTreeView;
@@ -77,7 +76,6 @@ public:
     QueueView* queue() const { return m_queue; }
     void setQueue( QueueView* queue ) { m_queue = queue; }
 
-    bool isSuperCollectionVisible() const;
     bool isNewPlaylistPageVisible() const;
 
     Tomahawk::playlistinterface_ptr currentPlaylistInterface() const;
@@ -87,7 +85,6 @@ public:
     Tomahawk::ViewPage* show( Tomahawk::ViewPage* page );
 
     Tomahawk::ViewPage* newReleasesWidget() const;
-    Tomahawk::ViewPage* superCollectionView() const;
     Tomahawk::ViewPage* inboxWidget() const;
 
     Tomahawk::ViewPage* dynamicPageWidget( const QString& pageName ) const;
@@ -125,7 +122,6 @@ signals:
     void viewPageAdded( const QString& pageName, Tomahawk::ViewPage* page, int sortValue );
 
 public slots:
-    Tomahawk::ViewPage* showSuperCollection();
     Tomahawk::ViewPage* showNewReleasesPage();
     Tomahawk::ViewPage* showInboxPage();
     Tomahawk::ViewPage* showQueuePage();
@@ -167,8 +163,6 @@ private:
     QStackedWidget* m_stack;
     AnimatedSplitter* m_splitter;
 
-    TreeModel* m_superCollectionModel;
-    TreeWidget* m_superCollectionView;
     QueueView* m_queue;
     NewReleasesWidget* m_newReleasesWidget;
     Tomahawk::ViewPage* m_inboxWidget;
@@ -177,8 +171,6 @@ private:
     QHash< QString, Tomahawk::ViewPage* > m_dynamicPages;
     QHash< QString, QPointer< Tomahawk::ViewPagePlugin > > m_dynamicPagePlugins;
     QHash< QString, boost::function< Tomahawk::ViewPage*() > > m_dynamicPagesInstanceLoaders;
-
-    QList< Tomahawk::collection_ptr > m_superCollections;
 
     QHash< Tomahawk::dynplaylist_ptr, QPointer<Tomahawk::DynamicWidget> > m_dynamicWidgets;
     QHash< Tomahawk::collection_ptr, QPointer<FlexibleTreeView> > m_collectionViews;

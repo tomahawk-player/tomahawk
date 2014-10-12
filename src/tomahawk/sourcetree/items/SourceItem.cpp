@@ -65,8 +65,7 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
     , m_latestAdditionsPage( 0 )
     , m_recentPlaysPage( 0 )
 {
-    if ( !m_source )
-        return;
+    Q_ASSERT( m_source );
 
     connect( source.data(), SIGNAL( collectionAdded( Tomahawk::collection_ptr ) ),
              SLOT( onCollectionAdded( Tomahawk::collection_ptr ) ) );
@@ -215,10 +214,7 @@ void
 SourceItem::activate()
 {
     ViewPage* p = 0;
-    if ( source().isNull() )
-        p = ViewManager::instance()->showSuperCollection();
-    else
-        emit toggleExpandRequest( this );
+    emit toggleExpandRequest( this );
 
     model()->linkSourceItemToPage( this, p );
 }
@@ -238,10 +234,8 @@ SourceItem::pixmap( const QSize& size ) const
     {
         return TomahawkUtils::defaultPixmap( TomahawkUtils::SuperCollection, TomahawkUtils::Original, size );
     }
-    else
-    {
-        return m_source->avatar( TomahawkUtils::RoundedCorners, size, true );
-    }
+
+    return m_source->avatar( TomahawkUtils::RoundedCorners, size, true );
 }
 
 

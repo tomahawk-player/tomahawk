@@ -51,11 +51,6 @@
    <header>playlist/GridView.h</header>
   </customwidget>
   <customwidget>
-   <class>TreeView</class>
-   <extends>QTreeView</extends>
-   <header>playlist/TreeView.h</header>
-  </customwidget>
-  <customwidget>
    <class>TrackView</class>
    <extends>QTreeView</extends>
    <header>playlist/TrackView.h</header>
