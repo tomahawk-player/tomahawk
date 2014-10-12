@@ -122,7 +122,6 @@ set( libGuiSources
     viewpages/TrackViewPage.cpp
     viewpages/PlaylistViewPage.cpp
 
-    widgets/AnimatedCounterLabel.cpp
     widgets/AnimatedSplitter.cpp
     widgets/BasicHeader.cpp
     widgets/HoverControls.cpp
