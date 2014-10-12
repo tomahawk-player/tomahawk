@@ -96,6 +96,7 @@ namespace TomahawkUtils
         NewReleases,
         NewAdditions,
         RecentlyPlayed,
+        Queue,
         AutomaticPlaylist,
         Charts,
         Station,
