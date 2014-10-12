@@ -25,6 +25,7 @@
 #include "ViewManager.h"
 
 #include "playlist/FlexibleView.h"
+#include "playlist/ContextView.h"
 #include "playlist/TrackView.h"
 #include "playlist/TopLovedTracksModel.h"
 #include "playlist/TrackItemDelegate.h"

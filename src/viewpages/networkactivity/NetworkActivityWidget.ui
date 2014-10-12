@@ -41,7 +41,7 @@
           </widget>
          </item>
          <item>
-          <widget class="PlaylistView" name="trendingTracksView">
+          <widget class="TrackView" name="trendingTracksView">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
              <horstretch>0</horstretch>
@@ -152,7 +152,7 @@
          <widget class="Tomahawk::Breadcrumb" name="breadCrumbLeft" native="true"/>
         </item>
         <item>
-         <widget class="PlaylistView" name="tracksViewLeft">
+         <widget class="TrackView" name="tracksViewLeft">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -189,9 +189,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PlaylistView</class>
+   <class>TrackView</class>
    <extends>QTreeView</extends>
-   <header location="global">playlist/PlaylistView.h</header>
+   <header location="global">playlist/TrackView.h</header>
   </customwidget>
   <customwidget>
    <class>GridView</class>

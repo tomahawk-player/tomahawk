@@ -24,6 +24,7 @@
 #include "database/Database.h"
 #include "SourceList.h"
 #include "playlist/PlayableModel.h"
+#include "playlist/PlaylistModel.h"
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "playlist/dynamic/database/DatabaseGenerator.h"
 #include "utils/Logger.h"
@@ -71,7 +72,7 @@ SocialPlaylistWidget::SocialPlaylistWidget ( QWidget* parent )
 //     connect( model, SIGNAL( emptinessChanged( bool) ), this, SLOT( updatePlaylists() ) );
 
     m_topForeignTracksModel = new PlaylistModel( ui->newTracksView );
-    ui->newTracksView->setPlaylistModel( m_topForeignTracksModel );
+    ui->newTracksView->setPlayableModel( m_topForeignTracksModel );
     ui->newTracksView->proxyModel()->setStyle( PlayableProxyModel::Fancy );
     ui->newTracksView->overlay()->setEnabled( false );
 

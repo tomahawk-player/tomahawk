@@ -23,14 +23,11 @@
 #include "PlaylistInterface.h"
 #include "DllMacro.h"
 
-class QStackedWidget;
-
 class CaptionLabel;
 class GridView;
 class TrackView;
 class PlayableModel;
 class PlaylistModel;
-class FilterHeader;
 
 class DLLEXPORT ContextView : public QWidget, public Tomahawk::ViewPage
 {

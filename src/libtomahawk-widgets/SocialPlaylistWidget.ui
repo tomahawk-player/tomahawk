@@ -65,7 +65,7 @@
         </widget>
        </item>
        <item>
-        <widget class="PlaylistView" name="newTracksView">
+        <widget class="TrackView" name="newTracksView">
          <property name="minimumSize">
           <size>
            <width>320</width>
@@ -82,9 +82,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PlaylistView</class>
+   <class>TrackView</class>
    <extends>QTreeView</extends>
-   <header>playlist/PlaylistView.h</header>
+   <header>playlist/TrackView.h</header>
   </customwidget>
   <customwidget>
    <class>HeaderLabel</class>

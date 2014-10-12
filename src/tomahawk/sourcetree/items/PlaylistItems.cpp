@@ -1,7 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
- *   Copyright 2010-2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -27,7 +27,8 @@
 #include "Source.h"
 #include "audio/AudioEngine.h"
 #include "playlist/dynamic/GeneratorInterface.h"
-#include "playlist/PlaylistView.h"
+#include "playlist/ContextView.h"
+#include "playlist/TrackView.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 

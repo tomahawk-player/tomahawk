@@ -49,7 +49,6 @@ set( libGuiSources
     playlist/ColumnItemDelegate.cpp
     playlist/ColumnViewPreviewWidget.cpp
     playlist/PlaylistModel.cpp
-    playlist/PlaylistView.cpp
     playlist/PlaylistItemDelegate.cpp
     playlist/QueueProxyModel.cpp
     playlist/QueueView.cpp

@@ -21,6 +21,7 @@
 
 #include "utils/ImageRegistry.h"
 #include "utils/Logger.h"
+#include "playlist/ContextView.h"
 #include "playlist/TrackView.h"
 #include "playlist/PlayableProxyModel.h"
 #include "ViewManager.h"

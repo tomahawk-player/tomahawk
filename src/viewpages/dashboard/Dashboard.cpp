@@ -74,7 +74,7 @@ DashboardWidget::DashboardWidget( QWidget* parent )
 
     {
         m_tracksModel = new RecentlyPlayedModel( ui->trackView->trackView(), HISTORY_TRACK_ITEMS );
-        ui->trackView->setPlayableModel( m_tracksModel );
+        ui->trackView->trackView()->setPlayableModel( m_tracksModel );
         ui->trackView->setCaption( tr( "Recently Played Tracks" ) );
         ui->trackView->trackView()->setUniformRowHeights( false );
         ui->trackView->trackView()->setIndentation( 0 );

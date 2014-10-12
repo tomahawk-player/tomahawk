@@ -43,7 +43,7 @@ using namespace Tomahawk;
 
 
 DynamicView::DynamicView( QWidget* parent )
-        : PlaylistView( parent )
+        : TrackView( parent )
         , m_onDemand( false )
         , m_checkOnCollapse( false )
         , m_working( false )
@@ -77,7 +77,7 @@ void
 DynamicView::setDynamicModel( DynamicModel* model )
 {
     m_model = model;
-    PlaylistView::setPlaylistModel( m_model );
+    TrackView::setPlayableModel( m_model );
     setAcceptDrops( false );
 
     connect( m_model, SIGNAL( itemCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );

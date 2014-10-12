@@ -29,7 +29,9 @@
 
 #include "audio/AudioEngine.h"
 #include "database/Database.h"
-#include "playlist/PlaylistView.h"
+#include "playlist/ContextView.h"
+#include "playlist/TrackView.h"
+#include "playlist/PlayableModel.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/ImageRegistry.h"
 #include "utils/Logger.h"

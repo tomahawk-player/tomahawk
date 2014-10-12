@@ -19,6 +19,7 @@
 #include "QueueView.h"
 
 #include "playlist/TrackView.h"
+#include "playlist/ContextView.h"
 #include "playlist/PlaylistModel.h"
 #include "playlist/QueueProxyModel.h"
 #include "playlist/TrackItemDelegate.h"

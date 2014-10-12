@@ -34,6 +34,7 @@
 #include "playlist/PlaylistModel.h"
 #include "playlist/TreeProxyModel.h"
 #include "playlist/ContextView.h"
+#include "playlist/TrackView.h"
 #include "database/DatabaseCommand_AllTracks.h"
 #include "database/DatabaseCommand_AllAlbums.h"
 #include "Source.h"
@@ -181,7 +182,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         ContextView* topHitsFullView = new ContextView( m_stackedWidget );
         topHitsFullView->setCaption( tr( "Songs" ) );
         topHitsFullView->setShowCloseButton( true );
-        topHitsFullView->setPlayableModel( m_topHitsModel );
+        topHitsFullView->trackView()->setPlayableModel( m_topHitsModel );
         m_stackedWidget->addWidget( topHitsFullView );
 
         connect( topHitsFullView, SIGNAL( closeClicked() ), SLOT( onPageClosed() ) );

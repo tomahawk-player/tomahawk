@@ -20,7 +20,7 @@
 #ifndef DYNAMIC_VIEW_H
 #define DYNAMIC_VIEW_H
 
-#include "playlist/PlaylistView.h"
+#include "playlist/TrackView.h"
 #include <QTimer>
 #include <QPropertyAnimation>
 #include <QTimeLine>
@@ -34,7 +34,7 @@ namespace Tomahawk
 class DynamicModel;
 
 
-class DynamicView : public PlaylistView
+class DynamicView : public TrackView
 {
     Q_OBJECT
 public:

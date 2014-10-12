@@ -24,6 +24,7 @@
 #include "MetaPlaylistInterface.h"
 
 #include "playlist/RecentlyPlayedModel.h"
+#include "playlist/ContextView.h"
 #include "playlist/TrackView.h"
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"

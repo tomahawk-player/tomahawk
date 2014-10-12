@@ -46,7 +46,6 @@ class CollectionModel;
 class FlexibleView;
 class FlexibleTreeView;
 class PlaylistModel;
-class PlaylistView;
 class TrackProxyModel;
 class TrackModel;
 class TreeProxyModel;
@@ -101,7 +100,7 @@ public:
     Tomahawk::ViewPage* pageForPlaylist( const Tomahawk::playlist_ptr& pl ) const;
     Tomahawk::ViewPage* pageForDynPlaylist( const Tomahawk::dynplaylist_ptr& pl ) const;
 
-    /// Get a playlist (or dynamic playlist ) from a ViewPage* if the page is PlaylistView or DynamicWidget.
+    /// Get a playlist (or dynamic playlist ) from a ViewPage* if the page is FlexibleView or DynamicWidget.
     /// Lives here but used by SourcesModel
     Tomahawk::playlist_ptr playlistForPage( Tomahawk::ViewPage* ) const;
 

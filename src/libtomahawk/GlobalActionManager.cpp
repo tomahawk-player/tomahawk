@@ -2,7 +2,7 @@
  *
  *   Copyright (C) 2011  Leo Franchi <lfranchi@kde.org>
  *   Copyright (C) 2011, Jeff Mitchell <jeff@tomahawk-player.org>
- *   Copyright (C) 2011-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright (C) 2011-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright (C) 2013, Uwe L. Korn <uwelk@xhochy.com>
  *   Copyright (C) 2013, Teo Mrnjavac <teo@kde.org>
  *
@@ -33,7 +33,9 @@
 #include "jobview/JobStatusView.h"
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "playlist/PlaylistTemplate.h"
-#include "playlist/PlaylistView.h"
+#include "playlist/ContextView.h"
+#include "playlist/TrackView.h"
+#include "playlist/PlayableModel.h"
 #include "resolvers/ExternalResolver.h"
 #include "resolvers/ScriptCommand_LookupUrl.h"
 #include "utils/JspfLoader.h"

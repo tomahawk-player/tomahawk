@@ -58,7 +58,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     m_tracksModel->setMode( Mixed );
 
     // We need to set the model on the view before loading the playlist, so spinners & co are connected
-    ui->albumView->setPlayableModel( m_tracksModel );
+    ui->albumView->trackView()->setPlayableModel( m_tracksModel );
     ui->albumView->setCaption( tr( "Album Details" ) );
 
     ui->topHits->setStyleSheet( QString( "QListView { background-color: #f9f9f9; }" ) );

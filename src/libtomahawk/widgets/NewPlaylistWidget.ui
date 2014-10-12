@@ -62,7 +62,7 @@
     </widget>
    </item>
    <item>
-    <widget class="PlaylistView" name="suggestionsView"/>
+    <widget class="TrackView" name="suggestionsView"/>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
@@ -75,9 +75,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PlaylistView</class>
+   <class>TrackView</class>
    <extends>QTreeView</extends>
-   <header>playlist/PlaylistView.h</header>
+   <header>playlist/TrackView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

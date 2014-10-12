@@ -52,7 +52,7 @@ NewPlaylistWidget::NewPlaylistWidget( QWidget* parent )
     connect( ui->buttonBox, SIGNAL( rejected() ), SLOT( cancel() ) );
 
     m_suggestionsModel = new PlaylistModel( ui->suggestionsView );
-    ui->suggestionsView->setPlaylistModel( m_suggestionsModel );
+    ui->suggestionsView->setPlayableModel( m_suggestionsModel );
     ui->suggestionsView->overlay()->setEnabled( false );
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( updateSuggestions() ) );
@@ -123,7 +123,7 @@ NewPlaylistWidget::suggestionsFound()
 
     delete m_suggestionsModel;
     m_suggestionsModel = new PlaylistModel( ui->suggestionsView );
-    ui->suggestionsView->setPlaylistModel( m_suggestionsModel );
+    ui->suggestionsView->setPlayableModel( m_suggestionsModel );
 
     m_suggestionsModel->appendQueries( m_queries );
 

@@ -48,7 +48,7 @@
   <customwidget>
    <class>GridView</class>
    <extends>QListView</extends>
-   <header location="global">playlist/GridView.h</header>
+   <header>playlist/GridView.h</header>
   </customwidget>
   <customwidget>
    <class>TreeView</class>
@@ -56,9 +56,9 @@
    <header>playlist/TreeView.h</header>
   </customwidget>
   <customwidget>
-   <class>PlaylistView</class>
+   <class>TrackView</class>
    <extends>QTreeView</extends>
-   <header>playlist/PlaylistView.h</header>
+   <header>playlist/TrackView.h</header>
   </customwidget>
   <customwidget>
    <class>Tomahawk::Breadcrumb</class>

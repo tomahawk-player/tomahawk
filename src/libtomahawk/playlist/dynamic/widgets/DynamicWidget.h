@@ -35,7 +35,6 @@ class QHBoxLayout;
 class QPushButton;
 class QComboBox;
 class PlaylistModel;
-class PlaylistView;
 class AnimatedSplitter;
 class QLabel;
 class ReadOrWriteWidget;

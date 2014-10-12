@@ -28,7 +28,7 @@
 #include "Source.h"
 #include "SourceList.h"
 
-#include "PlaylistView.h"
+#include "TrackView.h"
 #include "PlayableModel.h"
 #include "PlayableItem.h"
 #include "PlayableProxyModel.h"

@@ -25,10 +25,11 @@
 #include "infobar/InfoBar.h"
 
 #include "playlist/FlexibleView.h"
+#include "playlist/ContextView.h"
 #include "playlist/FlexibleTreeView.h"
 #include "playlist/TreeModel.h"
 #include "playlist/PlaylistModel.h"
-#include "playlist/PlaylistView.h"
+#include "playlist/TrackView.h"
 #include "playlist/PlayableProxyModel.h"
 #include "playlist/PlayableModel.h"
 #include "playlist/ColumnView.h"
@@ -133,13 +134,8 @@ ViewManager::createPageForPlaylist( const playlist_ptr& playlist )
     FlexibleView* view = new FlexibleView();
     PlaylistModel* model = new PlaylistModel();
 
-    PlaylistView* pv = new PlaylistView();
-    view->setDetailedView( pv );
-    view->setPixmap( pv->pixmap() );
-
     // We need to set the model on the view before loading the playlist, so spinners & co are connected
-    view->setPlaylistModel( model );
-    pv->setPlaylistModel( model );
+    view->view()->trackView()->setPlayableModel( model );
 
     model->loadPlaylist( playlist );
     playlist->resolve();
@@ -154,14 +150,10 @@ ViewManager::createPageForList( const QString& title, const QList< query_ptr >& 
     FlexibleView* view = new FlexibleView();
     PlaylistModel* model = new PlaylistModel();
 
-    PlaylistView* pv = new PlaylistView();
-    view->setDetailedView( pv );
-    view->setPixmap( pv->pixmap() );
     view->setTemporaryPage( true );
 
     // We need to set the model on the view before loading the playlist, so spinners & co are connected
-    view->setPlaylistModel( model );
-    pv->setPlaylistModel( model );
+    view->view()->trackView()->setPlayableModel( model );
 
     model->setTitle( title );
     model->appendQueries( queries );
@@ -174,10 +166,15 @@ playlist_ptr
 ViewManager::playlistForPage( ViewPage* page ) const
 {
     playlist_ptr p;
-    if ( dynamic_cast< PlaylistView* >( page ) && dynamic_cast< PlaylistView* >( page )->playlistModel() &&
-        !dynamic_cast< PlaylistView* >( page )->playlistModel()->playlist().isNull() )
+
+    FlexibleView* fv = dynamic_cast< FlexibleView* >( page );
+    if ( fv && fv->view()->trackView()->model() )
     {
-        p = dynamic_cast< PlaylistView* >( page )->playlistModel()->playlist();
+        PlaylistModel* m = dynamic_cast< PlaylistModel* >( fv->view()->trackView()->model() );
+        if ( m && m->playlist() )
+        {
+            p = m->playlist();
+        }
     }
     else if ( dynamic_cast< DynamicWidget* >( page ) )
         p = dynamic_cast< DynamicWidget* >( page )->playlist();

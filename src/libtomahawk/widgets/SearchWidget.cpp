@@ -25,6 +25,7 @@
 #include "ViewManager.h"
 #include "audio/AudioEngine.h"
 #include "playlist/ContextView.h"
+#include "playlist/TrackView.h"
 #include "playlist/PlayableModel.h"
 #include "playlist/PlaylistModel.h"
 #include "utils/AnimatedSpinner.h"
@@ -141,7 +142,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
         ContextView* topHitsFullView = new ContextView( m_stackedWidget );
         topHitsFullView->setCaption( tr( "Songs" ) );
         topHitsFullView->setShowCloseButton( true );
-        topHitsFullView->setPlayableModel( m_resultsModel );
+        topHitsFullView->trackView()->setPlayableModel( m_resultsModel );
         m_stackedWidget->addWidget( topHitsFullView );
 
         connect( topHitsFullView, SIGNAL( closeClicked() ), SLOT( onTopHitsMoreClosed() ) );

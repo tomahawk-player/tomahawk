@@ -28,6 +28,7 @@
 #include "database/DatabaseCommand_DeletePlaylist.h"
 #include "database/DatabaseCommand_RenamePlaylist.h"
 #include "playlist/PlaylistUpdaterInterface.h"
+#include "playlist/PlaylistModel.h"
 #include "utils/Logger.h"
 #include "utils/Closure.h"
 

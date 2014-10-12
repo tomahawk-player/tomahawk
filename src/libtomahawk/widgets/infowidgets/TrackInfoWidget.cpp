@@ -26,6 +26,7 @@
 
 #include "ViewManager.h"
 #include "SourceList.h"
+#include "playlist/TrackView.h"
 #include "playlist/PlayableModel.h"
 #include "audio/AudioEngine.h"
 #include "widgets/BasicHeader.h"
@@ -47,7 +48,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Original, QSize( 48, 48 ) );
 
     m_relatedTracksModel = new PlayableModel( ui->trackView );
-    ui->trackView->setPlayableModel( m_relatedTracksModel );
+    ui->trackView->trackView()->setPlayableModel( m_relatedTracksModel );
     ui->trackView->setCaption( tr( "Similar Tracks" ) );
     ui->trackView->setEmptyTip( tr( "Sorry, but we could not find similar tracks for this song!" ) );
 
