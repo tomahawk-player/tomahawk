@@ -50,8 +50,6 @@
 #include "viewpages/AlbumViewPage.h"
 #include "viewpages/TrackViewPage.h"
 
-#include "widgets/AnimatedSplitter.h"
-
 #include "utils/Logger.h"
 #include "utils/TomahawkUtilsGui.h"
 

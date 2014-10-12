@@ -36,7 +36,6 @@
 
 #include "DllMacro.h"
 
-class AnimatedSplitter;
 class AlbumModel;
 class GridView;
 class AlbumInfoWidget;
@@ -155,7 +154,6 @@ private:
 
     QWidget* m_widget;
     QStackedWidget* m_stack;
-    AnimatedSplitter* m_splitter;
 
     QueueView* m_queue;
     Tomahawk::ViewPage* m_inboxWidget;
