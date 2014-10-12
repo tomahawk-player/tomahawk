@@ -230,25 +230,27 @@ PlayableProxyModel::nameFilterAcceptsRow( int sourceRow, PlayableItem* pi, const
         }
     }
 
-    if ( pi->query() )
+    const Tomahawk::query_ptr& query = pi->query();
+    if ( query )
     {
         Tomahawk::result_ptr r;
-        if ( pi->query()->numResults() )
-            r = pi->query()->results().first();
+        if ( query->numResults() )
+            r = query->results().first();
 
         if ( !m_showOfflineResults && ( r.isNull() || !r->isOnline() ) )
             return false;
 
-        if ( filterRegExp().isEmpty() )
+        const QRegExp regexp = filterRegExp();
+        if ( regexp.isEmpty() )
             return true;
 
-        QStringList sl = filterRegExp().pattern().split( " ", QString::SkipEmptyParts );
-        foreach( QString s, sl )
+        QStringList sl = regexp.pattern().split( " ", QString::SkipEmptyParts );
+        foreach( const QString& s, sl )
         {
-            s = s.toLower();
-            if ( !pi->query()->track()->artist().toLower().contains( s ) &&
-                 !pi->query()->track()->album().toLower().contains( s ) &&
-                 !pi->query()->track()->track().toLower().contains( s ) )
+            const Tomahawk::track_ptr& track = query->track();
+            if ( !track->artist().contains( s, Qt::CaseInsensitive ) &&
+                 !track->album().contains( s, Qt::CaseInsensitive ) &&
+                 !track->track().contains( s, Qt::CaseInsensitive ) )
             {
                 return false;
             }
@@ -263,7 +265,8 @@ PlayableProxyModel::nameFilterAcceptsRow( int sourceRow, PlayableItem* pi, const
         bool found = true;
         foreach( const QString& s, sl )
         {
-            if ( !al->name().contains( s, Qt::CaseInsensitive ) && !al->artist()->name().contains( s, Qt::CaseInsensitive ) )
+            if ( !al->name().contains( s, Qt::CaseInsensitive ) &&
+                 !al->artist()->name().contains( s, Qt::CaseInsensitive ) )
             {
                 found = false;
             }
@@ -280,7 +283,8 @@ PlayableProxyModel::nameFilterAcceptsRow( int sourceRow, PlayableItem* pi, const
         bool found = true;
         foreach( const QString& s, sl )
         {
-            if ( !ar->name().contains( s, Qt::CaseInsensitive ) && !ar->artist()->name().contains( s, Qt::CaseInsensitive ) )
+            if ( !ar->name().contains( s, Qt::CaseInsensitive ) &&
+                 !ar->artist()->name().contains( s, Qt::CaseInsensitive ) )
             {
                 found = false;
             }
