@@ -48,7 +48,6 @@
 #include "viewpages/ArtistViewPage.h"
 #include "viewpages/AlbumViewPage.h"
 #include "viewpages/TrackViewPage.h"
-#include "widgets/NewPlaylistWidget.h"
 #include "widgets/AnimatedSplitter.h"
 
 #include "utils/Logger.h"
@@ -524,13 +523,6 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
     //This should save the CPU cycles, especially with pages like the visualizer
     if ( previousPage && previousPage != page->widget() )
         previousPage->hide();
-}
-
-
-bool
-ViewManager::isNewPlaylistPageVisible() const
-{
-    return dynamic_cast< NewPlaylistWidget* >( currentPage() ) != 0;
 }
 
 

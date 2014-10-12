@@ -133,13 +133,11 @@ set( libGuiSources
     widgets/HeaderLabel.cpp
     widgets/HistoryWidget.cpp
     widgets/ImageButton.cpp
-    widgets/NewPlaylistWidget.cpp
     widgets/NewReleasesWidget.cpp
     widgets/OverlayButton.cpp
     widgets/OverlayWidget.cpp
     widgets/PlayableCover.cpp
     widgets/PlaylistsModel.cpp
-    widgets/PlaylistTypeSelectorDialog.cpp
     widgets/QueryLabel.cpp
     widgets/RecentPlaylistsModel.cpp
     widgets/RecentlyPlayedPlaylistsModel.cpp
@@ -371,8 +369,6 @@ IF(LIBLASTFM_FOUND)
 ENDIF(LIBLASTFM_FOUND)
 
 set( libUI ${libUI}
-    widgets/PlaylistTypeSelectorDialog.ui
-    widgets/NewPlaylistWidget.ui
     widgets/HeaderWidget.ui
     widgets/NewReleasesWidget.ui
     viewpages/SearchViewPage.ui

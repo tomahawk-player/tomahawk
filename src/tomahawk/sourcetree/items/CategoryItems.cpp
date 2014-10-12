@@ -30,7 +30,6 @@
 #include "TomahawkWindow.h"
 #include "utils/TomahawkUtils.h"
 #include "playlist/dynamic/GeneratorInterface.h"
-#include "widgets/NewPlaylistWidget.h"
 #include "utils/ImageRegistry.h"
 #include "utils/Logger.h"
 

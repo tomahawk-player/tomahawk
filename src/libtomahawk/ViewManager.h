@@ -76,8 +76,6 @@ public:
     QueueView* queue() const { return m_queue; }
     void setQueue( QueueView* queue ) { m_queue = queue; }
 
-    bool isNewPlaylistPageVisible() const;
-
     Tomahawk::playlistinterface_ptr currentPlaylistInterface() const;
     Tomahawk::ViewPage* currentPage() const;
     Tomahawk::ViewPage* pageForInterface( Tomahawk::playlistinterface_ptr plInterface ) const;
