@@ -51,7 +51,7 @@ namespace Widgets
  * \class
  * \brief The tomahawk page that shows new releases.
  */
-class DLLEXPORT NewReleasesWidget : public QWidget
+class NewReleasesWidget : public QWidget
 {
 Q_OBJECT
 
