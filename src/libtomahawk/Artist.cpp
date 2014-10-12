@@ -49,7 +49,7 @@ static QMutex s_memberMutex;
 
 Artist::~Artist()
 {
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Deleting artist:" << m_name;
+    FINEGRAINED_MSG( Q_FUNC_INFO << "Deleting artist:" << m_name );
     m_ownRef.clear();
 
     delete m_cover;
@@ -137,7 +137,7 @@ Artist::Artist( unsigned int id, const QString& name )
     , m_chartCount( 0 )
     , m_cover( 0 )
 {
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Creating artist:" << id << name;
+    FINEGRAINED_MSG( Q_FUNC_INFO << "Creating artist:" << id << name );
     m_sortname = DatabaseImpl::sortname( name, true );
 }
 
@@ -156,7 +156,7 @@ Artist::Artist( const QString& name )
     , m_chartCount( 0 )
     , m_cover( 0 )
 {
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Creating artist:" << name;
+    FINEGRAINED_MSG( Q_FUNC_INFO << "Creating artist:" << name );
     m_sortname = DatabaseImpl::sortname( name, true );
 }
 
