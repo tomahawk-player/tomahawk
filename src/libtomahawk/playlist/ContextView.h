@@ -23,11 +23,11 @@
 #include "PlaylistInterface.h"
 #include "DllMacro.h"
 
+class QVBoxLayout;
 class CaptionLabel;
 class GridView;
 class TrackView;
-class PlayableModel;
-class PlaylistModel;
+class TrackDetailView;
 
 class DLLEXPORT ContextView : public QWidget, public Tomahawk::ViewPage
 {
@@ -50,6 +50,7 @@ public:
     virtual bool isBeingPlayed() const;
     void setTemporaryPage( bool b );
 
+    void setTrackView( TrackView* view );
     TrackView* trackView() const { return m_trackView; }
 
     void setCaption( const QString& caption );
@@ -76,7 +77,9 @@ private slots:
 private:
     CaptionLabel* m_captionLabel;
     TrackView* m_trackView;
-    PlayableModel* m_model;
+    TrackDetailView* m_detailView;
+
+    QVBoxLayout* m_innerLayout;
 
     QPixmap m_pixmap;
     Tomahawk::query_ptr m_query;

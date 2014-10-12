@@ -43,26 +43,17 @@ using namespace Tomahawk;
 ContextView::ContextView( QWidget* parent, const QString& caption )
     : QWidget( parent )
     , m_trackView( new TrackView() )
-    , m_model( 0 )
     , m_temporary( false )
 {
-//    qRegisterMetaType< ContextViewMode >( "ContextViewMode" );
-
-/*    m_detailedView->setColumnHidden( PlayableModel::Age, true ); // Hide age column per default
-    m_detailedView->setColumnHidden( PlayableModel::Filesize, true ); // Hide filesize column per default
-    m_detailedView->setColumnHidden( PlayableModel::Composer, true ); // Hide composer column per default*/
-
     TrackItemDelegate* del = new TrackItemDelegate( TrackItemDelegate::LovedTracks, m_trackView, m_trackView->proxyModel() );
     m_trackView->setPlaylistItemDelegate( del );
     m_trackView->proxyModel()->setStyle( PlayableProxyModel::Fancy );
     TomahawkStyle::styleScrollBar( m_trackView->verticalScrollBar() );
 
-    setLayout( new QVBoxLayout() );
+    setLayout( new QVBoxLayout( this ) );
     TomahawkUtils::unmarginLayout( layout() );
 
     m_trackView->setStyleSheet( QString( "QTreeView { background-color: white; }" ) );
-//    m_gridView->setStyleSheet( QString( "QListView { background-color: white; }" ) );
-
     m_captionLabel = new CaptionLabel( this );
     setCaption( caption );
 
@@ -72,7 +63,7 @@ ContextView::ContextView( QWidget* parent, const QString& caption )
     vbox->setPalette( pal );
     vbox->setAutoFillBackground( true );
 
-    QVBoxLayout* vboxl = new QVBoxLayout;
+    QVBoxLayout* vboxl = new QVBoxLayout( this );
     TomahawkUtils::unmarginLayout( vboxl );
     vboxl->setContentsMargins( 32, 32, 32, 32 );
     vboxl->setSpacing( 32 );
@@ -80,20 +71,19 @@ ContextView::ContextView( QWidget* parent, const QString& caption )
     vbox->setLayout( vboxl );
 
     QWidget* hbox = new QWidget;
-    QHBoxLayout* hboxl = new QHBoxLayout;
+    QHBoxLayout* hboxl = new QHBoxLayout( this );
     TomahawkUtils::unmarginLayout( hboxl );
     hboxl->setSpacing( 32 );
 
-    QVBoxLayout* vboxInner = new QVBoxLayout;
-    TomahawkUtils::unmarginLayout( vboxInner );
-    vboxInner->addWidget( m_trackView );
-    vboxInner->addStretch();
-    vboxInner->setStretchFactor( m_trackView, 1 );
+    m_innerLayout = new QVBoxLayout( this );
+    TomahawkUtils::unmarginLayout( m_innerLayout );
+    m_innerLayout->addWidget( m_trackView, 1 );
+    m_innerLayout->addStretch();
 
-    TrackDetailView* detailView = new TrackDetailView;
-    detailView->setPlaylistInterface( playlistInterface() );
-    hboxl->addWidget( detailView );
-    hboxl->addLayout( vboxInner );
+    m_detailView = new TrackDetailView;
+    m_detailView->setPlaylistInterface( playlistInterface() );
+    hboxl->addWidget( m_detailView );
+    hboxl->addLayout( m_innerLayout );
     hbox->setLayout( hboxl );
 
     vboxl->addWidget( m_captionLabel );
@@ -102,8 +92,8 @@ ContextView::ContextView( QWidget* parent, const QString& caption )
 
     connect( m_captionLabel, SIGNAL( clicked() ), SIGNAL( closeClicked() ) );
     connect( m_trackView, SIGNAL( querySelected( Tomahawk::query_ptr ) ), SLOT( onQuerySelected( Tomahawk::query_ptr ) ) );
-    connect( m_trackView, SIGNAL( querySelected( Tomahawk::query_ptr ) ), detailView, SLOT( setQuery( Tomahawk::query_ptr ) ) );
-//    connect( m_header, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
+    connect( m_trackView, SIGNAL( querySelected( Tomahawk::query_ptr ) ), m_detailView, SLOT( setQuery( Tomahawk::query_ptr ) ) );
+    connect( m_trackView, SIGNAL( modelChanged() ), SLOT( onModelChanged() ) );
 
     TomahawkUtils::fixMargins( this );
 }
@@ -112,6 +102,31 @@ ContextView::ContextView( QWidget* parent, const QString& caption )
 ContextView::~ContextView()
 {
     tDebug() << Q_FUNC_INFO;
+}
+
+
+void
+ContextView::setTrackView( TrackView* view )
+{
+    if ( m_trackView )
+    {
+        disconnect( m_trackView, SIGNAL( querySelected( Tomahawk::query_ptr ) ), this, SLOT( onQuerySelected( Tomahawk::query_ptr ) ) );
+        disconnect( m_trackView, SIGNAL( querySelected( Tomahawk::query_ptr ) ), m_detailView, SLOT( setQuery( Tomahawk::query_ptr ) ) );
+        disconnect( m_trackView, SIGNAL( modelChanged() ), this, SLOT( onModelChanged() ) );
+
+        m_innerLayout->removeWidget( m_trackView );
+        delete m_trackView;
+    }
+
+    m_trackView = view;
+    m_trackView->setStyleSheet( QString( "QTreeView { background-color: white; }" ) );
+    TomahawkStyle::styleScrollBar( m_trackView->verticalScrollBar() );
+
+    m_innerLayout->insertWidget( 0, view, 1 );
+
+    connect( m_trackView, SIGNAL( querySelected( Tomahawk::query_ptr ) ), SLOT( onQuerySelected( Tomahawk::query_ptr ) ) );
+    connect( m_trackView, SIGNAL( querySelected( Tomahawk::query_ptr ) ), m_detailView, SLOT( setQuery( Tomahawk::query_ptr ) ) );
+    connect( m_trackView, SIGNAL( modelChanged() ), SLOT( onModelChanged() ) );
 }
 
 
@@ -225,7 +240,7 @@ ContextView::setEmptyTip( const QString& tip )
 void
 ContextView::onModelChanged()
 {
-    if ( m_model->isReadOnly() )
+    if ( m_trackView->model()->isReadOnly() )
         setEmptyTip( tr( "This playlist is currently empty." ) );
     else
         setEmptyTip( tr( "This playlist is currently empty. Add some tracks to it and enjoy the music!" ) );
