@@ -202,6 +202,7 @@ PlayableProxyModel::visibilityFilterAcceptsRow( int sourceRow, const QModelIndex
         // We have already memoized the return value.
         return memo.visibilty[sourceRow] < m_maxVisibleItems;
     }
+    // else: We do not have memoized the value, so compute it.
 
     int items = memo.visibilty.back();
     for ( int i = memo.visibilty.size() - 1; ( i < sourceRow ) && ( items < m_maxVisibleItems ) ; i++ )
