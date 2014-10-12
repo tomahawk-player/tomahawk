@@ -18,8 +18,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "AlbumInfoWidget.h"
-#include "ui_AlbumInfoWidget.h"
+#include "AlbumViewPage.h"
+#include "ui_AlbumViewPage.h"
 
 #include "audio/AudioEngine.h"
 #include "ViewManager.h"

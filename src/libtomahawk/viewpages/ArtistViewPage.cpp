@@ -17,8 +17,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ArtistInfoWidget.h"
-#include "ui_ArtistInfoWidget.h"
+#include "ArtistViewPage.h"
+#include "ui_ArtistViewPage.h"
 
 #include <QDesktopServices>
 #include <QScrollArea>

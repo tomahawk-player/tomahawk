@@ -16,8 +16,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "SourceInfoWidget.h"
-#include "ui_SourceInfoWidget.h"
+#include "SourceViewPage.h"
+#include "ui_SourceViewPage.h"
 
 #include "Source.h"
 #include "ViewManager.h"

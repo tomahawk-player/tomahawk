@@ -145,14 +145,14 @@ set( libGuiSources
     widgets/RecentlyPlayedPlaylistsModel.cpp
     widgets/ScriptCollectionHeader.cpp
     widgets/ScrollingLabel.cpp
-    widgets/SearchWidget.cpp
     widgets/SeekSlider.cpp
     widgets/SourceTreePopupDialog.cpp
     widgets/ToggleButton.cpp
-    widgets/infowidgets/SourceInfoWidget.cpp
-    widgets/infowidgets/ArtistInfoWidget.cpp
-    widgets/infowidgets/AlbumInfoWidget.cpp
-    widgets/infowidgets/TrackInfoWidget.cpp
+    viewpages/SearchViewPage.cpp
+    viewpages/SourceViewPage.cpp
+    viewpages/ArtistViewPage.cpp
+    viewpages/AlbumViewPage.cpp
+    viewpages/TrackViewPage.cpp
     widgets/searchlineedit/ClearButton.cpp
     widgets/searchlineedit/LineEdit.cpp
     widgets/searchlineedit/SearchButton.cpp
@@ -373,13 +373,13 @@ ENDIF(LIBLASTFM_FOUND)
 set( libUI ${libUI}
     widgets/PlaylistTypeSelectorDialog.ui
     widgets/NewPlaylistWidget.ui
-    widgets/SearchWidget.ui
     widgets/HeaderWidget.ui
     widgets/NewReleasesWidget.ui
-    widgets/infowidgets/SourceInfoWidget.ui
-    widgets/infowidgets/ArtistInfoWidget.ui
-    widgets/infowidgets/AlbumInfoWidget.ui
-    widgets/infowidgets/TrackInfoWidget.ui
+    viewpages/SearchViewPage.ui
+    viewpages/SourceViewPage.ui
+    viewpages/ArtistViewPage.ui
+    viewpages/AlbumViewPage.ui
+    viewpages/TrackViewPage.ui
     playlist/QueueView.ui
     filemetadata/MetadataEditor.ui
     accounts/AccountFactoryWrapper.ui
@@ -566,7 +566,7 @@ file( GLOB thirdpartyKdsingleapplicationguardHeaders "thirdparty/kdsingleapplica
 file( GLOB thirdpartyQocoaHeaders "thirdparty/Qocoa/*.h" )
 file( GLOB utilsHeaders "utils/*.h" )
 file( GLOB widgetsHeaders "widgets/*.h" )
-file( GLOB widgetsInfowidgetsHeaders "widgets/infowidgets/*.h" )
+file( GLOB widgetsViewpagesHeaders "viewpages/*.h" )
 file( GLOB widgetsSearchlineeditHeaders "widgets/searchlineedit/*.h" )
 
 install( FILES ${CMAKE_CURRENT_BINARY_DIR}/config.h DESTINATION include/libtomahawk )
@@ -595,5 +595,5 @@ install( FILES ${thirdpartyKdsingleapplicationguardHeaders} DESTINATION include/
 install( FILES ${thirdpartyQocoaHeaders} DESTINATION include/libtomahawk/thirdparty/Qocoa )
 install( FILES ${utilsHeaders} DESTINATION include/libtomahawk/utils )
 install( FILES ${widgetsHeaders} DESTINATION include/libtomahawk/widgets )
-install( FILES ${widgetsInfowidgetsHeaders} DESTINATION include/libtomahawk/widgets/infowidgets )
+install( FILES ${widgetsViewpagesHeaders} DESTINATION include/libtomahawk/viewpages )
 install( FILES ${widgetsSearchlineeditHeaders} DESTINATION include/libtomahawk/widgets/searchlineedit )

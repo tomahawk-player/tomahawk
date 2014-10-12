@@ -47,7 +47,7 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/XspfLoader.h"
 #include "utils/XspfGenerator.h"
-#include "widgets/SearchWidget.h"
+#include "viewpages/SearchViewPage.h"
 
 #include "Album.h"
 #include "Artist.h"

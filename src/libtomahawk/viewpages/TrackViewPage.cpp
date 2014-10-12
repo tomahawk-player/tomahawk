@@ -18,8 +18,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "TrackInfoWidget.h"
-#include "ui_TrackInfoWidget.h"
+#include "TrackViewPage.h"
+#include "ui_TrackViewPage.h"
 
 #include <QScrollArea>
 #include <QScrollBar>

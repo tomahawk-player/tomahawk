@@ -17,8 +17,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "SearchWidget.h"
-#include "ui_SearchWidget.h"
+#include "SearchViewPage.h"
+#include "ui_SearchViewPage.h"
 
 #include "SourceList.h"
 #include "MetaPlaylistInterface.h"

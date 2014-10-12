@@ -49,8 +49,6 @@
 #include "utils/NetworkAccessManager.h"
 #include "widgets/AccountsToolButton.h"
 #include "widgets/AnimatedSplitter.h"
-#include "widgets/NewPlaylistWidget.h"
-#include "widgets/SearchWidget.h"
 #include "widgets/ContainedMenuButton.h"
 #include "thirdparty/Qocoa/qsearchfield.h"
 #include "playlist/dynamic/GeneratorInterface.h"
@@ -65,6 +63,7 @@
 #include "jobview/JobStatusModel.h"
 #include "sip/SipPlugin.h"
 #include "filemetadata/ScanManager.h"
+#include "viewpages/SearchViewPage.h"
 #include "viewpages/whatsnew_0_8/WhatsNew_0_8.h"
 
 #include "Playlist.h"
