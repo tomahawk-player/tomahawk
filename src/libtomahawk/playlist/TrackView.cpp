@@ -212,6 +212,7 @@ TrackView::setPlayableModel( PlayableModel* model )
     {
         disconnect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
         disconnect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
+        disconnect( m_model, SIGNAL( changed() ), this, SIGNAL( modelChanged() ) );
     }
 
     m_model = model;
@@ -239,6 +240,7 @@ TrackView::setPlayableModel( PlayableModel* model )
 
     connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
     connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
+    connect( m_model, SIGNAL( changed() ), SIGNAL( modelChanged() ) );
 
     if ( m_model->isLoading() )
         m_loadingSpinner->fadeIn();
