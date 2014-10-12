@@ -242,16 +242,37 @@ Database::enqueue( const Tomahawk::dbcmd_ptr& lc )
         {
             workerThread = m_workerThreads.at( i );
 
-            if ( workerThread && workerThread->worker() && !workerThread->worker()->busy() )
+            if ( !workerThread || !workerThread->worker() )
             {
+                // We have no valid worker for the current thread so skip it.
+                continue;
+            }
+
+            if ( !workerThread->worker()->busy() )
+            {
+                // Case 1: We have a workerThread with no outstanding jobs.
+                // As this is the optimal situation we do not need to look at
+                // the other workers.
                 happyWorker = workerThread->worker();
                 break;
             }
-            busyThreads++;
+            else
+            {
+                busyThreads++;
 
-            if ( ( !happyWorker && workerThread && workerThread->worker() ) ||
-                 ( workerThread && workerThread->worker() && workerThread->worker()->outstandingJobs() < happyWorker->outstandingJobs() ) )
-                happyWorker = workerThread->worker();
+                if ( !happyWorker )
+                {
+                    // Case 2: We have not yet got a happyWorker but the current
+                    // workerThread has a worker so use it as a fallback.
+                    happyWorker = workerThread->worker();
+                }
+                else if ( workerThread->worker()->outstandingJobs() < happyWorker->outstandingJobs() )
+                {
+                    // Case 3: We have a worker and the current worker is less busy
+                    // than the previous minimum.
+                    happyWorker = workerThread->worker();
+                }
+            }
         }
 
         tDebug( LOGVERBOSE ) << "Enqueueing command to thread:" << happyWorker << busyThreads << lc->commandname();
