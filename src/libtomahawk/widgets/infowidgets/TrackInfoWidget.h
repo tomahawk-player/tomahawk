@@ -68,7 +68,6 @@ public:
 
     virtual bool isBeingPlayed() const;
     virtual bool isTemporaryPage() const { return true; }
-    virtual bool showInfoBar() const { return false; }
 
     virtual bool jumpToCurrentTrack();
 

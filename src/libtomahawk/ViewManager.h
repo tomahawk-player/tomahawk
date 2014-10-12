@@ -52,7 +52,6 @@ class TreeProxyModel;
 class TreeModel;
 class TrackView;
 class SourceInfoWidget;
-class InfoBar;
 class TrackInfoWidget;
 class NewReleasesWidget;
 class QPushButton;
@@ -74,7 +73,6 @@ public:
     virtual ~ViewManager();
 
     QWidget* widget() const { return m_widget; }
-    InfoBar* infobar() const { return m_infobar; }
 
     QueueView* queue() const { return m_queue; }
     void setQueue( QueueView* queue ) { m_queue = queue; }
@@ -157,20 +155,15 @@ public slots:
     void playlistInterfaceChanged( Tomahawk::playlistinterface_ptr );
 
 private slots:
-    void setFilter( const QString& filter );
-    void applyFilter();
-
     void onWidgetDestroyed( QWidget* widget );
 
 private:
     void setPage( Tomahawk::ViewPage* page, bool trackHistory = true );
-    void updateView();
 
     Tomahawk::playlist_ptr playlistForInterface( Tomahawk::playlistinterface_ptr plInterface ) const;
     Tomahawk::dynplaylist_ptr dynamicPlaylistForInterface( Tomahawk::playlistinterface_ptr plInterface ) const;
 
     QWidget* m_widget;
-    InfoBar* m_infobar;
     QStackedWidget* m_stack;
     AnimatedSplitter* m_splitter;
 

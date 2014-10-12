@@ -22,7 +22,6 @@
 #include "ViewManager.h"
 
 #include "audio/AudioEngine.h"
-#include "infobar/InfoBar.h"
 
 #include "playlist/PlaylistViewPage.h"
 #include "playlist/ContextView.h"
@@ -84,7 +83,6 @@ ViewManager::ViewManager( QObject* parent )
     s_instance = this;
 
     m_widget->setLayout( new QVBoxLayout() );
-    m_infobar = new InfoBar();
     m_stack = new QStackedWidget();
 
     m_inboxModel = new InboxModel( this );
@@ -92,7 +90,6 @@ ViewManager::ViewManager( QObject* parent )
     m_inboxModel->setDescription( tr( "Listening suggestions from your friends" ) );
     m_inboxModel->setIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::Inbox ) );
 
-    m_widget->layout()->addWidget( m_infobar );
     m_widget->layout()->addWidget( m_stack );
 
     m_superCollectionView = new TreeWidget();
@@ -108,13 +105,6 @@ ViewManager::ViewManager( QObject* parent )
     m_widget->layout()->setSpacing( 0 );
 
     connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ), this, SLOT( playlistInterfaceChanged( Tomahawk::playlistinterface_ptr ) ) );
-
-    connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
-    connect( m_infobar, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
-
-/*    connect( m_infobar, SIGNAL( flatMode() ), SLOT( setTableMode() ) );
-    connect( m_infobar, SIGNAL( artistMode() ), SLOT( setTreeMode() ) );
-    connect( m_infobar, SIGNAL( albumMode() ), SLOT( setAlbumMode() ) );*/
 }
 
 
@@ -552,28 +542,8 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
     if ( AudioEngine::instance()->state() == AudioEngine::Stopped )
         AudioEngine::instance()->setPlaylist( page->playlistInterface() );
 
-    // UGH!
     if ( QObject* obj = dynamic_cast< QObject* >( currentPage() ) )
     {
-        // if the signal exists (just to hide the qobject runtime warning...)
-        if ( obj->metaObject()->indexOfSignal( "descriptionChanged(QString)" ) > -1 )
-            connect( obj, SIGNAL( descriptionChanged( QString ) ), m_infobar, SLOT( setDescription( QString ) ), Qt::UniqueConnection );
-
-        if ( obj->metaObject()->indexOfSignal( "descriptionChanged(Tomahawk::artist_ptr)" ) > -1 )
-            connect( obj, SIGNAL( descriptionChanged( Tomahawk::artist_ptr ) ), m_infobar, SLOT( setDescription( Tomahawk::artist_ptr ) ), Qt::UniqueConnection );
-
-        if ( obj->metaObject()->indexOfSignal( "descriptionChanged(Tomahawk::album_ptr)" ) > -1 )
-            connect( obj, SIGNAL( descriptionChanged( Tomahawk::album_ptr ) ), m_infobar, SLOT( setDescription( Tomahawk::album_ptr ) ), Qt::UniqueConnection );
-
-        if ( obj->metaObject()->indexOfSignal( "longDescriptionChanged(QString)" ) > -1 )
-            connect( obj, SIGNAL( longDescriptionChanged( QString ) ), m_infobar, SLOT( setLongDescription( QString ) ), Qt::UniqueConnection );
-
-        if ( obj->metaObject()->indexOfSignal( "nameChanged(QString)" ) > -1 )
-            connect( obj, SIGNAL( nameChanged( QString ) ), m_infobar, SLOT( setCaption( QString ) ), Qt::UniqueConnection );
-
-        if ( obj->metaObject()->indexOfSignal( "pixmapChanged(QPixmap)" ) > -1 )
-            connect( obj, SIGNAL( pixmapChanged( QPixmap ) ), m_infobar, SLOT( setPixmap( QPixmap ) ), Qt::UniqueConnection );
-
         if ( obj->metaObject()->indexOfSignal( "destroyed(QWidget*)" ) > -1 )
             connect( obj, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ), Qt::UniqueConnection );
     }
@@ -585,8 +555,6 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
     //This should save the CPU cycles, especially with pages like the visualizer
     if ( previousPage && previousPage != page->widget() )
         previousPage->hide();
-
-    updateView();
 }
 
 
@@ -594,38 +562,6 @@ bool
 ViewManager::isNewPlaylistPageVisible() const
 {
     return dynamic_cast< NewPlaylistWidget* >( currentPage() ) != 0;
-}
-
-
-void
-ViewManager::updateView()
-{
-    if ( currentPlaylistInterface() )
-    {
-        m_infobar->setFilter( currentPage()->filter() );
-    }
-
-    emit filterAvailable( currentPage()->showFilter() );
-
-    m_infobar->setVisible( currentPage()->showInfoBar() );
-    m_infobar->setCaption( currentPage()->title() );
-    m_infobar->setUpdaters( currentPage()->updaters() );
-
-    switch( currentPage()->descriptionType() )
-    {
-        case ViewPage::TextType:
-            m_infobar->setDescription( currentPage()->description() );
-            break;
-        case ViewPage::ArtistType:
-            m_infobar->setDescription( currentPage()->descriptionArtist() );
-            break;
-        case ViewPage::AlbumType:
-            m_infobar->setDescription( currentPage()->descriptionAlbum() );
-            break;
-
-    }
-    m_infobar->setLongDescription( currentPage()->longDescription() );
-    m_infobar->setPixmap( currentPage()->pixmap() );
 }
 
 

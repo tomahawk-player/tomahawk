@@ -55,7 +55,6 @@ public:
     virtual QString description() const { return tr( "Results for '%1'" ).arg( m_search ); }
     virtual QPixmap pixmap() const;
 
-    virtual bool showInfoBar() const { return false; }
     virtual bool isBeingPlayed() const;
     virtual bool isTemporaryPage() const { return true; }
     virtual bool jumpToCurrentTrack();

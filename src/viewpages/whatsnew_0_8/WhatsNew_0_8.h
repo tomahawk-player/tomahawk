@@ -95,8 +95,6 @@ public:
     void onItemDeleted();
 
     int sortValue() { return 1; }
-
-    bool showInfoBar() const { return false; }
 };
 
 

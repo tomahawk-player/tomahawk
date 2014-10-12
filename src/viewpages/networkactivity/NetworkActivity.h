@@ -57,8 +57,7 @@ public:
     virtual QString title() const { return tr( "Trending" ); }
     virtual QString description() const { return tr( "What's hot amongst your friends" ); }
     virtual const QString pixmapPath() const { return ( RESPATH "images/trending.svg" ); }
-    virtual bool showInfoBar() const { return true; }
-    
+
     virtual int sortValue() { return 3; }
 };
 

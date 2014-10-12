@@ -122,10 +122,3 @@ TreeWidget::jumpToCurrentTrack()
 {
     return m_view->jumpToCurrentTrack();
 }
-
-
-bool
-TreeWidget::showInfoBar() const
-{
-    return false;
-}

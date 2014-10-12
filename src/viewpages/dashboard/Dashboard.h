@@ -98,8 +98,6 @@ public:
     const QString pixmapPath() const Q_DECL_OVERRIDE { return ( RESPATH "images/dashboard.svg" ); }
 
     int sortValue() Q_DECL_OVERRIDE { return 2; }
-
-    bool showInfoBar() const Q_DECL_OVERRIDE { return false; }
 };
 
 

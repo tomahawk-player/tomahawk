@@ -35,8 +35,6 @@ set( libGuiSources
     jobview/IndexingJobItem.cpp
     jobview/InboxJobItem.cpp
 
-    infobar/InfoBar.cpp
-
     playlist/InboxModel.cpp
     playlist/InboxView.cpp
     playlist/ContextView.cpp
@@ -388,7 +386,6 @@ set( libUI ${libUI}
     widgets/infowidgets/TrackInfoWidget.ui
     playlist/QueueView.ui
     filemetadata/MetadataEditor.ui
-    infobar/InfoBar.ui
     accounts/AccountFactoryWrapper.ui
     accounts/spotify/SpotifyAccountConfig.ui
     accounts/lastfm/LastFmConfig.ui
@@ -559,7 +556,6 @@ file( GLOB contextPagesHeaders "context/pages/*.h" )
 file( GLOB databaseHeaders "database/*.h" )
 file( GLOB filemetadataHeaders "filemetadata/*.h" )
 file( GLOB filemetadataTaghandlersHeaders "filemetadata/taghandlers/*.h" )
-file( GLOB infobarHeaders "infobar/*.h" )
 file( GLOB infosystemHeaders "infosystem/*.h" )
 file( GLOB jobviewHeaders "jobview/*.h" )
 file( GLOB networkHeaders "network/*.h" )
@@ -589,7 +585,6 @@ install( FILES ${contextPagesHeaders} DESTINATION include/libtomahawk/context/pa
 install( FILES ${databaseHeaders} DESTINATION include/libtomahawk/database )
 install( FILES ${filemetadataHeaders} DESTINATION include/libtomahawk/filemetadata )
 install( FILES ${filemetadataTaghandlersHeaders} DESTINATION include/libtomahawk/filemetadata/taghandlers )
-install( FILES ${infobarHeaders} DESTINATION include/libtomahawk/infobar )
 install( FILES ${infosystemHeaders} DESTINATION include/libtomahawk/infosystem )
 install( FILES ${jobviewHeaders} DESTINATION include/libtomahawk/jobview )
 install( FILES ${networkHeaders} DESTINATION include/libtomahawk/network )

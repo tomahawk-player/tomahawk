@@ -71,7 +71,6 @@ public:
     virtual QString title() const { return tr( "New Releases" ); }
     virtual QString description() const { return QString(); }
 
-    virtual bool showInfoBar() const { return false; }
     virtual bool isBeingPlayed() const;
 
     virtual bool jumpToCurrentTrack();

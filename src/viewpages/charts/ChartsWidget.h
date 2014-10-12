@@ -136,8 +136,6 @@ public:
     const QString pixmapPath() const Q_DECL_OVERRIDE { return ( RESPATH "images/charts.svg" ); }
 
     int sortValue() Q_DECL_OVERRIDE { return 5; }
-
-    bool showInfoBar() const Q_DECL_OVERRIDE { return false; }
 };
 
 

@@ -43,8 +43,6 @@ public:
 
     virtual bool jumpToCurrentTrack();
 
-    virtual bool showInfoBar() const;
-
 public slots:
     virtual bool setFilter( const QString& filter );
 
