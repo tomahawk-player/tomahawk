@@ -221,7 +221,7 @@ DynamicWidget::sizeHint() const
 
 
 void
-DynamicWidget::resizeEvent(QResizeEvent* )
+DynamicWidget::resizeEvent( QResizeEvent* )
 {
     layoutFloatingWidgets();
 }
@@ -266,7 +266,7 @@ DynamicWidget::playlistChanged( Tomahawk::playlistinterface_ptr pl )
 
 
 void
-DynamicWidget::showEvent(QShowEvent* )
+DynamicWidget::showEvent( QShowEvent* )
 {
     if ( !m_playlist.isNull() && !m_runningOnDemand )
         m_setup->fadeIn();
