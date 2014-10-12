@@ -124,7 +124,6 @@ set( libGuiSources
     widgets/Breadcrumb.cpp
     widgets/BreadcrumbButton.cpp
     widgets/ChartDataLoader.cpp
-    widgets/CheckDirTree.cpp
     widgets/ClickableLabel.cpp
     widgets/ComboBox.cpp
     widgets/ElidedLabel.cpp
