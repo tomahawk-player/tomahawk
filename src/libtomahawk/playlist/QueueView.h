@@ -19,11 +19,11 @@
 #ifndef QUEUEVIEW_H
 #define QUEUEVIEW_H
 
-#include "playlist/FlexibleView.h"
+#include "playlist/PlaylistViewPage.h"
 
 #include "DllMacro.h"
 
-class DLLEXPORT QueueView : public FlexibleView
+class DLLEXPORT QueueView : public PlaylistViewPage
 {
 Q_OBJECT
 

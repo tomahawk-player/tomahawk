@@ -34,7 +34,7 @@ using namespace Tomahawk;
 
 
 QueueView::QueueView( QWidget* parent )
-    : FlexibleView( parent )
+    : PlaylistViewPage( parent )
 {
     view()->setCaption( tr( "Queue Details" ) );
 

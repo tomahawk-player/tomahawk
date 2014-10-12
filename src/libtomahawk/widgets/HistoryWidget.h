@@ -19,7 +19,7 @@
 #ifndef HISTORY_WIDGET_H
 #define HISTORY_WIDGET_H
 
-#include "playlist/FlexibleView.h"
+#include "playlist/PlaylistViewPage.h"
 #include "Query.h"
 #include "Source.h"
 #include "DllMacro.h"
@@ -28,7 +28,7 @@ class QCalendarWidget;
 class QDateEdit;
 class RecentlyPlayedModel;
 
-class DLLEXPORT HistoryWidget : public FlexibleView
+class DLLEXPORT HistoryWidget : public PlaylistViewPage
 {
 Q_OBJECT
 

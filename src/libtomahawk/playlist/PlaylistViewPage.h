@@ -16,8 +16,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FLEXIBLEVIEW_H
-#define FLEXIBLEVIEW_H
+#ifndef PLAYLISTVIEWPAGE_H
+#define PLAYLISTVIEWPAGE_H
 
 #include "ViewPage.h"
 #include "PlaylistInterface.h"
@@ -28,13 +28,13 @@ class QStackedWidget;
 class ContextView;
 class FilterHeader;
 
-class DLLEXPORT FlexibleView : public QWidget, public Tomahawk::ViewPage
+class DLLEXPORT PlaylistViewPage : public QWidget, public Tomahawk::ViewPage
 {
 Q_OBJECT
 
 public:
-    explicit FlexibleView( QWidget* parent = 0, QWidget* extraHeader = 0 );
-    ~FlexibleView();
+    explicit PlaylistViewPage( QWidget* parent = 0, QWidget* extraHeader = 0 );
+    ~PlaylistViewPage();
 
     virtual QWidget* widget() { return this; }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
@@ -70,4 +70,4 @@ private:
     bool m_temporary;
 };
 
-#endif // FLEXIBLEVIEW_H
+#endif // PLAYLISTVIEWPAGE_H

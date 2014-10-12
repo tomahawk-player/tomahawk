@@ -43,7 +43,7 @@ class AlbumInfoWidget;
 class ArtistInfoWidget;
 class TreeWidget;
 class CollectionModel;
-class FlexibleView;
+class PlaylistViewPage;
 class FlexibleTreeView;
 class PlaylistModel;
 class TrackProxyModel;
@@ -100,15 +100,15 @@ public:
     Tomahawk::ViewPage* pageForPlaylist( const Tomahawk::playlist_ptr& pl ) const;
     Tomahawk::ViewPage* pageForDynPlaylist( const Tomahawk::dynplaylist_ptr& pl ) const;
 
-    /// Get a playlist (or dynamic playlist ) from a ViewPage* if the page is FlexibleView or DynamicWidget.
+    /// Get a playlist (or dynamic playlist ) from a ViewPage* if the page is PlaylistViewPage or DynamicWidget.
     /// Lives here but used by SourcesModel
     Tomahawk::playlist_ptr playlistForPage( Tomahawk::ViewPage* ) const;
 
     // only use this is you need to create a playlist and show it directly and want it to be
     // linked to the sidebar. call it right after creating the playlist
-    FlexibleView* createPageForPlaylist( const Tomahawk::playlist_ptr& playlist );
+    PlaylistViewPage* createPageForPlaylist( const Tomahawk::playlist_ptr& playlist );
 
-    FlexibleView* createPageForList( const QString& title, const QList< Tomahawk::query_ptr >& queries );
+    PlaylistViewPage* createPageForList( const QString& title, const QList< Tomahawk::query_ptr >& queries );
 
     void addDynamicPage( Tomahawk::ViewPagePlugin* viewPage, const QString& pageName = QString() );
 
@@ -194,7 +194,7 @@ private:
     QHash< Tomahawk::artist_ptr, QPointer<ArtistInfoWidget> > m_artistViews;
     QHash< Tomahawk::album_ptr, QPointer<AlbumInfoWidget> > m_albumViews;
     QHash< Tomahawk::query_ptr, QPointer<TrackInfoWidget> > m_trackViews;
-    QHash< Tomahawk::playlist_ptr, QPointer<FlexibleView> > m_playlistViews;
+    QHash< Tomahawk::playlist_ptr, QPointer<PlaylistViewPage> > m_playlistViews;
     QHash< Tomahawk::source_ptr, QPointer<SourceInfoWidget> > m_sourceViews;
 
     QList<Tomahawk::ViewPage*> m_pageHistoryBack;

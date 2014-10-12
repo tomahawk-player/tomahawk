@@ -22,7 +22,7 @@
 #define INBOXVIEW_H
 
 #include "TrackView.h"
-#include "FlexibleView.h"
+#include "PlaylistViewPage.h"
 
 class InboxView : public TrackView
 {
@@ -39,7 +39,7 @@ public slots:
     virtual void onMenuTriggered( int action );
 };
 
-class InboxPage : public FlexibleView
+class InboxPage : public PlaylistViewPage
 {
     Q_OBJECT
 

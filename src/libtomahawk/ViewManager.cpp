@@ -24,7 +24,7 @@
 #include "audio/AudioEngine.h"
 #include "infobar/InfoBar.h"
 
-#include "playlist/FlexibleView.h"
+#include "playlist/PlaylistViewPage.h"
 #include "playlist/ContextView.h"
 #include "playlist/FlexibleTreeView.h"
 #include "playlist/TreeModel.h"
@@ -128,10 +128,10 @@ ViewManager::~ViewManager()
 }
 
 
-FlexibleView*
+PlaylistViewPage*
 ViewManager::createPageForPlaylist( const playlist_ptr& playlist )
 {
-    FlexibleView* view = new FlexibleView();
+    PlaylistViewPage* view = new PlaylistViewPage();
     PlaylistModel* model = new PlaylistModel();
 
     // We need to set the model on the view before loading the playlist, so spinners & co are connected
@@ -144,10 +144,10 @@ ViewManager::createPageForPlaylist( const playlist_ptr& playlist )
 }
 
 
-FlexibleView*
+PlaylistViewPage*
 ViewManager::createPageForList( const QString& title, const QList< query_ptr >& queries )
 {
-    FlexibleView* view = new FlexibleView();
+    PlaylistViewPage* view = new PlaylistViewPage();
     PlaylistModel* model = new PlaylistModel();
 
     view->setTemporaryPage( true );
@@ -167,7 +167,7 @@ ViewManager::playlistForPage( ViewPage* page ) const
 {
     playlist_ptr p;
 
-    FlexibleView* fv = dynamic_cast< FlexibleView* >( page );
+    PlaylistViewPage* fv = dynamic_cast< PlaylistViewPage* >( page );
     if ( fv && fv->view()->trackView()->model() )
     {
         PlaylistModel* m = dynamic_cast< PlaylistModel* >( fv->view()->trackView()->model() );
@@ -189,7 +189,7 @@ ViewManager::show( const Tomahawk::playlist_ptr& playlist )
     if ( !playlist->loaded() )
         playlist->loadRevision();
 
-    FlexibleView* view;
+    PlaylistViewPage* view;
 
     if ( !m_playlistViews.contains( playlist ) || m_playlistViews.value( playlist ).isNull() )
     {
@@ -741,7 +741,7 @@ ViewManager::currentPage() const
 Tomahawk::playlist_ptr
 ViewManager::playlistForInterface( Tomahawk::playlistinterface_ptr interface ) const
 {
-    foreach ( QPointer<FlexibleView> view, m_playlistViews.values() )
+    foreach ( QPointer<PlaylistViewPage> view, m_playlistViews.values() )
     {
         if ( !view.isNull() && view.data()->playlistInterface() == interface )
         {

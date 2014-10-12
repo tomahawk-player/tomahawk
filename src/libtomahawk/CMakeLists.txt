@@ -40,7 +40,7 @@ set( libGuiSources
     playlist/InboxModel.cpp
     playlist/InboxView.cpp
     playlist/ContextView.cpp
-    playlist/FlexibleView.cpp
+    playlist/PlaylistViewPage.cpp
     playlist/FlexibleTreeView.cpp
     playlist/TreeModel.cpp
     playlist/TreeProxyModel.cpp

@@ -28,6 +28,7 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
+
 InboxView::InboxView( QWidget* parent ) :
     TrackView( parent )
 {
@@ -76,8 +77,8 @@ InboxView::onMenuTriggered( int action )
 }
 
 
-InboxPage::InboxPage( QWidget* parent ) :
-    FlexibleView( parent )
+InboxPage::InboxPage( QWidget* parent )
+    : PlaylistViewPage( parent )
 {
     view()->setCaption( tr( "Inbox Details" ) );
 

@@ -24,7 +24,7 @@
 #include "DropJob.h"
 #include "ViewManager.h"
 
-#include "playlist/FlexibleView.h"
+#include "playlist/PlaylistViewPage.h"
 #include "playlist/ContextView.h"
 #include "playlist/TrackView.h"
 #include "playlist/TopLovedTracksModel.h"
@@ -74,7 +74,7 @@ LovedTracksItem::activate()
     if ( !m_lovedTracksPage )
     {
         SourceItem* par = dynamic_cast< SourceItem* >( parent() );
-        FlexibleView* pv = new FlexibleView( ViewManager::instance()->widget() );
+        PlaylistViewPage* pv = new PlaylistViewPage( ViewManager::instance()->widget() );
         pv->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::LovedPlaylist, TomahawkUtils::Original, QSize( 128, 128 ) ) );
 
         TopLovedTracksModel* raModel = new TopLovedTracksModel( pv );

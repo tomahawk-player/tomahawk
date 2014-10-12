@@ -16,7 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "FlexibleView.h"
+#include "PlaylistViewPage.h"
 
 #include <QRadioButton>
 #include <QStackedWidget>
@@ -33,7 +33,7 @@
 using namespace Tomahawk;
 
 
-FlexibleView::FlexibleView( QWidget* parent, QWidget* extraHeader )
+PlaylistViewPage::PlaylistViewPage( QWidget* parent, QWidget* extraHeader )
     : QWidget( parent )
     , m_header( new FilterHeader( this ) )
     , m_view( new ContextView( this ) )
@@ -56,49 +56,49 @@ FlexibleView::FlexibleView( QWidget* parent, QWidget* extraHeader )
 }
 
 
-FlexibleView::~FlexibleView()
+PlaylistViewPage::~PlaylistViewPage()
 {
     tDebug() << Q_FUNC_INFO;
 }
 
 
 Tomahawk::playlistinterface_ptr
-FlexibleView::playlistInterface() const
+PlaylistViewPage::playlistInterface() const
 {
     return m_view->playlistInterface();
 }
 
 
 QString
-FlexibleView::title() const
+PlaylistViewPage::title() const
 {
     return m_view->trackView()->title();
 }
 
 
 QString
-FlexibleView::description() const
+PlaylistViewPage::description() const
 {
     return m_view->trackView()->description();
 }
 
 
 QPixmap
-FlexibleView::pixmap() const
+PlaylistViewPage::pixmap() const
 {
     return m_pixmap;
 }
 
 
 bool
-FlexibleView::jumpToCurrentTrack()
+PlaylistViewPage::jumpToCurrentTrack()
 {
     return m_view->jumpToCurrentTrack();
 }
 
 
 bool
-FlexibleView::setFilter( const QString& pattern )
+PlaylistViewPage::setFilter( const QString& pattern )
 {
     ViewPage::setFilter( pattern );
 
@@ -107,7 +107,7 @@ FlexibleView::setFilter( const QString& pattern )
 
 
 void
-FlexibleView::setPixmap( const QPixmap& pixmap )
+PlaylistViewPage::setPixmap( const QPixmap& pixmap )
 {
     m_pixmap = pixmap;
     m_header->setPixmap( pixmap );
@@ -115,7 +115,7 @@ FlexibleView::setPixmap( const QPixmap& pixmap )
 
 
 void
-FlexibleView::onModelChanged()
+PlaylistViewPage::onModelChanged()
 {
     m_header->setCaption( m_view->trackView()->model()->title() );
     m_header->setDescription( m_view->trackView()->model()->description() );
@@ -123,7 +123,7 @@ FlexibleView::onModelChanged()
 
 
 void
-FlexibleView::onWidgetDestroyed( QWidget* widget )
+PlaylistViewPage::onWidgetDestroyed( QWidget* widget )
 {
     Q_UNUSED( widget );
     emit destroyed( this );
@@ -131,28 +131,28 @@ FlexibleView::onWidgetDestroyed( QWidget* widget )
 
 
 bool
-FlexibleView::isTemporaryPage() const
+PlaylistViewPage::isTemporaryPage() const
 {
     return m_temporary;
 }
 
 
 void
-FlexibleView::setTemporaryPage( bool b )
+PlaylistViewPage::setTemporaryPage( bool b )
 {
     m_temporary = b;
 }
 
 
 bool
-FlexibleView::isBeingPlayed() const
+PlaylistViewPage::isBeingPlayed() const
 {
     return m_view->isBeingPlayed();
 }
 
 
 ContextView*
-FlexibleView::view() const
+PlaylistViewPage::view() const
 {
     return m_view;
 }

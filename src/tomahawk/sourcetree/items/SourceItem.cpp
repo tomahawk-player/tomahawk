@@ -35,7 +35,7 @@
 #include "Source.h"
 #include "SourceList.h"
 #include "playlist/ContextView.h"
-#include "playlist/FlexibleView.h"
+#include "playlist/PlaylistViewPage.h"
 #include "playlist/TrackView.h"
 #include "playlist/RecentlyAddedModel.h"
 #include "playlist/RecentlyPlayedModel.h"
@@ -606,7 +606,7 @@ SourceItem::latestAdditionsClicked()
 {
     if ( !m_latestAdditionsPage )
     {
-        FlexibleView* pv = new FlexibleView( ViewManager::instance()->widget() );
+        PlaylistViewPage* pv = new PlaylistViewPage( ViewManager::instance()->widget() );
         pv->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NewAdditions,
                                                      TomahawkUtils::Original,
                                                      TomahawkUtils::DpiScaler::scaled( pv, 80, 80 ) ) );

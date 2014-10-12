@@ -38,7 +38,7 @@
 using namespace Tomahawk;
 
 HistoryWidget::HistoryWidget( const source_ptr& source, QWidget* parent )
-    : FlexibleView( parent )
+: PlaylistViewPage( parent )
 {
     setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RecentlyPlayed ) );
 
