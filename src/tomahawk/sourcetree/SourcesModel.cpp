@@ -312,17 +312,6 @@ SourcesModel::appendGroups()
     InboxItem* inbox = new InboxItem( this, m_browse );
     inbox->setSortValue( 4 );
 
-    // super collection
-/*    GenericPageItem* sc = new GenericPageItem( this, m_browse, tr( "SuperCollection" ), ImageRegistry::instance()->icon( RESPATH "images/supercollection.svg" ),
-                                                  boost::bind( &ViewManager::showSuperCollection, ViewManager::instance() ),
-                                                  boost::bind( &ViewManager::superCollectionView, ViewManager::instance() ) );
-    sc->setSortValue( 5 );*/
-
-    GenericPageItem* newReleases = new GenericPageItem( this, m_browse, tr( "New Releases" ), ImageRegistry::instance()->icon( RESPATH "images/new-releases.svg" ),
-                                                boost::bind( &ViewManager::showNewReleasesPage, ViewManager::instance() ),
-                                                boost::bind( &ViewManager::newReleasesWidget, ViewManager::instance() ) );
-    newReleases->setSortValue( 7 );
-
     m_collectionsGroup = new GroupItem( this, m_rootItem, tr( "Friends" ), 4 );
     m_cloudGroup = new GroupItem( this, m_rootItem, tr( "Cloud Collections" ), 5 );
 

@@ -52,7 +52,6 @@ class TreeModel;
 class TrackView;
 class SourceInfoWidget;
 class TrackInfoWidget;
-class NewReleasesWidget;
 class QPushButton;
 class InboxModel;
 
@@ -82,9 +81,7 @@ public:
 
     Tomahawk::ViewPage* show( Tomahawk::ViewPage* page );
 
-    Tomahawk::ViewPage* newReleasesWidget() const;
     Tomahawk::ViewPage* inboxWidget() const;
-
     Tomahawk::ViewPage* dynamicPageWidget( const QString& pageName ) const;
 
     InboxModel* inboxModel();
@@ -120,7 +117,6 @@ signals:
     void viewPageAdded( const QString& pageName, Tomahawk::ViewPage* page, int sortValue );
 
 public slots:
-    Tomahawk::ViewPage* showNewReleasesPage();
     Tomahawk::ViewPage* showInboxPage();
     Tomahawk::ViewPage* showQueuePage();
 
@@ -162,7 +158,6 @@ private:
     AnimatedSplitter* m_splitter;
 
     QueueView* m_queue;
-    NewReleasesWidget* m_newReleasesWidget;
     Tomahawk::ViewPage* m_inboxWidget;
     InboxModel* m_inboxModel;
 

@@ -25,17 +25,14 @@
 #include "ViewManager.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"
-#include "RecentPlaylistsModel.h"
-#include "ChartDataLoader.h"
+#include "Pipeline.h"
 
 #include "audio/AudioEngine.h"
-#include "playlist/dynamic/GeneratorInterface.h"
-#include "playlist/PlaylistModel.h"
-#include "playlist/TreeProxyModel.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
-#include "Pipeline.h"
 #include "utils/AnimatedSpinner.h"
+#include "widgets/ChartDataLoader.h"
+
 #include <QPainter>
 #include <QStandardItemModel>
 #include <QStandardItem>
@@ -46,6 +43,7 @@
 #define HISTORY_RESOLVING_TIMEOUT 2500
 
 using namespace Tomahawk;
+using namespace Tomahawk::Widgets;
 
 static QString s_newReleasesIdentifier = QString( "NewReleasesWidget" );
 
@@ -85,6 +83,8 @@ NewReleasesWidget::NewReleasesWidget( QWidget* parent )
     ui->breadCrumbLeft->setVisible( false );
     m_spinner = new AnimatedSpinner( ui->albumsView );
     m_spinner->fadeIn();
+
+    fetchData();
 }
 
 
@@ -169,7 +169,7 @@ NewReleasesWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData request
 
         case InfoSystem::InfoNewRelease:
         {
-            if( !returnedData.contains("type") )
+            if ( !returnedData.contains("type") )
                 break;
             const QString type = returnedData["type"].toString();
             if( !returnedData.contains(type) )
@@ -378,3 +378,16 @@ NewReleasesWidget::newReleasesLoaded( ChartDataLoader* loader, const QList< albu
     m_workers.remove( loader );
     loader->deleteLater();
 }
+
+
+NewReleasesPage::NewReleasesPage( QWidget* parent )
+{
+    Q_UNUSED( parent )
+}
+
+
+NewReleasesPage::~NewReleasesPage()
+{
+}
+
+Q_EXPORT_PLUGIN2( ViewPagePlugin, NewReleasesPage )

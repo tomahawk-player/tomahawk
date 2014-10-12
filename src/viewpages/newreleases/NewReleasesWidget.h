@@ -1,7 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2012, Casey Link <unnamedrambler@gmail.com>
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -19,28 +19,19 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef NEWRELEASESWIDGET_H
-#define NEWRELEASESWIDGET_H
+#ifndef TOMAHAWK_NEWRELEASESWIDGET_H
+#define TOMAHAWK_NEWRELEASESWIDGET_H
 
-#include "PlaylistInterface.h"
-#include "infosystem/InfoSystem.h"
-#include "ViewPage.h"
+#include "../ViewPageDllMacro.h"
+#include "ViewPagePlugin.h"
+#include "ViewPageLazyLoader.h"
 
-#include "DllMacro.h"
-
-#include <QWidget>
-#include <QListWidgetItem>
-#include <QStyledItemDelegate>
-
+class AnimatedSpinner;
+class PlayableModel;
 class QSortFilterProxyModel;
 class QStandardItemModel;
 class QStandardItem;
-class TreeModel;
-class PlaylistModel;
-class TreeProxyModel;
-class AlbumModel;
-class PlayableModel;
-class AnimatedSpinner;
+
 namespace Ui
 {
     class NewReleasesWidget;
@@ -49,15 +40,18 @@ namespace Ui
 namespace Tomahawk
 {
     class ChartDataLoader;
-    class ChartsPlaylistInterface;
-    class ChartDataLoader;
 }
+
+namespace Tomahawk
+{
+namespace Widgets
+{
 
 /**
  * \class
- * \brief The tomahawk page that shows music charts.
+ * \brief The tomahawk page that shows new releases.
  */
-class DLLEXPORT NewReleasesWidget : public QWidget, public Tomahawk::ViewPage
+class DLLEXPORT NewReleasesWidget : public QWidget
 {
 Q_OBJECT
 
@@ -65,14 +59,8 @@ public:
     NewReleasesWidget( QWidget* parent = 0 );
     ~NewReleasesWidget();
 
-    virtual QWidget* widget() { return this; }
-    virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
-
-    virtual QString title() const { return tr( "New Releases" ); }
-    virtual QString description() const { return QString(); }
-
+    Tomahawk::playlistinterface_ptr playlistInterface() const;
     virtual bool isBeingPlayed() const;
-
     virtual bool jumpToCurrentTrack();
 
 protected:
@@ -92,10 +80,8 @@ private slots:
     void newReleasesLoaded( Tomahawk::ChartDataLoader*, const QList< Tomahawk::album_ptr >& );
 
 private:
-    void setLeftViewArtists( TreeModel* artistModel );
     void setLeftViewAlbums( PlayableModel* albumModel );
     void setLeftViewTracks( PlaylistModel* trackModel );
-
 
     QStandardItem* parseNode( QStandardItem* parentItem, const QString &label, const QVariant &data );
     Ui::NewReleasesWidget *ui;
@@ -116,7 +102,31 @@ private:
     QSet< QString > m_queuedFetches;
     AnimatedSpinner* m_spinner;
     bool m_loading;
-    friend class Tomahawk::ChartsPlaylistInterface;
 };
 
-#endif // NEWRELEASESWIDGET_H
+const QString NEWRELEASES_VIEWPAGE_NAME = "newreleases";
+
+class TOMAHAWK_VIEWPAGE_EXPORT NewReleasesPage : public Tomahawk::ViewPageLazyLoader< NewReleasesWidget >
+{
+    Q_OBJECT
+    Q_INTERFACES( Tomahawk::ViewPagePlugin )
+    Q_PLUGIN_METADATA( IID "org.tomahawk-player.Player.ViewPagePlugin" )
+
+public:
+    NewReleasesPage( QWidget* parent = 0 );
+    virtual ~NewReleasesPage();
+
+    const QString defaultName() Q_DECL_OVERRIDE { return NEWRELEASES_VIEWPAGE_NAME; }
+    QString title() const Q_DECL_OVERRIDE { return tr( "New Releases" ); }
+    QString description() const Q_DECL_OVERRIDE { return QString(); }
+
+    const QString pixmapPath() const Q_DECL_OVERRIDE { return ( RESPATH "images/new-releases.svg" ); }
+
+    int sortValue() Q_DECL_OVERRIDE { return 5; }
+};
+
+
+} // Widgets
+} // Tomahawk
+
+#endif // TOMAHAWK_NEWRELEASESWIDGET_H

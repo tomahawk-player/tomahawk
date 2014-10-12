@@ -50,7 +50,6 @@
 #include "viewpages/AlbumViewPage.h"
 #include "viewpages/TrackViewPage.h"
 
-#include "widgets/NewReleasesWidget.h"
 #include "widgets/AnimatedSplitter.h"
 
 #include "utils/Logger.h"
@@ -76,7 +75,6 @@ ViewManager::ViewManager( QObject* parent )
     : QObject( parent )
     , m_widget( new QWidget() )
     , m_queue( 0 )
-    , m_newReleasesWidget( 0 )
     , m_inboxWidget( 0 )
     , m_currentPage( 0 )
 {
@@ -104,7 +102,6 @@ ViewManager::ViewManager( QObject* parent )
 
 ViewManager::~ViewManager()
 {
-    delete m_newReleasesWidget;
     delete m_inboxWidget;
     delete m_widget;
 }
@@ -347,19 +344,6 @@ ViewManager::playlistInterfaceChanged( Tomahawk::playlistinterface_ptr interface
         if ( !pl.isNull() )
             TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( pl->guid(), pl->author()->id() );
     }
-}
-
-
-Tomahawk::ViewPage*
-ViewManager::showNewReleasesPage()
-{
-    if ( !m_newReleasesWidget )
-    {
-        m_newReleasesWidget = new NewReleasesWidget();
-        m_newReleasesWidget->fetchData();
-    }
-
-    return show( m_newReleasesWidget );
 }
 
 
@@ -656,13 +640,6 @@ ViewManager::showCurrentTrack()
         setPage( page );
         page->jumpToCurrentTrack();
     }
-}
-
-
-Tomahawk::ViewPage*
-ViewManager::newReleasesWidget() const
-{
-    return m_newReleasesWidget;
 }
 
 
