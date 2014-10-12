@@ -132,7 +132,6 @@ set( libGuiSources
     widgets/ClickableLabel.cpp
     widgets/ComboBox.cpp
     widgets/ElidedLabel.cpp
-    widgets/FadingPixmap.cpp
     widgets/FilterHeader.cpp
     widgets/CaptionLabel.cpp
     widgets/HeaderLabel.cpp
