@@ -2,7 +2,7 @@
  *
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
- *   Copyright 2010-2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -20,8 +20,6 @@
  */
 
 #include "SourceItem.h"
-
-#include <libtomahawk-widgets/SocialPlaylistWidget.h>
 
 #include "CategoryItems.h"
 #include "database/Database.h"
@@ -59,9 +57,7 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
     , m_stations( 0 )
     , m_latchedOn( false )
     , m_sourceInfoItem( 0 )
-    , m_coolPlaylistsItem( 0 )
     , m_sourceInfoPage( 0 )
-    , m_coolPlaylistsPage( 0 )
     , m_latestAdditionsPage( 0 )
     , m_recentPlaysPage( 0 )
 {
@@ -571,27 +567,6 @@ ViewPage*
 SourceItem::getCollectionPage( const Tomahawk::collection_ptr& collection ) const
 {
     return m_collectionPages[ collection ];
-}
-
-
-ViewPage*
-SourceItem::coolPlaylistsClicked()
-{
-    if ( !m_source.isNull() )
-        return 0;
-
-    if ( !m_coolPlaylistsPage )
-        m_coolPlaylistsPage = new Tomahawk::Widgets::SocialPlaylistWidget( ViewManager::instance()->widget() );
-
-    ViewManager::instance()->show( m_coolPlaylistsPage );
-    return m_coolPlaylistsPage;
-}
-
-
-ViewPage*
-SourceItem::getCoolPlaylistsPage() const
-{
-    return m_coolPlaylistsPage;
 }
 
 

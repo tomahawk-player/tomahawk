@@ -2,7 +2,7 @@
  *
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
- *   Copyright 2010-2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -87,9 +87,6 @@ private slots:
     Tomahawk::ViewPage* collectionClicked( const Tomahawk::collection_ptr& collection );
     Tomahawk::ViewPage* getCollectionPage( const Tomahawk::collection_ptr& collection ) const;
 
-    Tomahawk::ViewPage* coolPlaylistsClicked();
-    Tomahawk::ViewPage* getCoolPlaylistsPage() const;
-
     Tomahawk::ViewPage* latestAdditionsClicked();
     Tomahawk::ViewPage* getLatestAdditionsPage() const;
 
@@ -115,12 +112,10 @@ private:
     QMap< Tomahawk::collection_ptr, Tomahawk::ViewPage* > m_collectionPages;
 
     GenericPageItem* m_sourceInfoItem;
-    GenericPageItem* m_coolPlaylistsItem;
     GenericPageItem* m_latestAdditionsItem;
     GenericPageItem* m_recentPlaysItem;
 
     Tomahawk::ViewPage* m_sourceInfoPage;
-    Tomahawk::ViewPage* m_coolPlaylistsPage;
     Tomahawk::ViewPage* m_latestAdditionsPage;
     Tomahawk::ViewPage* m_recentPlaysPage;
 };
