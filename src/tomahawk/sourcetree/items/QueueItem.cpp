@@ -39,12 +39,13 @@ QueueItem::QueueItem( SourcesModel* model, SourceTreeItem* parent )
     m_text = tr( "Queue" );
     m_icon = ImageRegistry::instance()->icon( RESPATH "images/queue.svg" );
 
-    connect( ViewManager::instance()->queue()->trackView()->proxyModel(), SIGNAL( itemCountChanged( uint ) ), SIGNAL( updated() ) );
+    connect( ViewManager::instance()->queue()->view()->trackView()->proxyModel(), SIGNAL( itemCountChanged( uint ) ), SIGNAL( updated() ) );
 }
 
 
 QueueItem::~QueueItem()
-{}
+{
+}
 
 
 QString
@@ -78,7 +79,7 @@ QueueItem::setSortValue( int value )
 int
 QueueItem::unlistenedCount() const
 {
-    return ViewManager::instance()->queue()->trackView()->proxyModel()->rowCount();
+    return ViewManager::instance()->queue()->view()->trackView()->proxyModel()->rowCount();
 }
 
 
@@ -170,7 +171,7 @@ QueueItem::parsedDroppedTracks( const QList< Tomahawk::query_ptr >& tracks )
 {
     if ( tracks.count() )
     {
-        ViewManager::instance()->queue()->trackView()->model()->appendQueries( tracks );
+        ViewManager::instance()->queue()->view()->trackView()->model()->appendQueries( tracks );
     }
     else
         tDebug() << "ERROR: Could not add empty track list to queue!";

@@ -619,13 +619,12 @@ SourceItem::latestAdditionsClicked()
         else
             raModel->setDescription( tr( "Latest additions to %1's collection" ).arg( m_source->friendlyName() ) );
 
-        pv->setPlayableModel( raModel );
-        pv->trackView()->sortByColumn( PlayableModel::Age, Qt::DescendingOrder );
-        pv->detailedView()->sortByColumn( PlayableModel::Age, Qt::DescendingOrder );
-        pv->setEmptyTip( tr( "Sorry, we could not find any recent additions!" ) );
+        pv->view()->trackView()->setPlayableModel( raModel );
+        pv->view()->trackView()->sortByColumn( PlayableModel::Age, Qt::DescendingOrder );
+        pv->view()->trackView()->setEmptyTip( tr( "Sorry, we could not find any recent additions!" ) );
         raModel->setSource( m_source );
 
-        pv->setGuid( QString( "latestadditions/%1" ).arg( m_source->nodeId() ) );
+        pv->view()->setGuid( QString( "latestadditions/%1" ).arg( m_source->nodeId() ) );
 
         m_latestAdditionsPage = pv;
     }

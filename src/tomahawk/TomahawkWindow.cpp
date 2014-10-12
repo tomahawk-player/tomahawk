@@ -119,7 +119,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     new ViewManager( this );
     QueueView* queueView = new QueueView();
     ViewManager::instance()->setQueue( queueView );
-    AudioEngine::instance()->setQueue( queueView->trackView()->proxyModel()->playlistInterface() );
+    AudioEngine::instance()->setQueue( queueView->view()->trackView()->proxyModel()->playlistInterface() );
 
     m_audioControls = new AudioControls( this );
 

@@ -403,15 +403,15 @@ ContextMenu::addToQueue()
 {
     foreach ( const query_ptr& query, m_queries )
     {
-        ViewManager::instance()->queue()->trackView()->model()->appendQuery( query );
+        ViewManager::instance()->queue()->view()->trackView()->model()->appendQuery( query );
     }
     foreach ( const artist_ptr& artist, m_artists )
     {
-        ViewManager::instance()->queue()->trackView()->model()->appendArtist( artist );
+        ViewManager::instance()->queue()->view()->trackView()->model()->appendArtist( artist );
     }
     foreach ( const album_ptr& album, m_albums )
     {
-        ViewManager::instance()->queue()->trackView()->model()->appendAlbum( album );
+        ViewManager::instance()->queue()->view()->trackView()->model()->appendAlbum( album );
     }
 }
 

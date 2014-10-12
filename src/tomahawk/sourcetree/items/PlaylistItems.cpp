@@ -152,7 +152,7 @@ PlaylistItem::doubleClicked()
     ViewPage* p = ViewManager::instance()->currentPage();
     if ( FlexibleView* view = dynamic_cast< FlexibleView* >( p ) )
     {
-        view->trackView()->startPlayingFromStart();
+        view->view()->trackView()->startPlayingFromStart();
     }
 }
 

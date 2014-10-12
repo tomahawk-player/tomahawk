@@ -20,10 +20,12 @@
 
 #include "InboxView.h"
 #include "InboxModel.h"
+#include "ContextView.h"
 #include "PlayableProxyModel.h"
 #include "ContextMenu.h"
 #include "playlist/TrackItemDelegate.h"
 #include "ViewManager.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
 InboxView::InboxView( QWidget* parent ) :
@@ -77,14 +79,13 @@ InboxView::onMenuTriggered( int action )
 InboxPage::InboxPage( QWidget* parent ) :
     FlexibleView( parent )
 {
-    InboxView* inboxView = new InboxView( this );
-    setTrackView( inboxView );
-    setCurrentMode( Flat );
-//    setCaption( tr( "Inbox Details" ) );
+    view()->setCaption( tr( "Inbox Details" ) );
 
-    setPlayableModel( ViewManager::instance()->inboxModel() );
-    setEmptyTip( tr( "Your friends have not shared any recommendations with you yet. Connect with them and share your musical gems!" ) );
+    setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::Inbox ) );
 
-    TrackItemDelegate* delegate = new TrackItemDelegate( TrackItemDelegate::Inbox, inboxView, inboxView->proxyModel() );
-    inboxView->setPlaylistItemDelegate( delegate );
+    view()->trackView()->setPlayableModel( ViewManager::instance()->inboxModel() );
+    view()->trackView()->setEmptyTip( tr( "Your friends have not shared any recommendations with you yet. Connect with them and share your musical gems!" ) );
+
+    TrackItemDelegate* delegate = new TrackItemDelegate( TrackItemDelegate::Inbox, view()->trackView(), view()->trackView()->proxyModel() );
+    view()->trackView()->setPlaylistItemDelegate( delegate );
 }

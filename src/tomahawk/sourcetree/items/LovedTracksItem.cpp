@@ -80,14 +80,14 @@ LovedTracksItem::activate()
         TopLovedTracksModel* raModel = new TopLovedTracksModel( pv );
         raModel->setTitle( text() );
 
-        TrackItemDelegate* del = new TrackItemDelegate( TrackItemDelegate::LovedTracks, pv->trackView(), pv->trackView()->proxyModel() );
-        pv->trackView()->setPlaylistItemDelegate( del );
+        TrackItemDelegate* del = new TrackItemDelegate( TrackItemDelegate::LovedTracks, pv->view()->trackView(), pv->view()->trackView()->proxyModel() );
+        pv->view()->trackView()->setPlaylistItemDelegate( del );
 
-        pv->setEmptyTip( tr( "Sorry, we could not find any of your Favorites!" ) );
+        pv->view()->trackView()->setEmptyTip( tr( "Sorry, we could not find any of your Favorites!" ) );
         if ( !par )
         {
             raModel->setDescription( tr( "The most loved tracks from all your friends" ) );
-            pv->setGuid( QString( "lovedtracks" ) );
+            pv->view()->setGuid( QString( "lovedtracks" ) );
         }
         else
         {
@@ -96,10 +96,10 @@ LovedTracksItem::activate()
             else
                 raModel->setDescription( tr( "All of %1's loved tracks" ).arg( par->source()->friendlyName() ) );
 
-            pv->setGuid( QString( "lovedtracks/%1" ).arg( par->source()->nodeId() ) );
+            pv->view()->setGuid( QString( "lovedtracks/%1" ).arg( par->source()->nodeId() ) );
         }
 
-        pv->setPlaylistModel( raModel );
+        pv->view()->trackView()->setPlayableModel( raModel );
         raModel->setSource( !par ? source_ptr() : par->source() );
 
         m_lovedTracksPage = pv;

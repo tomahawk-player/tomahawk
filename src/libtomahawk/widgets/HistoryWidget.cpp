@@ -50,14 +50,14 @@ HistoryWidget::HistoryWidget( const source_ptr& source, QWidget* parent )
     else
         m_model->setDescription( tr( "%1's recently played tracks" ).arg( source->friendlyName() ) );
 
-    trackView()->setIndentation( 0 );
-    trackView()->setUniformRowHeights( false );
+    view()->trackView()->setIndentation( 0 );
+    view()->trackView()->setUniformRowHeights( false );
 
-    setPlayableModel( m_model );
-    setEmptyTip( tr( "Sorry, we could not find any recent plays!" ) );
+    view()->trackView()->setPlayableModel( m_model );
+    view()->setEmptyTip( tr( "Sorry, we could not find any recent plays!" ) );
     m_model->setSource( source );
 
-    setGuid( QString( "recentplays/%1" ).arg( source->nodeId() ) );
+    view()->setGuid( QString( "recentplays/%1" ).arg( source->nodeId() ) );
 }
 
 
