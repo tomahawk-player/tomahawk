@@ -109,7 +109,7 @@ Third party libraries that we ship with our source:
 
 * [MiniUPnP 1.6](http://miniupnp.free.fr/)
 * [Qocoa](https://github.com/mikemcquaid/Qocoa/)
-* [libqnetwm](http://code.google.com/p/libqnetwm/)
+* [libqnetwm](https://code.google.com/p/libqnetwm/)
 * [libqxt](http://libqxt.org/) (QxtWeb module) 
 * [SPMediaKeyTap](https://github.com/nevyn/SPMediaKeyTap/)
 * [kdSingleApplicationGuard](http://www.kdab.com/)
@@ -122,10 +122,10 @@ Third party libraries that we ship with our source:
 
 ## GET HELP
 
-* [Support & Feedback](http://tomahawk.uservoice.com)
+* [Support & Feedback](https://tomahawk.uservoice.com)
 * Chat with Us (IRC): #tomahawk (on Freenode)
-* [Twitter](http://twitter.com/tomahawk)
-* [Facebook](http://facebook.com/tomahawkplayer)
+* [Twitter](https://twitter.com/tomahawk)
+* [Facebook](https://facebook.com/tomahawkplayer)
 * [Developer API documentation](http://dev.tomahawk-player.org/api/classes.html)
 
 ## SCREENSHOTS
