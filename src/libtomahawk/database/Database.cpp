@@ -306,6 +306,14 @@ Database::markAsReady()
         return;
 
     tLog() << Q_FUNC_INFO << "Database is ready now!";
+
+    // In addition to a ready index, we also need at leat one workerThread to
+    // be ready so that we can queue DatabaseCommands.
+    if ( m_workerThreads.size() > 0 && m_workerThreads.first() )
+    {
+        m_workerThreads.first()->waitForEventLoopStart();
+    }
+
     m_ready = true;
     emit ready();
 }
