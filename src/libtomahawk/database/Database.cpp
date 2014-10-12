@@ -328,7 +328,7 @@ Database::registerCommand( DatabaseCommandFactory* commandFactory )
     const QString commandName = command->commandname();
     const QString className = command->metaObject()->className();
 
-    tDebug() << "Registering command" << commandName << "from class" << className;
+    tDebug( LOGVERBOSE ) << "Registering command" << commandName << "from class" << className;
 
     if( m_commandFactories.keys().contains( commandName ) )
     {
