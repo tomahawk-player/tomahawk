@@ -71,7 +71,7 @@ public:
     Tomahawk::playlistinterface_ptr playlistInterface();
 
     QWeakPointer< Tomahawk::Artist > weakRef() { return m_ownRef; }
-    void setWeakRef( QWeakPointer< Tomahawk::Artist > weakRef ) { m_ownRef = weakRef; }
+    void setWeakRef( const QWeakPointer< Tomahawk::Artist >& weakRef ) { m_ownRef = weakRef; }
 
     void loadId( bool autoCreate );
 
