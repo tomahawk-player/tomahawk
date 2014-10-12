@@ -560,7 +560,7 @@ file( GLOB thirdpartyKdsingleapplicationguardHeaders "thirdparty/kdsingleapplica
 file( GLOB thirdpartyQocoaHeaders "thirdparty/Qocoa/*.h" )
 file( GLOB utilsHeaders "utils/*.h" )
 file( GLOB widgetsHeaders "widgets/*.h" )
-file( GLOB widgetsViewpagesHeaders "viewpages/*.h" )
+file( GLOB viewpagesHeaders "viewpages/*.h" )
 file( GLOB widgetsSearchlineeditHeaders "widgets/searchlineedit/*.h" )
 
 install( FILES ${CMAKE_CURRENT_BINARY_DIR}/config.h DESTINATION include/libtomahawk )
@@ -589,5 +589,5 @@ install( FILES ${thirdpartyKdsingleapplicationguardHeaders} DESTINATION include/
 install( FILES ${thirdpartyQocoaHeaders} DESTINATION include/libtomahawk/thirdparty/Qocoa )
 install( FILES ${utilsHeaders} DESTINATION include/libtomahawk/utils )
 install( FILES ${widgetsHeaders} DESTINATION include/libtomahawk/widgets )
-install( FILES ${widgetsViewpagesHeaders} DESTINATION include/libtomahawk/viewpages )
+install( FILES ${viewpagesHeaders} DESTINATION include/libtomahawk/viewpages )
 install( FILES ${widgetsSearchlineeditHeaders} DESTINATION include/libtomahawk/widgets/searchlineedit )
