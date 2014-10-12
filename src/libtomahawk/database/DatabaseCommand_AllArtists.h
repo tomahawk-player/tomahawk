@@ -48,12 +48,12 @@ public:
     explicit DatabaseCommand_AllArtists( const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr(), QObject* parent = 0 );
     virtual ~DatabaseCommand_AllArtists();
 
-    virtual void exec( DatabaseImpl* );
+    void exec( DatabaseImpl* ) Q_DECL_OVERRIDE;
 
-    virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "allartists"; }
+    bool doesMutates() const Q_DECL_OVERRIDE { return false; }
+    QString commandname() const Q_DECL_OVERRIDE { return "allartists"; }
 
-    virtual void enqueue() { Database::instance()->enqueue( Tomahawk::dbcmd_ptr( this ) ); }
+    void enqueue() Q_DECL_OVERRIDE { Database::instance()->enqueue( Tomahawk::dbcmd_ptr( this ) ); }
 
     void setLimit( unsigned int amount ) { m_amount = amount; }
     void setSortOrder( DatabaseCommand_AllArtists::SortOrder order ) { m_sortOrder = order; }
