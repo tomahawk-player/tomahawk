@@ -49,7 +49,7 @@ PlaylistViewPage::PlaylistViewPage( QWidget* parent, QWidget* extraHeader )
     layout()->addWidget( m_view );
 
     connect( m_header, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
-    connect( m_view->trackView(), SIGNAL( modelChanged() ), SLOT( onModelChanged() ) );
+    connect( m_view, SIGNAL( modelChanged() ), SLOT( onModelChanged() ) );
 
     TomahawkUtils::unmarginLayout( layout() );
     TomahawkUtils::fixMargins( this );
