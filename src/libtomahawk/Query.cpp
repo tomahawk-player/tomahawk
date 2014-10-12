@@ -241,6 +241,8 @@ void
 Query::refreshResults()
 {
     Q_D( Query );
+
+    clearResults();
     if ( d->resolveFinished && d->allowReresolve )
     {
         d->resolveFinished = false;
@@ -283,6 +285,21 @@ Query::removeResult( const Tomahawk::result_ptr& result )
 
     emit resultsRemoved( result );
     checkResults();
+    emit resultsChanged();
+}
+
+
+void
+Query::clearResults()
+{
+    Q_D( Query );
+    {
+        QMutexLocker lock( &d->mutex );
+        d->results.clear();
+    }
+
+    d->solved = false;
+    d->playable = false;
     emit resultsChanged();
 }
 
@@ -475,16 +492,6 @@ Query::disallowReresolve()
 {
     Q_D( Query );
     d->allowReresolve = false;
-}
-
-
-void
-Query::clearResults()
-{
-    foreach( const result_ptr& rp, results() )
-    {
-        removeResult( rp );
-    }
 }
 
 
