@@ -22,6 +22,7 @@
 #include <QDebug>
 
 #include "DllMacro.h"
+#include "config.h"
 
 #define LOGDEBUG 1
 #define LOGINFO 2
@@ -68,5 +69,13 @@ namespace Logger
 #define tDebug Logger::TDebug
 #define tSqlLog Logger::TSqlLog
 DLLEXPORT void tLogNotifyShutdown();
+
+// Macro for messages that severely hurt performance but are helpful
+// in some cases for better debugging.
+#ifdef TOMAHAWK_FINEGRAINED_MESSAGES
+    #define FINEGRAINED_MSG(a) tDebug( LOGVERBOSE ) << a ;
+#else
+    #define FINEGRAINED_MSG(a)
+#endif
 
 #endif // TOMAHAWK_LOGGER_H

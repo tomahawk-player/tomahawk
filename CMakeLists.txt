@@ -58,11 +58,14 @@ option(BUILD_TESTS "Build Tomahawk with unit tests" ON)
 option(BUILD_HATCHET "Build the Hatchet plugin" OFF)
 option(BUILD_WITH_QT4 "Build Tomahawk with Qt4 no matter if Qt5 was found" ON)
 
-option(SANITIZE_ADDRESS "Enable Address Sanitizer for memory error detection" OFF)
 option(WITH_CRASHREPORTER "Build with CrashReporter" ON)
 option(WITH_BINARY_ATTICA "Enable support for downloading binary resolvers automatically" ON)
 option(LEGACY_KDE_INTEGRATION "Install tomahawk.protocol file, deprecated since 4.6.0" OFF)
 option(WITH_KDE4 "Build with support for KDE specific stuff" ON)
+
+# build options for development purposes
+option(SANITIZE_ADDRESS "Enable Address Sanitizer for memory error detection" OFF)
+option(TOMAHAWK_FINEGRAINED_MESSAGES "Enable even more verbose logging (will hurt performance significantly" OFF)
 
 CMAKE_DEPENDENT_OPTION(WITH_UPOWER "Build with support for UPower events" ON
        "UNIX;NOT APPLE" OFF)
