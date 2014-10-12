@@ -24,7 +24,6 @@
 
 #include "audio/AudioEngine.h"
 #include "widgets/CaptionLabel.h"
-#include "widgets/FilterHeader.h"
 #include "playlist/PlayableModel.h"
 #include "playlist/PlaylistModel.h"
 #include "playlist/TrackView.h"
@@ -43,7 +42,6 @@ using namespace Tomahawk;
 
 ContextView::ContextView( QWidget* parent, const QString& caption )
     : QWidget( parent )
-//    , m_header( new FilterHeader( this ) )
     , m_trackView( new TrackView() )
     , m_model( 0 )
     , m_temporary( false )
@@ -169,39 +167,6 @@ ContextView::setGuid( const QString& guid )
 }
 
 
-void
-ContextView::setPlayableModel( PlayableModel* model )
-{
-    if ( m_model )
-    {
-        delete m_model;
-    }
-
-    m_model = model;
-
-    m_trackView->setPlayableModel( model );
-    m_trackView->setSortingEnabled( false );
-    m_trackView->sortByColumn( -1 );
-    m_trackView->proxyModel()->sort( -1 );
-
-    onModelChanged();
-}
-
-
-void
-ContextView::setPlaylistModel( PlaylistModel* model )
-{
-    if ( m_model )
-    {
-        disconnect( m_model, SIGNAL( changed() ), this, SLOT( onModelChanged() ) );
-    }
-
-    setPlayableModel( model );
-
-    connect( model, SIGNAL( changed() ), SLOT( onModelChanged() ), Qt::UniqueConnection );
-}
-
-
 Tomahawk::playlistinterface_ptr
 ContextView::playlistInterface() const
 {
@@ -258,24 +223,14 @@ ContextView::setEmptyTip( const QString& tip )
 
 
 void
-ContextView::setPixmap( const QPixmap& pixmap )
-{
-    m_pixmap = pixmap;
-//    m_header->setPixmap( pixmap );
-}
-
-
-void
 ContextView::onModelChanged()
 {
-//    m_header->setPixmap( m_pixmap );
-//    m_header->setCaption( m_model->title() );
-//    m_header->setDescription( m_model->description() );
-
     if ( m_model->isReadOnly() )
         setEmptyTip( tr( "This playlist is currently empty." ) );
     else
         setEmptyTip( tr( "This playlist is currently empty. Add some tracks to it and enjoy the music!" ) );
+
+    emit modelChanged();
 }
 
 
