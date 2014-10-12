@@ -82,7 +82,6 @@ signals:
     void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
     void playlistDeleted();
-    void playlistChanged();
 
 protected:
     PlaylistModel( QObject* parent, PlaylistModelPrivate* d );

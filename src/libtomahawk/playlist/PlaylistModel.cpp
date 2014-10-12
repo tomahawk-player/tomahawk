@@ -161,7 +161,7 @@ PlaylistModel::onPlaylistChanged()
     setTitle( d->playlist->title() );
     setDescription( desc );
 
-    emit playlistChanged();
+    emit changed();
 }
 
 
