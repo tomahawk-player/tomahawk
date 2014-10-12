@@ -263,17 +263,16 @@ PlayableProxyModel::nameFilterAcceptsRow( int sourceRow, PlayableItem* pi, const
     {
         QStringList sl = filterRegExp().pattern().split( " ", QString::SkipEmptyParts );
 
-        bool found = true;
         foreach( const QString& s, sl )
         {
             if ( !al->name().contains( s, Qt::CaseInsensitive ) &&
                  !al->artist()->name().contains( s, Qt::CaseInsensitive ) )
             {
-                found = false;
+                return false;
             }
         }
 
-        return found;
+        return true;
     }
 
     const Tomahawk::artist_ptr& ar = pi->artist();
@@ -281,16 +280,15 @@ PlayableProxyModel::nameFilterAcceptsRow( int sourceRow, PlayableItem* pi, const
     {
         QStringList sl = filterRegExp().pattern().split( " ", QString::SkipEmptyParts );
 
-        bool found = true;
         foreach( const QString& s, sl )
         {
             if ( !ar->name().contains( s, Qt::CaseInsensitive ) )
             {
-                found = false;
+                return false;
             }
         }
 
-        return found;
+        return true;
     }
 
     return true;
