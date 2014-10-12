@@ -25,11 +25,7 @@
 
 class QStackedWidget;
 
-class TrackDetailView;
-class GridView;
-class TrackView;
-class PlayableModel;
-class PlaylistModel;
+class ContextView;
 class FilterHeader;
 
 class DLLEXPORT FlexibleView : public QWidget, public Tomahawk::ViewPage
@@ -37,9 +33,6 @@ class DLLEXPORT FlexibleView : public QWidget, public Tomahawk::ViewPage
 Q_OBJECT
 
 public:
-    enum FlexibleViewMode
-    { Flat = 0, Detailed = 1, Grid = 2 };
-
     explicit FlexibleView( QWidget* parent = 0, QWidget* extraHeader = 0 );
     ~FlexibleView();
 
@@ -56,28 +49,14 @@ public:
     virtual bool isBeingPlayed() const;
     void setTemporaryPage( bool b );
 
-    TrackView* trackView() const { return m_trackView; }
-    TrackView* detailedView() const { return m_detailedView; }
-    GridView* gridView() const { return m_gridView; }
-
-    void setGuid( const QString& guid );
-
-    void setTrackView( TrackView* view );
-    void setDetailedView( TrackView* view );
-    void setGridView( GridView* view );
-
-    void setPlayableModel( PlayableModel* model );
-    void setPlaylistModel( PlaylistModel* model );
+    ContextView* view() const;
 
     void setPixmap( const QPixmap& pixmap );
-    void setEmptyTip( const QString& tip );
 
 public slots:
-    void setCurrentMode( FlexibleViewMode mode );
     virtual bool setFilter( const QString& pattern );
 
 signals:
-    void modeChanged( FlexibleViewMode mode );
     void destroyed( QWidget* widget );
 
 private slots:
@@ -86,21 +65,9 @@ private slots:
 
 private:
     FilterHeader* m_header;
+    ContextView* m_view;
     QPixmap m_pixmap;
-
-    TrackView* m_trackView;
-    TrackView* m_detailedView;
-    GridView* m_gridView;
-
-    TrackDetailView* m_detailView;
-
-    PlayableModel* m_model;
-    QStackedWidget* m_stack;
-
-    FlexibleViewMode m_mode;
     bool m_temporary;
 };
-
-Q_DECLARE_METATYPE( FlexibleView::FlexibleViewMode );
 
 #endif // FLEXIBLEVIEW_H
