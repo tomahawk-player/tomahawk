@@ -172,7 +172,7 @@ NewReleasesWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData request
             if ( !returnedData.contains("type") )
                 break;
             const QString type = returnedData["type"].toString();
-            if( !returnedData.contains(type) )
+            if ( !returnedData.contains(type) )
                 break;
 
             const QString releaseId = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >().value( "nr_id" );
@@ -203,7 +203,6 @@ NewReleasesWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData request
             }
 
             QMetaObject::invokeMethod( loader, "go", Qt::QueuedConnection );
-
             break;
         }
 
@@ -216,7 +215,7 @@ NewReleasesWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData request
 void
 NewReleasesWidget::infoSystemFinished( QString target )
 {
-    if( m_loading )
+    if ( m_loading )
     {
         if ( target != s_newReleasesIdentifier )
         {
@@ -239,11 +238,10 @@ NewReleasesWidget::leftCrumbIndexChanged( QModelIndex index )
 {
     tDebug( LOGVERBOSE ) << "NewReleases:: left crumb changed" << index.data();
     QStandardItem* item = m_crumbModelLeft->itemFromIndex( m_sortedProxy->mapToSource( index ) );
-    if( !item )
+    if ( !item )
         return;
-    if( !item->data( Breadcrumb::ChartIdRole ).isValid() )
+    if ( !item->data( Breadcrumb::ChartIdRole ).isValid() )
         return;
-
 
     QList<QModelIndex> indexes;
     while ( index.parent().isValid() )
@@ -251,7 +249,6 @@ NewReleasesWidget::leftCrumbIndexChanged( QModelIndex index )
         indexes.prepend(index);
         index = index.parent();
     }
-
 
     const QString nrId = item->data( Breadcrumb::ChartIdRole ).toString();
     const qlonglong nrExpires = item->data( Breadcrumb::ChartExpireRole ).toLongLong();
