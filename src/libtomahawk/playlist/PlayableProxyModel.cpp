@@ -145,20 +145,22 @@ PlayableProxyModel::setSourcePlayableModel( PlayableModel* sourceModel )
 bool
 PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
 {
+    PlayableProxyModelFilterMemo memo;
+
     PlayableItem* pi = itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
     if ( !pi )
         return false;
 
-    return filterAcceptsRowInternal( sourceRow, pi, sourceParent );
+    return filterAcceptsRowInternal( sourceRow, pi, sourceParent, memo );
 }
 
 
 bool
-PlayableProxyModel::filterAcceptsRowInternal( int sourceRow, PlayableItem* pi, const QModelIndex& sourceParent ) const
+PlayableProxyModel::filterAcceptsRowInternal( int sourceRow, PlayableItem* pi, const QModelIndex& sourceParent, PlayableProxyModelFilterMemo& memo ) const
 {
-    if ( m_maxVisibleItems > 0 && !visibilityFilterAcceptsRow( sourceRow, sourceParent ) )
+    if ( m_maxVisibleItems > 0 && !visibilityFilterAcceptsRow( sourceRow, sourceParent, memo ) )
         return false;
-    if ( m_hideDupeItems && !dupeFilterAcceptsRow( sourceRow, pi, sourceParent ) )
+    if ( m_hideDupeItems && !dupeFilterAcceptsRow( sourceRow, pi, sourceParent, memo ) )
         return false;
 
     return nameFilterAcceptsRow( sourceRow, pi, sourceParent );
@@ -166,7 +168,7 @@ PlayableProxyModel::filterAcceptsRowInternal( int sourceRow, PlayableItem* pi, c
 
 
 bool
-PlayableProxyModel::dupeFilterAcceptsRow( int sourceRow, PlayableItem* pi, const QModelIndex& sourceParent ) const
+PlayableProxyModel::dupeFilterAcceptsRow( int sourceRow, PlayableItem* pi, const QModelIndex& sourceParent, PlayableProxyModelFilterMemo& memo ) const
 {
     if ( !m_hideDupeItems )
         return true;
@@ -181,7 +183,7 @@ PlayableProxyModel::dupeFilterAcceptsRow( int sourceRow, PlayableItem* pi, const
                  ( pi->album() && pi->album() == di->album() ) ||
                  ( pi->artist() && pi->artist()->name() == di->artist()->name() );
 
-        if ( b && filterAcceptsRowInternal( i, di, sourceParent ) )
+        if ( b && filterAcceptsRowInternal( i, di, sourceParent, memo ) )
             return false;
     }
 
@@ -190,18 +192,26 @@ PlayableProxyModel::dupeFilterAcceptsRow( int sourceRow, PlayableItem* pi, const
 
 
 bool
-PlayableProxyModel::visibilityFilterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
+PlayableProxyModel::visibilityFilterAcceptsRow( int sourceRow, const QModelIndex& sourceParent, PlayableProxyModelFilterMemo& memo ) const
 {
     if ( m_maxVisibleItems <= 0 )
         return true;
 
-    int items = 0;
-    for ( int i = 0; ( i < sourceRow ) && ( items < m_maxVisibleItems ) ; i++ )
+    if ( static_cast<size_t>( sourceRow ) < memo.visibilty.size() )
+    {
+        // We have already memoized the return value.
+        return memo.visibilty[sourceRow] < m_maxVisibleItems;
+    }
+
+    int items = memo.visibilty.back();
+    for ( int i = memo.visibilty.size() - 1; ( i < sourceRow ) && ( items < m_maxVisibleItems ) ; i++ )
     {
         PlayableItem* pi = itemFromIndex( sourceModel()->index( i, 0, sourceParent ) );
-        if ( pi && dupeFilterAcceptsRow( i, pi, sourceParent ) && nameFilterAcceptsRow( i, pi, sourceParent ) )
+        // We will not change memo in these calls as all values needed in them are already memoized.
+        if ( pi && dupeFilterAcceptsRow( i, pi, sourceParent, memo ) && nameFilterAcceptsRow( i, pi, sourceParent ) )
         {
             items++;
+            memo.visibilty.push_back( items ); // Sets memo.visibilty[i + 1] to items
         }
     }
 

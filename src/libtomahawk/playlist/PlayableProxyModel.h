@@ -27,6 +27,20 @@
 
 #include "DllMacro.h"
 
+class PlayableProxyModelFilterMemo
+{
+public:
+    PlayableProxyModelFilterMemo()
+    {
+        // First element always has no predecessors.
+        // TODO C++11: Make this a constexpr using initializer lists.
+        visibilty.push_back( 0 );
+    }
+
+    virtual ~PlayableProxyModelFilterMemo() {}
+    std::vector<int> visibilty;
+};
+
 class DLLEXPORT PlayableProxyModel : public QSortFilterProxyModel
 {
 Q_OBJECT
@@ -117,10 +131,10 @@ private slots:
     void onCurrentIndexChanged( const QModelIndex& newIndex, const QModelIndex& oldIndex );
 
 private:
-    bool filterAcceptsRowInternal( int sourceRow, PlayableItem* pi, const QModelIndex& sourceParent ) const;
+    bool filterAcceptsRowInternal( int sourceRow, PlayableItem* pi, const QModelIndex& sourceParent, PlayableProxyModelFilterMemo& memo ) const;
     bool nameFilterAcceptsRow( int sourceRow, PlayableItem* pi, const QModelIndex& sourceParent ) const;
-    bool dupeFilterAcceptsRow( int sourceRow, PlayableItem* pi, const QModelIndex& sourceParent ) const;
-    bool visibilityFilterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
+    bool dupeFilterAcceptsRow( int sourceRow, PlayableItem* pi, const QModelIndex& sourceParent, PlayableProxyModelFilterMemo& memo ) const;
+    bool visibilityFilterAcceptsRow( int sourceRow, const QModelIndex& sourceParent, PlayableProxyModelFilterMemo& memo ) const;
     bool lessThan( int column, const Tomahawk::query_ptr& left, const Tomahawk::query_ptr& right ) const;
 
     PlayableModel* m_model;
