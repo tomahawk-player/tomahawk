@@ -627,6 +627,8 @@ void
 PlayableModel::clear()
 {
     Q_D( PlayableModel );
+    setCurrentIndex( QModelIndex() );
+
     if ( rowCount( QModelIndex() ) )
     {
         finishLoading();

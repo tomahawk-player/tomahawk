@@ -205,7 +205,7 @@ PlayableProxyModelPlaylistInterface::siblingIndex( int itemsAway, qint64 rootInd
             else
             {
                 // random mode is disabled
-                if ( rootIndex == -1 )
+                if ( rootIndex <= 0 )
                 {
                     idx = proxyModel->currentIndex();
                 }
