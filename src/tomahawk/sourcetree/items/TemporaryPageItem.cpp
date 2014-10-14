@@ -81,12 +81,6 @@ TemporaryPageItem::TemporaryPageItem( SourcesModel* mdl, SourceTreeItem* parent,
         NewClosure( action, SIGNAL( triggered() ), this, SLOT( linkActionTriggered( QAction* ) ), action );
     }
 
-    if ( QObject* obj = dynamic_cast< QObject* >( page ) )
-    {
-        if ( obj->metaObject()->indexOfSignal( "destroyed(QObject*)" ) > -1 )
-            connect( obj, SIGNAL( destroyed( QObject* ) ), SLOT( pageDestroyed() ) );
-    }
-
     model()->linkSourceItemToPage( this, page );
 }
 
