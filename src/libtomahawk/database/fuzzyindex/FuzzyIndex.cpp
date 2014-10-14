@@ -212,7 +212,7 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
 
     try
     {
-        float minScore;
+//        float minScore = 0.00;
         Collection<String> fields; // = newCollection<String>();
         MultiFieldQueryParserPtr parser = newLucene<MultiFieldQueryParser>( LuceneVersion::LUCENE_CURRENT, fields, m_analyzer );
         BooleanQueryPtr qry = newLucene<BooleanQuery>();
@@ -229,8 +229,6 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
 
             FuzzyQueryPtr fqry3 = newLucene<FuzzyQuery>( newLucene<Term>( L"fulltext", q.toStdWString() ) );
             qry->add( boost::dynamic_pointer_cast<Query>( fqry3 ), BooleanClause::SHOULD );
-
-            minScore = 0.00;
         }
         else
         {
@@ -243,8 +241,6 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
 
             FuzzyQueryPtr fqry2 = newLucene<FuzzyQuery>( newLucene<Term>( L"artist", artist.toStdWString() ), 0.5, 3 );
             qry->add( boost::dynamic_pointer_cast<Query>( fqry2 ), BooleanClause::MUST );
-
-            minScore = 0.00;
         }
 
         TopScoreDocCollectorPtr collector = TopScoreDocCollector::create( 20, true );
@@ -254,10 +250,10 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
         for ( int i = 0; i < collector->getTotalHits() && i < 20; i++ )
         {
             DocumentPtr d = m_luceneSearcher->doc( hits[i]->doc );
-            float score = hits[i]->score;
-            int id = QString::fromStdWString( d->get( L"trackid" ) ).toInt();
+            const float score = hits[i]->score;
+            const int id = QString::fromStdWString( d->get( L"trackid" ) ).toInt();
 
-            if ( score > minScore )
+//            if ( score > minScore )
             {
                 resultsmap.insert( id, score );
 //                tDebug() << "Index hit:" << id << score << QString::fromWCharArray( ((Query*)qry)->toString() );
@@ -286,7 +282,7 @@ FuzzyIndex::searchAlbum( const Tomahawk::query_ptr& query )
     try
     {
         QueryParserPtr parser = newLucene<QueryParser>( LuceneVersion::LUCENE_CURRENT, L"album", m_analyzer );
-        QString q = Tomahawk::DatabaseImpl::sortname( query->fullTextQuery() );
+        const QString q = Tomahawk::DatabaseImpl::sortname( query->fullTextQuery() );
 
         FuzzyQueryPtr qry = newLucene<FuzzyQuery>( newLucene<Term>( L"album", q.toStdWString() ) );
         TopScoreDocCollectorPtr collector = TopScoreDocCollector::create( 99999, false );
