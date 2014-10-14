@@ -530,7 +530,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
             paintStandardItem( painter, optIndentation, index, count );
         }
-        else if ( type == SourcesModel::TemporaryPage || SourcesModel::DeletablePage )
+        else if ( type == SourcesModel::TemporaryPage || type == SourcesModel::DeletablePage )
         {
             if ( opt.state & QStyle::State_MouseOver )
             {
