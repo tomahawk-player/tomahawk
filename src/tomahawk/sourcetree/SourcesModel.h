@@ -62,6 +62,7 @@ public:
         GenericPage = 6,
         TemporaryPage = 7,
         LovedTracksPage = 10,
+        DeletablePage = 15,
 
         Collection = 14,
         ScriptCollection = 11,

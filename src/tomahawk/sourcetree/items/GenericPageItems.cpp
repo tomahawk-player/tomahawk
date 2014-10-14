@@ -121,7 +121,7 @@ GenericPageItem::setDeletable( bool deletable )
 {
     if ( deletable )
     {
-        setRowType( SourcesModel::TemporaryPage );
+        setRowType( SourcesModel::DeletablePage );
     }
     else
     {

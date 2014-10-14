@@ -530,7 +530,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
             paintStandardItem( painter, optIndentation, index, count );
         }
-        else if ( type == SourcesModel::TemporaryPage )
+        else if ( type == SourcesModel::TemporaryPage || SourcesModel::DeletablePage )
         {
             if ( opt.state & QStyle::State_MouseOver )
             {
@@ -660,7 +660,7 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
     if ( event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonPress )
     {
         SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
-        if ( type == SourcesModel::TemporaryPage )
+        if ( type == SourcesModel::TemporaryPage || type == SourcesModel::DeletablePage )
         {
             SourceTreeItem* gpi = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
             Q_ASSERT( gpi );
