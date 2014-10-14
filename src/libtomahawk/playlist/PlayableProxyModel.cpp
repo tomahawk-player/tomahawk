@@ -91,6 +91,7 @@ PlayableProxyModel::isLoading() const
     return false;
 }
 
+
 QPersistentModelIndex
 PlayableProxyModel::currentIndex() const
 {
