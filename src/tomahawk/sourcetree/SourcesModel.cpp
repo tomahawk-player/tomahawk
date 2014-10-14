@@ -565,7 +565,7 @@ SourcesModel::onScriptCollectionRemoved( const collection_ptr& collection )
 
 
 void
-SourcesModel::onViewPageRemoved( Tomahawk::ViewPage *p )
+SourcesModel::onViewPageRemoved( Tomahawk::ViewPage* p )
 {
     p->onItemDeleted();
 }
@@ -663,7 +663,8 @@ SourcesModel::linkSourceItemToPage( SourceTreeItem* item, ViewPage* p )
     }
     m_viewPageDelayedCacheItem = 0;
 
-    if ( p && p->isDeletable() ) {
+    if ( p && p->isDeletable() )
+    {
         NewClosure( item, SIGNAL( removed() ), this, SLOT( onViewPageRemoved( Tomahawk::ViewPage* ) ), p );
     }
 }
