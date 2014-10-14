@@ -154,15 +154,13 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     addAction( renamePlaylistAction );
     connect( renamePlaylistAction, SIGNAL( triggered() ), SLOT( renamePlaylist() ) );
 
+    ViewManager::instance()->showDynamicPage( Tomahawk::Widgets::DASHBOARD_VIEWPAGE_NAME );
+
     // On the first run with 0.8 show the What's New page.
-    if ( !TomahawkSettings::instance()->value( "whatsnew/shownfor08", false).toBool() )
+    if ( !TomahawkSettings::instance()->value( "whatsnew/shownfor08", false ).toBool() )
     {
         ViewManager::instance()->showDynamicPage( Tomahawk::Widgets::WHATSNEW_0_8_VIEWPAGE_NAME );
         TomahawkSettings::instance()->setValue( "whatsnew/shownfor08", true );
-    }
-    else
-    {
-        ViewManager::instance()->showDynamicPage( Tomahawk::Widgets::DASHBOARD_VIEWPAGE_NAME );
     }
 }
 
