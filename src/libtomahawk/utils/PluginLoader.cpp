@@ -119,6 +119,13 @@ PluginLoader::pluginDirs()
 #endif
 
     QDir installLibDir( CMAKE_INSTALL_LIBDIR );
+    // In the case where CMAKE_INSTALL_LIBDIR is given relatively, we must
+    // add the install prefix to it.
+    if ( installLibDir.isRelative() )
+    {
+        installLibDir = QDir( CMAKE_INSTALL_PREFIX );
+        installLibDir.cd( CMAKE_INSTALL_LIBDIR );
+    }
 
     QDir libDir( appDir );
     libDir.cdUp();
