@@ -142,3 +142,13 @@ GenericPageItem::setSortValue( int value )
 {
     m_sortValue = value;
 }
+
+
+void
+GenericPageItem::removeFromList()
+{
+    SourceTreeItem::removeFromList();
+
+    if ( type() == SourcesModel::DeletablePage )
+        ViewManager::instance()->destroyPage( m_get() );
+}

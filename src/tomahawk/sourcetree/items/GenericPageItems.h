@@ -45,6 +45,9 @@ public:
     void setText( const QString& text );
     void setSortValue( int value );
 
+public slots:
+    void removeFromList();
+
 signals:
     void activated();
 
