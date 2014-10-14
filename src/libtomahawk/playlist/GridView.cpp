@@ -298,7 +298,7 @@ GridView::verifySize()
 
     if ( !isWrapping() )
     {
-        m_proxyModel->setMaxVisibleItems( qMin( itemsPerRow, m_model->rowCount( QModelIndex() ) ) );
+        m_proxyModel->setMaxVisibleItems( itemsPerRow );
     }
     else if ( newHeight > 0 )
     {
