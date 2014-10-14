@@ -356,6 +356,9 @@ TomahawkWindow::setupToolBar()
     addAction( ActionCollection::instance()->getAction( "quit" ) );
 #endif
 
+    onHistoryBackAvailable( false );
+    onHistoryForwardAvailable( false );
+
     balanceToolbar();
 }
 
