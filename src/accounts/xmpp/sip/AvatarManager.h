@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -32,17 +32,17 @@ class ACCOUNTDLLEXPORT AvatarManager : public QObject
 Q_OBJECT
 
 public:
-    AvatarManager(Jreen::Client* client);
+    AvatarManager( Jreen::Client* client );
     virtual ~AvatarManager();
 
-    QPixmap avatar(const QString& jid) const;
+    QPixmap avatar( const QString& jid ) const;
 
 signals:
     void newAvatar( const QString& jid );
 
 private slots:
     void onNewPresence( const Jreen::Presence& presence );
-    void onNewIq(const Jreen::IQ& iq);
+    void onNewIq( const Jreen::IQ& iq );
     void onNewConnection();
     void onNewAvatar( const QString& jid );
 
