@@ -26,7 +26,7 @@
 QString
 IndexingJobItem::mainText() const
 {
-    return tr( "Indexing database" );
+    return tr( "Indexing Music Library" );
 }
 
 QPixmap
