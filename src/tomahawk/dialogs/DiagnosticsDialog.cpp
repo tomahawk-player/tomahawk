@@ -137,7 +137,7 @@ DiagnosticsDialog::copyToClipboard()
 void
 DiagnosticsDialog::openLogfile()
 {
-    TomahawkUtils::openUrl( Logger::logFile() );
+    TomahawkUtils::openUrl( TomahawkUtils::logFilePath() );
 }
 
 

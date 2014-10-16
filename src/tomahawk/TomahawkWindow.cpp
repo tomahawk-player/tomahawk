@@ -1084,9 +1084,9 @@ void
 TomahawkWindow::openLogfile()
 {
 #ifdef WIN32
-    ShellExecuteW( 0, 0, (LPCWSTR)Logger::logFile().utf16(), 0, 0, SW_SHOWNORMAL );
+    ShellExecuteW( 0, 0, (LPCWSTR)TomahawkUtils::logFilePath().utf16(), 0, 0, SW_SHOWNORMAL );
 #else
-    QDesktopServices::openUrl( QUrl::fromLocalFile( Logger::logFile() ) );
+    QDesktopServices::openUrl( QUrl::fromLocalFile( TomahawkUtils::logFilePath() ) );
 #endif
 }
 

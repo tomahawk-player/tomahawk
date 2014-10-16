@@ -38,7 +38,7 @@
 
 using namespace std;
 
-ofstream logfile;
+QTextStream logStream;
 static int s_threshold = -1;
 QMutex s_mutex;
 bool shutdownInProgress = false;
@@ -75,13 +75,13 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
 
         #ifdef LOG_SQL_QUERIES
         if ( debugLevel == LOGSQL )
-            logfile << "TSQLQUERY: ";
+            logStream << "TSQLQUERY: ";
         #endif
 
         if ( shutdownInProgress )
         {
             // Do not use locales anymore in shutdown
-            logfile << QDate::currentDate().day() << "."
+            logStream << QDate::currentDate().day() << "."
                     << QDate::currentDate().month() << "."
                     << QDate::currentDate().year() << " - "
                     << QTime::currentTime().hour() << ":"
@@ -92,14 +92,14 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
         }
         else
         {
-            logfile << QDate::currentDate().toString().toUtf8().data()
+            logStream << QDate::currentDate().toString().toUtf8().data()
                     << " - "
                     << QTime::currentTime().toString().toUtf8().data()
                     << " [" << QString::number( debugLevel ).toUtf8().data() << "]: "
                     << msg << endl;
         }
 
-        logfile.flush();
+        logStream.flush();
     }
 
     if ( debugLevel <= LOGEXTRA || (int)debugLevel <= s_threshold )
@@ -164,38 +164,32 @@ TomahawkLogHandler( QtMsgType type, const char* msg )
 }
 
 
-QString
-logFile()
-{
-    return TomahawkUtils::appLogDir().filePath( "Tomahawk.log" );
-}
-
 
 void
-setupLogfile()
+setupLogfile(QFile& f)
 {
-    if ( QFileInfo( logFile() ).size() > LOGFILE_SIZE )
+    if ( QFileInfo( f ).size() > LOGFILE_SIZE )
     {
         QByteArray lc;
         {
-            QFile f( logFile() );
             f.open( QIODevice::ReadOnly | QIODevice::Text );
             f.seek( f.size() - ( LOGFILE_SIZE - ( LOGFILE_SIZE / 4 ) ) );
             lc = f.readAll();
             f.close();
         }
 
-        QFile::remove( logFile() );
+        f.remove();
 
         {
-            QFile f( logFile() );
             f.open( QIODevice::WriteOnly | QIODevice::Text );
             f.write( lc );
             f.close();
         }
     }
 
-    logfile.open( logFile().toUtf8().constData(), ios::app );
+    f.open(QIODevice::Append | QIODevice::Text);
+    logStream.setDevice(&f);
+
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     qInstallMessageHandler( TomahawkLogHandler );
 #else

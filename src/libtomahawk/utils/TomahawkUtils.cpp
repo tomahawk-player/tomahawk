@@ -208,6 +208,12 @@ appLogDir()
 }
 
 
+const QString
+logFilePath()
+{
+    return TomahawkUtils::appLogDir().filePath( "Tomahawk.log" );
+}
+
 QString
 timeToString( int seconds )
 {

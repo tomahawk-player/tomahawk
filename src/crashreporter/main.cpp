@@ -98,9 +98,9 @@ int main( int argc, char* argv[] )
         ;
 
     // send log
-    QFile logFile( Logger::logFile() );
+    QFile logFile( TomahawkUtils::logFilePath() );
     logFile.open( QFile::ReadOnly );
-    reporter.setReportData( "upload_file_tomahawklog", qCompress( logFile.readAll() ), "application/x-gzip", QFileInfo( Logger::logFile() ).fileName().toUtf8());
+    reporter.setReportData( "upload_file_tomahawklog", qCompress( logFile.readAll() ), "application/x-gzip", QFileInfo( logFile ).fileName().toUtf8());
     logFile.close();
 
     reporter.show();

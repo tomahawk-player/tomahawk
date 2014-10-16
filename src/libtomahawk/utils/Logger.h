@@ -20,6 +20,7 @@
 #define TOMAHAWK_LOGGER_H
 
 #include <QDebug>
+#include <QFile>
 
 #include "DllMacro.h"
 #include "config.h"
@@ -61,8 +62,7 @@ namespace Logger
     };
 
     DLLEXPORT void TomahawkLogHandler( QtMsgType type, const char* msg );
-    DLLEXPORT void setupLogfile();
-    DLLEXPORT QString logFile();
+    DLLEXPORT void setupLogfile(QFile& f);
 }
 
 #define tLog Logger::TLog

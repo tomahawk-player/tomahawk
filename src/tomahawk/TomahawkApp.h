@@ -141,6 +141,7 @@ private:
     QPointer< Tomahawk::Accounts::AccountManager > m_accountManager;
     bool m_scrubFriendlyName;
     QString m_queuedUrl;
+    QFile m_logFile;
 
 #ifdef LIBLASTFM_FOUND
     Scrobbler* m_scrobbler;

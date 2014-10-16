@@ -147,6 +147,7 @@ namespace TomahawkUtils
     DLLEXPORT QDir appConfigDir();
     DLLEXPORT QDir appDataDir();
     DLLEXPORT QDir appLogDir();
+    DLLEXPORT const QString logFilePath();
 
     DLLEXPORT void installTranslator( QObject* parent );
 
