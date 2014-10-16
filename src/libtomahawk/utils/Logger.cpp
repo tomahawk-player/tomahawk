@@ -38,10 +38,39 @@
 
 using namespace std;
 
-QTextStream logStream;
+# if defined (_WIN32) && defined (__GLIBCXX__)
+#include <ext/stdio_filebuf.h>
+#include <cstdio>
+
+std::ostream*
+open_ofstream( const QString& fileName )
+{
+    FILE* c_file = _wfopen( fileName.toStdWString().c_str(), L"a+" );
+
+    __gnu_cxx::stdio_filebuf< char >* buffer = new __gnu_cxx::stdio_filebuf< char >( c_file, std::ios_base::out, 1 );
+
+    return new ostream( buffer );
+}
+# elif defined( _MSC_VER )
+std::ostream*
+open_ofstream( const QString& fileName )
+{
+    return new ofstream( fileName.toStdWString().c_str() );
+}
+# else
+std::ostream*
+open_ofstream( const QString& fileName )
+{
+    return new ofstream( fileName.toStdString().c_str() );
+}
+#endif
+
+
+QSharedPointer<ostream> logStream;
 static int s_threshold = -1;
 QMutex s_mutex;
 bool shutdownInProgress = false;
+
 
 namespace Logger
 {
@@ -75,13 +104,13 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
 
         #ifdef LOG_SQL_QUERIES
         if ( debugLevel == LOGSQL )
-            logStream << "TSQLQUERY: ";
+            *logStream << "TSQLQUERY: ";
         #endif
 
         if ( shutdownInProgress )
         {
             // Do not use locales anymore in shutdown
-            logStream << QDate::currentDate().day() << "."
+            *logStream << QDate::currentDate().day() << "."
                     << QDate::currentDate().month() << "."
                     << QDate::currentDate().year() << " - "
                     << QTime::currentTime().hour() << ":"
@@ -92,14 +121,14 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
         }
         else
         {
-            logStream << QDate::currentDate().toString().toUtf8().data()
+            *logStream << QDate::currentDate().toString().toUtf8().data()
                     << " - "
                     << QTime::currentTime().toString().toUtf8().data()
                     << " [" << QString::number( debugLevel ).toUtf8().data() << "]: "
                     << msg << endl;
         }
 
-        logStream.flush();
+        logStream->flush();
     }
 
     if ( debugLevel <= LOGEXTRA || (int)debugLevel <= s_threshold )
@@ -187,8 +216,7 @@ setupLogfile(QFile& f)
         }
     }
 
-    f.open(QIODevice::Append | QIODevice::Text);
-    logStream.setDevice(&f);
+    logStream = QSharedPointer<ostream>(open_ofstream(f.fileName()));
 
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     qInstallMessageHandler( TomahawkLogHandler );
