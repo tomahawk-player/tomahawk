@@ -164,8 +164,8 @@ void
 TomahawkApp::init()
 {
     qDebug() << "TomahawkApp thread:" << thread();
-    m_logFile.setFileName(TomahawkUtils::logFilePath());
-    Logger::setupLogfile(m_logFile);
+    m_logFile.setFileName( TomahawkUtils::logFilePath() );
+    Logger::setupLogfile( m_logFile );
 
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
 

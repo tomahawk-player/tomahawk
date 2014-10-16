@@ -50,7 +50,7 @@ FuzzyIndex::FuzzyIndex( QObject* parent, const QString& filename, bool wipe )
     }
     catch ( LuceneException& error )
     {
-        tDebug() << "Caught Lucene error:" << QString::fromWCharArray(error.getError().c_str());
+        tDebug() << "Caught Lucene error:" << QString::fromWCharArray( error.getError().c_str() );
         failed = true;
     }
 

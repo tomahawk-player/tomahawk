@@ -195,7 +195,7 @@ TomahawkLogHandler( QtMsgType type, const char* msg )
 
 
 void
-setupLogfile(QFile& f)
+setupLogfile( QFile& f )
 {
     if ( QFileInfo( f ).size() > LOGFILE_SIZE )
     {
@@ -216,7 +216,7 @@ setupLogfile(QFile& f)
         }
     }
 
-    logStream = QSharedPointer<ostream>(open_ofstream(f.fileName()));
+    logStream = QSharedPointer<ostream>( open_ofstream( f.fileName() ) );
 
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     qInstallMessageHandler( TomahawkLogHandler );

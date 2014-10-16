@@ -62,7 +62,7 @@ namespace Logger
     };
 
     DLLEXPORT void TomahawkLogHandler( QtMsgType type, const char* msg );
-    DLLEXPORT void setupLogfile(QFile& f);
+    DLLEXPORT void setupLogfile( QFile& f );
 }
 
 #define tLog Logger::TLog
