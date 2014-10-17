@@ -137,7 +137,7 @@ Tomahawk::ArtistsRequest*
 ScriptCollection::requestArtists()
 {
     Tomahawk::collection_ptr thisCollection = m_resolver->collections().value( name() );
-    if ( thisCollection->name() != this->name() )
+    if ( thisCollection->name() != name() )
         return 0;
 
     Tomahawk::ArtistsRequest* cmd = new ScriptCommand_AllArtists( thisCollection );
@@ -150,7 +150,7 @@ Tomahawk::AlbumsRequest*
 ScriptCollection::requestAlbums( const Tomahawk::artist_ptr& artist )
 {
     Tomahawk::collection_ptr thisCollection = m_resolver->collections().value( name() );
-    if ( thisCollection->name() != this->name() )
+    if ( thisCollection->name() != name() )
         return 0;
 
     Tomahawk::AlbumsRequest* cmd = new ScriptCommand_AllAlbums( thisCollection, artist );
@@ -163,7 +163,7 @@ Tomahawk::TracksRequest*
 ScriptCollection::requestTracks( const Tomahawk::album_ptr& album )
 {
     Tomahawk::collection_ptr thisCollection = m_resolver->collections().value( name() );
-    if ( thisCollection->name() != this->name() )
+    if ( thisCollection->name() != name() )
         return 0;
 
     Tomahawk::TracksRequest* cmd = new ScriptCommand_AllTracks( thisCollection, album );

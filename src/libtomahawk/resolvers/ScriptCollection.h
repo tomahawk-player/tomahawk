@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2013, Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2014, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -41,7 +42,7 @@ class DLLEXPORT ScriptCollection : public Collection
 public:
     explicit ScriptCollection( const source_ptr& source,
                                ExternalResolver* resolver,
-                               QObject* parent = 0 );
+                               QObject* parent = nullptr );
     virtual ~ScriptCollection();
 
     /**
@@ -53,26 +54,26 @@ public:
      * different from the resolver's name, to identify the specific service rather than just the
      * resolver.
      */
-    virtual void setServiceName( const QString& name );
-    virtual QString prettyName() const;
-    virtual QString itemName() const;
-    virtual BackendType backendType() const { return ScriptCollectionType; }
+    void setServiceName( const QString& name );
+    QString prettyName() const override;
+    QString itemName() const override;
+    BackendType backendType() const override { return ScriptCollectionType; }
 
-    virtual void setIcon( const QIcon& icon );
-    virtual QIcon icon() const;
-    virtual QPixmap bigIcon() const;
+    void setIcon( const QIcon& icon );
+    QIcon icon() const override;
+    QPixmap bigIcon() const override;
 
-    virtual void setDescription( const QString& text );
-    virtual QString description() const;
+    void setDescription( const QString& text );
+    QString description() const override;
 
     virtual ExternalResolver* resolver() { return m_resolver; }
 
-    virtual Tomahawk::ArtistsRequest* requestArtists();
-    virtual Tomahawk::AlbumsRequest*  requestAlbums( const Tomahawk::artist_ptr& artist );
-    virtual Tomahawk::TracksRequest*  requestTracks( const Tomahawk::album_ptr& album );
+    Tomahawk::ArtistsRequest* requestArtists() override;
+    Tomahawk::AlbumsRequest*  requestAlbums( const Tomahawk::artist_ptr& artist ) override;
+    Tomahawk::TracksRequest*  requestTracks( const Tomahawk::album_ptr& album ) override;
 
-    virtual void setTrackCount( int count );
-    virtual int trackCount() const;
+    void setTrackCount( int count );
+    int trackCount() const override;
 
 private:
     ExternalResolver* m_resolver;
