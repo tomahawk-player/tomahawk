@@ -293,13 +293,17 @@ void
 Query::clearResults()
 {
     Q_D( Query );
+
+    d->solved = false;
+    d->playable = false;
+
     {
         QMutexLocker lock( &d->mutex );
         d->results.clear();
     }
 
-    d->solved = false;
-    d->playable = false;
+    emit playableStateChanged( false );
+    emit solvedStateChanged( false );
     emit resultsChanged();
 }
 
@@ -525,15 +529,18 @@ Query::checkResults()
     {
         refreshResults();
     }
-    if ( d->playable != playable )
+    else
     {
-        d->playable = playable;
-        emit playableStateChanged( d->playable );
-    }
-    if ( d->solved != solved )
-    {
-        d->solved = solved;
-        emit solvedStateChanged( d->solved );
+        if ( d->playable != playable )
+        {
+            d->playable = playable;
+            emit playableStateChanged( d->playable );
+        }
+        if ( d->solved != solved )
+        {
+            d->solved = solved;
+            emit solvedStateChanged( d->solved );
+        }
     }
 }
 
