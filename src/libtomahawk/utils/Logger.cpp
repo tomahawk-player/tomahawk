@@ -78,11 +78,6 @@ namespace Logger
 static void
 log( const char *msg, unsigned int debugLevel, bool toDisk = true )
 {
-    if( logStream.isNull() )
-    {
-        return;
-    }
-
     if ( s_threshold < 0 )
     {
         if ( qApp->arguments().contains( "--verbose" ) )
@@ -103,7 +98,7 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
         toDisk = true;
     #endif
 
-    if ( toDisk || (int)debugLevel <= s_threshold )
+    if ( !logStream.isNull() && ( toDisk || (int)debugLevel <= s_threshold ) )
     {
         QMutexLocker lock( &s_mutex );
 
