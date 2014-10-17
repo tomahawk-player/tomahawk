@@ -78,6 +78,11 @@ namespace Logger
 static void
 log( const char *msg, unsigned int debugLevel, bool toDisk = true )
 {
+    if( logStream.isNull() )
+    {
+        return;
+    }
+
     if ( s_threshold < 0 )
     {
         if ( qApp->arguments().contains( "--verbose" ) )
