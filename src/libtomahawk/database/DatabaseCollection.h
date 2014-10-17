@@ -37,27 +37,27 @@ class DLLEXPORT DatabaseCollection : public Tomahawk::Collection
 Q_OBJECT
 
 public:
-    explicit DatabaseCollection( const Tomahawk::source_ptr& source, QObject* parent = 0 );
-    ~DatabaseCollection()
+    explicit DatabaseCollection( const Tomahawk::source_ptr& source, QObject* parent = nullptr );
+    virtual ~DatabaseCollection()
     {
         qDebug() << Q_FUNC_INFO;
     }
 
-    virtual BackendType backendType() const { return DatabaseCollectionType; }
+    BackendType backendType() const override { return DatabaseCollectionType; }
 
-    virtual void loadPlaylists();
-    virtual void loadAutoPlaylists();
-    virtual void loadStations();
+    void loadPlaylists() override;
+    void loadAutoPlaylists() override;
+    void loadStations() override;
 
-    virtual QList< Tomahawk::playlist_ptr > playlists();
-    virtual QList< Tomahawk::dynplaylist_ptr > autoPlaylists();
-    virtual QList< Tomahawk::dynplaylist_ptr > stations();
+    QList< Tomahawk::playlist_ptr > playlists() override;
+    QList< Tomahawk::dynplaylist_ptr > autoPlaylists() override;
+    QList< Tomahawk::dynplaylist_ptr > stations() override;
 
-    virtual Tomahawk::ArtistsRequest* requestArtists();
-    virtual Tomahawk::AlbumsRequest*  requestAlbums( const Tomahawk::artist_ptr& artist );
-    virtual Tomahawk::TracksRequest*  requestTracks( const Tomahawk::album_ptr& album );
+    Tomahawk::ArtistsRequest* requestArtists() override;
+    Tomahawk::AlbumsRequest*  requestAlbums( const Tomahawk::artist_ptr& artist ) override;
+    Tomahawk::TracksRequest*  requestTracks( const Tomahawk::album_ptr& album ) override;
 
-    virtual int trackCount() const;
+    int trackCount() const override;
 
 public slots:
     virtual void addTracks( const QList<QVariant>& newitems );
