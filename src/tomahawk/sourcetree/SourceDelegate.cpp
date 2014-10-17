@@ -79,7 +79,7 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
     if ( type == SourcesModel::Source || type == SourcesModel::ScriptCollection )
     {
         SourceItem* colItem = qobject_cast< SourceItem* >( item );
-        return QSize( option.rect.width(), ( colItem && colItem->source() && colItem->source()->isLocal() ) ? 0 : option.fontMetrics.height() * 3.0 );
+        return QSize( option.rect.width(), ( colItem && colItem->source() && colItem->source()->isLocal() ) ? 0 : option.fontMetrics.height() * 3.2 );
     }
     else if ( type == SourcesModel::Divider )
     {
