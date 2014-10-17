@@ -86,7 +86,7 @@ public:
         CustomActionRole        = Qt::UserRole + 16 // QList< QAction* >
     };
 
-    SourcesModel( QObject* parent = 0 );
+    SourcesModel( QObject* parent = nullptr );
     virtual ~SourcesModel();
 
     static QString rowTypeToString( RowType type );

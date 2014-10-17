@@ -138,8 +138,8 @@ using namespace Tomahawk;
 
 TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     : TOMAHAWK_APPLICATION( argc, argv )
-    , m_mainwindow( 0 )
-    , m_splashWidget( 0 )
+    , m_mainwindow( nullptr )
+    , m_splashWidget( nullptr )
     , m_headless( false )
 {
     if ( arguments().contains( "--help" ) || arguments().contains( "-h" ) )

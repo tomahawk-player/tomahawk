@@ -46,7 +46,7 @@ Q_OBJECT
 public:
     static Pipeline* instance();
 
-    explicit Pipeline( QObject* parent = 0 );
+    explicit Pipeline( QObject* parent = nullptr );
     virtual ~Pipeline();
 
     bool isRunning() const;
