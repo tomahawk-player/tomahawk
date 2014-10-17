@@ -29,20 +29,20 @@ class ScriptCommand_AllArtists : public ScriptCommand, public Tomahawk::ArtistsR
     Q_OBJECT
 public:
     explicit ScriptCommand_AllArtists( const Tomahawk::collection_ptr& collection,
-                                       QObject* parent = 0 );
+                                       QObject* parent = nullptr );
     virtual ~ScriptCommand_AllArtists() {}
 
-    virtual void enqueue();
+    void enqueue() override;
 
-    void setFilter( const QString& filter );
+    void setFilter( const QString& filter ) override;
 
 signals:
     void artists( const QList< Tomahawk::artist_ptr >& );
     void done();
 
 protected:
-    virtual void exec();
-    virtual void reportFailure();
+    void exec() override;
+    void reportFailure() override;
 
 private slots:
     void onResolverDone( const QList< Tomahawk::artist_ptr >& );

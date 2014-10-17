@@ -39,18 +39,20 @@ class DLLEXPORT ScriptCommand_LookupUrl : public ScriptCommand
 {
     Q_OBJECT
 public:
-    explicit ScriptCommand_LookupUrl( Tomahawk::ExternalResolver* resolver, const QString& url, QObject* parent = 0 );
+    explicit ScriptCommand_LookupUrl( Tomahawk::ExternalResolver* resolver,
+                                      const QString& url,
+                                      QObject* parent = nullptr );
     virtual ~ScriptCommand_LookupUrl();
 
-    virtual void enqueue();
+    void enqueue();
 
 signals:
     void information( const QString& url, const QSharedPointer<QObject>& variant );
     void done();
 
 protected:
-    virtual void exec();
-    virtual void reportFailure();
+    void exec() override;
+    void reportFailure() override;
 
 private slots:
     void onResolverDone( const QString& url, const QSharedPointer<QObject>& information );

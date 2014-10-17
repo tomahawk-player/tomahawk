@@ -30,12 +30,12 @@ class ScriptCommand_AllAlbums : public ScriptCommand, public Tomahawk::AlbumsReq
 public:
     explicit ScriptCommand_AllAlbums( const Tomahawk::collection_ptr& collection,
                                       const Tomahawk::artist_ptr& artist,
-                                      QObject* parent = 0 );
+                                      QObject* parent = nullptr );
     virtual ~ScriptCommand_AllAlbums() {}
 
-    virtual void enqueue();
+    void enqueue() override;
 
-    virtual void setFilter( const QString& filter );
+    void setFilter( const QString& filter ) override;
 
 signals:
     void albums( const QList< Tomahawk::album_ptr >& );

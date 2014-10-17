@@ -33,15 +33,15 @@ public:
                                       QObject *parent = 0 );
     virtual ~ScriptCommand_AllTracks() {}
 
-    virtual void enqueue();
+    void enqueue() override;
 
 signals:
     void tracks( const QList< Tomahawk::query_ptr >& );
     void done();
 
 protected:
-    virtual void exec();
-    virtual void reportFailure();
+    void exec() override;
+    void reportFailure() override;
 
 private slots:
     void onResolverDone( const QList< Tomahawk::query_ptr >& );
