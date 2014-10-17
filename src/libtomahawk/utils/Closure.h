@@ -27,9 +27,9 @@
 #include <QMetaMethod>
 #include <QObject>
 #include <QPointer>
-#include <QSharedPointer>
 
 #include <functional>
+#include <memory>
 
 namespace _detail {
 
@@ -59,10 +59,10 @@ class DLLEXPORT Closure : public QObject {
  public:
   Closure(QObject* sender, const char* signal,
           QObject* receiver, const char* slot,
-          const ClosureArgumentWrapper* val0 = 0,
-          const ClosureArgumentWrapper* val1 = 0,
-          const ClosureArgumentWrapper* val2 = 0,
-          const ClosureArgumentWrapper* val3 = 0);
+          const ClosureArgumentWrapper* val0 = nullptr,
+          const ClosureArgumentWrapper* val1 = nullptr,
+          const ClosureArgumentWrapper* val2 = nullptr,
+          const ClosureArgumentWrapper* val3 = nullptr);
 
   Closure(QObject* sender, const char* signal,
           std::function<void()> callback);
@@ -94,10 +94,10 @@ class DLLEXPORT Closure : public QObject {
   bool autoDelete_;
   QPointer<QObject> outOfThreadReceiver_;
 
-  QScopedPointer<const ClosureArgumentWrapper> val0_;
-  QScopedPointer<const ClosureArgumentWrapper> val1_;
-  QScopedPointer<const ClosureArgumentWrapper> val2_;
-  QScopedPointer<const ClosureArgumentWrapper> val3_;
+  std::unique_ptr<const ClosureArgumentWrapper> val0_;
+  std::unique_ptr<const ClosureArgumentWrapper> val1_;
+  std::unique_ptr<const ClosureArgumentWrapper> val2_;
+  std::unique_ptr<const ClosureArgumentWrapper> val3_;
 };
 
 class DLLEXPORT SharedPointerWrapper {
@@ -128,10 +128,10 @@ class SharedClosure : public Closure {
  public:
   SharedClosure(SharedPointerWrapper* sender, const char* signal,
                 QObject* receiver, const char* slot,
-                const ClosureArgumentWrapper* val0 = 0,
-                const ClosureArgumentWrapper* val1 = 0,
-                const ClosureArgumentWrapper* val2 = 0,
-                const ClosureArgumentWrapper* val3 = 0)
+                const ClosureArgumentWrapper* val0 = nullptr,
+                const ClosureArgumentWrapper* val1 = nullptr,
+                const ClosureArgumentWrapper* val2 = nullptr,
+                const ClosureArgumentWrapper* val3 = nullptr)
       : Closure(sender->data(), signal,
                 receiver, slot,
                 val0, val1, val2, val3),
@@ -139,7 +139,7 @@ class SharedClosure : public Closure {
   }
 
  private:
-  QScopedPointer<SharedPointerWrapper> shared_sender_;
+  std::unique_ptr<SharedPointerWrapper> shared_sender_;
 };
 
 }  // namespace _detail
@@ -208,7 +208,7 @@ _detail::Closure* NewClosure(
 
 template <typename TP>
 _detail::Closure* NewClosure(
-    QSharedPointer<TP> sender,
+    std::unique_ptr<TP> sender,
     const char* signal,
     QObject* receiver,
     const char* slot) {
