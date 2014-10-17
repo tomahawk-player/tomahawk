@@ -27,6 +27,7 @@
 #include <QMetaMethod>
 #include <QObject>
 #include <QPointer>
+#include <QSharedPointer>
 
 #include <functional>
 #include <memory>
