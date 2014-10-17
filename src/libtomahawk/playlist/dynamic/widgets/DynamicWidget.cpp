@@ -34,6 +34,7 @@
 #include "ViewManager.h"
 #include "playlist/dynamic/DynamicView.h"
 #include "DynamicSetupWidget.h"
+#include "widgets/BasicHeader.h"
 #include "utils/AnimatedSpinner.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
@@ -64,6 +65,9 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     , m_view( 0 )
     , m_model()
 {
+    m_header = new BasicHeader;
+    m_layout->addWidget( m_header );
+
     m_controls = new CollapsibleControls( this );
     m_layout->addWidget( m_controls );
     setContentsMargins( 0, 0, 0, 1 ); // to align the bottom with the bottom of the sourcelist
@@ -163,7 +167,7 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     m_model->loadPlaylist( m_playlist );
     m_controlsChanged = false;
     m_setup->setPlaylist( m_playlist );
-
+    m_header->setCaption( m_playlist->title() );
 
     if ( !m_playlist->author()->isLocal() )  // hide controls, as we show the description in the summary
             m_layout->removeWidget( m_controls );
@@ -551,5 +555,8 @@ DynamicWidget::onChanged()
 {
     if ( !m_playlist.isNull() &&
          ViewManager::instance()->currentPage() == this )
-         emit nameChanged( m_playlist->title() );
+    {
+        m_header->setCaption( m_playlist->title() );
+        emit nameChanged( m_playlist->title() );
+    }
 }

@@ -27,6 +27,7 @@
 #include "playlist/dynamic/DynamicPlaylistRevision.h"
 
 class AnimatedSpinner;
+class BasicHeader;
 class QShowEvent;
 class QHideEvent;
 class QVBoxLayout;
@@ -121,6 +122,7 @@ private:
     bool m_controlsChanged;
     QWidget* m_steering;
 
+    BasicHeader* m_header;
     CollapsibleControls* m_controls;
 
     DynamicView* m_view;
