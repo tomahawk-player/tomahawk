@@ -33,6 +33,8 @@
 #include "SourceList.h"
 #include "TomahawkSettings.h"
 
+#include "config.h"
+
 #include <QCoreApplication>
 
 using namespace Tomahawk;
@@ -405,7 +407,7 @@ MusicScanner::readTags( const QFileInfo& fi )
         return QVariantMap(); // invalid extension
 
     #ifdef COMPLEX_TAGLIB_FILENAME
-        const wchar_t *encodedName = reinterpret_cast< const wchar_t * >( fi.canonicalFilePath().utf16() );
+        const wchar_t *encodedName = fi.canonicalFilePath().toStdWString().c_str();
     #else
         QByteArray fileName = QFile::encodeName( fi.canonicalFilePath() );
         const char *encodedName = fileName.constData();

@@ -23,5 +23,6 @@
 #cmakedefine QCA2_FOUND
 
 #cmakedefine TOMAHAWK_FINEGRAINED_MESSAGES
+#cmakedefine COMPLEX_TAGLIB_FILENAME
 
 #endif // CONFIG_H_IN
