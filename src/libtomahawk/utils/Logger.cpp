@@ -189,6 +189,9 @@ setupLogfile( QFile& f )
     }
 
 #ifdef _WIN32
+    // this is not supported in upstream libstdc++ as shipped with GCC
+    // GCC needs the patch from https://gcc.gnu.org/ml/libstdc++/2011-06/msg00066.html applied
+    // we could create a CMake check like the one for taglib, but I don't care right now :P
     logStream.open( f.fileName().toStdWString().c_str() );
 #else
     logStream.open( f.fileName().toStdString().c_str() );
