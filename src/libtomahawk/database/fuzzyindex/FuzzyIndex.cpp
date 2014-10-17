@@ -103,7 +103,7 @@ FuzzyIndex::beginIndexing()
     }
     catch( LuceneException& error )
     {
-        tDebug() << "Caught Lucene error:" << error.what();
+        tDebug() << "Caught Lucene error:" << QString::fromWCharArray( error.getError().c_str() );
         Q_ASSERT( false );
     }
 }
@@ -164,7 +164,7 @@ FuzzyIndex::appendFields( const Tomahawk::IndexData& data )
     }
     catch( LuceneException& error )
     {
-        tDebug() << "Caught Lucene error:" << error.what();
+        tDebug() << "Caught Lucene error:" << QString::fromWCharArray( error.getError().c_str() );
 
         QTimer::singleShot( 0, this, SLOT( wipeIndex() ) );
     }
@@ -262,7 +262,7 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
     }
     catch( LuceneException& error )
     {
-        tDebug() << "Caught Lucene error:" << error.what() << query->toString();
+        tDebug() << "Caught Lucene error:" << QString::fromWCharArray( error.getError().c_str() ) << query->toString();
     }
 
     return resultsmap;
@@ -304,7 +304,7 @@ FuzzyIndex::searchAlbum( const Tomahawk::query_ptr& query )
     }
     catch( LuceneException& error )
     {
-        tDebug() << "Caught Lucene error:" << error.what();
+        tDebug() << "Caught Lucene error:" << QString::fromWCharArray( error.getError().c_str() );
     }
 
     return resultsmap;
