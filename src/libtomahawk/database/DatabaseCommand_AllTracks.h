@@ -47,22 +47,22 @@ public:
         AlbumPosition = 3
     };
 
-    explicit DatabaseCommand_AllTracks( const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr(), QObject* parent = 0 )
+    explicit DatabaseCommand_AllTracks( const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr(), QObject* parent = nullptr )
         : DatabaseCommand( parent )
         , m_collection( collection )
-        , m_artist( 0 )
-        , m_album( 0 )
+        , m_artist( nullptr )
+        , m_album( nullptr )
         , m_amount( 0 )
         , m_sortOrder( DatabaseCommand_AllTracks::None )
         , m_sortDescending( false )
     {}
 
-    virtual void exec( DatabaseImpl* );
+    void exec( DatabaseImpl* ) override;
 
-    virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "alltracks"; }
+    bool doesMutates() const override { return false; }
+    QString commandname() const override { return "alltracks"; }
 
-    virtual void enqueue() { Database::instance()->enqueue( Tomahawk::dbcmd_ptr( this ) ); }
+    void enqueue() override { Database::instance()->enqueue( Tomahawk::dbcmd_ptr( this ) ); }
 
     void setArtist( const Tomahawk::artist_ptr& artist ) { m_artist = artist; }
     void setAlbum( const Tomahawk::album_ptr& album ) { m_album = album; }

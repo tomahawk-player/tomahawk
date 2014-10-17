@@ -30,6 +30,8 @@
 #include "SourceList.h"
 #include "Track.h"
 
+#include <unordered_map>
+
 namespace Tomahawk
 {
 
@@ -100,7 +102,7 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
 
     // Small cache to keep already created source objects.
     // This saves some mutex locking.
-    std::map<uint, Tomahawk::source_ptr> sourceCache;
+    std::unordered_map<uint, Tomahawk::source_ptr> sourceCache;
 
     while( query.next() )
     {
@@ -119,7 +121,7 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         uint albumpos = query.value( 13 ).toUInt();
         uint trackId = query.value( 14 ).toUInt();
 
-        std::map<uint, Tomahawk::source_ptr>::const_iterator _s = sourceCache.find( sourceId );
+        std::unordered_map<uint, Tomahawk::source_ptr>::const_iterator _s = sourceCache.find( sourceId );
         Tomahawk::source_ptr s;
         if ( _s == sourceCache.end() )
         {
