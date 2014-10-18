@@ -90,7 +90,7 @@ localFileIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
                           IODeviceCallback callback )
 {
     // ignore "file://" at front of url
-    QFile* io = new QFile( url.mid( QString( "file://" ).length() ) );
+    QFile* io = new QFile( url.mid( strlen( "file://" ) ) );
     if ( io )
         io->open( QIODevice::ReadOnly );
 
