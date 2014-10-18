@@ -2,7 +2,7 @@
  *
  *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
- *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2014,      Adrien Aubry <dridri85@gmail.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 #include "AudioEngine.h"
 #include "AudioOutput.h"
-#include "VlcDspHack.h"
+#include "VlcDsp.h"
 
 #include "utils/Logger.h"
 
@@ -61,6 +61,7 @@ AudioOutput::AudioOutput( QObject* parent )
     , m_currentTime( 0 )
     , m_totalTime( 0 )
     , m_aboutToFinish( false )
+    , m_justSeeked( false )
     , dspPluginCallback( 0 )
     , vlcInstance( 0 )
     , vlcPlayer( 0 )
@@ -177,6 +178,7 @@ AudioOutput::setCurrentSource(MediaStream* stream)
     currentStream = stream;
     m_totalTime = 0;
     m_currentTime = 0;
+    m_justSeeked = false;
     seekable = true;
 
     QByteArray url;
@@ -223,8 +225,7 @@ AudioOutput::setCurrentSource(MediaStream* stream)
     libvlc_media_player_set_media( vlcPlayer, vlcMedia );
 
 #ifdef VLC_DSP_PLUGIN_ENABLED
-    // This is very, very tricky
-    VlcDspHackInstall( vlcPlayer );
+    VlcDspSetup( vlcPlayer );
 #endif
 
     if ( stream->type() == MediaStream::Url ) {
@@ -378,8 +379,9 @@ AudioOutput::seek( qint64 milliseconds )
             return;
     }
 
-    tDebug() << "AudioOutput:: seeking" << milliseconds << "msec";
+//    tDebug() << "AudioOutput:: seeking" << milliseconds << "msec";
 
+    m_justSeeked = true;
     libvlc_media_player_set_time ( vlcPlayer, milliseconds );
     setCurrentTime( milliseconds );
 }
@@ -487,18 +489,20 @@ AudioOutput::vlcEventCallback( const libvlc_event_t* event, void* opaque )
 
 
 void
-AudioOutput::s_dspCallback( float* samples, int nb_channels, int nb_samples )
+AudioOutput::s_dspCallback( int frameNumber, float* samples, int nb_channels, int nb_samples )
 {
 //    tDebug() << Q_FUNC_INFO;
 
+    int state = AudioOutput::instance()->m_justSeeked ? 1 : 0;
+    AudioOutput::instance()->m_justSeeked = false;
     if ( AudioOutput::instance()->dspPluginCallback ) {
-        AudioOutput::instance()->dspPluginCallback( samples, nb_channels, nb_samples );
+        AudioOutput::instance()->dspPluginCallback( state, frameNumber, samples, nb_channels, nb_samples );
     }
 }
 
 
 void
-AudioOutput::setDspCallback( void ( *cb ) ( float*, int, int ) )
+AudioOutput::setDspCallback( boost::function< void( int, int, float*, int, int ) > cb )
 {
     dspPluginCallback = cb;
 }

@@ -2,7 +2,7 @@
  *
  *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
- *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2014,      Adrien Aubry <dridri85@gmail.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -24,8 +24,9 @@
 #include "../Typedefs.h"
 
 #include "DllMacro.h"
-
 #include "utils/MediaStream.h"
+
+#include <boost/function.hpp>
 
 struct libvlc_instance_t;
 struct libvlc_media_player_t;
@@ -61,7 +62,7 @@ public:
     qint64 totalTime();
     void setAutoDelete ( bool ad );
 
-    void setDspCallback( void ( *cb ) ( float*, int, int ) );
+    void setDspCallback( boost::function< void( int, int, float*, int, int ) > cb );
 
     static AudioOutput* instance();
 
@@ -78,7 +79,7 @@ private:
     void setTotalTime( qint64 time );
 
     static void vlcEventCallback( const libvlc_event_t *event, void *opaque );
-    static void s_dspCallback( float* samples, int nb_channels, int nb_samples );
+    static void s_dspCallback( int frameNumber, float* samples, int nb_channels, int nb_samples );
 
     static AudioOutput* s_instance;
     AudioState currentState;
@@ -90,8 +91,9 @@ private:
     qint64 m_currentTime;
     qint64 m_totalTime;
     bool m_aboutToFinish;
+    bool m_justSeeked;
 
-    void ( *dspPluginCallback ) ( float* samples, int nb_channels, int nb_samples );
+    boost::function< void( int state, int frameNumber, float* samples, int nb_channels, int nb_samples ) > dspPluginCallback;
 
     libvlc_instance_t* vlcInstance;
     libvlc_media_player_t* vlcPlayer;

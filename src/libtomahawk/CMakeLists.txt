@@ -215,7 +215,7 @@ list(APPEND libSources
 
     audio/AudioEngine.cpp
     audio/AudioOutput.cpp
-    audio/VlcDspHack.cpp
+    audio/VlcDsp.cpp
 
     collection/Collection.cpp
     collection/ArtistsRequest.cpp
@@ -393,7 +393,8 @@ include_directories(
     ${ECHONEST_INCLUDE_DIR}
     ${LUCENEPP_INCLUDE_DIRS}
     ${PHONON_INCLUDES}
-    ${LIBVLC_INCLUDES}
+    ${LIBVLC_INCLUDE_DIR}
+    ${LIBVLCCORE_INCLUDE_DIR}
     ${Boost_INCLUDE_DIR}
 
     ${LIBPORTFWD_INCLUDE_DIR}

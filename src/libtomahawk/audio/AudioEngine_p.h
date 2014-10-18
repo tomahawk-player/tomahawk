@@ -59,7 +59,5 @@ private:
 
     QTemporaryFile* coverTempFile;
 
-    void (* dspPluginCallback )( signed short* samples, int nb_channels, int nb_samples );
-
     static AudioEngine* s_instance;
 };

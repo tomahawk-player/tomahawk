@@ -76,7 +76,7 @@ AudioEnginePrivate::onStateChanged( AudioOutput::AudioState newState, AudioOutpu
     {
         q_ptr->stop( AudioEngine::UnknownError );
 
-//TODO        tDebug() << "Phonon Error:" << audioOutput->errorString() << audioOutput->errorType();
+//TODO        tDebug() << "AudioOutput Error:" << audioOutput->errorString() << audioOutput->errorType();
 
         emit q_ptr->error( AudioEngine::UnknownError );
         q_ptr->setState( AudioEngine::Error );
@@ -97,7 +97,6 @@ AudioEnginePrivate::onStateChanged( AudioOutput::AudioState newState, AudioOutpu
     }
     if ( newState == AudioOutput::Stopped && oldState == AudioOutput::Paused )
     {
-        // GStreamer backend hack: instead of going from PlayingState to StoppedState, it traverses PausedState
         q_ptr->setState( AudioEngine::Stopped );
     }
 
@@ -508,7 +507,6 @@ bool
 AudioEngine::isMuted() const
 {
     return d_func()->audioOutput->isMuted();
-    return 0;
 }
 
 
@@ -1248,8 +1246,8 @@ AudioEngine::currentTrackTotalTime() const
 {
     // TODO : This is too hacky. The problem is that I don't know why
     //        libVLC doesn't report total duration for stream data (imem://)
-    // But it's not a real problem for playback, since
-    // EndOfStream is emitted by libVLC itself
+    // But it's not a real problem for playback, since EndOfStream is emitted by libVLC itself
+    // This value is only used by AudioOutput to evaluate if it's close to end of stream
     if ( d_func()->audioOutput->totalTime() <= 0 && d_func()->currentTrack && d_func()->currentTrack->track() ) {
         return d_func()->currentTrack->track()->duration() * 1000 + 1000;
     }
@@ -1341,7 +1339,7 @@ AudioEngine::setCurrentTrackPlaylist( const playlistinterface_ptr& playlist )
 
 
 void
-AudioEngine::setDspCallback( void ( *cb ) ( float*, int, int ) )
+AudioEngine::setDspCallback( boost::function< void( int state, int frameNumber, float* samples, int nb_channels, int nb_samples ) > cb )
 {
     Q_D( AudioEngine );
 

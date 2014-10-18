@@ -10,7 +10,7 @@
 #    LIBVLC_VERSION
 
 if(NOT LIBVLC_MIN_VERSION)
-    set(LIBVLC_MIN_VERSION "0.0")
+    set(LIBVLC_MIN_VERSION "2.1")
 endif(NOT LIBVLC_MIN_VERSION)
 
 # find_path and find_library normally search standard locations
@@ -42,6 +42,15 @@ PATHS
 )
 find_path(LIBVLC_INCLUDE_DIR PATHS "${CMAKE_INCLUDE_PATH}/vlc" NAMES vlc.h 
         HINTS ${PC_LIBVLC_INCLUDEDIR} ${PC_LIBVLC_INCLUDE_DIRS})
+
+find_path(LIBVLCCORE_INCLUDE_DIR vlc_plugin.h
+PATHS
+    "$ENV{LIB_DIR}/include/vlc/plugins"
+    "/usr/include/vlc/plugins"
+    "/usr/local/include/vlc/plugins"
+    #mingw
+    c:/msys/local/include/vlc/plugins
+)
 
 #Put here path to custom location
 #example: /home/user/vlc/lib etc..
