@@ -28,9 +28,6 @@
 #include <QFile>
 #include <QDir>
 
-#include <boost/function.hpp>
-#include <boost/bind.hpp>
-
 #include <vlc/libvlc.h>
 #include <vlc/libvlc_media.h>
 #include <vlc/libvlc_media_player.h>
@@ -502,7 +499,7 @@ AudioOutput::s_dspCallback( int frameNumber, float* samples, int nb_channels, in
 
 
 void
-AudioOutput::setDspCallback( boost::function< void( int, int, float*, int, int ) > cb )
+AudioOutput::setDspCallback( std::function< void( int, int, float*, int, int ) > cb )
 {
     dspPluginCallback = cb;
 }

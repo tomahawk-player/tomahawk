@@ -24,7 +24,7 @@
 #include "../Typedefs.h"
 
 #include <QStringList>
-#include <boost/function.hpp>
+#include <functional>
 
 #include "DllMacro.h"
 
@@ -110,7 +110,7 @@ public:
      */
     qint64 currentTrackTotalTime() const;
 
-    void setDspCallback( boost::function< void( int state, int frameNumber, float* samples, int nb_channels, int nb_samples ) > cb );
+    void setDspCallback( std::function< void( int state, int frameNumber, float* samples, int nb_channels, int nb_samples ) > cb );
 
 public slots:
     void playPause();

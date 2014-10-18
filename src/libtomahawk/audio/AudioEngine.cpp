@@ -1339,7 +1339,7 @@ AudioEngine::setCurrentTrackPlaylist( const playlistinterface_ptr& playlist )
 
 
 void
-AudioEngine::setDspCallback( boost::function< void( int state, int frameNumber, float* samples, int nb_channels, int nb_samples ) > cb )
+AudioEngine::setDspCallback( std::function< void( int state, int frameNumber, float* samples, int nb_channels, int nb_samples ) > cb )
 {
     Q_D( AudioEngine );
 

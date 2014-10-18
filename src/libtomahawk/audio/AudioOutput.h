@@ -26,7 +26,7 @@
 #include "DllMacro.h"
 #include "utils/MediaStream.h"
 
-#include <boost/function.hpp>
+#include <functional>
 
 struct libvlc_instance_t;
 struct libvlc_media_player_t;
@@ -62,7 +62,7 @@ public:
     qint64 totalTime();
     void setAutoDelete ( bool ad );
 
-    void setDspCallback( boost::function< void( int, int, float*, int, int ) > cb );
+    void setDspCallback( std::function< void( int, int, float*, int, int ) > cb );
 
     static AudioOutput* instance();
 
@@ -93,7 +93,7 @@ private:
     bool m_aboutToFinish;
     bool m_justSeeked;
 
-    boost::function< void( int state, int frameNumber, float* samples, int nb_channels, int nb_samples ) > dspPluginCallback;
+    std::function< void( int state, int frameNumber, float* samples, int nb_channels, int nb_samples ) > dspPluginCallback;
 
     libvlc_instance_t* vlcInstance;
     libvlc_media_player_t* vlcPlayer;
