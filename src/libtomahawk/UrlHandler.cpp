@@ -38,24 +38,9 @@ QMap< QString, UrlTranslatorFunc > urltranslators;
 void
 initialiseDefaultIOFactories()
 {
-    {
-        // _1 = result, _2 = callback function for IODevice
-        IODeviceFactoryFunc fac = std::bind( localFileIODeviceFactory,
-                                             std::placeholders::_1,
-                                             std::placeholders::_2,
-                                             std::placeholders::_3 );
-        iofactories.insert( "file", fac );
-    }
-
-    {
-        IODeviceFactoryFunc fac = std::bind( httpIODeviceFactory,
-                                             std::placeholders::_1,
-                                             std::placeholders::_2,
-                                             std::placeholders::_3 );
-        iofactories.insert( "http", fac );
-        iofactories.insert( "https", fac );
-    }
-
+    iofactories.insert( "file", localFileIODeviceFactory );
+    iofactories.insert( "http", httpIODeviceFactory );
+    iofactories.insert( "https", httpIODeviceFactory );
 }
 
 void
