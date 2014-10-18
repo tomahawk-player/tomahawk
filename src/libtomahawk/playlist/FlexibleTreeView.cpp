@@ -53,7 +53,7 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
     qRegisterMetaType< FlexibleTreeViewMode >( "FlexibleTreeViewMode" );
 
     m_header->setBackgroundColor( Qt::black );
-    m_header->setBackground( ImageRegistry::instance()->pixmap( RESPATH "images/collection_background_small.png", QSize( 0, 0 ) ), false );
+    m_header->setBackground( ImageRegistry::instance()->pixmap( RESPATH "images/collection_background.png", QSize( 0, 0 ) ), false );
     setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultCollection, TomahawkUtils::Original, QSize( 256, 256 ) ) );
 
 //    m_trackView->setPlaylistInterface( m_playlistInterface );

@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>data/images/collection_background.png</file>
-        <file>data/images/collection_background_small.png</file>
         <file>data/images/playlist_background.png</file>
         <file>data/images/filter.svg</file>
         <file>data/images/loved.svg</file>
