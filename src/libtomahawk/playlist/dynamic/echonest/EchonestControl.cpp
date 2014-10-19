@@ -1148,10 +1148,7 @@ Tomahawk::EchonestControl::insertMoodsStylesAndGenres()
     }
     else
     {
-        foreach( const Echonest::Genre& genre, EchonestGenerator::genres() )
-        {
-            src.append( genre.name() );
-        }
+        src = EchonestGenerator::genres();
     }
 
     QComboBox* combo = qobject_cast< QComboBox* >( m_input.data() );

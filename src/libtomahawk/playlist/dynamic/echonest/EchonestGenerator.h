@@ -90,7 +90,7 @@ public:
 
     static QStringList styles();
     static QStringList moods();
-    static Echonest::Genres genres();
+    static QStringList genres();
     static QStringList userCatalogs();
     static QByteArray catalogId( const QString& collectionId );
 
@@ -135,7 +135,7 @@ private:
 
     static QStringList s_styles;
     static QStringList s_moods;
-    static Echonest::Genres s_genres;
+    static QStringList s_genres;
     static QNetworkReply* s_stylesJob;
     static QNetworkReply* s_moodsJob;
     static QNetworkReply* s_genresJob;
@@ -148,11 +148,6 @@ private:
 };
 
 };
-
-//TODO: this code should be move to libechonest
-//TODO: (delete this when libechonest 2.4 is out)
-QDataStream& operator<<(QDataStream& out, const Echonest::Genre& genre);
-QDataStream& operator>>(QDataStream& in, Echonest::Genre& genre);
 
 #endif
 
