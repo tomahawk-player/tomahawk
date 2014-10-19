@@ -33,8 +33,8 @@ public:
     ExternalResolverPlaylistUpdaterFactory();
     virtual ~ExternalResolverPlaylistUpdaterFactory();
 
-    QString type() const Q_DECL_OVERRIDE;
-    PlaylistUpdaterInterface* create( const playlist_ptr&, const QVariantHash& settings ) Q_DECL_OVERRIDE;
+    QString type() const override;
+    PlaylistUpdaterInterface* create( const playlist_ptr&, const QVariantHash& settings ) override;
 
 private slots:
     void resolverAdded( Tomahawk::Resolver* resolver );
