@@ -23,8 +23,6 @@
 #include "DllMacro.h"
 #include <QPointer>
 
-class IndexingJobItem;
-
 namespace Tomahawk
 {
 
@@ -47,9 +45,6 @@ public:
     virtual QString commandname() const { return "updatesearchindex"; }
     virtual bool doesMutates() const { return true; }
     virtual void exec( DatabaseImpl* db );
-
-private:
-    QPointer<IndexingJobItem> m_statusJob;
 };
 
 }
