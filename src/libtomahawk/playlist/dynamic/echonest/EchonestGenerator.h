@@ -34,6 +34,7 @@
 #include <echonest5/Genre.h>
 #else
 #include <echonest/Playlist.h>
+#include <echonest/Genre.h>
 #endif
 
 namespace Tomahawk
