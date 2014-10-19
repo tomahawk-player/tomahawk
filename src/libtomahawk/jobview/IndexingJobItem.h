@@ -19,8 +19,9 @@
 #ifndef INDEXINGJOBITEM_H
 #define INDEXINGJOBITEM_H
 
-#include <jobview/JobStatusItem.h>
+#include "JobStatusItem.h"
 
+#include <QPointer>
 
 class IndexingJobItem : public JobStatusItem
 {
@@ -35,6 +36,21 @@ public:
     virtual QString mainText() const;
     virtual QPixmap icon() const;
     virtual QString type() const { return "indexerjob"; }
+};
+
+class IndexStatusManager : public QObject
+{
+    Q_OBJECT
+public:
+    explicit IndexStatusManager( QObject* parent = 0 );
+    virtual ~IndexStatusManager() {}
+
+private slots:
+    void started();
+    void finished();
+
+private:
+    QPointer<IndexingJobItem> m_curItem;
 };
 
 #endif // INDEXINGJOBITEM_H

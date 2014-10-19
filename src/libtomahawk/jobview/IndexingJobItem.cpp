@@ -18,7 +18,11 @@
 
 #include "IndexingJobItem.h"
 
+#include "JobStatusModel.h"
+#include "JobStatusView.h"
+#include "database/Database.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
 
 #include <QPixmap>
 
@@ -29,16 +33,40 @@ IndexingJobItem::mainText() const
     return tr( "Indexing Music Library" );
 }
 
+
 QPixmap
 IndexingJobItem::icon() const
 {
     return TomahawkUtils::defaultPixmap( TomahawkUtils::ViewRefresh, TomahawkUtils::Original, QSize( 128, 128 ) );
-
 }
 
 
-void IndexingJobItem::done()
+void
+IndexingJobItem::done()
 {
     emit finished();
 }
 
+
+IndexStatusManager::IndexStatusManager( QObject* parent )
+: QObject( parent )
+{
+    connect( Tomahawk::Database::instance(), SIGNAL( indexStarted() ), SLOT( started() ) );
+    connect( Tomahawk::Database::instance(), SIGNAL( indexReady() ), SLOT( finished() ) );
+}
+
+
+void
+IndexStatusManager::started()
+{
+    m_curItem = new IndexingJobItem;
+    JobStatusView::instance()->model()->addJob( m_curItem.data() );
+}
+
+
+void
+IndexStatusManager::finished()
+{
+    if ( m_curItem )
+        m_curItem->done();
+}
