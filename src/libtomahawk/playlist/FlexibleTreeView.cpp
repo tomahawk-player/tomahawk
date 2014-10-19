@@ -361,6 +361,7 @@ void
 FlexibleTreeView::setEmptyTip( const QString& tip )
 {
     m_columnView->setEmptyTip( tip );
+    m_albumView->setEmptyTip( tip );
     m_trackView->setEmptyTip( tip );
 }
 
@@ -380,7 +381,7 @@ FlexibleTreeView::onModelChanged()
     m_header->setCaption( m_model->title() );
     m_header->setDescription( m_model->description() );
 
-    setEmptyTip( tr( "This collection is currently empty." ) );
+//    setEmptyTip( tr( "This collection is currently empty." ) );
 }
 
 

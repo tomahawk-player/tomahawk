@@ -67,7 +67,6 @@ public:
     virtual BackendType backendType() const { return NullCollectionType; }
     virtual QIcon icon() const;
     virtual QPixmap bigIcon() const; //for the ViewPage header
-    virtual QString emptyText() const;
 
     virtual void loadPlaylists();
     virtual void loadAutoPlaylists();
