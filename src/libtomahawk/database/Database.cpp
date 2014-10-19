@@ -117,6 +117,7 @@ Database::Database( const QString& dbname, QObject* parent )
     tDebug() << Q_FUNC_INFO << "Using" << m_maxConcurrentThreads << "database worker threads";
 
     connect( m_impl, SIGNAL( indexReady() ), SLOT( markAsReady() ) );
+    connect( m_impl, SIGNAL( indexStarted() ), SIGNAL( indexStarted() ) );
     connect( m_impl, SIGNAL( indexReady() ), SIGNAL( indexReady() ) );
 
     Q_ASSERT( m_workerRW );

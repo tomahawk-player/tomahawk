@@ -199,6 +199,7 @@ Tomahawk::DatabaseImpl::dumpDatabase()
 void
 Tomahawk::DatabaseImpl::loadIndex()
 {
+    connect( m_fuzzyIndex, SIGNAL( indexStarted() ), SIGNAL( indexStarted() ) );
     connect( m_fuzzyIndex, SIGNAL( indexReady() ), SIGNAL( indexReady() ) );
     m_fuzzyIndex->loadLuceneIndex();
 }

@@ -52,6 +52,7 @@ public:
     virtual void updateIndex();
 
 signals:
+    void indexStarted();
     void indexReady();
 
 public slots:

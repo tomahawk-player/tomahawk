@@ -94,6 +94,7 @@ FuzzyIndex::updateIndexSlot()
 void
 FuzzyIndex::beginIndexing()
 {
+    emit indexStarted();
     m_mutex.lock();
 
     try
