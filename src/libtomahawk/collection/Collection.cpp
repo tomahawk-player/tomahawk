@@ -98,13 +98,6 @@ Collection::bigIcon() const
 }
 
 
-QString
-Collection::emptyText() const
-{
-    return  tr( "This collection is empty." );
-}
-
-
 const
 source_ptr& Collection::source() const
 {

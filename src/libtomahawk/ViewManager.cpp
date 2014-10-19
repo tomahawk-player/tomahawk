@@ -281,8 +281,12 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
 
         setPage( view );
 
-        if ( !collection.isNull() )
-            view->setEmptyTip( collection->emptyText() );
+        if ( collection && collection->source() && collection->source()->isLocal() )
+        {
+            view->setEmptyTip( tr( "After you have scanned your music collection you will find your tracks right here." ) );
+        }
+        else
+            view->setEmptyTip( tr( "This collection is empty." ) );
 
         if ( collection.objectCast<ScriptCollection>() )
             view->trackView()->setEmptyTip( tr( "Cloud collections aren't supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them." ) );

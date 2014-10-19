@@ -34,7 +34,6 @@ public:
     explicit LocalCollection( const Tomahawk::source_ptr& source, QObject* parent = 0 );
 
     virtual QString prettyName() const;
-    virtual QString emptyText() const;
 };
 
 }
