@@ -816,23 +816,3 @@ EchonestGenerator::genresReceived()
     s_genres_lock.unlock();
     emit genresSaved();
 }
-
-QDataStream&
-operator<<(QDataStream& out, const Echonest::Genre &genre)
-{
-    //TODO: this should be made more complete and be moved to libechonest
-    return out << genre.name() << genre.description();
-}
-
-QDataStream&
-operator>>(QDataStream& in, Echonest::Genre& genre)
-{
-    //TODO: this should be made more complete and be moved to libechonest
-    QString name;
-    QString description;
-    in >> name;
-    in >> description;
-    genre.setName( name );
-    genre.setDescription( description );
-    return in;
-}
