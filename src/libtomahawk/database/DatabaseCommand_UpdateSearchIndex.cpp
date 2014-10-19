@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2012       Leo Franchi            <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -26,9 +26,6 @@
 #include "TomahawkSqlQuery.h"
 
 #include "fuzzyindex/DatabaseFuzzyIndex.h"
-#include "jobview/IndexingJobItem.h"
-#include "jobview/JobStatusView.h"
-#include "jobview/JobStatusModel.h"
 #include "utils/Logger.h"
 
 namespace Tomahawk
@@ -36,22 +33,14 @@ namespace Tomahawk
 
 DatabaseCommand_UpdateSearchIndex::DatabaseCommand_UpdateSearchIndex()
     : DatabaseCommand()
-    , m_statusJob( new IndexingJobItem )
 {
-    tLog() << Q_FUNC_INFO << "Updating index.";
-
-    JobStatusView::addJob( m_statusJob );
+    tDebug() << Q_FUNC_INFO << "Updating index.";
 }
 
 
 DatabaseCommand_UpdateSearchIndex::~DatabaseCommand_UpdateSearchIndex()
 {
     tDebug() << Q_FUNC_INFO;
-
-    if ( ! m_statusJob.isNull() )
-    {
-        m_statusJob.data()->done();
-    }
 }
 
 
