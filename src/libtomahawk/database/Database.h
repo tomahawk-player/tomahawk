@@ -101,7 +101,8 @@ public:
     }
 
 signals:
-    void indexReady(); // search index
+    void indexStarted();
+    void indexReady();
     void ready();
 
     void newJobRO( Tomahawk::dbcmd_ptr );

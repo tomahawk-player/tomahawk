@@ -86,7 +86,9 @@ public:
     void loadIndex();
 
 signals:
+    void indexStarted();
     void indexReady();
+
     void schemaUpdateStarted();
     void schemaUpdateStatus( const QString& message );
     void schemaUpdateDone();
