@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -26,6 +26,7 @@
 #include "JobStatusDelegate.h"
 #include "utils/Logger.h"
 #include "Source.h"
+#include "IndexingJobItem.h"
 #include "PipelineStatusItem.h"
 #include "TransferStatusItem.h"
 #include "LatchedStatusItem.h"
@@ -92,6 +93,7 @@ JobStatusView::JobStatusView( AnimatedSplitter* parent )
     m_view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     m_view->setUniformItemSizes( false );
 
+    new IndexStatusManager( this );
     new PipelineStatusManager( this );
     new TransferStatusManager( this );
     new LatchedStatusManager( this );
