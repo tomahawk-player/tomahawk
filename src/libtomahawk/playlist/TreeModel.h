@@ -51,7 +51,6 @@ public:
 
     Tomahawk::collection_ptr collection() const;
 
-    void addAllCollections();
     void addCollection( const Tomahawk::collection_ptr& collection );
     //TODO: Unused, but will be useful for supporting filtered queries. - Teo 1/2013
     //void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllArtists::SortOrder order );
@@ -71,7 +70,6 @@ public:
 
 public slots:
     void addAlbums( const QModelIndex& parent, const QList<Tomahawk::album_ptr>& albums );
-    void reloadCollection();
 
 signals:
     void modeChanged( Tomahawk::ModelMode mode );
@@ -85,9 +83,6 @@ private slots:
     void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, Tomahawk::ModelMode mode );
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QModelIndex& index );
     void onTracksFound( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::ModelMode mode, Tomahawk::collection_ptr collection );
-
-    void onSourceAdded( const Tomahawk::source_ptr& source );
-    void onCollectionChanged();
 
 private:
     Tomahawk::ModelMode m_mode;
