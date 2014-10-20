@@ -52,18 +52,10 @@ CollectionViewPage::CollectionViewPage( QWidget* parent )
 {
     qRegisterMetaType< CollectionViewPageMode >( "CollectionViewPageMode" );
 
-    m_header->setBackgroundColor( Qt::black );
     m_header->setBackground( ImageRegistry::instance()->pixmap( RESPATH "images/collection_background.png", QSize( 0, 0 ) ), false );
     setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultCollection, TomahawkUtils::Original, QSize( 256, 256 ) ) );
 
-//    m_trackView->setPlaylistInterface( m_playlistInterface );
-//    m_columnView->setPlaylistInterface( m_trackView->proxyModel()->playlistInterface() );
-//    m_gridView->setPlaylistInterface( m_trackView->proxyModel()->playlistInterface() );
-
-/*    m_columnView->setColumnHidden( PlayableModel::Age, true ); // Hide age column per default
-    m_columnView->setColumnHidden( PlayableModel::Filesize, true ); // Hide filesize column per default
-    m_columnView->setColumnHidden( PlayableModel::Composer, true ); // Hide composer column per default*/
-
+    m_trackView->setColumnHidden( PlayableModel::Composer, true );
     m_trackView->setColumnHidden( PlayableModel::Origin, true );
     m_trackView->setColumnHidden( PlayableModel::Score, true );
     m_trackView->setGuid( QString( "trackview/flat" ) );
@@ -71,7 +63,6 @@ CollectionViewPage::CollectionViewPage( QWidget* parent )
     {
         m_albumView->setAutoResize( false );
         m_albumView->setAutoFitItems( true );
-//        m_albumView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         m_albumView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         m_albumView->setItemSize( QSize( 170, 170 + 56 ) );
 
@@ -136,8 +127,6 @@ CollectionViewPage::setTrackView( TrackView* view )
         delete m_trackView;
     }
 
-//    view->setPlaylistInterface( m_playlistInterface );
-
     m_trackView = view;
     m_stack->addWidget( view );
 }
@@ -153,8 +142,6 @@ CollectionViewPage::setColumnView( ColumnView* view )
     }
 
     connect( view, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ), Qt::UniqueConnection );
-
-//    view->setPlaylistInterface( m_trackView->proxyModel()->playlistInterface() );
 
     m_columnView = view;
     m_stack->addWidget( view );
@@ -378,8 +365,6 @@ CollectionViewPage::onModelChanged()
     setPixmap( m_model->icon(), false );
     m_header->setCaption( m_model->title() );
     m_header->setDescription( m_model->description() );
-
-//    setEmptyTip( tr( "This collection is currently empty." ) );
 }
 
 
