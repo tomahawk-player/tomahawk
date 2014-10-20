@@ -215,7 +215,6 @@ list(APPEND libSources
 
     audio/AudioEngine.cpp
     audio/AudioOutput.cpp
-    audio/VlcDsp.cpp
 
     collection/Collection.cpp
     collection/ArtistsRequest.cpp

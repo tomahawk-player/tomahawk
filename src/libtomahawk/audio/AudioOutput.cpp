@@ -21,7 +21,6 @@
 
 #include "AudioEngine.h"
 #include "AudioOutput.h"
-#include "VlcDsp.h"
 
 #include "utils/Logger.h"
 
@@ -91,10 +90,6 @@ AudioOutput::AudioOutput( QObject* parent )
 */
     args << "--no-video";
     args << "--no-xlib";
-#ifdef VLC_DSP_PLUGIN_ENABLED
-    args << "--audio-filter=dsp";
-    args << QString("--dsp-callback=%1").arg((quint64)&AudioOutput::s_dspCallback, 0, 16).toAscii();
-#endif
 
     QVarLengthArray< const char * , 64 > vlcArgs( args.size() );
     for ( int i = 0 ; i < args.size() ; ++i ) {
@@ -145,7 +140,18 @@ AudioOutput::~AudioOutput()
 {
     tDebug() << Q_FUNC_INFO;
 
-    // TODO
+    if ( vlcPlayer != 0 ) {
+        libvlc_media_player_stop( vlcPlayer );
+        libvlc_media_player_release( vlcPlayer );
+        vlcPlayer = 0;
+    }
+    if ( vlcMedia != 0 ) {
+        libvlc_media_release( vlcMedia );
+        vlcMedia = 0;
+    }
+    if ( vlcInstance != 0 ) {
+        libvlc_release( vlcInstance );
+    }
 }
 
 
@@ -226,10 +232,6 @@ AudioOutput::setCurrentSource(MediaStream* stream)
     }
 
     libvlc_media_player_set_media( vlcPlayer, vlcMedia );
-
-#ifdef VLC_DSP_PLUGIN_ENABLED
-    VlcDspSetup( vlcPlayer );
-#endif
 
     if ( stream->type() == MediaStream::Url ) {
         m_totalTime = libvlc_media_get_duration( vlcMedia );
@@ -475,7 +477,11 @@ AudioOutput::vlcEventCallback( const libvlc_event_t* event, void* opaque )
             that->setState(Stopped);
             break;
         case libvlc_MediaPlayerEncounteredError:
-            // TODO emit Error
+            tDebug() << "LibVLC error : MediaPlayerEncounteredError. Stopping";
+            if ( that->vlcPlayer != 0 ) {
+                that->stop();
+            }
+            that->setState( Error );
             break;
         case libvlc_MediaPlayerVout:
         case libvlc_MediaPlayerMediaChanged:

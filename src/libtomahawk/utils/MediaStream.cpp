@@ -45,7 +45,7 @@ MediaStream::MediaStream( QObject* parent )
 
 MediaStream::MediaStream( const QUrl &url )
     : QObject( 0 )
-    , m_type(Url)
+    , m_type( Url )
     , m_ioDevice ( 0 )
     , m_started( false )
     , m_bufferingFinished( false )
@@ -61,7 +61,7 @@ MediaStream::MediaStream( const QUrl &url )
 
 MediaStream::MediaStream( QIODevice* device )
     : QObject( 0 )
-    , m_type(IODevice)
+    , m_type( IODevice )
     , m_url( QUrl() )
     , m_ioDevice ( 0 )
     , m_started( false )
@@ -202,7 +202,7 @@ MediaStream::readDoneCallback ( void *data, const char *cookie, size_t bufferSiz
     MediaStream* that = static_cast < MediaStream * > ( data );
 
     if ( ( that->m_type == Stream ) && buffer != 0 && bufferSize > 0 ) {
-        delete static_cast<char *>(buffer);
+        delete static_cast< char* >( buffer );
     }
 
     return 0;

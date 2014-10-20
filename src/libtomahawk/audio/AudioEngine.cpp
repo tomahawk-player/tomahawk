@@ -31,7 +31,7 @@
 #include "playlist/SingleTrackPlaylistInterface.h"
 #include "utils/Closure.h"
 #include "utils/Logger.h"
-#include "utils/Qnr_IoDeviceStream.h"
+#include "utils/Qnr_IoDeviceSFtream.h"
 
 #include "Album.h"
 #include "Artist.h"
@@ -75,9 +75,7 @@ AudioEnginePrivate::onStateChanged( AudioOutput::AudioState newState, AudioOutpu
     if ( newState == AudioOutput::Error )
     {
         q_ptr->stop( AudioEngine::UnknownError );
-
-//TODO        tDebug() << "AudioOutput Error:" << audioOutput->errorString() << audioOutput->errorType();
-
+        tDebug() << "AudioOutput Error";
         emit q_ptr->error( AudioEngine::UnknownError );
         q_ptr->setState( AudioEngine::Error );
     }
@@ -1244,8 +1242,8 @@ AudioEngine::currentTime() const
 qint64
 AudioEngine::currentTrackTotalTime() const
 {
-    // TODO : This is too hacky. The problem is that I don't know why
-    //        libVLC doesn't report total duration for stream data (imem://)
+    // FIXME : This is too hacky. The problem is that I don't know why
+    //         libVLC doesn't report total duration for stream data (imem://)
     // But it's not a real problem for playback, since EndOfStream is emitted by libVLC itself
     // This value is only used by AudioOutput to evaluate if it's close to end of stream
     if ( d_func()->audioOutput->totalTime() <= 0 && d_func()->currentTrack && d_func()->currentTrack->track() ) {
