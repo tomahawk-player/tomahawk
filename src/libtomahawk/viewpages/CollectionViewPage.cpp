@@ -49,7 +49,7 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
     , m_albumView( new GridView() )
     , m_model( 0 )
     , m_flatModel( 0 )
-    , m_collection( collection )
+    , m_albumModel( 0 )
 {
     qRegisterMetaType< CollectionViewPageMode >( "CollectionViewPageMode" );
 
@@ -111,6 +111,23 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
     m_stack->addWidget( m_albumView );
     m_stack->addWidget( m_trackView );
 
+    connect( m_header, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
+
+    loadCollection( collection );
+}
+
+
+CollectionViewPage::~CollectionViewPage()
+{
+    tDebug() << Q_FUNC_INFO;
+}
+
+
+void
+CollectionViewPage::loadCollection( const collection_ptr& collection )
+{
+    m_collection = collection;
+
     TreeModel* model = new TreeModel();
     PlayableModel* flatModel = new PlayableModel();
     PlayableModel* albumModel = new PlayableModel();
@@ -132,14 +149,6 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
 
     if ( collection.objectCast<ScriptCollection>() )
         m_trackView->setEmptyTip( tr( "Cloud collections aren't supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them." ) );
-
-    connect( m_header, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
-}
-
-
-CollectionViewPage::~CollectionViewPage()
-{
-    tDebug() << Q_FUNC_INFO;
 }
 
 
@@ -153,15 +162,7 @@ CollectionViewPage::setTreeModel( TreeModel* model )
     }
 
     m_model = model;
-
-//    m_trackView->setPlayableModel( model );
     m_columnView->setTreeModel( model );
-
-/*    m_trackView->setSortingEnabled( false );
-    m_trackView->sortByColumn( -1 );
-    m_trackView->proxyModel()->sort( -1 );
-    m_columnView->proxyModel()->sort( -1 );
-    m_gridView->proxyModel()->sort( -1 );*/
 
     connect( model, SIGNAL( changed() ), SLOT( onModelChanged() ), Qt::UniqueConnection );
     onModelChanged();
@@ -172,31 +173,23 @@ void
 CollectionViewPage::setFlatModel( PlayableModel* model )
 {
     if ( m_flatModel )
-    {
-//        disconnect( m_flatModel, SIGNAL( changed() ), this, SLOT( onModelChanged() ) );
         delete m_flatModel;
-    }
 
     m_flatModel = model;
-
     m_trackView->setPlayableModel( model );
-
     m_trackView->setSortingEnabled( true );
     m_trackView->sortByColumn( 0, Qt::AscendingOrder );
-
-/*    connect( model, SIGNAL( changed() ), SLOT( onModelChanged() ), Qt::UniqueConnection );
-    onModelChanged();*/
 }
 
 
 void
 CollectionViewPage::setAlbumModel( PlayableModel* model )
 {
+    if ( m_albumModel )
+        delete m_albumModel;
+
     m_albumModel = model;
     m_albumView->setPlayableModel( model );
-
-    /*    connect( model, SIGNAL( changed() ), SLOT( onModelChanged() ), Qt::UniqueConnection );
-     *    onModelChanged();*/
 }
 
 
@@ -328,6 +321,7 @@ CollectionViewPage::setFilter( const QString& pattern )
 void
 CollectionViewPage::restoreViewMode()
 {
+    //FIXME: needs be moved to TomahawkSettings
     TomahawkSettings::instance()->beginGroup( "ui" );
     int modeNumber = TomahawkSettings::instance()->value( "flexibleTreeViewMode", Columns ).toInt();
     m_mode = static_cast< CollectionViewPageMode >( modeNumber );
@@ -360,14 +354,6 @@ CollectionViewPage::onModelChanged()
     setPixmap( m_model->icon(), false );
     m_header->setCaption( m_model->title() );
     m_header->setDescription( m_model->description() );
-}
-
-
-void
-CollectionViewPage::onWidgetDestroyed( QWidget* widget )
-{
-    Q_UNUSED( widget );
-    emit destroyed( this );
 }
 
 

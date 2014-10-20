@@ -68,13 +68,14 @@ public slots:
     virtual bool setFilter( const QString& pattern );
     void restoreViewMode(); //ViewManager calls this on every show
 
+    void loadCollection( const Tomahawk::collection_ptr& collection );
+
 signals:
     void modeChanged( CollectionViewPageMode mode );
     void destroyed( QWidget* widget );
 
 private slots:
     void onModelChanged();
-    void onWidgetDestroyed( QWidget* widget );
 
 private:
     FilterHeader* m_header;
