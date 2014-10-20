@@ -264,20 +264,7 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
     CollectionViewPage* view;
     if ( !m_collectionViews.contains( collection ) || m_collectionViews.value( collection ).isNull() )
     {
-        view = new CollectionViewPage();
-
-        view->columnView()->proxyModel()->setStyle( PlayableProxyModel::Collection );
-        TreeModel* model = new TreeModel();
-        PlayableModel* flatModel = new PlayableModel();
-        PlayableModel* albumModel = new PlayableModel();
-
-        view->setTreeModel( model );
-        view->setFlatModel( flatModel );
-        view->setAlbumModel( albumModel );
-
-        model->addCollection( collection );
-        flatModel->appendTracks( collection );
-        albumModel->appendAlbums( collection );
+        view = new CollectionViewPage( collection );
 
         setPage( view );
 

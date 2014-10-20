@@ -40,7 +40,7 @@
 using namespace Tomahawk;
 
 
-CollectionViewPage::CollectionViewPage( QWidget* parent )
+CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collection, QWidget* parent )
     : QWidget( parent )
     , m_header( new FilterHeader( this ) )
     , m_columnView( new ColumnView() )
@@ -48,12 +48,15 @@ CollectionViewPage::CollectionViewPage( QWidget* parent )
     , m_albumView( new GridView() )
     , m_model( 0 )
     , m_flatModel( 0 )
+    , m_collection( collection )
     , m_temporary( false )
 {
     qRegisterMetaType< CollectionViewPageMode >( "CollectionViewPageMode" );
 
     m_header->setBackground( ImageRegistry::instance()->pixmap( RESPATH "images/collection_background.png", QSize( 0, 0 ) ), false );
     setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultCollection, TomahawkUtils::Original, QSize( 256, 256 ) ) );
+
+    m_columnView->proxyModel()->setStyle( PlayableProxyModel::Collection );
 
     m_trackView->setColumnHidden( PlayableModel::Composer, true );
     m_trackView->setColumnHidden( PlayableModel::Origin, true );
@@ -107,6 +110,18 @@ CollectionViewPage::CollectionViewPage( QWidget* parent )
     m_stack->addWidget( m_columnView );
     m_stack->addWidget( m_albumView );
     m_stack->addWidget( m_trackView );
+
+    TreeModel* model = new TreeModel();
+    PlayableModel* flatModel = new PlayableModel();
+    PlayableModel* albumModel = new PlayableModel();
+
+    setTreeModel( model );
+    setFlatModel( flatModel );
+    setAlbumModel( albumModel );
+
+    model->addCollection( collection );
+    flatModel->appendTracks( collection );
+    albumModel->appendAlbums( collection );
 
     connect( m_header, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
 }
