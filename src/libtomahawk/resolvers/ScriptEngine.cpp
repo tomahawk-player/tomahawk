@@ -74,6 +74,7 @@ ScriptEngine::sslErrorHandler( QNetworkReply* qnr, const QList<QSslError>& errli
     tDebug() << Q_FUNC_INFO;
 
     QByteArray digest = errlist.first().certificate().digest();
+    int result = -1;
 
     if ( !TomahawkSettings::instance()->isSslCertKnown( digest ) )
     {
@@ -91,7 +92,7 @@ ScriptEngine::sslErrorHandler( QNetworkReply* qnr, const QList<QSslError>& errli
         question.setStandardButtons( QMessageBox::No );
         question.addButton( tr( "Trust certificate" ), QMessageBox::AcceptRole );
 
-        int result = question.exec();
+        result = question.exec();
 
         //FIXME: discuss whether we want to store rejects, too (needs settings management to remove the decision?)
         if ( result == QMessageBox::AcceptRole )

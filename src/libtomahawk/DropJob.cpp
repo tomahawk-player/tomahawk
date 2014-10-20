@@ -263,14 +263,9 @@ bool
 DropJob::validateLocalFiles(const QString &paths, const QString &suffix)
 {
     QStringList filePaths = paths.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
-    QStringList::iterator it = filePaths.begin();
-    while (it != filePaths.end())
-    {
+    for ( QStringList::iterator it = filePaths.begin(); it != filePaths.end(); ++it )
         if ( !validateLocalFile( *it, suffix ) )
-            it = filePaths.erase( it );
-        else
-            ++it;
-    }
+            filePaths.erase( it );
     return !filePaths.isEmpty();
 }
 
@@ -982,7 +977,7 @@ DropJob::removeRemoteSources()
         foreach ( const Tomahawk::result_ptr& result, item->results() )
         {
             if ( !result->collection().isNull() && !result->collection()->source().isNull() &&
-                 result->collection()->source()->isLocal() )
+                 !result->collection()->source().isNull() && result->collection()->source()->isLocal() )
                 hasLocalSource = true;
         }
         if ( hasLocalSource )

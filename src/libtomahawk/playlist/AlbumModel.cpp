@@ -144,9 +144,10 @@ AlbumModel::addAlbums( const QList<Tomahawk::album_ptr>& albums )
 
     emit beginInsertRows( QModelIndex(), crows.first, crows.second );
 
+    PlayableItem* albumitem;
     foreach( const album_ptr& album, trimmedAlbums )
     {
-        PlayableItem* albumitem = new PlayableItem( album, rootItem() );
+        albumitem = new PlayableItem( album, rootItem() );
         albumitem->index = createIndex( rootItem()->children.count() - 1, 0, albumitem );
 
         connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
@@ -189,9 +190,10 @@ AlbumModel::addArtists( const QList<Tomahawk::artist_ptr>& artists )
 
     emit beginInsertRows( QModelIndex(), crows.first, crows.second );
 
+    PlayableItem* albumitem;
     foreach ( const artist_ptr& artist, trimmedArtists )
     {
-        PlayableItem* albumitem = new PlayableItem( artist, rootItem() );
+        albumitem = new PlayableItem( artist, rootItem() );
         albumitem->index = createIndex( rootItem()->children.count() - 1, 0, albumitem );
 
         connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
@@ -217,9 +219,10 @@ AlbumModel::addQueries( const QList<Tomahawk::query_ptr>& queries )
 
     emit beginInsertRows( QModelIndex(), crows.first, crows.second );
 
+    PlayableItem* albumitem;
     foreach ( const query_ptr& query, queries )
     {
-        PlayableItem* albumitem = new PlayableItem( query, rootItem() );
+        albumitem = new PlayableItem( query, rootItem() );
         albumitem->index = createIndex( rootItem()->children.count() - 1, 0, albumitem );
 
         connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );

@@ -269,6 +269,7 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
 
             case Age:
                 return TomahawkUtils::ageToString( QDateTime::fromTime_t( query->results().first()->modificationTime() ) );
+                break;
 
             case Year:
                 if ( query->results().first()->track()->year() != 0 )
@@ -277,9 +278,11 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
 
             case Filesize:
                 return TomahawkUtils::filesizeToString( query->results().first()->size() );
+                break;
 
             case Origin:
                 return query->results().first()->friendlySource();
+                break;
 
             case Score:
             {
@@ -290,6 +293,7 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
                     score = 0.0;
 
                 return scoreText( score );
+                break;
             }
 
             default:
@@ -675,10 +679,11 @@ PlayableModel::insertInternal( const QList< T >& items, int row, const QList< To
     emit beginInsertRows( parent, crows.first, crows.second );
 
     int i = 0;
+    PlayableItem* plitem;
     foreach ( const T& item, items )
     {
         PlayableItem* pItem = itemFromIndex( parent );
-        PlayableItem* plitem = new PlayableItem( item, pItem, row + i );
+        plitem = new PlayableItem( item, pItem, row + i );
         plitem->index = createIndex( row + i, 0, plitem );
 
         if ( plitem->query() )
