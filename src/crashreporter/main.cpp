@@ -28,6 +28,11 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
+#ifdef Q_OS_WIN
+    #include <windows.h>
+    #include <unistd.h>
+#endif
+
 
 // code taken from http://stackoverflow.com/questions/20734831/compress-string-with-gzip-using-qcompress
 static const quint32 crc_32_tab[] = { /* CRC polynomial 0xedb88320 */
@@ -126,6 +131,26 @@ const char* k_usage =
 
 int main( int argc, char* argv[] )
 {
+#ifdef Q_OS_WIN // log to console window
+    if ( fileno( stdout ) != -1 && _get_osfhandle( fileno( stdout ) ) != -1 )
+    {
+        /* stdout is fine, presumably redirected to a file or pipe */
+    }
+    else
+    {
+        typedef BOOL (WINAPI * AttachConsole_t) (DWORD);
+        AttachConsole_t p_AttachConsole = (AttachConsole_t) GetProcAddress( GetModuleHandleW( L"kernel32.dll" ), "AttachConsole" );
+
+        if ( p_AttachConsole != NULL && p_AttachConsole( ATTACH_PARENT_PROCESS ) )
+        {
+            _wfreopen ( L"CONOUT$", L"w", stdout );
+            dup2( fileno( stdout ), 1 );
+            _wfreopen ( L"CONOUT$", L"w", stderr );
+            dup2( fileno( stderr ), 2 );
+        }
+    }
+#endif
+
     // used by some Qt stuff, eg QSettings
     // leave first! As Settings object is created quickly
     QCoreApplication::setApplicationName( "Tomahawk" );
