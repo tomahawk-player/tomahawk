@@ -269,7 +269,6 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
 
             case Age:
                 return TomahawkUtils::ageToString( QDateTime::fromTime_t( query->results().first()->modificationTime() ) );
-                break;
 
             case Year:
                 if ( query->results().first()->track()->year() != 0 )
@@ -278,11 +277,9 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
 
             case Filesize:
                 return TomahawkUtils::filesizeToString( query->results().first()->size() );
-                break;
 
             case Origin:
                 return query->results().first()->friendlySource();
-                break;
 
             case Score:
             {
@@ -293,7 +290,6 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
                     score = 0.0;
 
                 return scoreText( score );
-                break;
             }
 
             default:
