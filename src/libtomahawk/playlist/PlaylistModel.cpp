@@ -290,10 +290,11 @@ PlaylistModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int
 
     QList< Tomahawk::query_ptr > queries;
     int i = 0;
+    PlayableItem* plitem;
     foreach( const plentry_ptr& entry, entries )
     {
         PlayableItem* pItem = itemFromIndex( parent );
-        PlayableItem* plitem = new PlayableItem( entry, pItem, row + i );
+        plitem = new PlayableItem( entry, pItem, row + i );
         plitem->index = createIndex( row + i, 0, plitem );
 
         if ( logs.count() > i )
