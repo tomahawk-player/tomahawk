@@ -161,5 +161,6 @@
         <file>data/images/copy.svg</file>
         <file>data/icons/tomahawk-icon-1024x1024.png</file>
         <file>data/images/plugins.svg</file>
+        <file>data/icons/tomahawk-white-icon-128x128.png</file>
     </qresource>
 </RCC>
