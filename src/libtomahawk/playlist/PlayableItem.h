@@ -87,8 +87,8 @@ private:
     Tomahawk::source_ptr m_source;
 
     PlayableItem* m_parent;
-    bool m_fetchingMore;
-    bool m_isPlaying;
+    bool m_fetchingMore = false;
+    bool m_isPlaying = false;
 
     Tomahawk::PlaybackLog m_playbackLog;
 };

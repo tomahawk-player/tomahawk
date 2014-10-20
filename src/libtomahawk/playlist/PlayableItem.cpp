@@ -118,9 +118,6 @@ PlayableItem::PlayableItem( const Tomahawk::source_ptr& source, PlayableItem* pa
 void
 PlayableItem::init( int row )
 {
-    m_fetchingMore = false;
-    m_isPlaying = false;
-
     track_ptr track;
     if ( m_query )
     {
