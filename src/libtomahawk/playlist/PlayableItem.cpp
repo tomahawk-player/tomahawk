@@ -47,16 +47,19 @@ PlayableItem::~PlayableItem()
 
 
 PlayableItem::PlayableItem( PlayableItem* parent )
+    : QObject( parent )
+    , m_parent( parent )
 {
-    init( parent );
+    init();
 }
 
 
 PlayableItem::PlayableItem( const Tomahawk::album_ptr& album, PlayableItem* parent, int row )
     : QObject( parent )
     , m_album( album )
+    , m_parent( parent )
 {
-    init( parent, row );
+    init( row );
 
     connect( album.data(), SIGNAL( updated() ), SIGNAL( dataChanged() ) );
 }
@@ -65,8 +68,9 @@ PlayableItem::PlayableItem( const Tomahawk::album_ptr& album, PlayableItem* pare
 PlayableItem::PlayableItem( const Tomahawk::artist_ptr& artist, PlayableItem* parent, int row )
     : QObject( parent )
     , m_artist( artist )
+    , m_parent( parent )
 {
-    init( parent, row );
+    init( row );
 
     connect( artist.data(), SIGNAL( updated() ), SIGNAL( dataChanged() ) );
 }
@@ -75,8 +79,9 @@ PlayableItem::PlayableItem( const Tomahawk::artist_ptr& artist, PlayableItem* pa
 PlayableItem::PlayableItem( const Tomahawk::result_ptr& result, PlayableItem* parent, int row )
     : QObject( parent )
     , m_result( result )
+    , m_parent( parent )
 {
-    init( parent, row );
+    init( row );
 
     connect( result.data(), SIGNAL( updated() ), SIGNAL( dataChanged() ) );
 }
@@ -85,8 +90,9 @@ PlayableItem::PlayableItem( const Tomahawk::result_ptr& result, PlayableItem* pa
 PlayableItem::PlayableItem( const Tomahawk::query_ptr& query, PlayableItem* parent, int row )
     : QObject( parent )
     , m_query( query )
+    , m_parent( parent )
 {
-    init( parent, row );
+    init( row );
 }
 
 
@@ -94,25 +100,26 @@ PlayableItem::PlayableItem( const Tomahawk::plentry_ptr& entry, PlayableItem* pa
     : QObject( parent )
     , m_entry( entry )
     , m_query( entry->query() )
+    , m_parent( parent )
 {
-    init( parent, row );
+    init( row );
 }
 
 
 PlayableItem::PlayableItem( const Tomahawk::source_ptr& source, PlayableItem* parent, int row )
     : QObject( parent )
     , m_source( source )
+    , m_parent( parent )
 {
-    init( parent, row );
+    init( row );
 }
 
 
 void
-PlayableItem::init( PlayableItem* parent, int row )
+PlayableItem::init( int row )
 {
     m_fetchingMore = false;
     m_isPlaying = false;
-    m_parent = parent;
 
     track_ptr track;
     if ( m_query )
@@ -132,15 +139,15 @@ PlayableItem::init( PlayableItem* parent, int row )
         connect( track.data(), SIGNAL( updated() ), SIGNAL( dataChanged() ) );
     }
 
-    if ( parent )
+    if ( m_parent )
     {
         if ( row < 0 )
         {
-            parent->children.append( this );
+            m_parent->children.append( this );
         }
         else
         {
-            parent->children.insert( row, this );
+            m_parent->children.insert( row, this );
         }
     }
 

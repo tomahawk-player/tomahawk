@@ -77,7 +77,7 @@ private slots:
     void onResultsChanged();
 
 private:
-    void init( PlayableItem* parent, int row = -1 );
+    void init( int row = -1 );
 
     Tomahawk::artist_ptr m_artist;
     Tomahawk::album_ptr m_album;
