@@ -55,13 +55,6 @@ public:
     virtual bool jumpToCurrentTrack();
     virtual bool isTemporaryPage() const;
     virtual bool isBeingPlayed() const;
-    void setTemporaryPage( bool b );
-
-    ColumnView* columnView() const { return m_columnView; }
-    TrackView* trackView() const { return m_trackView; }
-
-    void setColumnView( ColumnView* view );
-    void setTrackView( TrackView* view );
 
     void setTreeModel( TreeModel* model );
     void setFlatModel( PlayableModel* model );
@@ -99,7 +92,6 @@ private:
     Tomahawk::collection_ptr m_collection;
 
     CollectionViewPageMode m_mode;
-    bool m_temporary;
 };
 
 Q_DECLARE_METATYPE( CollectionViewPage::CollectionViewPageMode );

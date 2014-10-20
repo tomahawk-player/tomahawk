@@ -30,6 +30,7 @@
 #include "playlist/TrackView.h"
 #include "playlist/GridView.h"
 #include "playlist/PlayableProxyModelPlaylistInterface.h"
+#include "resolvers/ScriptCollection.h"
 #include "TomahawkSettings.h"
 #include "utils/ImageRegistry.h"
 #include "utils/TomahawkStyle.h"
@@ -49,7 +50,6 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
     , m_model( 0 )
     , m_flatModel( 0 )
     , m_collection( collection )
-    , m_temporary( false )
 {
     qRegisterMetaType< CollectionViewPageMode >( "CollectionViewPageMode" );
 
@@ -123,6 +123,16 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
     flatModel->appendTracks( collection );
     albumModel->appendAlbums( collection );
 
+    if ( collection && collection->source() && collection->source()->isLocal() )
+    {
+        setEmptyTip( tr( "After you have scanned your music collection you will find your tracks right here." ) );
+    }
+    else
+        setEmptyTip( tr( "This collection is empty." ) );
+
+    if ( collection.objectCast<ScriptCollection>() )
+        m_trackView->setEmptyTip( tr( "Cloud collections aren't supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them." ) );
+
     connect( m_header, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
 }
 
@@ -130,36 +140,6 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
 CollectionViewPage::~CollectionViewPage()
 {
     tDebug() << Q_FUNC_INFO;
-}
-
-
-void
-CollectionViewPage::setTrackView( TrackView* view )
-{
-    if ( m_trackView )
-    {
-        m_stack->removeWidget( m_trackView );
-        delete m_trackView;
-    }
-
-    m_trackView = view;
-    m_stack->addWidget( view );
-}
-
-
-void
-CollectionViewPage::setColumnView( ColumnView* view )
-{
-    if ( m_columnView )
-    {
-        m_stack->removeWidget( m_columnView );
-        delete m_columnView;
-    }
-
-    connect( view, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ), Qt::UniqueConnection );
-
-    m_columnView = view;
-    m_stack->addWidget( view );
 }
 
 
@@ -394,14 +374,7 @@ CollectionViewPage::onWidgetDestroyed( QWidget* widget )
 bool
 CollectionViewPage::isTemporaryPage() const
 {
-    return m_temporary;
-}
-
-
-void
-CollectionViewPage::setTemporaryPage( bool b )
-{
-    m_temporary = b;
+    return false;
 }
 
 

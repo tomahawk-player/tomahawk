@@ -41,8 +41,6 @@
 #include "playlist/RecentlyPlayedModel.h"
 #include "playlist/dynamic/widgets/DynamicWidget.h"
 
-#include "resolvers/ScriptCollection.h"
-
 #include "viewpages/PlaylistViewPage.h"
 #include "viewpages/SourceViewPage.h"
 #include "viewpages/ArtistViewPage.h"
@@ -265,18 +263,7 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
     if ( !m_collectionViews.contains( collection ) || m_collectionViews.value( collection ).isNull() )
     {
         view = new CollectionViewPage( collection );
-
         setPage( view );
-
-        if ( collection && collection->source() && collection->source()->isLocal() )
-        {
-            view->setEmptyTip( tr( "After you have scanned your music collection you will find your tracks right here." ) );
-        }
-        else
-            view->setEmptyTip( tr( "This collection is empty." ) );
-
-        if ( collection.objectCast<ScriptCollection>() )
-            view->trackView()->setEmptyTip( tr( "Cloud collections aren't supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them." ) );
 
         m_collectionViews.insert( collection, view );
     }
