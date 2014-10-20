@@ -76,6 +76,7 @@ signals:
 
 private slots:
     void onModelChanged();
+    void onCollectionChanged();
 
 private:
     FilterHeader* m_header;
