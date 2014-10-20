@@ -267,8 +267,8 @@ SlideSwitchButton::backChecked() const
 void
 SlideSwitchButton::createKnob()
 {
-    const qreal knobWidth = sizeHint().height() * KNOB_ASPECT_RATIO;
-    m_knob = QPixmap( QSize( knobWidth, sizeHint().height() ) );
+    const qreal knobWidth = SlideSwitchButton::sizeHint().height() * KNOB_ASPECT_RATIO;
+    m_knob = QPixmap( QSize( knobWidth, SlideSwitchButton::sizeHint().height() ) );
     m_knob.fill( Qt::transparent );
 
     QPainter p( &m_knob );
