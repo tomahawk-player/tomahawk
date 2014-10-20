@@ -42,7 +42,7 @@ public:
     enum CollectionViewPageMode
     { Columns = 0, Albums = 1, Flat = 2 };
 
-    explicit CollectionViewPage( QWidget* parent = 0 );
+    explicit CollectionViewPage( const Tomahawk::collection_ptr& collection, QWidget* parent = 0 );
     ~CollectionViewPage();
 
     virtual QWidget* widget() { return this; }
@@ -95,6 +95,8 @@ private:
     PlayableModel* m_flatModel;
     PlayableModel* m_albumModel;
     QStackedWidget* m_stack;
+
+    Tomahawk::collection_ptr m_collection;
 
     CollectionViewPageMode m_mode;
     bool m_temporary;
