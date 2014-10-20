@@ -1067,7 +1067,7 @@ bool
 XmppSipPlugin::readXmlConsoleEnabled()
 {
     // HACK we want to allow xmlconsole to be set manually in the onfig file, which means we can't hide it in a QVariantHash
-    const bool xmlConsole = TomahawkSettings::instance()->value( QString( "accounts/%1/xmlconsole" ).arg( account()->accountId() ), false ).toBool();
+    const bool xmlConsole = TomahawkSettings::instance()->value( QString( "accounts/%1/xmlconsole" ).arg( m_account->accountId() ), false ).toBool();
     return xmlConsole;
 }
 
