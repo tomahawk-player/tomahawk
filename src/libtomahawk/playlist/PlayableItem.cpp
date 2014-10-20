@@ -137,7 +137,6 @@ PlayableItem::init( PlayableItem* parent, int row )
         if ( row < 0 )
         {
             parent->children.append( this );
-            row = parent->children.count() - 1;
         }
         else
         {
