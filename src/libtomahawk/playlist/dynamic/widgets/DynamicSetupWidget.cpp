@@ -98,7 +98,7 @@ DynamicSetupWidget::DynamicSetupWidget( const Tomahawk::dynplaylist_ptr& playlis
     m_fadeAnim->setEndValue( .70 );
 
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
-    resize( sizeHint() );
+    resize( QWidget::sizeHint() );
 }
 
 
