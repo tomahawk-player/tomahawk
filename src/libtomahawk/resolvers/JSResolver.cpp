@@ -557,7 +557,7 @@ JSResolver::parseResultVariantList( const QVariantList& reslist )
             continue;
 
         unsigned int duration = m.value( "duration", 0 ).toUInt();
-        if ( duration <= 0 && m.contains( "durationString" ) )
+        if ( duration == 0 && m.contains( "durationString" ) )
         {
             QTime time = QTime::fromString( m.value( "durationString" ).toString(), "hh:mm:ss" );
             duration = time.secsTo( QTime( 0, 0 ) ) * -1;
