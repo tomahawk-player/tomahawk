@@ -78,7 +78,7 @@ private:
     Tomahawk::ArtistsRequest* m_artistsFilterCmd;
 
     QString m_filter;
-    TreeModel* m_model;
+    QPointer<TreeModel> m_model;
 };
 
 #endif // TREEPROXYMODEL_H

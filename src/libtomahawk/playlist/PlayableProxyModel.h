@@ -137,7 +137,7 @@ private:
     bool visibilityFilterAcceptsRow( int sourceRow, const QModelIndex& sourceParent, PlayableProxyModelFilterMemo& memo ) const;
     bool lessThan( int column, const Tomahawk::query_ptr& left, const Tomahawk::query_ptr& right ) const;
 
-    PlayableModel* m_model;
+    QPointer<PlayableModel> m_model;
 
     bool m_showOfflineResults;
     bool m_hideEmptyParents;

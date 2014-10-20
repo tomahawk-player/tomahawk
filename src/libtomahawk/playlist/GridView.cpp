@@ -566,3 +566,10 @@ GridView::onScrollTimeout()
         m_proxyModel->updateDetailedInfo( m_proxyModel->index( i, 0 ) );
     }
 }
+
+
+PlayableModel*
+GridView::model() const
+{
+    return m_model.data();
+}

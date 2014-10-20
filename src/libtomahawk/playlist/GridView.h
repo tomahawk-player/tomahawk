@@ -52,7 +52,7 @@ public:
 
     void setProxyModel( PlayableProxyModel* model );
 
-    PlayableModel* model() const { return m_model; }
+    PlayableModel* model() const;
     PlayableProxyModel* proxyModel() const { return m_proxyModel; }
     GridItemDelegate* delegate() const { return m_delegate; }
 
@@ -117,7 +117,7 @@ private slots:
     void verifySize();
 
 private:
-    PlayableModel* m_model;
+    QPointer<PlayableModel> m_model;
     PlayableProxyModel* m_proxyModel;
     GridItemDelegate* m_delegate;
     AnimatedSpinner* m_loadingSpinner;

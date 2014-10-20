@@ -53,7 +53,7 @@ public:
     virtual void setModel( QAbstractItemModel* model );
     void setProxyModel( PlayableProxyModel* model );
 
-    virtual PlayableModel* model() const { return m_model; }
+    virtual PlayableModel* model() const;
     PlayableProxyModel* proxyModel() const { return m_proxyModel; }
     PlaylistItemDelegate* delegate() const { return m_delegate; }
     ViewHeader* header() const { return m_header; }
@@ -143,7 +143,7 @@ private:
     void updateHoverIndex( const QPoint& pos );
 
     QString m_guid;
-    PlayableModel* m_model;
+    QPointer<PlayableModel> m_model;
     PlayableProxyModel* m_proxyModel;
     PlaylistItemDelegate* m_delegate;
     ViewHeader* m_header;

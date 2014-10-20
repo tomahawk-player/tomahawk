@@ -45,7 +45,7 @@ TreeProxyModel::TreeProxyModel( QObject* parent )
 void
 TreeProxyModel::setSourcePlayableModel( TreeModel* model )
 {
-    if ( sourceModel() )
+    if ( m_model )
     {
         disconnect( m_model, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( onRowsInserted( QModelIndex, int, int ) ) );
         disconnect( m_model, SIGNAL( modelReset() ), this, SLOT( onModelReset() ) );
@@ -54,7 +54,7 @@ TreeProxyModel::setSourcePlayableModel( TreeModel* model )
     PlayableProxyModel::setSourcePlayableModel( model );
     m_model = model;
 
-    if ( sourceModel() )
+    if ( m_model )
     {
         connect( m_model, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onRowsInserted( QModelIndex, int, int ) ) );
         connect( m_model, SIGNAL( modelReset() ), SLOT( onModelReset() ) );
