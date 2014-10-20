@@ -27,7 +27,6 @@
 #include "audio/AudioEngine.h"
 
 #include "playlist/ContextView.h"
-#include "playlist/FlexibleTreeView.h"
 #include "playlist/TreeModel.h"
 #include "playlist/PlaylistModel.h"
 #include "playlist/TrackView.h"
@@ -49,6 +48,7 @@
 #include "viewpages/ArtistViewPage.h"
 #include "viewpages/AlbumViewPage.h"
 #include "viewpages/TrackViewPage.h"
+#include "viewpages/CollectionViewPage.h"
 
 #include "utils/Logger.h"
 #include "utils/TomahawkUtilsGui.h"
@@ -261,10 +261,10 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
 {
     m_currentCollection = collection;
 
-    FlexibleTreeView* view;
+    CollectionViewPage* view;
     if ( !m_collectionViews.contains( collection ) || m_collectionViews.value( collection ).isNull() )
     {
-        view = new FlexibleTreeView();
+        view = new CollectionViewPage();
 
         view->columnView()->proxyModel()->setStyle( PlayableProxyModel::Collection );
         TreeModel* model = new TreeModel();

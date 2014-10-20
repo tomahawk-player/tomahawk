@@ -38,7 +38,6 @@ set( libGuiSources
     playlist/InboxModel.cpp
     playlist/InboxView.cpp
     playlist/ContextView.cpp
-    playlist/FlexibleTreeView.cpp
     playlist/TreeModel.cpp
     playlist/TreeProxyModel.cpp
     playlist/TreeProxyModelPlaylistInterface.cpp
@@ -121,6 +120,7 @@ set( libGuiSources
     viewpages/AlbumViewPage.cpp
     viewpages/TrackViewPage.cpp
     viewpages/PlaylistViewPage.cpp
+    viewpages/CollectionViewPage.cpp
 
     widgets/AnimatedSplitter.cpp
     widgets/BasicHeader.cpp

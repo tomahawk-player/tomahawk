@@ -41,7 +41,7 @@ class AlbumInfoWidget;
 class ArtistInfoWidget;
 class CollectionModel;
 class PlaylistViewPage;
-class FlexibleTreeView;
+class CollectionViewPage;
 class PlaylistModel;
 class TrackProxyModel;
 class TrackModel;
@@ -163,7 +163,7 @@ private:
     QHash< QString, std::function< Tomahawk::ViewPage*() > > m_dynamicPagesInstanceLoaders;
 
     QHash< Tomahawk::dynplaylist_ptr, QPointer<Tomahawk::DynamicWidget> > m_dynamicWidgets;
-    QHash< Tomahawk::collection_ptr, QPointer<FlexibleTreeView> > m_collectionViews;
+    QHash< Tomahawk::collection_ptr, QPointer<CollectionViewPage> > m_collectionViews;
     QHash< Tomahawk::artist_ptr, QPointer<ArtistInfoWidget> > m_artistViews;
     QHash< Tomahawk::album_ptr, QPointer<AlbumInfoWidget> > m_albumViews;
     QHash< Tomahawk::query_ptr, QPointer<TrackInfoWidget> > m_trackViews;
