@@ -184,7 +184,7 @@ LastFmConfig::onHistoryLoaded()
         else
             finished = true;
     }
-    catch( lastfm::ws::ParseError e )
+    catch( lastfm::ws::ParseError& e )
     {
         tDebug() << "XmlQuery error:" << e.message();
         finished = true;
@@ -326,7 +326,7 @@ LastFmConfig::onLovedFinished( QNetworkReply* reply )
             emit sizeHintChanged();
         }
     }
-    catch( lastfm::ws::ParseError e )
+    catch( lastfm::ws::ParseError& e )
     {
         m_ui->syncLovedTracks->setText( "Failed" );
         m_ui->progressBar->hide();

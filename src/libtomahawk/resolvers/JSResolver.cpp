@@ -557,7 +557,7 @@ JSResolver::parseResultVariantList( const QVariantList& reslist )
             continue;
 
         unsigned int duration = m.value( "duration", 0 ).toUInt();
-        if ( duration <= 0 && m.contains( "durationString" ) )
+        if ( duration == 0 && m.contains( "durationString" ) )
         {
             QTime time = QTime::fromString( m.value( "durationString" ).toString(), "hh:mm:ss" );
             duration = time.secsTo( QTime( 0, 0 ) ) * -1;
@@ -846,12 +846,11 @@ JSResolver::loadCollections()
 
         if ( collectionInfo.contains( "iconfile" ) )
         {
-            bool ok = false;
             QString iconPath = QFileInfo( filePath() ).path() + "/"
                                + collectionInfo.value( "iconfile" ).toString();
 
             QPixmap iconPixmap;
-            ok = iconPixmap.load( iconPath );
+            bool ok = iconPixmap.load( iconPath );
             if ( ok && !iconPixmap.isNull() )
                 sc->setIcon( QIcon( iconPixmap ) );
         }

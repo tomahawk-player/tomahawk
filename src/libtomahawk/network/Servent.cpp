@@ -274,7 +274,7 @@ Servent::isValidExternalIP( const QHostAddress& addr )
         if ( addr.isInSubnet(QHostAddress::parseSubnet( "224.0.0.0/4" ) ) )
             return false;
     }
-    else if (addr.protocol() == QAbstractSocket::IPv4Protocol)
+    else if (addr.protocol() == QAbstractSocket::IPv6Protocol)
     {
         // "unspecified address"
         if ( addr.isInSubnet(QHostAddress::parseSubnet( "::/128" ) ) )

@@ -119,7 +119,6 @@ DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
         if ( !query_entries_old.next() )
         {
             return;
-            Q_ASSERT( false );
         }
 
         if ( !query_entries_old.value( 0 ).isNull() )

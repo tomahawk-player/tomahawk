@@ -235,9 +235,6 @@ Source::friendlyNamesLessThan( const QString& first, const QString& second )
     favored.append( QRegExp( "\\b([A-Z][a-z']* ?){2,10}" ) ); //properly capitalized person's name
     favored.append( QRegExp( "[a-zA-Z ']+" ) ); //kind of person's name
 
-    bool matchFirst = false;
-    bool matchSecond = false;
-
     //We check if the strings match the regexps. The regexps represent friendly name patterns we do
     //*not* want (penalties) or want (favored), prioritized. If none of the strings match a regexp,
     //we go to the next regexp. If one of the strings matches, and we're matching penalties, we say
@@ -261,8 +258,8 @@ Source::friendlyNamesLessThan( const QString& first, const QString& second )
             isPenalty = false;
         }
 
-        matchFirst = rx.exactMatch( first );
-        matchSecond = rx.exactMatch( second );
+        bool matchFirst = rx.exactMatch( first );
+        bool matchSecond = rx.exactMatch( second );
 
         if ( matchFirst == false && matchSecond == false )
             continue;
