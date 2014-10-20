@@ -941,3 +941,10 @@ TrackView::selectFirstTrack()
         currentChanged( idx, QModelIndex() );
     }
 }
+
+
+PlayableModel*
+TrackView::model() const
+{
+    return m_model.data();
+}
