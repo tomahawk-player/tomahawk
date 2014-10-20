@@ -126,70 +126,70 @@ CollectionViewPage::~CollectionViewPage()
 void
 CollectionViewPage::loadCollection( const collection_ptr& collection )
 {
-    m_collection = collection;
-
-    TreeModel* model = new TreeModel();
-    PlayableModel* flatModel = new PlayableModel();
-    PlayableModel* albumModel = new PlayableModel();
-
-    setTreeModel( model );
-    setFlatModel( flatModel );
-    setAlbumModel( albumModel );
-
-    model->addCollection( collection );
-    flatModel->appendTracks( collection );
-    albumModel->appendAlbums( collection );
-
-    if ( collection && collection->source() && collection->source()->isLocal() )
+    if ( m_collection )
     {
-        setEmptyTip( tr( "After you have scanned your music collection you will find your tracks right here." ) );
+        disconnect( collection.data(), SIGNAL( changed() ), this, SLOT( onCollectionChanged() ) );
     }
-    else
-        setEmptyTip( tr( "This collection is empty." ) );
 
-    if ( collection.objectCast<ScriptCollection>() )
-        m_trackView->setEmptyTip( tr( "Cloud collections aren't supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them." ) );
+    m_collection = collection;
+    connect( collection.data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
+
+    onCollectionChanged();
 }
 
 
 void
 CollectionViewPage::setTreeModel( TreeModel* model )
 {
-    if ( m_model )
-    {
-        disconnect( m_model, SIGNAL( changed() ), this, SLOT( onModelChanged() ) );
-        delete m_model;
-    }
-
+    QPointer<PlayableModel> oldModel = m_model;
     m_model = model;
     m_columnView->setTreeModel( model );
 
     connect( model, SIGNAL( changed() ), SLOT( onModelChanged() ), Qt::UniqueConnection );
     onModelChanged();
+
+    if ( oldModel )
+    {
+        disconnect( oldModel.data(), SIGNAL( changed() ), this, SLOT( onModelChanged() ) );
+        delete oldModel.data();
+    }
 }
 
 
 void
 CollectionViewPage::setFlatModel( PlayableModel* model )
 {
-    if ( m_flatModel )
-        delete m_flatModel;
+    QPointer<PlayableModel> oldModel = m_flatModel;
 
     m_flatModel = model;
     m_trackView->setPlayableModel( model );
     m_trackView->setSortingEnabled( true );
     m_trackView->sortByColumn( 0, Qt::AscendingOrder );
+
+    if ( oldModel )
+    {
+        disconnect( oldModel.data(), SIGNAL( changed() ), this, SLOT( onModelChanged() ) );
+        delete oldModel.data();
+    }
 }
 
 
 void
 CollectionViewPage::setAlbumModel( PlayableModel* model )
 {
+    QPointer<PlayableModel> oldModel = m_albumModel;
+
     if ( m_albumModel )
         delete m_albumModel;
 
     m_albumModel = model;
     m_albumView->setPlayableModel( model );
+
+    if ( oldModel )
+    {
+        disconnect( oldModel.data(), SIGNAL( changed() ), this, SLOT( onModelChanged() ) );
+        delete oldModel.data();
+    }
 }
 
 
@@ -354,6 +354,33 @@ CollectionViewPage::onModelChanged()
     setPixmap( m_model->icon(), false );
     m_header->setCaption( m_model->title() );
     m_header->setDescription( m_model->description() );
+}
+
+
+void
+CollectionViewPage::onCollectionChanged()
+{
+    TreeModel* model = new TreeModel();
+    PlayableModel* flatModel = new PlayableModel();
+    PlayableModel* albumModel = new PlayableModel();
+
+    setTreeModel( model );
+    setFlatModel( flatModel );
+    setAlbumModel( albumModel );
+
+    model->addCollection( m_collection );
+    flatModel->appendTracks( m_collection );
+    albumModel->appendAlbums( m_collection );
+
+    if ( m_collection && m_collection->source() && m_collection->source()->isLocal() )
+    {
+        setEmptyTip( tr( "After you have scanned your music collection you will find your tracks right here." ) );
+    }
+    else
+        setEmptyTip( tr( "This collection is empty." ) );
+
+    if ( m_collection.objectCast<ScriptCollection>() )
+        m_trackView->setEmptyTip( tr( "Cloud collections aren't supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them." ) );
 }
 
 
