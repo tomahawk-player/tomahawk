@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *   Copyright 2014,      Adrien Aubry <dridri85@gmail.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -24,6 +25,7 @@
 
 #include "utils/Logger.h"
 
+#include <QApplication>
 #include <QVarLengthArray>
 #include <QFile>
 #include <QDir>
@@ -74,17 +76,21 @@ AudioOutput::AudioOutput( QObject* parent )
     QList<QByteArray> args;
 
     args << "--ignore-config";
-    args << "--verbose=42";
-    args << "--no-plugins-cache";
     args << "--extraintf=logger";
+    if ( qApp->arguments().contains( "--verbose" ) ) {
+        args << "--verbose=3";
+    }
+/*
+    args << "--no-plugins-cache";
     args << "--no-media-library";
     args << "--no-osd";
     args << "--no-stats";
     args << "--no-video-title-show";
     args << "--no-snapshot-preview";
-    args << "--no-xlib";
     args << "--services-discovery=''";
+*/
     args << "--no-video";
+    args << "--no-xlib";
 #ifdef VLC_DSP_PLUGIN_ENABLED
     args << "--audio-filter=dsp";
     args << QString("--dsp-callback=%1").arg((quint64)&AudioOutput::s_dspCallback, 0, 16).toAscii();

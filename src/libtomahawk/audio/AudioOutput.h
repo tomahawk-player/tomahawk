@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *   Copyright 2014,      Adrien Aubry <dridri85@gmail.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
