@@ -109,7 +109,7 @@ void
 ColumnView::setModel( QAbstractItemModel* model )
 {
     Q_UNUSED( model );
-    tDebug() << "Explicitly use setPlaylistModel instead";
+    tDebug() << "Explicitly use setTreeModel instead";
     Q_ASSERT( false );
 }
 
