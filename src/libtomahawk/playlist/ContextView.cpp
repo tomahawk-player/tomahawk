@@ -50,7 +50,7 @@ ContextView::ContextView( QWidget* parent, const QString& caption )
     m_trackView->proxyModel()->setStyle( PlayableProxyModel::Fancy );
     TomahawkStyle::styleScrollBar( m_trackView->verticalScrollBar() );
 
-    setLayout( new QVBoxLayout( this ) );
+    setLayout( new QVBoxLayout() );
     TomahawkUtils::unmarginLayout( layout() );
 
     m_trackView->setStyleSheet( QString( "QTreeView { background-color: white; }" ) );
@@ -63,7 +63,7 @@ ContextView::ContextView( QWidget* parent, const QString& caption )
     vbox->setPalette( pal );
     vbox->setAutoFillBackground( true );
 
-    QVBoxLayout* vboxl = new QVBoxLayout( this );
+    QVBoxLayout* vboxl = new QVBoxLayout();
     TomahawkUtils::unmarginLayout( vboxl );
     vboxl->setContentsMargins( 32, 32, 32, 32 );
     vboxl->setSpacing( 32 );
@@ -71,11 +71,11 @@ ContextView::ContextView( QWidget* parent, const QString& caption )
     vbox->setLayout( vboxl );
 
     QWidget* hbox = new QWidget;
-    QHBoxLayout* hboxl = new QHBoxLayout( this );
+    QHBoxLayout* hboxl = new QHBoxLayout();
     TomahawkUtils::unmarginLayout( hboxl );
     hboxl->setSpacing( 32 );
 
-    m_innerLayout = new QVBoxLayout( this );
+    m_innerLayout = new QVBoxLayout();
     TomahawkUtils::unmarginLayout( m_innerLayout );
     m_innerLayout->addWidget( m_trackView, 1 );
     m_innerLayout->addStretch();
