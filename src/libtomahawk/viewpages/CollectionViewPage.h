@@ -17,8 +17,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FLEXIBLETREEVIEW_H
-#define FLEXIBLETREEVIEW_H
+#ifndef COLLECTIONVIEWPAGE_H
+#define COLLECTIONVIEWPAGE_H
 
 #include "ViewPage.h"
 #include "PlaylistInterface.h"
@@ -34,16 +34,16 @@ class PlayableModel;
 class PlaylistModel;
 class FilterHeader;
 
-class DLLEXPORT FlexibleTreeView : public QWidget, public Tomahawk::ViewPage
+class DLLEXPORT CollectionViewPage : public QWidget, public Tomahawk::ViewPage
 {
 Q_OBJECT
 
 public:
-    enum FlexibleTreeViewMode
+    enum CollectionViewPageMode
     { Columns = 0, Albums = 1, Flat = 2 };
 
-    explicit FlexibleTreeView( QWidget* parent = 0, QWidget* extraHeader = 0 );
-    ~FlexibleTreeView();
+    explicit CollectionViewPage( QWidget* parent = 0, QWidget* extraHeader = 0 );
+    ~CollectionViewPage();
 
     virtual QWidget* widget() { return this; }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
@@ -71,12 +71,12 @@ public:
     void setEmptyTip( const QString& tip );
 
 public slots:
-    void setCurrentMode( FlexibleTreeViewMode mode );
+    void setCurrentMode( CollectionViewPageMode mode );
     virtual bool setFilter( const QString& pattern );
     void restoreViewMode(); //ViewManager calls this on every show
 
 signals:
-    void modeChanged( FlexibleTreeViewMode mode );
+    void modeChanged( CollectionViewPageMode mode );
     void destroyed( QWidget* widget );
 
 private slots:
@@ -96,10 +96,10 @@ private:
     PlayableModel* m_albumModel;
     QStackedWidget* m_stack;
 
-    FlexibleTreeViewMode m_mode;
+    CollectionViewPageMode m_mode;
     bool m_temporary;
 };
 
-Q_DECLARE_METATYPE( FlexibleTreeView::FlexibleTreeViewMode );
+Q_DECLARE_METATYPE( CollectionViewPage::CollectionViewPageMode );
 
-#endif // FLEXIBLETREEVIEW_H
+#endif // COLLECTIONVIEWPAGE_H
