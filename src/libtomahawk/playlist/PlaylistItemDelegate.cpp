@@ -27,8 +27,6 @@
 #include <QPainter>
 #include <QToolTip>
 
-#include <boost/concept_check.hpp>
-
 #include "Query.h"
 #include "Result.h"
 #include "Artist.h"
