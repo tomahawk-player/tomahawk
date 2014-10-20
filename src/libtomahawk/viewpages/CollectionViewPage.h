@@ -42,7 +42,7 @@ public:
     enum CollectionViewPageMode
     { Columns = 0, Albums = 1, Flat = 2 };
 
-    explicit CollectionViewPage( QWidget* parent = 0, QWidget* extraHeader = 0 );
+    explicit CollectionViewPage( QWidget* parent = 0 );
     ~CollectionViewPage();
 
     virtual QWidget* widget() { return this; }

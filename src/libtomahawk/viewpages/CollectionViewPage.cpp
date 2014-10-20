@@ -40,7 +40,7 @@
 using namespace Tomahawk;
 
 
-CollectionViewPage::CollectionViewPage( QWidget* parent, QWidget* extraHeader )
+CollectionViewPage::CollectionViewPage( QWidget* parent )
     : QWidget( parent )
     , m_header( new FilterHeader( this ) )
     , m_columnView( new ColumnView() )
@@ -111,8 +111,6 @@ CollectionViewPage::CollectionViewPage( QWidget* parent, QWidget* extraHeader )
     }
 
     layout()->addWidget( m_header );
-    if ( extraHeader )
-        layout()->addWidget( extraHeader );
     layout()->addWidget( m_stack );
 
     m_stack->addWidget( m_columnView );
