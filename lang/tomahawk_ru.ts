@@ -701,11 +701,6 @@ connect and stream from you?</source>
         <source>Songs</source>
         <translation>Песни</translation>
     </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="383"/>
-        <source>This collection is currently empty.</source>
-        <translation>Это коллекция сейчас пуста.</translation>
-    </message>
 </context>
 <context>
     <name>GlobalActionManager</name>
@@ -858,7 +853,7 @@ Password (OTP)</source>
 <context>
     <name>IndexingJobItem</name>
     <message>
-        <location filename="../src/libtomahawk/jobview/IndexingJobItem.cpp" line="29"/>
+        <location filename="../src/libtomahawk/jobview/IndexingJobItem.cpp" line="33"/>
         <source>Indexing Music Library</source>
         <translation>Индексирование музыкальной библиотеки</translation>
     </message>
@@ -2597,11 +2592,6 @@ username@jabber.org</translation>
         <source>Collection</source>
         <translation>Коллекция</translation>
     </message>
-    <message>
-        <location filename="../src/libtomahawk/collection/Collection.cpp" line="104"/>
-        <source>This collection is empty.</source>
-        <translation>Коллекция пуста.</translation>
-    </message>
 </context>
 <context>
     <name>Tomahawk::ContextMenu</name>
@@ -3486,14 +3476,9 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::LocalCollection</name>
     <message>
-        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="43"/>
+        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="42"/>
         <source>Your Collection</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="50"/>
-        <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation>После сканирования Вашей музыкальной коллекции, Вы найдете Ваши композиции прямо здесь.</translation>
     </message>
 </context>
 <context>
@@ -4232,7 +4217,17 @@ Try tweaking the filters for a new set of songs to play.</source>
         <translation>Музыкальные рекомендации от Ваших друзей</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="288"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="286"/>
+        <source>After you have scanned your music collection you will find your tracks right here.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="289"/>
+        <source>This collection is empty.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="292"/>
         <source>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</source>
         <translation>Облачные коллекции еще не поддерживаются в плоском виде. Мы постараемся охватить их в ближайшее время. Переключитесь на другой вид для навигации по ним.</translation>
     </message>
