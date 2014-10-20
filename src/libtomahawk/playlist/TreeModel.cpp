@@ -132,30 +132,6 @@ TreeModel::fetchMore( const QModelIndex& parent )
 
 
 void
-TreeModel::addAllCollections()
-{
-    startLoading();
-
-    DatabaseCommand_AllArtists* cmd = new DatabaseCommand_AllArtists();
-
-    connect( cmd, SIGNAL( artists( QList<Tomahawk::artist_ptr> ) ),
-                    SLOT( onArtistsAdded( QList<Tomahawk::artist_ptr> ) ) );
-
-    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
-
-    connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ), Qt::UniqueConnection );
-
-    QList<Tomahawk::source_ptr> sources = SourceList::instance()->sources();
-    foreach ( const source_ptr& source, sources )
-    {
-        connect( source->dbCollection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
-    }
-
-    setTitle( tr( "All Artists" ) );
-}
-
-
-void
 TreeModel::addArtists( const artist_ptr& artist )
 {
     if ( artist.isNull() )
@@ -262,22 +238,9 @@ TreeModel::addCollection( const collection_ptr& collection )
              this, SLOT( onArtistsAdded( QList< Tomahawk::artist_ptr > ) ), Qt::UniqueConnection );
     req->enqueue();
 
-    connect( collection.data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
-
     setIcon( collection->bigIcon() );
     setTitle( collection->prettyName() );
     setDescription( collection->description() );
-}
-
-
-void
-TreeModel::reloadCollection()
-{
-    if ( m_collection.isNull() )
-        return;
-
-    if ( !isLoading() )
-        onCollectionChanged();
 }
 
 
@@ -303,25 +266,6 @@ TreeModel::reloadCollection()
 //    else
 //        setTitle( tr( "Collection of %1" ).arg( collection->source()->friendlyName() ) );
 //}
-
-
-void
-TreeModel::onSourceAdded( const Tomahawk::source_ptr& source )
-{
-    connect( source->dbCollection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
-}
-
-
-void
-TreeModel::onCollectionChanged()
-{
-    clear();
-
-    if ( m_collection )
-        addCollection( m_collection );
-    else
-        addAllCollections();
-}
 
 
 void
