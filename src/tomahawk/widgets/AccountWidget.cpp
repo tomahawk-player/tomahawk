@@ -46,7 +46,7 @@ AccountWidget::AccountWidget( QWidget* parent )
     : QWidget( parent )
     , TomahawkUtils::DpiScaler( this )
 {
-    QHBoxLayout *mainLayout = new QHBoxLayout( this );
+    QHBoxLayout *mainLayout = new QHBoxLayout();
     TomahawkUtils::unmarginLayout( mainLayout );
     setLayout( mainLayout );
     setContentsMargins( 0, scaledY( 8 ), 0, scaledY( 8 ) );
@@ -55,7 +55,7 @@ AccountWidget::AccountWidget( QWidget* parent )
     mainLayout->addWidget( m_imageLabel );
     mainLayout->setSpacing( scaledX( 4 ) );
 
-    QGridLayout* vLayout = new QGridLayout( this );
+    QGridLayout* vLayout = new QGridLayout();
     vLayout->setSpacing( 8 );
     mainLayout->addLayout( vLayout );
 
@@ -63,7 +63,7 @@ AccountWidget::AccountWidget( QWidget* parent )
     idContainer->setAttribute( Qt::WA_TranslucentBackground, false );
     vLayout->addWidget( idContainer, 0, 0 );
 
-    QHBoxLayout* idContLayout = new QHBoxLayout( idContainer );
+    QHBoxLayout* idContLayout = new QHBoxLayout();
     idContainer->setLayout( idContLayout );
     idContainer->setContentsMargins( 0, 0, 0, 0 );
     idContLayout->setMargin( 2 );
@@ -96,7 +96,7 @@ AccountWidget::AccountWidget( QWidget* parent )
     m_statusToggle->setContentsMargins( 0, 0, 0, 0 );
     m_statusToggle->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Expanding );
     m_statusToggle->setFixedSize( m_statusToggle->sizeHint() );
-    QHBoxLayout *statusToggleLayout = new QHBoxLayout( this );
+    QHBoxLayout *statusToggleLayout = new QHBoxLayout();
     vLayout->addLayout( statusToggleLayout, 0, 1, 1, 1 );
     statusToggleLayout->addStretch();
     statusToggleLayout->addWidget( m_statusToggle );
@@ -109,7 +109,7 @@ AccountWidget::AccountWidget( QWidget* parent )
     m_inviteContainer->setContentsMargins( 1, 1, 1, 2 );
     m_inviteContainer->setAttribute( Qt::WA_TranslucentBackground, false );
 
-    QHBoxLayout* containerLayout = new QHBoxLayout( m_inviteContainer );
+    QHBoxLayout* containerLayout = new QHBoxLayout();
     m_inviteContainer->setLayout( containerLayout );
     TomahawkUtils::unmarginLayout( containerLayout );
     containerLayout->setContentsMargins( 1, 1, 0, 0 );
