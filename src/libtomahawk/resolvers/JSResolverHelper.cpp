@@ -388,7 +388,7 @@ JSResolverHelper::addUrlResult( const QString& url, const QVariantMap& result )
 void
 JSResolverHelper::reportCapabilities( const QVariant& v )
 {
-    bool ok = 0;
+    bool ok;
     int intCap = v.toInt( &ok );
     Tomahawk::ExternalResolver::Capabilities capabilities;
     if ( !ok )
