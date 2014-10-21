@@ -146,7 +146,7 @@ IF( BUILD_GUI )
     qt_wrap_ui( tomahawkUI_H ${tomahawkUI} )
 ENDIF()
 
-kde4_add_app_icon( tomahawkSources "${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon-*.png" )
+tomahawk_add_app_icon( tomahawkSources Tomahawk "${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon-*.png" )
 qt_add_resources( RC_SRCS "../../resources.qrc" )
 
 SET( final_src ${final_src} ${tomahawkUI_H} ${tomahawkMoc} ${tomahawkSources} ${RC_SRCS} )

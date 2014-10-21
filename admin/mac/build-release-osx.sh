@@ -35,8 +35,6 @@ VERSION=$1
 
     cd Tomahawk.app
 
-    header "Renaming icon"
-    mv Contents/Resources/tomahawkSources.icns Contents/Resources/Tomahawk.icns
     cp $ROOT/../admin/mac/qt.conf Contents/Resources/qt.conf
 
     header "Copying Sparkle framework"

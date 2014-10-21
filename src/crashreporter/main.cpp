@@ -33,7 +33,6 @@
     #include <unistd.h>
 #endif
 
-
 // code taken from http://stackoverflow.com/questions/20734831/compress-string-with-gzip-using-qcompress
 static const quint32 crc_32_tab[] = { /* CRC polynomial 0xedb88320 */
     0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f,
