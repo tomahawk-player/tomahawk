@@ -33,6 +33,7 @@
     #include <unistd.h>
 #endif
 
+#include <numeric>
 
 // code taken from http://stackoverflow.com/questions/20734831/compress-string-with-gzip-using-qcompress
 static const quint32 crc_32_tab[] = { /* CRC polynomial 0xedb88320 */
@@ -81,7 +82,7 @@ static const quint32 crc_32_tab[] = { /* CRC polynomial 0xedb88320 */
     0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d
 };
 
-quint32 updateCRC32(unsigned char ch, quint32 crc)
+quint32 updateCRC32(quint32 crc, unsigned char ch)
 {
     return (crc_32_tab[((crc) ^ ((quint8)ch)) & 0xff] ^ ((crc) >> 8));
 }
@@ -92,12 +93,12 @@ quint32 crc32buf(const QByteArray& data)
         data.begin(),
         data.end(),
         quint32(0xFFFFFFFF),
-        [](quint32 oldcrc32, char buf){ return updateCRC32(buf, oldcrc32); });
+        updateCRC32);
 }
 
 QByteArray gzip_compress(const QByteArray& data)
 {
-    auto compressedData = qCompress(data);
+    QByteArray compressedData = qCompress(data);
     //  Strip the first six bytes (a 4-byte length put on by qCompress and a 2-byte zlib header)
     // and the last four bytes (a zlib integrity check).
     compressedData.remove(0, 6);
