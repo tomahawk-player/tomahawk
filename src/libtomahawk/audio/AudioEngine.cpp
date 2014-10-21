@@ -31,7 +31,7 @@
 #include "playlist/SingleTrackPlaylistInterface.h"
 #include "utils/Closure.h"
 #include "utils/Logger.h"
-#include "utils/Qnr_IoDeviceSFtream.h"
+#include "utils/Qnr_IoDeviceStream.h"
 
 #include "Album.h"
 #include "Artist.h"
