@@ -465,6 +465,44 @@ erlauben sich mit dir zu verbinden und von dir zu streamen?</translation>
     </message>
 </context>
 <context>
+    <name>CollectionViewPage</name>
+    <message>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="73"/>
+        <source>Sorry, there are no albums in this collection!</source>
+        <translation>Sorry, es sind keine Alben in dieser Sammlung!</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="85"/>
+        <source>Artists</source>
+        <translation>Künstler</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="86"/>
+        <source>Albums</source>
+        <translation>Alben</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="87"/>
+        <source>Songs</source>
+        <translation>Lieder</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="377"/>
+        <source>After you have scanned your music collection you will find your tracks right here.</source>
+        <translation>Nachdem  deine Sammlung durchsucht wurde, findest du hier deine Lieder.</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="380"/>
+        <source>This collection is empty.</source>
+        <translation>Diese Sammlung ist leer.</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="383"/>
+        <source>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</source>
+        <translation>Cloud-Sammlungen werden in der flachen Ansicht noch nicht unterstützt. Wir werden das bald beheben. Wechsel solange in eine anderer Ansicht, um diese zu nutzen.</translation>
+    </message>
+</context>
+<context>
     <name>ColumnItemDelegate</name>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnItemDelegate.cpp" line="191"/>
@@ -676,29 +714,6 @@ erlauben sich mit dir zu verbinden und von dir zu streamen?</translation>
         <location filename="../src/libtomahawk/widgets/FilterHeader.cpp" line="29"/>
         <source>Filter...</source>
         <translation>Filter...</translation>
-    </message>
-</context>
-<context>
-    <name>FlexibleTreeView</name>
-    <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="79"/>
-        <source>Sorry, there are no albums in this collection!</source>
-        <translation>Sorry, es sind keine Alben in dieser Sammlung!</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="91"/>
-        <source>Artists</source>
-        <translation>Künstler</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="92"/>
-        <source>Albums</source>
-        <translation>Alben</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="93"/>
-        <source>Songs</source>
-        <translation>Lieder</translation>
     </message>
 </context>
 <context>
@@ -4077,14 +4092,6 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     </message>
 </context>
 <context>
-    <name>TreeModel</name>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="154"/>
-        <source>All Artists</source>
-        <translation>Alle Künstler</translation>
-    </message>
-</context>
-<context>
     <name>Type selector</name>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="75"/>
@@ -4205,29 +4212,14 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="85"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="83"/>
         <source>Inbox</source>
         <translation>Posteingang </translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="86"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="84"/>
         <source>Listening suggestions from your friends</source>
         <translation>Musik-Vorschläge deiner Freunde</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="286"/>
-        <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation>Nachdem deine Musiksammlung durchsucht wurde, findest du hier deine Lieder.</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="289"/>
-        <source>This collection is empty.</source>
-        <translation>Diese Sammlung ist leer.</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="292"/>
-        <source>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</source>
-        <translation>Cloud-Sammlungen werden in der flachen Ansicht noch nicht unterstützt. Wir werden das bald beheben. Wechsel solange in eine anderer Ansicht, um diese zu nutzen.</translation>
     </message>
 </context>
 <context>

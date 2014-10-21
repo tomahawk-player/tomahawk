@@ -465,6 +465,44 @@ se s vámi spojil?</translation>
     </message>
 </context>
 <context>
+    <name>CollectionViewPage</name>
+    <message>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="73"/>
+        <source>Sorry, there are no albums in this collection!</source>
+        <translation>Promiňte, v této sbírce nejsou žádná alba!</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="85"/>
+        <source>Artists</source>
+        <translation>Umělci</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="86"/>
+        <source>Albums</source>
+        <translation>Alba</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="87"/>
+        <source>Songs</source>
+        <translation>Písně</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="377"/>
+        <source>After you have scanned your music collection you will find your tracks right here.</source>
+        <translation>Poté co byla prohledána vaše hudební sbírka, najdete své skladby přesně zde.</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="380"/>
+        <source>This collection is empty.</source>
+        <translation>Tato sbírka je prázdná.</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="383"/>
+        <source>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</source>
+        <translation>Sbírky uložené na soukromých serverech (cloud) nejsou v jednotném pohledu ještě podporovány. Toto však bude zajištěno brzy. Přepněte do jiného pohledu pro pohyb v nich.</translation>
+    </message>
+</context>
+<context>
     <name>ColumnItemDelegate</name>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnItemDelegate.cpp" line="191"/>
@@ -676,29 +714,6 @@ se s vámi spojil?</translation>
         <location filename="../src/libtomahawk/widgets/FilterHeader.cpp" line="29"/>
         <source>Filter...</source>
         <translation>Filtr...</translation>
-    </message>
-</context>
-<context>
-    <name>FlexibleTreeView</name>
-    <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="79"/>
-        <source>Sorry, there are no albums in this collection!</source>
-        <translation>Promiňte, v této sbírce nejsou žádná alba!</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="91"/>
-        <source>Artists</source>
-        <translation>Umělci</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="92"/>
-        <source>Albums</source>
-        <translation>Alba</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="93"/>
-        <source>Songs</source>
-        <translation>Písně</translation>
     </message>
 </context>
 <context>
@@ -2076,7 +2091,7 @@ heslo</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="312"/>
         <source>Cloud Collections</source>
-        <translation>Sbírky v oblacích</translation>
+        <translation>Sbírky na soukromých serverech</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="300"/>
@@ -4080,14 +4095,6 @@ Zkuste vyladit filtry pro nové písně.</translation>
     </message>
 </context>
 <context>
-    <name>TreeModel</name>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="154"/>
-        <source>All Artists</source>
-        <translation>Všichni umělci</translation>
-    </message>
-</context>
-<context>
     <name>Type selector</name>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="75"/>
@@ -4208,29 +4215,14 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="85"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="83"/>
         <source>Inbox</source>
         <translation>Doručené</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="86"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="84"/>
         <source>Listening suggestions from your friends</source>
         <translation>Sledování návrhů od vašich přátel</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="286"/>
-        <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation>Poté co byla prohledána vaše hudební sbírka, najdete své skladby přesně zde.</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="289"/>
-        <source>This collection is empty.</source>
-        <translation>Tato sbírka je prázdná.</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="292"/>
-        <source>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</source>
-        <translation>Sbírky oblaků nejsou v jednotném pohledu ještě podporovány. Toto však bude zajištěno brzy. Přepněte do jiného pohledu pro pohyb v nich.</translation>
     </message>
 </context>
 <context>
