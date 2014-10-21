@@ -429,7 +429,7 @@ JSResolverHelper::setResolverConfig( const QVariantMap& config )
 
 
 QString
-JSResolverHelper::acountId()
+JSResolverHelper::accountId()
 {
     return m_resolver->d_func()->accountId;
 }
