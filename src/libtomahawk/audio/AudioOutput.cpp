@@ -72,33 +72,24 @@ AudioOutput::AudioOutput( QObject* parent )
 
     qRegisterMetaType<AudioOutput::AudioState>("AudioOutput::AudioState");
     
-    QList<QByteArray> args;
-
-    args << "--ignore-config";
-    args << "--extraintf=logger";
-    if ( qApp->arguments().contains( "--verbose" ) ) {
-        args << "--verbose=3";
-    }
-/*
-    args << "--no-plugins-cache";
-    args << "--no-media-library";
-    args << "--no-osd";
-    args << "--no-stats";
-    args << "--no-video-title-show";
-    args << "--no-snapshot-preview";
-    args << "--services-discovery=''";
-*/
-    args << "--no-video";
-    args << "--no-xlib";
-
-    QVarLengthArray< const char * , 64 > vlcArgs( args.size() );
-    for ( int i = 0 ; i < args.size() ; ++i ) {
-        vlcArgs[i] = args.at( i ).constData();
-        tDebug() << args.at( i );
-    }
+    const char* vlcArgs[] = {
+        "--ignore-config",
+        "--extraintf=logger",
+        qApp->arguments().contains( "--verbose" ) ? "--verbose=3" : "",
+        // "--no-plugins-cache",
+        // "--no-media-library",
+        // "--no-osd",
+        // "--no-stats",
+        // "--no-video-title-show",
+        // "--no-snapshot-preview",
+        // "--services-discovery=''",
+        "--no-video",
+        "--no-xlib"
+    };
 
     // Create and initialize a libvlc instance (it should be done only once)
-    if ( !( vlcInstance = libvlc_new( vlcArgs.size(), vlcArgs.constData() ) ) ) {
+    vlcInstance = libvlc_new( sizeof(vlcArgs) / sizeof(*vlcArgs), vlcArgs );
+    if ( !vlcInstance ) {
         tDebug() << "libVLC: could not initialize";
     }
 
