@@ -450,11 +450,11 @@ AudioEngine::seek( qint64 ms )
 {
     Q_D( AudioEngine );
 
-    if ( !canSeek() )
+    /*if ( !canSeek() )
     {
         tDebug( LOGEXTRA ) << "Could not seek!";
         return;
-    }
+    }*/
 
     if ( isPlaying() || isPaused() )
     {
