@@ -45,15 +45,14 @@ if (NOT LIBVLC_VERSION)
     # TODO: implement means to detect version on windows (vlc --version && regex? ... ultimately we would get it from a header though...)
 endif (NOT LIBVLC_VERSION)
 
-if (LIBVLC_INCLUDE_DIR AND LIBVLC_LIBRARY AND LIBVLCCORE_LIBRARY)
-    set(LIBVLC_FOUND TRUE)
-endif (LIBVLC_INCLUDE_DIR AND LIBVLC_LIBRARY AND LIBVLCCORE_LIBRARY)
+find_package_handle_standard_args(LibVLC DEFAULT_MSG LIBVLC_LIBRARY LIBVLCCORE_LIBRARY LIBVLC_INCLUDE_DIR)
 
 if (LIBVLC_VERSION STRLESS "${LIBVLC_MIN_VERSION}")
     message(WARNING "LibVLC version not found: version searched: ${LIBVLC_MIN_VERSION}, found ${LIBVLC_VERSION}\nUnless you are on Windows this is bound to fail.")
 # TODO: only activate once version detection can be garunteed (which is currently not the case on windows)
 #     set(LIBVLC_FOUND FALSE)
 endif (LIBVLC_VERSION STRLESS "${LIBVLC_MIN_VERSION}")
+
 
 if (LIBVLC_FOUND)
     if (NOT LIBVLC_FIND_QUIETLY)
