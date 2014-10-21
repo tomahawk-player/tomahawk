@@ -39,9 +39,8 @@ public:
     enum MediaType { Unknown = -1, Empty = 0, Url = 1, Stream = 2, IODevice = 3 };
 
     MediaStream( QObject* parent = 0 );
-    MediaStream( const MediaStream& copy );
-    MediaStream( const QUrl &url );
-    MediaStream( QIODevice* device );
+    explicit MediaStream( const QUrl &url );
+    explicit MediaStream( QIODevice* device );
     virtual ~MediaStream();
 
     MediaType type();
@@ -74,6 +73,8 @@ protected:
     qint64 m_streamSize;
 
     char m_buffer[1048576];
+private:
+    Q_DISABLE_COPY( MediaStream );
 };
 
 #endif // MEDIASTREAM_H

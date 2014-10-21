@@ -46,8 +46,9 @@ public:
 
     AudioState state();
 
-    void setCurrentSource(MediaStream stream);
-    void setCurrentSource(MediaStream* stream);
+    void setCurrentSource( const QUrl& stream);
+    void setCurrentSource( QIODevice* stream);
+    void setCurrentSource( MediaStream* stream );
 
     void play();
     void pause();

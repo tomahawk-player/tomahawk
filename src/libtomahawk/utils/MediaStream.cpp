@@ -77,24 +77,6 @@ MediaStream::MediaStream( QIODevice* device )
 }
 
 
-MediaStream::MediaStream( const MediaStream& copy )
-    : QObject( copy.parent() )
-{
-    m_type = copy.m_type;
-    m_url = copy.m_url;
-    m_ioDevice = copy.m_ioDevice;
-    m_started = copy.m_started;
-    m_bufferingFinished = copy.m_bufferingFinished;
-    m_eos = copy.m_eos;
-    m_pos = copy.m_pos;
-    m_streamSize = copy.m_streamSize;
-
-    if ( m_type == IODevice ) {
-        QObject::connect( m_ioDevice, SIGNAL( readChannelFinished() ), this, SLOT( bufferingFinished() ) );
-    }
-}
-
-
 MediaStream::~MediaStream()
 {
     tDebug() << Q_FUNC_INFO;

@@ -154,9 +154,16 @@ AudioOutput::setAutoDelete ( bool ad )
 
 
 void
-AudioOutput::setCurrentSource( MediaStream stream )
+AudioOutput::setCurrentSource( const QUrl& stream )
 {
-    setCurrentSource( new MediaStream(stream) );
+    setCurrentSource( new MediaStream( stream ) );
+}
+
+
+void
+AudioOutput::setCurrentSource( QIODevice* stream )
+{
+    setCurrentSource( new MediaStream( stream ) );
 }
 
 
