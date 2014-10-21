@@ -440,7 +440,7 @@ JSResolverHelper::addCustomUrlHandler( const QString& protocol,
                                              const QString& callbackFuncName,
                                              const QString& isAsynchronous )
 {
-    m_urlCallbackIsAsync = ( isAsynchronous.toLower() == "true" ) ? true : false;
+    m_urlCallbackIsAsync = ( isAsynchronous.toLower() == "true" );
 
     std::function< void( const Tomahawk::result_ptr&, const QString&,
                            std::function< void( const QString&, QSharedPointer< QIODevice >& ) > )> fac =

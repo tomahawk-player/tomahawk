@@ -844,12 +844,11 @@ JSResolver::loadCollections()
 
         if ( collectionInfo.contains( "iconfile" ) )
         {
-            bool ok = false;
             QString iconPath = QFileInfo( filePath() ).path() + "/"
                                + collectionInfo.value( "iconfile" ).toString();
 
             QPixmap iconPixmap;
-            ok = iconPixmap.load( iconPath );
+            bool ok = iconPixmap.load( iconPath );
             if ( ok && !iconPixmap.isNull() )
                 sc->setIcon( QIcon( iconPixmap ) );
         }
