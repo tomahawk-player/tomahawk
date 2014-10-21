@@ -1528,7 +1528,6 @@ TomahawkSettings::setPrivateListeningMode( TomahawkSettings::PrivateListeningMod
 void
 TomahawkSettings::updateIndex()
 {
-    tDebug() << Q_FUNC_INFO;
     if ( !Database::instance() || !Database::instance()->isReady() )
     {
         QTimer::singleShot( 0, this, SLOT( updateIndex() ) );
