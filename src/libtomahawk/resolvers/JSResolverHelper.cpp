@@ -903,7 +903,7 @@ void
 JSResolverHelper::gotStreamUrl( std::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback, NetworkReply* reply )
 {
     // std::functions cannot accept temporaries as parameters
-    QSharedPointer< QIODevice > sp = QSharedPointer< QIODevice >( reply->reply(), &QObject::deleteLater );
+    QSharedPointer< QIODevice > sp ( reply->reply(), &QObject::deleteLater );
     QString url = reply->reply()->url().toString();
     reply->disconnectFromReply();
     reply->deleteLater();
