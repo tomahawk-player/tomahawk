@@ -265,11 +265,9 @@ JSResolver::init()
     d->timeout = m.value( "timeout", 25 ).toUInt() * 1000;
     bool compressed = m.value( "compressed", "false" ).toString() == "true";
 
-    QByteArray icoData = m.value( "icon" ).toByteArray();
+    QByteArray icoData = QByteArray::fromBase64( m.value( "icon" ).toByteArray() );
     if ( compressed )
-        icoData = qUncompress( QByteArray::fromBase64( icoData ) );
-    else
-        icoData = QByteArray::fromBase64( icoData );
+        icoData = qUncompress( icoData );
     QPixmap ico;
     ico.loadFromData( icoData );
 
@@ -614,10 +612,11 @@ JSResolver::parseArtistVariantList( const QVariantList& reslist )
 
     foreach( const QVariant& rv, reslist )
     {
-        if ( rv.toString().trimmed().isEmpty() )
+        const QString val = rv.toString();
+        if ( val.trimmed().isEmpty() )
             continue;
 
-        Tomahawk::artist_ptr ap = Tomahawk::Artist::get( rv.toString(), false );
+        Tomahawk::artist_ptr ap = Tomahawk::Artist::get( val, false );
 
         results << ap;
     }
@@ -633,10 +632,11 @@ JSResolver::parseAlbumVariantList( const Tomahawk::artist_ptr& artist, const QVa
 
     foreach( const QVariant& rv, reslist )
     {
-        if ( rv.toString().trimmed().isEmpty() )
+        const QString val = rv.toString();
+        if ( val.trimmed().isEmpty() )
             continue;
 
-        Tomahawk::album_ptr ap = Tomahawk::Album::get( artist, rv.toString(), false );
+        Tomahawk::album_ptr ap = Tomahawk::Album::get( artist, val, false );
 
         results << ap;
     }
@@ -673,18 +673,16 @@ JSResolver::loadUi()
     bool compressed = m.value( "compressed", "false" ).toBool();
     qDebug() << "Resolver has a preferences widget! compressed?" << compressed;
 
-    QByteArray uiData = m[ "widget" ].toByteArray();
-
+    QByteArray uiData = QByteArray::fromBase64( m[ "widget" ].toByteArray() );
     if ( compressed )
-        uiData = qUncompress( QByteArray::fromBase64( uiData ) );
-    else
-        uiData = QByteArray::fromBase64( uiData );
+        uiData = qUncompress(  uiData );
 
     QVariantMap images;
     foreach(const QVariant& item, m[ "images" ].toList())
     {
-        QString key = item.toMap().keys().first();
-        QVariant value = item.toMap().value(key);
+        const QVariantMap m = item.toMap();
+        QString key = m.keys().first();
+        QVariant value = m.value(key);
         images[key] = value;
     }
 
@@ -740,11 +738,13 @@ JSResolver::widgetData( QWidget* widget, const QString& property )
 void
 JSResolver::setWidgetData( const QVariant& value, QWidget* widget, const QString& property )
 {
-    for ( int i = 0; i < widget->metaObject()->propertyCount(); i++ )
+    const QMetaObject *metaObject = widget->metaObject();
+    for ( int i = 0; i < metaObject->propertyCount(); i++ )
     {
-        if ( widget->metaObject()->property( i ).name() == property )
+        const QMetaProperty &prop = metaObject->property( i );
+        if ( prop.name() == property )
         {
-            widget->metaObject()->property( i ).write( widget, value );
+            prop.write( widget, value );
             return;
         }
     }
@@ -780,7 +780,8 @@ JSResolver::fillDataInWidgets( const QVariantMap& data )
 
     foreach(const QVariant& dataWidget, d->dataWidgets)
     {
-        QString widgetName = dataWidget.toMap()["widget"].toString();
+        const QVariantMap m = dataWidget.toMap();
+        QString widgetName = m["widget"].toString();
         QWidget* widget= d->configWidget.data()->findChild<QWidget*>( widgetName );
         if ( !widget )
         {
@@ -789,8 +790,8 @@ JSResolver::fillDataInWidgets( const QVariantMap& data )
             return;
         }
 
-        QString propertyName = dataWidget.toMap()["property"].toString();
-        QString name = dataWidget.toMap()["name"].toString();
+        QString propertyName = m["property"].toString();
+        QString name = m["name"].toString();
 
         setWidgetData( data[ name ], widget, propertyName );
     }
@@ -814,14 +815,14 @@ JSResolver::loadCollections()
 
     if ( d->capabilities.testFlag( Browsable ) )
     {
-        QVariantMap collectionInfo = d->engine->mainFrame()->evaluateJavaScript( "Tomahawk.resolver.instance.collection();" ).toMap();
+        const QVariantMap collectionInfo = d->engine->mainFrame()->evaluateJavaScript( "Tomahawk.resolver.instance.collection();" ).toMap();
         if ( collectionInfo.isEmpty() ||
              !collectionInfo.contains( "prettyname" ) ||
              !collectionInfo.contains( "description" ) )
             return;
 
-        QString prettyname = collectionInfo.value( "prettyname" ).toString();
-        QString desc = collectionInfo.value( "description" ).toString();
+        const QString prettyname = collectionInfo.value( "prettyname" ).toString();
+        const QString desc = collectionInfo.value( "description" ).toString();
 
         foreach ( Tomahawk::collection_ptr collection, m_collections )
         {
