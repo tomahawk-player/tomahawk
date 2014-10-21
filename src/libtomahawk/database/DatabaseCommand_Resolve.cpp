@@ -145,9 +145,14 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
         }
 
         track_ptr track = Track::get( files_query.value( 9 ).toUInt(), files_query.value( 12 ).toString(), files_query.value( 14 ).toString(), files_query.value( 13 ).toString(), files_query.value( 5 ).toUInt(), files_query.value( 15 ).toString(), files_query.value( 17 ).toUInt(), files_query.value( 11 ).toUInt() );
+        if ( !track )
+            continue;
         track->loadAttributes();
 
         result = Result::get( url, track );
+        if ( !result )
+            continue;
+
         result->setModificationTime( files_query.value( 1 ).toUInt() );
         result->setSize( files_query.value( 2 ).toUInt() );
         result->setMimetype( files_query.value( 4 ).toString() );
