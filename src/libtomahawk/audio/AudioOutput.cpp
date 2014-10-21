@@ -52,6 +52,7 @@ AudioOutput::instance()
 AudioOutput::AudioOutput( QObject* parent )
     : QObject( parent )
     , currentState( Stopped )
+    , currentStream( nullptr )
     , seekable( true )
     , muted( false )
     , m_autoDelete ( true )
@@ -60,15 +61,14 @@ AudioOutput::AudioOutput( QObject* parent )
     , m_totalTime( 0 )
     , m_aboutToFinish( false )
     , m_justSeeked( false )
-    , dspPluginCallback( 0 )
-    , vlcInstance( 0 )
-    , vlcPlayer( 0 )
-    , vlcMedia( 0 )
+    , dspPluginCallback( nullptr )
+    , vlcInstance( nullptr )
+    , vlcPlayer( nullptr )
+    , vlcMedia( nullptr )
 {
     tDebug() << Q_FUNC_INFO;
 
     AudioOutput::s_instance = this;
-    currentStream = 0;
 
     qRegisterMetaType<AudioOutput::AudioState>("AudioOutput::AudioState");
     
