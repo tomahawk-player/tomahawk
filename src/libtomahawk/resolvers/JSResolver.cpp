@@ -554,7 +554,7 @@ JSResolver::parseResultVariantList( const QVariantList& reslist )
         if ( m.value( "preview" ).toBool() == true )
             continue;
 
-        unsigned int duration = m.value( "duration", 0 ).toUInt();
+        int duration = m.value( "duration", 0 ).toInt();
         if ( duration <= 0 && m.contains( "durationString" ) )
         {
             QTime time = QTime::fromString( m.value( "durationString" ).toString(), "hh:mm:ss" );
