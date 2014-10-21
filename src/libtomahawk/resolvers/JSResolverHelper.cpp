@@ -810,7 +810,7 @@ JSResolverHelper::addToFuzzyIndex( const QVariantList& list )
 
 
 bool
-cmpTuple ( QVariant x, QVariant y )
+cmpTuple ( QVariant& x, QVariant& y )
 {
     return x.toList().at( 1 ).toFloat() < y.toList().at( 1 ).toFloat();
 }
