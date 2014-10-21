@@ -86,9 +86,9 @@ macro (KDE4_ADD_APP_ICON appsources pattern)
             if (_icon)
                 
                 # first, get the basename of our app icon
-                add_custom_command(OUTPUT ${_outfilename}.icns ${outfilename}.tiff
-                                   COMMAND ${SIPS_EXECUTABLE} -s format tiff ${_icon} --out ${outfilename}.tiff
-                                   COMMAND ${TIFF2ICNS_EXECUTABLE} ${outfilename}.tiff ${_outfilename}.icns
+                add_custom_command(OUTPUT ${_outfilename}.icns ${_outfilename}.tiff
+                                   COMMAND ${SIPS_EXECUTABLE} -s format tiff ${_icon} --out ${_outfilename}.tiff
+                                   COMMAND ${TIFF2ICNS_EXECUTABLE} ${_outfilename}.tiff ${_outfilename}.icns
                                    DEPENDS ${_icon}
                                    )
 
