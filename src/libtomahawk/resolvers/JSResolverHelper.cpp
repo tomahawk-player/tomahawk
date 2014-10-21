@@ -319,7 +319,7 @@ JSResolverHelper::addUrlResult( const QString& url, const QVariantMap& result )
         QString guid = result.value( "guid" ).toString();
         Q_ASSERT( !guid.isEmpty() );
         // Append nodeid to guid to make it globally unique.
-        guid += Tomahawk::Database::instance()->impl()->dbid();
+        guid += instanceUUID();
 
         // Do we already have this playlist loaded?
         {
@@ -354,7 +354,7 @@ JSResolverHelper::addUrlResult( const QString& url, const QVariantMap& result )
     {
         QString xspfUrl = result.value( "url" ).toString();
         Q_ASSERT( !xspfUrl.isEmpty() );
-        QString guid = QString( "xspf-%1-%2" ).arg( xspfUrl.toUtf8().toBase64().constData() ).arg( Tomahawk::Database::instance()->impl()->dbid() );
+        QString guid = QString( "xspf-%1-%2" ).arg( xspfUrl.toUtf8().toBase64().constData() ).arg( instanceUUID() );
 
         // Do we already have this playlist loaded?
         {
@@ -765,13 +765,13 @@ JSResolverHelper::indexDataFromVariant( const QVariantMap &map, struct Tomahawk:
 void
 JSResolverHelper::createFuzzyIndex( const QVariantList& list )
 {
-    if ( m_resolver->d_func()->fuzzyIndex.isNull() )
+    if ( hasFuzzyIndex() )
     {
-        m_resolver->d_func()->fuzzyIndex.reset( new FuzzyIndex( m_resolver, m_resolver->d_func()->accountId + ".lucene" , true ) );
+        m_resolver->d_func()->fuzzyIndex->wipeIndex();
     }
     else
     {
-        m_resolver->d_func()->fuzzyIndex->wipeIndex();
+        m_resolver->d_func()->fuzzyIndex.reset( new FuzzyIndex( m_resolver, accountId() + ".lucene" , true ) );
     }
 
     addToFuzzyIndex( list );
@@ -781,7 +781,7 @@ JSResolverHelper::createFuzzyIndex( const QVariantList& list )
 void
 JSResolverHelper::addToFuzzyIndex( const QVariantList& list )
 {
-    if ( m_resolver->d_func()->fuzzyIndex.isNull() )
+    if ( !hasFuzzyIndex() )
     {
         tLog() << Q_FUNC_INFO << "Cannot add entries to non-existing index.";
         return;
