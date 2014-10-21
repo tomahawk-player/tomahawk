@@ -12,8 +12,8 @@ SET(WINDRES_EXECUTABLE  ${CMAKE_RC_COMPILER})
 
 # adds application icon to target source list 
 # for detailed documentation see the top of FindKDE4Internal.cmake
-macro (KDE4_ADD_APP_ICON appsources pattern)
-    set (_outfilename ${CMAKE_CURRENT_BINARY_DIR}/${appsources})
+macro (TOMAHAWK_ADD_APP_ICON appsources outfilename pattern)
+    set (_outfilename ${CMAKE_CURRENT_BINARY_DIR}/${outfilename})
 
     if (WIN32)
         if(NOT WINCE)
@@ -111,4 +111,4 @@ macro (KDE4_ADD_APP_ICON appsources pattern)
             message(STATUS "Unable to find the sips and tiff2icns utilities - application will not have an application icon!")
         endif(SIPS_EXECUTABLE AND TIFF2ICNS_EXECUTABLE)
     endif(Q_WS_MAC)
-endmacro (KDE4_ADD_APP_ICON)
+endmacro (TOMAHAWK_ADD_APP_ICON)
