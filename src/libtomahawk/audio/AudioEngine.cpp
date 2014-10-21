@@ -1244,14 +1244,16 @@ AudioEngine::currentTime() const
 qint64
 AudioEngine::currentTrackTotalTime() const
 {
+    Q_D( const AudioEngine );
+
     // FIXME : This is too hacky. The problem is that I don't know why
     //         libVLC doesn't report total duration for stream data (imem://)
     // But it's not a real problem for playback, since EndOfStream is emitted by libVLC itself
     // This value is only used by AudioOutput to evaluate if it's close to end of stream
-    if ( d_func()->audioOutput->totalTime() <= 0 && d_func()->currentTrack && d_func()->currentTrack->track() ) {
-        return d_func()->currentTrack->track()->duration() * 1000 + 1000;
+    if ( d->audioOutput->totalTime() <= 0 && d->currentTrack && d->currentTrack->track() ) {
+        return d->currentTrack->track()->duration() * 1000 + 1000;
     }
-    return d_func()->audioOutput->totalTime();
+    return d->audioOutput->totalTime();
 }
 
 
