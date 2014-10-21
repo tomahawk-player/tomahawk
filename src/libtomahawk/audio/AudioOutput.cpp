@@ -131,16 +131,16 @@ AudioOutput::~AudioOutput()
 {
     tDebug() << Q_FUNC_INFO;
 
-    if ( vlcPlayer != 0 ) {
+    if ( vlcPlayer != nullptr ) {
         libvlc_media_player_stop( vlcPlayer );
         libvlc_media_player_release( vlcPlayer );
-        vlcPlayer = 0;
+        vlcPlayer = nullptr;
     }
-    if ( vlcMedia != 0 ) {
+    if ( vlcMedia != nullptr ) {
         libvlc_media_release( vlcMedia );
-        vlcMedia = 0;
+        vlcMedia = nullptr;
     }
-    if ( vlcInstance != 0 ) {
+    if ( vlcInstance != nullptr ) {
         libvlc_release( vlcInstance );
     }
 }
@@ -165,13 +165,13 @@ AudioOutput::setCurrentSource(MediaStream* stream)
 
     setState(Loading);
 
-    if ( vlcMedia != 0 ) {
+    if ( vlcMedia != nullptr ) {
         // Ensure playback is stopped, then release media
         libvlc_media_player_stop( vlcPlayer );
         libvlc_media_release( vlcMedia );
-        vlcMedia = 0;
+        vlcMedia = nullptr;
     }
-    if ( m_autoDelete && currentStream != 0 ) {
+    if ( m_autoDelete && currentStream != nullptr ) {
         delete currentStream;
     }
 
