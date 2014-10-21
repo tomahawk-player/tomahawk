@@ -1,11 +1,3 @@
-/*
-#include <phonon/MediaObject>
-#include <phonon/AudioOutput>
-#include <phonon/Path>
-#include <phonon/BackendCapabilities>
-#include <phonon/Effect>
-#include <phonon/EffectParameter>
-*/
 #include "AudioOutput.h"
 
 #include <stdint.h>
