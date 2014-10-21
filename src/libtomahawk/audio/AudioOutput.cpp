@@ -152,14 +152,16 @@ AudioOutput::setAutoDelete ( bool ad )
     m_autoDelete = ad;
 }
 
+
 void
-AudioOutput::setCurrentSource(MediaStream stream)
+AudioOutput::setCurrentSource( MediaStream stream )
 {
     setCurrentSource( new MediaStream(stream) );
 }
 
+
 void
-AudioOutput::setCurrentSource(MediaStream* stream)
+AudioOutput::setCurrentSource( MediaStream* stream )
 {
     tDebug() << Q_FUNC_INFO;
 
