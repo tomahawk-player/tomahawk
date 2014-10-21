@@ -212,13 +212,15 @@ AudioEngine::~AudioEngine()
 QStringList
 AudioEngine::supportedMimeTypes() const
 {
-    if ( d_func()->supportedMimeTypes.isEmpty() )
+    Q_D( const AudioEngine );
+
+    if ( d->supportedMimeTypes.isEmpty() )
     {
-        d_func()->supportedMimeTypes << "audio/*";
-        d_func()->supportedMimeTypes << "audio/basic";
+        d->supportedMimeTypes << "audio/*";
+        d->supportedMimeTypes << "audio/basic";
     }
 
-    return d_func()->supportedMimeTypes;
+    return d->supportedMimeTypes;
 }
 
 
