@@ -673,7 +673,6 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString 
                 QSharedPointer<QNetworkReply> qnr = io.objectCast<QNetworkReply>();
                 if ( !qnr.isNull() )
                 {
-                    tLog() << "CASE 1";
                     d->audioOutput->setCurrentSource( new QNR_IODeviceStream( qnr, this ) );
                     // We keep track of the QNetworkReply in QNR_IODeviceStream
                     // and Phonon handles the deletion of the
@@ -683,7 +682,6 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString 
                 }
                 else
                 {
-                    tLog() << "CASE 2";
                     d->audioOutput->setCurrentSource( io.data() );
                     // We handle the deletion via tracking in d->input
                     d->audioOutput->setAutoDelete( false );
@@ -697,7 +695,6 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString 
                  */
                 if ( !TomahawkUtils::isLocalResult( url ) )
                 {
-                    tLog() << "CASE 3";
                     QUrl furl = url;
                     if ( url.contains( "?" ) )
                     {
@@ -710,7 +707,6 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString 
                 }
                 else
                 {
-                    tLog() << "CASE 4";
                     QString furl = url;
                     if ( furl.startsWith( "file://" ) )
                         furl = furl.right( furl.length() - 7 );
