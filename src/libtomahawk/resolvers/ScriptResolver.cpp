@@ -402,7 +402,7 @@ ScriptResolver::doSetup( const QVariantMap& m )
     m_timeout = m.value( "timeout", 5 ).toUInt() * 1000;
     bool compressed = m.value( "compressed", "false" ).toString() == "true";
 
-    bool ok = 0;
+    bool ok;
     int intCap = m.value( "capabilities" ).toInt( &ok );
     if ( !ok )
         m_capabilities = NullCapability;

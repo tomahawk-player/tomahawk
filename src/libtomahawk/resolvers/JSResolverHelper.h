@@ -54,7 +54,7 @@ public:
      *
      * INTERNAL USE ONLY!
      */
-    Q_INVOKABLE QString acountId();
+    Q_INVOKABLE QString accountId();
 
     Q_INVOKABLE void addCustomUrlHandler( const QString& protocol, const QString& callbackFuncName, const QString& isAsynchronous = "false" );
     Q_INVOKABLE void reportStreamUrl( const QString& qid, const QString& streamUrl );

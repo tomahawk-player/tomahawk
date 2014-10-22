@@ -679,11 +679,10 @@ PlayableModel::insertInternal( const QList< T >& items, int row, const QList< To
     emit beginInsertRows( parent, crows.first, crows.second );
 
     int i = 0;
-    PlayableItem* plitem;
     foreach ( const T& item, items )
     {
         PlayableItem* pItem = itemFromIndex( parent );
-        plitem = new PlayableItem( item, pItem, row + i );
+        PlayableItem* plitem = new PlayableItem( item, pItem, row + i );
         plitem->index = createIndex( row + i, 0, plitem );
 
         if ( plitem->query() )
