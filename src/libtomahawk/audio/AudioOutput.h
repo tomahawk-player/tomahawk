@@ -43,7 +43,7 @@ public:
     explicit AudioOutput( QObject* parent = nullptr );
     ~AudioOutput();
 
-    AudioState state();
+    AudioState state() const;
 
     void setCurrentSource( const QUrl& stream );
     void setCurrentSource( QIODevice* stream );
@@ -58,9 +58,9 @@ public:
     bool isMuted() const;
     void setMuted( bool m );
     void setVolume( qreal vol );
-    qreal volume();
-    qint64 currentTime();
-    qint64 totalTime();
+    qreal volume() const;
+    qint64 currentTime() const;
+    qint64 totalTime() const;
     void setAutoDelete ( bool ad );
 
     void setDspCallback( std::function< void( int, int, float*, int, int ) > cb );

@@ -256,9 +256,8 @@ AudioOutput::setCurrentSource( MediaStream* stream )
 
 
 AudioOutput::AudioState
-AudioOutput::state()
+AudioOutput::state() const
 {
-    tDebug() << Q_FUNC_INFO;
     return m_currentState;
 }
 
@@ -274,7 +273,7 @@ AudioOutput::setState( AudioState state )
 
 
 qint64
-AudioOutput::currentTime()
+AudioOutput::currentTime() const
 {
     return m_currentTime;
 }
@@ -313,7 +312,7 @@ AudioOutput::setCurrentTime( qint64 time )
 
 
 qint64
-AudioOutput::totalTime()
+AudioOutput::totalTime() const
 {
     return m_totalTime;
 }
@@ -429,10 +428,8 @@ AudioOutput::setMuted(bool m)
 
 
 qreal
-AudioOutput::volume()
+AudioOutput::volume() const
 {
-    tDebug() << Q_FUNC_INFO;
-
     return m_muted ? 0 : m_volume;
 }
 
