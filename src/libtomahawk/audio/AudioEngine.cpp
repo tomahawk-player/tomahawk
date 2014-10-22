@@ -675,7 +675,7 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString 
                 {
                     d->audioOutput->setCurrentSource( new QNR_IODeviceStream( qnr, this ) );
                     // We keep track of the QNetworkReply in QNR_IODeviceStream
-                    // and Phonon handles the deletion of the
+                    // and AudioOutput handles the deletion of the
                     // QNR_IODeviceStream object
                     ioToKeep.clear();
                    d->audioOutput->setAutoDelete( true );
@@ -691,7 +691,7 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString 
             {
                 /*
                  * TODO: Do we need this anymore as we now do HTTP streaming ourselves?
-                 * Maybe this can be useful for letting phonon do other protocols?
+                 * Maybe this can be useful for letting VLC do other protocols?
                  */
                 if ( !TomahawkUtils::isLocalResult( url ) )
                 {
@@ -702,7 +702,7 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString 
                         TomahawkUtils::urlSetQuery( furl, QString( url.mid( url.indexOf( '?' ) + 1 ) ) );
                     }
 
-                    tLog( LOGVERBOSE ) << "Passing to Phonon:" << furl;
+                    tLog( LOGVERBOSE ) << "Passing to VLC:" << furl;
                     d->audioOutput->setCurrentSource( furl );
                 }
                 else
@@ -711,7 +711,7 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString 
                     if ( furl.startsWith( "file://" ) )
                         furl = furl.right( furl.length() - 7 );
 
-                    tLog( LOGVERBOSE ) << "Passing to Phonon:" << QUrl::fromLocalFile( furl );
+                    tLog( LOGVERBOSE ) << "Passing to VLC:" << QUrl::fromLocalFile( furl );
                     d->audioOutput->setCurrentSource( QUrl::fromLocalFile( furl ) );
                 }
 

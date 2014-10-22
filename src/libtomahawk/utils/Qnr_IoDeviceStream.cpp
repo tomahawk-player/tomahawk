@@ -29,7 +29,7 @@
 
 using namespace Tomahawk;
 
-// Feed Phonon in 1MiB blocks
+// Feed VLC in 1MiB blocks
 #define BLOCK_SIZE 1048576
 
 QNR_IODeviceStream::QNR_IODeviceStream( const QSharedPointer<QNetworkReply>& reply, QObject* parent )
