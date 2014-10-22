@@ -233,10 +233,12 @@ AudioOutput::setCurrentSource( MediaStream* stream )
 
     libvlc_media_player_set_media( vlcPlayer, vlcMedia );
 
-    if ( stream->type() == MediaStream::Url ) {
+    if ( stream->type() == MediaStream::Url )
+    {
         m_totalTime = libvlc_media_get_duration( vlcMedia );
     }
-    else if ( stream->type() == MediaStream::Stream || stream->type() == MediaStream::IODevice ) {
+    else if ( stream->type() == MediaStream::Stream || stream->type() == MediaStream::IODevice )
+    {
         libvlc_media_add_option_flag(vlcMedia, "imem-cat=4", libvlc_media_option_trusted);
         libvlc_media_add_option_flag(vlcMedia, (QString("imem-data=") + QString::number((quint64)stream)).toUtf8().data(), libvlc_media_option_trusted);
         libvlc_media_add_option_flag(vlcMedia, (QString("imem-get=") + QString::number((quint64)&MediaStream::readCallback)).toUtf8().data(), libvlc_media_option_trusted);
