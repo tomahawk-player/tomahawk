@@ -53,16 +53,16 @@ static QString s_aeInfoIdentifier = QString( "AUDIOENGINE" );
 
 
 void
-AudioEnginePrivate::onStateChanged( Phonon::State newState, Phonon::State oldState )
+AudioEnginePrivate::onStateChanged( AudioOutput::AudioState newState, AudioOutput::AudioState oldState )
 {
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << oldState << newState << expectStop << q_ptr->state();
+    tDebug() << Q_FUNC_INFO << oldState << newState << expectStop << q_ptr->state();
 
-    if ( newState == Phonon::LoadingState )
+    if ( newState == AudioOutput::Loading )
     {
         // We don't emit this state to listeners - yet.
         state = AudioEngine::Loading;
     }
-    if ( newState == Phonon::BufferingState )
+    if ( newState == AudioOutput::Buffering )
     {
         if ( underrunCount > UNDERRUNTHRESHOLD && !underrunNotified )
         {
@@ -72,16 +72,14 @@ AudioEnginePrivate::onStateChanged( Phonon::State newState, Phonon::State oldSta
         else
             underrunCount++;
     }
-    if ( newState == Phonon::ErrorState )
+    if ( newState == AudioOutput::Error )
     {
         q_ptr->stop( AudioEngine::UnknownError );
-
-        tDebug() << "Phonon Error:" << mediaObject->errorString() << mediaObject->errorType();
-
+        tDebug() << "AudioOutput Error";
         emit q_ptr->error( AudioEngine::UnknownError );
         q_ptr->setState( AudioEngine::Error );
     }
-    if ( newState == Phonon::PlayingState )
+    if ( newState == AudioOutput::Playing )
     {
         bool emitSignal = false;
         if ( q_ptr->state() != AudioEngine::Paused && q_ptr->state() != AudioEngine::Playing )
@@ -95,23 +93,22 @@ AudioEnginePrivate::onStateChanged( Phonon::State newState, Phonon::State oldSta
         if ( emitSignal )
             emit q_ptr->started( currentTrack );
     }
-    if ( newState == Phonon::StoppedState && oldState == Phonon::PausedState )
+    if ( newState == AudioOutput::Stopped && oldState == AudioOutput::Paused )
     {
-        // GStreamer backend hack: instead of going from PlayingState to StoppedState, it traverses PausedState
         q_ptr->setState( AudioEngine::Stopped );
     }
 
-    if ( oldState == Phonon::PlayingState )
+    if ( oldState == AudioOutput::Playing )
     {
         bool stopped = false;
         switch ( newState )
         {
-            case Phonon::PausedState:
+            case AudioOutput::Paused:
             {
-                if ( mediaObject && currentTrack )
+                if ( audioOutput && currentTrack )
                 {
-                    qint64 duration = mediaObject->totalTime() > 0 ? mediaObject->totalTime() : currentTrack->track()->duration() * 1000;
-                    stopped = ( duration - 1000 < mediaObject->currentTime() );
+                    qint64 duration = audioOutput->totalTime() > 0 ? audioOutput->totalTime() : currentTrack->track()->duration() * 1000;
+                    stopped = ( duration - 1000 < audioOutput->currentTime() );
                 }
                 else
                     stopped = true;
@@ -121,7 +118,7 @@ AudioEnginePrivate::onStateChanged( Phonon::State newState, Phonon::State oldSta
 
                 break;
             }
-            case Phonon::StoppedState:
+            case AudioOutput::Stopped:
             {
                 stopped = true;
                 break;
@@ -133,7 +130,7 @@ AudioEnginePrivate::onStateChanged( Phonon::State newState, Phonon::State oldSta
         if ( stopped && expectStop )
         {
             expectStop = false;
-            tDebug( LOGVERBOSE ) << "Finding next track.";
+            tDebug() << "Finding next track.";
             if ( q_ptr->canGoNext() )
             {
                 q_ptr->loadNextTrack();
@@ -159,40 +156,6 @@ AudioEnginePrivate::onStateChanged( Phonon::State newState, Phonon::State oldSta
 }
 
 
-void
-AudioEnginePrivate::onAudioDataArrived( QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> > data )
-{
-    QMap< AudioEngine::AudioChannel, QVector< qint16 > > result;
-
-    if( data.contains( Phonon::AudioDataOutput::LeftChannel ) )
-    {
-        result[ AudioEngine::LeftChannel ] = QVector< qint16 >( data[ Phonon::AudioDataOutput::LeftChannel ] );
-    }
-    if( data.contains( Phonon::AudioDataOutput::LeftSurroundChannel ) )
-    {
-        result[ AudioEngine::LeftChannel ] = QVector< qint16 >( data[ Phonon::AudioDataOutput::LeftSurroundChannel ] );
-    }
-    if( data.contains( Phonon::AudioDataOutput::RightChannel ) )
-    {
-        result[ AudioEngine::RightChannel ] =  QVector< qint16 >( data[ Phonon::AudioDataOutput::RightChannel ] );
-    }
-    if( data.contains( Phonon::AudioDataOutput::RightSurroundChannel ) )
-    {
-        result[ AudioEngine::LeftChannel ] = QVector< qint16 >( data[ Phonon::AudioDataOutput::RightSurroundChannel ] );
-    }
-    if( data.contains( Phonon::AudioDataOutput::CenterChannel ) )
-    {
-        result[ AudioEngine::LeftChannel ] = QVector< qint16 >( data[ Phonon::AudioDataOutput::CenterChannel ] );
-    }
-    if( data.contains( Phonon::AudioDataOutput::SubwooferChannel ) )
-    {
-        result[ AudioEngine::LeftChannel ] = QVector< qint16 >( data[ Phonon::AudioDataOutput::SubwooferChannel ] );
-    }
-
-    s_instance->audioDataArrived( result );
-}
-
-
 AudioEngine* AudioEnginePrivate::s_instance = 0;
 
 
@@ -214,31 +177,20 @@ AudioEngine::AudioEngine()
     d->waitingOnNewTrack = false;
     d->state = Stopped;
     d->coverTempFile = 0;
-    d->audioEffect = 0;
 
     d->s_instance = this;
     tDebug() << "Init AudioEngine";
 
-    qRegisterMetaType< AudioErrorCode >("AudioErrorCode");
-    qRegisterMetaType< AudioState >("AudioState");
+    d->audioOutput = new AudioOutput(this);
 
-    d->mediaObject = new Phonon::MediaObject( this );
-    d->audioOutput = new Phonon::AudioOutput( Phonon::MusicCategory, this );
-    d->audioDataOutput = new Phonon::AudioDataOutput( this );
+    connect( d->audioOutput, SIGNAL( stateChanged( AudioOutput::AudioState, AudioOutput::AudioState ) ), d_func(), SLOT( onStateChanged( AudioOutput::AudioState, AudioOutput::AudioState ) ) );
+    connect( d->audioOutput, SIGNAL( tick( qint64 ) ), SLOT( timerTriggered( qint64 ) ) );
+    connect( d->audioOutput, SIGNAL( aboutToFinish() ), SLOT( onAboutToFinish() ) );
 
-    d->audioPath = Phonon::createPath( d->mediaObject, d->audioOutput );
-
-    d->mediaObject->setTickInterval( 150 );
-    connect( d->mediaObject, SIGNAL( stateChanged( Phonon::State, Phonon::State ) ), d_func(), SLOT( onStateChanged( Phonon::State, Phonon::State ) ) );
-    connect( d->mediaObject, SIGNAL( tick( qint64 ) ), SLOT( timerTriggered( qint64 ) ) );
-    connect( d->mediaObject, SIGNAL( aboutToFinish() ), SLOT( onAboutToFinish() ) );
-    connect( d->audioOutput, SIGNAL( volumeChanged( qreal ) ), SLOT( onVolumeChanged( qreal ) ) );
-    connect( d->audioOutput, SIGNAL( mutedChanged( bool ) ), SIGNAL( mutedChanged( bool ) ) );
-
-    onVolumeChanged( d->audioOutput->volume() );
     setVolume( TomahawkSettings::instance()->volume() );
 
-    // initEqualizer();
+    qRegisterMetaType< AudioErrorCode >("AudioErrorCode");
+    qRegisterMetaType< AudioState >("AudioState");
 }
 
 
@@ -246,26 +198,9 @@ AudioEngine::~AudioEngine()
 {
     tDebug() << Q_FUNC_INFO;
 
-    d_func()->mediaObject->stop();
     TomahawkSettings::instance()->setVolume( volume() );
 
-
     delete d_ptr;
-}
-
-
-QStringList
-AudioEngine::supportedMimeTypes() const
-{
-    if ( d_func()->supportedMimeTypes.isEmpty() )
-    {
-        d_func()->supportedMimeTypes = Phonon::BackendCapabilities::availableMimeTypes();
-        d_func()->supportedMimeTypes << "audio/basic";
-
-        return d_func()->supportedMimeTypes;
-    }
-    else
-        return d_func()->supportedMimeTypes;
 }
 
 
@@ -301,7 +236,7 @@ AudioEngine::play()
 
     if ( isPaused() )
     {
-        d->mediaObject->play();
+        d->audioOutput->play();
         emit resumed();
 
         sendNowPlayingNotification( Tomahawk::InfoSystem::InfoNowResumed );
@@ -331,7 +266,7 @@ AudioEngine::pause()
 
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
-    d->mediaObject->pause();
+    d->audioOutput->pause();
     emit paused();
 
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( Tomahawk::InfoSystem::InfoPushData( s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowPaused, QVariant(), Tomahawk::InfoSystem::PushNoFlag ) );
@@ -359,8 +294,8 @@ AudioEngine::stop( AudioErrorCode errorCode )
     else
         setState( Error );
 
-    if ( d->mediaObject->state() != Phonon::StoppedState )
-        d->mediaObject->stop();
+    if ( d->audioOutput->state() != AudioOutput::Stopped )
+        d->audioOutput->stop();
 
     emit stopped();
 
@@ -376,32 +311,6 @@ AudioEngine::stop( AudioErrorCode errorCode )
 
     Tomahawk::InfoSystem::InfoPushData pushData( s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowStopped, QVariant(), Tomahawk::InfoSystem::PushNoFlag );
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
-}
-
-
-bool AudioEngine::activateDataOutput()
-{
-    Q_D( AudioEngine );
-
-    d->audioDataPath = Phonon::createPath( d->mediaObject, d->audioDataOutput );
-    connect( d->audioDataOutput, SIGNAL( dataReady( QMap< Phonon::AudioDataOutput::Channel, QVector< qint16 > > ) ),
-            d_func(), SLOT( onAudioDataArrived( QMap< Phonon::AudioDataOutput::Channel, QVector< qint16 > > ) ) );
-
-    return d->audioDataPath.isValid();
-
-}
-
-
-bool AudioEngine::deactivateDataOutput()
-{
-    Q_D( AudioEngine );
-
-    return  d->audioDataPath.disconnect();
-}
-
-void AudioEngine::audioDataArrived( QMap< AudioEngine::AudioChannel, QVector< qint16 > >& data )
-{
-    emit audioDataReady( data );
 }
 
 
@@ -492,15 +401,11 @@ AudioEngine::canSeek()
 {
     Q_D( AudioEngine );
 
-    bool phononCanSeek = true;
-    /* TODO: When phonon properly reports this, re-enable it
-    if ( d->mediaObject && d->mediaObject->isValid() )
-        phononCanSeek = d->mediaObject->isSeekable();
-    */
-    if ( d->playlist.isNull() )
-        return phononCanSeek;
+    if ( !d->audioOutput->isSeekable() ) {
+        return false;
+    }
 
-    return !d->playlist.isNull() && ( d->playlist.data()->seekRestrictions() != PlaylistModes::NoSeek ) && phononCanSeek;
+    return !d->playlist.isNull() && ( d->playlist.data()->seekRestrictions() != PlaylistModes::NoSeek );
 }
 
 
@@ -509,16 +414,16 @@ AudioEngine::seek( qint64 ms )
 {
     Q_D( AudioEngine );
 
-    if ( !canSeek() )
+    /*if ( !canSeek() )
     {
         tDebug( LOGEXTRA ) << "Could not seek!";
         return;
-    }
+    }*/
 
     if ( isPlaying() || isPaused() )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << ms;
-        d->mediaObject->seek( ms );
+        d->audioOutput->seek( ms );
         emit seeked( ms );
     }
 }
@@ -543,6 +448,7 @@ AudioEngine::setVolume( int percentage )
 
     if ( percentage > 0 && d->audioOutput->isMuted() )
         d->audioOutput->setMuted( false );
+
     emit volumeChanged( percentage );
 }
 
@@ -767,18 +673,18 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString 
                 QSharedPointer<QNetworkReply> qnr = io.objectCast<QNetworkReply>();
                 if ( !qnr.isNull() )
                 {
-                    d->mediaObject->setCurrentSource( new QNR_IODeviceStream( qnr, this ) );
+                    d->audioOutput->setCurrentSource( new QNR_IODeviceStream( qnr, this ) );
                     // We keep track of the QNetworkReply in QNR_IODeviceStream
                     // and Phonon handles the deletion of the
                     // QNR_IODeviceStream object
                     ioToKeep.clear();
-                    d->mediaObject->currentSource().setAutoDelete( true );
+                   d->audioOutput->setAutoDelete( true );
                 }
                 else
                 {
-                    d->mediaObject->setCurrentSource( io.data() );
+                    d->audioOutput->setCurrentSource( io.data() );
                     // We handle the deletion via tracking in d->input
-                    d->mediaObject->currentSource().setAutoDelete( false );
+                    d->audioOutput->setAutoDelete( false );
                 }
             }
             else
@@ -797,7 +703,7 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString 
                     }
 
                     tLog( LOGVERBOSE ) << "Passing to Phonon:" << furl;
-                    d->mediaObject->setCurrentSource( furl );
+                    d->audioOutput->setCurrentSource( furl );
                 }
                 else
                 {
@@ -806,10 +712,10 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString 
                         furl = furl.right( furl.length() - 7 );
 
                     tLog( LOGVERBOSE ) << "Passing to Phonon:" << QUrl::fromLocalFile( furl );
-                    d->mediaObject->setCurrentSource( QUrl::fromLocalFile( furl ) );
+                    d->audioOutput->setCurrentSource( QUrl::fromLocalFile( furl ) );
                 }
 
-                d->mediaObject->currentSource().setAutoDelete( true );
+                d->audioOutput->setAutoDelete( true );
             }
 
             if ( !d->input.isNull() )
@@ -818,7 +724,7 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString 
                 d->input.clear();
             }
             d->input = ioToKeep;
-            d->mediaObject->play();
+            d->audioOutput->play();
 
             if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
             {
@@ -1291,14 +1197,23 @@ AudioEngine::setState( AudioState state )
 qint64
 AudioEngine::currentTime() const
 {
-    return d_func()->mediaObject->currentTime();
+    return d_func()->audioOutput->currentTime();
 }
 
 
 qint64
 AudioEngine::currentTrackTotalTime() const
 {
-    return d_func()->mediaObject->totalTime();
+    Q_D( const AudioEngine );
+
+    // FIXME : This is too hacky. The problem is that I don't know why
+    //         libVLC doesn't report total duration for stream data (imem://)
+    // But it's not a real problem for playback, since EndOfStream is emitted by libVLC itself
+    // This value is only used by AudioOutput to evaluate if it's close to end of stream
+    if ( d->audioOutput->totalTime() <= 0 && d->currentTrack && d->currentTrack->track() ) {
+        return d->currentTrack->track()->duration() * 1000 + 1000;
+    }
+    return d->audioOutput->totalTime();
 }
 
 
@@ -1386,52 +1301,9 @@ AudioEngine::setCurrentTrackPlaylist( const playlistinterface_ptr& playlist )
 
 
 void
-AudioEngine::initEqualizer()
+AudioEngine::setDspCallback( std::function< void( int state, int frameNumber, float* samples, int nb_channels, int nb_samples ) > cb )
 {
     Q_D( AudioEngine );
 
-    QList< Phonon::EffectDescription > effectDescriptions = Phonon::BackendCapabilities::availableAudioEffects();
-    foreach ( Phonon::EffectDescription effectDesc, effectDescriptions )
-    {
-        if ( effectDesc.name().toLower().contains( "eq" ) )
-        {
-            d->audioEffect = new Phonon::Effect( effectDesc );
-            d->audioPath.insertEffect( d->audioEffect );
-            break;
-        }
-    }
-}
-
-
-int
-AudioEngine::equalizerBandCount()
-{
-    Q_D( AudioEngine );
-
-    if ( d->audioEffect )
-    {
-        QList< Phonon::EffectParameter > params = d->audioEffect->parameters();
-        return params.size();
-    }
-
-    return 0;
-}
-
-
-bool
-AudioEngine::setEqualizerBand( int band, int value )
-{
-    Q_D( AudioEngine );
-
-    if ( d->audioEffect )
-    {
-        QList< Phonon::EffectParameter > params = d->audioEffect->parameters();
-        if ( band < params.size() )
-        {
-            d->audioEffect->setParameterValue( params.at( band ), value );
-            return true;
-        }
-    }
-
-    return false;
+    d->audioOutput->setDspCallback( cb );
 }

@@ -214,6 +214,7 @@ list(APPEND libSources
     accounts/spotify/SpotifyInfoPlugin.cpp
 
     audio/AudioEngine.cpp
+    audio/AudioOutput.cpp
 
     collection/Collection.cpp
     collection/ArtistsRequest.cpp
@@ -353,6 +354,7 @@ list(APPEND libSources
     utils/WeakObjectHash.cpp
     utils/WeakObjectList.cpp
     utils/PluginLoader.cpp
+    utils/MediaStream.cpp
 )
 
 add_subdirectory( accounts/configstorage )
@@ -389,7 +391,7 @@ include_directories(
     ${QJSON_INCLUDE_DIR}
     ${ECHONEST_INCLUDE_DIR}
     ${LUCENEPP_INCLUDE_DIRS}
-    ${PHONON_INCLUDES}
+    ${LIBVLC_INCLUDE_DIR}
     ${Boost_INCLUDE_DIR}
 
     ${LIBPORTFWD_INCLUDE_DIR}
@@ -501,7 +503,8 @@ ENDIF( UNIX AND NOT APPLE )
 
 TARGET_LINK_LIBRARIES( tomahawklib
     LINK_PRIVATE
-    ${PHONON_LIBRARY}
+    ${LIBVLC_LIBRARY}
+    ${LIBVLCCORE_LIBRARY}
 
     # Thirdparty shipped with tomahawk
     ${LIBPORTFWD_LIBRARIES}

@@ -24,6 +24,7 @@
 #include "../Typedefs.h"
 
 #include <QStringList>
+#include <functional>
 
 #include "DllMacro.h"
 
@@ -109,17 +110,13 @@ public:
      */
     qint64 currentTrackTotalTime() const;
 
-    int equalizerBandCount();
-    bool setEqualizerBand( int band, int value );
+    void setDspCallback( std::function< void( int state, int frameNumber, float* samples, int nb_channels, int nb_samples ) > cb );
 
 public slots:
     void playPause();
     void play();
     void pause();
     void stop( AudioErrorCode errorCode = NoError );
-
-    bool activateDataOutput();
-    bool deactivateDataOutput();
 
     void previous();
     void next();
@@ -157,7 +154,7 @@ signals:
     void paused();
     void resumed();
 
-    void audioDataReady( QMap< AudioEngine::AudioChannel, QVector<qint16> > data );
+//    void audioDataReady( QMap< AudioEngine::AudioChannel, QVector<qint16> > data );
 
     void stopAfterTrackChanged();
 
@@ -201,8 +198,7 @@ private:
     void setState( AudioState state );
     void setCurrentTrackPlaylist( const Tomahawk::playlistinterface_ptr& playlist );
 
-    void initEqualizer();
-    void audioDataArrived( QMap< AudioEngine::AudioChannel, QVector< qint16 > >& data );
+//    void audioDataArrived( QMap< AudioEngine::AudioChannel, QVector< qint16 > >& data );
 
 
     Q_DECLARE_PRIVATE( AudioEngine )
