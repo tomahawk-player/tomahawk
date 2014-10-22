@@ -376,9 +376,11 @@ AudioOutput::seek( qint64 milliseconds )
 {
     tDebug() << Q_FUNC_INFO;
 
-    if ( !seekable ) {
-        return;
-    }
+    // Even seek if reported as not seekable. VLC can seek in some cases where
+    // it tells us it can't.
+    // if ( !seekable ) {
+    //     return;
+    // }
 
     switch ( currentState ) {
         case Playing:
