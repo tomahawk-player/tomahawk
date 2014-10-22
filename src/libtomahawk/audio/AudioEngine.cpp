@@ -193,6 +193,9 @@ AudioEngine::AudioEngine()
     connect( d->audioOutput, SIGNAL( tick( qint64 ) ), SLOT( timerTriggered( qint64 ) ) );
     connect( d->audioOutput, SIGNAL( aboutToFinish() ), SLOT( onAboutToFinish() ) );
 
+    onVolumeChanged( d->audioOutput->volume() );
+    setVolume( TomahawkSettings::instance()->volume() );
+
     qRegisterMetaType< AudioErrorCode >("AudioErrorCode");
     qRegisterMetaType< AudioState >("AudioState");
 }
