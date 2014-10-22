@@ -240,10 +240,14 @@ AudioOutput::setCurrentSource( MediaStream* stream )
     else if ( stream->type() == MediaStream::Stream || stream->type() == MediaStream::IODevice )
     {
         libvlc_media_add_option_flag(vlcMedia, "imem-cat=4", libvlc_media_option_trusted);
-        libvlc_media_add_option_flag(vlcMedia, (QString("imem-data=") + QString::number((uintptr_t)stream)).toUtf8().data(), libvlc_media_option_trusted);
-        libvlc_media_add_option_flag(vlcMedia, (QString("imem-get=") + QString::number((uintptr_t)&MediaStream::readCallback)).toUtf8().data(), libvlc_media_option_trusted);
-        libvlc_media_add_option_flag(vlcMedia, (QString("imem-release=") + QString::number((uintptr_t)&MediaStream::readDoneCallback)).toUtf8().data(), libvlc_media_option_trusted);
-        libvlc_media_add_option_flag(vlcMedia, (QString("imem-seek=") + QString::number((uintptr_t)&MediaStream::seekCallback)).toUtf8().data(), libvlc_media_option_trusted);
+        const char* imemData = QString( "imem-data=%1" ).arg( (uintptr_t)stream ).toLatin1().constData();
+        libvlc_media_add_option_flag(vlcMedia, imemData, libvlc_media_option_trusted);
+        const char* imemGet = QString( "imem-get=%1" ).arg( (uintptr_t)&MediaStream::readCallback ).toLatin1().constData();
+        libvlc_media_add_option_flag(vlcMedia, imemGet, libvlc_media_option_trusted);
+        const char* imemRelease = QString( "imem-release=%1" ).arg( (uintptr_t)&MediaStream::readDoneCallback ).toLatin1().constData();
+        libvlc_media_add_option_flag(vlcMedia, imemRelease, libvlc_media_option_trusted);
+        const char* imemSeek = QString( "imem-seek=%1" ).arg( (uintptr_t)&MediaStream::seekCallback ).toLatin1().constData();
+        libvlc_media_add_option_flag(vlcMedia, imemSeek, libvlc_media_option_trusted);
     }
 
     m_aboutToFinish = false;
