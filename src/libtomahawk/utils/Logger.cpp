@@ -83,21 +83,21 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
         {
             // Do not use locales anymore in shutdown
             logStream << QDate::currentDate().day() << "."
-                    << QDate::currentDate().month() << "."
-                    << QDate::currentDate().year() << " - "
-                    << QTime::currentTime().hour() << ":"
-                    << QTime::currentTime().minute() << ":"
-                    << QTime::currentTime().second()
-                    << " [" << QString::number( debugLevel ).toUtf8().data() << "]: "
-                    << msg << endl;
+                      << QDate::currentDate().month() << "."
+                      << QDate::currentDate().year() << " - "
+                      << QTime::currentTime().hour() << ":"
+                      << QTime::currentTime().minute() << ":"
+                      << QTime::currentTime().second()
+                      << " [" << QString::number( debugLevel ).toUtf8().data() << "]: "
+                      << msg << endl;
         }
         else
         {
             logStream << QDate::currentDate().toString().toUtf8().data()
-                    << " - "
-                    << QTime::currentTime().toString().toUtf8().data()
-                    << " [" << QString::number( debugLevel ).toUtf8().data() << "]: "
-                    << msg << endl;
+                      << " - "
+                      << QTime::currentTime().toString().toUtf8().data()
+                      << " [" << QString::number( debugLevel ).toUtf8().data() << "]: "
+                      << msg << endl;
         }
 
         logStream.flush();
@@ -110,16 +110,16 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
         if ( shutdownInProgress )
         {
             wcout << QTime::currentTime().hour() << ":"
-                 << QTime::currentTime().minute() << ":"
-                 << QTime::currentTime().second()
-                 << " [" << QString::number( debugLevel ).toStdWString().c_str() << "]: "
-                 << msg << endl;
+                  << QTime::currentTime().minute() << ":"
+                  << QTime::currentTime().second()
+                  << " [" << QString::number( debugLevel ).toStdWString().c_str() << "]: "
+                  << msg << endl;
         }
         else
         {
             wcout << QTime::currentTime().toString().toUtf8().data()
-                 << " [" << QString::number( debugLevel ).toStdWString().c_str() << "]: "
-                 << msg << endl;
+                  << " [" << QString::number( debugLevel ).toStdWString().c_str() << "]: "
+                  << msg << endl;
         }
 
         wcout.flush();
