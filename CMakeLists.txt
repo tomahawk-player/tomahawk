@@ -347,7 +347,7 @@ endif()
 endif()
 
 find_package(LIBVLC REQUIRED 2.1.0)
-macro_log_feature(LIBVLC_FOUND "LibVLC" "Provides audio output" TRUE "" "")
+macro_log_feature(LIBVLC_FOUND "LibVLC" "Provides audio output" "https://www.videolan.org/vlc/"  TRUE "" "")
 
 set(QXTWEB_FOUND TRUE)
 set(QXTWEB_LIBRARIES qxtweb-standalone)
