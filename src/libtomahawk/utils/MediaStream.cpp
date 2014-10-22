@@ -24,9 +24,6 @@
 
 #define BLOCK_SIZE 1048576
 
-static QString s_aeInfoIdentifier = QString( "MEDIASTREAM" );
-
-
 MediaStream::MediaStream( QObject* parent )
     : QObject( parent )
     , m_type( Unknown )
