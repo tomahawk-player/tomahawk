@@ -155,12 +155,6 @@ AudioEnginePrivate::onStateChanged( AudioOutput::AudioState newState, AudioOutpu
     }
 }
 
-/*
-void
-AudioEnginePrivate::onAudioDataArrived( QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> > data )
-{
-}
-*/
 
 AudioEngine* AudioEnginePrivate::s_instance = 0;
 
@@ -205,7 +199,6 @@ AudioEngine::~AudioEngine()
     tDebug() << Q_FUNC_INFO;
 
     TomahawkSettings::instance()->setVolume( volume() );
-
 
     delete d_ptr;
 }
@@ -320,22 +313,6 @@ AudioEngine::stop( AudioErrorCode errorCode )
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
 }
 
-
-bool AudioEngine::activateDataOutput()
-{
-    Q_D( AudioEngine );
-
-    return true;
-
-}
-
-
-bool AudioEngine::deactivateDataOutput()
-{
-    Q_D( AudioEngine );
-
-    return true;
-}
 
 void
 AudioEngine::previous()

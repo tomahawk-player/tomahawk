@@ -118,9 +118,6 @@ public slots:
     void pause();
     void stop( AudioErrorCode errorCode = NoError );
 
-    bool activateDataOutput();
-    bool deactivateDataOutput();
-
     void previous();
     void next();
 
