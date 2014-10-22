@@ -21,13 +21,10 @@
 #ifndef MEDIASTREAM_H
 #define MEDIASTREAM_H
 
-#include "../Typedefs.h"
-
 #include "DllMacro.h"
+#include "Typedefs.h"
 #include "utils/Logger.h"
-#include <stdint.h>
 
-#include <QObject>
 #include <QUrl>
 #include <QIODevice>
 
@@ -38,7 +35,7 @@ class DLLEXPORT MediaStream : public QObject
 public:
     enum MediaType { Unknown = -1, Empty = 0, Url = 1, Stream = 2, IODevice = 3 };
 
-    MediaStream( QObject* parent = 0 );
+    MediaStream( QObject* parent = nullptr );
     explicit MediaStream( const QUrl &url );
     explicit MediaStream( QIODevice* device );
     virtual ~MediaStream();
@@ -74,7 +71,7 @@ protected:
 
     char m_buffer[1048576];
 private:
-    Q_DISABLE_COPY( MediaStream );
+    Q_DISABLE_COPY( MediaStream )
 };
 
 #endif // MEDIASTREAM_H

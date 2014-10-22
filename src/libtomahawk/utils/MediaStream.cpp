@@ -30,8 +30,7 @@ static QString s_aeInfoIdentifier = QString( "MEDIASTREAM" );
 MediaStream::MediaStream( QObject* parent )
     : QObject( parent )
     , m_type( Unknown )
-    , m_url( QUrl() )
-    , m_ioDevice ( 0 )
+    , m_ioDevice ( nullptr )
     , m_started( false )
     , m_bufferingFinished( false )
     , m_eos( false )
@@ -39,14 +38,14 @@ MediaStream::MediaStream( QObject* parent )
     , m_streamSize( 0 )
 {
     tDebug() << Q_FUNC_INFO;
-
 }
 
 
 MediaStream::MediaStream( const QUrl &url )
     : QObject( 0 )
     , m_type( Url )
-    , m_ioDevice ( 0 )
+    , m_url( url )
+    , m_ioDevice ( nullptr )
     , m_started( false )
     , m_bufferingFinished( false )
     , m_eos( false )
@@ -54,16 +53,13 @@ MediaStream::MediaStream( const QUrl &url )
     , m_streamSize( 0 )
 {
     tDebug() << Q_FUNC_INFO;
-
-    m_url = url;
 }
 
 
 MediaStream::MediaStream( QIODevice* device )
     : QObject( 0 )
     , m_type( IODevice )
-    , m_url( QUrl() )
-    , m_ioDevice ( 0 )
+    , m_ioDevice ( device )
     , m_started( false )
     , m_bufferingFinished( false )
     , m_eos( false )
@@ -72,7 +68,6 @@ MediaStream::MediaStream( QIODevice* device )
 {
     tDebug() << Q_FUNC_INFO;
 
-    m_ioDevice = device;
     QObject::connect( m_ioDevice, SIGNAL( readChannelFinished() ), this, SLOT( bufferingFinished() ) );
 }
 

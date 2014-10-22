@@ -22,9 +22,8 @@
 #ifndef AUDIOOUTPUT_H
 #define AUDIOOUTPUT_H
 
-#include "../Typedefs.h"
-
 #include "DllMacro.h"
+#include "Typedefs.h"
 #include "utils/MediaStream.h"
 
 #include <functional>
@@ -41,24 +40,24 @@ Q_OBJECT
 public:
     enum AudioState { Stopped = 0, Playing = 1, Paused = 2, Error = 3, Loading = 4, Buffering = 5 };
 
-    explicit AudioOutput(QObject* parent = 0);
+    explicit AudioOutput( QObject* parent = nullptr );
     ~AudioOutput();
 
     AudioState state();
 
-    void setCurrentSource( const QUrl& stream);
-    void setCurrentSource( QIODevice* stream);
+    void setCurrentSource( const QUrl& stream );
+    void setCurrentSource( QIODevice* stream );
     void setCurrentSource( MediaStream* stream );
 
     void play();
     void pause();
     void stop();
-    void seek(qint64 milliseconds);
+    void seek( qint64 milliseconds );
 
     bool isSeekable();
     bool isMuted();
-    void setMuted(bool m);
-    void setVolume(qreal vol);
+    void setMuted( bool m );
+    void setVolume( qreal vol );
     qreal volume();
     qint64 currentTime();
     qint64 totalTime();
