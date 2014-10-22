@@ -35,8 +35,6 @@
 #include <vlc/libvlc_events.h>
 #include <vlc/libvlc_version.h>
 
-static QString s_aeInfoIdentifier = QString( "AUDIOOUTPUT" );
-
 static const int ABOUT_TO_FINISH_TIME = 2000;
 
 AudioOutput* AudioOutput::s_instance = 0;
