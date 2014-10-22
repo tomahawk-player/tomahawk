@@ -40,8 +40,6 @@ private:
     bool expectStop;
     bool waitingOnNewTrack;
 
-    mutable QStringList supportedMimeTypes;
-
     AudioState state;
     QQueue< AudioState > stateQueue;
     QTimer stateQueueTimer;

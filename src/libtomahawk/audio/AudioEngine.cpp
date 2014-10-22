@@ -211,21 +211,6 @@ AudioEngine::~AudioEngine()
 }
 
 
-QStringList
-AudioEngine::supportedMimeTypes() const
-{
-    Q_D( const AudioEngine );
-
-    if ( d->supportedMimeTypes.isEmpty() )
-    {
-        d->supportedMimeTypes << "audio/*";
-        d->supportedMimeTypes << "audio/basic";
-    }
-
-    return d->supportedMimeTypes;
-}
-
-
 void
 AudioEngine::playPause()
 {
