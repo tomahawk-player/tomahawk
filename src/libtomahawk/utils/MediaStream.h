@@ -23,7 +23,6 @@
 
 #include "DllMacro.h"
 #include "Typedefs.h"
-#include "utils/Logger.h"
 
 #include <QUrl>
 #include <QIODevice>
@@ -47,7 +46,7 @@ public:
     qint64 streamSize() const;
 
     virtual void seekStream( qint64 offset ) { (void)offset; }
-    virtual qint64 needData ( void** buffer ) { (void)buffer; tDebug() << Q_FUNC_INFO; return 0; }
+    virtual qint64 needData ( void** buffer ) { (void)buffer; return 0; }
 
     static int readCallback ( void* data, const char* cookie, int64_t* dts, int64_t* pts, unsigned* flags, size_t* bufferSize, void** buffer );
     static int readDoneCallback ( void *data, const char *cookie, size_t bufferSize, void *buffer );
