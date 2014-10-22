@@ -50,13 +50,13 @@ int main( int argc, char* argv[] )
 {
     QCoreApplication app( argc, argv );
     // TODO: Add an argument to change the path
-    app.setOrganizationName( QLatin1String( TOMAHAWK_ORGANIZATION_NAME ) );
+    app.setOrganizationName( TOMAHAWK_ORGANIZATION_NAME );
 
     // Helper QObject to connect slots and actions in the correct thread.
     Tasks tasks;
 
     // Start a thread so we can actually block main until the end of the DbCmd
-    QThread thread( 0 );
+    QThread thread( nullptr );
     thread.start();
 
     // We need to do this or the finished() signal/quit() SLOT is not called.
