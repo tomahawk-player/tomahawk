@@ -79,26 +79,22 @@ MediaStream::~MediaStream()
 
 
 MediaStream::MediaType
-MediaStream::type()
+MediaStream::type() const
 {
-    tDebug() << Q_FUNC_INFO;
     return m_type;
 }
 
 
 QUrl
-MediaStream::url()
+MediaStream::url() const
 {
-    tDebug() << Q_FUNC_INFO;
     return m_url;
 }
 
 
 qint64
-MediaStream::streamSize()
+MediaStream::streamSize() const
 {
-    tDebug() << Q_FUNC_INFO;
-
     return m_streamSize;
 }
 

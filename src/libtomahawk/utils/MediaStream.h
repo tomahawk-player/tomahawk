@@ -40,11 +40,11 @@ public:
     explicit MediaStream( QIODevice* device );
     virtual ~MediaStream();
 
-    MediaType type();
-    QUrl url();
+    MediaType type() const;
+    QUrl url() const;
 
     void setStreamSize( qint64 size );
-    qint64 streamSize();
+    qint64 streamSize() const;
 
     virtual void seekStream( qint64 offset ) { (void)offset; }
     virtual qint64 needData ( void** buffer ) { (void)buffer; tDebug() << Q_FUNC_INFO; return 0; }
