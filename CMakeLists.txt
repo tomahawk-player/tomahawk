@@ -346,7 +346,7 @@ endif()
     macro_log_feature(LIBSNORE_FOUND "Libsnore" "Library for notifications" "https://github.com/TheOneRing/Snorenotify" FALSE "" "")
 endif()
 
-find_package(LIBVLC REQUIRED)
+find_package(LIBVLC REQUIRED 2.1.0)
 macro_log_feature(LIBVLC_FOUND "LibVLC" "Provides audio output" TRUE "" "")
 
 set(QXTWEB_FOUND TRUE)
