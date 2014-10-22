@@ -25,7 +25,6 @@
 
 #include "DllMacro.h"
 
-//#include <phonon/abstractmediastream.h>
 #include <QByteArray>
 #include <QNetworkReply>
 #include <QSharedPointer>
