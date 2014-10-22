@@ -79,6 +79,7 @@ private:
     void setCurrentTime( qint64 time );
     void setTotalTime( qint64 time );
 
+    void onVlcEvent( const libvlc_event_t* event );
     static void vlcEventCallback( const libvlc_event_t *event, void *opaque );
     static void s_dspCallback( int frameNumber, float* samples, int nb_channels, int nb_samples );
 

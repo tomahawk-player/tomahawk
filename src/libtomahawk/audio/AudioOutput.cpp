@@ -447,22 +447,17 @@ AudioOutput::setVolume(qreal vol)
 
 
 void
-AudioOutput::vlcEventCallback( const libvlc_event_t* event, void* opaque )
+AudioOutput::onVlcEvent( const libvlc_event_t* event )
 {
-//    tDebug() << Q_FUNC_INFO;
-
-    AudioOutput* that = reinterpret_cast < AudioOutput * > ( opaque );
-    Q_ASSERT( that );
-
-    switch (event->type) {
+    switch ( event->type ) {
         case libvlc_MediaPlayerTimeChanged:
-            that->setCurrentTime( event->u.media_player_time_changed.new_time );
+            setCurrentTime( event->u.media_player_time_changed.new_time );
             break;
         case libvlc_MediaPlayerSeekableChanged:
          //   tDebug() << Q_FUNC_INFO << " : seekable changed : " << event->u.media_player_seekable_changed.new_seekable;
             break;
         case libvlc_MediaDurationChanged:
-            that->setTotalTime( event->u.media_duration_changed.new_duration );
+            setTotalTime( event->u.media_duration_changed.new_duration );
             break;
         case libvlc_MediaPlayerLengthChanged:
         //    tDebug() << Q_FUNC_INFO << " : length changed : " << event->u.media_player_length_changed.new_length;
@@ -475,14 +470,14 @@ AudioOutput::vlcEventCallback( const libvlc_event_t* event, void* opaque )
         case libvlc_MediaPlayerStopped:
             break;
         case libvlc_MediaPlayerEndReached:
-            that->setState(Stopped);
+            setState( Stopped );
             break;
         case libvlc_MediaPlayerEncounteredError:
             tDebug() << "LibVLC error : MediaPlayerEncounteredError. Stopping";
-            if ( that->m_vlcPlayer != 0 ) {
-                that->stop();
+            if ( m_vlcPlayer != nullptr ) {
+                stop();
             }
-            that->setState( Error );
+            setState( Error );
             break;
         case libvlc_MediaPlayerVout:
         case libvlc_MediaPlayerMediaChanged:
@@ -495,6 +490,18 @@ AudioOutput::vlcEventCallback( const libvlc_event_t* event, void* opaque )
         default:
             break;
     }
+}
+
+
+void
+AudioOutput::vlcEventCallback( const libvlc_event_t* event, void* opaque )
+{
+//    tDebug() << Q_FUNC_INFO;
+
+    AudioOutput* that = reinterpret_cast < AudioOutput * > ( opaque );
+    Q_ASSERT( that );
+
+    that->onVlcEvent( event );
 }
 
 
