@@ -54,8 +54,8 @@ public:
     void stop();
     void seek( qint64 milliseconds );
 
-    bool isSeekable();
-    bool isMuted();
+    bool isSeekable() const;
+    bool isMuted() const;
     void setMuted( bool m );
     void setVolume( qreal vol );
     qreal volume();
@@ -83,10 +83,10 @@ private:
     static void s_dspCallback( int frameNumber, float* samples, int nb_channels, int nb_samples );
 
     static AudioOutput* s_instance;
-    AudioState currentState;
-    MediaStream* currentStream;
-    bool seekable;
-    bool muted;
+    AudioState m_currentState;
+    MediaStream* m_currentStream;
+    bool m_seekable;
+    bool m_muted;
     bool m_autoDelete;
     qreal m_volume;
     qint64 m_currentTime;
@@ -96,9 +96,9 @@ private:
 
     std::function< void( int state, int frameNumber, float* samples, int nb_channels, int nb_samples ) > dspPluginCallback;
 
-    libvlc_instance_t* vlcInstance;
-    libvlc_media_player_t* vlcPlayer;
-    libvlc_media_t* vlcMedia;
+    libvlc_instance_t* m_vlcInstance;
+    libvlc_media_player_t* m_vlcPlayer;
+    libvlc_media_t* m_vlcMedia;
 };
 
 #endif // AUDIOOUTPUT_H
