@@ -27,7 +27,6 @@ public:
 public slots:
     void runDbCmd()
     {
-        // TODO FIX database so that ready is emitted after the index is loaded and at least one worker runs.
         database->enqueue( cmd );
     }
 
