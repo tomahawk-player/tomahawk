@@ -66,6 +66,8 @@ public:
     explicit ScanManager( QObject* parent = 0 );
     virtual ~ScanManager();
 
+    void init();
+
 signals:
     void started();
     void progress( unsigned int files );

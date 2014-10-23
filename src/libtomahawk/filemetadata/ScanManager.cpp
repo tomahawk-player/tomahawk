@@ -89,17 +89,6 @@ ScanManager::ScanManager( QObject* parent )
     m_scanTimer = new QTimer( this );
     m_scanTimer->setSingleShot( false );
     m_scanTimer->setInterval( TomahawkSettings::instance()->scannerTime() * 1000 );
-
-    connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
-    connect( m_scanTimer, SIGNAL( timeout() ), SLOT( scanTimerTimeout() ) );
-
-    if ( TomahawkSettings::instance()->hasScannerPaths() )
-    {
-        m_cachedScannerDirs = TomahawkSettings::instance()->scannerPaths();
-        m_scanTimer->start();
-        if ( TomahawkSettings::instance()->watchForChanges() )
-            QTimer::singleShot( 1000, this, SLOT( runStartupScan() ) );
-    }
 }
 
 
@@ -116,6 +105,22 @@ ScanManager::~ScanManager()
         m_musicScannerThreadController = 0;
     }
     qDebug() << Q_FUNC_INFO << "scanner thread controller finished, exiting ScanManager";
+}
+
+
+void
+ScanManager::init()
+{
+    connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
+    connect( m_scanTimer, SIGNAL( timeout() ), SLOT( scanTimerTimeout() ) );
+
+    if ( TomahawkSettings::instance()->hasScannerPaths() )
+    {
+        m_cachedScannerDirs = TomahawkSettings::instance()->scannerPaths();
+        m_scanTimer->start();
+        if ( TomahawkSettings::instance()->watchForChanges() )
+            QTimer::singleShot( 1000, this, SLOT( runStartupScan() ) );
+    }
 }
 
 
