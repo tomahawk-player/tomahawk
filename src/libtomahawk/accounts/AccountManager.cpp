@@ -307,7 +307,8 @@ AccountManager::finishLoadingFromConfig( const QString& csid )
             if ( m_accountFactories.contains( pluginFactory ) )
             {
                 Account* account = loadPlugin( accountId );
-                addAccount( account );
+                if ( account )
+                    addAccount( account );
             }
         }
     }
@@ -336,10 +337,14 @@ AccountManager::loadPlugin( const QString& accountId )
     QString factoryName = factoryFromId( accountId );
 
     Q_ASSERT( m_accountFactories.contains( factoryName ) );
+    if ( !m_accountFactories.contains( factoryName ) )
+        return 0;
 
     Account* account = m_accountFactories[ factoryName ]->createAccount( accountId );
-    hookupAccount( account );
+    if ( !account )
+        return 0;
 
+    hookupAccount( account );
     return account;
 }
 
