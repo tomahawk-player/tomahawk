@@ -107,9 +107,6 @@ public:
     MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& paths, quint32 bs = 0 );
     ~MusicScanner();
 
-    void showProgress( bool _showProgress );
-    bool showingProgress();
-
     /**
      * Specify if we want a dry run, i.e. not change any of the internal data stores.
      *
@@ -153,7 +150,6 @@ private:
     QStringList m_paths;
     unsigned int m_scanned;
     unsigned int m_skipped;
-    bool m_showProgress;
     bool m_dryRun;
     bool m_verbose;
 
