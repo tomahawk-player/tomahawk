@@ -8,6 +8,7 @@ Version 0.8.0:
     * Improved connecting between Tomahawk peers and support having multiple IPs
       (including IPv6).
     * Removed Top Loved from sidebar.
+    * Removed Spotify playlist syncing (we will bring it back in future versions).
     * JavaScript-Resolver can now handle URLs (e.g. when dropped from a browser)
       and resolve them to Playlists/Tracks/Artists/Albums.
     * HTTP(S) streaming is now done by Tomahawk instead of the Phonon backend
