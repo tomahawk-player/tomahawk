@@ -47,7 +47,6 @@ main( int argc, char* argv[] )
         MusicScanner scanner( MusicScanner::DirScan, paths, 0 );
 
         // We want a dry-run of the scanner and not update any internal data.
-        scanner.showProgress( false );
         scanner.setDryRun( true );
         scanner.setVerbose( true );
 
@@ -68,4 +67,3 @@ main( int argc, char* argv[] )
         std::cerr << "Unknown path (type) given, cannot handle this." << std::endl;
     }
 }
-   

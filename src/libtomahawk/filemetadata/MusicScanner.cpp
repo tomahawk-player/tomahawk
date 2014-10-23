@@ -35,8 +35,6 @@
 
 #include "config.h"
 
-#include <QCoreApplication>
-
 using namespace Tomahawk;
 
 void
@@ -139,7 +137,6 @@ MusicScanner::MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& 
     , m_scanMode( scanMode )
     , m_paths( paths )
     , m_scanned( 0 )
-    , m_showProgress( true )
     , m_dryRun( false )
     , m_verbose( false )
     , m_cmdQueue( 0 )
@@ -161,20 +158,6 @@ MusicScanner::~MusicScanner()
         delete m_dirListerThreadController;
         m_dirListerThreadController = 0;
     }
-}
-
-
-void
-MusicScanner::showProgress( bool _showProgress )
-{
-    m_showProgress = _showProgress;
-}
-
-
-bool
-MusicScanner::showingProgress()
-{
-    return m_showProgress;
 }
 
 
