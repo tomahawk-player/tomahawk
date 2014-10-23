@@ -28,6 +28,7 @@
 #include "Source.h"
 #include "IndexingJobItem.h"
 #include "PipelineStatusItem.h"
+#include "ScannerStatusItem.h"
 #include "TransferStatusItem.h"
 #include "LatchedStatusItem.h"
 
@@ -95,6 +96,7 @@ JobStatusView::JobStatusView( AnimatedSplitter* parent )
 
     new IndexStatusManager( this );
     new PipelineStatusManager( this );
+    new ScannerStatusManager( this );
     new TransferStatusManager( this );
     new LatchedStatusManager( this );
 
