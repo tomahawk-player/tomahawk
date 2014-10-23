@@ -491,20 +491,6 @@ Source::dbLoaded( unsigned int id, const QString& fname )
 
 
 void
-Source::scanningProgress( unsigned int files )
-{
-    Q_D( Source );
-
-    if ( files )
-        d->textStatus = tr( "Scanning (%L1 tracks)" ).arg( files );
-    else
-        d->textStatus = tr( "Scanning" );
-
-    emit stateChanged();
-}
-
-
-void
 Source::scanningFinished( bool updateGUI )
 {
     Q_D( Source );
