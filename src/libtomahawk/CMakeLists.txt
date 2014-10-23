@@ -29,6 +29,7 @@ set( libGuiSources
     jobview/JobStatusItem.cpp
     jobview/AclJobItem.cpp
     jobview/PipelineStatusItem.cpp
+    jobview/ScannerStatusItem.cpp
     jobview/TransferStatusItem.cpp
     jobview/LatchedStatusItem.cpp
     jobview/ErrorStatusMessage.cpp
