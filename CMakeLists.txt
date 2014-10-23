@@ -236,7 +236,8 @@ else( Qt5Core_DIR )
 endif( Qt5Core_DIR )
 
 if( BUILD_GUI AND UNIX AND NOT APPLE )
-    find_package( X11 )
+    macro_optional_find_package( X11 )
+    macro_log_feature(X11_FOUND "X11" "The Xorg libraries" "http://www.x.org/wiki/" TRUE "" "Xorg libraries are used by libqnetwm to bring windows to front reliably")
 endif()
 
 include(CheckCXXCompilerFlag)
