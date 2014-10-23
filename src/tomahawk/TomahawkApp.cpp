@@ -608,6 +608,7 @@ TomahawkApp::onInfoSystemReady()
     Echonest::Config::instance()->setNetworkAccessManager( Tomahawk::Utils::nam() );
     EchonestGenerator::setupCatalogs();
 
+    m_scanManager = QPointer<ScanManager>( new ScanManager( this ) );
     if ( !m_headless )
     {
         tDebug() << "Init MainWindow.";
@@ -626,10 +627,10 @@ TomahawkApp::onInfoSystemReady()
     tDebug() << "Init Pipeline.";
     initPipeline();
 
-    m_scanManager = QPointer<ScanManager>( new ScanManager( this ) );
+    m_scanManager->init();
     if ( arguments().contains( "--filescan" ) )
     {
-        m_scanManager.data()->runFullRescan();
+        m_scanManager->runFullRescan();
     }
 
     // load remote list of resolvers able to be installed
