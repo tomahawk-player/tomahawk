@@ -93,7 +93,6 @@ public:
 
     const QSet< Tomahawk::peerinfo_ptr > peerInfos() const;
 
-    void scanningProgress( unsigned int files );
     void scanningFinished( bool updateGUI );
 
     unsigned int trackCount() const;
