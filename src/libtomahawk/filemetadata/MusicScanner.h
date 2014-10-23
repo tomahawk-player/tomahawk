@@ -130,6 +130,7 @@ signals:
     //void fileScanned( QVariantMap );
     void finished();
     void batchReady( const QVariantList&, const QVariantList& );
+    void progress( unsigned int files );
 
 private:
     QVariant readFile( const QFileInfo& fi );
