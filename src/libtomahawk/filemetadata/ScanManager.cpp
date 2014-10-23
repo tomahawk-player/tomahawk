@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -56,6 +56,7 @@ MusicScannerThreadController::run()
 {
     m_musicScanner = QPointer< MusicScanner >( new MusicScanner( m_mode, m_paths, m_bs ) );
     connect( m_musicScanner.data(), SIGNAL( finished() ), parent(), SLOT( scannerFinished() ), Qt::QueuedConnection );
+    connect( m_musicScanner.data(), SIGNAL( progress( unsigned int ) ), parent(), SIGNAL( progress( unsigned int ) ), Qt::QueuedConnection );
     QMetaObject::invokeMethod( m_musicScanner.data(), "startScan", Qt::QueuedConnection );
 
     exec();
