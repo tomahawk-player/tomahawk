@@ -151,13 +151,18 @@ qt_add_resources( RC_SRCS "../../resources.qrc" )
 
 SET( final_src ${final_src} ${tomahawkUI_H} ${tomahawkMoc} ${tomahawkSources} ${RC_SRCS} )
 
+if(APPLE)
+    set(TOMAHAWK_RUNTIME_OUTPUT_NAME "Tomahawk")
+else()
+    set(TOMAHAWK_RUNTIME_OUTPUT_NAME "tomahawk")
+endif()
 
 ADD_EXECUTABLE( tomahawk_bin WIN32 MACOSX_BUNDLE ${final_src} )
 SET_TARGET_PROPERTIES(tomahawk_bin
     PROPERTIES
         AUTOMOC TRUE
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_BINARY_DIR}/Info.plist"
-        RUNTIME_OUTPUT_NAME tomahawk
+        RUNTIME_OUTPUT_NAME ${TOMAHAWK_RUNTIME_OUTPUT_NAME}
 )
 
 
@@ -194,7 +199,7 @@ TARGET_LINK_LIBRARIES( tomahawk_bin
 IF( APPLE )
   IF( HAVE_SPARKLE )
     MESSAGE("Sparkle Found, installing framekwork in bundle")
-    INSTALL(DIRECTORY "${SPARKLE}/Versions/Current/Resources" DESTINATION "${CMAKE_BINARY_DIR}/tomahawk.app/Contents/Frameworks/Sparkle.framework")
+    INSTALL(DIRECTORY "${SPARKLE}/Versions/Current/Resources" DESTINATION "${CMAKE_BINARY_DIR}/Tomahawk.app/Contents/Frameworks/Sparkle.framework")
 
   ENDIF( HAVE_SPARKLE )
 ENDIF( APPLE )
