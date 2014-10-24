@@ -1539,6 +1539,14 @@ Password (OTP)</source>
     </message>
 </context>
 <context>
+    <name>ScannerStatusItem</name>
+    <message>
+        <location filename="../src/libtomahawk/jobview/ScannerStatusItem.cpp" line="55"/>
+        <source>Scanning Collection</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>ScriptCollectionHeader</name>
     <message>
         <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="48"/>
@@ -3523,43 +3531,37 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="499"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="554"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="540"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Söker igenom (%L1 spår)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="501"/>
-        <source>Scanning</source>
-        <translation>Skannar</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="539"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="525"/>
         <source>Checking</source>
         <translation>Kontrollerar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="544"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="530"/>
         <source>Syncing</source>
         <translation>Synkroniserar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="549"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="535"/>
         <source>Importing</source>
         <translation>Importerar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="739"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="725"/>
         <source>Saving (%1%)</source>
         <translation>Sparar (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="826"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="812"/>
         <source>Online</source>
         <translation>Online</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="830"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="816"/>
         <source>Offline</source>
         <translation>Offline</translation>
     </message>
@@ -3752,21 +3754,21 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="689"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="690"/>
         <source>Updating database
 </source>
         <translation>Uppdaterar databasen
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="696"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="697"/>
         <source>Updating database
 %1</source>
         <translation>Uppdaterar databasen
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="746"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="747"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Automatisk extern IP-upptäckt misslyckades</translation>
     </message>

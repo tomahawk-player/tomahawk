@@ -1540,6 +1540,14 @@ jednorazowe (OTP)</translation>
     </message>
 </context>
 <context>
+    <name>ScannerStatusItem</name>
+    <message>
+        <location filename="../src/libtomahawk/jobview/ScannerStatusItem.cpp" line="55"/>
+        <source>Scanning Collection</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>ScriptCollectionHeader</name>
     <message>
         <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="48"/>
@@ -3527,43 +3535,37 @@ wysłane przez %1.</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="499"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="554"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="540"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Skanowanie (%L1 utworów)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="501"/>
-        <source>Scanning</source>
-        <translation>Skanowanie</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="539"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="525"/>
         <source>Checking</source>
         <translation>Sprawdzanie</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="544"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="530"/>
         <source>Syncing</source>
         <translation>Synchronizowanie</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="549"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="535"/>
         <source>Importing</source>
         <translation>Importowanie</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="739"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="725"/>
         <source>Saving (%1%)</source>
         <translation>Zapisywanie (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="826"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="812"/>
         <source>Online</source>
         <translation>Online</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="830"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="816"/>
         <source>Offline</source>
         <translation>Offline</translation>
     </message>
@@ -3756,21 +3758,21 @@ wysłane przez %1.</translation>
         <translation>Ty</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="689"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="690"/>
         <source>Updating database
 </source>
         <translation>Aktualizowanie bazy danych
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="696"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="697"/>
         <source>Updating database
 %1</source>
         <translation>Aktualizowanie bazy danych
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="746"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="747"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Automatyczne wykrywanie zewnętrznego adresu IP nie powiodło się.</translation>
     </message>

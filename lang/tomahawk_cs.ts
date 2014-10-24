@@ -1540,6 +1540,14 @@ heslo</translation>
     </message>
 </context>
 <context>
+    <name>ScannerStatusItem</name>
+    <message>
+        <location filename="../src/libtomahawk/jobview/ScannerStatusItem.cpp" line="55"/>
+        <source>Scanning Collection</source>
+        <translation>Prohledání sbírky</translation>
+    </message>
+</context>
+<context>
     <name>ScriptCollectionHeader</name>
     <message>
         <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="48"/>
@@ -3523,43 +3531,37 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="499"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="554"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="540"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Prohledává se (%L1 skladeb)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="501"/>
-        <source>Scanning</source>
-        <translation>Prohledává se</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="539"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="525"/>
         <source>Checking</source>
         <translation>Přezkušuje se</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="544"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="530"/>
         <source>Syncing</source>
         <translation>Seřizuje se</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="549"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="535"/>
         <source>Importing</source>
         <translation>Zavádí se</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="739"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="725"/>
         <source>Saving (%1%)</source>
         <translation>Ukládá se (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="826"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="812"/>
         <source>Online</source>
         <translation>Připojený</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="830"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="816"/>
         <source>Offline</source>
         <translation>Nepřipojený</translation>
     </message>
@@ -3752,21 +3754,21 @@ Zkuste vyladit filtry pro nové písně.</translation>
         <translation>Vy</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="689"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="690"/>
         <source>Updating database
 </source>
         <translation>Obnovit databázi
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="696"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="697"/>
         <source>Updating database
 %1</source>
         <translation>Obnovit databázi
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="746"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="747"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Automatické zjištění vnější adresy IP se nezdařilo.</translation>
     </message>
