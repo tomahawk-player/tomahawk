@@ -336,7 +336,7 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
         for ( int i = 0; i < m_resultsModel->rowCount( QModelIndex() ); i++ )
         {
             PlayableItem* item = m_resultsModel->itemFromIndex( m_resultsModel->index( i, 0, QModelIndex() ) );
-            if ( item && item->query() )
+            if ( item && item->query() && item->query()->numResults( true ) )
             {
                 if ( item->query()->results().first()->score() < q->results().first()->score() )
                 {
