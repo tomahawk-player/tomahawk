@@ -157,16 +157,17 @@ Database::~Database()
         workerThread->quit();
     }
 
+    emit waitingForWorkers();
     if ( m_workerRW )
     {
-        m_workerRW.data()->wait( 60000 );
+        m_workerRW.data()->wait();
         delete m_workerRW.data();
     }
     foreach ( QPointer< DatabaseWorkerThread > workerThread, m_workerThreads )
     {
         if ( workerThread )
         {
-            workerThread.data()->wait( 60000 );
+            workerThread.data()->wait();
             delete workerThread.data();
         }
     }
@@ -176,6 +177,7 @@ Database::~Database()
     qDeleteAll( m_commandFactories.values() );
     delete m_impl;
 
+    emit workersFinished();
 }
 
 
