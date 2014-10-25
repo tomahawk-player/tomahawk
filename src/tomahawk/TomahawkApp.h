@@ -102,12 +102,13 @@ public slots:
     void instanceStarted( KDSingleApplicationGuard::Instance );
 
 private slots:
-    void playlistRemoved( const Tomahawk::playlist_ptr& playlist );
     void initServent();
     void initSIP();
     void initHTTP();
     void initFactoriesForAccountManager();
     void initEnergyEventHandler();
+
+    void onShutdownDelayed();
 
     void spotifyApiCheckFinished();
     void onInfoSystemReady();
@@ -120,6 +121,7 @@ private slots:
     void updateSplashWidgetMessage( const QString& message );
     void killSplashWidget();
 
+    void playlistRemoved( const Tomahawk::playlist_ptr& playlist );
     void ipDetectionFailed( QNetworkReply::NetworkError error, QString errorString );
 
 private:

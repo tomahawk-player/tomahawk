@@ -103,6 +103,7 @@
 #include <QTime>
 #include <QMessageBox>
 #include <QNetworkReply>
+#include <QProgressDialog>
 #include <QFile>
 #include <QFileInfo>
 #include <QTranslator>
@@ -469,6 +470,8 @@ TomahawkApp::initDatabase()
     m_database = QPointer<Tomahawk::Database>( new Tomahawk::Database( dbpath, this ) );
     // this also connects dbImpl schema update signals
 
+    connect( m_database.data(), SIGNAL( waitingForWorkers() ), SLOT( onShutdownDelayed() ) );
+
     Pipeline::instance()->databaseReady();
 }
 
@@ -590,6 +593,25 @@ TomahawkApp::initSIP()
         tDebug( LOGINFO ) << "Connecting SIP classes";
         Accounts::AccountManager::instance()->initSIP();
     }
+}
+
+
+void
+TomahawkApp::onShutdownDelayed()
+{
+    QProgressDialog* d = new QProgressDialog( tr( "Tomahawk is updating the database. Please wait, this may take a minute!" ), QString(),
+                                              0, 0, 0, Qt::Tool
+                                              | Qt::WindowTitleHint
+                                              | Qt::CustomizeWindowHint );
+    d->setModal( true );
+    d->setAutoClose( false );
+    d->setAutoReset( false );
+    d->setWindowTitle( tr( "Tomahawk" ) );
+
+#ifdef Q_OS_MAC
+    d->setAttribute( Qt::WA_MacAlwaysShowToolWindow );
+#endif
+    d->show();
 }
 
 
