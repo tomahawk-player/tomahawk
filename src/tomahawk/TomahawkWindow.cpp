@@ -113,7 +113,9 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     , m_trayIcon( 0 )
     , m_audioRetryCounter( 0 )
 {
+#ifndef Q_OS_MAC
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
+#endif
 
     new ViewManager( this );
     QueueView* queueView = new QueueView();
