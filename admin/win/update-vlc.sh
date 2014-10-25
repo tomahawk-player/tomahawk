@@ -50,6 +50,7 @@ tar xvjf pvlc.tar.bz2
 
 
 # this is for vlc-2.x
+cd vlc/plugins
 rm -rvf \
     video_*/ \
     gui/ \
@@ -76,8 +77,8 @@ rm -rvf \
     **/liblibbluray_plugin* \
     **/libdtv_plugin* \
     **/*.dll.a \
-    **/*.la
+    **/*.la \
+    misc/liblogger_plugin*
 
 
 echo "Downloaded and stripped VLC"
-
