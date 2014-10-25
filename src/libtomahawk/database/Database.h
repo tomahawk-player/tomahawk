@@ -108,6 +108,9 @@ signals:
     void newJobRO( Tomahawk::dbcmd_ptr );
     void newJobRW( Tomahawk::dbcmd_ptr );
 
+    void waitingForWorkers();
+    void workersFinished();
+
 public slots:
     void enqueue( const Tomahawk::dbcmd_ptr& lc );
     void enqueue( const QList< Tomahawk::dbcmd_ptr >& lc );
