@@ -1,8 +1,23 @@
 Version 0.9.0:
 
 Version 0.8.0:
+    * Redesigned - Shiny new interface. Simplified. New icons.
+    * Added Friend Feed
+    * Now Playing notifications (OS X & Windows) - support for OS-level notification systems 
+    (e.g. Notification Center) with fallback to its own native notification system.
+    * Many actions now available in context menu - including Favorite and Send to a Friend
+    * Drag and drop support for iTunes, Deezer, Beats Music, Rdio, Spotify, SoundCloud links (into Tomahawk)
+    * Added Hatchet plug-in
+    * Added Google Play Music and Beats Music support 
+    * Add links to Support site, Bug Reports and Translations to Help menu
+    * Add "What's New" page to display on first launch (or until user dismisses it) - also available from Help menu
+    * Changed label from "Resolvers" and "Services" to more generic "Plug-Ins"
+    * Clarified some labels, help text and status messages
+    * Changed icon color a bit
     * Added "Acoustic" and "Electric" songtypes to Stations options
+    * Removed some stale Chart sources
     * Playback Queue now saves its state across sessions.
+    * Queue now moved to sidebar
     * Added "Inbox" feature, showing incoming song recommendations. Dropping
       a track on a user in the sidebar sends a recommendation to them.
     * You will now be asked whether you want to trust invalid SSL certificates.
@@ -10,16 +25,17 @@ Version 0.8.0:
       (including IPv6).
     * Removed Top Loved from sidebar.
     * Removed Spotify playlist syncing (we will bring it back in future versions).
-    * JavaScript-Resolver can now handle URLs (e.g. when dropped from a browser)
+    * JavaScript-Resolvers can now handle URLs (e.g. when dropped from a browser)
       and resolve them to Playlists/Tracks/Artists/Albums.
     * HTTP(S) streaming is now done by Tomahawk instead of the Phonon backend
       (fixed HTTPS streaming on MacOS).
     * Heavily reduced memory footprint during and after indexing the database.
     * Retina display and DPI scaling fixes.
-    * New Collection views.
+    * New Collection views. Re-added support for tracklist view of Collection.
     * Added Telepathy support.
     * Plugin refactoring (and .AXE resolver binaries).
     * Removed Twitter due to change in Twitter's API.
+    * Removed auto-playlists.
     * Improved error messages.
     * Added basic remote control API.
     * Add support for Opus codec (requires TagLib 1.9).
@@ -28,7 +44,7 @@ Version 0.8.0:
     * Support additional headers in CustomUrlHandler.
     * Fuzzy search indices for JS Resolvers.
     * Add metadata retrieval of HTTP(S) streams in JavaScript resolvers.
-    * Support for Windows, OS X and Growl notifications.
+
 
 Version 0.7.0:
     * JavaScript Resolvers can now expose collections.
