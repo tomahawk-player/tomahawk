@@ -29,7 +29,7 @@ Tomahawk provides some tools that help highlight where crashes (of course we onl
 
 ##### ```BUILD_HATCHET``` (boolean) (default: ON)
 
-Build the account plugin for Hatchet (http://hatchet.is).
+Build the account plugin for Hatchet (http://hatchet.is). Requires [websocketpp](https://github.com/zaphoyd/websocketpp).
 
 ##### ```BUILD_WITH_QT4``` (boolean) (default: ON)
 
@@ -70,4 +70,4 @@ In openSUSE there are macros for updating icon caches in KDE and GNOME (```%desk
 
 ### Firewall
 
-Tomahawk offers P2P functionality, if your distribution offers a default firewall, it's nice to support a default profile for the standard Tomahawk P2P-port (50210). (cf. https://build.opensuse.org/package/view_file/KDE:Extra/tomahawk/tomahawk.SuSEfirewall2?expand=1 for openSUSE integration)
+Tomahawk offers P2P functionality, if your distribution offers a default firewall, it's nice to support a default profile for the standard Tomahawk P2P-port (50210). (cf. [openSUSE integration](https://build.opensuse.org/package/view_file/KDE:Extra/tomahawk/tomahawk.SuSEfirewall2?expand=1))
