@@ -1,6 +1,7 @@
 Version 0.9.0:
 
 Version 0.8.0:
+    * Added "Acoustic" and "Electric" songtypes to Stations options
     * Playback Queue now saves its state across sessions.
     * Added "Inbox" feature, showing incoming song recommendations. Dropping
       a track on a user in the sidebar sends a recommendation to them.
