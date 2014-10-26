@@ -61,9 +61,6 @@ If your distribution splits the QSqlite plugin for QSql into a separate package,
 
 Either jreen or (at least) Tomahawk's package should require the qca-ossl plugin, otherwise there will be no GTalk/Jabber support.
 
-##### Audio / Phonon
-Tomahawk requires phonon-vlc >= 0.4.1 or phonon-gstreamer >= 4.6.1 (esp. phonon-xine in any version will not work!).
-
 ### Icon caches
 
 In openSUSE there are macros for updating icon caches in KDE and GNOME (```%desktop_database_post[un]``` ```%icon_theme_cache_post[un]```) after [un]installation, check if your distribution offers the same.
