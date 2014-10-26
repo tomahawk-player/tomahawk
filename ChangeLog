@@ -6,7 +6,10 @@ Version 0.8.0:
     * Now Playing notifications (OS X & Windows) - support for OS-level notification systems 
     (e.g. Notification Center) with fallback to its own native notification system.
     * Many actions now available in context menu - including Favorite and Send to a Friend.
-    * Drag and drop support for iTunes, Deezer, Beats Music, Rdio, Spotify, SoundCloud links (into Tomahawk).
+    * Drag and drop support for iTunes, Deezer, Beats Music, Rdio, Spotify, SoundCloud links (into Tomahawk)
+      for playlists/tracks/artists/album links.
+    * Support for clicking source icon for currently playing track in audio controls to take user to associated page
+      on source's site
     * Added Hatchet plug-in.
     * Added Google Play Music and Beats Music support.
     * Add links to Support site, Bug Reports and Translations to Help menu.
@@ -25,8 +28,6 @@ Version 0.8.0:
       (including IPv6).
     * Removed Top Loved from sidebar.
     * Removed Spotify playlist syncing (we will bring it back in future versions).
-    * JavaScript-Resolvers can now handle URLs (e.g. when dropped from a browser)
-      and resolve them to Playlists/Tracks/Artists/Albums.
     * HTTP(S) streaming is now done by Tomahawk instead of the Phonon backend
       (fixed HTTPS streaming on MacOS).
     * Heavily reduced memory footprint during and after indexing the database.
