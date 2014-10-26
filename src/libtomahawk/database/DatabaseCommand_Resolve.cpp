@@ -34,7 +34,8 @@ DatabaseCommand_Resolve::DatabaseCommand_Resolve( const query_ptr& query )
     : DatabaseCommand()
     , m_query( query )
 {
-    Q_ASSERT( Pipeline::instance()->isRunning() );
+    // FIXME: We need to run tests of this DbCmd without a Pipeline
+    // Q_ASSERT( Pipeline::instance()->isRunning() );
 }
 
 
