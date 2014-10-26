@@ -974,7 +974,7 @@ Servent::checkACLResult( const QString& nodeid, const QString& username, Tomahaw
     QSet<Tomahawk::peerinfo_ptr> peerInfos = d->queuedForACLResult.value( username ).value( nodeid );
     if ( peerStatus == Tomahawk::ACLStatus::Stream )
     {
-        foreach ( Tomahawk::peerinfo_ptr peerInfo, peerInfos )
+        foreach ( const Tomahawk::peerinfo_ptr& peerInfo, peerInfos )
         {
             registerPeer( peerInfo );
         }
