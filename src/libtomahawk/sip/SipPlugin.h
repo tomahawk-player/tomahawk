@@ -51,7 +51,7 @@ public:
     enum AddContactOptions { NoOptions = 0, SendInvite = 1 };
 
     SipPlugin();
-    explicit SipPlugin( Tomahawk::Accounts::Account* account, QObject* parent = 0 );
+    explicit SipPlugin( Tomahawk::Accounts::Account* account, QObject* parent = nullptr );
     virtual ~SipPlugin();
 
     // plugin id is "pluginfactoryname_someuniqueid".  get it from SipPluginFactory::generateId

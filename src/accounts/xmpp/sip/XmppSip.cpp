@@ -92,9 +92,9 @@ JreenMessageHandler( QtMsgType type, const char *msg )
 XmppSipPlugin::XmppSipPlugin( Account* account )
     : SipPlugin( account )
     , m_state( Account::Disconnected )
-    , m_menu( 0 )
-    , m_xmlConsole( 0 )
-    , m_pubSubManager( 0 )
+    , m_menu( nullptr )
+    , m_xmlConsole( nullptr )
+    , m_pubSubManager( nullptr )
 {
 #if QT_VERSION <= QT_VERSION_CHECK( 5, 0, 0 )
     Jreen::Logger::addHandler( JreenMessageHandler );

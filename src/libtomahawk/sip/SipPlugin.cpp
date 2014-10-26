@@ -67,7 +67,7 @@ SipPlugin::inviteString() const
 QMenu*
 SipPlugin::menu()
 {
-    return 0;
+    return nullptr;
 }
 
 
