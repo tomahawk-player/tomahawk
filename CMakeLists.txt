@@ -57,10 +57,16 @@ tomahawk_add_definitions( "-fvisibility=hidden" )
 tomahawk_add_definitions( "-DQT_STRICT_ITERATORS" )
 
 # build options
-option(BUILD_GUI "Build Tomahawk with GUI" ON)
 option(BUILD_RELEASE "Generate TOMAHAWK_VERSION without GIT info" OFF)
-option(BUILD_TESTS "Build Tomahawk with unit tests" ON)
-option(BUILD_TOOLS "Build Tomahawk helper tools" ON)
+if(BUILD_RELEASE)
+    set(BUILD_NO_RELEASE OFF)
+else()
+    set(BUILD_NO_RELEASE ON)
+endif()
+
+option(BUILD_GUI "Build Tomahawk with GUI" ON)
+option(BUILD_TESTS "Build Tomahawk with unit tests" ${BUILD_NO_RELEASE})
+option(BUILD_TOOLS "Build Tomahawk helper tools" ${BUILD_NO_RELEASE})
 option(BUILD_HATCHET "Build the Hatchet plugin" ON)
 option(BUILD_WITH_QT4 "Build Tomahawk with Qt4 no matter if Qt5 was found" ON)
 
