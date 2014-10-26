@@ -34,20 +34,20 @@ class DLLEXPORT ACLJobDelegate : public QStyledItemDelegate
     Q_OBJECT
 
 public:
-    explicit ACLJobDelegate ( QObject* parent = 0 );
+    explicit ACLJobDelegate ( QObject* parent = nullptr );
     virtual ~ACLJobDelegate();
 
-    virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-    virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const override;
+    QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const override;
 
-    virtual void emitSizeHintChanged( const QModelIndex &index );
+    void emitSizeHintChanged( const QModelIndex &index );
 
 signals:
     void update( const QModelIndex& idx );
     void aclResult( Tomahawk::ACLStatus::Type result );
 
 protected:
-    virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
+    bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index ) override;
 
 private:
     void drawRoundedButton( QPainter* painter, const QRect& btnRect, bool red = false ) const;
@@ -65,21 +65,21 @@ public:
     explicit ACLJobItem( ACLRegistry::User user, const QString &username );
     virtual ~ACLJobItem();
 
-    virtual int weight() const { return 99; }
+    int weight() const override { return 99; }
     
-    virtual QString rightColumnText() const { return QString(); }
-    virtual QString mainText() const { return QString(); }
-    virtual QPixmap icon() const { return QPixmap(); }
-    virtual QString type() const { return "acljob"; }
+    QString rightColumnText() const override { return QString(); }
+    QString mainText() const override { return QString(); }
+    QPixmap icon() const override { return QPixmap(); }
+    QString type() const override { return "acljob"; }
 
-    virtual int concurrentJobLimit() const { return 3; }
+    int concurrentJobLimit() const override { return 3; }
 
-    virtual bool hasCustomDelegate() const { return true; }
-    virtual void createDelegate( QObject* parent = 0 );
-    virtual QStyledItemDelegate* customDelegate() const { return m_delegate; }
+    bool hasCustomDelegate() const override { return true; }
+    void createDelegate( QObject* parent = nullptr ) override;
+    QStyledItemDelegate* customDelegate() const override { return m_delegate; }
 
-    virtual ACLRegistry::User user() const { return m_user; }
-    virtual const QString& username() const { return m_username; }
+    ACLRegistry::User user() const { return m_user; }
+    const QString& username() const { return m_username; }
     
 signals:
     void userDecision( ACLRegistry::User user );

@@ -158,7 +158,7 @@ ACLJobDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
 
 
 ACLJobItem::ACLJobItem( ACLRegistry::User user, const QString &username )
-    : m_delegate( 0 )
+    : m_delegate( nullptr )
     , m_user( user )
     , m_username( username )
 {
