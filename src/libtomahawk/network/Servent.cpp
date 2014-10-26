@@ -959,18 +959,19 @@ Servent::socketError( QAbstractSocket::SocketError e )
 void
 Servent::checkACLResult( const QString& nodeid, const QString& username, Tomahawk::ACLStatus::Type peerStatus )
 {
+    Q_D( Servent );
 
-    if ( !d_func()->queuedForACLResult.contains( username ) )
+    if ( !d->queuedForACLResult.contains( username ) )
     {
         return;
     }
-    if ( !d_func()->queuedForACLResult.value( username ).contains( nodeid ) )
+    if ( !d->queuedForACLResult.value( username ).contains( nodeid ) )
     {
         return;
     }
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QString( "ACL status for user %1 is" ).arg( username ) << peerStatus;
-    QSet<Tomahawk::peerinfo_ptr> peerInfos = d_func()->queuedForACLResult.value( username ).value( nodeid );
+    QSet<Tomahawk::peerinfo_ptr> peerInfos = d->queuedForACLResult.value( username ).value( nodeid );
     if ( peerStatus == Tomahawk::ACLStatus::Stream )
     {
         foreach ( Tomahawk::peerinfo_ptr peerInfo, peerInfos )
@@ -980,7 +981,7 @@ Servent::checkACLResult( const QString& nodeid, const QString& username, Tomahaw
 
     }
     // We have a result, so remove from queue
-    d_func()->queuedForACLResult[username].remove( nodeid );
+    d->queuedForACLResult[username].remove( nodeid );
 }
 
 
