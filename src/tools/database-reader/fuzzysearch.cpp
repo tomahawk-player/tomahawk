@@ -44,7 +44,8 @@ public slots:
                 std::chrono::duration_cast<std::chrono::duration<double>>( resolveDoneTime - startTime );
 
         std::cerr << "Fulltext query took " << duration.count()
-                  << "s" << std::endl;
+                  << "s and returned " << results.length() << " results."
+                  << std::endl;
 
         // Query is destructed by deleteLater() so we need to wait for the
         // event queue to process it.
