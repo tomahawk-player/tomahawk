@@ -27,8 +27,8 @@ using namespace Tomahawk::Widgets;
 
 PlaylistWidget::PlaylistWidget( QWidget* parent )
     : QListView( parent )
+    , m_overlay( new OverlayWidget( this ) )
 {
-    m_overlay = new OverlayWidget( this );
     new LoadingSpinner( this );
 }
 
