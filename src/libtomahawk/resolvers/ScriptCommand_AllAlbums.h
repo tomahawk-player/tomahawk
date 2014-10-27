@@ -42,7 +42,6 @@ public:
 
 signals:
     void albums( const QList< Tomahawk::album_ptr >& );
-    void done();
 
 protected:
     virtual void exec();
