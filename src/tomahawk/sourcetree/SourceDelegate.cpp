@@ -87,7 +87,7 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
     }
     else if ( type == SourcesModel::Group )
     {
-        const int groupSpacer = index.row() > 0 ? option.fontMetrics.height() * 2.5 : option.fontMetrics.height() * 0.8;
+        const int groupSpacer = index.row() > 0 ? option.fontMetrics.height() * 2.5 : option.fontMetrics.height() * 1.8;
         return QSize( option.rect.width(), option.fontMetrics.height() + groupSpacer );
     }
     else
