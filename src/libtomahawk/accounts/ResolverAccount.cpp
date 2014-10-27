@@ -110,13 +110,13 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
             if ( !( dir.exists() && dir.isReadable() ) ) //decompression fubar
             {
                 displayError( tr( "Resolver installation error: cannot open bundle." ) );
-                return 0;
+                return nullptr;
             }
 
             if ( !dir.cd( "content" ) ) //more fubar
             {
                 displayError( tr( "Resolver installation error: incomplete bundle." ) );
-                return 0;
+                return nullptr;
             }
 
             QString metadataFilePath = dir.absoluteFilePath( "metadata.json" );
@@ -128,7 +128,7 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
             {
                 dir.cdUp();
                 if ( !dir.cdUp() ) //we're in MANUALRESOLVERS_DIR
-                    return 0;
+                    return nullptr;
 
                 QString name = configuration[ "pluginName" ].toString();
 
@@ -145,7 +145,7 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
                 configuration[ "bundleDir" ] = name;
 
                 if ( !dir.cd( QString( "%1/content" ).arg( name ) ) ) //should work if it worked once
-                    return 0;
+                    return nullptr;
             }
 
             expandPaths( dir, configuration );
@@ -154,7 +154,7 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
             if ( realPath.isEmpty() )
             {
                 displayError( tr( "Resolver installation error: bad metadata in bundle." ) );
-                return 0;
+                return nullptr;
             }
         }
         else //either legacy resolver or uncompressed bundle, so we look for a metadata file
@@ -190,7 +190,7 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
             if ( !myPlatform.contains( platform ) )
             {
                 displayError( tr( "Resolver installation error: platform mismatch." ) );
-                return 0;
+                return nullptr;
             }
         }
 
@@ -203,7 +203,7 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
             {
                 displayError( tr( "Resolver installation error: Tomahawk %1 or newer is required." )
                               .arg( requiredVer ) );
-                return 0;
+                return nullptr;
             }
         }
 
