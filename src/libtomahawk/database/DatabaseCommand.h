@@ -45,8 +45,8 @@ public:
         FINISHED = 2
     };
 
-    explicit DatabaseCommand( QObject* parent = 0 );
-    explicit DatabaseCommand( const Tomahawk::source_ptr& src, QObject* parent = 0 );
+    explicit DatabaseCommand( QObject* parent = nullptr );
+    explicit DatabaseCommand( const Tomahawk::source_ptr& src, QObject* parent = nullptr );
 
     DatabaseCommand( const DatabaseCommand &other ); //needed for QMetaType
 
