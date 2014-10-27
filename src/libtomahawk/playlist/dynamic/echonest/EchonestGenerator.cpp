@@ -715,7 +715,7 @@ EchonestGenerator::loadGenres()
             {
                 s_genres_lock.lockForWrite();
                 tLog() << "Genres not in cache or too old, refetching genres ...";
-                s_genresJob = Echonest::Genre::fetchList();
+                s_genresJob = Echonest::Genre::fetchList( Echonest::GenreInformation(), 2000 );
                 connect( s_genresJob, SIGNAL( finished() ), this, SLOT( genresReceived() ) );
             }
         }
