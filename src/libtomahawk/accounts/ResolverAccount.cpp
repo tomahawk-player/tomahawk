@@ -72,6 +72,38 @@ ResolverAccountFactory::createFromPath( const QString& path )
 }
 
 
+/**
+ * Check if the bundle specifies a platform, and if so, reject the
+ * resolver if the platform is wrong.
+ */
+bool
+isPlatformSupported( const QVariant& variant )
+{
+    // No platform specified, so accept it.
+    if ( variant.isNull() )
+        return true;
+
+    const QString platform( variant.toString() );
+    // We accept any platform
+    if ( platform == "any" )
+        return true;
+
+    QString myPlatform( "any" );
+#if defined( Q_OS_WIN )
+    myPlatform = "win";
+#elif defined( Q_OS_MAC )
+    myPlatform = "osx";
+#elif defined( Q_OS_LINUX )
+    if ( __WORDSIZE == 32 )
+        myPlatform = "linux-x86";
+    else if ( __WORDSIZE == 64 )
+        myPlatform = "linux-x64";
+#endif
+
+    return myPlatform.contains( platform );
+}
+
+
 Account*
 ResolverAccountFactory::createFromPath( const QString& path, const QString& factory,  bool isAttica )
 {
@@ -170,28 +202,10 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
             //else we just have empty metadata (legacy resolver without desktop file)
         }
 
-        //check if the bundle specifies a platform, and if so, reject the resolver if the platform is wrong
-        if ( !configuration[ "platform" ].isNull() && configuration[ "platform" ].toString() != "any" )
+        if ( !isPlatformSupported( configuration[ "platform" ] ) )
         {
-            QString platform( configuration[ "platform" ].toString() );
-            QString myPlatform( "any" );
-
-#if defined( Q_OS_WIN )
-            myPlatform = "win";
-#elif defined( Q_OS_MAC )
-            myPlatform = "osx";
-#elif defined( Q_OS_LINUX )
-            if ( __WORDSIZE == 32 )
-                myPlatform = "linux-x86";
-            else if ( __WORDSIZE == 64 )
-                myPlatform = "linux-x64";
-#endif
-
-            if ( !myPlatform.contains( platform ) )
-            {
-                displayError( tr( "Resolver installation error: platform mismatch." ) );
-                return nullptr;
-            }
+            displayError( tr( "Resolver installation error: platform mismatch." ) );
+            return nullptr;
         }
 
         if ( !configuration[ "tomahawkVersion" ].isNull() )
