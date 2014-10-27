@@ -457,8 +457,23 @@ def CopyFramework(path):
 
   menu_nib = os.path.join(os.path.split(path)[0], 'Resources', 'qt_menu.nib')
   if os.path.exists(menu_nib):
-    args = ['cp', '-r', menu_nib, resources_dir]
+    args = ['cp', '-rf', menu_nib, resources_dir]
     commands.append(args)
+
+  # Copy Contents/Info.plist to Resources/Info.plist if Resources/Info.plist does not exist
+  # If Contents/Info.plist doesn't exist either, error out. If we actually see this, we can copy QtCore's Info.plist
+  info_plist_in_resources = os.path.join(os.path.split(path)[0], '..', '..', 'Resources', 'Info.plist')
+  if not os.path.exists(info_plist_in_resources):
+    info_plist_in_contents = os.path.join(os.path.split(path)[0], '..', '..', 'Contents', 'Info.plist')
+    framework_resources_dir = os.path.join(full_path, '..', '..', 'Resources')
+    args = ['mkdir', '-p', framework_resources_dir]
+    commands.append(args)
+    if os.path.exists(info_plist_in_contents):
+      args = ['cp', '-rf', info_plist_in_contents, framework_resources_dir]
+      commands.append(args)
+    else:
+      print "%s: Framework does not contain an Info.plist file in Contents/ or Resources/ folder." % (path)
+      sys.exit(-1)
 
   return os.path.join(full_path, parts[-1])
 
