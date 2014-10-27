@@ -42,35 +42,35 @@ public:
     virtual ~JSResolver();
     static ExternalResolver* factory( const QString& accountId, const QString& scriptPath, const QStringList& additionalScriptPaths = QStringList() );
 
-    Capabilities capabilities() const Q_DECL_OVERRIDE;
+    Capabilities capabilities() const override;
 
-    QString name() const Q_DECL_OVERRIDE;
-    QPixmap icon() const Q_DECL_OVERRIDE;
-    unsigned int weight() const Q_DECL_OVERRIDE;
-    unsigned int timeout() const Q_DECL_OVERRIDE;
+    QString name() const override;
+    QPixmap icon() const override;
+    unsigned int weight() const override;
+    unsigned int timeout() const override;
 
-    AccountConfigWidget* configUI() const Q_DECL_OVERRIDE;
-    void saveConfig() Q_DECL_OVERRIDE;
+    AccountConfigWidget* configUI() const override;
+    void saveConfig() override;
 
-    ExternalResolver::ErrorState error() const Q_DECL_OVERRIDE;
-    bool running() const Q_DECL_OVERRIDE;
-    void reload() Q_DECL_OVERRIDE;
+    ExternalResolver::ErrorState error() const override;
+    bool running() const override;
+    void reload() override;
 
-    void setIcon( const QPixmap& icon ) Q_DECL_OVERRIDE;
+    void setIcon( const QPixmap& icon ) override;
 
-    bool canParseUrl( const QString& url, UrlType type ) Q_DECL_OVERRIDE;
+    bool canParseUrl( const QString& url, UrlType type ) override;
 
 public slots:
-    void resolve( const Tomahawk::query_ptr& query ) Q_DECL_OVERRIDE;
-    void stop() Q_DECL_OVERRIDE;
-    void start() Q_DECL_OVERRIDE;
+    void resolve( const Tomahawk::query_ptr& query ) override;
+    void stop() override;
+    void start() override;
 
     // For ScriptCollection
-    void artists( const Tomahawk::collection_ptr& collection ) Q_DECL_OVERRIDE;
-    void albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist ) Q_DECL_OVERRIDE;
-    void tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album ) Q_DECL_OVERRIDE;
+    void artists( const Tomahawk::collection_ptr& collection ) override;
+    void albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist ) override;
+    void tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album ) override;
     // For UrlLookup
-    void lookupUrl( const QString& url ) Q_DECL_OVERRIDE;
+    void lookupUrl( const QString& url ) override;
 
 signals:
     void stopped();
