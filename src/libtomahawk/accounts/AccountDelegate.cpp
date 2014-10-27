@@ -318,72 +318,19 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     painter->drawText( descRect, Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignTop, desc );
     runningBottom = descRect.bottom();
 
-    if ( index.data( AccountModel::CanRateRole ).toBool() )
+    // TODO: Readd download count
+    QString versionString = index.data( AccountModel::VersionRole ).toString();
+    if ( !versionString.isEmpty() )
     {
-        // rating stars
-        const int rating = index.data( AccountModel::RatingRole ).toInt();
-
-//         int runningEdge = opt.rect.right() - 2*PADDING - ratingWidth;
         int runningEdge = textRect.left();
-//         int starsTop = opt.rect.bottom() - 3*PADDING - m_ratingStarNegative.height();
-        int starsTop = runningBottom + PADDING;
-        for ( int i = 1; i < 6; i++ )
-        {
-            QRect r( runningEdge, starsTop, STAR_SIZE, STAR_SIZE );
-//             QRect r( runningEdge, opt.rect.top() + PADDING, m_ratingStarPositive.width(), m_ratingStarPositive.height() );
-            if ( i == 1 )
-                m_cachedStarRects[ index ] = r;
+        int pkgTop = runningBottom + PADDING;
+        int h = painter->fontMetrics().height();
 
-            const bool userHasRated = index.data( AccountModel::UserHasRatedRole ).toBool();
-            if ( !userHasRated && // Show on-hover animation if the user hasn't rated it yet, and is hovering over it
-                 m_hoveringOver > -1 &&
-                 m_hoveringItem == index )
-            {
-                if ( i <= m_hoveringOver ) // positive star
-                    painter->drawPixmap( r, TomahawkUtils::defaultPixmap( TomahawkUtils::StarHovered, TomahawkUtils::Original, r.size() ) );
-                else
-                    painter->drawPixmap( r, TomahawkUtils::defaultPixmap( TomahawkUtils::Unstarred, TomahawkUtils::Original, r.size() ) );
-            }
-            else
-            {
-                if ( i <= rating ) // positive or rated star
-                {
-                    if ( userHasRated )
-                        painter->drawPixmap( r, TomahawkUtils::defaultPixmap( TomahawkUtils::StarHovered, TomahawkUtils::Original, r.size() ) );
-                    else
-                        painter->drawPixmap( r, TomahawkUtils::defaultPixmap( TomahawkUtils::Starred, TomahawkUtils::Original, r.size() ) );
-                }
-                else
-                    painter->drawPixmap( r, TomahawkUtils::defaultPixmap( TomahawkUtils::Unstarred, TomahawkUtils::Original, r.size() ) );
-            }
-            runningEdge += STAR_SIZE + PADDING_BETWEEN_STARS;
-        }
+        QRect pkgRect( runningEdge, pkgTop, h, h );
+        painter->drawPixmap( pkgRect, TomahawkUtils::defaultPixmap( TomahawkUtils::ResolverBundle, TomahawkUtils::Original, pkgRect.size() ) );
 
-        // downloaded num times
-        QString count = tr( "%1 downloads" ).arg( index.data( AccountModel::DownloadCounterRole ).toInt() );
-        painter->setFont( descFont );
-        const int countW = painter->fontMetrics().width( count );
-        const QRect countRect( runningEdge + 50, starsTop, countW, painter->fontMetrics().height() );
-        count = painter->fontMetrics().elidedText( count, Qt::ElideRight, rightEdge - PADDING - countRect.left() );
-        painter->drawText( countRect, Qt::AlignLeft, count );
-        //         runningEdge = authorRect.x();
-    }
-    else //no rating, it's not attica, let's show other stuff...
-    {
-        QString versionString = index.data( AccountModel::VersionRole ).toString();
-
-        if ( !versionString.isEmpty() )
-        {
-            int runningEdge = textRect.left();
-            int pkgTop = runningBottom + PADDING;
-            int h = painter->fontMetrics().height();
-
-            QRect pkgRect( runningEdge, pkgTop, h, h );
-            painter->drawPixmap( pkgRect, TomahawkUtils::defaultPixmap( TomahawkUtils::ResolverBundle, TomahawkUtils::Original, pkgRect.size() ) );
-
-            QRect textRect( runningEdge + PADDING + h, pkgTop, painter->fontMetrics().width( versionString ), h );
-            painter->drawText( textRect, Qt::AlignLeft, versionString );
-        }
+        QRect textRect( runningEdge + PADDING + h, pkgTop, painter->fontMetrics().width( versionString ), h );
+        painter->drawText( textRect, Qt::AlignLeft, versionString );
     }
 
     // Title and description!
@@ -498,35 +445,6 @@ AccountDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QS
         {
             // Install/create/etc button for this row
             model->setData( index, true, AccountModel::CustomButtonRole );
-        }
-    }
-
-    if ( m_cachedStarRects.contains( index ) )
-    {
-        QRect fullStars = m_cachedStarRects[ index ];
-        const int starsWidth = 5 * ( STAR_SIZE + PADDING_BETWEEN_STARS );
-        fullStars.setWidth( starsWidth );
-
-        QMouseEvent* me = static_cast< QMouseEvent* >( event );
-
-        if ( fullStars.contains( me->pos() ) )
-        {
-            const int eachStar = starsWidth / 5;
-            const int clickOffset = me->pos().x() - fullStars.x();
-            const int whichStar = (clickOffset / eachStar) + 1;
-
-            if ( event->type() == QEvent::MouseButtonRelease )
-            {
-                model->setData( index, whichStar, AccountModel::RatingRole );
-            }
-            else if ( event->type() == QEvent::MouseMove )
-            {
-                // 0-indexed
-                m_hoveringOver = whichStar;
-                m_hoveringItem = index;
-            }
-
-            return true;
         }
     }
 

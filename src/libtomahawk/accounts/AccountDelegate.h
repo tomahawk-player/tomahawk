@@ -83,7 +83,6 @@ private:
     int m_hoveringOver;
     QPersistentModelIndex m_hoveringItem, m_configPressed;
     mutable QHash< QPersistentModelIndex, QRect > m_cachedButtonRects;
-    mutable QHash< QPersistentModelIndex, QRect > m_cachedStarRects;
     mutable QHash< QPersistentModelIndex, QRect > m_cachedConfigRects;
     mutable QHash< QPersistentModelIndex, QSize > m_sizeHints;
     mutable QHash< QPersistentModelIndex, AnimatedSpinner* > m_loadingSpinners;
