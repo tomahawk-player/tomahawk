@@ -109,15 +109,13 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
                                                            MANUALRESOLVERS_DIR ) );
             if ( !( dir.exists() && dir.isReadable() ) ) //decompression fubar
             {
-                JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
-                                        tr( "Resolver installation error: cannot open bundle." ) ) );
+                displayError( tr( "Resolver installation error: cannot open bundle." ) );
                 return 0;
             }
 
             if ( !dir.cd( "content" ) ) //more fubar
             {
-                JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
-                                        tr( "Resolver installation error: incomplete bundle." ) ) );
+                displayError( tr( "Resolver installation error: incomplete bundle." ) );
                 return 0;
             }
 
@@ -155,8 +153,7 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
             realPath = configuration[ "path" ].toString();
             if ( realPath.isEmpty() )
             {
-                JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
-                                        tr( "Resolver installation error: bad metadata in bundle." ) ) );
+                displayError( tr( "Resolver installation error: bad metadata in bundle." ) );
                 return 0;
             }
         }
@@ -193,8 +190,7 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
             if ( !myPlatform.contains( platform ) )
             {
                 tDebug() << "Wrong resolver platform.";
-                JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
-                                        tr( "Resolver installation error: platform mismatch." ) ) );
+                displayError( tr( "Resolver installation error: platform mismatch." ) );
                 return 0;
             }
         }
@@ -206,9 +202,8 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
 
             if ( TomahawkUtils::compareVersionStrings( thVer, requiredVer ) < 0 )
             {
-                JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
-                                        tr( "Resolver installation error: Tomahawk %1 or newer is required." )
-                                        .arg( requiredVer ) ) );
+                displayError( tr( "Resolver installation error: Tomahawk %1 or newer is required." )
+                              .arg( requiredVer ) );
                 return 0;
             }
         }
@@ -279,6 +274,13 @@ ResolverAccountFactory::expandPaths( const QDir& contentDir, QVariantHash& confi
         }
         configuration[ "scripts" ] = scripts;
     }
+}
+
+
+void
+ResolverAccountFactory::displayError( const QString& error )
+{
+    JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( error ) );
 }
 
 

@@ -56,8 +56,9 @@ public:
     static Account* createFromPath( const QString& path, const QString& factoryId, bool isAttica );
 
 private:
-    static QVariantHash metadataFromJsonFile( const QString& path );
+    static void displayError( const QString& error );
     static void expandPaths( const QDir& contentDir, QVariantHash& configuration );
+    static QVariantHash metadataFromJsonFile( const QString& path );
 };
 
 /**
