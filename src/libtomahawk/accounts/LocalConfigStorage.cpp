@@ -41,8 +41,8 @@ LocalConfigStorage::credentialsServiceName()
 
 LocalConfigStorage::LocalConfigStorage( QObject* parent )
     : ConfigStorage( parent )
+    , m_accountIds( TomahawkSettings::instance()->accounts() )
 {
-    m_accountIds = TomahawkSettings::instance()->accounts();
 }
 
 
