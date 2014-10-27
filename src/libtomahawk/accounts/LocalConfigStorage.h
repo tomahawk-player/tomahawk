@@ -31,21 +31,21 @@ class LocalConfigStorage : public ConfigStorage
 {
     Q_OBJECT
 public:
-    explicit LocalConfigStorage( QObject* parent = 0 );
+    explicit LocalConfigStorage( QObject* parent = nullptr );
 
-    virtual void init();
+    void init() override;
 
-    QString id() const;
+    QString id() const override;
 
-    QStringList accountIds() const;
+    QStringList accountIds() const override;
 
-    unsigned int priority() const;
+    unsigned int priority() const override;
 
-    void deduplicateFrom( const ConfigStorage* other );
+    void deduplicateFrom( const ConfigStorage* other ) override;
 
-    virtual void save( const QString& accountId, const Account::Configuration& cfg );
-    virtual void load( const QString& accountId, Account::Configuration& cfg ) const;
-    virtual void remove( const QString& accountId );
+    void save( const QString& accountId, const Account::Configuration& cfg ) override;
+    void load( const QString& accountId, Account::Configuration& cfg ) const override;
+    void remove( const QString& accountId ) override;
 
 #ifdef Q_OS_MAC
     static QString credentialsServiceName();
