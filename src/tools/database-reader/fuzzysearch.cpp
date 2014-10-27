@@ -7,6 +7,7 @@
 #include <QCoreApplication>
 #include <QDir>
 
+#include <chrono>
 #include <iostream>
 
 
@@ -21,18 +22,30 @@ public:
         database->loadIndex();
     }
 
-    Tomahawk::query_ptr query;
     Tomahawk::dbcmd_ptr cmd;
     QSharedPointer<Tomahawk::Database> database;
+    Tomahawk::query_ptr query;
+
+    // Time measurements
+    std::chrono::high_resolution_clock::time_point startTime;
+    std::chrono::high_resolution_clock::time_point resolveDoneTime;
 
 public slots:
     void runCmd()
     {
         database->enqueue( cmd );
+        startTime = std::chrono::high_resolution_clock::now();
     }
 
     void onResults( const Tomahawk::QID, const QList< Tomahawk::result_ptr>& results )
     {
+        resolveDoneTime = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> duration =
+                std::chrono::duration_cast<std::chrono::duration<double>>( resolveDoneTime - startTime );
+
+        std::cerr << "Fulltext query took " << duration.count()
+                  << "s" << std::endl;
+
         // Query is destructed by deleteLater() so we need to wait for the
         // event queue to process it.
         connect( query.data(), SIGNAL( destroyed( QObject* ) ),
