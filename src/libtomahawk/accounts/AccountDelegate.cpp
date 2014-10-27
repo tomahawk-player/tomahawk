@@ -114,7 +114,6 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     QFont titleFont = opt.font;
     titleFont.setBold( true );
     titleFont.setPointSize( titleFont.pointSize() + 2 );
-    const QFontMetrics titleMetrics( titleFont );
 
     QFont authorFont = opt.font;
     authorFont.setItalic( true );
@@ -126,7 +125,6 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
 
     QFont descFont = authorFont;
     descFont.setItalic( false );
-    const QFontMetrics descMetrics( descFont );
 
     QFont installFont = opt.font;
     installFont.setPointSize( installFont.pointSize() - 1 );
