@@ -90,7 +90,7 @@ JSResolver::~JSResolver()
 
 Tomahawk::ExternalResolver* JSResolver::factory( const QString& accountId, const QString& scriptPath, const QStringList& additionalScriptPaths )
 {
-    ExternalResolver* res = 0;
+    ExternalResolver* res = nullptr;
 
     const QFileInfo fi( scriptPath );
     if ( fi.suffix() == "js" || fi.suffix() == "script" )
