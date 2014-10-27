@@ -40,17 +40,17 @@ public:
     ResolverAccountFactory() {}
     virtual ~ResolverAccountFactory() {}
 
-    virtual Account* createAccount( const QString& accountId = QString() );
-    virtual QString factoryId() const  { return "resolveraccount"; }
-    virtual QString description() const { return QString(); }
-    virtual QString prettyName() const { return QString(); } // Internal, not displayed
-    AccountTypes types() const { return AccountTypes( ResolverType ); }
-    virtual bool allowUserCreation() const { return false; }
+    Account* createAccount( const QString& accountId = QString() ) override;
+    QString factoryId() const override { return "resolveraccount"; }
+    QString description() const override { return QString(); }
+    QString prettyName() const override { return QString(); } // Internal, not displayed
+    AccountTypes types() const override { return AccountTypes( ResolverType ); }
+    bool allowUserCreation() const override { return false; }
 
     // Used to create a new resolver from a script on disk, either chosen by
     // the user, or installed from synchrotron
-    virtual bool acceptsPath( const QString&  ) const { return true; } // This is the catch-all filesystem account
-    virtual Account* createFromPath( const QString& path );
+    bool acceptsPath( const QString&  ) const override { return true; } // This is the catch-all filesystem account
+    Account* createFromPath( const QString& path ) override;
 
     // Internal use
     static Account* createFromPath( const QString& path, const QString& factoryId, bool isAttica );
@@ -73,30 +73,30 @@ public:
     explicit ResolverAccount( const QString& accountId );
     virtual ~ResolverAccount();
 
-    virtual void authenticate();
-    virtual void deauthenticate();
-    virtual bool isAuthenticated() const;
-    virtual Tomahawk::Accounts::Account::ConnectionState connectionState() const;
+    void authenticate() override;
+    void deauthenticate() override;
+    bool isAuthenticated() const override;
+    Tomahawk::Accounts::Account::ConnectionState connectionState() const override;
 
-    virtual AccountConfigWidget* configurationWidget();
-    virtual QString errorMessage() const;
+    AccountConfigWidget* configurationWidget() override;
+    QString errorMessage() const override;
 
-    virtual void saveConfig();
-    virtual void removeFromConfig();
+    void saveConfig() override;
+    void removeFromConfig() override;
 
     QString path() const;
 
-    virtual QPixmap icon() const;
-    virtual QString description() const;
-    virtual QString author() const;
-    virtual QString version() const;
+    QPixmap icon() const override;
+    QString description() const override;
+    QString author() const override;
+    QString version() const override;
 
     // Not relevant
-    virtual SipPlugin* sipPlugin( bool ) { return 0; }
-    virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() { return Tomahawk::InfoSystem::InfoPluginPtr(); }
-    virtual QWidget* aclWidget() { return 0; }
+    SipPlugin* sipPlugin( bool ) override { return nullptr; }
+    Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() override { return Tomahawk::InfoSystem::InfoPluginPtr(); }
+    QWidget* aclWidget() override { return nullptr; }
 
-    virtual void removeBundle();
+    void removeBundle();
 
 private slots:
     void resolverChanged();
@@ -127,7 +127,7 @@ public:
     explicit AtticaResolverAccount( const QString& accountId );
     virtual ~AtticaResolverAccount();
 
-    virtual QPixmap icon() const;
+    QPixmap icon() const override;
 
     QString atticaId() const { return m_atticaId; }
 
