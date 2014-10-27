@@ -178,12 +178,12 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
     QList< QPair<int, float> > trackPairs = lib->search( m_query );
     QList< QPair<int, float> > albumPairs = lib->searchAlbum( m_query, 20 );
 
+    TomahawkSqlQuery query = lib->newquery();
+    query.prepare( "SELECT album.name, artist.id, artist.name FROM album, artist WHERE artist.id = album.artist AND album.id = ?" );
+
     foreach ( const scorepair_t& albumPair, albumPairs )
     {
-        TomahawkSqlQuery query = lib->newquery();
-
-        QString sql = QString( "SELECT album.name, artist.id, artist.name FROM album, artist WHERE artist.id = album.artist AND album.id = %1" ).arg( albumPair.first );
-        query.prepare( sql );
+        query.bindValue( 0, albumPair.first );
         query.exec();
 
         QList<Tomahawk::album_ptr> albumList;
