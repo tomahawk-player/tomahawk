@@ -45,7 +45,7 @@ QSize
 CaptionLabel::sizeHint() const
 {
     QFontMetrics fm( font() );
-    return QSize( fm.width( text().toUpper() ), fm.height() * 1.7 );
+    return QSize( fm.width( text().toUpper() ), fm.height() + 9 );
 }
 
 
