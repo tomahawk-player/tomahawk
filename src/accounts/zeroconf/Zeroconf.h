@@ -45,15 +45,17 @@ public:
 
     virtual ~ZeroconfPlugin();
 
-    virtual const QString name() const;
-    virtual const QString friendlyName() const;
-    virtual const QString accountName() const;
-    virtual const QString serviceName() const;
-    virtual Account::ConnectionState connectionState() const;
-    virtual bool isValid() const { return true; }
-    virtual QIcon icon() const;
-    virtual void checkSettings() {}
-    virtual void configurationChanged() {}
+    const QString name() const;
+    const QString accountName() const;
+    QIcon icon() const;
+
+    const QString friendlyName() const override;
+    const QString serviceName() const override;
+    bool isValid() const override { return true; }
+    void checkSettings() override {}
+    void configurationChanged() override {}
+
+    Account::ConnectionState connectionState() const;
 
 public slots:
     void connectPlugin();
