@@ -39,10 +39,10 @@ public:
     explicit DatabaseCommand_Resolve( const Tomahawk::query_ptr& query );
     virtual ~DatabaseCommand_Resolve();
 
-    virtual QString commandname() const { return "dbresolve"; }
-    virtual bool doesMutates() const { return false; }
+    QString commandname() const override { return "dbresolve"; }
+    bool doesMutates() const override { return false; }
 
-    virtual void exec( DatabaseImpl *lib );
+    void exec( DatabaseImpl *lib ) override;
 
 signals:
     void results( Tomahawk::QID qid, QList<Tomahawk::result_ptr> results );
