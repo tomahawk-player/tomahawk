@@ -41,15 +41,14 @@ public:
     ZeroconfFactory();
     virtual ~ZeroconfFactory();
 
-    virtual QString factoryId() const { return "zeroconfaccount"; }
-    virtual QString prettyName() const { return tr( "Local Network" ); }
-    QString description() const { return tr( "Automatically connect to Tomahawk users on the same local network." ); }
-    virtual bool isUnique() const { return true; }
-    AccountTypes types() const { return AccountTypes( SipType ); }
-virtual QPixmap icon() const;
+    QString factoryId() const override { return "zeroconfaccount"; }
+    QString prettyName() const override { return tr( "Local Network" ); }
+    QString description() const override { return tr( "Automatically connect to Tomahawk users on the same local network." ); }
+    bool isUnique() const override { return true; }
+    AccountTypes types() const override { return AccountTypes( SipType ); }
+    QPixmap icon() const override;
 
-
-    virtual Account* createAccount ( const QString& pluginId = QString() );
+    Account* createAccount ( const QString& pluginId = QString() ) override;
 };
 
 class ACCOUNTDLLEXPORT ZeroconfAccount : public Account
@@ -59,18 +58,18 @@ public:
     ZeroconfAccount( const QString &accountId );
     virtual ~ZeroconfAccount();
 
-    QPixmap icon() const;
+    QPixmap icon() const override;
 
-    void authenticate();
-    void deauthenticate();
-    bool isAuthenticated() const;
-    ConnectionState connectionState() const;
+    void authenticate() override;
+    void deauthenticate() override;
+    bool isAuthenticated() const override;
+    ConnectionState connectionState() const override;
 
-    virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() { return Tomahawk::InfoSystem::InfoPluginPtr(); }
-    SipPlugin* sipPlugin( bool create = true );
+    Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() override { return Tomahawk::InfoSystem::InfoPluginPtr(); }
+    SipPlugin* sipPlugin( bool create = true ) override;
 
-    AccountConfigWidget* configurationWidget() { return 0; }
-    QWidget* aclWidget() { return 0; }
+    AccountConfigWidget* configurationWidget() override { return nullptr; }
+    QWidget* aclWidget() override { return nullptr; }
 
 private:
     QPointer< ZeroconfPlugin > m_sipPlugin;

@@ -25,11 +25,11 @@
 using namespace Tomahawk;
 using namespace Accounts;
 
-QPixmap* s_icon = 0;
+QPixmap* s_icon = nullptr;
 
 ZeroconfFactory::ZeroconfFactory()
 {
-    if ( s_icon == 0 )
+    if ( !s_icon )
         s_icon = new QPixmap( ":/zeroconf-account/zeroconf-icon.png" );
 }
 
@@ -39,7 +39,7 @@ ZeroconfFactory::~ZeroconfFactory()
     if ( s_icon )
     {
         delete s_icon;
-        s_icon = 0;
+        s_icon = nullptr;
     }
 }
 
@@ -66,10 +66,11 @@ ZeroconfAccount::ZeroconfAccount( const QString& accountId )
     setTypes( SipType );
 }
 
+
 ZeroconfAccount::~ZeroconfAccount()
 {
-
 }
+
 
 QPixmap
 ZeroconfAccount::icon() const
@@ -117,7 +118,7 @@ ZeroconfAccount::sipPlugin( bool create )
 {
     if ( m_sipPlugin.isNull() ) {
         if ( !create )
-            return 0;
+            return nullptr;
 
         m_sipPlugin = QPointer< ZeroconfPlugin >( new ZeroconfPlugin( this ) );
     }
