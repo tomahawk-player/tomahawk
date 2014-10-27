@@ -200,9 +200,9 @@ public:
     virtual Account* createFromPath( const QString& ) { return 0; }
 };
 
-};
+}
 
-};
+}
 
 Q_DECLARE_INTERFACE( Tomahawk::Accounts::AccountFactory, "tomahawk.AccountFactory/1.0" )
 
