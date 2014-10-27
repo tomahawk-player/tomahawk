@@ -318,7 +318,7 @@ ResolverAccount::~ResolverAccount()
     if ( m_resolver.isNull() )
         return;
 
-    Pipeline::instance()->removeScriptResolver( m_resolver.data()->filePath() );
+    Pipeline::instance()->removeScriptResolver( m_resolver->filePath() );
     delete m_resolver.data();
 }
 
@@ -368,8 +368,8 @@ ResolverAccount::authenticate()
 
     tDebug() << Q_FUNC_INFO << "Authenticating/starting resolver, exists?" << m_resolver.data()->name();
 
-    if ( !m_resolver.data()->running() )
-        m_resolver.data()->start();
+    if ( !m_resolver->running() )
+        m_resolver->start();
 
     emit connectionStateChanged( connectionState() );
 }
@@ -378,14 +378,14 @@ ResolverAccount::authenticate()
 bool
 ResolverAccount::isAuthenticated() const
 {
-    return !m_resolver.isNull() && m_resolver.data()->running();
+    return !m_resolver.isNull() && m_resolver->running();
 }
 
 
 void
 ResolverAccount::deauthenticate()
 {
-    if ( !m_resolver.isNull() && m_resolver.data()->running() )
+    if ( !m_resolver.isNull() && m_resolver->running() )
         m_resolver.data()->stop();
 
     emit connectionStateChanged( connectionState() );
@@ -396,7 +396,7 @@ ResolverAccount::deauthenticate()
 Account::ConnectionState
 ResolverAccount::connectionState() const
 {
-    if ( !m_resolver.isNull() && m_resolver.data()->running() )
+    if ( !m_resolver.isNull() && m_resolver->running() )
         return Connected;
     else
         return Disconnected;
@@ -452,7 +452,7 @@ ResolverAccount::path() const
 void
 ResolverAccount::resolverChanged()
 {
-    setAccountFriendlyName( m_resolver.data()->name() );
+    setAccountFriendlyName( m_resolver->name() );
     emit connectionStateChanged( connectionState() );
 }
 
@@ -463,7 +463,7 @@ ResolverAccount::icon() const
     if ( m_resolver.isNull() )
         return QPixmap();
 
-    return m_resolver.data()->icon();
+    return m_resolver->icon();
 }
 
 
