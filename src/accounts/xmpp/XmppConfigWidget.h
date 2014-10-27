@@ -44,12 +44,12 @@ class ACCOUNTDLLEXPORT XmppConfigWidget : public AccountConfigWidget
     Q_OBJECT
 
 public:
-    explicit XmppConfigWidget( XmppAccount* account = 0, QWidget *parent = 0 );
+    explicit XmppConfigWidget( XmppAccount* account = nullptr, QWidget *parent = nullptr );
     virtual ~XmppConfigWidget();
 
     void saveConfig();
 
-    virtual void checkForErrors();
+    void checkForErrors() override;
 
 signals:
     void dataError( bool exists );

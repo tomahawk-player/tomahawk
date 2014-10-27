@@ -18,8 +18,8 @@
 
 #include "AccountConfigWidget.h"
 
-AccountConfigWidget::AccountConfigWidget(QWidget *parent)
-    : QWidget(parent)
+AccountConfigWidget::AccountConfigWidget( QWidget* parent )
+    : QWidget( parent )
 {
 }
 

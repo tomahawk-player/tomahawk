@@ -27,7 +27,7 @@ class DLLEXPORT AccountConfigWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit AccountConfigWidget(QWidget *parent = 0);
+    explicit AccountConfigWidget( QWidget* parent = nullptr );
 
     virtual void checkForErrors();
     virtual const QStringList errors() const;
