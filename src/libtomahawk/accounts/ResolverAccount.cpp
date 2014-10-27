@@ -189,7 +189,6 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
 
             if ( !myPlatform.contains( platform ) )
             {
-                tDebug() << "Wrong resolver platform.";
                 displayError( tr( "Resolver installation error: platform mismatch." ) );
                 return 0;
             }
@@ -280,6 +279,7 @@ ResolverAccountFactory::expandPaths( const QDir& contentDir, QVariantHash& confi
 void
 ResolverAccountFactory::displayError( const QString& error )
 {
+    tLog() << "Resolver creation FAILED:" << error;
     JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( error ) );
 }
 
