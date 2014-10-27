@@ -36,7 +36,6 @@
 #include "accounts/DelegateConfigWrapper.h"
 #include "Pipeline.h"
 #include "resolvers/Resolver.h"
-#include "resolvers/ExternalResolverGui.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/GuiHelpers.h"
 #include "accounts/AccountDelegate.h"

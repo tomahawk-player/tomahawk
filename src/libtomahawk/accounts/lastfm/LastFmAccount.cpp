@@ -21,7 +21,7 @@
 
 #include "infosystem/InfoSystem.h"
 #include "LastFmInfoPlugin.h"
-#include "resolvers/ExternalResolverGui.h"
+#include "resolvers/ExternalResolver.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "AtticaManager.h"
 #include "Pipeline.h"
@@ -286,11 +286,7 @@ LastFmAccount::hookupResolver()
 
     const AtticaManager::Resolver data = AtticaManager::instance()->resolverData( res.id() );
 
-    m_resolver = QPointer< ExternalResolverGui >(
-                qobject_cast< ExternalResolverGui* >(
-                    Pipeline::instance()->addScriptResolver( accountId(), data.scriptPath )
-                    )
-                );
+    m_resolver = Pipeline::instance()->addScriptResolver( accountId(), data.scriptPath );
     m_resolver.data()->setIcon( icon() );
     connect( m_resolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
 }

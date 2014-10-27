@@ -57,7 +57,7 @@ private:
     QString name;
     QPixmap icon;
     unsigned int weight, timeout;
-    Tomahawk::ExternalResolverGui::Capabilities capabilities;
+    Tomahawk::ExternalResolver::Capabilities capabilities;
 
     bool ready;
     bool stopped;

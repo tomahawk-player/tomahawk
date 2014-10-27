@@ -29,7 +29,7 @@ class QDir;
 
 namespace Tomahawk {
 
-class ExternalResolverGui;
+class ExternalResolver;
 
 namespace Accounts {
 
@@ -107,7 +107,7 @@ protected:
     ResolverAccount( const QString& accountId, const QString& path, const QVariantHash& initialConfiguration = QVariantHash() );
     void hookupResolver();
 
-    QPointer<ExternalResolverGui> m_resolver;
+    QPointer<ExternalResolver> m_resolver;
 
 private:
     void init( const QString& path );

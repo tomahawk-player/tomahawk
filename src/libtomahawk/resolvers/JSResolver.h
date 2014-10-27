@@ -24,7 +24,7 @@
 
 #include "config.h"
 #include "DllMacro.h"
-#include "ExternalResolverGui.h"
+#include "ExternalResolver.h"
 #include "Typedefs.h"
 
 namespace Tomahawk
@@ -35,7 +35,7 @@ class JSResolverHelper;
 class JSResolverPrivate;
 class ScriptEngine;
 
-class DLLEXPORT JSResolver : public Tomahawk::ExternalResolverGui
+class DLLEXPORT JSResolver : public Tomahawk::ExternalResolver
 {
 Q_OBJECT
 

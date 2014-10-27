@@ -82,7 +82,6 @@ set( libGuiSources
     playlist/dynamic/widgets/CollapsibleControls.cpp
     playlist/dynamic/widgets/DynamicSetupWidget.cpp
 
-    resolvers/ExternalResolverGui.cpp
     resolvers/ScriptResolver.cpp
     resolvers/JSInfoPlugin.cpp
     resolvers/JSInfoSystemHelper.cpp

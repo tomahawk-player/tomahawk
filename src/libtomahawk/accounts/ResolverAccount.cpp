@@ -27,7 +27,6 @@
 #include "AtticaManager.h"
 #include "ConfigStorage.h"
 #include "resolvers/ExternalResolver.h"
-#include "resolvers/ExternalResolverGui.h"
 #include "utils/Json.h"
 #include "utils/Logger.h"
 
@@ -352,8 +351,7 @@ ResolverAccount::hookupResolver()
     if ( configuration().contains( "scripts" ) )
         additionalPaths = configuration().value( "scripts" ).toStringList();
 
-    Tomahawk::ExternalResolver* er = Pipeline::instance()->addScriptResolver( accountId(), mainScriptPath, additionalPaths );
-    m_resolver = QPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( er ) );
+    m_resolver = Pipeline::instance()->addScriptResolver( accountId(), mainScriptPath, additionalPaths );
     connect( m_resolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
 
     // What resolver do we have here? Should only be types that are 'real' resolvers

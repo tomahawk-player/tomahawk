@@ -20,7 +20,7 @@
 #include "ScriptCollection.h"
 
 #include "Source.h"
-#include "ExternalResolverGui.h"
+#include "ExternalResolver.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "resolvers/ScriptCommand_AllArtists.h"

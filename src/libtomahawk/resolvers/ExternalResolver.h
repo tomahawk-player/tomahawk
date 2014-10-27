@@ -105,6 +105,8 @@ public:
     virtual void enqueue( const QSharedPointer< ScriptCommand >& req )
     { m_commandQueue->enqueue( req ); }
 
+    virtual AccountConfigWidget* configUI() const = 0;
+
 public slots:
     virtual void start() = 0;
     virtual void stop() = 0;
@@ -132,8 +134,15 @@ protected:
     // UrlLookup
     virtual void lookupUrl( const QString& url ) = 0;
 
+    AccountConfigWidget* widgetFromData( QByteArray& data, QWidget* parent = 0 );
+    QVariant configMsgFromWidget( QWidget* w );
+    QByteArray fixDataImagePaths( const QByteArray& data, bool compressed, const QVariantMap& images );
+
+
 private:
     QString m_filePath;
+
+    void addChildProperties( QObject* parent, QVariantMap& m );
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( ExternalResolver::Capabilities )

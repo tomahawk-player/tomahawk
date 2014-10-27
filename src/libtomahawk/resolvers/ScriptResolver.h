@@ -25,7 +25,7 @@
 #include "Artist.h"
 #include "Album.h"
 #include "collection/Collection.h"
-#include "ExternalResolverGui.h"
+#include "ExternalResolver.h"
 #include "DllMacro.h"
 
 #include <QProcess>
@@ -35,7 +35,7 @@ class QWidget;
 namespace Tomahawk
 {
 
-class DLLEXPORT ScriptResolver : public Tomahawk::ExternalResolverGui
+class DLLEXPORT ScriptResolver : public Tomahawk::ExternalResolver
 {
 Q_OBJECT
 

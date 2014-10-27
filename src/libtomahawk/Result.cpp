@@ -24,7 +24,7 @@
 #include "database/DatabaseCommand_AllTracks.h"
 #include "database/DatabaseCommand_AddFiles.h"
 #include "filemetadata/MetadataEditor.h"
-#include "resolvers/ExternalResolverGui.h"
+#include "resolvers/ExternalResolver.h"
 #include "resolvers/Resolver.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
