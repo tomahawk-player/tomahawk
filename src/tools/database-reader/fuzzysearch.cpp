@@ -21,6 +21,7 @@ public:
         database->loadIndex();
     }
 
+    Tomahawk::query_ptr query;
     Tomahawk::dbcmd_ptr cmd;
     QSharedPointer<Tomahawk::Database> database;
 
@@ -30,10 +31,16 @@ public slots:
         database->enqueue( cmd );
     }
 
-    void onResults( const Tomahawk::QID, QList< Tomahawk::result_ptr> results )
+    void onResults( const Tomahawk::QID, const QList< Tomahawk::result_ptr>& results )
     {
-        // TODO
-        QMetaObject::invokeMethod( thread(), "quit", Qt::QueuedConnection );
+        // Query is destructed by deleteLater() so we need to wait for the
+        // event queue to process it.
+        connect( query.data(), SIGNAL( destroyed( QObject* ) ),
+                 thread(), SLOT( quit() ) );
+
+        // Remove references to local objects, so they are queued for destruction.
+        cmd.clear();
+        query.clear();
     }
 };
 
@@ -61,8 +68,9 @@ int main( int argc, char* argv[] )
     tasks.moveToThread( &thread );
 
     // Load the Database
-    Tomahawk::query_ptr query( Tomahawk::Query::get( "Bloc Party", QString() ) );
-    Tomahawk::DatabaseCommand_Resolve* cmd = new Tomahawk::DatabaseCommand_Resolve( query );
+    tasks.query = Tomahawk::Query::get( "Bloc Party", QString() );
+    tasks.query->moveToThread( &thread );
+    Tomahawk::DatabaseCommand_Resolve* cmd = new Tomahawk::DatabaseCommand_Resolve( tasks.query );
     tasks.cmd = Tomahawk::dbcmd_ptr( cmd );
     tasks.cmd->moveToThread( &thread );
     QObject::connect( cmd, SIGNAL( results( Tomahawk::QID, QList<Tomahawk::result_ptr> ) ),
