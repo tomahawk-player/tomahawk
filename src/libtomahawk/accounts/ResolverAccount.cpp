@@ -139,13 +139,13 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
             QDir dir( TomahawkUtils::extractScriptPayload( pathInfo.filePath(),
                                                            uniqueName,
                                                            MANUALRESOLVERS_DIR ) );
-            if ( !( dir.exists() && dir.isReadable() ) ) //decompression fubar
+            if ( !( dir.exists() && dir.isReadable() ) )
             {
                 displayError( tr( "Resolver installation error: cannot open bundle." ) );
                 return nullptr;
             }
 
-            if ( !dir.cd( "content" ) ) //more fubar
+            if ( !dir.cd( "content" ) )
             {
                 displayError( tr( "Resolver installation error: incomplete bundle." ) );
                 return nullptr;
