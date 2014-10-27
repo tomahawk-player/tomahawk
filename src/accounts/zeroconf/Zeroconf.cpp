@@ -37,14 +37,13 @@ using namespace Accounts;
 
 ZeroconfPlugin::ZeroconfPlugin ( ZeroconfAccount* parent )
     : SipPlugin( parent )
-    , m_zeroconf( 0 )
+    , m_zeroconf( nullptr )
     , m_state( Account::Disconnected )
     , m_cachedNodes()
 {
-    qDebug() << Q_FUNC_INFO;
     m_advertisementTimer.setInterval( 60000 );
     m_advertisementTimer.setSingleShot( false );
-    connect( &m_advertisementTimer, SIGNAL( timeout() ), this, SLOT( advertise() ) );
+    connect( &m_advertisementTimer, SIGNAL( timeout() ), SLOT( advertise() ) );
 }
 
 
@@ -101,7 +100,7 @@ ZeroconfPlugin::disconnectPlugin()
     m_state = Account::Disconnected;
 
     delete m_zeroconf;
-    m_zeroconf = 0;
+    m_zeroconf = nullptr;
 
     setAllPeersOffline();
 }
