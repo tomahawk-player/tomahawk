@@ -1644,12 +1644,12 @@ Password (OTP)</source>
 <context>
     <name>Servent</name>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="1002"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="1003"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
         <translation>الكشف التلقائي عن عنوان IP الخارجي فشل: تعذر تحليل إستجابة JSON.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="1015"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="1016"/>
         <source>Automatically detecting external IP failed: %1</source>
         <translation>الكشف التلقائي عن عنوان IP الخارجي فشل: %1</translation>
     </message>
