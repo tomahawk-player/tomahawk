@@ -52,21 +52,6 @@ ZeroconfPlugin::~ZeroconfPlugin()
 {
 }
 
-
-const QString
-ZeroconfPlugin::name() const
-{
-    return QString( MYNAME );
-}
-
-
-const QString
-ZeroconfPlugin::accountName() const
-{
-    return QString( MYNAME );
-}
-
-
 const QString
 ZeroconfPlugin::serviceName() const
 {
@@ -119,13 +104,6 @@ ZeroconfPlugin::disconnectPlugin()
     m_zeroconf = 0;
 
     setAllPeersOffline();
-}
-
-
-QIcon
-ZeroconfPlugin::icon() const
-{
-    return account()->icon();
 }
 
 

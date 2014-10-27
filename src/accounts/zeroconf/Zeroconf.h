@@ -45,10 +45,6 @@ public:
 
     virtual ~ZeroconfPlugin();
 
-    const QString name() const;
-    const QString accountName() const;
-    QIcon icon() const;
-
     const QString friendlyName() const override;
     const QString serviceName() const override;
     bool isValid() const override { return true; }
