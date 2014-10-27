@@ -3,8 +3,8 @@ Version 0.9.0:
 Version 0.8.0:
     * Redesigned - Shiny new interface. Simplified. New icons.
     * Added Friend Feed.
-    * Now Playing notifications (OS X & Windows) - support for OS-level notification systems 
-    (e.g. Notification Center) with fallback to its own native notification system.
+    * Now Playing notifications (OS X & Windows) - support for OS-level notification systems
+      (e.g. Notification Center) with fallback to its own native notification system.
     * Many actions now available in context menu - including Favorite and Send to a Friend.
     * Drag and drop support for iTunes, Deezer, Beats Music, Rdio, Spotify, SoundCloud links (into Tomahawk)
       for playlists/tracks/artists/album links.
