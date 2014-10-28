@@ -444,8 +444,10 @@ def CopyPlugin(path, subdir):
 
 def CopyFramework(path):
   parts = path.split(os.sep)
+  name = ''
   for i, part in enumerate(parts):
     if re.match(r'\w+\.framework', part):
+      name = part[:-10]
       full_path = os.path.join(frameworks_dir, *parts[i:-1])
       break
   args = ['mkdir', '-p', full_path]
@@ -460,20 +462,43 @@ def CopyFramework(path):
     args = ['cp', '-rf', menu_nib, resources_dir]
     commands.append(args)
 
+  framework_versions_dir = os.path.join(full_path, '..', '..', 'Versions')
+  framework_resources_current_dir = os.path.join(full_path, 'Resources')
+  framework_resources_main_dir = os.path.join(full_path, '..', '..', 'Resources')
+  framework_current_version = full_path.split(os.sep)[-1]
+
+  # link /Versions/Current to /Versions/$currentVersion
+  args = ['ln', '-Fs', framework_current_version, os.path.join(framework_versions_dir, 'Current')]
+  commands.append(args)
+
   # Copy Contents/Info.plist to Resources/Info.plist if Resources/Info.plist does not exist
   # If Contents/Info.plist doesn't exist either, error out. If we actually see this, we can copy QtCore's Info.plist
   info_plist_in_resources = os.path.join(os.path.split(path)[0], '..', '..', 'Resources', 'Info.plist')
   if not os.path.exists(info_plist_in_resources):
     info_plist_in_contents = os.path.join(os.path.split(path)[0], '..', '..', 'Contents', 'Info.plist')
-    framework_resources_dir = os.path.join(full_path, '..', '..', 'Resources')
-    args = ['mkdir', '-p', framework_resources_dir]
+    args = ['mkdir', '-p', framework_resources_current_dir]
     commands.append(args)
     if os.path.exists(info_plist_in_contents):
-      args = ['cp', '-rf', info_plist_in_contents, framework_resources_dir]
+      args = ['cp', '-rf', info_plist_in_contents, framework_resources_current_dir]
       commands.append(args)
     else:
       print "%s: Framework does not contain an Info.plist file in Contents/ or Resources/ folder." % (path)
       sys.exit(-1)
+
+  # link /Resources to /Versions/Current/Resources
+  args = ['ln', '-Fs', 'Versions/Current/Resources', framework_resources_main_dir]
+  commands.append(args)
+
+  # link /$name to /Versions/Current/$name
+  args = ['ln', '-Fs', os.path.join('Versions/Current/', name), os.path.join(full_path, '..', '..', name)]
+  commands.append(args)
+
+  # HACK: CopyFramework is called repeatedly for the same frameworks, but we can't check for the existence of the link from python
+  # as the commands are only executed in the end, that's why we remove wrong symlinks afterwards
+  args = ['rm', '-rf', os.path.join(framework_resources_main_dir, 'Resources')]
+  commands.append(args)
+  args = ['rm', '-rf', os.path.join(framework_versions_dir, 'Current', framework_current_version)]
+  commands.append(args)
 
   return os.path.join(full_path, parts[-1])
 
