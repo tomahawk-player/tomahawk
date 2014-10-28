@@ -27,6 +27,7 @@
 #include "infosystem/InfoSystemWorker.h"
 #include "utils/Logger.h"
 #include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "Album.h"
 #include "Artist.h"
 #include "GlobalActionManager.h"
@@ -107,7 +108,7 @@ MprisPlugin::canQuit() const
 bool
 MprisPlugin::canRaise() const
 {
-    return false;
+    return true;
 }
 
 
@@ -151,6 +152,7 @@ MprisPlugin::supportedMimeTypes() const
 void
 MprisPlugin::Raise()
 {
+  TomahawkUtils::bringToFront();
 }
 
 
