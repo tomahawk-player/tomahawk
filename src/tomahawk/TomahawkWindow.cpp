@@ -1035,7 +1035,10 @@ void
 TomahawkWindow::showSettingsDialog()
 {
     if ( m_settingsDialog )
+    {
+        m_settingsDialog->show();
         return;
+    }
 
     m_settingsDialog = new SettingsDialog;
     // This needs to be a QueuedConnection, so that deleteLater() actually works.
