@@ -144,12 +144,16 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
                                                       artist, track, album,
                                                       duration, composer,
                                                       albumpos, discnumber );
+        if ( !t )
+            continue;
 
-        if ( m_album || m_artist ) {
+        if ( m_album || m_artist )
             t->loadAttributes();
-        }
 
         Tomahawk::result_ptr result = Tomahawk::Result::get( url, t );
+        if ( !result )
+            continue;
+
         result->setSize( size );
         result->setBitrate( bitrate );
         result->setModificationTime( modificationTime );
