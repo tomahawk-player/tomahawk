@@ -37,7 +37,8 @@ VERSION=$1
     cp $ROOT/../admin/mac/qt.conf Contents/Resources/qt.conf
 
     header "Copying Sparkle framework"
-    cp -R /Library/Frameworks/Sparkle.framework Contents/Frameworks
+    rm -rf Contents/Frameworks/Sparkle.framework
+    cp -R /Library/Frameworks/Sparkle.framework Contents/Frameworks/
 
     header "Creating DMG"
     cd ..
