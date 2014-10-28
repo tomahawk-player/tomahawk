@@ -29,12 +29,15 @@ class QTimer;
 class SipStatusMessagePrivate
 {
 public:
-    SipStatusMessagePrivate( SipStatusMessage* q, SipStatusMessage::SipStatusMessageType _statusMessageType, const QString& _contactId, const QString& _message )
+    SipStatusMessagePrivate( SipStatusMessage* q,
+                             SipStatusMessage::SipStatusMessageType _statusMessageType,
+                             const QString& _contactId, const QString& _message,
+                             QTimer* _timer )
         : q_ptr ( q )
         , contactId( _contactId )
         , statusMessageType( _statusMessageType )
         , message( _message )
-
+        , timer( _timer )
     {
     }
     SipStatusMessage* q_ptr;

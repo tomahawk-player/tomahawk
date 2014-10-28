@@ -27,15 +27,13 @@
 QHash< SipStatusMessage::SipStatusMessageType, QPixmap > SipStatusMessagePrivate::s_typesPixmaps = QHash< SipStatusMessage::SipStatusMessageType, QPixmap >();
 
 SipStatusMessage::SipStatusMessage( SipStatusMessageType statusMessageType, const QString& contactId, const QString& message )
-    : d_ptr( new SipStatusMessagePrivate( this, statusMessageType, contactId, message ) )
+    : d_ptr( new SipStatusMessagePrivate( this, statusMessageType, contactId, message, new QTimer( this ) ) )
 {
     Q_D( SipStatusMessage );
 
     // make this temporary for now, as soon as i know how: add ack button
-    d->timer = new QTimer( this );
     d->timer->setInterval( 8 * 1000 );
     d->timer->setSingleShot( true );
-
     connect( d->timer, SIGNAL( timeout() ), this, SIGNAL( finished() ) );
     d->timer->start();
 
