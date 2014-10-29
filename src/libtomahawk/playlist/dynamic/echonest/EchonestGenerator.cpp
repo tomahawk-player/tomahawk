@@ -708,7 +708,9 @@ EchonestGenerator::loadGenres()
             {
                 s_genres_lock.lockForWrite();
                 tLog() << "Genres not in cache or too old, refetching genres ...";
-                s_genresJob = Echonest::Artist::fetchGenres();
+                //Hack for Tomahawk 0.8 - use new echones Genre API URL but old libechonest 2.0.2 parser
+                QString genreUrl = QString( "http://developer.echonest.com/api/v4/genre/list?api_key=%1&format=xml&results=2000" ).arg( QString( Echonest::Config::instance()->apiKey() ) );
+                s_genresJob = Echonest::Config::instance()->nam()->get( QNetworkRequest( QUrl( genreUrl ) ) );
                 connect( s_genresJob, SIGNAL( finished() ), this, SLOT( genresReceived() ) );
             }
         }
