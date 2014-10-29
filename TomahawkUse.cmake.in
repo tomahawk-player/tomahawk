@@ -13,6 +13,7 @@ if(TOMAHAWK_QT5)
     find_package(Qt5WebKitWidgets REQUIRED)
     find_package(Qt5Widgets REQUIRED)
     find_package(Qt5Xml REQUIRED)
+    find_package(Qt5Sql REQUIRED)
 
     macro(qt_wrap_ui)
         qt5_wrap_ui(${ARGN})
