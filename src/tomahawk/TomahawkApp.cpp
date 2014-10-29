@@ -68,7 +68,6 @@
 #include "widgets/SplashWidget.h"
 
 #include "resolvers/JSResolver.h"
-#include "resolvers/ScriptResolver.h"
 #include "utils/SpotifyParser.h"
 #include "AtticaManager.h"
 #include "TomahawkWindow.h"
@@ -225,9 +224,6 @@ TomahawkApp::init()
 
     Pipeline::instance()->addExternalResolverFactory(
                 std::bind( &JSResolver::factory, std::placeholders::_1,
-                           std::placeholders::_2, std::placeholders::_3 ) );
-    Pipeline::instance()->addExternalResolverFactory(
-                std::bind( &ScriptResolver::factory, std::placeholders::_1,
                            std::placeholders::_2, std::placeholders::_3 ) );
 
     new ActionCollection( this );

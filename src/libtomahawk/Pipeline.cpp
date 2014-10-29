@@ -22,7 +22,6 @@
 
 #include "database/Database.h"
 #include "resolvers/ExternalResolver.h"
-#include "resolvers/ScriptResolver.h"
 #include "resolvers/JSResolver.h"
 #include "utils/ResultUrlChecker.h"
 #include "utils/Logger.h"
