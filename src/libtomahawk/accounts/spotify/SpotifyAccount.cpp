@@ -37,8 +37,6 @@
 #include "PlaylistInterface.h"
 #include "SourceList.h"
 #include "SpotifyAccountConfig.h"
-#include "SpotifyInfoPlugin.h"
-//#include "SpotifyPlaylistUpdater.h"
 #include "TomahawkSettings.h"
 #include "Track.h"
 
@@ -341,18 +339,6 @@ Account::ConnectionState
 SpotifyAccount::connectionState() const
 {
     return (!m_spotifyResolver.isNull() && m_spotifyResolver.data()->running()) ? Account::Connected : Account::Disconnected;
-}
-
-
-InfoSystem::InfoPluginPtr
-SpotifyAccount::infoPlugin()
-{
-    if ( m_infoPlugin.isNull() )
-    {
-        m_infoPlugin = QPointer< InfoSystem::SpotifyInfoPlugin >( new InfoSystem::SpotifyInfoPlugin( this ) );
-    }
-
-    return InfoSystem::InfoPluginPtr( m_infoPlugin.data() );
 }
 
 

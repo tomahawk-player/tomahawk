@@ -212,8 +212,6 @@ list(APPEND libSources
 
     accounts/spotify/SpotifyAccount.cpp
     accounts/spotify/SpotifyAccountConfig.cpp
-#    accounts/spotify/SpotifyPlaylistUpdater.cpp
-    accounts/spotify/SpotifyInfoPlugin.cpp
 
     audio/AudioEngine.cpp
     audio/AudioOutput.cpp
