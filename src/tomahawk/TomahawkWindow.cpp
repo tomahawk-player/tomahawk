@@ -1134,7 +1134,7 @@ TomahawkWindow::fullScreenEntered()
 //    margins.setRight( 24 );
 //    statusBar()->setContentsMargins( margins );
 
-#if defined( Q_WS_MAC )
+#if defined( Q_OS_MAC )
     ActionCollection::instance()->getAction( "fullscreen" )->setText( tr( "Exit Full Screen" ) );
 #endif
 }
@@ -1152,7 +1152,7 @@ TomahawkWindow::fullScreenExited()
 //    margins.setRight( 0 );
 //    statusBar()->setContentsMargins( margins );
 
-#if defined( Q_WS_MAC )
+#if defined( Q_OS_MAC )
     ActionCollection::instance()->getAction( "fullscreen" )->setText( tr( "Enter Full Screen" ) );
 #endif
 }
@@ -1481,7 +1481,7 @@ TomahawkWindow::toggleFullscreen()
 {
     tDebug() << Q_FUNC_INFO;
 
-#if defined( Q_WS_MAC )
+#if defined( Q_OS_MAC )
    Tomahawk::toggleFullscreen();
 #endif
 }

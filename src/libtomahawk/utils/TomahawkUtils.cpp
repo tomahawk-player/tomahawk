@@ -64,7 +64,7 @@
     #include <shlobj.h>
 #endif
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     #include <Carbon/Carbon.h>
     #include <sys/sysctl.h>
 #endif
@@ -81,14 +81,14 @@ static quint64 s_infosystemRequestId = 0;
 static QMutex s_infosystemRequestIdMutex;
 static bool s_headless = false;
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 QString
 appSupportFolderPath()
 {
     // honestly, it is *always* this --mxcl
     return QDir::home().filePath( "Library/Application Support" );
 }
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
 
 bool
@@ -122,7 +122,7 @@ appConfigDir()
 {
     QDir ret;
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     if ( getenv( "HOME" ) )
     {
         return QDir( QString( "%1" ).arg( getenv( "HOME" ) ) );
@@ -200,7 +200,7 @@ appDataDir()
 QDir
 appLogDir()
 {
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
     return appDataDir();
 #else
     return QDir( QDir::homePath() + "/Library/Logs" );

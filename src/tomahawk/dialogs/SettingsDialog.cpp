@@ -120,7 +120,7 @@ SettingsDialog::SettingsDialog(QObject *parent )
     m_advancedWidgetUi->aclEntryClearButton->setEnabled( TomahawkSettings::instance()->aclEntries().size() > 0 );
     connect( m_advancedWidgetUi->aclEntryClearButton, SIGNAL( clicked( bool ) ), this, SLOT( aclEntryClearButtonClicked() ) );
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     // Avoid resize handles on sheets on osx
     m_proxySettings.setSizeGripEnabled( true );
     QSizeGrip* p = m_proxySettings.findChild< QSizeGrip* >();
@@ -229,7 +229,7 @@ SettingsDialog::SettingsDialog(QObject *parent )
 #endif
 
     // NOW PLAYING
-// #ifdef Q_WS_MAC
+// #ifdef Q_OS_MAC
 //     ui->checkBoxEnableAdium->setChecked( s->nowPlayingEnabled() );
 // #else
 //     ui->checkBoxEnableAdium->hide();

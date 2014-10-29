@@ -70,7 +70,7 @@ DynamicControlList::init()
     m_layout->setColumnStretch( 2, 1 );
     m_layout->setMargin( 0 );
     m_layout->setVerticalSpacing( 0 );
-#ifdef Q_WS_MAC // on OS X we don't want the right edge of the toolbuttons against the window
+#ifdef Q_OS_MAC // on OS X we don't want the right edge of the toolbuttons against the window
     m_layout->setContentsMargins( 0, 0, 3, 0 );
 #else
     m_layout->setContentsMargins( 0, 0, 0, 0 );

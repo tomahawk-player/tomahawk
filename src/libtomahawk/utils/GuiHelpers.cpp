@@ -98,7 +98,7 @@ createAccountFromFactory( Tomahawk::Accounts::AccountFactory* factory, QWidget* 
     bool added = false;
     if( account->configurationWidget() )
     {
-/*#ifdef Q_WS_MAC
+/*#ifdef Q_OS_MAC
         // on osx a sheet needs to be non-modal
         DelegateConfigWrapper* dialog = new DelegateConfigWrapper( account->configurationWidget(), account->aboutWidget(), QObject::tr( "%1 Config" ).arg( account->accountFriendlyName() ), parent, Qt::Sheet );
         dialog->setProperty( "accountplugin", QVariant::fromValue< QObject* >( account ) );

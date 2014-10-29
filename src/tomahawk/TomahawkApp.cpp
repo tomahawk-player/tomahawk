@@ -114,7 +114,7 @@ const char* enApiSecret = "BNvTzfthHr/d1eNhHLvL1Jo=";
 void
 increaseMaxFileDescriptors()
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     /// Following code taken from Clementine project, main.cpp. Thanks!
     // Bump the soft limit for the number of file descriptors from the default of 256 to
     // the maximum (usually 1024).
