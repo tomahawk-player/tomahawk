@@ -61,3 +61,7 @@ endif()
 
 include( "${TOMAHAWK_CMAKE_DIR}/TomahawkAddLibrary.cmake" )
 include( "${TOMAHAWK_CMAKE_DIR}/TomahawkAddPlugin.cmake" )
+
+add_definitions( ${TOMAHAWK_DEFINITIONS} )
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TOMAHAWK_CXX_FLAGS}")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${TOMAHAWK_C_FLAGS}")

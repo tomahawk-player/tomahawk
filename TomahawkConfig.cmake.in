@@ -19,3 +19,6 @@ include("${TOMAHAWK_CMAKE_DIR}/TomahawkLibraryDepends.cmake")
 # These are IMPORTED targets created by TomahawkLibraryDepends.cmake
 set(TOMAHAWK_LIBRARIES tomahawklib)
 set(TOMAHAWK_USE_FILE "${TOMAHAWK_CMAKE_DIR}/TomahawkUse.cmake")
+set(TOMAHAWK_DEFINITIONS "@TOMAHAWK_DEFINITIONS@")
+set(TOMAHAWK_CXX_FLAGS "@TOMAHAWK_CXX_FLAGS@")
+set(TOMAHAWK_C_FLAGS "@TOMAHAWK_C_FLAGS@")

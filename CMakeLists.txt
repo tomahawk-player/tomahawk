@@ -48,7 +48,17 @@ SET( TOMAHAWK_TRANSLATION_LANGUAGES ar bg bn_IN ca cs de en el es fi fr hi_IN hu
 # not included in out-of-source build so we need to re-add_definitions there.
 macro(tomahawk_add_definitions DEFINITION)
     add_definitions( ${DEFINITION} )
-    list(APPEND TOMAHAWK_DEFINITIONS ${DEFINITION})
+    set( TOMAHAWK_DEFINITIONS "${TOMAHAWK_DEFINITIONS} ${DEFINITION}")
+endmacro()
+
+macro(tomahawk_add_cxx_flags FLAGS)
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS}")
+    set( TOMAHAWK_CXX_FLAGS "${TOMAHAWK_CXX_FLAGS} ${FLAGS}")
+endmacro()
+
+macro(tomahawk_add_c_flags FLAGS)
+    set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${FLAGS}")
+    set( TOMAHAWK_C_FLAGS "${TOMAHAWK_C_FLAGS} ${FLAGS}")
 endmacro()
 
 # enforce proper symbol exporting on all platforms
@@ -264,16 +274,17 @@ check_cxx_compiler_flag( "-std=c++11" CXX11_FOUND )
 check_cxx_compiler_flag( "-std=c++0x" CXX0X_FOUND )
 check_cxx_compiler_flag( "-stdlib=libc++" LIBCPP_FOUND )
 if(CXX11_FOUND)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+    tomahawk_add_cxx_flags( "-std=c++11" )
 elseif(CXX0X_FOUND)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+    tomahawk_add_cxx_flags( "-std=c++0x" )
 else()
     message(STATUS "${CMAKE_CXX_COMPILER} does not support C++11, please use a
     different compiler")
 endif()
 if(LIBCPP_FOUND AND APPLE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+    tomahawk_add_cxx_flags( "-stdlib=libc++" )
 endif()
+
 
 macro_optional_find_package(Echonest 2.2.0)
 macro_log_feature(ECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest 2.2.0 is needed for dynamic playlists and the infosystem")
