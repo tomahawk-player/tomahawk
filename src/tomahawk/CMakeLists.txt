@@ -167,6 +167,9 @@ SET_TARGET_PROPERTIES(tomahawk_bin
 
 
 qt5_use_modules(tomahawk_bin Core Widgets Network Sql WebKitWidgets)
+if(APPLE)
+    qt5_use_modules(tomahawk_bin MacExtras)
+endif()
 if(WIN32)
     qt5_use_modules(tomahawk_bin WinExtras)
 endif()

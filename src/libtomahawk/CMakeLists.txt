@@ -441,19 +441,11 @@ IF( APPLE )
       mac/FileHelpers.mm
       widgets/SourceTreePopupDialog_mac.mm )
 
-    if( BUILD_WITH_QT4 )
-        list(APPEND libSources
-            thirdparty/Qocoa/qbutton_mac.mm
-            thirdparty/Qocoa/qsearchfield_mac.mm
-            thirdparty/Qocoa/qtoolbartabdialog_mac.mm
-        )
-    else()
-        list(APPEND libSources
-            thirdparty/Qocoa/qbutton.cpp
-            thirdparty/Qocoa/qsearchfield.cpp
-            thirdparty/Qocoa/qtoolbartabdialog.cpp
-        )
-    endif()
+    list(APPEND libSources
+      thirdparty/Qocoa/qbutton_mac.mm
+      thirdparty/Qocoa/qsearchfield_mac.mm
+      thirdparty/Qocoa/qtoolbartabdialog_mac.mm
+    )
 
     SET_SOURCE_FILES_PROPERTIES(utils/TomahawkUtils_Mac.mm PROPERTIES COMPILE_FLAGS "-fvisibility=default")
 
@@ -492,6 +484,9 @@ set_target_properties(
 
 
 qt5_use_modules(tomahawklib Widgets Network Sql WebKitWidgets Concurrent Xml UiTools Svg)
+IF(APPLE)
+	qt5_use_modules(tomahawklib MacExtras)
+ENDIF()
 
 IF(QCA2_FOUND)
     LIST(APPEND LINK_LIBRARIES ${QCA2_LIBRARIES} )
