@@ -49,7 +49,6 @@
 #include "accounts/ResolverAccount.h"
 #include "utils/Logger.h"
 #include "accounts/AccountFactoryWrapper.h"
-#include "accounts/spotify/SpotifyAccount.h"
 #include "thirdparty/Qocoa/qtoolbartabdialog.h"
 #include "thirdparty/Qocoa/qbutton.h"
 #include "jobview/JobStatusView.h"
