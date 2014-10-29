@@ -77,23 +77,6 @@ namespace {
     };
 }
 
-Account*
-SpotifyAccountFactory::createAccount( const QString& accountId )
-{
-    return new SpotifyAccount( accountId );
-}
-
-
-QPixmap
-SpotifyAccountFactory::icon() const
-{
-    if ( !s_icon )
-        s_icon = new QPixmap( RESPATH "images/spotify-logo.png" );
-
-    return *s_icon;
-}
-
-
 SpotifyAccount* SpotifyAccount::s_instance = 0;
 
 SpotifyAccount*

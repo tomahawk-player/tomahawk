@@ -61,24 +61,6 @@ struct SpotifyPlaylistInfo {
 };
 
 
-class DLLEXPORT SpotifyAccountFactory : public AccountFactory
-{
-    Q_OBJECT
-public:
-    SpotifyAccountFactory() {}
-
-    virtual Account* createAccount( const QString& accountId = QString() );
-    virtual QString description() const { return tr( "Play music from and sync your playlists with Spotify Premium" ); }
-    virtual QString factoryId() const { return "spotifyaccount"; }
-    virtual QString prettyName() const { return "Spotify"; }
-
-    virtual AccountTypes types() const { return AccountTypes( ResolverType ); }
-    virtual bool allowUserCreation() const { return false; }
-    virtual QPixmap icon() const;
-    virtual bool isUnique() const { return true; }
-
-};
-
 class DLLEXPORT SpotifyAccount : public CustomAtticaAccount
 {
     Q_OBJECT

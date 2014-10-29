@@ -50,8 +50,6 @@
 #include "utils/NetworkAccessManager.h"
 
 #include "accounts/lastfm/LastFmAccount.h"
-#include "accounts/spotify/SpotifyAccount.h"
-//#include "accounts/spotify/SpotifyPlaylistUpdater.h"
 #include "accounts/AccountManager.h"
 #include "audio/AudioEngine.h"
 #include "database/Database.h"
@@ -563,10 +561,6 @@ TomahawkApp::initFactoriesForAccountManager()
     m_accountManager.data()->addAccountFactory( lastfmFactory );
 #endif
 
-    Tomahawk::Accounts::SpotifyAccountFactory* spotifyFactory = new Tomahawk::Accounts::SpotifyAccountFactory;
-    m_accountManager.data()->addAccountFactory( spotifyFactory );
-    m_accountManager.data()->registerAccountFactoryForFilesystem( spotifyFactory );
-
     Tomahawk::Accounts::AccountManager::instance()->loadFromConfig();
 }
 
@@ -678,7 +672,6 @@ TomahawkApp::onInfoSystemReady()
     Tomahawk::EchonestCatalogSynchronizer::instance();
 
     PlaylistUpdaterInterface::registerUpdaterFactory( new XspfUpdaterFactory );
-//    PlaylistUpdaterInterface::registerUpdaterFactory( new SpotifyUpdaterFactory );
 
     // Following work-around/fix taken from Clementine rev. 13e13ccd9a95 and courtesy of David Sansome
     // A bug in Qt means the wheel_scroll_lines setting gets ignored and replaced
