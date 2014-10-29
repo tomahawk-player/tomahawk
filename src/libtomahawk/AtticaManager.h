@@ -188,5 +188,5 @@ protected:
     CustomAtticaAccount( const QString& id ) : Tomahawk::Accounts::Account( id ) {}
 };
 
-Q_DECLARE_METATYPE( Attica::Content );
+Q_DECLARE_METATYPE( Attica::Content )
 #endif // ATTICAMANAGER_H
