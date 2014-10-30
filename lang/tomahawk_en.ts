@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.0">
 <context>
     <name>ACLJobDelegate</name>
     <message>
@@ -72,22 +70,6 @@ connect and stream from you?</translation>
         <location filename="../src/tomahawk/widgets/AccountListWidget.cpp" line="242"/>
         <source>Disconnect &amp;All</source>
         <translation>Disconnect &amp;All</translation>
-    </message>
-</context>
-<context>
-    <name>AccountWidget</name>
-    <message>
-        <location filename="../src/tomahawk/widgets/AccountWidget.cpp" line="131"/>
-        <source>Invite</source>
-        <translation type="unfinished">Invite</translation>
-    </message>
-</context>
-<context>
-    <name>AccountsToolButton</name>
-    <message>
-        <location filename="../src/tomahawk/widgets/AccountsToolButton.cpp" line="90"/>
-        <source>Configure Accounts</source>
-        <translation type="unfinished">Configure Accounts</translation>
     </message>
 </context>
 <context>
@@ -487,37 +469,37 @@ connect and stream from you?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="73"/>
         <source>Sorry, there are no albums in this collection!</source>
-        <translation type="unfinished">Sorry, there are no albums in this collection!</translation>
+        <translation>Sorry, there are no albums in this collection!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="85"/>
         <source>Artists</source>
-        <translation type="unfinished">Artists</translation>
+        <translation>Artists</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="86"/>
         <source>Albums</source>
-        <translation type="unfinished">Albums</translation>
+        <translation>Albums</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="87"/>
         <source>Songs</source>
-        <translation type="unfinished">Songs</translation>
+        <translation>Songs</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="377"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation type="unfinished">After you have scanned your music collection you will find your tracks right here.</translation>
+        <translation>After you have scanned your music collection you will find your tracks right here.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="380"/>
         <source>This collection is empty.</source>
-        <translation type="unfinished">This collection is empty.</translation>
+        <translation>This collection is empty.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="383"/>
         <source>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</source>
-        <translation type="unfinished">Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</translation>
+        <translation>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</translation>
     </message>
 </context>
 <context>
@@ -1363,82 +1345,52 @@ Password (OTP)</translation>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="254"/>
         <source>%n year(s) ago</source>
-        <translation>
-            <numerusform>%n year ago</numerusform>
-            <numerusform>%n years ago</numerusform>
-        </translation>
+        <translation><numerusform>%n year ago</numerusform><numerusform>%n years ago</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="256"/>
         <source>%n year(s)</source>
-        <translation>
-            <numerusform>%n year</numerusform>
-            <numerusform>%n years</numerusform>
-        </translation>
+        <translation><numerusform>%n year</numerusform><numerusform>%n years</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="262"/>
         <source>%n month(s) ago</source>
-        <translation>
-            <numerusform>%n month ago</numerusform>
-            <numerusform>%n months ago</numerusform>
-        </translation>
+        <translation><numerusform>%n month ago</numerusform><numerusform>%n months ago</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="264"/>
         <source>%n month(s)</source>
-        <translation>
-            <numerusform>%n month</numerusform>
-            <numerusform>%n months</numerusform>
-        </translation>
+        <translation><numerusform>%n month</numerusform><numerusform>%n months</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="270"/>
         <source>%n week(s) ago</source>
-        <translation>
-            <numerusform>%n week ago</numerusform>
-            <numerusform>%n weeks ago</numerusform>
-        </translation>
+        <translation><numerusform>%n week ago</numerusform><numerusform>%n weeks ago</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="272"/>
         <source>%n week(s)</source>
-        <translation>
-            <numerusform>%n week</numerusform>
-            <numerusform>%n weeks</numerusform>
-        </translation>
+        <translation><numerusform>%n week</numerusform><numerusform>%n weeks</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="278"/>
         <source>%n day(s) ago</source>
-        <translation>
-            <numerusform>%n day ago</numerusform>
-            <numerusform>%n days ago</numerusform>
-        </translation>
+        <translation><numerusform>%n day ago</numerusform><numerusform>%n days ago</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="280"/>
         <source>%n day(s)</source>
-        <translation>
-            <numerusform>%n day</numerusform>
-            <numerusform>%n days</numerusform>
-        </translation>
+        <translation><numerusform>%n day</numerusform><numerusform>%n days</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="286"/>
         <source>%n hour(s) ago</source>
-        <translation>
-            <numerusform>%n hour ago</numerusform>
-            <numerusform>%n hours ago</numerusform>
-        </translation>
+        <translation><numerusform>%n hour ago</numerusform><numerusform>%n hours ago</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="288"/>
         <source>%n hour(s)</source>
-        <translation>
-            <numerusform>%n hour</numerusform>
-            <numerusform>%n hours</numerusform>
-        </translation>
+        <translation><numerusform>%n hour</numerusform><numerusform>%n hours</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="294"/>
@@ -1592,7 +1544,7 @@ Password (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/ScannerStatusItem.cpp" line="55"/>
         <source>Scanning Collection</source>
-        <translation type="unfinished"></translation>
+        <translation>Scanning Collection</translation>
     </message>
 </context>
 <context>
@@ -3260,10 +3212,7 @@ Try tweaking the filters for a new set of songs to play.</translation>
     <message numerus="yes">
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="936"/>
         <source>about %n minute(s) long</source>
-        <translation>
-            <numerusform>about %n minute long</numerusform>
-            <numerusform>about %n minutes long</numerusform>
-        </translation>
+        <translation><numerusform>about %n minute long</numerusform><numerusform>about %n minutes long</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="940"/>
@@ -3347,13 +3296,13 @@ Try tweaking the filters for a new set of songs to play.</translation>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="269"/>
         <source>on</source>
-        <comment>&apos;on&apos; is followed by an album name</comment>
+        <comment>'on' is followed by an album name</comment>
         <translation>on</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="272"/>
         <source>%1%4 %2%3.</source>
-        <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist (&apos;by&apos; in english)</comment>
+        <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist ('by' in english)</comment>
         <translation>%1%4 %2%3.</translation>
     </message>
     <message>
@@ -3367,7 +3316,7 @@ Try tweaking the filters for a new set of songs to play.</translation>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="209"/>
         <source>%1 sent you
 %2%4 %3.</source>
-        <comment>%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist (&apos;by&apos; in english)</comment>
+        <comment>%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist ('by' in english)</comment>
         <translation>%1 sent you
 %2%4 %3.</translation>
     </message>
@@ -3456,13 +3405,13 @@ Try tweaking the filters for a new set of songs to play.</translation>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="202"/>
         <source>on</source>
-        <comment>&apos;on&apos; is followed by an album name</comment>
+        <comment>'on' is followed by an album name</comment>
         <translation>on</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="204"/>
         <source>%1%4 %2%3.</source>
-        <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist (&apos;by&apos; in english)</comment>
+        <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist ('by' in english)</comment>
         <translation>%1%4 %2%3.</translation>
     </message>
     <message>
@@ -3488,7 +3437,7 @@ Try tweaking the filters for a new set of songs to play.</translation>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="266"/>
         <source>%1 sent you
 %2%4 %3.</source>
-        <comment>%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist (&apos;by&apos; in english)</comment>
+        <comment>%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist ('by' in english)</comment>
         <translation>%1 sent you
 %2%4 %3.</translation>
     </message>
@@ -3653,18 +3602,12 @@ Try tweaking the filters for a new set of songs to play.</translation>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Track.cpp" line="580"/>
         <source>%n other(s)</source>
-        <translation>
-            <numerusform>%n other</numerusform>
-            <numerusform>%n others</numerusform>
-        </translation>
+        <translation><numerusform>%n other</numerusform><numerusform>%n others</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Track.cpp" line="583"/>
         <source>%n people</source>
-        <translation>
-            <numerusform>%n people</numerusform>
-            <numerusform>%n people</numerusform>
-        </translation>
+        <translation><numerusform>%n people</numerusform><numerusform>%n people</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="587"/>
@@ -3816,12 +3759,12 @@ Try tweaking the filters for a new set of songs to play.</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="602"/>
         <source>Tomahawk is updating the database. Please wait, this may take a minute!</source>
-        <translation type="unfinished"></translation>
+        <translation>Tomahawk is updating the database. Please wait, this may take a minute!</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="609"/>
         <source>Tomahawk</source>
-        <translation type="unfinished">Tomahawk</translation>
+        <translation>Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="710"/>
@@ -3901,6 +3844,19 @@ Try tweaking the filters for a new set of songs to play.</translation>
     </message>
 </context>
 <context>
+    <name>TomahawkUtils</name>
+    <message>
+        <location filename="../src/tomahawk/widgets/AccountsToolButton.cpp" line="90"/>
+        <source>Configure Accounts</source>
+        <translation>Configure Accounts</translation>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/widgets/AccountWidget.cpp" line="131"/>
+        <source>Invite</source>
+        <translation>Invite</translation>
+    </message>
+</context>
+<context>
     <name>TomahawkWindow</name>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.ui" line="14"/>
@@ -3909,7 +3865,6 @@ Try tweaking the filters for a new set of songs to play.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="295"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="544"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="589"/>
         <source>Back</source>
         <translation>Back</translation>
@@ -3947,32 +3902,25 @@ Try tweaking the filters for a new set of songs to play.</translation>
         <translation>&amp;Main Menu</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="550"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="596"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="906"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="918"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="946"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="958"/>
         <source>Play</source>
         <translation>Play</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="556"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="602"/>
         <source>Next</source>
         <translation>Next</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="568"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="615"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="988"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1007"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1014"/>
         <source>Love</source>
         <translation>Love</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="983"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1002"/>
         <source>Unlove</source>
         <translation>Unlove</translation>
@@ -4049,7 +3997,6 @@ Try tweaking the filters for a new set of songs to play.</translation>
         <translation>Copyright 2010 - 2014</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="897"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="937"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1324"/>
         <source>Pause</source>
