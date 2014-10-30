@@ -5,6 +5,7 @@
 <file>tomahawk_ca.qm</file>
 <file>tomahawk_ca@valencia.qm</file>
 <file>tomahawk_cs.qm</file>
+<file>tomahawk_da.qm</file>
 <file>tomahawk_de.qm</file>
 <file>tomahawk_el.qm</file>
 <file>tomahawk_en.qm</file>
@@ -12,13 +13,19 @@
 <file>tomahawk_fi.qm</file>
 <file>tomahawk_fr.qm</file>
 <file>tomahawk_gl.qm</file>
+<file>tomahawk_hu.qm</file>
 <file>tomahawk_it.qm</file>
 <file>tomahawk_ja.qm</file>
+<file>tomahawk_lt.qm</file>
+<file>tomahawk_nl.qm</file>
 <file>tomahawk_pl.qm</file>
 <file>tomahawk_pt_BR.qm</file>
 <file>tomahawk_ro.qm</file>
 <file>tomahawk_ru.qm</file>
+<file>tomahawk_sq.qm</file>
 <file>tomahawk_sv.qm</file>
+<file>tomahawk_uk.qm</file>
 <file>tomahawk_zh_CN.qm</file>
+<file>tomahawk_zh_TW.qm</file>
 </qresource>
 </RCC>
