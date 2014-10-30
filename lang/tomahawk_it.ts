@@ -24,7 +24,7 @@ connettersi e condividere la tua musica?</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="185"/>
         <source>Tomahawk needs you to decide whether %1 is allowed to connect.</source>
-        <translation>Tomahawk ha bisogno di sapere se %1 può connettersi a te</translation>
+        <translation>Tomahawk ha bisogno di sapere se %1 può connettersi con te</translation>
     </message>
 </context>
 <context>

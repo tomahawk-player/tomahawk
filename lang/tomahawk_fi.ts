@@ -2605,7 +2605,7 @@ käyttäjätunnus@jabber.org</translation>
     <message>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="46"/>
         <source>Automatically connect to Tomahawk users on the same local network.</source>
-        <translation>Yhdistä saman paikallisverkon Tomahawk-käyttäjiin automaattisesti.</translation>
+        <translation>Yhdistä saman lähiverkon Tomahawk-käyttäjiin automaattisesti.</translation>
     </message>
 </context>
 <context>
@@ -4272,7 +4272,7 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="253"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Love that your friends and influencers are posting music links  but hate that they are links for music services you don&apos;t use? Just drag Rdio, Deezer, Beats or other music service URLs into your Tomahawk queue or playlists and have them automatically play from your preferred source.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tykkäätkö, että kaverisi ja vaikuttajat julkaisevat musiikkilinkkejä, mutta et pidä siitä, että ne ovat musiikkipalveluihin, joita et käytä? Vedä Rdio-, Deezer-, Beats- tai muun palvelun osoitteita Tomahawk-jonoosi tai soittolistaasi, ja ne soitetaan suosimastasi lähteestä.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Pidätkö siitä, että kaverisi ja vaikuttajat julkaisevat musiikkilinkkejä, mutta et pidä siitä, että ne ovat musiikkipalveluihin, joita et käytä? Vedä Rdio-, Deezer-, Beats- tai muun palvelun osoitteita Tomahawk-jonoosi tai soittolistaasi, ja ne soitetaan suosimastasi lähteestä.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="270"/>
@@ -4282,7 +4282,7 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="296"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beats Music (recently aquired by Apple) is now supported. This means that Beats Music subscribers can also benefit by resolving other music service links so they stream from their Beats Music account. Welcome aboard!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beats Music (jonka Apple osti hiljattain) on nyt tuettu.Tämä tarkoittaa, että Beats Musicin tilaajat hyötyvät muiden musiikikpalveluiden linkkien selvittämisestä siten, että niitä suoratoistetaan Beast Music -tililtä. Tervetuloa mukaan!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beats Music (jonka Apple osti hiljattain) on nyt tuettu.Tämä tarkoittaa, että Beats Musicin tilaajat hyötyvät muiden musiikkipalveluiden linkkien selvittämisestä siten, että niitä suoratoistetaan Beast Music -tililtä. Tervetuloa mukaan!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="313"/>
@@ -4307,7 +4307,7 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="419"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk now supports IPv6 and multiple local IP addresses. This improves the discoverability and connection between Tomahawk users - particularly large local networks often found in work and university settings. The more friends, the more music, the more playlists and the more curation from those people whose musical tastes you value. Sit back and just Listen Along!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk tukee nyt IPv6:ta ja useita paikallisia IP-osoitteita. Tämä parantaa Tomahawk-käyttäjien välistä löydettävyyttä ja yhteydenpitoa – erityisesti suurissa paikallisverkoissa kuten työpaikoilla ja yliopistoilla. Mitä enemmän kavereita, sitä enemmän musiikkia, soittolistoja ja kuratointia ihmisiltä, joiden musiikkimakua arvostat. Ota mukava asento ja kuuntele mukana!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk tukee nyt IPv6:ta ja useita paikallisia IP-osoitteita. Tämä parantaa Tomahawk-käyttäjien välistä löydettävyyttä ja yhteydenpitoa – erityisesti suurissa lähiverkoissa kuten työpaikoilla ja yliopistoilla. Mitä enemmän kavereita, sitä enemmän musiikkia, soittolistoja ja kuratointia ihmisiltä, joiden musiikkimakua arvostat. Ota mukava asento ja kuuntele mukana!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="353"/>

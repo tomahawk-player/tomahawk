@@ -326,17 +326,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="93"/>
         <source>Sorry, we could not find any albums for this artist!</source>
-        <translation type="unfinished"/>
+        <translation>เสียใจด้วย เราไม่พบอัลบั้มใดสำหรับศิลปินรายนี้!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="73"/>
         <source>Sorry, we could not find any related artists!</source>
-        <translation type="unfinished"/>
+        <translation>เสียใจด้วย เราไม่พบศิลปินที่เกี่ยวข้องใดๆ!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="113"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
-        <translation type="unfinished"/>
+        <translation>เสียใจด้วย เราไม่พบรายการสุดฮิตของศิลปินรายนี้!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="144"/>
@@ -389,17 +389,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="925"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
-        <translation type="unfinished"/>
+        <translation>เสียใจด้วย Tomahawk ไม่พบแทร็ค &apos;%1&apos; โดย %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="949"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
-        <translation type="unfinished"/>
+        <translation>เสียใจด้วย Tomahawk ไม่พบศิลปิน &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="975"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
-        <translation type="unfinished"/>
+        <translation>เสียใจด้วย Tomahawk ไม่พบอัลบั้ม &apos;%1&apos; โดย %2</translation>
     </message>
 </context>
 <context>
@@ -469,32 +469,32 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="73"/>
         <source>Sorry, there are no albums in this collection!</source>
-        <translation type="unfinished"/>
+        <translation>เสียใจด้วย ไม่มีอัลบั้มในชุดสะสมนี้!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="85"/>
         <source>Artists</source>
-        <translation type="unfinished"/>
+        <translation>ศิลปิน</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="86"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>อัลบั้ม</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="87"/>
         <source>Songs</source>
-        <translation type="unfinished"/>
+        <translation>เพลง</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="377"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation type="unfinished"/>
+        <translation>หลังจากคุณได้สแกนชุดสะสมดนตรีของคุณ คุณจะพบแทร็คของคุณที่นี่</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="380"/>
         <source>This collection is empty.</source>
-        <translation type="unfinished"/>
+        <translation>ชุดสะสมนี้ว่างเปล่า</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="383"/>
@@ -515,7 +515,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="290"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
-        <translation type="unfinished"/>
+        <translation>เสียใจด้วย ตัวกรอง &apos;%1&apos; ของคุณ ไม่ตรงกับผลลัพธ์ใดๆ</translation>
     </message>
 </context>
 <context>
@@ -561,12 +561,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="244"/>
         <source>This playlist is currently empty.</source>
-        <translation type="unfinished"/>
+        <translation>บัญชีการเล่นนี้ว่างเปล่าในปัจจุบัน</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="246"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
-        <translation type="unfinished"/>
+        <translation>บัญชีการเล่นนี้ว่างเปล่าในปัจจุบัน เพิ่มบางแทร็คให้มันและสนุกกับดนตรี!</translation>
     </message>
 </context>
 <context>
@@ -1125,7 +1125,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="79"/>
         <source>Hot Playlists</source>
-        <translation type="unfinished"/>
+        <translation>บัญชีการเล่นที่มาแรง</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="113"/>
@@ -1138,52 +1138,52 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Artist</source>
-        <translation type="unfinished"/>
+        <translation>ศิลปิน</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Title</source>
-        <translation type="unfinished"/>
+        <translation>ชื่อเรียก</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Composer</source>
-        <translation type="unfinished"/>
+        <translation>ผู้แต่ง</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Album</source>
-        <translation type="unfinished"/>
+        <translation>อัลบั้ม</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Track</source>
-        <translation type="unfinished"/>
+        <translation>แทร็ค</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Duration</source>
-        <translation type="unfinished"/>
+        <translation>ระยะเวลา</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Bitrate</source>
-        <translation type="unfinished"/>
+        <translation>อัตราบิต</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Age</source>
-        <translation type="unfinished"/>
+        <translation>อายุ</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Year</source>
-        <translation type="unfinished"/>
+        <translation>ปี</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Size</source>
-        <translation type="unfinished"/>
+        <translation>ขนาด</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
