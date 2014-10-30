@@ -2541,7 +2541,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="96"/>
         <source>KDE Instant Messaging Accounts</source>
-        <translation>KDE Instant Messenger Kontos</translation>
+        <translation>KDE Instant-Messenger-Konten</translation>
     </message>
 </context>
 <context>
