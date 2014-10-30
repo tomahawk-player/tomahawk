@@ -200,7 +200,7 @@ AccountListWidget::removeEntries( const QModelIndex& parent, int start, int end 
 void
 AccountListWidget::toggleOnlineStateForAll()
 {
-    tDebug() << Q_FUNC_INFO;
+    // tDebug() << Q_FUNC_INFO;
     bool newState = !m_toggleOnlineButtonState;
     foreach ( QList< AccountWidget* > awgts, m_entries )
     {

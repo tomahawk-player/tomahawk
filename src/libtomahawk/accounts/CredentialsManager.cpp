@@ -93,7 +93,7 @@ CredentialsManager::loadCredentials( const QString &service )
 #ifdef Q_OS_MAC
     foreach ( QString key, accountIds )
     {
-        tDebug() << "beginGroup" << QString( "accounts/%1" ).arg( key );
+        tDebug() << Q_FUNC_INFO << "beginGroup" << QString( "accounts/%1" ).arg( key );
         TomahawkSettings::instance()->beginGroup( QString( "accounts/%1" ).arg( key ) );
         const QVariantMap creds = TomahawkSettings::instance()->value( "credentials" ).toMap();
         tDebug() << creds[ "username" ]
@@ -120,7 +120,7 @@ CredentialsManager::loadCredentials( const QString &service )
                     SLOT( keychainJobFinished( QKeychain::Job* ) ) );
         m_readJobs[ service ] << j;
         j->start();
-        tDebug()  << "Launching QtKeychain readJob for" << key;
+        tDebug() << Q_FUNC_INFO << "Launching QtKeychain readJob for" << key;
     }
 
     if ( m_readJobs[ service ].isEmpty() )
@@ -171,7 +171,7 @@ CredentialsManager::credentials( const QString& serviceName, const QString& key 
 void
 CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QVariant& value, bool tryToWriteAsString )
 {
-    tDebug() << Q_FUNC_INFO;
+    // tDebug() << Q_FUNC_INFO;
     QMutexLocker locker( &m_mutex );
 
     QKeychain::Job* j;
@@ -222,11 +222,11 @@ CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QV
 
             if ( ok )
             {
-                tDebug() << "About to write credentials for key" << csKey.key();
+                tDebug() << Q_FUNC_INFO << "About to write credentials for key" << csKey.key();
             }
             else
             {
-                tDebug() << "Cannot serialize credentials for writing" << csKey.key();
+                tDebug() << Q_FUNC_INFO << "Cannot serialize credentials for writing" << csKey.key();
             }
 
             wj->setTextData( data );
@@ -267,12 +267,12 @@ void
 CredentialsManager::keychainJobFinished( QKeychain::Job* j )
 {
 #ifndef Q_OS_MAC
-    tDebug() << Q_FUNC_INFO;
+    // tDebug() << Q_FUNC_INFO;
     if ( QKeychain::ReadPasswordJob* readJob = qobject_cast< QKeychain::ReadPasswordJob* >( j ) )
     {
         if ( readJob->error() == QKeychain::NoError )
         {
-            tDebug() << "QtKeychain readJob for" << readJob->service() << "/"
+            tDebug() << Q_FUNC_INFO << "QtKeychain readJob for" << readJob->service() << "/"
                      << readJob->key() << "finished without errors";
 
             QVariant creds;
@@ -292,7 +292,7 @@ CredentialsManager::keychainJobFinished( QKeychain::Job* j )
         }
         else
         {
-            tDebug() << "QtKeychain readJob for" << readJob->service() << "/" << readJob->key() << "finished with ERROR:" << j->error() << j->errorString();
+            tDebug() << Q_FUNC_INFO << "QtKeychain readJob for" << readJob->service() << "/" << readJob->key() << "finished with ERROR:" << j->error() << j->errorString();
         }
 
         m_readJobs[ readJob->service() ].removeOne( readJob );

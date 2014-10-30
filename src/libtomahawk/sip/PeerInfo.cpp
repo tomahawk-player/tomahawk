@@ -344,7 +344,7 @@ PeerInfo::avatar( TomahawkUtils::ImageMode style, const QSize& size ) const
 
     if ( d->avatar.isNull() )
     {
-        tDebug() << "Avatar for:" << id();
+        // tDebug() << "Avatar for:" << id();
         Q_ASSERT( !contactId().isEmpty() );
         if ( d->avatarBuffer.isEmpty() && !contactId().isEmpty() )
             d->avatarBuffer = TomahawkUtils::Cache::instance()->getData( "Sources", contactId() ).toByteArray();

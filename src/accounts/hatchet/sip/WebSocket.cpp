@@ -254,10 +254,10 @@ WebSocket::readOutput()
     std::string outputString = m_outputStream.str();
     if ( outputString.size() > 0 )
     {
-        m_outputStream.str("");
+        m_outputStream.str( "" );
 
         qint64 sizeWritten = m_socket->write( outputString.data(), outputString.size() );
-        tDebug() << Q_FUNC_INFO << "Got " << outputString.size() << "from outstream, wrote" << sizeWritten << "bytes to the socket";
+        // tDebug() << Q_FUNC_INFO << "Got" << outputString.size() << "from outstream, wrote" << sizeWritten << "bytes to the socket";
         if ( sizeWritten == -1 )
         {
             tLog() << Q_FUNC_INFO << "Error during writing, closing connection";
@@ -291,6 +291,7 @@ WebSocket::readOutput()
     }
 }
 
+
 void
 WebSocket::socketReadyRead()
 {
@@ -311,7 +312,8 @@ WebSocket::socketReadyRead()
         QByteArray buf;
         buf.resize( bytes );
         qint64 bytesRead = m_socket->read( buf.data(), bytes );
-        tDebug() << Q_FUNC_INFO << "Bytes available: " << bytes << ", bytes read:" << bytesRead; // << ", content is" << websocketpp::utility::to_hex( buf.constData(), bytesRead ).data();
+        // tDebug() << Q_FUNC_INFO << "Bytes available:" << bytes << ", bytes read:" << bytesRead;
+        // << ", content is" << websocketpp::utility::to_hex( buf.constData(), bytesRead ).data();
         if ( bytesRead != bytes )
         {
             tLog() << Q_FUNC_INFO << "Error occurred during socket read. Something is wrong; disconnecting";
@@ -349,6 +351,7 @@ WebSocket::encodeMessage( const QByteArray &bytes )
     QMetaObject::invokeMethod( this, "readOutput", Qt::QueuedConnection );
 }
 
+
 void
 onMessage( WebSocket* ws, websocketpp::connection_hdl, hatchet_client::message_ptr msg )
 {
@@ -356,6 +359,7 @@ onMessage( WebSocket* ws, websocketpp::connection_hdl, hatchet_client::message_p
     std::string payload = msg->get_payload();
     ws->decodedMessage( QByteArray( payload.data(), payload.length() ) );
 }
+
 
 void
 onClose( WebSocket *ws, websocketpp::connection_hdl )
