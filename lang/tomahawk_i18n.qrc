@@ -13,7 +13,9 @@
 <file>tomahawk_fi.qm</file>
 <file>tomahawk_fr.qm</file>
 <file>tomahawk_gl.qm</file>
+<file>tomahawk_hi_IN.qm</file>
 <file>tomahawk_hu.qm</file>
+<file>tomahawk_id.qm</file>
 <file>tomahawk_it.qm</file>
 <file>tomahawk_ja.qm</file>
 <file>tomahawk_lt.qm</file>
@@ -24,7 +26,10 @@
 <file>tomahawk_ru.qm</file>
 <file>tomahawk_sq.qm</file>
 <file>tomahawk_sv.qm</file>
+<file>tomahawk_th.qm</file>
+<file>tomahawk_tr.qm</file>
 <file>tomahawk_uk.qm</file>
+<file>tomahawk_vi.qm</file>
 <file>tomahawk_zh_CN.qm</file>
 <file>tomahawk_zh_TW.qm</file>
 </qresource>
