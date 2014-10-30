@@ -171,7 +171,7 @@ PluginLoader::pluginPaths( const QString& name ) const
     QSet< QString > paths;
     foreach ( const QDir& pluginDir, pluginDirs() )
     {
-        tDebug() << Q_FUNC_INFO << "Checking directory for" << type << "plugins:" << pluginDir;
+        tDebug() << Q_FUNC_INFO << "Checking directory for" << type << "plugins:" << pluginDir.absolutePath();
         foreach ( QString fileName, pluginDir.entryList( pluginFilenames( name ), QDir::Files ) )
         {
             //TODO: do we really need to check this?!

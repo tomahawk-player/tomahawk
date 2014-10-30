@@ -52,7 +52,7 @@ QueueProxyModel::onIndexChanged( const QModelIndex& index )
     PlayableItem* item = itemFromIndex( mapToSource( index ) );
     if ( item && item->query() )
     {
-        tDebug() << item->query()->toString() << item->query()->resolvingFinished() << item->query()->playable();
+        // tDebug() << Q_FUNC_INFO << item->query()->toString() << item->query()->resolvingFinished() << item->query()->playable();
     }
     if ( !item || !item->query() || ( item->query()->resolvingFinished() && !item->query()->playable() ) )
     {

@@ -933,7 +933,7 @@ PlayableModel::startLoading()
     Q_D( PlayableModel );
     if ( !d->loading )
     {
-        tDebug() << Q_FUNC_INFO;
+        // tDebug() << Q_FUNC_INFO;
         d->loading = true;
         emit loadingStarted();
     }
@@ -1280,6 +1280,6 @@ PlayableModel::indexFromSource( const Tomahawk::source_ptr& source ) const
         }
     }
 
-    tDebug() << "Could not find item for source:" << source->friendlyName();
+    // tDebug() << "Could not find item for source:" << source->friendlyName();
     return QModelIndex();
 }

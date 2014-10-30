@@ -331,9 +331,9 @@ TreeModel::onTracksFound( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::Mo
 
     Tomahawk::Album* album = qobject_cast<Tomahawk::Album*>( sender() );
 
-    tDebug() << "Adding album:" << album->artist()->name() << album->name() << album->id();
+    tDebug() << Q_FUNC_INFO << "Adding album:" << album->artist()->name() << album->name() << album->id();
     QModelIndex idx = indexFromAlbum( album->weakRef().toStrongRef() );
-    tDebug() << "Adding tracks" << tracks.count() << "to index:" << idx;
+    tDebug() << Q_FUNC_INFO << "Adding tracks" << tracks.count() << "to index:" << idx;
     onTracksAdded( tracks, idx );
 }
 
@@ -351,7 +351,7 @@ TreeModel::indexFromArtist( const Tomahawk::artist_ptr& artist ) const
         }
     }
 
-    tDebug() << "Could not find item for artist:" << artist->name();
+    tDebug() << Q_FUNC_INFO << "Could not find item for artist:" << artist->name();
     return QModelIndex();
 }
 
@@ -370,7 +370,7 @@ TreeModel::indexFromAlbum( const Tomahawk::album_ptr& album ) const
         }
     }
 
-    tDebug() << "Could not find item for album:" << album->name() << album->artist()->name();
+    tDebug() << Q_FUNC_INFO << "Could not find item for album:" << album->name() << album->artist()->name();
     return QModelIndex();
 }
 
@@ -383,14 +383,14 @@ TreeModel::indexFromResult( const Tomahawk::result_ptr& result ) const
     {
         QModelIndex idx = index( i, 0, albumIdx );
         PlayableItem* item = itemFromIndex( idx );
-        tDebug() << item->result()->toString();
+        // tDebug() << Q_FUNC_INFO << item->result()->toString();
         if ( item && item->result() == result )
         {
             return idx;
         }
     }
 
-    tDebug() << "Could not find item for result:" << result->toString();
+    tDebug() << Q_FUNC_INFO << "Could not find item for result:" << result->toString();
     return QModelIndex();
 }
 
@@ -409,7 +409,7 @@ TreeModel::indexFromQuery( const Tomahawk::query_ptr& query ) const
         }
     }
 
-    tDebug() << "Could not find item for query:" << query->toString();
+    tDebug() << Q_FUNC_INFO << "Could not find item for query:" << query->toString();
     return QModelIndex();
 }
 
@@ -428,6 +428,6 @@ TreeModel::itemFromResult( const Tomahawk::result_ptr& result ) const
         }
     }
 
-    tDebug() << "Could not find item for result:" << result->toString();
+    tDebug() << Q_FUNC_INFO << "Could not find item for result:" << result->toString();
     return 0;
 }
