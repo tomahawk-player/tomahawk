@@ -165,7 +165,7 @@ int main( int argc, char* argv[] )
         return 1;
     }
 
-    CrashReporter reporter( QUrl( "http://crash-reports.tomahawk-player.org/submit" ),  app.arguments() );
+    CrashReporter reporter( QUrl( "https://crash-reports.tomahawk-player.org/submit" ),  app.arguments() );
 
     reporter.setLogo(QPixmap(":/tomahawk-icon.png"));
 
