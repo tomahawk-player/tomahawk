@@ -185,9 +185,6 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
         if ( url.contains( "itunes" ) && url.contains( "album" ) ) // YES itunes is fucked up and song links have album/ in the url.
             return true;
 
-        if ( url.contains( "spotify" ) && url.contains( "track" ) )
-            return true;
-
         if ( url.contains( "rdio.com" ) && ( ( ( url.contains( "track" ) && url.contains( "artist" ) && url.contains( "album" ) )
                                                || url.contains( "playlists" )  ) ) )
             return true;
@@ -204,8 +201,6 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
     {
         if ( url.contains( "itunes" ) && url.contains( "album" ) ) // YES itunes is fucked up and song links have album/ in the url.
             return true;
-        if ( url.contains( "spotify" ) && url.contains( "album" ) )
-            return true;
         if ( url.contains( "rdio.com" ) && ( url.contains( "artist" ) && url.contains( "album" ) && !url.contains( "track" ) )  )
             return true;
 
@@ -220,8 +215,6 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
     if ( acceptedType.testFlag( Artist ) )
     {
         if ( url.contains( "itunes" ) && url.contains( "artist" ) ) // YES itunes is fucked up and song links have album/ in the url.
-            return true;
-        if ( url.contains( "spotify" ) && url.contains( "artist" ) )
             return true;
         if ( url.contains( "rdio.com" ) && ( url.contains( "artist" ) && !url.contains( "album" ) && !url.contains( "track" ) )  )
             return true;
