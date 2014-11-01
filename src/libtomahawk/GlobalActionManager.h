@@ -87,7 +87,7 @@ private slots:
     void playNow( const Tomahawk::query_ptr& );
 
 private:
-    explicit GlobalActionManager( QObject* parent = 0 );
+    explicit GlobalActionManager( QObject* parent = nullptr );
 
     /// handle opening of urls
     bool handlePlaylistCommand( const QUrl& url );
