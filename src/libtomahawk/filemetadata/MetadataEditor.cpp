@@ -127,8 +127,6 @@ MetadataEditor::writeMetadata( bool closeDlg )
 
                 changed = true;
             }
-            else
-                Q_ASSERT( false );
         }
 
         // FIXME: Ugly workaround for the min value of 0
