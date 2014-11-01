@@ -68,7 +68,6 @@
 #include "widgets/SplashWidget.h"
 
 #include "resolvers/JSResolver.h"
-#include "utils/SpotifyParser.h"
 #include "AtticaManager.h"
 #include "TomahawkWindow.h"
 #include "dialogs/SettingsDialog.h"
@@ -681,10 +680,6 @@ TomahawkApp::onInfoSystemReady()
     // Make sure to init GAM in the gui thread
     GlobalActionManager::instance();
 
-    // check if our spotify playlist api server is up and running, and enable spotify playlist drops if so
-    QNetworkReply* r = Tomahawk::Utils::nam()->get( QNetworkRequest( QUrl( SPOTIFY_PLAYLIST_API_URL "/pong" ) ) );
-    connect( r, SIGNAL( finished() ), this, SLOT( spotifyApiCheckFinished() ) );
-
 #ifdef Q_OS_MAC
     // Make sure to do this after main window is inited
     Tomahawk::enableFullscreen( m_mainwindow );
@@ -759,16 +754,6 @@ TomahawkApp::ipDetectionFailed( QNetworkReply::NetworkError error, QString error
 #else
     JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( errorString ) );
 #endif
-}
-
-
-void
-TomahawkApp::spotifyApiCheckFinished()
-{
-    QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
-    Q_ASSERT( reply );
-
-    DropJob::setCanParseSpotifyPlaylists( !reply->error() );
 }
 
 

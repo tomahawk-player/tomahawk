@@ -110,7 +110,6 @@ private slots:
 
     void onShutdownDelayed();
 
-    void spotifyApiCheckFinished();
     void onInfoSystemReady();
 
     void onSchemaUpdateStarted();

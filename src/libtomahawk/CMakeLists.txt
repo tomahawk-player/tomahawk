@@ -91,7 +91,6 @@ set( libGuiSources
     utils/WidgetDragFilter.cpp
     utils/XspfGenerator.cpp
     utils/JspfLoader.cpp
-    utils/SpotifyParser.cpp
     utils/M3uLoader.cpp
     utils/ItunesParser.cpp
     utils/ItunesLoader.cpp

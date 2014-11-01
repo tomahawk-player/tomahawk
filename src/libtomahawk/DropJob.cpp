@@ -27,7 +27,6 @@
 #include "jobview/ErrorStatusMessage.h"
 #include "playlist/PlaylistTemplate.h"
 #include "resolvers/ExternalResolver.h"
-#include "utils/SpotifyParser.h"
 #include "utils/ItunesParser.h"
 #include "utils/ItunesLoader.h"
 #include "utils/M3uLoader.h"
@@ -52,7 +51,6 @@
 
 using namespace Tomahawk;
 
-bool DropJob::s_canParseSpotifyPlaylists = false;
 static QString s_dropJobInfoId = "dropjob";
 
 DropJob::DropJob( QObject *parent )
@@ -163,10 +161,6 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
             return true;
 
         if ( urlList.contains( "xspf" ) )
-            return true;
-
-        // Not the most elegant
-        if ( url.contains( "spotify" ) && url.contains( "playlist" ) && s_canParseSpotifyPlaylists )
             return true;
 
         if ( url.contains( "grooveshark.com" ) && url.contains( "playlist" ) )
@@ -288,10 +282,6 @@ DropJob::isDropType( DropJob::DropType desired, const QMimeData* data )
             return true;
 
         if ( url.contains( "m3u" ) || urlList.contains( "m3u" ) )
-            return true;
-
-        // Not the most elegant
-        if ( url.contains( "spotify" ) && url.contains( "playlist" ) && s_canParseSpotifyPlaylists )
             return true;
 
         if ( url.contains( "rdio.com" ) && url.contains( "people" ) && url.contains( "playlist" ) )
@@ -633,33 +623,6 @@ DropJob::handleXspfs( const QString& fileUrls )
 
 
 void
-DropJob::handleSpotifyUrls( const QString& urlsRaw )
-{
-    // Todo: Allow search querys, and split these in a better way.
-    // Example: spotify:search:artist:Madonna year:<1970 year:>1990
-    QStringList urls = urlsRaw.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
-    qDebug() << "Got spotify browse uris!" << urls;
-
-    /// Lets allow parsing all spotify uris here, if parse server is not available
-    /// fallback to spotify metadata for tracks /hugo
-    if ( dropAction() == Default )
-        setDropAction( Create );
-
-    tDebug() << "Got a spotify browse uri in dropjob!" << urls;
-    SpotifyParser* spot = new SpotifyParser( urls, dropAction() == Create, this );
-    spot->setSingleMode( false );
-
-    /// This currently supports draging and dropping a spotify playlist and artist
-    if ( dropAction() == Append )
-    {
-        tDebug() << Q_FUNC_INFO << "Asking for spotify browse contents from" << urls;
-        connect( spot, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
-        m_queryCount++;
-    }
-}
-
-
-void
 DropJob::handleGroovesharkUrls ( const QString& urlsRaw )
 {
 #ifdef QCA2_FOUND
@@ -684,20 +647,6 @@ DropJob::handleGroovesharkUrls ( const QString& urlsRaw )
 }
 
 
-bool
-DropJob::canParseSpotifyPlaylists()
-{
-    return s_canParseSpotifyPlaylists;
-}
-
-
-void
-DropJob::setCanParseSpotifyPlaylists( bool parseable )
-{
-    s_canParseSpotifyPlaylists = parseable;
-}
-
-
 void
 DropJob::handleAllUrls( const QString& urls )
 {
@@ -705,10 +654,6 @@ DropJob::handleAllUrls( const QString& urls )
         handleXspfs( urls );
     else if ( urls.contains( "m3u" ) )
         handleM3u( urls );
-    else if ( urls.contains( "spotify" ) /// Handle all the spotify uris on internal server, if not avail. fallback to spotify
-              && ( urls.contains( "playlist" ) || urls.contains( "artist" ) || urls.contains( "album" ) || urls.contains( "track" ) )
-              && s_canParseSpotifyPlaylists )
-        handleSpotifyUrls( urls );
 #ifdef QCA2_FOUND
     else if ( urls.contains( "grooveshark.com" ) )
         handleGroovesharkUrls( urls );
@@ -734,15 +679,6 @@ DropJob::handleTrackUrls( const QString& urls )
         tDebug() << "Got a list of itunes urls!" << tracks;
         ItunesParser* itunes = new ItunesParser( tracks, this );
         connect( itunes, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
-        m_queryCount++;
-    }
-    else if ( urls.contains( "open.spotify.com/track") || urls.contains( "spotify:track" ) )
-    {
-        QStringList tracks = urls.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
-
-        tDebug() << "Got a list of spotify urls!" << tracks;
-        SpotifyParser* spot = new SpotifyParser( tracks, false, this );
-        connect( spot, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
         m_queryCount++;
     }
     else if ( ShortenedLinkParser::handlesUrl( urls ) )

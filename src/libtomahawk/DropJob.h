@@ -112,11 +112,7 @@ public:
     void tracksFromMimeData( const QMimeData* data, bool allowDuplicates = false, bool onlyLocal = false, bool top10 = false );
     void handleXspfs( const QString& files );
     void handleM3u( const QString& urls );
-    void handleSpotifyUrls( const QString& urls );
     void handleGroovesharkUrls( const QString& urls );
-
-    static bool canParseSpotifyPlaylists();
-    static void setCanParseSpotifyPlaylists( bool parseable );
 
 signals:
     /// QMimeData parsing results
@@ -161,8 +157,6 @@ private:
     QList< Tomahawk::query_ptr > m_resultList;
     QSet< Tomahawk::album_ptr > m_albumsToKeep;
     QSet< Tomahawk::artist_ptr > m_artistsToKeep;
-
-    static bool s_canParseSpotifyPlaylists;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(DropJob::DropTypes)

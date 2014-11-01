@@ -42,7 +42,6 @@
 #include "utils/NetworkAccessManager.h"
 #include "utils/ShortenedLinkParser.h"
 #include "utils/ShortLinkHelper.h"
-#include "utils/SpotifyParser.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/XspfLoader.h"
 #include "utils/XspfGenerator.h"
@@ -194,8 +193,6 @@ GlobalActionManager::openUrl( const QString& url )
     // Native Implementations
     if ( url.startsWith( "tomahawk://" ) )
         return parseTomahawkLink( url );
-    else if ( url.contains( "open.spotify.com" ) || url.startsWith( "spotify:" ) )
-        return openSpotifyLink( url );
 
     // Can we parse the Url using a ScriptResolver?
     bool canParse = false;
@@ -759,9 +756,6 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
 {
     if ( parts.size() && parts[ 0 ] == "track" )
     {
-        if ( queueSpotify( parts, queryItems ) )
-            return true;
-
         QPair< QString, QString > pair;
         QString title, artist, album, urlStr;
         foreach ( pair, queryItems )
@@ -873,29 +867,6 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
         }
     }
     return false;
-}
-
-
-bool
-GlobalActionManager::queueSpotify( const QStringList& , const QList< QPair< QString, QString > >& queryItems )
-{
-    QString url;
-
-    QPair< QString, QString > pair;
-    foreach ( pair, queryItems )
-    {
-        if ( pair.first == "spotifyURL" )
-            url = pair.second;
-        else if ( pair.first == "spotifyURI" )
-            url = pair.second;
-    }
-
-    if ( url.isEmpty() )
-        return false;
-
-    openSpotifyLink( url );
-
-    return true;
 }
 
 
@@ -1202,9 +1173,6 @@ GlobalActionManager::handlePlayCommand( const QUrl& url )
 
     if ( parts[ 0 ] == "track" )
     {
-        if ( playSpotify( url ) )
-            return true;
-
         QPair< QString, QString > pair;
         QString title, artist, album, urlStr;
         foreach ( pair, urlQueryItems( url ) )
@@ -1234,20 +1202,6 @@ GlobalActionManager::handlePlayCommand( const QUrl& url )
     }
 
     return false;
-}
-
-
-bool
-GlobalActionManager::playSpotify( const QUrl& url )
-{
-    if ( !urlHasQueryItem( url, "spotifyURI" ) && !urlHasQueryItem( url, "spotifyURL" ) )
-        return false;
-
-    QString spotifyUrl = urlHasQueryItem( url, "spotifyURI" ) ? urlQueryItemValue( url, "spotifyURI" ) : urlQueryItemValue( url, "spotifyURL" );
-    SpotifyParser* p = new SpotifyParser( spotifyUrl, false, this );
-    connect( p, SIGNAL( track( Tomahawk::query_ptr ) ), this, SLOT( playOrQueueNow( Tomahawk::query_ptr ) ) );
-
-    return true;
 }
 
 
@@ -1312,18 +1266,6 @@ GlobalActionManager::waitingForResolved( bool /* success */ )
 
         m_waitingToPlay.clear();
     }
-}
-
-
-/// SPOTIFY URL HANDLING
-
-bool
-GlobalActionManager::openSpotifyLink( const QString& link )
-{
-    SpotifyParser* spot = new SpotifyParser( link, false, this );
-    connect( spot, SIGNAL( track( Tomahawk::query_ptr ) ), this, SLOT( handleOpenTrack( Tomahawk::query_ptr ) ) );
-
-    return true;
 }
 
 
