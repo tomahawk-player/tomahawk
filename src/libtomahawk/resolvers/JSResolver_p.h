@@ -37,7 +37,10 @@ class JSResolverPrivate
 public:
     JSResolverPrivate( JSResolver* q, const QString& pAccountId, const QString& scriptPath, const QStringList& additionalScriptPaths )
         : q_ptr ( q )
+        , engine( nullptr )
         , accountId( pAccountId )
+        , weight( 0 )
+        , timeout( 0 )
         , ready( false )
         , stopped( true )
         , error( Tomahawk::ExternalResolver::NoError )
