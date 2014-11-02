@@ -21,6 +21,7 @@
 
 #include "AudioEngine.h"
 #include "AudioOutput.h"
+#include "TomahawkVersion.h"
 
 #include "utils/Logger.h"
 
@@ -90,6 +91,12 @@ AudioOutput::AudioOutput( QObject* parent )
     if ( !m_vlcInstance ) {
         tDebug() << "libVLC: could not initialize";
     }
+    libvlc_set_user_agent( m_vlcInstance, TOMAHAWK_APPLICATION_NAME,
+                           TOMAHAWK_APPLICATION_NAME "/" TOMAHAWK_VERSION );
+    // FIXME: icon is named tomahawk, so we need the lowercase application name
+    libvlc_set_app_id( m_vlcInstance, "org.tomahawk-player.desktop",
+                       TOMAHAWK_VERSION, "tomahawk" );
+
 
 
     m_vlcPlayer = libvlc_media_player_new( m_vlcInstance );
