@@ -468,37 +468,37 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="73"/>
         <source>Sorry, there are no albums in this collection!</source>
-        <translation type="unfinished"/>
+        <translation>抱歉，此收藏中没有任何专辑！</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="85"/>
         <source>Artists</source>
-        <translation type="unfinished"/>
+        <translation>艺术家</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="86"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>专辑</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="87"/>
         <source>Songs</source>
-        <translation type="unfinished"/>
+        <translation>歌曲</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="377"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation type="unfinished"/>
+        <translation>在扫描音乐收藏后你将可以在这里找到你的音乐。</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="380"/>
         <source>This collection is empty.</source>
-        <translation type="unfinished"/>
+        <translation>收藏为空。</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="383"/>
         <source>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</source>
-        <translation type="unfinished"/>
+        <translation>云收藏暂不支持扁平视图。我们将会尽快解决这个问题。请使用别的视图来操控它们。</translation>
     </message>
 </context>
 <context>
@@ -1543,7 +1543,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/jobview/ScannerStatusItem.cpp" line="55"/>
         <source>Scanning Collection</source>
-        <translation type="unfinished"/>
+        <translation>扫描收藏中</translation>
     </message>
 </context>
 <context>
@@ -3757,12 +3757,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="602"/>
         <source>Tomahawk is updating the database. Please wait, this may take a minute!</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk 更新数据库中。请稍等，可能需要几分钟！</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="609"/>
         <source>Tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="710"/>
@@ -3845,12 +3845,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/widgets/AccountsToolButton.cpp" line="90"/>
         <source>Configure Accounts</source>
-        <translation type="unfinished"/>
+        <translation>配置账户</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/AccountWidget.cpp" line="131"/>
         <source>Invite</source>
-        <translation type="unfinished"/>
+        <translation>邀请</translation>
     </message>
 </context>
 <context>

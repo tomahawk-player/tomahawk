@@ -469,37 +469,37 @@ de se connecter et streamer votre flux ?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="73"/>
         <source>Sorry, there are no albums in this collection!</source>
-        <translation type="unfinished"/>
+        <translation>Désolé, il n&apos;y a aucun album dans cette collection !</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="85"/>
         <source>Artists</source>
-        <translation type="unfinished"/>
+        <translation>Artistes</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="86"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Albums</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="87"/>
         <source>Songs</source>
-        <translation type="unfinished"/>
+        <translation>Titres</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="377"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation type="unfinished"/>
+        <translation>Après avoir scanné votre collection musicale, vous trouverez tous vos titres ici.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="380"/>
         <source>This collection is empty.</source>
-        <translation type="unfinished"/>
+        <translation>Cette collection est vide.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="383"/>
         <source>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</source>
-        <translation type="unfinished"/>
+        <translation>Les collections Cloud ne sont pas encore supportées dans la vue en liste, mais cela arrive bientôt. Passez à une autre vue pour les parcourir.</translation>
     </message>
 </context>
 <context>
@@ -868,7 +868,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/jobview/IndexingJobItem.cpp" line="33"/>
         <source>Indexing Music Library</source>
-        <translation type="unfinished"/>
+        <translation>Indexation de la bibliothèque musicale</translation>
     </message>
 </context>
 <context>
@@ -1543,7 +1543,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/jobview/ScannerStatusItem.cpp" line="55"/>
         <source>Scanning Collection</source>
-        <translation type="unfinished"/>
+        <translation>Scan en cours</translation>
     </message>
 </context>
 <context>
@@ -3755,12 +3755,12 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="602"/>
         <source>Tomahawk is updating the database. Please wait, this may take a minute!</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk met à jour la base de données. Veuillez patienter, cela peut prendre une minute !</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="609"/>
         <source>Tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="710"/>
@@ -3844,12 +3844,12 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/tomahawk/widgets/AccountsToolButton.cpp" line="90"/>
         <source>Configure Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Configurer les comptes</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/AccountWidget.cpp" line="131"/>
         <source>Invite</source>
-        <translation type="unfinished"/>
+        <translation>Inviter</translation>
     </message>
 </context>
 <context>

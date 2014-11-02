@@ -87,7 +87,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="72"/>
         <source>&amp;Follow in Real-Time</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Seuraa reaaliajassa</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
@@ -157,12 +157,12 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="111"/>
         <source>Import Playlist...</source>
-        <translation type="unfinished"/>
+        <translation>Tuo soittolista…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="114"/>
         <source>Show Offline Friends</source>
-        <translation type="unfinished"/>
+        <translation>Näytä poissa verkossa olevat kaverit</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="116"/>
@@ -222,17 +222,17 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="145"/>
         <source>Report a Bug</source>
-        <translation type="unfinished"/>
+        <translation>Ilmoita virheestä</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="146"/>
         <source>Get Support</source>
-        <translation type="unfinished"/>
+        <translation>Hanki tukea</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="147"/>
         <source>Help Us Translate</source>
-        <translation type="unfinished"/>
+        <translation>Auta kääntämisessä</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="157"/>
@@ -253,7 +253,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="188"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="258"/>
         <source>What&apos;s New in ...</source>
-        <translation type="unfinished"/>
+        <translation>Mitä uutta versiossa…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="214"/>
@@ -271,12 +271,12 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/AlbumViewPage.ui" line="60"/>
         <source>Top Hits</source>
-        <translation type="unfinished"/>
+        <translation>Parhaat hitit</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/AlbumViewPage.cpp" line="62"/>
         <source>Album Details</source>
-        <translation type="unfinished"/>
+        <translation>Albumin tiedot</translation>
     </message>
 </context>
 <context>
@@ -298,7 +298,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.ui" line="50"/>
         <source>Top Albums</source>
-        <translation type="unfinished"/>
+        <translation>Parhaat albumit</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.ui" line="110"/>
@@ -309,13 +309,13 @@ yhdistää ja toistaa sinulta virtaa?</translation>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.ui" line="76"/>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.ui" line="136"/>
         <source>Show More</source>
-        <translation type="unfinished"/>
+        <translation>Näytä lisää</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.ui" line="173"/>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="145"/>
         <source>Biography</source>
-        <translation type="unfinished"/>
+        <translation>Biografia</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.ui" line="267"/>
@@ -341,17 +341,17 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="144"/>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>Musiikki</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="183"/>
         <source>Songs</source>
-        <translation type="unfinished"/>
+        <translation>Kappaleet</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="198"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Albumit</translation>
     </message>
 </context>
 <context>
@@ -407,7 +407,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/CaptionLabel.cpp" line="71"/>
         <source>Close</source>
-        <translation type="unfinished"/>
+        <translation>Sulje</translation>
     </message>
 </context>
 <context>
@@ -461,7 +461,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CollectionItem.cpp" line="37"/>
         <source>Collection</source>
-        <translation type="unfinished"/>
+        <translation>Kokoelma</translation>
     </message>
 </context>
 <context>
@@ -469,37 +469,37 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="73"/>
         <source>Sorry, there are no albums in this collection!</source>
-        <translation type="unfinished"/>
+        <translation>Tässä kokoelmassa ei ole albumeita!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="85"/>
         <source>Artists</source>
-        <translation type="unfinished"/>
+        <translation>Artistit</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="86"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Albumit</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="87"/>
         <source>Songs</source>
-        <translation type="unfinished"/>
+        <translation>Kappaleet</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="377"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation type="unfinished"/>
+        <translation>Löydät kappaleesi tästä, kunhan musiikkikokoelmasi haku on valmistunut.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="380"/>
         <source>This collection is empty.</source>
-        <translation type="unfinished"/>
+        <translation>Tämä kokoelma on tyhjä.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="383"/>
         <source>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</source>
-        <translation type="unfinished"/>
+        <translation>Pilvikokoelmia ei vielä tueta litteässä näkymässä. Lisäämme tuen niille pian. Tällä välin voit selata niitä vaihtamalla toiseen näkymään.</translation>
     </message>
 </context>
 <context>
@@ -556,17 +556,17 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="137"/>
         <source>Playlist Details</source>
-        <translation type="unfinished"/>
+        <translation>Soittolistan tiedot</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="244"/>
         <source>This playlist is currently empty.</source>
-        <translation type="unfinished"/>
+        <translation>Tämä soittolista on nyt tyhjä.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="246"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
-        <translation type="unfinished"/>
+        <translation>Tämä soittolista on parhaillaan tyhjä. Lisää kappaleita ja nauti musiikista!</translation>
     </message>
 </context>
 <context>
@@ -721,17 +721,17 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="189"/>
         <source>Resolver installation from file %1 failed.</source>
-        <translation type="unfinished"/>
+        <translation>Selvittimen asennus tiedostosta %1 epäonnistui.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="197"/>
         <source>Install plug-in</source>
-        <translation type="unfinished"/>
+        <translation>Asenna liitännäinen</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="198"/>
         <source>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;by &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;You are attempting to install a Tomahawk plug-in from an unknown source. Plug-ins from untrusted sources may put your data at risk.&lt;br/&gt;Do you want to install this plug-in?</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;Tekijä: &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Yrität asentaa Tomahawk-liitännäistä tuntemattomasta lähteestä. Luottamattomien lähteiden liitännäiset saattavat vaarantaa tietosi.&lt;br/&gt;Haluatko asentaa tämän liitännäisen?</translation>
     </message>
 </context>
 <context>
@@ -744,7 +744,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="43"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;http://blog.hatchet.is&quot;&gt;Learn More&lt;/a&gt; and/or &lt;a href=&quot;http://hatchet.is/register&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Create Account&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;http://blog.hatchet.is&quot;&gt;Lue lisää&lt;/a&gt; ja/tai &lt;a href=&quot;http://hatchet.is/register&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;luo tili&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="78"/>
@@ -856,12 +856,12 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="84"/>
         <source>Inbox Details</source>
-        <translation type="unfinished"/>
+        <translation>Saapuneiden tiedot</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="93"/>
         <source>Your friends have not shared any recommendations with you yet. Connect with them and share your musical gems!</source>
-        <translation type="unfinished"/>
+        <translation>Kaverisi eivät ole vielä jakaneet kanssasi yhtään suosituksia. Ole yhteydessä heihin ja jaa musiikkihelmesi!</translation>
     </message>
 </context>
 <context>
@@ -869,7 +869,7 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/IndexingJobItem.cpp" line="33"/>
         <source>Indexing Music Library</source>
-        <translation type="unfinished"/>
+        <translation>Indeksoidaan musiikkikirjastoa</translation>
     </message>
 </context>
 <context>
@@ -934,7 +934,7 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadXSPFDialog.ui" line="20"/>
         <source>Enter the URL of the hosted playlist (e.g. .xspf format) or click the button to select a local M3U of XSPF playlist to import.</source>
-        <translation type="unfinished"/>
+        <translation>Anna ulkoisen soittolistan (esim. xspf-muotoisen) verkko-osoite tai valitse tuotava paikallinen M3U- tai XSPF-soittolista painamalla painikkeesta.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadXSPFDialog.ui" line="32"/>
@@ -954,12 +954,12 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadXSPFDialog.ui" line="61"/>
         <source>Automatically Update (upon changes to hosted playlist)</source>
-        <translation type="unfinished"/>
+        <translation>Päivitä automaattisesti (ulkoisen soittolistan muuttuessa)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadXSPFDialog.ui" line="76"/>
         <source>To import a playlist from Spotify, Rdio, Beats, etc. - simply drag the link into Tomahawk.</source>
-        <translation type="unfinished"/>
+        <translation>Tuo soittolista Spotifysta, Rdiosta, Beatsista jne. vetämällä linkki Tomahawkiin.</translation>
     </message>
 </context>
 <context>
@@ -985,12 +985,12 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="60"/>
         <source>Favorites</source>
-        <translation type="unfinished"/>
+        <translation>Suosikit</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="86"/>
         <source>Sorry, we could not find any of your Favorites!</source>
-        <translation type="unfinished"/>
+        <translation>Valitettavasti emme löytäneet yhtään suosikeistasi!</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="89"/>
@@ -1500,7 +1500,7 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/QueueItem.cpp" line="39"/>
         <source>Queue</source>
-        <translation type="unfinished"/>
+        <translation>Jono</translation>
     </message>
 </context>
 <context>
@@ -1513,17 +1513,17 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="39"/>
         <source>Queue Details</source>
-        <translation type="unfinished"/>
+        <translation>Jonon tiedot</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="49"/>
         <source>Queue</source>
-        <translation type="unfinished"/>
+        <translation>Jono</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="53"/>
         <source>The queue is currently empty. Drop something to enqueue it!</source>
-        <translation type="unfinished"/>
+        <translation>Tämä jono on nyt tyhjä. Laita jotain jonoon pudottamalla se tähän!</translation>
     </message>
 </context>
 <context>
@@ -1544,7 +1544,7 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/ScannerStatusItem.cpp" line="55"/>
         <source>Scanning Collection</source>
-        <translation type="unfinished"/>
+        <translation>Etsitään kokoelmaa</translation>
     </message>
 </context>
 <context>
@@ -1602,14 +1602,14 @@ salasana (OTP)</translation>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.ui" line="41"/>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="143"/>
         <source>Songs</source>
-        <translation type="unfinished"/>
+        <translation>Kappaleet</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.ui" line="67"/>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.ui" line="127"/>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.ui" line="187"/>
         <source>Show More</source>
-        <translation type="unfinished"/>
+        <translation>Näytä lisää</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.ui" line="101"/>
@@ -1626,17 +1626,17 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="64"/>
         <source>Sorry, we could not find any artists!</source>
-        <translation type="unfinished"/>
+        <translation>Yhtään artistia ei löytynyt.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="84"/>
         <source>Sorry, we could not find any albums!</source>
-        <translation type="unfinished"/>
+        <translation>Yhtään albumia ei löytynyt.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="105"/>
         <source>Sorry, we could not find any songs!</source>
-        <translation type="unfinished"/>
+        <translation>Yhtään kappaletta ei löytynyt.</translation>
     </message>
 </context>
 <context>
@@ -1672,7 +1672,7 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="133"/>
         <source>Install Plug-In...</source>
-        <translation type="unfinished"/>
+        <translation>Asenna liitännäinen…</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="300"/>
@@ -1687,7 +1687,7 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="239"/>
         <source>Plug-Ins</source>
-        <translation type="unfinished"/>
+        <translation>Liitännäiset</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="244"/>
@@ -1735,7 +1735,7 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Accounts.ui" line="57"/>
         <source>Filter by Capability:</source>
-        <translation type="unfinished"/>
+        <translation>Suodata ominaisuuden perusteella:</translation>
     </message>
 </context>
 <context>
@@ -1753,12 +1753,12 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="51"/>
         <source>UPnP / Automatic Port Forwarding (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>UPnP / aatomaattinen porttien uudelleenohjaus (suositellaan)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="69"/>
         <source>Manual Port Forwarding</source>
-        <translation type="unfinished"/>
+        <translation>Manuaalinen porttien uudelleenohjaus</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="82"/>
@@ -1798,12 +1798,12 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="206"/>
         <source>Send Tomahawk Crash Reports</source>
-        <translation type="unfinished"/>
+        <translation>Lähetä Tomahawkin kaatumisilmoitukset</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="216"/>
         <source>Show Notifications on song change</source>
-        <translation type="unfinished"/>
+        <translation>Näytä ilmoituksia kappaleen vaihtuessa</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="244"/>
@@ -1816,12 +1816,12 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="38"/>
         <source>Folders to scan for music:</source>
-        <translation type="unfinished"/>
+        <translation>Kansiot, joista etsitään musiikkia:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="53"/>
         <source>Due to the unique way Tomahawk works, your music files must at least have Artist &amp; Title metadata/ID3 tags to be added to your Collection.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawkin ainutlaatuisen toimintatavan vuoksi musiikkitiedoston metatiedoissa/ID3-tunnisteissa tarvitsee olla ainakin artistin ja kappaleen nimi, jotta tiedosto lisätään kokoelmaasi.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="76"/>
@@ -1848,17 +1848,17 @@ asemia sinun henkilökohtaisen musiikkimakuprofiilisi perusteella.</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="115"/>
         <source>Upload Collection info to enable personalized &quot;User Radio&quot;</source>
-        <translation type="unfinished"/>
+        <translation>Ota personoitu ”Käyttäjäradio” käyttöön lähettämällä kokoelman tiedot</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="128"/>
         <source>Watch for changes (automatically update Collection)</source>
-        <translation type="unfinished"/>
+        <translation>Tarkkaile muutoksia (päivitä kokoelma automaattisesti)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="137"/>
         <source>Time between scans (in seconds):</source>
-        <translation type="unfinished"/>
+        <translation>Etsimisten aikaväli (sekunteina):</translation>
     </message>
 </context>
 <context>
@@ -1976,7 +1976,7 @@ asemia sinun henkilökohtaisen musiikkimakuprofiilisi perusteella.</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="84"/>
         <source>History</source>
-        <translation type="unfinished"/>
+        <translation>Historia</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="147"/>
@@ -2078,7 +2078,7 @@ asemia sinun henkilökohtaisen musiikkimakuprofiilisi perusteella.</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="103"/>
         <source>Source</source>
-        <translation type="unfinished"/>
+        <translation>Lähde</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="106"/>
@@ -2103,22 +2103,22 @@ asemia sinun henkilökohtaisen musiikkimakuprofiilisi perusteella.</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="316"/>
         <source>Cloud Collections</source>
-        <translation type="unfinished"/>
+        <translation>Pilvikokoelmat</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="304"/>
         <source>Discover</source>
-        <translation type="unfinished"/>
+        <translation>Löydöt</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="305"/>
         <source>Open Pages</source>
-        <translation type="unfinished"/>
+        <translation>Avoimet sivut</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="307"/>
         <source>Your Music</source>
-        <translation type="unfinished"/>
+        <translation>Oma musiikki</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="315"/>
@@ -2294,7 +2294,7 @@ napsauttamalla hiiren oikealla.</translation>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="101"/>
         <source>You may need to change your %1Google Account Settings%2 to login.</source>
         <comment>%1 is &lt;a href&gt;, %2 is &lt;/a&gt;</comment>
-        <translation type="unfinished"/>
+        <translation>Sinun tarvitsee ehkä muuttaa %1Google-tilin asetuksia%2 voidaksesi kirjautua sisään.</translation>
     </message>
 </context>
 <context>
@@ -2302,7 +2302,7 @@ napsauttamalla hiiren oikealla.</translation>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.h" line="44"/>
         <source>Login to directly connect to your Google Talk contacts that also use Tomahawk.</source>
-        <translation type="unfinished"/>
+        <translation>Kirjaudu ollaksesi suoraan yhteydessä Google Talk -yhteystietoihisi, jotka käyttävät Tomahawkia.</translation>
     </message>
 </context>
 <context>
@@ -2351,7 +2351,7 @@ napsauttamalla hiiren oikealla.</translation>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccount.h" line="51"/>
         <source>Connect to Hatchet to capture your playback data, sync your playlists to Android and more.</source>
-        <translation type="unfinished"/>
+        <translation>Yhdistä Hatchetiin ja ota soittotiedot talteen, synkronoi soittolistasi Androidiin sekä muuta.</translation>
     </message>
 </context>
 <context>
@@ -2554,7 +2554,7 @@ napsauttamalla hiiren oikealla.</translation>
     <message>
         <location filename="../src/accounts/xmpp/XmppAccount.h" line="53"/>
         <source>Login to connect to your Jabber/XMPP contacts that also use Tomahawk.</source>
-        <translation type="unfinished"/>
+        <translation>Kirjaudu ollaksesi yhteydessä Jabber/XMPP-yhteystietoihisi, jotka käyttävät Tomahawkia.</translation>
     </message>
 </context>
 <context>
@@ -2605,7 +2605,7 @@ käyttäjätunnus@jabber.org</translation>
     <message>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="46"/>
         <source>Automatically connect to Tomahawk users on the same local network.</source>
-        <translation type="unfinished"/>
+        <translation>Yhdistä saman lähiverkon Tomahawk-käyttäjiin automaattisesti.</translation>
     </message>
 </context>
 <context>
@@ -2660,7 +2660,7 @@ käyttäjätunnus@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="199"/>
         <source>View Similar Tracks to &quot;%1&quot;</source>
-        <translation type="unfinished"/>
+        <translation>Näytä samankaltaisia kappaleita kuin ”%1”</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="278"/>
@@ -2762,7 +2762,7 @@ käyttäjätunnus@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicControlList.cpp" line="84"/>
         <source>Save Settings</source>
-        <translation type="unfinished"/>
+        <translation>Tallenna asetukset</translation>
     </message>
 </context>
 <context>
@@ -3154,7 +3154,7 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="897"/>
         <source>You</source>
-        <translation type="unfinished"/>
+        <translation>Sinä</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="898"/>
@@ -3402,7 +3402,7 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="91"/>
         <source>You received a Song recommendation</source>
-        <translation type="unfinished"/>
+        <translation>Sait kappalesuosituksen</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="202"/>
@@ -3505,7 +3505,7 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="42"/>
         <source>Your Collection</source>
-        <translation type="unfinished"/>
+        <translation>Kokoelmasi</translation>
     </message>
 </context>
 <context>
@@ -3627,7 +3627,7 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/viewpages/charts/ChartsWidget.h" line="130"/>
         <source>Charts</source>
-        <translation type="unfinished"/>
+        <translation>Listat</translation>
     </message>
 </context>
 <context>
@@ -3635,7 +3635,7 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.h" line="96"/>
         <source>Feed</source>
-        <translation type="unfinished"/>
+        <translation>Syöte</translation>
     </message>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.h" line="97"/>
@@ -3648,12 +3648,12 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.cpp" line="78"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Viime aikoina kuunnellut kappaleet</translation>
     </message>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.cpp" line="72"/>
         <source>Feed</source>
-        <translation type="unfinished"/>
+        <translation>Syöte</translation>
     </message>
 </context>
 <context>
@@ -3727,7 +3727,7 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/viewpages/newreleases/NewReleasesWidget.h" line="120"/>
         <source>New Releases</source>
-        <translation type="unfinished"/>
+        <translation>Uudet julkaisut</translation>
     </message>
 </context>
 <context>
@@ -3756,17 +3756,17 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="515"/>
         <source>You</source>
-        <translation type="unfinished"/>
+        <translation>Sinä</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="602"/>
         <source>Tomahawk is updating the database. Please wait, this may take a minute!</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk päivittää tietokantaa. Odota hetki, tässä voi kestää minuutti!</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="609"/>
         <source>Tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="710"/>
@@ -3850,12 +3850,12 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/tomahawk/widgets/AccountsToolButton.cpp" line="90"/>
         <source>Configure Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Tilien asetukset</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/AccountWidget.cpp" line="131"/>
         <source>Invite</source>
-        <translation type="unfinished"/>
+        <translation>Kutsu</translation>
     </message>
 </context>
 <context>
@@ -4007,7 +4007,7 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="325"/>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>Etsi</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1346"/>
@@ -4052,22 +4052,22 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="79"/>
         <source>Marked as Favorite</source>
-        <translation type="unfinished"/>
+        <translation>Merkitty suosikiksi</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="97"/>
         <source>Alternate Sources:</source>
-        <translation type="unfinished"/>
+        <translation>Vaihtoehtoiset lähteet:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="175"/>
         <source>Unknown Release-Date</source>
-        <translation type="unfinished"/>
+        <translation>Tuntematon julkaisupäivä</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="266"/>
         <source>on %1</source>
-        <translation type="unfinished"/>
+        <translation>albumilla %1</translation>
     </message>
 </context>
 <context>
@@ -4085,7 +4085,7 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/TrackViewPage.ui" line="60"/>
         <source>Top Hits</source>
-        <translation type="unfinished"/>
+        <translation>Parhaat hitit</translation>
     </message>
 </context>
 <context>
@@ -4247,12 +4247,12 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="86"/>
         <source>WHAT&apos;S NEW</source>
-        <translation type="unfinished"/>
+        <translation>MITÄ UUTTA</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="96"/>
         <source>If you are reading this it likely means you have already noticed the biggest change since our last release - a shiny new interface and design. New views, fonts, icons, header images and animations at every turn. Below you can find an overview of the functional changes and additions since 0.7 too:</source>
-        <translation type="unfinished"/>
+        <translation>Kun kerran luet tätä, olet jo varmaan huomannut suurimman muutoksen viime julkaisuun verrattuna – uudenkiiltävän käyttöliittymän ja designin. Uusia näkymiä, fontteja, kuvakkeita, otsikkokuvia ja animaatioita on kaikkialla. Alla on yleiskatsaus toiminnallisista muutoksista ja lisäyksistä sitten 0.7-version:</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="174"/>
@@ -4262,52 +4262,52 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="213"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Send tracks to your friends just by dragging it onto their avatar in the Tomahawk sidebar. Check out what your friends think you should listen to in your inbox.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Lähetä kappaleita kavereillesi vetämällä niitä heidän avatareihinsa Tomahawk-sivupalkissa. Katso myös saapuneista, mitä sinun pitäisi kavereiden mielestä kuunnella.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="230"/>
         <source>Universal Link Support</source>
-        <translation type="unfinished"/>
+        <translation>Yleisten linkkien tuki</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="253"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Love that your friends and influencers are posting music links  but hate that they are links for music services you don&apos;t use? Just drag Rdio, Deezer, Beats or other music service URLs into your Tomahawk queue or playlists and have them automatically play from your preferred source.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Pidätkö siitä, että kaverisi ja vaikuttajat julkaisevat musiikkilinkkejä, mutta et pidä siitä, että ne ovat musiikkipalveluihin, joita et käytä? Vedä Rdio-, Deezer-, Beats- tai muun palvelun osoitteita Tomahawk-jonoosi tai soittolistaasi, ja ne soitetaan suosimastasi lähteestä.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="270"/>
         <source>Beats Music</source>
-        <translation type="unfinished"/>
+        <translation>Beats Music</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="296"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beats Music (recently aquired by Apple) is now supported. This means that Beats Music subscribers can also benefit by resolving other music service links so they stream from their Beats Music account. Welcome aboard!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beats Music (jonka Apple osti hiljattain) on nyt tuettu.Tämä tarkoittaa, että Beats Musicin tilaajat hyötyvät muiden musiikkipalveluiden linkkien selvittämisestä siten, että niitä suoratoistetaan Beast Music -tililtä. Tervetuloa mukaan!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="313"/>
         <source>Google Music</source>
-        <translation type="unfinished"/>
+        <translation>Google Music</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="336"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Google Music is another of our latest supported services - both for the music you&apos;ve uploaded to Google Music as well as their full streaming catalog for Google Play Music All Access subscribers. Not only is all of your Google Play Music a potential source for streaming - your entire online collection is browseable too.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Google Music on toinen uusimmista tukemistamme palveluista – sekä Google Musiciin laittamasi musiikki että Google Play Music All Access -tilaajien koko suoratoistovalikoima on tuettu. Google Play Music ei ole pelkästään mahdollinen suoratoiston lähde – voit myös selata koko verkkokokoelmaasi.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="376"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk for Android is now in beta! The majority of the same resolvers are supported in the Android app - plus a couple of additional ones in Rdio &amp;amp; Deezer. &lt;a href=&quot;http://hatchet.is/register&quot;&gt;Create a Hatchet account&lt;/a&gt; to sync all of your playlists from your desktop to your mobile. Find current and future music influencers and follow them to discover and hear what they love. Just like on the desktop, Tomahawk on Android can open other music service links and play them from yours. Even when you are listening to other music apps, Tomahawk can capture all of that playback data and add it to your Hatchet profile.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk Androidille on nyt beetavaiheessa! Android-sovellus tukee suurinta osaa samoista selvittimistä – sekä muutamia muita kuten Rdio &amp;amp; Deezer. &lt;a href=&quot;http://hatchet.is/register&quot;&gt;Luo Hatchet-tili&lt;/a&gt; ja synkronoi kaikki soittolistasi työpöydältä puhelimeesi. Löydä nykyisyyden ja tulevaisuuden musiikkivaikuttajia ja seuraa heitä löytääksesi ja kuunnellaksesi sitä, mistä he pitävät. Aivan niin kuin työpöydällä, myös Androidilla Tomahawk osaa avata muiden musiikkipalveluiden linkkejä ja soittaa ne omistasi. Tomahawk osaa ottaa soittotiedot talteen ja lisätä ne Hatchet-profiiliisi silloinkin, kun kuuntelet musiikkia muilla sovelluksilla.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="396"/>
         <source>Connectivity</source>
-        <translation type="unfinished"/>
+        <translation>Yhdistettävyys</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="419"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk now supports IPv6 and multiple local IP addresses. This improves the discoverability and connection between Tomahawk users - particularly large local networks often found in work and university settings. The more friends, the more music, the more playlists and the more curation from those people whose musical tastes you value. Sit back and just Listen Along!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk tukee nyt IPv6:ta ja useita paikallisia IP-osoitteita. Tämä parantaa Tomahawk-käyttäjien välistä löydettävyyttä ja yhteydenpitoa – erityisesti suurissa lähiverkoissa kuten työpaikoilla ja yliopistoilla. Mitä enemmän kavereita, sitä enemmän musiikkia, soittolistoja ja kuratointia ihmisiltä, joiden musiikkimakua arvostat. Ota mukava asento ja kuuntele mukana!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="353"/>
@@ -4482,22 +4482,22 @@ Sanat artistin %2 kappaleelle ”%1”:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="58"/>
         <source>Configure this Jabber/XMPP account</source>
-        <translation type="unfinished"/>
+        <translation>Tämän Jabber/XMPP-tilin asetukset</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="104"/>
         <source>Enter your XMPP login to connect with your friends using Tomahawk!</source>
-        <translation type="unfinished"/>
+        <translation>Ole yhteydessä Tomahawkia käyttäviin kavereihisi antamalla XMPP-kirjautumistietosi!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="231"/>
         <source>XMPP ID:</source>
-        <translation type="unfinished"/>
+        <translation>XMPP-tunnus:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="247"/>
         <source>e.g. user@jabber.org</source>
-        <translation type="unfinished"/>
+        <translation>esim. joku@jabber.org</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="260"/>
@@ -4532,7 +4532,7 @@ Sanat artistin %2 kappaleelle ”%1”:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="402"/>
         <source>Display currently playing track</source>
-        <translation type="unfinished"/>
+        <translation>Näytä parhaillaan soiva kappale</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="409"/>
