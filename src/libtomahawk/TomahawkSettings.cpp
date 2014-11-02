@@ -23,6 +23,7 @@
 #include "collection/Collection.h"
 #include "database/DatabaseCommand_UpdateSearchIndex.h"
 #include "database/Database.h"
+#include "database/fuzzyindex/DatabaseFuzzyIndex.h"
 #include "infosystem/InfoSystemCache.h"
 #include "playlist/PlaylistUpdaterInterface.h"
 #include "utils/Logger.h"
@@ -312,6 +313,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
     else if ( oldVersion == 4 || oldVersion == 5 )
     {
         // 0.3.0 contained a bug which prevent indexing local files. Force a reindex.
+        Tomahawk::DatabaseFuzzyIndex::wipeIndex();
         updateIndex();
     }
     else if ( oldVersion == 6 )
@@ -676,10 +678,11 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
     else if ( oldVersion == 15 )
     {
         // 0.8.0 switches to Lucene++. Force a reindex.
-        // updateIndex();
+        // (obsoleted by version 16 update)
     }
     else if ( oldVersion == 16 )
     {
+        Tomahawk::DatabaseFuzzyIndex::wipeIndex();
         updateIndex();
     }
 }
@@ -1534,8 +1537,8 @@ TomahawkSettings::updateIndex()
         return;
     }
 
-    tDebug() << Q_FUNC_INFO << "Wiping index.";
-//    Database::instance()->wipeIndex();
+    tDebug() << Q_FUNC_INFO << "Updating fuzzy index.";
+
     Tomahawk::DatabaseCommand* cmd = new Tomahawk::DatabaseCommand_UpdateSearchIndex();
     Database::instance()->enqueue( QSharedPointer<Tomahawk::DatabaseCommand>( cmd ) );
 }

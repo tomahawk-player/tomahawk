@@ -29,6 +29,7 @@ public:
     explicit DatabaseFuzzyIndex( QObject* parent, bool wipe = false );
 
     virtual void updateIndex();
+    static void wipeIndex();
 };
 
 } // namespace Tomahawk
