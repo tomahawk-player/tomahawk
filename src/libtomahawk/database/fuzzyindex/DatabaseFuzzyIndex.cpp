@@ -20,11 +20,17 @@
 
 #include "database/DatabaseImpl.h"
 #include "database/Database.h"
+#include "utils/TomahawkUtils.h"
+
+#include <QDir>
+
 
 namespace Tomahawk {
 
+static QString s_indexPathName = "tomahawk.lucene";
+
 DatabaseFuzzyIndex::DatabaseFuzzyIndex( QObject* parent, bool wipe )
-    : FuzzyIndex( parent, "tomahawk.lucene", wipe )
+    : FuzzyIndex( parent, s_indexPathName, wipe )
 {
 }
 
@@ -34,6 +40,13 @@ DatabaseFuzzyIndex::updateIndex()
 {
     Tomahawk::DatabaseCommand* cmd = new Tomahawk::DatabaseCommand_UpdateSearchIndex();
     Tomahawk::Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
+}
+
+
+void
+DatabaseFuzzyIndex::wipeIndex()
+{
+    TomahawkUtils::removeDirectory( TomahawkUtils::appDataDir().absoluteFilePath( s_indexPathName ) );
 }
 
 } // namespace Tomahawk
