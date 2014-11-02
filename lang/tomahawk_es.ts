@@ -232,7 +232,7 @@ conectarse y transmitir música por usted?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="147"/>
         <source>Help Us Translate</source>
-        <translation type="unfinished"/>
+        <translation>Ayúdenos a traducir</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="157"/>
@@ -415,7 +415,7 @@ conectarse y transmitir música por usted?</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="61"/>
         <source>Create new Playlist</source>
-        <translation>Nueva lista de reproducción</translation>
+        <translation>Crear lista de reproducción</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="64"/>
@@ -469,22 +469,22 @@ conectarse y transmitir música por usted?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="73"/>
         <source>Sorry, there are no albums in this collection!</source>
-        <translation type="unfinished"/>
+        <translation>No hay ningún álbum en esta colección.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="85"/>
         <source>Artists</source>
-        <translation type="unfinished"/>
+        <translation>Artistas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="86"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Álbumes</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="87"/>
         <source>Songs</source>
-        <translation type="unfinished"/>
+        <translation>Canciones</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="377"/>
@@ -494,7 +494,7 @@ conectarse y transmitir música por usted?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="380"/>
         <source>This collection is empty.</source>
-        <translation type="unfinished"/>
+        <translation>Esta colección está vacía.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="383"/>
@@ -602,7 +602,7 @@ conectarse y transmitir música por usted?</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/DiagnosticsDialog.ui" line="42"/>
         <source>&amp;Copy to Clipboard</source>
-        <translation>&amp;Copiar al portapapeles</translation>
+        <translation>&amp;Copiar en el portapapeles</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/DiagnosticsDialog.ui" line="49"/>
@@ -1013,7 +1013,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="30"/>
         <source>Tags</source>
-        <translation>Tags</translation>
+        <translation>Etiquetas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="39"/>
@@ -1068,7 +1068,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="162"/>
         <source>Bitrate:</source>
-        <translation>Bitrate:</translation>
+        <translation>Tasa de bits:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="183"/>
@@ -1169,7 +1169,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Bitrate</source>
-        <translation>Bitrate</translation>
+        <translation>Tasa de bits</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
@@ -2658,7 +2658,7 @@ usuario@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="199"/>
         <source>View Similar Tracks to &quot;%1&quot;</source>
-        <translation type="unfinished"/>
+        <translation>Ver pistas similares a «%1»</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="278"/>
@@ -4274,7 +4274,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="270"/>
         <source>Beats Music</source>
-        <translation type="unfinished"/>
+        <translation>Beats Music</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="296"/>
