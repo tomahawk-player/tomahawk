@@ -25,6 +25,7 @@
 #include <QAction>
 #include <QCloseEvent>
 #include <QDesktopServices>
+#include <QDesktopWidget>
 #include <QShowEvent>
 #include <QHideEvent>
 #include <QInputDialog>
@@ -198,6 +199,12 @@ TomahawkWindow::loadSettings()
 
     if ( !s->mainWindowGeometry().isEmpty() )
         restoreGeometry( s->mainWindowGeometry() );
+    else
+    {
+        // Set default window geometry
+        resize( QDesktopWidget().availableGeometry( this ).size() * 0.8 );
+    }
+
     if ( !s->mainWindowState().isEmpty() )
         restoreState( s->mainWindowState() );
     if ( !s->mainWindowSplitterState().isEmpty() )
