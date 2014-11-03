@@ -3783,7 +3783,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="384"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="386"/>
         <source>Local Network</source>
         <translation>Lokales Netzwerk</translation>
     </message>

@@ -3786,7 +3786,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="384"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="386"/>
         <source>Local Network</source>
         <translation>Místní síť</translation>
     </message>

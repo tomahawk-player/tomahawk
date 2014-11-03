@@ -87,7 +87,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="72"/>
         <source>&amp;Follow in Real-Time</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Seguir em Tempo-Real</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
@@ -102,7 +102,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="83"/>
         <source>&amp;Load Station</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Carregar Estação</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="84"/>
@@ -112,7 +112,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="85"/>
         <source>&amp;Rename Station</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Renomear Estação</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="86"/>
@@ -157,12 +157,12 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="111"/>
         <source>Import Playlist...</source>
-        <translation type="unfinished"/>
+        <translation>Importar Lista de Reprodução</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="114"/>
         <source>Show Offline Friends</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar Amigos Desconectados</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="116"/>
@@ -182,7 +182,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="123"/>
         <source>Enter Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Entrar em Tela Cheia</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="126"/>
@@ -222,7 +222,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="145"/>
         <source>Report a Bug</source>
-        <translation type="unfinished"/>
+        <translation>Reportar um Problema</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="146"/>
@@ -315,7 +315,7 @@ se conecte e faça o stream de você?</translation>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.ui" line="173"/>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="145"/>
         <source>Biography</source>
-        <translation type="unfinished"/>
+        <translation>Biografia</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.ui" line="267"/>
@@ -341,17 +341,17 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="144"/>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>Música</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="183"/>
         <source>Songs</source>
-        <translation type="unfinished"/>
+        <translation>Faixas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="198"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Álbuns</translation>
     </message>
 </context>
 <context>
@@ -407,7 +407,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/CaptionLabel.cpp" line="71"/>
         <source>Close</source>
-        <translation type="unfinished"/>
+        <translation>Fechar</translation>
     </message>
 </context>
 <context>
@@ -461,7 +461,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CollectionItem.cpp" line="37"/>
         <source>Collection</source>
-        <translation type="unfinished"/>
+        <translation>Coleção</translation>
     </message>
 </context>
 <context>
@@ -469,22 +469,22 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="73"/>
         <source>Sorry, there are no albums in this collection!</source>
-        <translation type="unfinished"/>
+        <translation>Desculpe, não há álbuns nesta coleção!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="85"/>
         <source>Artists</source>
-        <translation type="unfinished"/>
+        <translation>Artistas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="86"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Álbuns</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="87"/>
         <source>Songs</source>
-        <translation type="unfinished"/>
+        <translation>Faixas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="377"/>
@@ -494,7 +494,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="380"/>
         <source>This collection is empty.</source>
-        <translation type="unfinished"/>
+        <translation>Esta coleção está vazia.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="383"/>
@@ -3778,7 +3778,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="384"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="386"/>
         <source>Local Network</source>
         <translation>Rede local</translation>
     </message>

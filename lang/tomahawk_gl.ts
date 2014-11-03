@@ -3783,7 +3783,7 @@ Proba a trocar os filtros para ter outra lista música para escoitar. </translat
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="384"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="386"/>
         <source>Local Network</source>
         <translation>Rede local</translation>
     </message>

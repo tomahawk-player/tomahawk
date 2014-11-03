@@ -3790,7 +3790,7 @@ wysłane przez %1.</translation>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="384"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="386"/>
         <source>Local Network</source>
         <translation>Sieć Lokalna</translation>
     </message>
