@@ -74,7 +74,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
         ui->albums->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         ui->albums->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         ui->albums->setWrapping( false );
-        ui->albums->setItemWidth( TomahawkUtils::DpiScaler::scaledX( this, 140 );
+        ui->albums->setItemWidth( TomahawkUtils::DpiScaler::scaledX( this, 140 ) );
 //        ui->albums->proxyModel()->setHideDupeItems( true );
         ui->albums->setFixedHeight( 140 + 56 + 38 );
 
