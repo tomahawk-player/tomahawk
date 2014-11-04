@@ -98,6 +98,10 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
 void
 SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index, const QString& count ) const
 {
+    QFont font = painter->font();
+    font.setPointSize( TomahawkUtils::defaultFontSize() );
+    painter->setFont( font );
+
     SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
     const bool upperCase = !( type == SourcesModel::StaticPlaylist ||
         type == SourcesModel::AutomaticPlaylist ||
