@@ -61,8 +61,8 @@ GridItemDelegate::GridItemDelegate( QAbstractItemView* parent, PlayableProxyMode
     if ( m_view && m_view->metaObject()->indexOfSignal( "modelChanged()" ) > -1 )
         connect( m_view, SIGNAL( modelChanged() ), this, SLOT( modelChanged() ) );
 
-    QFont m_font = m_view->font();
-    QFont m_smallFont = m_font;
+    m_font = m_view->font();
+    m_smallFont = m_font;
     m_font.setPointSize( TomahawkUtils::defaultFontSize() + 2 );
     m_smallFont.setPointSize( TomahawkUtils::defaultFontSize() );
 
@@ -91,9 +91,9 @@ GridItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelInde
         const QFontMetrics fms( m_smallFont );
 
         if ( !m_wordWrapping )
-            return QSize( m_itemWidth, m_itemWidth + fm.height() + m_margin );
+            return QSize( m_itemWidth, m_itemWidth + fm.height() + m_margin * 0.8 );
 
-        return QSize( m_itemWidth, m_itemWidth + fm.height() + fms.height() + m_margin );
+        return QSize( m_itemWidth, m_itemWidth + fm.height() + fms.height() + m_margin * 0.8 );
     }
 }
 
