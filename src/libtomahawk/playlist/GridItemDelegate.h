@@ -52,6 +52,7 @@ public:
 public slots:
     void resetHoverIndex();
     void setShowPosition( bool enabled );
+    void setWordWrapping( bool enabled );
 
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
@@ -89,6 +90,7 @@ private:
     PlayableProxyModel* m_model;
     int m_itemWidth;
     bool m_showPosition;
+    bool m_wordWrapping;
 
     mutable QHash< QPersistentModelIndex, QRect > m_artistNameRects;
     mutable QHash< QPersistentModelIndex, QRect > m_albumNameRects;
@@ -102,6 +104,8 @@ private:
     mutable QHash< QPersistentModelIndex, HoverControls* > m_hoverControls;
     mutable QHash< QPersistentModelIndex, QTimeLine* > m_hoverFaders;
 
+    QFont m_font;
+    QFont m_smallFont;
     const int m_margin;
 };
 
