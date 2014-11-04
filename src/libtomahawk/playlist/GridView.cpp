@@ -496,6 +496,13 @@ GridView::setPlaylistInterface( const Tomahawk::playlistinterface_ptr& playlistI
 }
 
 
+QSize
+GridView::itemSize() const
+{
+    return m_delegate->itemSize();
+}
+
+
 void
 GridView::setItemWidth( int width )
 {
