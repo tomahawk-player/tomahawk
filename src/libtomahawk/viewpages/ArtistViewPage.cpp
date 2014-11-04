@@ -85,7 +85,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         ui->albums->setWrapping( false );
         ui->albums->setItemWidth( scaledX( 190 ) );
         ui->albums->proxyModel()->setHideDupeItems( true );
-        ui->albums->setFixedHeight( scaledY( 190 + 56 + 38 ) );
+        ui->albums->delegate()->setWordWrapping( true );
+        ui->albums->setFixedHeight( ui->albums->itemSize().height() + ui->albums->spacing() * 2 );
 
         m_albumsModel = new PlayableModel( ui->albums );
         ui->albums->setPlayableModel( m_albumsModel );
@@ -105,7 +106,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         ui->topHits->setWrapping( false );
         ui->topHits->setItemWidth( scaledX( 140 ) );
         ui->topHits->proxyModel()->setHideDupeItems( true );
-        ui->topHits->setFixedHeight( scaledY( 140 + 56 + 38 ) );
+        ui->topHits->delegate()->setWordWrapping( true );
+        ui->topHits->setFixedHeight( ui->topHits->itemSize().height() + ui->topHits->spacing() * 2 );
 
         m_topHitsModel = new PlayableModel( ui->topHits );
         ui->topHits->setPlayableModel( m_topHitsModel );
