@@ -24,6 +24,7 @@
 
 #include "ViewManager.h"
 #include "audio/AudioEngine.h"
+#include "playlist/GridItemDelegate.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "utils/AnimatedSpinner.h"
@@ -74,6 +75,8 @@ NewReleasesWidget::NewReleasesWidget( QWidget* parent )
     ui->breadCrumbLeft->setVisible( false );
     m_spinner = new AnimatedSpinner( ui->albumsView );
     m_spinner->fadeIn();
+
+    ui->albumsView->delegate()->setWordWrapping( true );
 
     fetchData();
 }

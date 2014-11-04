@@ -70,6 +70,8 @@ ChartsWidget::ChartsWidget( QWidget* parent )
     ui->artistsView->setItemWidth( TomahawkUtils::DpiScaler::scaledX( this, 190 ) );
     ui->albumsView->setItemWidth( TomahawkUtils::DpiScaler::scaledX( this, 190 ) );
     ui->tracksView->setItemWidth( TomahawkUtils::DpiScaler::scaledX( this, 190 ) );
+    ui->albumsView->delegate()->setWordWrapping( true );
+    ui->tracksView->delegate()->setWordWrapping( true );
     ui->artistsView->delegate()->setShowPosition( true );
     ui->albumsView->delegate()->setShowPosition( true );
     ui->tracksView->delegate()->setShowPosition( true );
