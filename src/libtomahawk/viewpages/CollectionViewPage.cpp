@@ -67,7 +67,7 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
         m_albumView->setAutoResize( false );
         m_albumView->setAutoFitItems( true );
         m_albumView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-        m_albumView->setItemSize( QSize( 170, 170 + 56 ) );
+        m_albumView->setItemWidth( TomahawkUtils::DpiScaler::scaledX( this, 170 ) );
 
         m_albumView->proxyModel()->sort( -1 );
         m_albumView->setEmptyTip( tr( "Sorry, there are no albums in this collection!" ) );
