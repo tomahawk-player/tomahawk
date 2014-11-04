@@ -53,6 +53,7 @@ GridItemDelegate::GridItemDelegate( QAbstractItemView* parent, PlayableProxyMode
     : QStyledItemDelegate( (QObject*)parent )
     , m_view( parent )
     , m_model( proxy )
+    , m_itemWidth( 0 )
     , m_showPosition( false )
     , m_margin( TomahawkUtils::DpiScaler::scaledY( parent, 32 ) )
 {
@@ -73,13 +74,29 @@ GridItemDelegate::GridItemDelegate( QAbstractItemView* parent, PlayableProxyMode
 QSize
 GridItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    if ( m_itemSize.isNull() )
+    if ( m_itemWidth == 0 )
     {
         QSize size = QStyledItemDelegate::sizeHint( option, index );
         return size;
     }
     else
-        return m_itemSize;
+    {
+        PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
+        if ( !item || !index.isValid() )
+            return QStyledItemDelegate::sizeHint( option, index );
+
+        if ( item->artist() )
+            return QSize( m_itemWidth, m_itemWidth + option.fontMetrics.height() * 3 );
+
+        return QSize( m_itemWidth, m_itemWidth + option.fontMetrics.height() * 4.4 );
+    }
+}
+
+
+QSize
+GridItemDelegate::itemSize() const
+{
+    return sizeHint( QStyleOptionViewItem(), m_model->index( 0, 0 ) );
 }
 
 
@@ -217,9 +234,9 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         }
 
         const QString fig = QString::number( index.row() + 1 );
-        painter->drawText( textRect, fig, QTextOption( Qt::AlignLeft | Qt::AlignTop ) );
+        painter->drawText( textRect, fig, QTextOption( Qt::AlignLeft | Qt::AlignVCenter ) );
 
-        textRect.adjust( painter->fontMetrics().boundingRect( textRect, Qt::AlignLeft | Qt::AlignTop, fig ).width() + m_margin / 4, 0, 0, 0 );
+        textRect.adjust( painter->fontMetrics().boundingRect( textRect, Qt::AlignLeft | Qt::AlignVCenter, fig ).width() + m_margin / 4, 0, 0, 0 );
         painter->restore();
     }
 
