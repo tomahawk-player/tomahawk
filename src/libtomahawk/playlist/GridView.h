@@ -67,6 +67,7 @@ public:
 
     void setEmptyTip( const QString& tip );
 
+    QSize itemSize() const;
     int itemWidth() const { return m_itemWidth; }
     void setItemWidth( int width );
 
