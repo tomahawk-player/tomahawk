@@ -67,8 +67,8 @@ public:
 
     void setEmptyTip( const QString& tip );
 
-    QSize itemSize() const { return m_itemSize; }
-    void setItemSize( const QSize& size );
+    int itemWidth() const { return m_itemWidth; }
+    void setItemWidth( int width );
 
     virtual QWidget* widget() { return this; }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
@@ -135,7 +135,7 @@ private:
     bool m_inited;
     bool m_autoFitItems;
     bool m_autoResize;
-    QSize m_itemSize;
+    int m_itemWidth;
     QRect m_paintRect;
 
     QTimer m_timer;

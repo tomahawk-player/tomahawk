@@ -46,8 +46,8 @@ Q_OBJECT
 public:
     GridItemDelegate( QAbstractItemView* parent, PlayableProxyModel* proxy );
 
-    QSize itemSize() const { return m_itemSize; }
-    void setItemSize( const QSize& size ) { m_itemSize = size; }
+    QSize itemSize() const;
+    void setItemWidth( int width ) { m_itemWidth = width; }
 
 public slots:
     void resetHoverIndex();
@@ -87,7 +87,7 @@ private:
 
     QAbstractItemView* m_view;
     PlayableProxyModel* m_model;
-    QSize m_itemSize;
+    int m_itemWidth;
     bool m_showPosition;
 
     mutable QHash< QPersistentModelIndex, QRect > m_artistNameRects;
