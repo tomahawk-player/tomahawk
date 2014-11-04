@@ -28,6 +28,7 @@
 #include "playlist/TrackView.h"
 #include "playlist/PlayableModel.h"
 #include "playlist/PlaylistModel.h"
+#include "playlist/GridItemDelegate.h"
 #include "utils/AnimatedSpinner.h"
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
@@ -56,7 +57,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
         ui->artists->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         ui->artists->setWrapping( false );
         ui->artists->setItemWidth( TomahawkUtils::DpiScaler::scaledX( this, 140 ) );
-        ui->artists->setFixedHeight( 140 + 32 + 38 );
+        ui->artists->setFixedHeight( ui->artists->itemSize().height() + ui->artists->spacing() * 2 );
 
         m_artistsModel = new PlayableModel( ui->artists );
         ui->artists->setPlayableModel( m_artistsModel );
@@ -76,7 +77,8 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
         ui->albums->setWrapping( false );
         ui->albums->setItemWidth( TomahawkUtils::DpiScaler::scaledX( this, 140 ) );
 //        ui->albums->proxyModel()->setHideDupeItems( true );
-        ui->albums->setFixedHeight( 140 + 56 + 38 );
+        ui->albums->delegate()->setWordWrapping( true );
+        ui->albums->setFixedHeight( ui->albums->itemSize().height() + ui->albums->spacing() * 2 );
 
         m_albumsModel = new PlayableModel( ui->albums );
         ui->albums->setPlayableModel( m_albumsModel );
@@ -97,7 +99,8 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
         ui->tracks->setWrapping( false );
         ui->tracks->setItemWidth( TomahawkUtils::DpiScaler::scaledX( this, 140 ) );
 //        ui->tracks->proxyModel()->setHideDupeItems( true );
-        ui->tracks->setFixedHeight( 140 + 56 + 38 );
+        ui->tracks->delegate()->setWordWrapping( true );
+        ui->tracks->setFixedHeight( ui->tracks->itemSize().height() + ui->tracks->spacing() * 2 );
 
         m_resultsModel = new PlayableModel( ui->tracks );
         ui->tracks->setPlayableModel( m_resultsModel );

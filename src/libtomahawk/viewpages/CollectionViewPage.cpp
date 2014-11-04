@@ -28,6 +28,7 @@
 #include "playlist/TreeModel.h"
 #include "playlist/ColumnView.h"
 #include "playlist/TrackView.h"
+#include "playlist/GridItemDelegate.h"
 #include "playlist/GridView.h"
 #include "playlist/PlayableProxyModelPlaylistInterface.h"
 #include "resolvers/ScriptCollection.h"
@@ -68,6 +69,7 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
         m_albumView->setAutoFitItems( true );
         m_albumView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         m_albumView->setItemWidth( TomahawkUtils::DpiScaler::scaledX( this, 170 ) );
+        m_albumView->delegate()->setWordWrapping( true );
 
         m_albumView->proxyModel()->sort( -1 );
         m_albumView->setEmptyTip( tr( "Sorry, there are no albums in this collection!" ) );
