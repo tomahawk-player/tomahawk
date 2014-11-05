@@ -733,15 +733,24 @@ Tomahawk::DatabaseImpl::openDatabase( const QString& dbname, bool checkSchema )
         connName += "_" + uuid();
     }
 
+    static QString sqlDriver;
     bool schemaUpdated = false;
     int version = -1;
     {
-        QSqlDatabase db = QSqlDatabase::addDatabase( "QSQLITE", connName );
+        if ( sqlDriver.isEmpty() )
+        {
+            sqlDriver = QString( "QSQLITE3" );
+            QSqlDatabase testdb = QSqlDatabase::addDatabase( sqlDriver, "testDriverConnection" );
+            if ( !testdb.isValid() )
+                sqlDriver = QString( "QSQLITE" );
+        }
+
+        QSqlDatabase db = QSqlDatabase::addDatabase( sqlDriver, connName );
         db.setDatabaseName( dbname );
         db.setConnectOptions( "QSQLITE_ENABLE_SHARED_CACHE=1" );
         if ( !db.open() )
         {
-            tLog() << "Failed to open database" << dbname;
+            tLog() << "Failed to open database" << dbname << "with driver" << sqlDriver;
             throw "failed to open db"; // TODO
         }
 
@@ -752,7 +761,7 @@ Tomahawk::DatabaseImpl::openDatabase( const QString& dbname, bool checkSchema )
             if ( qry.next() )
             {
                 version = qry.value( 0 ).toInt();
-                tLog() << "Database schema of" << dbname << "is" << version;
+                tLog() << "Database schema of" << dbname << sqlDriver << "is" << version;
             }
         }
         else
@@ -775,7 +784,7 @@ Tomahawk::DatabaseImpl::openDatabase( const QString& dbname, bool checkSchema )
 
         QFile::copy( dbname, newname );
         {
-            m_db = QSqlDatabase::addDatabase( "QSQLITE", connName );
+            m_db = QSqlDatabase::addDatabase( sqlDriver, connName );
             m_db.setDatabaseName( dbname );
             if ( !m_db.open() )
                 throw "db moving failed";
