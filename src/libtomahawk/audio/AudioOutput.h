@@ -24,7 +24,8 @@
 
 #include "DllMacro.h"
 #include "Typedefs.h"
-#include "utils/MediaStream.h"
+
+#include "audio/MediaStream.h"
 
 #include <functional>
 

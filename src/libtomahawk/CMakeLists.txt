@@ -216,6 +216,8 @@ list(APPEND libSources
 
     audio/AudioEngine.cpp
     audio/AudioOutput.cpp
+    audio/MediaStream.cpp
+    audio/Qnr_IoDeviceStream.cpp
 
     collection/Collection.cpp
     collection/ArtistsRequest.cpp
@@ -348,14 +350,12 @@ list(APPEND libSources
     utils/Json.cpp
     utils/TomahawkUtils.cpp
     utils/Logger.cpp
-    utils/Qnr_IoDeviceStream.cpp
     utils/XspfLoader.cpp
     utils/TomahawkCache.cpp
     utils/GuiHelpers.cpp
     utils/WeakObjectHash.cpp
     utils/WeakObjectList.cpp
     utils/PluginLoader.cpp
-    utils/MediaStream.cpp
 )
 
 add_subdirectory( accounts/configstorage )

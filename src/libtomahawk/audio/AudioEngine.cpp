@@ -23,6 +23,7 @@
 
 #include "config.h"
 
+#include "audio/Qnr_IoDeviceStream.h"
 #include "filemetadata/MusicScanner.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
@@ -31,7 +32,6 @@
 #include "playlist/SingleTrackPlaylistInterface.h"
 #include "utils/Closure.h"
 #include "utils/Logger.h"
-#include "utils/Qnr_IoDeviceStream.h"
 
 #include "Album.h"
 #include "Artist.h"
