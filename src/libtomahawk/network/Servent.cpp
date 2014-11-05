@@ -1131,11 +1131,11 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
         if ( !d->noAuth && peer != QHostAddress::Any && !isIPWhitelisted( peer ) )
         {
             bool authed = false;
-            tDebug() << Q_FUNC_INFO << "Checking for ControlConnection with IP" << peer;
+            tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Checking for ControlConnection with IP" << peer;
             QMutexLocker locker( &d->controlconnectionsMutex );
             foreach ( ControlConnection* cc, d->controlconnections )
             {
-                tDebug() << Q_FUNC_INFO << "Probing:" << cc->name();
+                tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Probing:" << cc->name() << cc->socket()->peerAddress();
                 // Always compare IPv6 addresses as IPv4 address are sometime simply IPv4 addresses, sometimes mapped IPv6 addresses
                 if ( cc->socket() && equalByIPv6Address( cc->socket()->peerAddress(), peer ) )
                 {
