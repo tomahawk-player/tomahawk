@@ -23,9 +23,8 @@ namespace Tomahawk
 
 APETag::APETag( TagLib::Tag *tag, TagLib::APE::Tag *apeTag )
     : Tag( tag )
-    , m_apeTag( apeTag )
 {
-    TagLib::APE::ItemListMap map = m_apeTag->itemListMap();
+    TagLib::APE::ItemListMap map = apeTag->itemListMap();
     for( TagLib::APE::ItemListMap::ConstIterator it = map.begin();
          it != map.end(); ++it )
     {

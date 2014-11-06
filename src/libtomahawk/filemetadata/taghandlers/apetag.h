@@ -29,9 +29,6 @@ class DLLEXPORT APETag : public Tag
 {
 public:
     APETag( TagLib::Tag *, TagLib::APE::Tag * );
-
-private:
-    TagLib::APE::Tag *m_apeTag;
 };
 
 }
