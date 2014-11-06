@@ -25,14 +25,14 @@
 #include "DllMacro.h"
 #include "Typedefs.h"
 
-#include "audio/MediaStream.h"
-
 #include <functional>
 
 struct libvlc_instance_t;
 struct libvlc_media_player_t;
 struct libvlc_media_t;
 struct libvlc_event_t;
+
+class MediaStream;
 
 class DLLEXPORT AudioOutput : public QObject
 {

@@ -23,6 +23,7 @@
 #include "AudioOutput.h"
 #include "TomahawkVersion.h"
 
+#include "audio/MediaStream.h"
 #include "utils/Logger.h"
 
 #include <QApplication>
