@@ -30,9 +30,9 @@ class DLLEXPORT ASFTag : public Tag
 public:
     ASFTag( TagLib::Tag *, TagLib::ASF::Tag * );
 
-    virtual QString albumArtist() const { return m_albumArtist; }
-    virtual QString composer() const { return m_composer; }
-    virtual unsigned int discNumber() const { return m_discNumber; }
+    QString albumArtist() const override { return m_albumArtist; }
+    QString composer() const override { return m_composer; }
+    unsigned int discNumber() const override { return m_discNumber; }
 
 private:
     TagLib::ASF::Tag *m_asfTag;

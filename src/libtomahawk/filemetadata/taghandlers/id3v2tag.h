@@ -30,9 +30,9 @@ class DLLEXPORT ID3v2Tag : public Tag
 public:
     ID3v2Tag( TagLib::Tag *, TagLib::ID3v2::Tag * );
 
-    virtual QString albumArtist() const { return m_albumArtist; }
-    virtual QString composer() const { return m_composer; }
-    virtual unsigned int discNumber() const { return m_discNumber; }
+    QString albumArtist() const override { return m_albumArtist; }
+    QString composer() const override { return m_composer; }
+    unsigned int discNumber() const override { return m_discNumber; }
 
 private:
     TagLib::ID3v2::Tag *m_id3v2Tag;
