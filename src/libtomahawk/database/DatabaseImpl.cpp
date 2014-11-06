@@ -799,7 +799,7 @@ Tomahawk::DatabaseImpl::openDatabase( const QString& dbname, bool checkSchema )
     }
     else if ( version < 0 )
     {
-            schemaUpdated = updateSchema( 0 );
+        schemaUpdated = updateSchema( 0 );
     }
 
     return schemaUpdated;
