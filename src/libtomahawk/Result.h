@@ -64,6 +64,9 @@ public:
 
     virtual ~Result();
 
+    QWeakPointer< Tomahawk::Result > weakRef();
+    void setWeakRef( QWeakPointer< Tomahawk::Result > weakRef );
+
     QVariant toVariant() const;
     QString toString() const;
     Tomahawk::query_ptr toQuery();
@@ -159,6 +162,7 @@ private:
 
     track_ptr m_track;
     query_wptr m_query;
+    QWeakPointer< Tomahawk::Result > m_ownRef;
 };
 
 } //ns

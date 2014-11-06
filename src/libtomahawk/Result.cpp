@@ -69,6 +69,7 @@ Result::get( const QString& url, const track_ptr& track )
     }
 
     result_ptr r = result_ptr( new Result( url, track ), &Result::deleteLater );
+    r->setWeakRef( r.toWeakRef() );
     s_results.insert( url, r );
 
     return r;
@@ -271,8 +272,7 @@ Result::toQuery()
         m_query = query->weakRef();
 
         QList<Tomahawk::result_ptr> rl;
-        rl << Result::get( m_url, m_track );
-
+        rl << weakRef().toStrongRef();
         query->addResults( rl );
         query->setResolveFinished( true );
         return query;
@@ -518,3 +518,18 @@ Result::track() const
 {
     return m_track;
 }
+
+
+QWeakPointer<Result>
+Result::weakRef()
+{
+    return m_ownRef;
+}
+
+
+void
+Result::setWeakRef( QWeakPointer<Result> weakRef )
+{
+    m_ownRef = weakRef;
+}
+
