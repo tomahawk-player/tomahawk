@@ -29,9 +29,6 @@ class DLLEXPORT ASFTag : public Tag
 {
 public:
     ASFTag( TagLib::Tag *, TagLib::ASF::Tag * );
-
-private:
-    TagLib::ASF::Tag *m_asfTag;
 };
 
 }

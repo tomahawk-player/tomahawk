@@ -23,9 +23,8 @@ namespace Tomahawk
 
 ASFTag::ASFTag( TagLib::Tag *tag, TagLib::ASF::Tag *asfTag )
     : Tag( tag )
-    , m_asfTag( asfTag )
 {
-    TagLib::ASF::AttributeListMap map = m_asfTag->attributeListMap();
+    TagLib::ASF::AttributeListMap map = asfTag->attributeListMap();
     for( TagLib::ASF::AttributeListMap::ConstIterator it = map.begin();
          it != map.end(); ++it )
     {
