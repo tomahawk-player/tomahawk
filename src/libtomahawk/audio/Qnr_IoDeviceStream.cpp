@@ -37,8 +37,6 @@ QNR_IODeviceStream::QNR_IODeviceStream( const QSharedPointer<QNetworkReply>& rep
     , m_networkReply( reply )
     , m_timer( new QTimer( this ) )
 {
-    tDebug() << Q_FUNC_INFO;
-
     m_type = MediaStream::Stream;
 
     if ( !m_networkReply->isOpen() ) {
@@ -92,8 +90,6 @@ QNR_IODeviceStream::seekStream( qint64 offset )
 qint64
 QNR_IODeviceStream::needData ( void** buffer )
 {
-//    tDebug() << Q_FUNC_INFO;
-
     QByteArray data = m_data.mid( m_pos, BLOCK_SIZE );
     m_pos += data.size();
     if ( ( data.size() == 0 ) && m_networkReply->atEnd() && m_networkReply->isFinished() )
