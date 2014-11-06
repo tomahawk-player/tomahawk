@@ -29,7 +29,6 @@ MediaStream::MediaStream( QObject* parent )
     , m_type( Unknown )
     , m_ioDevice ( nullptr )
 {
-    tDebug() << Q_FUNC_INFO;
 }
 
 
@@ -39,7 +38,6 @@ MediaStream::MediaStream( const QUrl &url )
     , m_url( url )
     , m_ioDevice ( nullptr )
 {
-    tDebug() << Q_FUNC_INFO;
 }
 
 
@@ -48,15 +46,12 @@ MediaStream::MediaStream( QIODevice* device )
     , m_type( IODevice )
     , m_ioDevice ( device )
 {
-    tDebug() << Q_FUNC_INFO;
-
     QObject::connect( m_ioDevice, SIGNAL( readChannelFinished() ), this, SLOT( bufferingFinished() ) );
 }
 
 
 MediaStream::~MediaStream()
 {
-    tDebug() << Q_FUNC_INFO;
 }
 
 
@@ -84,8 +79,6 @@ MediaStream::streamSize() const
 void
 MediaStream::setStreamSize( qint64 size )
 {
-    tDebug() << Q_FUNC_INFO;
-
     m_streamSize = size;
 }
 
@@ -93,16 +86,13 @@ MediaStream::setStreamSize( qint64 size )
 void
 MediaStream::endOfData()
 {
-    tDebug() << Q_FUNC_INFO;
-
     m_eos = true;
 }
 
 
-void MediaStream::bufferingFinished()
+void
+MediaStream::bufferingFinished()
 {
-    tDebug() << Q_FUNC_INFO;
-
     m_bufferingFinished = true;
 }
 
