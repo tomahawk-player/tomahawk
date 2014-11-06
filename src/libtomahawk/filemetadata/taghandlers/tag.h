@@ -36,21 +36,21 @@ public:
     static QSharedPointer<Tag> fromFile( const TagLib::FileRef &f );
 
     //getter-setters for common TagLib items
-    virtual QString title() const { return TStringToQString( m_tag->title() ).trimmed(); }
-    virtual QString artist() const { return TStringToQString( m_tag->artist() ).trimmed(); }
-    virtual QString album() const { return TStringToQString( m_tag->album() ).trimmed(); }
-    virtual QString comment() const { return TStringToQString( m_tag->comment() ).trimmed(); }
-    virtual QString genre() const { return TStringToQString( m_tag->genre() ).trimmed(); }
-    virtual unsigned int year() const { return m_tag->year(); }
-    virtual unsigned int track() const { return m_tag->track(); }
-    virtual void setTitle( const QString &s ) { m_tag->setTitle( TagLib::String( s.toUtf8().data(), TagLib::String::UTF8 ) ); }
-    virtual void setArtist( const QString &s ) { m_tag->setArtist( TagLib::String( s.toUtf8().data(), TagLib::String::UTF8 ) ); }
-    virtual void setAlbum( const QString &s ) { m_tag->setAlbum( TagLib::String( s.toUtf8().data(), TagLib::String::UTF8 ) ); }
-    virtual void setComment( const QString &s ) { m_tag->setComment( TagLib::String( s.toUtf8().data(), TagLib::String::UTF8 ) ); }
-    virtual void setGenre( const QString &s ) { m_tag->setGenre( TagLib::String( s.toUtf8().data(), TagLib::String::UTF8 ) ); }
-    virtual void setYear( unsigned int i ) { m_tag->setYear( i ); }
-    virtual void setTrack( unsigned int i ) { m_tag->setTrack( i ); }
-    virtual bool isEmpty() const { return m_tag->isEmpty(); }
+    QString title() const { return TStringToQString( m_tag->title() ).trimmed(); }
+    QString artist() const { return TStringToQString( m_tag->artist() ).trimmed(); }
+    QString album() const { return TStringToQString( m_tag->album() ).trimmed(); }
+    QString comment() const { return TStringToQString( m_tag->comment() ).trimmed(); }
+    QString genre() const { return TStringToQString( m_tag->genre() ).trimmed(); }
+    unsigned int year() const { return m_tag->year(); }
+    unsigned int track() const { return m_tag->track(); }
+    void setTitle( const QString &s ) { m_tag->setTitle( TagLib::String( s.toUtf8().data(), TagLib::String::UTF8 ) ); }
+    void setArtist( const QString &s ) { m_tag->setArtist( TagLib::String( s.toUtf8().data(), TagLib::String::UTF8 ) ); }
+    void setAlbum( const QString &s ) { m_tag->setAlbum( TagLib::String( s.toUtf8().data(), TagLib::String::UTF8 ) ); }
+    void setComment( const QString &s ) { m_tag->setComment( TagLib::String( s.toUtf8().data(), TagLib::String::UTF8 ) ); }
+    void setGenre( const QString &s ) { m_tag->setGenre( TagLib::String( s.toUtf8().data(), TagLib::String::UTF8 ) ); }
+    void setYear( unsigned int i ) { m_tag->setYear( i ); }
+    void setTrack( unsigned int i ) { m_tag->setTrack( i ); }
+    bool isEmpty() const { return m_tag->isEmpty(); }
 
     virtual QString albumArtist() const = 0;
     virtual QString composer() const = 0;
