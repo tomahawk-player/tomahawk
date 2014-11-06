@@ -2219,33 +2219,33 @@ heslo</translation>
 <context>
     <name>Tomahawk::Accounts::AccountDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="201"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="199"/>
         <source>Add Account</source>
         <translation>Přidat účet</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="251"/>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="668"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="249"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="666"/>
         <source>Remove</source>
         <translation>Odstranit</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="365"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="363"/>
         <source>%1 downloads</source>
         <translation>%1 stažení</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="569"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="567"/>
         <source>Online</source>
         <translation>Připojený</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="574"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="572"/>
         <source>Connecting...</source>
         <translation>Připojuje se...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="579"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="577"/>
         <source>Offline</source>
         <translation>Nepřipojený</translation>
     </message>
@@ -2426,22 +2426,22 @@ heslo</translation>
         <translation>Chyba při instalaci řešitele: Nelze otevřít balík.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="120"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="119"/>
         <source>Resolver installation error: incomplete bundle.</source>
         <translation>Chyba při instalaci řešitele: Neúplný balík.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="159"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="157"/>
         <source>Resolver installation error: bad metadata in bundle.</source>
         <translation>Chyba při instalaci řešitele: Špatná popisná data v balíku.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="197"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="193"/>
         <source>Resolver installation error: platform mismatch.</source>
         <translation>Chyba při instalaci řešitele: Neodpovídající platforma.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="210"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="205"/>
         <source>Resolver installation error: Tomahawk %1 or newer is required.</source>
         <translation>Chyba při instalaci řešitele: Je požadován Tomahawk %1 nebo novější.</translation>
     </message>

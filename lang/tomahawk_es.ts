@@ -2222,33 +2222,33 @@ y estaciones basadas en sus gustos personales.</translation>
 <context>
     <name>Tomahawk::Accounts::AccountDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="201"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="199"/>
         <source>Add Account</source>
         <translation>Añadir cuenta</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="251"/>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="668"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="249"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="666"/>
         <source>Remove</source>
         <translation>Eliminar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="365"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="363"/>
         <source>%1 downloads</source>
         <translation>%1 descargas</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="569"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="567"/>
         <source>Online</source>
         <translation>Conectado</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="574"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="572"/>
         <source>Connecting...</source>
         <translation>Conectando…</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="579"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="577"/>
         <source>Offline</source>
         <translation>Desconectado</translation>
     </message>
@@ -2429,22 +2429,22 @@ y estaciones basadas en sus gustos personales.</translation>
         <translation>Error de instalación del servicio: no se puede abrir el paquete.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="120"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="119"/>
         <source>Resolver installation error: incomplete bundle.</source>
         <translation>Error de instalación del servicio: el paquete está incompleto.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="159"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="157"/>
         <source>Resolver installation error: bad metadata in bundle.</source>
         <translation>Error de instalación del servicio: el paquete contiene metadatos incorrectos.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="197"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="193"/>
         <source>Resolver installation error: platform mismatch.</source>
         <translation>Error de instalación del servicio: la plataforma no coincide.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="210"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="205"/>
         <source>Resolver installation error: Tomahawk %1 or newer is required.</source>
         <translation>Error de instalación del servicio: se necesita Tomahawk %1 o superior.</translation>
     </message>

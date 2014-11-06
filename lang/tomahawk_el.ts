@@ -2218,33 +2218,33 @@ Password (OTP)</source>
 <context>
     <name>Tomahawk::Accounts::AccountDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="201"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="199"/>
         <source>Add Account</source>
         <translation>Προσθήκη Λογαριασμού</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="251"/>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="668"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="249"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="666"/>
         <source>Remove</source>
         <translation>Μετακινηση</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="365"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="363"/>
         <source>%1 downloads</source>
         <translation>%1 λήψεις</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="569"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="567"/>
         <source>Online</source>
         <translation>Συνεδεμένος</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="574"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="572"/>
         <source>Connecting...</source>
         <translation>Σύνδεση...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="579"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="577"/>
         <source>Offline</source>
         <translation>Εκτός Σύνδεσης</translation>
     </message>
@@ -2426,22 +2426,22 @@ Password (OTP)</source>
         <translation>Σφάλμα εγκατάστασης Resolver: δεν μπορεί να ανοιχθεί η διανομή.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="120"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="119"/>
         <source>Resolver installation error: incomplete bundle.</source>
         <translation>Σφάλμα εγκατάστασης Resolver: ελλειπής διανομή.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="159"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="157"/>
         <source>Resolver installation error: bad metadata in bundle.</source>
         <translation>Σφάλμα εγκατάστασης Resolver: κακής ποιότητας μεταδεδομένα στην διανομή.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="197"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="193"/>
         <source>Resolver installation error: platform mismatch.</source>
         <translation>Σφάλμα εγκατάστασης Resolver: αναντιστοιχία πλατφόρμας.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="210"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="205"/>
         <source>Resolver installation error: Tomahawk %1 or newer is required.</source>
         <translation>Σφάλμα εγκαταστάσης Resolver: απαιτείται το Tomahawk %1 ή νεότερο.</translation>
     </message>
