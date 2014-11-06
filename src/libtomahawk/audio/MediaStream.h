@@ -62,11 +62,11 @@ protected:
     QUrl m_url;
     QIODevice* m_ioDevice;
 
-    bool m_started;
-    bool m_bufferingFinished;
-    bool m_eos;
-    qint64 m_pos;
-    qint64 m_streamSize;
+    bool m_started = false;
+    bool m_bufferingFinished = false;
+    bool m_eos = false;
+    qint64 m_pos = 0;
+    qint64 m_streamSize = 0;
 
     char m_buffer[1048576];
 private:

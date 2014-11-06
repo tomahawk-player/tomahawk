@@ -28,11 +28,6 @@ MediaStream::MediaStream( QObject* parent )
     : QObject( parent )
     , m_type( Unknown )
     , m_ioDevice ( nullptr )
-    , m_started( false )
-    , m_bufferingFinished( false )
-    , m_eos( false )
-    , m_pos( 0 )
-    , m_streamSize( 0 )
 {
     tDebug() << Q_FUNC_INFO;
 }
@@ -43,11 +38,6 @@ MediaStream::MediaStream( const QUrl &url )
     , m_type( Url )
     , m_url( url )
     , m_ioDevice ( nullptr )
-    , m_started( false )
-    , m_bufferingFinished( false )
-    , m_eos( false )
-    , m_pos( 0 )
-    , m_streamSize( 0 )
 {
     tDebug() << Q_FUNC_INFO;
 }
@@ -57,11 +47,6 @@ MediaStream::MediaStream( QIODevice* device )
     : QObject( 0 )
     , m_type( IODevice )
     , m_ioDevice ( device )
-    , m_started( false )
-    , m_bufferingFinished( false )
-    , m_eos( false )
-    , m_pos( 0 )
-    , m_streamSize( 0 )
 {
     tDebug() << Q_FUNC_INFO;
 
