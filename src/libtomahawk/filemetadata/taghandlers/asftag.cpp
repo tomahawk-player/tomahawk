@@ -24,12 +24,10 @@ namespace Tomahawk
 ASFTag::ASFTag( TagLib::Tag *tag, TagLib::ASF::Tag *asfTag )
     : Tag( tag )
 {
-    TagLib::ASF::AttributeListMap map = asfTag->attributeListMap();
-    for( TagLib::ASF::AttributeListMap::ConstIterator it = map.begin();
-         it != map.end(); ++it )
+    for ( const auto& item : asfTag->attributeListMap() )
     {
-        TagLib::String key = it->first;
-        QString val = TStringToQString( it->second[ 0 ].toString() );
+        const TagLib::String& key = item.first;
+        QString val = TStringToQString( item.second[ 0 ].toString() );
         if( key == TagLib::String( "WM/AlbumTitle" ) ) //album artist
         {
             m_albumArtist = val;
