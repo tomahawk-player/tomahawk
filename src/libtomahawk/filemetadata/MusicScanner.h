@@ -59,8 +59,8 @@ public:
         qDebug() << Q_FUNC_INFO;
     }
 
-    bool isDeleting() { QMutexLocker locker( &m_deletingMutex ); return m_deleting; };
-    void setIsDeleting() { QMutexLocker locker( &m_deletingMutex ); m_deleting = true; };
+    bool isDeleting() { QMutexLocker locker( &m_deletingMutex ); return m_deleting; }
+    void setIsDeleting() { QMutexLocker locker( &m_deletingMutex ); m_deleting = true; }
 
 signals:
     void fileToScan( QFileInfo );
