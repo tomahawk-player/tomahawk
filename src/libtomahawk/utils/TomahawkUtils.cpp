@@ -950,7 +950,13 @@ percentEncode( const QUrl& url )
 {
     QByteArray data = url.toEncoded();
 
-    data.replace( "'", "%27" ); // QUrl doesn't encode ', which it doesn't have to. Some apps don't like ' though, and want %27. Both are valid.
+    // QUrl doesn't encode ', which it doesn't have to. Some apps don't like ' though, and want %27. Both are valid. It also doesn't encode : or ; which it should, so be safer here in general.
+    data.replace( "'", "%27" );
+    data.replace( ".", "%2E" );
+    data.replace( "*", "%2A" );
+    data.replace( ":", "%3A" );
+    data.replace( ";", "%3B" );
+
     data.replace( "%20", "+" );
 
     return data;
@@ -960,11 +966,18 @@ percentEncode( const QUrl& url )
 QByteArray
 encodedQuery( const QUrl& url )
 {
+    QByteArray data;
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-    return url.query(QUrl::FullyEncoded).toUtf8();
+    data = url.query(QUrl::FullyEncoded).toUtf8();
 #else
-    return url.encodedQuery();
+    data = url.encodedQuery();
 #endif
+    data.replace( "'", "%27" );
+    data.replace( ".", "%2E" );
+    data.replace( "*", "%2A" );
+    data.replace( ":", "%3A" );
+    data.replace( ";", "%3B" );
+    return data;
 }
 
 } // ns
