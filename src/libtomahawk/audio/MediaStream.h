@@ -32,7 +32,13 @@ class DLLEXPORT MediaStream : public QObject
     Q_OBJECT
 
 public:
-    enum MediaType { Unknown = -1, Empty = 0, Url = 1, Stream = 2, IODevice = 3 };
+    enum MediaType {
+        Unknown = -1,
+        Empty = 0,
+        Url = 1,
+        Stream = 2,
+        IODevice = 3
+    };
 
     MediaStream( QObject* parent = nullptr );
     explicit MediaStream( const QUrl &url );

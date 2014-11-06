@@ -33,7 +33,7 @@ MediaStream::MediaStream( QObject* parent )
 
 
 MediaStream::MediaStream( const QUrl &url )
-    : QObject( 0 )
+    : QObject( nullptr )
     , m_type( Url )
     , m_url( url )
     , m_ioDevice ( nullptr )
@@ -42,7 +42,7 @@ MediaStream::MediaStream( const QUrl &url )
 
 
 MediaStream::MediaStream( QIODevice* device )
-    : QObject( 0 )
+    : QObject( nullptr )
     , m_type( IODevice )
     , m_ioDevice ( device )
 {
