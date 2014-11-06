@@ -30,10 +30,6 @@ class DLLEXPORT APETag : public Tag
 public:
     APETag( TagLib::Tag *, TagLib::APE::Tag * );
 
-    QString albumArtist() const override { return m_albumArtist; }
-    QString composer() const override { return m_composer; }
-    unsigned int discNumber() const override { return m_discNumber; }
-
 private:
     TagLib::APE::Tag *m_apeTag;
 };

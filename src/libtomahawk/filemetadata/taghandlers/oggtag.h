@@ -30,10 +30,6 @@ class DLLEXPORT OggTag : public Tag
 public:
     OggTag( TagLib::Tag *, TagLib::Ogg::XiphComment * );
 
-    QString albumArtist() const override { return m_albumArtist; }
-    QString composer() const override { return m_composer; }
-    unsigned int discNumber() const override { return m_discNumber; }
-
 private:
     TagLib::Ogg::XiphComment *m_xiphComment;
 };

@@ -29,10 +29,6 @@ class DLLEXPORT ID3v1Tag : public Tag
 {
 public:
     ID3v1Tag( TagLib::Tag * );
-
-    QString albumArtist() const override { return QString(); }
-    QString composer() const override { return QString(); }
-    unsigned int discNumber() const override { return 0; }
 };
 
 }

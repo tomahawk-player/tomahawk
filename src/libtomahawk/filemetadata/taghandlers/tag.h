@@ -52,9 +52,9 @@ public:
     void setTrack( unsigned int i ) { m_tag->setTrack( i ); }
     bool isEmpty() const { return m_tag->isEmpty(); }
 
-    virtual QString albumArtist() const = 0;
-    virtual QString composer() const = 0;
-    virtual unsigned int discNumber() const = 0;
+    QString albumArtist() const { return m_albumArtist; }
+    QString composer() const { return m_composer; }
+    unsigned int discNumber() const { return m_discNumber; }
     //TODO: add support for writing those 3 items with TagLib's addField/setField
 
 protected:
