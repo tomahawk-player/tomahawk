@@ -24,12 +24,10 @@ namespace Tomahawk
 APETag::APETag( TagLib::Tag *tag, TagLib::APE::Tag *apeTag )
     : Tag( tag )
 {
-    TagLib::APE::ItemListMap map = apeTag->itemListMap();
-    for( TagLib::APE::ItemListMap::ConstIterator it = map.begin();
-         it != map.end(); ++it )
+    for( const auto& item : apeTag->itemListMap() )
     {
-        TagLib::String key = it->first;
-        QString val = TStringToQString( it->second.toString() );
+        const TagLib::String& key = item.first;
+        QString val = TStringToQString( item.second.toString() );
         //some of these are not defined in the item key according to the hydrogenaudio wiki
         //can I use them anyway?    --Teo 11/2011
         if( key == TagLib::String( "Album Artist" ) )
