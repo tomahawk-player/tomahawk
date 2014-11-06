@@ -334,6 +334,8 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
     while ( queries.count() )
     {
         query_ptr q = queries.takeFirst();
+        if ( !q->results().count() )
+            continue;
 
         bool done = false;
         for ( int i = 0; i < m_resultsModel->rowCount( QModelIndex() ); i++ )
