@@ -951,13 +951,13 @@ percentEncode( const QUrl& url )
     QByteArray data = url.toEncoded();
 
     // QUrl doesn't encode ', which it doesn't have to. Some apps don't like ' though, and want %27. Both are valid. It also doesn't encode : or ; which it should, so be safer here in general.
-    data.replace( "'", "%27" );
-    data.replace( ".", "%2E" );
-    data.replace( "*", "%2A" );
-    data.replace( ":", "%3A" );
-    data.replace( ";", "%3B" );
+     data.replace( "'", "%27" );
+    // data.replace( ".", "%2E" );
+    // data.replace( "*", "%2A" );
+    // data.replace( ":", "%3A" );
+    // data.replace( ";", "%3B" );
 
-    data.replace( "%20", "+" );
+     data.replace( "%20", "+" );
 
     return data;
 }
