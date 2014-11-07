@@ -948,16 +948,16 @@ urlSetQuery( QUrl& url, const QString& query )
 QByteArray
 percentEncode( const QUrl& url )
 {
+    //NOTE: this function does not exhaustively replace things that QUrl
+    //sometimes misses, however adding those in this function (like in
+    //encodedQuery()) causes some things like toma.hk link generation to
+    //fail, so leave them out here
+
     QByteArray data = url.toEncoded();
 
-    // QUrl doesn't encode ', which it doesn't have to. Some apps don't like ' though, and want %27. Both are valid. It also doesn't encode : or ; which it should, so be safer here in general.
-    data.replace( "'", "%27" );
-    data.replace( ".", "%2E" );
-    data.replace( "*", "%2A" );
-    data.replace( ":", "%3A" );
-    data.replace( ";", "%3B" );
-
-    data.replace( "%20", "+" );
+    // QUrl doesn't encode ', which it doesn't have to. Some apps don't like ' though, and want %27. Both are valid.
+     data.replace( "'", "%27" );
+     data.replace( "%20", "+" );
 
     return data;
 }
@@ -972,6 +972,7 @@ encodedQuery( const QUrl& url )
 #else
     data = url.encodedQuery();
 #endif
+    // QUrl doesn't encode : or ; which it should, as well as some other things, so be safer here in general.
     data.replace( "'", "%27" );
     data.replace( ".", "%2E" );
     data.replace( "*", "%2A" );
