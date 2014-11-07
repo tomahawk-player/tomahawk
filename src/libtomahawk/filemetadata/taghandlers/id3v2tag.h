@@ -29,9 +29,6 @@ class DLLEXPORT ID3v2Tag : public Tag
 {
 public:
     ID3v2Tag( TagLib::Tag *, TagLib::ID3v2::Tag * );
-
-private:
-    TagLib::ID3v2::Tag *m_id3v2Tag;
 };
 
 }
