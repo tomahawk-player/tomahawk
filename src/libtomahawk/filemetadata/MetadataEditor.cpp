@@ -36,6 +36,7 @@
 #include "Source.h"
 #include "Typedefs.h"
 
+#include "config.h"
 
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -89,8 +90,12 @@ MetadataEditor::writeMetadata( bool closeDlg )
         QFileInfo fi( QUrl( m_result->url() ).toLocalFile() );
 
         bool changed = false;
+#ifdef COMPLEX_TAGLIB_FILENAME
+        const wchar_t *encodedName = fi.canonicalFilePath().toStdWString().c_str();
+#else
         QByteArray fileName = QFile::encodeName( fi.canonicalFilePath() );
         const char *encodedName = fileName.constData();
+#endif
 
         TagLib::FileRef f( encodedName );
         QSharedPointer<Tomahawk::Tag> tag( Tomahawk::Tag::fromFile( f ) );
