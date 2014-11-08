@@ -90,10 +90,10 @@ MetadataEditor::writeMetadata( bool closeDlg )
         QFileInfo fi( QUrl( m_result->url() ).toLocalFile() );
 
         bool changed = false;
+        QByteArray fileName = QFile::encodeName( fi.canonicalFilePath() );
 #ifdef Q_OS_WIN
         const wchar_t* encodedName = fi.canonicalFilePath().toStdWString().c_str();
 #else
-        QByteArray fileName = QFile::encodeName( fi.canonicalFilePath() );
         const char* encodedName = fileName.constData();
 #endif
 
