@@ -1109,7 +1109,7 @@ Password (OTP)</source>
         <translation>次へ</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="376"/>
+        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="381"/>
         <source>Properties</source>
         <translation>情報</translation>
     </message>
