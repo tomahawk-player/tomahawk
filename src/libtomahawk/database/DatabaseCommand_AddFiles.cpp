@@ -94,7 +94,7 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         QVariant& v = *it;
         QVariantMap m = v.toMap();
 
-        int fileid = 0, artistid = 0, albumid = 0, trackid = 0, composerid = 0;
+        int fileid = 0, artistid = 0, albumartistid = 0, albumid = 0, trackid = 0, composerid = 0;
 
         QString url      = m.value( "url" ).toString();
         int mtime        = m.value( "mtime" ).toInt();
@@ -104,6 +104,7 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         uint duration    = m.value( "duration" ).toUInt();
         uint bitrate     = m.value( "bitrate" ).toUInt();
         QString artist   = m.value( "artist" ).toString();
+        QString albumartist   = m.value( "albumartist" ).toString();
         QString album    = m.value( "album" ).toString();
         QString track    = m.value( "track" ).toString();
         uint albumpos    = m.value( "albumpos" ).toUInt();
@@ -130,13 +131,18 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         // this is the qvariant(map) the remote will get
         v = m;
 
+        // add the album artist to the artist database
+        albumartistid = dbi->artistId( albumartist, true );
+        
         artistid = dbi->artistId( artist, true );
         if ( artistid < 1 )
             continue;
         trackid = dbi->trackId( artistid, track, true );
         if ( trackid < 1 )
             continue;
-        albumid = dbi->albumId( artistid, album, true );
+        
+        // If there's an album artist, use it. Otherwise use the track artist
+        albumid = dbi->albumId( albumartistid > 0 ? albumartistid : artistid, album, true );
 
         if( !composer.trimmed().isEmpty() )
             composerid = dbi->artistId( composer, true );
