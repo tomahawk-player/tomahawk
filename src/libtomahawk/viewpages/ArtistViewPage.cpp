@@ -191,6 +191,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     }
     {
         GridView* albumsFullView = new GridView( m_stackedWidget );
+        albumsFullView->delegate()->setWordWrapping( true );
         //        albumsFullView->setCaption( tr( "Albums" ) );
         //        albumsFullView->setShowCloseButton( true );
         albumsFullView->setPlayableModel( m_albumsModel );
