@@ -386,11 +386,11 @@ MusicScanner::readTags( const QFileInfo& fi )
     if ( !TomahawkUtils::supportedExtensions().contains( suffix ) )
         return QVariantMap(); // invalid extension
 
-    #ifdef COMPLEX_TAGLIB_FILENAME
-        const wchar_t *encodedName = fi.canonicalFilePath().toStdWString().c_str();
+    #ifdef Q_OS_WIN
+        const wchar_t* encodedName = fi.canonicalFilePath().toStdWString().c_str();
     #else
         QByteArray fileName = QFile::encodeName( fi.canonicalFilePath() );
-        const char *encodedName = fileName.constData();
+        const char* encodedName = fileName.constData();
     #endif
 
     TagLib::FileRef f( encodedName );

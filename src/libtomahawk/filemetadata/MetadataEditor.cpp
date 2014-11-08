@@ -90,11 +90,11 @@ MetadataEditor::writeMetadata( bool closeDlg )
         QFileInfo fi( QUrl( m_result->url() ).toLocalFile() );
 
         bool changed = false;
-#ifdef COMPLEX_TAGLIB_FILENAME
-        const wchar_t *encodedName = fi.canonicalFilePath().toStdWString().c_str();
+#ifdef Q_OS_WIN
+        const wchar_t* encodedName = fi.canonicalFilePath().toStdWString().c_str();
 #else
         QByteArray fileName = QFile::encodeName( fi.canonicalFilePath() );
-        const char *encodedName = fileName.constData();
+        const char* encodedName = fileName.constData();
 #endif
 
         TagLib::FileRef f( encodedName );
