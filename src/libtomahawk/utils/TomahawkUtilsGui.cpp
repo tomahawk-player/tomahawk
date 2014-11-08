@@ -359,6 +359,7 @@ bringToFront()
             return;
 
         widget->show();
+        widget->activateWindow();
         widget->raise();
     }
 #endif
