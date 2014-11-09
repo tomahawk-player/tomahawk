@@ -41,6 +41,7 @@
 #include "utils/Closure.h"
 #include "utils/Logger.h"
 #include "utils/ShortLinkHelper.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "widgets/SourceTreePopupDialog.h"
 #include "PlaylistEntry.h"
@@ -104,6 +105,8 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setMouseTracking( true );
     setEditTriggers( NoEditTriggers );
     setAutoExpandDelay( 500 );
+
+    TomahawkStyle::styleScrollBar( verticalScrollBar() );
 
     // TODO animation conflicts with the expanding-playlists-when-collection-is-null
     // so investigate
