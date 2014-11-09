@@ -349,7 +349,7 @@ te verbinden en te streamen vanuit jou?</translation>
         <translation>Nummers</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="200"/>
+        <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="201"/>
         <source>Albums</source>
         <translation>Albums</translation>
     </message>
@@ -1111,7 +1111,7 @@ opgeven (OTP)</translation>
         <translation>Vooruit</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="376"/>
+        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="381"/>
         <source>Properties</source>
         <translation>Eigenschappen</translation>
     </message>

@@ -349,7 +349,7 @@ de se connecter et streamer votre flux ?</translation>
         <translation>Chansons</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="200"/>
+        <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="201"/>
         <source>Albums</source>
         <translation>Albums</translation>
     </message>
@@ -1110,7 +1110,7 @@ Password (OTP)</source>
         <translation>Avancer</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="376"/>
+        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="381"/>
         <source>Properties</source>
         <translation>Propriétés</translation>
     </message>
@@ -2345,7 +2345,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccount.h" line="51"/>
         <source>Connect to Hatchet to capture your playback data, sync your playlists to Android and more.</source>
-        <translation>Connectez-vous à Hatchet pour récupérer votre informations de lecture, synchroniser vos collections vers Android, et plus.</translation>
+        <translation>Connectez-vous à Hatchet pour récupérer vos informations de lecture, synchroniser vos collections vers Android, et plus.</translation>
     </message>
 </context>
 <context>

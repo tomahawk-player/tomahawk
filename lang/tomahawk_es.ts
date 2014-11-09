@@ -349,7 +349,7 @@ conectarse y transmitir música por usted?</translation>
         <translation>Canciones</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="200"/>
+        <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="201"/>
         <source>Albums</source>
         <translation>Álbumes</translation>
     </message>
@@ -1111,7 +1111,7 @@ de un solo uso (OTP)</translation>
         <translation>Adelante</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="376"/>
+        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="381"/>
         <source>Properties</source>
         <translation>Propiedades</translation>
     </message>
