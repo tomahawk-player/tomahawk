@@ -144,14 +144,12 @@ MediaStream::readCallback ( const char* cookie, int64_t* dts, int64_t* pts, unsi
 
 
 int
-MediaStream::readDoneCallback ( void *data, const char *cookie, size_t bufferSize, void *buffer )
+MediaStream::readDoneCallback ( const char *cookie, size_t bufferSize, void *buffer )
 {
     Q_UNUSED(cookie);
     Q_UNUSED(bufferSize);
 
-    MediaStream* that = static_cast < MediaStream * > ( data );
-
-    if ( ( that->m_type == Stream ) && buffer != 0 && bufferSize > 0 ) {
+    if ( ( m_type == Stream ) && buffer != nullptr && bufferSize > 0 ) {
         delete static_cast< char* >( buffer );
     }
 
