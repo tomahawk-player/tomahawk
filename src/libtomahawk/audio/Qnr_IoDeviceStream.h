@@ -26,6 +26,7 @@
 #include "DllMacro.h"
 
 #include <QByteArray>
+#include <QMutex>
 #include <QNetworkReply>
 #include <QSharedPointer>
 
@@ -52,6 +53,7 @@ private slots:
     void readyRead();
 
 private:
+    QMutex m_mutex;
     QByteArray m_data;
     QSharedPointer<QNetworkReply> m_networkReply;
     QTimer* m_timer;
