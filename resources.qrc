@@ -65,6 +65,8 @@
         <file>data/sql/dbmigrate-27_to_28.sql</file>
         <file>data/sql/dbmigrate-28_to_29.sql</file>
         <file>data/js/tomahawk.js</file>
+        <file>data/js/tomahawk-infosystem.js</file>
+        <file>data/js/es6-promise-2.0.0.min.js</file>
         <file>data/images/drop-all-songs.svg</file>
         <file>data/images/drop-local-songs.svg</file>
         <file>data/images/drop-top-songs.svg</file>

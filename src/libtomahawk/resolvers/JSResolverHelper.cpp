@@ -125,7 +125,7 @@ JSResolverHelper::resolverData()
 void
 JSResolverHelper::log( const QString& message )
 {
-    tLog() << m_scriptPath << ":" << message;
+    tLog() << "JAVASCRIPT:" << m_scriptPath << ":" << message;
 }
 
 

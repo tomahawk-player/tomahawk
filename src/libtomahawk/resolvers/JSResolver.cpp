@@ -42,6 +42,7 @@
 #include "TomahawkSettings.h"
 #include "TomahawkVersion.h"
 #include "Track.h"
+#include "JSInfoPlugin.h"
 
 #include <QDir>
 #include <QFile>
@@ -204,57 +205,44 @@ JSResolver::init()
 
     d->engine->mainFrame()->setHtml( "<html><body></body></html>", QUrl( "file:///invalid/file/for/security/policy" ) );
 
-    // add c++ part of tomahawk javascript library
-    d->engine->mainFrame()->addToJavaScriptWindowObject( "Tomahawk", d->resolverHelper );
 
-    // Load CrytoJS
+    // tomahawk.js
     {
-        d->engine->setScriptPath( "cryptojs-core.js" );
-        QFile jslib( RESPATH "js/cryptojs-core.js" );
-        jslib.open( QIODevice::ReadOnly );
-        d->engine->mainFrame()->evaluateJavaScript( jslib.readAll() );
-        jslib.close();
-    }
-    {
+        // add c++ part of tomahawk javascript library
+        d->engine->mainFrame()->addToJavaScriptWindowObject( "Tomahawk", d->resolverHelper );
+
+        // Load CrytoJS core
+        loadScript( RESPATH "js/cryptojs-core.js" );
+
+        // Load CryptoJS modules
         QStringList jsfiles;
         jsfiles << "*.js";
         QDir cryptojs( RESPATH "js/cryptojs" );
         foreach ( QString jsfile, cryptojs.entryList( jsfiles ) )
         {
-            d->engine->setScriptPath( RESPATH "js/cryptojs/" +  jsfile );
-            QFile jslib(  RESPATH "js/cryptojs/" +  jsfile  );
-            jslib.open( QIODevice::ReadOnly );
-            d->engine->mainFrame()->evaluateJavaScript( jslib.readAll() );
-            jslib.close();
+            loadScript( RESPATH "js/cryptojs/" +  jsfile );
         }
+
+        // Load tomahawk.js
+        loadScript( RESPATH "js/tomahawk.js" );
     }
+
+    // tomahawk-infosystem.js
     {
-        // Load the tomahawk javascript utilities
-        d->engine->setScriptPath( "tomahawk.js" );
-        QFile jslib( RESPATH "js/tomahawk.js" );
-        jslib.open( QIODevice::ReadOnly );
-        d->engine->mainFrame()->evaluateJavaScript( jslib.readAll() );
-        jslib.close();
+        // add c++ part of tomahawk infosystem bindings as Tomahawk.InfoSystem
+        d->engine->mainFrame()->addToJavaScriptWindowObject( "_TomahawkInfoSystem", d->infoSystemHelper );
+        d->engine->mainFrame()->evaluateJavaScript( "Tomahawk.InfoSystem = _TomahawkInfoSystem;" );
+
+        // add deps
+        loadScripts( d->infoSystemHelper->requiredScriptPaths() );
     }
 
     // add resolver dependencies, if any
-    foreach ( const QString& s, d->requiredScriptPaths )
-    {
-        QFile reqFile( s );
-        if ( !reqFile.open( QIODevice::ReadOnly ) )
-        {
-            qWarning() << "Failed to read contents of file:" << s << reqFile.errorString();
-            return;
-        }
-        const QByteArray reqContents = reqFile.readAll();
+    loadScripts( d->requiredScriptPaths );
 
-        d->engine->setScriptPath( s );
-        d->engine->mainFrame()->evaluateJavaScript( reqContents );
-    }
 
     // add resolver
-    d->engine->setScriptPath( filePath() );
-    d->engine->mainFrame()->evaluateJavaScript( scriptContents );
+    loadScript( filePath() );
 
     // init resolver
     resolverInit();
@@ -483,6 +471,16 @@ JSResolver::lookupUrl( const QString& url )
     JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( errorMessage ) );
     tDebug() << errorMessage << m;
 }
+
+
+QVariant
+JSResolver::evaluateJavaScript ( const QString& scriptSource )
+{
+    Q_D( JSResolver );
+
+    return d->engine->mainFrame()->evaluateJavaScript( scriptSource );
+}
+
 
 
 Tomahawk::ExternalResolver::ErrorState
@@ -942,4 +940,37 @@ JSResolver::resolverCollections()
     // against this ID. doesn't matter what kind of ID string as long as it's unique.
     // Then when there's callbacks from a resolver, it sends source name, collection id
     // + data.
+}
+
+
+void
+JSResolver::loadScript ( const QString& path )
+{
+    Q_D( JSResolver );
+
+    QFile file( path );
+
+    if ( !file.open( QIODevice::ReadOnly ) )
+    {
+        qWarning() << "Failed to read contents of file:" << path << file.errorString();
+        Q_ASSERT(false);
+        return;
+    }
+
+    const QByteArray contents = file.readAll();
+
+    d->engine->setScriptPath( path );
+    d->engine->mainFrame()->evaluateJavaScript( contents );
+
+    file.close();
+}
+
+
+void
+JSResolver::loadScripts ( const QStringList& paths )
+{
+    foreach ( const QString& path, paths )
+    {
+        loadScript( path );
+    }
 }

@@ -27,6 +27,7 @@
 #include "ExternalResolverGui.h"
 #include "Typedefs.h"
 
+class JSInfoPlugin;
 class JSResolverHelper;
 class JSResolverPrivate;
 class ScriptEngine;
@@ -60,6 +61,8 @@ public:
 
     bool canParseUrl( const QString& url, UrlType type ) override;
 
+    QVariant evaluateJavaScript( const QString& scriptSource );
+
 public slots:
     void resolve( const Tomahawk::query_ptr& query ) override;
     void stop() override;
@@ -88,6 +91,8 @@ private:
     void fillDataInWidgets( const QVariantMap& data );
     void onCapabilitiesChanged( Capabilities capabilities );
     void loadCollections();
+    void loadScript( const QString& path );
+    void loadScripts( const QStringList& paths );
 
     // encapsulate javascript calls
     QVariantMap resolverSettings();
