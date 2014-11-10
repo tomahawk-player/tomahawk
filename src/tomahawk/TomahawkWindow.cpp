@@ -679,7 +679,7 @@ TomahawkWindow::setupSignals()
     connect( ac->getAction( "openLogfile" ), SIGNAL( triggered() ), SLOT( openLogfile() ) );
     connect( ac->getAction( "updateCollection" ), SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
     connect( ac->getAction( "rescanCollection" ), SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
-    connect( ac->getAction( "loadXSPF" ), SIGNAL( triggered() ), SLOT( loadSpiff() ) );
+    connect( ac->getAction( "importPlaylist" ), SIGNAL( triggered() ), SLOT( loadPlaylist() ) );
     connect( ac->getAction( "whatsnew_0_8" ), SIGNAL( triggered() ), SLOT( showWhatsNew_0_8() ) );
     connect( ac->getAction( "aboutTomahawk" ), SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ac->getAction( "quit" ), SIGNAL( triggered() ), qApp, SLOT( quit() ) );
