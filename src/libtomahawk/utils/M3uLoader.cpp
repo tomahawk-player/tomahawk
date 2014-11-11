@@ -111,7 +111,7 @@ M3uLoader::parseLine( const QString& line, const QFile& file )
 {
     QFileInfo tmpFile( QUrl::fromUserInput( QString( line.simplified() ) ).toLocalFile() );
 
-    if( tmpFile.exists() )
+    if ( tmpFile.exists() )
     {
         getTags( tmpFile );
     }
@@ -190,6 +190,7 @@ M3uLoader::parseM3u( const QString& fileLink )
     }
     else
         emit tracks( m_tracks );
+
     m_tracks.clear();
 }
 
