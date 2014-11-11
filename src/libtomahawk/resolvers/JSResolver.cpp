@@ -211,6 +211,10 @@ JSResolver::init()
         // add c++ part of tomahawk javascript library
         d->engine->mainFrame()->addToJavaScriptWindowObject( "Tomahawk", d->resolverHelper );
 
+        // load es6-promises shim
+        loadScript( RESPATH "js/es6-promise-2.0.0.min.js" );
+
+
         // Load CrytoJS core
         loadScript( RESPATH "js/cryptojs-core.js" );
 

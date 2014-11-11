@@ -39,7 +39,6 @@ JSInfoSystemHelper::~JSInfoSystemHelper()
 QStringList JSInfoSystemHelper::requiredScriptPaths() const
 {
     return QStringList()
-        << RESPATH "js/es6-promise-2.0.0.min.js"
         << RESPATH "js/tomahawk-infosystem.js";
 }
 
