@@ -78,6 +78,9 @@ public slots:
 signals:
     void stopped();
 
+protected:
+    QVariant callOnResolver( const QString& scriptSource );
+
 private slots:
     void onCollectionIconFetched();
 
