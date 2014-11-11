@@ -985,5 +985,13 @@ JSResolver::callOnResolver ( const QString& scriptSource )
 {
     Q_D( JSResolver );
 
-    return d->engine->mainFrame()->evaluateJavaScript( scriptSource + ";" );
+    QString propertyName = scriptSource.split('(').first();
+
+    return d->engine->mainFrame()->evaluateJavaScript( QString(
+        "if(Tomahawk.resolver.instance['_adapter_%1']) {"
+        "    Tomahawk.resolver.instance._adapter_%2;"
+        "} else {"
+        "    Tomahawk.resolver.instance.%2"
+        "}"
+    ).arg( propertyName ).arg( scriptSource ) );
 }
