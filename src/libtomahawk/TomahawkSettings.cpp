@@ -1545,19 +1545,19 @@ TomahawkSettings::updateIndex()
 
 
 QString
-TomahawkSettings::importXspfPath() const
+TomahawkSettings::importPlaylistPath() const
 {
-    if ( contains( "importXspfPath" ) )
-        return value( "importXspfPath" ).toString();
+    if ( contains( "importPlaylistPath" ) )
+        return value( "importPlaylistPath" ).toString();
     else
         return QDir::homePath();
 }
 
 
 void
-TomahawkSettings::setImportXspfPath( const QString& path )
+TomahawkSettings::setImportPlaylistPath( const QString& path )
 {
-    setValue( "importXspfPath", path );
+    setValue( "importPlaylistPath", path );
 }
 
 
