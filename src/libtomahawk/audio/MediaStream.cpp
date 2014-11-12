@@ -98,38 +98,43 @@ MediaStream::bufferingFinished()
 
 
 int
-MediaStream::readCallback ( void* data, const char* cookie, int64_t* dts, int64_t* pts, unsigned* flags, size_t* bufferSize, void** buffer )
+MediaStream::readCallback ( const char* cookie, int64_t* dts, int64_t* pts, unsigned* flags, size_t* bufferSize, void** buffer )
 {
     Q_UNUSED(cookie);
     Q_UNUSED(dts);
     Q_UNUSED(pts);
     Q_UNUSED(flags);
 
-    MediaStream* that = static_cast < MediaStream * > ( data );
     qint64 bufsize = 0;
     *bufferSize = 0;
 
-    if ( that->m_eos == true ) {
+    if ( m_eos == true )
+    {
         return -1;
     }
 
-    if ( that->m_type == Stream ) {
-        bufsize = that->needData(buffer);
+    if ( m_type == Stream )
+    {
+        bufsize = needData( buffer );
     }
-    else if ( that->m_type == IODevice ) {
-        bufsize = that->m_ioDevice->read( that->m_buffer, BLOCK_SIZE );
-        *buffer = that->m_buffer;
+    else if ( m_type == IODevice )
+    {
+        bufsize = m_ioDevice->read( m_buffer, BLOCK_SIZE );
+        *buffer = m_buffer;
     }
 
-    if ( bufsize > 0 ) {
-        that->m_started = true;
+    if ( bufsize > 0 )
+    {
+        m_started = true;
     }
-    if ( that->m_type == IODevice && bufsize == 0 && that->m_started && that->m_bufferingFinished == true ) {
-        that->m_eos = true;
+    if ( m_type == IODevice && bufsize == 0 && m_started && m_bufferingFinished == true )
+    {
+        m_eos = true;
         return -1;
     }
-    if ( bufsize < 0 ) {
-        that->m_eos = true;
+    if ( bufsize < 0 )
+    {
+        m_eos = true;
         return -1;
     }
 
@@ -139,14 +144,12 @@ MediaStream::readCallback ( void* data, const char* cookie, int64_t* dts, int64_
 
 
 int
-MediaStream::readDoneCallback ( void *data, const char *cookie, size_t bufferSize, void *buffer )
+MediaStream::readDoneCallback ( const char *cookie, size_t bufferSize, void *buffer )
 {
     Q_UNUSED(cookie);
     Q_UNUSED(bufferSize);
 
-    MediaStream* that = static_cast < MediaStream * > ( data );
-
-    if ( ( that->m_type == Stream ) && buffer != 0 && bufferSize > 0 ) {
+    if ( ( m_type == Stream ) && buffer != nullptr && bufferSize > 0 ) {
         delete static_cast< char* >( buffer );
     }
 

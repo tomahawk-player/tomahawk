@@ -69,7 +69,7 @@ ENDIF (LUCENEPP_INCLUDE_DIR)
 SET(LUCENEPP_GOOD_VERSION TRUE)
 
 FIND_PATH(LUCENEPP_LIBRARY_DIR
-	NAMES liblucene++.dylib liblucene++.so liblucene++.dll.a
+	NAMES liblucene++.dylib liblucene++.so liblucene++.dll.a lucene++
        	PATHS ${TRIAL_LIBRARY_PATHS} ${TRIAL_INCLUDE_PATHS} NO_DEFAULT_PATH)
 IF (LUCENEPP_LIBRARY_DIR)
   MESSAGE(STATUS "Found Lucene++ library dir: ${LUCENEPP_LIBRARY_DIR}")

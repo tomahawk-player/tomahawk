@@ -108,7 +108,7 @@ ActionCollection::initActions()
     connect( m_actionCollection[ "nextTrack" ],     SIGNAL( triggered() ), ae,   SLOT( next() ),      Qt::UniqueConnection );
 
     // main menu actions
-    m_actionCollection[ "loadXSPF" ] = new QAction( tr( "Import Playlist..." ), this );
+    m_actionCollection[ "importPlaylist" ] = new QAction( tr( "Import Playlist..." ), this );
     m_actionCollection[ "updateCollection" ] = new QAction( tr( "U&pdate Collection" ), this );
     m_actionCollection[ "rescanCollection" ] = new QAction( tr( "Fully &Rescan Collection" ), this );
     m_actionCollection[ "showOfflineSources" ] = new QAction( tr( "Show Offline Friends" ), this );
@@ -163,7 +163,7 @@ ActionCollection::createMenuBar( QWidget *parent )
     controlsMenu->addAction( m_actionCollection[ "togglePrivacy" ] );
     controlsMenu->addAction( m_actionCollection[ "showOfflineSources" ] );
     controlsMenu->addSeparator();
-    controlsMenu->addAction( m_actionCollection[ "loadXSPF" ] );
+    controlsMenu->addAction( m_actionCollection[ "importPlaylist" ] );
     controlsMenu->addAction( m_actionCollection[ "updateCollection" ] );
     controlsMenu->addAction( m_actionCollection[ "rescanCollection" ] );
     controlsMenu->addSeparator();
@@ -226,7 +226,7 @@ ActionCollection::createMenuBar( QWidget *parent )
 
 
 QMenu*
-ActionCollection::createCompactMenu( QWidget *parent )
+ActionCollection::createCompactMenu( QWidget* parent )
 {
     QMenu* compactMenu = new QMenu( tr( "Main Menu" ), parent );
     compactMenu->setFont( TomahawkUtils::systemFont() );
@@ -238,7 +238,7 @@ ActionCollection::createCompactMenu( QWidget *parent )
     compactMenu->addAction( m_actionCollection[ "togglePrivacy" ] );
     compactMenu->addAction( m_actionCollection[ "showOfflineSources" ] );
     compactMenu->addSeparator();
-    compactMenu->addAction( m_actionCollection[ "loadXSPF" ] );
+    compactMenu->addAction( m_actionCollection[ "importPlaylist" ] );
     compactMenu->addAction( m_actionCollection[ "updateCollection" ] );
     compactMenu->addAction( m_actionCollection[ "rescanCollection" ] );
     compactMenu->addSeparator();

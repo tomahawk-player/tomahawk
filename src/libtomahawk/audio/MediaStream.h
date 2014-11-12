@@ -54,8 +54,8 @@ public:
     virtual void seekStream( qint64 offset ) { (void)offset; }
     virtual qint64 needData ( void** buffer ) { (void)buffer; return 0; }
 
-    static int readCallback ( void* data, const char* cookie, int64_t* dts, int64_t* pts, unsigned* flags, size_t* bufferSize, void** buffer );
-    static int readDoneCallback ( void *data, const char *cookie, size_t bufferSize, void *buffer );
+    int readCallback( const char* cookie, int64_t* dts, int64_t* pts, unsigned* flags, size_t* bufferSize, void** buffer );
+    int readDoneCallback ( const char *cookie, size_t bufferSize, void *buffer );
     static int seekCallback ( void *data, const uint64_t pos );
 
 public slots:

@@ -99,7 +99,7 @@ protected:
 public slots:
     void createStation();
     void createPlaylist();
-    void loadSpiff();
+    void loadPlaylist();
     void showSettingsDialog();
     void showDiagnosticsDialog();
     void legalInfo();
@@ -137,7 +137,7 @@ private slots:
     void onSearch( const QString& search );
     void onFilterEdited();
 
-    void loadXspfFinished( int );
+    void loadPlaylistFinished( int );
 
     void minimize();
     void maximize();
@@ -165,6 +165,8 @@ private:
     void setupStatusBar();
     void setupShortcuts();
     void setupUpdateCheck();
+
+    void importPlaylist( const QString& url, bool autoUpdate );
 
 #ifdef Q_OS_WIN
     bool setupWindowsButtons();
