@@ -138,6 +138,7 @@ public slots:
     void playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::query_ptr& query );
     void playItem( const Tomahawk::artist_ptr& artist );
     void playItem( const Tomahawk::album_ptr& album );
+    void playPlaylistInterface( const Tomahawk::playlistinterface_ptr& playlist );
     void setPlaylist( Tomahawk::playlistinterface_ptr playlist );
     void setQueue( const Tomahawk::playlistinterface_ptr& queue );
 
