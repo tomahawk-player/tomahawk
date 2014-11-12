@@ -1,4 +1,5 @@
 Version 0.8.1:
+    * Fixed importing M3U playlists.
     * Sort album grids by artist name.
     * Fixed painting issue on 'More Albums' grid.
     * Fixed crash when editing/saving track tags.
