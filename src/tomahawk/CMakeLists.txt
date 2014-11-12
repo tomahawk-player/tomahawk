@@ -34,7 +34,7 @@ ENDIF( LIBLASTFM_FOUND )
 
 SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      dialogs/DiagnosticsDialog.cpp
-     dialogs/LoadXSPFDialog.cpp
+     dialogs/LoadPlaylistDialog.cpp
      dialogs/SettingsDialog.cpp
 
      sourcetree/SourcesModel.cpp
@@ -74,7 +74,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
 SET( tomahawkUI ${tomahawkUI}
      dialogs/DiagnosticsDialog.ui
      dialogs/HostDialog.ui
-     dialogs/LoadXSPFDialog.ui
+     dialogs/LoadPlaylistDialog.ui
      dialogs/ProxyDialog.ui
      dialogs/Settings_Accounts.ui
      dialogs/Settings_Advanced.ui

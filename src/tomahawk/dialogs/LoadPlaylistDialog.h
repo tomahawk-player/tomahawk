@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2014,      Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,28 +17,31 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LOADXSPFDIALOG_H
-#define LOADXSPFDIALOG_H
+#ifndef LOADPLAYLISTDIALOG_H
+#define LOADPLAYLISTDIALOG_H
 
 #include <QDialog>
 
-class Ui_LoadXSPF;
+class Ui_LoadPlaylist;
 
-class LoadXSPFDialog : public QDialog
+class LoadPlaylistDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit LoadXSPFDialog( QWidget* parent = 0, Qt::WindowFlags f = 0 );
-    virtual ~LoadXSPFDialog();
+    explicit LoadPlaylistDialog( QWidget* parent = 0, Qt::WindowFlags f = 0 );
+    virtual ~LoadPlaylistDialog();
 
-    QString xspfUrl() const;
+    QString url() const;
     bool autoUpdate() const;
 
 public slots:
     void getLocalFile();
 
+private slots:
+    void onUrlChanged();
+
 private:
-    Ui_LoadXSPF* m_ui;
+    Ui_LoadPlaylist* m_ui;
 };
 
-#endif // LOADXSPFDIALOG_H
+#endif // LOADPLAYLISTDIALOG_H
