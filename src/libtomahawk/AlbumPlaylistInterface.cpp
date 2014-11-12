@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
@@ -61,10 +61,11 @@ AlbumPlaylistInterface::~AlbumPlaylistInterface()
 void
 AlbumPlaylistInterface::setCurrentIndex( qint64 index )
 {
-    if ( index < m_queries.size() && !m_queries.at( index ).isNull() && m_queries.at( index )->results().size() > 0 ) {
-      PlaylistInterface::setCurrentIndex( index );
-
-      m_currentItem = m_queries.at( index )->results().first();
+    if ( index >= 0 && index < m_queries.size() &&
+         !m_queries.at( index ).isNull() && m_queries.at( index )->results().size() > 0 )
+    {
+        PlaylistInterface::setCurrentIndex( index );
+        m_currentItem = m_queries.at( index )->results().first();
     }
 }
 
