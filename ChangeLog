@@ -2,6 +2,7 @@ Version 0.9.0:
     * Resolved playback issues by switching to a new audio engine.
 
 Version 0.8.1:
+    * Sort album grids by artist name.
     * Fixed painting issue on 'More Albums' grid.
     * Fixed crash when editing/saving track tags.
 
