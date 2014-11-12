@@ -2,6 +2,8 @@ Version 0.9.0:
     * Resolved playback issues by switching to a new audio engine.
 
 Version 0.8.1:
+    * When playing an artist or album, don't give up when the first track
+      in list isn't playable.
     * Fixed importing M3U playlists.
     * Sort album grids by artist name.
     * Fixed painting issue on 'More Albums' grid.
