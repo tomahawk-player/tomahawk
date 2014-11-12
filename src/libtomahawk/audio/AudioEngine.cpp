@@ -1046,7 +1046,7 @@ AudioEngine::playItem( const Tomahawk::artist_ptr& artist )
                 emit stopped(); // we do this so the original caller knows we couldn't find this track
         }
         else
-            playItem( pli, pli->tracks().first() );
+            playPlaylistInterface( pli );
     }
     else
     {
@@ -1072,7 +1072,7 @@ AudioEngine::playItem( const Tomahawk::album_ptr& album )
                 emit stopped(); // we do this so the original caller knows we couldn't find this track
         }
         else
-            playItem( pli, pli->tracks().first() );
+            playPlaylistInterface( pli );
     }
     else
     {
@@ -1080,6 +1080,30 @@ AudioEngine::playItem( const Tomahawk::album_ptr& album )
                     const_cast<AudioEngine*>(this), SLOT( playItem( Tomahawk::album_ptr ) ), album );
         pli->tracks();
     }
+}
+
+
+void
+AudioEngine::playPlaylistInterface( const Tomahawk::playlistinterface_ptr& playlist )
+{
+    if ( !playlist->hasFirstPlayableTrack() )
+    {
+        NewClosure( playlist.data(), SIGNAL( foundFirstPlayableTrack() ),
+                    const_cast<AudioEngine*>(this), SLOT( playPlaylistInterface( Tomahawk::playlistinterface_ptr ) ), playlist );
+        return;
+    }
+
+    foreach ( const Tomahawk::query_ptr& query, playlist->tracks() )
+    {
+        if ( query->playable() )
+        {
+            playItem( playlist, query );
+            return;
+        }
+    }
+
+    // No playable track found
+    JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Sorry, couldn't find any playable tracks" ), 15 ) );
 }
 
 
