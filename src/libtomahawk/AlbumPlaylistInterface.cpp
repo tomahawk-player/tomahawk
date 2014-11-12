@@ -141,7 +141,7 @@ AlbumPlaylistInterface::tracks() const
 
             const_cast< int& >( m_lastQueryTimestamp ) = QDateTime::currentMSecsSinceEpoch();
         }
-        else if ( m_mode == DatabaseMode && !m_databaseLoaded && !m_finished )
+        else if ( m_mode == DatabaseMode && !m_databaseLoaded && !isFinished() )
         {
             if ( m_collection.isNull() ) //we do a dbcmd directly, for the SuperCollection I guess?
             {
@@ -205,7 +205,6 @@ AlbumPlaylistInterface::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData re
                 Pipeline::instance()->resolve( ql );
 
                 m_queries << ql;
-                checkQueries();
             }
 
             break;
@@ -238,7 +237,7 @@ AlbumPlaylistInterface::infoSystemFinished( const QString& infoId )
                 this, SLOT( infoSystemFinished( QString ) ) );
 
     // Add !m_finished check to not endlessly reload on an empty album.
-    if ( m_queries.isEmpty() && m_mode == Mixed && !m_finished )
+    if ( m_queries.isEmpty() && m_mode == Mixed && !isFinished() )
     {
         if ( m_collection.isNull() ) //we do a dbcmd directly, for the SuperCollection I guess?
         {
@@ -262,7 +261,7 @@ AlbumPlaylistInterface::infoSystemFinished( const QString& infoId )
     }
     else
     {
-        m_finished = true;
+        finishLoading();
         emit tracksLoaded( m_mode, m_collection );
     }
 }
@@ -279,9 +278,7 @@ AlbumPlaylistInterface::onTracksLoaded( const QList< query_ptr >& tracks )
     else
         m_queries << tracks;
 
-    checkQueries();
-
-    m_finished = true;
+    finishLoading();
     emit tracksLoaded( m_mode, m_collection );
 }
 
@@ -338,14 +335,4 @@ AlbumPlaylistInterface::resultAt( qint64 index ) const
         return query->results().first();
 
     return Tomahawk::result_ptr();
-}
-
-
-void
-AlbumPlaylistInterface::checkQueries()
-{
-    foreach ( const Tomahawk::query_ptr& query, m_queries )
-    {
-        connect( query.data(), SIGNAL( playableStateChanged( bool ) ), SLOT( onItemsChanged() ), Qt::UniqueConnection );
-    }
 }

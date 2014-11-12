@@ -30,10 +30,11 @@ using namespace Tomahawk;
 PlaylistInterface::PlaylistInterface()
     : QObject()
     , m_latchMode( PlaylistModes::StayOnSong )
-    , m_finished( false )
     , m_prevAvail( false )
     , m_nextAvail( false )
     , m_currentIndex( -1 )
+    , m_finished( false )
+    , m_foundFirstTrack( false )
 {
     m_id = uuid();
 }
@@ -245,4 +246,52 @@ PlaylistInterface::setCurrentIndex( qint64 index )
 
     emit currentIndexChanged();
     onItemsChanged();
+}
+
+
+void
+PlaylistInterface::finishLoading()
+{
+    foreach ( const Tomahawk::query_ptr& query, tracks() )
+    {
+        connect( query.data(), SIGNAL( playableStateChanged( bool ) ), SLOT( onItemsChanged() ), Qt::UniqueConnection );
+        connect( query.data(), SIGNAL( resolvingFinished( bool ) ), SLOT( onQueryResolved() ), Qt::UniqueConnection );
+    }
+
+    m_finished = true;
+    emit finishedLoading();
+}
+
+
+void
+PlaylistInterface::onQueryResolved()
+{
+    if ( m_foundFirstTrack )
+        return;
+
+    // We're looking for the first playable track, but want to make sure the
+    // second track doesn't start playing before the first really finished resolving
+    foreach ( const Tomahawk::query_ptr& query, tracks() )
+    {
+        if ( !query->resolvingFinished() )
+        {
+            // Wait for this track to be resolved
+            return;
+        }
+
+        if ( query->playable() )
+        {
+            // We have a playable track, all previous tracks are resolved but not playable
+            break;
+        }
+    }
+
+    // We have either found the first playable track or none of the tracks are playable
+    m_foundFirstTrack = true;
+    emit foundFirstPlayableTrack();
+
+    foreach ( const Tomahawk::query_ptr& query, tracks() )
+    {
+        disconnect( query.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( onQueryResolved() ) );
+    }
 }
