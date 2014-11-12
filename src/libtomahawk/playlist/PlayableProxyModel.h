@@ -135,7 +135,9 @@ private:
     bool nameFilterAcceptsRow( int sourceRow, PlayableItem* pi, const QModelIndex& sourceParent ) const;
     bool dupeFilterAcceptsRow( int sourceRow, PlayableItem* pi, const QModelIndex& sourceParent, PlayableProxyModelFilterMemo& memo ) const;
     bool visibilityFilterAcceptsRow( int sourceRow, const QModelIndex& sourceParent, PlayableProxyModelFilterMemo& memo ) const;
+
     bool lessThan( int column, const Tomahawk::query_ptr& left, const Tomahawk::query_ptr& right ) const;
+    bool lessThan( const Tomahawk::album_ptr& album1, const Tomahawk::album_ptr& album2 ) const;
 
     QPointer<PlayableModel> m_model;
 

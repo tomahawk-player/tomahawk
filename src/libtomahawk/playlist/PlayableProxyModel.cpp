@@ -384,15 +384,8 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
     const unsigned int albumpos2 = t2->albumpos();
     const unsigned int discnumber1 = t1->discnumber();
     const unsigned int discnumber2 = t2->discnumber();
-    qint64 id1 = 0, id2 = 0;
-
-    // This makes it a stable sorter and prevents items from randomly jumping about.
-    // FIXME: This always true.
-    if ( id1 == id2 )
-    {
-        id1 = (qint64)&q1;
-        id2 = (qint64)&q2;
-    }
+    const qint64 id1 = (qint64)&q1;
+    const qint64 id2 = (qint64)&q2;
 
     if ( column == PlayableModel::Artist ) // sort by artist
     {
@@ -567,6 +560,18 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
 
 
 bool
+PlayableProxyModel::lessThan( const Tomahawk::album_ptr& album1, const Tomahawk::album_ptr& album2 ) const
+{
+    if ( album1->artist() == album2->artist() )
+    {
+        return QString::localeAwareCompare( album1->sortname(), album2->sortname() ) < 0;
+    }
+
+    return QString::localeAwareCompare( album1->artist()->sortname(), album2->artist()->sortname() ) < 0;
+}
+
+
+bool
 PlayableProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
 {
     PlayableItem* p1 = itemFromIndex( left );
@@ -580,6 +585,10 @@ PlayableProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right 
     if ( p1->query() && p2->query() )
     {
         return lessThan( left.column(), p1->query(), p2->query() );
+    }
+    if ( p1->album() && p2->album() )
+    {
+        return lessThan( p1->album(), p2->album() );
     }
 
     return QString::localeAwareCompare( sourceModel()->data( left ).toString(), sourceModel()->data( right ).toString() ) < 0;
