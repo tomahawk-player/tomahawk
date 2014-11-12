@@ -69,8 +69,6 @@ private slots:
 private:
     Q_DISABLE_COPY( ArtistPlaylistInterface )
 
-    void checkQueries();
-
     QList< Tomahawk::query_ptr > m_queries;
     mutable result_ptr m_currentItem;
 

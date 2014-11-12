@@ -162,7 +162,6 @@ ArtistPlaylistInterface::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData r
                 }
 
                 m_queries << ql;
-                checkQueries();
             }
 
             break;
@@ -207,7 +206,7 @@ ArtistPlaylistInterface::infoSystemFinished( const QString &infoId )
     }
     else
     {
-        m_finished = true;
+        finishLoading();
         emit tracksLoaded( m_mode, m_collection );
     }
 }
@@ -224,9 +223,7 @@ ArtistPlaylistInterface::onTracksLoaded( const QList< query_ptr >& tracks )
     else
         m_queries << tracks;
 
-    checkQueries();
-
-    m_finished = true;
+    finishLoading();
     emit tracksLoaded( m_mode, m_collection );
 }
 
@@ -283,14 +280,4 @@ ArtistPlaylistInterface::resultAt( qint64 index ) const
         return query->results().first();
 
     return Tomahawk::result_ptr();
-}
-
-
-void
-ArtistPlaylistInterface::checkQueries()
-{
-    foreach ( const Tomahawk::query_ptr& query, m_queries )
-    {
-        connect( query.data(), SIGNAL( playableStateChanged( bool ) ), SLOT( onItemsChanged() ), Qt::UniqueConnection );
-    }
 }

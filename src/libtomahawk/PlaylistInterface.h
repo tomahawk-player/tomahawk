@@ -40,7 +40,8 @@ public:
     const QString id() const { return m_id; }
 
     virtual QList< Tomahawk::query_ptr > tracks() const = 0;
-    virtual bool isFinished() const { return m_finished; }
+    bool isFinished() const { return m_finished; }
+    bool hasFirstPlayableTrack() const { return m_foundFirstTrack; }
 
     virtual int trackCount() const = 0;
 
@@ -56,7 +57,7 @@ public:
     virtual qint64 siblingResultIndex( int itemsAway, qint64 rootIndex = -1 ) const;
     virtual Tomahawk::result_ptr siblingResult( int itemsAway, qint64 rootIndex = -1 ) const;
     virtual Tomahawk::result_ptr setSiblingResult( int itemsAway, qint64 rootIndex = -1 );
-    
+
     virtual Tomahawk::result_ptr resultAt( qint64 index ) const = 0;
     virtual Tomahawk::query_ptr queryAt( qint64 index ) const = 0;
     virtual qint64 indexOfResult( const Tomahawk::result_ptr& result ) const = 0;
@@ -102,15 +103,18 @@ signals:
     void nextTrackAvailable( bool available );
 
     void currentIndexChanged();
+    void finishedLoading();
+    void foundFirstPlayableTrack();
 
 protected slots:
     virtual void onItemsChanged();
+    void finishLoading();
+    void onQueryResolved();
 
 protected:
     virtual QList<Tomahawk::query_ptr> filterTracks( const QList<Tomahawk::query_ptr>& queries );
 
     PlaylistModes::LatchMode m_latchMode;
-    bool m_finished;
     mutable bool m_prevAvail;
     mutable bool m_nextAvail;
     mutable qint64 m_currentIndex;
@@ -121,6 +125,8 @@ private:
 private:
     QString m_id;
     QString m_filter;
+    bool m_finished;
+    bool m_foundFirstTrack;
 };
 
 }
