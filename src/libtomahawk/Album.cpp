@@ -305,6 +305,7 @@ Album::cover( const QSize& size, bool forceLoad ) const
         return QPixmap();
 }
 
+
 bool
 Album::coverLoaded() const
 {
