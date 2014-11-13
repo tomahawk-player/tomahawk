@@ -102,13 +102,13 @@ JSInfoPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tom
 void
 JSInfoPlugin::addInfoRequestResult( int requestId, qint64 maxAge, const QVariantMap& returnedData )
 {
-    Q_D( JSInfoPlugin );
-
     if ( QThread::currentThread() != thread() )
     {
         QMetaObject::invokeMethod( this, "addInfoRequestResult", Qt::QueuedConnection, Q_ARG( int, requestId ), Q_ARG( qint64, maxAge ), Q_ARG( QVariantMap, returnedData ) );
         return;
     }
+
+    Q_D( JSInfoPlugin );
 
     // retrieve requestData from cache and delete it
     Tomahawk::InfoSystem::InfoRequestData requestData = d->requestDataCache[ requestId ];
@@ -127,13 +127,14 @@ JSInfoPlugin::addInfoRequestResult( int requestId, qint64 maxAge, const QVariant
 void
 JSInfoPlugin::emitGetCachedInfo( int requestId, const QVariantMap& criteria, int newMaxAge )
 {
-    Q_D( JSInfoPlugin );
-
     if ( QThread::currentThread() != thread() )
     {
         QMetaObject::invokeMethod( this, "emitGetCachedInfo", Qt::QueuedConnection, Q_ARG( int, requestId ), Q_ARG( QVariantMap, criteria ), Q_ARG( int, newMaxAge ) );
         return;
     }
+
+    Q_D( JSInfoPlugin );
+
 
     emit getCachedInfo( convertQVariantMapToInfoStringHash( criteria ), newMaxAge, d->requestDataCache[ requestId ]);
 }
@@ -142,13 +143,13 @@ JSInfoPlugin::emitGetCachedInfo( int requestId, const QVariantMap& criteria, int
 void
 JSInfoPlugin::emitInfo( int requestId, const QVariantMap& output )
 {
-    Q_D( JSInfoPlugin );
-
     if ( QThread::currentThread() != thread() )
     {
         QMetaObject::invokeMethod( this, "emitInfo", Qt::QueuedConnection, Q_ARG( int, requestId ), Q_ARG( QVariantMap, output ) );
         return;
     }
+
+    Q_D( JSInfoPlugin );
 
     emit info( d->requestDataCache[ requestId ], output );
 }
