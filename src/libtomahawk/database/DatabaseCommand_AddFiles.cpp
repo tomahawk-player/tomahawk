@@ -131,6 +131,11 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         v = m;
 
         artistid = dbi->artistId( artist, true );
+        // add the album artist to the artist database
+        albumartistid = dbi->artistId( albumartist, true );
+        
+	if ( !artist.trimmed().isEmpty() )
+            artistid = dbi->artistId( artist, true );
         if ( artistid < 1 )
             continue;
         trackid = dbi->trackId( artistid, track, true );
