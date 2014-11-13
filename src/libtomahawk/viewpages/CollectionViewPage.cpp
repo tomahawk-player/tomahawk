@@ -71,7 +71,6 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
         m_albumView->setItemWidth( TomahawkUtils::DpiScaler::scaledX( this, 170 ) );
         m_albumView->delegate()->setWordWrapping( true );
 
-        m_albumView->proxyModel()->sort( -1 );
         m_albumView->setEmptyTip( tr( "Sorry, there are no albums in this collection!" ) );
 
         TomahawkStyle::stylePageFrame( m_albumView );
@@ -186,6 +185,7 @@ CollectionViewPage::setAlbumModel( PlayableModel* model )
 
     m_albumModel = model;
     m_albumView->setPlayableModel( model );
+    m_albumView->proxyModel()->sort( PlayableModel::Artist, Qt::AscendingOrder );
 
     if ( oldModel )
     {

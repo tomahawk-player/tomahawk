@@ -349,7 +349,7 @@ połączyć się i strumieniować od ciebie?</translation>
         <translation>Utwory</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="200"/>
+        <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="201"/>
         <source>Albums</source>
         <translation>Albumy</translation>
     </message>
@@ -1111,7 +1111,7 @@ jednorazowe (OTP)</translation>
         <translation>Naprzód</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="376"/>
+        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="381"/>
         <source>Properties</source>
         <translation>Właściwości</translation>
     </message>

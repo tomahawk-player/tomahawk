@@ -172,6 +172,7 @@ RecentlyPlayedModel::onPlaybackFinished( const Tomahawk::track_ptr& track, const
 void
 RecentlyPlayedModel::onTracksLoaded( QList<Tomahawk::track_ptr> tracks, QList<Tomahawk::PlaybackLog> logs )
 {
+    finishLoading();
     for ( int i = 0; i < tracks.count(); i++ )
     {
         onPlaybackFinished( tracks.at( i ), logs.at( i ) );

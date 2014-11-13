@@ -295,6 +295,7 @@ tomahawkWindow()
 void
 bringToFront()
 {
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
 #if defined(Q_WS_X11)
     {
         qDebug() << Q_FUNC_INFO;
@@ -346,6 +347,20 @@ bringToFront()
             SetFocus( (HWND)wid );
             AttachThreadInput(GetCurrentThreadId(), idActive, FALSE);
         }
+    }
+#endif
+#endif
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    {
+        qDebug() << Q_FUNC_INFO;
+
+        QWidget* widget = tomahawkWindow();
+        if ( !widget )
+            return;
+
+        widget->show();
+        widget->activateWindow();
+        widget->raise();
     }
 #endif
 }

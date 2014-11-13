@@ -216,8 +216,8 @@ public:
     PrivateListeningMode privateListeningMode() const;
     void setPrivateListeningMode( PrivateListeningMode mode );
 
-    void setImportXspfPath( const QString& path );
-    QString importXspfPath() const;
+    void setImportPlaylistPath( const QString& path );
+    QString importPlaylistPath() const;
 
     Tomahawk::SerializedUpdaters playlistUpdaters() const;
     void setPlaylistUpdaters( const Tomahawk::SerializedUpdaters& updaters );

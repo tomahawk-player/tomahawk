@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="uz@Latn" version="2.0">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="pt_PT" version="2.0">
 <context>
     <name>ACLJobDelegate</name>
     <message>
@@ -1342,52 +1342,52 @@ Password (OTP)</source>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="254"/>
         <source>%n year(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="256"/>
         <source>%n year(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="262"/>
         <source>%n month(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="264"/>
         <source>%n month(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="270"/>
         <source>%n week(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="272"/>
         <source>%n week(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="278"/>
         <source>%n day(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="280"/>
         <source>%n day(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="286"/>
         <source>%n hour(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="288"/>
         <source>%n hour(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="294"/>
@@ -3199,7 +3199,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message numerus="yes">
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="936"/>
         <source>about %n minute(s) long</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="940"/>
@@ -3587,12 +3587,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Track.cpp" line="580"/>
         <source>%n other(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Track.cpp" line="583"/>
         <source>%n people</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="587"/>

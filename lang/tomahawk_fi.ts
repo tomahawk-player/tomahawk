@@ -349,7 +349,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
         <translation>Kappaleet</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="200"/>
+        <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="201"/>
         <source>Albums</source>
         <translation>Albumit</translation>
     </message>
@@ -1111,7 +1111,7 @@ salasana (OTP)</translation>
         <translation>Seuraava</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="376"/>
+        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="381"/>
         <source>Properties</source>
         <translation>Ominaisuudet</translation>
     </message>
