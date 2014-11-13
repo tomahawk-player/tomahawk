@@ -61,7 +61,16 @@ public:
 
     bool canParseUrl( const QString& url, UrlType type ) override;
 
-    QVariant evaluateJavaScript( const QString& scriptSource );
+    /**
+     *  Evaluate JavaScript on the WebKit thread
+     */
+    Q_INVOKABLE void evaluateJavaScript( const QString& scriptSource );
+
+    /**
+     * This method must be called from the WebKit thread
+     */
+    QVariant evaluateJavaScriptWithResult( const QString& scriptSource );
+
 
 public slots:
     void resolve( const Tomahawk::query_ptr& query ) override;
@@ -96,6 +105,11 @@ private:
     void loadCollections();
     void loadScript( const QString& path );
     void loadScripts( const QStringList& paths );
+
+    /**
+     * Wrap the pure evaluateJavaScript call in here, while the threadings guards are in public methods
+     */
+    QVariant evaluateJavaScriptInternal( const QString& scriptSource );
 
     // encapsulate javascript calls
     QVariantMap resolverSettings();

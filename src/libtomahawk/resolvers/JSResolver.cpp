@@ -478,11 +478,35 @@ JSResolver::lookupUrl( const QString& url )
 
 
 QVariant
-JSResolver::evaluateJavaScript ( const QString& scriptSource )
+JSResolver::evaluateJavaScriptInternal(const QString& scriptSource)
 {
     Q_D( JSResolver );
 
     return d->engine->mainFrame()->evaluateJavaScript( scriptSource );
+}
+
+
+void
+JSResolver::evaluateJavaScript( const QString& scriptSource )
+{
+    Q_D( JSResolver );
+
+    if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "evaluateJavaScript", Qt::QueuedConnection, Q_ARG( QString, scriptSource ) );
+        return;
+    }
+
+    evaluateJavaScriptInternal( scriptSource );
+}
+
+
+QVariant
+JSResolver::evaluateJavaScriptWithResult( const QString& scriptSource )
+{
+    Q_ASSERT( QThread::currentThread() == thread() );
+
+    return evaluateJavaScriptInternal( scriptSource );
 }
 
 

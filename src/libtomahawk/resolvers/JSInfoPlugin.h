@@ -40,9 +40,9 @@ public:
     virtual ~JSInfoPlugin();
 
 
-    void addInfoRequestResult( int requestId, qint64 maxAge, const QVariantMap& returnedData );
-    void emitGetCachedInfo( int requestId, const QVariantMap& criteria, int newMaxAge );
-    void emitInfo( int requestId, const QVariantMap& output );
+    Q_INVOKABLE void addInfoRequestResult( int requestId, qint64 maxAge, const QVariantMap& returnedData );
+    Q_INVOKABLE void emitGetCachedInfo( int requestId, const QVariantMap& criteria, int newMaxAge );
+    Q_INVOKABLE void emitInfo( int requestId, const QVariantMap& output );
 
 protected slots:
     void init() override;
@@ -54,7 +54,8 @@ protected slots:
 protected:
     // TODO: create JSPlugin base class and move these methods there
     QString serviceGetter() const; // = 0
-    QVariant callMethodOnInfoPlugin( const QString& scriptSource );
+    void callMethodOnInfoPlugin( const QString& scriptSource );
+    QVariant callMethodOnInfoPluginWithResult( const QString& scriptSource );
 
 private:
     static QSet< Tomahawk::InfoSystem::InfoType > parseSupportedTypes(const QVariant& variant);

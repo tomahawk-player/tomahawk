@@ -29,9 +29,9 @@ JSInfoPlugin::JSInfoPlugin( int id, JSResolver *resolver )
 {
     Q_ASSERT( resolver );
 
-    // read in supported GetTypes and PushTypes
-    m_supportedGetTypes = parseSupportedTypes( callMethodOnInfoPlugin( "supportedGetTypes" ) );
-    m_supportedPushTypes = parseSupportedTypes( callMethodOnInfoPlugin( "supportedPushTypes" ) );
+    // read in supported GetTypes and PushTypes - we can do this safely because we are still in WebKit thread here
+    m_supportedGetTypes = parseSupportedTypes( callMethodOnInfoPluginWithResult( "supportedGetTypes" ) );
+    m_supportedPushTypes = parseSupportedTypes( callMethodOnInfoPluginWithResult( "supportedPushTypes" ) );
 
     setFriendlyName( QString( "JSInfoPlugin: %1" ).arg( resolver->name() ) );
 }
@@ -104,6 +104,12 @@ JSInfoPlugin::addInfoRequestResult( int requestId, qint64 maxAge, const QVariant
 {
     Q_D( JSInfoPlugin );
 
+    if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "addInfoRequestResult", Qt::QueuedConnection, Q_ARG( int, requestId ), Q_ARG( qint64, maxAge ), Q_ARG( QVariantMap, returnedData ) );
+        return;
+    }
+
     // retrieve requestData from cache and delete it
     Tomahawk::InfoSystem::InfoRequestData requestData = d->requestDataCache[ requestId ];
     d->requestDataCache.remove( requestId );
@@ -123,6 +129,12 @@ JSInfoPlugin::emitGetCachedInfo( int requestId, const QVariantMap& criteria, int
 {
     Q_D( JSInfoPlugin );
 
+    if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "emitGetCachedInfo", Qt::QueuedConnection, Q_ARG( int, requestId ), Q_ARG( QVariantMap, criteria ), Q_ARG( int, newMaxAge ) );
+        return;
+    }
+
     emit getCachedInfo( convertQVariantMapToInfoStringHash( criteria ), newMaxAge, d->requestDataCache[ requestId ]);
 }
 
@@ -131,6 +143,12 @@ void
 JSInfoPlugin::emitInfo( int requestId, const QVariantMap& output )
 {
     Q_D( JSInfoPlugin );
+
+    if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "emitInfo", Qt::QueuedConnection, Q_ARG( int, requestId ), Q_ARG( QVariantMap, output ) );
+        return;
+    }
 
     emit info( d->requestDataCache[ requestId ], output );
 }
@@ -144,8 +162,8 @@ JSInfoPlugin::serviceGetter() const
     return QString( "Tomahawk.InfoSystem.getInfoPlugin(%1)" ).arg( d->id );
 }
 
-
-QVariant
+// TODO: DRY, really move things into base class
+void
 JSInfoPlugin::callMethodOnInfoPlugin( const QString& scriptSource )
 {
     Q_D( JSInfoPlugin );
@@ -154,8 +172,22 @@ JSInfoPlugin::callMethodOnInfoPlugin( const QString& scriptSource )
 
     tLog() << Q_FUNC_INFO << eval;
 
-    return d->resolver->evaluateJavaScript( eval );
+    d->resolver->evaluateJavaScript( eval );
 }
+
+
+QVariant
+JSInfoPlugin::callMethodOnInfoPluginWithResult(const QString& scriptSource)
+{
+    Q_D( JSInfoPlugin );
+
+    QString eval = QString( "%1.%2" ).arg( serviceGetter() ).arg( scriptSource );
+
+    tLog() << Q_FUNC_INFO << eval;
+
+    return d->resolver->evaluateJavaScriptWithResult( eval );
+}
+
 
 
 QSet< Tomahawk::InfoSystem::InfoType >
