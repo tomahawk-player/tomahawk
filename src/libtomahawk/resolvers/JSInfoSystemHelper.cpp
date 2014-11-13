@@ -44,7 +44,7 @@ QStringList JSInfoSystemHelper::requiredScriptPaths() const
 
 
 void
-JSInfoSystemHelper::nativeAddInfoPlugin ( int id )
+JSInfoSystemHelper::nativeAddInfoPlugin( int id )
 {
     Q_D( JSInfoSystemHelper );
 
@@ -64,7 +64,7 @@ JSInfoSystemHelper::nativeAddInfoPlugin ( int id )
 
 
 void
-JSInfoSystemHelper::nativeRemoveInfoPlugin ( int id )
+JSInfoSystemHelper::nativeRemoveInfoPlugin( int id )
 {
     Q_UNUSED( id );
     tLog() << "Removing Info plugins from JS is not implemented yet";
@@ -73,7 +73,7 @@ JSInfoSystemHelper::nativeRemoveInfoPlugin ( int id )
 
 
 void
-JSInfoSystemHelper::nativeAddInfoRequestResult ( int infoPluginId, int requestId, int maxAge, const QVariantMap& returnedData )
+JSInfoSystemHelper::nativeAddInfoRequestResult( int infoPluginId, int requestId, int maxAge, const QVariantMap& returnedData )
 {
     Q_D( JSInfoSystemHelper );
 
@@ -88,7 +88,7 @@ JSInfoSystemHelper::nativeAddInfoRequestResult ( int infoPluginId, int requestId
 
 
 void
-JSInfoSystemHelper::nativeGetCachedInfo ( int infoPluginId, int requestId, int newMaxAge, const QVariantMap& criteria )
+JSInfoSystemHelper::nativeGetCachedInfo( int infoPluginId, int requestId, int newMaxAge, const QVariantMap& criteria )
 {
     Q_D( JSInfoSystemHelper );
 
@@ -99,10 +99,10 @@ JSInfoSystemHelper::nativeGetCachedInfo ( int infoPluginId, int requestId, int n
     }
 
     d->infoPlugins[ infoPluginId ]->emitGetCachedInfo( requestId, criteria, newMaxAge );
-
 }
 
-void JSInfoSystemHelper::nativeDataError ( int infoPluginId, int requestId )
+
+void JSInfoSystemHelper::nativeDataError( int infoPluginId, int requestId )
 {
     Q_D( JSInfoSystemHelper );
 
@@ -114,4 +114,3 @@ void JSInfoSystemHelper::nativeDataError ( int infoPluginId, int requestId )
 
     d->infoPlugins[ infoPluginId ]->emitInfo( requestId, QVariantMap() );
 }
-

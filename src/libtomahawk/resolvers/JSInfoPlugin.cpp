@@ -55,7 +55,7 @@ JSInfoPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 
     d->requestDataCache[ requestData.requestId ] = requestData;
 
-    QString eval = QString("_getInfo(%1, %2, %3, %4)")
+    QString eval = QString( "_getInfo(%1, %2, %3, %4)" )
         .arg( d->id ) // infoPluginId
         .arg( requestData.requestId ) // requestId
         .arg( requestData.type )  // type
@@ -100,7 +100,7 @@ JSInfoPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tom
 
 
 void
-JSInfoPlugin::addInfoRequestResult ( int requestId, qint64 maxAge, const QVariantMap& returnedData )
+JSInfoPlugin::addInfoRequestResult( int requestId, qint64 maxAge, const QVariantMap& returnedData )
 {
     Q_D( JSInfoPlugin );
 
@@ -119,7 +119,7 @@ JSInfoPlugin::addInfoRequestResult ( int requestId, qint64 maxAge, const QVarian
 
 
 void
-JSInfoPlugin::emitGetCachedInfo ( int requestId, const QVariantMap& criteria, int newMaxAge )
+JSInfoPlugin::emitGetCachedInfo( int requestId, const QVariantMap& criteria, int newMaxAge )
 {
     Q_D( JSInfoPlugin );
 
@@ -128,7 +128,7 @@ JSInfoPlugin::emitGetCachedInfo ( int requestId, const QVariantMap& criteria, in
 
 
 void
-JSInfoPlugin::emitInfo ( int requestId, const QVariantMap& output )
+JSInfoPlugin::emitInfo( int requestId, const QVariantMap& output )
 {
     Q_D( JSInfoPlugin );
 
@@ -141,12 +141,12 @@ JSInfoPlugin::serviceGetter() const
 {
     Q_D( const JSInfoPlugin );
 
-    return QString("Tomahawk.InfoSystem.getInfoPlugin(%1)").arg( d->id );
+    return QString( "Tomahawk.InfoSystem.getInfoPlugin(%1)" ).arg( d->id );
 }
 
 
 QVariant
-JSInfoPlugin::callMethodOnInfoPlugin ( const QString& scriptSource )
+JSInfoPlugin::callMethodOnInfoPlugin( const QString& scriptSource )
 {
     Q_D( JSInfoPlugin );
 
@@ -157,8 +157,9 @@ JSInfoPlugin::callMethodOnInfoPlugin ( const QString& scriptSource )
     return d->resolver->evaluateJavaScript( eval );
 }
 
+
 QSet< Tomahawk::InfoSystem::InfoType >
-JSInfoPlugin::parseSupportedTypes ( const QVariant& variant )
+JSInfoPlugin::parseSupportedTypes( const QVariant& variant )
 {
     QVariantList list = variant.toList();
 
@@ -179,7 +180,7 @@ JSInfoPlugin::parseSupportedTypes ( const QVariant& variant )
 
 
 QString
-JSInfoPlugin::serializeQVariantMap ( const QVariantMap& map )
+JSInfoPlugin::serializeQVariantMap( const QVariantMap& map )
 {
     QVariantMap localMap = map;
 
@@ -203,12 +204,12 @@ JSInfoPlugin::serializeQVariantMap ( const QVariantMap& map )
 
     QByteArray serialized = TomahawkUtils::toJson( localMap );
 
-    return QString("JSON.parse('%1')").arg( QString::fromUtf8( serialized ) );
+    return QString( "JSON.parse('%1')" ).arg( QString::fromUtf8( serialized ) );
 }
 
 
 QVariantMap
-JSInfoPlugin::convertInfoStringHashToQVariantMap ( const Tomahawk::InfoSystem::InfoStringHash& hash )
+JSInfoPlugin::convertInfoStringHashToQVariantMap( const Tomahawk::InfoSystem::InfoStringHash& hash )
 {
     QVariantMap map;
 
@@ -222,7 +223,7 @@ JSInfoPlugin::convertInfoStringHashToQVariantMap ( const Tomahawk::InfoSystem::I
 
 
 Tomahawk::InfoSystem::InfoStringHash
-JSInfoPlugin::convertQVariantMapToInfoStringHash ( const QVariantMap& map )
+JSInfoPlugin::convertQVariantMapToInfoStringHash( const QVariantMap& map )
 {
     Tomahawk::InfoSystem::InfoStringHash hash;
 

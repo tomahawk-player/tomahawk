@@ -948,7 +948,7 @@ JSResolver::resolverCollections()
 
 
 void
-JSResolver::loadScript ( const QString& path )
+JSResolver::loadScript( const QString& path )
 {
     Q_D( JSResolver );
 
@@ -971,7 +971,7 @@ JSResolver::loadScript ( const QString& path )
 
 
 void
-JSResolver::loadScripts ( const QStringList& paths )
+JSResolver::loadScripts( const QStringList& paths )
 {
     foreach ( const QString& path, paths )
     {
@@ -981,7 +981,7 @@ JSResolver::loadScripts ( const QStringList& paths )
 
 
 QVariant
-JSResolver::callOnResolver ( const QString& scriptSource )
+JSResolver::callOnResolver( const QString& scriptSource )
 {
     Q_D( JSResolver );
 
