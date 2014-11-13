@@ -158,6 +158,7 @@ private:
 
     unsigned int m_cmdQueue;
 
+    QSet< QString > m_processedFiles;
     QVariantList m_scannedfiles;
     QVariantList m_filesToDelete;
     quint32 m_batchsize;

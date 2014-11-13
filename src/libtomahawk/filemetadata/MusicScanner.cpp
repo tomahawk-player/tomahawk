@@ -286,6 +286,8 @@ MusicScanner::postOps()
         m_filesToDelete.clear();
     }
 
+    m_processedFiles.clear();
+
     if ( !m_cmdQueue )
         cleanup();
 }
@@ -348,6 +350,13 @@ MusicScanner::commandFinished()
 void
 MusicScanner::scanFile( const QFileInfo& fi )
 {
+    // Don't process a single file twice, this might happen if you add a subfolder of another collection folder to your collection
+    if ( m_processedFiles.contains( fi.canonicalFilePath() ) )
+        return;
+    else
+        m_processedFiles << fi.canonicalFilePath();
+
+
     if ( m_filemtimes.contains( "file://" + fi.canonicalFilePath() ) )
     {
         if ( !m_filemtimes.value( "file://" + fi.canonicalFilePath() ).values().isEmpty() &&
