@@ -116,7 +116,7 @@ Third party libraries that we ship with our source:
 
 ## SUPPORT TOMAHAWK
 
-* [Open Issues](https://bugs.tomahawk-player.org/secure/Dashboard.jspa)
+* [Bug Tracker & Issues](https://bugs.tomahawk-player.org/secure/Dashboard.jspa)
 * [Translations](https://www.transifex.com/projects/p/tomahawk/)
 * [Donate](https://flattr.com/thing/169312/Tomahawk)
 
