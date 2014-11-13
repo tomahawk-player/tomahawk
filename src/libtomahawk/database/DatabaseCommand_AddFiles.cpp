@@ -131,8 +131,9 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         // this is the qvariant(map) the remote will get
         v = m;
 
-        // add the album artist to the artist database
-        albumartistid = dbi->artistId( albumartist, true );
+        // add the album artist to the artist database.
+	if( !albumartist.trimmed().isEmpty() )
+	  albumartistid = dbi->artistId( albumartist, true );
         
 	if( !artist.trimmed().isEmpty() )
         	artistid = dbi->artistId( artist, true );
