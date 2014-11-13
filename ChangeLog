@@ -1,4 +1,5 @@
 Version 0.8.1:
+    * Prevented adding dupes to the collection when scanning.
     * When playing an artist or album, don't give up when the first track
       in list isn't playable.
     * Fixed importing M3U playlists.
