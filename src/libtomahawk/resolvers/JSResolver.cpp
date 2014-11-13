@@ -510,7 +510,6 @@ JSResolver::evaluateJavaScriptWithResult( const QString& scriptSource )
 }
 
 
-
 Tomahawk::ExternalResolver::ErrorState
 JSResolver::error() const
 {
