@@ -21,8 +21,6 @@
 
 #include "../utils/Logger.h"
 
-#include <QMetaMethod>
-
 
 JSInfoSystemHelper::JSInfoSystemHelper( JSResolver* parent )
     : QObject( parent )
