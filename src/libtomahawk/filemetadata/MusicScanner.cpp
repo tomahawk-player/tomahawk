@@ -61,9 +61,9 @@ DirLister::scanDir( QDir dir, int depth )
     }
 
     tDebug( LOGVERBOSE ) << "DirLister::scanDir scanning:" << dir.canonicalPath();
-    if ( !dir.exists() )
+    if ( !dir.exists() || m_processedDirs.contains( dir.canonicalPath() ) )
     {
-        tDebug( LOGVERBOSE ) << "Dir no longer exists, not scanning";
+        tDebug( LOGVERBOSE ) << "Dir no longer exists or already scanned, ignoring";
 
         m_opcount--;
         if ( m_opcount == 0 )
@@ -72,18 +72,17 @@ DirLister::scanDir( QDir dir, int depth )
         return;
     }
 
-    QFileInfoList filteredEntries;
+    m_processedDirs << dir.canonicalPath();
 
+    QFileInfoList filteredEntries;
     dir.setFilter( QDir::Files | QDir::Readable | QDir::NoDotAndDotDot );
     dir.setSorting( QDir::Name );
     filteredEntries = dir.entryInfoList();
-
     foreach ( const QFileInfo& di, filteredEntries )
         emit fileToScan( di );
 
     dir.setFilter( QDir::Dirs | QDir::Readable | QDir::NoDotAndDotDot );
     filteredEntries = dir.entryInfoList();
-
     foreach ( const QFileInfo& di, filteredEntries )
     {
         const QString canonical = di.canonicalFilePath();

@@ -72,6 +72,7 @@ private slots:
 
 private:
     QStringList m_dirs;
+    QSet< QString > m_processedDirs;
 
     uint m_opcount;
     QMutex m_deletingMutex;
