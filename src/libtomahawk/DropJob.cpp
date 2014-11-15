@@ -284,10 +284,10 @@ DropJob::isDropType( DropJob::DropType desired, const QMimeData* data )
         if ( urlList.contains( "xml" ) && urlList.contains( "iTunes" ) )
             return validateLocalFiles( urlList, "xml" );
 
-        if( url.contains( "xspf" ) || urlList.contains( "xspf" ) )
+        if ( url.contains( "xspf" ) || urlList.contains( "xspf" ) )
             return true;
 
-        if( url.contains( "m3u" ) || urlList.contains( "m3u" ) )
+        if ( url.contains( "m3u" ) || urlList.contains( "m3u" ) )
             return true;
 
         // Not the most elegant
@@ -308,7 +308,7 @@ DropJob::isDropType( DropJob::DropType desired, const QMimeData* data )
         {
             if ( resolver->canParseUrl( url, ExternalResolver::Playlist ) )
             {
-                tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Accepting current drop as a playlist";
+                tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Accepting current drop as a playlist" << resolver->name();
                 return true;
             }
         }
