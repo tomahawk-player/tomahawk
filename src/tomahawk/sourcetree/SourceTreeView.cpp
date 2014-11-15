@@ -776,15 +776,7 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
 
     bool accept = false;
 
-    // Don't highlight the drop for a playlist, as it won't get added to the playlist but created generally
-    if ( DropJob::isDropType( DropJob::Playlist, event->mimeData() ) )
-    {
-        event->setDropAction( Qt::CopyAction );
-        event->accept();
-        return;
-    }
-
-    if ( DropJob::acceptsMimeData( event->mimeData(),  DropJob::Track, DropJob::Append ) )
+    if ( DropJob::acceptsMimeData( event->mimeData(), DropJob::Track, DropJob::Append ) )
     {
         setDirtyRegion( m_dropRect );
         const QPoint pos = event->pos();
@@ -843,6 +835,14 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
         event->setDropAction( Qt::CopyAction );
         event->accept();
     }
+    else if ( DropJob::isDropType( DropJob::Playlist, event->mimeData() ) )
+    {
+        // Don't highlight the drop for a playlist, as it won't get added to the playlist but created generally
+        event->setDropAction( Qt::CopyAction );
+        event->accept();
+        return;
+    }
+
     setDirtyRegion( m_dropRect );
 }
 
