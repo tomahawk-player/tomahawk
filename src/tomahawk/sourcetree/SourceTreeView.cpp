@@ -779,6 +779,7 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
     // Don't highlight the drop for a playlist, as it won't get added to the playlist but created generally
     if ( DropJob::isDropType( DropJob::Playlist, event->mimeData() ) )
     {
+        event->setDropAction( Qt::CopyAction );
         event->accept();
         return;
     }
