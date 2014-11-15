@@ -1768,7 +1768,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="82"/>
         <source>Host Settings...</source>
-        <translation type="unfinished"/>
+        <translation>Configurações de Host...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="110"/>
@@ -2114,12 +2114,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="305"/>
         <source>Open Pages</source>
-        <translation type="unfinished"/>
+        <translation>Abrir páginas</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="307"/>
         <source>Your Music</source>
-        <translation type="unfinished"/>
+        <translation>Sua Música</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="315"/>
@@ -2328,7 +2328,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="128"/>
         <source>Logged in as: %1</source>
-        <translation type="unfinished"/>
+        <translation>Conectado como %1</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="134"/>
@@ -3084,7 +3084,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="492"/>
         <source>is not</source>
-        <translation type="unfinished"/>
+        <translation>não é</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="495"/>
@@ -3398,7 +3398,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="91"/>
         <source>You received a Song recommendation</source>
-        <translation type="unfinished"/>
+        <translation>Você recebeu uma recomendação de música</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="202"/>
@@ -3704,12 +3704,12 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="79"/>
         <source>Last Month</source>
-        <translation type="unfinished"/>
+        <translation>Último Mês</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="76"/>
         <source>Last Year</source>
-        <translation type="unfinished"/>
+        <translation>Último Ano</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="73"/>
@@ -3730,7 +3730,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNew_0_8.h" line="89"/>
         <source>What&apos;s new in 0.8?</source>
-        <translation type="unfinished"/>
+        <translation>O que há de novo no 0.8?</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNew_0_8.h" line="90"/>
@@ -3843,12 +3843,12 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/tomahawk/widgets/AccountsToolButton.cpp" line="90"/>
         <source>Configure Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Configurar contas</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/AccountWidget.cpp" line="131"/>
         <source>Invite</source>
-        <translation type="unfinished"/>
+        <translation>Convidar</translation>
     </message>
 </context>
 <context>
@@ -3901,12 +3901,12 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="954"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="966"/>
         <source>Play</source>
-        <translation type="unfinished"/>
+        <translation>Reporduzir</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="610"/>
         <source>Next</source>
-        <translation type="unfinished"/>
+        <translation>Próxima</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="623"/>
@@ -3923,12 +3923,12 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1146"/>
         <source>Exit Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Sair da Tela Cheia</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1164"/>
         <source>Enter Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Entrar em Tela Cheia</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1234"/>
@@ -3984,7 +3984,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1307"/>
         <source>Create New Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Criar Nova Lista de Reprodução</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1414"/>
@@ -4000,7 +4000,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="333"/>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>Buscar</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1362"/>
@@ -4045,7 +4045,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="79"/>
         <source>Marked as Favorite</source>
-        <translation type="unfinished"/>
+        <translation>Marcada como favorita</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="97"/>
@@ -4078,7 +4078,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/TrackViewPage.ui" line="60"/>
         <source>Top Hits</source>
-        <translation type="unfinished"/>
+        <translation>Maiores sucessos</translation>
     </message>
 </context>
 <context>
@@ -4204,7 +4204,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="84"/>
         <source>Mode</source>
-        <translation type="unfinished"/>
+        <translation>Modo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="85"/>
@@ -4475,7 +4475,7 @@ Letras de &quot;%1&quot; por %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="58"/>
         <source>Configure this Jabber/XMPP account</source>
-        <translation type="unfinished"/>
+        <translation>Configurar esta conta Jabber/XMPP</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="104"/>
