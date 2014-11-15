@@ -51,6 +51,7 @@ DynamicView::DynamicView( QWidget* parent )
         , m_fadeOnly( false )
 {
     setAcceptDrops( false );
+    setSortingEnabled( false );
 
     m_fadeOutAnim.setDuration( FADE_LENGTH );
     m_fadeOutAnim.setCurveShape( QTimeLine::LinearCurve );
