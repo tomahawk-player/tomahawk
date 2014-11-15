@@ -2,6 +2,8 @@ Version 0.9.0:
     * Resolved playback issues by switching to a new audio engine.
 
 Version 0.8.1:
+    * Disabled sorting for stations.
+    * Fixed drag & drop behavior in combination with certain resolvers.
     * Fixed infinite scanning recursion.
     * Prevented adding dupes to the collection when scanning.
     * When playing an artist or album, don't give up when the first track
