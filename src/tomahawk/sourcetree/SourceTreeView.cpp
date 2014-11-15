@@ -772,6 +772,8 @@ SourceTreeView::dragLeaveEvent( QDragLeaveEvent* event )
 void
 SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
 {
+    QTreeView::dragMoveEvent( event );
+
     bool accept = false;
 
     // Don't highlight the drop for a playlist, as it won't get added to the playlist but created generally
@@ -780,8 +782,6 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
         event->accept();
         return;
     }
-
-    QTreeView::dragMoveEvent( event );
 
     if ( DropJob::acceptsMimeData( event->mimeData(),  DropJob::Track, DropJob::Append ) )
     {
