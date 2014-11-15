@@ -774,10 +774,15 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
 {
     QTreeView::dragMoveEvent( event );
 
-    bool accept = false;
-
-    if ( DropJob::acceptsMimeData( event->mimeData(), DropJob::Track, DropJob::Append ) )
+    if ( DropJob::isDropType( DropJob::Playlist, event->mimeData() ) )
     {
+        // Don't highlight the drop for a playlist, as it won't get added to the playlist but created generally
+        event->setDropAction( Qt::CopyAction );
+        event->accept();
+    }
+    else if ( DropJob::acceptsMimeData( event->mimeData(), DropJob::Track, DropJob::Append ) )
+    {
+        bool accept = false;
         setDirtyRegion( m_dropRect );
         const QPoint pos = event->pos();
         const QModelIndex index = indexAt( pos );
@@ -834,13 +839,6 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
     {
         event->setDropAction( Qt::CopyAction );
         event->accept();
-    }
-    else if ( DropJob::isDropType( DropJob::Playlist, event->mimeData() ) )
-    {
-        // Don't highlight the drop for a playlist, as it won't get added to the playlist but created generally
-        event->setDropAction( Qt::CopyAction );
-        event->accept();
-        return;
     }
 
     setDirtyRegion( m_dropRect );
