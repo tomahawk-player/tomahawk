@@ -1,4 +1,5 @@
 Version 0.8.1:
+    * Fixed drag & drop behavior in combination with certain resolvers.
     * Fixed infinite scanning recursion.
     * Prevented adding dupes to the collection when scanning.
     * When playing an artist or album, don't give up when the first track
