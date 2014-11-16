@@ -115,6 +115,6 @@ private:
     DropType m_dropType;
 };
 
-Q_DECLARE_METATYPE( SourceTreeItem* );
+Q_DECLARE_METATYPE( SourceTreeItem* )
 
 #endif // SOURCETREEITEM_H
