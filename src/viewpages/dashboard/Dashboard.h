@@ -58,7 +58,7 @@ Q_OBJECT
 friend class Dashboard;
 
 public:
-    DashboardWidget( QWidget* parent = 0 );
+    DashboardWidget( QWidget* parent = nullptr );
     virtual ~DashboardWidget();
 
     virtual bool isBeingPlayed() const;
@@ -89,15 +89,15 @@ Q_INTERFACES( Tomahawk::ViewPagePlugin )
 Q_PLUGIN_METADATA( IID "org.tomahawk-player.Player.ViewPagePlugin" )
 
 public:
-    Dashboard( QWidget* parent = 0 );
+    Dashboard( QWidget* parent = nullptr );
     virtual ~Dashboard();
 
-    const QString defaultName() Q_DECL_OVERRIDE { return DASHBOARD_VIEWPAGE_NAME; }
-    QString title() const Q_DECL_OVERRIDE { return tr( "Feed" ); }
-    QString description() const Q_DECL_OVERRIDE { return tr( "An overview of your friends' recent activity" ); }
-    const QString pixmapPath() const Q_DECL_OVERRIDE { return ( RESPATH "images/dashboard.svg" ); }
+    const QString defaultName() override { return DASHBOARD_VIEWPAGE_NAME; }
+    QString title() const override { return tr( "Feed" ); }
+    QString description() const override { return tr( "An overview of your friends' recent activity" ); }
+    const QString pixmapPath() const override { return ( RESPATH "images/dashboard.svg" ); }
 
-    int sortValue() Q_DECL_OVERRIDE { return 2; }
+    int sortValue() override { return 2; }
 };
 
 
