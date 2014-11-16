@@ -973,15 +973,15 @@ DropJob::removeRemoteSources()
             continue;
         }
 
-        bool hasLocalSource = false;
         foreach ( const Tomahawk::result_ptr& result, item->results() )
         {
             if ( !result->collection().isNull() && !result->collection()->source().isNull()
                  && result->collection()->source()->isLocal() )
-                hasLocalSource = true;
+            {
+                list.append( item );
+                break;
+            }
         }
-        if ( hasLocalSource )
-            list.append( item );
     }
     m_resultList = list;
 }
