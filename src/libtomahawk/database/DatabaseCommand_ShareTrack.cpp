@@ -40,7 +40,7 @@ DatabaseCommand_ShareTrack::DatabaseCommand_ShareTrack( QObject* parent )
 DatabaseCommand_ShareTrack::DatabaseCommand_ShareTrack( const Tomahawk::trackdata_ptr& track,
                                                         const QString& recipientDbid,
                                                         QObject* parent )
-    : DatabaseCommand_SocialAction( track, "Inbox", "", parent )
+    : DatabaseCommand_SocialAction( track, "Inbox", QString(), parent )
     , m_recipient( recipientDbid )
 {}
 

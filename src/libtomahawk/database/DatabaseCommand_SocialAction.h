@@ -72,7 +72,7 @@ public:
      *
      * Constructor which creates a new database command for the specified social action.
      */
-    explicit DatabaseCommand_SocialAction( const Tomahawk::trackdata_ptr& track, QString action, QString comment = "", QObject* parent = 0 )
+    explicit DatabaseCommand_SocialAction( const Tomahawk::trackdata_ptr& track, QString action, QString comment = QString(), QObject* parent = 0 )
         : DatabaseCommandLoggable( parent )
         , m_track( track )
         , m_comment( comment )
