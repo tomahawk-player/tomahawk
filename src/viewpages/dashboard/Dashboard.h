@@ -61,9 +61,9 @@ public:
     DashboardWidget( QWidget* parent = nullptr );
     virtual ~DashboardWidget();
 
-    virtual bool isBeingPlayed() const;
-    virtual playlistinterface_ptr playlistInterface() const;
-    virtual bool jumpToCurrentTrack();
+    bool isBeingPlayed() const;
+    playlistinterface_ptr playlistInterface() const;
+    bool jumpToCurrentTrack();
 
 public slots:
 
