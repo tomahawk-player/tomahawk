@@ -37,21 +37,21 @@ class DLLEXPORT DatabaseCommand_ShareTrack : public DatabaseCommand_SocialAction
     Q_PROPERTY( QString recipient   READ recipient  WRITE setRecipient )
 
 public:
-    explicit DatabaseCommand_ShareTrack( QObject* parent = 0 );
+    explicit DatabaseCommand_ShareTrack( QObject* parent = nullptr );
 
     explicit DatabaseCommand_ShareTrack( const Tomahawk::trackdata_ptr& track,
                                          const QString& recipientDbid,
-                                         QObject* parent = 0 );
+                                         QObject* parent = nullptr );
 
-    QString commandname() const Q_DECL_OVERRIDE;
+    QString commandname() const override;
 
-    void exec( DatabaseImpl* ) Q_DECL_OVERRIDE;
-    void postCommitHook() Q_DECL_OVERRIDE;
+    void exec( DatabaseImpl* ) override;
+    void postCommitHook() override;
 
-    bool doesMutates() const Q_DECL_OVERRIDE;
-    bool singletonCmd() const Q_DECL_OVERRIDE;
-    bool localOnly() const Q_DECL_OVERRIDE;
-    bool groupable() const Q_DECL_OVERRIDE;
+    bool doesMutates() const override;
+    bool singletonCmd() const override;
+    bool localOnly() const override;
+    bool groupable() const override;
 
     QString recipient() const;
     void setRecipient( const QString& s );
