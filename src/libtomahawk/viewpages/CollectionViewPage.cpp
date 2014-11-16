@@ -38,6 +38,7 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Closure.h"
 #include "utils/Logger.h"
+#include "MetaPlaylistInterface.h"
 
 using namespace Tomahawk;
 
@@ -51,6 +52,7 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
     , m_model( 0 )
     , m_flatModel( 0 )
     , m_albumModel( 0 )
+    , m_playlistInterface( new MetaPlaylistInterface() )
 {
     qRegisterMetaType< CollectionViewPageMode >( "CollectionViewPageMode" );
 
@@ -113,6 +115,10 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
     m_stack->addWidget( m_trackView );
 
     connect( m_header, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
+
+    m_playlistInterface->addChildInterface( m_trackView->playlistInterface() );
+    m_playlistInterface->addChildInterface( m_albumView->playlistInterface() );
+    m_playlistInterface->addChildInterface( m_columnView->proxyModel()->playlistInterface() );
 
     loadCollection( collection );
 }
@@ -266,7 +272,7 @@ CollectionViewPage::setCurrentMode( CollectionViewPageMode mode )
 Tomahawk::playlistinterface_ptr
 CollectionViewPage::playlistInterface() const
 {
-    return m_columnView->proxyModel()->playlistInterface();
+    return m_playlistInterface.objectCast<Tomahawk::PlaylistInterface>();
 }
 
 

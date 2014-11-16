@@ -34,6 +34,10 @@ class PlayableModel;
 class PlaylistModel;
 class FilterHeader;
 
+namespace Tomahawk {
+    class MetaPlaylistInterface;
+}
+
 class DLLEXPORT CollectionViewPage : public QWidget, public Tomahawk::ViewPage
 {
 Q_OBJECT
@@ -90,6 +94,7 @@ private:
     PlayableModel* m_flatModel;
     PlayableModel* m_albumModel;
     QStackedWidget* m_stack;
+    QSharedPointer<Tomahawk::MetaPlaylistInterface> m_playlistInterface;
 
     Tomahawk::collection_ptr m_collection;
 
