@@ -72,6 +72,13 @@ CollectionItem::setSortValue( int value )
 }
 
 
+bool
+CollectionItem::isBeingPlayed() const
+{
+    return m_page && m_page->isBeingPlayed();
+}
+
+
 int
 CollectionItem::trackCount() const
 {

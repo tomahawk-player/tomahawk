@@ -35,6 +35,8 @@ public:
     virtual int peerSortValue() const;
     void setSortValue( int value );
 
+    bool isBeingPlayed() const override;
+
     int trackCount() const;
 
 public slots:
