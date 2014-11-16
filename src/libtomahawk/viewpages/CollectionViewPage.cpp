@@ -402,14 +402,5 @@ CollectionViewPage::isTemporaryPage() const
 bool
 CollectionViewPage::isBeingPlayed() const
 {
-    if ( !playlistInterface() )
-        return false;
-
-    if ( playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
-        return true;
-
-    if ( playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
-        return true;
-
-    return false;
+    return m_playlistInterface->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() );
 }
