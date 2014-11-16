@@ -45,6 +45,12 @@ private:
     QIcon m_icon;
     QString m_text;
     Tomahawk::collection_ptr m_collection;
+
+    /**
+     * Reference to the ViewPage for the collection. Until the page is loaded
+     * once on user request, this will be nullptr.
+     */
+    Tomahawk::ViewPage* m_page;
 };
 
 #endif // COLLECTIONITEM_H

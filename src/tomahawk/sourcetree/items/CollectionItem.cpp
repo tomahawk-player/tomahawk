@@ -33,6 +33,7 @@ CollectionItem::CollectionItem( SourcesModel* model, SourceTreeItem* parent, con
     : SourceTreeItem( model, parent, SourcesModel::Collection )
     , m_sortValue( -150 )
     , m_collection( collection )
+    , m_page( nullptr )
 {
     m_text = tr( "Collection" );
     m_icon = ImageRegistry::instance()->icon( RESPATH "images/collection.svg" );
@@ -81,6 +82,6 @@ CollectionItem::trackCount() const
 void
 CollectionItem::activate()
 {
-    Tomahawk::ViewPage* page = ViewManager::instance()->show( m_collection );
-    model()->linkSourceItemToPage( this, page );
+    m_page = ViewManager::instance()->show( m_collection );
+    model()->linkSourceItemToPage( this, m_page );
 }
