@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="bn_IN" version="2.0">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="es_419" version="2.0">
 <context>
     <name>ACLJobDelegate</name>
     <message>
