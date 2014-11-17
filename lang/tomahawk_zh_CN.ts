@@ -463,7 +463,7 @@ connect and stream from you?</source>
 <context>
     <name>CollectionItem</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/items/CollectionItem.cpp" line="37"/>
+        <location filename="../src/tomahawk/sourcetree/items/CollectionItem.cpp" line="38"/>
         <source>Collection</source>
         <translation>收藏</translation>
     </message>
@@ -471,37 +471,37 @@ connect and stream from you?</source>
 <context>
     <name>CollectionViewPage</name>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="74"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="76"/>
         <source>Sorry, there are no albums in this collection!</source>
         <translation>抱歉，此收藏中没有任何专辑！</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="86"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="88"/>
         <source>Artists</source>
         <translation>艺术家</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="87"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="89"/>
         <source>Albums</source>
         <translation>专辑</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="88"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="90"/>
         <source>Songs</source>
         <translation>曲目</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="379"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="385"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>在扫描完音乐收藏后，你将可以在这里找到你的音乐。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="382"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="388"/>
         <source>This collection is empty.</source>
         <translation>收藏为空。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="385"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="391"/>
         <source>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</source>
         <translation>云收藏暂不支持扁平视图。我们将会尽快解决这个问题。请使用别的视图来操控它们。</translation>
     </message>
@@ -1912,24 +1912,24 @@ Password (OTP)</source>
 <context>
     <name>SourceDelegate</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="231"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="232"/>
         <source>All available tracks</source>
         <translation>所有可用的歌曲</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="339"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="340"/>
         <source>Drop to send tracks</source>
         <translation>拖到此处发送歌曲</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="402"/>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="430"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="403"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="431"/>
         <source>Show</source>
         <translation>显示</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="404"/>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="432"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="405"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="433"/>
         <source>Hide</source>
         <translation>隐藏 </translation>
     </message>

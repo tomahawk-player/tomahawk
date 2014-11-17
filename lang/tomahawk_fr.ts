@@ -464,7 +464,7 @@ de se connecter et streamer votre flux ?</translation>
 <context>
     <name>CollectionItem</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/items/CollectionItem.cpp" line="37"/>
+        <location filename="../src/tomahawk/sourcetree/items/CollectionItem.cpp" line="38"/>
         <source>Collection</source>
         <translation>Collection</translation>
     </message>
@@ -472,37 +472,37 @@ de se connecter et streamer votre flux ?</translation>
 <context>
     <name>CollectionViewPage</name>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="74"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="76"/>
         <source>Sorry, there are no albums in this collection!</source>
         <translation>Désolé, il n&apos;y a aucun album dans cette collection !</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="86"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="88"/>
         <source>Artists</source>
         <translation>Artistes</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="87"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="89"/>
         <source>Albums</source>
         <translation>Albums</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="88"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="90"/>
         <source>Songs</source>
         <translation>Titres</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="379"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="385"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>Après avoir scanné votre collection musicale, vous trouverez tous vos titres ici.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="382"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="388"/>
         <source>This collection is empty.</source>
         <translation>Cette collection est vide.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="385"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="391"/>
         <source>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</source>
         <translation>Les collections Cloud ne sont pas encore supportées dans la vue en liste, mais cela arrive bientôt. Passez à une autre vue pour les parcourir.</translation>
     </message>
@@ -1910,24 +1910,24 @@ Password (OTP)</source>
 <context>
     <name>SourceDelegate</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="231"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="232"/>
         <source>All available tracks</source>
         <translation>Tous les titres disponibles</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="339"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="340"/>
         <source>Drop to send tracks</source>
         <translation>Déposez des titres pour les envoyer</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="402"/>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="430"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="403"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="431"/>
         <source>Show</source>
         <translation>Afficher</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="404"/>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="432"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="405"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="433"/>
         <source>Hide</source>
         <translation>Masquer</translation>
     </message>
