@@ -182,6 +182,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
     {
         GridView* albumsFullView = new GridView( m_stackedWidget );
         albumsFullView->setPlayableModel( m_albumsModel );
+        albumsFullView->delegate()->setWordWrapping( true );
 
         CaptionLabel* captionLabel = new CaptionLabel( this );
         captionLabel->setText( tr( "Albums" ) );
