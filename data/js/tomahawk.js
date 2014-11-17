@@ -409,6 +409,10 @@ Tomahawk.asyncRequest = function (url, callback, extraHeaders, options) {
     }
 };
 
+Tomahawk.assert = function (assertion, message) {
+    Tomahawk.nativeAssert(assertion, message);
+}
+
 Tomahawk.sha256 = Tomahawk.sha256 || CryptoJS.SHA256;
 Tomahawk.md5 = Tomahawk.md5 || CryptoJS.MD5;
 // Return a HMAC (md5) signature of the input text with the desired key

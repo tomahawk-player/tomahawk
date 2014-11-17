@@ -61,6 +61,11 @@ public:
     Q_INVOKABLE void reportStreamUrl( const QString& qid, const QString& streamUrl, const QVariantMap& headers );
 
     /**
+     * Make Tomahawk assert the assertion is true, probably not to be used by resolvers directly
+     */
+    Q_INVOKABLE void nativeAssert( bool assertion, const QString& message = QString() );
+
+    /**
      * Retrieve metadata for a media stream.
      *
      * Current suported transport protocols are:

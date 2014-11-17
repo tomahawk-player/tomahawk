@@ -460,6 +460,17 @@ JSResolverHelper::reportStreamUrl( const QString& qid, const QString& streamUrl 
 }
 
 
+void JSResolverHelper::nativeAssert(bool assertion, const QString& message)
+{
+    if ( !assertion )
+    {
+        tLog() << "Assertion failed" << message;
+        Q_ASSERT( assertion );
+    }
+}
+
+
+
 void
 JSResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
                                                std::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback )
