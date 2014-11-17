@@ -739,8 +739,7 @@ Tomahawk::DatabaseImpl::openDatabase( const QString& dbname, bool checkSchema )
     {
         if ( sqlDriver.isEmpty() )
         {
-            QStringList drivers = QSqlDatabase::drivers();
-            if (drivers.contains( "QSQLITE3" ))
+            if ( QSqlDatabase::drivers().contains( "QSQLITE3" ) )
             {
                 sqlDriver = "QSQLITE3";
             }
