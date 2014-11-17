@@ -111,6 +111,11 @@ private:
      */
     QVariant evaluateJavaScriptInternal( const QString& scriptSource );
 
+    /**
+     * Escape \ and ' in strings so they are safe to use in JavaScript
+     */
+    static QString escape( const QString& source );
+
     // encapsulate javascript calls
     QVariantMap resolverSettings();
     QVariantMap resolverUserConfig();

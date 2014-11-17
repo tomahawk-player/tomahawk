@@ -325,7 +325,7 @@ JSResolver::artists( const Tomahawk::collection_ptr& collection )
     }
 
     QString eval = QString( "artists( '%1' )" )
-                   .arg( collection->name().replace( "\\", "\\\\" ).replace( "'", "\\'" ) );
+                   .arg( escape( collection->name() ) );
 
     QVariantMap m = callOnResolver( eval ).toMap();
     if ( m.isEmpty() )
@@ -361,8 +361,8 @@ JSResolver::albums( const Tomahawk::collection_ptr& collection, const Tomahawk::
     }
 
     QString eval = QString( "albums( '%1', '%2' )" )
-                   .arg( collection->name().replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
-                   .arg( artist->name().replace( "\\", "\\\\" ).replace( "'", "\\'" ) );
+                   .arg( escape( collection->name() ) )
+                   .arg( escape( artist->name() ) );
 
     QVariantMap m = callOnResolver( eval ).toMap();
     if ( m.isEmpty() )
@@ -398,9 +398,9 @@ JSResolver::tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::
     }
 
     QString eval = QString( "tracks( '%1', '%2', '%3' )" )
-                   .arg( collection->name().replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
-                   .arg( album->artist()->name().replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
-                   .arg( album->name().replace( "\\", "\\\\" ).replace( "'", "\\'" ) );
+                   .arg( escape( collection->name() ) )
+                   .arg( escape( album->artist()->name() ) )
+                   .arg( escape( album->name() ) );
 
     QVariantMap m = callOnResolver( eval ).toMap();
     if ( m.isEmpty() )
@@ -431,7 +431,7 @@ JSResolver::canParseUrl( const QString& url, UrlType type )
     if ( d->capabilities.testFlag( UrlLookup ) )
     {
         QString eval = QString( "canParseUrl( '%1', %2 )" )
-                       .arg( QString( url ).replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
+                       .arg( escape( QString( url ) ) )
                        .arg( (int) type );
         return callOnResolver( eval ).toBool();
     }
@@ -462,7 +462,7 @@ JSResolver::lookupUrl( const QString& url )
     }
 
     QString eval = QString( "lookupUrl( '%1' )" )
-                   .arg( QString( url ).replace( "\\", "\\\\" ).replace( "'", "\\'" ) );
+                   .arg( escape( QString( url ) ) );
 
     QVariantMap m = callOnResolver( eval ).toMap();
     if ( m.isEmpty() )
@@ -534,16 +534,16 @@ JSResolver::resolve( const Tomahawk::query_ptr& query )
     if ( !query->isFullTextQuery() )
     {
         eval = QString( "resolve( '%1', '%2', '%3', '%4' )" )
-                  .arg( query->id().replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
-                  .arg( query->queryTrack()->artist().replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
-                  .arg( query->queryTrack()->album().replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
-                  .arg( query->queryTrack()->track().replace( "\\", "\\\\" ).replace( "'", "\\'" ) );
+                  .arg( escape( query->id() ) )
+                  .arg( escape( query->queryTrack()->artist() ) )
+                  .arg( escape( query->queryTrack()->album() ) )
+                  .arg( escape( query->queryTrack()->track() ) );
     }
     else
     {
         eval = QString( "search( '%1', '%2' )" )
-                  .arg( query->id().replace( "\\", "\\\\" ).replace( "'", "\\'" ) )
-                  .arg( query->fullTextQuery().replace( "\\", "\\\\" ).replace( "'", "\\'" ) );
+                  .arg( escape( query->id() ) )
+                  .arg( escape( query->fullTextQuery() ) );
     }
 
     QVariantMap m = callOnResolver( eval ).toMap();
@@ -1017,4 +1017,10 @@ JSResolver::callOnResolver( const QString& scriptSource )
         "    Tomahawk.resolver.instance.%2"
         "}"
     ).arg( propertyName ).arg( scriptSource ) );
+}
+
+
+QString JSResolver::escape( const QString& source )
+{
+    return source.replace( "\\", "\\\\" ).replace( "'", "\\'" );
 }
