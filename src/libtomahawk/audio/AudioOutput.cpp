@@ -544,3 +544,10 @@ AudioOutput::setDspCallback( std::function< void( int, int, float*, int, int ) >
 {
     dspPluginCallback = cb;
 }
+
+
+libvlc_instance_t*
+AudioOutput::vlcInstance() const
+{
+    return m_vlcInstance;
+}

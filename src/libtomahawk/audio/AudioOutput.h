@@ -67,6 +67,7 @@ public:
     void setDspCallback( std::function< void( int, int, float*, int, int ) > cb );
 
     static AudioOutput* instance();
+    libvlc_instance_t* vlcInstance() const;
 
 public slots:
 
