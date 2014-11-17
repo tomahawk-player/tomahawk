@@ -1020,7 +1020,8 @@ JSResolver::callOnResolver( const QString& scriptSource )
 }
 
 
-QString JSResolver::escape( const QString& source )
+QString
+JSResolver::escape( const QString& source )
 {
     QString copy = source;
     return copy.replace( "\\", "\\\\" ).replace( "'", "\\'" );

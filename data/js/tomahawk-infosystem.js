@@ -96,10 +96,9 @@ Tomahawk.InfoSystem.PushInfoFlags.PushShortUrlFlag = 2;
 Tomahawk.InfoSystem._infoPluginIdCounter = 0;
 Tomahawk.InfoSystem._infoPluginHash = Object.create(null);
 
-Tomahawk.InfoSystem.addInfoPlugin = function(infoPlugin) {
+Tomahawk.InfoSystem.addInfoPlugin = function (infoPlugin) {
     var infoPluginId = Tomahawk.InfoSystem._infoPluginIdCounter++;
     Tomahawk.InfoSystem._infoPluginHash[infoPluginId] = infoPlugin;
-    Tomahawk.log("Call nativeAddInfoPlugin");
     Tomahawk.InfoSystem.nativeAddInfoPlugin(infoPluginId);
 };
 
@@ -113,7 +112,7 @@ Tomahawk.InfoSystem.removeInfoPlugin = function (infoPluginId) {
 };
 
 Tomahawk.InfoSystem.InfoPlugin = {
-    infoTypeString: function(infoType) {
+    infoTypeString: function (infoType) {
         for (var currentInfoTypeString in Tomahawk.InfoSystem.InfoType) {
             if (Tomahawk.InfoSystem.InfoType[currentInfoTypeString] === infoType) {
                 return currentInfoTypeString;
@@ -123,7 +122,6 @@ Tomahawk.InfoSystem.InfoPlugin = {
     // we can get around infoPluginId here probably ... but internal either way
     _notInCache: function (infoPluginId, requestId, requestType, criteria) {
         this.notInCache(requestType, criteria).then(function(result) {
-            Tomahawk.log("Call nativeAddInfoRequestResult");
             Tomahawk.InfoSystem.nativeAddInfoRequestResult(infoPluginId, requestId, result.maxAge, result.data);
         }).catch(function() {
             // TODO: how to handle errors here?!
@@ -131,7 +129,6 @@ Tomahawk.InfoSystem.InfoPlugin = {
     },
     notInCache: function (infoType, criteria) {
         var requestMethod = 'request' + this.infoTypeString(infoType);
-        Tomahawk.log('Calling requestMethod: ' + requestMethod);
 
         return Promise.resolve(this[requestMethod](criteria));
     },
@@ -141,10 +138,7 @@ Tomahawk.InfoSystem.InfoPlugin = {
     },
     // we can get around infoPluginId here probably ... but internal either way
     _getInfo: function (infoPluginId, requestId, type, infoHash) {
-        Tomahawk.log("currentInfoPlugin._getInfo");
-        window.getInfo = arguments;
         this.getInfo(type, infoHash).then(function(result) {
-            Tomahawk.log("Call nativeGetCachedInfo");
             Tomahawk.InfoSystem.nativeGetCachedInfo(infoPluginId, requestId, result.newMaxAge, result.criteria)
         }, function() {
             Tomahawk.log("Call nativeDataError");
@@ -152,7 +146,6 @@ Tomahawk.InfoSystem.InfoPlugin = {
         });
     },
     getInfo: function (type, infoHash) {
-        Tomahawk.log("currentInfoPlugin.getInfo");
         var getInfoMethod = 'get' + this.infoTypeString(type);
 
         return Promise.resolve(this[getInfoMethod](infoHash));
