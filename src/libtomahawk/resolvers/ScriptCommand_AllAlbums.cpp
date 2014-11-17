@@ -26,6 +26,8 @@
 #include "PlaylistEntry.h"
 #include "ScriptCollection.h"
 
+using namespace Tomahawk;
+
 ScriptCommand_AllAlbums::ScriptCommand_AllAlbums( const Tomahawk::collection_ptr& collection,
                                                   const Tomahawk::artist_ptr& artist,
                                                   QObject* parent )

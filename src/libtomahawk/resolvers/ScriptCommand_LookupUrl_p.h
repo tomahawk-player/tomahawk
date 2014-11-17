@@ -23,6 +23,9 @@
 
 #include "ExternalResolver.h"
 
+namespace Tomahawk
+{
+
 class ScriptCommand_LookupUrlPrivate
 {
 public:
@@ -39,5 +42,7 @@ private:
     QString url;
     Tomahawk::ExternalResolver* resolver;
 };
+
+} // ns: Tomahawk
 
 #endif // SCRIPTCOMMAND_LOOKUPURL_P_H

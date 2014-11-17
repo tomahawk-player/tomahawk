@@ -24,6 +24,9 @@
 #include "collection/Collection.h"
 #include "resolvers/ScriptCommand.h"
 
+namespace Tomahawk
+{
+
 class ScriptCommand_AllTracks : public ScriptCommand, public Tomahawk::TracksRequest
 {
     Q_OBJECT
@@ -50,5 +53,7 @@ private:
     Tomahawk::collection_ptr m_collection;
     Tomahawk::album_ptr m_album;
 };
+
+} // ns: Tomahawk
 
 #endif // SCRIPTCOMMAND_ALLTRACKS_H

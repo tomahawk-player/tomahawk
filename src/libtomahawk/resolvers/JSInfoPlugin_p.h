@@ -21,9 +21,12 @@
 
 #include "JSInfoPlugin.h"
 
+namespace  Tomahawk
+{
+
 class JSInfoPluginPrivate
 {
-    friend class ::JSInfoPlugin;
+    friend class JSInfoPlugin;
 public:
     JSInfoPluginPrivate( JSInfoPlugin* q, int id, JSResolver* resolver )
         : q_ptr ( q )
@@ -42,5 +45,6 @@ private:
     QMap< int, Tomahawk::InfoSystem::InfoStringHash > criteriaCache;
 };
 
+} // ns: Tomahawk
 
 #endif // TOMAHAWK_JSINFOPLUGIN_P_H

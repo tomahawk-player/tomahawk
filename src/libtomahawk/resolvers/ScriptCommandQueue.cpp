@@ -21,6 +21,8 @@
 #include <QMetaType>
 #include <QMutex>
 
+using namespace  Tomahawk;
+
 ScriptCommandQueue::ScriptCommandQueue( QObject* parent )
     : QObject( parent )
     , m_timer( new QTimer( this ) )

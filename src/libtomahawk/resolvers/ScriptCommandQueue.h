@@ -27,6 +27,9 @@
 #include <QMetaType>
 #include <QMutex>
 
+namespace Tomahawk
+{
+
 class ScriptCommandQueue : public QObject
 {
     Q_OBJECT
@@ -47,6 +50,8 @@ private:
     QMutex m_mutex;
 };
 
-Q_DECLARE_METATYPE( QSharedPointer< ScriptCommand > )
+} // ns: Tomahawk
+
+Q_DECLARE_METATYPE( QSharedPointer< Tomahawk::ScriptCommand > )
 
 #endif // SCRIPTCOMMANDQUEUE_H

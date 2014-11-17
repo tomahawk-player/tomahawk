@@ -54,6 +54,8 @@
 #include <QTime>
 #include <QWebFrame>
 
+using namespace Tomahawk;
+
 JSResolver::JSResolver( const QString& accountId, const QString& scriptPath, const QStringList& additionalScriptPaths )
     : Tomahawk::ExternalResolverGui( scriptPath )
     , d_ptr( new JSResolverPrivate( this, accountId, scriptPath, additionalScriptPaths ) )

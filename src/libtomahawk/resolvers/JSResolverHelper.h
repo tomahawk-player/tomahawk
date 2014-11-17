@@ -34,8 +34,13 @@
 #include <functional>
 
 
-class JSResolver;
+
 Q_DECLARE_METATYPE( std::function< void( QSharedPointer< QIODevice >& ) >  )
+
+namespace Tomahawk
+{
+
+class JSResolver;
 
 class DLLEXPORT JSResolverHelper : public QObject
 {
@@ -161,4 +166,7 @@ private:
     QString m_pendingUrl;
     Tomahawk::album_ptr m_pendingAlbum;
 };
+
+} // ns: Tomahawk
+
 #endif // JSRESOLVERHELPER_H

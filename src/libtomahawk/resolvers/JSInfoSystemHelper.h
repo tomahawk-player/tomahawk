@@ -21,6 +21,9 @@
 
 #include <QObject>
 
+namespace Tomahawk
+{
+
 class JSResolver;
 class JSInfoSystemHelperPrivate;
 
@@ -46,5 +49,7 @@ private:
     Q_DECLARE_PRIVATE( JSInfoSystemHelper )
     QScopedPointer<JSInfoSystemHelperPrivate> d_ptr;
 };
+
+} // ns: Tomahawk
 
 #endif // TOMAHAWK_JSINFOSYSTEMHELPER_H

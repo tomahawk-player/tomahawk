@@ -28,9 +28,12 @@
 #include "JSInfoSystemHelper.h"
 #include "database/fuzzyindex/FuzzyIndex.h"
 
+namespace Tomahawk
+{
+
 class JSResolverPrivate
 {
-    friend class ::JSResolverHelper;
+    friend class JSResolverHelper;
 public:
     JSResolverPrivate( JSResolver* q, const QString& pAccountId, const QString& scriptPath, const QStringList& additionalScriptPaths )
         : q_ptr ( q )
@@ -68,5 +71,6 @@ private:
     QStringList requiredScriptPaths;
 };
 
+} // ns: Tomahawk
 
 #endif // JSRESOLVER_P_H

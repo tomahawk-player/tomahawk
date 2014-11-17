@@ -22,9 +22,12 @@
 #include "JSResolver.h"
 #include "JSInfoSystemHelper.h"
 
+namespace Tomahawk
+{
+
 class JSInfoSystemHelperPrivate
 {
-    friend class ::JSInfoSystemHelper;
+    friend class JSInfoSystemHelper;
 public:
     JSInfoSystemHelperPrivate( JSInfoSystemHelper* q, JSResolver* resolver )
         : q_ptr ( q )
@@ -41,5 +44,6 @@ private:
 
 };
 
+} // ns: Tomahawk
 
 #endif // TOMAHAWK_JSINFOSYSTEMHELPER_P_H

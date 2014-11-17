@@ -24,6 +24,8 @@
 #include "../utils/Logger.h"
 #include "../utils/Json.h"
 
+using namespace Tomahawk;
+
 JSInfoPlugin::JSInfoPlugin( int id, JSResolver *resolver )
     : d_ptr( new JSInfoPluginPrivate( this, id, resolver ) )
 {

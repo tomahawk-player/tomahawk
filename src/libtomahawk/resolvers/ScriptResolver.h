@@ -32,6 +32,9 @@
 
 class QWidget;
 
+namespace Tomahawk
+{
+
 class DLLEXPORT ScriptResolver : public Tomahawk::ExternalResolverGui
 {
 Q_OBJECT
@@ -106,5 +109,7 @@ private:
     bool m_ready, m_stopped, m_configSent, m_deleting;
     ExternalResolver::ErrorState m_error;
 };
+
+}
 
 #endif // SCRIPTRESOLVER_H

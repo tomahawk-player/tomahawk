@@ -24,6 +24,9 @@
 #include "DllMacro.h"
 
 
+namespace Tomahawk
+{
+
 class JSResolver;
 class JSInfoPluginPrivate;
 
@@ -66,5 +69,7 @@ private:
     Q_DECLARE_PRIVATE( JSInfoPlugin )
     QScopedPointer<JSInfoPluginPrivate> d_ptr;
 };
+
+}; // ns: Tomahawk
 
 #endif // TOMAHAWK_JSINFOPLUGIN_H

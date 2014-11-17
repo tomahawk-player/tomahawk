@@ -21,6 +21,9 @@
 
 #include <QObject>
 
+namespace Tomahawk
+{
+
 class ScriptCommand : public QObject
 {
 public:
@@ -35,5 +38,7 @@ protected:
     virtual void exec() = 0;
     virtual void reportFailure() = 0;
 };
+
+} // ns: Tomahawk
 
 #endif // SCRIPTCOMMAND_H

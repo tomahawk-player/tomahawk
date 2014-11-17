@@ -24,6 +24,9 @@
 #include "collection/Collection.h"
 #include "resolvers/ScriptCommand.h"
 
+namespace Tomahawk
+{
+
 class ScriptCommand_AllArtists : public ScriptCommand, public Tomahawk::ArtistsRequest
 {
     Q_OBJECT
@@ -51,5 +54,7 @@ private:
     Tomahawk::collection_ptr m_collection;
     QString m_filter;
 };
+
+} // ns: Tomahawk
 
 #endif // SCRIPTCOMMAND_ALLARTISTS_H

@@ -27,6 +27,9 @@
 #include "ExternalResolverGui.h"
 #include "Typedefs.h"
 
+namespace Tomahawk
+{
+
 class JSInfoPlugin;
 class JSResolverHelper;
 class JSResolverPrivate;
@@ -36,7 +39,7 @@ class DLLEXPORT JSResolver : public Tomahawk::ExternalResolverGui
 {
 Q_OBJECT
 
-friend class ::JSResolverHelper;
+friend class JSResolverHelper;
 
 public:
     explicit JSResolver( const QString& accountId, const QString& scriptPath, const QStringList& additionalScriptPaths = QStringList() );
@@ -130,4 +133,5 @@ private:
     QScopedPointer<JSResolverPrivate> d_ptr;
 };
 
+} // ns: Tomahawk
 #endif // JSRESOLVER_H

@@ -21,6 +21,7 @@
 
 #include "../utils/Logger.h"
 
+using namespace Tomahawk;
 
 JSInfoSystemHelper::JSInfoSystemHelper( JSResolver* parent )
     : QObject( parent )
