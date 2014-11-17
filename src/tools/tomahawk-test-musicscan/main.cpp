@@ -1,4 +1,5 @@
-#include"filemetadata/MusicScanner.h"
+#include "audio/AudioOutput.h"
+#include "filemetadata/MusicScanner.h"
 
 #include <QCoreApplication>
 #include <QFileInfo>
@@ -41,6 +42,8 @@ main( int argc, char* argv[] )
         qRegisterMetaType< QDir >( "QDir" );
         qRegisterMetaType< QFileInfo >( "QFileInfo" );
 
+        AudioOutput* aout = new AudioOutput();
+
         // Create the MusicScanner instance
         QStringList paths;
         paths << pathInfo.canonicalFilePath();
@@ -61,6 +64,8 @@ main( int argc, char* argv[] )
 
         // Wait until the scanner has done its work.
         scannerThread.wait();
+
+        delete aout;
     }
     else
     {

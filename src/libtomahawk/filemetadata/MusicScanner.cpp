@@ -19,6 +19,7 @@
 
 #include "MusicScanner.h"
 
+#include "audio/AudioOutput.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_DirMtimes.h"
 #include "database/DatabaseCommand_FileMTimes.h"
@@ -32,6 +33,9 @@
 #include "PlaylistEntry.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"
+
+#include <vlc/libvlc.h>
+#include <vlc/libvlc_media.h>
 
 #include "config.h"
 
@@ -385,10 +389,67 @@ MusicScanner::scanFile( const QFileInfo& fi )
 }
 
 
+QString
+getVlcMeta( libvlc_media_t* media, libvlc_meta_t meta )
+{
+    char* str = libvlc_media_get_meta( media, meta );
+    QString string = QString::fromUtf8( str );
+    free( str );
+    return string;
+}
+
 QVariant
 MusicScanner::readTags( const QFileInfo& fi )
 {
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Parsing tags for file:" << fi.absoluteFilePath();
+
+    libvlc_media_t* media = libvlc_media_new_path( AudioOutput::instance()->vlcInstance(),
+                                                   fi.canonicalFilePath().toUtf8().constData() );
+    tLog() << fi.canonicalFilePath().toUtf8().constData();
+    libvlc_media_parse( media );
+
+    QString url( "file://%1" );
+    QVariantMap m;
+    m["url"]          = url.arg( fi.canonicalFilePath() );
+    m["mtime"]        = fi.lastModified().toUTC().toTime_t();
+    m["size"]         = (unsigned int)fi.size();
+/*    m["mimetype"]     = mimetype;
+    m["duration"]     = duration;
+    m["bitrate"]      = bitrate; */
+
+    m["artist"]      = getVlcMeta( media, libvlc_meta_Artist );
+    m["album"]       = getVlcMeta( media, libvlc_meta_Album );
+    m["track"]       = getVlcMeta( media, libvlc_meta_Title );
+    m["albumpos"]    = getVlcMeta( media, libvlc_meta_TrackNumber ).toInt();
+    m["year"]        = getVlcMeta( media, libvlc_meta_Date ).toInt();
+//    m["albumartist"] = tag->albumArtist();
+//    m["composer"]     = tag->composer();
+//    m["discnumber"]   = tag->discNumber();
+//    m["hash"]         = ""; // TODO
+    /*
+    libvlc_meta_Genre,
+    libvlc_meta_Copyright,
+    libvlc_meta_TrackNumber,
+    libvlc_meta_Description,
+    libvlc_meta_Rating,
+    libvlc_meta_Setting,
+    libvlc_meta_URL,
+    libvlc_meta_Language,
+    libvlc_meta_NowPlaying,
+    libvlc_meta_Publisher,
+    libvlc_meta_EncodedBy,
+    libvlc_meta_ArtworkURL,
+    libvlc_meta_TrackID,
+    libvlc_meta_TrackTotal,
+    libvlc_meta_Director,
+    libvlc_meta_Season,
+    libvlc_meta_Episode,
+    libvlc_meta_ShowName,
+    libvlc_meta_Actors
+    */
+
+    libvlc_media_release( media );
+
 
     const QString suffix = fi.suffix().toLower();
     if ( !TomahawkUtils::supportedExtensions().contains( suffix ) )
@@ -426,9 +487,7 @@ MusicScanner::readTags( const QFileInfo& fi )
         return QVariantMap();
 
     QString mimetype = TomahawkUtils::extensionToMimetype( suffix );
-    QString url( "file://%1" );
 
-    QVariantMap m;
     m["url"]          = url.arg( fi.canonicalFilePath() );
     m["mtime"]        = fi.lastModified().toUTC().toTime_t();
     m["size"]         = (unsigned int)fi.size();
