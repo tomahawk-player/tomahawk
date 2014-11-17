@@ -736,7 +736,7 @@ LastFmInfoPlugin::artistInfoReturned()
                                  .replace( trackRegExp, "<a href=\"tomahawk://view/track?artist=\\2&album=\\3&name=\\4\">" )
                                  .replace( "&album=_", "" );
 
-            QVariantHash siteData;
+            QVariantMap siteData;
             siteData[ "site" ] = "last.fm";
             siteData[ "text" ] = biography.replace( "\r", "\n" ).replace( "\n\n", "\n" );
             siteData[ "summary" ] = lfm["artist"]["bio"]["summary"].text().trimmed().replace( "\r", "\n" ).replace( "\n\n", "\n" );

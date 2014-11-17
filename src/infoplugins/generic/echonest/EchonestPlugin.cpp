@@ -182,7 +182,7 @@ EchonestPlugin::getArtistBiographySlot()
     QVariantMap biographyMap;
     Q_FOREACH( const Echonest::Biography& biography, biographies )
     {
-        QVariantHash siteData;
+        QVariantMap siteData;
         siteData[ "site" ] = biography.site();
         siteData[ "url" ] = biography.url().toString();
         siteData[ "text" ] = biography.text();
