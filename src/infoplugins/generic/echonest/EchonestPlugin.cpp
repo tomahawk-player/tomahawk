@@ -228,7 +228,7 @@ EchonestPlugin::getArtistTermsSlot()
     Echonest::TermList terms = artist.terms();
     QVariantMap termsMap;
     Q_FOREACH( const Echonest::Term& term, terms ) {
-        QVariantHash termHash;
+        QVariantMap termHash;
         termHash[ "weight" ] = QString::number( term.weight() );
         termHash[ "frequency" ] = QString::number( term.frequency() );
         termsMap[ term.name() ] = termHash;
@@ -246,7 +246,7 @@ EchonestPlugin::getMiscTopSlot()
     Echonest::TermList terms = Echonest::Artist::parseTopTerms( reply );
     QVariantMap termsMap;
     Q_FOREACH( const Echonest::Term& term, terms ) {
-        QVariantHash termHash;
+        QVariantMap termHash;
         termHash[ "weight" ] = QString::number( term.weight() );
         termHash[ "frequency" ] = QString::number( term.frequency() );
         termsMap[ term.name() ] = termHash;
