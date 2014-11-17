@@ -27,8 +27,12 @@
 #include <QSslError>
 #include <QWebPage>
 
-class JSResolver;
 class QNetworkReply;
+
+namespace Tomahawk
+{
+
+class JSResolver;
 
 class DLLEXPORT ScriptEngine : public QWebPage
 {
@@ -54,5 +58,7 @@ private:
     QString m_scriptPath;
     QString m_header;
 };
+
+} // ns: Tomahawk
 
 #endif // SCRIPTENGINE_H

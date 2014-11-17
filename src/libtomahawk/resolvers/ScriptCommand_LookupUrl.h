@@ -26,14 +26,11 @@
 
 #include <QVariant>
 
-class ScriptCommand_LookupUrlPrivate;
-
 namespace Tomahawk
 {
 
+class ScriptCommand_LookupUrlPrivate;
 class ExternalResolver;
-
-}
 
 class DLLEXPORT ScriptCommand_LookupUrl : public ScriptCommand
 {
@@ -61,5 +58,7 @@ private:
     Q_DECLARE_PRIVATE( ScriptCommand_LookupUrl )
     ScriptCommand_LookupUrlPrivate* d_ptr;
 };
+
+} // ns: Tomahawk
 
 #endif // SCRIPTCOMMAND_LOOKUPURL_H

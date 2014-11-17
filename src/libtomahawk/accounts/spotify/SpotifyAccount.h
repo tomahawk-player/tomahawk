@@ -33,11 +33,10 @@
 //class SpotifyPlaylistUpdater;
 class QTimer;
 
-class ScriptResolver;
-
 namespace Tomahawk {
 
 class SpotifyParser;
+class ScriptResolver;
 
 namespace InfoSystem
 {

@@ -33,6 +33,8 @@
 #include <QDir>
 #include <QMessageBox>
 
+using namespace Tomahawk;
+
 ScriptEngine::ScriptEngine( JSResolver* parent )
     : QWebPage( (QObject*) parent )
     , m_parent( parent )

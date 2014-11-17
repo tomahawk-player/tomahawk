@@ -20,6 +20,8 @@
 
 #include "PlaylistEntry.h"
 
+using namespace Tomahawk;
+
 ScriptCommand_LookupUrl::ScriptCommand_LookupUrl( Tomahawk::ExternalResolver* resolver, const QString& url, QObject* parent )
     : ScriptCommand( parent )
     , d_ptr( new ScriptCommand_LookupUrlPrivate( this, resolver, url ) )

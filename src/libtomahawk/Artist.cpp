@@ -547,7 +547,7 @@ Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVari
             foreach ( const QString& source, bmap.keys() )
             {
                 if ( source == "last.fm" )
-                    m_biography = bmap[ source ].toHash()[ "text" ].toString();
+                    m_biography = bmap[ source ].toMap()[ "text" ].toString();
             }
 
             m_biographyLoaded = true;

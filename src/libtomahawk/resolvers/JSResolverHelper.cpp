@@ -125,7 +125,7 @@ JSResolverHelper::resolverData()
 void
 JSResolverHelper::log( const QString& message )
 {
-    tLog() << m_scriptPath << ":" << message;
+    tLog() << "JAVASCRIPT:" << m_scriptPath << ":" << message;
 }
 
 
@@ -458,6 +458,17 @@ JSResolverHelper::reportStreamUrl( const QString& qid, const QString& streamUrl 
 {
     reportStreamUrl( qid, streamUrl, QVariantMap() );
 }
+
+
+void JSResolverHelper::nativeAssert(bool assertion, const QString& message)
+{
+    if ( !assertion )
+    {
+        tLog() << "Assertion failed" << message;
+        Q_ASSERT( assertion );
+    }
+}
+
 
 
 void

@@ -44,6 +44,8 @@
 #include <shlwapi.h>
 #endif
 
+using namespace Tomahawk;
+
 ScriptResolver::ScriptResolver( const QString& exe )
     : Tomahawk::ExternalResolverGui( exe )
     , m_num_restarts( 0 )

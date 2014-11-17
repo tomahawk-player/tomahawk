@@ -24,6 +24,8 @@
 
 #include "utils/Logger.h"
 
+using namespace Tomahawk;
+
 ScriptCommand_AllArtists::ScriptCommand_AllArtists( const Tomahawk::collection_ptr& collection,
                                                     QObject* parent )
     : ScriptCommand( parent )

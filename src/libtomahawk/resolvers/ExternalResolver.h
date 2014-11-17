@@ -48,11 +48,11 @@ class DLLEXPORT ExternalResolver : public Resolver
 {
 Q_OBJECT
 
-    friend class ::ScriptCommandQueue;
-    friend class ::ScriptCommand_AllArtists;
-    friend class ::ScriptCommand_AllAlbums;
-    friend class ::ScriptCommand_AllTracks;
-    friend class ::ScriptCommand_LookupUrl;
+    friend class ScriptCommandQueue;
+    friend class ScriptCommand_AllArtists;
+    friend class ScriptCommand_AllAlbums;
+    friend class ScriptCommand_AllTracks;
+    friend class ScriptCommand_LookupUrl;
 
 public:
     enum ErrorState {

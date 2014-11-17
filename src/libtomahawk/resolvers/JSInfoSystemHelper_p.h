@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2013, Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2014, Dominik Schmidt <domme@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,29 +16,34 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SCRIPTCOMMAND_H
-#define SCRIPTCOMMAND_H
+#ifndef TOMAHAWK_JSINFOSYSTEMHELPER_P_H
+#define TOMAHAWK_JSINFOSYSTEMHELPER_P_H
 
-#include <QObject>
+#include "JSResolver.h"
+#include "JSInfoSystemHelper.h"
 
 namespace Tomahawk
 {
 
-class ScriptCommand : public QObject
+class JSInfoSystemHelperPrivate
 {
+    friend class JSInfoSystemHelper;
 public:
-    explicit ScriptCommand( QObject* parent = 0 ) : QObject( parent ) {}
-    virtual ~ScriptCommand() {}
+    JSInfoSystemHelperPrivate( JSInfoSystemHelper* q, JSResolver* resolver )
+        : q_ptr ( q )
+        , resolver ( resolver )
+    {
+    }
 
-signals:
-    virtual void done() = 0;
+    JSInfoSystemHelper* q_ptr;
+    Q_DECLARE_PUBLIC ( JSInfoSystemHelper )
 
-protected:
-    friend class ScriptCommandQueue;
-    virtual void exec() = 0;
-    virtual void reportFailure() = 0;
+private:
+    JSResolver* resolver;
+    QMap<int,JSInfoPlugin*> infoPlugins;
+
 };
 
 } // ns: Tomahawk
 
-#endif // SCRIPTCOMMAND_H
+#endif // TOMAHAWK_JSINFOSYSTEMHELPER_P_H
