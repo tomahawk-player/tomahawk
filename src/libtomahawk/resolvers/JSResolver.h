@@ -71,6 +71,10 @@ public:
      */
     QVariant evaluateJavaScriptWithResult( const QString& scriptSource );
 
+    /**
+     * Escape \ and ' in strings so they are safe to use in JavaScript
+     */
+    static QString escape( const QString& source );
 
 public slots:
     void resolve( const Tomahawk::query_ptr& query ) override;
@@ -110,11 +114,6 @@ private:
      * Wrap the pure evaluateJavaScript call in here, while the threadings guards are in public methods
      */
     QVariant evaluateJavaScriptInternal( const QString& scriptSource );
-
-    /**
-     * Escape \ and ' in strings so they are safe to use in JavaScript
-     */
-    static QString escape( const QString& source );
 
     // encapsulate javascript calls
     QVariantMap resolverSettings();

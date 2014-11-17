@@ -59,7 +59,7 @@ JSInfoPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
         .arg( d->id ) // infoPluginId
         .arg( requestData.requestId ) // requestId
         .arg( requestData.type )  // type
-        .arg( serializeQVariantMap(  convertInfoStringHashToQVariantMap( requestData.input.value<Tomahawk::InfoSystem::InfoStringHash>()  ) ) ); // infoHash
+        .arg( JSResolver::escape( serializeQVariantMap(  convertInfoStringHashToQVariantMap( requestData.input.value<Tomahawk::InfoSystem::InfoStringHash>() ) ) ) ); // infoHash
 
     callMethodOnInfoPlugin( eval );
 }
@@ -73,8 +73,8 @@ JSInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
     QString eval = QString( "pushInfo({ type: %1, pushFlags: %2, input: %3, additionalInput: %4})" )
         .arg( pushData.type )
         .arg( pushData.pushFlags )
-        .arg( serializeQVariantMap ( pushData.infoPair.second.toMap() ) )
-        .arg( serializeQVariantMap( pushData.infoPair.first ) );
+        .arg( JSResolver::escape( serializeQVariantMap ( pushData.infoPair.second.toMap() ) ) )
+        .arg( JSResolver::escape( serializeQVariantMap( pushData.infoPair.first ) ) );
 
     callMethodOnInfoPlugin( eval );
 }
@@ -93,7 +93,7 @@ JSInfoPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tom
         .arg( d->id )
         .arg( requestData.requestId )
         .arg( requestData.type )
-        .arg( serializeQVariantMap( convertInfoStringHashToQVariantMap( criteria ) ) );
+        .arg( JSResolver::escape( serializeQVariantMap( convertInfoStringHashToQVariantMap( criteria ) ) ) );
 
     callMethodOnInfoPlugin( eval );
 }
