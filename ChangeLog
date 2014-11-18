@@ -1,6 +1,9 @@
 Version 0.9.0:
     * Resolved playback issues by switching to a new audio engine.
 
+Version 0.8.2:
+    * Fixed painting issue on search page.
+
 Version 0.8.1:
     * Disabled sorting for stations.
     * Fixed drag & drop behavior in combination with certain resolvers.
