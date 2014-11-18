@@ -1,3 +1,6 @@
+Version 0.8.2:
+    * Fixed painting issue on search page.
+
 Version 0.8.1:
     * Disabled sorting for stations.
     * Fixed drag & drop behavior in combination with certain resolvers.
