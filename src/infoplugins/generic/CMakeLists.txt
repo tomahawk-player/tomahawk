@@ -20,7 +20,6 @@ list(APPEND simple_plugins
     Echonest
     Charts
     NewReleases
-    Spotify
     Hypem
     MusixMatch
     MusicBrainz
