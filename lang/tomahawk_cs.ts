@@ -6,7 +6,7 @@
         <source>Allow %1 to
 connect and stream from you?</source>
         <translation>Chcete dovolit %1,
-se s vámi spojil?</translation>
+aby se s vámi spojil?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="83"/>
@@ -3265,7 +3265,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="269"/>
         <source>on</source>
         <comment>'on' is followed by an album name</comment>
-        <translation>na</translation>
+        <translation>Na </translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="272"/>
@@ -3298,7 +3298,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="285"/>
         <source>on &quot;%1&quot;</source>
         <comment>%1 is an album name</comment>
-        <translation>na &quot;%1&quot;</translation>
+        <translation>Na &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="287"/>
@@ -3374,7 +3374,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="202"/>
         <source>on</source>
         <comment>'on' is followed by an album name</comment>
-        <translation>na</translation>
+        <translation>Na </translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="204"/>
@@ -3393,7 +3393,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="217"/>
         <source>on &quot;%1&quot;</source>
         <comment>%1 is an album name</comment>
-        <translation>na &quot;%1&quot;</translation>
+        <translation>Na &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="219"/>
@@ -3460,7 +3460,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="414"/>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="476"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
-        <translation type="unfinished"/>
+        <translation>Varování řešitele skriptu: Volání API %1 vrátilo data synchronně.</translation>
     </message>
 </context>
 <context>
@@ -3507,22 +3507,22 @@ Zkuste vyladit filtry pro nové písně.</translation>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="68"/>
         <source>Resolver Error: %1:%2 %3</source>
-        <translation type="unfinished"/>
+        <translation>Chyba řešitele: %1 %2 %3</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="86"/>
         <source>SSL Error</source>
-        <translation type="unfinished"/>
+        <translation>Chyba SSL</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="87"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
-        <translation type="unfinished"/>
+        <translation>Požádal jste Tomahawk o to, aby se bezpečně připojil k &lt;b&gt;%1&lt;/b&gt;, ale nelze potvrdit, že je vaše připojení bezpečné:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Chcete tomuto připojení důvěřovat?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="94"/>
         <source>Trust certificate</source>
-        <translation type="unfinished"/>
+        <translation>Důvěřovat certifikátu</translation>
     </message>
 </context>
 <context>
@@ -4102,7 +4102,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
         <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="68"/>
         <source>from</source>
         <comment>streaming artist - track from friend</comment>
-        <translation>od</translation>
+        <translation>Od </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="68"/>

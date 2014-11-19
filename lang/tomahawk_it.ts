@@ -253,7 +253,7 @@ connettersi e condividere la tua musica?</translation>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="188"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="258"/>
         <source>What&apos;s New in ...</source>
-        <translation type="unfinished"/>
+        <translation>Cosa c&apos;è di nuovo...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="214"/>
@@ -309,7 +309,7 @@ connettersi e condividere la tua musica?</translation>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.ui" line="76"/>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.ui" line="136"/>
         <source>Show More</source>
-        <translation type="unfinished"/>
+        <translation>Mostra altro</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.ui" line="173"/>
@@ -341,7 +341,7 @@ connettersi e condividere la tua musica?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="146"/>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>Musica</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="185"/>
@@ -404,7 +404,7 @@ connettersi e condividere la tua musica?</translation>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1012"/>
         <source>Sorry, couldn&apos;t find any playable tracks</source>
-        <translation type="unfinished"/>
+        <translation>Spiacente, non siamo riusciti a trovare alcuna traccia</translation>
     </message>
 </context>
 <context>
@@ -412,7 +412,7 @@ connettersi e condividere la tua musica?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/CaptionLabel.cpp" line="71"/>
         <source>Close</source>
-        <translation type="unfinished"/>
+        <translation>Chiudi</translation>
     </message>
 </context>
 <context>
@@ -466,7 +466,7 @@ connettersi e condividere la tua musica?</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CollectionItem.cpp" line="38"/>
         <source>Collection</source>
-        <translation type="unfinished"/>
+        <translation>Collezione</translation>
     </message>
 </context>
 <context>
@@ -474,32 +474,32 @@ connettersi e condividere la tua musica?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="76"/>
         <source>Sorry, there are no albums in this collection!</source>
-        <translation type="unfinished"/>
+        <translation>Spiacente, non ci sono albums in questa colezione!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="88"/>
         <source>Artists</source>
-        <translation type="unfinished"/>
+        <translation>Artisti</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="89"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Albums</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="90"/>
         <source>Songs</source>
-        <translation type="unfinished"/>
+        <translation>Brani</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="385"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation type="unfinished"/>
+        <translation>Dopo aver analizzato la tua collezione troverai le tracce qui.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="388"/>
         <source>This collection is empty.</source>
-        <translation type="unfinished"/>
+        <translation>Questa collezione è vuota</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="391"/>
@@ -520,7 +520,7 @@ connettersi e condividere la tua musica?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="290"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
-        <translation type="unfinished"/>
+        <translation>Spiacente, il filtro &apos;%1&apos; non ha dato alcun risultato.</translation>
     </message>
 </context>
 <context>
@@ -561,12 +561,12 @@ connettersi e condividere la tua musica?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="137"/>
         <source>Playlist Details</source>
-        <translation type="unfinished"/>
+        <translation>Dettagli della playlist</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="244"/>
         <source>This playlist is currently empty.</source>
-        <translation type="unfinished"/>
+        <translation>Questa playlist è vuota.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="246"/>
@@ -726,12 +726,12 @@ connettersi e condividere la tua musica?</translation>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="189"/>
         <source>Resolver installation from file %1 failed.</source>
-        <translation type="unfinished"/>
+        <translation>L&apos;installazione del risolutore dal file %1 è fallita.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="197"/>
         <source>Install plug-in</source>
-        <translation type="unfinished"/>
+        <translation>Installa Plug-In</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="198"/>
@@ -3112,7 +3112,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="897"/>
         <source>You</source>
-        <translation type="unfinished"/>
+        <translation>Tu</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="898"/>
@@ -3718,7 +3718,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/newreleases/NewReleasesWidget.h" line="120"/>
         <source>New Releases</source>
-        <translation type="unfinished"/>
+        <translation>Nuove uscite</translation>
     </message>
 </context>
 <context>
@@ -3757,7 +3757,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="611"/>
         <source>Tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="712"/>
@@ -3897,7 +3897,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="954"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="966"/>
         <source>Play</source>
-        <translation type="unfinished"/>
+        <translation>Play</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="610"/>
@@ -3909,12 +3909,12 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1015"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1022"/>
         <source>Love</source>
-        <translation type="unfinished"/>
+        <translation>Love</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1010"/>
         <source>Unlove</source>
-        <translation type="unfinished"/>
+        <translation>Unlove</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1146"/>
@@ -3985,7 +3985,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1414"/>
         <source>Copyright 2010 - 2014</source>
-        <translation type="unfinished"/>
+        <translation>Copyright 2010 - 2014</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="945"/>
@@ -4041,12 +4041,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="79"/>
         <source>Marked as Favorite</source>
-        <translation type="unfinished"/>
+        <translation>Segna come Preferito</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="97"/>
         <source>Alternate Sources:</source>
-        <translation type="unfinished"/>
+        <translation>Fonti alternative</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="175"/>
@@ -4074,7 +4074,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/viewpages/TrackViewPage.ui" line="60"/>
         <source>Top Hits</source>
-        <translation type="unfinished"/>
+        <translation>Top Hits</translation>
     </message>
 </context>
 <context>
@@ -4236,7 +4236,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="86"/>
         <source>WHAT&apos;S NEW</source>
-        <translation type="unfinished"/>
+        <translation>Cosa c&apos;è di nuovo</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="96"/>
@@ -4246,7 +4246,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="174"/>
         <source>Inbox</source>
-        <translation type="unfinished"/>
+        <translation>Inbox</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="213"/>
@@ -4266,7 +4266,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="270"/>
         <source>Beats Music</source>
-        <translation type="unfinished"/>
+        <translation>Beats Music</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="296"/>
@@ -4276,7 +4276,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="313"/>
         <source>Google Music</source>
-        <translation type="unfinished"/>
+        <translation>Google Music</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="336"/>
