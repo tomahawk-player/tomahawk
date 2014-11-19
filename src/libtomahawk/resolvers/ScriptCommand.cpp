@@ -19,8 +19,12 @@
 
 #include "ScriptCommand.h"
 
+namespace Tomahawk
+{
 
 ScriptCommand::ScriptCommand( QObject* parent )
     : QObject( parent )
 {
+}
+
 }
