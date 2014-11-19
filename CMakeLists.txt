@@ -41,7 +41,7 @@ SET( TOMAHAWK_VERSION_MINOR 8 )
 SET( TOMAHAWK_VERSION_PATCH 99 )
 SET( TOMAHAWK_VERSION_RC 0 )
 
-SET( TOMAHAWK_TRANSLATION_LANGUAGES ar bg bn_IN ca cs da de en el es fi fr hi_IN hu gl id it ja lt nl pl pt_BR ro ru sq sv th tr uk vi zh_CN zh_TW )
+SET( TOMAHAWK_TRANSLATION_LANGUAGES ar bg bn_IN ca cs da de en el es es_419 fi fr hi_IN hu gl id it ja lt nl pl pt_BR pt_PT ro ru sq sv th tr uk vi zh_CN zh_TW )
 
 # add_definitions is only in the scope of this directory and all directories
 # below it. Tomahawk Libraries and plugins that are built with Tomahawk are
