@@ -42,6 +42,7 @@
 #include <QDialogButtonBox>
 #include <QFileInfo>
 #include <QFile>
+#include <QMessageBox>
 
 
 MetadataEditor::MetadataEditor( const Tomahawk::query_ptr& query, const Tomahawk::playlistinterface_ptr& plInterface, QWidget* parent )
@@ -85,9 +86,12 @@ MetadataEditor::init( const Tomahawk::playlistinterface_ptr& plInterface )
 void
 MetadataEditor::writeMetadata( bool closeDlg )
 {
+    bool failed = false;
+    QFileInfo fi;
+
     if ( m_result )
     {
-        QFileInfo fi( QUrl( m_result->url() ).toLocalFile() );
+        fi = QFileInfo( QUrl( m_result->url() ).toLocalFile() );
 
         bool changed = false;
         QByteArray fileName = QFile::encodeName( fi.canonicalFilePath() );
@@ -99,77 +103,88 @@ MetadataEditor::writeMetadata( bool closeDlg )
 
         TagLib::FileRef f( encodedName );
         QSharedPointer<Tomahawk::Tag> tag( Tomahawk::Tag::fromFile( f ) );
-
-        if ( title() != m_result->track()->track() )
+        if ( !tag )
         {
-            tDebug() << Q_FUNC_INFO << "Track changed" << title() << m_result->track();
-
-            tag->setTitle( title() );
-            m_result->track()->setTrack( title() );
-
-            changed = true;
+            failed = true;
         }
-
-        Tomahawk::artist_ptr newArtist = Tomahawk::Artist::get( artist(), true );
-        if ( newArtist != m_result->track()->artistPtr() )
+        else
         {
-            tDebug() << Q_FUNC_INFO << "Artist changed" << artist() << m_result->track()->artist();
-
-            tag->setArtist( artist() );
-            m_result->track()->setArtist( artist() );
-
-            changed = true;
-        }
-
-        Tomahawk::album_ptr newAlbum = Tomahawk::Album::get( newArtist, album(), true );
-        if ( newAlbum != m_result->track()->albumPtr() )
-        {
-            tDebug() << Q_FUNC_INFO << "Album changed" << album() << newAlbum->id() << m_result->track()->album() << m_result->track()->albumPtr()->id() << newAlbum.data() << m_result->track()->albumPtr().data();
-            if ( newAlbum->id() != m_result->track()->albumPtr()->id() )
+            if ( title() != m_result->track()->track() )
             {
-                tag->setAlbum( album() );
-                m_result->track()->setAlbum( album() );
+                tDebug() << Q_FUNC_INFO << "Track changed" << title() << m_result->track();
 
+                tag->setTitle( title() );
                 changed = true;
             }
-        }
 
-        // FIXME: Ugly workaround for the min value of 0
-        if ( albumPos() != 0 && albumPos() != (int)m_result->track()->albumpos() )
-        {
-            tag->setTrack( albumPos() );
-            m_result->track()->setAlbumPos( albumPos() );
-
-            tDebug() << Q_FUNC_INFO << "Albumpos changed";
-            changed = true;
-        }
-
-        // FIXME: Ugly workaround for the min value of 1900
-        if ( year() != 1900 && year() != m_result->track()->year() )
-        {
-            tag->setYear( year() );
+            Tomahawk::artist_ptr newArtist = Tomahawk::Artist::get( artist(), true );
+            if ( newArtist != m_result->track()->artistPtr() )
             {
-                QVariantMap attr = m_result->track()->attributes();
-                attr[ "releaseyear" ] = year();
-                m_result->track()->setAttributes( attr );
+                tDebug() << Q_FUNC_INFO << "Artist changed" << artist() << m_result->track()->artist();
+
+                tag->setArtist( artist() );
+                changed = true;
             }
 
-            tDebug() << Q_FUNC_INFO << "Year changed";
-            changed = true;
-        }
+            Tomahawk::album_ptr newAlbum = Tomahawk::Album::get( newArtist, album(), true );
+            if ( newAlbum != m_result->track()->albumPtr() )
+            {
+                tDebug() << Q_FUNC_INFO << "Album changed" << album() << newAlbum->id() << m_result->track()->album() << m_result->track()->albumPtr()->id() << newAlbum.data() << m_result->track()->albumPtr().data();
+                if ( newAlbum->id() != m_result->track()->albumPtr()->id() )
+                {
+                    tag->setAlbum( album() );
+                    changed = true;
+                }
+            }
 
-        if ( changed )
-        {
-            f.save();
+            // FIXME: Ugly workaround for the min value of 0
+            if ( albumPos() != 0 && albumPos() != (int)m_result->track()->albumpos() )
+            {
+                tag->setTrack( albumPos() );
 
-            m_editFiles.append( fileName );
-            m_result->doneEditing();
+                tDebug() << Q_FUNC_INFO << "Albumpos changed";
+                changed = true;
+            }
 
-            tDebug() << Q_FUNC_INFO << m_result->toString() << m_result->track()->toString();
+            // FIXME: Ugly workaround for the min value of 1900
+            if ( year() != 1900 && year() != m_result->track()->year() )
+            {
+                tag->setYear( year() );
+
+                tDebug() << Q_FUNC_INFO << "Year changed";
+                changed = true;
+            }
+
+            if ( changed )
+            {
+                if ( f.save() )
+                {
+                    m_result->track()->setTrack( title() );
+                    m_result->track()->setArtist( artist() );
+                    m_result->track()->setAlbum( album() );
+                    m_result->track()->setAlbumPos( albumPos() );
+                    {
+                        QVariantMap attr = m_result->track()->attributes();
+                        attr[ "releaseyear" ] = year();
+                        m_result->track()->setAttributes( attr );
+                    }
+
+                    m_editFiles.append( fileName );
+                    m_result->doneEditing();
+
+                    tDebug() << Q_FUNC_INFO << m_result->toString() << m_result->track()->toString();
+                }
+                else
+                    failed = true;
+            }
         }
     }
 
-    if ( closeDlg )
+    if ( failed )
+    {
+        QMessageBox::critical( 0, tr( "Error" ), tr( "Could not write tags to file:\n%1" ).arg( fi.canonicalFilePath() ) );
+    }
+    else if ( closeDlg )
     {
         if ( m_editFiles.count() )
             ScanManager::instance()->runFileScan( m_editFiles, false );
