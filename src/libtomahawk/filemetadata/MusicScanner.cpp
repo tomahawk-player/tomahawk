@@ -408,6 +408,9 @@ MusicScanner::readTags( const QFileInfo& fi )
     int bitrate = 0;
     int duration = 0;
     QSharedPointer<Tag> tag( Tag::fromFile( f ) );
+    if ( !tag )
+        return QVariantMap();
+
     if ( f.audioProperties() )
     {
         TagLib::AudioProperties *properties = f.audioProperties();
@@ -415,18 +418,14 @@ MusicScanner::readTags( const QFileInfo& fi )
         bitrate = properties->bitrate();
     }
 
-    QString artist, album, track;
-    if ( tag )
-    {
-        artist = tag->artist().trimmed();
-        album  = tag->album().trimmed();
-        track  = tag->title().trimmed();
-    }
-    if ( !tag || artist.isEmpty() || track.isEmpty() )
+    const QString artist = tag->artist().trimmed();
+    const QString album  = tag->album().trimmed();
+    const QString track  = tag->title().trimmed();
+    if ( artist.isEmpty() || track.isEmpty() )
         return QVariantMap();
 
-    QString mimetype = TomahawkUtils::extensionToMimetype( suffix );
-    QString url( "file://%1" );
+    const QString mimetype = TomahawkUtils::extensionToMimetype( suffix );
+    const QString url( "file://%1" );
 
     QVariantMap m;
     m["url"]          = url.arg( fi.canonicalFilePath() );
