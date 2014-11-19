@@ -38,7 +38,7 @@ ENDIF()
 
 SET( TOMAHAWK_VERSION_MAJOR 0 )
 SET( TOMAHAWK_VERSION_MINOR 8 )
-SET( TOMAHAWK_VERSION_PATCH 1 )
+SET( TOMAHAWK_VERSION_PATCH 2 )
 #SET( TOMAHAWK_VERSION_RC 1 )
 
 SET( TOMAHAWK_TRANSLATION_LANGUAGES ar bg bn_IN ca cs da de en el es fi fr hi_IN hu gl id it ja lt nl pl pt_BR ro ru sq sv th tr uk vi zh_CN zh_TW )
