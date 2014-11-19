@@ -2,7 +2,9 @@ Version 0.9.0:
     * Resolved playback issues by switching to a new audio engine.
 
 Version 0.8.2:
+    * Show error message if saving tags failed.
     * Fixed painting issue on search page.
+    * (OS X & Windows) Fixed crash during collection scan.
 
 Version 0.8.1:
     * Disabled sorting for stations.
