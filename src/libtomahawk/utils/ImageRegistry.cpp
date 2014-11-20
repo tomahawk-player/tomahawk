@@ -87,7 +87,7 @@ ImageRegistry::pixmap( const QString& image, const QSize& size, TomahawkUtils::I
     if ( image.toLower().endsWith( ".svg" ) )
     {
         QSvgRenderer svgRenderer( image );
-        QPixmap p( size.isNull() ? svgRenderer.defaultSize() : size );
+        QPixmap p( size.isNull() || size.height() == 0 || size.width() == 0 ? svgRenderer.defaultSize() : size );
         p.fill( Qt::transparent );
 
         QPainter pixPainter( &p );
@@ -117,10 +117,16 @@ ImageRegistry::pixmap( const QString& image, const QSize& size, TomahawkUtils::I
 
         if ( !size.isNull() && pixmap.size() != size )
         {
-            Qt::AspectRatioMode aspect = Qt::IgnoreAspectRatio;
-            if ( size.height() == 0 || size.width() == 0 )
-                aspect = Qt::KeepAspectRatio;
-            pixmap = pixmap.scaled( size, aspect, Qt::SmoothTransformation );
+            if ( size.width() == 0 )
+            {
+                pixmap = pixmap.scaledToHeight( size.height(), Qt::SmoothTransformation );
+            }
+            else if ( size.height() == 0 )
+            {
+                pixmap = pixmap.scaledToWidth( size.width(), Qt::SmoothTransformation );
+            }
+            else
+                pixmap = pixmap.scaled( size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
         }
 
         putInCache( image, size, mode, opacity, pixmap, tint );
