@@ -1105,7 +1105,19 @@ Password (OTP)</source>
         <translation>Vorwärts</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="381"/>
+        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="185"/>
+        <source>Error</source>
+        <translation>Fehler</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="185"/>
+        <source>Could not write tags to file:
+%1</source>
+        <translation>Konnte keine Tags in die folgende Datei schreiben:
+%1</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="396"/>
         <source>Properties</source>
         <translation>Eigenschaften</translation>
     </message>

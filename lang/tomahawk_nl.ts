@@ -1105,7 +1105,18 @@ opgeven (OTP)</translation>
         <translation>Vooruit</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="381"/>
+        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="185"/>
+        <source>Error</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="185"/>
+        <source>Could not write tags to file:
+%1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="396"/>
         <source>Properties</source>
         <translation>Eigenschappen</translation>
     </message>
