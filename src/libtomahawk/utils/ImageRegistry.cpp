@@ -116,7 +116,12 @@ ImageRegistry::pixmap( const QString& image, const QSize& size, TomahawkUtils::I
         }
 
         if ( !size.isNull() && pixmap.size() != size )
-            pixmap = pixmap.scaled( size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
+        {
+            Qt::AspectRatioMode aspect = Qt::IgnoreAspectRatio;
+            if ( size.height() == 0 || size.width() == 0 )
+                aspect = Qt::KeepAspectRatio;
+            pixmap = pixmap.scaled( size, aspect, Qt::SmoothTransformation );
+        }
 
         putInCache( image, size, mode, opacity, pixmap, tint );
     }
