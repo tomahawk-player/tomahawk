@@ -125,7 +125,7 @@ FdoNotifyPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
     switch ( pushData.type )
     {
         case Tomahawk::InfoSystem::InfoTrackUnresolved:
-            notifyUser( "The current track could not be resolved. Tomahawk will pick back up with the next resolvable track from this source." );
+            notifyUser( tr( "The current track could not be resolved. Tomahawk will pick back up with the next resolvable track from this source." ) );
             return;
 
         case Tomahawk::InfoSystem::InfoNotifyUser:
@@ -133,7 +133,7 @@ FdoNotifyPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
             return;
 
         case Tomahawk::InfoSystem::InfoNowStopped:
-            notifyUser( "Tomahawk is stopped." );
+            notifyUser( tr( "Tomahawk is stopped." ) );
             return;
 
         case Tomahawk::InfoSystem::InfoNowPlaying:
@@ -318,7 +318,6 @@ FdoNotifyPlugin::nowPlaying( const QVariant& input )
 
     QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher( reply, this );
     connect( watcher, SIGNAL( finished( QDBusPendingCallWatcher* ) ), SLOT( dbusPlayingReplyReceived( QDBusPendingCallWatcher* ) ) );
-
 }
 
 
