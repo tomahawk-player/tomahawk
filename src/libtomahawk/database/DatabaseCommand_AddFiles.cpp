@@ -96,21 +96,21 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
 
         int fileid = 0, artistid = 0, albumartistid = 0, albumid = 0, trackid = 0, composerid = 0;
 
-        QString url      = m.value( "url" ).toString();
-        int mtime        = m.value( "mtime" ).toInt();
-        uint size        = m.value( "size" ).toUInt();
-        QString hash     = m.value( "hash" ).toString();
-        QString mimetype = m.value( "mimetype" ).toString();
-        uint duration    = m.value( "duration" ).toUInt();
-        uint bitrate     = m.value( "bitrate" ).toUInt();
-        QString artist   = m.value( "artist" ).toString();
-        QString albumartist   = m.value( "albumartist" ).toString();
-        QString album    = m.value( "album" ).toString();
-        QString track    = m.value( "track" ).toString();
-        uint albumpos    = m.value( "albumpos" ).toUInt();
-        QString composer = m.value( "composer" ).toString();
-        uint discnumber  = m.value( "discnumber" ).toUInt();
-        int year         = m.value( "year" ).toInt();
+        const QString url         = m.value( "url" ).toString();
+        const int mtime           = m.value( "mtime" ).toInt();
+        const uint size           = m.value( "size" ).toUInt();
+        const QString hash        = m.value( "hash" ).toString();
+        const QString mimetype    = m.value( "mimetype" ).toString();
+        const uint duration       = m.value( "duration" ).toUInt();
+        const uint bitrate        = m.value( "bitrate" ).toUInt();
+        const QString artist      = m.value( "artist" ).toString();
+        const QString albumartist = m.value( "albumartist" ).toString();
+        const QString album       = m.value( "album" ).toString();
+        const QString track       = m.value( "track" ).toString();
+        const uint albumpos       = m.value( "albumpos" ).toUInt();
+        const QString composer    = m.value( "composer" ).toString();
+        const uint discnumber     = m.value( "discnumber" ).toUInt();
+        const int year            = m.value( "year" ).toInt();
 
         query_file.bindValue( 0, srcid );
         query_file.bindValue( 1, url );
@@ -132,21 +132,20 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         v = m;
 
         // add the album artist to the artist database.
-	if( !albumartist.trimmed().isEmpty() )
-	  albumartistid = dbi->artistId( albumartist, true );
+        if ( !albumartist.trimmed().isEmpty() )
+            albumartistid = dbi->artistId( albumartist, true );
         
-	if( !artist.trimmed().isEmpty() )
-        	artistid = dbi->artistId( artist, true );
+        if ( !artist.trimmed().isEmpty() )
+            artistid = dbi->artistId( artist, true );
         if ( artistid < 1 )
             continue;
         trackid = dbi->trackId( artistid, track, true );
         if ( trackid < 1 )
             continue;
-        
         // If there's an album artist, use it. Otherwise use the track artist
         albumid = dbi->albumId( albumartistid > 0 ? albumartistid : artistid, album, true );
 
-        if( !composer.trimmed().isEmpty() )
+        if ( !composer.trimmed().isEmpty() )
             composerid = dbi->artistId( composer, true );
 
         // Now add the association
