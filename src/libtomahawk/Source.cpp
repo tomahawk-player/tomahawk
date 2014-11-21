@@ -192,6 +192,23 @@ Source::nodeId() const
 
 
 QString
+Source::prettyName( const QString& name ) const
+{
+    Q_D( const Source );
+
+    if ( d->scrubFriendlyName )
+    {
+        if ( name.indexOf( "@" ) > 0 )
+        {
+            return name.split( "@" ).first();
+        }
+    }
+
+    return name;
+}
+
+
+QString
 Source::friendlyName() const
 {
     Q_D( const Source );
@@ -210,15 +227,15 @@ Source::friendlyName() const
         if ( candidateNames.count() > 1 )
             qSort( candidateNames.begin(), candidateNames.end(), &Source::friendlyNamesLessThan );
 
-        return candidateNames.first();
+        return prettyName( candidateNames.first() );
     }
 
     if ( d->friendlyname.isEmpty() )
     {
-        return dbFriendlyName();
+        return prettyName( dbFriendlyName() );
     }
 
-    return d->friendlyname;
+    return prettyName( d->friendlyname );
 }
 
 
@@ -347,13 +364,6 @@ Source::setFriendlyName( const QString& fname )
     }
 
     d->friendlyname = fname;
-    if ( d->scrubFriendlyName )
-    {
-        if ( d->friendlyname.indexOf( "@" ) > 0 )
-        {
-            d->friendlyname = d->friendlyname.split( "@" ).first();
-        }
-    }
 }
 
 
@@ -362,7 +372,7 @@ Source::dbFriendlyName() const
 {
     Q_D( const Source );
 
-    if( d->dbFriendlyName.isEmpty() )
+    if ( d->dbFriendlyName.isEmpty() )
     {
         return nodeId();
     }
