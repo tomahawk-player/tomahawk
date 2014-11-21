@@ -155,6 +155,7 @@ private:
     SourcePrivate* d_ptr;
 
     static bool friendlyNamesLessThan( const QString& first, const QString& second ); //lessThan for sorting
+    QString prettyName( const QString& name ) const;
 
     void updateTracks();
     void reportSocialAttributesChanged( DatabaseCommand_SocialAction* action );
