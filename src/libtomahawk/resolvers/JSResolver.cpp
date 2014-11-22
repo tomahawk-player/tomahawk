@@ -414,7 +414,7 @@ JSResolver::tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::
 bool
 JSResolver::canParseUrl( const QString& url, UrlType type )
 {
-    Q_D( JSResolver );
+    Q_D( const JSResolver );
 
     // FIXME: How can we do this?
     /*if ( QThread::currentThread() != thread() )
