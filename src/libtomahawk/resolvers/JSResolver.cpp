@@ -311,8 +311,6 @@ JSResolver::start()
 void
 JSResolver::artists( const Tomahawk::collection_ptr& collection )
 {
-    Q_D( JSResolver );
-
     if ( QThread::currentThread() != thread() )
     {
         QMetaObject::invokeMethod( this, "artists", Qt::QueuedConnection, Q_ARG( Tomahawk::collection_ptr, collection ) );
@@ -345,8 +343,6 @@ JSResolver::artists( const Tomahawk::collection_ptr& collection )
 void
 JSResolver::albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist )
 {
-    Q_D( JSResolver );
-
     if ( QThread::currentThread() != thread() )
     {
         QMetaObject::invokeMethod( this, "albums", Qt::QueuedConnection,
@@ -382,8 +378,6 @@ JSResolver::albums( const Tomahawk::collection_ptr& collection, const Tomahawk::
 void
 JSResolver::tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album )
 {
-    Q_D( JSResolver );
-
     if ( QThread::currentThread() != thread() )
     {
         QMetaObject::invokeMethod( this, "tracks", Qt::QueuedConnection,
@@ -448,8 +442,6 @@ JSResolver::canParseUrl( const QString& url, UrlType type )
 void
 JSResolver::lookupUrl( const QString& url )
 {
-    Q_D( JSResolver );
-
     if ( QThread::currentThread() != thread() )
     {
         QMetaObject::invokeMethod( this, "lookupUrl", Qt::QueuedConnection,
@@ -491,8 +483,6 @@ JSResolver::evaluateJavaScriptInternal(const QString& scriptSource)
 void
 JSResolver::evaluateJavaScript( const QString& scriptSource )
 {
-    Q_D( JSResolver );
-
     if ( QThread::currentThread() != thread() )
     {
         QMetaObject::invokeMethod( this, "evaluateJavaScript", Qt::QueuedConnection, Q_ARG( QString, scriptSource ) );
@@ -524,8 +514,6 @@ JSResolver::error() const
 void
 JSResolver::resolve( const Tomahawk::query_ptr& query )
 {
-    Q_D( JSResolver );
-
     if ( QThread::currentThread() != thread() )
     {
         QMetaObject::invokeMethod( this, "resolve", Qt::QueuedConnection, Q_ARG(Tomahawk::query_ptr, query) );
@@ -937,8 +925,6 @@ JSResolver::onCollectionIconFetched()
 QVariantMap
 JSResolver::resolverSettings()
 {
-    Q_D( JSResolver );
-
     return callOnResolver( "settings" ).toMap();
 }
 
@@ -946,8 +932,6 @@ JSResolver::resolverSettings()
 QVariantMap
 JSResolver::resolverUserConfig()
 {
-    Q_D( JSResolver );
-
     return callOnResolver( "getUserConfig()" ).toMap();
 }
 
@@ -955,8 +939,6 @@ JSResolver::resolverUserConfig()
 QVariantMap
 JSResolver::resolverInit()
 {
-    Q_D( JSResolver );
-
     return callOnResolver( "init()" ).toMap();
 }
 
