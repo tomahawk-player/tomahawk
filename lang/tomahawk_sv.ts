@@ -404,7 +404,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1106"/>
         <source>Sorry, couldn&apos;t find any playable tracks</source>
-        <translation type="unfinished"/>
+        <translation>Tyvärr hittades inte några uppspelningsbara spår</translation>
     </message>
 </context>
 <context>
@@ -489,7 +489,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="88"/>
         <source>Songs</source>
-        <translation type="unfinished"/>
+        <translation>Låtar</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="379"/>
@@ -731,7 +731,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="197"/>
         <source>Install plug-in</source>
-        <translation type="unfinished"/>
+        <translation>Installera plug-in</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="198"/>
@@ -873,7 +873,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/jobview/IndexingJobItem.cpp" line="33"/>
         <source>Indexing Music Library</source>
-        <translation type="unfinished"/>
+        <translation>Indexerar Musikbibliotek</translation>
     </message>
 </context>
 <context>
@@ -933,7 +933,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="14"/>
         <source>Load Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Ladda Spellista</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="20"/>
@@ -943,17 +943,17 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="35"/>
         <source>Playlist URL</source>
-        <translation type="unfinished"/>
+        <translation>Spelistans URL</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="42"/>
         <source>Enter URL...</source>
-        <translation type="unfinished"/>
+        <translation>Ange URL...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="55"/>
         <source>...</source>
-        <translation type="unfinished"/>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="64"/>
@@ -963,7 +963,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="79"/>
         <source>To import a playlist from Spotify, Rdio, Beats, etc. - simply drag the link into Tomahawk.</source>
-        <translation type="unfinished"/>
+        <translation>För att inportera en spellista från Spotify, Rdio, Beats, etc. - dra in länken till Tomahawk.</translation>
     </message>
 </context>
 <context>
@@ -3326,6 +3326,16 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
         <translation>av</translation>
     </message>
     <message>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="128"/>
+        <source>The current track could not be resolved. Tomahawk will pick back up with the next resolvable track from this source.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="136"/>
+        <source>Tomahawk is stopped.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="209"/>
         <source>%1 sent you
 %2%4 %3.</source>
@@ -3547,37 +3557,37 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="543"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="553"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Söker igenom (%L1 spår)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="528"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="538"/>
         <source>Checking</source>
         <translation>Kontrollerar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="533"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="543"/>
         <source>Syncing</source>
         <translation>Synkroniserar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="538"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="548"/>
         <source>Importing</source>
         <translation>Importerar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="728"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="738"/>
         <source>Saving (%1%)</source>
         <translation>Sparar (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="815"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="825"/>
         <source>Online</source>
         <translation>Online</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="819"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="829"/>
         <source>Offline</source>
         <translation>Offline</translation>
     </message>

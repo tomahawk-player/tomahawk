@@ -222,7 +222,7 @@ erlauben sich mit dir zu verbinden und von dir zu streamen?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="145"/>
         <source>Report a Bug</source>
-        <translation>Einen Fehler melden</translation>
+        <translation>Fehler melden</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="146"/>
@@ -3324,6 +3324,16 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
         <translation>von</translation>
     </message>
     <message>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="128"/>
+        <source>The current track could not be resolved. Tomahawk will pick back up with the next resolvable track from this source.</source>
+        <translation>Das aktuelle Lied konnte nicht gefunden werden. Tomahawk setzt die Wiedergabe beim nächsten gefundenen Lied fort.</translation>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="136"/>
+        <source>Tomahawk is stopped.</source>
+        <translation>Wiedergabe beendet.</translation>
+    </message>
+    <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="209"/>
         <source>%1 sent you
 %2%4 %3.</source>
@@ -3545,37 +3555,37 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="543"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="553"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Scanne (%L1 Lieder)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="528"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="538"/>
         <source>Checking</source>
         <translation>Überprüfe</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="533"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="543"/>
         <source>Syncing</source>
         <translation>Synchronisiere</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="538"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="548"/>
         <source>Importing</source>
         <translation>Importiere</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="728"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="738"/>
         <source>Saving (%1%)</source>
         <translation>Speichere (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="815"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="825"/>
         <source>Online</source>
         <translation>Online</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="819"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="829"/>
         <source>Offline</source>
         <translation>Offline</translation>
     </message>

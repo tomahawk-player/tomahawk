@@ -3324,6 +3324,16 @@ Try tweaking the filters for a new set of songs to play.</source>
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="128"/>
+        <source>The current track could not be resolved. Tomahawk will pick back up with the next resolvable track from this source.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="136"/>
+        <source>Tomahawk is stopped.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="209"/>
         <source>%1 sent you
 %2%4 %3.</source>
@@ -3543,37 +3553,37 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="543"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="553"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>スキャン中（%1L1トラック）</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="528"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="538"/>
         <source>Checking</source>
         <translation>検査中</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="533"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="543"/>
         <source>Syncing</source>
         <translation>同期中</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="538"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="548"/>
         <source>Importing</source>
         <translation>インポート中</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="728"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="738"/>
         <source>Saving (%1%)</source>
         <translation>保存中（%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="815"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="825"/>
         <source>Online</source>
         <translation>オンライン</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="819"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="829"/>
         <source>Offline</source>
         <translation>オフライン</translation>
     </message>
