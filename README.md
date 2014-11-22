@@ -74,7 +74,7 @@ You can download one of our nightly or stable builds:
 
 **MAC**
 
-* [OS X](http://wiki.tomahawk-player.org/index.php/Building_OS_X_Application_Bunde)
+* [OS X](http://wiki.tomahawk-player.org/index.php/Building_OS_X_Application_Bundle)
 
 **WINDOWS**
 
