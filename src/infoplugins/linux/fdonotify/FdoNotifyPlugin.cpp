@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2013-2014, Uwe L. Korn <uwelk@xhochy.com>
  *
@@ -48,6 +48,8 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "utils/TomahawkUtilsGui.h"
+
+#include "config.h"
 
 #include <QDBusConnection>
 #include <QDBusPendingCallWatcher>
@@ -306,14 +308,14 @@ FdoNotifyPlugin::nowPlaying( const QVariant& input )
 
 
     QDBusPendingReply<> reply = notifications_interface->Notify(
-        "Tomahawk",                  // app_name
-        m_nowPlayingId,              // notification_id
-        "",                          // app_icon
-        "Tomahawk - Now Playing",    // summary
-        messageText,                 // body
-        QStringList(),               // actions
-        hints,                       // hints
-        -1                           // expire_timeout
+        TOMAHAWK_APPLICATION_NAME,      // app_name
+        m_nowPlayingId,                 // notification_id
+        "",                             // app_icon
+        tr( "Tomahawk - Now Playing" ), // summary
+        messageText,                    // body
+        QStringList(),                  // actions
+        hints,                          // hints
+        -1                              // expire_timeout
     );
 
     QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher( reply, this );
