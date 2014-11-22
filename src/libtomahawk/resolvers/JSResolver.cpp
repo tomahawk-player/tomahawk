@@ -317,8 +317,10 @@ JSResolver::artists( const Tomahawk::collection_ptr& collection )
         return;
     }
 
+    Q_D( const JSResolver );
+
     if ( !m_collections.contains( collection->name() ) || //if the collection doesn't belong to this resolver
-         !capabilities().testFlag( Browsable ) )          //or this resolver doesn't even support collections
+         !d->capabilities.testFlag( Browsable ) )          //or this resolver doesn't even support collections
     {
         emit artistsFound( QList< Tomahawk::artist_ptr >() );
         return;
@@ -351,8 +353,10 @@ JSResolver::albums( const Tomahawk::collection_ptr& collection, const Tomahawk::
         return;
     }
 
+    Q_D( const JSResolver );
+
     if ( !m_collections.contains( collection->name() ) || //if the collection doesn't belong to this resolver
-         !capabilities().testFlag( Browsable ) )          //or this resolver doesn't even support collections
+         !d->capabilities.testFlag( Browsable ) )          //or this resolver doesn't even support collections
     {
         emit albumsFound( QList< Tomahawk::album_ptr >() );
         return;
@@ -386,8 +390,10 @@ JSResolver::tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::
         return;
     }
 
+    Q_D( const JSResolver );
+
     if ( !m_collections.contains( collection->name() ) || //if the collection doesn't belong to this resolver
-         !capabilities().testFlag( Browsable ) )          //or this resolver doesn't even support collections
+         !d->capabilities.testFlag( Browsable ) )          //or this resolver doesn't even support collections
     {
         emit tracksFound( QList< Tomahawk::query_ptr >() );
         return;
@@ -449,7 +455,9 @@ JSResolver::lookupUrl( const QString& url )
         return;
     }
 
-    if ( !capabilities().testFlag( UrlLookup ) )
+    Q_D( const JSResolver );
+
+    if ( !d->capabilities.testFlag( UrlLookup ) )
     {
         emit informationFound( url, QSharedPointer<QObject>() );
         return;
