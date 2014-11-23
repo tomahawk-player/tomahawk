@@ -170,7 +170,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         m_area->setWidget( m_widget );
 
         QPalette pal = palette();
-        pal.setBrush( backgroundRole(), Qt::white );
+        pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
         m_area->setPalette( pal );
         m_area->setAutoFillBackground( true );
         m_area->setFrameShape( QFrame::NoFrame );
@@ -203,7 +203,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
         QWidget* vbox = new QWidget;
         QPalette pal = vbox->palette();
-        pal.setBrush( vbox->backgroundRole(), Qt::white );
+        pal.setBrush( vbox->backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
         vbox->setPalette( pal );
         vbox->setAutoFillBackground( true );
 

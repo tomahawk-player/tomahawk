@@ -77,7 +77,7 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
 
         TomahawkStyle::stylePageFrame( m_albumView );
 
-        m_albumView->setStyleSheet( QString( "QListView { background-color: white; }" ) );
+        m_albumView->setStyleSheet( QString( "QListView { background-color: %1; }" ).arg( TomahawkStyle::PAGE_BACKGROUND.name() ) );
     }
 
     m_stack = new QStackedWidget();

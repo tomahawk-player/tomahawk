@@ -85,7 +85,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
         ui->albums->proxyModel()->sort( -1 );
         ui->albums->setEmptyTip( tr( "Sorry, we could not find any albums!" ) );
 
-        ui->albums->setStyleSheet( QString( "QListView { background-color: white; }" ) );
+        ui->albums->setStyleSheet( QString( "QListView { background-color: %1; }" ).arg( TomahawkStyle::PAGE_BACKGROUND.name() ) );
         TomahawkStyle::stylePageFrame( ui->albumFrame );
         TomahawkStyle::styleScrollBar( ui->albums->verticalScrollBar() );
         TomahawkStyle::styleScrollBar( ui->albums->horizontalScrollBar() );
@@ -107,7 +107,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
         ui->tracks->proxyModel()->sort( -1 );
         ui->tracks->setEmptyTip( tr( "Sorry, we could not find any songs!" ) );
 
-        ui->tracks->setStyleSheet( QString( "QListView { background-color: white; }" ) );
+        ui->tracks->setStyleSheet( QString( "QListView { background-color: %1; }" ).arg( TomahawkStyle::PAGE_BACKGROUND.name() ) );
         TomahawkStyle::stylePageFrame( ui->trackFrame );
     }
 
@@ -133,7 +133,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
         area->setWidget( widget );
 
         QPalette pal = palette();
-        pal.setBrush( backgroundRole(), Qt::white );
+        pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
         area->setPalette( pal );
         area->setAutoFillBackground( true );
         area->setFrameShape( QFrame::NoFrame );
@@ -160,7 +160,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
 
         QWidget* vbox = new QWidget;
         QPalette pal = vbox->palette();
-        pal.setBrush( vbox->backgroundRole(), Qt::white );
+        pal.setBrush( vbox->backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
         vbox->setPalette( pal );
         vbox->setAutoFillBackground( true );
 
@@ -190,7 +190,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
 
         QWidget* vbox = new QWidget;
         QPalette pal = vbox->palette();
-        pal.setBrush( vbox->backgroundRole(), Qt::white );
+        pal.setBrush( vbox->backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
         vbox->setPalette( pal );
         vbox->setAutoFillBackground( true );
 

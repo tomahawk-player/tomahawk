@@ -53,13 +53,13 @@ ContextView::ContextView( QWidget* parent, const QString& caption )
     setLayout( new QVBoxLayout() );
     TomahawkUtils::unmarginLayout( layout() );
 
-    m_trackView->setStyleSheet( QString( "QTreeView { background-color: white; }" ) );
+    m_trackView->setStyleSheet( QString( "QTreeView { background-color: %1; }" ).arg( TomahawkStyle::PAGE_BACKGROUND.name() ) );
     m_captionLabel = new CaptionLabel( this );
     setCaption( caption );
 
     QWidget* vbox = new QWidget;
     QPalette pal = vbox->palette();
-    pal.setBrush( vbox->backgroundRole(), Qt::white );
+    pal.setBrush( vbox->backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
     vbox->setPalette( pal );
     vbox->setAutoFillBackground( true );
 
