@@ -50,6 +50,9 @@ namespace TomahawkStyle
     DLLEXPORT void stylePageWidget( QWidget* widget );
     DLLEXPORT void styleScrollBar( QScrollBar* scrollBar );
 
+    static const QColor PAGE_BACKGROUND = QColor( "#F9F9F9" );
+
+    // Potentially obsolete definitions
     static const QColor BORDER_LINE = QColor( "#8c8c8c" );
     static const QColor POPUP_BACKGROUND = QColor( "#ffffff" );
     static const QColor POPUP_OSX_BACKGROUND = QColor( "#D6E3F1" );
@@ -80,7 +83,6 @@ namespace TomahawkStyle
     static const QColor PAGE_CAPTION = QColor( "#292F34" );
     static const QColor PAGE_TEXT = QColor( "#ABCCE8" );
     static const QColor PAGE_FOREGROUND = QColor( "#292f34" );
-    static const QColor PAGE_BACKGROUND = QColor( "#DBDBDB" );
 
     static const QColor PAGE_TRACKLIST_TRACK_SOLVED = QColor( "#292F34" );
     static const QColor PAGE_TRACKLIST_TRACK_UNRESOLVED = QColor( "#8597A6" ).lighter( 150 );

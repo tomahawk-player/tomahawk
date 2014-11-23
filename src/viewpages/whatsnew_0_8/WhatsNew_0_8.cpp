@@ -73,7 +73,7 @@ WhatsNewWidget_0_8::WhatsNewWidget_0_8( QWidget* parent )
         m_area->setWidget( m_widget );
 
         QPalette pal = palette();
-        pal.setBrush( backgroundRole(), Qt::white );
+        pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
         m_area->setPalette( pal );
         m_area->setAutoFillBackground( true );
         m_area->setFrameShape( QFrame::NoFrame );

@@ -36,6 +36,7 @@
 #include "utils/AnimatedSpinner.h"
 #include "utils/PixmapDelegateFader.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/TomahawkStyle.h"
 
 #include <QDrag>
 #include <QHeaderView>
@@ -77,7 +78,7 @@ GridView::GridView( QWidget* parent )
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 
-    setStyleSheet( "QListView { background-color: #ffffff; }" );
+    setStyleSheet( QString( "QListView { background-color: %1; }" ).arg( TomahawkStyle::PAGE_BACKGROUND.name() ) );
 
     setAutoFitItems( true );
     setAutoResize( false );

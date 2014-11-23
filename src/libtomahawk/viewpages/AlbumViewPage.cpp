@@ -61,7 +61,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     ui->albumView->trackView()->setPlayableModel( m_tracksModel );
     ui->albumView->setCaption( tr( "Album Details" ) );
 
-    ui->topHits->setStyleSheet( QString( "QListView { background-color: #f9f9f9; }" ) );
+    ui->topHits->setStyleSheet( QString( "QListView { background-color: %1; }" ).arg( TomahawkStyle::PAGE_BACKGROUND.name() ) );
     TomahawkStyle::stylePageFrame( ui->trackFrame );
     ui->topHits->setVisible( false );
     ui->topHitsLabel->setVisible( false );
@@ -73,7 +73,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
         area->setWidget( widget );
 
         QPalette pal = palette();
-        pal.setBrush( backgroundRole(), Qt::white );
+        pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
         area->setPalette( pal );
         area->setAutoFillBackground( true );
         area->setFrameShape( QFrame::NoFrame );
@@ -85,13 +85,6 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
         setLayout( layout );
         TomahawkUtils::unmarginLayout( layout );
     }
-
-/*    {
-        QPalette pal = palette();
-        pal.setBrush( backgroundRole(), Qt::white );
-        ui->widget->setPalette( pal );
-        ui->widget->setAutoFillBackground( true );
-    }*/
 
     MetaPlaylistInterface* mpl = new MetaPlaylistInterface();
     mpl->addChildInterface( ui->topHits->playlistInterface() );

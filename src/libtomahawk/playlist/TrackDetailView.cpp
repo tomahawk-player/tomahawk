@@ -47,7 +47,7 @@ TrackDetailView::TrackDetailView( QWidget* parent )
     setContentsMargins( 0, 0, 0, 0 );
 
     QPalette pal( palette() );
-    pal.setColor( QPalette::Background, Qt::white );
+    pal.setColor( QPalette::Background, TomahawkStyle::PAGE_BACKGROUND );
     setPalette( pal );
     setAutoFillBackground( true );
 
