@@ -152,7 +152,7 @@ erlauben sich mit dir zu verbinden und von dir zu streamen?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="113"/>
         <source>Fully &amp;Rescan Collection</source>
-        <translation>Sammlung komplett scannen</translation>
+        <translation>Sammlung erneut einlesen</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="111"/>
@@ -3328,7 +3328,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="314"/>
         <source>Tomahawk - Now Playing</source>
-        <translation>Tomahawk - Jetzt läuft</translation>
+        <translation>Tomahawk - Jetzt läuft:</translation>
     </message>
 </context>
 <context>
