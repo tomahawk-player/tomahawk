@@ -56,7 +56,6 @@ public:
     //void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllArtists::SortOrder order );
 
     void addArtists( const Tomahawk::artist_ptr& artist );
-    void addTracks( const Tomahawk::album_ptr& album, const QModelIndex& parent, bool autoRefetch = false );
     void fetchAlbums( const Tomahawk::artist_ptr& artist );
 
     void getCover( const QModelIndex& index );
@@ -70,6 +69,7 @@ public:
 
 public slots:
     void addAlbums( const QModelIndex& parent, const QList<Tomahawk::album_ptr>& albums );
+    void addTracks( const Tomahawk::album_ptr& album, const QModelIndex& parent );
 
 signals:
     void modeChanged( Tomahawk::ModelMode mode );
@@ -82,7 +82,6 @@ private slots:
     void onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists );
     void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, Tomahawk::ModelMode mode );
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QModelIndex& index );
-    void onTracksFound( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::ModelMode mode, Tomahawk::collection_ptr collection );
 
 private:
     Tomahawk::ModelMode m_mode;
