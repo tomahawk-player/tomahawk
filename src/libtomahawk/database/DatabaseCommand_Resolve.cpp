@@ -111,10 +111,13 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
                             "file_join.albumpos, "                                  //17
                             "artist.id as artid, "                                  //18
                             "album.id as albid, "                                   //19
-                            "composer.id as cmpid "                                 //20
+                            "composer.id as cmpid, "                                //20
+                            "albumArtist.id as albumartistid, "                     //21
+                            "albumArtist.name as albumartistname "                  //22
                             "FROM file, file_join, artist, track "
                             "LEFT JOIN album ON album.id = file_join.album "
                             "LEFT JOIN artist AS composer ON composer.id = file_join.composer "
+                            "LEFT JOIN artist AS albumArtist ON albumArtist.id = album.artist "
                             "WHERE "
                             "artist.id = file_join.artist AND "
                             "track.id = file_join.track AND "
@@ -145,7 +148,9 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
             continue;
         }
 
-        track_ptr track = Track::get( files_query.value( 9 ).toUInt(), files_query.value( 12 ).toString(), files_query.value( 14 ).toString(), files_query.value( 13 ).toString(), files_query.value( 5 ).toUInt(), files_query.value( 15 ).toString(), files_query.value( 17 ).toUInt(), files_query.value( 11 ).toUInt() );
+        track_ptr track = Track::get( files_query.value( 9 ).toUInt(), files_query.value( 12 ).toString(), files_query.value( 14 ).toString(),
+                                      files_query.value( 13 ).toString(), files_query.value( 22 ).toString(), files_query.value( 5 ).toUInt(),
+                                      files_query.value( 15 ).toString(), files_query.value( 17 ).toUInt(), files_query.value( 11 ).toUInt() );
         if ( !track )
             continue;
         track->loadAttributes();
@@ -224,10 +229,13 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
                             "file_join.albumpos, "                                  //17
                             "artist.id as artid, "                                  //18
                             "album.id as albid, "                                   //19
-                            "composer.id as cmpid "                                 //20
+                            "composer.id as cmpid, "                                //20
+                            "albumArtist.id as albumartistid, "                     //21
+                            "albumArtist.name as albumartistname "                  //22
                             "FROM file, file_join, artist, track "
                             "LEFT JOIN album ON album.id = file_join.album "
                             "LEFT JOIN artist AS composer ON composer.id = file_join.composer "
+                            "LEFT JOIN artist AS albumArtist ON albumArtist.id = album.artist "
                             "WHERE "
                             "artist.id = file_join.artist AND "
                             "track.id = file_join.track AND "
@@ -258,7 +266,9 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
             continue;
         }
 
-        track_ptr track = Track::get( files_query.value( 9 ).toUInt(), files_query.value( 12 ).toString(), files_query.value( 14 ).toString(), files_query.value( 13 ).toString(), files_query.value( 5 ).toUInt(), files_query.value( 15 ).toString(), files_query.value( 17 ).toUInt(), files_query.value( 11 ).toUInt() );
+        track_ptr track = Track::get( files_query.value( 9 ).toUInt(), files_query.value( 12 ).toString(), files_query.value( 14 ).toString(),
+                                      files_query.value( 13 ).toString(), files_query.value( 22 ).toString(), files_query.value( 5 ).toUInt(),
+                                      files_query.value( 15 ).toString(), files_query.value( 17 ).toUInt(), files_query.value( 11 ).toUInt() );
         track->loadAttributes();
 
         result = Result::get( url, track );

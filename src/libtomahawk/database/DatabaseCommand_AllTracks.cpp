@@ -76,14 +76,16 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
     }
 
     QString sql = QString(
-            "SELECT file.id, artist.name, album.name, track.name, composer.name, file.size, "   //0
-                   "file.duration, file.bitrate, file.url, file.source, file.mtime, "           //6
-                   "file.mimetype, file_join.discnumber, file_join.albumpos, track.id "       //11
+            "SELECT file.id, artist.name, album.name, track.name, composer.name, file.size, "             //0
+                   "file.duration, file.bitrate, file.url, file.source, file.mtime, "                     //6
+                   "file.mimetype, file_join.discnumber, file_join.albumpos, track.id, albumArtist.name " //11
             "FROM file, artist, track, file_join "
             "LEFT OUTER JOIN album "
             "ON file_join.album = album.id "
             "LEFT OUTER JOIN artist AS composer "
             "ON file_join.composer = composer.id "
+            "LEFT OUTER JOIN artist AS albumArtist "
+            "ON album.artist = albumArtist.id "
             "WHERE file.id = file_join.file "
             "AND file_join.artist = artist.id "
             "AND file_join.track = track.id "
@@ -106,20 +108,21 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
 
     while( query.next() )
     {
-        QString artist = query.value( 1 ).toString();
-        QString album = query.value( 2 ).toString();
-        QString track = query.value( 3 ).toString();
-        QString composer = query.value( 4 ).toString();
-        uint size = query.value( 5 ).toUInt();
-        uint duration = query.value( 6 ).toUInt();
-        uint bitrate = query.value( 7 ).toUInt();
+        const QString artist = query.value( 1 ).toString();
+        const QString album = query.value( 2 ).toString();
+        const QString track = query.value( 3 ).toString();
+        const QString composer = query.value( 4 ).toString();
+        const uint size = query.value( 5 ).toUInt();
+        const uint duration = query.value( 6 ).toUInt();
+        const uint bitrate = query.value( 7 ).toUInt();
         QString url = query.value( 8 ).toString();
-        uint sourceId = query.value( 9 ).toUInt();
-        uint modificationTime = query.value( 10 ).toUInt();
-        QString mimetype = query.value( 11 ).toString();
-        uint discnumber = query.value( 12 ).toUInt();
-        uint albumpos = query.value( 13 ).toUInt();
-        uint trackId = query.value( 14 ).toUInt();
+        const uint sourceId = query.value( 9 ).toUInt();
+        const uint modificationTime = query.value( 10 ).toUInt();
+        const QString mimetype = query.value( 11 ).toString();
+        const uint discnumber = query.value( 12 ).toUInt();
+        const uint albumpos = query.value( 13 ).toUInt();
+        const uint trackId = query.value( 14 ).toUInt();
+        const QString albumArtist = query.value( 15 ).toString();
 
         std::unordered_map<uint, Tomahawk::source_ptr>::const_iterator _s = sourceCache.find( sourceId );
         Tomahawk::source_ptr s;
@@ -142,7 +145,7 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
 
         Tomahawk::track_ptr t = Tomahawk::Track::get( trackId,
                                                       artist, track, album,
-                                                      duration, composer,
+                                                      albumArtist, duration, composer,
                                                       albumpos, discnumber );
         if ( !t )
             continue;

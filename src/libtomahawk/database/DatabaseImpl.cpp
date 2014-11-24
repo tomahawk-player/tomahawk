@@ -290,11 +290,12 @@ Tomahawk::DatabaseImpl::file( int fid )
     TomahawkSqlQuery query = newquery();
     query.exec( QString( "SELECT url, mtime, size, md5, mimetype, duration, bitrate, "
                          "file_join.artist, file_join.album, file_join.track, file_join.composer, "
-                         "(select name from artist where id = file_join.artist) as artname, "
-                         "(select name from album  where id = file_join.album)  as albname, "
-                         "(select name from track  where id = file_join.track)  as trkname, "
-                         "(select name from artist where id = file_join.composer) as cmpname, "
-                         "source "
+                         "(SELECT name FROM artist WHERE id = file_join.artist) AS artname, "
+                         "(SELECT name FROM album  WHERE id = file_join.album)  AS albname, "
+                         "(SELECT name FROM track  WHERE id = file_join.track)  AS trkname, "
+                         "(SELECT name FROM artist WHERE id = file_join.composer) AS cmpname, "
+                         "source, "
+                         "(SELECT artist.name FROM artist, album WHERE artist.id = album.artist AND album.id = file_join.album) AS albumartname "
                          "FROM file, file_join "
                          "WHERE file.id = file_join.file AND file.id = %1" )
                 .arg( fid ) );
@@ -308,7 +309,9 @@ Tomahawk::DatabaseImpl::file( int fid )
         if ( !s->isLocal() )
             url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
 
-        Tomahawk::track_ptr track = Tomahawk::Track::get( query.value( 9 ).toUInt(), query.value( 11 ).toString(), query.value( 13 ).toString(), query.value( 12 ).toString(), query.value( 5 ).toUInt(), query.value( 14 ).toString(), 0, 0 );
+        Tomahawk::track_ptr track = Tomahawk::Track::get( query.value( 9 ).toUInt(), query.value( 11 ).toString(), query.value( 13 ).toString(),
+                                                          query.value( 12 ).toString(), query.value( 16 ).toString(), query.value( 5 ).toUInt(),
+                                                          query.value( 14 ).toString(), 0, 0 );
         if ( !track )
             return r;
         r = Tomahawk::Result::get( url, track );
@@ -633,6 +636,7 @@ Tomahawk::DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         Tomahawk::track_ptr track = Tomahawk::Track::get( origquery->queryTrack()->artist(),
                                                           origquery->queryTrack()->track(),
                                                           origquery->queryTrack()->album(),
+                                                          QString(),
                                                           origquery->queryTrack()->duration() );
 
         // Return http resulthint directly
@@ -674,10 +678,13 @@ Tomahawk::DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
                             "file_join.discnumber, "                                //17
                             "artist.id as artid, "                                  //18
                             "album.id as albid, "                                   //19
-                            "composer.id as cmpid "                                 //20
+                            "composer.id as cmpid, "                                //20
+                            "albumArtist.id as albumartistid, "                     //21
+                            "albumArtist.name as albumartistname "                  //22
                             "FROM file, file_join, artist, track "
                             "LEFT JOIN album ON album.id = file_join.album "
                             "LEFT JOIN artist AS composer on composer.id = file_join.composer "
+                            "LEFT JOIN artist AS albumArtist on albumArtist.id = album.artist "
                             "WHERE "
                             "artist.id = file_join.artist AND "
                             "track.id = file_join.track AND "
@@ -703,6 +710,7 @@ Tomahawk::DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
                                                           query.value( 11 ).toString(),
                                                           query.value( 13 ).toString(),
                                                           query.value( 12 ).toString(),
+                                                          query.value( 22 ).toString(),
                                                           query.value( 5 ).toInt(),
                                                           query.value( 14 ).toString(),
                                                           query.value( 16 ).toUInt(),
