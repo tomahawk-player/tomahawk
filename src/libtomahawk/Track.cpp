@@ -47,7 +47,7 @@ static QMutex s_nameCacheMutex;
 
 
 inline QString
-cacheKey( const QString& artist, const QString& track, const QString& album, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber )
+cacheKey( const QString& artist, const QString& track, const QString& album, const QString& albumArtist, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber )
 {
     const QString durationStr = QString::number( duration );
     const QString albumposStr = QString::number( albumpos );
@@ -58,11 +58,12 @@ cacheKey( const QString& artist, const QString& track, const QString& album, int
     // The "+" implementation in Qt4 differs slighty depending on compile
     // options which could drastically reduce the performance.
     str.reserve( artist.size() + track.size() + album.size()
-                 + composer.size() + durationStr.size()
+                 + albumArtist.size() + composer.size() + durationStr.size()
                  + albumposStr.size() + discnumberStr.size() );
     str += artist;
     str += track;
     str += album;
+    str += albumArtist;
     str += composer;
     str += durationStr;
     str += albumposStr;
@@ -72,7 +73,7 @@ cacheKey( const QString& artist, const QString& track, const QString& album, int
 
 
 track_ptr
-Track::get( const QString& artist, const QString& track, const QString& album, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber )
+Track::get( const QString& artist, const QString& track, const QString& album, const QString& albumArtist, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber )
 {
     if ( artist.trimmed().isEmpty() || track.trimmed().isEmpty() )
     {
@@ -82,7 +83,7 @@ Track::get( const QString& artist, const QString& track, const QString& album, i
     }
 
     QMutexLocker lock( &s_nameCacheMutex );
-    const QString key = cacheKey( artist, track, album, duration, composer, albumpos, discnumber );
+    const QString key = cacheKey( artist, track, album, albumArtist, duration, composer, albumpos, discnumber );
     if ( s_tracksByName.contains( key ) )
     {
         track_wptr track = s_tracksByName.value( key );
@@ -90,7 +91,7 @@ Track::get( const QString& artist, const QString& track, const QString& album, i
             return track.toStrongRef();
     }
 
-    track_ptr t = track_ptr( new Track( artist, track, album, duration, composer, albumpos, discnumber ), &Track::deleteLater );
+    track_ptr t = track_ptr( new Track( artist, track, album, albumArtist, duration, composer, albumpos, discnumber ), &Track::deleteLater );
     t->setWeakRef( t.toWeakRef() );
     s_tracksByName.insert( key, t );
 
@@ -99,10 +100,10 @@ Track::get( const QString& artist, const QString& track, const QString& album, i
 
 
 track_ptr
-Track::get( unsigned int id, const QString& artist, const QString& track, const QString& album, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber )
+Track::get( unsigned int id, const QString& artist, const QString& track, const QString& album, const QString& albumArtist, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber )
 {
     QMutexLocker lock( &s_nameCacheMutex );
-    const QString key = cacheKey( artist, track, album, duration, composer, albumpos, discnumber );
+    const QString key = cacheKey( artist, track, album, albumArtist, duration, composer, albumpos, discnumber );
     if ( s_tracksByName.contains( key ) )
     {
         track_wptr track = s_tracksByName.value( key );
@@ -110,7 +111,7 @@ Track::get( unsigned int id, const QString& artist, const QString& track, const 
             return track;
     }
 
-    track_ptr t = track_ptr( new Track( id, artist, track, album, duration, composer, albumpos, discnumber ), &Track::deleteLater );
+    track_ptr t = track_ptr( new Track( id, artist, track, album, albumArtist, duration, composer, albumpos, discnumber ), &Track::deleteLater );
     t->setWeakRef( t.toWeakRef() );
     s_tracksByName.insert( key, t );
 
@@ -118,8 +119,8 @@ Track::get( unsigned int id, const QString& artist, const QString& track, const 
 }
 
 
-Track::Track( unsigned int id, const QString& artist, const QString& track, const QString& album, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber )
-    : d_ptr( new TrackPrivate( this, album, duration, composer, albumpos, discnumber ) )
+Track::Track( unsigned int id, const QString& artist, const QString& track, const QString& album, const QString& albumArtist, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber )
+    : d_ptr( new TrackPrivate( this, album, albumArtist, duration, composer, albumpos, discnumber ) )
 {
     Q_D( Track );
     d->trackData = TrackData::get( id, artist, track );
@@ -128,8 +129,8 @@ Track::Track( unsigned int id, const QString& artist, const QString& track, cons
 }
 
 
-Track::Track( const QString& artist, const QString& track, const QString& album, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber )
-    : d_ptr( new TrackPrivate( this, album, duration, composer, albumpos, discnumber ) )
+Track::Track( const QString& artist, const QString& track, const QString& album, const QString& albumArtist, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber )
+    : d_ptr( new TrackPrivate( this, album, albumArtist, duration, composer, albumpos, discnumber ) )
 {
     Q_D( Track );
     d->trackData = TrackData::get( 0, artist, track );
@@ -232,7 +233,7 @@ Track::deleteLater()
     Q_D( Track );
     QMutexLocker lock( &s_nameCacheMutex );
 
-    const QString key = cacheKey( artist(), track(), d->album, d->duration, d->composer, d->albumpos, d->discnumber );
+    const QString key = cacheKey( artist(), track(), d->album, d->albumArtist, d->duration, d->composer, d->albumpos, d->discnumber );
     if ( s_tracksByName.contains( key ) )
     {
         s_tracksByName.remove( key );
@@ -617,13 +618,32 @@ Track::artistPtr() const
 }
 
 
+artist_ptr
+Track::albumArtistPtr() const
+{
+    Q_D( const Track );
+    if ( !d->albumArtistPtr )
+    {
+        d->albumArtistPtr = Artist::get( albumArtist(), false );
+        connect( d->albumArtistPtr.data(), SIGNAL( updated() ), SIGNAL( updated() ), Qt::UniqueConnection );
+        connect( d->albumArtistPtr.data(), SIGNAL( coverChanged() ), SIGNAL( coverChanged() ), Qt::UniqueConnection );
+    }
+
+    return d->albumArtistPtr;
+}
+
+
 album_ptr
 Track::albumPtr() const
 {
     Q_D( const Track );
     if ( !d->albumPtr )
     {
-        d->albumPtr = Album::get( artistPtr(), album(), false );
+        if ( albumArtist().isEmpty() )
+            d->albumPtr = Album::get( artistPtr(), album(), false );
+        else
+            d->albumPtr = Album::get( albumArtistPtr(), album(), false );
+
         connect( d->albumPtr.data(), SIGNAL( updated() ), SIGNAL( updated() ), Qt::UniqueConnection );
         connect( d->albumPtr.data(), SIGNAL( coverChanged() ), SIGNAL( coverChanged() ), Qt::UniqueConnection );
     }
@@ -694,6 +714,14 @@ Track::artist() const
 {
     Q_D( const Track );
     return d->trackData->artist();
+}
+
+
+QString
+Track::albumArtist() const
+{
+    Q_D( const Track );
+    return d->albumArtist;
 }
 
 

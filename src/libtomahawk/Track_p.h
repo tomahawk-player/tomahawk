@@ -29,10 +29,11 @@ namespace Tomahawk {
 class TrackPrivate
 {
 public:
-    TrackPrivate( Track* q, const QString& _album, int _duration, const QString& _composer, unsigned int _albumpos, unsigned int _discnumber )
+    TrackPrivate( Track* q, const QString& _album, const QString& _albumArtist, int _duration, const QString& _composer, unsigned int _albumpos, unsigned int _discnumber )
         : q_ptr( q )
         , composer( _composer )
         , album( _album )
+        , albumArtist( _albumArtist )
         , duration( _duration )
         , albumpos( _albumpos )
         , discnumber( _discnumber )
@@ -45,6 +46,7 @@ public:
 private:
     QString composer;
     QString album;
+    QString albumArtist;
     QString composerSortname;
     QString albumSortname;
 
@@ -53,6 +55,7 @@ private:
     uint discnumber;
 
     mutable Tomahawk::artist_ptr artistPtr;
+    mutable Tomahawk::artist_ptr albumArtistPtr;
     mutable Tomahawk::album_ptr albumPtr;
     mutable Tomahawk::artist_ptr composerPtr;
 
