@@ -1,8 +1,8 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
- *   Copyright 2013, Teo Mrnjavac <teo@kde.org>
- *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
+ *   Copyright 2013-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -48,8 +48,8 @@ public:
     enum DescriptionMode
     { Detailed = 0, Short = 1 };
 
-    static track_ptr get( const QString& artist, const QString& track, const QString& album = QString(), int duration = 0, const QString& composer = QString(), unsigned int albumpos = 0, unsigned int discnumber = 0 );
-    static track_ptr get( unsigned int id, const QString& artist, const QString& track, const QString& album, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber );
+    static track_ptr get( const QString& artist, const QString& track, const QString& album = QString(), const QString& albumArtist = QString(), int duration = 0, const QString& composer = QString(), unsigned int albumpos = 0, unsigned int discnumber = 0 );
+    static track_ptr get( unsigned int id, const QString& artist, const QString& track, const QString& album, const QString& albumArtist, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber );
 
     virtual ~Track();
 
@@ -74,6 +74,7 @@ public:
     const QString& trackSortname() const;
 
     QString artist() const;
+    QString albumArtist() const;
     QString track() const;
     QString composer() const;
     QString album() const;
@@ -83,6 +84,7 @@ public:
     unsigned int discnumber() const;
 
     Tomahawk::artist_ptr artistPtr() const;
+    Tomahawk::artist_ptr albumArtistPtr() const;
     Tomahawk::album_ptr albumPtr() const;
     Tomahawk::artist_ptr composerPtr() const;
 
@@ -142,8 +144,8 @@ protected:
 
 private:
     Q_DECLARE_PRIVATE( Track )
-    explicit Track( unsigned int id, const QString& artist, const QString& track, const QString& album, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber );
-    explicit Track( const QString& artist, const QString& track, const QString& album, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber );
+    explicit Track( unsigned int id, const QString& artist, const QString& track, const QString& album, const QString& albumArtist, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber );
+    explicit Track( const QString& artist, const QString& track, const QString& album, const QString& albumArtist, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber );
 
     void init();
 
