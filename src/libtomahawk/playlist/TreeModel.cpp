@@ -33,6 +33,7 @@
 #include "AlbumPlaylistInterface.h"
 #include "PlayableItem.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/Closure.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;
@@ -207,14 +208,12 @@ TreeModel::addAlbums( const QModelIndex& parent, const QList<Tomahawk::album_ptr
 
 
 void
-TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent, bool autoRefetch )
+TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent )
 {
-    Q_UNUSED( autoRefetch );
-
     startLoading();
 
-    connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
-                             SLOT( onTracksFound( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ) );
+    NewClosure( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
+                const_cast<TreeModel*>(this), SLOT( addTracks( Tomahawk::album_ptr, QModelIndex ) ), album, parent );
 
     onTracksAdded( album->tracks( m_mode, m_collection ), parent );
 }
@@ -321,21 +320,6 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QModel
 
     emit endInsertRows();
     emit selectRequest( index( 0, 0, parent ) );
-}
-
-
-void
-TreeModel::onTracksFound( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::ModelMode mode, Tomahawk::collection_ptr collection )
-{
-    if ( mode != m_mode || collection != m_collection )
-        return;
-
-    Tomahawk::Album* album = qobject_cast<Tomahawk::Album*>( sender() );
-
-    tDebug() << Q_FUNC_INFO << "Adding album:" << album->artist()->name() << album->name() << album->id();
-    QModelIndex idx = indexFromAlbum( album->weakRef().toStrongRef() );
-    tDebug() << Q_FUNC_INFO << "Adding tracks" << tracks.count() << "to index:" << idx;
-    onTracksAdded( tracks, idx );
 }
 
 
