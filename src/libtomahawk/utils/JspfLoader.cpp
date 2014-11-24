@@ -178,7 +178,7 @@ JSPFLoader::gotBody()
                 continue;
             }
 
-            track_ptr t = Tomahawk::Track::get( artist, track, album, duration.toInt() / 1000 );
+            track_ptr t = Tomahawk::Track::get( artist, track, album, QString(), duration.toInt() / 1000 );
             query_ptr q = Tomahawk::Query::get( t );
             if ( !q )
                 continue;

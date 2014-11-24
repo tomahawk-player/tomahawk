@@ -942,7 +942,7 @@ AudioEngine::play( const QUrl& url )
     if ( !tags.isEmpty() )
     {
         t = Track::get( tags["artist"].toString(), tags["track"].toString(), tags["album"].toString(),
-                        tags["duration"].toInt(), tags["composer"].toString(),
+                        tags["albumArtist"].toString(), tags["duration"].toInt(), tags["composer"].toString(),
                         tags["albumpos"].toUInt(), tags["discnumber"].toUInt() );
     }
     else
