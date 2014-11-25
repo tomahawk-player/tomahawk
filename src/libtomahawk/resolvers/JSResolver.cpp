@@ -566,7 +566,7 @@ JSResolver::parseResultVariantList( const QVariantList& reslist )
         Tomahawk::track_ptr track = Tomahawk::Track::get( m.value( "artist" ).toString(),
                                                           m.value( "track" ).toString(),
                                                           m.value( "album" ).toString(),
-                                                          m.value( "albumartist" ).toString(),
+                                                          m.value( "albumArtist" ).toString(),
                                                           duration,
                                                           QString(),
                                                           m.value( "albumpos" ).toUInt(),
