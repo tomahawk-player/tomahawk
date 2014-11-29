@@ -24,7 +24,7 @@
 #include "utils/ShortLinkHelper.h"
 #include "utils/TomahawkUtils.h"
 #include "config.h"
-#include "GlobalActionManager.h"
+#include "utils/LinkGenerator.h"
 #include "InfoSystemCache.h"
 #include "PlaylistEntry.h"
 #include "utils/TomahawkUtils.h"
@@ -337,7 +337,7 @@ InfoSystemWorker::getShortUrl( Tomahawk::InfoSystem::InfoPushData pushData )
     if( hash.contains( "album" ) )
         album = hash[ "album" ];
 
-    QUrl longUrl = GlobalActionManager::instance()->openLink( title, artist, album );
+    QUrl longUrl = Utils::LinkGenerator::instance()->openLink( title, artist, album );
 
     Tomahawk::Utils::ShortLinkHelper* slh = new Tomahawk::Utils::ShortLinkHelper();
     connect( slh, SIGNAL( shortLinkReady( QUrl, QUrl, QVariant ) ),
@@ -356,7 +356,7 @@ InfoSystemWorker::shortLinkReady( QUrl longUrl, QUrl shortUrl, QVariant callback
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "long url = " << longUrl << ", shortUrl = " << shortUrl;
     m_shortLinksWaiting--;
     if ( !m_shortLinksWaiting )
-        disconnect( GlobalActionManager::instance(), SIGNAL( shortLinkReady( QUrl, QUrl, QVariant ) ) );
+        disconnect( Utils::LinkGenerator::instance(), SIGNAL( shortLinkReady( QUrl, QUrl, QVariant ) ) );
 
     if ( !callbackObj.isValid() )
     {

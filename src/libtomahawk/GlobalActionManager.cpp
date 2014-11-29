@@ -25,9 +25,7 @@
 
 #include "accounts/AccountManager.h"
 #include "accounts/spotify/SpotifyAccount.h"
-#include "accounts/ResolverAccount.h"
 #include "audio/AudioEngine.h"
-#include "database/LocalCollection.h"
 #include "jobview/ErrorStatusMessage.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/JobStatusView.h"
@@ -40,29 +38,19 @@
 #include "resolvers/ScriptCommand_LookupUrl.h"
 #include "utils/JspfLoader.h"
 #include "utils/Logger.h"
-#include "utils/NetworkAccessManager.h"
-#include "utils/ShortenedLinkParser.h"
-#include "utils/ShortLinkHelper.h"
 #include "utils/SpotifyParser.h"
-#include "utils/TomahawkUtils.h"
 #include "utils/XspfLoader.h"
 #include "utils/XspfGenerator.h"
 #include "viewpages/SearchViewPage.h"
 
-#include "Album.h"
-#include "Artist.h"
 #include "Pipeline.h"
-#include "PlaylistEntry.h"
-#include "SourceList.h"
 #include "TomahawkSettings.h"
 #include "ViewManager.h"
 
-#include <QApplication>
-#include <QClipboard>
-#include <QMessageBox>
-
 #include <echonest/Playlist.h>
 
+#include <QMessageBox>
+#include <QFileInfo>
 
 GlobalActionManager* GlobalActionManager::s_instance = 0;
 
@@ -89,61 +77,6 @@ GlobalActionManager::GlobalActionManager( QObject* parent )
 GlobalActionManager::~GlobalActionManager()
 {
 }
-
-
-QUrl
-GlobalActionManager::openLinkFromQuery( const query_ptr& query ) const
-{
-    QString title = query->track()->track();
-    QString artist = query->track()->artist();
-    QString album = query->track()->album();
-
-    return openLink( title, artist, album );
-}
-
-
-QUrl
-GlobalActionManager::copyOpenLink( const artist_ptr& artist ) const
-{
-    const QUrl link( QString( "%1/artist/%2" ).arg( hostname() ).arg( artist->name() ) );
-
-    QClipboard* cb = QApplication::clipboard();
-    QByteArray data = percentEncode( link );
-    cb->setText( data );
-
-    return link;
-}
-
-
-QUrl
-GlobalActionManager::copyOpenLink( const album_ptr& album ) const
-{
-    const QUrl link = QUrl::fromUserInput( QString( "%1/album/%2/%3" ).arg( hostname() ).arg( album->artist().isNull() ? QString() : album->artist()->name() ).arg( album->name() ) );
-
-    QClipboard* cb = QApplication::clipboard();
-    QByteArray data = percentEncode( link );
-
-    cb->setText( data );
-
-    return link;
-}
-
-
-QUrl
-GlobalActionManager::openLink( const QString& title, const QString& artist, const QString& album ) const
-{
-    QUrl link( QString( "%1/open/track/" ).arg( hostname() ) );
-
-    if ( !artist.isEmpty() )
-       TomahawkUtils::urlAddQueryItem( link, "artist", artist );
-    if ( !title.isEmpty() )
-        TomahawkUtils::urlAddQueryItem( link, "title", title );
-    if ( !album.isEmpty() )
-        TomahawkUtils::urlAddQueryItem( link, "album", album );
-
-    return link;
-}
-
 
 
 void
@@ -252,57 +185,6 @@ GlobalActionManager::openUrl( const QString& url )
 }
 
 
-QString
-GlobalActionManager::copyPlaylistToClipboard( const dynplaylist_ptr& playlist )
-{
-    QUrl link( QString( "%1/%2/create/" ).arg( hostname() ).arg( playlist->mode() == OnDemand ? "station" : "autoplaylist" ) );
-
-    if ( playlist->generator()->type() != "echonest" )
-    {
-        tLog() << "Only echonest generators are supported";
-        return QString();
-    }
-
-    TomahawkUtils::urlAddQueryItem( link, "type", "echonest" );
-    TomahawkUtils::urlAddQueryItem( link, "title", playlist->title() );
-
-    QList< dyncontrol_ptr > controls = playlist->generator()->controls();
-    foreach ( const dyncontrol_ptr& c, controls )
-    {
-        if ( c->selectedType() == "Artist" )
-        {
-            if ( c->match().toInt() == Echonest::DynamicPlaylist::ArtistType )
-                TomahawkUtils::urlAddQueryItem( link, "artist_limitto", c->input() );
-            else
-                TomahawkUtils::urlAddQueryItem( link, "artist", c->input() );
-        }
-        else if ( c->selectedType() == "Artist Description" )
-        {
-            TomahawkUtils::urlAddQueryItem( link, "description", c->input() );
-        }
-        else
-        {
-            QString name = c->selectedType().toLower().replace( " ", "_" );
-            Echonest::DynamicPlaylist::PlaylistParam p = static_cast< Echonest::DynamicPlaylist::PlaylistParam >( c->match().toInt() );
-            // if it is a max, set that too
-            if ( p == Echonest::DynamicPlaylist::MaxTempo || p == Echonest::DynamicPlaylist::MaxDuration || p == Echonest::DynamicPlaylist::MaxLoudness
-               || p == Echonest::DynamicPlaylist::MaxDanceability || p == Echonest::DynamicPlaylist::MaxEnergy || p == Echonest::DynamicPlaylist::ArtistMaxFamiliarity
-               || p == Echonest::DynamicPlaylist::ArtistMaxHotttnesss || p == Echonest::DynamicPlaylist::SongMaxHotttnesss || p == Echonest::DynamicPlaylist::ArtistMaxLatitude
-               || p == Echonest::DynamicPlaylist::ArtistMaxLongitude )
-                name += "_max";
-
-            TomahawkUtils::urlAddQueryItem( link, name, c->input() );
-        }
-    }
-
-    QClipboard* cb = QApplication::clipboard();
-    QByteArray data = percentEncode( link );
-    cb->setText( data );
-
-    return link.toString();
-}
-
-
 void
 GlobalActionManager::savePlaylistToFile( const playlist_ptr& playlist, const QString& filename )
 {
@@ -329,20 +211,6 @@ GlobalActionManager::xspfCreated( const QByteArray& xspf )
     f.close();
 
     sender()->deleteLater();
-}
-
-
-void
-GlobalActionManager::copyToClipboard( const query_ptr& query )
-{
-    m_clipboardLongUrl = openLinkFromQuery( query );
-    Tomahawk::Utils::ShortLinkHelper* slh = new Tomahawk::Utils::ShortLinkHelper();
-    connect( slh, SIGNAL( shortLinkReady( QUrl, QUrl, QVariant ) ),
-             SLOT( copyToClipboardReady( QUrl, QUrl, QVariant ) ) );
-    connect( slh, SIGNAL( done() ),
-             slh, SLOT( deleteLater() ),
-             Qt::QueuedConnection );
-    slh->shortenLink( m_clipboardLongUrl );
 }
 
 
@@ -738,22 +606,6 @@ GlobalActionManager::informationForUrl(const QString& url, const QSharedPointer<
 
     // Could not cast to a known type.
     tLog() << Q_FUNC_INFO << "Can't load parsed information for " << url;
-}
-
-
-void
-GlobalActionManager::copyToClipboardReady( const QUrl& longUrl, const QUrl& shortUrl, const QVariant& )
-{
-    // Copy resulting url to clipboard
-    if ( m_clipboardLongUrl == longUrl )
-    {
-        QClipboard* cb = QApplication::clipboard();
-
-        QByteArray data = TomahawkUtils::percentEncode( shortUrl.isEmpty() ? longUrl : shortUrl );
-        cb->setText( data );
-
-        m_clipboardLongUrl.clear();
-    }
 }
 
 
@@ -1351,11 +1203,4 @@ GlobalActionManager::openSpotifyLink( const QString& link )
     connect( spot, SIGNAL( track( Tomahawk::query_ptr ) ), this, SLOT( handleOpenTrack( Tomahawk::query_ptr ) ) );
 
     return true;
-}
-
-
-QString
-GlobalActionManager::hostname() const
-{
-    return QString( "http://toma.hk" );
 }

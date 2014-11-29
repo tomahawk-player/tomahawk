@@ -19,7 +19,7 @@
 
 #include "TemporaryPageItem.h"
 
-#include "GlobalActionManager.h"
+#include "utils/LinkGenerator.h"
 #include "ViewManager.h"
 #include "viewpages/AlbumViewPage.h"
 #include "viewpages/ArtistViewPage.h"
@@ -139,7 +139,7 @@ TemporaryPageItem::linkActionTriggered( QAction* action )
         {
             ArtistInfoWidget* aPage = dynamic_cast< ArtistInfoWidget* >( m_page );
             Q_ASSERT( aPage );
-            GlobalActionManager::instance()->copyOpenLink( aPage->artist() );
+            Utils::LinkGenerator::instance()->copyOpenLink( aPage->artist() );
 
             break;
         }
@@ -147,7 +147,7 @@ TemporaryPageItem::linkActionTriggered( QAction* action )
         {
             AlbumInfoWidget* aPage = dynamic_cast< AlbumInfoWidget* >( m_page );
             Q_ASSERT( aPage );
-            GlobalActionManager::instance()->copyOpenLink( aPage->album() );
+            Utils::LinkGenerator::instance()->copyOpenLink( aPage->album() );
 
             break;
         }
@@ -155,7 +155,7 @@ TemporaryPageItem::linkActionTriggered( QAction* action )
         {
             TrackInfoWidget* tPage = dynamic_cast< TrackInfoWidget* >( m_page );
             Q_ASSERT( tPage );
-            GlobalActionManager::instance()->copyToClipboard( tPage->query() );
+            Utils::LinkGenerator::instance()->copyToClipboard( tPage->query() );
 
             break;
         }

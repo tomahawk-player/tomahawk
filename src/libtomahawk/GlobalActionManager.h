@@ -39,13 +39,6 @@ public:
     static GlobalActionManager* instance();
     virtual ~GlobalActionManager();
 
-    QUrl openLinkFromQuery( const Tomahawk::query_ptr& query ) const;
-
-    QUrl copyOpenLink( const Tomahawk::artist_ptr& artist ) const;
-    QUrl copyOpenLink( const Tomahawk::album_ptr& album ) const;
-
-    QUrl openLink( const QString& title, const QString& artist, const QString& album ) const;
-
     void installResolverFromFile( const QString& resolverPath );
 
 public slots:
@@ -58,11 +51,6 @@ public slots:
     /// Takes a spotify link and performs the default open action on it
     bool openSpotifyLink( const QString& link );
 
-    /// Creates a link from the requested data and copies it to the clipboard
-    void copyToClipboard( const Tomahawk::query_ptr& query );
-
-
-    QString copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& playlist );
     void savePlaylistToFile( const Tomahawk::playlist_ptr& playlist, const QString& filename );
 
     bool parseTomahawkLink( const QString& link );
@@ -77,7 +65,6 @@ public slots:
 
 private slots:
     void informationForUrl( const QString& url, const QSharedPointer<QObject>& information );
-    void copyToClipboardReady( const QUrl& longUrl, const QUrl& shortUrl, const QVariant& callbackObj );
 
     void showPlaylist();
 
@@ -112,11 +99,8 @@ private:
 
     void createPlaylistFromUrl( const QString& type, const QString& url, const QString& title );
 
-    QString hostname() const;
-
     Tomahawk::playlist_ptr m_toShow;
     Tomahawk::query_ptr m_waitingToPlay;
-    QUrl m_clipboardLongUrl;
     QString m_queuedUrl;
 
     static GlobalActionManager* s_instance;

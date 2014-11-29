@@ -25,7 +25,7 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
-#include "GlobalActionManager.h"
+#include "utils/LinkGenerator.h"
 #include "Source.h"
 #include "Track.h"
 
@@ -180,7 +180,7 @@ SocialWidget::setQuery( const Tomahawk::query_ptr& query )
     onShortLinkReady( QString(), QString(), QVariant() );
     onChanged();
 
-    QUrl longUrl = GlobalActionManager::instance()->openLinkFromQuery( query );
+    QUrl longUrl = Tomahawk::Utils::LinkGenerator::instance()->openLinkFromQuery( query );
     m_slh.shortenLink( longUrl );
 }
 

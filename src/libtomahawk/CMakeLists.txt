@@ -117,6 +117,7 @@ set( libGuiSources
     utils/NetworkProxyFactory.cpp
     utils/NetworkAccessManager.cpp
     utils/ShortLinkHelper.cpp
+    utils/LinkGenerator.cpp
 
     viewpages/SearchViewPage.cpp
     viewpages/SourceViewPage.cpp

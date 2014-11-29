@@ -20,7 +20,7 @@
 
 #include "XmppInfoPlugin.h"
 
-#include "GlobalActionManager.h"
+#include "utils/LinkGenerator.h"
 #include "sip/XmppSip.h"
 #include "utils/Logger.h"
 #include "TomahawkSettings.h"
@@ -122,7 +122,7 @@ Tomahawk::InfoSystem::XmppInfoPlugin::audioStarted( const Tomahawk::InfoSystem::
     if ( pushInfoPair.first.contains( "shorturl" ) )
         url = pushInfoPair.first[ "shorturl" ].toUrl();
     else
-        url = GlobalActionManager::instance()->openLink( info.value( "title" ), info.value( "artist" ), info.value( "album" ) );
+        url = Utils::LinkGenerator::instance()->openLink( info.value( "title" ), info.value( "artist" ), info.value( "album" ) );
 
     emit publishTune( url, info );
 }

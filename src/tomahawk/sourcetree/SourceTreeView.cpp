@@ -38,6 +38,7 @@
 #include "database/Database.h"
 #include "LatchManager.h"
 #include "GlobalActionManager.h"
+#include "utils/LinkGenerator.h"
 #include "utils/Closure.h"
 #include "utils/Logger.h"
 #include "utils/ShortLinkHelper.h"
@@ -502,7 +503,7 @@ SourceTreeView::copyPlaylistLink()
     {
         DynamicPlaylistItem* item = itemFromIndex< DynamicPlaylistItem >( m_contextMenuIndex );
         dynplaylist_ptr playlist = item->dynPlaylist();
-        GlobalActionManager::instance()->copyPlaylistToClipboard( playlist );
+        Utils::LinkGenerator::instance()->copyPlaylistToClipboard( playlist );
     }
     else if ( type == SourcesModel::StaticPlaylist )
     {
@@ -562,7 +563,7 @@ SourceTreeView::addToLocal()
 
         // copy to a link and then generate a new playlist from that
         // this way we cheaply regenerate the needed controls
-        QString link = GlobalActionManager::instance()->copyPlaylistToClipboard( playlist );
+        QString link = Utils::LinkGenerator::instance()->copyPlaylistToClipboard( playlist );
         GlobalActionManager::instance()->parseTomahawkLink( link );
     }
     else if ( type == SourcesModel::StaticPlaylist )

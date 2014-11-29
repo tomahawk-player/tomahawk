@@ -24,7 +24,7 @@
 #include "playlist/TrackView.h"
 #include "playlist/PlayableModel.h"
 #include "filemetadata/MetadataEditor.h"
-#include "GlobalActionManager.h"
+#include "utils/LinkGenerator.h"
 #include "ViewManager.h"
 #include "Query.h"
 #include "Result.h"
@@ -421,15 +421,15 @@ ContextMenu::copyLink()
 {
     if ( m_queries.count() )
     {
-        GlobalActionManager::instance()->copyToClipboard( m_queries.first() );
+        Utils::LinkGenerator::instance()->copyToClipboard( m_queries.first() );
     }
     else if ( m_albums.count() )
     {
-        GlobalActionManager::instance()->copyOpenLink( m_albums.first() );
+        Utils::LinkGenerator::instance()->copyOpenLink( m_albums.first() );
     }
     else if ( m_artists.count() )
     {
-        GlobalActionManager::instance()->copyOpenLink( m_artists.first() );
+        Utils::LinkGenerator::instance()->copyOpenLink( m_artists.first() );
     }
 }
 
