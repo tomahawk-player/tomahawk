@@ -63,7 +63,7 @@ JSResolver::JSResolver( const QString& accountId, const QString& scriptPath, con
     Q_D( JSResolver );
     tLog() << Q_FUNC_INFO << "Loading JS resolver:" << scriptPath;
 
-    d->engine = new ScriptEngine( this );
+    d->scriptPlugin = new JSPlugin();
     d->name = QFileInfo( filePath() ).baseName();
 
     // set the icon, if we launch properly we'll get the icon the resolver reports
@@ -87,7 +87,7 @@ JSResolver::~JSResolver()
     if ( !d->stopped )
         stop();
 
-    delete d->engine;
+    delete d->scriptPlugin;
 }
 
 
@@ -205,20 +205,17 @@ JSResolver::init()
     }
     const QByteArray scriptContents = scriptFile.readAll();
 
-    d->engine->mainFrame()->setHtml( "<html><body></body></html>", QUrl( "file:///invalid/file/for/security/policy" ) );
-
-
     // tomahawk.js
     {
         // add c++ part of tomahawk javascript library
-        d->engine->mainFrame()->addToJavaScriptWindowObject( "Tomahawk", d->resolverHelper );
+        d->scriptPlugin->addToJavaScriptWindowObject( "Tomahawk", d->resolverHelper );
 
         // load es6-promises shim
-        loadScript( RESPATH "js/es6-promise-2.0.0.min.js" );
+        d->scriptPlugin->loadScript( RESPATH "js/es6-promise-2.0.0.min.js" );
 
 
         // Load CrytoJS core
-        loadScript( RESPATH "js/cryptojs-core.js" );
+        d->scriptPlugin->loadScript( RESPATH "js/cryptojs-core.js" );
 
         // Load CryptoJS modules
         QStringList jsfiles;
@@ -226,29 +223,30 @@ JSResolver::init()
         QDir cryptojs( RESPATH "js/cryptojs" );
         foreach ( QString jsfile, cryptojs.entryList( jsfiles ) )
         {
-            loadScript( RESPATH "js/cryptojs/" +  jsfile );
+            d->scriptPlugin->loadScript( RESPATH "js/cryptojs/" +  jsfile );
         }
 
         // Load tomahawk.js
-        loadScript( RESPATH "js/tomahawk.js" );
+        d->scriptPlugin->loadScript( RESPATH "js/tomahawk.js" );
     }
 
     // tomahawk-infosystem.js
     {
         // add c++ part of tomahawk infosystem bindings as Tomahawk.InfoSystem
-        d->engine->mainFrame()->addToJavaScriptWindowObject( "_TomahawkInfoSystem", d->infoSystemHelper );
-        d->engine->mainFrame()->evaluateJavaScript( "Tomahawk.InfoSystem = _TomahawkInfoSystem;" );
+        d->infoSystemHelper = new JSInfoSystemHelper( d->scriptPlugin );
+        d->scriptPlugin->addToJavaScriptWindowObject( "_TomahawkInfoSystem", d->infoSystemHelper );
+        d->scriptPlugin->evaluateJavaScript( "Tomahawk.InfoSystem = _TomahawkInfoSystem;" );
 
         // add deps
-        loadScripts( d->infoSystemHelper->requiredScriptPaths() );
+        d->scriptPlugin->loadScripts( d->infoSystemHelper->requiredScriptPaths() );
     }
 
     // add resolver dependencies, if any
-    loadScripts( d->requiredScriptPaths );
+    d->scriptPlugin->loadScripts( d->requiredScriptPaths );
 
 
     // add resolver
-    loadScript( filePath() );
+    d->scriptPlugin->loadScript( filePath() );
 
     // init resolver
     resolverInit();
@@ -327,7 +325,7 @@ JSResolver::artists( const Tomahawk::collection_ptr& collection )
     }
 
     QString eval = QString( "artists( '%1' )" )
-                   .arg( escape( collection->name() ) );
+                   .arg( JSPlugin::escape( collection->name() ) );
 
     QVariantMap m = callOnResolver( eval ).toMap();
     if ( m.isEmpty() )
@@ -363,8 +361,8 @@ JSResolver::albums( const Tomahawk::collection_ptr& collection, const Tomahawk::
     }
 
     QString eval = QString( "albums( '%1', '%2' )" )
-                   .arg( escape( collection->name() ) )
-                   .arg( escape( artist->name() ) );
+                   .arg( JSPlugin::escape( collection->name() ) )
+                   .arg( JSPlugin::escape( artist->name() ) );
 
     QVariantMap m = callOnResolver( eval ).toMap();
     if ( m.isEmpty() )
@@ -400,9 +398,9 @@ JSResolver::tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::
     }
 
     QString eval = QString( "tracks( '%1', '%2', '%3' )" )
-                   .arg( escape( collection->name() ) )
-                   .arg( escape( album->artist()->name() ) )
-                   .arg( escape( album->name() ) );
+                   .arg( JSPlugin::escape( collection->name() ) )
+                   .arg( JSPlugin::escape( album->artist()->name() ) )
+                   .arg( JSPlugin::escape( album->name() ) );
 
     QVariantMap m = callOnResolver( eval ).toMap();
     if ( m.isEmpty() )
@@ -433,7 +431,7 @@ JSResolver::canParseUrl( const QString& url, UrlType type )
     if ( d->capabilities.testFlag( UrlLookup ) )
     {
         QString eval = QString( "canParseUrl( '%1', %2 )" )
-                       .arg( escape( QString( url ) ) )
+                       .arg( JSPlugin::escape( QString( url ) ) )
                        .arg( (int) type );
         return callOnResolver( eval ).toBool();
     }
@@ -464,7 +462,7 @@ JSResolver::lookupUrl( const QString& url )
     }
 
     QString eval = QString( "lookupUrl( '%1' )" )
-                   .arg( escape( QString( url ) ) );
+                   .arg( JSPlugin::escape( QString( url ) ) );
 
     QVariantMap m = callOnResolver( eval ).toMap();
     if ( m.isEmpty() )
@@ -480,16 +478,14 @@ JSResolver::lookupUrl( const QString& url )
 
 
 QVariant
-JSResolver::evaluateJavaScriptInternal(const QString& scriptSource)
+JSPlugin::evaluateJavaScriptInternal( const QString& scriptSource )
 {
-    Q_D( JSResolver );
-
-    return d->engine->mainFrame()->evaluateJavaScript( scriptSource );
+    return m_engine->mainFrame()->evaluateJavaScript( scriptSource );
 }
 
 
 void
-JSResolver::evaluateJavaScript( const QString& scriptSource )
+JSPlugin::evaluateJavaScript( const QString& scriptSource )
 {
     if ( QThread::currentThread() != thread() )
     {
@@ -502,7 +498,7 @@ JSResolver::evaluateJavaScript( const QString& scriptSource )
 
 
 QVariant
-JSResolver::evaluateJavaScriptWithResult( const QString& scriptSource )
+JSPlugin::evaluateJavaScriptWithResult( const QString& scriptSource )
 {
     Q_ASSERT( QThread::currentThread() == thread() );
 
@@ -532,16 +528,16 @@ JSResolver::resolve( const Tomahawk::query_ptr& query )
     if ( !query->isFullTextQuery() )
     {
         eval = QString( "resolve( '%1', '%2', '%3', '%4' )" )
-                  .arg( escape( query->id() ) )
-                  .arg( escape( query->queryTrack()->artist() ) )
-                  .arg( escape( query->queryTrack()->album() ) )
-                  .arg( escape( query->queryTrack()->track() ) );
+                  .arg( JSPlugin::escape( query->id() ) )
+                  .arg( JSPlugin::escape( query->queryTrack()->artist() ) )
+                  .arg( JSPlugin::escape( query->queryTrack()->album() ) )
+                  .arg( JSPlugin::escape( query->queryTrack()->track() ) );
     }
     else
     {
         eval = QString( "search( '%1', '%2' )" )
-                  .arg( escape( query->id() ) )
-                  .arg( escape( query->fullTextQuery() ) );
+                  .arg( JSPlugin::escape( query->id() ) )
+                  .arg( JSPlugin::escape( query->fullTextQuery() ) );
     }
 
     QVariantMap m = callOnResolver( eval ).toMap();
@@ -964,10 +960,8 @@ JSResolver::resolverCollections()
 
 
 void
-JSResolver::loadScript( const QString& path )
+JSPlugin::loadScript( const QString& path )
 {
-    Q_D( JSResolver );
-
     QFile file( path );
 
     if ( !file.open( QIODevice::ReadOnly ) )
@@ -979,15 +973,15 @@ JSResolver::loadScript( const QString& path )
 
     const QByteArray contents = file.readAll();
 
-    d->engine->setScriptPath( path );
-    d->engine->mainFrame()->evaluateJavaScript( contents );
+    m_engine->setScriptPath( path );
+    m_engine->mainFrame()->evaluateJavaScript( contents );
 
     file.close();
 }
 
 
 void
-JSResolver::loadScripts( const QStringList& paths )
+JSPlugin::loadScripts( const QStringList& paths )
 {
     foreach ( const QString& path, paths )
     {
@@ -1003,7 +997,9 @@ JSResolver::callOnResolver( const QString& scriptSource )
 
     QString propertyName = scriptSource.split('(').first();
 
-    return d->engine->mainFrame()->evaluateJavaScript( QString(
+    tLog() << "JAVASCRIPT: run: " << scriptSource;
+
+    return d->scriptPlugin->evaluateJavaScriptWithResult( QString(
         "if(Tomahawk.resolver.instance['_adapter_%1']) {"
         "    Tomahawk.resolver.instance._adapter_%2;"
         "} else {"
@@ -1014,7 +1010,7 @@ JSResolver::callOnResolver( const QString& scriptSource )
 
 
 QString
-JSResolver::escape( const QString& source )
+JSPlugin::JSPlugin::escape( const QString& source )
 {
     QString copy = source;
     return copy.replace( "\\", "\\\\" ).replace( "'", "\\'" );

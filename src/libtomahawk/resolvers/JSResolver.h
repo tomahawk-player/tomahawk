@@ -27,6 +27,10 @@
 #include "ExternalResolverGui.h"
 #include "Typedefs.h"
 
+
+#include <memory> // unique_ptr
+#include "ScriptEngine.h" // hack, also should be renamed to JSEngine
+
 namespace Tomahawk
 {
 
@@ -34,6 +38,54 @@ class JSInfoPlugin;
 class JSResolverHelper;
 class JSResolverPrivate;
 class ScriptEngine;
+class ScriptJob;
+class ScriptObject;
+class ScriptPlugin;
+
+class DLLEXPORT ScriptPlugin
+{
+public:
+    virtual ~ScriptPlugin() {}
+};
+
+class DLLEXPORT JSPlugin : public QObject, public ScriptPlugin
+{
+    Q_OBJECT
+
+public:
+    JSPlugin()
+       : m_engine( new ScriptEngine( this ) )
+    {
+    }
+
+    /**
+     *  Evaluate JavaScript on the WebKit thread
+     */
+    Q_INVOKABLE void evaluateJavaScript( const QString& scriptSource );
+
+    /**
+     * This method must be called from the WebKit thread
+     */
+    QVariant evaluateJavaScriptWithResult( const QString& scriptSource );
+
+    /**
+     * Escape \ and ' in strings so they are safe to use in JavaScript
+     */
+    static QString escape( const QString& source );
+
+
+    void loadScript( const QString& path );
+    void loadScripts( const QStringList& paths );
+    void addToJavaScriptWindowObject( const QString& name, QObject* object );
+private:
+    /**
+     * Wrap the pure evaluateJavaScript call in here, while the threadings guards are in public methods
+     */
+    QVariant evaluateJavaScriptInternal( const QString& scriptSource );
+
+    std::unique_ptr<ScriptEngine> m_engine;
+
+};
 
 class DLLEXPORT JSResolver : public Tomahawk::ExternalResolverGui
 {
@@ -64,20 +116,6 @@ public:
 
     bool canParseUrl( const QString& url, UrlType type ) override;
 
-    /**
-     *  Evaluate JavaScript on the WebKit thread
-     */
-    Q_INVOKABLE void evaluateJavaScript( const QString& scriptSource );
-
-    /**
-     * This method must be called from the WebKit thread
-     */
-    QVariant evaluateJavaScriptWithResult( const QString& scriptSource );
-
-    /**
-     * Escape \ and ' in strings so they are safe to use in JavaScript
-     */
-    static QString escape( const QString& source );
 
 public slots:
     void resolve( const Tomahawk::query_ptr& query ) override;
@@ -110,13 +148,6 @@ private:
     void fillDataInWidgets( const QVariantMap& data );
     void onCapabilitiesChanged( Capabilities capabilities );
     void loadCollections();
-    void loadScript( const QString& path );
-    void loadScripts( const QStringList& paths );
-
-    /**
-     * Wrap the pure evaluateJavaScript call in here, while the threadings guards are in public methods
-     */
-    QVariant evaluateJavaScriptInternal( const QString& scriptSource );
 
     // encapsulate javascript calls
     QVariantMap resolverSettings();

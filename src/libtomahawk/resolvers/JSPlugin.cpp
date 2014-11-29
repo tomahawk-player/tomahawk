@@ -16,34 +16,14 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TOMAHAWK_JSINFOSYSTEMHELPER_P_H
-#define TOMAHAWK_JSINFOSYSTEMHELPER_P_H
-
 #include "JSResolver.h"
-#include "JSInfoSystemHelper.h"
+#include <QWebFrame>
 
-namespace Tomahawk
+
+using namespace Tomahawk;
+
+void
+JSPlugin::addToJavaScriptWindowObject( const QString& name, QObject* object )
 {
-
-class JSInfoSystemHelperPrivate
-{
-    friend class JSInfoSystemHelper;
-public:
-    JSInfoSystemHelperPrivate( JSInfoSystemHelper* q, JSPlugin* scriptPlugin )
-        : q_ptr ( q )
-        , scriptPlugin ( scriptPlugin )
-    {
-    }
-
-    JSInfoSystemHelper* q_ptr;
-    Q_DECLARE_PUBLIC ( JSInfoSystemHelper )
-
-private:
-    JSPlugin* scriptPlugin;
-    QMap<int,JSInfoPlugin*> infoPlugins;
-
+    m_engine->mainFrame()->addToJavaScriptWindowObject( name, object );
 };
-
-} // ns: Tomahawk
-
-#endif // TOMAHAWK_JSINFOSYSTEMHELPER_P_H

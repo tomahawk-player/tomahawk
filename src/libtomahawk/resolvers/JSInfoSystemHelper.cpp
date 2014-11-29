@@ -23,7 +23,7 @@
 
 using namespace Tomahawk;
 
-JSInfoSystemHelper::JSInfoSystemHelper( JSResolver* parent )
+JSInfoSystemHelper::JSInfoSystemHelper( JSPlugin* parent )
     : QObject( parent )
     , d_ptr( new JSInfoSystemHelperPrivate( this, parent ) )
 {
@@ -48,7 +48,7 @@ JSInfoSystemHelper::nativeAddInfoPlugin( int id )
     Q_D( JSInfoSystemHelper );
 
     // create infoplugin instance
-    JSInfoPlugin* jsInfoPlugin = new JSInfoPlugin( id, d->resolver );
+    JSInfoPlugin* jsInfoPlugin = new JSInfoPlugin( id, d->scriptPlugin );
     Tomahawk::InfoSystem::InfoPluginPtr infoPlugin( jsInfoPlugin );
 
     // move it to infosystem thread

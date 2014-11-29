@@ -35,7 +35,7 @@
 
 using namespace Tomahawk;
 
-ScriptEngine::ScriptEngine( JSResolver* parent )
+ScriptEngine::ScriptEngine( JSPlugin* parent )
     : QWebPage( (QObject*) parent )
     , m_parent( parent )
 {
@@ -53,6 +53,8 @@ ScriptEngine::ScriptEngine( JSResolver* parent )
                .arg( TOMAHAWK_VERSION )
                , "" );
     tLog( LOGVERBOSE ) << "JSResolver Using header" << m_header;
+
+    mainFrame()->setHtml( "<html><body></body></html>", QUrl( "file:///invalid/file/for/security/policy" ) );
 
     connect( networkAccessManager(), SIGNAL( sslErrors( QNetworkReply*, QList<QSslError> ) ),
                                        SLOT( sslErrorHandler( QNetworkReply*, QList<QSslError> ) ) );

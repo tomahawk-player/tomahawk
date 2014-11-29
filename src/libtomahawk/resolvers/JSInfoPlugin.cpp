@@ -26,7 +26,7 @@
 
 using namespace Tomahawk;
 
-JSInfoPlugin::JSInfoPlugin( int id, JSResolver *resolver )
+JSInfoPlugin::JSInfoPlugin( int id, JSPlugin *resolver )
     : d_ptr( new JSInfoPluginPrivate( this, id, resolver ) )
 {
     Q_ASSERT( resolver );
@@ -35,7 +35,7 @@ JSInfoPlugin::JSInfoPlugin( int id, JSResolver *resolver )
     m_supportedGetTypes = parseSupportedTypes( callMethodOnInfoPluginWithResult( "supportedGetTypes" ) );
     m_supportedPushTypes = parseSupportedTypes( callMethodOnInfoPluginWithResult( "supportedPushTypes" ) );
 
-    setFriendlyName( QString( "JSInfoPlugin: %1" ).arg( resolver->name() ) );
+    setFriendlyName( QString( "JSInfoPlugin: %1" ) ); // TODO: .arg( resolver->name() )
 }
 
 
@@ -70,8 +70,6 @@ JSInfoPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 void
 JSInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 {
-    Q_D( JSInfoPlugin );
-
     QString eval = QString( "pushInfo({ type: %1, pushFlags: %2, input: %3, additionalInput: %4})" )
         .arg( pushData.type )
         .arg( pushData.pushFlags )
@@ -239,7 +237,7 @@ JSInfoPlugin::serializeQVariantMap( const QVariantMap& map )
 
     QByteArray serialized = TomahawkUtils::toJson( localMap );
 
-    return QString( "JSON.parse('%1')" ).arg( JSResolver::escape( QString::fromUtf8( serialized ) ) );
+    return QString( "JSON.parse('%1')" ).arg( JSPlugin::escape( QString::fromUtf8( serialized ) ) );
 }
 
 

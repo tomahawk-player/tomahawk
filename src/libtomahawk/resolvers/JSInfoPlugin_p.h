@@ -28,7 +28,7 @@ class JSInfoPluginPrivate
 {
     friend class JSInfoPlugin;
 public:
-    JSInfoPluginPrivate( JSInfoPlugin* q, int id, JSResolver* resolver )
+    JSInfoPluginPrivate( JSInfoPlugin* q, int id, JSPlugin* resolver )
         : q_ptr ( q )
         , id( id )
         , resolver( resolver )
@@ -39,7 +39,8 @@ public:
 
 private:
     int id;
-    JSResolver* resolver;
+    // HACK: JSInfoPlugin needs to be refactored to track a ScriptObject
+    JSPlugin* resolver;
 
     QMap< int, Tomahawk::InfoSystem::InfoRequestData > requestDataCache;
     QMap< int, Tomahawk::InfoSystem::InfoStringHash > criteriaCache;

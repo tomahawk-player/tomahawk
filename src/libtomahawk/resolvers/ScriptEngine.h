@@ -32,14 +32,14 @@ class QNetworkReply;
 namespace Tomahawk
 {
 
-class JSResolver;
+class JSPlugin;
 
 class DLLEXPORT ScriptEngine : public QWebPage
 {
 Q_OBJECT
 
 public:
-    explicit ScriptEngine( JSResolver* parent );
+    explicit ScriptEngine( JSPlugin* parent );
 
     QString userAgentForUrl( const QUrl& url ) const;
     void setScriptPath( const QString& scriptPath );
@@ -54,7 +54,7 @@ private slots:
     void sslErrorHandler( QNetworkReply* qnr, const QList<QSslError>& errlist );
 
 private:
-    JSResolver* m_parent;
+    JSPlugin* m_parent;
     QString m_scriptPath;
     QString m_header;
 };

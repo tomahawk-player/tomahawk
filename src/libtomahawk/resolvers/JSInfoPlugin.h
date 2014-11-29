@@ -27,7 +27,7 @@
 namespace Tomahawk
 {
 
-class JSResolver;
+class JSPlugin;
 class JSInfoPluginPrivate;
 
 
@@ -39,7 +39,7 @@ public:
     /**
      * @param id unique identifier to identify an infoplugin in its scope
      */
-    JSInfoPlugin( int id, JSResolver* resolver );
+    JSInfoPlugin( int id, JSPlugin* resolver );
     virtual ~JSInfoPlugin();
 
 

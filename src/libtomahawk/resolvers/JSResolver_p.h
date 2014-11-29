@@ -43,7 +43,7 @@ public:
         , error( Tomahawk::ExternalResolver::NoError )
         , resolverHelper( new JSResolverHelper( scriptPath, q ) )
         // TODO: be smarter about this, only instantiate this if the resolver supports infoplugins
-        , infoSystemHelper( new JSInfoSystemHelper( q ) )
+        , infoSystemHelper( nullptr )
         , requiredScriptPaths( additionalScriptPaths )
     {
     }
@@ -51,8 +51,6 @@ public:
     Q_DECLARE_PUBLIC ( JSResolver )
 
 private:
-    ScriptEngine* engine;
-
     QString accountId;
     QString name;
     QPixmap icon;
@@ -69,6 +67,8 @@ private:
     QPointer< AccountConfigWidget > configWidget;
     QList< QVariant > dataWidgets;
     QStringList requiredScriptPaths;
+
+    JSPlugin* scriptPlugin;
 };
 
 } // ns: Tomahawk
