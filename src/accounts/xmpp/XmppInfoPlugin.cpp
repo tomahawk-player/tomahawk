@@ -118,13 +118,17 @@ Tomahawk::InfoSystem::XmppInfoPlugin::audioStarted( const Tomahawk::InfoSystem::
 
     Tomahawk::InfoSystem::InfoStringHash info = map[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
 
-    QUrl url;
-    if ( pushInfoPair.first.contains( "shorturl" ) )
-        url = pushInfoPair.first[ "shorturl" ].toUrl();
-    else
-        url = Utils::LinkGenerator::instance()->openLink( info.value( "title" ), info.value( "artist" ), info.value( "album" ) );
+    ScriptJob* job = Utils::LinkGenerator::instance()->openLink( info.value( "title" ), info.value( "artist" ), info.value( "album" ) );
+    connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onQueryLinkReady( QVariantMap ) ) );
+    job->setProperty( "infoStringHash", QVariant::fromValue( info ) );
+    job->start();
+}
 
-    emit publishTune( url, info );
+
+void
+Tomahawk::InfoSystem::XmppInfoPlugin::onQueryLinkReady( const QVariantMap& data )
+{
+    emit publishTune( data[ "url" ].toUrl(), sender()->property("infoStringHash").value< Tomahawk::InfoSystem::InfoStringHash >() );
 }
 
 

@@ -53,6 +53,7 @@ namespace Tomahawk {
             void audioStarted( const Tomahawk::InfoSystem::PushInfoPair& pushInfoPair );
             void audioStopped();
             void audioPaused();
+            void onQueryLinkReady( const QVariantMap& data );
 
         private:
             QPointer< XmppSipPlugin > m_sipPlugin;

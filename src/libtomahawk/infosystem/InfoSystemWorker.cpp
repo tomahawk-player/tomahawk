@@ -291,91 +291,13 @@ InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 void
 InfoSystemWorker::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 {
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "type is " << pushData.type;
-
-    if ( pushData.pushFlags != PushNoFlag )
-    {
-        if ( pushData.pushFlags & PushShortUrlFlag )
-        {
-            pushData.pushFlags = Tomahawk::InfoSystem::PushInfoFlags( pushData.pushFlags & ~PushShortUrlFlag );
-            QMetaObject::invokeMethod( this, "getShortUrl", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPushData, pushData ) );
-            return;
-        }
-    }
-
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "number of matching plugins: " << m_infoPushMap[ pushData.type ].size();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "type is " << pushData.type << "number of matching plugins: " << m_infoPushMap[ pushData.type ].size();
 
     Q_FOREACH( InfoPluginPtr ptr, m_infoPushMap[ pushData.type ] )
     {
         if( ptr )
             QMetaObject::invokeMethod( ptr.data(), "pushInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPushData, pushData ) );
     }
-}
-
-
-void
-InfoSystemWorker::getShortUrl( Tomahawk::InfoSystem::InfoPushData pushData )
-{
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "type is " << pushData.type;
-    if ( !pushData.infoPair.second.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
-    {
-        QMetaObject::invokeMethod( this, "pushInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPushData, pushData ) );
-        return;
-    }
-
-    Tomahawk::InfoSystem::InfoStringHash hash = pushData.infoPair.second.value< Tomahawk::InfoSystem::InfoStringHash >();
-
-    if ( hash.isEmpty() || !hash.contains( "title" ) || !hash.contains( "artist" ) )
-    {
-        QMetaObject::invokeMethod( this, "pushInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPushData, pushData ) );
-        return;
-    }
-
-    QString title, artist, album;
-    title = hash[ "title" ];
-    artist = hash[ "artist" ];
-    if( hash.contains( "album" ) )
-        album = hash[ "album" ];
-
-    QUrl longUrl = Utils::LinkGenerator::instance()->openLink( title, artist, album );
-
-    Tomahawk::Utils::ShortLinkHelper* slh = new Tomahawk::Utils::ShortLinkHelper();
-    connect( slh, SIGNAL( shortLinkReady( QUrl, QUrl, QVariant ) ),
-             SLOT( shortLinkReady( QUrl, QUrl, QVariant ) ) );
-    connect( slh, SIGNAL( done() ),
-             slh, SLOT( deleteLater() ),
-             Qt::QueuedConnection );
-    slh->shortenLink( longUrl, QVariant::fromValue< Tomahawk::InfoSystem::InfoPushData >( pushData ) );
-    m_shortLinksWaiting++;
-}
-
-
-void
-InfoSystemWorker::shortLinkReady( QUrl longUrl, QUrl shortUrl, QVariant callbackObj )
-{
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "long url = " << longUrl << ", shortUrl = " << shortUrl;
-    m_shortLinksWaiting--;
-    if ( !m_shortLinksWaiting )
-        disconnect( Utils::LinkGenerator::instance(), SIGNAL( shortLinkReady( QUrl, QUrl, QVariant ) ) );
-
-    if ( !callbackObj.isValid() )
-    {
-        tDebug() << Q_FUNC_INFO << "callback object was not valid, cannot continue";
-        return;
-    }
-
-    Tomahawk::InfoSystem::InfoPushData pushData = callbackObj.value< Tomahawk::InfoSystem::InfoPushData >();
-
-    if ( !shortUrl.isEmpty() && longUrl != shortUrl )
-    {
-        QVariantMap flagProps = pushData.infoPair.first;
-        flagProps[ "shorturl" ] = shortUrl;
-        pushData.infoPair.first = flagProps;
-    }
-
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "pushInfoPair first is: " << pushData.infoPair.first.keys();
-
-    QMetaObject::invokeMethod( this, "pushInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoPushData, pushData ) );
 }
 
 

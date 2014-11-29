@@ -180,8 +180,18 @@ SocialWidget::setQuery( const Tomahawk::query_ptr& query )
     onShortLinkReady( QString(), QString(), QVariant() );
     onChanged();
 
-    QUrl longUrl = Tomahawk::Utils::LinkGenerator::instance()->openLinkFromQuery( query );
-    m_slh.shortenLink( longUrl );
+    Tomahawk::ScriptJob* job = Tomahawk::Utils::LinkGenerator::instance()->openLink( query );
+    connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onQueryLinkReady( QVariantMap ) ) );
+    job->start();
+}
+
+
+void
+SocialWidget::onQueryLinkReady( const QVariantMap& data )
+{
+    m_slh.shortenLink( data[ "url" ].toUrl() );
+
+    sender()->deleteLater();
 }
 
 

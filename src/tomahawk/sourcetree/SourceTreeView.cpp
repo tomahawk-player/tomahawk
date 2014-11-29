@@ -45,6 +45,7 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "widgets/SourceTreePopupDialog.h"
 #include "PlaylistEntry.h"
+#include "resolvers/ScriptJob.h"
 
 #include "../../viewpages/dashboard/Dashboard.h"
 #include "../../viewpages/whatsnew_0_8/WhatsNew_0_8.h"
@@ -503,7 +504,7 @@ SourceTreeView::copyPlaylistLink()
     {
         DynamicPlaylistItem* item = itemFromIndex< DynamicPlaylistItem >( m_contextMenuIndex );
         dynplaylist_ptr playlist = item->dynPlaylist();
-        Utils::LinkGenerator::instance()->copyPlaylistToClipboard( playlist );
+        Utils::LinkGenerator::instance()->copyOpenLink( playlist );
     }
     else if ( type == SourcesModel::StaticPlaylist )
     {
@@ -563,8 +564,14 @@ SourceTreeView::addToLocal()
 
         // copy to a link and then generate a new playlist from that
         // this way we cheaply regenerate the needed controls
-        QString link = Utils::LinkGenerator::instance()->copyPlaylistToClipboard( playlist );
-        GlobalActionManager::instance()->parseTomahawkLink( link );
+        ScriptJob* job = Utils::LinkGenerator::instance()->openLink( playlist );
+        if( !job )
+        {
+            // No supported generator
+            return;
+        }
+        connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onPlaylistLinkReady( QVariantMap ) ) );
+        job->start();
     }
     else if ( type == SourcesModel::StaticPlaylist )
     {
@@ -578,6 +585,15 @@ SourceTreeView::addToLocal()
 
         playlist_ptr newpl = Playlist::create( SourceList::instance()->getLocal(), uuid(), playlist->title(), playlist->info(), playlist->creator(), playlist->shared(), queries );
     }
+}
+
+
+void
+SourceTreeView::onPlaylistLinkReady(const QVariantMap& data)
+{
+    GlobalActionManager::instance()->parseTomahawkLink( data[ "url" ].toString() );
+
+    sender()->deleteLater();
 }
 
 

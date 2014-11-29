@@ -21,13 +21,14 @@
 #ifndef TOMAHAWK_UTILS_LINKGENERATOR_H
 #define TOMAHAWK_UTILS_LINKGENERATOR_H
 
-#include "DllMacro.h"
-#include "Typedefs.h"
+#include "../resolvers/ScriptJob.h"
+
+#include "../DllMacro.h"
+#include "../Typedefs.h"
 
 namespace Tomahawk {
-namespace Utils {
 
-class ShortLinkHelperPrivate;
+namespace Utils {
 
 class DLLEXPORT LinkGenerator : public QObject
 {
@@ -36,22 +37,34 @@ public:
     static LinkGenerator* instance();
     virtual ~LinkGenerator();
 
-    QUrl openLinkFromQuery( const Tomahawk::query_ptr& query ) const;
+    ScriptJob* openLink( const QString& title, const QString& artist, const QString& album ) const;
+    ScriptJob* openLink( const Tomahawk::query_ptr& query ) const;
+    ScriptJob* openLink( const Tomahawk::artist_ptr& artist ) const;
+    ScriptJob* openLink( const Tomahawk::album_ptr& album ) const;
+    ScriptJob* openLink( const Tomahawk::dynplaylist_ptr& playlist ) const;
 
-    QUrl copyOpenLink( const Tomahawk::artist_ptr& artist ) const;
-    QUrl copyOpenLink( const Tomahawk::album_ptr& album ) const;
+    // Fire and forget
 
-    QUrl openLink( const QString& title, const QString& artist, const QString& album ) const;
+    // the query link is shortened automatically
+    void copyOpenLink( const query_ptr& query ) const
+    {
+        ScriptJob* job = openLink( query );
+        connect( job, SIGNAL( done( QVariantMap ) ), SLOT( copyScriptJobResultToClipboardShortened( QVariantMap ) ), Qt::QueuedConnection );
+        job->start();
+    }
 
-    QString copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& playlist );
-
-
-public slots:
-    /// Creates a link from the requested data and copies it to the clipboard
-    void copyToClipboard( const Tomahawk::query_ptr& query );
+    // all others are not
+    template <typename T> void copyOpenLink( const T& item ) const
+    {
+        ScriptJob* job = openLink( item );
+        connect( job, SIGNAL( done( QVariantMap ) ), SLOT( copyScriptJobResultToClipboard( QVariantMap ) ), Qt::QueuedConnection );
+        job->start();
+    }
 
 private slots:
-    void copyToClipboardReady( const QUrl& longUrl, const QUrl& shortUrl, const QVariant& callbackObj );
+    void copyToClipboardReady( const QUrl& longUrl, const QUrl& shortUrl, const QVariant& callbackObj = QVariant() );
+    void copyScriptJobResultToClipboard( const QVariantMap& data );
+    void copyScriptJobResultToClipboardShortened( const QVariantMap& data );
 
 private:
     explicit LinkGenerator( QObject* parent = 0 );

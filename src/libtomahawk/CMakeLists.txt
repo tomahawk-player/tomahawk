@@ -90,6 +90,7 @@ set( libGuiSources
     resolvers/JSResolverHelper.cpp
     resolvers/ScriptEngine.cpp
     resolvers/JSPlugin.cpp
+    resolvers/ScriptJob.cpp
 
     utils/DpiScaler.cpp
     utils/ImageRegistry.cpp

@@ -16,14 +16,40 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "JSResolver.h"
-#include <QWebFrame>
-
+#include "ScriptJob.h"
+#include <QMetaObject>
 
 using namespace Tomahawk;
 
-void
-JSPlugin::addToJavaScriptWindowObject( const QString& name, QObject* object )
+ScriptJob::ScriptJob( ScriptObject* scriptObject, const QString& method, const QVariantMap& parameters )
+    : QObject()
 {
-    m_engine->mainFrame()->addToJavaScriptWindowObject( name, object );
 }
+
+
+ScriptJob::~ScriptJob()
+{
+}
+
+
+void
+ScriptJob::start()
+{
+
+}
+
+
+void
+ScriptJob::reportResults( const QVariantMap& data )
+{
+    m_data = data;
+    emit done( data );
+}
+
+
+void
+ScriptJob::reportFailure()
+{
+
+}
+

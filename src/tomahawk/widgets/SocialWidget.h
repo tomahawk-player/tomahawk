@@ -65,6 +65,7 @@ protected:
 private slots:
     void accept();
     void onChanged();
+    void onQueryLinkReady( const QVariantMap& data );
     void onShortLinkReady( const QUrl& longUrl, const QUrl& shortUrl, const QVariant& callbackObj );
 
     void onGeometryUpdate();

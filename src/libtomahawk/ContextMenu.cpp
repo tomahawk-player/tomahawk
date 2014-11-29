@@ -421,7 +421,7 @@ ContextMenu::copyLink()
 {
     if ( m_queries.count() )
     {
-        Utils::LinkGenerator::instance()->copyToClipboard( m_queries.first() );
+        Utils::LinkGenerator::instance()->copyOpenLink( m_queries.first() );
     }
     else if ( m_albums.count() )
     {
