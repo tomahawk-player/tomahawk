@@ -444,6 +444,12 @@ MusicScanner::readTags( const QFileInfo& fi, libvlc_instance_t* vlcInstance )
     // m["composer"]     = tag->composer();
     // m["discnumber"]   = tag->discNumber();
 
+    if ( m["artist"].toString().isEmpty() || m["track"].toString().isEmpty() )
+    {
+        // Artist and track name  are required.
+        return QVariantMap();
+    }
+
     libvlc_media_release( media );
 #else
     Q_UNUSED( vlcInstance );
