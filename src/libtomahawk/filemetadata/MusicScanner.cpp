@@ -392,13 +392,62 @@ MusicScanner::scanFile( const QFileInfo& fi )
     }
 }
 
+QString
+vlcMetaToQString( libvlc_media_t* media, libvlc_meta_t meta )
+{
+    char *str = libvlc_media_get_meta(media, meta);
+    if ( str )
+    {
+        QString qstr = QString::fromUtf8( str );
+        libvlc_free( str );
+        return qstr;
+    }
+    return QString();
+}
 
 QVariant
-MusicScanner::readTags( const QFileInfo& fi )
+MusicScanner::readTags( const QFileInfo& fi, libvlc_instance_t* vlcInstance )
 {
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Parsing tags for file:" << fi.absoluteFilePath();
 
     const QString suffix = fi.suffix().toLower();
+    const QString mimetype = TomahawkUtils::extensionToMimetype( suffix );
+    const QString url( "file://%1" );
+
+    QVariantMap m;
+    m["url"]          = url.arg( fi.canonicalFilePath() );
+    m["mtime"]        = fi.lastModified().toUTC().toTime_t();
+    m["size"]         = (unsigned int)fi.size();
+    m["mimetype"]     = mimetype;
+
+#ifdef HAVE_VLC_ALBUMARTIST
+    libvlc_media_t* media = libvlc_media_new_path( vlcInstance, fi.canonicalFilePath().toUtf8().constData() );
+    libvlc_media_parse( media );
+
+    m["duration"] = (qlonglong)( libvlc_media_get_duration( media ) / 1000 );
+    libvlc_media_track_t **tracks;
+    uint track_count;
+    if ( ( track_count = libvlc_media_tracks_get( media, &tracks ) ) > 0 )
+    {
+        // FIXME: Should we count all or just one track?
+        //        Or only the first audio tracks?
+        // For most audio files we only have a single audio track.
+        m["bitrate"] = tracks[0]->i_bitrate / 1000;
+        libvlc_media_tracks_release(tracks, track_count);
+    }
+    m["artist"] = vlcMetaToQString( media, libvlc_meta_Artist );
+    m["album"] = vlcMetaToQString( media, libvlc_meta_Album );
+    m["albumartist"] = vlcMetaToQString( media, libvlc_meta_AlbumArtist );
+    m["track"] = vlcMetaToQString( media, libvlc_meta_Title );
+    m["albumpos"] = vlcMetaToQString( media, libvlc_meta_TrackNumber );
+    m["year"] = vlcMetaToQString( media, libvlc_meta_Date );
+    // m["composer"]     = tag->composer();
+    // m["discnumber"]   = tag->discNumber();
+
+    libvlc_media_release( media );
+#else
+    Q_UNUSED( vlcInstance );
+
     if ( !TomahawkUtils::supportedExtensions().contains( suffix ) )
         return QVariantMap(); // invalid extension
 
@@ -432,14 +481,6 @@ MusicScanner::readTags( const QFileInfo& fi )
     if ( artist.isEmpty() || track.isEmpty() )
         return QVariantMap();
 
-    const QString mimetype = TomahawkUtils::extensionToMimetype( suffix );
-    const QString url( "file://%1" );
-
-    QVariantMap m;
-    m["url"]          = url.arg( fi.canonicalFilePath() );
-    m["mtime"]        = fi.lastModified().toUTC().toTime_t();
-    m["size"]         = (unsigned int)fi.size();
-    m["mimetype"]     = mimetype;
     m["duration"]     = duration;
     m["bitrate"]      = bitrate;
     m["artist"]       = artist;
@@ -451,6 +492,7 @@ MusicScanner::readTags( const QFileInfo& fi )
     m["composer"]     = tag->composer();
     m["discnumber"]   = tag->discNumber();
     m["hash"]         = ""; // TODO
+#endif
 
     return m;
 }
