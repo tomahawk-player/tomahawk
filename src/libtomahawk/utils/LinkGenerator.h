@@ -22,9 +22,12 @@
 #define TOMAHAWK_UTILS_LINKGENERATOR_H
 
 #include "../resolvers/ScriptJob.h"
+#include "LinkGeneratorPlugin.h"
 
 #include "../DllMacro.h"
 #include "../Typedefs.h"
+
+#include <memory>
 
 namespace Tomahawk {
 
@@ -37,11 +40,45 @@ public:
     static LinkGenerator* instance();
     virtual ~LinkGenerator();
 
-    ScriptJob* openLink( const QString& title, const QString& artist, const QString& album ) const;
-    ScriptJob* openLink( const Tomahawk::query_ptr& query ) const;
-    ScriptJob* openLink( const Tomahawk::artist_ptr& artist ) const;
-    ScriptJob* openLink( const Tomahawk::album_ptr& album ) const;
-    ScriptJob* openLink( const Tomahawk::dynplaylist_ptr& playlist ) const;
+    // TODO: openLink(QString, QString, QString) is a rather annoying special case. Can we get rid of it?
+
+    ScriptJob* openLink( const QString& title, const QString& artist, const QString& album ) const
+    {
+        ScriptJob* job;
+        QList< LinkGeneratorPlugin* >::const_iterator i = m_plugins.constEnd();
+        while ( i != m_plugins.constBegin() )
+        {
+            --i;
+            job = (*i)->openLink( title, artist, album );
+            if ( job )
+            {
+                break;
+            }
+        }
+
+        // No suitable link generator plugin found
+        Q_ASSERT( job );
+        return job;
+    }
+
+    template <typename T> ScriptJob* openLink( const T& item ) const
+    {
+        ScriptJob* job;
+        QList< LinkGeneratorPlugin* >::const_iterator i = m_plugins.constEnd();
+        while ( i != m_plugins.constBegin() )
+        {
+            --i;
+            job = (*i)->openLink( item );
+            if ( job )
+            {
+                break;
+            }
+        }
+
+        // No suitable link generator plugin found
+        Q_ASSERT( job );
+        return job;
+    }
 
     // Fire and forget
 
@@ -68,9 +105,12 @@ private slots:
 
 private:
     explicit LinkGenerator( QObject* parent = 0 );
-    QString hostname() const;
 
     QUrl m_clipboardLongUrl;
+
+    std::unique_ptr< LinkGeneratorPlugin > m_defaultPlugin;
+    QList< LinkGeneratorPlugin* > m_plugins;
+
 
     static LinkGenerator* s_instance;
 };

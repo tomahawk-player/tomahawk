@@ -91,6 +91,7 @@ set( libGuiSources
     resolvers/ScriptEngine.cpp
     resolvers/JSPlugin.cpp
     resolvers/ScriptJob.cpp
+    resolvers/SyncScriptJob.cpp
 
     utils/DpiScaler.cpp
     utils/ImageRegistry.cpp
@@ -119,6 +120,8 @@ set( libGuiSources
     utils/NetworkAccessManager.cpp
     utils/ShortLinkHelper.cpp
     utils/LinkGenerator.cpp
+    utils/LinkGeneratorPlugin.cpp
+    utils/TomaHkLinkGeneratorPlugin.cpp
 
     viewpages/SearchViewPage.cpp
     viewpages/SourceViewPage.cpp
