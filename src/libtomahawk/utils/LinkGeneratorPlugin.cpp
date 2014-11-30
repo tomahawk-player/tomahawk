@@ -33,7 +33,9 @@ Tomahawk::Utils::LinkGeneratorPlugin::openLink(const QString&, const QString&, c
     return nullptr;
 }
 
-Tomahawk::ScriptJob* Tomahawk::Utils::LinkGeneratorPlugin::openLink( const Tomahawk::query_ptr& query ) const
+
+Tomahawk::ScriptJob*
+Tomahawk::Utils::LinkGeneratorPlugin::openLink( const Tomahawk::query_ptr& query ) const
 {
     QString title = query->track()->track();
     QString artist = query->track()->artist();
@@ -41,7 +43,6 @@ Tomahawk::ScriptJob* Tomahawk::Utils::LinkGeneratorPlugin::openLink( const Tomah
 
     return openLink( title, artist, album );
 }
-
 
 
 Tomahawk::ScriptJob*
