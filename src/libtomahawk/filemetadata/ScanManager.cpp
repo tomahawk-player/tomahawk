@@ -35,11 +35,14 @@
 #include <QTimer>
 #include <QSet>
 
+#include <vlc/libvlc.h>
+
 using namespace Tomahawk;
 
-MusicScannerThreadController::MusicScannerThreadController( QObject* parent )
+MusicScannerThreadController::MusicScannerThreadController( libvlc_instance_t* vlcInstance, QObject* parent )
     : QThread( parent )
     , m_bs( 0 )
+    , m_vlcInstance( vlcInstance )
 {
     tDebug() << Q_FUNC_INFO;
 }
@@ -54,7 +57,7 @@ MusicScannerThreadController::~MusicScannerThreadController()
 void
 MusicScannerThreadController::run()
 {
-    m_musicScanner = QPointer< MusicScanner >( new MusicScanner( m_mode, m_paths, m_bs ) );
+    m_musicScanner = QPointer< MusicScanner >( new MusicScanner( m_mode, m_paths, m_vlcInstance, m_bs ) );
     connect( m_musicScanner.data(), SIGNAL( finished() ), parent(), SLOT( scannerFinished() ), Qt::QueuedConnection );
     connect( m_musicScanner.data(), SIGNAL( progress( unsigned int ) ), parent(), SIGNAL( progress( unsigned int ) ), Qt::QueuedConnection );
     QMetaObject::invokeMethod( m_musicScanner.data(), "startScan", Qt::QueuedConnection );
@@ -76,11 +79,12 @@ ScanManager::instance()
 }
 
 
-ScanManager::ScanManager( QObject* parent )
+ScanManager::ScanManager( QObject* parent, libvlc_instance_t* pVlcInstance )
     : QObject( parent )
     , m_musicScannerThreadController( 0 )
     , m_currScannerPaths()
     , m_cachedScannerDirs()
+    , m_vlcInstance( pVlcInstance )
     , m_queuedScanType( MusicScanner::None )
     , m_updateGUI( true )
 {
@@ -201,7 +205,7 @@ ScanManager::runNormalScan( bool manualFull )
     }
 
     m_scanTimer->stop();
-    m_musicScannerThreadController = new MusicScannerThreadController( this );
+    m_musicScannerThreadController = new MusicScannerThreadController( m_vlcInstance, this );
     m_currScanMode = MusicScanner::DirScan;
 
     if ( manualFull )
@@ -248,7 +252,7 @@ ScanManager::runFileScan( const QStringList& paths, bool updateGUI )
     }
 
     m_scanTimer->stop();
-    m_musicScannerThreadController = new MusicScannerThreadController( this );
+    m_musicScannerThreadController = new MusicScannerThreadController( m_vlcInstance, this );
     m_currScanMode = MusicScanner::FileScan;
     m_updateGUI = updateGUI;
 

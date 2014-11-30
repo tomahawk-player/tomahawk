@@ -39,6 +39,8 @@
 #include <QTimer>
 #include <QVariantMap>
 
+struct libvlc_instance_t;
+
 // descend dir tree comparing dir mtimes to last known mtime
 // emit signal for any dir with new content, so we can scan it.
 // finally, emit the list of new mtimes we observed.
@@ -103,9 +105,9 @@ public:
     enum ScanMode { DirScan, FileScan };
     enum ScanType { None, Full, Normal, File };
 
-    static QVariant readTags( const QFileInfo& fi );
+    static QVariant readTags( const QFileInfo& fi, libvlc_instance_t* vlcInstance );
 
-    MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& paths, quint32 bs = 0 );
+    MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& paths, libvlc_instance_t* pVlcInstance, quint32 bs = 0 );
     ~MusicScanner();
 
     /**
@@ -163,6 +165,7 @@ private:
     QVariantList m_scannedfiles;
     QVariantList m_filesToDelete;
     quint32 m_batchsize;
+    libvlc_instance_t* m_vlcInstance;
 
     DirListerThreadController* m_dirListerThreadController;
 };

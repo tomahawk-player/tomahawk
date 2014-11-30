@@ -33,6 +33,8 @@
 #include <QSet>
 #include <QThread>
 
+struct libvlc_instance_t;
+
 class QFileSystemWatcher;
 class QTimer;
 
@@ -41,7 +43,7 @@ class MusicScannerThreadController : public QThread
     Q_OBJECT
 
 public:
-    MusicScannerThreadController( QObject* parent );
+    MusicScannerThreadController( libvlc_instance_t* vlcInstance, QObject* parent );
     virtual ~MusicScannerThreadController();
 
     void setScanMode( MusicScanner::ScanMode mode ) { m_mode = mode; }
@@ -53,6 +55,7 @@ private:
     MusicScanner::ScanMode m_mode;
     QStringList m_paths;
     quint32 m_bs;
+    libvlc_instance_t* m_vlcInstance;
 };
 
 
@@ -63,7 +66,7 @@ Q_OBJECT
 public:
     static ScanManager* instance();
 
-    explicit ScanManager( QObject* parent = 0 );
+    explicit ScanManager( QObject* parent, libvlc_instance_t* vlcInstance );
     virtual ~ScanManager();
 
     void init();
@@ -97,6 +100,7 @@ private:
     MusicScannerThreadController* m_musicScannerThreadController;
     QSet< QString > m_currScannerPaths;
     QStringList m_cachedScannerDirs;
+    libvlc_instance_t* m_vlcInstance;
 
     QTimer* m_scanTimer;
     MusicScanner::ScanType m_queuedScanType;

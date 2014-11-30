@@ -5,6 +5,8 @@
 
 #include <iostream>
 
+#include "libtomahawk/audio/AudioOutput.h"
+
 void
 usage()
 {
@@ -33,7 +35,13 @@ main( int argc, char* argv[] )
 
     if ( pathInfo.isFile() )
     {
-        qDebug() << MusicScanner::readTags( pathInfo );
+        // Start VLC instance
+        AudioOutput* ao = new AudioOutput();
+
+        qDebug() << MusicScanner::readTags( pathInfo, ao->vlcInstance() );
+
+        // Close AudioOutput again
+        delete ao;
     }
     else if ( pathInfo.isDir() )
     {
@@ -41,10 +49,13 @@ main( int argc, char* argv[] )
         qRegisterMetaType< QDir >( "QDir" );
         qRegisterMetaType< QFileInfo >( "QFileInfo" );
 
+        // Start VLC instance
+        AudioOutput* ao = new AudioOutput();
+
         // Create the MusicScanner instance
         QStringList paths;
         paths << pathInfo.canonicalFilePath();
-        MusicScanner scanner( MusicScanner::DirScan, paths, 0 );
+        MusicScanner scanner( MusicScanner::DirScan, paths, ao->vlcInstance() );
 
         // We want a dry-run of the scanner and not update any internal data.
         scanner.setDryRun( true );
@@ -61,6 +72,9 @@ main( int argc, char* argv[] )
 
         // Wait until the scanner has done its work.
         scannerThread.wait();
+
+        // Close AudioOutput again
+        delete ao;
     }
     else
     {

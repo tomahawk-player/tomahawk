@@ -840,9 +840,11 @@ AudioEngine::loadNextTrack()
 void
 AudioEngine::play( const QUrl& url )
 {
+    Q_D( AudioEngine );
+
     tDebug() << Q_FUNC_INFO << url;
 
-    const QVariantMap tags = MusicScanner::readTags( QFileInfo( url.toLocalFile() ) ).toMap();
+    const QVariantMap tags = MusicScanner::readTags( QFileInfo( url.toLocalFile() ), d->audioOutput->vlcInstance() ).toMap();
 
     track_ptr t;
     if ( !tags.isEmpty() )

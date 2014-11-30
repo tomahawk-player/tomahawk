@@ -54,6 +54,7 @@
 //#include "accounts/spotify/SpotifyPlaylistUpdater.h"
 #include "accounts/AccountManager.h"
 #include "audio/AudioEngine.h"
+#include "audio/AudioOutput.h"
 #include "database/Database.h"
 #include "database/DatabaseCollection.h"
 #include "database/DatabaseCommand_CollectionStats.h"
@@ -630,7 +631,7 @@ TomahawkApp::onInfoSystemReady()
     Echonest::Config::instance()->setNetworkAccessManager( Tomahawk::Utils::nam() );
     EchonestGenerator::setupCatalogs();
 
-    m_scanManager = QPointer<ScanManager>( new ScanManager( this ) );
+    m_scanManager = QPointer<ScanManager>( new ScanManager( this, AudioOutput::instance()->vlcInstance() ) );
     if ( !m_headless )
     {
         tDebug() << "Init MainWindow.";

@@ -35,6 +35,9 @@
 
 #include "config.h"
 
+#include <vlc/libvlc.h>
+#include <vlc/libvlc_media.h>
+
 using namespace Tomahawk;
 
 void
@@ -131,7 +134,7 @@ DirListerThreadController::run()
 }
 
 
-MusicScanner::MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& paths, quint32 bs )
+MusicScanner::MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& paths, libvlc_instance_t* pVlcInstance, quint32 bs )
     : QObject()
     , m_scanMode( scanMode )
     , m_paths( paths )
@@ -140,8 +143,11 @@ MusicScanner::MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& 
     , m_verbose( false )
     , m_cmdQueue( 0 )
     , m_batchsize( bs )
+    , m_vlcInstance( pVlcInstance )
     , m_dirListerThreadController( 0 )
 {
+    // We keep a strong reference to the libvlc instance here
+    libvlc_retain( m_vlcInstance );
 }
 
 
@@ -157,6 +163,8 @@ MusicScanner::~MusicScanner()
         delete m_dirListerThreadController;
         m_dirListerThreadController = 0;
     }
+
+    libvlc_release( m_vlcInstance );
 }
 
 
@@ -451,7 +459,7 @@ MusicScanner::readTags( const QFileInfo& fi )
 QVariant
 MusicScanner::readFile( const QFileInfo& fi )
 {
-    const QVariant m = readTags( fi );
+    const QVariant m = readTags( fi, m_vlcInstance );
 
     if ( m_scanned )
         if ( m_scanned % 3 == 0 )
