@@ -960,37 +960,6 @@ JSResolver::resolverCollections()
 }
 
 
-void
-JSPlugin::loadScript( const QString& path )
-{
-    QFile file( path );
-
-    if ( !file.open( QIODevice::ReadOnly ) )
-    {
-        qWarning() << "Failed to read contents of file:" << path << file.errorString();
-        Q_ASSERT(false);
-        return;
-    }
-
-    const QByteArray contents = file.readAll();
-
-    m_engine->setScriptPath( path );
-    m_engine->mainFrame()->evaluateJavaScript( contents );
-
-    file.close();
-}
-
-
-void
-JSPlugin::loadScripts( const QStringList& paths )
-{
-    foreach ( const QString& path, paths )
-    {
-        loadScript( path );
-    }
-}
-
-
 QVariant
 JSResolver::callOnResolver( const QString& scriptSource )
 {
@@ -1007,12 +976,4 @@ JSResolver::callOnResolver( const QString& scriptSource )
         "    Tomahawk.resolver.instance.%2"
         "}"
     ).arg( propertyName ).arg( scriptSource ) );
-}
-
-
-QString
-JSPlugin::JSPlugin::escape( const QString& source )
-{
-    QString copy = source;
-    return copy.replace( "\\", "\\\\" ).replace( "'", "\\'" );
 }
