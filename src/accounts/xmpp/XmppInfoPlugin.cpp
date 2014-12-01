@@ -129,6 +129,8 @@ void
 Tomahawk::InfoSystem::XmppInfoPlugin::onQueryLinkReady( const QVariantMap& data )
 {
     emit publishTune( data[ "url" ].toUrl(), sender()->property("infoStringHash").value< Tomahawk::InfoSystem::InfoStringHash >() );
+
+    sender()->deleteLater();
 }
 
 
