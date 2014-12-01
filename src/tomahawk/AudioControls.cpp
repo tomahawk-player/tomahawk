@@ -60,6 +60,7 @@ AudioControls::AudioControls( QWidget* parent )
 {
     ui->setupUi( this );
     setAutoFillBackground( false );
+    BackgroundWidget::setBackgroundColor( TomahawkStyle::HEADER_BACKGROUND );
     setAcceptDrops( true );
     setFixedHeight( scaledY( 85 ) );
 

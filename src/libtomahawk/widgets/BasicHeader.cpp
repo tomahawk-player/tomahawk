@@ -38,8 +38,8 @@ BasicHeader::BasicHeader( QWidget* parent )
     , DpiScaler( this )
     , ui( new Ui::HeaderWidget )
 {
-    setAutoFillBackground( false );
     ui->setupUi( this );
+    setAutoFillBackground( false );
     BackgroundWidget::setBackgroundColor( TomahawkStyle::HEADER_BACKGROUND );
 
     {
