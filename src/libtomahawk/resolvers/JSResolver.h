@@ -77,6 +77,9 @@ public:
     void loadScript( const QString& path );
     void loadScripts( const QStringList& paths );
     void addToJavaScriptWindowObject( const QString& name, QObject* object );
+
+    static QString serializeQVariantMap(const QVariantMap& map);
+
 private:
     /**
      * Wrap the pure evaluateJavaScript call in here, while the threadings guards are in public methods

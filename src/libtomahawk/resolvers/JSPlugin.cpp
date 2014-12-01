@@ -17,6 +17,9 @@
  */
 
 #include "JSResolver.h"
+
+#include "../utils/Json.h"
+
 #include <QWebFrame>
 
 
@@ -26,4 +29,26 @@ void
 JSPlugin::addToJavaScriptWindowObject( const QString& name, QObject* object )
 {
     m_engine->mainFrame()->addToJavaScriptWindowObject( name, object );
+}
+
+
+QString
+JSPlugin::serializeQVariantMap( const QVariantMap& map )
+{
+    QVariantMap localMap = map;
+
+    foreach( const QString& key, localMap.keys() )
+    {
+        QVariant currentVariant = localMap[ key ];
+
+        // strip unserializable types - at least QJson needs this, check with QtJson
+        if( currentVariant.canConvert<QImage>() )
+        {
+            localMap.remove( key );
+        }
+    }
+
+    QByteArray serialized = TomahawkUtils::toJson( localMap );
+
+    return QString( "JSON.parse('%1')" ).arg( JSPlugin::escape( QString::fromUtf8( serialized ) ) );
 }

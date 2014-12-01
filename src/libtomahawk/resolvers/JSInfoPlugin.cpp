@@ -221,12 +221,6 @@ JSInfoPlugin::serializeQVariantMap( const QVariantMap& map )
     {
         QVariant currentVariant = localMap[ key ];
 
-        // strip unserializable types - at least QJson needs this, check with QtJson
-        if( currentVariant.canConvert<QImage>() )
-        {
-            localMap.remove( key );
-        }
-
         // convert InfoStringHash to QVariantMap
         if( currentVariant.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
         {
@@ -235,9 +229,7 @@ JSInfoPlugin::serializeQVariantMap( const QVariantMap& map )
         }
     }
 
-    QByteArray serialized = TomahawkUtils::toJson( localMap );
-
-    return QString( "JSON.parse('%1')" ).arg( JSPlugin::escape( QString::fromUtf8( serialized ) ) );
+    return JSPlugin::serializeQVariantMap( localMap );
 }
 
 
