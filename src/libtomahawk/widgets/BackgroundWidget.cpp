@@ -34,7 +34,7 @@ BackgroundWidget::BackgroundWidget( QWidget* parent )
     , m_blurred( false )
 {
     setAutoFillBackground( false );
-    BackgroundWidget::setBackgroundColor( QColor( "#333333" ) );
+    setBackgroundColor( Qt::transparent );
 }
 
 

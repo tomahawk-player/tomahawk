@@ -40,6 +40,7 @@ BasicHeader::BasicHeader( QWidget* parent )
 {
     setAutoFillBackground( false );
     ui->setupUi( this );
+    BackgroundWidget::setBackgroundColor( TomahawkStyle::HEADER_BACKGROUND );
 
     {
         QFont f = ui->captionLabel->font();
