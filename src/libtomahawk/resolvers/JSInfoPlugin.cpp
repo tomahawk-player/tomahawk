@@ -18,7 +18,7 @@
 
 #include "JSInfoPlugin_p.h"
 
-#include "JSResolver.h"
+#include "JSPlugin.h"
 #include "Typedefs.h"
 
 #include "../utils/Logger.h"

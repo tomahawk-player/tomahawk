@@ -43,6 +43,7 @@
 #include "TomahawkVersion.h"
 #include "Track.h"
 #include "JSInfoPlugin.h"
+#include "JSPlugin.h"
 
 #include <QDir>
 #include <QFile>

@@ -19,6 +19,7 @@
 #include "JSInfoSystemHelper_p.h"
 #include "JSInfoPlugin.h"
 
+#include "JSPlugin.h"
 #include "../utils/Logger.h"
 
 using namespace Tomahawk;

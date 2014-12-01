@@ -40,6 +40,7 @@
 #include "Result.h"
 #include "SourceList.h"
 #include "UrlHandler.h"
+#include "JSPlugin.h"
 
 #include <QFile>
 #include <QFileInfo>

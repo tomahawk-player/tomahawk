@@ -16,14 +16,21 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "JSResolver.h"
+#include "JSPlugin.h"
 
 #include "../utils/Json.h"
+#include "ScriptEngine.h"
 
 #include <QWebFrame>
 
 
 using namespace Tomahawk;
+
+JSPlugin::JSPlugin()
+    : m_engine( new ScriptEngine( this ) )
+{
+}
+
 
 void
 JSPlugin::addToJavaScriptWindowObject( const QString& name, QObject* object )
