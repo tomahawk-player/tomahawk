@@ -65,6 +65,13 @@ LinkGenerator::~LinkGenerator()
 {
 }
 
+
+void LinkGenerator::addPlugin( LinkGeneratorPlugin* plugin )
+{
+    m_plugins.append( plugin );
+}
+
+
 void
 LinkGenerator::copyScriptJobResultToClipboard( const QVariantMap& data )
 {

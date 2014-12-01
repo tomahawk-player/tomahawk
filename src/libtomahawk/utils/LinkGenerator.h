@@ -40,8 +40,9 @@ public:
     static LinkGenerator* instance();
     virtual ~LinkGenerator();
 
-    // TODO: openLink(QString, QString, QString) is a rather annoying special case. Can we get rid of it?
+    void addPlugin( LinkGeneratorPlugin* plugin );
 
+    // TODO: openLink(QString, QString, QString) is a rather annoying special case. Can we get rid of it?
     ScriptJob* openLink( const QString& title, const QString& artist, const QString& album ) const
     {
         ScriptJob* job;
