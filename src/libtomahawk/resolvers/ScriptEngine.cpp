@@ -32,6 +32,7 @@
 
 #include <QDir>
 #include <QMessageBox>
+#include <QWebFrame>
 
 using namespace Tomahawk;
 
