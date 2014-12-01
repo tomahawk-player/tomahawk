@@ -33,6 +33,7 @@
 #include "playlist/TrackView.h"
 #include "playlist/PlayableModel.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/ImageRegistry.h"
 #include "utils/Logger.h"
 #include "widgets/ImageButton.h"
