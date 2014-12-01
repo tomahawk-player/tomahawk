@@ -28,8 +28,9 @@ class ScriptObjectPrivate
 {
     friend class ScriptObject;
 public:
-    ScriptObjectPrivate( ScriptObject* q, ScriptPlugin* scriptPlugin )
+    ScriptObjectPrivate( ScriptObject* q, const QString& id, ScriptPlugin* scriptPlugin )
         : q_ptr ( q )
+        , id( id )
         , scriptPlugin( scriptPlugin )
     {
     }

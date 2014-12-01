@@ -126,7 +126,7 @@ public slots:
     QString readBase64( const QString& fileName );
     QString readCompressed( const QString& fileName );
     QString instanceUUID();
-
+    QString uuid() const;
     QString compress( const QString& data );
     QVariantMap resolverData();
 

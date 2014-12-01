@@ -272,6 +272,13 @@ JSResolverHelper::instanceUUID()
 }
 
 
+QString
+JSResolverHelper::uuid() const
+{
+    return ::uuid();
+}
+
+
 void
 JSResolverHelper::addUrlResult( const QString& url, const QVariantMap& result )
 {

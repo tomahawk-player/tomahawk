@@ -595,8 +595,7 @@ Tomahawk.PluginManager = {
     objects: {},
     identifyObject: function (object) {
         if( object.id === undefined ) {
-            // FIXME: get a proper unique id
-            object.id = "foobar";
+            object.id = Tomahawk.uuid();
         }
 
         return object.id;

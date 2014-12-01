@@ -31,8 +31,7 @@ using namespace Tomahawk;
 static QString
 requestIdGenerator()
 {
-    //FIXME: create a proper requestId
-    return "somerequestId";
+    return uuid();
 }
 
 
@@ -85,7 +84,7 @@ ScriptPlugin::registerScriptPlugin( const QString& type, const QString& objectId
     ScriptObject* object = m_objects.value( objectId );
     if( !object )
     {
-        object = new ScriptObject( this );
+        object = new ScriptObject( objectId, this );
         m_objects.insert( objectId, object );
     }
 

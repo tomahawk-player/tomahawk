@@ -37,7 +37,7 @@ friend class JSPlugin;
 friend class ScriptJob;
 
 public:
-    ScriptObject( ScriptPlugin* parent );
+    ScriptObject( const QString& id, ScriptPlugin* parent );
     virtual ~ScriptObject();
 
     ScriptJob* invoke( const QString& methodName, const QVariantMap& arguments );

@@ -22,14 +22,10 @@
 
 using namespace Tomahawk;
 
-ScriptObject::ScriptObject( ScriptPlugin* parent )
+ScriptObject::ScriptObject( const QString& id, ScriptPlugin* parent )
     : QObject( parent )
-    , d_ptr( new ScriptObjectPrivate( this, parent ))
+    , d_ptr( new ScriptObjectPrivate( this, id, parent ))
 {
-    Q_D( ScriptObject );
-
-    // TODO:retrieve id from ScriptPlugin
-    d->id = "foobar";
 }
 
 
