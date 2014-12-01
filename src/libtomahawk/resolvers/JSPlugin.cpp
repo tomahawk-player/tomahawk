@@ -21,6 +21,8 @@
 #include "../utils/Json.h"
 #include "../utils/Logger.h"
 #include "ScriptEngine.h"
+#include "ScriptJob.h"
+#include "ScriptObject.h"
 
 #include <QWebFrame>
 #include <QFile>
@@ -99,4 +101,25 @@ JSPlugin::loadScripts( const QStringList& paths )
     {
         loadScript( path );
     }
+}
+
+
+void
+JSPlugin::startJob( ScriptJob* scriptJob )
+{
+    QString eval = QString(
+        "Tomahawk.PluginManager.invoke("
+        "'%1'," // requestId
+        "'%2'," // objectId
+        "'%3'," // methodName
+        "%4"    // arguments
+        ");"
+    ).arg( scriptJob->id() )
+    .arg( scriptJob->scriptObject()->id() )
+    .arg( scriptJob->methodName() )
+    .arg( serializeQVariantMap( scriptJob->arguments() ) );
+
+    tLog() << Q_FUNC_INFO << eval;
+
+    evaluateJavaScript( eval );
 }

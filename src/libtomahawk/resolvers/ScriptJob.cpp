@@ -17,25 +17,63 @@
  */
 
 #include "ScriptJob.h"
+#include "ScriptObject.h"
 #include <QMetaObject>
 
 using namespace Tomahawk;
 
-ScriptJob::ScriptJob( ScriptObject* scriptObject, const QString& method, const QVariantMap& parameters )
-    : QObject()
+ScriptJob::ScriptJob( const QString& id, ScriptObject* scriptObject, const QString& methodName, const QVariantMap& arguments )
+    : QObject( scriptObject )
+    , m_id( id )
+    , m_scriptObject( scriptObject )
+    , m_methodName( methodName )
+    , m_arguments( arguments )
 {
 }
 
 
 ScriptJob::~ScriptJob()
 {
+    //FIXME: probably not necessary if we change the inheritance order
+    if ( !m_id.isEmpty() )
+    {
+        Q_ASSERT( m_scriptObject );
+        m_scriptObject->removeJob( this );
+    }
 }
-
 
 void
 ScriptJob::start()
 {
+    m_scriptObject->startJob( this );
+}
 
+
+ScriptObject*
+ScriptJob::scriptObject() const
+{
+    return m_scriptObject;
+}
+
+
+const QString
+ScriptJob::id() const
+{
+    return m_id;
+}
+
+
+const QString
+ScriptJob::methodName() const
+{
+    return m_methodName;
+}
+
+
+const QVariantMap
+ScriptJob::arguments() const
+{
+    return m_arguments;
 }
 
 

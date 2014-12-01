@@ -35,12 +35,14 @@ namespace Tomahawk
 //TODO: pimple
 class ScriptEngine;
 
-class DLLEXPORT JSPlugin : public QObject, public ScriptPlugin
+class DLLEXPORT JSPlugin : public ScriptPlugin
 {
     Q_OBJECT
 
 public:
     JSPlugin();
+
+    void startJob( ScriptJob* scriptJob ) override;
 
     /**
         *  Evaluate JavaScript on the WebKit thread

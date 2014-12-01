@@ -92,6 +92,9 @@ set( libGuiSources
     resolvers/JSPlugin.cpp
     resolvers/ScriptJob.cpp
     resolvers/SyncScriptJob.cpp
+    resolvers/ScriptObject.cpp
+    resolvers/ScriptLinkGeneratorPlugin.cpp
+    resolvers/ScriptPlugin.cpp
 
     utils/DpiScaler.cpp
     utils/ImageRegistry.cpp

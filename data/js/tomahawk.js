@@ -590,3 +590,31 @@ Tomahawk.setTimeout = Tomahawk.setTimeout || window.setTimeout;
 Tomahawk.setInterval = Tomahawk.setInterval || window.setInterval;
 Tomahawk.base64Decode = function(a) { return window.atob(a); };
 Tomahawk.base64Encode = function(b) { return window.btoa(b); };
+
+Tomahawk.PluginManager = {
+    objects: {},
+    identifyObject: function (object) {
+        if( object.id === undefined ) {
+            // FIXME: get a proper unique id
+            object.id = "foobar";
+        }
+
+        return object.id;
+    },
+    registerPlugin: function (type, object) {
+        this.objects[this.identifyObject(object)] = object;
+
+        Tomahawk.registerScriptPlugin(type, object.id);
+    },
+
+    invoke: function (requestId, objectId, methodName, params ) {
+        this.objects[objectId][methodName](params).then(function (result) {
+            Tomahawk.reportScriptJobResults({
+                requestId: requestId,
+                data: result
+            });
+        },function (error) {
+            Tomahawk.reportScriptJobResults({error: error});
+        });
+    }
+};

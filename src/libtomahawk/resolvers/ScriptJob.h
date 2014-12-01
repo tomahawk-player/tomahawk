@@ -31,17 +31,20 @@ class ScriptObject;
 
 class DLLEXPORT ScriptJob : public QObject
 {
-friend class ScriptObject;
-
 Q_OBJECT
 
 public:
-    ScriptJob( ScriptObject* scriptObject, const QString& method, const QVariantMap& parameters = QVariantMap() );
+    ScriptJob( const QString& id, ScriptObject* scriptObject, const QString& methodName, const QVariantMap& arguments = QVariantMap() );
     virtual ~ScriptJob();
 
     virtual void start();
 
-protected slots:
+    const QString id() const;
+    ScriptObject* scriptObject() const;
+    const QString methodName() const;
+    const QVariantMap arguments() const;
+
+public slots:
     void reportResults( const QVariantMap& data );
     void reportFailure();
 
@@ -51,7 +54,11 @@ signals:
 
 protected:
     // TODO: pimple
+    QString m_id;
+    ScriptObject* m_scriptObject;
     QVariantMap m_data;
+    QString m_methodName;
+    QVariantMap m_arguments;
 };
 
 }

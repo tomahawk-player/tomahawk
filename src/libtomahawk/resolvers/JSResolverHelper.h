@@ -143,6 +143,10 @@ public slots:
 
     void reportCapabilities( const QVariant& capabilities );
 
+    void reportScriptJobResults( const QVariantMap& result );
+
+    void registerScriptPlugin( const QString& type, const QString& objectId );
+
 private slots:
     void gotStreamUrl( IODeviceCallback callback, NetworkReply* reply );
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::ModelMode, const Tomahawk::collection_ptr& collection );

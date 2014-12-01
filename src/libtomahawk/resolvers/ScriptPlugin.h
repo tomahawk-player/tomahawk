@@ -22,15 +22,36 @@
 #define TOMAHAWK_SCRIPTPLUGIN_H
 
 #include <QObject>
+#include <QVariantMap>
+
+//TODO: pimple
+#include <QHash>
 
 #include "../DllMacro.h"
 
 namespace Tomahawk {
 
-class DLLEXPORT ScriptPlugin
+class ScriptObject;
+class ScriptJob;
+
+class DLLEXPORT ScriptPlugin : public QObject
 {
+    Q_OBJECT
+
 public:
     virtual ~ScriptPlugin() {}
+
+    ScriptJob* invoke( ScriptObject* scriptObject, const QString& methodName, const QVariantMap& arguments );
+    virtual void startJob( ScriptJob* scriptJob ) = 0;
+    void removeJob( ScriptJob* );
+
+    void reportScriptJobResult( const QVariantMap& result );
+    void registerScriptPlugin( const QString& type, const QString& objectId );
+
+
+private: // TODO: pimple, might be renamed before tho
+    QHash< QString, ScriptJob* > m_jobs;
+    QHash< QString, ScriptObject* > m_objects;
 };
 
 } // ns: Tomahawk

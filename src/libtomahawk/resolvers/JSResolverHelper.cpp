@@ -402,6 +402,20 @@ JSResolverHelper::reportCapabilities( const QVariant& v )
 
 
 void
+JSResolverHelper::reportScriptJobResults( const QVariantMap& result )
+{
+    m_resolver->d_func()->scriptPlugin->reportScriptJobResult( result );
+}
+
+
+void
+JSResolverHelper::registerScriptPlugin(const QString& type, const QString& objectId)
+{
+    m_resolver->d_func()->scriptPlugin->registerScriptPlugin( type, objectId );
+}
+
+
+void
 JSResolverHelper::tracksAdded( const QList<query_ptr>&, const ModelMode, const collection_ptr&)
 {
     // Check if we still are actively waiting
