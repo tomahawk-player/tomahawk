@@ -61,7 +61,7 @@ namespace TomahawkStyle
 
     static const QColor GROUP_HEADER = QColor( "#637180" );
 
-    static const QColor NOW_PLAYING_ITEM = QColor( "#962c26" );
+    static const QColor NOW_PLAYING_ITEM = QColor( "#ff004c" );
     static const QColor NOW_PLAYING_ITEM_TEXT = QColor( "#ffffff" );
     static const QColor SELECTION_BACKGROUND = QColor( "#7DC4FF" );
     static const QColor SELECTION_FOREGROUND = QColor( "#ffffff" );
