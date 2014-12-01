@@ -35,7 +35,7 @@ JSInfoPlugin::JSInfoPlugin( int id, JSPlugin *resolver )
     m_supportedGetTypes = parseSupportedTypes( callMethodOnInfoPluginWithResult( "supportedGetTypes" ) );
     m_supportedPushTypes = parseSupportedTypes( callMethodOnInfoPluginWithResult( "supportedPushTypes" ) );
 
-    setFriendlyName( QString( "JSInfoPlugin: %1" ) ); // TODO: .arg( resolver->name() )
+    setFriendlyName( QString( "JSInfoPlugin: %1" ).arg( resolver->name() ) );
 }
 
 

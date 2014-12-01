@@ -40,9 +40,12 @@ class DLLEXPORT JSPlugin : public ScriptPlugin
     Q_OBJECT
 
 public:
-    JSPlugin();
+    // HACK: needs refactoring
+    JSPlugin( const QString& name );
 
     void startJob( ScriptJob* scriptJob ) override;
+
+    const QString name() const;
 
     /**
         *  Evaluate JavaScript on the WebKit thread
@@ -73,6 +76,7 @@ private:
     QVariant evaluateJavaScriptInternal( const QString& scriptSource );
 
     std::unique_ptr<ScriptEngine> m_engine;
+    QString m_name;
 
 };
 

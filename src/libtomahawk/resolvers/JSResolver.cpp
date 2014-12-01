@@ -64,8 +64,8 @@ JSResolver::JSResolver( const QString& accountId, const QString& scriptPath, con
     Q_D( JSResolver );
     tLog() << Q_FUNC_INFO << "Loading JS resolver:" << scriptPath;
 
-    d->scriptPlugin = new JSPlugin();
     d->name = QFileInfo( filePath() ).baseName();
+    d->scriptPlugin = new JSPlugin( d->name );
 
     // set the icon, if we launch properly we'll get the icon the resolver reports
     d->icon = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, QSize( 128, 128 ) );

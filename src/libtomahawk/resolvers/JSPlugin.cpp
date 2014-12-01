@@ -30,8 +30,9 @@
 
 using namespace Tomahawk;
 
-JSPlugin::JSPlugin()
+JSPlugin::JSPlugin( const QString& name )
     : m_engine( new ScriptEngine( this ) )
+    , m_name( name )
 {
 }
 
@@ -122,4 +123,11 @@ JSPlugin::startJob( ScriptJob* scriptJob )
     tLog() << Q_FUNC_INFO << eval;
 
     evaluateJavaScript( eval );
+}
+
+
+const QString
+JSPlugin::name() const
+{
+    return m_name;
 }
