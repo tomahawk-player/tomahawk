@@ -86,7 +86,7 @@ Required dependencies:
 
 * [CMake 2.8.6](http://www.cmake.org/)
 * [Qt 4.7.0](http://qt-project.org/)
-* [Phonon 4.6.0 ](http://phonon.kde.org/)
+* [Phonon 4.6.0](http://phonon.kde.org/)
 * [QJson 0.8.1](http://qjson.sourceforge.net/)
 * [SQLite 3.6.22](http://www.sqlite.org/)
 * [TagLib 1.8](http://developer.kde.org/~wheeler/taglib.html)
@@ -116,7 +116,7 @@ Third party libraries that we ship with our source:
 
 ## SUPPORT TOMAHAWK
 
-* [Open Issues](https://bugs.tomahawk-player.org/secure/Dashboard.jspa)
+* [Bug Tracker & Issues](https://bugs.tomahawk-player.org/secure/Dashboard.jspa)
 * [Translations](https://www.transifex.com/projects/p/tomahawk/)
 * [Donate](https://flattr.com/thing/169312/Tomahawk)
 
