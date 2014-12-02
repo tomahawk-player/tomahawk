@@ -357,29 +357,29 @@ aby se s vámi spojil?</translation>
 <context>
     <name>AudioControls</name>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="106"/>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="339"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="108"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="341"/>
         <source>Shuffle</source>
         <translation>Zamíchat</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="107"/>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="340"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="109"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="342"/>
         <source>Repeat</source>
         <translation>Opakovat</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="337"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="339"/>
         <source>Time Elapsed</source>
         <translation>Uběhlý čas</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="338"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="340"/>
         <source>Time Remaining</source>
         <translation>Zbývající čas</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="343"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="345"/>
         <source>Playing from %1</source>
         <translation>Přehrávání od %1</translation>
     </message>

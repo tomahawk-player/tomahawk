@@ -181,7 +181,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="123"/>
         <source>Enter Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti Visame Ekrane</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="126"/>
@@ -356,29 +356,29 @@ connect and stream from you?</source>
 <context>
     <name>AudioControls</name>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="106"/>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="339"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="108"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="341"/>
         <source>Shuffle</source>
         <translation>Maišyti</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="107"/>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="340"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="109"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="342"/>
         <source>Repeat</source>
         <translation>Kartoti</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="337"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="339"/>
         <source>Time Elapsed</source>
         <translation>Praėjęs Laikas</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="338"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="340"/>
         <source>Time Remaining</source>
         <translation>Likęs Laikas</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="343"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="345"/>
         <source>Playing from %1</source>
         <translation>Grojama nuo %1</translation>
     </message>
@@ -624,47 +624,47 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="82"/>
         <source>Much less</source>
-        <translation type="unfinished"/>
+        <translation>Žymiai mažiau</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="83"/>
         <source>Less</source>
-        <translation type="unfinished"/>
+        <translation>Mažiau</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="84"/>
         <source>A bit less</source>
-        <translation type="unfinished"/>
+        <translation>Šiek tiek mažiau</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="85"/>
         <source>Keep at current</source>
-        <translation type="unfinished"/>
+        <translation>Palikti tiek pat</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="86"/>
         <source>A bit more</source>
-        <translation type="unfinished"/>
+        <translation>Šiek tiek daugiau</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="87"/>
         <source>More</source>
-        <translation type="unfinished"/>
+        <translation>Daugiau</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="88"/>
         <source>Much more</source>
-        <translation type="unfinished"/>
+        <translation>Žymiai daugiau</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="91"/>
         <source>Tempo</source>
-        <translation type="unfinished"/>
+        <translation>Tempas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="92"/>
         <source>Loudness</source>
-        <translation type="unfinished"/>
+        <translation>Garsumas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="93"/>
@@ -932,12 +932,12 @@ Slaptažodį (VS)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="35"/>
         <source>Playlist URL</source>
-        <translation type="unfinished"/>
+        <translation>Grojaraščio URL</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="42"/>
         <source>Enter URL...</source>
-        <translation type="unfinished"/>
+        <translation>Įveskite URL...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="55"/>
@@ -1112,7 +1112,8 @@ Slaptažodį (VS)</translation>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="185"/>
         <source>Could not write tags to file:
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Nepavyko įrašyti žymių į failą:
+%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="396"/>
@@ -2079,7 +2080,7 @@ Slaptažodį (VS)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="312"/>
         <source>Cloud Collections</source>
-        <translation type="unfinished"/>
+        <translation>Debesies Kolekcijos</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="300"/>
@@ -2089,7 +2090,7 @@ Slaptažodį (VS)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="301"/>
         <source>Open Pages</source>
-        <translation type="unfinished"/>
+        <translation>Atverti Puslapius</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="303"/>
@@ -2147,7 +2148,7 @@ Slaptažodį (VS)</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="199"/>
         <source>Always run in Private Mode</source>
-        <translation type="unfinished"/>
+        <translation>Visuomet leisti Privačioje Veiksenoje</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="146"/>
@@ -2461,12 +2462,12 @@ Slaptažodį (VS)</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="576"/>
         <source>Enable Spotify collaborations</source>
-        <translation type="unfinished"/>
+        <translation>Įjungti Spotify bendradarbiavimus</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="578"/>
         <source>Disable Spotify collaborations</source>
-        <translation type="unfinished"/>
+        <translation>Išjungti Spotify bendradarbiavimus</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="534"/>
@@ -2658,7 +2659,7 @@ vartotojovardas@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="234"/>
         <source>Mark as &amp;Listened</source>
-        <translation type="unfinished"/>
+        <translation>Pažymėti kaip K&amp;lausytą</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="238"/>
@@ -2696,7 +2697,7 @@ vartotojovardas@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="119"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Nežinoma</translation>
     </message>
 </context>
 <context>
@@ -3919,7 +3920,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="356"/>
         <source>&amp;Main Menu</source>
-        <translation type="unfinished"/>
+        <translation>Pagrindinis &amp;Meniu</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="604"/>
