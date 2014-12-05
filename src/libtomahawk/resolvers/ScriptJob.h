@@ -52,6 +52,8 @@ signals:
     void done( const QVariantMap& result );
     void failed( const QVariantMap& reason );
 
+    void destroyed( const QString& id );
+
 protected:
     // TODO: pimple
     QString m_id;

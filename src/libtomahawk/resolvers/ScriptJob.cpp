@@ -34,12 +34,7 @@ ScriptJob::ScriptJob( const QString& id, ScriptObject* scriptObject, const QStri
 
 ScriptJob::~ScriptJob()
 {
-    //FIXME: probably not necessary if we change the inheritance order
-    if ( !m_id.isEmpty() )
-    {
-        Q_ASSERT( m_scriptObject );
-        m_scriptObject->removeJob( this );
-    }
+    emit destroyed( m_id );
 }
 
 void

@@ -41,16 +41,10 @@ ScriptPlugin::invoke( ScriptObject* scriptObject, const QString& methodName, con
     QString requestId = requestIdGenerator();
 
     ScriptJob* job = new ScriptJob( requestId, scriptObject, methodName, arguments );
+    connect( job, SIGNAL( destroyed( QString ) ), SLOT( onJobDeleted( QString ) ) );
     m_jobs.insert( requestId, job );
 
     return job;
-}
-
-
-void
-ScriptPlugin::removeJob( ScriptJob* job )
-{
-    m_jobs.remove( job->id() );
 }
 
 
@@ -99,4 +93,11 @@ ScriptPlugin::registerScriptPlugin( const QString& type, const QString& objectId
         tLog() << "This plugin type is not handled by Tomahawk";
         Q_ASSERT( false );
     }
+}
+
+
+void
+ScriptPlugin::onJobDeleted( const QString& jobId )
+{
+    m_jobs.remove( jobId );
 }

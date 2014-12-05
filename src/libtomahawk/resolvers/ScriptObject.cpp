@@ -59,14 +59,3 @@ ScriptObject::startJob( ScriptJob* scriptJob )
 
     d->scriptPlugin->startJob( scriptJob );
 }
-
-
-void
-ScriptObject::removeJob( ScriptJob* scriptJob )
-{
-    Q_D( const ScriptObject );
-
-    Q_ASSERT( d->scriptPlugin );
-    d->scriptPlugin->removeJob( scriptJob );
-}
-

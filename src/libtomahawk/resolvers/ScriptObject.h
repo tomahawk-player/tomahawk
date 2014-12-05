@@ -46,7 +46,7 @@ protected:
     QString id() const;
 
     void startJob( ScriptJob* scriptJob );
-    void removeJob( ScriptJob* scriptJob );
+
 private:
     Q_DECLARE_PRIVATE( ScriptObject )
     QScopedPointer<ScriptObjectPrivate> d_ptr;
