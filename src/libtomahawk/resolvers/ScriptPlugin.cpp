@@ -69,7 +69,7 @@ ScriptPlugin::reportScriptJobResult( const QVariantMap& result )
     }
     else
     {
-        job->reportFailure();
+        job->reportFailure( result[ "error" ].toString() );
     }
 }
 

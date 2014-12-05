@@ -24,6 +24,7 @@ using namespace Tomahawk;
 
 ScriptJob::ScriptJob( const QString& id, ScriptObject* scriptObject, const QString& methodName, const QVariantMap& arguments )
     : QObject( scriptObject )
+    , m_error( false )
     , m_id( id )
     , m_scriptObject( scriptObject )
     , m_methodName( methodName )
@@ -41,6 +42,13 @@ void
 ScriptJob::start()
 {
     m_scriptObject->startJob( this );
+}
+
+
+bool
+ScriptJob::error() const
+{
+    return m_error;
 }
 
 
@@ -81,8 +89,9 @@ ScriptJob::reportResults( const QVariantMap& data )
 
 
 void
-ScriptJob::reportFailure()
+ScriptJob::reportFailure( const QString& errorMessage )
 {
+    emit error( errorMessage );
 
+    reportResults( QVariantMap() );
 }
-

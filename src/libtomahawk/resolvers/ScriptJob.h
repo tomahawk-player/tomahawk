@@ -39,23 +39,26 @@ public:
 
     virtual void start();
 
+    bool error() const;
+
     const QString id() const;
     ScriptObject* scriptObject() const;
     const QString methodName() const;
     const QVariantMap arguments() const;
 
 public slots:
-    void reportResults( const QVariantMap& data );
-    void reportFailure();
+    void reportResults( const QVariantMap& data = QVariantMap() );
+    void reportFailure( const QString& errorMessage );
 
 signals:
     void done( const QVariantMap& result );
-    void failed( const QVariantMap& reason );
+    void error( const QString& errorMessage );
 
     void destroyed( const QString& id );
 
 protected:
     // TODO: pimple
+    bool m_error;
     QString m_id;
     ScriptObject* m_scriptObject;
     QVariantMap m_data;
