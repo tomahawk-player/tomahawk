@@ -37,6 +37,7 @@
 
 #include <vlc/libvlc.h>
 #include <vlc/libvlc_media.h>
+#include <vlc/libvlc_version.h>
 
 using namespace Tomahawk;
 
@@ -420,7 +421,7 @@ MusicScanner::readTags( const QFileInfo& fi, libvlc_instance_t* vlcInstance )
     m["size"]         = (unsigned int)fi.size();
     m["mimetype"]     = mimetype;
 
-#ifdef HAVE_VLC_ALBUMARTIST
+#if (LIBVLC_VERSION_INT >= LIBVLC_VERSION(3, 0, 0, 0))
     libvlc_media_t* media = libvlc_media_new_path( vlcInstance, fi.canonicalFilePath().toUtf8().constData() );
     libvlc_media_parse( media );
 

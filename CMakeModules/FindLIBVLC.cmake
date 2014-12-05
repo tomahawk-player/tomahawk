@@ -22,15 +22,6 @@ find_library(LIBVLCCORE_LIBRARY NAMES vlccore libvlccore
 
 set(LIBVLC_VERSION ${PC_LIBVLC_VERSION})
 
-include(CheckCXXSourceCompiles)
-check_cxx_source_compiles("
-#include <vlc/libvlc.h>
-#include <vlc/libvlc_media.h>
-int main(int argc, char *argv[]) {
-    libvlc_meta_t meta = libvlc_meta_AlbumArtist;
-}"
-HAVE_VLC_ALBUMARTIST)
-
 find_package_handle_standard_args(LibVLC
     REQUIRED_VARS LIBVLC_LIBRARY LIBVLCCORE_LIBRARY LIBVLC_INCLUDE_DIR
     VERSION_VAR LIBVLC_VERSION
