@@ -593,9 +593,10 @@ Tomahawk.base64Encode = function(b) { return window.btoa(b); };
 
 Tomahawk.PluginManager = {
     objects: {},
+    objectCounter: 0,
     identifyObject: function (object) {
         if( !object.hasOwnProperty('id') ) {
-            object.id = Tomahawk.uuid();
+            object.id = this.objectCounter++;
         }
 
         return object.id;
