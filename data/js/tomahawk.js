@@ -607,7 +607,7 @@ Tomahawk.PluginManager = {
     },
 
     invoke: function (requestId, objectId, methodName, params ) {
-        this.objects[objectId][methodName](params).then(function (result) {
+        Promise.resolve(this.objects[objectId][methodName](params)).then(function (result) {
             if (typeof result === 'object') {
                 Tomahawk.reportScriptJobResults({
                     requestId: requestId,
