@@ -28,6 +28,8 @@
 #include "JSInfoSystemHelper.h"
 #include "database/fuzzyindex/FuzzyIndex.h"
 
+#include <memory> // unique_ptr
+
 namespace Tomahawk
 {
 
@@ -42,7 +44,6 @@ public:
         , stopped( true )
         , error( Tomahawk::ExternalResolver::NoError )
         , resolverHelper( new JSResolverHelper( scriptPath, q ) )
-        // TODO: be smarter about this, only instantiate this if the resolver supports infoplugins
         , infoSystemHelper( nullptr )
         , requiredScriptPaths( additionalScriptPaths )
     {
@@ -68,7 +69,7 @@ private:
     QList< QVariant > dataWidgets;
     QStringList requiredScriptPaths;
 
-    JSPlugin* scriptPlugin;
+    std::unique_ptr<JSPlugin> scriptPlugin;
 };
 
 } // ns: Tomahawk

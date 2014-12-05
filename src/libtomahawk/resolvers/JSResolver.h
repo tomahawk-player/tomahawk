@@ -27,8 +27,6 @@
 #include "ExternalResolverGui.h"
 #include "Typedefs.h"
 
-
-#include <memory> // unique_ptr
 #include "ScriptEngine.h" // hack, also should be renamed to JSEngine
 
 namespace Tomahawk

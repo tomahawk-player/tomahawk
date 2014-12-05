@@ -48,18 +48,18 @@ public:
     const QString name() const;
 
     /**
-        *  Evaluate JavaScript on the WebKit thread
-        */
+    *  Evaluate JavaScript on the WebKit thread
+    */
     Q_INVOKABLE void evaluateJavaScript( const QString& scriptSource );
 
     /**
-        * This method must be called from the WebKit thread
-        */
+    * This method must be called from the WebKit thread
+    */
     QVariant evaluateJavaScriptWithResult( const QString& scriptSource );
 
     /**
-        * Escape \ and ' in strings so they are safe to use in JavaScript
-        */
+    * Escape \ and ' in strings so they are safe to use in JavaScript
+    */
     static QString escape( const QString& source );
 
 

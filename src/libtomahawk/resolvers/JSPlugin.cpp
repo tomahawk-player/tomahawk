@@ -120,7 +120,8 @@ JSPlugin::startJob( ScriptJob* scriptJob )
     .arg( scriptJob->methodName() )
     .arg( serializeQVariantMap( scriptJob->arguments() ) );
 
-    tLog() << Q_FUNC_INFO << eval;
+    // Remove when new scripting api turned out to work reliably
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << eval;
 
     evaluateJavaScript( eval );
 }

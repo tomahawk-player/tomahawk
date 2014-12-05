@@ -26,7 +26,6 @@ namespace  Tomahawk
 
 class ScriptLinkGeneratorPluginPrivate
 {
-    friend class ScriptLinkGeneratorPlugin;
 public:
     ScriptLinkGeneratorPluginPrivate( ScriptLinkGeneratorPlugin* q, ScriptObject* scriptObject )
         : q_ptr ( q )

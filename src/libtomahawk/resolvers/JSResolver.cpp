@@ -65,7 +65,7 @@ JSResolver::JSResolver( const QString& accountId, const QString& scriptPath, con
     tLog() << Q_FUNC_INFO << "Loading JS resolver:" << scriptPath;
 
     d->name = QFileInfo( filePath() ).baseName();
-    d->scriptPlugin = new JSPlugin( d->name );
+    d->scriptPlugin.reset( new JSPlugin( d->name ) );
 
     // set the icon, if we launch properly we'll get the icon the resolver reports
     d->icon = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, QSize( 128, 128 ) );
@@ -87,8 +87,6 @@ JSResolver::~JSResolver()
     Q_D( JSResolver );
     if ( !d->stopped )
         stop();
-
-    delete d->scriptPlugin;
 }
 
 
@@ -233,8 +231,10 @@ JSResolver::init()
 
     // tomahawk-infosystem.js
     {
+        // TODO: be smarter about this, only instantiate this if the resolver supports infoplugins
+
         // add c++ part of tomahawk infosystem bindings as Tomahawk.InfoSystem
-        d->infoSystemHelper = new JSInfoSystemHelper( d->scriptPlugin );
+        d->infoSystemHelper = new JSInfoSystemHelper( d->scriptPlugin.get() );
         d->scriptPlugin->addToJavaScriptWindowObject( "_TomahawkInfoSystem", d->infoSystemHelper );
         d->scriptPlugin->evaluateJavaScript( "Tomahawk.InfoSystem = _TomahawkInfoSystem;" );
 
@@ -966,8 +966,6 @@ JSResolver::callOnResolver( const QString& scriptSource )
     Q_D( JSResolver );
 
     QString propertyName = scriptSource.split('(').first();
-
-    tLog() << "JAVASCRIPT: run: " << scriptSource;
 
     return d->scriptPlugin->evaluateJavaScriptWithResult( QString(
         "if(Tomahawk.resolver.instance['_adapter_%1']) {"

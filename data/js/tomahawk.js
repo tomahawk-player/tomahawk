@@ -594,7 +594,7 @@ Tomahawk.base64Encode = function(b) { return window.btoa(b); };
 Tomahawk.PluginManager = {
     objects: {},
     identifyObject: function (object) {
-        if( object.id === undefined ) {
+        if( !object.hasOwnProperty('id') ) {
             object.id = Tomahawk.uuid();
         }
 
@@ -612,7 +612,7 @@ Tomahawk.PluginManager = {
                 requestId: requestId,
                 data: result
             });
-        },function (error) {
+        }, function (error) {
             Tomahawk.reportScriptJobResults({error: error});
         });
     }

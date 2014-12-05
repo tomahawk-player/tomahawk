@@ -31,7 +31,9 @@ using namespace Tomahawk;
 static QString
 requestIdGenerator()
 {
-    return uuid();
+    static int requestCounter = 0;
+    return QString::number( ++requestCounter );
+
 }
 
 
