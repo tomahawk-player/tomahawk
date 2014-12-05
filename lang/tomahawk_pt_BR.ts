@@ -3295,7 +3295,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="130"/>
         <source>The current track could not be resolved. Tomahawk will pick back up with the next resolvable track from this source.</source>
-        <translation type="unfinished"/>
+        <translation>A faixa atual não pode ser carregada. Tomahawk vai voltar com a próxima faixa carregável para essa fonte. </translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="138"/>
@@ -3385,7 +3385,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="89"/>
         <source>Unresolved track</source>
-        <translation type="unfinished"/>
+        <translation>Faixa não carregável. </translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="90"/>
@@ -4294,7 +4294,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="230"/>
         <source>Universal Link Support</source>
-        <translation type="unfinished"/>
+        <translation>Universal Link Support</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="253"/>
@@ -4309,7 +4309,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="296"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beats Music (recently aquired by Apple) is now supported. This means that Beats Music subscribers can also benefit by resolving other music service links so they stream from their Beats Music account. Welcome aboard!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beats Music (Adquirido automaticamente pela Apple) agora é suportado. Isso significa que os assinantes do Beats Music também podem se beneficiar conectando em links de outro serviços de música, transmitindo a partir de sua conta Beats Music. Bem-vindo a bordo!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="313"/>

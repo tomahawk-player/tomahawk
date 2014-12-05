@@ -504,7 +504,7 @@ conectarse y transmitir música por usted?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="391"/>
         <source>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</source>
-        <translation type="unfinished"/>
+        <translation>Las colecciones en la nube aún no son compatibles en la vista plana. Lo tendremos cubierto pronto. Cambiar a otra vista para navegar en ellos.</translation>
     </message>
 </context>
 <context>
@@ -928,7 +928,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="20"/>
         <source>Enter the URL of the hosted playlist (e.g. .xspf format) or click the button to select a local M3U of XSPF playlist to import.</source>
-        <translation type="unfinished"/>
+        <translation>Introduzca la dirección URL de la lista de reproducción alojado (e.g .xspf formato) o haga clic en el botón para seleccionar una lista de reproducción local M3U de XSPF para importar.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="35"/>
@@ -948,7 +948,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="64"/>
         <source>Automatically Update (upon changes to hosted playlist)</source>
-        <translation type="unfinished"/>
+        <translation>Actualizar automáticamente (sobre cambios a la lista de reproducción alojada)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="79"/>
@@ -1736,7 +1736,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="51"/>
         <source>UPnP / Automatic Port Forwarding (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>UPnP / Redirección de puertos automática (recomendado)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="69"/>
@@ -3490,7 +3490,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="414"/>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="476"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
-        <translation type="unfinished"/>
+        <translation>Aviso del script del servicio: la llamada a la API %1 devolvió datos en sincronía.</translation>
     </message>
 </context>
 <context>
@@ -3537,7 +3537,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="68"/>
         <source>Resolver Error: %1:%2 %3</source>
-        <translation type="unfinished"/>
+        <translation>Error del servicio: %1:%2 %3</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="86"/>
@@ -4282,7 +4282,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="96"/>
         <source>If you are reading this it likely means you have already noticed the biggest change since our last release - a shiny new interface and design. New views, fonts, icons, header images and animations at every turn. Below you can find an overview of the functional changes and additions since 0.7 too:</source>
-        <translation type="unfinished"/>
+        <translation>Si usted está leyendo esto probablemente significa que usted ya ha notado el cambio más grande desde nuestra última liberación - una nueva interfaz y brillante diseño. Nuevas vistas, fuentes, iconos, imágenes de cabecera y animaciones a cada paso. A continuación puede encontrar una visión general de los cambios funcionales y adiciones desde 0.7:</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="174"/>
@@ -4292,7 +4292,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="213"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Send tracks to your friends just by dragging it onto their avatar in the Tomahawk sidebar. Check out what your friends think you should listen to in your inbox.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enviar pistas a tus amigos con sólo arrastrar en su avatar en la barra lateral Tomahawk. Echa un vistazo a lo que tus amigos creen que debe escuchar en su bandeja de entrada.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="230"/>
@@ -4312,7 +4312,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="296"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beats Music (recently aquired by Apple) is now supported. This means that Beats Music subscribers can also benefit by resolving other music service links so they stream from their Beats Music account. Welcome aboard!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beats Música (recientemente adquirida por Apple) es ahora compatible. Esto significa que los suscriptores Beats Música también pueden beneficiarse mediante la resolución de otros enlaces de servicio de música para que el stream de su cuenta Beats Música. Bienvenido a bordo! Enviar pistas a tus amigos con sólo arrastrar en su avatar en la barra lateral Tomahawk. Echa un vistazo a lo que tus amigos creen que debe escuchar en su bandeja de entrada.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="313"/>
@@ -4327,7 +4327,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="376"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk for Android is now in beta! The majority of the same resolvers are supported in the Android app - plus a couple of additional ones in Rdio &amp;amp; Deezer. &lt;a href=&quot;http://hatchet.is/register&quot;&gt;Create a Hatchet account&lt;/a&gt; to sync all of your playlists from your desktop to your mobile. Find current and future music influencers and follow them to discover and hear what they love. Just like on the desktop, Tomahawk on Android can open other music service links and play them from yours. Even when you are listening to other music apps, Tomahawk can capture all of that playback data and add it to your Hatchet profile.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk para Android ya está en fase beta! La mayoría de los mismas resolucionadores se admiten en la aplicación para Android - además de un par de otras adicionales en Rdio &amp; amp; Deezer. &lt;a href=&quot;http://hatchet.is/register&quot;&gt;Crear una cuenta Hatchet&lt;/a&gt; para sincronizar todos tus listas de reproducción desde tu escritorio en so móvil. Encontrar a personajes influyentes de la música actual y futura y seguirlos para descubrir y escuchar lo que les gusta. Al igual que en el escritorio, Tomahawk en Android puede abrir otros enlaces de servicio de música y reproducirlas a los suyos. Incluso cuando usted está escuchando otras aplicaciones de música, Tomahawk puede capturar todos esos datos de reproducción y agregarla a tu perfil Hatchet&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="396"/>
