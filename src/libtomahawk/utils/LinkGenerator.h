@@ -82,16 +82,6 @@ public:
     }
 
     // Fire and forget
-
-    // the query link is shortened automatically
-    void copyOpenLink( const query_ptr& query ) const
-    {
-        ScriptJob* job = openLink( query );
-        connect( job, SIGNAL( done( QVariantMap ) ), SLOT( copyScriptJobResultToClipboardShortened( QVariantMap ) ), Qt::QueuedConnection );
-        job->start();
-    }
-
-    // all others are not
     template <typename T> void copyOpenLink( const T& item ) const
     {
         ScriptJob* job = openLink( item );
@@ -102,7 +92,6 @@ public:
 private slots:
     void copyToClipboardReady( const QUrl& longUrl, const QUrl& shortUrl, const QVariant& callbackObj = QVariant() );
     void copyScriptJobResultToClipboard( const QVariantMap& data );
-    void copyScriptJobResultToClipboardShortened( const QVariantMap& data );
 
 private:
     explicit LinkGenerator( QObject* parent = 0 );

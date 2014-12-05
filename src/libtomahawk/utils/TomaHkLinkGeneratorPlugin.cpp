@@ -52,6 +52,7 @@ Tomahawk::Utils::TomaHkLinkGeneratorPlugin::openLink( const QString& title, cons
 
     QVariantMap data;
     data[ "url" ] = link;
+    data[ "shortenLink" ] = true;
 
     return new SyncScriptJob( data );
 }

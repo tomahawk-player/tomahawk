@@ -76,24 +76,21 @@ void
 LinkGenerator::copyScriptJobResultToClipboard( const QVariantMap& data )
 {
     m_clipboardLongUrl = data[ "url" ].toUrl();
-    copyToClipboardReady( m_clipboardLongUrl, m_clipboardLongUrl );
 
-    sender()->deleteLater();
-}
-
-
-void
-LinkGenerator::copyScriptJobResultToClipboardShortened( const QVariantMap& data )
-{
-    m_clipboardLongUrl = data[ "url" ].toUrl();
-
-    Tomahawk::Utils::ShortLinkHelper* slh = new Tomahawk::Utils::ShortLinkHelper();
-    connect( slh, SIGNAL( shortLinkReady( QUrl, QUrl, QVariant ) ),
-             SLOT( copyToClipboardReady( QUrl, QUrl, QVariant ) ) );
-    connect( slh, SIGNAL( done() ),
-             slh, SLOT( deleteLater() ),
-             Qt::QueuedConnection );
-    slh->shortenLink( m_clipboardLongUrl );
+    if ( data[ "shortenLink" ].toBool() )
+    {
+        Tomahawk::Utils::ShortLinkHelper* slh = new Tomahawk::Utils::ShortLinkHelper();
+        connect( slh, SIGNAL( shortLinkReady( QUrl, QUrl, QVariant ) ),
+                SLOT( copyToClipboardReady( QUrl, QUrl, QVariant ) ) );
+        connect( slh, SIGNAL( done() ),
+                slh, SLOT( deleteLater() ),
+                Qt::QueuedConnection );
+        slh->shortenLink( m_clipboardLongUrl );
+    }
+    else
+    {
+        copyToClipboardReady( m_clipboardLongUrl, m_clipboardLongUrl );
+    }
 
     sender()->deleteLater();
 }
