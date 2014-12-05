@@ -72,6 +72,10 @@ ScriptLinkGeneratorPlugin::openLink( const album_ptr& album ) const
     QVariantMap arguments;
     arguments[ "name" ] = QVariant( album->name() );
 
+    QVariantMap artist;
+    artist[ "name" ] = album->artist()->name();
+    arguments[ "artist" ] = artist;
+
     return d->scriptObject->invoke( "generateAlbumLink", arguments );
 }
 
