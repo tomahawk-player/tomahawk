@@ -478,35 +478,6 @@ JSResolver::lookupUrl( const QString& url )
 }
 
 
-QVariant
-JSPlugin::evaluateJavaScriptInternal( const QString& scriptSource )
-{
-    return m_engine->mainFrame()->evaluateJavaScript( scriptSource );
-}
-
-
-void
-JSPlugin::evaluateJavaScript( const QString& scriptSource )
-{
-    if ( QThread::currentThread() != thread() )
-    {
-        QMetaObject::invokeMethod( this, "evaluateJavaScript", Qt::QueuedConnection, Q_ARG( QString, scriptSource ) );
-        return;
-    }
-
-    evaluateJavaScriptInternal( scriptSource );
-}
-
-
-QVariant
-JSPlugin::evaluateJavaScriptWithResult( const QString& scriptSource )
-{
-    Q_ASSERT( QThread::currentThread() == thread() );
-
-    return evaluateJavaScriptInternal( scriptSource );
-}
-
-
 Tomahawk::ExternalResolver::ErrorState
 JSResolver::error() const
 {
