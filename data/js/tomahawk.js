@@ -608,12 +608,22 @@ Tomahawk.PluginManager = {
 
     invoke: function (requestId, objectId, methodName, params ) {
         this.objects[objectId][methodName](params).then(function (result) {
+            if (typeof result === 'object') {
+                Tomahawk.reportScriptJobResults({
+                    requestId: requestId,
+                    data: result
+                });
+            } else {
+                Tomahawk.reportScriptJobResults({
+                    requestId: requestId,
+                    error: "Scripts need to return objects for requests"
+                });
+            }
+        }, function (error) {
             Tomahawk.reportScriptJobResults({
                 requestId: requestId,
-                data: result
+                error: error
             });
-        }, function (error) {
-            Tomahawk.reportScriptJobResults({error: error});
         });
     }
 };
