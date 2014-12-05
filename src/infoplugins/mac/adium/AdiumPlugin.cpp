@@ -26,7 +26,7 @@
 #include "Artist.h"
 #include "Result.h"
 #include "TomahawkSettings.h"
-#include "GlobalActionManager.h"
+#include "utils/LinkGenerator.h"
 #include "utils/Logger.h"
 
 #include "AdiumPlugin.h"
@@ -161,11 +161,19 @@ AdiumPlugin::audioStarted( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair
     m_currentArtist = hash["artist"];
 
     // Request a short URL
-    m_currentLongUrl = GlobalActionManager::instance()->openLink( hash.value( "title" ), hash.value( "artist" ), hash.value( "album" ) );
+    ScriptJob* job = Utils::LinkGenerator::instance()->openLink( hash.value( "title" ), hash.value( "artist" ), hash.value( "album" ) );
+    connect( job, SIGNAL( done( QVariantMap ) ), SLOT ( onQueryLinkReady( QVariantMap ) ) );
+    job->start();
+}
+
+
+void
+AdiumPlugin::onQueryLinkReady( const QVariantMap& data )
+{
+
+    m_currentLongUrl = data[ "url" ].toUrl();
 
     QUrl shortUrl = m_currentLongUrl;
-    if ( pushInfoPair.first.contains( "shortUrl" ) )
-        shortUrl = pushInfoPair.first[ "shortUrl" ].toUrl();
 
     QString nowPlaying = "";
     nowPlaying.append( m_currentArtist );
@@ -184,7 +192,10 @@ AdiumPlugin::audioStarted( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair
     nowPlaying.append( " " );
     nowPlaying.append( shortUrl.toEncoded() );
     setStatus( nowPlaying );
+
+    sender()->deleteLater();
 }
+
 
 void
 AdiumPlugin::audioFinished( const QVariant &input )

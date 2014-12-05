@@ -65,6 +65,7 @@ public slots:
 private slots:
     void clearStatus();
     void settingsChanged();
+    void onQueryLinkReady( const QVariantMap& data );
 
 private:
     void audioStarted( const Tomahawk::InfoSystem::PushInfoPair pushInfoPair );
