@@ -32,10 +32,12 @@
 using namespace Tomahawk;
 
 
-ScriptCollection::ScriptCollection( const source_ptr& source,
+ScriptCollection::ScriptCollection( const QString& id,
+                                    const source_ptr& source,
                                     ExternalResolver* resolver,
                                     QObject* parent )
     : Collection( source, QString( "scriptcollection:" + resolver->name() + ":" + uuid() ), parent )
+    , m_id( id )
     , m_trackCount( -1 ) //null value
 {
     Q_ASSERT( resolver );
@@ -50,6 +52,13 @@ ScriptCollection::ScriptCollection( const source_ptr& source,
 ScriptCollection::~ScriptCollection()
 {
 
+}
+
+
+const QString
+ScriptCollection::id() const
+{
+    return m_id;
 }
 
 

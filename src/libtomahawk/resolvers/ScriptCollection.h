@@ -40,10 +40,13 @@ class DLLEXPORT ScriptCollection : public Collection
     Q_OBJECT
 
 public:
-    explicit ScriptCollection( const source_ptr& source,
+    explicit ScriptCollection( const QString& id,
+                               const source_ptr& source,
                                ExternalResolver* resolver,
                                QObject* parent = nullptr );
     virtual ~ScriptCollection();
+
+    const QString id() const;
 
     /**
      * @brief setServiceName sets the name of the service that provides the ScriptCollection.
@@ -76,6 +79,7 @@ public:
     int trackCount() const override;
 
 private:
+    QString m_id;
     ExternalResolver* m_resolver;
     QString m_servicePrettyName;
     QString m_description;
