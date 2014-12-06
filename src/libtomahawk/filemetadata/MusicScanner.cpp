@@ -370,7 +370,7 @@ MusicScanner::scanFile( const QFileInfo& fi )
         m_filemtimes.remove( "file://" + fi.canonicalFilePath() );
     }
 
-    //tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Scanning file:" << fi.canonicalFilePath();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Scanning file:" << fi.canonicalFilePath();
     QVariant m = readFile( fi );
     if ( m.toMap().isEmpty() )
         return;
