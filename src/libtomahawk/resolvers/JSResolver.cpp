@@ -590,6 +590,28 @@ JSResolver::parseResultVariantList( const QVariantList& reslist )
         }
 
         rp->setResolvedBy( this );
+
+
+        // find collection
+        const QString collectionId = m.value( "collectionId" ).toString();
+        if ( !collectionId.isEmpty() )
+        {
+            Tomahawk::collection_ptr collection = Tomahawk::collection_ptr();
+            foreach ( const Tomahawk::collection_ptr& coll, collections() )
+            {
+                Tomahawk::ScriptCollection* scriptCollection = qobject_cast<Tomahawk::ScriptCollection*>( coll.data() );
+                Q_ASSERT( scriptCollection );
+                if ( scriptCollection->id() == collectionId )
+                {
+                    collection = coll;
+                }
+            }
+            if ( !collection.isNull() )
+            {
+                rp->setCollection( collection );
+            }
+        }
+
         results << rp;
     }
 
