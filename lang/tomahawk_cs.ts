@@ -3365,7 +3365,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="314"/>
         <source>Tomahawk - Now Playing</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk - Nyní se hraje</translation>
     </message>
 </context>
 <context>
@@ -4023,7 +4023,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1414"/>
         <source>Copyright 2010 - 2014</source>
-        <translation>Copyright 2010 - 2014</translation>
+        <translation>Autorské právo 2010 - 2014</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="945"/>
