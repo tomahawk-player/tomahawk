@@ -47,6 +47,8 @@ public:
     void reportScriptJobResult( const QVariantMap& result );
     void registerScriptPlugin( const QString& type, const QString& objectId );
 
+    virtual void scriptPluginFactory( const QString& type, ScriptObject* object );
+
 private slots:
     void onJobDeleted( const QString& jobId );
 

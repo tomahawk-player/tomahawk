@@ -84,6 +84,13 @@ ScriptAccount::registerScriptPlugin( const QString& type, const QString& objectI
         m_objects.insert( objectId, object );
     }
 
+    scriptPluginFactory( type, object );
+}
+
+
+void
+ScriptAccount::scriptPluginFactory( const QString& type, ScriptObject* object )
+{
     if ( type == "linkGenerator" )
     {
         tLog() << "Got link generator plugin";
