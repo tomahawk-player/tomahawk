@@ -73,6 +73,13 @@ void LinkGenerator::addPlugin( LinkGeneratorPlugin* plugin )
 
 
 void
+LinkGenerator::removePlugin( LinkGeneratorPlugin* plugin )
+{
+    m_plugins.removeAll( plugin );
+}
+
+
+void
 LinkGenerator::copyScriptJobResultToClipboard( const QVariantMap& data )
 {
     m_clipboardLongUrl = data[ "url" ].toUrl();

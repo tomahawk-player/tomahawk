@@ -41,6 +41,7 @@ public:
     virtual ~LinkGenerator();
 
     void addPlugin( LinkGeneratorPlugin* plugin );
+    void removePlugin( LinkGeneratorPlugin* plugin );
 
     // TODO: openLink(QString, QString, QString) is a rather annoying special case. Can we get rid of it?
     ScriptJob* openLink( const QString& title, const QString& artist, const QString& album ) const

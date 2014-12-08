@@ -17,6 +17,8 @@
  */
 #include "LinkGeneratorPlugin.h"
 
+#include "LinkGenerator.h"
+
 #include "../Query.h"
 #include "../Track.h"
 #include "../Artist.h"
@@ -24,6 +26,8 @@
 
 Tomahawk::Utils::LinkGeneratorPlugin::~LinkGeneratorPlugin()
 {
+    // do this on destroyed() if you ever make this a QObject
+    LinkGenerator::instance()->removePlugin( this );
 }
 
 
