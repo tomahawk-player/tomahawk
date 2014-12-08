@@ -19,10 +19,12 @@
 #ifndef TOMAHAWK_SCRIPTLINKGENERATORPLUGIN_H
 #define TOMAHAWK_SCRIPTLINKGENERATORPLUGIN_H
 
+#include "../resolvers/ScriptPlugin.h"
 #include "../utils/LinkGeneratorPlugin.h"
 
-#include "DllMacro.h"
+#include <QObject>
 
+#include "DllMacro.h"
 
 namespace Tomahawk
 {
@@ -30,7 +32,7 @@ namespace Tomahawk
 class ScriptObject;
 class ScriptLinkGeneratorPluginPrivate;
 
-class DLLEXPORT ScriptLinkGeneratorPlugin : QObject, public Utils::LinkGeneratorPlugin
+class DLLEXPORT ScriptLinkGeneratorPlugin : public QObject, public ScriptPlugin, public Utils::LinkGeneratorPlugin
 {
 Q_OBJECT
 

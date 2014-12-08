@@ -25,7 +25,9 @@
 using namespace Tomahawk;
 
 ScriptLinkGeneratorPlugin::ScriptLinkGeneratorPlugin( ScriptObject* scriptObject )
-    : Utils::LinkGeneratorPlugin()
+    : QObject( scriptObject )
+    , ScriptPlugin( scriptObject )
+    , Utils::LinkGeneratorPlugin()
     , d_ptr( new ScriptLinkGeneratorPluginPrivate( this, scriptObject ) )
 {
 }
@@ -39,35 +41,29 @@ ScriptLinkGeneratorPlugin::~ScriptLinkGeneratorPlugin()
 ScriptJob*
 ScriptLinkGeneratorPlugin::openLink( const QString& title, const QString& artist, const QString& album ) const
 {
-    Q_D( const ScriptLinkGeneratorPlugin );
-
     QVariantMap arguments;
     arguments[ "title" ] = QVariant( title );
     arguments[ "artist" ] = QVariant( artist );
     arguments[ "album" ] = QVariant( album );
 
-    return d->scriptObject->invoke( "generateQueryLink", arguments );
+    return scriptObject()->invoke( "generateQueryLink", arguments );
 }
 
 
 ScriptJob*
 ScriptLinkGeneratorPlugin::openLink( const artist_ptr& artist ) const
 {
-    Q_D( const ScriptLinkGeneratorPlugin );
-
     // TODO: create proper serializer for QObjects
     QVariantMap arguments;
     arguments[ "name" ] = QVariant( artist->name() );
 
-    return d->scriptObject->invoke( "generateArtistLink", arguments );
+    return scriptObject()->invoke( "generateArtistLink", arguments );
 }
 
 
 ScriptJob*
 ScriptLinkGeneratorPlugin::openLink( const album_ptr& album ) const
 {
-    Q_D( const ScriptLinkGeneratorPlugin );
-
     // TODO: create proper serializer for QObjects
     QVariantMap arguments;
     arguments[ "name" ] = QVariant( album->name() );
@@ -76,7 +72,7 @@ ScriptLinkGeneratorPlugin::openLink( const album_ptr& album ) const
     artist[ "name" ] = album->artist()->name();
     arguments[ "artist" ] = artist;
 
-    return d->scriptObject->invoke( "generateAlbumLink", arguments );
+    return scriptObject()->invoke( "generateAlbumLink", arguments );
 }
 
 
