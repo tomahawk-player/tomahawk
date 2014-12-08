@@ -95,6 +95,7 @@ set( libGuiSources
     resolvers/ScriptObject.cpp
     resolvers/ScriptLinkGeneratorPlugin.cpp
     resolvers/ScriptAccount.cpp
+    resolvers/ScriptPlugin.cpp
 
     utils/DpiScaler.cpp
     utils/ImageRegistry.cpp
