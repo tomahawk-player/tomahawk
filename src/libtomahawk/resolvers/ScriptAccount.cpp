@@ -16,7 +16,7 @@
  *   You should have received a copy of the GNU General Public License
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "ScriptPlugin.h"
+#include "ScriptAccount.h"
 
 #include "ScriptObject.h"
 #include "../utils/Logger.h"
@@ -38,7 +38,7 @@ requestIdGenerator()
 
 
 ScriptJob*
-ScriptPlugin::invoke( ScriptObject* scriptObject, const QString& methodName, const QVariantMap& arguments )
+ScriptAccount::invoke( ScriptObject* scriptObject, const QString& methodName, const QVariantMap& arguments )
 {
     QString requestId = requestIdGenerator();
 
@@ -51,7 +51,7 @@ ScriptPlugin::invoke( ScriptObject* scriptObject, const QString& methodName, con
 
 
 void
-ScriptPlugin::reportScriptJobResult( const QVariantMap& result )
+ScriptAccount::reportScriptJobResult( const QVariantMap& result )
 {
     tLog() << Q_FUNC_INFO << result;
     const QString requestId = result[ "requestId" ].toString();
@@ -75,7 +75,7 @@ ScriptPlugin::reportScriptJobResult( const QVariantMap& result )
 
 
 void
-ScriptPlugin::registerScriptPlugin( const QString& type, const QString& objectId )
+ScriptAccount::registerScriptPlugin( const QString& type, const QString& objectId )
 {
     ScriptObject* object = m_objects.value( objectId );
     if( !object )
@@ -99,7 +99,7 @@ ScriptPlugin::registerScriptPlugin( const QString& type, const QString& objectId
 
 
 void
-ScriptPlugin::onJobDeleted( const QString& jobId )
+ScriptAccount::onJobDeleted( const QString& jobId )
 {
     m_jobs.remove( jobId );
 }

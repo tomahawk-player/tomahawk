@@ -38,7 +38,7 @@ class JSResolverPrivate;
 class ScriptEngine;
 class ScriptJob;
 class ScriptObject;
-class ScriptPlugin;
+class ScriptAccount;
 
 class DLLEXPORT JSResolver : public Tomahawk::ExternalResolverGui
 {

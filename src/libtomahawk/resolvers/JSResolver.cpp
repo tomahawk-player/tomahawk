@@ -43,7 +43,7 @@
 #include "TomahawkVersion.h"
 #include "Track.h"
 #include "JSInfoPlugin.h"
-#include "JSPlugin.h"
+#include "JSAccount.h"
 
 #include <QDir>
 #include <QFile>
@@ -65,7 +65,7 @@ JSResolver::JSResolver( const QString& accountId, const QString& scriptPath, con
     tLog() << Q_FUNC_INFO << "Loading JS resolver:" << scriptPath;
 
     d->name = QFileInfo( filePath() ).baseName();
-    d->scriptPlugin.reset( new JSPlugin( d->name ) );
+    d->scriptAccount.reset( new JSAccount( d->name ) );
 
     // set the icon, if we launch properly we'll get the icon the resolver reports
     d->icon = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, QSize( 128, 128 ) );
@@ -207,14 +207,14 @@ JSResolver::init()
     // tomahawk.js
     {
         // add c++ part of tomahawk javascript library
-        d->scriptPlugin->addToJavaScriptWindowObject( "Tomahawk", d->resolverHelper );
+        d->scriptAccount->addToJavaScriptWindowObject( "Tomahawk", d->resolverHelper );
 
         // load es6-promises shim
-        d->scriptPlugin->loadScript( RESPATH "js/es6-promise-2.0.0.min.js" );
+        d->scriptAccount->loadScript( RESPATH "js/es6-promise-2.0.0.min.js" );
 
 
         // Load CrytoJS core
-        d->scriptPlugin->loadScript( RESPATH "js/cryptojs-core.js" );
+        d->scriptAccount->loadScript( RESPATH "js/cryptojs-core.js" );
 
         // Load CryptoJS modules
         QStringList jsfiles;
@@ -222,11 +222,11 @@ JSResolver::init()
         QDir cryptojs( RESPATH "js/cryptojs" );
         foreach ( QString jsfile, cryptojs.entryList( jsfiles ) )
         {
-            d->scriptPlugin->loadScript( RESPATH "js/cryptojs/" +  jsfile );
+            d->scriptAccount->loadScript( RESPATH "js/cryptojs/" +  jsfile );
         }
 
         // Load tomahawk.js
-        d->scriptPlugin->loadScript( RESPATH "js/tomahawk.js" );
+        d->scriptAccount->loadScript( RESPATH "js/tomahawk.js" );
     }
 
     // tomahawk-infosystem.js
@@ -234,21 +234,24 @@ JSResolver::init()
         // TODO: be smarter about this, only instantiate this if the resolver supports infoplugins
 
         // add c++ part of tomahawk infosystem bindings as Tomahawk.InfoSystem
-        d->infoSystemHelper = new JSInfoSystemHelper( d->scriptPlugin.get() );
-        d->scriptPlugin->addToJavaScriptWindowObject( "_TomahawkInfoSystem", d->infoSystemHelper );
-        d->scriptPlugin->evaluateJavaScript( "Tomahawk.InfoSystem = _TomahawkInfoSystem;" );
+        d->infoSystemHelper = new JSInfoSystemHelper( d->scriptAccount.get() );
+        d->scriptAccount->addToJavaScriptWindowObject( "_TomahawkInfoSystem", d->infoSystemHelper );
+        d->scriptAccount->evaluateJavaScript( "Tomahawk.InfoSystem = _TomahawkInfoSystem;" );
 
         // add deps
-        d->scriptPlugin->loadScripts( d->infoSystemHelper->requiredScriptPaths() );
+        d->scriptAccount->loadScripts( d->infoSystemHelper->requiredScriptPaths() );
     }
 
     // add resolver dependencies, if any
-    d->scriptPlugin->loadScripts( d->requiredScriptPaths );
+    d->scriptAccount->loadScripts( d->requiredScriptPaths );
 
 
     // add resolver
-    d->scriptPlugin->loadScript( filePath() );
+    d->scriptAccount->loadScript( filePath() );
 
+    // HACK: register resolver object
+    d->scriptAccount->evaluateJavaScript( "Tomahawk.PluginManager.registerPlugin('resolver', Tomahawk.resolver.instance);" )
+;
     // init resolver
     resolverInit();
 
@@ -326,7 +329,7 @@ JSResolver::artists( const Tomahawk::collection_ptr& collection )
     }
 
     QString eval = QString( "artists( '%1' )" )
-                   .arg( JSPlugin::escape( collection->name() ) );
+                   .arg( JSAccount::escape( collection->name() ) );
 
     QVariantMap m = callOnResolver( eval ).toMap();
     if ( m.isEmpty() )
@@ -362,8 +365,8 @@ JSResolver::albums( const Tomahawk::collection_ptr& collection, const Tomahawk::
     }
 
     QString eval = QString( "albums( '%1', '%2' )" )
-                   .arg( JSPlugin::escape( collection->name() ) )
-                   .arg( JSPlugin::escape( artist->name() ) );
+                   .arg( JSAccount::escape( collection->name() ) )
+                   .arg( JSAccount::escape( artist->name() ) );
 
     QVariantMap m = callOnResolver( eval ).toMap();
     if ( m.isEmpty() )
@@ -399,9 +402,9 @@ JSResolver::tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::
     }
 
     QString eval = QString( "tracks( '%1', '%2', '%3' )" )
-                   .arg( JSPlugin::escape( collection->name() ) )
-                   .arg( JSPlugin::escape( album->artist()->name() ) )
-                   .arg( JSPlugin::escape( album->name() ) );
+                   .arg( JSAccount::escape( collection->name() ) )
+                   .arg( JSAccount::escape( album->artist()->name() ) )
+                   .arg( JSAccount::escape( album->name() ) );
 
     QVariantMap m = callOnResolver( eval ).toMap();
     if ( m.isEmpty() )
@@ -432,7 +435,7 @@ JSResolver::canParseUrl( const QString& url, UrlType type )
     if ( d->capabilities.testFlag( UrlLookup ) )
     {
         QString eval = QString( "canParseUrl( '%1', %2 )" )
-                       .arg( JSPlugin::escape( QString( url ) ) )
+                       .arg( JSAccount::escape( QString( url ) ) )
                        .arg( (int) type );
         return callOnResolver( eval ).toBool();
     }
@@ -463,7 +466,7 @@ JSResolver::lookupUrl( const QString& url )
     }
 
     QString eval = QString( "lookupUrl( '%1' )" )
-                   .arg( JSPlugin::escape( QString( url ) ) );
+                   .arg( JSAccount::escape( QString( url ) ) );
 
     QVariantMap m = callOnResolver( eval ).toMap();
     if ( m.isEmpty() )
@@ -500,16 +503,16 @@ JSResolver::resolve( const Tomahawk::query_ptr& query )
     if ( !query->isFullTextQuery() )
     {
         eval = QString( "resolve( '%1', '%2', '%3', '%4' )" )
-                  .arg( JSPlugin::escape( query->id() ) )
-                  .arg( JSPlugin::escape( query->queryTrack()->artist() ) )
-                  .arg( JSPlugin::escape( query->queryTrack()->album() ) )
-                  .arg( JSPlugin::escape( query->queryTrack()->track() ) );
+                  .arg( JSAccount::escape( query->id() ) )
+                  .arg( JSAccount::escape( query->queryTrack()->artist() ) )
+                  .arg( JSAccount::escape( query->queryTrack()->album() ) )
+                  .arg( JSAccount::escape( query->queryTrack()->track() ) );
     }
     else
     {
         eval = QString( "search( '%1', '%2' )" )
-                  .arg( JSPlugin::escape( query->id() ) )
-                  .arg( JSPlugin::escape( query->fullTextQuery() ) );
+                  .arg( JSAccount::escape( query->id() ) )
+                  .arg( JSAccount::escape( query->fullTextQuery() ) );
     }
 
     QVariantMap m = callOnResolver( eval ).toMap();
@@ -960,7 +963,7 @@ JSResolver::callOnResolver( const QString& scriptSource )
 
     QString propertyName = scriptSource.split('(').first();
 
-    return d->scriptPlugin->evaluateJavaScriptWithResult( QString(
+    return d->scriptAccount->evaluateJavaScriptWithResult( QString(
         "if(Tomahawk.resolver.instance['_adapter_%1']) {"
         "    Tomahawk.resolver.instance._adapter_%2;"
         "} else {"

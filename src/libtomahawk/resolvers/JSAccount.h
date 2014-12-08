@@ -16,11 +16,11 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TOMAHAWK_JSPLUGIN_H
-#define TOMAHAWK_JSPLUGIN_H
+#ifndef TOMAHAWK_JSACCOUNT_H
+#define TOMAHAWK_JSACCOUNT_H
 
 
-#include "ScriptPlugin.h"
+#include "ScriptAccount.h"
 
 #include <QVariantMap>
 #include <QObject>
@@ -35,13 +35,13 @@ namespace Tomahawk
 //TODO: pimple
 class ScriptEngine;
 
-class DLLEXPORT JSPlugin : public ScriptPlugin
+class DLLEXPORT JSAccount : public ScriptAccount
 {
     Q_OBJECT
 
 public:
     // HACK: needs refactoring
-    JSPlugin( const QString& name );
+    JSAccount( const QString& name );
 
     void startJob( ScriptJob* scriptJob ) override;
 
@@ -82,5 +82,5 @@ private:
 
 }
 
-#endif // TOMAHAWK_SCRIPTJOB_H
+#endif // TOMAHAWK_JSACCOUNT_H
 

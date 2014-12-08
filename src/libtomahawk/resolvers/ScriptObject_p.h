@@ -28,10 +28,10 @@ class ScriptObjectPrivate
 {
     friend class ScriptObject;
 public:
-    ScriptObjectPrivate( ScriptObject* q, const QString& id, ScriptPlugin* scriptPlugin )
+    ScriptObjectPrivate( ScriptObject* q, const QString& id, ScriptAccount* scriptAccount )
         : q_ptr ( q )
         , id( id )
-        , scriptPlugin( scriptPlugin )
+        , scriptAccount( scriptAccount )
     {
     }
     ScriptObject* q_ptr;
@@ -39,7 +39,7 @@ public:
 
 private:
     QString id;
-    ScriptPlugin* scriptPlugin;
+    ScriptAccount* scriptAccount;
 };
 
 } // ns: Tomahawk

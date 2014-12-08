@@ -69,7 +69,7 @@ private:
     QList< QVariant > dataWidgets;
     QStringList requiredScriptPaths;
 
-    std::unique_ptr<JSPlugin> scriptPlugin;
+    std::unique_ptr<JSAccount> scriptAccount;
 };
 
 } // ns: Tomahawk

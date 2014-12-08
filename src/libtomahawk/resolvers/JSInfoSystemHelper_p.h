@@ -29,9 +29,9 @@ class JSInfoSystemHelperPrivate
 {
     friend class JSInfoSystemHelper;
 public:
-    JSInfoSystemHelperPrivate( JSInfoSystemHelper* q, JSPlugin* scriptPlugin )
+    JSInfoSystemHelperPrivate( JSInfoSystemHelper* q, JSAccount* scriptAccount )
         : q_ptr ( q )
-        , scriptPlugin ( scriptPlugin )
+        , scriptAccount ( scriptAccount )
     {
     }
 
@@ -39,7 +39,7 @@ public:
     Q_DECLARE_PUBLIC ( JSInfoSystemHelper )
 
 private:
-    JSPlugin* scriptPlugin;
+    JSAccount* scriptAccount;
     QMap<int,JSInfoPlugin*> infoPlugins;
 
 };

@@ -19,12 +19,12 @@
 #include "JSInfoSystemHelper_p.h"
 #include "JSInfoPlugin.h"
 
-#include "JSPlugin.h"
+#include "JSAccount.h"
 #include "../utils/Logger.h"
 
 using namespace Tomahawk;
 
-JSInfoSystemHelper::JSInfoSystemHelper( JSPlugin* parent )
+JSInfoSystemHelper::JSInfoSystemHelper( JSAccount* parent )
     : QObject( parent )
     , d_ptr( new JSInfoSystemHelperPrivate( this, parent ) )
 {
@@ -49,7 +49,7 @@ JSInfoSystemHelper::nativeAddInfoPlugin( int id )
     Q_D( JSInfoSystemHelper );
 
     // create infoplugin instance
-    JSInfoPlugin* jsInfoPlugin = new JSInfoPlugin( id, d->scriptPlugin );
+    JSInfoPlugin* jsInfoPlugin = new JSInfoPlugin( id, d->scriptAccount );
     Tomahawk::InfoSystem::InfoPluginPtr infoPlugin( jsInfoPlugin );
 
     // move it to infosystem thread

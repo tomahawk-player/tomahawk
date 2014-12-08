@@ -40,7 +40,7 @@
 #include "Result.h"
 #include "SourceList.h"
 #include "UrlHandler.h"
-#include "JSPlugin.h"
+#include "JSAccount.h"
 
 #include <QFile>
 #include <QFileInfo>
@@ -412,14 +412,14 @@ JSResolverHelper::reportCapabilities( const QVariant& v )
 void
 JSResolverHelper::reportScriptJobResults( const QVariantMap& result )
 {
-    m_resolver->d_func()->scriptPlugin->reportScriptJobResult( result );
+    m_resolver->d_func()->scriptAccount->reportScriptJobResult( result );
 }
 
 
 void
 JSResolverHelper::registerScriptPlugin(const QString& type, const QString& objectId)
 {
-    m_resolver->d_func()->scriptPlugin->registerScriptPlugin( type, objectId );
+    m_resolver->d_func()->scriptAccount->registerScriptPlugin( type, objectId );
 }
 
 
@@ -507,14 +507,14 @@ JSResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr&, const QStr
                                                                                   .arg( url );
 
         m_streamCallbacks.insert( qid, callback );
-        m_resolver->d_func()->scriptPlugin->evaluateJavaScript( getUrl );
+        m_resolver->d_func()->scriptAccount->evaluateJavaScript( getUrl );
     }
     else
     {
         QString getUrl = QString( "Tomahawk.resolver.instance.%1( '%2' );" ).arg( m_urlCallback )
                                                                             .arg( url );
 
-        QString urlStr = m_resolver->d_func()->scriptPlugin->evaluateJavaScriptWithResult( getUrl ).toString();
+        QString urlStr = m_resolver->d_func()->scriptAccount->evaluateJavaScriptWithResult( getUrl ).toString();
 
         returnStreamUrl( urlStr, QMap<QString, QString>(), callback );
     }
@@ -551,7 +551,7 @@ JSResolverHelper::nativeRetrieveMetadata( int metadataId, const QString& url,
     {
         QString javascript = QString( "Tomahawk.retrievedMetadata( %1, null, 'Supplied size is not (yet) supported');" )
                 .arg( metadataId );
-        m_resolver->d_func()->scriptPlugin->evaluateJavaScript( javascript );
+        m_resolver->d_func()->scriptAccount->evaluateJavaScript( javascript );
         return;
     }
 
@@ -618,7 +618,7 @@ JSResolverHelper::nativeRetrieveMetadata( int metadataId, const QString& url,
         {
             QString javascript = QString( "Tomahawk.retrievedMetadata( %1, null, 'Unknown mime type for tagging: %2');" )
                     .arg( metadataId ).arg( mime_type );
-            m_resolver->d_func()->scriptPlugin->evaluateJavaScript( javascript );
+            m_resolver->d_func()->scriptAccount->evaluateJavaScript( javascript );
             return;
         }
 
@@ -633,7 +633,7 @@ JSResolverHelper::nativeRetrieveMetadata( int metadataId, const QString& url,
         {
             QString javascript = QString( "Tomahawk.retrievedMetadata( %1, null, 'Could not read tag information.');" )
                     .arg( metadataId );
-            m_resolver->d_func()->scriptPlugin->evaluateJavaScript( javascript );
+            m_resolver->d_func()->scriptAccount->evaluateJavaScript( javascript );
             return;
         }
 
@@ -647,7 +647,7 @@ JSResolverHelper::nativeRetrieveMetadata( int metadataId, const QString& url,
         {
             QString javascript = QString( "Tomahawk.retrievedMetadata( %1, null, 'Empty track returnd');" )
                     .arg( metadataId );
-            m_resolver->d_func()->scriptPlugin->evaluateJavaScript( javascript );
+            m_resolver->d_func()->scriptAccount->evaluateJavaScript( javascript );
             return;
         }
 
@@ -655,7 +655,7 @@ JSResolverHelper::nativeRetrieveMetadata( int metadataId, const QString& url,
         {
             QString javascript = QString( "Tomahawk.retrievedMetadata( %1, null, 'Empty artist returnd');" )
                     .arg( metadataId );
-            m_resolver->d_func()->scriptPlugin->evaluateJavaScript( javascript );
+            m_resolver->d_func()->scriptAccount->evaluateJavaScript( javascript );
             return;
         }
 
@@ -670,13 +670,13 @@ JSResolverHelper::nativeRetrieveMetadata( int metadataId, const QString& url,
         QString javascript = QString( "Tomahawk.retrievedMetadata( %1, %2 );" )
                 .arg( metadataId )
                 .arg( QString::fromLatin1( TomahawkUtils::toJson( m ) ) );
-        m_resolver->d_func()->scriptPlugin->evaluateJavaScript( javascript );
+        m_resolver->d_func()->scriptAccount->evaluateJavaScript( javascript );
     }
     else
     {
         QString javascript = QString( "Tomahawk.retrievedMetadata( %1, null, 'Protocol not supported');" )
                 .arg( metadataId );
-        m_resolver->d_func()->scriptPlugin->evaluateJavaScript( javascript );
+        m_resolver->d_func()->scriptAccount->evaluateJavaScript( javascript );
     }
 }
 
@@ -740,7 +740,7 @@ JSResolverHelper::nativeAsyncRequestDone( int requestId, NetworkReply* reply )
     QString javascript = QString( "Tomahawk.nativeAsyncRequestDone( %1, %2 );" )
             .arg( QString::number( requestId ) )
             .arg( json );
-    m_resolver->d_func()->scriptPlugin->evaluateJavaScript( javascript );
+    m_resolver->d_func()->scriptAccount->evaluateJavaScript( javascript );
 }
 
 

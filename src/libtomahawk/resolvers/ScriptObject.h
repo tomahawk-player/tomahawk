@@ -27,17 +27,17 @@
 namespace Tomahawk
 {
 
-class ScriptPlugin;
+class ScriptAccount;
 class ScriptObjectPrivate;
 class ScriptJob;
 
 class DLLEXPORT ScriptObject : public QObject
 {
-friend class JSPlugin;
+friend class JSAccount;
 friend class ScriptJob;
 
 public:
-    ScriptObject( const QString& id, ScriptPlugin* parent );
+    ScriptObject( const QString& id, ScriptAccount* parent );
     virtual ~ScriptObject();
 
     ScriptJob* invoke( const QString& methodName, const QVariantMap& arguments );

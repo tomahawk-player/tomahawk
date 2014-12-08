@@ -24,7 +24,7 @@
 namespace Tomahawk
 {
 
-class JSPlugin;
+class JSAccount;
 class JSInfoSystemHelperPrivate;
 
 class JSInfoSystemHelper : public QObject
@@ -32,7 +32,7 @@ class JSInfoSystemHelper : public QObject
     Q_OBJECT
 
 public:
-    JSInfoSystemHelper( JSPlugin* parent );
+    JSInfoSystemHelper( JSAccount* parent );
     ~JSInfoSystemHelper();
 
     QStringList requiredScriptPaths() const;

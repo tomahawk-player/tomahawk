@@ -36,7 +36,7 @@
 
 using namespace Tomahawk;
 
-ScriptEngine::ScriptEngine( JSPlugin* parent )
+ScriptEngine::ScriptEngine( JSAccount* parent )
     : QWebPage( (QObject*) parent )
     , m_parent( parent )
 {

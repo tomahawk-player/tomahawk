@@ -18,7 +18,7 @@
 
 #include "JSInfoPlugin_p.h"
 
-#include "JSPlugin.h"
+#include "JSAccount.h"
 #include "Typedefs.h"
 
 #include "../utils/Logger.h"
@@ -26,7 +26,7 @@
 
 using namespace Tomahawk;
 
-JSInfoPlugin::JSInfoPlugin( int id, JSPlugin *resolver )
+JSInfoPlugin::JSInfoPlugin( int id, JSAccount *resolver )
     : d_ptr( new JSInfoPluginPrivate( this, id, resolver ) )
 {
     Q_ASSERT( resolver );
@@ -229,7 +229,7 @@ JSInfoPlugin::serializeQVariantMap( const QVariantMap& map )
         }
     }
 
-    return JSPlugin::serializeQVariantMap( localMap );
+    return JSAccount::serializeQVariantMap( localMap );
 }
 
 

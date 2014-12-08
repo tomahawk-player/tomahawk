@@ -27,7 +27,7 @@
 namespace Tomahawk
 {
 
-class JSPlugin;
+class JSAccount;
 class JSInfoPluginPrivate;
 
 
@@ -39,7 +39,7 @@ public:
     /**
      * @param id unique identifier to identify an infoplugin in its scope
      */
-    JSInfoPlugin( int id, JSPlugin* resolver );
+    JSInfoPlugin( int id, JSAccount* resolver );
     virtual ~JSInfoPlugin();
 
 
@@ -55,7 +55,7 @@ protected slots:
     void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData ) override;
 
 protected:
-    // TODO: create JSPlugin base class and move these methods there
+    // TODO: create JSAccount base class and move these methods there
     QString serviceGetter() const; // = 0
     void callMethodOnInfoPlugin( const QString& scriptSource );
     QVariant callMethodOnInfoPluginWithResult( const QString& scriptSource );

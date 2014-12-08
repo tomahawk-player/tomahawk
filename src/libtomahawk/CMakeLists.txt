@@ -89,12 +89,12 @@ set( libGuiSources
     resolvers/JSResolver.cpp
     resolvers/JSResolverHelper.cpp
     resolvers/ScriptEngine.cpp
-    resolvers/JSPlugin.cpp
+    resolvers/JSAccount.cpp
     resolvers/ScriptJob.cpp
     resolvers/SyncScriptJob.cpp
     resolvers/ScriptObject.cpp
     resolvers/ScriptLinkGeneratorPlugin.cpp
-    resolvers/ScriptPlugin.cpp
+    resolvers/ScriptAccount.cpp
 
     utils/DpiScaler.cpp
     utils/ImageRegistry.cpp

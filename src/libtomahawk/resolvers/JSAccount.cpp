@@ -16,7 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "JSPlugin.h"
+#include "JSAccount.h"
 
 #include "../utils/Json.h"
 #include "../utils/Logger.h"
@@ -30,7 +30,7 @@
 
 using namespace Tomahawk;
 
-JSPlugin::JSPlugin( const QString& name )
+JSAccount::JSAccount( const QString& name )
     : m_engine( new ScriptEngine( this ) )
     , m_name( name )
 {
@@ -38,14 +38,14 @@ JSPlugin::JSPlugin( const QString& name )
 
 
 void
-JSPlugin::addToJavaScriptWindowObject( const QString& name, QObject* object )
+JSAccount::addToJavaScriptWindowObject( const QString& name, QObject* object )
 {
     m_engine->mainFrame()->addToJavaScriptWindowObject( name, object );
 }
 
 
 QString
-JSPlugin::serializeQVariantMap( const QVariantMap& map )
+JSAccount::serializeQVariantMap( const QVariantMap& map )
 {
     QVariantMap localMap = map;
 
@@ -62,12 +62,12 @@ JSPlugin::serializeQVariantMap( const QVariantMap& map )
 
     QByteArray serialized = TomahawkUtils::toJson( localMap );
 
-    return QString( "JSON.parse('%1')" ).arg( JSPlugin::escape( QString::fromUtf8( serialized ) ) );
+    return QString( "JSON.parse('%1')" ).arg( JSAccount::escape( QString::fromUtf8( serialized ) ) );
 }
 
 
 QString
-JSPlugin::JSPlugin::escape( const QString& source )
+JSAccount::JSAccount::escape( const QString& source )
 {
     QString copy = source;
     return copy.replace( "\\", "\\\\" ).replace( "'", "\\'" );
@@ -75,7 +75,7 @@ JSPlugin::JSPlugin::escape( const QString& source )
 
 
 void
-JSPlugin::loadScript( const QString& path )
+JSAccount::loadScript( const QString& path )
 {
     QFile file( path );
 
@@ -96,7 +96,7 @@ JSPlugin::loadScript( const QString& path )
 
 
 void
-JSPlugin::loadScripts( const QStringList& paths )
+JSAccount::loadScripts( const QStringList& paths )
 {
     foreach ( const QString& path, paths )
     {
@@ -106,7 +106,7 @@ JSPlugin::loadScripts( const QStringList& paths )
 
 
 void
-JSPlugin::startJob( ScriptJob* scriptJob )
+JSAccount::startJob( ScriptJob* scriptJob )
 {
     QString eval = QString(
         "Tomahawk.PluginManager.invoke("
@@ -128,21 +128,21 @@ JSPlugin::startJob( ScriptJob* scriptJob )
 
 
 const QString
-JSPlugin::name() const
+JSAccount::name() const
 {
     return m_name;
 }
 
 
 QVariant
-JSPlugin::evaluateJavaScriptInternal( const QString& scriptSource )
+JSAccount::evaluateJavaScriptInternal( const QString& scriptSource )
 {
     return m_engine->mainFrame()->evaluateJavaScript( scriptSource );
 }
 
 
 void
-JSPlugin::evaluateJavaScript( const QString& scriptSource )
+JSAccount::evaluateJavaScript( const QString& scriptSource )
 {
     if ( QThread::currentThread() != thread() )
     {
@@ -155,7 +155,7 @@ JSPlugin::evaluateJavaScript( const QString& scriptSource )
 
 
 QVariant
-JSPlugin::evaluateJavaScriptWithResult( const QString& scriptSource )
+JSAccount::evaluateJavaScriptWithResult( const QString& scriptSource )
 {
     Q_ASSERT( QThread::currentThread() == thread() );
 

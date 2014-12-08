@@ -18,8 +18,8 @@
  */
 
 #pragma once
-#ifndef TOMAHAWK_SCRIPTPLUGIN_H
-#define TOMAHAWK_SCRIPTPLUGIN_H
+#ifndef TOMAHAWK_SCRIPTACCOUNT_H
+#define TOMAHAWK_SCRIPTACCOUNT_H
 
 #include <QObject>
 #include <QVariantMap>
@@ -34,12 +34,12 @@ namespace Tomahawk {
 class ScriptObject;
 class ScriptJob;
 
-class DLLEXPORT ScriptPlugin : public QObject
+class DLLEXPORT ScriptAccount : public QObject
 {
     Q_OBJECT
 
 public:
-    virtual ~ScriptPlugin() {}
+    virtual ~ScriptAccount() {}
 
     ScriptJob* invoke( ScriptObject* scriptObject, const QString& methodName, const QVariantMap& arguments );
     virtual void startJob( ScriptJob* scriptJob ) = 0;
@@ -57,4 +57,4 @@ private: // TODO: pimple, might be renamed before tho
 
 } // ns: Tomahawk
 
-#endif // TOMAHAWK_SCRIPTPLUGIN_H
+#endif // TOMAHAWK_SCRIPTACCOUNT_H

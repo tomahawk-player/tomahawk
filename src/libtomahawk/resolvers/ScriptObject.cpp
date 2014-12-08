@@ -17,12 +17,12 @@
  */
 #include "ScriptObject_p.h"
 
-#include "ScriptPlugin.h"
+#include "ScriptAccount.h"
 
 
 using namespace Tomahawk;
 
-ScriptObject::ScriptObject( const QString& id, ScriptPlugin* parent )
+ScriptObject::ScriptObject( const QString& id, ScriptAccount* parent )
     : QObject( parent )
     , d_ptr( new ScriptObjectPrivate( this, id, parent ))
 {
@@ -39,7 +39,7 @@ ScriptObject::invoke( const QString& methodName, const QVariantMap& arguments )
 {
     Q_D( ScriptObject );
 
-    return d->scriptPlugin->invoke( this, methodName, arguments );
+    return d->scriptAccount->invoke( this, methodName, arguments );
 }
 
 
@@ -57,5 +57,5 @@ ScriptObject::startJob( ScriptJob* scriptJob )
 {
     Q_D( const ScriptObject );
 
-    d->scriptPlugin->startJob( scriptJob );
+    d->scriptAccount->startJob( scriptJob );
 }
