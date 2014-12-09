@@ -405,7 +405,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1106"/>
         <source>Sorry, couldn&apos;t find any playable tracks</source>
-        <translation type="unfinished"/>
+        <translation>К сожалению, не удалось найти воспроизводимых треков</translation>
     </message>
 </context>
 <context>
@@ -756,8 +756,7 @@ connect and stream from you?</source>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="78"/>
         <source>Enter One-time
 Password (OTP)</source>
-        <translation>Введите одноразовый⏎
-пароль (OTP)</translation>
+        <translation>Введите одноразовый пароль (OTP)</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="86"/>
@@ -935,37 +934,37 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="14"/>
         <source>Load Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Загрузить плей-лист</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="20"/>
         <source>Enter the URL of the hosted playlist (e.g. .xspf format) or click the button to select a local M3U of XSPF playlist to import.</source>
-        <translation type="unfinished"/>
+        <translation>Введите адрес размещенного список воспроизведения (например, формата .xspf), или нажмите кнопку, чтобы выбрать для импорта локальный список воспроизведения M3U или XSPF.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="35"/>
         <source>Playlist URL</source>
-        <translation type="unfinished"/>
+        <translation>Адрес плей-листа (URI)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="42"/>
         <source>Enter URL...</source>
-        <translation type="unfinished"/>
+        <translation>Введите ссылку на плейлист (URI)...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="55"/>
         <source>...</source>
-        <translation type="unfinished"/>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="64"/>
         <source>Automatically Update (upon changes to hosted playlist)</source>
-        <translation type="unfinished"/>
+        <translation>Автоматическое обновление (при изменениях размещения списока воспроизведения)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="79"/>
         <source>To import a playlist from Spotify, Rdio, Beats, etc. - simply drag the link into Tomahawk.</source>
-        <translation type="unfinished"/>
+        <translation>Чтобы импортировать список воспроизведения из Spotify, Rdio, Beats и т.д. - просто перетащите ссылку в Tomahawk.</translation>
     </message>
 </context>
 <context>
@@ -973,12 +972,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.cpp" line="56"/>
         <source>Load Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Загрузить плей-лист</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.cpp" line="56"/>
         <source>Playlists (*.xspf *.m3u)</source>
-        <translation type="unfinished"/>
+        <translation>Плей-листы (*.xspf)</translation>
     </message>
 </context>
 <context>
@@ -1119,13 +1118,14 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="185"/>
         <source>Error</source>
-        <translation type="unfinished"/>
+        <translation>Ошибка</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="185"/>
         <source>Could not write tags to file:
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Не удалось записать теги в файл:
+%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="396"/>
@@ -1704,7 +1704,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="239"/>
         <source>Plug-Ins</source>
-        <translation type="unfinished"/>
+        <translation>Плагины</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="244"/>
@@ -3337,7 +3337,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="138"/>
         <source>Tomahawk is stopped.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk остановлен.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="211"/>
@@ -3368,7 +3368,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="314"/>
         <source>Tomahawk - Now Playing</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk - воспроизводит</translation>
     </message>
 </context>
 <context>

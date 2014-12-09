@@ -495,7 +495,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="379"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation>Depois que você escanear a sua biblioteca musical você encontrará aqui as suas faixas.</translation>
+        <translation>Depois que você escanear a sua coleção de music você encontrará suas faixas aqui.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="382"/>
@@ -3541,7 +3541,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/libtomahawk/network/RemoteCollection.cpp" line="36"/>
         <source>Collection of %1</source>
-        <translation>Biblioteca de %1</translation>
+        <translation>Coleção de %1</translation>
     </message>
 </context>
 <context>
@@ -3550,7 +3550,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="66"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection</comment>
-        <translation>%1 Biblioteca</translation>
+        <translation>%1 Coleção</translation>
     </message>
 </context>
 <context>
