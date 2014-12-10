@@ -26,7 +26,10 @@
 #include <QPushButton>
 #include <QDebug>
 
+
 class AccountConfigWidget;
+
+class QLabel;
 
 class DelegateConfigWrapper : public QDialog
 {
@@ -64,6 +67,7 @@ private:
     QWidget* m_aboutW;
     QDialogButtonBox* m_buttons;
     QPushButton *m_okButton, *m_deleteButton;
+    QLabel* m_errorLabel;
     bool m_deleted;
 };
 

@@ -22,6 +22,7 @@
 #include "../utils/Logger.h"
 
 #include <QMessageBox>
+#include <QLabel>
 
 
 DelegateConfigWrapper::DelegateConfigWrapper( Tomahawk::Accounts::Account* account, QWidget* parent, Qt::WindowFlags flags )
@@ -32,6 +33,7 @@ DelegateConfigWrapper::DelegateConfigWrapper( Tomahawk::Accounts::Account* accou
     , m_buttons( nullptr )
     , m_okButton( nullptr )
     , m_deleteButton( nullptr )
+    , m_errorLabel( new QLabel( this ) )
     , m_deleted( false )
 {
     setWindowTitle(  tr("%1 Config" ).arg( account->accountFriendlyName() ) );
@@ -64,6 +66,9 @@ DelegateConfigWrapper::DelegateConfigWrapper( Tomahawk::Accounts::Account* accou
         h->setContentsMargins( m_widget->layout()->contentsMargins() );
     else if ( m_widget )
         h->setContentsMargins( m_widget->contentsMargins() );
+
+    m_errorLabel->setAlignment( Qt::AlignCenter );
+    v->addWidget( m_errorLabel );
 
     v->addLayout( h );
     setLayout( v );
@@ -119,6 +124,7 @@ DelegateConfigWrapper::closed( QAbstractButton* b )
             return;
         }
 
+        m_errorLabel->setText( "" );
         m_account->testConfig();
     }
     else if ( b == m_deleteButton )
@@ -182,12 +188,13 @@ DelegateConfigWrapper::onConfigTestResult( Tomahawk::Accounts::ConfigTestResultT
 
     if( result == Tomahawk::Accounts::ConfigTestResultSuccess )
     {
+        m_errorLabel->setText( "" );
         closeDialog( QDialog::Accepted );
     }
     else
     {
         // TODO: make this nicer
-        QMessageBox::critical( this, tr( "Error" ), tr( "Your config is invalid and can't be saved." ) );
+        m_errorLabel->setText( QString( "<font color='red'>%1</font>" ).arg( tr( "Your config is invalid." ) ) );
     }
 }
 
