@@ -18,6 +18,8 @@
 #ifndef RESOLVER_CONFIG_WRAPPER
 #define RESOLVER_CONFIG_WRAPPER
 
+#include "Account.h"
+
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
@@ -30,7 +32,7 @@ class DelegateConfigWrapper : public QDialog
 {
     Q_OBJECT
 public:
-    DelegateConfigWrapper( AccountConfigWidget* conf, QWidget* aboutWidget, const QString& title, QWidget* parent, Qt::WindowFlags flags = 0 );
+    DelegateConfigWrapper( Tomahawk::Accounts::Account* account, QWidget* parent, Qt::WindowFlags flags = 0 );
 
     ~DelegateConfigWrapper() {}
 
@@ -54,9 +56,10 @@ private slots:
     void aboutClicked( bool );
 
 private:
-    QDialogButtonBox* m_buttons;
+    Tomahawk::Accounts::Account* m_account;
     AccountConfigWidget* m_widget;
     QWidget* m_aboutW;
+    QDialogButtonBox* m_buttons;
     QPushButton *m_okButton, *m_deleteButton;
     bool m_deleted;
 };

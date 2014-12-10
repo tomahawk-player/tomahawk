@@ -16,18 +16,24 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "DelegateConfigWrapper.h"
+
+#include "Account.h"
 #include "AccountConfigWidget.h"
 
 #include <QMessageBox>
 
 
-DelegateConfigWrapper::DelegateConfigWrapper( AccountConfigWidget* conf, QWidget* aboutWidget, const QString& title, QWidget* parent, Qt::WindowFlags flags )
+DelegateConfigWrapper::DelegateConfigWrapper( Tomahawk::Accounts::Account* account, QWidget* parent, Qt::WindowFlags flags )
     : QDialog( parent, flags )
-    , m_widget( conf )
-    , m_aboutW( aboutWidget )
+    , m_account( account )
+    , m_widget( account->configurationWidget() )
+    , m_aboutW( account->aboutWidget() )
+    , m_buttons( nullptr )
+    , m_okButton( nullptr )
+    , m_deleteButton( nullptr )
     , m_deleted( false )
 {
-    setWindowTitle( title );
+    setWindowTitle(  tr("%1 Config" ).arg( account->accountFriendlyName() ) );
     QVBoxLayout* v = new QVBoxLayout( this );
     v->setContentsMargins( 0, 0, 0, 0 );
     v->addWidget( m_widget );
@@ -66,8 +72,8 @@ DelegateConfigWrapper::DelegateConfigWrapper( AccountConfigWidget* conf, QWidget
     setSizeGripEnabled( false );
     updateSizeHint();
 
-    if ( conf->metaObject()->indexOfSignal( "sizeHintChanged()" ) > -1 )
-        connect( conf, SIGNAL( sizeHintChanged() ), this, SLOT( updateSizeHint() ) );
+    if ( m_widget->metaObject()->indexOfSignal( "sizeHintChanged()" ) > -1 )
+        connect( m_widget, SIGNAL( sizeHintChanged() ), this, SLOT( updateSizeHint() ) );
 }
 
 
