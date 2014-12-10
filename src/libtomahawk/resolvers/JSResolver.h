@@ -23,11 +23,12 @@
 #define JSRESOLVER_H
 
 #include "config.h"
-#include "DllMacro.h"
 #include "ExternalResolverGui.h"
 #include "Typedefs.h"
-
+#include "ScriptPlugin.h"
 #include "ScriptEngine.h" // hack, also should be renamed to JSEngine
+
+#include "DllMacro.h"
 
 namespace Tomahawk
 {
@@ -40,11 +41,12 @@ class ScriptJob;
 class ScriptObject;
 class ScriptAccount;
 
-class DLLEXPORT JSResolver : public Tomahawk::ExternalResolverGui
+class DLLEXPORT JSResolver : public Tomahawk::ExternalResolverGui, public ScriptPlugin
 {
 Q_OBJECT
 
 friend class JSResolverHelper;
+friend class JSAccount;
 
 public:
     explicit JSResolver( const QString& accountId, const QString& scriptPath, const QStringList& additionalScriptPaths = QStringList() );

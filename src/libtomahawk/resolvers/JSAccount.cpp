@@ -23,6 +23,7 @@
 #include "ScriptEngine.h"
 #include "ScriptJob.h"
 #include "ScriptObject.h"
+#include "JSResolver.h"
 
 #include <QWebFrame>
 #include <QFile>
@@ -41,6 +42,28 @@ void
 JSAccount::addToJavaScriptWindowObject( const QString& name, QObject* object )
 {
     m_engine->mainFrame()->addToJavaScriptWindowObject( name, object );
+}
+
+
+void
+JSAccount::setResolver( JSResolver* resolver )
+{
+    m_resolver = resolver;
+}
+
+
+void
+JSAccount::scriptPluginFactory( const QString& type, ScriptObject* object )
+{
+    if ( type == "resolver" )
+    {
+        Q_ASSERT( m_resolver );
+        m_resolver->m_object = object;
+    }
+    else
+    {
+        Tomahawk::ScriptAccount::scriptPluginFactory(type, object);
+    }
 }
 
 

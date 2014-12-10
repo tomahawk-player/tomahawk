@@ -34,6 +34,7 @@ namespace Tomahawk
 {
 //TODO: pimple
 class ScriptEngine;
+class JSResolver;
 
 class DLLEXPORT JSAccount : public ScriptAccount
 {
@@ -67,6 +68,9 @@ public:
     void loadScripts( const QStringList& paths );
     void addToJavaScriptWindowObject( const QString& name, QObject* object );
 
+    void setResolver( JSResolver* resolver );
+    void scriptPluginFactory( const QString& type, ScriptObject* object ) override;
+
     static QString serializeQVariantMap(const QVariantMap& map);
 
 private:
@@ -77,7 +81,8 @@ private:
 
     std::unique_ptr<ScriptEngine> m_engine;
     QString m_name;
-
+    // HACK: the order of initializen is flawed, tbr
+    JSResolver* m_resolver;
 };
 
 }

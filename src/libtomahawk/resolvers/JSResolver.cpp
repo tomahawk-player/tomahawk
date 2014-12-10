@@ -59,6 +59,7 @@ using namespace Tomahawk;
 
 JSResolver::JSResolver( const QString& accountId, const QString& scriptPath, const QStringList& additionalScriptPaths )
     : Tomahawk::ExternalResolverGui( scriptPath )
+    , ScriptPlugin( nullptr )
     , d_ptr( new JSResolverPrivate( this, accountId, scriptPath, additionalScriptPaths ) )
 {
     Q_D( JSResolver );
@@ -66,6 +67,7 @@ JSResolver::JSResolver( const QString& accountId, const QString& scriptPath, con
 
     d->name = QFileInfo( filePath() ).baseName();
     d->scriptAccount.reset( new JSAccount( d->name ) );
+    d->scriptAccount->setResolver( this );
 
     // set the icon, if we launch properly we'll get the icon the resolver reports
     d->icon = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, QSize( 128, 128 ) );
