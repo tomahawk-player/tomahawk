@@ -96,6 +96,7 @@ Api_v1_5::playback( QxtWebRequestEvent* event, const QString& command )
         {
             QVariantMap trackInfo;
             trackInfo.insert( "playing", true );
+            trackInfo.insert( "paused", AudioEngine::instance()->isPaused() );
             trackInfo.insert( "position", AudioEngine::instance()->currentTime() / 1000 );
             trackInfo.insert( "bitrate", currentTrack->bitrate() );
             if ( !currentTrack->resolvedBy().isNull() ) {
