@@ -770,6 +770,12 @@ JSResolver::loadCollections()
 
     if ( d->capabilities.testFlag( Browsable ) )
     {
+
+        foreach ( Tomahawk::collection_ptr collection, m_collections )
+        {
+            emit collectionRemoved( collection );
+        }
+
         const QVariantMap collectionInfo =  callOnResolver( "collection()" ).toMap();
         if ( collectionInfo.isEmpty() ||
              !collectionInfo.contains( "prettyname" ) ||
@@ -778,11 +784,6 @@ JSResolver::loadCollections()
 
         const QString prettyname = collectionInfo.value( "prettyname" ).toString();
         const QString desc = collectionInfo.value( "description" ).toString();
-
-        foreach ( Tomahawk::collection_ptr collection, m_collections )
-        {
-            emit collectionRemoved( collection );
-        }
 
         m_collections.clear();
         // at this point we assume that all the tracks browsable through a resolver belong to the local source
