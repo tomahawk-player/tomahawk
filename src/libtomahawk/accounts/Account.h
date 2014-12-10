@@ -54,6 +54,19 @@ enum AccountType
     StatusPushType = 0x08
 };
 
+// ATTENTION: keep in sync with tomahawk.js
+enum ConfigTestResultType
+{
+    ConfigTestResultOther = 0,
+    ConfigTestResultSuccess = 1,
+    ConfigTestResultLogout = 2,
+    ConfigTestResultCommunicationError = 3,
+    ConfigTestResultInvalidCredentials = 4,
+    ConfigTestResultInvalidAccount = 5,
+    ConfigTestResultPlayingElsewhere = 6,
+    ConfigTestResultAccountExpired = 7
+};
+
 DLLEXPORT QString accountTypeToString( AccountType type );
 
 Q_DECLARE_FLAGS( AccountTypes, AccountType )
@@ -143,6 +156,8 @@ public:
      */
     virtual void removeFromConfig();
 
+    virtual void testConfig();
+
 public slots:
     virtual void authenticate() = 0;
     virtual void deauthenticate() = 0;
@@ -152,6 +167,7 @@ signals:
     void connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState state );
 
     void configurationChanged();
+    void configTestResult( Tomahawk::Accounts::ConfigTestResultType );
 
 protected:
     virtual void loadFromConfig( const QString &accountId );

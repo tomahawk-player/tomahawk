@@ -196,6 +196,13 @@ var TomahawkResolver = {
     },
     collection: function () {
         return {};
+    },
+    _testConfig: function (config) {
+        return Promise.resolve(this.testConfig(config)).then(function() {
+            return { result: Tomahawk.ConfigTestResultType.Success };
+        });
+    },
+    testConfig: function () {
     }
 };
 
@@ -637,4 +644,16 @@ Tomahawk.PluginManager = {
             });
         });
     }
+};
+
+
+Tomahawk.ConfigTestResultType = {
+    Other: 0,
+    Success: 1,
+    Logout: 2,
+    CommunicationError: 3,
+    InvalidCredentials: 4,
+    InvalidAccount: 5,
+    PlayingElsewhere: 6,
+    AccountExpired: 7
 };

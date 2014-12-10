@@ -71,6 +71,7 @@ public:
 
     bool canParseUrl( const QString& url, UrlType type ) override;
 
+    QVariantMap loadDataFromWidgets();
 
 public slots:
     void resolve( const Tomahawk::query_ptr& query ) override;
@@ -99,7 +100,6 @@ private:
     void loadUi();
     void setWidgetData( const QVariant& value, QWidget* widget, const QString& property );
     QVariant widgetData( QWidget* widget, const QString& property );
-    QVariantMap loadDataFromWidgets();
     void fillDataInWidgets( const QVariantMap& data );
     void onCapabilitiesChanged( Capabilities capabilities );
     void loadCollections();

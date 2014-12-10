@@ -19,6 +19,7 @@
 
 #include "Account.h"
 #include "AccountConfigWidget.h"
+#include "../utils/Logger.h"
 
 #include <QMessageBox>
 
@@ -74,6 +75,8 @@ DelegateConfigWrapper::DelegateConfigWrapper( Tomahawk::Accounts::Account* accou
 
     if ( m_widget->metaObject()->indexOfSignal( "sizeHintChanged()" ) > -1 )
         connect( m_widget, SIGNAL( sizeHintChanged() ), this, SLOT( updateSizeHint() ) );
+
+    connect( m_account, SIGNAL( configTestResult( Tomahawk::Accounts::ConfigTestResultType ) ), SLOT( onConfigTestResult( Tomahawk::Accounts::ConfigTestResultType ) ) );
 }
 
 
@@ -101,10 +104,9 @@ DelegateConfigWrapper::closed( QAbstractButton* b )
     if ( buttons->standardButton( b ) == QDialogButtonBox::Help )
         return;
 
-    int doneCode = 0;
-
     if ( buttons->standardButton( b ) == QDialogButtonBox::Ok )
     {
+        // TODO: probably should be hidden behind testConfig() in cpp accounts
         m_widget->resetErrors();
         m_widget->checkForErrors();
         if( !m_widget->settingsValid() )
@@ -117,7 +119,7 @@ DelegateConfigWrapper::closed( QAbstractButton* b )
             return;
         }
 
-        doneCode = QDialog::Accepted;
+        m_account->testConfig();
     }
     else if ( b == m_deleteButton )
     {
@@ -128,15 +130,8 @@ DelegateConfigWrapper::closed( QAbstractButton* b )
     }
     else
     {
-        doneCode = QDialog::Rejected;
+        closeDialog( QDialog::Rejected );
     }
-
-    // let the config widget live to see another day
-    layout()->removeWidget( m_widget );
-    m_widget->setParent( 0 );
-    m_widget->setVisible( false );
-
-    done( doneCode );
 }
 
 
@@ -179,3 +174,31 @@ DelegateConfigWrapper::aboutClicked( bool )
 
 }
 
+
+void
+DelegateConfigWrapper::onConfigTestResult( Tomahawk::Accounts::ConfigTestResultType result )
+{
+    tLog() << Q_FUNC_INFO << result;
+
+    if( result == Tomahawk::Accounts::ConfigTestResultSuccess )
+    {
+        closeDialog( QDialog::Accepted );
+    }
+    else
+    {
+        // TODO: make this nicer
+        QMessageBox::critical( this, tr( "Error" ), tr( "Your config is invalid and can't be saved." ) );
+    }
+}
+
+
+void
+DelegateConfigWrapper::closeDialog( QDialog::DialogCode code )
+{
+    // let the config widget live to see another day
+    layout()->removeWidget( m_widget );
+    m_widget->setParent( 0 );
+    m_widget->setVisible( false );
+
+    done( code );
+}

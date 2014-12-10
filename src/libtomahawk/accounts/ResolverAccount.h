@@ -99,8 +99,11 @@ public:
 
     void removeBundle();
 
+    void testConfig() override;
+
 private slots:
     void resolverChanged();
+    void onTestConfig( const QVariantMap& result );
 
 protected:
     // Created by factory, when user installs a new resolver

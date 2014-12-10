@@ -54,8 +54,11 @@ signals:
 
 private slots:
     void aboutClicked( bool );
+    void onConfigTestResult( Tomahawk::Accounts::ConfigTestResultType );
 
 private:
+    void closeDialog( QDialog::DialogCode code );
+
     Tomahawk::Accounts::Account* m_account;
     AccountConfigWidget* m_widget;
     QWidget* m_aboutW;

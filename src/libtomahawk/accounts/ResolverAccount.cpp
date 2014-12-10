@@ -41,6 +41,12 @@
 #include "TomahawkSettings.h"
 #include "TomahawkVersion.h"
 
+
+// HACK
+#include "../resolvers/JSResolver.h"
+#include "resolvers/ScriptObject.h"
+#include "resolvers/ScriptJob.h"
+
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
@@ -508,6 +514,44 @@ ResolverAccount::removeBundle()
     {
         TomahawkUtils::removeDirectory( expectedPath );
     }
+}
+
+
+void ResolverAccount::testConfig()
+{
+    // HACK: move to JSAccount once we have that properly
+    JSResolver* resolver = qobject_cast< Tomahawk::JSResolver* >( m_resolver );
+    if ( resolver )
+    {
+        QVariantMap data = resolver->loadDataFromWidgets();
+        tLog() << "config data: " << data;
+        ScriptJob* job = resolver->scriptObject()->invoke( "_testConfig", data );
+        connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onTestConfig( QVariantMap ) ) );
+        job->start();
+    }
+    else
+    {
+        emit configTestResult( Accounts::ConfigTestResultSuccess );
+    }
+}
+
+
+void
+ResolverAccount::onTestConfig( const QVariantMap& result )
+{
+    tLog() << Q_FUNC_INFO << result;
+
+    int resultCode = result[ "result" ].toInt();
+    if ( resultCode == 1 )
+    {
+        emit configTestResult( Accounts::ConfigTestResultSuccess );
+    }
+    else
+    {
+        emit configTestResult( Accounts::ConfigTestResultOther );
+    }
+
+    sender()->deleteLater();
 }
 
 

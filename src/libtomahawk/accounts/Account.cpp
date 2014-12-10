@@ -151,6 +151,13 @@ Account::removeFromConfig()
 
 
 void
+Account::testConfig()
+{
+    emit configTestResult( ConfigTestResultSuccess );
+}
+
+
+void
 Account::setTypes( AccountTypes types )
 {
     QMutexLocker locker( &m_mutex );
