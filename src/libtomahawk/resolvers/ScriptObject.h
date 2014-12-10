@@ -40,7 +40,7 @@ public:
     ScriptObject( const QString& id, ScriptAccount* parent );
     virtual ~ScriptObject();
 
-    ScriptJob* invoke( const QString& methodName, const QVariantMap& arguments );
+    ScriptJob* invoke( const QString& methodName, const QVariantMap& arguments = QVariantMap() );
 
 protected:
     QString id() const;
