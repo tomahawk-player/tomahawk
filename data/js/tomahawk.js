@@ -604,10 +604,20 @@ Tomahawk.PluginManager = {
     registerPlugin: function (type, object) {
         this.objects[this.identifyObject(object)] = object;
 
+        Tomahawk.log("registerPlugin: " + type + " id: " + object.id);
         Tomahawk.registerScriptPlugin(type, object.id);
     },
 
     invoke: function (requestId, objectId, methodName, params ) {
+        Tomahawk.log("requestId: " + requestId + " objectId: " + objectId + " methodName: " + methodName + " params: " + params);
+        if (!this.objects[objectId]) {
+            Tomahawk.log("Object not found!");
+        } else {
+            if (!this.objects[objectId][methodName]) {
+                Tomahawk.log("Function not found!");
+            }
+        }
+
         Promise.resolve(this.objects[objectId][methodName](params)).then(function (result) {
             if (typeof result === 'object') {
                 Tomahawk.reportScriptJobResults({
