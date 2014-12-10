@@ -136,6 +136,7 @@ DelegateConfigWrapper::closed( QAbstractButton* b )
     }
     else
     {
+        m_widget->fillDataInWidgets( m_initialData );
         closeDialog( QDialog::Rejected );
     }
 }
@@ -154,6 +155,15 @@ void
 DelegateConfigWrapper::updateSizeHint()
 {
     setFixedSize( sizeHint() );
+}
+
+
+void DelegateConfigWrapper::showEvent(QShowEvent* event)
+{
+    // TODO: would be cool to load the data only on show event instead of on widget creation
+    m_initialData = m_widget->readData();
+
+    QDialog::showEvent(event);
 }
 
 

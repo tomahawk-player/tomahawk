@@ -55,6 +55,9 @@ public slots:
 signals:
     void closedWithDelete();
 
+protected:
+    void showEvent( QShowEvent * event ) override;
+
 private slots:
     void aboutClicked( bool );
     void onConfigTestResult( Tomahawk::Accounts::ConfigTestResultType );
@@ -70,6 +73,7 @@ private:
     QLabel* m_errorLabel;
     bool m_deleted;
     QVariantMap m_invalidData;
+    QVariantMap m_initialData;
 };
 
 #endif
