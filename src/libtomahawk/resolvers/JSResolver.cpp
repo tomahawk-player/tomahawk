@@ -290,8 +290,10 @@ JSResolver::init()
 
     // load config widget and apply settings
     loadUi();
-    QVariantMap config = resolverUserConfig();
-    fillDataInWidgets( config );
+    if ( !d->configWidget.isNull() )
+    {
+        d->configWidget->fillDataInWidgets( resolverUserConfig() );
+    }
 
     qDebug() << "JS" << filePath() << "READY," << "name" << d->name << "weight" << d->weight << "timeout" << d->timeout << "icon received" << success;
 
@@ -687,7 +689,6 @@ JSResolver::loadUi()
     Q_D( JSResolver );
 
     QVariantMap m = callOnResolver( "getConfigUi()" ).toMap();
-    d->dataWidgets = m["fields"].toList();
 
     bool compressed = m.value( "compressed", "false" ).toBool();
     qDebug() << "Resolver has a preferences widget! compressed?" << compressed;
@@ -709,6 +710,10 @@ JSResolver::loadUi()
         uiData = fixDataImagePaths( uiData, compressed, images );
 
     d->configWidget = QPointer< AccountConfigWidget >( widgetFromData( uiData, 0 ) );
+    if ( !d->configWidget.isNull() )
+    {
+        d->configWidget->setDataWidgets( m["fields"].toList() );
+    }
 
     emit changed();
 }
@@ -739,81 +744,12 @@ JSResolver::saveConfig()
 }
 
 
-QVariant
-JSResolver::widgetData( QWidget* widget, const QString& property )
-{
-    for ( int i = 0; i < widget->metaObject()->propertyCount(); i++ )
-    {
-        if ( widget->metaObject()->property( i ).name() == property )
-        {
-            return widget->property( property.toLatin1() );
-        }
-    }
-
-    return QVariant();
-}
-
-
-void
-JSResolver::setWidgetData( const QVariant& value, QWidget* widget, const QString& property )
-{
-    const QMetaObject *metaObject = widget->metaObject();
-    for ( int i = 0; i < metaObject->propertyCount(); i++ )
-    {
-        const QMetaProperty &prop = metaObject->property( i );
-        if ( prop.name() == property )
-        {
-            prop.write( widget, value );
-            return;
-        }
-    }
-}
-
-
 QVariantMap
 JSResolver::loadDataFromWidgets()
 {
     Q_D( JSResolver );
 
-    QVariantMap saveData;
-    foreach( const QVariant& dataWidget, d->dataWidgets )
-    {
-        QVariantMap data = dataWidget.toMap();
-
-        QString widgetName = data["widget"].toString();
-        QWidget* widget= d->configWidget.data()->findChild<QWidget*>( widgetName );
-
-        QVariant value = widgetData( widget, data["property"].toString() );
-
-        saveData[ data["name"].toString() ] = value;
-    }
-
-    return saveData;
-}
-
-
-void
-JSResolver::fillDataInWidgets( const QVariantMap& data )
-{
-    Q_D( JSResolver );
-
-    foreach(const QVariant& dataWidget, d->dataWidgets)
-    {
-        const QVariantMap m = dataWidget.toMap();
-        QString widgetName = m["widget"].toString();
-        QWidget* widget= d->configWidget.data()->findChild<QWidget*>( widgetName );
-        if ( !widget )
-        {
-            tLog() << Q_FUNC_INFO << "Widget specified in resolver was not found:" << widgetName;
-            Q_ASSERT(false);
-            return;
-        }
-
-        QString propertyName = m["property"].toString();
-        QString name = m["name"].toString();
-
-        setWidgetData( data[ name ], widget, propertyName );
-    }
+    return d->configWidget->readData();
 }
 
 

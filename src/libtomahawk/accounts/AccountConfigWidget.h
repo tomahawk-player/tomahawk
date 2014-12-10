@@ -19,9 +19,10 @@
 #ifndef ACCOUNTCONFIGWIDGET_H
 #define ACCOUNTCONFIGWIDGET_H
 
-#include "DllMacro.h"
-
 #include <QWidget>
+#include <QVariantMap>
+
+#include "DllMacro.h"
 
 class DLLEXPORT AccountConfigWidget : public QWidget
 {
@@ -35,8 +36,16 @@ public:
 
     virtual bool settingsValid() const;
 
+    void setDataWidgets( const QVariantList& dataWidgets );
+    const QVariantMap readData();
+    static QVariant widgetData( QWidget* widget, const QString& property );
+    static void setWidgetData( const QVariant& value, QWidget* widget, const QString& property );
+    void fillDataInWidgets( const QVariantMap& data );
+
+
 protected:
     QStringList m_errors;
+    QVariantList m_dataWidgets;
 };
 
 #endif // ACCOUNTCONFIGWIDGET_H

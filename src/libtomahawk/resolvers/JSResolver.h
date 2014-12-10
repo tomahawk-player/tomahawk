@@ -98,9 +98,6 @@ private:
     void init();
 
     void loadUi();
-    void setWidgetData( const QVariant& value, QWidget* widget, const QString& property );
-    QVariant widgetData( QWidget* widget, const QString& property );
-    void fillDataInWidgets( const QVariantMap& data );
     void onCapabilitiesChanged( Capabilities capabilities );
     void loadCollections();
 
