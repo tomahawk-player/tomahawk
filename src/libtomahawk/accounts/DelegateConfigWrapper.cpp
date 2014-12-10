@@ -188,12 +188,35 @@ DelegateConfigWrapper::onConfigTestResult( Tomahawk::Accounts::ConfigTestResultT
 
     if( result == Tomahawk::Accounts::ConfigTestResultSuccess )
     {
-        m_errorLabel->setText( "" );
+        m_invalidData = QVariantMap();
         closeDialog( QDialog::Accepted );
     }
     else
     {
-        // TODO: make this nicer
+        const QVariantMap newData = m_widget->readData();
+
+        // check if user tried to save the same config for the second time
+        bool configChangedSinceLastTry = false;
+        if ( !m_invalidData.isEmpty() )
+        {
+            foreach( const QString& key, m_invalidData.keys() )
+            {
+                if ( m_invalidData[ key ] != newData[ key ] )
+                {
+                    configChangedSinceLastTry = true;
+                    break;
+                }
+            }
+
+            if ( !configChangedSinceLastTry )
+            {
+                closeDialog( QDialog::Accepted );
+            }
+        }
+
+        m_invalidData = m_widget->readData();
+
+        // TODO: generate message based on status code
         m_errorLabel->setText( QString( "<font color='red'>%1</font>" ).arg( tr( "Your config is invalid." ) ) );
     }
 }
@@ -206,6 +229,7 @@ DelegateConfigWrapper::closeDialog( QDialog::DialogCode code )
     layout()->removeWidget( m_widget );
     m_widget->setParent( 0 );
     m_widget->setVisible( false );
+    m_errorLabel->setText( "" );
 
     done( code );
 }

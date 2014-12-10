@@ -69,6 +69,7 @@ private:
     QPushButton *m_okButton, *m_deleteButton;
     QLabel* m_errorLabel;
     bool m_deleted;
+    QVariantMap m_invalidData;
 };
 
 #endif
