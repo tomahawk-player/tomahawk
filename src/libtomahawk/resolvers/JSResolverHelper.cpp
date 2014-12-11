@@ -907,6 +907,14 @@ JSResolverHelper::deleteFuzzyIndex()
 
 
 void
+JSResolverHelper::readdResolver()
+{
+    Pipeline::instance()->removeResolver( m_resolver );
+    Pipeline::instance()->addResolver( m_resolver );
+}
+
+
+void
 JSResolverHelper::returnStreamUrl( const QString& streamUrl, const QMap<QString, QString>& headers,
                                    std::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback )
 {

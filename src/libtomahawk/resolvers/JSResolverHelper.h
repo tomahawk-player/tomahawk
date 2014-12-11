@@ -116,10 +116,18 @@ public:
     Q_INVOKABLE void deleteFuzzyIndex();
 
     /**
+     * This is horrible, we can use it to invalidate resolver results when the config changes
+     * TODO: register the resolver through registerPlugin and remove it through standard methods
+     */
+    Q_INVOKABLE void readdResolver();
+
+
+    /**
      * INTERNAL USE ONLY!
      */
     void customIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
                                 std::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback ); // async
+
 
 public slots:
     QByteArray readRaw( const QString& fileName );
