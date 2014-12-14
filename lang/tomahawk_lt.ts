@@ -3532,7 +3532,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/network/RemoteCollection.cpp" line="36"/>
         <source>Collection of %1</source>
-        <translation type="unfinished"/>
+        <translation>%1 Kolekcija</translation>
     </message>
 </context>
 <context>
@@ -3541,7 +3541,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="66"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection</comment>
-        <translation type="unfinished"/>
+        <translation>%1 Kolekcija</translation>
     </message>
 </context>
 <context>

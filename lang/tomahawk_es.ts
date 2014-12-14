@@ -3438,7 +3438,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="202"/>
         <source>on</source>
         <comment>'on' is followed by an album name</comment>
-        <translation type="unfinished"/>
+        <translation>en</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="204"/>
@@ -3457,7 +3457,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="217"/>
         <source>on &quot;%1&quot;</source>
         <comment>%1 is an album name</comment>
-        <translation type="unfinished"/>
+        <translation>en &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="219"/>
@@ -4097,7 +4097,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="266"/>
         <source>on %1</source>
-        <translation type="unfinished"/>
+        <translation>en %1</translation>
     </message>
 </context>
 <context>

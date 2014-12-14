@@ -217,7 +217,7 @@ lidhuni dhe transmeto nga ju?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="143"/>
         <source>0.8</source>
-        <translation type="unfinished"/>
+        <translation>0.8</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="145"/>
@@ -341,17 +341,17 @@ lidhuni dhe transmeto nga ju?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="146"/>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>Muzikë</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="185"/>
         <source>Songs</source>
-        <translation type="unfinished"/>
+        <translation>Këngë</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="201"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Albume</translation>
     </message>
 </context>
 <context>
@@ -412,7 +412,7 @@ lidhuni dhe transmeto nga ju?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/CaptionLabel.cpp" line="71"/>
         <source>Close</source>
-        <translation type="unfinished"/>
+        <translation>Mbyll</translation>
     </message>
 </context>
 <context>
@@ -466,7 +466,7 @@ lidhuni dhe transmeto nga ju?</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CollectionItem.cpp" line="37"/>
         <source>Collection</source>
-        <translation type="unfinished"/>
+        <translation>Koleksion</translation>
     </message>
 </context>
 <context>
@@ -479,17 +479,17 @@ lidhuni dhe transmeto nga ju?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="86"/>
         <source>Artists</source>
-        <translation type="unfinished"/>
+        <translation>Artistë</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="87"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Albume</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="88"/>
         <source>Songs</source>
-        <translation type="unfinished"/>
+        <translation>Këngë</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="379"/>
@@ -499,7 +499,7 @@ lidhuni dhe transmeto nga ju?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="382"/>
         <source>This collection is empty.</source>
-        <translation type="unfinished"/>
+        <translation>Ky koleksion është bosh.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="385"/>
@@ -512,7 +512,7 @@ lidhuni dhe transmeto nga ju?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnItemDelegate.cpp" line="191"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Panjohur</translation>
     </message>
 </context>
 <context>
@@ -533,7 +533,7 @@ lidhuni dhe transmeto nga ju?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="118"/>
         <source>Duration:</source>
-        <translation type="unfinished"/>
+        <translation>Kohëzgjatje:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="125"/>
@@ -548,12 +548,12 @@ lidhuni dhe transmeto nga ju?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="139"/>
         <source>Age:</source>
-        <translation type="unfinished"/>
+        <translation>Mosha:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="217"/>
         <source>%1 kbps</source>
-        <translation type="unfinished"/>
+        <translation>%1 kbps</translation>
     </message>
 </context>
 <context>
@@ -770,7 +770,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="100"/>
         <source>Password:</source>
-        <translation type="unfinished"/>
+        <translation>Fjalëkalim:</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="113"/>
@@ -780,7 +780,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="154"/>
         <source>Login</source>
-        <translation type="unfinished"/>
+        <translation>Hyrje</translation>
     </message>
 </context>
 <context>
@@ -839,7 +839,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/InboxItem.cpp" line="35"/>
         <source>Inbox</source>
-        <translation type="unfinished"/>
+        <translation>Kutia</translation>
     </message>
 </context>
 <context>
@@ -847,12 +847,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="67"/>
         <source>Sent %1 by %2 to %3.</source>
-        <translation type="unfinished"/>
+        <translation>Dërguar %1 nga %2 tek %3.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="72"/>
         <source>%1 sent you %2 by %3.</source>
-        <translation type="unfinished"/>
+        <translation>%1 dërguar ty %2 nga %3.</translation>
     </message>
 </context>
 <context>
@@ -860,7 +860,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="84"/>
         <source>Inbox Details</source>
-        <translation type="unfinished"/>
+        <translation>Detajet Kutia</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="93"/>
@@ -953,7 +953,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="55"/>
         <source>...</source>
-        <translation type="unfinished"/>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="64"/>
@@ -1117,7 +1117,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="185"/>
         <source>Error</source>
-        <translation type="unfinished"/>
+        <translation>Gabim</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="185"/>
@@ -1466,7 +1466,7 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="617"/>
         <source>, </source>
         <comment>Inserted between items in a list</comment>
-        <translation type="unfinished"/>
+        <translation>, </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="590"/>
@@ -1475,25 +1475,25 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="622"/>
         <source>.</source>
         <comment>Inserted when ending a sentence summary</comment>
-        <translation type="unfinished"/>
+        <translation>.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="603"/>
         <source>, and </source>
         <comment>Inserted between the last two items in a list of more than two</comment>
-        <translation type="unfinished"/>
+        <translation>, dhe</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="614"/>
         <source>and </source>
         <comment>Inserted before the last item in a list</comment>
-        <translation type="unfinished"/>
+        <translation>dhe</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="622"/>
         <source>and </source>
         <comment>Inserted before the sorting summary in a sentence summary</comment>
-        <translation type="unfinished"/>
+        <translation>dhe</translation>
     </message>
 </context>
 <context>
@@ -1616,7 +1616,7 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.ui" line="41"/>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="146"/>
         <source>Songs</source>
-        <translation type="unfinished"/>
+        <translation>Këngë</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.ui" line="67"/>
@@ -1629,13 +1629,13 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.ui" line="101"/>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="158"/>
         <source>Artists</source>
-        <translation type="unfinished"/>
+        <translation>Artistë</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.ui" line="161"/>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="188"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Albume</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="65"/>
@@ -1645,12 +1645,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="86"/>
         <source>Sorry, we could not find any albums!</source>
-        <translation type="unfinished"/>
+        <translation>Na vjen keq, ne nuk mund të gjejmë ndonjë album!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="108"/>
         <source>Sorry, we could not find any songs!</source>
-        <translation type="unfinished"/>
+        <translation>Na vjen keq, ne nuk mund të gjejmë ndonjë këngë!</translation>
     </message>
 </context>
 <context>
@@ -1716,7 +1716,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="417"/>
         <source>Open Directory</source>
-        <translation type="unfinished"/>
+        <translation>Hap Skedarë</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="511"/>
@@ -1840,12 +1840,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="76"/>
         <source>+</source>
-        <translation type="unfinished"/>
+        <translation>+</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="83"/>
         <source>-</source>
-        <translation type="unfinished"/>
+        <translation>-</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="109"/>
@@ -2118,7 +2118,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="304"/>
         <source>Discover</source>
-        <translation type="unfinished"/>
+        <translation>Zbulo</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="305"/>
@@ -2128,7 +2128,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="307"/>
         <source>Your Music</source>
-        <translation type="unfinished"/>
+        <translation>Muzika Juaj</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="315"/>
@@ -2352,7 +2352,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="181"/>
         <source>Continue</source>
-        <translation type="unfinished"/>
+        <translation>Vazhgo</translation>
     </message>
 </context>
 <context>
@@ -2730,7 +2730,7 @@ username@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="119"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Panjohur</translation>
     </message>
 </context>
 <context>
@@ -2848,7 +2848,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="170"/>
         <source>Artist name</source>
-        <translation type="unfinished"/>
+        <translation>Emri artistit</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="193"/>
@@ -2938,13 +2938,13 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="362"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="369"/>
         <source>-180%1</source>
-        <translation type="unfinished"/>
+        <translation>-180%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="362"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="369"/>
         <source>180%1</source>
-        <translation type="unfinished"/>
+        <translation>180%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="378"/>
@@ -3106,30 +3106,30 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="496"/>
         <source>Live</source>
         <comment>Song type: The song was a life performance.</comment>
-        <translation type="unfinished"/>
+        <translation>Direkt</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="497"/>
         <source>Acoustic</source>
         <comment>Song type</comment>
-        <translation type="unfinished"/>
+        <translation>Akustike</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="498"/>
         <source>Electric</source>
         <comment>Song type</comment>
-        <translation type="unfinished"/>
+        <translation>Elektrike</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="499"/>
         <source>Christmas</source>
         <comment>Song type: A christmas song</comment>
-        <translation type="unfinished"/>
+        <translation>Krishtlindje</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="526"/>
         <source>At Least</source>
-        <translation type="unfinished"/>
+        <translation>Të Pakten</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="527"/>
@@ -3161,7 +3161,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="897"/>
         <source>You</source>
-        <translation type="unfinished"/>
+        <translation>Ju</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="898"/>
@@ -3312,14 +3312,14 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="274"/>
         <source>%1%4 %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist ('by' in english)</comment>
-        <translation type="unfinished"/>
+        <translation>%1%4 %2%3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="215"/>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="278"/>
         <source>by</source>
         <comment>preposition to link track and artist</comment>
-        <translation type="unfinished"/>
+        <translation>nga</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="130"/>
@@ -3442,32 +3442,33 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="270"/>
         <source>by</source>
         <comment>preposition to link track and artist</comment>
-        <translation type="unfinished"/>
+        <translation>nga</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="217"/>
         <source>on &quot;%1&quot;</source>
         <comment>%1 is an album name</comment>
-        <translation type="unfinished"/>
+        <translation>në &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="219"/>
         <source>&quot;%1&quot; by %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing</comment>
-        <translation type="unfinished"/>
+        <translation>&quot;%1&quot; nga %2%3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="266"/>
         <source>%1 sent you
 %2%4 %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist ('by' in english)</comment>
-        <translation type="unfinished"/>
+        <translation>%1 dërguar ju
+%2%4 %3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="277"/>
         <source>%1 sent you &quot;%2&quot; by %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist</comment>
-        <translation type="unfinished"/>
+        <translation>%1 dërguar ju &quot;%2&quot; nga %3.</translation>
     </message>
 </context>
 <context>
@@ -3604,22 +3605,22 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="558"/>
         <source> and </source>
-        <translation type="unfinished"/>
+        <translation>dhe</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="566"/>
         <source>You</source>
-        <translation type="unfinished"/>
+        <translation>Ju</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="568"/>
         <source>you</source>
-        <translation type="unfinished"/>
+        <translation>ju</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="581"/>
         <source>and</source>
-        <translation type="unfinished"/>
+        <translation>dhe</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Track.cpp" line="581"/>
@@ -3729,12 +3730,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="79"/>
         <source>Last Month</source>
-        <translation type="unfinished"/>
+        <translation>Muaji Kaluar</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="76"/>
         <source>Last Year</source>
-        <translation type="unfinished"/>
+        <translation>Viti Kaluar</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="73"/>
@@ -3776,7 +3777,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="515"/>
         <source>You</source>
-        <translation type="unfinished"/>
+        <translation>Ju</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="602"/>
@@ -3786,7 +3787,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="609"/>
         <source>Tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="710"/>
@@ -3873,7 +3874,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/widgets/AccountWidget.cpp" line="131"/>
         <source>Invite</source>
-        <translation type="unfinished"/>
+        <translation>Ftesë</translation>
     </message>
 </context>
 <context>
@@ -4149,7 +4150,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="76"/>
         <source>Song</source>
-        <translation type="unfinished"/>
+        <translation>Këngë</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="77"/>

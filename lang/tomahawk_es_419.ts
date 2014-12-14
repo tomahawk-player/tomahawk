@@ -314,43 +314,43 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.ui" line="173"/>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="147"/>
         <source>Biography</source>
-        <translation type="unfinished"/>
+        <translation>Biografía</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.ui" line="267"/>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="148"/>
         <source>Related Artists</source>
-        <translation type="unfinished"/>
+        <translation>Artistas relacionados</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="94"/>
         <source>Sorry, we could not find any albums for this artist!</source>
-        <translation type="unfinished"/>
+        <translation>¡Lo sentimos!, no podemos encontrar ningún álbum de este artista</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="73"/>
         <source>Sorry, we could not find any related artists!</source>
-        <translation type="unfinished"/>
+        <translation>¡Lo sentimos!, no podemos encontrar ningún artista relacionado</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="115"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
-        <translation type="unfinished"/>
+        <translation>¡Lo sentimos!, no podemos encontrar ningún éxito para este artista</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="146"/>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>Música</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="185"/>
         <source>Songs</source>
-        <translation type="unfinished"/>
+        <translation>Canciones</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="201"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Álbumes</translation>
     </message>
 </context>
 <context>
@@ -359,13 +359,13 @@ connect and stream from you?</source>
         <location filename="../src/tomahawk/AudioControls.cpp" line="108"/>
         <location filename="../src/tomahawk/AudioControls.cpp" line="341"/>
         <source>Shuffle</source>
-        <translation type="unfinished"/>
+        <translation>Aleatorio</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="109"/>
         <location filename="../src/tomahawk/AudioControls.cpp" line="342"/>
         <source>Repeat</source>
-        <translation type="unfinished"/>
+        <translation>Repetir</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="339"/>
