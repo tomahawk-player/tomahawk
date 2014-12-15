@@ -380,7 +380,7 @@ ArtistInfoWidget::onBiographyLoaded()
 
     QString html =
         QString( "<html><head><style type=text/css>"
-                 "body { margin: 0; padding: 0; color: #333333; font-family: Roboto; font-size: %1pt; font-weight: normal; }"
+                 "body { margin: 0; padding: 0; color: #333333; background-color: #f9f9f9; font-family: Roboto; font-size: %1pt; font-weight: normal; }"
                     "a { color: #000000; text-decoration: none; font-weight: bold; }"
                     "a:hover { color: #000000; text-decoration: underline; font-weight: bold; }"
                  "</style></head>"
