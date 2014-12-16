@@ -4,7 +4,8 @@
  *   Copyright 2011-2012, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2011,      Thierry Goeckel
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
- *   Copyright 2013-2014,  Uwe L. Korn <uwelk@xhochy.com>
+ *   Copyright 2013-2014, Uwe L. Korn <uwelk@xhochy.com>
+ *   Copyright 2014,      Enno Gottschalk <mrmaffen@googlemail.com>
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -36,7 +37,7 @@ if ((typeof Tomahawk === "undefined") || (Tomahawk === null)) {
     };
 }
 
-Tomahawk.apiVersion = "0.2.1";
+Tomahawk.apiVersion = "0.2.2";
 
 /**
  * Compares versions strings
@@ -81,8 +82,8 @@ Tomahawk.versionCompare = function (version1, version2) {
 };
 
 /**
-  * Check if this is at least specified tomahawk-api-version.
-  */
+ * Check if this is at least specified tomahawk-api-version.
+ */
 Tomahawk.atLeastVersion = function (version) {
     return (Tomahawk.versionCompare(Tomahawk.apiVersion, version) >= 0);
 };
@@ -137,6 +138,16 @@ var TomahawkUrlType = {
     Artist: 8
 };
 
+var TomahawkConfigTestResultType = {
+    Other: 0,
+    Success: 1,
+    Logout: 2,
+    CommunicationError: 3,
+    InvalidCredentials: 4,
+    InvalidAccount: 5,
+    PlayingElsewhere: 6,
+    AccountExpired: 7
+};
 
 /**
  * Resolver BaseObject, inherit it to implement your own resolver.
@@ -318,7 +329,7 @@ Tomahawk.retrieveMetadata = function (url, mimetype, sizehint, options, callback
  * Internal use only!
  */
 Tomahawk.retrievedMetadata = function(metadataId, metadata, error) {
-    // Check we have a matching callback stored.
+    // Check that we have a matching callback stored.
     if (!Tomahawk.retrieveMetadataCallbacks.hasOwnProperty(metadataId)) {
         return;
     }
@@ -349,15 +360,26 @@ Tomahawk.asyncRequestCallbacks = {};
  * Internal use only!
  */
 Tomahawk.nativeAsyncRequestDone = function (reqId, xhr) {
-    // Check we have a matching callback stored.
+    // Check that we have a matching callback stored.
     if (!Tomahawk.asyncRequestCallbacks.hasOwnProperty(reqId)) {
         return;
     }
 
     // Call the real callback
-    Tomahawk.asyncRequestCallbacks[reqId](xhr);
+    if (xhr.readyState == 4 && xhr.status == 200) {
+        // Call the real callback
+        if (Tomahawk.asyncRequestCallbacks[reqId].callback) {
+            Tomahawk.asyncRequestCallbacks[reqId].callback(xhr);
+        }
+    } else if (xmlHttpRequest.readyState === 4) {
+        Tomahawk.log("Failed to do nativeAsyncRequest");
+        Tomahawk.log("Status Code was: " + xhr.status);
+        if (Tomahawk.asyncRequestCallbacks[reqId].errorHandler) {
+            Tomahawk.asyncRequestCallbacks[reqId].errorHandler(xhr);
+        }
+    }
 
-    // Callback are only used once.
+    // Callbacks are only used once.
     delete Tomahawk.asyncRequestCallbacks[reqId];
 };
 
@@ -368,23 +390,23 @@ Tomahawk.nativeAsyncRequestDone = function (reqId, xhr) {
  *  - password: The password for HTTP Basic Auth
  *  - errorHandler: callback called if the request was not completed
  *  - data: body data included in POST requests
+ *  - needCookieHeader: boolean indicating whether or not the request needs to be able to get the
+ *                      "Set-Cookie" response header
  */
 Tomahawk.asyncRequest = function (url, callback, extraHeaders, options) {
     // unpack options
     var opt = options || {};
     var method = opt.method || 'GET';
-    var doNativeRequest = false;
 
-    if (extraHeaders && (extraHeaders.hasOwnProperty("Referer") || extraHeaders.hasOwnProperty("referer"))) {
-        doNativeRequest = true;
-    }
-
-    if (doNativeRequest) {
+    if (shouldDoNativeRequest(url, callback, extraHeaders, options)) {
         // Assign a request Id to the callback so we can use it when we are
         // returning from the native call.
         var reqId = Tomahawk.asyncRequestIdCounter;
         Tomahawk.asyncRequestIdCounter++;
-        Tomahawk.asyncRequestCallbacks[reqId] = callback;
+        Tomahawk.asyncRequestCallbacks[reqId] = {
+            callback: callback,
+            errorHandler: opt.errorHandler
+        };
         Tomahawk.nativeAsyncRequest(reqId, url, extraHeaders, options);
     } else {
         var xmlHttpRequest = new XMLHttpRequest();
@@ -409,15 +431,31 @@ Tomahawk.asyncRequest = function (url, callback, extraHeaders, options) {
     }
 };
 
+/**
+ * This method is externalized from Tomahawk.asyncRequest, so that other clients
+ * (like tomahawk-android) can inject their own logic that determines whether or not to do a request
+ * natively.
+ *
+ * @returns boolean indicating whether or not to do a request with the given parameters natively
+ */
+shouldDoNativeRequest = function (url, callback, extraHeaders, options) {
+    return (extraHeaders && (extraHeaders.hasOwnProperty("Referer")
+        || extraHeaders.hasOwnProperty("referer")));
+};
+
 Tomahawk.assert = function (assertion, message) {
     Tomahawk.nativeAssert(assertion, message);
 }
 
-Tomahawk.sha256 = Tomahawk.sha256 || CryptoJS.SHA256;
-Tomahawk.md5 = Tomahawk.md5 || CryptoJS.MD5;
+Tomahawk.sha256 = Tomahawk.sha256 || function(message) {
+  return CryptoJS.SHA256(message).toString(CryptoJS.enc.Hex);
+};
+Tomahawk.md5 = Tomahawk.md5 || function(message) {
+  return CryptoJS.MD5(message).toString(CryptoJS.enc.Hex);
+};
 // Return a HMAC (md5) signature of the input text with the desired key
 Tomahawk.hmac = function (key, message) {
-    return CryptoJS.HmacMD5(message, key);
+    return CryptoJS.HmacMD5(message, key).toString(CryptoJS.enc.Hex);
 };
 
 // Extracted from https://github.com/andrewrk/diacritics version 1.2.0
