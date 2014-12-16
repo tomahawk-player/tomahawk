@@ -283,8 +283,8 @@ ControlConnection::handleMsg( msg_ptr msg )
     // All control connection msgs are JSON
     if ( !msg->is( Msg::JSON ) )
     {
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Received message was not in JSON format:" << qPrintable( msg->payload() );
         Q_ASSERT( msg->is( Msg::JSON ) );
-        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Received message was not in JSON format";
         markAsFailed();
         return;
     }
