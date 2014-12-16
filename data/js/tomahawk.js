@@ -579,6 +579,12 @@ Tomahawk.removeDiacritics = function (str) {
     });
 };
 
+Tomahawk.localStorage = Tomahawk.localStorage || {
+    setItem: function() {},
+    getItem: function() {},
+    removeItem: function() {}
+};
+
 // some aliases
 Tomahawk.setTimeout = Tomahawk.setTimeout || window.setTimeout;
 Tomahawk.setInterval = Tomahawk.setInterval || window.setInterval;
