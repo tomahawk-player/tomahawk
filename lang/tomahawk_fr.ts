@@ -3299,7 +3299,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="138"/>
         <source>Tomahawk is stopped.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk est arrêté</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="211"/>
@@ -3330,7 +3330,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="314"/>
         <source>Tomahawk - Now Playing</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk - Lecture</translation>
     </message>
 </context>
 <context>
