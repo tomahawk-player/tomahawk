@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Usage: ./admin/mac/build-release-osx.sh [--no-clean]
+# Usage: ./admin/mac/build-release-osx.sh VERSION CERT_SIGNER [--no-clean]
 #
 ################################################################################
 
@@ -20,12 +20,13 @@ function die {
 
 if [ -z $1 ]
 then
-    echo This script expects the version number as a parameter, e.g. 1.0.0
+    echo This script expects the version number and cert-signer as parameters, e.g. "1.0.0 John Doe"
     exit 1
 fi
 
 ROOT=`pwd`
 VERSION=$1
+CERT_SIGNER=$2
 
 ################################################################################
 
@@ -44,7 +45,7 @@ VERSION=$1
     cd ..
 
     header "Signing bundle"
-    codesign -s "Developer ID Application: Leonardo Franchi" -f -v ./Tomahawk.app
+    codesign -s "Developer ID Application: $CERT_SIGNER" -f -v ./Tomahawk.app
 
     if [ -f ~/sign_step.sh ];
     then
