@@ -206,6 +206,11 @@ namespace TomahawkUtils
 
     DLLEXPORT void crash();
 
+    /**
+     *  User-Agent header helpers
+     */
+    DLLEXPORT const QString operatingSystemVersionDetail();
+    DLLEXPORT const QString userAgentString( const QString& applicationName, const QString& applicationVersion );
 
     /**
      * Qt4 / Qt5 compatibility layer
