@@ -691,7 +691,13 @@ TomahawkApp::onInfoSystemReady()
     GlobalActionManager::instance();
 
     // check if our spotify playlist api server is up and running, and enable spotify playlist drops if so
-    QNetworkReply* r = Tomahawk::Utils::nam()->get( QNetworkRequest( QUrl( SPOTIFY_PLAYLIST_API_URL "/pong" ) ) );
+    QNetworkRequest request( QUrl( SPOTIFY_PLAYLIST_API_URL "/pong" ) );
+
+    QByteArray userAgent = TomahawkUtils::userAgentString( TOMAHAWK_APPLICATION_NAME, TOMAHAWK_VERSION ).toUtf8();
+    tLog() << "User-Agent: " << userAgent;
+    request.setRawHeader( "User-Agent", userAgent );
+
+    QNetworkReply* r = Tomahawk::Utils::nam()->get( request );
     connect( r, SIGNAL( finished() ), this, SLOT( spotifyApiCheckFinished() ) );
 
 #ifdef Q_OS_MAC

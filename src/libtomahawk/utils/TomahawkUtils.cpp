@@ -623,6 +623,27 @@ crash()
 }
 
 
+const QString
+operatingSystemVersionDetail()
+{
+#ifdef Q_OS_LINUX
+    return QSettings( "/etc/os-release", QSettings::IniFormat ).value( "PRETTY_NAME", "Linux" ).toString();
+#else
+    return "Unknown";
+#endif
+}
+
+
+const QString
+userAgentString( const QString& applicationName, const QString& applicationVersion )
+{
+    return QString( "%1/%2 (%3)" )
+    .arg( applicationName )
+    .arg( applicationVersion )
+    .arg( operatingSystemVersionDetail() );
+}
+
+
 void
 installTranslator( QObject* parent )
 {
