@@ -18,7 +18,7 @@ function die {
 }
 ################################################################################
 
-if [ -z $1 ]
+if [ -z $2 ]
 then
     echo This script expects the version number and cert-signer as parameters, e.g. "1.0.0 John Doe"
     exit 1
