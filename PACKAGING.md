@@ -19,6 +19,14 @@ This document contains only options relevant to packaging, to have a complete ov
 
 Make sure to specify the build type as ```Release``` or even better ```RelWithDebInfo``` if your distribution supports debug packages. If you do not do this, your users might see asserts (that look like crashes to them) which are only really useful to developers.
 
+##### ```CMAKE_INSTALL_LIBDIR``` (PATH)
+
+You can specify the path where Tomahawk install the libs. This is very helpful to support multilib on linux machines. 
+
+##### ```CMAKE_SKIP_RPATH``` (boolean) (default: OFF)
+
+Build without using rpath prevents from overriding of the normal library search path, possibly interfering with local policy and causing problems for multilib, among other issues.
+
 ##### ```BUILD_RELEASE``` (boolean) (default: OFF)
 
 If you're not using our tarballs you can turn this on to suppress putting Git revision hashes into the version string. This also disables building tools and tests by default (although you can do that manually) it's more future-proof to simply pass ```-DBUILD_RELEASE=ON``` because we might make use of it in later releases.
