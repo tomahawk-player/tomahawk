@@ -443,7 +443,7 @@ MusicScanner::readTags( const QFileInfo& fi, libvlc_instance_t* vlcInstance )
     m["albumpos"] = vlcMetaToQString( media, libvlc_meta_TrackNumber );
     m["year"] = vlcMetaToQString( media, libvlc_meta_Date );
     // m["composer"]     = tag->composer();
-    // m["discnumber"]   = tag->discNumber();
+    m["discnumber"] = vlcMetaToQString( media, libvlc_meta_DiscNumber );
 
     if ( m["artist"].toString().isEmpty() || m["track"].toString().isEmpty() )
     {
