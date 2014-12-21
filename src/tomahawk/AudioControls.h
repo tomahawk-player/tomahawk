@@ -30,6 +30,8 @@
 #include <QTimer>
 #include <QTimeLine>
 
+#include <memory>
+
 class QDropEvent;
 class QDragEnterEvent;
 class QDragMoveEvent;
@@ -45,7 +47,7 @@ class AudioControls : public BackgroundWidget, private TomahawkUtils::DpiScaler
 Q_OBJECT
 
 public:
-    AudioControls( QWidget* parent = 0 );
+    AudioControls( QWidget* parent = nullptr );
     ~AudioControls();
 
 signals:
@@ -97,7 +99,7 @@ private:
     void setCover();
     void setSocialActions();
 
-    Ui::AudioControls* ui;
+    std::unique_ptr<Ui::AudioControls> ui;
 
     QPointer<SocialWidget> m_socialWidget;
 

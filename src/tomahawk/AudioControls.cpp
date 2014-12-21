@@ -187,7 +187,6 @@ AudioControls::AudioControls( QWidget* parent )
 
 AudioControls::~AudioControls()
 {
-    delete ui;
 }
 
 
