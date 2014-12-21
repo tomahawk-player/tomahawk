@@ -106,12 +106,8 @@ RecentlyPlayedModel::onSourceAdded( const Tomahawk::source_ptr& source )
     connect( source.data(), SIGNAL( playbackFinished( Tomahawk::track_ptr, Tomahawk::PlaybackLog ) ),
                               SLOT( onPlaybackFinished( Tomahawk::track_ptr, Tomahawk::PlaybackLog ) ), Qt::UniqueConnection );
 
-    QPair< int, int > crows;
     int c = rowCount( QModelIndex() );
-    crows.first = c;
-    crows.second = c;
-
-    emit beginInsertRows( QModelIndex(), crows.first, crows.second );
+    emit beginInsertRows( QModelIndex(), c, c );
 
     PlayableItem* item = new PlayableItem( source, rootItem() );
     item->index = createIndex( rootItem()->children.count() - 1, 0, item );
