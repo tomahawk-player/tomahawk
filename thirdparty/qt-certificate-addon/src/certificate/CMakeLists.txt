@@ -18,7 +18,7 @@ list(APPEND qtcertificateaddon_SOURCES
     utils.cpp
 )
 
-include_directories(${qtcertificateaddon_INCLUDE_DIRECTORIES})
+include_directories(${qtcertificateaddon_INCLUDE_DIRECTORIES} ${GNUTLS_INCLUDE_DIR})
 add_library(qtcertificateaddon STATIC ${qtcertificateaddon_SOURCES})
 set_target_properties(
     qtcertificateaddon
