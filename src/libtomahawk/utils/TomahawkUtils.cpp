@@ -628,6 +628,21 @@ operatingSystemVersionDetail()
 {
 #ifdef Q_OS_LINUX
     return QSettings( "/etc/os-release", QSettings::IniFormat ).value( "PRETTY_NAME", "Linux" ).toString();
+#elif defined ( Q_OS_WIN )
+    QString version( "Windows" );
+    OSVERSIONINFOEX osvi;
+    BOOL bOsVersionInfoEx;
+
+    ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
+    osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+
+    bOsVersionInfoEx = GetVersionEx((OSVERSIONINFO*) &osvi);
+    if(bOsVersionInfoEx == 0)
+        return version;
+
+    version.append( QString( " %1.%2" ).arg( osvi.dwMajorVersion ).arg( osvi.dwMinorVersion ) );
+
+    return version;
 #else
     return "Unknown";
 #endif
