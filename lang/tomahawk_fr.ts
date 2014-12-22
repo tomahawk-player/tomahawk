@@ -3794,21 +3794,21 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
         <translation>Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="710"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="716"/>
         <source>Updating database
 </source>
         <translation>Mise à jour de la base de données
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="717"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="723"/>
         <source>Updating database
 %1</source>
         <translation>Mise à jour de la base de données
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="767"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="773"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Échec de la détection automatique de l&apos;IP externe.</translation>
     </message>

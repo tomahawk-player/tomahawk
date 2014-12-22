@@ -3796,21 +3796,21 @@ Zkuste vyladit filtry pro nové písně.</translation>
         <translation>Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="710"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="716"/>
         <source>Updating database
 </source>
         <translation>Obnovit databázi
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="717"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="723"/>
         <source>Updating database
 %1</source>
         <translation>Obnovit databázi
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="767"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="773"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Automatické zjištění vnější adresy IP se nezdařilo.</translation>
     </message>

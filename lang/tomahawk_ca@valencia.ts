@@ -3794,19 +3794,19 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="710"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="716"/>
         <source>Updating database
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="717"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="723"/>
         <source>Updating database
 %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="767"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="773"/>
         <source>Automatically detecting external IP failed.</source>
         <translation type="unfinished"/>
     </message>

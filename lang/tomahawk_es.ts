@@ -3799,21 +3799,21 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
         <translation>Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="710"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="716"/>
         <source>Updating database
 </source>
         <translation>Actualizando la base de datos
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="717"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="723"/>
         <source>Updating database
 %1</source>
         <translation>Actualizando la base de datos
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="767"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="773"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Falló la detección automática de IP externa.</translation>
     </message>

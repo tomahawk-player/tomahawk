@@ -1805,7 +1805,7 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="180"/>
         <source>Allow web browsers to interact with Tomahawk (recommended)</source>
-        <translation>Salli webselainten olla yhteydessä Tomahawkiin (suositellaan)</translation>
+        <translation>Salli verkkoselainten olla yhteydessä Tomahawkiin (suositellaan)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="193"/>
@@ -1959,7 +1959,7 @@ asemia sinun henkilökohtaisen musiikkimakuprofiilisi perusteella.</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/SourceViewPage.ui" line="74"/>
         <source>Latest Additions</source>
-        <translation>Viimeisimmät lisäykset</translation>
+        <translation>Uusimmat lisäykset</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SourceViewPage.ui" line="88"/>
@@ -1988,7 +1988,7 @@ asemia sinun henkilökohtaisen musiikkimakuprofiilisi perusteella.</translation>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="80"/>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="584"/>
         <source>Latest Additions</source>
-        <translation>Viimeisimmät lisäykset</translation>
+        <translation>Uusimmat lisäykset</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="84"/>
@@ -2003,12 +2003,12 @@ asemia sinun henkilökohtaisen musiikkimakuprofiilisi perusteella.</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="587"/>
         <source>Latest additions to your collection</source>
-        <translation>Viimeisimmät lisäykset kokoelmaasi</translation>
+        <translation>Uusimmat lisäykset kokoelmaasi</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="589"/>
         <source>Latest additions to %1&apos;s collection</source>
-        <translation>Viimeisimmät lisäykset käyttäjän %1 kokoelmaan</translation>
+        <translation>Uusimmat lisäykset käyttäjän %1 kokoelmaan</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="593"/>
@@ -3801,21 +3801,21 @@ kappaleen %2%4 %3.</translation>
         <translation>Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="710"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="716"/>
         <source>Updating database
 </source>
         <translation>Päivitetään tietokantaa
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="717"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="723"/>
         <source>Updating database
 %1</source>
         <translation>Päivitetään tietokantaa
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="767"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="773"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Ulkoisen IP-osoitteen automaattinen tunnistus epäonnistui.</translation>
     </message>
