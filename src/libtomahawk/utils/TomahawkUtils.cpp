@@ -643,6 +643,8 @@ operatingSystemVersionDetail()
     version.append( QString( " %1.%2" ).arg( osvi.dwMajorVersion ).arg( osvi.dwMinorVersion ) );
 
     return version;
+#elif defined ( Q_OS_MAC )
+    return "OS X";
 #else
     return "Unknown";
 #endif
