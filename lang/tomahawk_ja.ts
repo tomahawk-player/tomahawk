@@ -3797,21 +3797,21 @@ Try tweaking the filters for a new set of songs to play.</source>
         <translation>トマホーク</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="712"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="718"/>
         <source>Updating database
 </source>
         <translation>データベースを更新中
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="719"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="725"/>
         <source>Updating database
 %1</source>
         <translation>データベースを更新中
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="769"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="775"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>エキスターナルIPアドレスの自動検出が失敗しました。</translation>
     </message>

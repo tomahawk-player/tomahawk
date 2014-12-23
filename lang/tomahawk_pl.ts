@@ -3799,21 +3799,21 @@ wysłane przez %1.</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="712"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="718"/>
         <source>Updating database
 </source>
         <translation>Aktualizowanie bazy danych
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="719"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="725"/>
         <source>Updating database
 %1</source>
         <translation>Aktualizowanie bazy danych
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="769"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="775"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Automatyczne wykrywanie zewnętrznego adresu IP nie powiodło się.</translation>
     </message>

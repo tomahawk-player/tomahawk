@@ -3793,21 +3793,21 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
         <translation>Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="712"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="718"/>
         <source>Updating database
 </source>
         <translation>Aktualisiere Datenbank
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="719"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="725"/>
         <source>Updating database
 %1</source>
         <translation>Aktualisiere Datenbank
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="769"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="775"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Automatisches Erkennen externer IP fehlgeschlagen.</translation>
     </message>
