@@ -861,7 +861,7 @@ Slaptažodį (VS)</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="84"/>
         <source>Inbox Details</source>
-        <translation type="unfinished"/>
+        <translation>Išsamiau apie Pašto Dėžutę</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="93"/>
@@ -939,7 +939,7 @@ Slaptažodį (VS)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="20"/>
         <source>Enter the URL of the hosted playlist (e.g. .xspf format) or click the button to select a local M3U of XSPF playlist to import.</source>
-        <translation type="unfinished"/>
+        <translation>Įveskite talpinamo grojaraščio URL (pvz., .xspf formatu) arba spustelėkite mygtuką, norėdami importavimui pasirinkti vietinį M3U iš XSPF grojaraštį.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="35"/>
@@ -959,7 +959,7 @@ Slaptažodį (VS)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="64"/>
         <source>Automatically Update (upon changes to hosted playlist)</source>
-        <translation type="unfinished"/>
+        <translation>Automatiškai Naujinti (esant pakeitimams į talpinamą grojaraštį)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="79"/>
@@ -1211,7 +1211,7 @@ Slaptažodį (VS)</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Accuracy</source>
-        <translation type="unfinished"/>
+        <translation>Tikslumas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="893"/>
@@ -1411,7 +1411,7 @@ Slaptažodį (VS)</translation>
     <message>
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="294"/>
         <source>%1 minutes ago</source>
-        <translation type="unfinished"/>
+        <translation>prieš %1 minučių</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="296"/>
@@ -1698,7 +1698,7 @@ Slaptažodį (VS)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="239"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
-        <translation type="unfinished"/>
+        <translation>Konfigūruokite Tomahawk naudojamas paskyras ir paslaugas, kad ieškotumėte ir gautumėte muzikos, rastumėte savo draugus ir atnaujintumėte savo būseną.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="239"/>
@@ -1751,7 +1751,7 @@ Slaptažodį (VS)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Accounts.ui" line="57"/>
         <source>Filter by Capability:</source>
-        <translation type="unfinished"/>
+        <translation>Filtruoti pagal Gebėjimą:</translation>
     </message>
 </context>
 <context>
@@ -3982,7 +3982,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1252"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
-        <translation type="unfinished"/>
+        <translation>Atsiprašome, atsirado problemų, bandant pasiekti jūsų audio įrenginį ar norimą takelį, dabartinis takelis bus praleistas. Įsitikinkite, kad esate įdiegę tinkamą Phonon vidinę sąsają bei reikiamus papildinius.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1254"/>
@@ -4299,7 +4299,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="270"/>
         <source>Beats Music</source>
-        <translation type="unfinished"/>
+        <translation>Beats Music</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="296"/>
@@ -4385,12 +4385,12 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="50"/>
         <source>Some playlist entries were found without artist and track name, they will be omitted</source>
-        <translation type="unfinished"/>
+        <translation>Buvo rasta kai kurių grojaraščio įrašų be atlikėjo ir takelio pavadinimo, jie bus praleisti</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="52"/>
         <source>Failed to fetch the desired playlist from the network, or the desired file does not exist</source>
-        <translation type="unfinished"/>
+        <translation>Nepavyko iš tinklo gauti norimą grojaraštį, arba norimo failo nėra</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="239"/>
@@ -4595,7 +4595,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="398"/>
         <source>System shutdown</source>
-        <translation type="unfinished"/>
+        <translation>Sistemos sustabdymas</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="401"/>
