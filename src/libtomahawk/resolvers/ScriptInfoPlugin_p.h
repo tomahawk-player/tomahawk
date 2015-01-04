@@ -16,30 +16,30 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TOMAHAWK_JSINFOPLUGIN_P_H
-#define TOMAHAWK_JSINFOPLUGIN_P_H
+#ifndef TOMAHAWK_SCRIPTINFOPLUGIN_P_H
+#define TOMAHAWK_SCRIPTINFOPLUGIN_P_H
 
-#include "JSInfoPlugin.h"
+#include "ScriptInfoPlugin.h"
 
 namespace  Tomahawk
 {
 
-class JSInfoPluginPrivate
+class ScriptInfoPluginPrivate
 {
-    friend class JSInfoPlugin;
+    friend class ScriptInfoPlugin;
 public:
-    JSInfoPluginPrivate( JSInfoPlugin* q, int id, JSAccount* resolver )
+    ScriptInfoPluginPrivate( ScriptInfoPlugin* q, int id, JSAccount* resolver )
         : q_ptr ( q )
         , id( id )
         , resolver( resolver )
     {
     }
-    JSInfoPlugin* q_ptr;
-    Q_DECLARE_PUBLIC ( JSInfoPlugin )
+    ScriptInfoPlugin* q_ptr;
+    Q_DECLARE_PUBLIC ( ScriptInfoPlugin )
 
 private:
     int id;
-    // HACK: JSInfoPlugin needs to be refactored to track a ScriptObject
+    // HACK: ScriptInfoPlugin needs to be refactored to track a ScriptObject
     JSAccount* resolver;
 
     QMap< int, Tomahawk::InfoSystem::InfoRequestData > requestDataCache;
@@ -48,4 +48,4 @@ private:
 
 } // ns: Tomahawk
 
-#endif // TOMAHAWK_JSINFOPLUGIN_P_H
+#endif // TOMAHAWK_SCRIPTINFOPLUGIN_P_H

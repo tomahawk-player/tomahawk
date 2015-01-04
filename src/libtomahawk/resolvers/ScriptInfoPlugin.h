@@ -16,8 +16,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TOMAHAWK_JSINFOPLUGIN_H
-#define TOMAHAWK_JSINFOPLUGIN_H
+#ifndef TOMAHAWK_SCRIPTINFOPLUGIN_H
+#define TOMAHAWK_SCRIPTINFOPLUGIN_H
 
 #include "../infosystem/InfoSystem.h"
 
@@ -28,10 +28,10 @@ namespace Tomahawk
 {
 
 class JSAccount;
-class JSInfoPluginPrivate;
+class ScriptInfoPluginPrivate;
 
 
-class DLLEXPORT JSInfoPlugin : public Tomahawk::InfoSystem::InfoPlugin
+class DLLEXPORT ScriptInfoPlugin : public Tomahawk::InfoSystem::InfoPlugin
 {
 Q_OBJECT
 
@@ -39,8 +39,8 @@ public:
     /**
      * @param id unique identifier to identify an infoplugin in its scope
      */
-    JSInfoPlugin( int id, JSAccount* resolver );
-    virtual ~JSInfoPlugin();
+    ScriptInfoPlugin( int id, JSAccount* resolver );
+    virtual ~ScriptInfoPlugin();
 
 
     Q_INVOKABLE void addInfoRequestResult( int requestId, qint64 maxAge, const QVariantMap& returnedData );
@@ -66,10 +66,10 @@ private:
     static QVariantMap convertInfoStringHashToQVariantMap(const Tomahawk::InfoSystem::InfoStringHash& hash);
     static Tomahawk::InfoSystem::InfoStringHash convertQVariantMapToInfoStringHash( const QVariantMap& map );
 
-    Q_DECLARE_PRIVATE( JSInfoPlugin )
-    QScopedPointer<JSInfoPluginPrivate> d_ptr;
+    Q_DECLARE_PRIVATE( ScriptInfoPlugin )
+    QScopedPointer<ScriptInfoPluginPrivate> d_ptr;
 };
 
 }; // ns: Tomahawk
 
-#endif // TOMAHAWK_JSINFOPLUGIN_H
+#endif // TOMAHAWK_SCRIPTINFOPLUGIN_H

@@ -17,7 +17,7 @@
 */
 
 #include "JSInfoSystemHelper_p.h"
-#include "JSInfoPlugin.h"
+#include "ScriptInfoPlugin.h"
 
 #include "JSAccount.h"
 #include "../utils/Logger.h"
@@ -49,14 +49,14 @@ JSInfoSystemHelper::nativeAddInfoPlugin( int id )
     Q_D( JSInfoSystemHelper );
 
     // create infoplugin instance
-    JSInfoPlugin* jsInfoPlugin = new JSInfoPlugin( id, d->scriptAccount );
-    Tomahawk::InfoSystem::InfoPluginPtr infoPlugin( jsInfoPlugin );
+    ScriptInfoPlugin* scriptInfoPlugin = new ScriptInfoPlugin( id, d->scriptAccount );
+    Tomahawk::InfoSystem::InfoPluginPtr infoPlugin( scriptInfoPlugin );
 
     // move it to infosystem thread
     infoPlugin->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
 
     // add it to local list of infoplugins
-    d->infoPlugins[id] = jsInfoPlugin;
+    d->infoPlugins[id] = scriptInfoPlugin;
 
     // add it to infosystem
     Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin );

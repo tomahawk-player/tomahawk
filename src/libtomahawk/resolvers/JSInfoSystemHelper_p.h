@@ -40,7 +40,7 @@ public:
 
 private:
     JSAccount* scriptAccount;
-    QMap<int,JSInfoPlugin*> infoPlugins;
+    QMap<int,ScriptInfoPlugin*> infoPlugins;
 
 };
 

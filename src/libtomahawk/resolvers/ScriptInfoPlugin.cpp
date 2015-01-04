@@ -16,7 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "JSInfoPlugin_p.h"
+#include "ScriptInfoPlugin_p.h"
 
 #include "JSAccount.h"
 #include "Typedefs.h"
@@ -26,8 +26,8 @@
 
 using namespace Tomahawk;
 
-JSInfoPlugin::JSInfoPlugin( int id, JSAccount *resolver )
-    : d_ptr( new JSInfoPluginPrivate( this, id, resolver ) )
+ScriptInfoPlugin::ScriptInfoPlugin( int id, JSAccount *resolver )
+    : d_ptr( new ScriptInfoPluginPrivate( this, id, resolver ) )
 {
     Q_ASSERT( resolver );
 
@@ -35,25 +35,25 @@ JSInfoPlugin::JSInfoPlugin( int id, JSAccount *resolver )
     m_supportedGetTypes = parseSupportedTypes( callMethodOnInfoPluginWithResult( "supportedGetTypes" ) );
     m_supportedPushTypes = parseSupportedTypes( callMethodOnInfoPluginWithResult( "supportedPushTypes" ) );
 
-    setFriendlyName( QString( "JSInfoPlugin: %1" ).arg( resolver->name() ) );
+    setFriendlyName( QString( "ScriptInfoPlugin: %1" ).arg( resolver->name() ) );
 }
 
 
-JSInfoPlugin::~JSInfoPlugin()
+ScriptInfoPlugin::~ScriptInfoPlugin()
 {
 }
 
 
 void
-JSInfoPlugin::init()
+ScriptInfoPlugin::init()
 {
 }
 
 
 void
-JSInfoPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
+ScriptInfoPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    Q_D( JSInfoPlugin );
+    Q_D( ScriptInfoPlugin );
 
     d->requestDataCache[ requestData.requestId ] = requestData;
 
@@ -68,7 +68,7 @@ JSInfoPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 
 
 void
-JSInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
+ScriptInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 {
     QString eval = QString( "pushInfo({ type: %1, pushFlags: %2, input: %3, additionalInput: %4})" )
         .arg( pushData.type )
@@ -81,9 +81,9 @@ JSInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 
 
 void
-JSInfoPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
+ScriptInfoPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    Q_D( JSInfoPlugin );
+    Q_D( ScriptInfoPlugin );
 
     d->requestDataCache[ requestData.requestId ] = requestData;
     d->criteriaCache[ requestData.requestId ] = criteria;
@@ -100,7 +100,7 @@ JSInfoPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tom
 
 
 void
-JSInfoPlugin::addInfoRequestResult( int requestId, qint64 maxAge, const QVariantMap& returnedData )
+ScriptInfoPlugin::addInfoRequestResult( int requestId, qint64 maxAge, const QVariantMap& returnedData )
 {
     if ( QThread::currentThread() != thread() )
     {
@@ -108,7 +108,7 @@ JSInfoPlugin::addInfoRequestResult( int requestId, qint64 maxAge, const QVariant
         return;
     }
 
-    Q_D( JSInfoPlugin );
+    Q_D( ScriptInfoPlugin );
 
     // retrieve requestData from cache and delete it
     Tomahawk::InfoSystem::InfoRequestData requestData = d->requestDataCache[ requestId ];
@@ -125,7 +125,7 @@ JSInfoPlugin::addInfoRequestResult( int requestId, qint64 maxAge, const QVariant
 
 
 void
-JSInfoPlugin::emitGetCachedInfo( int requestId, const QVariantMap& criteria, int newMaxAge )
+ScriptInfoPlugin::emitGetCachedInfo( int requestId, const QVariantMap& criteria, int newMaxAge )
 {
     if ( QThread::currentThread() != thread() )
     {
@@ -133,7 +133,7 @@ JSInfoPlugin::emitGetCachedInfo( int requestId, const QVariantMap& criteria, int
         return;
     }
 
-    Q_D( JSInfoPlugin );
+    Q_D( ScriptInfoPlugin );
 
 
     emit getCachedInfo( convertQVariantMapToInfoStringHash( criteria ), newMaxAge, d->requestDataCache[ requestId ]);
@@ -141,7 +141,7 @@ JSInfoPlugin::emitGetCachedInfo( int requestId, const QVariantMap& criteria, int
 
 
 void
-JSInfoPlugin::emitInfo( int requestId, const QVariantMap& output )
+ScriptInfoPlugin::emitInfo( int requestId, const QVariantMap& output )
 {
     if ( QThread::currentThread() != thread() )
     {
@@ -149,25 +149,25 @@ JSInfoPlugin::emitInfo( int requestId, const QVariantMap& output )
         return;
     }
 
-    Q_D( JSInfoPlugin );
+    Q_D( ScriptInfoPlugin );
 
     emit info( d->requestDataCache[ requestId ], output );
 }
 
 
 QString
-JSInfoPlugin::serviceGetter() const
+ScriptInfoPlugin::serviceGetter() const
 {
-    Q_D( const JSInfoPlugin );
+    Q_D( const ScriptInfoPlugin );
 
     return QString( "Tomahawk.InfoSystem.getInfoPlugin(%1)" ).arg( d->id );
 }
 
 // TODO: DRY, really move things into base class
 void
-JSInfoPlugin::callMethodOnInfoPlugin( const QString& scriptSource )
+ScriptInfoPlugin::callMethodOnInfoPlugin( const QString& scriptSource )
 {
-    Q_D( JSInfoPlugin );
+    Q_D( ScriptInfoPlugin );
 
     QString eval = QString( "%1.%2" ).arg( serviceGetter() ).arg( scriptSource );
 
@@ -178,9 +178,9 @@ JSInfoPlugin::callMethodOnInfoPlugin( const QString& scriptSource )
 
 
 QVariant
-JSInfoPlugin::callMethodOnInfoPluginWithResult(const QString& scriptSource)
+ScriptInfoPlugin::callMethodOnInfoPluginWithResult(const QString& scriptSource)
 {
-    Q_D( JSInfoPlugin );
+    Q_D( ScriptInfoPlugin );
 
     QString eval = QString( "%1.%2" ).arg( serviceGetter() ).arg( scriptSource );
 
@@ -192,7 +192,7 @@ JSInfoPlugin::callMethodOnInfoPluginWithResult(const QString& scriptSource)
 
 
 QSet< Tomahawk::InfoSystem::InfoType >
-JSInfoPlugin::parseSupportedTypes( const QVariant& variant )
+ScriptInfoPlugin::parseSupportedTypes( const QVariant& variant )
 {
     QVariantList list = variant.toList();
 
@@ -213,7 +213,7 @@ JSInfoPlugin::parseSupportedTypes( const QVariant& variant )
 
 
 QString
-JSInfoPlugin::serializeQVariantMap( const QVariantMap& map )
+ScriptInfoPlugin::serializeQVariantMap( const QVariantMap& map )
 {
     QVariantMap localMap = map;
 
@@ -234,7 +234,7 @@ JSInfoPlugin::serializeQVariantMap( const QVariantMap& map )
 
 
 QVariantMap
-JSInfoPlugin::convertInfoStringHashToQVariantMap( const Tomahawk::InfoSystem::InfoStringHash& hash )
+ScriptInfoPlugin::convertInfoStringHashToQVariantMap( const Tomahawk::InfoSystem::InfoStringHash& hash )
 {
     QVariantMap map;
 
@@ -248,7 +248,7 @@ JSInfoPlugin::convertInfoStringHashToQVariantMap( const Tomahawk::InfoSystem::In
 
 
 Tomahawk::InfoSystem::InfoStringHash
-JSInfoPlugin::convertQVariantMapToInfoStringHash( const QVariantMap& map )
+ScriptInfoPlugin::convertQVariantMapToInfoStringHash( const QVariantMap& map )
 {
     Tomahawk::InfoSystem::InfoStringHash hash;
 

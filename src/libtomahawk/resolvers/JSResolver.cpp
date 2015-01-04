@@ -42,7 +42,7 @@
 #include "TomahawkSettings.h"
 #include "TomahawkVersion.h"
 #include "Track.h"
-#include "JSInfoPlugin.h"
+#include "ScriptInfoPlugin.h"
 #include "JSAccount.h"
 
 #include <QDir>

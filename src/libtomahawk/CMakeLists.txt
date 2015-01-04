@@ -84,7 +84,7 @@ set( libGuiSources
 
     resolvers/ExternalResolverGui.cpp
     resolvers/ScriptResolver.cpp
-    resolvers/JSInfoPlugin.cpp
+    resolvers/ScriptInfoPlugin.cpp
     resolvers/JSInfoSystemHelper.cpp
     resolvers/JSResolver.cpp
     resolvers/JSResolverHelper.cpp

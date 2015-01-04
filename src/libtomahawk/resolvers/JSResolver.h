@@ -33,7 +33,7 @@
 namespace Tomahawk
 {
 
-class JSInfoPlugin;
+class ScriptInfoPlugin;
 class JSResolverHelper;
 class JSResolverPrivate;
 class ScriptEngine;
