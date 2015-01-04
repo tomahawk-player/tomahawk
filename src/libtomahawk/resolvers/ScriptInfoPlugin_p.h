@@ -28,20 +28,14 @@ class ScriptInfoPluginPrivate
 {
     friend class ScriptInfoPlugin;
 public:
-    ScriptInfoPluginPrivate( ScriptInfoPlugin* q, int id, JSAccount* resolver )
+    ScriptInfoPluginPrivate( ScriptInfoPlugin* q )
         : q_ptr ( q )
-        , id( id )
-        , resolver( resolver )
     {
     }
     ScriptInfoPlugin* q_ptr;
     Q_DECLARE_PUBLIC ( ScriptInfoPlugin )
 
 private:
-    int id;
-    // HACK: ScriptInfoPlugin needs to be refactored to track a ScriptObject
-    JSAccount* resolver;
-
     QMap< int, Tomahawk::InfoSystem::InfoRequestData > requestDataCache;
     QMap< int, Tomahawk::InfoSystem::InfoStringHash > criteriaCache;
 };

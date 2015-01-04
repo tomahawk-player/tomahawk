@@ -39,9 +39,12 @@ class DLLEXPORT ScriptAccount : public QObject
     Q_OBJECT
 
 public:
+    ScriptAccount( const QString& name );
     virtual ~ScriptAccount() {}
 
     ScriptJob* invoke( ScriptObject* scriptObject, const QString& methodName, const QVariantMap& arguments );
+    virtual const QVariant syncInvoke( ScriptObject* scriptObject, const QString& methodName, const QVariantMap& arguments ) = 0;
+
     virtual void startJob( ScriptJob* scriptJob ) = 0;
 
     void reportScriptJobResult( const QVariantMap& result );
@@ -53,6 +56,7 @@ private slots:
     void onJobDeleted( const QString& jobId );
 
 private: // TODO: pimple, might be renamed before tho
+    QString m_name;
     QHash< QString, ScriptJob* > m_jobs;
     QHash< QString, ScriptObject* > m_objects;
 };

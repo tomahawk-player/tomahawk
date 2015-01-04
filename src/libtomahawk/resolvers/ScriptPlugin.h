@@ -35,7 +35,7 @@ public:
     ScriptObject* scriptObject() const;
 
 protected: // TODO: pimple
-    ScriptObject* m_object;
+    ScriptObject* m_scriptObject;
 
 };
 

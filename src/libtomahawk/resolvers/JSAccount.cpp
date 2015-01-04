@@ -32,8 +32,8 @@
 using namespace Tomahawk;
 
 JSAccount::JSAccount( const QString& name )
-    : m_engine( new ScriptEngine( this ) )
-    , m_name( name )
+    : ScriptAccount( name )
+    , m_engine( new ScriptEngine( this ) )
 {
 }
 
@@ -58,7 +58,7 @@ JSAccount::scriptPluginFactory( const QString& type, ScriptObject* object )
     if ( type == "resolver" )
     {
         Q_ASSERT( m_resolver );
-        m_resolver->m_object = object;
+        m_resolver->m_scriptObject = object;
     }
     else
     {
@@ -147,6 +147,26 @@ JSAccount::startJob( ScriptJob* scriptJob )
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << eval;
 
     evaluateJavaScript( eval );
+}
+
+
+const QVariant
+JSAccount::syncInvoke( ScriptObject* scriptObject, const QString& methodName, const QVariantMap& arguments )
+{
+    QString eval = QString(
+        "Tomahawk.PluginManager.invokeSync("
+        "'%1'," // objectId
+        "'%2'," // methodName
+        "%3"    // arguments
+        ");"
+    ).arg( scriptObject->id() )
+    .arg( methodName )
+    .arg( serializeQVariantMap( arguments ) );
+
+    // Remove when new scripting api turned out to work reliably
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << eval;
+
+    return evaluateJavaScriptWithResult( eval );
 }
 
 

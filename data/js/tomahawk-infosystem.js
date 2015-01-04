@@ -4,7 +4,7 @@ if(window.Promise === undefined) {
 }
 
 // TODO: find a way to enumerate TypeInfo instead of copying this manually
-
+Tomahawk.InfoSystem = Tomahawk.InfoSystem || {};
 Tomahawk.InfoSystem.InfoType = Object.create(null);
 
 Tomahawk.InfoSystem.InfoType.InfoNoInfo = 0; //WARNING: *ALWAYS* keep this first!
@@ -92,25 +92,6 @@ Tomahawk.InfoSystem.PushInfoFlags = Object.create(null);
 Tomahawk.InfoSystem.PushInfoFlags.PushNoFlag = 1;
 Tomahawk.InfoSystem.PushInfoFlags.PushShortUrlFlag = 2;
 
-
-Tomahawk.InfoSystem._infoPluginIdCounter = 0;
-Tomahawk.InfoSystem._infoPluginHash = Object.create(null);
-
-Tomahawk.InfoSystem.addInfoPlugin = function (infoPlugin) {
-    var infoPluginId = Tomahawk.InfoSystem._infoPluginIdCounter++;
-    Tomahawk.InfoSystem._infoPluginHash[infoPluginId] = infoPlugin;
-    Tomahawk.InfoSystem.nativeAddInfoPlugin(infoPluginId);
-};
-
-Tomahawk.InfoSystem.getInfoPlugin = function (infoPluginId) {
-    return Tomahawk.InfoSystem._infoPluginHash[infoPluginId];
-};
-
-Tomahawk.InfoSystem.removeInfoPlugin = function (infoPluginId) {
-    Tomahawk.log('Removing info plugins from JS is not implemented yet');
-    Tomahawk.assert(false);
-};
-
 Tomahawk.InfoSystem.InfoPlugin = {
     infoTypeString: function (infoType) {
         for (var currentInfoTypeString in Tomahawk.InfoSystem.InfoType) {
@@ -119,13 +100,8 @@ Tomahawk.InfoSystem.InfoPlugin = {
             }
         }
     },
-    // we can get around infoPluginId here probably ... but internal either way
-    _notInCache: function (infoPluginId, requestId, requestType, criteria) {
-        this.notInCache(requestType, criteria).then(function(result) {
-            Tomahawk.InfoSystem.nativeAddInfoRequestResult(infoPluginId, requestId, result.maxAge, result.data);
-        }).catch(function() {
-            // TODO: how to handle errors here?!
-        });
+    _notInCache: function (params) {
+        return this.notInCache(params.type, params.criteria);
     },
     notInCache: function (infoType, criteria) {
         var requestMethod = 'request' + this.infoTypeString(infoType);
@@ -136,14 +112,8 @@ Tomahawk.InfoSystem.InfoPlugin = {
         var pushMethod = 'push' + this.infoTypeString(pushData.type);
         return this[pushMethod](pushData);
     },
-    // we can get around infoPluginId here probably ... but internal either way
-    _getInfo: function (infoPluginId, requestId, type, infoHash) {
-        this.getInfo(type, infoHash).then(function(result) {
-            Tomahawk.InfoSystem.nativeGetCachedInfo(infoPluginId, requestId, result.newMaxAge, result.criteria)
-        }, function() {
-            Tomahawk.log("Call nativeDataError");
-            Tomahawk.InfoSystem.nativeDataError();
-        });
+    _getInfo: function (params) {
+        return this.getInfo(params.type, params.data);
     },
     getInfo: function (type, infoHash) {
         var getInfoMethod = 'get' + this.infoTypeString(type);

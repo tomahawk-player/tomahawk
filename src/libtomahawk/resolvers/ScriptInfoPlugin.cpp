@@ -20,22 +20,25 @@
 
 #include "JSAccount.h"
 #include "Typedefs.h"
+#include "ScriptObject.h"
+#include "ScriptJob.h"
 
 #include "../utils/Logger.h"
 #include "../utils/Json.h"
 
 using namespace Tomahawk;
 
-ScriptInfoPlugin::ScriptInfoPlugin( int id, JSAccount *resolver )
-    : d_ptr( new ScriptInfoPluginPrivate( this, id, resolver ) )
+ScriptInfoPlugin::ScriptInfoPlugin( ScriptObject* scriptObject, const QString& name )
+    : d_ptr( new ScriptInfoPluginPrivate( this ) )
+    , ScriptPlugin( scriptObject )
 {
-    Q_ASSERT( resolver );
+    Q_ASSERT( scriptObject );
 
     // read in supported GetTypes and PushTypes - we can do this safely because we are still in WebKit thread here
-    m_supportedGetTypes = parseSupportedTypes( callMethodOnInfoPluginWithResult( "supportedGetTypes" ) );
-    m_supportedPushTypes = parseSupportedTypes( callMethodOnInfoPluginWithResult( "supportedPushTypes" ) );
+    m_supportedGetTypes = parseSupportedTypes( m_scriptObject->syncInvoke( "supportedGetTypes" ) );
+    m_supportedPushTypes = parseSupportedTypes( m_scriptObject->syncInvoke( "supportedPushTypes" ) );
 
-    setFriendlyName( QString( "ScriptInfoPlugin: %1" ).arg( resolver->name() ) );
+    setFriendlyName( QString( "ScriptInfoPlugin: %1" ).arg( name ) );
 }
 
 
@@ -55,28 +58,29 @@ ScriptInfoPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     Q_D( ScriptInfoPlugin );
 
-    d->requestDataCache[ requestData.requestId ] = requestData;
 
-    QString eval = QString( "_getInfo(%1, %2, %3, %4)" )
-        .arg( d->id ) // infoPluginId
-        .arg( requestData.requestId ) // requestId
-        .arg( requestData.type )  // type
-        .arg( serializeQVariantMap(  convertInfoStringHashToQVariantMap( requestData.input.value<Tomahawk::InfoSystem::InfoStringHash>() ) ) ); // infoHash
+    QVariantMap arguments;
+    arguments[ "type" ] = requestData.type;
+    arguments[ "data" ] = convertInfoStringHashToQVariantMap( requestData.input.value<Tomahawk::InfoSystem::InfoStringHash>() );
 
-    callMethodOnInfoPlugin( eval );
+    ScriptJob* job = m_scriptObject->invoke( "_getInfo", arguments );
+    connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onGetInfoRequestDone( QVariantMap ) ) );
+
+    d->requestDataCache[ job->id().toInt() ] = requestData;
+    job->start();
 }
 
 
 void
 ScriptInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 {
-    QString eval = QString( "pushInfo({ type: %1, pushFlags: %2, input: %3, additionalInput: %4})" )
-        .arg( pushData.type )
-        .arg( pushData.pushFlags )
-        .arg( serializeQVariantMap ( pushData.infoPair.second.toMap() ) )
-        .arg( serializeQVariantMap( pushData.infoPair.first ) );
+    QVariantMap arguments;
+    arguments[ "type" ] = pushData.type;
+    arguments[ "pushFlags" ] = pushData.pushFlags;
+    arguments[ "input" ] = serializeQVariantMap ( pushData.infoPair.second.toMap() );
+    arguments[ "additionalInput" ] = serializeQVariantMap( pushData.infoPair.first );
 
-    callMethodOnInfoPlugin( eval );
+    m_scriptObject->invoke( "pushInfo", arguments );
 }
 
 
@@ -85,110 +89,68 @@ ScriptInfoPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria,
 {
     Q_D( ScriptInfoPlugin );
 
-    d->requestDataCache[ requestData.requestId ] = requestData;
-    d->criteriaCache[ requestData.requestId ] = criteria;
+    QVariantMap arguments;
+    arguments[ "type" ] = requestData.type;
+    arguments[ "criteria" ] = convertInfoStringHashToQVariantMap( criteria );
 
+    ScriptJob* job = m_scriptObject->invoke( "_notInCache", arguments );
+    connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onNotInCacheRequestDone( QVariantMap ) ) );
+    d->requestDataCache[ job->id().toInt() ] = requestData;
+    d->criteriaCache[ job->id().toInt() ] = criteria;
 
-    QString eval = QString( "_notInCache(%1, %2, %3, %4)" )
-        .arg( d->id )
-        .arg( requestData.requestId )
-        .arg( requestData.type )
-        .arg( serializeQVariantMap( convertInfoStringHashToQVariantMap( criteria ) ) );
-
-    callMethodOnInfoPlugin( eval );
+    job->start();
 }
 
 
 void
-ScriptInfoPlugin::addInfoRequestResult( int requestId, qint64 maxAge, const QVariantMap& returnedData )
+ScriptInfoPlugin::onGetInfoRequestDone( const QVariantMap& result )
 {
-    if ( QThread::currentThread() != thread() )
-    {
-        QMetaObject::invokeMethod( this, "addInfoRequestResult", Qt::QueuedConnection, Q_ARG( int, requestId ), Q_ARG( qint64, maxAge ), Q_ARG( QVariantMap, returnedData ) );
-        return;
-    }
+    Q_ASSERT( QThread::currentThread() == thread() );
 
     Q_D( ScriptInfoPlugin );
+
+
+
+    ScriptJob* job = qobject_cast< ScriptJob* >( sender() );
+
+    if ( job->error() )
+    {
+        emit info( d->requestDataCache[ job->id().toInt() ], QVariantMap() );
+    }
+    else
+    {
+
+        emit getCachedInfo( convertQVariantMapToInfoStringHash( result[ "criteria" ].toMap() ), result[ "newMaxAge" ].toLongLong(), d->requestDataCache[ job->id().toInt() ] );
+    }
+
+    d->requestDataCache.remove( job->id().toInt() );
+    sender()->deleteLater();
+}
+
+
+void
+ScriptInfoPlugin::onNotInCacheRequestDone( const QVariantMap& result )
+{
+    Q_ASSERT( QThread::currentThread() == thread() );
+
+    Q_D( ScriptInfoPlugin );
+
+    ScriptJob* job = qobject_cast< ScriptJob* >( sender() );
 
     // retrieve requestData from cache and delete it
-    Tomahawk::InfoSystem::InfoRequestData requestData = d->requestDataCache[ requestId ];
-    d->requestDataCache.remove( requestId );
+    Tomahawk::InfoSystem::InfoRequestData requestData = d->requestDataCache[ job->id().toInt() ];
+    d->requestDataCache.remove( job->id().toInt() );
 
-    emit info( requestData, returnedData );
+    emit info( requestData, result[ "data" ].toMap() );
 
     // retrieve criteria from cache and delete it
-    Tomahawk::InfoSystem::InfoStringHash criteria = d->criteriaCache[ requestId ];
-    d->criteriaCache.remove( requestId );
+    Tomahawk::InfoSystem::InfoStringHash criteria = d->criteriaCache[ job->id().toInt() ];
+    d->criteriaCache.remove( job->id().toInt() );
 
-    emit updateCache( criteria, maxAge, requestData.type, returnedData );
+    emit updateCache( criteria, result[ "maxAge" ].toLongLong(), requestData.type, result[ "data" ].toMap() );
+
+    sender()->deleteLater();
 }
-
-
-void
-ScriptInfoPlugin::emitGetCachedInfo( int requestId, const QVariantMap& criteria, int newMaxAge )
-{
-    if ( QThread::currentThread() != thread() )
-    {
-        QMetaObject::invokeMethod( this, "emitGetCachedInfo", Qt::QueuedConnection, Q_ARG( int, requestId ), Q_ARG( QVariantMap, criteria ), Q_ARG( int, newMaxAge ) );
-        return;
-    }
-
-    Q_D( ScriptInfoPlugin );
-
-
-    emit getCachedInfo( convertQVariantMapToInfoStringHash( criteria ), newMaxAge, d->requestDataCache[ requestId ]);
-}
-
-
-void
-ScriptInfoPlugin::emitInfo( int requestId, const QVariantMap& output )
-{
-    if ( QThread::currentThread() != thread() )
-    {
-        QMetaObject::invokeMethod( this, "emitInfo", Qt::QueuedConnection, Q_ARG( int, requestId ), Q_ARG( QVariantMap, output ) );
-        return;
-    }
-
-    Q_D( ScriptInfoPlugin );
-
-    emit info( d->requestDataCache[ requestId ], output );
-}
-
-
-QString
-ScriptInfoPlugin::serviceGetter() const
-{
-    Q_D( const ScriptInfoPlugin );
-
-    return QString( "Tomahawk.InfoSystem.getInfoPlugin(%1)" ).arg( d->id );
-}
-
-// TODO: DRY, really move things into base class
-void
-ScriptInfoPlugin::callMethodOnInfoPlugin( const QString& scriptSource )
-{
-    Q_D( ScriptInfoPlugin );
-
-    QString eval = QString( "%1.%2" ).arg( serviceGetter() ).arg( scriptSource );
-
-    tLog() << Q_FUNC_INFO << eval;
-
-    d->resolver->evaluateJavaScript( eval );
-}
-
-
-QVariant
-ScriptInfoPlugin::callMethodOnInfoPluginWithResult(const QString& scriptSource)
-{
-    Q_D( ScriptInfoPlugin );
-
-    QString eval = QString( "%1.%2" ).arg( serviceGetter() ).arg( scriptSource );
-
-    tLog() << Q_FUNC_INFO << eval;
-
-    return d->resolver->evaluateJavaScriptWithResult( eval );
-}
-
 
 
 QSet< Tomahawk::InfoSystem::InfoType >

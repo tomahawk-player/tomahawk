@@ -21,12 +21,20 @@
 #include "ScriptObject.h"
 #include "../utils/Logger.h"
 
-
 // TODO: register factory methods instead of hardcoding all plugin types in here
 #include "../utils/LinkGenerator.h"
 #include "ScriptLinkGeneratorPlugin.h"
+#include "ScriptInfoPlugin.h"
 
 using namespace Tomahawk;
+
+
+ScriptAccount::ScriptAccount( const QString& name )
+    : QObject()
+    , m_name( name )
+{
+}
+
 
 static QString
 requestIdGenerator()
@@ -43,6 +51,9 @@ ScriptAccount::invoke( ScriptObject* scriptObject, const QString& methodName, co
     QString requestId = requestIdGenerator();
 
     ScriptJob* job = new ScriptJob( requestId, scriptObject, methodName, arguments );
+    // TODO: setParent through QueuedConnection
+
+
     connect( job, SIGNAL( destroyed( QString ) ), SLOT( onJobDeleted( QString ) ) );
     m_jobs.insert( requestId, job );
 
@@ -96,6 +107,18 @@ ScriptAccount::scriptPluginFactory( const QString& type, ScriptObject* object )
         tLog() << "Got link generator plugin";
         ScriptLinkGeneratorPlugin* lgp = new ScriptLinkGeneratorPlugin( object );
         Utils::LinkGenerator::instance()->addPlugin( lgp );
+    }
+    else if ( type == "infoPlugin" )
+    {
+        // create infoplugin instance
+        ScriptInfoPlugin* scriptInfoPlugin = new ScriptInfoPlugin( object, m_name );
+        Tomahawk::InfoSystem::InfoPluginPtr infoPlugin( scriptInfoPlugin );
+
+        // move it to infosystem thread
+        infoPlugin->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
+
+        // add it to infosystem
+        Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin );
     }
     else
     {

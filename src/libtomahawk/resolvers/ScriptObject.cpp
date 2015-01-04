@@ -43,6 +43,15 @@ ScriptObject::invoke( const QString& methodName, const QVariantMap& arguments )
 }
 
 
+const QVariant
+ScriptObject::syncInvoke(const QString& methodName, const QVariantMap& arguments)
+{
+    Q_D( ScriptObject );
+
+    return d->scriptAccount->syncInvoke( this, methodName, arguments );
+}
+
+
 QString
 ScriptObject::id() const
 {

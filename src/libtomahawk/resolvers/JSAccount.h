@@ -45,6 +45,7 @@ public:
     JSAccount( const QString& name );
 
     void startJob( ScriptJob* scriptJob ) override;
+    const QVariant syncInvoke( ScriptObject* scriptObject, const QString& methodName, const QVariantMap& arguments ) override;
 
     const QString name() const;
 

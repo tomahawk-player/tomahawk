@@ -18,12 +18,14 @@
 
 #include "ScriptJob.h"
 #include "ScriptObject.h"
+
 #include <QMetaObject>
+#include <QThread>
 
 using namespace Tomahawk;
 
 ScriptJob::ScriptJob( const QString& id, ScriptObject* scriptObject, const QString& methodName, const QVariantMap& arguments )
-    : QObject( scriptObject )
+    : QObject( scriptObject->thread() == QThread::currentThread() ? scriptObject : nullptr )
     , m_error( false )
     , m_id( id )
     , m_scriptObject( scriptObject )

@@ -21,7 +21,7 @@
 using namespace Tomahawk;
 
 ScriptPlugin::ScriptPlugin( ScriptObject* object )
-    : m_object( object )
+    : m_scriptObject( object )
 {
 }
 
@@ -35,5 +35,5 @@ ScriptPlugin::~ScriptPlugin()
 ScriptObject*
 ScriptPlugin::scriptObject() const
 {
-    return m_object;
+    return m_scriptObject;
 }

@@ -233,15 +233,10 @@ JSResolver::init()
 
     // tomahawk-infosystem.js
     {
-        // TODO: be smarter about this, only instantiate this if the resolver supports infoplugins
-
-        // add c++ part of tomahawk infosystem bindings as Tomahawk.InfoSystem
-        d->infoSystemHelper = new JSInfoSystemHelper( d->scriptAccount.get() );
-        d->scriptAccount->addToJavaScriptWindowObject( "_TomahawkInfoSystem", d->infoSystemHelper );
-        d->scriptAccount->evaluateJavaScript( "Tomahawk.InfoSystem = _TomahawkInfoSystem;" );
+        // TODO: be smarter about this, only include this if the resolver supports infoplugins
 
         // add deps
-        d->scriptAccount->loadScripts( d->infoSystemHelper->requiredScriptPaths() );
+        d->scriptAccount->loadScript( RESPATH "js/tomahawk-infosystem.js" );
     }
 
     // add resolver dependencies, if any

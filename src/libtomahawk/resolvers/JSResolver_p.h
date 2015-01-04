@@ -25,7 +25,6 @@
 #include "JSResolver.h"
 
 #include "JSResolverHelper.h"
-#include "JSInfoSystemHelper.h"
 #include "database/fuzzyindex/FuzzyIndex.h"
 
 #include <memory> // unique_ptr
@@ -44,7 +43,6 @@ public:
         , stopped( true )
         , error( Tomahawk::ExternalResolver::NoError )
         , resolverHelper( new JSResolverHelper( scriptPath, q ) )
-        , infoSystemHelper( nullptr )
         , requiredScriptPaths( additionalScriptPaths )
     {
     }
@@ -63,7 +61,6 @@ private:
     Tomahawk::ExternalResolver::ErrorState error;
 
     JSResolverHelper* resolverHelper;
-    JSInfoSystemHelper* infoSystemHelper;
     QScopedPointer<FuzzyIndex> fuzzyIndex;
     QPointer< AccountConfigWidget > configWidget;
     QList< QVariant > dataWidgets;

@@ -20,6 +20,7 @@
 #define TOMAHAWK_SCRIPTINFOPLUGIN_H
 
 #include "../infosystem/InfoSystem.h"
+#include "ScriptPlugin.h"
 
 #include "DllMacro.h"
 
@@ -29,9 +30,10 @@ namespace Tomahawk
 
 class JSAccount;
 class ScriptInfoPluginPrivate;
+class ScriptObject;
 
 
-class DLLEXPORT ScriptInfoPlugin : public Tomahawk::InfoSystem::InfoPlugin
+class DLLEXPORT ScriptInfoPlugin : public Tomahawk::InfoSystem::InfoPlugin, Tomahawk::ScriptPlugin
 {
 Q_OBJECT
 
@@ -39,13 +41,8 @@ public:
     /**
      * @param id unique identifier to identify an infoplugin in its scope
      */
-    ScriptInfoPlugin( int id, JSAccount* resolver );
+    ScriptInfoPlugin( ScriptObject* scriptObject, const QString& name );
     virtual ~ScriptInfoPlugin();
-
-
-    Q_INVOKABLE void addInfoRequestResult( int requestId, qint64 maxAge, const QVariantMap& returnedData );
-    Q_INVOKABLE void emitGetCachedInfo( int requestId, const QVariantMap& criteria, int newMaxAge );
-    Q_INVOKABLE void emitInfo( int requestId, const QVariantMap& output );
 
 protected slots:
     void init() override;
@@ -54,11 +51,8 @@ protected slots:
     void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData ) override;
     void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData ) override;
 
-protected:
-    // TODO: create JSAccount base class and move these methods there
-    QString serviceGetter() const; // = 0
-    void callMethodOnInfoPlugin( const QString& scriptSource );
-    QVariant callMethodOnInfoPluginWithResult( const QString& scriptSource );
+    void onGetInfoRequestDone( const QVariantMap& result );
+    void onNotInCacheRequestDone( const QVariantMap& result );
 
 private:
     static QSet< Tomahawk::InfoSystem::InfoType > parseSupportedTypes(const QVariant& variant);
