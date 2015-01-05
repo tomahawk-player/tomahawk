@@ -39,11 +39,20 @@ ScriptInfoPlugin::ScriptInfoPlugin( ScriptObject* scriptObject, const QString& n
     m_supportedPushTypes = parseSupportedTypes( m_scriptObject->syncInvoke( "supportedPushTypes" ) );
 
     setFriendlyName( QString( "ScriptInfoPlugin: %1" ).arg( name ) );
+
+    connect( scriptObject, SIGNAL( destroyed( QObject* ) ), SLOT( onScriptObjectDeleted() ) );
 }
 
 
 ScriptInfoPlugin::~ScriptInfoPlugin()
 {
+}
+
+
+void
+ScriptInfoPlugin::onScriptObjectDeleted()
+{
+    deleteLater();
 }
 
 

@@ -54,6 +54,9 @@ protected slots:
     void onGetInfoRequestDone( const QVariantMap& result );
     void onNotInCacheRequestDone( const QVariantMap& result );
 
+    // boilerplate: to be removed with Qt5 (can be put into ScriptPlugin)
+    void onScriptObjectDeleted();
+
 private:
     static QSet< Tomahawk::InfoSystem::InfoType > parseSupportedTypes(const QVariant& variant);
     static QString serializeQVariantMap(const QVariantMap& map);
