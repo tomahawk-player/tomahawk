@@ -55,6 +55,8 @@ public:
 private slots:
     void onJobDeleted( const QString& jobId );
 
+    void onScriptObjectDeleted( QObject* scriptObject );
+
 private: // TODO: pimple, might be renamed before tho
     QString m_name;
     QHash< QString, ScriptJob* > m_jobs;

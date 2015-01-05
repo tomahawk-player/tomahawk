@@ -92,10 +92,18 @@ ScriptAccount::registerScriptPlugin( const QString& type, const QString& objectI
     if( !object )
     {
         object = new ScriptObject( objectId, this );
+        connect( object, SIGNAL( destroyed( QObject* ) ), SLOT( onScriptObjectDeleted( QObject* ) ) );
         m_objects.insert( objectId, object );
     }
 
     scriptPluginFactory( type, object );
+}
+
+
+void
+ScriptAccount::onScriptObjectDeleted( QObject* scriptObject )
+{
+    m_objects.remove( m_objects.key( static_cast< ScriptObject* >( scriptObject ) ) );
 }
 
 
