@@ -19,6 +19,8 @@
 #ifndef TOMAHAWK_SCRIPTOBJECT_H
 #define TOMAHAWK_SCRIPTOBJECT_H
 
+#include "../Typedefs.h"
+
 #include <QObject>
 #include <QVariantMap>
 
@@ -39,6 +41,9 @@ friend class ScriptJob;
 public:
     ScriptObject( const QString& id, ScriptAccount* parent );
     virtual ~ScriptObject();
+
+    void setWeakRef( const scriptobject_wptr& weakRef );
+    const scriptobject_wptr weakRef() const;
 
     ScriptJob* invoke( const QString& methodName, const QVariantMap& arguments = QVariantMap() );
 

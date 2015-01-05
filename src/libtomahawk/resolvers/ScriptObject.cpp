@@ -31,6 +31,24 @@ ScriptObject::ScriptObject( const QString& id, ScriptAccount* parent )
 
 ScriptObject::~ScriptObject()
 {
+     //TODO: Album clears the ownRef wptr explicitly ... why?
+}
+
+
+void
+ScriptObject::setWeakRef(const scriptobject_wptr& weakRef)
+{
+    Q_D( ScriptObject );
+    d->ownRef = weakRef;
+}
+
+
+const scriptobject_wptr
+ScriptObject::weakRef() const
+{
+    Q_D( const ScriptObject );
+
+    return d->ownRef;
 }
 
 
@@ -39,7 +57,7 @@ ScriptObject::invoke( const QString& methodName, const QVariantMap& arguments )
 {
     Q_D( ScriptObject );
 
-    return d->scriptAccount->invoke( this, methodName, arguments );
+    return d->scriptAccount->invoke( weakRef().toStrongRef(), methodName, arguments );
 }
 
 
@@ -48,7 +66,7 @@ ScriptObject::syncInvoke(const QString& methodName, const QVariantMap& arguments
 {
     Q_D( ScriptObject );
 
-    return d->scriptAccount->syncInvoke( this, methodName, arguments );
+    return d->scriptAccount->syncInvoke( weakRef().toStrongRef(), methodName, arguments );
 }
 
 

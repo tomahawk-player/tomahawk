@@ -45,7 +45,7 @@ public:
     JSAccount( const QString& name );
 
     void startJob( ScriptJob* scriptJob ) override;
-    const QVariant syncInvoke( ScriptObject* scriptObject, const QString& methodName, const QVariantMap& arguments ) override;
+    const QVariant syncInvoke( const scriptobject_ptr& scriptObject, const QString& methodName, const QVariantMap& arguments ) override;
 
     const QString name() const;
 
@@ -70,7 +70,7 @@ public:
     void addToJavaScriptWindowObject( const QString& name, QObject* object );
 
     void setResolver( JSResolver* resolver );
-    void scriptPluginFactory( const QString& type, ScriptObject* object ) override;
+    void scriptPluginFactory( const QString& type, const scriptobject_ptr& object ) override;
 
     static QString serializeQVariantMap(const QVariantMap& map);
 

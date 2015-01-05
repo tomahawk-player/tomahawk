@@ -37,7 +37,7 @@ class DLLEXPORT ScriptLinkGeneratorPlugin : public QObject, public ScriptPlugin,
 Q_OBJECT
 
 public:
-    ScriptLinkGeneratorPlugin( ScriptObject* scriptObject );
+    ScriptLinkGeneratorPlugin( const scriptobject_ptr& scriptObject );
     virtual ~ScriptLinkGeneratorPlugin();
 
     ScriptJob* openLink( const QString& title, const QString& artist, const QString& album ) const override;

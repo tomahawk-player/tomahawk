@@ -17,9 +17,11 @@
  */
 #include "SyncScriptJob.h"
 
+#include "../Typedefs.h"
+#include "ScriptObject.h"
 
 Tomahawk::SyncScriptJob::SyncScriptJob( const QVariantMap& resultData )
-    : ScriptJob( QString(), nullptr, QString() )
+    : ScriptJob( QString(), scriptobject_ptr(), QString() )
 {
     m_data = resultData;
 }

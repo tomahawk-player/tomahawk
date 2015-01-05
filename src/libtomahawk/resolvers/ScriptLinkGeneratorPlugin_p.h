@@ -27,7 +27,7 @@ namespace  Tomahawk
 class ScriptLinkGeneratorPluginPrivate
 {
 public:
-    ScriptLinkGeneratorPluginPrivate( ScriptLinkGeneratorPlugin* q, ScriptObject* scriptObject )
+    ScriptLinkGeneratorPluginPrivate( ScriptLinkGeneratorPlugin* q, const scriptobject_ptr& scriptObject )
         : q_ptr ( q )
         , scriptObject( scriptObject )
     {
@@ -36,7 +36,7 @@ public:
     Q_DECLARE_PUBLIC ( ScriptLinkGeneratorPlugin )
 
 private:
-    ScriptObject* scriptObject;
+    scriptobject_ptr scriptObject;
 };
 
 } // ns: Tomahawk

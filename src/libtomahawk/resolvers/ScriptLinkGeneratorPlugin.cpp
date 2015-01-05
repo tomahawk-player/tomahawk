@@ -24,8 +24,8 @@
 
 using namespace Tomahawk;
 
-ScriptLinkGeneratorPlugin::ScriptLinkGeneratorPlugin( ScriptObject* scriptObject )
-    : QObject( scriptObject )
+ScriptLinkGeneratorPlugin::ScriptLinkGeneratorPlugin( const scriptobject_ptr& scriptObject )
+    : QObject( scriptObject.data() )
     , ScriptPlugin( scriptObject )
     , Utils::LinkGeneratorPlugin()
     , d_ptr( new ScriptLinkGeneratorPluginPrivate( this, scriptObject ) )

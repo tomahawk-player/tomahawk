@@ -41,7 +41,7 @@ public:
     /**
      * @param id unique identifier to identify an infoplugin in its scope
      */
-    ScriptInfoPlugin( ScriptObject* scriptObject, const QString& name );
+    ScriptInfoPlugin( const scriptobject_ptr& scriptObject, const QString& name );
     virtual ~ScriptInfoPlugin();
 
 protected slots:

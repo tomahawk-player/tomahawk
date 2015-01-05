@@ -20,7 +20,7 @@
 
 using namespace Tomahawk;
 
-ScriptPlugin::ScriptPlugin( ScriptObject* object )
+ScriptPlugin::ScriptPlugin( const scriptobject_ptr& object )
     : m_scriptObject( object )
 {
 }
@@ -32,7 +32,7 @@ ScriptPlugin::~ScriptPlugin()
 }
 
 
-ScriptObject*
+const scriptobject_ptr
 ScriptPlugin::scriptObject() const
 {
     return m_scriptObject;

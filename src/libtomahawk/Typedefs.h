@@ -55,6 +55,7 @@ namespace Tomahawk
     class GeneratorInterface;
     class PeerInfo;
     class DatabaseCommand;
+    class ScriptObject;
 
     typedef QSharedPointer<Collection> collection_ptr;
     typedef QSharedPointer<Playlist> playlist_ptr;
@@ -81,6 +82,11 @@ namespace Tomahawk
 
     typedef QSharedPointer<DynamicControl> dyncontrol_ptr;
     typedef QSharedPointer<GeneratorInterface> geninterface_ptr;
+
+
+    // Scripting
+    typedef QSharedPointer< ScriptObject > scriptobject_ptr;
+    typedef QWeakPointer< ScriptObject > scriptobject_wptr;
 
     // let's keep these typesafe, they are different kinds of GUID:
     typedef QString QID; //query id

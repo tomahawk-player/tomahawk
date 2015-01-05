@@ -40,6 +40,7 @@ public:
 private:
     QString id;
     ScriptAccount* scriptAccount;
+    scriptobject_wptr ownRef;
 };
 
 } // ns: Tomahawk

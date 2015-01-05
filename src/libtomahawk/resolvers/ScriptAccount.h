@@ -21,6 +21,8 @@
 #ifndef TOMAHAWK_SCRIPTACCOUNT_H
 #define TOMAHAWK_SCRIPTACCOUNT_H
 
+#include "../Typedefs.h"
+
 #include <QObject>
 #include <QVariantMap>
 
@@ -42,25 +44,25 @@ public:
     ScriptAccount( const QString& name );
     virtual ~ScriptAccount() {}
 
-    ScriptJob* invoke( ScriptObject* scriptObject, const QString& methodName, const QVariantMap& arguments );
-    virtual const QVariant syncInvoke( ScriptObject* scriptObject, const QString& methodName, const QVariantMap& arguments ) = 0;
+    ScriptJob* invoke( const scriptobject_ptr& scriptObject, const QString& methodName, const QVariantMap& arguments );
+    virtual const QVariant syncInvoke( const scriptobject_ptr& scriptObject, const QString& methodName, const QVariantMap& arguments ) = 0;
 
     virtual void startJob( ScriptJob* scriptJob ) = 0;
 
     void reportScriptJobResult( const QVariantMap& result );
     void registerScriptPlugin( const QString& type, const QString& objectId );
 
-    virtual void scriptPluginFactory( const QString& type, ScriptObject* object );
+    virtual void scriptPluginFactory( const QString& type, const scriptobject_ptr& object );
 
 private slots:
     void onJobDeleted( const QString& jobId );
 
-    void onScriptObjectDeleted( QObject* scriptObject );
+    void onScriptObjectDeleted();
 
 private: // TODO: pimple, might be renamed before tho
     QString m_name;
     QHash< QString, ScriptJob* > m_jobs;
-    QHash< QString, ScriptObject* > m_objects;
+    QHash< QString, scriptobject_ptr > m_objects;
 };
 
 } // ns: Tomahawk

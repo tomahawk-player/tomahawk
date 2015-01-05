@@ -32,13 +32,13 @@ class ScriptObject;
 class DLLEXPORT ScriptPlugin
 {
 public:
-    ScriptPlugin( ScriptObject* object );
+    ScriptPlugin( const scriptobject_ptr& object );
     virtual ~ScriptPlugin();
 
-    ScriptObject* scriptObject() const;
+    const scriptobject_ptr scriptObject() const;
 
 protected: // TODO: pimple
-    QPointer< ScriptObject > m_scriptObject;
+    scriptobject_ptr m_scriptObject;
 
 };
 

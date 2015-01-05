@@ -19,6 +19,8 @@
 #ifndef TOMAHAWK_SCRIPTJOB_H
 #define TOMAHAWK_SCRIPTJOB_H
 
+#include "../Typedefs.h"
+
 #include <QVariantMap>
 #include <QObject>
 
@@ -34,7 +36,7 @@ class DLLEXPORT ScriptJob : public QObject
 Q_OBJECT
 
 public:
-    ScriptJob( const QString& id, ScriptObject* scriptObject, const QString& methodName, const QVariantMap& arguments = QVariantMap() );
+    ScriptJob( const QString& id, const scriptobject_ptr& scriptObject, const QString& methodName, const QVariantMap& arguments = QVariantMap() );
     virtual ~ScriptJob();
 
     virtual void start();
@@ -42,7 +44,7 @@ public:
     bool error() const;
 
     const QString id() const;
-    ScriptObject* scriptObject() const;
+    const scriptobject_ptr scriptObject() const;
     const QString methodName() const;
     const QVariantMap arguments() const;
 
@@ -60,7 +62,7 @@ protected:
     // TODO: pimple
     bool m_error;
     QString m_id;
-    ScriptObject* m_scriptObject;
+    scriptobject_ptr m_scriptObject;
     QVariantMap m_data;
     QString m_methodName;
     QVariantMap m_arguments;

@@ -53,7 +53,7 @@ JSAccount::setResolver( JSResolver* resolver )
 
 
 void
-JSAccount::scriptPluginFactory( const QString& type, ScriptObject* object )
+JSAccount::scriptPluginFactory( const QString& type, const scriptobject_ptr& object )
 {
     if ( type == "resolver" )
     {
@@ -151,7 +151,7 @@ JSAccount::startJob( ScriptJob* scriptJob )
 
 
 const QVariant
-JSAccount::syncInvoke( ScriptObject* scriptObject, const QString& methodName, const QVariantMap& arguments )
+JSAccount::syncInvoke( const scriptobject_ptr& scriptObject, const QString& methodName, const QVariantMap& arguments )
 {
     QString eval = QString(
         "Tomahawk.PluginManager.invokeSync("

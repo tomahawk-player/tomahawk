@@ -59,7 +59,7 @@ using namespace Tomahawk;
 
 JSResolver::JSResolver( const QString& accountId, const QString& scriptPath, const QStringList& additionalScriptPaths )
     : Tomahawk::ExternalResolverGui( scriptPath )
-    , ScriptPlugin( nullptr )
+    , ScriptPlugin( scriptobject_ptr() )
     , d_ptr( new JSResolverPrivate( this, accountId, scriptPath, additionalScriptPaths ) )
 {
     Q_D( JSResolver );

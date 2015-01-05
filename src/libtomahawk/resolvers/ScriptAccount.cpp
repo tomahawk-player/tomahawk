@@ -20,6 +20,7 @@
 
 #include "ScriptObject.h"
 #include "../utils/Logger.h"
+#include "../Typedefs.h"
 
 // TODO: register factory methods instead of hardcoding all plugin types in here
 #include "../utils/LinkGenerator.h"
@@ -46,7 +47,7 @@ requestIdGenerator()
 
 
 ScriptJob*
-ScriptAccount::invoke( ScriptObject* scriptObject, const QString& methodName, const QVariantMap& arguments )
+ScriptAccount::invoke( const scriptobject_ptr& scriptObject, const QString& methodName, const QVariantMap& arguments )
 {
     QString requestId = requestIdGenerator();
 
@@ -88,11 +89,12 @@ ScriptAccount::reportScriptJobResult( const QVariantMap& result )
 void
 ScriptAccount::registerScriptPlugin( const QString& type, const QString& objectId )
 {
-    ScriptObject* object = m_objects.value( objectId );
+    scriptobject_ptr object = m_objects.value( objectId );
     if( !object )
     {
-        object = new ScriptObject( objectId, this );
-        connect( object, SIGNAL( destroyed( QObject* ) ), SLOT( onScriptObjectDeleted( QObject* ) ) );
+        object = scriptobject_ptr( new ScriptObject( objectId, this ), &ScriptObject::deleteLater );
+        object->setWeakRef( object.toWeakRef() );
+        connect( object.data(), SIGNAL( destroyed( QObject* ) ), SLOT( onScriptObjectDeleted() ) );
         m_objects.insert( objectId, object );
     }
 
@@ -101,14 +103,21 @@ ScriptAccount::registerScriptPlugin( const QString& type, const QString& objectI
 
 
 void
-ScriptAccount::onScriptObjectDeleted( QObject* scriptObject )
+ScriptAccount::onScriptObjectDeleted()
 {
-    m_objects.remove( m_objects.key( static_cast< ScriptObject* >( scriptObject ) ) );
+    foreach( const scriptobject_ptr& object, m_objects.values() )
+    {
+        if ( object.isNull() )
+        {
+            m_objects.remove( m_objects.key( object ) );
+            break;
+        }
+    }
 }
 
 
 void
-ScriptAccount::scriptPluginFactory( const QString& type, ScriptObject* object )
+ScriptAccount::scriptPluginFactory( const QString& type, const scriptobject_ptr& object )
 {
     if ( type == "linkGenerator" )
     {

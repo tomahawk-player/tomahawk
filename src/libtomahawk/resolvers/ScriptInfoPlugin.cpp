@@ -28,7 +28,7 @@
 
 using namespace Tomahawk;
 
-ScriptInfoPlugin::ScriptInfoPlugin( ScriptObject* scriptObject, const QString& name )
+ScriptInfoPlugin::ScriptInfoPlugin( const scriptobject_ptr& scriptObject, const QString& name )
     : d_ptr( new ScriptInfoPluginPrivate( this ) )
     , ScriptPlugin( scriptObject )
 {
@@ -40,7 +40,7 @@ ScriptInfoPlugin::ScriptInfoPlugin( ScriptObject* scriptObject, const QString& n
 
     setFriendlyName( QString( "ScriptInfoPlugin: %1" ).arg( name ) );
 
-    connect( scriptObject, SIGNAL( destroyed( QObject* ) ), SLOT( onScriptObjectDeleted() ) );
+    connect( scriptObject.data(), SIGNAL( destroyed( QObject* ) ), SLOT( onScriptObjectDeleted() ) );
 }
 
 

@@ -24,8 +24,8 @@
 
 using namespace Tomahawk;
 
-ScriptJob::ScriptJob( const QString& id, ScriptObject* scriptObject, const QString& methodName, const QVariantMap& arguments )
-    : QObject( scriptObject->thread() == QThread::currentThread() ? scriptObject : nullptr )
+ScriptJob::ScriptJob( const QString& id, const scriptobject_ptr& scriptObject, const QString& methodName, const QVariantMap& arguments )
+    : QObject( scriptObject->thread() == QThread::currentThread() ? scriptObject.data() : nullptr )
     , m_error( false )
     , m_id( id )
     , m_scriptObject( scriptObject )
@@ -54,7 +54,7 @@ ScriptJob::error() const
 }
 
 
-ScriptObject*
+const scriptobject_ptr
 ScriptJob::scriptObject() const
 {
     return m_scriptObject;
