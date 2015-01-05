@@ -621,7 +621,7 @@ Tomahawk.PluginManager = {
             Tomahawk.log("Object not found!");
         } else {
             if (!this.objects[objectId][methodName]) {
-                Tomahawk.log("Function not found!");
+                Tomahawk.log("Function not found: " + methodName);
             }
         }
 
