@@ -20,7 +20,10 @@
 #ifndef TOMAHAWK_SCRIPTPLUGIN_H
 #define TOMAHAWK_SCRIPTPLUGIN_H
 
+#include "ScriptObject.h"
 #include "../DllMacro.h"
+
+#include <QPointer>
 
 namespace Tomahawk {
 
@@ -35,7 +38,7 @@ public:
     ScriptObject* scriptObject() const;
 
 protected: // TODO: pimple
-    ScriptObject* m_scriptObject;
+    QPointer< ScriptObject > m_scriptObject;
 
 };
 
