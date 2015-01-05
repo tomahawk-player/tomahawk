@@ -53,6 +53,20 @@ Collection::~Collection()
 }
 
 
+void
+Collection::setWeakRef( const collection_wptr& weakRef )
+{
+    m_ownRef = weakRef;
+}
+
+
+const collection_wptr
+Collection::weakRef() const
+{
+    return m_ownRef;
+}
+
+
 QString
 Collection::name() const
 {

@@ -58,6 +58,7 @@ namespace Tomahawk
     class ScriptObject;
 
     typedef QSharedPointer<Collection> collection_ptr;
+    typedef QWeakPointer<Collection> collection_wptr;
     typedef QSharedPointer<Playlist> playlist_ptr;
     typedef QSharedPointer<PlaylistEntry> plentry_ptr;
     typedef QSharedPointer<PlaylistInterface> playlistinterface_ptr;

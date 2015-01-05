@@ -783,6 +783,9 @@ JSResolver::loadCollections()
         m_collections.clear();
         // at this point we assume that all the tracks browsable through a resolver belong to the local source
         Tomahawk::ScriptCollection* sc = new Tomahawk::ScriptCollection( collectionInfo[ "id" ].toString(), SourceList::instance()->getLocal(), this );
+        Tomahawk::collection_ptr collection( sc );
+        collection->setWeakRef( collection.toWeakRef() );
+
         sc->setServiceName( prettyname );
         sc->setDescription( desc );
 
@@ -804,8 +807,6 @@ JSResolver::loadCollections()
             if ( ok && !iconPixmap.isNull() )
                 sc->setIcon( QIcon( iconPixmap ) );
         }
-
-        Tomahawk::collection_ptr collection( sc );
 
         m_collections.insert( collection->name(), collection );
         emit collectionAdded( collection );

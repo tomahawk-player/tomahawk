@@ -145,11 +145,7 @@ ScriptCollection::description() const
 Tomahawk::ArtistsRequest*
 ScriptCollection::requestArtists()
 {
-    Tomahawk::collection_ptr thisCollection = m_resolver->collections().value( name() );
-    if ( thisCollection->name() != name() )
-        return 0;
-
-    Tomahawk::ArtistsRequest* cmd = new ScriptCommand_AllArtists( thisCollection );
+    Tomahawk::ArtistsRequest* cmd = new ScriptCommand_AllArtists( weakRef().toStrongRef() );
 
     return cmd;
 }
@@ -158,11 +154,7 @@ ScriptCollection::requestArtists()
 Tomahawk::AlbumsRequest*
 ScriptCollection::requestAlbums( const Tomahawk::artist_ptr& artist )
 {
-    Tomahawk::collection_ptr thisCollection = m_resolver->collections().value( name() );
-    if ( thisCollection->name() != name() )
-        return 0;
-
-    Tomahawk::AlbumsRequest* cmd = new ScriptCommand_AllAlbums( thisCollection, artist );
+    Tomahawk::AlbumsRequest* cmd = new ScriptCommand_AllAlbums( weakRef().toStrongRef(), artist );
 
     return cmd;
 }
@@ -171,11 +163,7 @@ ScriptCollection::requestAlbums( const Tomahawk::artist_ptr& artist )
 Tomahawk::TracksRequest*
 ScriptCollection::requestTracks( const Tomahawk::album_ptr& album )
 {
-    Tomahawk::collection_ptr thisCollection = m_resolver->collections().value( name() );
-    if ( thisCollection->name() != name() )
-        return 0;
-
-    Tomahawk::TracksRequest* cmd = new ScriptCommand_AllTracks( thisCollection, album );
+    Tomahawk::TracksRequest* cmd = new ScriptCommand_AllTracks( weakRef().toStrongRef(), album );
 
     return cmd;
 }

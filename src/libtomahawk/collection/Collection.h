@@ -53,6 +53,9 @@ public:
     Collection( const source_ptr& source, const QString& name, QObject* parent = 0 );
     virtual ~Collection();
 
+    void setWeakRef( const collection_wptr& weakRef );
+    const collection_wptr weakRef() const;
+
     enum BackendType
     {
         NullCollectionType = 0,
@@ -133,7 +136,9 @@ private slots:
 private:
     bool m_changed;
 
+    collection_wptr m_ownRef;
     source_ptr m_source;
+
     QHash< QString, Tomahawk::playlist_ptr > m_playlists;
     QHash< QString, Tomahawk::dynplaylist_ptr > m_autoplaylists;
     QHash< QString, Tomahawk::dynplaylist_ptr > m_stations;

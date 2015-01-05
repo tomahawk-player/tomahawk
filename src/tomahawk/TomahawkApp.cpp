@@ -516,6 +516,7 @@ TomahawkApp::initLocalCollection()
     source_ptr src( new Source( 0, Database::instance()->impl()->dbid() ) );
     src->setFriendlyName( tr( "You" ) );
     collection_ptr coll( new LocalCollection( src ) );
+    coll->setWeakRef( coll.toWeakRef() );
 
     src->addCollection( coll );
     SourceList::instance()->setLocal( src );

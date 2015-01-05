@@ -138,6 +138,7 @@ SourceList::add( const source_ptr& source )
     connect( source.data(), SIGNAL( syncedWithDatabase() ), SLOT( sourceSynced() ) );
 
     collection_ptr coll( new RemoteCollection( source ) );
+    coll->setWeakRef( coll.toWeakRef() );
     source->addCollection( coll );
 
     connect( source.data(), SIGNAL( latchedOn( Tomahawk::source_ptr ) ), this, SLOT( latchedOn( Tomahawk::source_ptr ) ) );
