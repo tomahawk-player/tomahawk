@@ -86,8 +86,8 @@ ScriptInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
     QVariantMap arguments;
     arguments[ "type" ] = pushData.type;
     arguments[ "pushFlags" ] = pushData.pushFlags;
-    arguments[ "input" ] = serializeQVariantMap ( pushData.infoPair.second.toMap() );
-    arguments[ "additionalInput" ] = serializeQVariantMap( pushData.infoPair.first );
+    arguments[ "input" ] = pushData.infoPair.second.toMap();
+    arguments[ "additionalInput" ] = pushData.infoPair.first.toMap();
 
     m_scriptObject->invoke( "pushInfo", arguments );
 }
