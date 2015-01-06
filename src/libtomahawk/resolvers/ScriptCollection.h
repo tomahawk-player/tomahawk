@@ -29,7 +29,7 @@
 #include "Typedefs.h"
 #include "DllMacro.h"
 
-#include <QIcon>
+#include <QPixmap>
 
 
 namespace Tomahawk
@@ -62,8 +62,8 @@ public:
     QString itemName() const override;
     BackendType backendType() const override { return ScriptCollectionType; }
 
-    void setIcon( const QIcon& icon );
-    QIcon icon() const override;
+    void setIcon( const QPixmap& icon );
+    const QPixmap icon( const QSize& size ) const override;
     QPixmap bigIcon() const override;
 
     void setDescription( const QString& text );
@@ -84,7 +84,7 @@ private:
     QString m_servicePrettyName;
     QString m_description;
     int m_trackCount;
-    QIcon m_icon;
+    QPixmap m_icon;
 };
 
 } //ns

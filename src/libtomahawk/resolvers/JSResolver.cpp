@@ -116,7 +116,7 @@ JSResolver::capabilities() const
 }
 
 
-QString
+const QString
 JSResolver::name() const
 {
     Q_D( const JSResolver );
@@ -125,10 +125,13 @@ JSResolver::name() const
 }
 
 
-QPixmap
-JSResolver::icon() const
+const QPixmap
+JSResolver::icon( const QSize& size ) const
 {
     Q_D( const JSResolver );
+
+    if ( !size.isEmpty() )
+        return d->icon.scaled( size, Qt::KeepAspectRatio, Qt::SmoothTransformation );
 
     return d->icon;
 }
@@ -805,7 +808,7 @@ JSResolver::loadCollections()
             QPixmap iconPixmap;
             bool ok = iconPixmap.load( iconPath );
             if ( ok && !iconPixmap.isNull() )
-                sc->setIcon( QIcon( iconPixmap ) );
+                sc->setIcon( iconPixmap );
         }
 
         m_collections.insert( collection->name(), collection );

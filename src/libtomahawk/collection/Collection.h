@@ -37,15 +37,14 @@
 #include "collection/ArtistsRequest.h"
 #include "collection/AlbumsRequest.h"
 #include "collection/TracksRequest.h"
+#include "../ResultProvider.h"
 
 #include "DllMacro.h"
-
-class QIcon;
 
 namespace Tomahawk
 {
 
-class DLLEXPORT Collection : public QObject
+class DLLEXPORT Collection : public QObject, public ResultProvider
 {
 Q_OBJECT
 
@@ -63,12 +62,12 @@ public:
         ScriptCollectionType    //performs operations through a resolver
     };
 
-    virtual QString name() const;
+    virtual const QString name() const override;
     virtual QString prettyName() const;
     virtual QString description() const;
     virtual QString itemName() const;
     virtual BackendType backendType() const { return NullCollectionType; }
-    virtual QIcon icon() const;
+    virtual const QPixmap icon( const QSize& size ) const override;
     virtual QPixmap bigIcon() const; //for the ViewPage header
 
     virtual void loadPlaylists();

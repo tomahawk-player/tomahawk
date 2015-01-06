@@ -378,7 +378,7 @@ SourceItem::performAddCollectionItem( const collection_ptr& collection )
         GenericPageItem* i = new GenericPageItem( model(),
                                                      this,
                                                      collection->itemName(),
-                                                     collection->icon(),
+                                                     collection->icon( QSize( 0, 0 ) ),
                                                      std::bind( &SourceItem::collectionClicked, this, collection ),
                                                      std::bind( &SourceItem::getCollectionPage, this, collection ) );
         i->setSortValue( -340 );

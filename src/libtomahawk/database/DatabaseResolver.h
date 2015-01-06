@@ -33,7 +33,7 @@ Q_OBJECT
 public:
     explicit DatabaseResolver( int weight );
 
-    virtual QString name() const;
+    const QString name() const override;
     virtual unsigned int weight() const { return m_weight; }
     virtual unsigned int timeout() const { return 0; }
 

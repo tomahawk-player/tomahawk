@@ -555,6 +555,16 @@ ScriptResolver::setIcon( const QPixmap& icon )
 }
 
 
+const QPixmap
+ScriptResolver::icon( const QSize& size ) const
+{
+    if ( !size.isEmpty() )
+        return m_icon.scaled( size, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+
+    return m_icon;
+}
+
+
 AccountConfigWidget*
 ScriptResolver::configUI() const
 {

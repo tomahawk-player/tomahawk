@@ -19,11 +19,11 @@
 #ifndef RESOLVER_H
 #define RESOLVER_H
 
-#include <QObject>
-
-#include "DllMacro.h"
+#include "../ResultProvider.h"
 #include "Typedefs.h"
+#include "DllMacro.h"
 
+#include <QObject>
 
 // implement this if you can resolve queries to content
 
@@ -37,16 +37,17 @@
 namespace Tomahawk
 {
 
-class DLLEXPORT Resolver : public QObject
+class DLLEXPORT Resolver : public QObject, public ResultProvider
 {
 Q_OBJECT
 
 public:
     Resolver() {}
 
-    virtual QString name() const = 0;
     virtual unsigned int weight() const = 0;
     virtual unsigned int timeout() const = 0;
+
+    virtual const QPixmap icon( const QSize& size ) const override;
 
 public slots:
     virtual void resolve( const Tomahawk::query_ptr& query ) = 0;

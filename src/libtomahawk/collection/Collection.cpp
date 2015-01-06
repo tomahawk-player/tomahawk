@@ -67,7 +67,7 @@ Collection::weakRef() const
 }
 
 
-QString
+const QString
 Collection::name() const
 {
     return m_name;
@@ -95,10 +95,10 @@ Collection::itemName() const
 }
 
 
-QIcon
-Collection::icon() const
+const QPixmap
+Collection::icon( const QSize& size ) const
 {
-    return ImageRegistry::instance()->icon( RESPATH "images/collection.svg" );
+    return ImageRegistry::instance()->pixmap( RESPATH "images/collection.svg", size );
 }
 
 

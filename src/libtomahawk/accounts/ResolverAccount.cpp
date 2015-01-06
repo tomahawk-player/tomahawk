@@ -472,7 +472,7 @@ ResolverAccount::icon() const
     if ( m_resolver.isNull() )
         return QPixmap();
 
-    return m_resolver->icon();
+    return m_resolver->icon( QSize( 0, 0 ) );
 }
 
 

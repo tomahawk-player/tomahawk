@@ -77,7 +77,7 @@ DatabaseResolver::gotArtists( const Tomahawk::QID qid, QList< Tomahawk::artist_p
 }
 
 
-QString
+const QString
 DatabaseResolver::name() const
 {
     return QString( "DatabaseResolver" );

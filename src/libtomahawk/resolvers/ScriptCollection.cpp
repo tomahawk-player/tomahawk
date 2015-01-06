@@ -86,20 +86,20 @@ ScriptCollection::itemName() const
 
 
 void
-ScriptCollection::setIcon( const QIcon& icon )
+ScriptCollection::setIcon( const QPixmap& icon )
 {
     m_icon = icon;
     emit changed();
 }
 
 
-QIcon
-ScriptCollection::icon() const
+const QPixmap
+ScriptCollection::icon( const QSize& size ) const
 {
-    if( !m_icon.isNull() )
-        return m_icon;
+    if ( !size.isEmpty() && !m_icon.isNull() )
+        return m_icon.scaled( size, Qt::KeepAspectRatio, Qt::SmoothTransformation );
 
-    return m_resolver->icon();
+    return m_icon;
 }
 
 
@@ -107,7 +107,7 @@ QPixmap
 ScriptCollection::bigIcon() const
 {
     QPixmap big = Collection::bigIcon();
-    QPixmap base = icon().pixmap( big.size() );
+    QPixmap base = icon( big.size() );
 
     if ( !source()->isLocal() )
     {

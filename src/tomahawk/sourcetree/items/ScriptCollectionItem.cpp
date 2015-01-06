@@ -62,7 +62,7 @@ ScriptCollectionItem::tooltip() const
 QIcon
 ScriptCollectionItem::icon() const
 {
-    return m_collection->icon();
+    return m_collection->icon( QSize( 0, 0 ) );
 }
 
 

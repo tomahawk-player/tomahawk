@@ -197,6 +197,7 @@ list(APPEND libSources
     MetaPlaylistInterface.cpp
     Query.cpp
     Result.cpp
+    ResultProvider.cpp
     Source.cpp
     Track.cpp
     TrackData.cpp
