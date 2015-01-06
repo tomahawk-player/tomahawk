@@ -87,7 +87,7 @@ ScriptInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
     arguments[ "type" ] = pushData.type;
     arguments[ "pushFlags" ] = pushData.pushFlags;
     arguments[ "input" ] = pushData.infoPair.second.toMap();
-    arguments[ "additionalInput" ] = pushData.infoPair.first.toMap();
+    arguments[ "additionalInput" ] = pushData.infoPair.first;
 
     m_scriptObject->invoke( "pushInfo", arguments );
 }
