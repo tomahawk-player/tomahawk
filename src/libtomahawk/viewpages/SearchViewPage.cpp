@@ -302,7 +302,7 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
 
     foreach( const Tomahawk::result_ptr& result, results )
     {
-        if ( !result->collection().isNull() && !result->isOnline() )
+        if ( !result->resolvedByCollection().isNull() && !result->isOnline() )
             continue;
 
         QList< Tomahawk::result_ptr > rl;

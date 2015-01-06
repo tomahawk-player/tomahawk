@@ -360,7 +360,7 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr result )
         ui->ownerButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, QSize( 34, 34 ) ) );
     }
 
-    if ( QUrl( result->linkUrl() ).isValid() || !result->collection().isNull() )
+    if ( QUrl( result->linkUrl() ).isValid() || !result->resolvedByCollection().isNull() )
         ui->ownerButton->setCursor( Qt::PointingHandCursor );
     else
         ui->ownerButton->setCursor( Qt::ArrowCursor );
@@ -791,12 +791,12 @@ AudioControls::onLoveButtonClicked( bool checked )
 void
 AudioControls::onOwnerButtonClicked()
 {
-    if ( m_currentTrack->collection().isNull() )
+    if ( m_currentTrack->resolvedByCollection().isNull() )
     {
         QUrl url = QUrl( m_currentTrack->linkUrl() );
         if ( url.isValid() )
             QDesktopServices::openUrl( url );
     }
     else
-        ViewManager::instance()->show( m_currentTrack->collection() );
+        ViewManager::instance()->show( m_currentTrack->resolvedByCollection() );
 }

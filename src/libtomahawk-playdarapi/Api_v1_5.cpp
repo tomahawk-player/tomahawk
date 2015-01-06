@@ -99,7 +99,7 @@ Api_v1_5::playback( QxtWebRequestEvent* event, const QString& command )
             trackInfo.insert( "paused", AudioEngine::instance()->isPaused() );
             trackInfo.insert( "position", AudioEngine::instance()->currentTime() / 1000 );
             trackInfo.insert( "bitrate", currentTrack->bitrate() );
-            if ( !currentTrack->resolvedBy().isNull() ) {
+            if ( currentTrack->resolvedBy() ) {
                 QString resolverName = currentTrack->resolvedBy()->name();
                 trackInfo.insert( "resolvedBy", resolverName );
             } else {

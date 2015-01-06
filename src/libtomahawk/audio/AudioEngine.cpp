@@ -867,7 +867,7 @@ AudioEngine::play( const QUrl& url )
     }
 
     result->setScore( 1.0 );
-    result->setCollection( SourceList::instance()->getLocal()->collections().first(), false );
+    result->setResolvedByCollection( SourceList::instance()->getLocal()->collections().first(), false );
 
     //    Tomahawk::query_ptr qry = Tomahawk::Query::get( t );
     playItem( playlistinterface_ptr(), result, query_ptr() );

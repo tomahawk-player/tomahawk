@@ -327,7 +327,7 @@ ScriptResolver::handleMsg( const QByteArray& msg )
                 Q_ASSERT( !rp->mimetype().isEmpty() );
             }
 
-            rp->setResolvedBy( this );
+            rp->setResolvedByResolver( this );
             results << rp;
         }
 

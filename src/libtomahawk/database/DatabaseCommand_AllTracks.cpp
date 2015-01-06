@@ -162,7 +162,7 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         result->setModificationTime( modificationTime );
         result->setMimetype( mimetype );
         result->setScore( 1.0f );
-        result->setCollection( s->dbCollection(), false );
+        result->setResolvedByCollection( s->dbCollection(), false );
 
         ql << Tomahawk::Query::getFixed( t, result );
     }

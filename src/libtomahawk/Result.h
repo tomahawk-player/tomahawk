@@ -20,15 +20,16 @@
 #ifndef RESULT_H
 #define RESULT_H
 
-#include <QObject>
-#include <QPixmap>
-#include <QPointer>
-#include <QVariant>
-
+#include "ResultProvider.h"
 #include "utils/TomahawkUtils.h"
 #include "Typedefs.h"
 
 #include "DllMacro.h"
+
+#include <QObject>
+#include <QPixmap>
+#include <QPointer>
+#include <QVariant>
 
 class MetadataEditor;
 
@@ -71,15 +72,27 @@ public:
     QString toString() const;
     Tomahawk::query_ptr toQuery();
 
-    QPointer<Tomahawk::Resolver> resolvedBy() const;
-    void setResolvedBy( Tomahawk::Resolver* resolver );
+    /**
+     * Associate the used collection for this result.
+     *
+     * @param emitOnlineEvents disableing this will not emit statusChanged anymore thus the query will not update (use with care!, only when this is the sole result)
+     */
+    void setResolvedByCollection( const Tomahawk::collection_ptr& collection, bool emitOnlineEvents = true );
+    collection_ptr resolvedByCollection() const;
+
+    QPointer< Tomahawk::Resolver > resolvedByResolver() const;
+    void setResolvedByResolver( Tomahawk::Resolver* resolver );
+
+    /**
+     *  This is very bad. ResultProvider is not a QObject and thus can not be tracked by a qt smart pointer ... :-(
+     */
+    ResultProvider* resolvedBy() const;
 
     float score() const;
     RID id() const;
     bool isOnline() const;
     bool playable() const;
 
-    collection_ptr collection() const;
     QString url() const;
     /**
      * Has the given url been checked that it is accessible/valid.
@@ -101,12 +114,7 @@ public:
     void setScore( float score );
     void setFileId( unsigned int id );
     void setRID( RID id ) { m_rid = id; }
-    /**
-     * Associate the used collection for this result.
-     *
-     * @param emitOnlineEvents disableing this will not emit statusChanged anymore thus the query will not update (use with care!, only when this is the sole result)
-     */
-    void setCollection( const Tomahawk::collection_ptr& collection, bool emitOnlineEvents = true );
+
     void setFriendlySource( const QString& s );
     void setPurchaseUrl( const QString& u );
     void setLinkUrl( const QString& u );
@@ -143,8 +151,8 @@ private:
     explicit Result();
 
     mutable RID m_rid;
-    collection_ptr m_collection;
-    QPointer< Tomahawk::Resolver > m_resolvedBy;
+    collection_wptr m_collection;
+    QPointer< Tomahawk::Resolver > m_resolver;
 
     QString m_url;
     QString m_purchaseUrl;

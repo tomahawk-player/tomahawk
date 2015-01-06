@@ -413,7 +413,7 @@ Query::resultSorter( const result_ptr& left, const result_ptr& right )
         {
             return true;
         }*/
-        if ( right->collection() && right->collection()->source()->isLocal() )
+        if ( right->resolvedByCollection() && right->resolvedByCollection()->source()->isLocal() )
         {
             return false;
         }

@@ -59,7 +59,7 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
         tDebug() << "Using result-hint to speed up resolving:" << m_query->resultHint();
 
         Tomahawk::result_ptr result = lib->resultFromHint( m_query );
-        if ( result && ( !result->collection() || result->collection()->source()->isOnline() ) )
+        if ( result && ( !result->resolvedByCollection() || result->resolvedByCollection()->source()->isOnline() ) )
         {
             QList<Tomahawk::result_ptr> res;
             res << result;
@@ -164,7 +164,7 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
         result->setMimetype( files_query.value( 4 ).toString() );
         result->setBitrate( files_query.value( 6 ).toUInt() );
         result->setRID( uuid() );
-        result->setCollection( s->dbCollection() );
+        result->setResolvedByCollection( s->dbCollection() );
 
         res << result;
     }
@@ -277,7 +277,7 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
         result->setMimetype( files_query.value( 4 ).toString() );
         result->setBitrate( files_query.value( 6 ).toUInt() );
         result->setRID( uuid() );
-        result->setCollection( s->dbCollection() );
+        result->setResolvedByCollection( s->dbCollection() );
 
         for ( int k = 0; k < trackPairs.count(); k++ )
         {

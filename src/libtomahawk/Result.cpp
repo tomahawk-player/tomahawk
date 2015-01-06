@@ -34,6 +34,7 @@
 #include "PlaylistInterface.h"
 #include "Source.h"
 #include "Track.h"
+#include "Typedefs.h"
 
 using namespace Tomahawk;
 
@@ -132,16 +133,16 @@ Result::deleteLater()
 void
 Result::onResolverRemoved( Tomahawk::Resolver* resolver )
 {
-    if ( m_resolvedBy.data() == resolver )
+    if ( m_resolver.data() == resolver )
     {
-        m_resolvedBy = 0;
+        m_resolver = 0;
         emit statusChanged();
     }
 }
 
 
 collection_ptr
-Result::collection() const
+Result::resolvedByCollection() const
 {
     return m_collection;
 }
@@ -188,13 +189,13 @@ Result::id() const
 bool
 Result::isOnline() const
 {
-    if ( !collection().isNull() )
+    if ( !resolvedByCollection().isNull() )
     {
-        return collection()->source()->isOnline();
+        return resolvedByCollection()->source()->isOnline();
     }
     else
     {
-        return !m_resolvedBy.isNull();
+        return !m_resolver.isNull();
     }
 }
 
@@ -202,9 +203,9 @@ Result::isOnline() const
 bool
 Result::playable() const
 {
-    if ( collection() )
+    if ( resolvedByCollection() )
     {
-        return collection()->source()->isOnline();
+        return resolvedByCollection()->source()->isOnline();
     }
     else
     {
@@ -297,15 +298,17 @@ Result::onOffline()
 
 
 void
-Result::setCollection( const Tomahawk::collection_ptr& collection , bool emitOnlineEvents )
+Result::setResolvedByCollection( const Tomahawk::collection_ptr& collection , bool emitOnlineEvents )
 {
     m_collection = collection;
     if ( emitOnlineEvents )
     {
-        connect( m_collection->source().data(), SIGNAL( online() ), SLOT( onOnline() ), Qt::QueuedConnection );
-        connect( m_collection->source().data(), SIGNAL( offline() ), SLOT( onOffline() ), Qt::QueuedConnection );
+        connect( collection->source().data(), SIGNAL( online() ), SLOT( onOnline() ), Qt::QueuedConnection );
+        connect( collection->source().data(), SIGNAL( offline() ), SLOT( onOffline() ), Qt::QueuedConnection );
     }
 }
+
+
 
 
 void
@@ -381,12 +384,12 @@ Result::fileId() const
 QString
 Result::friendlySource() const
 {
-    if ( collection().isNull() )
+    if ( resolvedByCollection().isNull() )
     {
         return m_friendlySource;
     }
     else
-        return collection()->source()->friendlyName();
+        return resolvedByCollection()->source()->friendlyName();
 }
 
 
@@ -407,9 +410,9 @@ Result::linkUrl() const
 QPixmap
 Result::sourceIcon( TomahawkUtils::ImageMode style, const QSize& desiredSize ) const
 {
-    if ( collection().isNull() )
+    if ( resolvedByCollection().isNull() )
     {
-        const ExternalResolver* resolver = qobject_cast< ExternalResolver* >( m_resolvedBy.data() );
+        const ExternalResolver* resolver = qobject_cast< ExternalResolver* >( m_resolver.data() );
         if ( !resolver )
         {
             return QPixmap();
@@ -418,7 +421,7 @@ Result::sourceIcon( TomahawkUtils::ImageMode style, const QSize& desiredSize ) c
         {
             QMutexLocker l( &s_sourceIconMutex );
 
-            const QString key = sourceCacheKey( m_resolvedBy.data(), desiredSize, style );
+            const QString key = sourceCacheKey( m_resolver.data(), desiredSize, style );
             if ( !sourceIconCache()->contains( key ) )
             {
                 QPixmap pixmap = resolver->icon( desiredSize );
@@ -448,7 +451,7 @@ Result::sourceIcon( TomahawkUtils::ImageMode style, const QSize& desiredSize ) c
     }
     else
     {
-        QPixmap avatar = collection()->source()->avatar( TomahawkUtils::RoundedCorners, desiredSize, true );
+        QPixmap avatar = resolvedByCollection()->source()->avatar( TomahawkUtils::RoundedCorners, desiredSize, true );
         return avatar;
     }
 }
@@ -489,17 +492,20 @@ Result::setFileId( unsigned int id )
 }
 
 
-QPointer<Tomahawk::Resolver>
+Tomahawk::ResultProvider*
 Result::resolvedBy() const
 {
-    return m_resolvedBy;
+    if ( !m_collection.isNull() )
+        return m_collection.data();
+
+    return m_resolver.data();
 }
 
 
 void
-Result::setResolvedBy( Tomahawk::Resolver* resolver )
+Result::setResolvedByResolver( Tomahawk::Resolver* resolver )
 {
-    m_resolvedBy = QPointer< Tomahawk::Resolver >( resolver );
+    m_resolver = QPointer< Tomahawk::Resolver >( resolver );
 }
 
 

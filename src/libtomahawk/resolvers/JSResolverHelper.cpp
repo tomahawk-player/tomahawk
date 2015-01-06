@@ -233,7 +233,7 @@ JSResolverHelper::addAlbumTrackResults( const QVariantMap& results )
     foreach ( const Tomahawk::result_ptr& result, tracks )
     {
         result->setScore( 1.0 );
-        result->setCollection( collection );
+        result->setResolvedByCollection( collection );
         queries.append( result->toQuery() );
     }
 

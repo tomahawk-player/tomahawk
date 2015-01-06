@@ -57,7 +57,7 @@ DatabaseResolver::gotResults( const Tomahawk::QID qid, QList< Tomahawk::result_p
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << qid << results.length();
 
     foreach ( const Tomahawk::result_ptr& r, results )
-        r->setResolvedBy( this );
+        r->setResolvedByResolver( this );
 
     Tomahawk::Pipeline::instance()->reportResults( qid, results );
 }

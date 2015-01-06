@@ -594,7 +594,7 @@ JSResolver::parseResultVariantList( const QVariantList& reslist )
             Q_ASSERT( !rp->mimetype().isEmpty() );
         }
 
-        rp->setResolvedBy( this );
+        rp->setResolvedByResolver( this );
 
 
         // find collection
@@ -613,7 +613,7 @@ JSResolver::parseResultVariantList( const QVariantList& reslist )
             }
             if ( !collection.isNull() )
             {
-                rp->setCollection( collection );
+                rp->setResolvedByCollection( collection );
             }
         }
 

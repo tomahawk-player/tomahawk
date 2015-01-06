@@ -322,7 +322,7 @@ Tomahawk::DatabaseImpl::file( int fid )
         r->setSize( query.value( 2 ).toUInt() );
         r->setMimetype( query.value( 4 ).toString() );
         r->setBitrate( query.value( 6 ).toUInt() );
-        r->setCollection( s->dbCollection() );
+        r->setResolvedByCollection( s->dbCollection() );
         r->setScore( 1.0 );
         r->setFileId( fid );
     }
@@ -724,7 +724,7 @@ Tomahawk::DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         res->setBitrate( query.value( 6 ).toInt() );
         res->setScore( 1.0 );
         res->setRID( uuid() );
-        res->setCollection( s->dbCollection() );
+        res->setResolvedByCollection( s->dbCollection() );
     }
 
     return res;
