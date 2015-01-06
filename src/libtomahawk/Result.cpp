@@ -451,7 +451,7 @@ Result::sourceIcon( TomahawkUtils::ImageMode style, const QSize& desiredSize ) c
     }
     else
     {
-        QPixmap avatar = resolvedByCollection()->source()->avatar( TomahawkUtils::RoundedCorners, desiredSize, true );
+        QPixmap avatar = resolvedByCollection()->icon( desiredSize );
         return avatar;
     }
 }

@@ -189,6 +189,13 @@ DatabaseCollection::trackCount() const
 }
 
 
+const QPixmap
+DatabaseCollection::icon( const QSize& size ) const
+{
+    return source()->avatar( TomahawkUtils::RoundedCorners, size, true );
+}
+
+
 void
 DatabaseCollection::autoPlaylistCreated( const source_ptr& source, const QVariantList& data )
 {
