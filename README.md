@@ -2,13 +2,13 @@
 
 ## WHAT TOMAHAWK IS
 
-Tomahawk is a free multi-source and cross-platform music player. An application that can play not only your local files, but also stream from services like Spotify, Beats, SoundCloud, Google Music, YouTube and many others. You can even connect with your friends' Tomahawks, share your musical gems or listen along to them. Let the music play!
+Tomahawk is a free multi-source and cross-platform music player. An application that can play not only your local files, but also stream from services like Spotify, Beats, SoundCloud, Google Music, YouTube and many others. You can even connect with your friends' Tomahawks, share your musical gems or listen along with them. Let the music play!
 
 ![Tomahawk Screenshot](/data/screenshots/tomahawk-screenshot.png?raw=true)
 
 ## HOW TOMAHAWK WORKS
 
-Tomahawk is basically a **music metadata player**.  At its core it decouples the metadata about a song from the source and reassembles it for each user based on their individual music accessibility and rights. In short, given the name of a song and artist Tomahawk will find the right source, for the right user at the right time.  This fundamentally different approach to music enables a range of new music consumption and sharing experiences previously not possible. 
+Tomahawk is basically a **music metadata player**.  At its core it decouples the metadata about a song from the source and reassembles it for each user based on their individual music accessibility and rights. In short, given the name of a song and artist Tomahawk will find the right source, for the right user at the right time.  This fundamentally different approach to music enables a range of new music consumption and sharing experiences previously not possible.
 
 ## MUSIC SOURCES
 
@@ -123,7 +123,7 @@ Third party libraries that we ship with our source:
 ## GET HELP
 
 * [Support & Feedback](https://tomahawk.uservoice.com)
-* Chat with Us (IRC): #tomahawk (on Freenode)
+* Chat with us in IRC: **#tomahawk** on Freenode, and [Scrollback.io](https://scrollback.io/tomahawk)
 * [Twitter](https://twitter.com/tomahawk)
 * [Facebook](https://facebook.com/tomahawkplayer)
 * [Developer API documentation](http://dev.tomahawk-player.org/api/classes.html)
