@@ -44,7 +44,7 @@ ScriptCommand_AllArtists::enqueue()
         return;
     }
 
-    collection->resolver()->enqueue( QSharedPointer< ScriptCommand >( this ) );
+    exec();
 }
 
 

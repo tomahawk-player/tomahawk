@@ -48,7 +48,7 @@ ScriptCommand_AllAlbums::enqueue()
         return;
     }
 
-    collection->resolver()->enqueue( QSharedPointer< ScriptCommand >( this ) );
+    exec();
 }
 
 

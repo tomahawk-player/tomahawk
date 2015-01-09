@@ -46,7 +46,7 @@ ScriptCommand_AllTracks::enqueue()
         return;
     }
 
-    collection->resolver()->enqueue( QSharedPointer< ScriptCommand >( this ) );
+    exec();
 }
 
 
