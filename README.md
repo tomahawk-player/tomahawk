@@ -1,6 +1,4 @@
-# TOMAHAWK
-
-## WHAT TOMAHAWK IS
+# WHAT TOMAHAWK IS
 
 Tomahawk is a free multi-source and cross-platform music player. An application that can play not only your local files, but also stream from services like Spotify, Beats, SoundCloud, Google Music, YouTube and many others. You can even connect with your friends' Tomahawks, share your musical gems or listen along with them. Let the music play!
 
@@ -65,21 +63,10 @@ You can download one of our nightly or stable builds:
 
 ### Detailed Build Instructions
 
-**LINUX**
-
-* [Arch](http://wiki.tomahawk-player.org/index.php/Building_ArchLinux_package)
-* [Debian](http://wiki.tomahawk-player.org/index.php/Building_on_Debian)
-* [Fedora](http://wiki.tomahawk-player.org/index.php/Building_on_Fedora)
-* [openSUSE](http://wiki.tomahawk-player.org/index.php/Building_on_openSUSE)
-* [Ubuntu](http://wiki.tomahawk-player.org/index.php/Building_on_Ubuntu)
-
-**MAC**
-
-* [OS X](http://wiki.tomahawk-player.org/index.php/Building_OS_X_Application_Bundle)
-
-**WINDOWS**
-
-* [Windows](http://wiki.tomahawk-player.org/index.php/Building_Windows_Binary)
+| Linux: | [Arch](http://wiki.tomahawk-player.org/index.php/Building_ArchLinux_package) **-** [Debian](http://wiki.tomahawk-player.org/index.php/Building_on_Debian)  **-** [Fedora](http://wiki.tomahawk-player.org/index.php/Building_on_Fedora)  **-** [openSUSE](http://wiki.tomahawk-player.org/index.php/Building_on_openSUSE)  **-** [Ubuntu](http://wiki.tomahawk-player.org/index.php/Building_on_Ubuntu)
+|-:|
+| **Windows**: |[**Windows**](http://wiki.tomahawk-player.org/index.php/Building_Windows_Binary)
+| **Mac**: | [**OS X**](http://wiki.tomahawk-player.org/index.php/Building_OS_X_Application_Bundle) |
 
 ### Dependencies
 
@@ -155,4 +142,4 @@ PLUG-INS / RESOLVER SETTINGS
 
 ![Settings](https://dchtm6r471mui.cloudfront.net/hackpad.com_ZRZMJDdxrVe_p.242147_1410998587408_prefs.jpg)
 
-**Enjoy!**
+##Enjoy!
