@@ -48,11 +48,9 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
-#include <QImageReader>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QMetaProperty>
-#include <QTime>
 #include <QWebFrame>
 
 using namespace Tomahawk;
@@ -68,6 +66,8 @@ JSResolver::JSResolver( const QString& accountId, const QString& scriptPath, con
     d->name = QFileInfo( filePath() ).baseName();
     d->scriptAccount.reset( new JSAccount( d->name ) );
     d->scriptAccount->setResolver( this );
+    d->scriptAccount->setFilePath( filePath() );
+    d->scriptAccount->setIcon( icon( QSize( 0, 0 ) ) );
 
     // set the icon, if we launch properly we'll get the icon the resolver reports
     d->icon = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, QSize( 128, 128 ) );
@@ -312,115 +312,6 @@ JSResolver::start()
 }
 
 
-void
-JSResolver::artists( const Tomahawk::collection_ptr& collection )
-{
-    if ( QThread::currentThread() != thread() )
-    {
-        QMetaObject::invokeMethod( this, "artists", Qt::QueuedConnection, Q_ARG( Tomahawk::collection_ptr, collection ) );
-        return;
-    }
-
-    Q_D( const JSResolver );
-
-    if ( /* !m_collections.contains( collection->name() ) || */ //if the collection doesn't belong to this resolver
-         !d->capabilities.testFlag( Browsable ) )          //or this resolver doesn't even support collections
-    {
-        emit artistsFound( QList< Tomahawk::artist_ptr >() );
-        return;
-    }
-
-    QString eval = QString( "artists( '%1' )" )
-                   .arg( JSAccount::escape( collection->name() ) );
-
-    QVariantMap m = callOnResolver( eval ).toMap();
-    if ( m.isEmpty() )
-    {
-        // if the resolver doesn't return anything, async api is used
-        return;
-    }
-
-    QString errorMessage = tr( "Script Resolver Warning: API call %1 returned data synchronously." ).arg( eval );
-    JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( errorMessage ) );
-    tDebug() << errorMessage << m;
-}
-
-
-void
-JSResolver::albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist )
-{
-    if ( QThread::currentThread() != thread() )
-    {
-        QMetaObject::invokeMethod( this, "albums", Qt::QueuedConnection,
-                                   Q_ARG( Tomahawk::collection_ptr, collection ),
-                                   Q_ARG( Tomahawk::artist_ptr, artist ) );
-        return;
-    }
-
-    Q_D( const JSResolver );
-
-    if ( /* !m_collections.contains( collection->name() ) || */ //if the collection doesn't belong to this resolver
-         !d->capabilities.testFlag( Browsable ) )          //or this resolver doesn't even support collections
-    {
-        emit albumsFound( QList< Tomahawk::album_ptr >() );
-        return;
-    }
-
-    QString eval = QString( "albums( '%1', '%2' )" )
-                   .arg( JSAccount::escape( collection->name() ) )
-                   .arg( JSAccount::escape( artist->name() ) );
-
-    QVariantMap m = callOnResolver( eval ).toMap();
-    if ( m.isEmpty() )
-    {
-        // if the resolver doesn't return anything, async api is used
-        return;
-    }
-
-    QString errorMessage = tr( "Script Resolver Warning: API call %1 returned data synchronously." ).arg( eval );
-    JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( errorMessage ) );
-    tDebug() << errorMessage << m;
-}
-
-
-void
-JSResolver::tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album )
-{
-    if ( QThread::currentThread() != thread() )
-    {
-        QMetaObject::invokeMethod( this, "tracks", Qt::QueuedConnection,
-                                   Q_ARG( Tomahawk::collection_ptr, collection ),
-                                   Q_ARG( Tomahawk::album_ptr, album ) );
-        return;
-    }
-
-    Q_D( const JSResolver );
-
-    if ( /* !m_collections.contains( collection->name() ) || */ //if the collection doesn't belong to this resolver
-         !d->capabilities.testFlag( Browsable ) )          //or this resolver doesn't even support collections
-    {
-        emit tracksFound( QList< Tomahawk::query_ptr >() );
-        return;
-    }
-
-    QString eval = QString( "tracks( '%1', '%2', '%3' )" )
-                   .arg( JSAccount::escape( collection->name() ) )
-                   .arg( JSAccount::escape( album->artist()->name() ) )
-                   .arg( JSAccount::escape( album->name() ) );
-
-    QVariantMap m = callOnResolver( eval ).toMap();
-    if ( m.isEmpty() )
-    {
-        // if the resolver doesn't return anything, async api is used
-        return;
-    }
-
-    QString errorMessage = tr( "Script Resolver Warning: API call %1 returned data synchronously." ).arg( eval );
-    JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( errorMessage ) );
-    tDebug() << errorMessage << m;
-}
-
-
 bool
 JSResolver::canParseUrl( const QString& url, UrlType type )
 {
@@ -518,140 +409,6 @@ JSResolver::resolve( const Tomahawk::query_ptr& query )
     }
 
     QVariantMap m = callOnResolver( eval ).toMap();
-    if ( m.isEmpty() )
-    {
-        // if the resolver doesn't return anything, async api is used
-        return;
-    }
-
-    qDebug() << "JavaScript Result:" << m;
-
-    const QString qid = query->id();
-    const QVariantList reslist = m.value( "results" ).toList();
-
-    QList< Tomahawk::result_ptr > results = parseResultVariantList( reslist );
-
-    Tomahawk::Pipeline::instance()->reportResults( qid, results );
-}
-
-
-QList< Tomahawk::result_ptr >
-JSResolver::parseResultVariantList( const QVariantList& reslist )
-{
-    QList< Tomahawk::result_ptr > results;
-
-    foreach( const QVariant& rv, reslist )
-    {
-        QVariantMap m = rv.toMap();
-        // TODO we need to handle preview urls separately. they should never trump a real url, and we need to display
-        // the purchaseUrl for the user to upgrade to a full stream.
-        if ( m.value( "preview" ).toBool() == true )
-            continue;
-
-        int duration = m.value( "duration", 0 ).toInt();
-        if ( duration <= 0 && m.contains( "durationString" ) )
-        {
-            QTime time = QTime::fromString( m.value( "durationString" ).toString(), "hh:mm:ss" );
-            duration = time.secsTo( QTime( 0, 0 ) ) * -1;
-        }
-
-        Tomahawk::track_ptr track = Tomahawk::Track::get( m.value( "artist" ).toString(),
-                                                          m.value( "track" ).toString(),
-                                                          m.value( "album" ).toString(),
-                                                          m.value( "albumArtist" ).toString(),
-                                                          duration,
-                                                          QString(),
-                                                          m.value( "albumpos" ).toUInt(),
-                                                          m.value( "discnumber" ).toUInt() );
-        if ( !track )
-            continue;
-
-        Tomahawk::result_ptr rp = Tomahawk::Result::get( m.value( "url" ).toString(), track );
-        if ( !rp )
-            continue;
-
-        rp->setBitrate( m.value( "bitrate" ).toUInt() );
-        rp->setSize( m.value( "size" ).toUInt() );
-        rp->setRID( uuid() );
-        rp->setFriendlySource( name() );
-        rp->setPurchaseUrl( m.value( "purchaseUrl" ).toString() );
-        rp->setLinkUrl( m.value( "linkUrl" ).toString() );
-        rp->setScore( m.value( "score" ).toFloat() );
-        rp->setChecked( m.value( "checked" ).toBool() );
-
-        //FIXME
-        if ( m.contains( "year" ) )
-        {
-            QVariantMap attr;
-            attr[ "releaseyear" ] = m.value( "year" );
-//            rp->track()->setAttributes( attr );
-        }
-
-        rp->setMimetype( m.value( "mimetype" ).toString() );
-        if ( rp->mimetype().isEmpty() )
-        {
-            rp->setMimetype( TomahawkUtils::extensionToMimetype( m.value( "extension" ).toString() ) );
-            Q_ASSERT( !rp->mimetype().isEmpty() );
-        }
-
-        rp->setResolvedByResolver( this );
-
-
-        // find collection
-        const QString collectionId = m.value( "collectionId" ).toString();
-        if ( !collectionId.isEmpty() )
-        {
-            Tomahawk::collection_ptr collection = Tomahawk::collection_ptr();
-            if ( !collection.isNull() )
-            {
-                rp->setResolvedByCollection( collection );
-            }
-        }
-
-        results << rp;
-    }
-
-    return results;
-}
-
-
-QList< Tomahawk::artist_ptr >
-JSResolver::parseArtistVariantList( const QVariantList& reslist )
-{
-    QList< Tomahawk::artist_ptr > results;
-
-    foreach( const QVariant& rv, reslist )
-    {
-        const QString val = rv.toString();
-        if ( val.trimmed().isEmpty() )
-            continue;
-
-        Tomahawk::artist_ptr ap = Tomahawk::Artist::get( val, false );
-
-        results << ap;
-    }
-
-    return results;
-}
-
-
-QList< Tomahawk::album_ptr >
-JSResolver::parseAlbumVariantList( const Tomahawk::artist_ptr& artist, const QVariantList& reslist )
-{
-    QList< Tomahawk::album_ptr > results;
-
-    foreach( const QVariant& rv, reslist )
-    {
-        const QString val = rv.toString();
-        if ( val.trimmed().isEmpty() )
-            continue;
-
-        Tomahawk::album_ptr ap = Tomahawk::Album::get( artist, val, false );
-
-        results << ap;
-    }
-
-    return results;
 }
 
 
@@ -662,6 +419,7 @@ JSResolver::stop()
 
     d->stopped = true;
 
+    scriptAccount()->stop();
 
     Tomahawk::Pipeline::instance()->removeResolver( this );
     emit stopped();
@@ -738,36 +496,21 @@ JSResolver::loadDataFromWidgets()
 }
 
 
+ScriptAccount*
+JSResolver::scriptAccount() const
+{
+    Q_D( const JSResolver );
+
+    return d->scriptAccount.get();
+}
+
+
 void
 JSResolver::onCapabilitiesChanged( Tomahawk::ExternalResolver::Capabilities capabilities )
 {
     Q_D( JSResolver );
 
     d->capabilities = capabilities;
-}
-
-
-void
-JSResolver::onCollectionIconFetched()
-{
-    QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
-    if ( reply != 0 )
-    {
-        Tomahawk::collection_ptr collection;
-        /* collection = m_collections.value( reply->property( "collectionName" ).toString() ); */
-        if ( !collection.isNull() )
-        {
-            if ( reply->error() == QNetworkReply::NoError )
-            {
-                QImageReader imageReader( reply );
-                QPixmap collectionIcon = QPixmap::fromImageReader( &imageReader );
-
-                if ( !collectionIcon.isNull() )
-                    qobject_cast< Tomahawk::ScriptCollection* >( collection.data() )->setIcon( collectionIcon );
-            }
-        }
-        reply->deleteLater();
-    }
 }
 
 

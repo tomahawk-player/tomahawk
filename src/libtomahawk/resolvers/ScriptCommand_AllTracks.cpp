@@ -18,11 +18,15 @@
 
 #include "ScriptCommand_AllTracks.h"
 
-#include "ExternalResolver.h"
+
+#include "ScriptAccount.h"
 #include "PlaylistEntry.h"
 #include "ScriptCollection.h"
-
+#include "Artist.h"
+#include "Album.h"
+#include "ScriptJob.h"
 #include "utils/Logger.h"
+#include "../Result.h"
 
 using namespace Tomahawk;
 
@@ -66,10 +70,13 @@ ScriptCommand_AllTracks::exec()
         return;
     }
 
-    connect( collection->resolver(), SIGNAL( tracksFound( QList< Tomahawk::query_ptr > ) ),
-             this, SLOT( onResolverDone( QList< Tomahawk::query_ptr > ) ) );
+    QVariantMap arguments;
+    arguments[ "artist" ] = m_album->artist()->name();
+    arguments[ "album" ] = m_album->name();
 
-    collection->resolver()->tracks( m_collection, m_album );
+    ScriptJob* job = collection->scriptObject()->invoke( "tracks", arguments );
+    connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onTracksJobDone( QVariantMap ) ), Qt::QueuedConnection );
+    job->start();
 }
 
 
@@ -89,8 +96,37 @@ ScriptCommand_AllTracks::reportFailure()
 
 
 void
-ScriptCommand_AllTracks::onResolverDone( const QList< Tomahawk::query_ptr >& q )
+ScriptCommand_AllTracks::onTracksJobDone( const QVariantMap& result )
 {
-    emit tracks( q );
+    ScriptJob* job = qobject_cast< ScriptJob* >( sender() );
+    Q_ASSERT( job );
+
+    qDebug() << "Resolver reporting album tracks:" << result;
+
+    if ( job->error() )
+    {
+        reportFailure();
+        return;
+    }
+
+    QSharedPointer< ScriptCollection > collection = m_collection.objectCast< ScriptCollection >();
+    Q_ASSERT( !collection.isNull() );
+
+    QList< Tomahawk::result_ptr > t = collection->scriptAccount()->parseResultVariantList( result[ "tracks"].toList() );
+
+
+    QList< Tomahawk::query_ptr > queries;
+    foreach ( const Tomahawk::result_ptr& result, t )
+    {
+        result->setScore( 1.0 );
+        result->setResolvedByCollection( m_collection );
+        queries.append( result->toQuery() );
+    }
+
+    tDebug() << Q_FUNC_INFO << "about to push" << queries.count() << "tracks";
+
+    emit tracks( queries );
     emit done();
+
+    job->deleteLater();
 }

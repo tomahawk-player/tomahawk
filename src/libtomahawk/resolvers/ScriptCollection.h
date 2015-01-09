@@ -21,7 +21,7 @@
 #ifndef SCRIPTCOLLECTION_H
 #define SCRIPTCOLLECTION_H
 
-#include "ExternalResolver.h"
+#include "ScriptPlugin.h"
 #include "collection/Collection.h"
 #include "collection/ArtistsRequest.h"
 #include "collection/AlbumsRequest.h"
@@ -34,19 +34,27 @@
 
 namespace Tomahawk
 {
+class ScriptAccount;
 
-class DLLEXPORT ScriptCollection : public Collection
+class DLLEXPORT ScriptCollection : public Collection, public ScriptPlugin
 {
-    Q_OBJECT
+Q_OBJECT
+
+    // access to ScriptObject
+    friend class ScriptCommand_AllArtists;
+    friend class ScriptCommand_AllAlbums;
+    friend class ScriptCommand_AllTracks;
+    friend class JSResolver;
+
 
 public:
-    explicit ScriptCollection( const QString& id,
+    explicit ScriptCollection( const scriptobject_ptr& scriptObject,
                                const source_ptr& source,
-                               ExternalResolver* resolver,
+                               ScriptAccount* scriptAccount,
                                QObject* parent = nullptr );
     virtual ~ScriptCollection();
 
-    const QString id() const;
+    ScriptAccount* scriptAccount() const;
 
     /**
      * @brief setServiceName sets the name of the service that provides the ScriptCollection.
@@ -62,14 +70,13 @@ public:
     QString itemName() const override;
     BackendType backendType() const override { return ScriptCollectionType; }
 
+    void fetchIcon( const QString& iconUrl );
     void setIcon( const QPixmap& icon );
     const QPixmap icon( const QSize& size ) const override;
     QPixmap bigIcon() const override;
 
     void setDescription( const QString& text );
     QString description() const override;
-
-    virtual ExternalResolver* resolver() { return m_resolver; }
 
     Tomahawk::ArtistsRequest* requestArtists() override;
     Tomahawk::AlbumsRequest*  requestAlbums( const Tomahawk::artist_ptr& artist ) override;
@@ -78,9 +85,11 @@ public:
     void setTrackCount( int count );
     int trackCount() const override;
 
+private slots:
+    void onIconFetched();
+
 private:
-    QString m_id;
-    ExternalResolver* m_resolver;
+    ScriptAccount* m_scriptAccount;
     QString m_servicePrettyName;
     QString m_description;
     int m_trackCount;

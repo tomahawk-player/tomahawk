@@ -43,11 +43,11 @@ signals:
     void done();
 
 protected:
-    void exec() override;
+    Q_INVOKABLE void exec() override;
     void reportFailure() override;
 
 private slots:
-    void onResolverDone( const QList< Tomahawk::query_ptr >& );
+    void onTracksJobDone( const QVariantMap& result );
 
 private:
     Tomahawk::collection_ptr m_collection;

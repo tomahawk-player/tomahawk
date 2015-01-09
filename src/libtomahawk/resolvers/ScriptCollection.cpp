@@ -20,45 +20,45 @@
 #include "ScriptCollection.h"
 
 #include "Source.h"
-#include "ExternalResolverGui.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/NetworkAccessManager.h"
 #include "utils/Logger.h"
 #include "resolvers/ScriptCommand_AllArtists.h"
 #include "resolvers/ScriptCommand_AllAlbums.h"
 #include "resolvers/ScriptCommand_AllTracks.h"
+#include "ScriptAccount.h"
 
+#include <QImageReader>
 #include <QPainter>
 
 using namespace Tomahawk;
 
 
-ScriptCollection::ScriptCollection( const QString& id,
+ScriptCollection::ScriptCollection( const scriptobject_ptr& scriptObject,
                                     const source_ptr& source,
-                                    ExternalResolver* resolver,
+                                    ScriptAccount* scriptAccount,
                                     QObject* parent )
-    : Collection( source, QString( "scriptcollection:" + resolver->name() + ":" + uuid() ), parent )
-    , m_id( id )
+    : Collection( source, QString( "scriptcollection:" + scriptAccount->name() + ":" + uuid() ), parent )
+    , ScriptPlugin( scriptObject )
+    , m_scriptAccount( scriptAccount )
     , m_trackCount( -1 ) //null value
 {
-    Q_ASSERT( resolver );
-    qDebug() << Q_FUNC_INFO << resolver->name() << Collection::name();
+    Q_ASSERT( scriptAccount );
+    qDebug() << Q_FUNC_INFO << scriptAccount->name() << Collection::name();
 
-    m_resolver = resolver;
-
-    m_servicePrettyName = m_resolver->name();
+    m_servicePrettyName = scriptAccount->name();
 }
 
 
 ScriptCollection::~ScriptCollection()
 {
-
 }
 
 
-const QString
-ScriptCollection::id() const
+ScriptAccount*
+ScriptCollection::scriptAccount() const
 {
-    return m_id;
+    return m_scriptAccount;
 }
 
 
@@ -73,7 +73,7 @@ QString
 ScriptCollection::prettyName() const
 {
     return tr( "%1 Collection",
-               "Name of a collection based on a resolver, e.g. Subsonic Collection" )
+               "Name of a collection based on a script pluginsc, e.g. Subsonic Collection" )
                .arg( m_servicePrettyName );
 }
 
@@ -180,4 +180,40 @@ int
 ScriptCollection::trackCount() const
 {
     return m_trackCount;
+}
+
+
+void
+ScriptCollection::fetchIcon( const QString& iconUrlString )
+{
+    if ( !iconUrlString.isEmpty() )
+    {
+        QUrl iconUrl = QUrl::fromEncoded( iconUrlString.toLatin1() );
+        if ( iconUrl.isValid() )
+        {
+            QNetworkRequest req( iconUrl );
+            tDebug() << "Creating a QNetworkReply with url:" << req.url().toString();
+            QNetworkReply* reply = Tomahawk::Utils::nam()->get( req );
+
+            connect( reply, SIGNAL( finished() ),
+                        this, SLOT( onIconFetched() ) );
+        }
+    }
+}
+
+
+void
+ScriptCollection::onIconFetched()
+{
+    QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
+    if ( reply != 0 )
+    {
+        if( reply->error() == QNetworkReply::NoError )
+        {
+            QImageReader imageReader( reply );
+            setIcon( QPixmap::fromImageReader( &imageReader ) );
+        }
+
+        reply->deleteLater();
+    }
 }

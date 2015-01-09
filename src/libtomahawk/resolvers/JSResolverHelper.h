@@ -143,10 +143,6 @@ public slots:
 
     void addTrackResults( const QVariantMap& results );
 
-    void addArtistResults( const QVariantMap& results );
-    void addAlbumResults( const QVariantMap& results );
-    void addAlbumTrackResults( const QVariantMap& results );
-
     void addUrlResult( const QString& url, const QVariantMap& result );
 
     void reportCapabilities( const QVariant& capabilities );
@@ -154,6 +150,7 @@ public slots:
     void reportScriptJobResults( const QVariantMap& result );
 
     void registerScriptPlugin( const QString& type, const QString& objectId );
+    void unregisterScriptPlugin( const QString& type, const QString& objectId );
 
 private slots:
     void gotStreamUrl( IODeviceCallback callback, NetworkReply* reply );

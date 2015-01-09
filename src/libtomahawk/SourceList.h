@@ -52,6 +52,8 @@ public:
     QList<Tomahawk::source_ptr> sources( bool onlyOnline = false ) const;
     unsigned int count() const;
 
+    void addScriptCollection( const Tomahawk::collection_ptr& collection );
+    void removeScriptCollection( const Tomahawk::collection_ptr& collection );
     QList<Tomahawk::collection_ptr> scriptCollections() const;
 
     Tomahawk::source_ptr get( const QString& username, const QString& friendlyName = QString(), bool autoCreate = false );
@@ -80,9 +82,6 @@ private slots:
 
     void latchedOn( const Tomahawk::source_ptr& );
     void latchedOff( const Tomahawk::source_ptr& );
-
-    void addScriptCollection( const Tomahawk::collection_ptr& collection );
-    void removeScriptCollection( const Tomahawk::collection_ptr& collection );
 
 private:
     void add( const Tomahawk::source_ptr& source );

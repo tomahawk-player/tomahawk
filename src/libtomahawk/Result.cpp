@@ -303,6 +303,8 @@ Result::setResolvedByCollection( const Tomahawk::collection_ptr& collection , bo
     m_collection = collection;
     if ( emitOnlineEvents )
     {
+        Q_ASSERT( !collection.isNull() );
+        connect( collection.data(), SIGNAL( destroyed( QObject * ) ), SLOT( onOffline() ), Qt::QueuedConnection );
         connect( collection->source().data(), SIGNAL( online() ), SLOT( onOnline() ), Qt::QueuedConnection );
         connect( collection->source().data(), SIGNAL( offline() ), SLOT( onOffline() ), Qt::QueuedConnection );
     }

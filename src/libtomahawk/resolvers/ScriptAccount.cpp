@@ -26,6 +26,15 @@
 #include "../utils/LinkGenerator.h"
 #include "ScriptLinkGeneratorPlugin.h"
 #include "ScriptInfoPlugin.h"
+#include "SourceList.h"
+#include "ScriptCollection.h"
+
+// TODO:
+#include "../Result.h"
+#include "../Track.h"
+#include <QTime>
+
+#include <QFileInfo>
 
 using namespace Tomahawk;
 
@@ -34,6 +43,51 @@ ScriptAccount::ScriptAccount( const QString& name )
     : QObject()
     , m_name( name )
 {
+}
+
+
+void
+ScriptAccount::stop()
+{
+    foreach( const QWeakPointer< ScriptCollection >& collection, m_collections.hash().values() )
+    {
+        unregisterScriptPlugin( "collection", collection.data()->scriptObject()->id() );
+    }
+}
+
+
+const QString
+ScriptAccount::name() const
+{
+    return m_name;
+}
+
+
+void
+ScriptAccount::setIcon(const QPixmap& icon)
+{
+    m_icon = icon;
+}
+
+
+const QPixmap
+ScriptAccount::icon() const
+{
+    return m_icon;
+}
+
+
+void
+ScriptAccount::setFilePath( const QString& filePath )
+{
+    m_filePath = filePath;
+}
+
+
+const QString
+ScriptAccount::filePath() const
+{
+    return m_filePath;
 }
 
 
@@ -102,6 +156,33 @@ ScriptAccount::registerScriptPlugin( const QString& type, const QString& objectI
 }
 
 
+
+void
+ScriptAccount::unregisterScriptPlugin( const QString& type, const QString& objectId )
+{
+    scriptobject_ptr object = m_objects.value( objectId );
+    if( !object )
+    {
+        tLog() << "ScriptAccount" << name() << "tried to unregister plugin that was not registered";
+        return;
+    }
+
+    if ( type == "collection" )
+    {
+        collection_ptr collection = scriptCollection( objectId );
+        if ( !collection.isNull() )
+        {
+            SourceList::instance()->removeScriptCollection( collection );
+        }
+    }
+    else
+    {
+        tLog() << "This plugin type is not handled by Tomahawk or simply cannot be removed yet";
+        Q_ASSERT( false );
+    }
+}
+
+
 void
 ScriptAccount::onScriptObjectDeleted()
 {
@@ -137,6 +218,54 @@ ScriptAccount::scriptPluginFactory( const QString& type, const scriptobject_ptr&
         // add it to infosystem
         Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin );
     }
+    else if( type == "collection" )
+    {
+        if ( !scriptCollection( object->id() ).isNull() )
+            return;
+
+        const QVariantMap collectionInfo =  object->syncInvoke( "collection" ).toMap();
+
+        if ( collectionInfo.isEmpty() ||
+             !collectionInfo.contains( "prettyname" ) ||
+             !collectionInfo.contains( "description" ) )
+            return;
+
+        const QString prettyname = collectionInfo.value( "prettyname" ).toString();
+        const QString desc = collectionInfo.value( "description" ).toString();
+
+        // at this point we assume that all the tracks browsable through a resolver belong to the local source
+        Tomahawk::ScriptCollection* sc = new Tomahawk::ScriptCollection( object, SourceList::instance()->getLocal(), this );
+        QSharedPointer<ScriptCollection> collection( sc );
+        collection->setWeakRef( collection.toWeakRef() );
+
+        sc->setServiceName( prettyname );
+        sc->setDescription( desc );
+
+        if ( collectionInfo.contains( "trackcount" ) ) //a resolver might not expose this
+        {
+            bool ok = false;
+            int trackCount = collectionInfo.value( "trackcount" ).toInt( &ok );
+            if ( ok )
+                sc->setTrackCount( trackCount );
+        }
+
+        if ( collectionInfo.contains( "iconfile" ) )
+        {
+            QString iconPath = QFileInfo( filePath() ).path() + "/"
+                               + collectionInfo.value( "iconfile" ).toString();
+
+            QPixmap iconPixmap;
+            bool ok = iconPixmap.load( iconPath );
+            if ( ok && !iconPixmap.isNull() )
+                sc->setIcon( iconPixmap );
+        }
+
+        SourceList::instance()->addScriptCollection( collection );
+
+        sc->fetchIcon( collectionInfo.value( "iconurl" ).toString() );
+
+        m_collections.insert( object->id(), collection );
+    }
     else
     {
         tLog() << "This plugin type is not handled by Tomahawk";
@@ -149,4 +278,93 @@ void
 ScriptAccount::onJobDeleted( const QString& jobId )
 {
     m_jobs.remove( jobId );
+}
+
+
+QList< Tomahawk::result_ptr >
+ScriptAccount::parseResultVariantList( const QVariantList& reslist )
+{
+    QList< Tomahawk::result_ptr > results;
+
+    foreach( const QVariant& rv, reslist )
+    {
+        QVariantMap m = rv.toMap();
+        // TODO we need to handle preview urls separately. they should never trump a real url, and we need to display
+        // the purchaseUrl for the user to upgrade to a full stream.
+        if ( m.value( "preview" ).toBool() == true )
+            continue;
+
+        int duration = m.value( "duration", 0 ).toInt();
+        if ( duration <= 0 && m.contains( "durationString" ) )
+        {
+            QTime time = QTime::fromString( m.value( "durationString" ).toString(), "hh:mm:ss" );
+            duration = time.secsTo( QTime( 0, 0 ) ) * -1;
+        }
+
+        Tomahawk::track_ptr track = Tomahawk::Track::get( m.value( "artist" ).toString(),
+                                                          m.value( "track" ).toString(),
+                                                          m.value( "album" ).toString(),
+                                                          m.value( "albumArtist" ).toString(),
+                                                          duration,
+                                                          QString(),
+                                                          m.value( "albumpos" ).toUInt(),
+                                                          m.value( "discnumber" ).toUInt() );
+        if ( !track )
+            continue;
+
+        Tomahawk::result_ptr rp = Tomahawk::Result::get( m.value( "url" ).toString(), track );
+        if ( !rp )
+            continue;
+
+        rp->setBitrate( m.value( "bitrate" ).toUInt() );
+        rp->setSize( m.value( "size" ).toUInt() );
+        rp->setRID( uuid() );
+        rp->setPurchaseUrl( m.value( "purchaseUrl" ).toString() );
+        rp->setLinkUrl( m.value( "linkUrl" ).toString() );
+        rp->setScore( m.value( "score" ).toFloat() );
+        rp->setChecked( m.value( "checked" ).toBool() );
+
+        //FIXME
+        if ( m.contains( "year" ) )
+        {
+            QVariantMap attr;
+            attr[ "releaseyear" ] = m.value( "year" );
+//            rp->track()->setAttributes( attr );
+        }
+
+        rp->setMimetype( m.value( "mimetype" ).toString() );
+        if ( rp->mimetype().isEmpty() )
+        {
+            rp->setMimetype( TomahawkUtils::extensionToMimetype( m.value( "extension" ).toString() ) );
+            Q_ASSERT( !rp->mimetype().isEmpty() );
+        }
+
+        rp->setFriendlySource( name() );
+
+        // find collection
+        const QString collectionId = m.value( "collectionId" ).toString();
+        if ( !collectionId.isEmpty() )
+        {
+            if ( scriptCollection( collectionId ).isNull() )
+            {
+                tLog() << "Resolver returned invalid collection id";
+                Q_ASSERT( false );
+            }
+            else
+            {
+                rp->setResolvedByCollection( scriptCollection( collectionId ) );
+            }
+        }
+
+        results << rp;
+    }
+
+    return results;
+}
+
+
+const QSharedPointer< ScriptCollection >
+ScriptAccount::scriptCollection( const QString& id ) const
+{
+    return m_collections.hash().value( id );
 }

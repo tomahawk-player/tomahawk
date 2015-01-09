@@ -25,9 +25,6 @@
 #include "DllMacro.h"
 #include "Resolver.h"
 #include "ScriptCommandQueue.h"
-#include "ScriptCommand_AllArtists.h"
-#include "ScriptCommand_AllAlbums.h"
-#include "ScriptCommand_AllTracks.h"
 #include "ScriptCommand_LookupUrl.h"
 #include "Typedefs.h"
 
@@ -49,9 +46,6 @@ class DLLEXPORT ExternalResolver : public Resolver
 Q_OBJECT
 
     friend class ScriptCommandQueue;
-    friend class ScriptCommand_AllArtists;
-    friend class ScriptCommand_AllAlbums;
-    friend class ScriptCommand_AllTracks;
     friend class ScriptCommand_LookupUrl;
 
 public:
@@ -120,10 +114,6 @@ protected:
     ScriptCommandQueue* m_commandQueue;
 
     // Should only be called by ScriptCommands
-    // ScriptCollection
-    virtual void artists( const Tomahawk::collection_ptr& collection ) = 0;
-    virtual void albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist ) = 0;
-    virtual void tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album ) = 0;
     // UrlLookup
     virtual void lookupUrl( const QString& url ) = 0;
 

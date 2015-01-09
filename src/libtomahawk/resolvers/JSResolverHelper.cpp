@@ -41,6 +41,10 @@
 #include "SourceList.h"
 #include "UrlHandler.h"
 #include "JSAccount.h"
+#include "../Album.h"
+#include "../Artist.h"
+#include "../Result.h"
+#include "../Track.h"
 
 #include <QFile>
 #include <QFileInfo>
@@ -133,92 +137,22 @@ JSResolverHelper::log( const QString& message )
 void
 JSResolverHelper::addTrackResults( const QVariantMap& results )
 {
-    qDebug() << "Resolver reporting results:" << results;
-    QList< Tomahawk::result_ptr > tracks = m_resolver->parseResultVariantList( results.value("results").toList() );
+    tLog() << "Resolver reporting results:" << m_resolver->name() << results;
+
+    Q_ASSERT( results["results"].toMap().isEmpty() );
+
+    QList< Tomahawk::result_ptr > tracks = m_resolver->scriptAccount()->parseResultVariantList( results.value("results").toList() );
+
+    foreach( const result_ptr& track, tracks )
+    {
+        tLog() << "Found result: " << track->track()->track() << "by" << track->track()->artist();
+        track->setResolvedByResolver( m_resolver );
+        track->setFriendlySource( "FOOBAR" );
+    }
 
     QString qid = results.value("qid").toString();
 
     Tomahawk::Pipeline::instance()->reportResults( qid, tracks );
-}
-
-
-void
-JSResolverHelper::addArtistResults( const QVariantMap& results )
-{
-    qDebug() << "Resolver reporting artists:" << results;
-    QList< Tomahawk::artist_ptr > artists = m_resolver->parseArtistVariantList( results.value( "artists" ).toList() );
-
-    QString qid = results.value("qid").toString();
-
-    Tomahawk::collection_ptr collection = Tomahawk::collection_ptr();
-    if ( collection.isNull() )
-        return;
-
-    tDebug() << Q_FUNC_INFO << "about to push" << artists.count() << "artists";
-    foreach( const Tomahawk::artist_ptr& artist, artists)
-        tDebug() << artist->name();
-
-    emit m_resolver->artistsFound( artists );
-}
-
-
-void
-JSResolverHelper::addAlbumResults( const QVariantMap& results )
-{
-    qDebug() << "Resolver reporting albums:" << results;
-    QString artistName = results.value( "artist" ).toString();
-    if ( artistName.trimmed().isEmpty() )
-        return;
-    Tomahawk::artist_ptr artist = Tomahawk::Artist::get( artistName, false );
-    QList< Tomahawk::album_ptr > albums = m_resolver->parseAlbumVariantList( artist, results.value( "albums" ).toList() );
-
-    QString qid = results.value("qid").toString();
-
-    Tomahawk::collection_ptr collection = Tomahawk::collection_ptr();
-    if ( collection.isNull() )
-        return;
-
-    tDebug() << Q_FUNC_INFO << "about to push" << albums.count() << "albums";
-    foreach( const Tomahawk::album_ptr& album, albums)
-        tDebug() << album->name();
-
-    emit m_resolver->albumsFound( albums );
-}
-
-
-void
-JSResolverHelper::addAlbumTrackResults( const QVariantMap& results )
-{
-    qDebug() << "Resolver reporting album tracks:" << results;
-    QString artistName = results.value( "artist" ).toString();
-    if ( artistName.trimmed().isEmpty() )
-        return;
-    QString albumName = results.value( "album" ).toString();
-    if ( albumName.trimmed().isEmpty() )
-        return;
-
-    Tomahawk::artist_ptr artist = Tomahawk::Artist::get( artistName, false );
-    Tomahawk::album_ptr  album  = Tomahawk::Album::get( artist, albumName, false );
-
-    QList< Tomahawk::result_ptr > tracks = m_resolver->parseResultVariantList( results.value("results").toList() );
-
-    QString qid = results.value("qid").toString();
-
-    Tomahawk::collection_ptr collection = Tomahawk::collection_ptr();
-    if ( collection.isNull() )
-        return;
-
-    QList< Tomahawk::query_ptr > queries;
-    foreach ( const Tomahawk::result_ptr& result, tracks )
-    {
-        result->setScore( 1.0 );
-        result->setResolvedByCollection( collection );
-        queries.append( result->toQuery() );
-    }
-
-    tDebug() << Q_FUNC_INFO << "about to push" << tracks.count() << "tracks";
-
-    emit m_resolver->tracksFound( queries );
 }
 
 
@@ -396,9 +330,16 @@ JSResolverHelper::reportScriptJobResults( const QVariantMap& result )
 
 
 void
-JSResolverHelper::registerScriptPlugin(const QString& type, const QString& objectId)
+JSResolverHelper::registerScriptPlugin( const QString& type, const QString& objectId )
 {
     m_resolver->d_func()->scriptAccount->registerScriptPlugin( type, objectId );
+}
+
+
+void
+JSResolverHelper::unregisterScriptPlugin( const QString& type, const QString& objectId )
+{
+    m_resolver->d_func()->scriptAccount->unregisterScriptPlugin( type, objectId );
 }
 
 

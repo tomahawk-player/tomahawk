@@ -19,10 +19,13 @@
 #include "ScriptCommand_AllArtists.h"
 
 #include "Artist.h"
-#include "ExternalResolver.h"
+#include "ScriptAccount.h"
 #include "ScriptCollection.h"
+#include "ScriptObject.h"
+#include "ScriptJob.h"
 
 #include "utils/Logger.h"
+#include "../Typedefs.h"
 
 using namespace Tomahawk;
 
@@ -59,16 +62,11 @@ void
 ScriptCommand_AllArtists::exec()
 {
     Tomahawk::ScriptCollection* collection = qobject_cast< Tomahawk::ScriptCollection* >( m_collection.data() );
-    if ( collection == 0 )
-    {
-        emit artists( QList< Tomahawk::artist_ptr >() );
-        return;
-    }
+    Q_ASSERT( collection );
 
-    connect( collection->resolver(), SIGNAL( artistsFound( QList< Tomahawk::artist_ptr > ) ),
-             this, SLOT( onResolverDone( QList< Tomahawk::artist_ptr > ) ) );
-
-    collection->resolver()->artists( m_collection );
+    ScriptJob* job = collection->scriptObject()->invoke( "artists" );
+    connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onArtistsJobDone( QVariantMap ) ), Qt::QueuedConnection );
+    job->start();
 }
 
 
@@ -81,10 +79,24 @@ ScriptCommand_AllArtists::reportFailure()
 }
 
 
-void ScriptCommand_AllArtists::onResolverDone( const QList< Tomahawk::artist_ptr >& a )
+void
+ScriptCommand_AllArtists::onArtistsJobDone( const QVariantMap& result )
 {
+    ScriptJob* job = qobject_cast< ScriptJob* >( sender() );
+    Q_ASSERT( job );
+
+    if ( job->error() )
+    {
+        reportFailure();
+        return;
+    }
+
+    QList< Tomahawk::artist_ptr > a = parseArtistVariantList( result[ "artists" ].toList() );
+
     if ( m_filter.isEmpty() )
+    {
         emit artists( a );
+    }
     else
     {
         QList< Tomahawk::artist_ptr > filtered;
@@ -93,7 +105,30 @@ void ScriptCommand_AllArtists::onResolverDone( const QList< Tomahawk::artist_ptr
             if ( artist->name().contains( m_filter ) )
                 filtered.append( artist );
         }
-        emit artists( filtered );
+        emit artists( a );
     }
+
     emit done();
+
+    job->deleteLater();
+}
+
+
+QList< Tomahawk::artist_ptr >
+ScriptCommand_AllArtists::parseArtistVariantList( const QVariantList& reslist )
+{
+    QList< Tomahawk::artist_ptr > results;
+
+    foreach( const QVariant& rv, reslist )
+    {
+        const QString val = rv.toString();
+        if ( val.trimmed().isEmpty() )
+            continue;
+
+        Tomahawk::artist_ptr ap = Tomahawk::Artist::get( val, false );
+
+        results << ap;
+    }
+
+    return results;
 }

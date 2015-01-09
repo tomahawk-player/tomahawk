@@ -48,9 +48,11 @@ protected:
     void reportFailure() override;
 
 private slots:
-    void onResolverDone( const QList< Tomahawk::artist_ptr >& );
+    void onArtistsJobDone( const QVariantMap& result );
 
 private:
+    static QList< Tomahawk::artist_ptr > parseArtistVariantList( const QVariantList& reslist );
+
     Tomahawk::collection_ptr m_collection;
     QString m_filter;
 };

@@ -73,15 +73,13 @@ public:
 
     QVariantMap loadDataFromWidgets();
 
+    ScriptAccount* scriptAccount() const;
+
 public slots:
     void resolve( const Tomahawk::query_ptr& query ) override;
     void stop() override;
     void start() override;
 
-    // For ScriptCollection
-    void artists( const Tomahawk::collection_ptr& collection ) override;
-    void albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist ) override;
-    void tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album ) override;
     // For UrlLookup
     void lookupUrl( const QString& url ) override;
 
@@ -90,9 +88,6 @@ signals:
 
 protected:
     QVariant callOnResolver( const QString& scriptSource );
-
-private slots:
-    void onCollectionIconFetched();
 
 private:
     void init();
@@ -104,11 +99,6 @@ private:
     QVariantMap resolverSettings();
     QVariantMap resolverUserConfig();
     QVariantMap resolverInit();
-
-    QList< Tomahawk::result_ptr > parseResultVariantList( const QVariantList& reslist );
-    QList< Tomahawk::artist_ptr > parseArtistVariantList( const QVariantList& reslist );
-    QList< Tomahawk::album_ptr >  parseAlbumVariantList(  const Tomahawk::artist_ptr& artist,
-                                                          const QVariantList& reslist );
 
     Q_DECLARE_PRIVATE( JSResolver )
     QScopedPointer<JSResolverPrivate> d_ptr;

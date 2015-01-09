@@ -42,6 +42,8 @@ public:
     ScriptObject( const QString& id, ScriptAccount* parent );
     virtual ~ScriptObject();
 
+    QString id() const;
+
     void setWeakRef( const scriptobject_wptr& weakRef );
     const scriptobject_wptr weakRef() const;
 
@@ -53,8 +55,6 @@ public:
     const QVariant syncInvoke( const QString& methodName, const QVariantMap& arguments = QVariantMap() );
 
 protected:
-    QString id() const;
-
     void startJob( ScriptJob* scriptJob );
 
 private:

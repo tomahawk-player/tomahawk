@@ -72,7 +72,7 @@ public:
         m_hash.insert( key, value.toWeakRef() );
     }
 
-    const QHash< QString, QWeakPointer<T> >& hash() { return m_hash; }
+    const QHash< QString, QWeakPointer<T> >& hash() const { return m_hash; }
     virtual void remove( const QString& key ) { m_hash.remove( key ); }
 
 private:

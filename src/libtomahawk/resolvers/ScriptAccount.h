@@ -27,7 +27,11 @@
 #include <QVariantMap>
 
 //TODO: pimple
+#include "../utils/WeakObjectHash.h"
+#include "ScriptCollection.h"
 #include <QHash>
+#include <QPixmap>
+
 
 #include "../DllMacro.h"
 
@@ -44,6 +48,16 @@ public:
     ScriptAccount( const QString& name );
     virtual ~ScriptAccount() {}
 
+    void stop();
+
+    const QString name() const;
+
+    void setIcon( const QPixmap& icon );
+    const QPixmap icon() const;
+
+    void setFilePath( const QString& filePath );
+    const QString filePath() const;
+
     ScriptJob* invoke( const scriptobject_ptr& scriptObject, const QString& methodName, const QVariantMap& arguments );
     virtual const QVariant syncInvoke( const scriptobject_ptr& scriptObject, const QString& methodName, const QVariantMap& arguments ) = 0;
 
@@ -51,8 +65,13 @@ public:
 
     void reportScriptJobResult( const QVariantMap& result );
     void registerScriptPlugin( const QString& type, const QString& objectId );
+    void unregisterScriptPlugin( const QString& type, const QString& objectId );
 
     virtual void scriptPluginFactory( const QString& type, const scriptobject_ptr& object );
+
+    QList< Tomahawk::result_ptr > parseResultVariantList( const QVariantList& reslist );
+
+    const QSharedPointer< ScriptCollection > scriptCollection( const QString& id ) const;
 
 private slots:
     void onJobDeleted( const QString& jobId );
@@ -61,8 +80,11 @@ private slots:
 
 private: // TODO: pimple, might be renamed before tho
     QString m_name;
+    QPixmap m_icon;
+    QString m_filePath;
     QHash< QString, ScriptJob* > m_jobs;
     QHash< QString, scriptobject_ptr > m_objects;
+    Utils::WeakObjectHash< ScriptCollection > m_collections;
 };
 
 } // ns: Tomahawk

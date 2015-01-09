@@ -615,6 +615,12 @@ Tomahawk.PluginManager = {
         Tomahawk.registerScriptPlugin(type, object.id);
     },
 
+    unregisterPlugin: function(type, object) {
+        this.objects[this.identifyObject(object)] = object;
+
+        Tomahawk.log("unregisterPlugin: " + type + " id: " + object.id);
+        Tomahawk.unregisterScriptPlugin(type, object.id);
+    },
 
     invokeSync: function (objectId, methodName, params) {
         if (!this.objects[objectId]) {

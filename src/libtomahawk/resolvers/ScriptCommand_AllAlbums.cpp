@@ -22,9 +22,10 @@
 
 #include "Album.h"
 #include "Artist.h"
-#include "ExternalResolver.h"
+#include "ScriptAccount.h"
 #include "PlaylistEntry.h"
 #include "ScriptCollection.h"
+#include "ScriptJob.h"
 
 using namespace Tomahawk;
 
@@ -75,10 +76,12 @@ ScriptCommand_AllAlbums::exec()
         return;
     }
 
-    connect( collection->resolver(), SIGNAL( albumsFound( QList< Tomahawk::album_ptr > ) ),
-             this, SLOT( onResolverDone( QList< Tomahawk::album_ptr > ) ) );
+    QVariantMap arguments;
+    arguments[ "artist" ] = m_artist->name();
 
-    collection->resolver()->albums( m_collection, m_artist );
+    ScriptJob* job = collection->scriptObject()->invoke( "albums", arguments );
+    connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onAlbumsJobDone( QVariantMap ) ), Qt::QueuedConnection );
+    job->start();
 }
 
 
@@ -94,8 +97,19 @@ ScriptCommand_AllAlbums::reportFailure()
 
 
 void
-ScriptCommand_AllAlbums::onResolverDone( const QList< Tomahawk::album_ptr >& a )
+ScriptCommand_AllAlbums::onAlbumsJobDone(const QVariantMap& result)
 {
+    ScriptJob* job = qobject_cast< ScriptJob* >( sender() );
+    Q_ASSERT( job );
+
+    if ( job->error() )
+    {
+        reportFailure();
+        return;
+    }
+
+    QList< Tomahawk::album_ptr > a = parseAlbumVariantList( m_artist, result[ "albums" ].toList() );
+
     if ( m_filter.isEmpty() )
         emit albums( a );
     else
@@ -110,4 +124,26 @@ ScriptCommand_AllAlbums::onResolverDone( const QList< Tomahawk::album_ptr >& a )
         emit albums( filtered );
     }
     emit done();
+
+    job->deleteLater();
+}
+
+
+QList< Tomahawk::album_ptr >
+ScriptCommand_AllAlbums::parseAlbumVariantList( const Tomahawk::artist_ptr& artist, const QVariantList& reslist )
+{
+    QList< Tomahawk::album_ptr > results;
+
+    foreach( const QVariant& rv, reslist )
+    {
+        const QString val = rv.toString();
+        if ( val.trimmed().isEmpty() )
+            continue;
+
+        Tomahawk::album_ptr ap = Tomahawk::Album::get( artist, val, false );
+
+        results << ap;
+    }
+
+    return results;
 }
