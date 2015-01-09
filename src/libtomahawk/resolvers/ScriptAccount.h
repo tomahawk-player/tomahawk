@@ -32,13 +32,13 @@
 #include <QHash>
 #include <QPixmap>
 
-
 #include "../DllMacro.h"
 
 namespace Tomahawk {
 
 class ScriptObject;
 class ScriptJob;
+class ScriptCollectionFactory;
 
 class DLLEXPORT ScriptAccount : public QObject
 {
@@ -46,9 +46,12 @@ class DLLEXPORT ScriptAccount : public QObject
 
 public:
     ScriptAccount( const QString& name );
-    virtual ~ScriptAccount() {}
+    virtual ~ScriptAccount();
 
+    void start();
     void stop();
+
+    bool isStopped();
 
     const QString name() const;
 
@@ -82,9 +85,11 @@ private: // TODO: pimple, might be renamed before tho
     QString m_name;
     QPixmap m_icon;
     QString m_filePath;
+    bool m_stopped;
     QHash< QString, ScriptJob* > m_jobs;
     QHash< QString, scriptobject_ptr > m_objects;
-    Utils::WeakObjectHash< ScriptCollection > m_collections;
+
+    ScriptCollectionFactory* m_collectionFactory; // port to QScopedPointer when pimple'd
 };
 
 } // ns: Tomahawk

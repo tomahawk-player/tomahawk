@@ -309,6 +309,8 @@ JSResolver::start()
         Tomahawk::Pipeline::instance()->addResolver( this );
     else
         init();
+
+    scriptAccount()->start();
 }
 
 

@@ -346,12 +346,16 @@ list(APPEND libSources
 
     resolvers/ExternalResolver.cpp
     resolvers/Resolver.cpp
-    resolvers/ScriptCollection.cpp
     resolvers/ScriptCommand_AllArtists.cpp
     resolvers/ScriptCommand_AllAlbums.cpp
     resolvers/ScriptCommand_AllTracks.cpp
     resolvers/ScriptCommand_LookupUrl.cpp
     resolvers/ScriptCommandQueue.cpp
+    resolvers/ScriptPluginFactory.cpp
+
+    # ScriptPlugins
+    resolvers/ScriptCollection.cpp
+    resolvers/plugins/ScriptCollectionFactory.cpp
 
     sip/SipPlugin.cpp
     sip/SipInfo.cpp

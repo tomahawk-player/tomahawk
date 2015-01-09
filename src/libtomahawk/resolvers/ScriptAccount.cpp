@@ -22,19 +22,18 @@
 #include "../utils/Logger.h"
 #include "../Typedefs.h"
 
+#include "plugins/ScriptCollectionFactory.h"
+
 // TODO: register factory methods instead of hardcoding all plugin types in here
 #include "../utils/LinkGenerator.h"
 #include "ScriptLinkGeneratorPlugin.h"
 #include "ScriptInfoPlugin.h"
-#include "SourceList.h"
-#include "ScriptCollection.h"
 
 // TODO:
 #include "../Result.h"
 #include "../Track.h"
 #include <QTime>
 
-#include <QFileInfo>
 
 using namespace Tomahawk;
 
@@ -42,17 +41,40 @@ using namespace Tomahawk;
 ScriptAccount::ScriptAccount( const QString& name )
     : QObject()
     , m_name( name )
+    , m_stopped( false )
+    , m_collectionFactory( new ScriptCollectionFactory() )
 {
+}
+
+
+ScriptAccount::~ScriptAccount()
+{
+    delete m_collectionFactory;
+}
+
+
+void
+ScriptAccount::start()
+{
+    m_stopped = false;
+
+    m_collectionFactory->addAllPlugins();
 }
 
 
 void
 ScriptAccount::stop()
 {
-    foreach( const QWeakPointer< ScriptCollection >& collection, m_collections.hash().values() )
-    {
-        unregisterScriptPlugin( "collection", collection.data()->scriptObject()->id() );
-    }
+    m_stopped = true;
+
+    m_collectionFactory->removeAllPlugins();
+}
+
+
+bool
+ScriptAccount::isStopped()
+{
+    return m_stopped;
 }
 
 
@@ -169,11 +191,7 @@ ScriptAccount::unregisterScriptPlugin( const QString& type, const QString& objec
 
     if ( type == "collection" )
     {
-        collection_ptr collection = scriptCollection( objectId );
-        if ( !collection.isNull() )
-        {
-            SourceList::instance()->removeScriptCollection( collection );
-        }
+        m_collectionFactory->unregisterPlugin( object );
     }
     else
     {
@@ -220,51 +238,7 @@ ScriptAccount::scriptPluginFactory( const QString& type, const scriptobject_ptr&
     }
     else if( type == "collection" )
     {
-        if ( !scriptCollection( object->id() ).isNull() )
-            return;
-
-        const QVariantMap collectionInfo =  object->syncInvoke( "collection" ).toMap();
-
-        if ( collectionInfo.isEmpty() ||
-             !collectionInfo.contains( "prettyname" ) ||
-             !collectionInfo.contains( "description" ) )
-            return;
-
-        const QString prettyname = collectionInfo.value( "prettyname" ).toString();
-        const QString desc = collectionInfo.value( "description" ).toString();
-
-        // at this point we assume that all the tracks browsable through a resolver belong to the local source
-        Tomahawk::ScriptCollection* sc = new Tomahawk::ScriptCollection( object, SourceList::instance()->getLocal(), this );
-        QSharedPointer<ScriptCollection> collection( sc );
-        collection->setWeakRef( collection.toWeakRef() );
-
-        sc->setServiceName( prettyname );
-        sc->setDescription( desc );
-
-        if ( collectionInfo.contains( "trackcount" ) ) //a resolver might not expose this
-        {
-            bool ok = false;
-            int trackCount = collectionInfo.value( "trackcount" ).toInt( &ok );
-            if ( ok )
-                sc->setTrackCount( trackCount );
-        }
-
-        if ( collectionInfo.contains( "iconfile" ) )
-        {
-            QString iconPath = QFileInfo( filePath() ).path() + "/"
-                               + collectionInfo.value( "iconfile" ).toString();
-
-            QPixmap iconPixmap;
-            bool ok = iconPixmap.load( iconPath );
-            if ( ok && !iconPixmap.isNull() )
-                sc->setIcon( iconPixmap );
-        }
-
-        SourceList::instance()->addScriptCollection( collection );
-
-        sc->fetchIcon( collectionInfo.value( "iconurl" ).toString() );
-
-        m_collections.insert( object->id(), collection );
+        m_collectionFactory->registerPlugin( object, this );
     }
     else
     {
@@ -366,5 +340,5 @@ ScriptAccount::parseResultVariantList( const QVariantList& reslist )
 const QSharedPointer< ScriptCollection >
 ScriptAccount::scriptCollection( const QString& id ) const
 {
-    return m_collections.hash().value( id );
+    return m_collectionFactory->scriptPlugins().value( id );
 }
