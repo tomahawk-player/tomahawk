@@ -96,7 +96,6 @@ public:
     virtual ErrorState error() const;
     virtual bool running() const = 0;
     virtual Capabilities capabilities() const = 0;
-    virtual QMap< QString, Tomahawk::collection_ptr > collections() { return m_collections; }
 
     // UrlLookup, sync call
     virtual bool canParseUrl( const QString& url, UrlType type ) = 0;
@@ -110,8 +109,6 @@ public slots:
 
 signals:
     void changed(); // if config widget was added/removed, name changed, etc
-    void collectionAdded( const Tomahawk::collection_ptr& collection );
-    void collectionRemoved( const Tomahawk::collection_ptr& collection );
 
     void artistsFound( const QList< Tomahawk::artist_ptr >& );
     void albumsFound( const QList< Tomahawk::album_ptr >& );
@@ -120,7 +117,6 @@ signals:
 
 protected:
     void setFilePath( const QString& path ) { m_filePath = path; }
-    QMap< QString, Tomahawk::collection_ptr > m_collections;
     ScriptCommandQueue* m_commandQueue;
 
     // Should only be called by ScriptCommands

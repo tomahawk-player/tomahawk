@@ -99,13 +99,11 @@ private:
 
     void loadUi();
     void onCapabilitiesChanged( Capabilities capabilities );
-    void loadCollections();
 
     // encapsulate javascript calls
     QVariantMap resolverSettings();
     QVariantMap resolverUserConfig();
     QVariantMap resolverInit();
-    QVariantMap resolverCollections();
 
     QList< Tomahawk::result_ptr > parseResultVariantList( const QVariantList& reslist );
     QList< Tomahawk::artist_ptr > parseArtistVariantList( const QVariantList& reslist );

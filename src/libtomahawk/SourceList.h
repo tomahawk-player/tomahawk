@@ -62,9 +62,6 @@ public slots:
     void createPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
     void createDynamicPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
 
-    void onResolverAdded( Tomahawk::Resolver* resolver );
-    void onResolverRemoved( Tomahawk::Resolver* resolver );
-
 signals:
     void ready();
 

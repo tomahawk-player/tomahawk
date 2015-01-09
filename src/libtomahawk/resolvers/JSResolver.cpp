@@ -323,7 +323,7 @@ JSResolver::artists( const Tomahawk::collection_ptr& collection )
 
     Q_D( const JSResolver );
 
-    if ( !m_collections.contains( collection->name() ) || //if the collection doesn't belong to this resolver
+    if ( /* !m_collections.contains( collection->name() ) || */ //if the collection doesn't belong to this resolver
          !d->capabilities.testFlag( Browsable ) )          //or this resolver doesn't even support collections
     {
         emit artistsFound( QList< Tomahawk::artist_ptr >() );
@@ -359,7 +359,7 @@ JSResolver::albums( const Tomahawk::collection_ptr& collection, const Tomahawk::
 
     Q_D( const JSResolver );
 
-    if ( !m_collections.contains( collection->name() ) || //if the collection doesn't belong to this resolver
+    if ( /* !m_collections.contains( collection->name() ) || */ //if the collection doesn't belong to this resolver
          !d->capabilities.testFlag( Browsable ) )          //or this resolver doesn't even support collections
     {
         emit albumsFound( QList< Tomahawk::album_ptr >() );
@@ -396,7 +396,7 @@ JSResolver::tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::
 
     Q_D( const JSResolver );
 
-    if ( !m_collections.contains( collection->name() ) || //if the collection doesn't belong to this resolver
+    if ( /* !m_collections.contains( collection->name() ) || */ //if the collection doesn't belong to this resolver
          !d->capabilities.testFlag( Browsable ) )          //or this resolver doesn't even support collections
     {
         emit tracksFound( QList< Tomahawk::query_ptr >() );
@@ -602,15 +602,6 @@ JSResolver::parseResultVariantList( const QVariantList& reslist )
         if ( !collectionId.isEmpty() )
         {
             Tomahawk::collection_ptr collection = Tomahawk::collection_ptr();
-            foreach ( const Tomahawk::collection_ptr& coll, collections() )
-            {
-                Tomahawk::ScriptCollection* scriptCollection = qobject_cast<Tomahawk::ScriptCollection*>( coll.data() );
-                Q_ASSERT( scriptCollection );
-                if ( scriptCollection->id() == collectionId )
-                {
-                    collection = coll;
-                }
-            }
             if ( !collection.isNull() )
             {
                 rp->setResolvedByCollection( collection );
@@ -671,10 +662,6 @@ JSResolver::stop()
 
     d->stopped = true;
 
-    foreach ( const Tomahawk::collection_ptr& collection, m_collections )
-    {
-        emit collectionRemoved( collection );
-    }
 
     Tomahawk::Pipeline::instance()->removeResolver( this );
     emit stopped();
@@ -757,84 +744,6 @@ JSResolver::onCapabilitiesChanged( Tomahawk::ExternalResolver::Capabilities capa
     Q_D( JSResolver );
 
     d->capabilities = capabilities;
-    loadCollections();
-}
-
-
-void
-JSResolver::loadCollections()
-{
-    Q_D( JSResolver );
-
-    if ( d->capabilities.testFlag( Browsable ) )
-    {
-
-        foreach ( Tomahawk::collection_ptr collection, m_collections )
-        {
-            emit collectionRemoved( collection );
-        }
-
-        const QVariantMap collectionInfo =  callOnResolver( "collection()" ).toMap();
-        if ( collectionInfo.isEmpty() ||
-             !collectionInfo.contains( "prettyname" ) ||
-             !collectionInfo.contains( "description" ) )
-            return;
-
-        const QString prettyname = collectionInfo.value( "prettyname" ).toString();
-        const QString desc = collectionInfo.value( "description" ).toString();
-
-        m_collections.clear();
-        // at this point we assume that all the tracks browsable through a resolver belong to the local source
-        Tomahawk::ScriptCollection* sc = new Tomahawk::ScriptCollection( collectionInfo[ "id" ].toString(), SourceList::instance()->getLocal(), this );
-        Tomahawk::collection_ptr collection( sc );
-        collection->setWeakRef( collection.toWeakRef() );
-
-        sc->setServiceName( prettyname );
-        sc->setDescription( desc );
-
-        if ( collectionInfo.contains( "trackcount" ) ) //a resolver might not expose this
-        {
-            bool ok = false;
-            int trackCount = collectionInfo.value( "trackcount" ).toInt( &ok );
-            if ( ok )
-                sc->setTrackCount( trackCount );
-        }
-
-        if ( collectionInfo.contains( "iconfile" ) )
-        {
-            QString iconPath = QFileInfo( filePath() ).path() + "/"
-                               + collectionInfo.value( "iconfile" ).toString();
-
-            QPixmap iconPixmap;
-            bool ok = iconPixmap.load( iconPath );
-            if ( ok && !iconPixmap.isNull() )
-                sc->setIcon( iconPixmap );
-        }
-
-        m_collections.insert( collection->name(), collection );
-        emit collectionAdded( collection );
-
-        if ( collectionInfo.contains( "iconurl" ) )
-        {
-            QString iconUrlString = collectionInfo.value( "iconurl" ).toString();
-            if ( !iconUrlString.isEmpty() )
-            {
-                QUrl iconUrl = QUrl::fromEncoded( iconUrlString.toLatin1() );
-                if ( iconUrl.isValid() )
-                {
-                    QNetworkRequest req( iconUrl );
-                    tDebug() << "Creating a QNetworkReply with url:" << req.url().toString();
-                    QNetworkReply* reply = Tomahawk::Utils::nam()->get( req );
-                    reply->setProperty( "collectionName", collection->name() );
-
-                    connect( reply, SIGNAL( finished() ),
-                             this, SLOT( onCollectionIconFetched() ) );
-                }
-            }
-        }
-
-        //TODO: implement multiple collections from a resolver
-    }
 }
 
 
@@ -845,7 +754,7 @@ JSResolver::onCollectionIconFetched()
     if ( reply != 0 )
     {
         Tomahawk::collection_ptr collection;
-        collection = m_collections.value( reply->property( "collectionName" ).toString() );
+        /* collection = m_collections.value( reply->property( "collectionName" ).toString() ); */
         if ( !collection.isNull() )
         {
             if ( reply->error() == QNetworkReply::NoError )
@@ -880,17 +789,6 @@ QVariantMap
 JSResolver::resolverInit()
 {
     return callOnResolver( "init()" ).toMap();
-}
-
-
-QVariantMap
-JSResolver::resolverCollections()
-{
-    return QVariantMap(); //TODO: add a way to distinguish collections
-    // the resolver should provide a unique ID string for each collection, and then be queriable
-    // against this ID. doesn't matter what kind of ID string as long as it's unique.
-    // Then when there's callbacks from a resolver, it sends source name, collection id
-    // + data.
 }
 
 

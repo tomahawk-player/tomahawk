@@ -273,43 +273,6 @@ SourceList::latchedOff( const source_ptr& to )
 
 
 void
-SourceList::onResolverAdded( Resolver* resolver )
-{
-    ExternalResolver* r = qobject_cast< ExternalResolver* >( resolver );
-    if ( r == 0 )
-        return;
-
-    foreach ( const Tomahawk::collection_ptr& collection, r->collections() )
-    {
-        addScriptCollection( collection );
-    }
-
-    connect( r, SIGNAL( collectionAdded( Tomahawk::collection_ptr ) ),
-             this, SLOT( addScriptCollection( Tomahawk::collection_ptr ) ) );
-    connect( r, SIGNAL( collectionRemoved(Tomahawk::collection_ptr) ),
-             this, SLOT( removeScriptCollection( Tomahawk::collection_ptr ) ) );
-}
-
-
-void
-SourceList::onResolverRemoved( Resolver* resolver )
-{
-    ExternalResolver* r = qobject_cast< ExternalResolver* >( resolver );
-    if ( r == 0 )
-        return;
-
-    foreach ( const Tomahawk::collection_ptr& collection, m_scriptCollections )
-        if ( qobject_cast< ScriptCollection* >( collection.data() )->resolver() == r )
-            removeScriptCollection( collection );
-
-    disconnect( r, SIGNAL( collectionAdded( Tomahawk::collection_ptr ) ),
-                this, SLOT( addScriptCollection( Tomahawk::collection_ptr ) ) );
-    disconnect( r, SIGNAL( collectionRemoved(Tomahawk::collection_ptr) ),
-                this, SLOT( removeScriptCollection( Tomahawk::collection_ptr ) ) );
-}
-
-
-void
 SourceList::addScriptCollection( const collection_ptr& collection )
 {
     m_scriptCollections.append( collection );

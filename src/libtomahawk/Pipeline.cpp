@@ -61,11 +61,6 @@ Pipeline::Pipeline( QObject* parent )
 
     d->temporaryQueryTimer.setInterval( CLEANUP_TIMEOUT );
     connect( &d->temporaryQueryTimer, SIGNAL( timeout() ), SLOT( onTemporaryQueryTimer() ) );
-
-    connect( this, SIGNAL( resolverAdded( Tomahawk::Resolver* ) ),
-             SourceList::instance(), SLOT( onResolverAdded( Tomahawk::Resolver* ) ) );
-    connect( this, SIGNAL( resolverRemoved( Tomahawk::Resolver* ) ),
-             SourceList::instance(), SLOT( onResolverRemoved( Tomahawk::Resolver* ) ) );
 }
 
 

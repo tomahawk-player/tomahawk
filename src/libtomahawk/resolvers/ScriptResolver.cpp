@@ -580,11 +580,5 @@ ScriptResolver::stop()
 {
     m_stopped = true;
 
-    foreach ( const Tomahawk::collection_ptr& collection, m_collections )
-    {
-        emit collectionRemoved( collection );
-    }
-    m_collections.clear();
-
     Tomahawk::Pipeline::instance()->removeResolver( this );
 }

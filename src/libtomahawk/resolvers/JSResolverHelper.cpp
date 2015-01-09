@@ -151,13 +151,6 @@ JSResolverHelper::addArtistResults( const QVariantMap& results )
     QString qid = results.value("qid").toString();
 
     Tomahawk::collection_ptr collection = Tomahawk::collection_ptr();
-    foreach ( const Tomahawk::collection_ptr& coll, m_resolver->collections() )
-    {
-        if ( coll->name() == qid )
-        {
-            collection = coll;
-        }
-    }
     if ( collection.isNull() )
         return;
 
@@ -182,13 +175,6 @@ JSResolverHelper::addAlbumResults( const QVariantMap& results )
     QString qid = results.value("qid").toString();
 
     Tomahawk::collection_ptr collection = Tomahawk::collection_ptr();
-    foreach ( const Tomahawk::collection_ptr& coll, m_resolver->collections() )
-    {
-        if ( coll->name() == qid )
-        {
-            collection = coll;
-        }
-    }
     if ( collection.isNull() )
         return;
 
@@ -219,13 +205,6 @@ JSResolverHelper::addAlbumTrackResults( const QVariantMap& results )
     QString qid = results.value("qid").toString();
 
     Tomahawk::collection_ptr collection = Tomahawk::collection_ptr();
-    foreach ( const Tomahawk::collection_ptr& coll, m_resolver->collections() )
-    {
-        if ( coll->name() == qid )
-        {
-            collection = coll;
-        }
-    }
     if ( collection.isNull() )
         return;
 
