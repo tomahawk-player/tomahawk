@@ -63,9 +63,9 @@ You can download one of our nightly or stable builds:
 
 ### Detailed Build Instructions
 
-| Linux: | [Arch](http://wiki.tomahawk-player.org/index.php/Building_ArchLinux_package) **-** [Debian](http://wiki.tomahawk-player.org/index.php/Building_on_Debian)  **-** [Fedora](http://wiki.tomahawk-player.org/index.php/Building_on_Fedora)  **-** [openSUSE](http://wiki.tomahawk-player.org/index.php/Building_on_openSUSE)  **-** [Ubuntu](http://wiki.tomahawk-player.org/index.php/Building_on_Ubuntu)
-|-:|
-| **Windows**: |[**Windows**](http://wiki.tomahawk-player.org/index.php/Building_Windows_Binary)
+| Linux: | [Arch](http://wiki.tomahawk-player.org/index.php/Building_ArchLinux_package) **-** [Debian](http://wiki.tomahawk-player.org/index.php/Building_on_Debian) **-** [Fedora](http://wiki.tomahawk-player.org/index.php/Building_on_Fedora)  **-** [openSUSE](http://wiki.tomahawk-player.org/index.php/Building_on_openSUSE)  **-** [Ubuntu](http://wiki.tomahawk-player.org/index.php/Building_on_Ubuntu) |
+|-:|:-|
+| **Windows**: | [**Windows**](http://wiki.tomahawk-player.org/index.php/Building_Windows_Binary) |
 | **Mac**: | [**OS X**](http://wiki.tomahawk-player.org/index.php/Building_OS_X_Application_Bundle) |
 
 ### Dependencies
