@@ -203,7 +203,6 @@ public:
     QPointer< QThread > workerThread() const;
 
 public slots:
-    // InfoSystem takes ownership of InfoPlugins
     void addInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin );
     void removeInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin );
 

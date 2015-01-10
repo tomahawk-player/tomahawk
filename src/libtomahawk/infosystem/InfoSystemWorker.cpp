@@ -184,7 +184,6 @@ InfoSystemWorker::removeInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
 
     m_plugins.removeOne( plugin );
     deregisterInfoTypes( plugin, plugin.data()->supportedGetTypes(), plugin.data()->supportedPushTypes() );
-    delete plugin.data();
 }
 
 

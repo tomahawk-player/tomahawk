@@ -80,7 +80,10 @@ LastFmAccount::LastFmAccount( const QString& accountId )
 LastFmAccount::~LastFmAccount()
 {
     if ( m_infoPlugin )
+    {
         Tomahawk::InfoSystem::InfoSystem::instance()->removeInfoPlugin( infoPlugin() );
+        delete m_infoPlugin;
+    }
 
     delete m_resolver.data();
 }

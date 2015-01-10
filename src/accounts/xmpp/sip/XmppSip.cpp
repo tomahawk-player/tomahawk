@@ -357,7 +357,10 @@ XmppSipPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
     removeMenuHelper();
 
     if ( !m_infoPlugin.isNull() )
+    {
         Tomahawk::InfoSystem::InfoSystem::instance()->removeInfoPlugin( infoPlugin() );
+        delete m_infoPlugin;
+    }
 }
 
 
