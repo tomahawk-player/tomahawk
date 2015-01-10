@@ -59,6 +59,8 @@ public:
         {
             removePlugin( scriptPlugin );
         }
+
+        m_scriptPlugins.remove( object->id() );
     }
 
 
