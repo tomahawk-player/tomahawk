@@ -30,6 +30,8 @@
 
 #include <QImageReader>
 #include <QPainter>
+#include <QFileInfo>
+
 
 using namespace Tomahawk;
 
@@ -180,6 +182,53 @@ int
 ScriptCollection::trackCount() const
 {
     return m_trackCount;
+}
+
+
+const QVariantMap
+ScriptCollection::readMetaData()
+{
+    return scriptObject()->syncInvoke( "collection" ).toMap();
+}
+
+
+void ScriptCollection::parseMetaData()
+{
+    return parseMetaData( readMetaData() );
+}
+
+
+void
+ScriptCollection::parseMetaData( const QVariantMap& metadata )
+{
+    tLog() << Q_FUNC_INFO;
+
+    const QString prettyname = metadata.value( "prettyname" ).toString();
+    const QString desc = metadata.value( "description" ).toString();
+
+    setServiceName( prettyname );
+    setDescription( desc );
+
+    if ( metadata.contains( "trackcount" ) ) //a resolver might not expose this
+    {
+        bool ok = false;
+        int trackCount = metadata.value( "trackcount" ).toInt( &ok );
+        if ( ok )
+            setTrackCount( trackCount );
+    }
+
+    if ( metadata.contains( "iconfile" ) )
+    {
+        QString iconPath = QFileInfo( scriptAccount()->filePath() ).path() + "/"
+                            + metadata.value( "iconfile" ).toString();
+
+        QPixmap iconPixmap;
+        bool ok = iconPixmap.load( iconPath );
+        if ( ok && !iconPixmap.isNull() )
+            setIcon( iconPixmap );
+
+        fetchIcon( metadata.value( "iconurl" ).toString() );
+    }
 }
 
 

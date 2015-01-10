@@ -20,12 +20,13 @@
 #include "SourceList.h"
 #include "../ScriptAccount.h"
 
-#include <QFileInfo>
-
 using namespace Tomahawk;
 
 void ScriptCollectionFactory::addPlugin( const QSharedPointer<ScriptCollection>& collection ) const
 {
+    // FIXME: no need for the same javascript call, already done in createPlugin
+    collection->parseMetaData();
+
     SourceList::instance()->addScriptCollection( collection );
 }
 
@@ -43,38 +44,12 @@ const QSharedPointer< ScriptCollection > ScriptCollectionFactory::createPlugin( 
             !collectionInfo.contains( "description" ) )
         return QSharedPointer< ScriptCollection >();
 
-    const QString prettyname = collectionInfo.value( "prettyname" ).toString();
-    const QString desc = collectionInfo.value( "description" ).toString();
-
     // at this point we assume that all the tracks browsable through a resolver belong to the local source
     Tomahawk::ScriptCollection* sc = new Tomahawk::ScriptCollection( object, SourceList::instance()->getLocal(), scriptAccount );
     QSharedPointer<ScriptCollection> collection( sc );
     collection->setWeakRef( collection.toWeakRef() );
 
-
-    sc->setServiceName( prettyname );
-    sc->setDescription( desc );
-
-    if ( collectionInfo.contains( "trackcount" ) ) //a resolver might not expose this
-    {
-        bool ok = false;
-        int trackCount = collectionInfo.value( "trackcount" ).toInt( &ok );
-        if ( ok )
-            sc->setTrackCount( trackCount );
-    }
-
-    if ( collectionInfo.contains( "iconfile" ) )
-    {
-        QString iconPath = QFileInfo( scriptAccount->filePath() ).path() + "/"
-                            + collectionInfo.value( "iconfile" ).toString();
-
-        QPixmap iconPixmap;
-        bool ok = iconPixmap.load( iconPath );
-        if ( ok && !iconPixmap.isNull() )
-            sc->setIcon( iconPixmap );
-    }
-
-    sc->fetchIcon( collectionInfo.value( "iconurl" ).toString() );
+    collection->parseMetaData( collectionInfo );
 
     return collection;
 }

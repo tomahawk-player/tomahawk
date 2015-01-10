@@ -85,6 +85,10 @@ public:
     void setTrackCount( int count );
     int trackCount() const override;
 
+    const QVariantMap readMetaData();
+    void parseMetaData();
+    void parseMetaData( const QVariantMap& metadata );
+
 private slots:
     void onIconFetched();
 
