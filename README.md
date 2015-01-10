@@ -1,14 +1,13 @@
-# TOMAHAWK
+# WHAT TOMAHAWK IS
 
-## WHAT TOMAHAWK IS
-
-Tomahawk is a free multi-source and cross-platform music player. An application that can play not only your local files, but also stream from services like Spotify, Beats, SoundCloud, Google Music, YouTube and many others. You can even connect with your friends' Tomahawks, share your musical gems or listen along to them. Let the music play!
+Tomahawk is a free multi-source and cross-platform music player. An application that can play not only your local files, but also stream from services like Spotify, Beats, SoundCloud, Google Music, YouTube and many others. You can even connect with your friends' Tomahawks, share your musical gems or listen along with them. Let the music play!
 
 ![Tomahawk Screenshot](/data/screenshots/tomahawk-screenshot.png?raw=true)
 
 ## HOW TOMAHAWK WORKS
 
-Tomahawk is basically a **music metadata player**.  At its core it decouples the metadata about a song from the source and reassembles it for each user based on their individual music accessibility and rights. In short, given the name of a song and artist Tomahawk will find the right source, for the right user at the right time.  This fundamentally different approach to music enables a range of new music consumption and sharing experiences previously not possible. 
+Tomahawk is basically a **player for music metadata**.  At its core it decouples the metadata about a song from the source and reassembles it for each user based on their individual music accessibility and rights.  
+In short, given the name of a song and artist, Tomahawk will find the right source, for the right user at the right time.  This fundamentally different approach to music enables a range of new music consumption and sharing experiences previously not possible.
 
 ## MUSIC SOURCES
 
@@ -51,7 +50,7 @@ You can download one of our nightly or stable builds:
 
 | *BUILD* | MAC / OSX | WINDOWS | LINUX |
 |:-------:|:---------:|:-------:|:-----:|
-|**NIGHTLY** | [**latest**](http://download.tomahawk-player.org/nightly/mac/Tomahawk-latest.dmg) | [**latest**](http://download.tomahawk-player.org/nightly/windows/tomahawk-latest.exe) | [**latest**] (https://launchpad.net/~tomahawk/+archive/ubuntu/nightly) (Ubuntu) |
+|**NIGHTLY** | [**latest**](http://download.tomahawk-player.org/nightly/mac/Tomahawk-latest.dmg) | [**latest**](http://download.tomahawk-player.org/nightly/windows/tomahawk-latest.exe) | [**latest**](https://launchpad.net/~tomahawk/+archive/ubuntu/nightly) (Ubuntu) |
 |**STABLE** | [**0.8**](http://download.tomahawk-player.org/Tomahawk-0.8.0.dmg) | [**0.8**](http://download.tomahawk-player.org/tomahawk-0.8.0.exe) | [**0.8**](http://www.tomahawk-player.org/#page-about) (various distros) |
 
 ## BUILD TOMAHAWK
@@ -64,21 +63,10 @@ You can download one of our nightly or stable builds:
 
 ### Detailed Build Instructions
 
-**LINUX**
-
-* [Arch](http://wiki.tomahawk-player.org/index.php/Building_ArchLinux_package)
-* [Debian](http://wiki.tomahawk-player.org/index.php/Building_on_Debian)
-* [Fedora](http://wiki.tomahawk-player.org/index.php/Building_on_Fedora)
-* [openSUSE](http://wiki.tomahawk-player.org/index.php/Building_on_openSUSE)
-* [Ubuntu](http://wiki.tomahawk-player.org/index.php/Building_on_Ubuntu)
-
-**MAC**
-
-* [OS X](http://wiki.tomahawk-player.org/index.php/Building_OS_X_Application_Bundle)
-
-**WINDOWS**
-
-* [Windows](http://wiki.tomahawk-player.org/index.php/Building_Windows_Binary)
+| Linux: | [Arch](http://wiki.tomahawk-player.org/index.php/Building_ArchLinux_package) **-** [Debian](http://wiki.tomahawk-player.org/index.php/Building_on_Debian) **-** [Fedora](http://wiki.tomahawk-player.org/index.php/Building_on_Fedora) **-** [openSUSE](http://wiki.tomahawk-player.org/index.php/Building_on_openSUSE) **-** [Ubuntu](http://wiki.tomahawk-player.org/index.php/Building_on_Ubuntu) |
+|------:|:------|
+| **Windows**: | [**Windows**](http://wiki.tomahawk-player.org/index.php/Building_Windows_Binary) |
+| **Mac**: | [**OS X**](http://wiki.tomahawk-player.org/index.php/Building_OS_X_Application_Bundle) |
 
 ### Dependencies
 
@@ -110,23 +98,23 @@ Third party libraries that we ship with our source:
 * [MiniUPnP 1.6](http://miniupnp.free.fr/)
 * [Qocoa](https://github.com/mikemcquaid/Qocoa/)
 * [libqnetwm](https://code.google.com/p/libqnetwm/)
-* [libqxt](http://libqxt.org/) (QxtWeb module) 
+* [libqxt](http://libqxt.org/) (QxtWeb module)
 * [SPMediaKeyTap](https://github.com/nevyn/SPMediaKeyTap/)
 * [kdSingleApplicationGuard](http://www.kdab.com/)
 
 ## SUPPORT TOMAHAWK
 
-* [Bug Tracker & Issues](https://bugs.tomahawk-player.org/secure/Dashboard.jspa)
+* [Bug / Issue Tracker](https://bugs.tomahawk-player.org/secure/Dashboard.jspa)
 * [Translations](https://www.transifex.com/projects/p/tomahawk/)
-* [Donate](https://flattr.com/thing/169312/Tomahawk)
+* [Donations](https://flattr.com/thing/169312/Tomahawk)
 
 ## GET HELP
 
 * [Support & Feedback](https://tomahawk.uservoice.com)
-* Chat with Us (IRC): #tomahawk (on Freenode)
+* Chat with us in IRC: **#tomahawk** on Freenode, and [Scrollback.io](https://scrollback.io/tomahawk)
 * [Twitter](https://twitter.com/tomahawk)
 * [Facebook](https://facebook.com/tomahawkplayer)
-* [Developer API documentation](http://dev.tomahawk-player.org/api/classes.html)
+* [Developer API Documentation](http://dev.tomahawk-player.org/api/classes.html)
 
 ## SCREENSHOTS
 
@@ -154,4 +142,4 @@ PLUG-INS / RESOLVER SETTINGS
 
 ![Settings](https://dchtm6r471mui.cloudfront.net/hackpad.com_ZRZMJDdxrVe_p.242147_1410998587408_prefs.jpg)
 
-**Enjoy!**
+##Enjoy!
