@@ -23,6 +23,7 @@
 #include "../Typedefs.h"
 
 #include "plugins/ScriptCollectionFactory.h"
+#include "plugins/ScriptInfoPluginFactory.h"
 
 // TODO: register factory methods instead of hardcoding all plugin types in here
 #include "../utils/LinkGenerator.h"
@@ -43,6 +44,7 @@ ScriptAccount::ScriptAccount( const QString& name )
     , m_name( name )
     , m_stopped( false )
     , m_collectionFactory( new ScriptCollectionFactory() )
+    , m_infoPluginFactory( new ScriptInfoPluginFactory() )
 {
 }
 
@@ -50,6 +52,7 @@ ScriptAccount::ScriptAccount( const QString& name )
 ScriptAccount::~ScriptAccount()
 {
     delete m_collectionFactory;
+    delete m_infoPluginFactory;
 }
 
 
@@ -193,6 +196,10 @@ ScriptAccount::unregisterScriptPlugin( const QString& type, const QString& objec
     {
         m_collectionFactory->unregisterPlugin( object );
     }
+    else if ( type == "infoPlugin" )
+    {
+        m_infoPluginFactory->unregisterPlugin( object );
+    }
     else
     {
         tLog() << "This plugin type is not handled by Tomahawk or simply cannot be removed yet";
@@ -226,15 +233,7 @@ ScriptAccount::scriptPluginFactory( const QString& type, const scriptobject_ptr&
     }
     else if ( type == "infoPlugin" )
     {
-        // create infoplugin instance
-        ScriptInfoPlugin* scriptInfoPlugin = new ScriptInfoPlugin( object, m_name );
-        Tomahawk::InfoSystem::InfoPluginPtr infoPlugin( scriptInfoPlugin );
-
-        // move it to infosystem thread
-        infoPlugin->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
-
-        // add it to infosystem
-        Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin );
+        m_infoPluginFactory->registerPlugin( object, this );
     }
     else if( type == "collection" )
     {

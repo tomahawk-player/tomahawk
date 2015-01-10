@@ -39,6 +39,7 @@ namespace Tomahawk {
 class ScriptObject;
 class ScriptJob;
 class ScriptCollectionFactory;
+class ScriptInfoPluginFactory;
 
 class DLLEXPORT ScriptAccount : public QObject
 {
@@ -89,7 +90,9 @@ private: // TODO: pimple, might be renamed before tho
     QHash< QString, ScriptJob* > m_jobs;
     QHash< QString, scriptobject_ptr > m_objects;
 
-    ScriptCollectionFactory* m_collectionFactory; // port to QScopedPointer when pimple'd
+    // port to QScopedPointer when pimple'd
+    ScriptCollectionFactory* m_collectionFactory;
+    ScriptInfoPluginFactory* m_infoPluginFactory;
 };
 
 } // ns: Tomahawk

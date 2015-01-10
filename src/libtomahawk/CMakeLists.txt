@@ -84,7 +84,6 @@ set( libGuiSources
 
     resolvers/ExternalResolverGui.cpp
     resolvers/ScriptResolver.cpp
-    resolvers/ScriptInfoPlugin.cpp
     resolvers/JSResolver.cpp
     resolvers/JSResolverHelper.cpp
     resolvers/ScriptEngine.cpp
@@ -356,6 +355,9 @@ list(APPEND libSources
     # ScriptPlugins
     resolvers/ScriptCollection.cpp
     resolvers/plugins/ScriptCollectionFactory.cpp
+    resolvers/ScriptInfoPlugin.cpp
+    resolvers/plugins/ScriptInfoPluginFactory.cpp
+
 
     sip/SipPlugin.cpp
     sip/SipInfo.cpp
