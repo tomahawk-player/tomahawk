@@ -308,7 +308,7 @@ JSResolverHelper::addUrlResult( const QString& url, const QVariantMap& result )
 
 
 void
-JSResolverHelper::reportCapabilities( const QVariant& v )
+JSResolverHelper::nativeReportCapabilities( const QVariant& v )
 {
     bool ok;
     int intCap = v.toInt( &ok );

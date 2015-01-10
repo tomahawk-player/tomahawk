@@ -145,7 +145,7 @@ public slots:
 
     void addUrlResult( const QString& url, const QVariantMap& result );
 
-    void reportCapabilities( const QVariant& capabilities );
+    void nativeReportCapabilities( const QVariant& capabilities );
 
     void reportScriptJobResults( const QVariantMap& result );
 

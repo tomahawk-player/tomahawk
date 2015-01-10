@@ -622,9 +622,11 @@ Tomahawk.PluginManager = {
         Tomahawk.unregisterScriptPlugin(type, object.id);
     },
 
-    invokeSync: function (objectId, methodName, params) {
+    resolve: [],
+    invokeSync: function (requestId, objectId, methodName, params) {
+        var pluginManager = this;
         if (!this.objects[objectId]) {
-            Tomahawk.log("Object not found!");
+            Tomahawk.log("Object not found! objectId: " + objectId + " methodName: " + methodName);
         } else {
             if (!this.objects[objectId][methodName]) {
                 Tomahawk.log("Function not found: " + methodName);
@@ -632,6 +634,25 @@ Tomahawk.PluginManager = {
         }
 
         if (typeof this.objects[objectId][methodName] === 'function') {
+            if (!Tomahawk.resolver.instance.apiVersion || Tomahawk.resolver.instance.apiVersion < 0.9) {
+                if (methodName == 'artists') {
+                    return new Promise(function (resolve, reject) {
+                        pluginManager.resolve[requestId] = resolve;
+                        Tomahawk.resolver.instance.artists(requestId);
+                    });
+                } else if (methodName == 'albums') {
+                    return new Promise(function (resolve, reject) {
+                        pluginManager.resolve[requestId] = resolve;
+                        Tomahawk.resolver.instance.albums(requestId, params.artist);
+                    });
+                } else if (methodName == 'tracks') {
+                    return new Promise(function (resolve, reject) {
+                        pluginManager.resolve[requestId] = resolve;
+                        Tomahawk.resolver.instance.tracks(requestId, params.artist, params.album);
+                    });
+                }
+            }
+
             return this.objects[objectId][methodName](params);
         }
 
@@ -639,7 +660,7 @@ Tomahawk.PluginManager = {
     },
 
     invoke: function (requestId, objectId, methodName, params ) {
-        Promise.resolve(this.invokeSync(objectId, methodName, params)).then(function (result) {
+        Promise.resolve(this.invokeSync(requestId, objectId, methodName, params)).then(function (result) {
             if (typeof result === 'object') {
                 Tomahawk.reportScriptJobResults({
                     requestId: requestId,
@@ -670,4 +691,18 @@ Tomahawk.ConfigTestResultType = {
     InvalidAccount: 5,
     PlayingElsewhere: 6,
     AccountExpired: 7
+};
+
+
+// Legacy compability for 0.8 and before
+Tomahawk.reportCapabilities = function (capabilities) {
+    if (capabilities & TomahawkResolverCapability.Browsable) {
+        Tomahawk.PluginManager.registerPlugin("collection", Tomahawk.resolver.instance);
+    }
+
+    Tomahawk.nativeReportCapabilities(capabilities);
+};
+
+Tomahawk.addArtistResults = Tomahawk.addAlbumResults = Tomahawk.addAlbumTrackResults = function (result) {
+    Tomahawk.PluginManager.resolve[result.qid](result);
 };

@@ -155,6 +155,7 @@ JSAccount::syncInvoke( const scriptobject_ptr& scriptObject, const QString& meth
 {
     QString eval = QString(
         "Tomahawk.PluginManager.invokeSync("
+        "0, " // requestId
         "'%1'," // objectId
         "'%2'," // methodName
         "%3"    // arguments
