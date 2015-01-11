@@ -176,7 +176,6 @@ ScriptInfoPlugin::parseSupportedTypes( const QVariant& variant )
         {
             results.insert( static_cast< Tomahawk::InfoSystem::InfoType >( intType ) );
         }
-        tLog() << type << intType;
     }
 
     return results;

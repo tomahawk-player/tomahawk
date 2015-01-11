@@ -345,7 +345,6 @@ CollectionViewPage::restoreViewMode()
     CollectionViewPageMode mode = (CollectionViewPageMode) modeNumber;
     if ( mode == CollectionViewPage::Columns && !m_collection->browseCapabilities().contains( Collection::CapabilityBrowseArtists ) )
     {
-        tLog() << Q_FUNC_INFO << 0;
         if ( m_collection->browseCapabilities().contains( Collection::CapabilityBrowseAlbums ) )
             setCurrentMode( CollectionViewPage::Albums );
         else if ( m_collection->browseCapabilities().contains( Collection::CapabilityBrowseTracks ) )
@@ -353,14 +352,12 @@ CollectionViewPage::restoreViewMode()
     }
     else if ( mode == CollectionViewPage::Albums && !m_collection->browseCapabilities().contains( Collection::CapabilityBrowseAlbums ) )
     {
-        tLog() << Q_FUNC_INFO << 1;
         if ( m_collection->browseCapabilities().contains( Collection::CapabilityBrowseTracks ) )
             setCurrentMode( CollectionViewPage::Flat );
         else
             setCurrentMode( CollectionViewPage::Columns );
     } else if ( mode == CollectionViewPage::Flat && !m_collection->browseCapabilities().contains( Collection::CapabilityBrowseTracks ) )
     {
-        tLog() << Q_FUNC_INFO << 2;
         if ( m_collection->browseCapabilities().contains( Collection::CapabilityBrowseArtists ) )
             setCurrentMode( CollectionViewPage::Columns );
         else if ( m_collection->browseCapabilities().contains( Collection::CapabilityBrowseAlbums ) )

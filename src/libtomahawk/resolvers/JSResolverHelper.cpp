@@ -137,17 +137,14 @@ JSResolverHelper::log( const QString& message )
 void
 JSResolverHelper::addTrackResults( const QVariantMap& results )
 {
-    tLog() << "Resolver reporting results:" << m_resolver->name() << results;
-
     Q_ASSERT( results["results"].toMap().isEmpty() );
 
     QList< Tomahawk::result_ptr > tracks = m_resolver->scriptAccount()->parseResultVariantList( results.value("results").toList() );
 
     foreach( const result_ptr& track, tracks )
     {
-        tLog() << "Found result: " << track->track()->track() << "by" << track->track()->artist();
         track->setResolvedByResolver( m_resolver );
-        track->setFriendlySource( "FOOBAR" );
+        track->setFriendlySource( m_resolver->name() );
     }
 
     QString qid = results.value("qid").toString();

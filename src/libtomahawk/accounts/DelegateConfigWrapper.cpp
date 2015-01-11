@@ -36,7 +36,7 @@ DelegateConfigWrapper::DelegateConfigWrapper( Tomahawk::Accounts::Account* accou
     , m_errorLabel( new QLabel( this ) )
     , m_deleted( false )
 {
-    setWindowTitle(  tr("%1 Config" ).arg( account->accountFriendlyName() ) );
+    setWindowTitle(  tr("%1 Config", "Window title for account config windows" ).arg( account->accountFriendlyName() ) );
     QVBoxLayout* v = new QVBoxLayout( this );
     v->setContentsMargins( 0, 0, 0, 0 );
     v->addWidget( m_widget );
@@ -124,7 +124,7 @@ DelegateConfigWrapper::closed( QAbstractButton* b )
             return;
         }
 
-        m_errorLabel->setText( "" );
+        m_errorLabel->setText( QString() );
         m_account->testConfig();
     }
     else if ( b == m_deleteButton )
@@ -158,7 +158,7 @@ DelegateConfigWrapper::updateSizeHint()
 }
 
 
-void DelegateConfigWrapper::showEvent(QShowEvent* event)
+void DelegateConfigWrapper::showEvent( QShowEvent* event )
 {
     // TODO: would be cool to load the data only on show event instead of on widget creation
     m_initialData = m_widget->readData();

@@ -227,7 +227,6 @@ ScriptAccount::scriptPluginFactory( const QString& type, const scriptobject_ptr&
 {
     if ( type == "linkGenerator" )
     {
-        tLog() << "Got link generator plugin";
         ScriptLinkGeneratorPlugin* lgp = new ScriptLinkGeneratorPlugin( object );
         Utils::LinkGenerator::instance()->addPlugin( lgp );
     }

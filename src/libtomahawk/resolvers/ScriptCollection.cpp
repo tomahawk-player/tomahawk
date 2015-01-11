@@ -240,7 +240,6 @@ ScriptCollection::parseMetaData( const QVariantMap& metadata )
             int intType = type.toInt( &ok );
             if ( ok )
             {
-                tLog() << intType;
                 m_browseCapabilities << static_cast< BrowseCapability >( intType );
             }
         }
