@@ -52,7 +52,7 @@ private slots:
     void onAlbumsJobDone( const QVariantMap& result );
 
 private:
-    static QList< Tomahawk::album_ptr > parseAlbumVariantList(  const Tomahawk::artist_ptr& artist,
+    static QList< Tomahawk::album_ptr > parseAlbumVariantList(  const QList< Tomahawk::artist_ptr >& artists,
                                                           const QVariantList& reslist );
     Tomahawk::collection_ptr m_collection;
     Tomahawk::artist_ptr m_artist;

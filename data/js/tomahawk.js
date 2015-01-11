@@ -624,6 +624,14 @@ Tomahawk.PluginManager = {
 
     resolve: [],
     invokeSync: function (requestId, objectId, methodName, params) {
+        if (!Tomahawk.resolver.instance.apiVersion || Tomahawk.resolver.instance.apiVersion < 0.9) {
+            if (methodName === 'artistAlbums') {
+                methodName = 'albums';
+            } else if ( methodName === 'albumTracks' ) {
+                methodName = 'tracks';
+            }
+        }
+
         var pluginManager = this;
         if (!this.objects[objectId]) {
             Tomahawk.log("Object not found! objectId: " + objectId + " methodName: " + methodName);
@@ -691,6 +699,15 @@ Tomahawk.ConfigTestResultType = {
     InvalidAccount: 5,
     PlayingElsewhere: 6,
     AccountExpired: 7
+};
+
+
+Tomahawk.Collection = {
+    BrowseCapability: {
+        Artists: 1,
+        Albums: 2,
+        Tracks: 4
+    }
 };
 
 

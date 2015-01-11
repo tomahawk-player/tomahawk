@@ -67,6 +67,13 @@ Collection::weakRef() const
 }
 
 
+QSet< Collection::BrowseCapability >
+Collection::browseCapabilities() const
+{
+    return m_browseCapabilities;
+}
+
+
 const QString
 Collection::name() const
 {

@@ -229,6 +229,27 @@ ScriptCollection::parseMetaData( const QVariantMap& metadata )
 
         fetchIcon( metadata.value( "iconurl" ).toString() );
     }
+
+    if ( metadata.contains( "capabilities" ) )
+    {
+        QVariantList list = metadata[ "capabilities" ].toList();
+
+        foreach( const QVariant& type, list )
+        {
+            bool ok;
+            int intType = type.toInt( &ok );
+            if ( ok )
+            {
+                tLog() << intType;
+                m_browseCapabilities << static_cast< BrowseCapability >( intType );
+            }
+        }
+
+    }
+    else
+    {
+        m_browseCapabilities << CapabilityBrowseArtists;
+    }
 }
 
 

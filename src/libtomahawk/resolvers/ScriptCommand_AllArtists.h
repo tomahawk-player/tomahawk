@@ -29,7 +29,9 @@ namespace Tomahawk
 
 class ScriptCommand_AllArtists : public ScriptCommand, public Tomahawk::ArtistsRequest
 {
-    Q_OBJECT
+Q_OBJECT
+    friend class ScriptCommand_AllAlbums;
+
 public:
     explicit ScriptCommand_AllArtists( const Tomahawk::collection_ptr& collection,
                                        QObject* parent = nullptr );

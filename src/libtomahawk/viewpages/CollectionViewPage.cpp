@@ -88,9 +88,15 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
         m_header->ui->anchor1Label->setText( tr( "Artists" ) );
         m_header->ui->anchor2Label->setText( tr( "Albums" ) );
         m_header->ui->anchor3Label->setText( tr( "Songs" ) );
-        m_header->ui->anchor1Label->show();
-        m_header->ui->anchor2Label->show();
-        m_header->ui->anchor3Label->show();
+
+        if( collection->browseCapabilities().contains( Collection::CapabilityBrowseArtists ) )
+            m_header->ui->anchor1Label->show();
+
+        if( collection->browseCapabilities().contains( Collection::CapabilityBrowseAlbums ) )
+            m_header->ui->anchor2Label->show();
+
+        if( collection->browseCapabilities().contains( Collection::CapabilityBrowseTracks ) )
+            m_header->ui->anchor3Label->show();
 
         const float lowOpacity = 0.8;
         m_header->ui->anchor1Label->setOpacity( 1 );
@@ -335,7 +341,33 @@ CollectionViewPage::restoreViewMode()
     m_mode = static_cast< CollectionViewPageMode >( modeNumber );
     TomahawkSettings::instance()->endGroup();
 
-    setCurrentMode( (CollectionViewPageMode)modeNumber );
+    // try to set a supported mode otherwise fall back to artists view
+    CollectionViewPageMode mode = (CollectionViewPageMode) modeNumber;
+    if ( mode == CollectionViewPage::Columns && !m_collection->browseCapabilities().contains( Collection::CapabilityBrowseArtists ) )
+    {
+        tLog() << Q_FUNC_INFO << 0;
+        if ( m_collection->browseCapabilities().contains( Collection::CapabilityBrowseAlbums ) )
+            setCurrentMode( CollectionViewPage::Albums );
+        else if ( m_collection->browseCapabilities().contains( Collection::CapabilityBrowseTracks ) )
+            setCurrentMode( CollectionViewPage::Columns );
+    }
+    else if ( mode == CollectionViewPage::Albums && !m_collection->browseCapabilities().contains( Collection::CapabilityBrowseAlbums ) )
+    {
+        tLog() << Q_FUNC_INFO << 1;
+        if ( m_collection->browseCapabilities().contains( Collection::CapabilityBrowseTracks ) )
+            setCurrentMode( CollectionViewPage::Flat );
+        else
+            setCurrentMode( CollectionViewPage::Columns );
+    } else if ( mode == CollectionViewPage::Flat && !m_collection->browseCapabilities().contains( Collection::CapabilityBrowseTracks ) )
+    {
+        tLog() << Q_FUNC_INFO << 2;
+        if ( m_collection->browseCapabilities().contains( Collection::CapabilityBrowseArtists ) )
+            setCurrentMode( CollectionViewPage::Columns );
+        else if ( m_collection->browseCapabilities().contains( Collection::CapabilityBrowseAlbums ) )
+            setCurrentMode( CollectionViewPage::Albums );
+    } else {
+        setCurrentMode( mode );
+    }
 }
 
 
@@ -386,9 +418,6 @@ CollectionViewPage::onCollectionChanged()
     }
     else
         setEmptyTip( tr( "This collection is empty." ) );
-
-    if ( m_collection.objectCast<ScriptCollection>() )
-        m_trackView->setEmptyTip( tr( "Cloud collections aren't supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them." ) );
 }
 
 

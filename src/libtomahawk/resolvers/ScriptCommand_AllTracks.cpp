@@ -64,17 +64,21 @@ ScriptCommand_AllTracks::exec()
         return;
     }
 
-    if ( m_album.isNull() )
+    ScriptJob* job;
+    if( m_album )
     {
-        reportFailure();
-        return;
+        QVariantMap arguments;
+        arguments[ "artist" ] = m_album->artist()->name();
+        arguments[ "album" ] = m_album->name();
+
+        job = collection->scriptObject()->invoke( "albumTracks", arguments );
+    }
+    else
+    {
+        job = collection->scriptObject()->invoke( "tracks" );
     }
 
-    QVariantMap arguments;
-    arguments[ "artist" ] = m_album->artist()->name();
-    arguments[ "album" ] = m_album->name();
 
-    ScriptJob* job = collection->scriptObject()->invoke( "tracks", arguments );
     connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onTracksJobDone( QVariantMap ) ), Qt::QueuedConnection );
     job->start();
 }

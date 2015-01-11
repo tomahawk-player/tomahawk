@@ -27,10 +27,6 @@
 #ifndef TOMAHAWK_COLLECTION_H
 #define TOMAHAWK_COLLECTION_H
 
-#include <QHash>
-#include <QList>
-#include <QSharedPointer>
-
 #include "Typedefs.h"
 #include "Playlist.h"
 #include "playlist/dynamic/DynamicPlaylist.h"
@@ -40,6 +36,12 @@
 #include "../ResultProvider.h"
 
 #include "DllMacro.h"
+
+#include <QHash>
+#include <QList>
+#include <QSharedPointer>
+#include <QSet>
+
 
 namespace Tomahawk
 {
@@ -54,6 +56,16 @@ public:
 
     void setWeakRef( const collection_wptr& weakRef );
     const collection_wptr weakRef() const;
+
+    enum BrowseCapability
+    {
+        CapabilityBrowseNull    = 0x0,
+        CapabilityBrowseArtists = 0x1,
+        CapabilityBrowseAlbums  = 0x2,
+        CapabilityBrowseTracks  = 0x4
+    };
+
+    QSet< BrowseCapability > browseCapabilities() const;
 
     enum BackendType
     {
@@ -127,6 +139,7 @@ public slots:
 protected:
     QString m_name;
     unsigned int m_lastmodified; // unix time of last change to collection
+    QSet< BrowseCapability > m_browseCapabilities;
 
 private slots:
     void onSynced();

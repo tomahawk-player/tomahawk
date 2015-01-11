@@ -26,6 +26,7 @@
 #include "PlaylistEntry.h"
 #include "ScriptCollection.h"
 #include "ScriptJob.h"
+#include "ScriptCommand_AllArtists.h"
 
 using namespace Tomahawk;
 
@@ -70,16 +71,18 @@ ScriptCommand_AllAlbums::exec()
         return;
     }
 
-    if ( !m_artist )
+    ScriptJob* job;
+    if ( m_artist )
     {
-        reportFailure();
-        return;
+        QVariantMap arguments;
+        arguments[ "artist" ] = m_artist->name();
+        job = collection->scriptObject()->invoke( "artistAlbums", arguments );
+    }
+    else
+    {
+        job = collection->scriptObject()->invoke( "albums" );
     }
 
-    QVariantMap arguments;
-    arguments[ "artist" ] = m_artist->name();
-
-    ScriptJob* job = collection->scriptObject()->invoke( "albums", arguments );
     connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onAlbumsJobDone( QVariantMap ) ), Qt::QueuedConnection );
     job->start();
 }
@@ -108,8 +111,17 @@ ScriptCommand_AllAlbums::onAlbumsJobDone(const QVariantMap& result)
         return;
     }
 
-    QList< Tomahawk::album_ptr > a = parseAlbumVariantList( m_artist, result[ "albums" ].toList() );
+    QList< Tomahawk::artist_ptr > resultArtists;
+    if ( result["artists"].toList().length() > 0 )
+    {
+        resultArtists = ScriptCommand_AllArtists::parseArtistVariantList( result[ "artists" ].toList() );
+    }
+    else
+    {
+        resultArtists << m_artist;
+    }
 
+    QList< Tomahawk::album_ptr > a = parseAlbumVariantList( resultArtists, result[ "albums" ].toList() );
     if ( m_filter.isEmpty() )
         emit albums( a );
     else
@@ -130,19 +142,34 @@ ScriptCommand_AllAlbums::onAlbumsJobDone(const QVariantMap& result)
 
 
 QList< Tomahawk::album_ptr >
-ScriptCommand_AllAlbums::parseAlbumVariantList( const Tomahawk::artist_ptr& artist, const QVariantList& reslist )
+ScriptCommand_AllAlbums::parseAlbumVariantList( const QList< Tomahawk::artist_ptr >& artists, const QVariantList& reslist )
 {
     QList< Tomahawk::album_ptr > results;
 
-    foreach( const QVariant& rv, reslist )
+    if (artists.length() != 1 && reslist.length() != artists.length())
     {
-        const QString val = rv.toString();
+        tLog() << "artists" << artists.length();
+        tLog() << "albums" << reslist.length();
+        Q_ASSERT(false);
+        tLog() << "Got invalid collection albums response where artists and albums don't match";
+        return results;
+    }
+
+    bool useArtistList = ( artists.length() > 1 );
+    for( int i=0; i<reslist.length(); i++ )
+    {
+        const QString val = reslist[ i ].toString();
         if ( val.trimmed().isEmpty() )
             continue;
 
-        Tomahawk::album_ptr ap = Tomahawk::Album::get( artist, val, false );
-
-        results << ap;
+        if ( useArtistList )
+        {
+            results << Tomahawk::Album::get( artists[ i ], val, false );
+        }
+        else
+        {
+            results << Tomahawk::Album::get( artists[ 0 ], val, false );
+        }
     }
 
     return results;
