@@ -59,7 +59,7 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
         tDebug() << "Using result-hint to speed up resolving:" << m_query->resultHint();
 
         Tomahawk::result_ptr result = lib->resultFromHint( m_query );
-        if ( result && ( !result->resolvedByCollection() || result->resolvedByCollection()->source()->isOnline() ) )
+        if ( result && ( !result->resolvedByCollection() || result->resolvedByCollection()->isOnline() ) )
         {
             QList<Tomahawk::result_ptr> res;
             res << result;

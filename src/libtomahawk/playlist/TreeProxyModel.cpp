@@ -238,8 +238,8 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
                         if ( !item->result()->isOnline() && ti->result()->isOnline() )
                             return false;
 
-                        if ( ( item->result()->resolvedByCollection().isNull() || !item->result()->resolvedByCollection()->source()->isLocal() ) &&
-                             !ti->result()->resolvedByCollection().isNull() && ti->result()->resolvedByCollection()->source()->isLocal() )
+                        if ( ( item->result()->resolvedByCollection().isNull() || !item->result()->resolvedByCollection()->isLocal() ) &&
+                             !ti->result()->resolvedByCollection().isNull() && ti->result()->resolvedByCollection()->isLocal() )
                         {
                             return false;
                         }

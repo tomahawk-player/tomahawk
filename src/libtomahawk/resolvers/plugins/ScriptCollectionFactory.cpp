@@ -27,11 +27,13 @@ void ScriptCollectionFactory::addPlugin( const QSharedPointer<ScriptCollection>&
     // FIXME: no need for the same javascript call, already done in createPlugin
     collection->parseMetaData();
 
+    collection->setOnline( true );
     SourceList::instance()->addScriptCollection( collection );
 }
 
 void ScriptCollectionFactory::removePlugin( const QSharedPointer<ScriptCollection>& collection ) const
 {
+    collection->setOnline( false );
     SourceList::instance()->removeScriptCollection( collection );
 }
 

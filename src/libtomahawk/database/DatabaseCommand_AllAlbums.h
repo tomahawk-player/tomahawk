@@ -30,6 +30,7 @@
 #include "Typedefs.h"
 #include "DatabaseCommand.h"
 #include "Database.h"
+#include "DatabaseCollection.h"
 
 #include "DllMacro.h"
 
@@ -74,7 +75,7 @@ signals:
     void done();
 
 private:
-    Tomahawk::collection_ptr m_collection;
+    QSharedPointer< DatabaseCollection > m_collection;
     Tomahawk::artist_ptr m_artist;
 
     unsigned int m_amount;

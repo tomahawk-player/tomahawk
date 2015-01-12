@@ -44,6 +44,7 @@ ScriptCollection::ScriptCollection( const scriptobject_ptr& scriptObject,
     , ScriptPlugin( scriptObject )
     , m_scriptAccount( scriptAccount )
     , m_trackCount( -1 ) //null value
+    , m_isOnline( true )
 {
     Q_ASSERT( scriptAccount );
     qDebug() << Q_FUNC_INFO << scriptAccount->name() << Collection::name();
@@ -84,6 +85,31 @@ QString
 ScriptCollection::itemName() const
 {
     return m_servicePrettyName;
+}
+
+
+bool ScriptCollection::isOnline() const
+{
+    return m_isOnline;
+}
+
+
+void
+ScriptCollection::setOnline( bool isOnline )
+{
+    m_isOnline = isOnline;
+
+    if ( isOnline )
+    {
+        emit online();
+    }
+    else
+    {
+        emit offline();
+    }
+
+
+    emit changed();
 }
 
 

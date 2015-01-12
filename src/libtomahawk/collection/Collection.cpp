@@ -119,8 +119,15 @@ Collection::bigIcon() const
 }
 
 
-const
-source_ptr& Collection::source() const
+bool
+Collection::isLocal() const
+{
+    return false;
+}
+
+
+const source_ptr
+Collection::source() const
 {
     return m_source;
 }

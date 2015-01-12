@@ -45,6 +45,11 @@ public:
 
     BackendType backendType() const override { return DatabaseCollectionType; }
 
+    bool isOnline() const override;
+    bool isLocal() const override { return source()->isLocal(); }
+
+    using Collection::source;
+
     void loadPlaylists() override;
     void loadAutoPlaylists() override;
     void loadStations() override;

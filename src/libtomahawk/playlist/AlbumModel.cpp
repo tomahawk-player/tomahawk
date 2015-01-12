@@ -49,10 +49,6 @@ AlbumModel::~AlbumModel()
 void
 AlbumModel::addCollection( const collection_ptr& collection, bool overwrite )
 {
-    qDebug() << Q_FUNC_INFO << collection->name()
-                            << collection->source()->id()
-                            << collection->source()->nodeId();
-
     DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( collection );
     m_overwriteOnAdd = overwrite;
     m_collection = collection;
@@ -62,7 +58,7 @@ AlbumModel::addCollection( const collection_ptr& collection, bool overwrite )
 
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 
-    setTitle( tr( "All albums from %1" ).arg( collection->source()->friendlyName() ) );
+    setTitle( tr( "All albums from %1" ).arg( collection->prettyName() ) );
 
     if ( collection.isNull() )
     {
@@ -86,11 +82,6 @@ AlbumModel::addCollection( const collection_ptr& collection, bool overwrite )
 void
 AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned int amount, DatabaseCommand_AllAlbums::SortOrder order, bool overwrite )
 {
-/*    qDebug() << Q_FUNC_INFO << collection->name()
-                            << collection->source()->id()
-                            << collection->source()->nodeId()
-                            << amount << order;*/
-
     DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( collection );
     cmd->setLimit( amount );
     cmd->setSortOrder( order );
@@ -104,7 +95,7 @@ AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned in
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 
     if ( !collection.isNull() )
-        setTitle( tr( "All albums from %1" ).arg( collection->source()->friendlyName() ) );
+        setTitle( tr( "All albums from %1" ).arg( collection->prettyName() ) );
     else
         setTitle( tr( "All albums" ) );
 

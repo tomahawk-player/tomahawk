@@ -975,8 +975,7 @@ DropJob::removeRemoteSources()
 
         foreach ( const Tomahawk::result_ptr& result, item->results() )
         {
-            if ( !result->resolvedByCollection().isNull() && !result->resolvedByCollection()->source().isNull()
-                 && result->resolvedByCollection()->source()->isLocal() )
+            if ( !result->resolvedByCollection().isNull() && !result->resolvedByCollection()->isLocal() )
             {
                 list.append( item );
                 break;

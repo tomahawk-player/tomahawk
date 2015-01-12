@@ -24,6 +24,7 @@
 
 #include "DatabaseCommand.h"
 #include "Database.h"
+#include "DatabaseCollection.h"
 #include "collection/Collection.h"
 #include "collection/TracksRequest.h"
 #include "Typedefs.h"
@@ -49,7 +50,7 @@ public:
 
     explicit DatabaseCommand_AllTracks( const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr(), QObject* parent = nullptr )
         : DatabaseCommand( parent )
-        , m_collection( collection )
+        , m_collection( collection.objectCast< DatabaseCollection >() )
         , m_artist( nullptr )
         , m_album( nullptr )
         , m_amount( 0 )
@@ -77,7 +78,7 @@ signals:
     void done( const Tomahawk::collection_ptr& );
 
 private:
-    Tomahawk::collection_ptr m_collection;
+    QSharedPointer< DatabaseCollection > m_collection;
 
     Tomahawk::artist_ptr m_artist;
     Tomahawk::album_ptr m_album;

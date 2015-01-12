@@ -55,6 +55,8 @@ public:
     virtual ~ScriptCollection();
 
     ScriptAccount* scriptAccount() const;
+    bool isOnline() const override;
+    void setOnline( bool isOnline );
 
     /**
      * @brief setServiceName sets the name of the service that provides the ScriptCollection.
@@ -98,6 +100,7 @@ private:
     QString m_description;
     int m_trackCount;
     QPixmap m_icon;
+    bool m_isOnline;
 };
 
 } //ns

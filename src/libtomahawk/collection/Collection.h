@@ -82,6 +82,9 @@ public:
     virtual const QPixmap icon( const QSize& size ) const override;
     virtual QPixmap bigIcon() const; //for the ViewPage header
 
+    virtual bool isOnline() const = 0;
+    virtual bool isLocal() const;
+
     virtual void loadPlaylists();
     virtual void loadAutoPlaylists();
     virtual void loadStations();
@@ -108,7 +111,6 @@ public:
     virtual Tomahawk::AlbumsRequest* requestAlbums( const Tomahawk::artist_ptr& artist ) = 0;
     virtual Tomahawk::TracksRequest* requestTracks( const Tomahawk::album_ptr& album ) = 0;
 
-    const source_ptr& source() const;
     unsigned int lastmodified() const { return m_lastmodified; }
 
     virtual int trackCount() const;
@@ -128,6 +130,9 @@ signals:
 
     void changed();
 
+    void online();
+    void offline();
+
 public slots:
     void setPlaylists( const QList<Tomahawk::playlist_ptr>& plists );
     void setAutoPlaylists( const QList< Tomahawk::dynplaylist_ptr >& autoplists );
@@ -137,13 +142,17 @@ public slots:
     void delTracks( const QList<unsigned int>& fileids );
 
 protected:
-    QString m_name;
-    unsigned int m_lastmodified; // unix time of last change to collection
-    QSet< BrowseCapability > m_browseCapabilities;
+    const source_ptr source() const;
 
 private slots:
     void onSynced();
     void doLoadPlaylistUpdater( const playlist_ptr& p );
+
+
+protected:
+    QString m_name;
+    unsigned int m_lastmodified; // unix time of last change to collection
+    QSet< BrowseCapability > m_browseCapabilities;
 
 private:
     bool m_changed;

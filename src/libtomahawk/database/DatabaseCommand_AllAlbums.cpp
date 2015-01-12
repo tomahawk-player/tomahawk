@@ -35,7 +35,7 @@ namespace Tomahawk
 
 DatabaseCommand_AllAlbums::DatabaseCommand_AllAlbums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist, QObject* parent )
   : DatabaseCommand( parent )
-  , m_collection( collection )
+  , m_collection( collection.objectCast< DatabaseCollection >() )
   , m_artist( artist )
   , m_amount( 0 )
   , m_sortOrder( DatabaseCommand_AllAlbums::None )
@@ -74,7 +74,7 @@ DatabaseCommand_AllAlbums::execForArtist( DatabaseImpl* dbi )
     }
 
     if ( !m_collection.isNull() )
-        sourceToken = QString( "AND file.source %1" ).arg( m_collection->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( m_collection->source()->id() ) );
+        sourceToken = QString( "AND file.source %1" ).arg( m_collection->isLocal() ? "IS NULL" : QString( "= %1" ).arg( m_collection->source()->id() ) );
 
     if ( !m_filter.isEmpty() )
     {

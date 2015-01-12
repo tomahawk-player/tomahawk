@@ -191,7 +191,7 @@ Result::isOnline() const
 {
     if ( !resolvedByCollection().isNull() )
     {
-        return resolvedByCollection()->source()->isOnline();
+        return resolvedByCollection()->isOnline();
     }
     else
     {
@@ -205,7 +205,7 @@ Result::playable() const
 {
     if ( resolvedByCollection() )
     {
-        return resolvedByCollection()->source()->isOnline();
+        return resolvedByCollection()->isOnline();
     }
     else
     {
@@ -305,8 +305,8 @@ Result::setResolvedByCollection( const Tomahawk::collection_ptr& collection , bo
     {
         Q_ASSERT( !collection.isNull() );
         connect( collection.data(), SIGNAL( destroyed( QObject * ) ), SLOT( onOffline() ), Qt::QueuedConnection );
-        connect( collection->source().data(), SIGNAL( online() ), SLOT( onOnline() ), Qt::QueuedConnection );
-        connect( collection->source().data(), SIGNAL( offline() ), SLOT( onOffline() ), Qt::QueuedConnection );
+        connect( collection.data(), SIGNAL( online() ), SLOT( onOnline() ), Qt::QueuedConnection );
+        connect( collection.data(), SIGNAL( offline() ), SLOT( onOffline() ), Qt::QueuedConnection );
     }
 }
 
@@ -391,7 +391,7 @@ Result::friendlySource() const
         return m_friendlySource;
     }
     else
-        return resolvedByCollection()->source()->friendlyName();
+        return resolvedByCollection()->prettyName();
 }
 
 

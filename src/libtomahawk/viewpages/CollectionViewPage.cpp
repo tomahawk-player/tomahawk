@@ -409,7 +409,7 @@ CollectionViewPage::onCollectionChanged()
     flatModel->appendTracks( m_collection );
     albumModel->appendAlbums( m_collection );
 
-    if ( m_collection && m_collection->source() && m_collection->source()->isLocal() )
+    if ( m_collection && m_collection->isLocal() )
     {
         setEmptyTip( tr( "After you have scanned your music collection you will find your tracks right here." ) );
     }

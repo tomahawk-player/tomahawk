@@ -409,11 +409,11 @@ Query::resultSorter( const result_ptr& left, const result_ptr& right )
 
     if ( ls == rs )
     {
-/*        if ( left->collection() && left->collection()->source()->isLocal() )
+/*        if ( left->collection() && left->collection()->isLocal() )
         {
             return true;
         }*/
-        if ( right->resolvedByCollection() && right->resolvedByCollection()->source()->isLocal() )
+        if ( right->resolvedByCollection() && right->resolvedByCollection()->isLocal() )
         {
             return false;
         }

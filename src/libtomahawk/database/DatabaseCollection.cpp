@@ -43,6 +43,17 @@ DatabaseCollection::DatabaseCollection( const source_ptr& src, QObject* parent )
         << CapabilityBrowseArtists
         << CapabilityBrowseAlbums
         << CapabilityBrowseTracks;
+
+
+    connect( source().data(), SIGNAL( online() ), SIGNAL( online() ) );
+    connect( source().data(), SIGNAL( offline() ), SIGNAL( offline() ) );
+}
+
+
+bool
+DatabaseCollection::isOnline() const
+{
+    return source()->isOnline();
 }
 
 
