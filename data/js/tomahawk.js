@@ -722,4 +722,5 @@ Tomahawk.reportCapabilities = function (capabilities) {
 
 Tomahawk.addArtistResults = Tomahawk.addAlbumResults = Tomahawk.addAlbumTrackResults = function (result) {
     Tomahawk.PluginManager.resolve[result.qid](result);
+    delete Tomahawk.PluginManager.resolve[result.qid];
 };
