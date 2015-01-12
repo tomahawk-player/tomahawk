@@ -252,7 +252,7 @@ ColumnViewPreviewWidget::onCoverUpdated()
         return;
     }
 
-    m_cover->setPixmap( TomahawkUtils::createRoundedImage( m_query->track()->cover( m_cover->size() ), QSize( 0, 0 ) ) );
+    m_cover->setPixmap( m_query->track()->cover( m_cover->size() ) );
 }
 
 
