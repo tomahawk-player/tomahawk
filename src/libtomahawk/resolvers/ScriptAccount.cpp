@@ -42,7 +42,7 @@ using namespace Tomahawk;
 ScriptAccount::ScriptAccount( const QString& name )
     : QObject()
     , m_name( name )
-    , m_stopped( false )
+    , m_stopped( true )
     , m_collectionFactory( new ScriptCollectionFactory() )
     , m_infoPluginFactory( new ScriptInfoPluginFactory() )
 {
