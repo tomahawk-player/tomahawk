@@ -206,6 +206,28 @@ var TomahawkResolver = {
     }
 };
 
+Tomahawk.Resolver = {};
+Tomahawk.Resolver.Promise = Tomahawk.extend(TomahawkResolver, {
+    _adapter_resolve: function (qid, artist, album, title) {
+        Promise.resolve(this.resolve(artist, album, title)).then(function(results){
+            Tomahawk.addTrackResults({
+                'qid': qid,
+                'results': results
+            });
+        });
+    },
+
+    _adapter_search: function (qid, query)
+    {
+        Promise.resolve(this.search(query)).then(function(results){
+            Tomahawk.addTrackResults({
+                'qid': qid,
+                'results': results
+            });
+        });
+    }
+});
+
 /**** begin example implementation of a resolver ****/
 
 
