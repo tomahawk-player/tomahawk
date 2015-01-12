@@ -445,14 +445,81 @@ Tomahawk.asyncRequest = function (url, callback, extraHeaders, options) {
  *
  * @returns boolean indicating whether or not to do a request with the given parameters natively
  */
-shouldDoNativeRequest = function (url, callback, extraHeaders, options) {
+var shouldDoNativeRequest = function (url, callback, extraHeaders, options) {
     return (extraHeaders && (extraHeaders.hasOwnProperty("Referer")
         || extraHeaders.hasOwnProperty("referer")));
 };
 
+Tomahawk.ajax = function(url, settings) {
+    if (typeof url === "object") {
+        settings = url;
+    } else {
+        settings = {
+            url: url
+        };
+    }
+
+    settings.method = settings.type;
+
+    if (settings.data) {
+        var formEncode = function(obj) {
+            var str = [];
+            for(var p in obj) {
+                if(obj[p] !== undefined) {
+                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                }
+            }
+
+            str.sort();
+
+            return str.join("&");
+        };
+
+        settings.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+        settings.data = formEncode(settings.data);
+    }
+
+    return new Promise(function (resolve, reject) {
+        settings.errorHandler = reject;
+        Tomahawk.asyncRequest(settings.url, resolve, settings.headers, settings);
+    }).then(function(xhr) {
+        var responseText = xhr.responseText;
+        var contentType;
+        if (settings.dataType === 'json') {
+            contentType = 'application/json';
+        } else {
+            contentType = xhr.getResponseHeader('Content-Type');
+        }
+
+        if (~contentType.indexOf('application/json')) {
+            return JSON.parse(responseText);
+        }
+
+        return xhr.responseText;
+    });
+};
+
+Tomahawk.post = function(url, settings) {
+    if (typeof url === "object") {
+        settings = url;
+    } else {
+        settings = {
+            url: url
+        };
+    }
+
+    settings.method = 'POST';
+
+    return Tomahawk.ajax(settings);
+};
+
+Tomahawk.get = function(url, settings) {
+    return Tomahawk.ajax(url, settings);
+};
+
 Tomahawk.assert = function (assertion, message) {
     Tomahawk.nativeAssert(assertion, message);
-}
+};
 
 Tomahawk.sha256 = Tomahawk.sha256 || function(message) {
   return CryptoJS.SHA256(message).toString(CryptoJS.enc.Hex);
