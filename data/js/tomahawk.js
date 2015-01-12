@@ -509,12 +509,19 @@ Tomahawk.ajax = function(url, settings) {
         var contentType;
         if (settings.dataType === 'json') {
             contentType = 'application/json';
+        } else if (contentType = 'xml') {
+            contentType = 'text/xml';
         } else {
             contentType = xhr.getResponseHeader('Content-Type');
         }
 
         if (~contentType.indexOf('application/json')) {
             return JSON.parse(responseText);
+        }
+
+        if (~contentType.indexOf('text/xml')) {
+            var domParser = new DOMParser();
+            return domParser.parseFromString(responseText, "text/xml");
         }
 
         return xhr.responseText;
