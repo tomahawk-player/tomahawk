@@ -482,6 +482,7 @@ Tomahawk.ajax = function(url, settings) {
     }
 
     settings.method = settings.type;
+    settings.type = settings.type || 'get';
 
     if (settings.data) {
         var formEncode = function(obj) {
@@ -497,8 +498,14 @@ Tomahawk.ajax = function(url, settings) {
             return str.join("&");
         };
 
-        settings.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-        settings.data = formEncode(settings.data);
+        if (settings.type.toLowerCase() === 'get') {
+            settings.url += '?' + formEncode(settings.data);
+            delete settings.data;
+        } else {
+            settings.headers = settings.headers || {};
+            settings.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+            settings.data = formEncode(settings.data);
+        }
     }
 
     return new Promise(function (resolve, reject) {
