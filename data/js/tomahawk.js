@@ -476,9 +476,8 @@ Tomahawk.ajax = function(url, settings) {
     if (typeof url === "object") {
         settings = url;
     } else {
-        settings = {
-            url: url
-        };
+        settings = settings || {};
+        settings.url = url;
     }
 
     settings.method = settings.type;
@@ -539,9 +538,8 @@ Tomahawk.post = function(url, settings) {
     if (typeof url === "object") {
         settings = url;
     } else {
-        settings = {
-            url: url
-        };
+        settings = settings || {};
+        settings: url;
     }
 
     settings.method = 'POST';
