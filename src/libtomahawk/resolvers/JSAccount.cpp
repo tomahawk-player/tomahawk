@@ -171,13 +171,6 @@ JSAccount::syncInvoke( const scriptobject_ptr& scriptObject, const QString& meth
 }
 
 
-const QString
-JSAccount::name() const
-{
-    return m_name;
-}
-
-
 QVariant
 JSAccount::evaluateJavaScriptInternal( const QString& scriptSource )
 {

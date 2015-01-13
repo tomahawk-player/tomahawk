@@ -41,13 +41,10 @@ class DLLEXPORT JSAccount : public ScriptAccount
     Q_OBJECT
 
 public:
-    // HACK: needs refactoring
     JSAccount( const QString& name );
 
     void startJob( ScriptJob* scriptJob ) override;
     const QVariant syncInvoke( const scriptobject_ptr& scriptObject, const QString& methodName, const QVariantMap& arguments ) override;
-
-    const QString name() const;
 
     /**
     *  Evaluate JavaScript on the WebKit thread
@@ -81,7 +78,6 @@ private:
     QVariant evaluateJavaScriptInternal( const QString& scriptSource );
 
     std::unique_ptr<ScriptEngine> m_engine;
-    QString m_name;
     // HACK: the order of initializen is flawed, tbr
     JSResolver* m_resolver;
 };
