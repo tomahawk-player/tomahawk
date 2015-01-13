@@ -27,6 +27,9 @@
 #include <QSslError>
 #include <QWebPage>
 
+// pimple
+#include <QWebInspector>
+
 class QNetworkReply;
 
 namespace Tomahawk
@@ -52,11 +55,13 @@ protected:
 
 private slots:
     void sslErrorHandler( QNetworkReply* qnr, const QList<QSslError>& errlist );
+    void initWebInspector();
 
 private:
     JSAccount* m_parent;
     QString m_scriptPath;
     QString m_header;
+    QScopedPointer< QWebInspector > m_webInspector;
 };
 
 } // ns: Tomahawk

@@ -29,10 +29,12 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "TomahawkSettings.h"
 #include "TomahawkVersion.h"
+#include "JSAccount.h"
 
 #include <QDir>
 #include <QMessageBox>
 #include <QWebFrame>
+#include <QCoreApplication>
 
 using namespace Tomahawk;
 
@@ -48,6 +50,14 @@ ScriptEngine::ScriptEngine( JSAccount* parent )
     settings()->setAttribute( QWebSettings::LocalContentCanAccessFileUrls, true );
     settings()->setAttribute( QWebSettings::LocalContentCanAccessRemoteUrls, true );
 
+    // HACK
+    QStringList cmdArgs = QCoreApplication::instance()->arguments();
+    int position = cmdArgs.indexOf( "--show-inspector" ) + 1;
+    if ( position > 0 &&  !cmdArgs.at( position ).isEmpty() && parent->name().contains( cmdArgs.at( position ), Qt::CaseInsensitive ) ) {
+        settings()->setAttribute( QWebSettings::DeveloperExtrasEnabled, true );
+        QMetaObject::invokeMethod( this, "initWebInspector", Qt::QueuedConnection );
+    }
+
     // Tomahawk is not a user agent
     m_header = QWebPage::userAgentForUrl( QUrl() ).replace( QString( "%1/%2" )
                .arg( TOMAHAWK_APPLICATION_NAME )
@@ -59,6 +69,17 @@ ScriptEngine::ScriptEngine( JSAccount* parent )
 
     connect( networkAccessManager(), SIGNAL( sslErrors( QNetworkReply*, QList<QSslError> ) ),
                                        SLOT( sslErrorHandler( QNetworkReply*, QList<QSslError> ) ) );
+}
+
+
+void
+ScriptEngine::initWebInspector()
+{
+    m_webInspector.reset( new QWebInspector() );
+    m_webInspector->setPage( this );
+    m_webInspector->setMinimumWidth( 800 );
+    m_webInspector->setMinimumHeight( 600 );
+    m_webInspector->show();
 }
 
 
