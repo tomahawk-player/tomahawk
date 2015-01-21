@@ -81,7 +81,7 @@ ScriptAccount::isStopped()
 }
 
 
-const QString
+QString
 ScriptAccount::name() const
 {
     return m_name;
@@ -95,7 +95,7 @@ ScriptAccount::setIcon(const QPixmap& icon)
 }
 
 
-const QPixmap
+QPixmap
 ScriptAccount::icon() const
 {
     return m_icon;
@@ -109,7 +109,7 @@ ScriptAccount::setFilePath( const QString& filePath )
 }
 
 
-const QString
+QString
 ScriptAccount::filePath() const
 {
     return m_filePath;
@@ -335,7 +335,7 @@ ScriptAccount::parseResultVariantList( const QVariantList& reslist )
 }
 
 
-const QSharedPointer< ScriptCollection >
+QSharedPointer< ScriptCollection >
 ScriptAccount::scriptCollection( const QString& id ) const
 {
     return m_collectionFactory->scriptPlugins().value( id );

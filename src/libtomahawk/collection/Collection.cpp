@@ -60,7 +60,7 @@ Collection::setWeakRef( const collection_wptr& weakRef )
 }
 
 
-const collection_wptr
+collection_wptr
 Collection::weakRef() const
 {
     return m_ownRef;
@@ -74,7 +74,7 @@ Collection::browseCapabilities() const
 }
 
 
-const QString
+QString
 Collection::name() const
 {
     return m_name;
@@ -102,7 +102,7 @@ Collection::itemName() const
 }
 
 
-const QPixmap
+QPixmap
 Collection::icon( const QSize& size ) const
 {
     return ImageRegistry::instance()->pixmap( RESPATH "images/collection.svg", size );
@@ -126,7 +126,7 @@ Collection::isLocal() const
 }
 
 
-const source_ptr
+source_ptr
 Collection::source() const
 {
     return m_source;

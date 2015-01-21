@@ -33,8 +33,8 @@ class DLLEXPORT ResultProvider
 public:
     virtual ~ResultProvider();
 
-    virtual const QString name() const = 0;
-    virtual const QPixmap icon( const QSize& size ) const = 0;
+    virtual QString name() const = 0;
+    virtual QPixmap icon( const QSize& size ) const = 0;
 };
 
 }

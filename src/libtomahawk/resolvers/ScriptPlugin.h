@@ -35,7 +35,7 @@ public:
     ScriptPlugin( const scriptobject_ptr& object );
     virtual ~ScriptPlugin();
 
-    const scriptobject_ptr scriptObject() const;
+    scriptobject_ptr scriptObject() const;
 
 protected: // TODO: pimple
     scriptobject_ptr m_scriptObject;

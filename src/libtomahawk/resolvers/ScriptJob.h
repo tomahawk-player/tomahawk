@@ -43,10 +43,10 @@ public:
 
     bool error() const;
 
-    const QString id() const;
-    const scriptobject_ptr scriptObject() const;
-    const QString methodName() const;
-    const QVariantMap arguments() const;
+    QString id() const;
+    scriptobject_ptr scriptObject() const;
+    QString methodName() const;
+    QVariantMap arguments() const;
 
 public slots:
     void reportResults( const QVariantMap& data = QVariantMap() );

@@ -43,7 +43,7 @@ ScriptObject::setWeakRef(const scriptobject_wptr& weakRef)
 }
 
 
-const scriptobject_wptr
+scriptobject_wptr
 ScriptObject::weakRef() const
 {
     Q_D( const ScriptObject );
@@ -61,7 +61,7 @@ ScriptObject::invoke( const QString& methodName, const QVariantMap& arguments )
 }
 
 
-const QVariant
+QVariant
 ScriptObject::syncInvoke(const QString& methodName, const QVariantMap& arguments)
 {
     Q_D( ScriptObject );

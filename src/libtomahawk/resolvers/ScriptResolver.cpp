@@ -555,7 +555,7 @@ ScriptResolver::setIcon( const QPixmap& icon )
 }
 
 
-const QPixmap
+QPixmap
 ScriptResolver::icon( const QSize& size ) const
 {
     if ( !size.isEmpty() )

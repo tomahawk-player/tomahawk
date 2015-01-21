@@ -63,7 +63,7 @@ public:
     Tomahawk::TracksRequest*  requestTracks( const Tomahawk::album_ptr& album ) override;
 
     int trackCount() const override;
-    const QPixmap icon( const QSize& size ) const override;
+    QPixmap icon( const QSize& size ) const override;
 
 public slots:
     virtual void addTracks( const QList<QVariant>& newitems );

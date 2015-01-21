@@ -116,7 +116,7 @@ JSResolver::capabilities() const
 }
 
 
-const QString
+QString
 JSResolver::name() const
 {
     Q_D( const JSResolver );
@@ -125,7 +125,7 @@ JSResolver::name() const
 }
 
 
-const QPixmap
+QPixmap
 JSResolver::icon( const QSize& size ) const
 {
     Q_D( const JSResolver );

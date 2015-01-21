@@ -30,7 +30,7 @@ class ScriptAccount;
 
 class DLLEXPORT ScriptInfoPluginFactory : public ScriptPluginFactory< ScriptInfoPlugin >
 {
-    const QSharedPointer< ScriptInfoPlugin > createPlugin( const scriptobject_ptr&, ScriptAccount* ) override;
+    QSharedPointer< ScriptInfoPlugin > createPlugin( const scriptobject_ptr&, ScriptAccount* ) override;
     void addPlugin( const QSharedPointer< ScriptInfoPlugin >& scriptPlugin ) const override;
     void removePlugin( const QSharedPointer< ScriptInfoPlugin >& scriptPlugin ) const override;
 };

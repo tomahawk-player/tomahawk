@@ -54,16 +54,16 @@ public:
 
     bool isStopped();
 
-    const QString name() const;
+    QString name() const;
 
     void setIcon( const QPixmap& icon );
-    const QPixmap icon() const;
+    QPixmap icon() const;
 
     void setFilePath( const QString& filePath );
-    const QString filePath() const;
+    QString filePath() const;
 
     ScriptJob* invoke( const scriptobject_ptr& scriptObject, const QString& methodName, const QVariantMap& arguments );
-    virtual const QVariant syncInvoke( const scriptobject_ptr& scriptObject, const QString& methodName, const QVariantMap& arguments ) = 0;
+    virtual QVariant syncInvoke( const scriptobject_ptr& scriptObject, const QString& methodName, const QVariantMap& arguments ) = 0;
 
     virtual void startJob( ScriptJob* scriptJob ) = 0;
 
@@ -75,7 +75,7 @@ public:
 
     QList< Tomahawk::result_ptr > parseResultVariantList( const QVariantList& reslist );
 
-    const QSharedPointer< ScriptCollection > scriptCollection( const QString& id ) const;
+    QSharedPointer< ScriptCollection > scriptCollection( const QString& id ) const;
 
 private slots:
     void onJobDeleted( const QString& jobId );

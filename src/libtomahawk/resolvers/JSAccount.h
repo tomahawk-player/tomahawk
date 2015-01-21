@@ -44,7 +44,7 @@ public:
     JSAccount( const QString& name );
 
     void startJob( ScriptJob* scriptJob ) override;
-    const QVariant syncInvoke( const scriptobject_ptr& scriptObject, const QString& methodName, const QVariantMap& arguments ) override;
+    QVariant syncInvoke( const scriptobject_ptr& scriptObject, const QString& methodName, const QVariantMap& arguments ) override;
 
     /**
     *  Evaluate JavaScript on the WebKit thread

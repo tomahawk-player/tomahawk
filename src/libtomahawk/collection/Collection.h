@@ -55,7 +55,7 @@ public:
     virtual ~Collection();
 
     void setWeakRef( const collection_wptr& weakRef );
-    const collection_wptr weakRef() const;
+    collection_wptr weakRef() const;
 
     enum BrowseCapability
     {
@@ -74,12 +74,12 @@ public:
         ScriptCollectionType    //performs operations through a resolver
     };
 
-    virtual const QString name() const override;
+    virtual QString name() const override;
     virtual QString prettyName() const;
     virtual QString description() const;
     virtual QString itemName() const;
     virtual BackendType backendType() const { return NullCollectionType; }
-    virtual const QPixmap icon( const QSize& size ) const override;
+    virtual QPixmap icon( const QSize& size ) const override;
     virtual QPixmap bigIcon() const; //for the ViewPage header
 
     virtual bool isOnline() const = 0;
@@ -142,7 +142,7 @@ public slots:
     void delTracks( const QList<unsigned int>& fileids );
 
 protected:
-    const source_ptr source() const;
+    source_ptr source() const;
 
 private slots:
     void onSynced();

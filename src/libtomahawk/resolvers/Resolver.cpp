@@ -19,7 +19,7 @@
 
 #include <QPixmap>
 
-const QPixmap
+QPixmap
 Tomahawk::Resolver::icon( const QSize& ) const
 {
     return QPixmap();

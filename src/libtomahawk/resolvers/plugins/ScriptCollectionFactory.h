@@ -33,7 +33,7 @@ class ScriptCollection;
 
 class DLLEXPORT ScriptCollectionFactory : public ScriptPluginFactory< ScriptCollection >
 {
-    const QSharedPointer< ScriptCollection > createPlugin( const scriptobject_ptr&, ScriptAccount* ) override;
+    QSharedPointer< ScriptCollection > createPlugin( const scriptobject_ptr&, ScriptAccount* ) override;
     void addPlugin( const QSharedPointer< ScriptCollection >& scriptPlugin ) const override;
     void removePlugin( const QSharedPointer< ScriptCollection >& scriptPlugin ) const override;
 };

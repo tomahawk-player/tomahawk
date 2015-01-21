@@ -47,7 +47,7 @@ public:
     virtual unsigned int weight() const = 0;
     virtual unsigned int timeout() const = 0;
 
-    virtual const QPixmap icon( const QSize& size ) const override;
+    virtual QPixmap icon( const QSize& size ) const override;
 
 public slots:
     virtual void resolve( const Tomahawk::query_ptr& query ) = 0;

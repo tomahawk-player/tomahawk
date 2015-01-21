@@ -27,7 +27,8 @@ Tomahawk::SyncScriptJob::SyncScriptJob( const QVariantMap& resultData )
 }
 
 
-void Tomahawk::SyncScriptJob::start()
+void
+Tomahawk::SyncScriptJob::start()
 {
     QMetaObject::invokeMethod( this, "reportResults", Qt::QueuedConnection, Q_ARG( QVariantMap, m_data ) );
 }

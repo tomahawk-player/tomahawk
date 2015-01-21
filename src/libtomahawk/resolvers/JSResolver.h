@@ -55,8 +55,8 @@ public:
 
     Capabilities capabilities() const override;
 
-    const QString name() const override;
-    const QPixmap icon( const QSize& size ) const override;
+    QString name() const override;
+    QPixmap icon( const QSize& size ) const override;
     unsigned int weight() const override;
     unsigned int timeout() const override;
 

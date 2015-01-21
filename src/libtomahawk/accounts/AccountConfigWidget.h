@@ -31,13 +31,13 @@ public:
     explicit AccountConfigWidget( QWidget* parent = nullptr );
 
     virtual void checkForErrors();
-    virtual const QStringList errors() const;
+    virtual QStringList errors() const;
     virtual void resetErrors();
 
     virtual bool settingsValid() const;
 
     void setDataWidgets( const QVariantList& dataWidgets );
-    const QVariantMap readData();
+    QVariantMap readData();
     static QVariant widgetData( QWidget* widget, const QString& property );
     static void setWidgetData( const QVariant& value, QWidget* widget, const QString& property );
     void fillDataInWidgets( const QVariantMap& data );

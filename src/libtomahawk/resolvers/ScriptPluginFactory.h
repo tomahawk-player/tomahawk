@@ -64,7 +64,7 @@ public:
     }
 
 
-    virtual const QSharedPointer<T> createPlugin( const scriptobject_ptr&, ScriptAccount* )
+    virtual QSharedPointer<T> createPlugin( const scriptobject_ptr&, ScriptAccount* )
     {
         return QSharedPointer<T>();
     }

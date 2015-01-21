@@ -74,7 +74,7 @@ public:
 
     void fetchIcon( const QString& iconUrl );
     void setIcon( const QPixmap& icon );
-    const QPixmap icon( const QSize& size ) const override;
+    QPixmap icon( const QSize& size ) const override;
     QPixmap bigIcon() const override;
 
     void setDescription( const QString& text );
@@ -87,7 +87,7 @@ public:
     void setTrackCount( int count );
     int trackCount() const override;
 
-    const QVariantMap readMetaData();
+    QVariantMap readMetaData();
     void parseMetaData();
     void parseMetaData( const QVariantMap& metadata );
 

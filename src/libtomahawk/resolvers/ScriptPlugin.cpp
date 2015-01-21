@@ -32,7 +32,7 @@ ScriptPlugin::~ScriptPlugin()
 }
 
 
-const scriptobject_ptr
+scriptobject_ptr
 ScriptPlugin::scriptObject() const
 {
     return m_scriptObject;

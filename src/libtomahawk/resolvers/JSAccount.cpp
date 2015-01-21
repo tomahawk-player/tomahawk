@@ -150,7 +150,7 @@ JSAccount::startJob( ScriptJob* scriptJob )
 }
 
 
-const QVariant
+QVariant
 JSAccount::syncInvoke( const scriptobject_ptr& scriptObject, const QString& methodName, const QVariantMap& arguments )
 {
     QString eval = QString(

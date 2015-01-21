@@ -54,28 +54,28 @@ ScriptJob::error() const
 }
 
 
-const scriptobject_ptr
+scriptobject_ptr
 ScriptJob::scriptObject() const
 {
     return m_scriptObject;
 }
 
 
-const QString
+QString
 ScriptJob::id() const
 {
     return m_id;
 }
 
 
-const QString
+QString
 ScriptJob::methodName() const
 {
     return m_methodName;
 }
 
 
-const QVariantMap
+QVariantMap
 ScriptJob::arguments() const
 {
     return m_arguments;

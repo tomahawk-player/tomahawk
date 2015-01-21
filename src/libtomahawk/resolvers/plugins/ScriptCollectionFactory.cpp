@@ -37,7 +37,7 @@ void ScriptCollectionFactory::removePlugin( const QSharedPointer<ScriptCollectio
     SourceList::instance()->removeScriptCollection( collection );
 }
 
-const QSharedPointer< ScriptCollection > ScriptCollectionFactory::createPlugin( const scriptobject_ptr& object, ScriptAccount* scriptAccount )
+QSharedPointer< ScriptCollection > ScriptCollectionFactory::createPlugin( const scriptobject_ptr& object, ScriptAccount* scriptAccount )
 {
     const QVariantMap collectionInfo =  object->syncInvoke( "collection" ).toMap();
 

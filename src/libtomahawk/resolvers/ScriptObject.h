@@ -45,14 +45,14 @@ public:
     QString id() const;
 
     void setWeakRef( const scriptobject_wptr& weakRef );
-    const scriptobject_wptr weakRef() const;
+    scriptobject_wptr weakRef() const;
 
     ScriptJob* invoke( const QString& methodName, const QVariantMap& arguments = QVariantMap() );
 
     /**
      * Avoid using this if possible, it's blocking and can only be used from the gui thread
      */
-    const QVariant syncInvoke( const QString& methodName, const QVariantMap& arguments = QVariantMap() );
+    QVariant syncInvoke( const QString& methodName, const QVariantMap& arguments = QVariantMap() );
 
 protected:
     void startJob( ScriptJob* scriptJob );

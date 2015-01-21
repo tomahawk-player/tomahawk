@@ -44,8 +44,8 @@ public:
     virtual ~ScriptResolver();
     static ExternalResolver* factory( const QString& accountId, const QString& exe, const QStringList& );
 
-    const QString name() const Q_DECL_OVERRIDE { return m_name; }
-    const QPixmap icon( const QSize& size ) const Q_DECL_OVERRIDE;
+    QString name() const Q_DECL_OVERRIDE { return m_name; }
+    QPixmap icon( const QSize& size ) const Q_DECL_OVERRIDE;
     unsigned int weight() const Q_DECL_OVERRIDE { return m_weight; }
     virtual unsigned int preference() const { return m_preference; }
     unsigned int timeout() const Q_DECL_OVERRIDE { return m_timeout; }

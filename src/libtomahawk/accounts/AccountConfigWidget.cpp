@@ -36,7 +36,7 @@ AccountConfigWidget::checkForErrors()
 }
 
 
-const QStringList
+QStringList
 AccountConfigWidget::errors() const
 {
     return m_errors;
@@ -64,7 +64,7 @@ AccountConfigWidget::setDataWidgets( const QVariantList& dataWidgets )
 }
 
 
-const QVariantMap
+QVariantMap
 AccountConfigWidget::readData()
 {
 

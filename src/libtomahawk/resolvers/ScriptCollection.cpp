@@ -121,7 +121,7 @@ ScriptCollection::setIcon( const QPixmap& icon )
 }
 
 
-const QPixmap
+QPixmap
 ScriptCollection::icon( const QSize& size ) const
 {
     if ( !size.isEmpty() && !m_icon.isNull() )
@@ -211,7 +211,7 @@ ScriptCollection::trackCount() const
 }
 
 
-const QVariantMap
+QVariantMap
 ScriptCollection::readMetaData()
 {
     return scriptObject()->syncInvoke( "collection" ).toMap();

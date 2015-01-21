@@ -204,7 +204,7 @@ DatabaseCollection::trackCount() const
 }
 
 
-const QPixmap
+QPixmap
 DatabaseCollection::icon( const QSize& size ) const
 {
     return source()->avatar( TomahawkUtils::RoundedCorners, size, true );

@@ -32,7 +32,7 @@ void ScriptInfoPluginFactory::removePlugin( const QSharedPointer< ScriptInfoPlug
     Tomahawk::InfoSystem::InfoSystem::instance()->removeInfoPlugin( infoPlugin.data() );
 }
 
-const QSharedPointer< ScriptInfoPlugin > ScriptInfoPluginFactory::createPlugin( const scriptobject_ptr& object, ScriptAccount* scriptAccount )
+QSharedPointer< ScriptInfoPlugin > ScriptInfoPluginFactory::createPlugin( const scriptobject_ptr& object, ScriptAccount* scriptAccount )
 {
     // create infoplugin instance
     ScriptInfoPlugin* scriptInfoPlugin = new ScriptInfoPlugin( object, scriptAccount->name() );
