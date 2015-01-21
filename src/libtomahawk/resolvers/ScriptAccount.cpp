@@ -131,8 +131,6 @@ ScriptAccount::invoke( const scriptobject_ptr& scriptObject, const QString& meth
     QString requestId = requestIdGenerator();
 
     ScriptJob* job = new ScriptJob( requestId, scriptObject, methodName, arguments );
-    // TODO: setParent through QueuedConnection
-
 
     connect( job, SIGNAL( destroyed( QString ) ), SLOT( onJobDeleted( QString ) ) );
     m_jobs.insert( requestId, job );
