@@ -46,6 +46,11 @@ CERT_SIGNER=$2
     header "Signing bundle"
     codesign -s "Developer ID Application: $CERT_SIGNER" -f -v ./Tomahawk.app
 
+    if [ -f ~/sign_step.sh ];
+    then
+        ~/sign_step.sh "$CERT_SIGNER" "Tomahawk.app"
+    fi
+
     $ROOT/../admin/mac/create-dmg.sh Tomahawk.app
     mv Tomahawk.dmg Tomahawk-$VERSION.dmg
 
