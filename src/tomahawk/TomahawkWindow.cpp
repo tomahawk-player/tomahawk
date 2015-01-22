@@ -1205,12 +1205,12 @@ TomahawkWindow::importPlaylist( const QString& url, bool autoUpdate )
     const QUrl u = QUrl::fromUserInput( url );
 
     const QString ext = u.toString().toLower();
-    if ( ext.endsWith( ".m3u" ) )
+    if ( ext.endsWith( "m3u" ) )
     {
         M3uLoader* loader = new M3uLoader( u.toString(), true );
         loader->parse();
     }
-    else if ( ext.endsWith( ".jspf" ) )
+    else if ( ext.endsWith( "jspf" ) )
     {
         JSPFLoader* loader = new JSPFLoader( true );
         connect( loader, SIGNAL( failed() ), SLOT( onJSPFError() ) );
