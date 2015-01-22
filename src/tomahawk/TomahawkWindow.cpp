@@ -49,6 +49,7 @@
 #include "utils/WidgetDragFilter.h"
 #include "utils/NetworkAccessManager.h"
 #include "utils/M3uLoader.h"
+#include "utils/JspfLoader.h"
 #include "widgets/AccountsToolButton.h"
 #include "widgets/AnimatedSplitter.h"
 #include "widgets/ContainedMenuButton.h"
@@ -1203,23 +1204,31 @@ TomahawkWindow::importPlaylist( const QString& url, bool autoUpdate )
 {
     const QUrl u = QUrl::fromUserInput( url );
 
-    if ( u.toString().toLower().endsWith( ".m3u" ) )
+    const QString ext = u.toString().toLower();
+    if ( ext.endsWith( ".m3u" ) )
     {
         M3uLoader* loader = new M3uLoader( u.toString(), true );
         loader->parse();
+    }
+    else if ( ext.endsWith( ".jspf" ) )
+    {
+        JSPFLoader* loader = new JSPFLoader( true );
+        connect( loader, SIGNAL( failed() ), SLOT( onJSPFError() ) );
+        connect( loader, SIGNAL( ok( Tomahawk::playlist_ptr ) ), SLOT( onNewPlaylistOk( Tomahawk::playlist_ptr ) ) );
+        loader->load( u );
     }
     else
     {
         XSPFLoader* loader = new XSPFLoader( true, autoUpdate );
         connect( loader, SIGNAL( error( XSPFLoader::XSPFErrorCode ) ), SLOT( onXSPFError( XSPFLoader::XSPFErrorCode ) ) );
-        connect( loader, SIGNAL( ok( Tomahawk::playlist_ptr ) ), SLOT( onXSPFOk( Tomahawk::playlist_ptr ) ) );
+        connect( loader, SIGNAL( ok( Tomahawk::playlist_ptr ) ), SLOT( onNewPlaylistOk( Tomahawk::playlist_ptr ) ) );
         loader->load( u );
     }
 }
 
 
 void
-TomahawkWindow::onXSPFOk( const Tomahawk::playlist_ptr& pl )
+TomahawkWindow::onNewPlaylistOk( const Tomahawk::playlist_ptr& pl )
 {
     ViewManager::instance()->show( pl );
 }
@@ -1228,21 +1237,26 @@ TomahawkWindow::onXSPFOk( const Tomahawk::playlist_ptr& pl )
 void
 TomahawkWindow::onXSPFError( XSPFLoader::XSPFErrorCode error )
 {
+    QString msg;
     switch ( error )
     {
         case XSPFLoader::ParseError:
-            QMessageBox::critical( this, tr( "XSPF Error" ), tr( "This is not a valid XSPF playlist." ) );
+            msg = tr( "This is not a valid XSPF playlist." );
             break;
 
         case XSPFLoader::InvalidTrackError:
-            QMessageBox::warning( this, tr( "Failed to save tracks" ), tr( "Some tracks in the playlist do not contain an artist and a title. They will be ignored." ), QMessageBox::Ok );
+            msg = tr( "Some tracks in the playlist do not contain an artist and a title. They will be ignored." );
             break;
         default:
-            //FIXME: This includes FetchError
-            break;
+            return;
     }
+    JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( msg, 15 ) );
 }
 
+void
+TomahawkWindow::onJSPFError() {
+    JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Failed to load JSPF playlist"), 15 ) );
+}
 
 void
 TomahawkWindow::onAudioEngineError( AudioEngine::AudioErrorCode /* error */ )

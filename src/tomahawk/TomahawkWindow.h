@@ -121,7 +121,8 @@ private slots:
     void onAudioEngineError( AudioEngine::AudioErrorCode error );
 
     void onXSPFError( XSPFLoader::XSPFErrorCode error );
-    void onXSPFOk( const Tomahawk::playlist_ptr& );
+    void onJSPFError();
+    void onNewPlaylistOk( const Tomahawk::playlist_ptr& );
 
     void onPlaybackLoading( const Tomahawk::result_ptr result );
 
