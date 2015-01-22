@@ -53,7 +53,7 @@ void
 LoadPlaylistDialog::getLocalFile()
 {
     const QString path = TomahawkSettings::instance()->importPlaylistPath();
-    QString url = QFileDialog::getOpenFileName( this, tr( "Load Playlist" ), path, tr( "Playlists (*.xspf *.m3u)" ) );
+    QString url = QFileDialog::getOpenFileName( this, tr( "Load Playlist" ), path, tr( "Playlists (*.xspf *.m3u *.jspf)" ) );
 
     if ( !url.isEmpty() )
     {
