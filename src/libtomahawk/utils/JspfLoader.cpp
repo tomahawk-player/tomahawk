@@ -217,7 +217,9 @@ JSPFLoader::gotBody()
                                        false,
                                        m_entries );
         emit ok( m_playlist );
-    } else {
+    }
+    else
+    {
         if ( !m_entries.isEmpty() )
             emit tracks( m_entries );
     }
