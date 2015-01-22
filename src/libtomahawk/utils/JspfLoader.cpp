@@ -216,9 +216,12 @@ JSPFLoader::gotBody()
                                        m_creator,
                                        false,
                                        m_entries );
+        emit ok( m_playlist );
+    } else {
+        if ( !m_entries.isEmpty() )
+            emit tracks( m_entries );
     }
 
-    emit ok( m_playlist );
 
     if ( m_autoDelete )
         deleteLater();

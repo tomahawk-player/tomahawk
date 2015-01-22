@@ -50,6 +50,7 @@ public:
 signals:
     void failed();
     void ok( const Tomahawk::playlist_ptr& );
+    void tracks( const QList< Tomahawk::query_ptr > tracks );
 
 public slots:
     void load( const QUrl& url );
