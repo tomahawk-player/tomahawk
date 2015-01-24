@@ -87,7 +87,7 @@ prisijungti ir klausytis jūsų transliavimo?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="72"/>
         <source>&amp;Follow in Real-Time</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Sekti Realiu Laiku</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
@@ -102,7 +102,7 @@ prisijungti ir klausytis jūsų transliavimo?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="83"/>
         <source>&amp;Load Station</source>
-        <translation type="unfinished"/>
+        <translation>Į&amp;kelti Stotį</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="84"/>
@@ -112,7 +112,7 @@ prisijungti ir klausytis jūsų transliavimo?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="85"/>
         <source>&amp;Rename Station</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Pervadinti Stotį</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="86"/>
@@ -147,12 +147,12 @@ prisijungti ir klausytis jūsų transliavimo?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="112"/>
         <source>U&amp;pdate Collection</source>
-        <translation type="unfinished"/>
+        <translation>At&amp;naujinti Kolekciją</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="113"/>
         <source>Fully &amp;Rescan Collection</source>
-        <translation type="unfinished"/>
+        <translation>Pilnai Pe&amp;ržvelgti Kolekciją</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="111"/>
@@ -202,12 +202,12 @@ prisijungti ir klausytis jūsų transliavimo?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="134"/>
         <source>&amp;Legal Information...</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Teisinė Informacija...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="136"/>
         <source>&amp;View Logfile</source>
-        <translation type="unfinished"/>
+        <translation>Ž&amp;iūrėti Žurnalo Failą</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="139"/>
@@ -258,7 +258,7 @@ prisijungti ir klausytis jūsų transliavimo?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="214"/>
         <source>&amp;Window</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Langas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="231"/>
@@ -494,7 +494,7 @@ prisijungti ir klausytis jūsų transliavimo?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="379"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation>Po to kai peržiūrėjote savo muzikinę kolekciją, savo garso takelius rasite štai čia.</translation>
+        <translation>Po to kai peržvelgėte savo muzikinę kolekciją, savo garso takelius rasite štai čia.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="382"/>
@@ -977,7 +977,7 @@ Slaptažodį (VS)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.cpp" line="56"/>
         <source>Playlists (*.xspf *.m3u *.jspf)</source>
-        <translation type="unfinished"/>
+        <translation>Grojaraščiai (*.xspf *.m3u *.jspf)</translation>
     </message>
 </context>
 <context>
@@ -1560,7 +1560,7 @@ Slaptažodį (VS)</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/ScannerStatusItem.cpp" line="55"/>
         <source>Scanning Collection</source>
-        <translation type="unfinished"/>
+        <translation>Peržvelgiama Kolekcija</translation>
     </message>
 </context>
 <context>
@@ -1784,12 +1784,12 @@ Slaptažodį (VS)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="110"/>
         <source>SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>SOCKS Įgaliotasis Serveris</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="116"/>
         <source>Use SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>Naudoti SOCKS Įgaliotąjį Serverį</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="145"/>
@@ -1832,7 +1832,7 @@ Slaptažodį (VS)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="38"/>
         <source>Folders to scan for music:</source>
-        <translation type="unfinished"/>
+        <translation>Aplankai muzikos peržvelgimui:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="53"/>
@@ -1870,7 +1870,7 @@ Slaptažodį (VS)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="137"/>
         <source>Time between scans (in seconds):</source>
-        <translation type="unfinished"/>
+        <translation>Laikas tarp peržvelgimų (sekundėmis):</translation>
     </message>
 </context>
 <context>
@@ -2041,7 +2041,7 @@ Slaptažodį (VS)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="241"/>
         <source>&amp;Export Playlist</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Eksportuoti Grojaraštį</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="395"/>
@@ -2645,12 +2645,12 @@ vartotojovardas@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="141"/>
         <source>Add to &amp;Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti į &amp;Grojaraštį</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="162"/>
         <source>Send to &amp;Friend</source>
-        <translation type="unfinished"/>
+        <translation>Siųsti &amp;Draugui</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="176"/>
@@ -2677,14 +2677,14 @@ vartotojovardas@jabber.org</translation>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="278"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="329"/>
         <source>&amp;Go to &quot;%1&quot;</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Pereiti prie &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="204"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="208"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="281"/>
         <source>Go to &quot;%1&quot;</source>
-        <translation type="unfinished"/>
+        <translation>Pereiti prie &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="214"/>
@@ -2699,12 +2699,12 @@ vartotojovardas@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="238"/>
         <source>&amp;Remove Items</source>
-        <translation type="unfinished"/>
+        <translation>Ša&amp;linti Elementus</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="238"/>
         <source>&amp;Remove Item</source>
-        <translation type="unfinished"/>
+        <translation>Ša&amp;inti Elementą</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="289"/>
@@ -3942,12 +3942,12 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1016"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1023"/>
         <source>Love</source>
-        <translation>Patinka</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1011"/>
         <source>Unlove</source>
-        <translation>Nepatinka</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1147"/>
@@ -3972,7 +3972,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1258"/>
         <source>Failed to load JSPF playlist</source>
-        <translation type="unfinished"/>
+        <translation>Nepavyko įkelti JSPF grojaraščio</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1266"/>
@@ -4029,7 +4029,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1376"/>
         <source>&amp;Play</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Groti</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1408"/>
