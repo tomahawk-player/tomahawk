@@ -28,6 +28,8 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
+#include <numeric>
+
 #ifdef Q_OS_WIN
     #include <windows.h>
     #include <unistd.h>
