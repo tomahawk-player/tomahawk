@@ -24,9 +24,14 @@ THE SOFTWARE.
 #define QCOCOA_MAC_H
 
 #import <Cocoa/Cocoa.h>
+#include <AppKit/NSImage.h>
 #include <QString>
 #include <QVBoxLayout>
 #include <QMacCocoaViewContainer>
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+#include <qmacfunctions.h>
+#endif
 
 static inline NSString* fromQString(const QString &string)
 {
@@ -44,11 +49,16 @@ static inline QString toQString(NSString *string)
 
 static inline NSImage* fromQPixmap(const QPixmap &pixmap)
 {
-    CGImageRef cgImage = pixmap.toMacCGImageRef();
+#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
+     CGImageRef cgImage = pixmap.toMacCGImageRef();
+#else
+    CGImageRef cgImage = QtMac::toCGImageRef(pixmap);
+#endif
+
     return [[[NSImage alloc] initWithCGImage:cgImage size:NSZeroSize] autorelease];
 }
 
-static inline void setupLayout(void *cocoaView, QWidget *parent)
+static inline void setupLayout(NSView *cocoaView, QWidget *parent)
 {
     parent->setAttribute(Qt::WA_NativeWindow);
     QVBoxLayout *layout = new QVBoxLayout(parent);

@@ -215,7 +215,7 @@ public:
         q.data()->accepted();
     }
 
-    QWeakPointer<QToolbarTabDialog> q;
+    QPointer<QToolbarTabDialog> q;
 
     NSWindow* prefsWindow;
     ToolbarDelegate *toolBarDelegate;
