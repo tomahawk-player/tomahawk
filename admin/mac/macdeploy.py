@@ -189,8 +189,8 @@ VLC_SEARCH_PATH=[
 ]
 
 QT_PLUGINS = [
-    'crypto/libqca-ossl.dylib',
-    'phonon_backend/phonon_vlc.so',
+#    'crypto/libqca-ossl.dylib',
+    'platforms/libqcocoa.dylib',
     'sqldrivers/libqsqlite.dylib',
     'imageformats/libqgif.dylib',
     'imageformats/libqico.dylib',
@@ -200,15 +200,15 @@ QT_PLUGINS = [
 ]
 
 SNORE_PLUGINS = [
-    'libsnore_backend_growl.so',
-    'libsnore_backend_osxnotificationcenter.so',
+#    'libsnore_backend_growl.so',
+#    'libsnore_backend_osxnotificationcenter.so',
 ]
 
 TOMAHAWK_PLUGINS = [
   'libtomahawk_account_xmpp.dylib',
   'libtomahawk_account_google.so',
   'libtomahawk_account_zeroconf.so',
-  'libtomahawk_account_hatchet.so',
+#  'libtomahawk_account_hatchet.so',
   'libtomahawk_infoplugin_adium.so',
   'libtomahawk_infoplugin_charts.so',
   'libtomahawk_infoplugin_discogs.so',
@@ -218,7 +218,7 @@ TOMAHAWK_PLUGINS = [
   'libtomahawk_infoplugin_musixmatch.so',
   'libtomahawk_infoplugin_newreleases.so',
   'libtomahawk_infoplugin_rovi.so',
-  'libtomahawk_infoplugin_snorenotify.so',
+#  'libtomahawk_infoplugin_snorenotify.so',
   'libtomahawk_infoplugin_spotify.so',
   'libtomahawk_viewpage_dashboard.so',
 #  'libtomahawk_viewpage_networkactivity.so',
@@ -228,7 +228,7 @@ TOMAHAWK_PLUGINS = [
 ]
 
 QT_PLUGINS_SEARCH_PATH=[
-    '/usr/local/Cellar/qt/4.8.6/plugins',
+    '/usr/local/Cellar/qt5/5.4.0/plugins',
 ]
 
 SNORE_PLUGINS_SEARCH_PATH=[
