@@ -965,7 +965,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.cpp" line="56"/>
         <source>Playlists (*.xspf *.m3u *.jspf)</source>
-        <translation type="unfinished"/>
+        <translation>Playlists (*.xspf *.m3u *.jspf)</translation>
     </message>
 </context>
 <context>
@@ -3976,7 +3976,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1258"/>
         <source>Failed to load JSPF playlist</source>
-        <translation type="unfinished"/>
+        <translation>Echec du chargement de la playlist JSPF</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1266"/>
