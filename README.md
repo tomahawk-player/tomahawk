@@ -73,7 +73,7 @@ You can download one of our nightly or stable builds:
 Required dependencies:
 
 * [CMake 2.8.6](http://www.cmake.org/)
-* [Qt 4.7.0](http://qt-project.org/)
+* [Qt 5.4.0](http://qt-project.org/)
 * [VLC 2.1.0](https://videolan.org/vlc/)
 * [QJson 0.8.1](http://qjson.sourceforge.net/)
 * [SQLite 3.6.22](http://www.sqlite.org/)
