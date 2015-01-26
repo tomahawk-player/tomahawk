@@ -44,7 +44,7 @@ CERT_SIGNER=$2
     cd ..
 
     header "Signing bundle"
-    codesign -s "Developer ID Application: $CERT_SIGNER" -f -v ./Tomahawk.app
+#    codesign -s "Developer ID Application: $CERT_SIGNER" -f -v ./Tomahawk.app
 
     if [ -f ~/sign_step.sh ];
     then
