@@ -20,6 +20,7 @@ import re
 import subprocess
 import commands
 import sys
+import glob
 
 FRAMEWORK_SEARCH_PATH=[
     '/Library/Frameworks',
@@ -270,6 +271,7 @@ bundle_dir = sys.argv[1]
 bundle_name = os.path.basename(bundle_dir).split('.')[0]
 
 commands = []
+framework_paths = []
 
 binary_dir = os.path.join(bundle_dir, 'Contents', 'MacOS')
 frameworks_dir = os.path.join(bundle_dir, 'Contents', 'Frameworks')
@@ -447,7 +449,14 @@ def CopyFramework(path):
   for i, part in enumerate(parts):
     if re.match(r'\w+\.framework', part):
       full_path = os.path.join(frameworks_dir, *parts[i:-1])
+      framework_name = part.split(".framework")[0]
       break
+
+  if full_path in framework_paths:
+    return os.path.join(full_path, parts[-1])
+
+  framework_paths.append(full_path)
+
   args = ['mkdir', '-p', full_path]
   commands.append(args)
   args = ['ditto', '--arch=i386', '--arch=x86_64', path, full_path]
@@ -460,12 +469,30 @@ def CopyFramework(path):
     args = ['cp', '-rf', menu_nib, resources_dir]
     commands.append(args)
 
+  # Fix framework structure for signing
+  path_base_dir = os.path.join(os.path.split(path)[0], '..', '..')
+  path_versions_dir = os.path.join(path_base_dir, 'Versions')
+
+  if not os.path.exists(os.path.join(full_path, 'Versions', 'Current')):
+    framework_base_dir = os.path.join(full_path, '..', '..')
+    framework_versions_dir = os.path.join(framework_base_dir, 'Versions')
+
+    versionParts = glob.glob(path_versions_dir+'/*')[0].split(os.sep)
+    args = ['ln', '-s', versionParts[-1], framework_versions_dir+'/Current']
+    commands.append(args)
+
+    args = ['ln', '-s', 'Versions/Current/'+framework_name, framework_base_dir+'/'+framework_name]
+    commands.append(args)
+
+    args = ['ln', '-s', 'Versions/Current/Resources', framework_base_dir+'/Resources']
+    commands.append(args)
+
   # Copy Contents/Info.plist to Resources/Info.plist if Resources/Info.plist does not exist
   # If Contents/Info.plist doesn't exist either, error out. If we actually see this, we can copy QtCore's Info.plist
   info_plist_in_resources = os.path.join(os.path.split(path)[0], '..', '..', 'Resources', 'Info.plist')
   if os.path.exists(info_plist_in_resources):
     info_plist_in_contents = os.path.join(os.path.split(path)[0], '..', '..', 'Resources', 'Info.plist')
-    framework_resources_dir = os.path.join(full_path, '..', '..', 'Resources')
+    framework_resources_dir = os.path.join(framework_versions_dir, versionParts[-1], 'Resources')
     args = ['mkdir', '-p', framework_resources_dir]
     commands.append(args)
     if os.path.exists(info_plist_in_contents):
