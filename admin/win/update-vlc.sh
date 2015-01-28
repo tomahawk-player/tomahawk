@@ -15,13 +15,13 @@ echo "Download phonon archive..."
 # wget -c "http://download.tomahawk-player.org/tomahawk-vlc-0.1.zip"
 # wget -c http://people.videolan.org/~jb/phonon/phonon-vlc-last.7z
 # wget -c http://people.videolan.org/~jb/phonon/phonon_phonon-vlc_20111128.7z
-wget -c http://download.tomahawk-player.org/test/pvlc.tar.bz2
+wget -c http://download.tomahawk-player.org/test/vlc.tar.bz2
 
 echo "Extract binary..."
 # 7z x phonon*.7z
 # mv -v vlc-*/ vlc/
 # unzip tomahawk-vlc-0.1.zip
-tar xvjf pvlc.tar.bz2
+tar xvjf vlc.tar.bz2
 
 # echo "Download phonon_vlc_no_video.dll..."
 # wget -c http://people.videolan.org/~jb/phonon/phonon_vlc_no_video.dll
