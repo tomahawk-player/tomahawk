@@ -23,8 +23,9 @@
 !define BUILD_PATH "@CMAKE_BINARY_DIR@"
 !define SOURCE_PATH "@CMAKE_SOURCE_DIR@"
 !define QT_DLL_PATH "${MING_BIN}"
-!define SQLITE_DLL_PATH "${MING_LIB}/qt4/plugins/sqldrivers"
-!define IMAGEFORMATS_DLL_PATH "${MING_LIB}/qt4/plugins/imageformats"
+!define SQLITE_DLL_PATH "${MING_LIB}/qt5/plugins/sqldrivers"
+!define IMAGEFORMATS_DLL_PATH "${MING_LIB}/qt5/plugins/imageformats"
+
 
 ; We use official release plugins
 ; mingw32-vlc from obs misses a lot and has even broken ones probably
@@ -304,43 +305,60 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File /oname=NOTES.txt ${NSI_PATH}\RELEASE_NOTES.txt
 
    ;QT stuff:
-   File "${QT_DLL_PATH}\QtCore4.dll"
-   File "${QT_DLL_PATH}\QtGui4.dll"
-   File "${QT_DLL_PATH}\QtNetwork4.dll"
-   File "${QT_DLL_PATH}\QtSql4.dll"
-   File "${QT_DLL_PATH}\QtScript4.dll"
-   File "${QT_DLL_PATH}\QtUiTools4.dll"
-   File "${QT_DLL_PATH}\QtWebKit4.dll"
-   File "${QT_DLL_PATH}\QtXml4.dll"
-   File "${QT_DLL_PATH}\QtSvg4.dll"
-   File "${QT_DLL_PATH}\QtDeclarative4.dll"
-   File "${QT_DLL_PATH}\QtXmlPatterns4.dll"
+    File "${QT_DLL_PATH}\Qt5Network.dll"
+    File "${QT_DLL_PATH}\Qt5Qml.dll"
+    File "${QT_DLL_PATH}\Qt5Sql.dll"
+    File "${QT_DLL_PATH}\Qt5Xml.dll"
+    File "${QT_DLL_PATH}\Qt5Core.dll"
+    File "${QT_DLL_PATH}\Qt5OpenGL.dll"
+    File "${QT_DLL_PATH}\Qt5Quick.dll"
+    File "${QT_DLL_PATH}\Qt5Svg.dll"
+    File "${QT_DLL_PATH}\Qt5Widgets.dll"
+    File "${QT_DLL_PATH}\Qt5Gui.dll"
+    File "${QT_DLL_PATH}\Qt5PrintSupport.dll"
+    File "${QT_DLL_PATH}\Qt5Sensors.dll"
+    File "${QT_DLL_PATH}\Qt5WebKit.dll"
+    File "${QT_DLL_PATH}\Qt5WinExtras.dll"
+    File "${QT_DLL_PATH}\Qt5WebKit.dll"
+    File "${QT_DLL_PATH}\Qt5WebKitWidgets.dll"
+    File "${QT_DLL_PATH}\Qt5Multimedia.dll"
+    File "${QT_DLL_PATH}\Qt5MultimediaWidgets.dll"
+
+
+    ;Qt deps
+    File "${QT_DLL_PATH}\libpcre16-0.dll"
+    File "${QT_DLL_PATH}\libxml2-2.dll"
+    File "${QT_DLL_PATH}\libxslt-1.dll"
+    File "${QT_DLL_PATH}\libEGL.dll"
+    File "${QT_DLL_PATH}\libGLESv2.dll"
+    File "${QT_DLL_PATH}\libwebp-4.dll"
+
+   ;Boost fnord
+    File "${QT_DLL_PATH}\icuuc53.dll"
+    File "${QT_DLL_PATH}\icudata53.dll"
+    File "${QT_DLL_PATH}\icui18n53.dll"
 
    ;SQLite driver
    SetOutPath "$INSTDIR\sqldrivers"
-   File "${SQLITE_DLL_PATH}\qsqlite4.dll"
+   File "${SQLITE_DLL_PATH}\qsqlite.dll"
    SetOutPath "$INSTDIR"
    File "${MING_BIN}\libsqlite3-0.dll"
 
+   ;Qt platform plugins
+    SetOutPath "$INSTDIR\platforms"
+    File "${MING_LIB}/qt5/plugins/platforms/qwindows.dll"
+   SetOutPath "$INSTDIR"
+
    ;Image plugins
    SetOutPath "$INSTDIR\imageformats"
-   File "${IMAGEFORMATS_DLL_PATH}\qgif4.dll"
-   File "${IMAGEFORMATS_DLL_PATH}\qjpeg4.dll"
-   File "${IMAGEFORMATS_DLL_PATH}\qsvg4.dll"
+   File "${IMAGEFORMATS_DLL_PATH}\qgif.dll"
+   File "${IMAGEFORMATS_DLL_PATH}\qjpeg.dll"
+   File "${IMAGEFORMATS_DLL_PATH}\qsvg.dll"
    SetOutPath "$INSTDIR"
 
    ;Cygwin/c++ stuff
-   ;File "${MING_BIN}\cygmad-0.dll"
-   ;File "${MING_BIN}\libgcc_s_dw2-1.dll"
-   ;File "${MING_BIN}\mingwm10.dll"
    File "${MING_BIN}\libgcc_s_sjlj-1.dll"
    File "${MING_BIN}\libstdc++-6.dll"
-
-   ;Phonon stuff
-   File "${MING_BIN}\libphonon.dll"
-   SetOutPath "$INSTDIR\phonon_backend"
-   File "${VLC_BIN}\phonon_backend\phonon_vlc.dll"
-   SetOutPath "$INSTDIR"
 
    ;VLC
    File "${VLC_BIN}\libvlc.dll"
@@ -350,16 +368,15 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    SetOutPath "$INSTDIR"
 
    ; Other
-   File "${MING_BIN}\libqjson.dll"
    File "${MING_BIN}\libtag.dll"
    File "${MING_BIN}\libpng16-16.dll"
    File "${MING_BIN}\libjpeg-8.dll"
    File "${MING_BIN}\zlib1.dll"
 
-   File "${MING_BIN}\libechonest.dll"
-   File "${MING_BIN}\liblastfm.dll"
+   File "${MING_BIN}\libechonest5.dll"
+   File "${MING_BIN}\liblastfm5.dll"
    File "${MING_BIN}\libquazip.dll"
-   File "${MING_BIN}\libqtkeychain.dll"
+   File "${MING_BIN}\libqt5keychain.dll"
 
    ; GnuTLS
    File "${MING_BIN}\libgnutls-28.dll"
@@ -373,23 +390,23 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
 
    ; Snorenotify
    File "${MING_BIN}\SnoreToast.exe"
-   File "${MING_BIN}\libsnore.dll"
-   File "${MING_LIB}\libsnore\libsnore_backend_growl.dll"
-   File "${MING_LIB}\libsnore\libsnore_backend_snarl.dll"
-   File "${MING_LIB}\libsnore\libsnore_backend_snore.dll"
-   File "${MING_LIB}\libsnore\libsnore_backend_snoretoast.dll"
+   File "${MING_BIN}\libsnore-qt5.dll"
+   File "${MING_LIB}\libsnore-qt5\libsnore_backend_growl.dll"
+   File "${MING_LIB}\libsnore-qt5\libsnore_backend_snarl.dll"
+   File "${MING_LIB}\libsnore-qt5\libsnore_backend_snore.dll"
+   File "${MING_LIB}\libsnore-qt5\libsnore_backend_snoretoast.dll"
 
    ; Snoregrowl
    File "${MING_BIN}\libsnoregrowl++.dll"
    File "${MING_BIN}\libsnoregrowl.dll"
 
    ; Jabber
-   File "${MING_BIN}\libjreen.dll"
+   File "${MING_BIN}\libjreen-qt5.dll"
    File "${MING_BIN}\libidn-11.dll"
    File "${MING_BIN}\libgsasl-7.dll"
    File "${MING_BIN}\libqca.dll"
    SetOutPath "$INSTDIR\crypto"
-   File "${MING_LIB}\qt4\plugins\crypto\libqca-ossl.dll"
+   File "${MING_LIB}\qca\crypto\libqca-ossl.dll"
    SetOutPath "$INSTDIR"
    File "${MING_BIN}\libssl-10.dll"
    File "${MING_BIN}\libcrypto-10.dll"
@@ -401,10 +418,10 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_BIN}\libboost_iostreams-mt.dll"
    File "${MING_BIN}\libboost_regex-mt.dll"
    File "${MING_BIN}\libboost_thread-mt.dll"
-   File "${MING_BIN}\bz2-1.dll"
+   File "${MING_BIN}\libbz2-1.dll"
 
-   File "${MING_BIN}\libqtsparkle.dll"
-   File "${MING_BIN}\libattica.dll"
+   File "${MING_BIN}\libqtsparkle-qt5.dll"
+   File "${MING_BIN}\libKF5Attica.dll"
 SectionEnd
 
 SectionGroup "Shortcuts"
