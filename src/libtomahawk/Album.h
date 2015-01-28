@@ -32,6 +32,7 @@
 
 #include "infosystem/InfoSystem.h"
 #include "DllMacro.h"
+#include "Query.h"
 #include "Typedefs.h"
 
 
