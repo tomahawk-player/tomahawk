@@ -89,7 +89,11 @@
 
 #if defined( Q_OS_WIN )
     #if defined ( WITH_QtSparkle )
-        #include <qtsparkle/Updater>
+        #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+            #include <qtsparkle/Updater>
+        #else
+            #include <qtsparkle-qt5/Updater>
+        #endif
     #endif
     #include <shellapi.h>
     #if QT_VERSION < QT_VERSION_CHECK(5,2,0)
