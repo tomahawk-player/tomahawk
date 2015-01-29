@@ -13,7 +13,6 @@ endif()
 include( ${TOMAHAWK_USE_FILE} )
 
 find_package(OpenSSL REQUIRED)
-find_package(QCA2 REQUIRED)
 find_package(websocketpp 0.2.99 REQUIRED)
 
 include_directories(

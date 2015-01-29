@@ -325,7 +325,15 @@ macro_log_feature(GNUTLS_FOUND "GnuTLS"
     "http://gnutls.org/" TRUE ""
     "GnuTLS is needed for serving the Playdar/HTTP API via TLS")
 
-macro_optional_find_package(QCA2)
+if( TOMAHAWK_QT5 )
+  macro_optional_find_package(Qca-qt5)
+  if(Qca-qt5_DIR)
+      set(QCA2_FOUND ON CACHE BOOL "QCA2 was found")
+      set(QCA2_LIBRARIES "qca-qt5" CACHE STRING "QCA2 Qt5 target")
+  endif()
+else()
+  macro_optional_find_package(QCA2)
+endif()
 macro_log_feature(QCA2_FOUND "QCA2" "Provides encryption and signing functions necessary for some resolvers and accounts" "http://delta.affinix.com/qca/" TRUE "" "")
 
 if( TOMAHAWK_QT5 )
