@@ -210,11 +210,12 @@ nam()
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Found gui thread in nam hash";
     
     // Create a nam for this thread based on the main thread's settings but with its own proxyfactory
-    QNetworkAccessManager *mainNam = s_threadNamHash[ QCoreApplication::instance()->thread() ];
+    QNetworkAccessManager* mainNam = s_threadNamHash[ QCoreApplication::instance()->thread() ];
     QNetworkAccessManager* newNam = new QNetworkAccessManager();
     
     newNam->setConfiguration( QNetworkConfiguration( mainNam->configuration() ) );
-    newNam->setNetworkAccessible( mainNam->networkAccessible() );
+    // DISABLED: This breaks Windows builds, because mainNam always claims the network is inaccessible
+    // newNam->setNetworkAccessible( mainNam->networkAccessible() );
     newNam->setProxyFactory( proxyFactory( false, true ) );
     
     s_threadNamHash[ QThread::currentThread() ] = newNam;
