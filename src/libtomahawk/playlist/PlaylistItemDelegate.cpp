@@ -45,6 +45,7 @@
 #include "utils/ImageRegistry.h"
 #include "utils/PixmapDelegateFader.h"
 #include "utils/Closure.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
@@ -560,11 +561,11 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
 
     if ( option.state & QStyle::State_Selected )
     {
-        painter->setPen( QColor( "#f8f8f8" ) );
-        painter->setBrush( QColor( "#f8f8f8" ) );
+        painter->setPen( TomahawkStyle::SELECTION_BACKGROUND );
+        painter->setBrush( TomahawkStyle::SELECTION_BACKGROUND );
         painter->drawRect( rect.adjusted( 0, 4, -rightMargin, -4 ) );
     }
-    painter->setPen( QColor( "#000000" ) );
+    painter->setPen( TomahawkStyle::SELECTION_FOREGROUND );
 
     QRect r = rect.adjusted( 32, 6, -32 -rightMargin, -6 );
     const int margin = 8;
