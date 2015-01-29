@@ -48,7 +48,7 @@ CERT_SIGNER=$2
 
     if [ -f ~/sign_step.sh ];
     then
-        ~/sign_step.sh "$CERT_SIGNER" "Tomahawk.app"
+        ~/sign_step.sh "$CERT_SIGNER" "Tomahawk.app" || true
     fi
 
     $ROOT/../admin/mac/create-dmg.sh Tomahawk.app
