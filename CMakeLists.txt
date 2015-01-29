@@ -264,10 +264,12 @@ if( NOT Qt5Core_DIR )
 endif()
 
 if( Qt5Core_DIR )
-    set( TOMAHAWK_QT5 TRUE )
+    set( TOMAHAWK_QT5_TMP TRUE)
 else( Qt5Core_DIR )
-    set( TOMAHAWK_QT5 FALSE )
+    set( TOMAHAWK_QT5_TMP FALSE )
 endif( Qt5Core_DIR )
+set( TOMAHAWK_QT5 ${TOMAHAWK_QT5_TMP} CACHE BOOL "Build Tomahawk with Qt5")
+
 
 if( BUILD_GUI AND UNIX AND NOT APPLE )
     macro_optional_find_package( X11 )
