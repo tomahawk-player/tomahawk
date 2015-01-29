@@ -50,7 +50,7 @@ namespace TomahawkStyle
     DLLEXPORT void stylePageWidget( QWidget* widget );
     DLLEXPORT void styleScrollBar( QScrollBar* scrollBar );
 
-    static const QColor PAGE_BACKGROUND = QColor( "#F9F9F9" );
+    static const QColor PAGE_BACKGROUND = QColor( "#ffffff" );
     static const QColor HEADER_LABEL = QColor( 255, 255, 255, 240 );
     static const QColor HEADER_BACKGROUND = QColor( "#333333" );
 
@@ -63,8 +63,8 @@ namespace TomahawkStyle
 
     static const QColor NOW_PLAYING_ITEM = QColor( "#ff004c" );
     static const QColor NOW_PLAYING_ITEM_TEXT = QColor( "#ffffff" );
-    static const QColor SELECTION_BACKGROUND = QColor( "#7DC4FF" );
-    static const QColor SELECTION_FOREGROUND = QColor( "#ffffff" );
+    static const QColor SELECTION_BACKGROUND = QColor( "#f8f8f8" );
+    static const QColor SELECTION_FOREGROUND = QColor( "#000000" );
 
     static const QColor HEADER_TEXT = QColor( "#DBDBDB" );
     static const QColor HEADER_LINK = QColor( "#7DC4FF" );
