@@ -1261,12 +1261,12 @@ Password (OTP)</source>
 <context>
     <name>PlaylistItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="172"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="173"/>
         <source>played %1 by you</source>
         <translation>παίχθηκε %1 από εσάς</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="174"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="175"/>
         <source>played %1 by %2</source>
         <translation>παίχθηκε %1 από τον/την %2</translation>
     </message>

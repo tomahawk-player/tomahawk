@@ -1262,12 +1262,12 @@ jednorazowe (OTP)</translation>
 <context>
     <name>PlaylistItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="172"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="173"/>
         <source>played %1 by you</source>
         <translation>odtworzone %1 przez ciebie</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="174"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="175"/>
         <source>played %1 by %2</source>
         <translation>odtworzone %1 przez %2</translation>
     </message>
