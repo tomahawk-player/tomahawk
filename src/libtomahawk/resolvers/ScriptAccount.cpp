@@ -62,6 +62,7 @@ ScriptAccount::start()
     m_stopped = false;
 
     m_collectionFactory->addAllPlugins();
+    m_infoPluginFactory->addAllPlugins();
 }
 
 
@@ -71,6 +72,7 @@ ScriptAccount::stop()
     m_stopped = true;
 
     m_collectionFactory->removeAllPlugins();
+    m_infoPluginFactory->removeAllPlugins();
 }
 
 
