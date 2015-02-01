@@ -74,10 +74,6 @@ public slots:
     void resolve( const Tomahawk::query_ptr& query ) Q_DECL_OVERRIDE;
     void start() Q_DECL_OVERRIDE;
 
-    // TODO: implement. Or not. Not really an issue while Spotify doesn't do browsable personal cloud storage.
-    void artists( const Tomahawk::collection_ptr& ) Q_DECL_OVERRIDE {}
-    void albums( const Tomahawk::collection_ptr&, const Tomahawk::artist_ptr& ) Q_DECL_OVERRIDE {}
-    void tracks( const Tomahawk::collection_ptr&, const Tomahawk::album_ptr& ) Q_DECL_OVERRIDE {}
     void lookupUrl( const QString&  ) Q_DECL_OVERRIDE {}
 
 
