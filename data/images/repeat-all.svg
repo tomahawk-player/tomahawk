@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
-    <title>Slice 1</title>
+<svg width="17px" height="17px" viewBox="0 0 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>repeat-all</title>
     <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
     <defs></defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-        <g id="repeat_all_a" sketch:type="MSLayerGroup" fill="#000000">
+        <g id="repeat_all_a" sketch:type="MSLayerGroup" transform="translate(0.000000, 1.000000)" fill="#000000">
             <g id="Group" sketch:type="MSShapeGroup">
                 <path d="M15.7,7.3 C15.7,6.4 15.4,5.5 15.1,4.7 L14.3,5 C14.6,5.7 14.8,6.4 14.8,7.2 C14.9,10.2 13,12.8 10.2,13.6 L10.6,12.9 L9.8,12.5 L8.7,14.5 L10.7,15.6 L11.1,14.8 L10.4,14.4 C13.6,13.7 15.9,10.8 15.7,7.3 L15.7,7.3 Z" id="Shape"></path>
                 <path d="M2.1,7.9 C2.1,7.4 2.1,7 2.2,6.5 L2.6,7.1 L3.3,6.6 L2,4.8 L0.1,6 L0.6,6.7 L1.3,6.3 C1.2,6.8 1.1,7.4 1.1,8 C1.2,11.3 3.6,14 6.6,14.7 L6.8,13.8 C4.2,13.1 2.2,10.8 2.1,7.9 L2.1,7.9 Z" id="Shape"></path>
