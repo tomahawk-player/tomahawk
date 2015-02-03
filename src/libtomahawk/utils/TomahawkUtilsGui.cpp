@@ -613,7 +613,7 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/volume-icon-muted.svg", size, TomahawkUtils::Original, 0.7, Qt::white );
             break;
         case VolumeFull:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/volume-icon-full.svg", size, TomahawkUtils::Original, 0.7, Qt::white );
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/volume-icon-muted.svg", size, TomahawkUtils::Original, 0.7, Qt::white );
             break;
 
         case Share:
