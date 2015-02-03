@@ -966,7 +966,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.cpp" line="56"/>
         <source>Playlists (*.xspf *.m3u *.jspf)</source>
-        <translation type="unfinished"/>
+        <translation>Listas de reproducción (*.xspf *.m3u *.jspf)</translation>
     </message>
 </context>
 <context>
