@@ -121,8 +121,7 @@ AudioControls::AudioControls( QWidget* parent )
     ui->shuffleButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::ShuffleOffPressed, TomahawkUtils::Original, ui->shuffleButton->size() ), QIcon::Off, QIcon::Active );
     ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatOff, TomahawkUtils::Original, ui->repeatButton->size() ) );
     ui->repeatButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RepeatOffPressed, TomahawkUtils::Original, ui->repeatButton->size() ), QIcon::Off, QIcon::Active );
-    ui->volumeLowButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::VolumeMuted, TomahawkUtils::Original, ui->volumeLowButton->size() ) );
-//    ui->volumeHighButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::VolumeFull, TomahawkUtils::Original, scaled( 16, 16 ) ) );
+    ui->volumeLowButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::Volume, TomahawkUtils::Original, ui->volumeLowButton->size() ) );
 //    ui->socialButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::Share, TomahawkUtils::Original, scaled( 20, 20 ) ) );
 //    ui->loveButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NotLoved, TomahawkUtils::Original, scaled( 20, 20 ) ) );
 //    ui->loveButton->setCheckable( true );
