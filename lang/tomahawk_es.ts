@@ -928,7 +928,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="20"/>
         <source>Enter the URL of the hosted playlist (e.g. .xspf format) or click the button to select a local M3U of XSPF playlist to import.</source>
-        <translation>Introduzca la dirección URL de la lista de reproducción alojado (e.g .xspf formato) o haga clic en el botón para seleccionar una lista de reproducción local M3U de XSPF para importar.</translation>
+        <translation>Escriba el URL de la lista de reproducción alojada (p. ej., en el formato .xspf) o pulse en el botón para seleccionar una lista M3U o XSPF local para su importación.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="35"/>
@@ -1072,22 +1072,22 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="189"/>
         <source>File Name:</source>
-        <translation>Nombre:</translation>
+        <translation>Nombre de archivo:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="199"/>
         <source>File Name...</source>
-        <translation>Nombre de archivo...</translation>
+        <translation>Nombre de archivo…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="206"/>
         <source>File Size...</source>
-        <translation>Tamaño de archivo...</translation>
+        <translation>Tamaño de archivo…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="212"/>
         <source>File size...</source>
-        <translation>Tamaño de archivo...</translation>
+        <translation>Tamaño de archivo…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="219"/>
@@ -1127,7 +1127,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="39"/>
         <source>Trending Tracks</source>
-        <translation>Pistas populares</translation>
+        <translation>Pistas de moda</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="79"/>
@@ -1137,7 +1137,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="113"/>
         <source>Trending Artists</source>
-        <translation>Artistas populares</translation>
+        <translation>Artistas de moda</translation>
     </message>
 </context>
 <context>
@@ -1550,7 +1550,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/ScannerStatusItem.cpp" line="55"/>
         <source>Scanning Collection</source>
-        <translation>Escaneando Colección</translation>
+        <translation>Escaneando la colección</translation>
     </message>
 </context>
 <context>
@@ -1848,12 +1848,12 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/tomahawk/widgets/SlideSwitchButton.cpp" line="46"/>
         <source>On</source>
-        <translation>On</translation>
+        <translation>Enc.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/SlideSwitchButton.cpp" line="47"/>
         <source>Off</source>
-        <translation>Off</translation>
+        <translation>Apag.</translation>
     </message>
 </context>
 <context>
@@ -2090,7 +2090,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="300"/>
         <source>Discover</source>
-        <translation>Descubre</translation>
+        <translation>Descubrir</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="301"/>
@@ -2163,7 +2163,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="189"/>
         <source>Delete Tomahawk playlist when removing synchronization</source>
-        <translation>Borrar la lista de reproducción de Tomahawk cuando se elimine la sincronización</translation>
+        <translation>Eliminar lista de reproducción de Tomahawk al desactivar la sincronización</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="91"/>
@@ -2181,7 +2181,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="351"/>
         <source>Delete associated Spotify playlist?</source>
-        <translation>¿Eliminar lista de reproducción de Spotify?</translation>
+        <translation>¿Quiere eliminar la lista de reproducción asociada en Spotify?</translation>
     </message>
 </context>
 <context>
@@ -2854,7 +2854,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="246"/>
         <source>Enter any combination of song name and artist here...</source>
-        <translation>Introduzca cualquier combinación de nombre de la canción y del artista aquí...</translation>
+        <translation>Escriba aquí el nombre de la canción y artista…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="267"/>
@@ -2891,12 +2891,12 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="319"/>
         <source>0 secs</source>
-        <translation>0 segundos</translation>
+        <translation>0 s</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="319"/>
         <source>3600 secs</source>
-        <translation>3600 segundos</translation>
+        <translation>3600 s</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="325"/>
@@ -3080,7 +3080,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="496"/>
         <source>Live</source>
         <comment>Song type: The song was a life performance.</comment>
-        <translation>Directo</translation>
+        <translation>En vivo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="497"/>
@@ -3303,7 +3303,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="138"/>
         <source>Tomahawk is stopped.</source>
-        <translation>Tomahawk se detuvo</translation>
+        <translation>Tomahawk se detuvo.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="211"/>
@@ -3334,7 +3334,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="314"/>
         <source>Tomahawk - Now Playing</source>
-        <translation>Tomahawk - Reproduciendo Ahora</translation>
+        <translation>Tomahawk: Ahora en reproducción</translation>
     </message>
 </context>
 <context>
@@ -3383,7 +3383,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="88"/>
         <source>Now Playing</source>
-        <translation>Reproduciendo ahora</translation>
+        <translation>Ahora en reproducción</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="89"/>
@@ -3417,7 +3417,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="270"/>
         <source>by</source>
         <comment>preposition to link track and artist</comment>
-        <translation>por</translation>
+        <translation>de</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="217"/>
@@ -3429,21 +3429,21 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="219"/>
         <source>&quot;%1&quot; by %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing</comment>
-        <translation>«%1» por %2%3.</translation>
+        <translation>«%1» de %2%3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="266"/>
         <source>%1 sent you
 %2%4 %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist ('by' in english)</comment>
-        <translation>%1 te envió
+        <translation>%1 le envió
 %2%4 %3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="277"/>
         <source>%1 sent you &quot;%2&quot; by %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist</comment>
-        <translation>%1 te envió &quot;%2&quot; de %3.</translation>
+        <translation>%1 le envió «%2» de %3.</translation>
     </message>
 </context>
 <context>
@@ -3512,7 +3512,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="42"/>
         <source>Your Collection</source>
-        <translation>Tu colección</translation>
+        <translation>Su colección</translation>
     </message>
 </context>
 <context>
@@ -3980,7 +3980,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1262"/>
         <source>Failed to load JSPF playlist</source>
-        <translation type="unfinished"/>
+        <translation>Falló la carga de la lista de reproducción JSPF</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1270"/>
@@ -4272,7 +4272,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="86"/>
         <source>WHAT&apos;S NEW</source>
-        <translation>QUÉ HAY DE NUEVO</translation>
+        <translation>NOVEDADES</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="96"/>
@@ -4282,7 +4282,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="174"/>
         <source>Inbox</source>
-        <translation>Bandeja de Entrada</translation>
+        <translation>Buzón de entrada</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="213"/>
@@ -4514,7 +4514,7 @@ Letras de «%1» por %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="104"/>
         <source>Enter your XMPP login to connect with your friends using Tomahawk!</source>
-        <translation>Introduzca sus datos de inicio de sesión de XMPP para conectarse son sus amigos que usen Tomahawk!</translation>
+        <translation>Escriba sus datos de acceso de XMPP para conectarse con sus amigos usuarios de Tomahawk.</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="231"/>
