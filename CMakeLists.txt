@@ -159,9 +159,14 @@ if( NOT BUILD_WITH_QT4 )
         find_package(Qt5WebKitWidgets REQUIRED)
         find_package(Qt5Widgets REQUIRED)
         find_package(Qt5Xml REQUIRED)
-        if(UNIX AND NOT APPLE)
-            find_package(Qt5X11Extras REQUIRED NO_MODULE)
+        find_package(Qt5X11Extras NO_MODULE)
+
+        if(Qt5X11Extras_FOUND)
+            set(HAVE_X11 TRUE)
+        else()
+            set(HAVE_X11 FALSE)
         endif()
+
         message(STATUS "Found Qt5! Be aware that Qt5-support is still experimental and not officially supported!")
 
         if( UNIX AND NOT APPLE )

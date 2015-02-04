@@ -41,17 +41,15 @@
 #include <QDesktopServices>
 
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-#ifdef Q_OS_LINUX
-    #include <QWindow>
-    #include <QX11Info>
-#endif
-#endif
-
-
-//FIXME: Qt5: this doesnt fail because Q_WS_X11 is deprecated
-//TODO: change to Q_OS_X11 and fix errors
-#ifdef Q_WS_X11
-    #include <libqnetwm/netwm.h>
+    #ifdef HAVE_X11
+        #include <QWindow>
+        #include <QX11Info>
+    #endif
+#else
+    #ifdef Q_WS_X11
+        #include <QX11Info>
+        #include <libqnetwm/netwm.h>
+    #endif
 #endif
 
 #ifdef Q_OS_WIN
@@ -356,8 +354,7 @@ bringToFront()
         }
     }
 #endif
-#endif
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+#else // Qt5
     {
         qDebug() << Q_FUNC_INFO;
 
