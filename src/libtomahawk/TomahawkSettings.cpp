@@ -99,7 +99,7 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
 {
     s_instance = this;
 
-    #ifdef Q_OS_LINUX
+    #if !(defined(Q_OS_MAC) && defined(Q_OS_WIN))
         QFile file( fileName() );
         file.setPermissions( file.permissions() & ~( QFile::ReadGroup | QFile::WriteGroup | QFile::ExeGroup | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther ) );
     #endif
