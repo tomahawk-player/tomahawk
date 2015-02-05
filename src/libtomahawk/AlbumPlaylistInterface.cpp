@@ -187,7 +187,7 @@ AlbumPlaylistInterface::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData re
                 Tomahawk::InfoSystem::InfoStringHash inputInfo;
                 inputInfo = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
 
-                QStringList tracks = returnedData[ "tracks" ].toStringList();
+                QVariantList data = returnedData[ "tracks" ].toList();
                 QList<query_ptr> ql;
 
                 //TODO: Figure out how to do this with a multi-disk album without breaking the
@@ -196,9 +196,42 @@ AlbumPlaylistInterface::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData re
                 //      which should make this easier. --Teo 11/2011
                 unsigned int trackNo = 1;
 
-                foreach ( const QString& trackName, tracks )
+                foreach ( const QVariant& datum, data )
                 {
-                    track_ptr track = Track::get( inputInfo[ "artist" ], trackName, inputInfo[ "album" ], QString(), 0, QString(), trackNo++ );
+                    track_ptr track;
+                    if ( !datum.toString().isEmpty() )
+                    {
+                        track = Track::get( inputInfo[ "artist" ], datum.toString(), inputInfo[ "album" ], QString(), 0, QString(), trackNo++ );
+                    }
+                    else
+                    {
+                        trackNo++;
+
+                        QVariantMap m = datum.toMap();
+
+                        int duration = m.value( "duration", 0 ).toInt();
+                        if ( duration <= 0 && m.contains( "durationString" ) )
+                        {
+                            QTime time = QTime::fromString( m.value( "durationString" ).toString(), "hh:mm:ss" );
+                            duration = time.secsTo( QTime( 0, 0 ) ) * -1;
+                        }
+
+                        track = Tomahawk::Track::get( m.value( "artist" ).toString(),
+                                                      m.value( "track" ).toString(),
+                                                      m.value( "album" ).toString(),
+                                                      inputInfo[ "artist" ],
+                                                      duration,
+                                                      QString(),
+                                                      m.value( "albumpos" ).toUInt(),
+                                                      m.value( "discnumber" ).toUInt() );
+
+
+
+                        if ( !track )
+                            continue;
+                    }
+
+
                     query_ptr query = Query::get( track );
                     if ( query )
                         ql << query;
