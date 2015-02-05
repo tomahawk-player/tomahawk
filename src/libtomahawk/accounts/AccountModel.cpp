@@ -555,7 +555,7 @@ AccountModel::setData( const QModelIndex& index, const QVariant& value, int role
         else if( state == Qt::Unchecked )
             AccountManager::instance()->disableAccount( acct );
 
-#if defined(Q_OS_LINUX)
+#if !(defined(Q_OS_MAC) && defined(Q_OS_WIN))
         if ( acct->preventEnabling() )
         {
             // Can't install from attica yet on linux, so show a warning if the user tries to turn it on.
