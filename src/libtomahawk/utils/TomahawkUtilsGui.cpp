@@ -1121,7 +1121,7 @@ drawCompositedPopup( QWidget* widget,
     bool compositingWorks = true;
 #if defined(Q_OS_WIN)   //HACK: Windows refuses to perform compositing so we must fake it
     compositingWorks = false;
-#elif defined(Q_WS_X11)
+#elif defined(Q_WS_X11) // QTBUG-41195: Qt5 lacks QX11Info::isCompositingManagerRunning()
     if ( !QX11Info::isCompositingManagerRunning() )
         compositingWorks = false;
 #endif
