@@ -358,28 +358,28 @@ se conecteze și să redea de la tine?</translation>
     <name>AudioControls</name>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="108"/>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="341"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="340"/>
         <source>Shuffle</source>
         <translation>Amestecă</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="109"/>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="342"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="341"/>
         <source>Repeat</source>
         <translation>Repetă</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="339"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="338"/>
         <source>Time Elapsed</source>
         <translation>Timp scurs</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="340"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="339"/>
         <source>Time Remaining</source>
         <translation>Timp rămas</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="345"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="344"/>
         <source>Playing from %1</source>
         <translation>Se redă de la %1</translation>
     </message>
