@@ -1265,12 +1265,7 @@ TomahawkWindow::onJSPFError() {
 void
 TomahawkWindow::onAudioEngineError( AudioEngine::AudioErrorCode /* error */ )
 {
-    QString msg;
-    #ifdef Q_OS_LINUX
-        msg = tr( "Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed." );
-    #else
-        msg = tr( "Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped." );
-    #endif
+    QString msg = tr( "Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped." );
 
     tLog() << msg;
 
