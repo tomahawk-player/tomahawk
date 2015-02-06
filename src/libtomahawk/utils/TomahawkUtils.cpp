@@ -32,7 +32,11 @@
 #include "Track.h"
 
 #ifdef LIBLASTFM_FOUND
+    #if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    #include <lastfm5/ws.h>
+    #else
     #include <lastfm/ws.h>
+    #endif
 #endif
 
 #if QT_VERSION >= QT_VERSION_CHECK(5,0,0)

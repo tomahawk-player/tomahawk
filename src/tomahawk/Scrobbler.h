@@ -20,10 +20,15 @@
 #ifndef TOMAHAWK_SCROBBLER_H
 #define TOMAHAWK_SCROBBLER_H
 
-#include "lastfm/ScrobblePoint.h"
 #include "Result.h"
 #include "infosystem/InfoSystem.h"
 
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+#include <lastfm5/ScrobblePoint.h>
+#else
+#include <lastfm/ScrobblePoint.h>
+#endif
 #include <QObject>
 
 /**
