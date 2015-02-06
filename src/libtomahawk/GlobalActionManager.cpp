@@ -61,8 +61,12 @@
 #include <QClipboard>
 #include <QMessageBox>
 
-#include <echonest/Playlist.h>
 
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+#include <echonest5/Playlist.h>
+#else
+#include <echonest/Playlist.h>
+#endif
 
 GlobalActionManager* GlobalActionManager::s_instance = 0;
 
