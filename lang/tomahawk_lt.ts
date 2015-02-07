@@ -2573,7 +2573,7 @@ Slaptažodį (VS)</translation>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="73"/>
         <source>Account provided by %1.</source>
-        <translation type="unfinished"/>
+        <translation>Paskyrą suteikė %1.</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="157"/>
@@ -2832,7 +2832,9 @@ Prašome pakeisti filtrus ir bandyti dar kartą.</translation>
         <source>Station ran out of tracks!
 
 Try tweaking the filters for a new set of songs to play.</source>
-        <translation type="unfinished"/>
+        <translation>Stotyje nebeliko takelių!
+
+Pabandykite pakeisti filtrus, norėdami groti naują dainų rinkinį.</translation>
     </message>
 </context>
 <context>
