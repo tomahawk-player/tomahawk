@@ -64,7 +64,11 @@ namespace Tomahawk
 }
 
 #ifdef LIBLASTFM_FOUND
+    #if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    #include <lastfm5/NetworkAccessManager.h>
+    #else
     #include <lastfm/NetworkAccessManager.h>
+    #endif
     #include "Scrobbler.h"
 #endif
 

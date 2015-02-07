@@ -34,8 +34,13 @@
 #include "TomahawkSettings.h"
 #include "utils/NetworkAccessManager.h"
 
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+#include <lastfm5/ws.h>
+#include <lastfm5/XmlQuery.h>
+#else
 #include <lastfm/ws.h>
 #include <lastfm/XmlQuery.h>
+#endif
 
 using namespace Tomahawk::Accounts;
 using namespace Tomahawk::InfoSystem;

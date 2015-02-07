@@ -25,8 +25,6 @@
 #include "../DllMacro.h"
 #include "../Typedefs.h"
 
-#include <echonest/Playlist.h>
-
 namespace Tomahawk {
 
 class ScriptJob;

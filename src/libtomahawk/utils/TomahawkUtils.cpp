@@ -32,12 +32,20 @@
 #include "Track.h"
 
 #ifdef LIBLASTFM_FOUND
+    #if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    #include <lastfm5/ws.h>
+    #else
     #include <lastfm/ws.h>
+    #endif
 #endif
 
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+#include <quazip5/quazip.h>
+#include <quazip5/quazipfile.h>
+#else
 #include <quazip/quazip.h>
 #include <quazip/quazipfile.h>
-
+#endif
 // We need this for the version info (if available)
 #include <taglib/taglib.h>
 
