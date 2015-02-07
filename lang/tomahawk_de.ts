@@ -418,24 +418,24 @@ erlauben sich mit dir zu verbinden und von dir zu streamen?</translation>
 <context>
     <name>CategoryAddItem</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="61"/>
+        <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="65"/>
         <source>Create new Playlist</source>
         <translation>Neue Playlist erstellen</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="64"/>
+        <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="68"/>
         <source>Create new Station</source>
         <translation>Neue Station erstellen</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="182"/>
-        <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="291"/>
+        <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="186"/>
+        <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="295"/>
         <source>New Station</source>
         <translation>Neue Station</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="182"/>
-        <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="291"/>
+        <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="186"/>
+        <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="295"/>
         <source>%1 Station</source>
         <translation>%1 Station</translation>
     </message>
@@ -443,12 +443,12 @@ erlauben sich mit dir zu verbinden und von dir zu streamen?</translation>
 <context>
     <name>CategoryItem</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="387"/>
+        <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="391"/>
         <source>Playlists</source>
         <translation>Playlisten</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="389"/>
+        <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="393"/>
         <source>Stations</source>
         <translation>Stationen</translation>
     </message>
@@ -618,97 +618,97 @@ erlauben sich mit dir zu verbinden und von dir zu streamen?</translation>
 <context>
     <name>EchonestSteerer</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="59"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="63"/>
         <source>Steer this station:</source>
         <translation>Steuere diese Station:</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="82"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="86"/>
         <source>Much less</source>
         <translation>Viel weniger</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="83"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="87"/>
         <source>Less</source>
         <translation>Weniger</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="84"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="88"/>
         <source>A bit less</source>
         <translation>Etwas weniger</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="85"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="89"/>
         <source>Keep at current</source>
         <translation>So belassen</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="86"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="90"/>
         <source>A bit more</source>
         <translation>Etwas mehr</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="87"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="91"/>
         <source>More</source>
         <translation>Mehr</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="88"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="92"/>
         <source>Much more</source>
         <translation>Viel mehr</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="91"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="95"/>
         <source>Tempo</source>
         <translation>Tempo</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="92"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="96"/>
         <source>Loudness</source>
         <translation>Lautstärke</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="93"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="97"/>
         <source>Danceability</source>
         <translation>Tanzbarkeit</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="94"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="98"/>
         <source>Energy</source>
         <translation>Energie</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="95"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="99"/>
         <source>Song Hotttnesss</source>
         <translation>Popularität des Liedes</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="96"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="100"/>
         <source>Artist Hotttnesss</source>
         <translation>Popularität des Künstlers</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="97"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="101"/>
         <source>Artist Familiarity</source>
         <translation>Bekanntheit des Künstler</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="98"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="102"/>
         <source>By Description</source>
         <translation>Von der Beschreibung</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="106"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="110"/>
         <source>Enter a description</source>
         <translation>Gib eine Beschreibung ein</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="113"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="117"/>
         <source>Apply steering command</source>
         <translation>Steuerkommando anwenden</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="119"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="123"/>
         <source>Reset all steering commands</source>
         <translation>Setze alle Steuerkommandos zurück</translation>
     </message>
@@ -724,17 +724,17 @@ erlauben sich mit dir zu verbinden und von dir zu streamen?</translation>
 <context>
     <name>GlobalActionManager</name>
     <message>
-        <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="189"/>
+        <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="193"/>
         <source>Resolver installation from file %1 failed.</source>
         <translation>Die Resolver-Installation von der Datei %1 ist fehlgeschlagen.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="197"/>
+        <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="201"/>
         <source>Install plug-in</source>
         <translation>Plug-in installieren</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="198"/>
+        <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="202"/>
         <source>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;by &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;You are attempting to install a Tomahawk plug-in from an unknown source. Plug-ins from untrusted sources may put your data at risk.&lt;br/&gt;Do you want to install this plug-in?</source>
         <translation>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;by &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Du bist dabei ein Tomahawk Plug-in von einer unbekannten Quelle zu installieren. Plug-ins von einer nicht vertrauenswürdigen Quelle könnten so deine Daten gefährden. &lt;br/&gt;Möchtest du wirklich dieses Plug-in installieren?</translation>
     </message>
@@ -1349,67 +1349,67 @@ Password (OTP)</source>
 <context>
     <name>QObject</name>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="254"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="262"/>
         <source>%n year(s) ago</source>
         <translation><numerusform>vor %n Jahr</numerusform><numerusform>vor %n Jahren</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="256"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="264"/>
         <source>%n year(s)</source>
         <translation><numerusform>%n Jahr</numerusform><numerusform>%n Jahre</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="262"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="270"/>
         <source>%n month(s) ago</source>
         <translation><numerusform>vor %n Monat</numerusform><numerusform>vor %n Monaten</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="264"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="272"/>
         <source>%n month(s)</source>
         <translation><numerusform>%n Monat</numerusform><numerusform>%n Monate</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="270"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="278"/>
         <source>%n week(s) ago</source>
         <translation><numerusform>vor %n Woche</numerusform><numerusform>vor %n Wochen</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="272"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="280"/>
         <source>%n week(s)</source>
         <translation><numerusform>%n Woche</numerusform><numerusform>%n Wochen</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="278"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="286"/>
         <source>%n day(s) ago</source>
         <translation><numerusform>vor %n Tag</numerusform><numerusform>vor %n Tagen</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="280"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="288"/>
         <source>%n day(s)</source>
         <translation><numerusform>%n Tag</numerusform><numerusform>%n Tage</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="286"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="294"/>
         <source>%n hour(s) ago</source>
         <translation><numerusform>vor %n Stunde</numerusform><numerusform>vor %n Stunden</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="288"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="296"/>
         <source>%n hour(s)</source>
         <translation><numerusform>%n Stunde</numerusform><numerusform>%n Stunden</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="294"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="302"/>
         <source>%1 minutes ago</source>
         <translation>vor %1 Minuten</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="296"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="304"/>
         <source>%1 minutes</source>
         <translation>%1 Minuten</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="300"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="308"/>
         <source>just now</source>
         <translation>gerade eben</translation>
     </message>
@@ -2343,60 +2343,60 @@ Password (OTP)</source>
 <context>
     <name>Tomahawk::Accounts::LastFmConfig</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="92"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="99"/>
         <source>Testing...</source>
         <translation>Teste...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="114"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="121"/>
         <source>Test Login</source>
         <translation>Login testen</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="124"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="131"/>
         <source>Importing %1</source>
         <comment>e.g. Importing 2012/01/01</comment>
         <translation>Importiere %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="127"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="134"/>
         <source>Importing History...</source>
         <translation>Importiere Chronik...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="196"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="203"/>
         <source>History Incomplete. Resume</source>
         <extracomment>Text on a button that resumes import</extracomment>
         <translation>Chronik unvollständig. Fortfahren</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="201"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="208"/>
         <source>Playback History Imported</source>
         <translation>Lieder-Chronik importiert</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="224"/>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="240"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="231"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="247"/>
         <source>Failed</source>
         <translation>Fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="229"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="236"/>
         <source>Success</source>
         <translation>Erfolgreich</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="246"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="253"/>
         <source>Could not contact server</source>
         <translation>Konnte den Server nicht erreichen!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="260"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="267"/>
         <source>Synchronizing...</source>
         <translation>Synchronisieren...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="424"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="431"/>
         <source>Synchronization Finished</source>
         <translation>Synchronisierung abgeschlossen</translation>
     </message>
@@ -3334,27 +3334,27 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>Tomahawk::InfoSystem::LastFmInfoPlugin</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="456"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="461"/>
         <source>Top Tracks</source>
         <translation>Meistgehörte Lieder</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="459"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="464"/>
         <source>Loved Tracks</source>
         <translation>Lieblingslieder</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="462"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="467"/>
         <source>Hyped Tracks</source>
         <translation>Gehypte Lieder</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="468"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="473"/>
         <source>Top Artists</source>
         <translation>Lieblingskünstler</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="471"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="476"/>
         <source>Hyped Artists</source>
         <translation>Gehypte Künstler</translation>
     </message>
