@@ -352,11 +352,7 @@ else()
 endif()
 macro_log_feature(LIBATTICA_FOUND "libattica" "Provides support for installation of resolvers from the Tomahawk website" "http://download.kde.org/stable/attica/" TRUE "" "")
 
-if(TOMAHAWK_QT5)
-    macro_optional_find_package(QuaZip5)
-else()
-    macro_optional_find_package(QuaZip)
-endif()
+macro_optional_find_package(QuaZip)
 macro_log_feature(QUAZIP_FOUND "QuaZip" "Provides support for extracting downloaded resolvers automatically." "http://quazip.sourceforge.net/" TRUE "" "")
 
 macro_optional_find_package(Jreen 1.0.5)
