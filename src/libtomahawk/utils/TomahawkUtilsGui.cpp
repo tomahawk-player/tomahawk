@@ -300,11 +300,32 @@ tomahawkWindow()
 void
 bringToFront()
 {
-#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-#if defined(Q_WS_X11)
-    {
-        qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO;
 
+#if defined(Q_OS_WIN)
+    {
+        QWidget* widget = tomahawkWindow();
+        if ( !widget )
+            return;
+
+        widget->show();
+        widget->activateWindow();
+        widget->raise();
+
+        WId wid = widget->winId();
+
+        HWND hwndActiveWin = GetForegroundWindow();
+        int  idActive      = GetWindowThreadProcessId( hwndActiveWin, NULL );
+        if ( AttachThreadInput(GetCurrentThreadId(), idActive, TRUE) )
+        {
+            SetForegroundWindow( (HWND)wid );
+            SetFocus( (HWND)wid );
+            AttachThreadInput( GetCurrentThreadId(), idActive, FALSE );
+        }
+    }
+#else
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+    {
         QWidget* widget = tomahawkWindow();
         if ( !widget )
             return;
@@ -330,34 +351,8 @@ bringToFront()
 
         XSendEvent( QX11Info::display(), RootWindow( QX11Info::display(), DefaultScreen( QX11Info::display() ) ), False, SubstructureRedirectMask | SubstructureNotifyMask, &e );
     }
-#elif defined(Q_OS_WIN)
-    {
-        qDebug() << Q_FUNC_INFO;
-
-        QWidget* widget = tomahawkWindow();
-        if ( !widget )
-            return;
-
-        widget->show();
-        widget->activateWindow();
-        widget->raise();
-
-        WId wid = widget->winId();
-
-        HWND hwndActiveWin = GetForegroundWindow();
-        int  idActive      = GetWindowThreadProcessId(hwndActiveWin, NULL);
-        if ( AttachThreadInput(GetCurrentThreadId(), idActive, TRUE) )
-        {
-            SetForegroundWindow( (HWND)wid );
-            SetFocus( (HWND)wid );
-            AttachThreadInput(GetCurrentThreadId(), idActive, FALSE);
-        }
-    }
-#endif
 #else // Qt5
     {
-        qDebug() << Q_FUNC_INFO;
-
         QWidget* widget = tomahawkWindow();
         if ( !widget )
             return;
@@ -366,13 +361,14 @@ bringToFront()
         widget->windowHandle()->showNormal();
         widget->windowHandle()->requestActivate();
 
-
         #ifdef HAVE_X11
-        if ( QX11Info::isPlatformX11() ) {
+        if ( QX11Info::isPlatformX11() )
+        {
             QX11Info::setAppTime( QX11Info::getTimestamp() );
         }
         #endif
     }
+#endif
 #endif
 }
 #endif
