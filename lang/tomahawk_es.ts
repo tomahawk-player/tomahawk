@@ -217,7 +217,7 @@ conectarse y transmitir música por usted?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="143"/>
         <source>0.8</source>
-        <translation>0,8</translation>
+        <translation>0.8</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="145"/>
@@ -575,7 +575,7 @@ conectarse y transmitir música por usted?</translation>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="39"/>
         <source>%1 Config</source>
         <comment>Window title for account config windows</comment>
-        <translation type="unfinished"/>
+        <translation>Configuración de %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="60"/>
@@ -600,7 +600,7 @@ conectarse y transmitir música por usted?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="230"/>
         <source>Your config is invalid.</source>
-        <translation type="unfinished"/>
+        <translation>La configuración no es válida.</translation>
     </message>
 </context>
 <context>
@@ -676,7 +676,7 @@ conectarse y transmitir música por usted?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="97"/>
         <source>Danceability</source>
-        <translation>Bailable</translation>
+        <translation>Bailabilidad</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="98"/>
@@ -3526,7 +3526,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="78"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a script pluginsc, e.g. Subsonic Collection</comment>
-        <translation type="unfinished"/>
+        <translation>Colección de %1</translation>
     </message>
 </context>
 <context>
