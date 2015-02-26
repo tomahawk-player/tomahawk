@@ -600,7 +600,7 @@ połączyć się i strumieniować od ciebie?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="230"/>
         <source>Your config is invalid.</source>
-        <translation type="unfinished"/>
+        <translation>Twoja konfiguracja jest nieprawidłowa.</translation>
     </message>
 </context>
 <context>
@@ -949,7 +949,7 @@ jednorazowe (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="55"/>
         <source>...</source>
-        <translation type="unfinished"/>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="64"/>
@@ -967,12 +967,12 @@ jednorazowe (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.cpp" line="56"/>
         <source>Load Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Załaduj listę</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.cpp" line="56"/>
         <source>Playlists (*.xspf *.m3u *.jspf)</source>
-        <translation type="unfinished"/>
+        <translation>Playlisty (*.xspf *.m3u *.jspf)</translation>
     </message>
 </context>
 <context>
@@ -1113,7 +1113,7 @@ jednorazowe (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="185"/>
         <source>Error</source>
-        <translation type="unfinished"/>
+        <translation>Błąd</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="185"/>
@@ -1518,7 +1518,7 @@ jednorazowe (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="39"/>
         <source>Queue Details</source>
-        <translation type="unfinished"/>
+        <translation>Szczegóły kolejki</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="49"/>
@@ -1549,7 +1549,7 @@ jednorazowe (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/ScannerStatusItem.cpp" line="55"/>
         <source>Scanning Collection</source>
-        <translation type="unfinished"/>
+        <translation>Skanowanie Kolekcji</translation>
     </message>
 </context>
 <context>
@@ -2641,7 +2641,7 @@ uzytkownik@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="199"/>
         <source>View Similar Tracks to &quot;%1&quot;</source>
-        <translation type="unfinished"/>
+        <translation>Wyświetl utwory podobne do &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="278"/>
@@ -2743,7 +2743,7 @@ uzytkownik@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicControlList.cpp" line="84"/>
         <source>Save Settings</source>
-        <translation type="unfinished"/>
+        <translation>Zapisz ustawienia</translation>
     </message>
 </context>
 <context>
@@ -3754,7 +3754,7 @@ wysłane przez %1.</translation>
     <message>
         <location filename="../src/viewpages/newreleases/NewReleasesWidget.h" line="120"/>
         <source>New Releases</source>
-        <translation type="unfinished"/>
+        <translation>Nowe Wydania</translation>
     </message>
 </context>
 <context>
@@ -3793,7 +3793,7 @@ wysłane przez %1.</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="612"/>
         <source>Tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="719"/>
@@ -4498,7 +4498,7 @@ Tekst dla &quot;%1&quot; wykonawcy %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="58"/>
         <source>Configure this Jabber/XMPP account</source>
-        <translation type="unfinished"/>
+        <translation>Skonfiguruj to konto Jabber/XMPP</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="104"/>
