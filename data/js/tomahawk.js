@@ -42,6 +42,13 @@ Tomahawk.apiVersion = "0.2.2";
 // install RSVP.Promise as global Promise
 if(window.Promise === undefined) {
     window.Promise = window.RSVP.Promise;
+    window.RSVP.on('error', function(reason) {
+        if (reason) {
+            console.error(reason.message, reason);
+        } else {
+            console.error('Error: error thrown from RSVP but it was empty');
+        }
+    });
 }
 
 /**
