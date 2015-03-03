@@ -1,8 +1,3 @@
-// install ES6Promise as global Promise
-if(window.Promise === undefined) {
-    window.Promise = window.ES6Promise.Promise;
-}
-
 // TODO: find a way to enumerate TypeInfo instead of copying this manually
 Tomahawk.InfoSystem = Tomahawk.InfoSystem || {};
 Tomahawk.InfoSystem.InfoType = Object.create(null);

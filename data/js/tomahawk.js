@@ -39,6 +39,11 @@ if ((typeof Tomahawk === "undefined") || (Tomahawk === null)) {
 
 Tomahawk.apiVersion = "0.2.2";
 
+// install RSVP.Promise as global Promise
+if(window.Promise === undefined) {
+    window.Promise = window.RSVP.Promise;
+}
+
 /**
  * Compares versions strings
  * (version1 < version2) == -1

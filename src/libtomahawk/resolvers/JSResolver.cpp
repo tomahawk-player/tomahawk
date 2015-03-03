@@ -215,7 +215,7 @@ JSResolver::init()
         d->scriptAccount->addToJavaScriptWindowObject( "Tomahawk", d->resolverHelper );
 
         // load es6-promises shim
-        d->scriptAccount->loadScript( RESPATH "js/es6-promise-2.0.0.min.js" );
+        d->scriptAccount->loadScript( RESPATH "js/rsvp-latest.min.js" );
 
 
         // Load CrytoJS core
