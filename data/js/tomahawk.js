@@ -492,8 +492,8 @@ Tomahawk.ajax = function(url, settings) {
         settings.url = url;
     }
 
+    settings.type = settings.type || settings.method || 'get';
     settings.method = settings.type;
-    settings.type = settings.type || 'get';
 
     if (settings.data) {
         var formEncode = function(obj) {
