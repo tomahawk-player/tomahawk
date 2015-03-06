@@ -98,6 +98,8 @@ namespace TomahawkStyle
     static const QColor SLIDESWITCH_UNCHECKED_BOTTOM = QColor( 179, 179, 179 );
     static const QColor SLIDESWITCH_TEXT = QColor( "#606060" );
 
+    static const QColor SEEKSLIDER_FOREGROUND = QColor( "#ffffff" );
+
     static const int POPUP_ROUNDING_RADIUS = 6;
     static const float POPUP_OPACITY = 0.93;
 }

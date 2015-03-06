@@ -24,6 +24,7 @@
 #include <QtCore/QTimeLine>
 
 #include "utils/TomahawkUtils.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/Logger.h"
 
 
@@ -40,7 +41,7 @@ SeekSlider::SeekSlider( QWidget* parent )
                    "}"
 
                    "QSlider::sub-page:horizontal {"
-                   "margin-top: %1px; margin-bottom: %1px; border: %2px solid rgba(0, 0, 0, 0); background: #ffffff;"
+                   "margin-top: %1px; margin-bottom: %1px; border: %2px solid rgba(0, 0, 0, 0); background: %5;"
 //                   "border-image: url(" RESPATH "images/seek-slider-level.png) %2 %2 %2 %2 stretch stretch;"
                    "}" )
                    .arg( scaledX( 7 ) /*margin*/)
@@ -56,7 +57,8 @@ SeekSlider::SeekSlider( QWidget* parent )
                    .arg( /*margin top&bottom*/ 0 )
                    .arg( /*margin left&right*/ 0 )
                    .arg( /*height*/ 0 )
-                   .arg( /*width*/ 0 ) );
+                   .arg( /*width*/ 0 )
+                   .arg( /*color*/ TomahawkStyle::SEEKSLIDER_FOREGROUND.name() ) );
 }
 
 
