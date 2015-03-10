@@ -190,6 +190,13 @@ JSResolverHelper::uuid() const
 }
 
 
+int
+JSResolverHelper::currentCountry() const
+{
+    return static_cast<int>(QLocale::system().country());
+}
+
+
 void
 JSResolverHelper::addUrlResult( const QString& url, const QVariantMap& result )
 {

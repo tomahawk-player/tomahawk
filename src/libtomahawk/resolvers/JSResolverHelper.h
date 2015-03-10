@@ -135,6 +135,7 @@ public slots:
     QString readCompressed( const QString& fileName );
     QString instanceUUID();
     QString uuid() const;
+    int currentCountry() const;
     QString compress( const QString& data );
     QVariantMap resolverData();
 
