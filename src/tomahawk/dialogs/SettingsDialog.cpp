@@ -25,6 +25,7 @@
 #include "ui_Settings_Accounts.h"
 #include "ui_Settings_Collection.h"
 #include "ui_Settings_Advanced.h"
+#include "ui_Settings_Downloads.h"
 
 #include "config.h"
 
@@ -79,6 +80,8 @@ SettingsDialog::SettingsDialog(QObject *parent )
     , m_collectionWidget( new QWidget )
     , m_advancedWidgetUi( new Ui_Settings_Advanced )
     , m_advancedWidget( new QWidget )
+    , m_downloadsWidgetUi( new Ui_Settings_Downloads )
+    , m_downloadsWidget( new QWidget )
     , m_staticHostSettings( 0 )
     , m_proxySettings( 0 )
     , m_restartRequired( false )
@@ -88,10 +91,12 @@ SettingsDialog::SettingsDialog(QObject *parent )
     m_accountsWidget->setFont( TomahawkUtils::systemFont() );
     m_collectionWidget->setFont( TomahawkUtils::systemFont() );
     m_advancedWidget->setFont( TomahawkUtils::systemFont() );
+    m_downloadsWidget->setFont( TomahawkUtils::systemFont() );
 
     m_accountsWidgetUi->setupUi( m_accountsWidget );
     m_collectionWidgetUi->setupUi( m_collectionWidget );
     m_advancedWidgetUi->setupUi( m_advancedWidget );
+    m_downloadsWidgetUi->setupUi( m_downloadsWidget );
 
     m_accountsWidgetUi->accountsFilterCombo->setFocusPolicy( Qt::NoFocus );
     m_dialog = new QToolbarTabDialog;
@@ -210,6 +215,9 @@ SettingsDialog::SettingsDialog(QObject *parent )
     m_advancedWidgetUi->proxyButton->setFixedWidth( buttonsWidth );
     m_advancedWidgetUi->aclEntryClearButton->setFixedWidth( buttonsWidth );
 
+    m_downloadsWidgetUi->downloadsFolder->setText( TomahawkSettings::instance()->downloadsPath() );
+    connect( m_downloadsWidgetUi->pickFolderButton, SIGNAL( clicked() ), SLOT( pickDownloadsPath() ) );
+
 #ifndef Q_OS_MAC
     m_advancedWidget->setMinimumSize( m_advancedWidget->sizeHint() );
     m_accountsWidget->setMinimumWidth( 500 );
@@ -247,6 +255,9 @@ SettingsDialog::SettingsDialog(QObject *parent )
                       tr( "Advanced" ), tr( "Configure Tomahawk's advanced settings, including "
                                             "network connectivity settings, browser interaction "
                                             "and more." ) );
+
+    m_dialog->addTab( m_downloadsWidget, TomahawkUtils::defaultPixmap( TomahawkUtils::DownloadsSettings ),
+                      tr( "Downloads" ), tr( "Configure Tomahawk's integrated download manager." ) );
 
     m_dialog->setCurrentIndex( 0 );
 
@@ -290,6 +301,7 @@ SettingsDialog::saveSettings()
     s->setWatchForChanges( m_collectionWidgetUi->checkBoxWatchForChanges->isChecked() );
     s->setScannerTime( m_collectionWidgetUi->scannerTimeSpinBox->value() );
     s->setEnableEchonestCatalogs( m_collectionWidgetUi->enableEchonestCatalog->isChecked() );
+    s->setDownloadsPath( m_downloadsWidgetUi->downloadsFolder->text() );
 
 //         s->setNowPlayingEnabled( ui->checkBoxEnableAdium->isChecked() );
 
@@ -412,9 +424,23 @@ SettingsDialog::toggleProxyEnabled()
 
 
 void
+SettingsDialog::pickDownloadsPath()
+{
+    const QString dir = QFileDialog::getExistingDirectory( m_downloadsWidget, tr( "Open Directory" ),
+                                                     QDir::homePath(),
+                                                     QFileDialog::ShowDirsOnly );
+
+    if ( !dir.isEmpty() )
+    {
+        m_downloadsWidgetUi->downloadsFolder->setText( dir );
+    }
+}
+
+
+void
 SettingsDialog::addLibraryPath()
 {
-    QString dir = QFileDialog::getExistingDirectory( m_collectionWidget, tr( "Open Directory" ),
+    const QString dir = QFileDialog::getExistingDirectory( m_collectionWidget, tr( "Open Directory" ),
                                                      QDir::homePath(),
                                                      QFileDialog::ShowDirsOnly );
 

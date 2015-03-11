@@ -79,6 +79,7 @@ SET( tomahawkUI ${tomahawkUI}
      dialogs/Settings_Accounts.ui
      dialogs/Settings_Advanced.ui
      dialogs/Settings_Collection.ui
+     dialogs/Settings_Downloads.ui
 
      TomahawkWindow.ui
 

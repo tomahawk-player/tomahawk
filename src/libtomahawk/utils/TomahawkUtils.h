@@ -104,6 +104,7 @@ namespace TomahawkUtils
         ListRemove,
         ListAdd,
         AdvancedSettings,
+        DownloadsSettings,
         AccountSettings,
         MusicSettings,
         Add,

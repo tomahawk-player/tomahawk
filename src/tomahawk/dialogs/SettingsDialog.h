@@ -32,6 +32,7 @@ class QListWidgetItem;
 class Ui_Settings_Accounts;
 class Ui_Settings_Collection;
 class Ui_Settings_Advanced;
+class Ui_Settings_Downloads;
 class SipPlugin;
 class ResolversModel;
 class QNetworkReply;
@@ -110,6 +111,7 @@ private slots:
     void showProxySettings();
     void addLibraryPath();
     void removeLibraryPath();
+    void pickDownloadsPath();
 
     void accountsFilterChanged( int );
 
@@ -137,6 +139,9 @@ private:
 
     Ui_Settings_Advanced* m_advancedWidgetUi;
     QWidget* m_advancedWidget;
+
+    Ui_Settings_Downloads* m_downloadsWidgetUi;
+    QWidget* m_downloadsWidget;
 
     QToolbarTabDialog* m_dialog;
 
