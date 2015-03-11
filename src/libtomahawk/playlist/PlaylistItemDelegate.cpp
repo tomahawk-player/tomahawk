@@ -284,47 +284,49 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
     else */
     if ( index.column() == PlayableModel::Download )
     {
-        QStyleOptionComboBox optc;
-        optc.rect = opt.rect.adjusted( 4, 0, -4, 0 );
-        optc.editable = false;
-//        sDebug() << item->track()->currentFormat() << item->track()->formats().count();
-        optc.currentText = tr( "Download %1" ).arg( item->result()->downloadFormats().first().extension );
-//        optc.palette = m_view->palette();
-
-        if ( option.state & QStyle::State_Selected && option.state & QStyle::State_Active )
-            optc.state = QStyle::State_Active | QStyle::State_Selected | QStyle::State_Enabled;
-        else
-            optc.state = QStyle::State_Active | QStyle::State_Enabled;
-
-        if ( !item->result()->downloadJob() )
+        if ( item->result() && !item->result()->downloadFormats().isEmpty() )
         {
-            QApplication::style()->drawComplexControl( QStyle::CC_ComboBox, &optc, painter, 0 );
-            optc.rect.adjust( 4, 0, 0, 0 );
-            QApplication::style()->drawControl( QStyle::CE_ComboBoxLabel, &optc, painter, 0 );
-        }
-        else
-        {
-            if ( item->result()->downloadJob()->state() == DownloadJob::Finished )
+            QStyleOptionComboBox optc;
+            optc.rect = opt.rect.adjusted( 4, 0, -4, 0 );
+            optc.editable = false;
+            optc.currentText = tr( "Download %1" ).arg( item->result()->downloadFormats().first().extension );
+            optc.palette = m_view->palette();
+
+            if ( option.state & QStyle::State_Selected && option.state & QStyle::State_Active )
+                optc.state = QStyle::State_Active | QStyle::State_Selected | QStyle::State_Enabled;
+            else
+                optc.state = QStyle::State_Active | QStyle::State_Enabled;
+
+            if ( !item->result()->downloadJob() )
             {
-                painter->setPen( opt.palette.text().color() );
-                const QString text = painter->fontMetrics().elidedText( tr( "Finished" ), Qt::ElideRight, opt.rect.width() - 3 );
-                painter->drawText( opt.rect, text, textOption );
+                QApplication::style()->drawComplexControl( QStyle::CC_ComboBox, &optc, painter, 0 );
+                optc.rect.adjust( 4, 0, 0, 0 );
+                QApplication::style()->drawControl( QStyle::CE_ComboBoxLabel, &optc, painter, 0 );
             }
             else
             {
-                QStyleOptionProgressBarV2 optp;
-                optp.rect = optc.rect;
-                optp.minimum = 0;
-                optp.maximum = 100;
-                optp.progress = item->result()->downloadJob()->progressPercentage();
-    //            optp.palette = m_view->palette();
-
-                if ( option.state & QStyle::State_Selected && option.state & QStyle::State_Active )
-                    optp.state = QStyle::State_Active | QStyle::State_Selected | QStyle::State_Enabled;
+                if ( item->result()->downloadJob()->state() == DownloadJob::Finished )
+                {
+                    painter->setPen( opt.palette.text().color() );
+                    const QString text = painter->fontMetrics().elidedText( tr( "Finished" ), Qt::ElideRight, opt.rect.width() - 3 );
+                    painter->drawText( opt.rect, text, textOption );
+                }
                 else
-                    optp.state = QStyle::State_Active | QStyle::State_Enabled;
+                {
+                    QStyleOptionProgressBarV2 optp;
+                    optp.rect = optc.rect;
+                    optp.minimum = 0;
+                    optp.maximum = 100;
+                    optp.progress = item->result()->downloadJob()->progressPercentage();
+                    optp.palette = m_view->palette();
 
-                QApplication::style()->drawControl( QStyle::CE_ProgressBar, &optp, painter, 0 );
+                    if ( option.state & QStyle::State_Selected && option.state & QStyle::State_Active )
+                        optp.state = QStyle::State_Active | QStyle::State_Selected | QStyle::State_Enabled;
+                    else
+                        optp.state = QStyle::State_Active | QStyle::State_Enabled;
+
+                    QApplication::style()->drawControl( QStyle::CE_ProgressBar, &optp, painter, 0 );
+                }
             }
         }
     }
