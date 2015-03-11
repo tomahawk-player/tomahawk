@@ -34,6 +34,8 @@
 #include "Source.h"
 #include "SourceList.h"
 
+#include "DownloadManager.h"
+#include "DownloadJob.h"
 #include "PlayableModel.h"
 #include "PlayableItem.h"
 #include "PlayableProxyModel.h"
@@ -280,7 +282,58 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
         painter->drawRect( fillR );
     }
     else */
-    if ( item->isPlaying() )
+    if ( index.column() == PlayableModel::Download )
+    {
+/*        QStyleOptionButton opt;
+        opt.state = QStyle::State_Active | QStyle::State_Enabled;
+        opt.rect = QRect( 50, 25, 100, 50 );
+        style()->drawControl( QStyle::CE_PushButton, &opt, &painter );*/
+
+        QStyleOptionComboBox optc;
+        optc.rect.adjust( 4, 0, -4, 0 );
+        optc.editable = false;
+//        sDebug() << item->track()->currentFormat() << item->track()->formats().count();
+        optc.currentText = tr( "Download %1" ).arg( item->result()->downloadFormats().first().extension );
+//        optc.palette = m_view->palette();
+
+        if ( option.state & QStyle::State_Selected && option.state & QStyle::State_Active )
+            optc.state = QStyle::State_Active | QStyle::State_Selected | QStyle::State_Enabled;
+        else
+            optc.state = QStyle::State_Active | QStyle::State_Enabled;
+
+        if ( !item->result()->downloadJob() )
+        {
+            QApplication::style()->drawComplexControl( QStyle::CC_ComboBox, &optc, painter, 0 );
+            optc.rect.adjust( 4, 0, 0, 0 );
+            QApplication::style()->drawControl( QStyle::CE_ComboBoxLabel, &optc, painter, 0 );
+        }
+        else
+        {
+            if ( item->result()->downloadJob()->state() == DownloadJob::TrackState::Finished )
+            {
+                painter->setPen( opt.palette.text().color() );
+                const QString text = painter->fontMetrics().elidedText( tr( "Finished" ), Qt::ElideRight, opt.rect.width() - 3 );
+                painter->drawText( opt.rect, text, textOption );
+            }
+            else
+            {
+                QStyleOptionProgressBarV2 optp;
+                optp.rect = optc.rect;
+                optp.minimum = 0;
+                optp.maximum = 100;
+                optp.progress = item->result()->downloadJob()->progressPercentage();
+    //            optp.palette = m_view->palette();
+
+                if ( option.state & QStyle::State_Selected && option.state & QStyle::State_Active )
+                    optp.state = QStyle::State_Active | QStyle::State_Selected | QStyle::State_Enabled;
+                else
+                    optp.state = QStyle::State_Active | QStyle::State_Enabled;
+
+                QApplication::style()->drawControl( QStyle::CE_ProgressBar, &optp, painter, 0 );
+            }
+        }
+    }
+    else if ( item->isPlaying() )
     {
         QRect r = opt.rect.adjusted( 3, 0, 0, 0 );
 
@@ -845,6 +898,10 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
                         break;
                 }
             }
+        }
+        else if ( index.column() == PlayableModel::Download )
+        {
+            DownloadManager::instance()->addJob( item->result()->toDownloadJob() );
         }
 
         event->accept();
