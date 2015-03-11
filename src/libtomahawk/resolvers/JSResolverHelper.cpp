@@ -231,7 +231,11 @@ JSResolverHelper::currentCountry() const
          { 32, QLocale::Brazil },
          { 34, QLocale::Bhutan },
          { 35, QLocale::Bulgaria },
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 37, QLocale::BruneiDarussalam },
+#else
          { 37, QLocale::Brunei },
+#endif
          { 38, QLocale::Burundi },
          { 39, QLocale::Canada },
          { 40, QLocale::Cambodia },
@@ -263,7 +267,11 @@ JSResolverHelper::currentCountry() const
          { 73, QLocale::Ethiopia },
          { 75, QLocale::CzechRepublic },
          { 77, QLocale::Finland },
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 78, QLocale::FijiCountry },
+#else
          { 78, QLocale::Fiji },
+#endif
          { 80, QLocale::Micronesia },
          { 81, QLocale::FaroeIslands },
          { 84, QLocale::France },
@@ -305,7 +313,11 @@ JSResolverHelper::currentCountry() const
          { 134, QLocale::RepublicOfKorea }, // Korea
          { 136, QLocale::Kuwait },
          { 137, QLocale::Kazakhstan },
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 138, QLocale::AnyCountry },
+#else
          { 138, QLocale::Laos },
+#endif
          { 139, QLocale::Lebanon },
          { 140, QLocale::Latvia },
          { 141, QLocale::Lithuania },
@@ -314,7 +326,11 @@ JSResolverHelper::currentCountry() const
          { 145, QLocale::Liechtenstein },
          { 146, QLocale::Lesotho },
          { 147, QLocale::Luxembourg },
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 148, QLocale::LibyanArabJamahiriya },
+#else
          { 148, QLocale::Libya },
+#endif
          { 149, QLocale::Madagascar },
          { 151, QLocale::Macau },
          { 152, QLocale::Moldova },
@@ -341,7 +357,11 @@ JSResolverHelper::currentCountry() const
          { 181, QLocale::Suriname },
          { 182, QLocale::Nicaragua },
          { 183, QLocale::NewZealand },
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 184, QLocale::PalestinianTerritory },
+#else
          { 184, QLocale::PalestinianTerritories }, // Palestinian Authority
+#endif
          { 185, QLocale::Paraguay },
          { 187, QLocale::Peru },
          { 190, QLocale::Pakistan },
@@ -357,10 +377,18 @@ JSResolverHelper::currentCountry() const
          { 200, QLocale::Romania },
          { 201, QLocale::Philippines },
          { 202, QLocale::PuertoRico },
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 203, QLocale::RussianFederation },
+#else
          { 203, QLocale::Russia },
+#endif
          { 204, QLocale::Rwanda },
          { 205, QLocale::SaudiArabia },
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 206, QLocale::StPierreAndMiquelon },
+#else
          { 206, QLocale::SaintPierreAndMiquelon },
+#endif
          { 207, QLocale::SaintKittsAndNevis },
          { 208, QLocale::Seychelles },
          { 209, QLocale::SouthAfrica },
@@ -371,17 +399,29 @@ JSResolverHelper::currentCountry() const
          { 215, QLocale::Singapore },
          { 216, QLocale::Somalia },
          { 217, QLocale::Spain },
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 218, QLocale::StLucia },
+#else
          { 218, QLocale::SaintLucia },
+#endif
          { 219, QLocale::Sudan },
          { 220, QLocale::SvalbardAndJanMayenIslands	 }, // Svalbard
          { 221, QLocale::Sweden },
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 222, QLocale::SyrianArabRepublic },
+#else
          { 222, QLocale::Syria },
+#endif
          { 223, QLocale::Switzerland },
          { 224, QLocale::UnitedArabEmirates },
          { 225, QLocale::TrinidadAndTobago },
          { 227, QLocale::Thailand },
          { 228, QLocale::Tajikistan },
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 231, QLocale::TongaCountry },
+#else
          { 231, QLocale::Tonga },
+#endif
          { 232, QLocale::Togo },
          { 233, QLocale::SaoTomeAndPrincipe },
          { 234, QLocale::Tunisia },
@@ -397,10 +437,22 @@ JSResolverHelper::currentCountry() const
          { 245, QLocale::BurkinaFaso },
          { 246, QLocale::Uruguay },
          { 247, QLocale::Uzbekistan },
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 248, QLocale::StVincentAndTheGrenadines },
+#else
          { 248, QLocale::SaintVincentAndTheGrenadines },
+#endif
          { 249, QLocale::Venezuela },
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 251, QLocale::VietNam },
+#else
          { 251, QLocale::Vietnam },
+#endif
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 252, QLocale::USVirginIslands },
+#else
          { 252, QLocale::UnitedStatesVirginIslands }, // VirginIslands (British VI are handled down below)
+#endif
          { 253, QLocale::VaticanCityState },
          { 254, QLocale::Namibia },
          { 257, QLocale::WesternSahara }, // Western Sahara (disputed)
@@ -413,22 +465,42 @@ JSResolverHelper::currentCountry() const
          { 269, QLocale::Serbia }, // Serbia and Montenegro(Former)
          { 270, QLocale::Montenegro },
          { 271, QLocale::Serbia },
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 273, QLocale::NetherlandsAntilles },
+#else
          { 273, QLocale::CuraSao },
+#endif
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 276, QLocale::Sudan },
+#else
          { 276, QLocale::SouthSudan },
+#endif
          { 300, QLocale::Anguilla },
          { 301, QLocale::Antarctica },
          { 302, QLocale::Aruba },
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 303, QLocale::StHelena },
+#else
          { 303, QLocale::AscensionIsland },
+#endif
          { 304, QLocale::Australia }, // Ashmore and Cartier Islands
          { 305, QLocale::UnitedStates }, // Baker Island
          { 306, QLocale::BouvetIsland },
          { 307, QLocale::CaymanIslands },
          { 309, QLocale::ChristmasIsland },
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 310, QLocale::France },
+#else
          { 310, QLocale::ClippertonIsland },
+#endif
          { 311, QLocale::CocosIslands }, // Cocos(Keeling)Islands
          { 312, QLocale::CookIslands },
          { 313, QLocale::Australia }, // Coral Sea Islands
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 314, QLocale::UnitedKingdom },
+#else
          { 314, QLocale::DiegoGarcia },
+#endif
          { 315, QLocale::FalklandIslands }, // Falkland Islands (IslasMalvinas)
          { 317, QLocale::FrenchGuiana },
          { 318, QLocale::FrenchPolynesia },
@@ -436,11 +508,19 @@ JSResolverHelper::currentCountry() const
          { 321, QLocale::Guadeloupe },
          { 322, QLocale::Guam },
          { 323, QLocale::UnitedStates }, // Guantanamo Bay
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 324, QLocale::UnitedKingdom },
+#else
          { 324, QLocale::Guernsey },
+#endif
          { 325, QLocale::Australia }, // Heard Island and Mc Donald Islands
          { 326, QLocale::UnitedStates }, // Howland Island
          { 327, QLocale::UnitedStates }, // Jarvis Island
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 328, QLocale::UnitedKingdom },
+#else
          { 328, QLocale::Jersey },
+#endif
          { 329, QLocale::UnitedStates }, // Kingman Reef
          { 330, QLocale::Martinique },
          { 331, QLocale::Mayotte },
@@ -454,23 +534,43 @@ JSResolverHelper::currentCountry() const
          { 340, QLocale::UnitedStates }, // Rota Island
          { 341, QLocale::UnitedStates }, // Saipan
          { 342, QLocale::SouthGeorgiaAndTheSouthSandwichIslands },
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 343, QLocale::StHelena },
+#else
          { 343, QLocale::SaintHelena },
+#endif
          { 346, QLocale::UnitedStates }, // Tinian Island
          { 347, QLocale::Tokelau },
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 348, QLocale::StHelena },
+#else
          { 348, QLocale::TristanDaCunha },
+#endif
          { 349, QLocale::TurksAndCaicosIslands },
          { 351, QLocale::BritishVirginIslands },
          { 352, QLocale::WallisAndFutunaIslands },
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 15126, QLocale::UnitedKingdom },
+#else
          { 15126, QLocale::IsleOfMan },
+#endif
          { 19618, QLocale::Macedonia }, // Macedonia, Former Yugoslav Republic Of
          { 21242, QLocale::UnitedStates }, // Midway Islands
          { 30967, QLocale::SaintMartin }, // SintMaarten (DutchPart)
          { 31706, QLocale::SaintMartin }, // (FrenchPart)
          { 7299303, QLocale::EastTimor }, // Democratic Republic Of Timor-Leste
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 10028789, QLocale::Finland },
+#else
          { 10028789, QLocale::AlandIslands },
+#endif
          { 161832015, QLocale::SaintBarthelemy },
          { 161832256, QLocale::UnitedStates }, // U.S. Minor Outlying Islands
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+         { 161832258, QLocale::NetherlandsAntilles },  // Bonaire, Saint Eustatius and Saba
+#else
          { 161832258, QLocale::Bonaire }, // Bonaire, Saint Eustatius and Saba
+#endif
     };
 
     GEOID nationId = GetUserGeoID(GEOCLASS_NATION);
