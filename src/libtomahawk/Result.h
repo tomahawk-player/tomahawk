@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -21,6 +21,7 @@
 #define RESULT_H
 
 #include "ResultProvider.h"
+#include "DownloadJob.h"
 #include "utils/TomahawkUtils.h"
 #include "Typedefs.h"
 
@@ -130,6 +131,12 @@ public:
 
     track_ptr track() const;
 
+    QList<DownloadFormat> downloadFormats() const { return m_formats; }
+    void setDownloadFormats( const QList<DownloadFormat>& formats ) { m_formats = formats; }
+
+    downloadjob_ptr downloadJob() const { return m_downloadJob; }
+    downloadjob_ptr toDownloadJob();
+
 public slots:
     void deleteLater();
 
@@ -159,6 +166,9 @@ private:
     QString m_linkUrl;
     QString m_mimetype;
     QString m_friendlySource;
+
+    QList<DownloadFormat> m_formats;
+    downloadjob_ptr m_downloadJob;
 
     bool m_checked;
     unsigned int m_bitrate;
