@@ -2,6 +2,7 @@
  *
  *   Copyright (C) 2011  Leo Franchi <lfranchi@kde.org>
  *   Copyright (C) 2014  Dominik Schmidt <domme@tomahawk-player.org>
+ *   Copyright (C) 2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -312,6 +313,21 @@ ScriptAccount::parseResultVariantList( const QVariantList& reslist )
         }
 
         rp->setFriendlySource( name() );
+
+        QList<DownloadFormat> fl;
+        foreach ( const QVariant& foo, m.value( "downloadUrls" ).toList() )
+        {
+            QVariantMap downloadUrl = foo.toMap();
+            tLog() << "downloadUrl:" << downloadUrl.value( "url" ).toUrl() << "drm:" << downloadUrl.value( "drm" ).toBool() << "extension:" << downloadUrl.value( "extension").toString().toLower() << "bitrate:" << downloadUrl.value( "bitrate" ).toInt();
+
+            DownloadFormat format;
+            format.url = downloadUrl.value( "url" ).toUrl();
+            format.extension = downloadUrl.value( "extension").toString().toLower();
+            format.mimetype = TomahawkUtils::extensionToMimetype( format.extension );
+
+            fl << format;
+        }
+        rp->setDownloadFormats( fl );
 
         // find collection
         const QString collectionId = m.value( "collectionId" ).toString();

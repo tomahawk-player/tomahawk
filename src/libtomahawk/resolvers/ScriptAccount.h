@@ -2,6 +2,7 @@
  *
  *   Copyright (C) 2011  Leo Franchi <lfranchi@kde.org>
  *   Copyright (C) 2014  Dominik Schmidt <domme@tomahawk-player.org>
+ *   Copyright (C) 2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
