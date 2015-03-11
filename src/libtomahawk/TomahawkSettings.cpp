@@ -799,6 +799,24 @@ TomahawkSettings::setWatchForChanges( bool watch )
 }
 
 
+QString
+TomahawkSettings::downloadsPath() const
+{
+    QString musicLocation;
+    if ( scannerPaths().count() )
+        musicLocation = scannerPaths().first();
+
+    return value( "downloadmanager/path", musicLocation ).toString();
+}
+
+
+void
+TomahawkSettings::setDownloadsPath( const QString& path )
+{
+    setValue( "downloadmanager/path", path );
+}
+
+
 bool
 TomahawkSettings::httpEnabled() const
 {

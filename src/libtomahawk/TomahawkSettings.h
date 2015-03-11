@@ -57,6 +57,9 @@ public:
     uint scannerTime() const;
     void setScannerTime( uint time );
 
+    QString downloadsPath() const;
+    void setDownloadsPath( const QString& path );
+
     uint infoSystemCacheVersion() const;
     void setInfoSystemCacheVersion( uint version );
     uint genericCacheVersion() const;
