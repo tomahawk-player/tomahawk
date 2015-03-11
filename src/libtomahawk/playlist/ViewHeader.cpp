@@ -158,7 +158,8 @@ ViewHeader::toggleVisibility( int index )
 }
 
 
-void ViewHeader::setGuid( const QString& guid )
+void
+ViewHeader::setGuid( const QString& guid )
 {
     m_guid = guid;
 

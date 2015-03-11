@@ -145,7 +145,7 @@ JSResolverHelper::addTrackResults( const QVariantMap& results )
 {
     Q_ASSERT( results["results"].toMap().isEmpty() );
 
-    QList< Tomahawk::result_ptr > tracks = m_resolver->scriptAccount()->parseResultVariantList( results.value("results").toList() );
+    QList< Tomahawk::result_ptr > tracks = m_resolver->scriptAccount()->parseResultVariantList( results.value( "results" ).toList() );
 
     foreach( const result_ptr& track, tracks )
     {
