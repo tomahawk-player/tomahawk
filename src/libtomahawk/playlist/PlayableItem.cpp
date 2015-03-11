@@ -159,7 +159,10 @@ void
 PlayableItem::onResultsChanged()
 {
     if ( m_query && !m_query->results().isEmpty() )
+    {
         m_result = m_query->results().first();
+        connect( m_result.data(), SIGNAL( updated() ), SIGNAL( dataChanged() ), Qt::UniqueConnection );
+    }
     else
         m_result = result_ptr();
 
