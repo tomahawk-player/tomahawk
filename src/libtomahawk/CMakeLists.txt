@@ -15,6 +15,8 @@ set( libGuiSources
     ActionCollection.cpp
 
     ContextMenu.cpp
+    DownloadManager.cpp
+    DownloadJob.cpp
     DropJob.cpp
     GlobalActionManager.cpp
     ViewPage.cpp
