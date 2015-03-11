@@ -309,7 +309,7 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
         }
         else
         {
-            if ( item->result()->downloadJob()->state() == DownloadJob::TrackState::Finished )
+            if ( item->result()->downloadJob()->state() == DownloadJob::Finished )
             {
                 painter->setPen( opt.palette.text().color() );
                 const QString text = painter->fontMetrics().elidedText( tr( "Finished" ), Qt::ElideRight, opt.rect.width() - 3 );

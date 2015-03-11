@@ -88,7 +88,7 @@ DownloadManager::jobs( DownloadJob::TrackState state ) const
         if ( job.isNull() )
             continue;
 
-        if ( state == DownloadJob::TrackState::Any || job->state() == state )
+        if ( state == DownloadJob::Any || job->state() == state )
             jobs << job;
     }
 
@@ -147,15 +147,15 @@ DownloadManager::containsJob( const downloadjob_ptr& job ) const
 downloadjob_ptr
 DownloadManager::currentJob() const
 {
-    QList<downloadjob_ptr> j = jobs( DownloadJob::TrackState::Running );
+    QList<downloadjob_ptr> j = jobs( DownloadJob::Running );
     if ( j.count() )
         return j.first();
 
-    j = jobs( DownloadJob::TrackState::Paused );
+    j = jobs( DownloadJob::Paused );
     if ( j.count() )
         return j.first();
 
-    j = jobs( DownloadJob::TrackState::Waiting );
+    j = jobs( DownloadJob::Waiting );
     if ( j.count() )
         return j.first();
 
@@ -171,18 +171,18 @@ DownloadManager::state() const
     {
         switch ( currentJob()->state() )
         {
-            case DownloadJob::TrackState::Waiting:
-                return DownloadManager::DownloadManagerState::Waiting;
+            case DownloadJob::Waiting:
+                return DownloadManager::Waiting;
 
-            case DownloadJob::TrackState::Paused:
-                return DownloadManager::DownloadManagerState::Paused;
+            case DownloadJob::Paused:
+                return DownloadManager::Paused;
 
-            case DownloadJob::TrackState::Running:
-                return DownloadManager::DownloadManagerState::Running;
+            case DownloadJob::Running:
+                return DownloadManager::Running;
         }
     }
 
-    return DownloadManager::DownloadManagerState::Waiting;
+    return DownloadManager::Waiting;
 }
 
 
@@ -192,7 +192,7 @@ DownloadManager::checkJobs()
     if ( !m_globalState )
         return;
 
-    if ( state() == DownloadManager::DownloadManagerState::Waiting && !currentJob().isNull() )
+    if ( state() == DownloadManager::Waiting && !currentJob().isNull() )
     {
         downloadjob_ptr job = currentJob();
 /*        connect( job.data(), SIGNAL( finished() ), SLOT( checkJobs() ) );
@@ -210,7 +210,7 @@ DownloadManager::pause()
     tLog() << Q_FUNC_INFO;
 
     m_globalState = false;
-    foreach ( const downloadjob_ptr& job, jobs( DownloadJob::TrackState::Running ) )
+    foreach ( const downloadjob_ptr& job, jobs( DownloadJob::Running ) )
     {
         job->pause();
     }
@@ -224,9 +224,9 @@ DownloadManager::resume()
 
     m_globalState = true;
 
-    if ( jobs( DownloadJob::TrackState::Paused ).count() )
+    if ( jobs( DownloadJob::Paused ).count() )
     {
-        foreach ( const downloadjob_ptr& job, jobs( DownloadJob::TrackState::Paused ) )
+        foreach ( const downloadjob_ptr& job, jobs( DownloadJob::Paused ) )
         {
             tLog() << "Resuming job:" << job->toString();
             job->resume();

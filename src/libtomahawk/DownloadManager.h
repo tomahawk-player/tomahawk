@@ -38,7 +38,7 @@ public:
 
     DownloadManagerState state() const;
 
-    QList<downloadjob_ptr> jobs( DownloadJob::TrackState state = DownloadJob::TrackState::Any ) const;
+    QList<downloadjob_ptr> jobs( DownloadJob::TrackState state = DownloadJob::Any ) const;
     bool containsJob( const downloadjob_ptr& job ) const;
     downloadjob_ptr currentJob() const;
 
