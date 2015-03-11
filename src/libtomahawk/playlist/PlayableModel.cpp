@@ -47,7 +47,7 @@ PlayableModel::init()
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ), Qt::DirectConnection );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );
 
-    d->header << tr( "Artist" ) << tr( "Title" ) << tr( "Composer" ) << tr( "Album" ) << tr( "Track" ) << tr( "Duration" )
+    d->header << tr( "Artist" ) << tr( "Title" ) << tr( "Composer" ) << tr( "Album" ) << tr( "Download" ) << tr( "Track" ) << tr( "Duration" )
               << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" ) << tr( "Accuracy" ) << tr( "Name" );
 }
 
@@ -874,6 +874,7 @@ PlayableModel::columnAlignment( int column ) const
         case Filesize:
         case Score:
         case Year:
+        case Download:
             return Qt::AlignHCenter;
             break;
 

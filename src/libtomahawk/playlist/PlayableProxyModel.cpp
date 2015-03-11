@@ -49,7 +49,7 @@ PlayableProxyModel::PlayableProxyModel( QObject* parent )
     PlayableProxyModel::setSourcePlayableModel( NULL );
 
     m_headerStyle[ Fancy ]      << PlayableModel::Name;
-    m_headerStyle[ Detailed ]   << PlayableModel::Artist << PlayableModel::Track << PlayableModel::Composer << PlayableModel::Album << PlayableModel::AlbumPos << PlayableModel::Duration << PlayableModel::Bitrate << PlayableModel::Age << PlayableModel::Year << PlayableModel::Filesize << PlayableModel::Origin << PlayableModel::Score;
+    m_headerStyle[ Detailed ]   << PlayableModel::Artist << PlayableModel::Track << PlayableModel::Composer << PlayableModel::Album << PlayableModel::Download << PlayableModel::AlbumPos << PlayableModel::Duration << PlayableModel::Bitrate << PlayableModel::Age << PlayableModel::Year << PlayableModel::Filesize << PlayableModel::Origin << PlayableModel::Score;
     m_headerStyle[ Collection ] << PlayableModel::Name << PlayableModel::Composer << PlayableModel::Duration << PlayableModel::Bitrate << PlayableModel::Age << PlayableModel::Year << PlayableModel::Filesize << PlayableModel::Origin;
 }
 
@@ -612,7 +612,7 @@ PlayableProxyModel::columnCount( const QModelIndex& parent ) const
 
         case Detailed:
         default:
-            return 12;
+            return 13;
             break;
     }
 }
@@ -674,7 +674,7 @@ PlayableProxyModel::columnWeights() const
 
         case Detailed:
         default:
-            w << 0.15 << 0.15 << 0.12 << 0.12 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.09; // << 0.03;
+            w << 0.12 << 0.12 << 0.12 << 0.12 << 0.06 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.09; // << 0.03;
             break;
     }
 

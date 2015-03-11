@@ -45,15 +45,16 @@ public:
         Track = 1,
         Composer = 2,
         Album = 3,
-        AlbumPos = 4,
-        Duration = 5,
-        Bitrate = 6,
-        Age = 7,
-        Year = 8,
-        Filesize = 9,
-        Origin = 10,
-        Score = 11,
-        Name = 12
+        Download = 4,
+        AlbumPos = 5,
+        Duration = 6,
+        Bitrate = 7,
+        Age = 8,
+        Year = 9,
+        Filesize = 10,
+        Origin = 11,
+        Score = 12,
+        Name = 13,
     };
 
     enum PlayableRoles
@@ -62,6 +63,7 @@ public:
         TrackRole,
         ComposerRole,
         AlbumRole,
+        DownloadRole,
         AlbumPosRole,
         DurationRole,
         BitrateRole,
