@@ -284,13 +284,8 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
     else */
     if ( index.column() == PlayableModel::Download )
     {
-/*        QStyleOptionButton opt;
-        opt.state = QStyle::State_Active | QStyle::State_Enabled;
-        opt.rect = QRect( 50, 25, 100, 50 );
-        style()->drawControl( QStyle::CE_PushButton, &opt, &painter );*/
-
         QStyleOptionComboBox optc;
-        optc.rect.adjust( 4, 0, -4, 0 );
+        optc.rect = opt.rect.adjusted( 4, 0, -4, 0 );
         optc.editable = false;
 //        sDebug() << item->track()->currentFormat() << item->track()->formats().count();
         optc.currentText = tr( "Download %1" ).arg( item->result()->downloadFormats().first().extension );
