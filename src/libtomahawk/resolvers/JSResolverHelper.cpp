@@ -50,6 +50,7 @@
 #include <QFileInfo>
 #include <QMap>
 #include <QWebFrame>
+#include <QLocale>
 #include <taglib/asffile.h>
 #include <taglib/flacfile.h>
 #include <taglib/id3v2framefactory.h>
@@ -62,6 +63,11 @@
 #if TAGLIB_MAJOR_VERSION >= 1 && TAGLIB_MINOR_VERSION >= 9
     #include <taglib/opusfile.h>
 #endif
+#endif
+
+#ifdef Q_OS_WIN
+    // GetUserGeoID for currentCountry
+    #include <winnls.h>
 #endif
 
 using namespace Tomahawk;
@@ -193,7 +199,287 @@ JSResolverHelper::uuid() const
 int
 JSResolverHelper::currentCountry() const
 {
+#if defined Q_OS_WIN
+    // c.f. https://msdn.microsoft.com/en-us/library/windows/desktop/dd374073(v=vs.85).aspx
+    static QHash< GEOID, QLocale::Country > geoIdCountryMapping = {
+        { 2, QLocale::AntiguaAndBarbuda },
+         { 3, QLocale::Afghanistan },
+         { 4, QLocale::Algeria },
+         { 5, QLocale::Azerbaijan },
+         { 6, QLocale::Albania },
+         { 7, QLocale::Armenia },
+         { 8, QLocale::Andorra },
+         { 9, QLocale::Angola },
+         { 10, QLocale::AmericanSamoa },
+         { 11, QLocale::Argentina },
+         { 12, QLocale::Australia },
+         { 14, QLocale::Austria },
+         { 17, QLocale::Bahrain },
+         { 18, QLocale::Barbados },
+         { 19, QLocale::Botswana },
+         { 20, QLocale::Bermuda },
+         { 21, QLocale::Belgium },
+         { 22, QLocale::Bahamas },
+         { 23, QLocale::Bangladesh },
+         { 24, QLocale::Belize },
+         { 25, QLocale::BosniaAndHerzegowina },
+         { 26, QLocale::Bolivia },
+         { 27, QLocale::Myanmar },
+         { 28, QLocale::Benin },
+         { 29, QLocale::Belarus },
+         { 30, QLocale::SolomonIslands },
+         { 32, QLocale::Brazil },
+         { 34, QLocale::Bhutan },
+         { 35, QLocale::Bulgaria },
+         { 37, QLocale::Brunei },
+         { 38, QLocale::Burundi },
+         { 39, QLocale::Canada },
+         { 40, QLocale::Cambodia },
+         { 41, QLocale::Chad },
+         { 42, QLocale::SriLanka },
+         { 43, QLocale::PeoplesRepublicOfCongo }, // Congo
+         { 44, QLocale::DemocraticRepublicOfCongo }, // Congo (DRC)
+         { 45, QLocale::China },
+         { 46, QLocale::Chile },
+         { 49, QLocale::Cameroon },
+         { 50, QLocale::Comoros },
+         { 51, QLocale::Colombia },
+         { 54, QLocale::CostaRica },
+         { 55, QLocale::CentralAfricanRepublic },
+         { 56, QLocale::Cuba },
+         { 57, QLocale::CapeVerde },
+         { 59, QLocale::Cyprus },
+         { 61, QLocale::Denmark },
+         { 62, QLocale::Djibouti },
+         { 63, QLocale::Dominica },
+         { 65, QLocale::DominicanRepublic },
+         { 66, QLocale::Ecuador },
+         { 67, QLocale::Egypt },
+         { 68, QLocale::Ireland },
+         { 69, QLocale::EquatorialGuinea },
+         { 70, QLocale::Estonia },
+         { 71, QLocale::Eritrea },
+         { 72, QLocale::ElSalvador },
+         { 73, QLocale::Ethiopia },
+         { 75, QLocale::CzechRepublic },
+         { 77, QLocale::Finland },
+         { 78, QLocale::Fiji },
+         { 80, QLocale::Micronesia },
+         { 81, QLocale::FaroeIslands },
+         { 84, QLocale::France },
+         { 86, QLocale::Gambia },
+         { 87, QLocale::Gabon },
+         { 88, QLocale::Georgia },
+         { 89, QLocale::Ghana },
+         { 90, QLocale::Gibraltar },
+         { 91, QLocale::Grenada },
+         { 93, QLocale::Greenland },
+         { 94, QLocale::Germany },
+         { 98, QLocale::Greece },
+         { 99, QLocale::Guatemala },
+         { 100, QLocale::Guinea },
+         { 101, QLocale::Guyana },
+         { 103, QLocale::Haiti },
+         { 104, QLocale::HongKong },
+         { 106, QLocale::Honduras },
+         { 108, QLocale::Croatia },
+         { 109, QLocale::Hungary },
+         { 110, QLocale::Iceland },
+         { 111, QLocale::Indonesia },
+         { 113, QLocale::India },
+         { 114, QLocale::BritishIndianOceanTerritory },
+         { 116, QLocale::Iran },
+         { 117, QLocale::Israel },
+         { 118, QLocale::Italy },
+         { 119, QLocale::IvoryCoast },
+         { 121, QLocale::Iraq },
+         { 122, QLocale::Japan },
+         { 124, QLocale::Jamaica },
+         { 125, QLocale::SvalbardAndJanMayenIslands	 }, // Jan Mayen
+         { 126, QLocale::Jordan },
+         { 127, QLocale::AnyCountry }, // Johnston Atoll
+         { 129, QLocale::Kenya },
+         { 130, QLocale::Kyrgyzstan },
+         { 131, QLocale::DemocraticRepublicOfKorea }, // North Korea
+         { 133, QLocale::Kiribati },
+         { 134, QLocale::RepublicOfKorea }, // Korea
+         { 136, QLocale::Kuwait },
+         { 137, QLocale::Kazakhstan },
+         { 138, QLocale::Laos },
+         { 139, QLocale::Lebanon },
+         { 140, QLocale::Latvia },
+         { 141, QLocale::Lithuania },
+         { 142, QLocale::Liberia },
+         { 143, QLocale::Slovakia },
+         { 145, QLocale::Liechtenstein },
+         { 146, QLocale::Lesotho },
+         { 147, QLocale::Luxembourg },
+         { 148, QLocale::Libya },
+         { 149, QLocale::Madagascar },
+         { 151, QLocale::Macau },
+         { 152, QLocale::Moldova },
+         { 154, QLocale::Mongolia },
+         { 156, QLocale::Malawi },
+         { 157, QLocale::Mali },
+         { 158, QLocale::Monaco },
+         { 159, QLocale::Morocco },
+         { 160, QLocale::Mauritius },
+         { 162, QLocale::Mauritania },
+         { 163, QLocale::Malta },
+         { 164, QLocale::Oman },
+         { 165, QLocale::Maldives },
+         { 166, QLocale::Mexico },
+         { 167, QLocale::Malaysia },
+         { 168, QLocale::Mozambique },
+         { 173, QLocale::Niger },
+         { 174, QLocale::Vanuatu },
+         { 175, QLocale::Nigeria },
+         { 176, QLocale::Netherlands },
+         { 177, QLocale::Norway },
+         { 178, QLocale::Nepal },
+         { 180, QLocale::NauruCountry }, // Nauru
+         { 181, QLocale::Suriname },
+         { 182, QLocale::Nicaragua },
+         { 183, QLocale::NewZealand },
+         { 184, QLocale::PalestinianTerritories }, // Palestinian Authority
+         { 185, QLocale::Paraguay },
+         { 187, QLocale::Peru },
+         { 190, QLocale::Pakistan },
+         { 191, QLocale::Poland },
+         { 192, QLocale::Panama },
+         { 193, QLocale::Portugal },
+         { 194, QLocale::PapuaNewGuinea },
+         { 195, QLocale::Palau },
+         { 196, QLocale::GuineaBissau },
+         { 197, QLocale::Qatar },
+         { 198, QLocale::Reunion },
+         { 199, QLocale::MarshallIslands },
+         { 200, QLocale::Romania },
+         { 201, QLocale::Philippines },
+         { 202, QLocale::PuertoRico },
+         { 203, QLocale::Russia },
+         { 204, QLocale::Rwanda },
+         { 205, QLocale::SaudiArabia },
+         { 206, QLocale::SaintPierreAndMiquelon },
+         { 207, QLocale::SaintKittsAndNevis },
+         { 208, QLocale::Seychelles },
+         { 209, QLocale::SouthAfrica },
+         { 210, QLocale::Senegal },
+         { 212, QLocale::Slovenia },
+         { 213, QLocale::SierraLeone },
+         { 214, QLocale::SanMarino },
+         { 215, QLocale::Singapore },
+         { 216, QLocale::Somalia },
+         { 217, QLocale::Spain },
+         { 218, QLocale::SaintLucia },
+         { 219, QLocale::Sudan },
+         { 220, QLocale::SvalbardAndJanMayenIslands	 }, // Svalbard
+         { 221, QLocale::Sweden },
+         { 222, QLocale::Syria },
+         { 223, QLocale::Switzerland },
+         { 224, QLocale::UnitedArabEmirates },
+         { 225, QLocale::TrinidadAndTobago },
+         { 227, QLocale::Thailand },
+         { 228, QLocale::Tajikistan },
+         { 231, QLocale::Tonga },
+         { 232, QLocale::Togo },
+         { 233, QLocale::SaoTomeAndPrincipe },
+         { 234, QLocale::Tunisia },
+         { 235, QLocale::Turkey },
+         { 236, QLocale::Tuvalu },
+         { 237, QLocale::Taiwan },
+         { 238, QLocale::Turkmenistan },
+         { 239, QLocale::Tanzania },
+         { 240, QLocale::Uganda },
+         { 241, QLocale::Ukraine },
+         { 242, QLocale::UnitedKingdom },
+         { 244, QLocale::UnitedStates },
+         { 245, QLocale::BurkinaFaso },
+         { 246, QLocale::Uruguay },
+         { 247, QLocale::Uzbekistan },
+         { 248, QLocale::SaintVincentAndTheGrenadines },
+         { 249, QLocale::Venezuela },
+         { 251, QLocale::Vietnam },
+         { 252, QLocale::UnitedStatesVirginIslands }, // VirginIslands (British VI are handled down below)
+         { 253, QLocale::VaticanCityState },
+         { 254, QLocale::Namibia },
+         { 257, QLocale::WesternSahara }, // Western Sahara (disputed)
+         { 258, QLocale::UnitedStates }, // Wake Island
+         { 259, QLocale::Samoa },
+         { 260, QLocale::Swaziland },
+         { 261, QLocale::Yemen },
+         { 263, QLocale::Zambia },
+         { 264, QLocale::Zimbabwe },
+         { 269, QLocale::Serbia }, // Serbia and Montenegro(Former)
+         { 270, QLocale::Montenegro },
+         { 271, QLocale::Serbia },
+         { 273, QLocale::CuraSao },
+         { 276, QLocale::SouthSudan },
+         { 300, QLocale::Anguilla },
+         { 301, QLocale::Antarctica },
+         { 302, QLocale::Aruba },
+         { 303, QLocale::AscensionIsland },
+         { 304, QLocale::Australia }, // Ashmore and Cartier Islands
+         { 305, QLocale::UnitedStates }, // Baker Island
+         { 306, QLocale::BouvetIsland },
+         { 307, QLocale::CaymanIslands },
+         { 309, QLocale::ChristmasIsland },
+         { 310, QLocale::ClippertonIsland },
+         { 311, QLocale::CocosIslands }, // Cocos(Keeling)Islands
+         { 312, QLocale::CookIslands },
+         { 313, QLocale::Australia }, // Coral Sea Islands
+         { 314, QLocale::DiegoGarcia },
+         { 315, QLocale::FalklandIslands }, // Falkland Islands (IslasMalvinas)
+         { 317, QLocale::FrenchGuiana },
+         { 318, QLocale::FrenchPolynesia },
+         { 319, QLocale::Antarctica }, // French Southern and Antarctic Lands
+         { 321, QLocale::Guadeloupe },
+         { 322, QLocale::Guam },
+         { 323, QLocale::UnitedStates }, // Guantanamo Bay
+         { 324, QLocale::Guernsey },
+         { 325, QLocale::Australia }, // Heard Island and Mc Donald Islands
+         { 326, QLocale::UnitedStates }, // Howland Island
+         { 327, QLocale::UnitedStates }, // Jarvis Island
+         { 328, QLocale::Jersey },
+         { 329, QLocale::UnitedStates }, // Kingman Reef
+         { 330, QLocale::Martinique },
+         { 331, QLocale::Mayotte },
+         { 332, QLocale::Montserrat },
+         { 334, QLocale::NewCaledonia },
+         { 335, QLocale::Niue },
+         { 336, QLocale::NorfolkIsland },
+         { 337, QLocale::NorthernMarianaIslands },
+         { 338, QLocale::UnitedStates }, // PalmyraAtoll
+         { 339, QLocale::Pitcairn }, // Pitcairn Islands
+         { 340, QLocale::UnitedStates }, // Rota Island
+         { 341, QLocale::UnitedStates }, // Saipan
+         { 342, QLocale::SouthGeorgiaAndTheSouthSandwichIslands },
+         { 343, QLocale::SaintHelena },
+         { 346, QLocale::UnitedStates }, // Tinian Island
+         { 347, QLocale::Tokelau },
+         { 348, QLocale::TristanDaCunha },
+         { 349, QLocale::TurksAndCaicosIslands },
+         { 351, QLocale::BritishVirginIslands },
+         { 352, QLocale::WallisAndFutunaIslands },
+         { 15126, QLocale::IsleOfMan },
+         { 19618, QLocale::Macedonia }, // Macedonia, Former Yugoslav Republic Of
+         { 21242, QLocale::UnitedStates }, // Midway Islands
+         { 30967, QLocale::SaintMartin }, // SintMaarten (DutchPart)
+         { 31706, QLocale::SaintMartin }, // (FrenchPart)
+         { 7299303, QLocale::EastTimor }, // Democratic Republic Of Timor-Leste
+         { 10028789, QLocale::AlandIslands },
+         { 161832015, QLocale::SaintBarthelemy },
+         { 161832256, QLocale::UnitedStates }, // U.S. Minor Outlying Islands
+         { 161832258, QLocale::Bonaire }, // Bonaire, Saint Eustatius and Saba
+    };
+
+    GEOID nationId = GetUserGeoID(GEOCLASS_NATION);
+
+    return geoIdCountryMapping.value(nationId);
+
+#else
     return static_cast<int>(QLocale::system().country());
+#endif
 }
 
 
