@@ -736,7 +736,7 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/music-settings.svg", size );
             break;
         case DownloadsSettings:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/music-settings.svg", size );
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/downloads.svg", size );
             break;
 
         case DropSong:
