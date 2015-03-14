@@ -1180,7 +1180,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Download</source>
-        <translation type="unfinished"/>
+        <translation>Télécharger</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
@@ -1274,12 +1274,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="292"/>
         <source>Download %1</source>
-        <translation type="unfinished"/>
+        <translation>Télécharger %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="311"/>
         <source>Finished</source>
-        <translation type="unfinished"/>
+        <translation>Terminé</translation>
     </message>
 </context>
 <context>
@@ -1699,12 +1699,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="260"/>
         <source>Downloads</source>
-        <translation type="unfinished"/>
+        <translation>Téléchargements</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="260"/>
         <source>Configure Tomahawk&apos;s integrated download manager.</source>
-        <translation type="unfinished"/>
+        <translation>Configurer le gestionnaire de téléchargements de Tomahawk.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="429"/>
@@ -1870,12 +1870,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="26"/>
         <source>Folder to download music to:</source>
-        <translation type="unfinished"/>
+        <translation>Dossier de destination des musiques :</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="45"/>
         <source>Browse...</source>
-        <translation type="unfinished"/>
+        <translation>Parcourir…</translation>
     </message>
 </context>
 <context>
