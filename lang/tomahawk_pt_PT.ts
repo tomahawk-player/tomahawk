@@ -4327,7 +4327,7 @@ Ajuste os filtros para definir um novo conjunto de faixas.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="253"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Love that your friends and influencers are posting music links  but hate that they are links for music services you don&apos;t use? Just drag Rdio, Deezer, Beats or other music service URLs into your Tomahawk queue or playlists and have them automatically play from your preferred source.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Os seus amigos e influenciadores estão a enviar ligações de músicas que vocÊs gosta mas que não consegue abrir? Basta arrastar os URL dos serviços como o Rdio, Deezer, Beats ou qualquer outro sítio web para a fila ou lista de reprodução do Tamanhawk para as poder ouvir através da sua fonte preferida.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Adora que os seus amigos e influenciadores publiquem ligações de música mas odeia que o levem a serviços que não utiliza? Basta arrastar os URL do Rdio, Deezer, Beats ou outro serviço para a fila ou listas de reprodução do seu Tomahawk, para automaticamente as poder reproduzir a partir da sua fonte preferida.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="270"/>
