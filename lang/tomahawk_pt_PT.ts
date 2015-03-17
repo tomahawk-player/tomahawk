@@ -5,8 +5,7 @@
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="67"/>
         <source>Allow %1 to
 connect and stream from you?</source>
-        <translation>Permite que %1 se ligue
-e transmita para si?</translation>
+        <translation>Permitir que %1 se ligue e faça stream a partir de si?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="83"/>
@@ -24,7 +23,7 @@ e transmita para si?</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="185"/>
         <source>Tomahawk needs you to decide whether %1 is allowed to connect.</source>
-        <translation>O Tomahawk precisa que você decida se %1 tem permissão para se ligar.</translation>
+        <translation>O Tomahawk precisa que decida se permite a ligação de %1.</translation>
     </message>
 </context>
 <context>
@@ -132,12 +131,12 @@ e transmita para si?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="92"/>
         <source>&amp;Previous Track</source>
-        <translation>Fai&amp;xa anterior</translation>
+        <translation>&amp;Faixa anterior</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="95"/>
         <source>&amp;Next Track</source>
-        <translation>Faixa segui&amp;nte</translation>
+        <translation>&amp;Faixa seguinte</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="98"/>
@@ -298,7 +297,7 @@ e transmita para si?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.ui" line="50"/>
         <source>Top Albums</source>
-        <translation>Melhores álbuns</translation>
+        <translation>Álbuns Mais Populares</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.ui" line="110"/>
@@ -613,7 +612,7 @@ e transmita para si?</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/DiagnosticsDialog.ui" line="42"/>
         <source>&amp;Copy to Clipboard</source>
-        <translation>&amp;Copiar para a área de transferência</translation>
+        <translation>&amp;Copiar para a Área de Transferência</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/DiagnosticsDialog.ui" line="49"/>
@@ -805,7 +804,7 @@ Descartável (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="51"/>
         <source>%1&apos;s recently played tracks</source>
-        <translation>Faixas reproduzidas recentemente de %1</translation>
+        <translation>Faixas de %1 reproduzidas recentemente </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="57"/>
@@ -833,7 +832,7 @@ Descartável (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="69"/>
         <source>Static Port:</source>
-        <translation>Porta estática:</translation>
+        <translation>Porta Estática:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="106"/>
@@ -846,7 +845,7 @@ Descartável (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/InboxItem.cpp" line="35"/>
         <source>Inbox</source>
-        <translation>Caixa de entrada</translation>
+        <translation>Caixa de Entrada</translation>
     </message>
 </context>
 <context>
@@ -867,7 +866,7 @@ Descartável (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="84"/>
         <source>Inbox Details</source>
-        <translation>Detalhes da caixa de entrada</translation>
+        <translation>Detalhes da Caixa de Entrada</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="93"/>
@@ -913,7 +912,7 @@ Descartável (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="87"/>
         <source>Synchronize Loved Tracks</source>
-        <translation>Sincronizar faixas preferidas</translation>
+        <translation>Sincronizar Faixas Preferidas</translation>
     </message>
 </context>
 <context>
@@ -959,7 +958,7 @@ Descartável (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="79"/>
         <source>To import a playlist from Spotify, Rdio, Beats, etc. - simply drag the link into Tomahawk.</source>
-        <translation>Para importar uma lista de reprodução do Spotify, Rdio, Beats..., arraste a ligação para o Tomahawk.</translation>
+        <translation>Para importar uma lista de reprodução do Spotify, Rdio, Beats, etc. - arraste simplesmente o link para o Tomahawk.</translation>
     </message>
 </context>
 <context>
@@ -980,7 +979,7 @@ Descartável (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="58"/>
         <source>Top Loved Tracks</source>
-        <translation>Faixas preferidas</translation>
+        <translation>Faixas Preferidas</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="60"/>
@@ -990,7 +989,7 @@ Descartável (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="86"/>
         <source>Sorry, we could not find any of your Favorites!</source>
-        <translation>Desculpe mas ainda não possui faixas favoritas!</translation>
+        <translation>Lamentamos, não foram encontrados nenhuns dos seus Favoritos!</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="89"/>
@@ -1231,7 +1230,7 @@ as etiquetas em %1</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="896"/>
         <source>Vague match</source>
-        <translation>Correspondência vaga</translation>
+        <translation>Vaga correspondência </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="897"/>
@@ -1364,7 +1363,7 @@ as etiquetas em %1</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="127"/>
         <source>Use proxy for DNS lookups?</source>
-        <translation>Utilizar proxy para procuras DNS?</translation>
+        <translation>Utilizar proxy para procuras por DNS?</translation>
     </message>
 </context>
 <context>
@@ -1432,7 +1431,7 @@ as etiquetas em %1</translation>
     <message>
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="308"/>
         <source>just now</source>
-        <translation>mesmo agora</translation>
+        <translation>agora mesmo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="38"/>
@@ -1442,12 +1441,12 @@ as etiquetas em %1</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="40"/>
         <source>Music Finders</source>
-        <translation>Localizadores de músicas</translation>
+        <translation>Localizadores de Músicas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="43"/>
         <source>Status Updaters</source>
-        <translation>Atualizadores de estado</translation>
+        <translation>Atualizadores de Estado</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="543"/>
@@ -1726,7 +1725,7 @@ as etiquetas em %1</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="556"/>
         <source>Delete all Access Control entries?</source>
-        <translation>Eliminar todas as entradas de controlo de acesso?</translation>
+        <translation>Eliminar todas as entradas de Controlo de Acesso?</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="557"/>
@@ -1817,7 +1816,7 @@ as etiquetas em %1</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="244"/>
         <source>Clear All Access Control Entries</source>
-        <translation>Limpar todas as entradas de controlo de acesso</translation>
+        <translation>Limpar Todas as Entradas de Controlo de Acesso</translation>
     </message>
 </context>
 <context>

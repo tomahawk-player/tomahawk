@@ -732,7 +732,7 @@ de se connecter et streamer votre flux ?</translation>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="127"/>
         <source>Resolver installation from file %1 failed.</source>
-        <translation>L&apos;installation du resolver à partir du fichier %1 a échouée.</translation>
+        <translation>L&apos;installation du resolver à partir du fichier %1 a échoué.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="135"/>
