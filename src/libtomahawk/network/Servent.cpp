@@ -1133,7 +1133,11 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
             QMutexLocker locker( &d->controlconnectionsMutex );
             foreach ( ControlConnection* cc, d->controlconnections )
             {
-                tDebug() << Q_FUNC_INFO << "Probing:" << cc->name();
+                if ( cc->socket() )
+                    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Probing:" << cc->name() << cc->socket()->peerAddress();
+                else
+                    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Probing error:" << cc->name() << "has invalid socket";
+
                 // Always compare IPv6 addresses as IPv4 address are sometime simply IPv4 addresses, sometimes mapped IPv6 addresses
                 if ( cc->socket() && equalByIPv6Address( cc->socket()->peerAddress(), peer ) )
                 {
