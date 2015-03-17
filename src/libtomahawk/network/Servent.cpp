@@ -1149,7 +1149,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
             }
             if ( !authed )
             {
-                tLog() << "File transfer request rejected, invalid source IP";
+                tLog() << "File transfer request rejected as the request came from an IP which we could not match to existing peer connections.";
                 return NULL;
             }
         }
