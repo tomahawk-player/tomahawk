@@ -448,10 +448,19 @@ PlayableModel::flags( const QModelIndex& index ) const
 {
     Qt::ItemFlags defaultFlags = QAbstractItemModel::flags( index );
 
-    if ( index.isValid() && index.column() == 0 )
-        return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
-    else
-        return Qt::ItemIsDropEnabled | defaultFlags;
+    if ( index.isValid() )
+    {
+        if ( index.column() == 0 )
+        {
+            return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
+        }
+        else if ( index.column() == PlayableModel::Download )
+        {
+            return Qt::ItemIsEditable | defaultFlags;
+        }
+    }
+
+    return Qt::ItemIsDropEnabled | defaultFlags;
 }
 
 
