@@ -527,11 +527,11 @@ Result::track() const
 
 
 downloadjob_ptr
-Result::toDownloadJob()
+Result::toDownloadJob( const DownloadFormat& format )
 {
     if ( !m_downloadJob )
     {
-        m_downloadJob = downloadjob_ptr( new DownloadJob( track(), downloadFormats().first() ) );
+        m_downloadJob = downloadjob_ptr( new DownloadJob( track(), format ) );
         connect( m_downloadJob.data(), SIGNAL( progress( int ) ), SIGNAL( updated() ) );
     }
 
