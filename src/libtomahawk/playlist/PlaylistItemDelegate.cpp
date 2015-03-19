@@ -147,7 +147,7 @@ PlaylistItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem&
         editor->addItems( formats );
 
         _detail::Closure* closure = NewClosure( editor, SIGNAL( activated( int ) ),
-                                                const_cast<PlaylistItemDelegate*>(this), SLOT( closeEditor( const QModelIndex&, QWidget* ) ), index, editor );
+                                                const_cast<PlaylistItemDelegate*>(this), SLOT( closeEditor( const QModelIndex&, QWidget* ) ), index, (QWidget*)editor );
         return editor;
     }
 
