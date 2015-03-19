@@ -32,6 +32,8 @@ class PlayableItem;
 class PlayableProxyModel;
 class TrackView;
 
+class QComboBox;
+
 namespace Tomahawk {
     class PixmapDelegateFader;
 }
@@ -55,12 +57,16 @@ signals:
 
 private slots:
     void doUpdateIndex( const QPersistentModelIndex& index );
+    void closeEditor( const QModelIndex& index, PlayableItem* item, QComboBox* editor );
 
 protected:
     void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const;
 
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
+    void updateEditorGeometry( QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    void setModelData( QWidget* editor, QAbstractItemModel* model, const QModelIndex& index ) const;
 
     QPersistentModelIndex hoveringOver() const { return m_hoveringOver; }
 

@@ -22,6 +22,7 @@
 
 #include <QAbstractTextDocumentLayout>
 #include <QApplication>
+#include <QComboBox>
 #include <QDateTime>
 #include <QMouseEvent>
 #include <QPainter>
@@ -125,6 +126,65 @@ PlaylistItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const 
     initStyleOption( option, index );
 
     TomahawkUtils::prepareStyleOption( option, index, item );
+}
+
+
+QWidget*
+PlaylistItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
+    PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
+    Q_ASSERT( item );
+
+    if ( index.column() == PlayableModel::Download && item->result() && !item->result()->downloadFormats().isEmpty() )
+    {
+        QStringList formats;
+        foreach ( const DownloadFormat& format, item->result()->downloadFormats() )
+        {
+            formats << tr( "Download %1" ).arg( format.extension );
+        }
+
+        QComboBox* editor = new QComboBox( parent );
+        editor->addItems( formats );
+
+        _detail::Closure* closure = NewClosure( editor, SIGNAL( activated( int ) ),
+                                                const_cast<PlaylistItemDelegate*>(this), SLOT( closeEditor( const QModelIndex&, PlayableItem*, QComboBox* ) ), index, item, editor );
+        return editor;
+    }
+
+    return 0;
+}
+
+
+void
+PlaylistItemDelegate::closeEditor( const QModelIndex& index, PlayableItem* item, QComboBox* editor )
+{
+    m_view->closePersistentEditor( index );
+
+    QComboBox* cb = static_cast< QComboBox* >(editor);
+    DownloadManager::instance()->addJob( item->result()->toDownloadJob( item->result()->downloadFormats().at( cb->currentIndex() ) ) );
+}
+
+
+void
+PlaylistItemDelegate::updateEditorGeometry( QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
+    QStyledItemDelegate::updateEditorGeometry( editor, option, index );
+
+    QComboBox* comboBox = static_cast<QComboBox*>(editor);
+    comboBox->resize( option.rect.size() - QSize( 8, 0 ) );
+    comboBox->move( option.rect.x() + 4, option.rect.y() );
+
+    if ( !comboBox->property( "shownPopup" ).toBool() )
+    {
+        comboBox->showPopup();
+        comboBox->setProperty( "shownPopup", true );
+    }
+}
+
+
+void
+PlaylistItemDelegate::setModelData( QWidget* editor, QAbstractItemModel* model, const QModelIndex& index ) const
+{
 }
 
 
@@ -898,7 +958,8 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
         }
         else if ( index.column() == PlayableModel::Download )
         {
-            DownloadManager::instance()->addJob( item->result()->toDownloadJob() );
+            m_view->edit( index );
+            return true;
         }
 
         event->accept();
