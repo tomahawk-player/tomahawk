@@ -57,7 +57,7 @@ signals:
 
 private slots:
     void doUpdateIndex( const QPersistentModelIndex& index );
-    void closeEditor( const QModelIndex& index, PlayableItem* item, QComboBox* editor );
+    void closeEditor( const QModelIndex& index, QWidget* editor );
 
 protected:
     void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const;

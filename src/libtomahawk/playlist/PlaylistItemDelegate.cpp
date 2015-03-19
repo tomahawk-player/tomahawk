@@ -147,7 +147,7 @@ PlaylistItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem&
         editor->addItems( formats );
 
         _detail::Closure* closure = NewClosure( editor, SIGNAL( activated( int ) ),
-                                                const_cast<PlaylistItemDelegate*>(this), SLOT( closeEditor( const QModelIndex&, PlayableItem*, QComboBox* ) ), index, item, editor );
+                                                const_cast<PlaylistItemDelegate*>(this), SLOT( closeEditor( const QModelIndex&, QWidget* ) ), index, editor );
         return editor;
     }
 
@@ -156,8 +156,11 @@ PlaylistItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem&
 
 
 void
-PlaylistItemDelegate::closeEditor( const QModelIndex& index, PlayableItem* item, QComboBox* editor )
+PlaylistItemDelegate::closeEditor( const QModelIndex& index, QWidget* editor )
 {
+    PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
+    Q_ASSERT( item );
+
     m_view->closePersistentEditor( index );
 
     QComboBox* cb = static_cast< QComboBox* >(editor);
