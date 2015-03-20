@@ -1213,42 +1213,42 @@ jednorazowe (OTP)</translation>
         <translation>Dokładność</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="893"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="902"/>
         <source>Perfect match</source>
         <translation>Perfekcyjne dopasowanie</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="894"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="903"/>
         <source>Very good match</source>
         <translation>Bardzo dobre dopasowanie</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="895"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="904"/>
         <source>Good match</source>
         <translation>Dobre dopasowanie</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="896"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="905"/>
         <source>Vague match</source>
         <translation>Niejasne dopasowanie</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="897"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="906"/>
         <source>Bad match</source>
         <translation>Złe dopasowanie</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="898"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="907"/>
         <source>Very bad match</source>
         <translation>Bardzo złe dopasowanie</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="899"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="908"/>
         <source>Not available</source>
         <translation>Niedostępne</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="900"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="909"/>
         <source>Searching...</source>
         <translation>Wyszukiwanie…</translation>
     </message>
@@ -1262,22 +1262,23 @@ jednorazowe (OTP)</translation>
 <context>
     <name>PlaylistItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="175"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="238"/>
         <source>played %1 by you</source>
         <translation>odtworzone %1 przez ciebie</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="177"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="240"/>
         <source>played %1 by %2</source>
         <translation>odtworzone %1 przez %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="292"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="143"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="355"/>
         <source>Download %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="311"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="374"/>
         <source>Finished</source>
         <translation type="unfinished"/>
     </message>

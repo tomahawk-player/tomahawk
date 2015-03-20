@@ -1212,42 +1212,42 @@ Password (OTP)</source>
         <translation>Ακρίβεια</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="893"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="902"/>
         <source>Perfect match</source>
         <translation>Τέλειο ταίριασμα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="894"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="903"/>
         <source>Very good match</source>
         <translation>Πολύ καλό ταίριασμα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="895"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="904"/>
         <source>Good match</source>
         <translation>Καλό ταίριασμα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="896"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="905"/>
         <source>Vague match</source>
         <translation>Ασαφές ταίριασμα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="897"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="906"/>
         <source>Bad match</source>
         <translation>Κακό ταίριασμα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="898"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="907"/>
         <source>Very bad match</source>
         <translation>Πολύ κακό ταίριασμα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="899"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="908"/>
         <source>Not available</source>
         <translation>Μη διαθέσιμο</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="900"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="909"/>
         <source>Searching...</source>
         <translation>Αναζήτηση...</translation>
     </message>
@@ -1261,22 +1261,23 @@ Password (OTP)</source>
 <context>
     <name>PlaylistItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="175"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="238"/>
         <source>played %1 by you</source>
         <translation>παίχθηκε %1 από εσάς</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="177"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="240"/>
         <source>played %1 by %2</source>
         <translation>παίχθηκε %1 από τον/την %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="292"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="143"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="355"/>
         <source>Download %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="311"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="374"/>
         <source>Finished</source>
         <translation type="unfinished"/>
     </message>

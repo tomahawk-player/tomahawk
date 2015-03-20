@@ -1214,42 +1214,42 @@ Senha (OTP)</translation>
         <translation>Precisão</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="893"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="902"/>
         <source>Perfect match</source>
         <translation>Combinação perfeita</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="894"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="903"/>
         <source>Very good match</source>
         <translation>Combinação muito boa</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="895"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="904"/>
         <source>Good match</source>
         <translation>Combinação boa</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="896"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="905"/>
         <source>Vague match</source>
         <translation>Combinação indefinida</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="897"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="906"/>
         <source>Bad match</source>
         <translation>Combinação ruim</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="898"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="907"/>
         <source>Very bad match</source>
         <translation>Combinação muito ruim</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="899"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="908"/>
         <source>Not available</source>
         <translation>Não disponível</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="900"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="909"/>
         <source>Searching...</source>
         <translation>Pesquisando</translation>
     </message>
@@ -1263,22 +1263,23 @@ Senha (OTP)</translation>
 <context>
     <name>PlaylistItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="175"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="238"/>
         <source>played %1 by you</source>
         <translation>tocou %1 por você</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="177"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="240"/>
         <source>played %1 by %2</source>
         <translation>tocou %1 por %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="292"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="143"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="355"/>
         <source>Download %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="311"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="374"/>
         <source>Finished</source>
         <translation type="unfinished"/>
     </message>
