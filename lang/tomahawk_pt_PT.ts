@@ -2561,7 +2561,7 @@ e estações baseadas no seu perfil de gostos pessoais.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="79"/>
         <source>the KDE instant messaging framework</source>
-        <translation>a estrutira de mensagens instantâneas do KDE</translation>
+        <translation>a estrutura de mensagens instantâneas do KDE</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="96"/>
