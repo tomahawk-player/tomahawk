@@ -4340,32 +4340,32 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="313"/>
         <source>Google Music</source>
-        <translation type="unfinished"/>
+        <translation>Google Music</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="336"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Google Music is another of our latest supported services - both for the music you&apos;ve uploaded to Google Music as well as their full streaming catalog for Google Play Music All Access subscribers. Not only is all of your Google Play Music a potential source for streaming - your entire online collection is browseable too.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Η Google Music είναι μια άλλη από τις τελευταίες υποστηριζόμενες υπηρεσίες μας - τόσο για τη μουσική που έχετε ανεβάσει στο Google Music, καθώς και πλήρη κατάλογο ροής του Google Play. Δεν είναι μόνο το σύνολο του Google Play Music μια πιθανή πηγή για Streaming - ολόκληρη σε απευθείας σύνδεση συλλογή σας.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="376"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk for Android is now in beta! The majority of the same resolvers are supported in the Android app - plus a couple of additional ones in Rdio &amp;amp; Deezer. &lt;a href=&quot;http://hatchet.is/register&quot;&gt;Create a Hatchet account&lt;/a&gt; to sync all of your playlists from your desktop to your mobile. Find current and future music influencers and follow them to discover and hear what they love. Just like on the desktop, Tomahawk on Android can open other music service links and play them from yours. Even when you are listening to other music apps, Tomahawk can capture all of that playback data and add it to your Hatchet profile.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Το Tomahawk για το Android είναι τώρα σε έκδοση beta! Η πλειοψηφία των ίδιων αναλυτών υποστηρίζονται στο Android εφαρμογή - συν ένα ζευγάρι συμπληρωματικών σε Rdio &amp; amp? Deezer. &lt;a href=&quot;http://hatchet.is/register&quot;&gt; Δημιουργήστε ένα Hatchet &lt;/a&gt; λογαριασμό για να συγχρονίσετε όλες τις λίστες αναπαραγωγής σας από τον υπολογιστή στο κινητό σας. Βρείτε τις τρέχουσες και μελλοντικές επιρροες της μουσικής και ακολουθήστε για την ανακαλύψετε και να ακούσετε αυτό που αγαπατε. Ακριβώς όπως και στην επιφάνεια εργασίας, το Tomahawk στο Android μπορεί να ανοίξει άλλες συνδέσεις μουσικών υπηρεσιών και να τισ αναπαραγει από την δική σας. Ακόμα και όταν ακούτε μουσική με άλλες εφαρμογές, το Tomahawk μπορεί να συλλάβει όλα αυτά τα στοιχεία αναπαραγωγής και να τα προσθέση στο προφίλ Hatchet.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="396"/>
         <source>Connectivity</source>
-        <translation type="unfinished"/>
+        <translation>Συνδεσιμότητα</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="419"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk now supports IPv6 and multiple local IP addresses. This improves the discoverability and connection between Tomahawk users - particularly large local networks often found in work and university settings. The more friends, the more music, the more playlists and the more curation from those people whose musical tastes you value. Sit back and just Listen Along!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Το Tomahawk υποστηρίζει πλέον IPv6 και πολλαπλές τοπικές διευθύνσεις IP. Αυτό βελτιώνει τη δυνατότητα εντοπισμού και την σύνδεση μεταξύ των χρηστών του Tomahawk - ιδιαίτερα μεγάλη τοπικά δίκτυα που βρίσκονται συχνά σε χώρους εργασίας και το πανεπιστήμιο. Όσους περισσότερους φίλους, η περισσότερη μουσική, οι περισσότερα λίστες αναπαραγωγής και  περισσότερα επιμέλεια από εκείνους τους ανθρώπουςοι οποιοι εκτιμούν τα μουσικά γούστα σας. Καθίστε αναπαυτικά και απλά ακούστε μαζί μουσικη!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="353"/>
         <source>Android</source>
-        <translation type="unfinished"/>
+        <translation>Android</translation>
     </message>
 </context>
 <context>
@@ -4537,22 +4537,22 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="58"/>
         <source>Configure this Jabber/XMPP account</source>
-        <translation type="unfinished"/>
+        <translation>Ρυθμισεις του Jabber/XMPP λογαριασμου</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="104"/>
         <source>Enter your XMPP login to connect with your friends using Tomahawk!</source>
-        <translation type="unfinished"/>
+        <translation>Εισάγετε τα Xmpp διαπιστευτήρια σας για να συνδεθείτε με τους φίλους σας χρησιμοποιώντας το Tomahawk!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="231"/>
         <source>XMPP ID:</source>
-        <translation type="unfinished"/>
+        <translation>Ταυτότητα XMPP:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="247"/>
         <source>e.g. user@jabber.org</source>
-        <translation type="unfinished"/>
+        <translation>π.χ. user@jabber.org</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="260"/>
@@ -4587,7 +4587,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="402"/>
         <source>Display currently playing track</source>
-        <translation type="unfinished"/>
+        <translation>Εμφάνιση του μουσικόυ κομμάτιου που παίζει τώρα</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="409"/>
