@@ -400,11 +400,11 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
                 }
                 else
                 {
-                    painter->setPen( TomahawkStyle::PLAYLIST_BUTTON_BACKGROUND.darker() );
-                    painter->setBrush( TomahawkStyle::PLAYLIST_BUTTON_FOREGROUND );
+                    painter->setPen( TomahawkStyle::PLAYLIST_PROGRESS_FOREGROUND.darker() );
+                    painter->setBrush( TomahawkStyle::PLAYLIST_PROGRESS_BACKGROUND );
                     painter->drawRect( optc.rect.adjusted( 2, 2, -2, -2 ) );
-                    painter->setPen( TomahawkStyle::PLAYLIST_BUTTON_BACKGROUND );
-                    painter->setBrush( TomahawkStyle::PLAYLIST_BUTTON_BACKGROUND );
+                    painter->setPen( TomahawkStyle::PLAYLIST_PROGRESS_FOREGROUND );
+                    painter->setBrush( TomahawkStyle::PLAYLIST_PROGRESS_FOREGROUND );
                     QRect fillp = optc.rect.adjusted( 3, 3, -3, -3 );
                     fillp.setWidth( float(fillp.width()) * ( float(item->result()->downloadJob()->progressPercentage()) / 100.0 ) );
                     painter->drawRect( fillp );

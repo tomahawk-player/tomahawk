@@ -100,8 +100,11 @@ namespace TomahawkStyle
 
     static const QColor SEEKSLIDER_FOREGROUND = QColor( "#ffffff" );
 
-    static const QColor PLAYLIST_BUTTON_BACKGROUND = QColor( "#E61878" );
+    static const QColor PLAYLIST_BUTTON_BACKGROUND = QColor( "#111111" );
     static const QColor PLAYLIST_BUTTON_FOREGROUND = QColor( "#ffffff" );
+
+    static const QColor PLAYLIST_PROGRESS_BACKGROUND = QColor( "#ffffff" );
+    static const QColor PLAYLIST_PROGRESS_FOREGROUND = QColor( "#E61878" );
 
     static const int POPUP_ROUNDING_RADIUS = 6;
     static const float POPUP_OPACITY = 0.93;
