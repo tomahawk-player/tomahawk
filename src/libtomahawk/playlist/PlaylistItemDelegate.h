@@ -58,6 +58,7 @@ signals:
 private slots:
     void doUpdateIndex( const QPersistentModelIndex& index );
     void closeEditor( const QModelIndex& index, QWidget* editor );
+    void addDownloadJob( const QModelIndex& index, QWidget* editor );
 
 protected:
     void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const;

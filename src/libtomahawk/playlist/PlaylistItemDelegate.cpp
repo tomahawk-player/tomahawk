@@ -22,7 +22,6 @@
 
 #include <QAbstractTextDocumentLayout>
 #include <QApplication>
-#include <QComboBox>
 #include <QDateTime>
 #include <QMouseEvent>
 #include <QPainter>
@@ -44,6 +43,7 @@
 #include "ViewHeader.h"
 #include "ViewManager.h"
 
+#include "widgets/DropDownButton.h"
 #include "audio/AudioEngine.h"
 #include "utils/ImageRegistry.h"
 #include "utils/PixmapDelegateFader.h"
@@ -143,15 +143,32 @@ PlaylistItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem&
             formats << tr( "Download %1" ).arg( format.extension );
         }
 
-        QComboBox* editor = new QComboBox( parent );
+        DropDownButton* editor = new DropDownButton( parent );
         editor->addItems( formats );
 
-        _detail::Closure* closure = NewClosure( editor, SIGNAL( activated( int ) ),
-                                                const_cast<PlaylistItemDelegate*>(this), SLOT( closeEditor( const QModelIndex&, QWidget* ) ), index, (QWidget*)editor );
+        NewClosure( editor, SIGNAL( clicked() ),
+                    const_cast<PlaylistItemDelegate*>(this), SLOT( addDownloadJob( const QModelIndex&, QWidget* ) ), index, (QWidget*)editor );
+
+        NewClosure( editor, SIGNAL( activated( int ) ),
+                    const_cast<PlaylistItemDelegate*>(this), SLOT( addDownloadJob( const QModelIndex&, QWidget* ) ), index, (QWidget*)editor );
         return editor;
     }
 
     return 0;
+}
+
+
+void
+PlaylistItemDelegate::addDownloadJob( const QModelIndex& index, QWidget* editor )
+{
+    PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
+    Q_ASSERT( item );
+
+    m_view->closePersistentEditor( index );
+
+    DropDownButton* cb = static_cast< DropDownButton* >(editor);
+    if ( !item->result()->downloadFormats().isEmpty() )
+        DownloadManager::instance()->addJob( item->result()->toDownloadJob( item->result()->downloadFormats().at( cb->currentIndex() ) ) );
 }
 
 
@@ -163,8 +180,8 @@ PlaylistItemDelegate::closeEditor( const QModelIndex& index, QWidget* editor )
 
     m_view->closePersistentEditor( index );
 
-    QComboBox* cb = static_cast< QComboBox* >(editor);
-    DownloadManager::instance()->addJob( item->result()->toDownloadJob( item->result()->downloadFormats().at( cb->currentIndex() ) ) );
+    DropDownButton* cb = static_cast< DropDownButton* >(editor);
+    editor->deleteLater();
 }
 
 
@@ -173,13 +190,13 @@ PlaylistItemDelegate::updateEditorGeometry( QWidget* editor, const QStyleOptionV
 {
     QStyledItemDelegate::updateEditorGeometry( editor, option, index );
 
-    QComboBox* comboBox = static_cast<QComboBox*>(editor);
+    DropDownButton* comboBox = static_cast<DropDownButton*>(editor);
     comboBox->resize( option.rect.size() - QSize( 8, 0 ) );
     comboBox->move( option.rect.x() + 4, option.rect.y() );
 
     if ( !comboBox->property( "shownPopup" ).toBool() )
     {
-        comboBox->showPopup();
+//        comboBox->showPopup();
         comboBox->setProperty( "shownPopup", true );
     }
 }
@@ -360,11 +377,18 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
             else
                 optc.state = QStyle::State_Active | QStyle::State_Enabled;
 
-            if ( !item->result()->downloadJob() )
+            if ( !DownloadManager::instance()->localFileForDownload( item->result()->downloadFormats().first().url.toString() ).isEmpty() )
             {
-                QApplication::style()->drawComplexControl( QStyle::CC_ComboBox, &optc, painter, 0 );
+                painter->setPen( opt.palette.text().color() );
+                const QString text = painter->fontMetrics().elidedText( tr( "View in Finder" ), Qt::ElideRight, opt.rect.width() - 3 );
+                painter->drawText( opt.rect, text, textOption );
+            }
+            else if ( !item->result()->downloadJob() )
+            {
+                DropDownButton::drawPrimitive( painter, optc.rect, optc.currentText );
+/*                QApplication::style()->drawComplexControl( QStyle::CC_ComboBox, &optc, painter, 0 );
                 optc.rect.adjust( 4, 0, 0, 0 );
-                QApplication::style()->drawControl( QStyle::CE_ComboBoxLabel, &optc, painter, 0 );
+                QApplication::style()->drawControl( QStyle::CE_ComboBoxLabel, &optc, painter, 0 );*/
             }
             else
             {
@@ -376,19 +400,29 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
                 }
                 else
                 {
-                    QStyleOptionProgressBarV2 optp;
+                    painter->setPen( TomahawkStyle::PLAYLIST_BUTTON_BACKGROUND.darker() );
+                    painter->setBrush( TomahawkStyle::PLAYLIST_BUTTON_FOREGROUND );
+                    painter->drawRect( optc.rect.adjusted( 2, 2, -2, -2 ) );
+                    painter->setPen( TomahawkStyle::PLAYLIST_BUTTON_BACKGROUND );
+                    painter->setBrush( TomahawkStyle::PLAYLIST_BUTTON_BACKGROUND );
+                    QRect fillp = optc.rect.adjusted( 3, 3, -3, -3 );
+                    fillp.setWidth( float(fillp.width()) * ( float(item->result()->downloadJob()->progressPercentage()) / 100.0 ) );
+                    painter->drawRect( fillp );
+
+/*                    QStyleOptionProgressBarV2 optp;
                     optp.rect = optc.rect;
                     optp.minimum = 0;
                     optp.maximum = 100;
                     optp.progress = item->result()->downloadJob()->progressPercentage();
                     optp.palette = m_view->palette();
+                    optp.palette.setColor( QPalette::Highlight, QColor( "#E61878" ) );
 
                     if ( option.state & QStyle::State_Selected && option.state & QStyle::State_Active )
                         optp.state = QStyle::State_Active | QStyle::State_Selected | QStyle::State_Enabled;
                     else
                         optp.state = QStyle::State_Active | QStyle::State_Enabled;
 
-                    QApplication::style()->drawControl( QStyle::CE_ProgressBar, &optp, painter, 0 );
+                    QApplication::style()->drawControl( QStyle::CE_ProgressBar, &optp, painter, 0 );*/
                 }
             }
         }
