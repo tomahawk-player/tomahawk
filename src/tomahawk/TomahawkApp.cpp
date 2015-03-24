@@ -44,6 +44,7 @@
 #include "database/LocalCollection.h"
 #include "Pipeline.h"
 #include "DropJob.h"
+#include "DownloadManager.h"
 #include "EchonestCatalogSynchronizer.h"
 #include "database/DatabaseImpl.h"
 #include "network/Msg.h"
@@ -214,6 +215,7 @@ TomahawkApp::init()
     // Cause the creation of the nam, but don't need to address it directly, so prevent warning
     tDebug() << "Setting NAM:" << Tomahawk::Utils::nam();
 
+    DownloadManager::instance();
     m_audioEngine = QPointer<AudioEngine>( new AudioEngine );
 
     // init pipeline and resolver factories
@@ -292,6 +294,8 @@ TomahawkApp::~TomahawkApp()
 
     if ( Pipeline::instance() )
         Pipeline::instance()->stop();
+
+    delete DownloadManager::instance();
 
     if ( !m_servent.isNull() )
         delete m_servent.data();
