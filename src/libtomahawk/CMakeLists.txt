@@ -144,6 +144,7 @@ set( libGuiSources
     widgets/ChartDataLoader.cpp
     widgets/ClickableLabel.cpp
     widgets/ComboBox.cpp
+    widgets/DropDownButton.cpp
     widgets/ElidedLabel.cpp
     widgets/FilterHeader.cpp
     widgets/CaptionLabel.cpp
