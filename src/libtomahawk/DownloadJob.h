@@ -45,7 +45,7 @@ public:
     enum TrackState
     { Waiting = 0, Running, Paused, Failed, Finished, Aborted, Any };
 
-    DownloadJob( const Tomahawk::track_ptr& track, DownloadFormat format, bool tryResuming = false, DownloadJob::TrackState state = Waiting );
+    DownloadJob( const Tomahawk::result_ptr& result, DownloadFormat format, bool tryResuming = false, DownloadJob::TrackState state = Waiting );
     ~DownloadJob();
 
     QString toString() const;
@@ -84,6 +84,9 @@ private slots:
     void onDownloadError( QNetworkReply::NetworkError code );
     void onDownloadProgress( qint64, qint64 );
     void onDownloadFinished();
+
+
+    void onUrlRetrieved( const QVariantMap& data );
 
 private:
     void storeState();

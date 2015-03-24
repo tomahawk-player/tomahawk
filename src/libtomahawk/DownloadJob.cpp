@@ -19,12 +19,17 @@
 #include "DownloadJob.h"
 
 #include "Track.h"
+#include "Result.h"
+#include "resolvers/ScriptResolver.h"
+#include "resolvers/ScriptCollection.h"
+#include "resolvers/ScriptObject.h"
+#include "resolvers/ScriptJob.h"
 #include "TomahawkSettings.h"
 #include "utils/NetworkAccessManager.h"
 #include "utils/Logger.h"
 
 
-DownloadJob::DownloadJob( const Tomahawk::track_ptr& track, DownloadFormat format, bool tryResuming, DownloadJob::TrackState state )
+DownloadJob::DownloadJob( const Tomahawk::result_ptr& result, DownloadFormat format, bool tryResuming, DownloadJob::TrackState state )
     : m_state( state )
     , m_retries( 0 )
     , m_tryResuming( tryResuming )
@@ -35,9 +40,29 @@ DownloadJob::DownloadJob( const Tomahawk::track_ptr& track, DownloadFormat forma
     , m_rcvdSize( 0 )
     , m_fileSize( 0 )
     , m_format( format )
-    , m_track( track )
+    , m_track( result->track() )
 {
     m_finished = ( state == Finished );
+
+    if (result->resolvedByCollection())
+    {
+        Tomahawk::ScriptCollection* collection = qobject_cast<Tomahawk::ScriptCollection*>( result->resolvedByCollection().data() );
+        if(collection)
+        {
+            QVariantMap arguments;
+            arguments[ "url" ] = format.url;
+
+            // HACK: *shrug* WIP.
+            Tomahawk::ScriptJob* job = collection->scriptObject()->invoke("getStreamUrlPromise", arguments);
+            connect( job, SIGNAL( done(QVariantMap) ), SLOT( onUrlRetrieved(QVariantMap) ) );
+            job->start();
+        }
+    }
+}
+
+void DownloadJob::onUrlRetrieved(const QVariantMap& data)
+{
+    tLog() << Q_FUNC_INFO << data;
 }
 
 

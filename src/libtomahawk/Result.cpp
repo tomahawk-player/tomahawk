@@ -511,6 +511,12 @@ Result::setResolvedByResolver( Tomahawk::Resolver* resolver )
 }
 
 
+QPointer< Resolver > Result::resolvedByResolver() const
+{
+    return m_resolver;
+}
+
+
 void
 Result::doneEditing()
 {
@@ -531,7 +537,7 @@ Result::toDownloadJob( const DownloadFormat& format )
 {
     if ( !m_downloadJob )
     {
-        m_downloadJob = downloadjob_ptr( new DownloadJob( track(), format ) );
+        m_downloadJob = downloadjob_ptr( new DownloadJob( weakRef().toStrongRef(), format ) );
         connect( m_downloadJob.data(), SIGNAL( progress( int ) ), SIGNAL( updated() ) );
     }
 
