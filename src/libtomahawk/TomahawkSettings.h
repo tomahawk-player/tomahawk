@@ -60,6 +60,9 @@ public:
     QString downloadsPath() const;
     void setDownloadsPath( const QString& path );
 
+    QVariantList downloadStates() const;
+    void setDownloadStates( const QVariantList& downloads );
+
     uint infoSystemCacheVersion() const;
     void setInfoSystemCacheVersion( uint version );
     uint genericCacheVersion() const;

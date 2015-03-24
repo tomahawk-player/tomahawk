@@ -817,6 +817,20 @@ TomahawkSettings::setDownloadsPath( const QString& path )
 }
 
 
+QVariantList
+TomahawkSettings::downloadStates() const
+{
+    return value( "downloadmanager/states", QVariantList() ).toList();
+}
+
+
+void
+TomahawkSettings::setDownloadStates( const QVariantList& downloads )
+{
+    setValue( "downloadmanager/states", downloads );
+}
+
+
 bool
 TomahawkSettings::httpEnabled() const
 {

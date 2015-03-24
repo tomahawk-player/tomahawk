@@ -20,6 +20,7 @@
 
 #include <QTimer>
 
+#include "TomahawkSettings.h"
 #include "utils/Logger.h"
 
 DownloadManager* DownloadManager::s_instance = 0;
@@ -56,7 +57,47 @@ DownloadManager::~DownloadManager()
         jl << job;
     }
 
-//    TomahawkSettings::instance()->storeJobs( jl );
+    storeJobs( jobs( DownloadJob::Finished ) );
+}
+
+
+QString
+DownloadManager::localFileForDownload( const QString& url ) const
+{
+    QVariantList downloads = TomahawkSettings::instance()->downloadStates();
+    foreach ( const QVariant& download, downloads )
+    {
+        QVariantMap map = download.toMap();
+        tDebug() << "Found known download:" << map["url"] << map["localfile"];
+        tDebug() << "Looking for download:" << url;
+        if ( map[ "url" ].toString() == url )
+        {
+            QString localFile = map[ "localfile"].toString();
+            QFileInfo fi( localFile );
+            if ( fi.exists() )
+                return localFile;
+        }
+    }
+
+    return QString();
+}
+
+
+void
+DownloadManager::storeJobs( const QList<downloadjob_ptr>& jobs )
+{
+    QVariantList downloads = TomahawkSettings::instance()->downloadStates();
+    foreach ( const downloadjob_ptr& job, jobs )
+    {
+        tDebug() << "Storing job:" << job->format().url << job->localFile();
+        QVariantMap map;
+        map[ "url" ] = job->format().url;
+        map[ "localfile" ] = job->localFile();
+
+        downloads << map;
+    }
+
+    TomahawkSettings::instance()->setDownloadStates( downloads );
 }
 
 

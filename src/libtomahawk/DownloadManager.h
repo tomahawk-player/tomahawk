@@ -24,8 +24,9 @@
 #include <QUrl>
 
 #include "DownloadJob.h"
+#include "DllMacro.h"
 
-class DownloadManager : public QObject
+class DLLEXPORT DownloadManager : public QObject
 {
 Q_OBJECT
 
@@ -41,6 +42,9 @@ public:
     QList<downloadjob_ptr> jobs( DownloadJob::TrackState state = DownloadJob::Any ) const;
     bool containsJob( const downloadjob_ptr& job ) const;
     downloadjob_ptr currentJob() const;
+
+    void storeJobs( const QList<downloadjob_ptr>& jobs );
+    QString localFileForDownload( const QString& url ) const;
 
 public slots:
     bool addJob( const downloadjob_ptr& job );
