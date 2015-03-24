@@ -66,6 +66,20 @@ DropDownButton::drawPrimitive( QPainter* p, const QRect& rect, const QString& te
     p->setPen( TomahawkStyle::PLAYLIST_BUTTON_FOREGROUND );
     p->drawLine( QPoint( r.right() - 24, r.top() + 3 ), QPoint( r.right() - 24, r.bottom() - 3 ) );
 
+    // paint drop-down arrow
+    p->save();
+    QPainterPath dropPath;
+    dropPath.moveTo( QPointF( r.right() - 14, float(r.top()) + float(r.height()) * 0.5 - 1.5 ) );
+    QPointF currentPosition = dropPath.currentPosition();
+    dropPath.lineTo( currentPosition.x() + 6, currentPosition.y() );
+    dropPath.lineTo( currentPosition.x() + 3, currentPosition.y() + 3 );
+    dropPath.closeSubpath();
+    p->setPen( TomahawkStyle::PLAYLIST_BUTTON_FOREGROUND );
+    p->setBrush( TomahawkStyle::PLAYLIST_BUTTON_FOREGROUND );
+    p->setRenderHint( QPainter::Antialiasing, false );
+    p->drawPath( dropPath );
+    p->restore();
+
     // paint label
     const QFontMetrics fm( p->font() );
     r.adjust( 0, 0, -24, 0 ); // center-align left of the divider
