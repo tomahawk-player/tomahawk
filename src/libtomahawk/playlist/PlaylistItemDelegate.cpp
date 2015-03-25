@@ -141,6 +141,10 @@ PlaylistItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem&
     {
         QDesktopServices::openUrl( QUrl::fromLocalFile( QFileInfo( DownloadManager::instance()->localFileForDownload( item->result()->downloadFormats().first().url.toString() ) ).absolutePath() ) );
     }
+    else if ( index.column() == PlayableModel::Download && item->result() && item->result()->downloadJob() && item->result()->downloadJob()->state() == DownloadJob::Finished )
+    {
+        QDesktopServices::openUrl( QUrl::fromLocalFile( QFileInfo( item->result()->downloadJob()->localFile() ).absolutePath() ) );
+    }
     else if ( index.column() == PlayableModel::Download && item->result() &&
               !item->result()->downloadFormats().isEmpty() && !item->result()->downloadJob() )
     {
