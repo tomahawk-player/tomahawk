@@ -18,6 +18,7 @@
 
 #include "DownloadJob.h"
 
+#include "Result.h"
 #include "Track.h"
 #include "Result.h"
 #include "resolvers/ScriptResolver.h"
@@ -41,33 +42,45 @@ DownloadJob::DownloadJob( const Tomahawk::result_ptr& result, DownloadFormat for
     , m_fileSize( 0 )
     , m_format( format )
     , m_track( result->track() )
+    , m_result( result )
 {
     m_finished = ( state == Finished );
-
-    if (result->resolvedByCollection())
-    {
-        Tomahawk::ScriptCollection* collection = qobject_cast<Tomahawk::ScriptCollection*>( result->resolvedByCollection().data() );
-        if(collection)
-        {
-            QVariantMap arguments;
-            arguments[ "url" ] = format.url;
-
-            // HACK: *shrug* WIP.
-            Tomahawk::ScriptJob* job = collection->scriptObject()->invoke("getStreamUrlPromise", arguments);
-            connect( job, SIGNAL( done(QVariantMap) ), SLOT( onUrlRetrieved(QVariantMap) ) );
-            job->start();
-        }
-    }
-}
-
-void DownloadJob::onUrlRetrieved(const QVariantMap& data)
-{
-    tLog() << Q_FUNC_INFO << data;
 }
 
 
 DownloadJob::~DownloadJob()
 {
+}
+
+
+void
+DownloadJob::onUrlRetrieved( const QVariantMap& data )
+{
+    tDebug() << Q_FUNC_INFO << data;
+    QUrl localFile = prepareFilename();
+    if ( m_file )
+    {
+        tLog() << "Recovering from failed download for track:" << toString() << "-" << m_retries << "retries so far.";
+        m_finished = false;
+        delete m_file;
+        m_file = 0;
+    }
+
+    tLog() << "Saving download" << m_format.url << "to file:" << localFile << localFile.toLocalFile();
+
+    m_file = new QFile( localFile.toString() );
+    m_localFile = localFile.toString();
+
+    if ( m_tryResuming && checkForResumedFile() )
+        return;
+
+    m_reply = Tomahawk::Utils::nam()->get( QNetworkRequest( data[ "url" ].toString() ) );
+
+    connect( m_reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( onDownloadError( QNetworkReply::NetworkError ) ) );
+    connect( m_reply, SIGNAL( downloadProgress( qint64, qint64 ) ), SLOT( onDownloadProgress( qint64, qint64 ) ) );
+    connect( m_reply, SIGNAL( finished() ), SLOT( onDownloadNetworkFinished() ) );
+
+    setState( Running );
 }
 
 
@@ -191,31 +204,20 @@ DownloadJob::retry()
 bool
 DownloadJob::download()
 {
-    QUrl localFile = prepareFilename();
-
-    if ( m_file )
+    if ( m_result->resolvedByCollection() )
     {
-        tLog() << "Recovering from failed download for track:" << toString() << "-" << m_retries << "retries so far.";
-        m_finished = false;
-        delete m_file;
-        m_file = 0;
+        Tomahawk::ScriptCollection* collection = qobject_cast<Tomahawk::ScriptCollection*>( m_result->resolvedByCollection().data() );
+        if ( collection )
+        {
+            QVariantMap arguments;
+            arguments[ "url" ] = m_format.url;
+
+            // HACK: *shrug* WIP.
+            Tomahawk::ScriptJob* job = collection->scriptObject()->invoke( "getStreamUrlPromise", arguments );
+            connect( job, SIGNAL( done(QVariantMap) ), SLOT( onUrlRetrieved(QVariantMap) ) );
+            job->start();
+        }
     }
-
-    tLog() << "Saving download to file:" << localFile << localFile.toLocalFile();
-
-    m_file = new QFile( localFile.toString() );
-    m_localFile = localFile.toString();
-
-    if ( m_tryResuming && checkForResumedFile() )
-        return true;
-
-    m_reply = Tomahawk::Utils::nam()->get( QNetworkRequest( m_format.url ) );
-
-    connect( m_reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( onDownloadError( QNetworkReply::NetworkError ) ) );
-    connect( m_reply, SIGNAL( downloadProgress( qint64, qint64 ) ), SLOT( onDownloadProgress( qint64, qint64 ) ) );
-    connect( m_reply, SIGNAL( finished() ), SLOT( onDownloadNetworkFinished() ) );
-
-    setState( Running );
     return true;
 }
 

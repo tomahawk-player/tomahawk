@@ -113,6 +113,7 @@ private:
 
     DownloadFormat m_format;
     Tomahawk::track_ptr m_track;
+    Tomahawk::result_ptr m_result;
 };
 
 typedef QSharedPointer<DownloadJob> downloadjob_ptr;
