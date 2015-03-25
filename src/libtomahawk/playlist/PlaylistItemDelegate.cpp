@@ -135,7 +135,8 @@ PlaylistItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem&
     PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     Q_ASSERT( item );
 
-    if ( index.column() == PlayableModel::Download && item->result() && !item->result()->downloadFormats().isEmpty() )
+    if ( index.column() == PlayableModel::Download && item->result() &&
+         !item->result()->downloadFormats().isEmpty() && !item->result()->downloadJob() )
     {
         QStringList formats;
         foreach ( const DownloadFormat& format, item->result()->downloadFormats() )
