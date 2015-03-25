@@ -67,7 +67,7 @@ private slots:
 private:
     QList< downloadjob_ptr > m_jobs;
     bool m_globalState;
-    QList<QVariantMap> m_downloadStates;
+    QHash<QString, QVariantMap> m_downloadStates;
 
     static DownloadManager* s_instance;
 };

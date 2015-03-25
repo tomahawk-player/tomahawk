@@ -46,7 +46,11 @@ DownloadManager::DownloadManager()
     QVariantList downloads = TomahawkSettings::instance()->downloadStates();
     foreach ( const QVariant& download, downloads )
     {
-        m_downloadStates << download.toMap();
+        QVariantMap map = download.toMap();
+        QString localFile = map[ "localfile" ].toString();
+        QFileInfo fi( localFile );
+        if ( fi.exists() )
+            m_downloadStates[ map[ "url" ].toString() ] = map;
     }
 
     QTimer::singleShot( 0, this, SLOT( resumeJobs() ) );
@@ -64,17 +68,15 @@ DownloadManager::~DownloadManager()
 QString
 DownloadManager::localFileForDownload( const QString& url ) const
 {
-    foreach ( const QVariantMap& map, m_downloadStates )
+    if ( m_downloadStates.contains( url ) )
     {
-        tDebug() << "Found known download:" << map["url"] << map["localfile"];
-        tDebug() << "Looking for download:" << url;
-        if ( map[ "url" ].toString() == url )
-        {
-            QString localFile = map[ "localfile" ].toString();
-            QFileInfo fi( localFile );
-            if ( fi.exists() )
-                return localFile;
-        }
+        QVariantMap map = m_downloadStates[ url ];
+//        tDebug() << "Found known download:" << map["url"] << map["localfile"];
+//        tDebug() << "Looking for download:" << url;
+        QString localFile = map[ "localfile" ].toString();
+        QFileInfo fi( localFile );
+        if ( fi.exists() )
+            return localFile;
     }
 
     return QString();
@@ -94,7 +96,7 @@ DownloadManager::storeJobs( const QList<downloadjob_ptr>& jobs )
         map[ "url" ] = job->format().url;
         map[ "localfile" ] = job->localFile();
 
-        m_downloadStates << map;
+        m_downloadStates[ map[ "url" ].toString() ] = map;
         downloads << map;
     }
 
