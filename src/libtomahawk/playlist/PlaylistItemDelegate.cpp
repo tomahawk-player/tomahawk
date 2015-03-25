@@ -25,6 +25,7 @@
 #include <QDateTime>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QDesktopServices>
 #include <QToolTip>
 
 #include "Query.h"
@@ -136,7 +137,12 @@ PlaylistItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem&
     Q_ASSERT( item );
 
     if ( index.column() == PlayableModel::Download && item->result() &&
-         !item->result()->downloadFormats().isEmpty() && !item->result()->downloadJob() )
+         !DownloadManager::instance()->localFileForDownload( item->result()->downloadFormats().first().url.toString() ).isEmpty() )
+    {
+        QDesktopServices::openUrl( QUrl::fromLocalFile( QFileInfo( DownloadManager::instance()->localFileForDownload( item->result()->downloadFormats().first().url.toString() ) ).absolutePath() ) );
+    }
+    else if ( index.column() == PlayableModel::Download && item->result() &&
+              !item->result()->downloadFormats().isEmpty() && !item->result()->downloadJob() )
     {
         QStringList formats;
         foreach ( const DownloadFormat& format, item->result()->downloadFormats() )
@@ -396,7 +402,7 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
                 if ( item->result()->downloadJob()->state() == DownloadJob::Finished )
                 {
                     painter->setPen( opt.palette.text().color() );
-                    const QString text = painter->fontMetrics().elidedText( tr( "Finished" ), Qt::ElideRight, opt.rect.width() - 3 );
+                    const QString text = painter->fontMetrics().elidedText( tr( "View in Finder" ), Qt::ElideRight, opt.rect.width() - 3 );
                     painter->drawText( opt.rect, text, textOption );
                 }
                 else
