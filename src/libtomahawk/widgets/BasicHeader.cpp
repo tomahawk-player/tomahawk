@@ -28,6 +28,7 @@
 #include <QPixmap>
 #include <QPaintEvent>
 #include <QPainter>
+#include <QPushButton>
 #include <QBoxLayout>
 
 using namespace Tomahawk;
@@ -116,6 +117,17 @@ BasicHeader::setPixmap( const QPixmap& pixmap, bool tinted )
 
     if ( !p.isNull() )
         ui->iconLabel->show();
+}
+
+
+QAbstractButton*
+BasicHeader::addButton( const QString& text )
+{
+    QPushButton* button = new QPushButton( this );
+    button->setText( text );
+    ui->horizontalLayout->addWidget( button );
+
+    return button;
 }
 
 

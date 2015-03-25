@@ -40,6 +40,8 @@ public:
 
     QScopedPointer<Ui::HeaderWidget> ui;
 
+    QAbstractButton* addButton( const QString& text );
+
 public slots:
     virtual void setCaption( const QString& s );
     virtual void setDescription( const QString& s );
