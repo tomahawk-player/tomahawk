@@ -790,7 +790,7 @@ Tomahawk.PluginManager = {
             } else {
                 Tomahawk.reportScriptJobResults({
                     requestId: requestId,
-                    error: "Scripts need to return objects for requests: methodName: " + methodName + " params: " + JSON.encode(params)
+                    error: "Scripts need to return objects for requests: methodName: " + methodName + " params: " + JSON.stringify(params)
                 });
             }
         }, function (error) {
