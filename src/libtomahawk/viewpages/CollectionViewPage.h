@@ -82,6 +82,8 @@ private slots:
     void onModelChanged();
     void onCollectionChanged();
 
+    void onDownloadAll();
+
 private:
     FilterHeader* m_header;
     QPixmap m_pixmap;

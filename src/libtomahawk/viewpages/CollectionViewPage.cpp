@@ -32,6 +32,7 @@
 #include "playlist/GridView.h"
 #include "playlist/PlayableProxyModelPlaylistInterface.h"
 #include "resolvers/ScriptCollection.h"
+#include "DownloadManager.h"
 #include "TomahawkSettings.h"
 #include "utils/ImageRegistry.h"
 #include "utils/TomahawkStyle.h"
@@ -89,13 +90,13 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
         m_header->ui->anchor2Label->setText( tr( "Albums" ) );
         m_header->ui->anchor3Label->setText( tr( "Songs" ) );
 
-        if( collection->browseCapabilities().contains( Collection::CapabilityBrowseArtists ) )
+        if ( collection->browseCapabilities().contains( Collection::CapabilityBrowseArtists ) )
             m_header->ui->anchor1Label->show();
 
-        if( collection->browseCapabilities().contains( Collection::CapabilityBrowseAlbums ) )
+        if ( collection->browseCapabilities().contains( Collection::CapabilityBrowseAlbums ) )
             m_header->ui->anchor2Label->show();
 
-        if( collection->browseCapabilities().contains( Collection::CapabilityBrowseTracks ) )
+        if ( collection->browseCapabilities().contains( Collection::CapabilityBrowseTracks ) )
             m_header->ui->anchor3Label->show();
 
         const float lowOpacity = 0.8;
@@ -112,6 +113,9 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
         NewClosure( m_header->ui->anchor2Label, SIGNAL( clicked() ), const_cast< CollectionViewPage* >( this ), SLOT( setCurrentMode( CollectionViewPageMode ) ), CollectionViewPage::Albums )->setAutoDelete( false );
         NewClosure( m_header->ui->anchor3Label, SIGNAL( clicked() ), const_cast< CollectionViewPage* >( this ), SLOT( setCurrentMode( CollectionViewPageMode ) ), CollectionViewPage::Flat )->setAutoDelete( false );
     }
+
+    QAbstractButton* downloadButton = m_header->addButton( tr( "Download All" ) );
+    connect( downloadButton, SIGNAL( clicked() ), SLOT( onDownloadAll() ) );
 
     layout()->addWidget( m_header );
     layout()->addWidget( m_stack );
@@ -415,6 +419,21 @@ CollectionViewPage::onCollectionChanged()
     }
     else
         setEmptyTip( tr( "This collection is empty." ) );
+}
+
+
+void
+CollectionViewPage::onDownloadAll()
+{
+    for ( int i = 0; i < m_flatModel->rowCount( QModelIndex() ); i++ )
+    {
+        PlayableItem* item = m_flatModel->itemFromIndex( m_flatModel->index( i, 0, QModelIndex() ) );
+        if ( !item )
+            continue;
+
+        if ( !item->result()->downloadFormats().isEmpty() )
+            DownloadManager::instance()->addJob( item->result()->toDownloadJob( item->result()->downloadFormats().first() ) );
+    }
 }
 
 
