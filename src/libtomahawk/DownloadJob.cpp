@@ -204,6 +204,10 @@ DownloadJob::retry()
 bool
 DownloadJob::download()
 {
+    if ( m_state == Running )
+        return true;
+    setState( Running );
+
     if ( m_result->resolvedByCollection() )
     {
         Tomahawk::ScriptCollection* collection = qobject_cast<Tomahawk::ScriptCollection*>( m_result->resolvedByCollection().data() );
