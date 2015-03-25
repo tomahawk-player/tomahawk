@@ -114,8 +114,11 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
         NewClosure( m_header->ui->anchor3Label, SIGNAL( clicked() ), const_cast< CollectionViewPage* >( this ), SLOT( setCurrentMode( CollectionViewPageMode ) ), CollectionViewPage::Flat )->setAutoDelete( false );
     }
 
-    QAbstractButton* downloadButton = m_header->addButton( tr( "Download All" ) );
-    connect( downloadButton, SIGNAL( clicked() ), SLOT( onDownloadAll() ) );
+    if ( collection->backendType() == Collection::ScriptCollectionType )
+    {
+        QAbstractButton* downloadButton = m_header->addButton( tr( "Download All" ) );
+        connect( downloadButton, SIGNAL( clicked() ), SLOT( onDownloadAll() ) );
+    }
 
     layout()->addWidget( m_header );
     layout()->addWidget( m_stack );
