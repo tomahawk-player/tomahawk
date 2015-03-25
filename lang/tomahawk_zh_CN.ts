@@ -1262,23 +1262,28 @@ Password (OTP)</source>
 <context>
     <name>PlaylistItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="238"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="255"/>
         <source>played %1 by you</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="240"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="257"/>
         <source>played %1 by %2</source>
         <translation>已播放 %2 的 %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="143"/>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="355"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="372"/>
         <source>Download %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="374"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="383"/>
+        <source>View in Finder</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="398"/>
         <source>Finished</source>
         <translation type="unfinished"/>
     </message>
@@ -3819,35 +3824,35 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="517"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="521"/>
         <source>You</source>
         <translation>我的</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="605"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="609"/>
         <source>Tomahawk is updating the database. Please wait, this may take a minute!</source>
         <translation>Tomahawk 更新数据库中。请稍等，可能需要几分钟！</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="612"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="616"/>
         <source>Tomahawk</source>
         <translation>Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="719"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="723"/>
         <source>Updating database
 </source>
         <translation>更新数据库中</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="726"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="730"/>
         <source>Updating database
 %1</source>
         <translation>更新数据库
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="776"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="780"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>自动检测外部 IP 是否失效</translation>
     </message>

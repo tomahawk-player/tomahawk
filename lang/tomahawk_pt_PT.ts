@@ -1262,23 +1262,28 @@ as etiquetas em %1</translation>
 <context>
     <name>PlaylistItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="238"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="255"/>
         <source>played %1 by you</source>
         <translation>reproduzido %1 por si</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="240"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="257"/>
         <source>played %1 by %2</source>
         <translation>reproduzido %1 por %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="143"/>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="355"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="372"/>
         <source>Download %1</source>
         <translation>Transferir %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="374"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="383"/>
+        <source>View in Finder</source>
+        <translation>Ver no Finder</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="398"/>
         <source>Finished</source>
         <translation>Terminado</translation>
     </message>
@@ -3820,35 +3825,35 @@ Ajuste os filtros para definir um novo conjunto de faixas.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="517"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="521"/>
         <source>You</source>
         <translation>Você</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="605"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="609"/>
         <source>Tomahawk is updating the database. Please wait, this may take a minute!</source>
         <translation>O Tomahawk está a atualizar a base de dados. Por favor aguarde, isto leva só um minuto!</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="612"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="616"/>
         <source>Tomahawk</source>
         <translation>Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="719"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="723"/>
         <source>Updating database
 </source>
         <translation>Atualizando base de dados</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="726"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="730"/>
         <source>Updating database
 %1</source>
         <translation>Atualizando base de dados
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="776"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="780"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>A deteção automática do IP externo falhou.</translation>
     </message>

@@ -1261,23 +1261,28 @@ Password (OTP)</source>
 <context>
     <name>PlaylistItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="238"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="255"/>
         <source>played %1 by you</source>
         <translation>παίχθηκε %1 από εσάς</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="240"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="257"/>
         <source>played %1 by %2</source>
         <translation>παίχθηκε %1 από τον/την %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="143"/>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="355"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="372"/>
         <source>Download %1</source>
         <translation>Λήψη %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="374"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="383"/>
+        <source>View in Finder</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="398"/>
         <source>Finished</source>
         <translation>Ολοκληρώθηκε</translation>
     </message>
@@ -3817,22 +3822,22 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="517"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="521"/>
         <source>You</source>
         <translation>Εσείς</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="605"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="609"/>
         <source>Tomahawk is updating the database. Please wait, this may take a minute!</source>
         <translation>Το Tomahawk ενημέρωνει την βάση. Παρακαλώ περιμένετε, αυτό μπορεί να διαρκέσει ένα λεπτό!</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="612"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="616"/>
         <source>Tomahawk</source>
         <translation>Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="719"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="723"/>
         <source>Updating database
 </source>
         <translation>Ενημέρωση της βάσης δεδομένων
@@ -3840,13 +3845,13 @@ Try tweaking the filters for a new set of songs to play.</source>
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="726"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="730"/>
         <source>Updating database
 %1</source>
         <translation>Ενημέρωση της βάσης δεδομένων %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="776"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="780"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Ο αυτόματος εντοπισμός της εξωτερικής διεύθυνσης IP απέτυχε.</translation>
     </message>
