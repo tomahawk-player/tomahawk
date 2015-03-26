@@ -11,7 +11,7 @@ de se connecter et streamer votre flux ?</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="83"/>
         <source>Allow Streaming</source>
-        <translation>Permettre le streaming</translation>
+        <translation>Autoriser le streaming</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="86"/>
@@ -87,12 +87,12 @@ de se connecter et streamer votre flux ?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="72"/>
         <source>&amp;Follow in Real-Time</source>
-        <translation>&amp;Suivre en temp réel</translation>
+        <translation>&amp;Suivre en temps réel</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
         <source>&amp;Listen Privately</source>
-        <translation>&amp;Ecouter en privé</translation>
+        <translation>&amp;Écouter en privé</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="82"/>
@@ -177,7 +177,7 @@ de se connecter et streamer votre flux ?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="121"/>
         <source>Zoom</source>
-        <translation>Zoom</translation>
+        <translation>Zoomer</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="123"/>
@@ -222,7 +222,7 @@ de se connecter et streamer votre flux ?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="145"/>
         <source>Report a Bug</source>
-        <translation>Reporter un bug</translation>
+        <translation>Rapporter un bug</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="146"/>
@@ -253,7 +253,7 @@ de se connecter et streamer votre flux ?</translation>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="188"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="258"/>
         <source>What&apos;s New in ...</source>
-        <translation>Quoi de neuf dans…</translation>
+        <translation>Quoi de neuf dans la version…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="214"/>
@@ -346,7 +346,7 @@ de se connecter et streamer votre flux ?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="185"/>
         <source>Songs</source>
-        <translation>Chansons</translation>
+        <translation>Titres</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="201"/>
@@ -360,7 +360,7 @@ de se connecter et streamer votre flux ?</translation>
         <location filename="../src/tomahawk/AudioControls.cpp" line="108"/>
         <location filename="../src/tomahawk/AudioControls.cpp" line="339"/>
         <source>Shuffle</source>
-        <translation>Lecture Aléatoire</translation>
+        <translation>Lecture aléatoire</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="109"/>
@@ -371,12 +371,12 @@ de se connecter et streamer votre flux ?</translation>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="337"/>
         <source>Time Elapsed</source>
-        <translation>Durée Ecoulé</translation>
+        <translation>Temps écoulé</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="338"/>
         <source>Time Remaining</source>
-        <translation>Durée Restante</translation>
+        <translation>Temps restant</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="343"/>
@@ -431,7 +431,7 @@ de se connecter et streamer votre flux ?</translation>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="186"/>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="295"/>
         <source>New Station</source>
-        <translation>Nouvelle Station</translation>
+        <translation>Nouvelle station</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="186"/>
@@ -472,32 +472,37 @@ de se connecter et streamer votre flux ?</translation>
 <context>
     <name>CollectionViewPage</name>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="76"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="77"/>
         <source>Sorry, there are no albums in this collection!</source>
         <translation>Désolé, il n&apos;y a aucun album dans cette collection !</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="88"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="89"/>
         <source>Artists</source>
         <translation>Artistes</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="89"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="90"/>
         <source>Albums</source>
         <translation>Albums</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="90"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="91"/>
         <source>Songs</source>
         <translation>Titres</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="414"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="119"/>
+        <source>Download All</source>
+        <translation>Tout télécharger</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="421"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>Après avoir scanné votre collection musicale, vous trouverez tous vos titres ici.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="417"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="424"/>
         <source>This collection is empty.</source>
         <translation>Cette collection est vide.</translation>
     </message>
@@ -515,7 +520,7 @@ de se connecter et streamer votre flux ?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="290"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
-        <translation>Désolé, votre filtre &apos;%1&apos; ne correspond à aucun résultat</translation>
+        <translation>Désolé, votre filtre &apos;%1&apos; ne correspond à aucun résultat.</translation>
     </message>
 </context>
 <context>
@@ -566,7 +571,7 @@ de se connecter et streamer votre flux ?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="246"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
-        <translation>La liste de lecture est vide. Ajoutez des pistes et profitez de la musique !</translation>
+        <translation>Cette liste de lecture est vide. Ajoutez-y des pistes pour pouvoir l&apos;apprécier !</translation>
     </message>
 </context>
 <context>
@@ -613,12 +618,12 @@ de se connecter et streamer votre flux ?</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/DiagnosticsDialog.ui" line="42"/>
         <source>&amp;Copy to Clipboard</source>
-        <translation>&amp;Copier dans le presse papier</translation>
+        <translation>&amp;Copier dans le presse-papier</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/DiagnosticsDialog.ui" line="49"/>
         <source>Open &amp;Log-file</source>
-        <translation>Ouvrir le &amp;fichier journal</translation>
+        <translation>Ouvrir le &amp;fichier de log</translation>
     </message>
 </context>
 <context>
@@ -686,12 +691,12 @@ de se connecter et streamer votre flux ?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="99"/>
         <source>Song Hotttnesss</source>
-        <translation>Hotttnesss du morceau</translation>
+        <translation>Popularité du titre</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="100"/>
         <source>Artist Hotttnesss</source>
-        <translation>Hotttnesss de l&apos;artiste</translation>
+        <translation>Popularité de l&apos;artiste</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="101"/>
@@ -701,7 +706,7 @@ de se connecter et streamer votre flux ?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="102"/>
         <source>By Description</source>
-        <translation>Par Description</translation>
+        <translation>Par description</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="110"/>
@@ -755,7 +760,7 @@ de se connecter et streamer votre flux ?</translation>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="43"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;http://blog.hatchet.is&quot;&gt;Learn More&lt;/a&gt; and/or &lt;a href=&quot;http://hatchet.is/register&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Create Account&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;http://blog.hatchet.is&quot;&gt;En savoir plus&lt;/a&gt; ou &lt;a href=&quot;http://hatchet.is/register&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Créer un compte&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;http://blog.hatchet.is&quot;&gt;En savoir plus&lt;/a&gt; ou &lt;a href=&quot;http://hatchet.is/register&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;créer un compte&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="78"/>
@@ -827,7 +832,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="53"/>
         <source>Static Host Name:</source>
-        <translation>Nom d&apos;hôte statique :</translation>
+        <translation>Nom d&apos;hôte static :</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="69"/>
@@ -853,7 +858,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="67"/>
         <source>Sent %1 by %2 to %3.</source>
-        <translation>Envoyé %1 par %2 à %3.</translation>
+        <translation>%1 par %2 envoyé à %3.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="72"/>
@@ -1262,30 +1267,26 @@ Password (OTP)</source>
 <context>
     <name>PlaylistItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="255"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="266"/>
         <source>played %1 by you</source>
         <translation>joué %1 par vous</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="257"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="268"/>
         <source>played %1 by %2</source>
         <translation>joué %1 par %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="143"/>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="372"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="154"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="383"/>
         <source>Download %1</source>
         <translation>Télécharger %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="383"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="394"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="409"/>
         <source>View in Finder</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="398"/>
-        <source>Finished</source>
-        <translation>Terminé</translation>
+        <translation>Voir dans le Finder</translation>
     </message>
 </context>
 <context>

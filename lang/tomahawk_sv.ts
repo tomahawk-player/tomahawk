@@ -472,32 +472,37 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>CollectionViewPage</name>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="76"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="77"/>
         <source>Sorry, there are no albums in this collection!</source>
         <translation>Tyvärr finns det inte några album i denna samling!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="88"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="89"/>
         <source>Artists</source>
         <translation>Artister</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="89"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="90"/>
         <source>Albums</source>
         <translation>Album</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="90"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="91"/>
         <source>Songs</source>
         <translation>Låtar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="414"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="119"/>
+        <source>Download All</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="421"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>När du har skannat din musiksamling hittar du dina låtar här.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="417"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="424"/>
         <source>This collection is empty.</source>
         <translation>Den här samlingen är tom.</translation>
     </message>
@@ -1262,30 +1267,26 @@ Password (OTP)</source>
 <context>
     <name>PlaylistItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="255"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="266"/>
         <source>played %1 by you</source>
         <translation>%1 spelades av dig</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="257"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="268"/>
         <source>played %1 by %2</source>
         <translation>%1 spelades av %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="143"/>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="372"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="154"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="383"/>
         <source>Download %1</source>
         <translation>Nerladdning %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="383"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="394"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="409"/>
         <source>View in Finder</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="398"/>
-        <source>Finished</source>
-        <translation>Färdig</translation>
     </message>
 </context>
 <context>
