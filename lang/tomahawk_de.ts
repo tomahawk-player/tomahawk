@@ -1287,7 +1287,7 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="394"/>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="409"/>
         <source>View in Finder</source>
-        <translation type="unfinished"/>
+        <translation>Ansicht in der Suche</translation>
     </message>
 </context>
 <context>

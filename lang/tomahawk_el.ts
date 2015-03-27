@@ -493,7 +493,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="119"/>
         <source>Download All</source>
-        <translation type="unfinished"/>
+        <translation>Λήψη ολων</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="421"/>
@@ -1285,7 +1285,7 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="394"/>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="409"/>
         <source>View in Finder</source>
-        <translation type="unfinished"/>
+        <translation>Εμφάνιση στην Εύρεση</translation>
     </message>
 </context>
 <context>

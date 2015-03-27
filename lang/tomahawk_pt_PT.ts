@@ -151,7 +151,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="113"/>
         <source>Fully &amp;Rescan Collection</source>
-        <translation>&amp;Reanalisar coleção</translation>
+        <translation>Total &amp;Reanálise da coleção</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="111"/>
@@ -345,7 +345,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="185"/>
         <source>Songs</source>
-        <translation>Faixas</translation>
+        <translation>Músicas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="201"/>
@@ -488,7 +488,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="91"/>
         <source>Songs</source>
-        <translation>Faixas</translation>
+        <translation>Músicas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="119"/>
@@ -690,12 +690,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="99"/>
         <source>Song Hotttnesss</source>
-        <translation>Fogosidade da faixa</translation>
+        <translation>Popularidade da música</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="100"/>
         <source>Artist Hotttnesss</source>
-        <translation>Fogosidade do artista</translation>
+        <translation>Popularidade do artista</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="101"/>
@@ -858,7 +858,7 @@ Descartável (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="67"/>
         <source>Sent %1 by %2 to %3.</source>
-        <translation>%1 enviada de %2 para %3.</translation>
+        <translation>enviada%1  de %2 para %3.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="72"/>
@@ -1123,8 +1123,8 @@ Descartável (OTP)</translation>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="185"/>
         <source>Could not write tags to file:
 %1</source>
-        <translation>Não foi possíver escrever
-as etiquetas em %1</translation>
+        <translation>Não foi possível escrever as etiquetas no ficheiro
+ %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="396"/>
@@ -1142,7 +1142,7 @@ as etiquetas em %1</translation>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="79"/>
         <source>Hot Playlists</source>
-        <translation>Listas de reprodução na moda</translation>
+        <translation>Listas de reprodução de topo</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="113"/>
@@ -1459,7 +1459,7 @@ as etiquetas em %1</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="543"/>
         <source>Songs </source>
         <comment>Beginning of a sentence summary</comment>
-        <translation>Faixas </translation>
+        <translation>Músicas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="572"/>
@@ -1606,7 +1606,7 @@ as etiquetas em %1</translation>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.ui" line="41"/>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="146"/>
         <source>Songs</source>
-        <translation>Faixas</translation>
+        <translation>Músicas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.ui" line="67"/>
@@ -1818,7 +1818,7 @@ as etiquetas em %1</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="216"/>
         <source>Show Notifications on song change</source>
-        <translation>Mostrar notificação ao mudar de faixa</translation>
+        <translation>Mostrar notificação ao mudar de música</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="244"/>
@@ -3064,19 +3064,19 @@ Ajuste os filtros para definir um novo conjunto de faixas.</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="436"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="912"/>
         <source>Artist Familiarity</source>
-        <translation>Familiaridade de artista</translation>
+        <translation>Fama do artista</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="437"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="911"/>
         <source>Artist Hotttnesss</source>
-        <translation>Fogosidade do artista</translation>
+        <translation>Popularidade do artista</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="438"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="912"/>
         <source>Song Hotttnesss</source>
-        <translation>Fogosidade da faixa</translation>
+        <translation>Popularidade da Música</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="439"/>
@@ -3397,7 +3397,7 @@ Ajuste os filtros para definir um novo conjunto de faixas.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="467"/>
         <source>Hyped Tracks</source>
-        <translation>Faixas na berra</translation>
+        <translation>Faixas no top</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="473"/>
@@ -3407,7 +3407,7 @@ Ajuste os filtros para definir um novo conjunto de faixas.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="476"/>
         <source>Hyped Artists</source>
-        <translation>Artistas na berra</translation>
+        <translation>Artistas no top</translation>
     </message>
 </context>
 <context>
@@ -3443,7 +3443,7 @@ Ajuste os filtros para definir um novo conjunto de faixas.</translation>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="91"/>
         <source>You received a Song recommendation</source>
-        <translation>Recebeu uma recomendação de faixa</translation>
+        <translation>Recebeu uma recomendação de música</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="202"/>
@@ -3532,7 +3532,7 @@ Ajuste os filtros para definir um novo conjunto de faixas.</translation>
     <message>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="373"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
-        <translation type="unfinished"/>
+        <translation>Script Resolver Warning: API call %1 devolve dados sincronizados.</translation>
     </message>
 </context>
 <context>
@@ -3540,7 +3540,7 @@ Ajuste os filtros para definir um novo conjunto de faixas.</translation>
     <message>
         <location filename="../src/libtomahawk/LatchManager.cpp" line="96"/>
         <source>&amp;Catch Up</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Alcança</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/LatchManager.cpp" line="133"/>
@@ -3812,7 +3812,7 @@ Ajuste os filtros para definir um novo conjunto de faixas.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNew_0_8.h" line="90"/>
         <source>An overview of the changes and additions since 0.7.</source>
-        <translation>Um resumo das alterações e adições desde a versão 0.7.</translation>
+        <translation>Um resumo das alterações e novidades desde a versão 0.7.</translation>
     </message>
 </context>
 <context>
@@ -4074,7 +4074,7 @@ Ajuste os filtros para definir um novo conjunto de faixas.</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1375"/>
         <source>&amp;Play</source>
-        <translation>Re&amp;produzir</translation>
+        <translation>&amp;Reproduzir</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1407"/>
@@ -4193,7 +4193,7 @@ Ajuste os filtros para definir um novo conjunto de faixas.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="76"/>
         <source>Song</source>
-        <translation>Faixa</translation>
+        <translation>Música</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="77"/>
@@ -4248,17 +4248,17 @@ Ajuste os filtros para definir um novo conjunto de faixas.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="82"/>
         <source>Artist Familiarity</source>
-        <translation>Familiaridade de artista</translation>
+        <translation>Fama do artista</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="82"/>
         <source>Artist Hotttnesss</source>
-        <translation>Fogosidade do artista</translation>
+        <translation>Popularidade do artista</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="83"/>
         <source>Song Hotttnesss</source>
-        <translation>Fogosidade da faixa</translation>
+        <translation>Popularidade da música </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="83"/>
@@ -4309,12 +4309,12 @@ Ajuste os filtros para definir um novo conjunto de faixas.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="86"/>
         <source>WHAT&apos;S NEW</source>
-        <translation>Novidades</translation>
+        <translation>O QUE HÁ DE NOVO</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="96"/>
         <source>If you are reading this it likely means you have already noticed the biggest change since our last release - a shiny new interface and design. New views, fonts, icons, header images and animations at every turn. Below you can find an overview of the functional changes and additions since 0.7 too:</source>
-        <translation>Se está a ler esta mensagem, significa que você já reparou na maior alteração desde a última versão - uma nova interface. Novas vistas, tipos de letra, ícones, imagens e animações em todo o lado. Abaixo pode ver um resumo das alterações funcionais e adições desde a versão 0.7:</translation>
+        <translation>Se está a ler esta mensagem, significa que você já reparou na maior alteração desde a última versão - uma nova interface e novo design. Novas vistas, tipos de letra, ícones, imagens e animações em todo o lado. Abaixo pode ver um resumo das alterações funcionais e novidades desde a versão 0.7:</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="174"/>
@@ -4329,7 +4329,7 @@ Ajuste os filtros para definir um novo conjunto de faixas.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="230"/>
         <source>Universal Link Support</source>
-        <translation>Suporte Universal Link</translation>
+        <translation>Suporte  Link Universal</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="253"/>
@@ -4359,7 +4359,7 @@ Ajuste os filtros para definir um novo conjunto de faixas.</translation>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="376"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk for Android is now in beta! The majority of the same resolvers are supported in the Android app - plus a couple of additional ones in Rdio &amp;amp; Deezer. &lt;a href=&quot;http://hatchet.is/register&quot;&gt;Create a Hatchet account&lt;/a&gt; to sync all of your playlists from your desktop to your mobile. Find current and future music influencers and follow them to discover and hear what they love. Just like on the desktop, Tomahawk on Android can open other music service links and play them from yours. Even when you are listening to other music apps, Tomahawk can capture all of that playback data and add it to your Hatchet profile.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;O Tomahawk para Android está agora em beta! A maior parte dos mesmos resolvers são suportados pela aplicação Android - e mais alguns no Rdio &amp;amp; Deezer. &lt;a href=&quot;http://hatchet.is/register&quot;&gt;Crie uma conta Hatchet&lt;/a&gt; para sincronizar todas as suas listas de reprodução do seu desktop com o seu telemóvel ou tablet. Encontre os influenciadores musicais atuais e futuros e siga-os para descobrir e ouvir o que eles adoram. Assim como no desktop, o Tomahawk no Android pode abrir links de outros serviços de música e reproduzi-los a partir do seu. Mesmo quando estiver a ouvir outras aplicações de música, o Tomahawk pode capturar todos os dados de reprodução e adicioná-los ao seu perfil Hatchet.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;O Tomahawk para Android está agora em beta! A maior parte dos mesmos &quot;resolvers&quot; são suportados pela aplicação Android - e mais alguns no Rdio &amp;amp; Deezer. &lt;a href=&quot;http://hatchet.is/register&quot;&gt;Crie uma conta Hatchet&lt;/a&gt; para sincronizar todas as suas listas de reprodução do seu desktop com o seu telemóvel ou tablet. Encontre os influenciadores musicais atuais e futuros e siga-os para descobrir e ouvir o que eles adoram. Assim como no desktop, o Tomahawk no Android pode abrir links de outros serviços de música e reproduzi-los a partir do seu. Mesmo quando estiver a ouvir outras aplicações de música, o Tomahawk pode capturar todos os dados de reprodução e adicioná-los ao seu perfil Hatchet.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="396"/>
@@ -4390,7 +4390,7 @@ Termos para %1:</translation>
     <message>
         <location filename="../src/tomahawk/xmppbot/XmppBot.cpp" line="317"/>
         <source>No terms found, sorry.</source>
-        <translation>Nenhum termo encontrado.</translation>
+        <translation>Nenhum termo encontrado, desculpe.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/xmppbot/XmppBot.cpp" line="350"/>
@@ -4398,7 +4398,7 @@ Termos para %1:</translation>
 Hotttness for %1: %2
 </source>
         <translation>
-Fogosidade para %1: %2</translation>
+Popularidade para %1: %2</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/xmppbot/XmppBot.cpp" line="366"/>
@@ -4406,7 +4406,8 @@ Fogosidade para %1: %2</translation>
 Familiarity for %1: %2
 </source>
         <translation>
-Familiaridade para %1: %2</translation>
+Fama para %1: %2
+</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/xmppbot/XmppBot.cpp" line="384"/>
@@ -4476,7 +4477,7 @@ Letras para &quot;%1&quot; de %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="68"/>
         <source>By namespace uri</source>
-        <translation>Por URI</translation>
+        <translation>Por espaço nome uri</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="71"/>
@@ -4486,7 +4487,7 @@ Letras para &quot;%1&quot; de %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="76"/>
         <source>Visible stanzas</source>
-        <translation>Stanzas visíveis</translation>
+        <translation>letras visíveis</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="79"/>

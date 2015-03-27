@@ -493,7 +493,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="119"/>
         <source>Download All</source>
-        <translation type="unfinished"/>
+        <translation>全てダウンロード</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="421"/>
@@ -579,7 +579,7 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="39"/>
         <source>%1 Config</source>
         <comment>Window title for account config windows</comment>
-        <translation type="unfinished"/>
+        <translation>%1設定</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="60"/>
@@ -604,7 +604,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="230"/>
         <source>Your config is invalid.</source>
-        <translation type="unfinished"/>
+        <translation>設定が正しくありません。</translation>
     </message>
 </context>
 <context>
@@ -976,7 +976,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.cpp" line="56"/>
         <source>Playlists (*.xspf *.m3u *.jspf)</source>
-        <translation type="unfinished"/>
+        <translation>プレイリスト (*.xspf *.m3u *.jspf)</translation>
     </message>
 </context>
 <context>
@@ -1123,7 +1123,8 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="185"/>
         <source>Could not write tags to file:
 %1</source>
-        <translation type="unfinished"/>
+        <translation>タグをファイルに書き込みできません:
+%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="396"/>
@@ -1184,7 +1185,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Download</source>
-        <translation type="unfinished"/>
+        <translation>ダウンロード</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
@@ -1279,13 +1280,13 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="154"/>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="383"/>
         <source>Download %1</source>
-        <translation type="unfinished"/>
+        <translation>%1をダウンロード</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="394"/>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="409"/>
         <source>View in Finder</source>
-        <translation type="unfinished"/>
+        <translation>ファインダーで表示</translation>
     </message>
 </context>
 <context>
@@ -1705,12 +1706,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="260"/>
         <source>Downloads</source>
-        <translation type="unfinished"/>
+        <translation>ダウンロード</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="260"/>
         <source>Configure Tomahawk&apos;s integrated download manager.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk の統合ダウンロードマネージャーを設定します。</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="429"/>
@@ -1879,12 +1880,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="26"/>
         <source>Folder to download music to:</source>
-        <translation type="unfinished"/>
+        <translation>音楽をダウンロードするフォルダー:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="45"/>
         <source>Browse...</source>
-        <translation type="unfinished"/>
+        <translation>閲覧...</translation>
     </message>
 </context>
 <context>
@@ -3342,12 +3343,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="130"/>
         <source>The current track could not be resolved. Tomahawk will pick back up with the next resolvable track from this source.</source>
-        <translation type="unfinished"/>
+        <translation>現在のトラックを解決できませんでした。Tomahawk はこのソースの次の解決可能なトラックをバックアップとして選択します。</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="138"/>
         <source>Tomahawk is stopped.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawkは停止しました。</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="211"/>
@@ -3378,7 +3379,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="314"/>
         <source>Tomahawk - Now Playing</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk - 再生中</translation>
     </message>
 </context>
 <context>
@@ -3531,7 +3532,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="373"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
-        <translation type="unfinished"/>
+        <translation>スクリプトリゾルバーの警告: %1のAPI callが同期的にデーターをリターンしました。</translation>
     </message>
 </context>
 <context>
@@ -3570,7 +3571,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="78"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a script pluginsc, e.g. Subsonic Collection</comment>
-        <translation type="unfinished"/>
+        <translation>%1コレクション</translation>
     </message>
 </context>
 <context>
@@ -3578,22 +3579,22 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="92"/>
         <source>Resolver Error: %1:%2 %3</source>
-        <translation type="unfinished"/>
+        <translation>リゾールバーのエラー: %1:%2 %3</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="110"/>
         <source>SSL Error</source>
-        <translation type="unfinished"/>
+        <translation>SSLエラー</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="111"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;%1&lt;/b&gt;に安全に接続するように求めていますが、Tomahawkは接続の安全を確認できません:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;接続を信頼しますか？</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="118"/>
         <source>Trust certificate</source>
-        <translation type="unfinished"/>
+        <translation>証明書を信頼</translation>
     </message>
 </context>
 <context>
@@ -4021,7 +4022,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1262"/>
         <source>Failed to load JSPF playlist</source>
-        <translation type="unfinished"/>
+        <translation>JSPFプレイリストのロードに失敗しました</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1268"/>
@@ -4313,7 +4314,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="96"/>
         <source>If you are reading this it likely means you have already noticed the biggest change since our last release - a shiny new interface and design. New views, fonts, icons, header images and animations at every turn. Below you can find an overview of the functional changes and additions since 0.7 too:</source>
-        <translation type="unfinished"/>
+        <translation>あなたがこれを読んでいるということは、既に前回リリース以来の最大の変化に気づいていることでしょう - ピカピカの新しいインターフェースとデザイン。新しいビュー、フォント、アイコン、ヘッダー画像、およびアニメーション。以下で 0.7 以降の機能の変更および追加の概要を見ることができます。</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="174"/>
@@ -4343,7 +4344,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="296"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beats Music (recently aquired by Apple) is now supported. This means that Beats Music subscribers can also benefit by resolving other music service links so they stream from their Beats Music account. Welcome aboard!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beats Music (最近アップルが取得) がサポートされるようになりました。これにより Beats Music の加入者が Beats Music アカウントからストリーミングして、他の音楽サービスのリンクを解決することによって利益を得ることもできます。ようこそ!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="313"/>
@@ -4353,7 +4354,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="336"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Google Music is another of our latest supported services - both for the music you&apos;ve uploaded to Google Music as well as their full streaming catalog for Google Play Music All Access subscribers. Not only is all of your Google Play Music a potential source for streaming - your entire online collection is browseable too.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Google Music は、もうひとつの最新のサポートされるサービスです - Google Music にアップロードした音楽と Google Play Music All Access 加入者のフルストリーミングカタログの両方。Google Play Music のすべてのストリーミング可能なソースだけでなく - あなたのオンラインコレクション全体が参照できます。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="376"/>
@@ -4373,7 +4374,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="353"/>
         <source>Android</source>
-        <translation type="unfinished"/>
+        <translation>Android</translation>
     </message>
 </context>
 <context>
