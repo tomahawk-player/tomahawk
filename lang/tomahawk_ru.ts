@@ -495,7 +495,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="119"/>
         <source>Download All</source>
-        <translation type="unfinished"/>
+        <translation>Скачать все</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="421"/>
@@ -1186,7 +1186,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Download</source>
-        <translation type="unfinished"/>
+        <translation>Скачать</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
@@ -1281,13 +1281,13 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="154"/>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="383"/>
         <source>Download %1</source>
-        <translation type="unfinished"/>
+        <translation>Скачать %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="394"/>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="409"/>
         <source>View in Finder</source>
-        <translation type="unfinished"/>
+        <translation>Открыть в поиске</translation>
     </message>
 </context>
 <context>
@@ -1707,12 +1707,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="260"/>
         <source>Downloads</source>
-        <translation type="unfinished"/>
+        <translation>Загрузки</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="260"/>
         <source>Configure Tomahawk&apos;s integrated download manager.</source>
-        <translation type="unfinished"/>
+        <translation>Настройка встроенного менеджера загрузок</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="429"/>
@@ -1881,12 +1881,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="26"/>
         <source>Folder to download music to:</source>
-        <translation type="unfinished"/>
+        <translation>Каталог для загрузки музыки</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="45"/>
         <source>Browse...</source>
-        <translation type="unfinished"/>
+        <translation>Обзор...</translation>
     </message>
 </context>
 <context>
