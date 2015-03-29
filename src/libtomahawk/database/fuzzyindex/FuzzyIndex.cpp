@@ -215,7 +215,6 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
     {
 //        float minScore = 0.00;
         Collection<String> fields; // = newCollection<String>();
-        MultiFieldQueryParserPtr parser = newLucene<MultiFieldQueryParser>( LuceneVersion::LUCENE_CURRENT, fields, m_analyzer );
         BooleanQueryPtr qry = newLucene<BooleanQuery>();
 
         if ( query->isFullTextQuery() )
