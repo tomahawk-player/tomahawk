@@ -330,17 +330,16 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
         return;
     if ( !d->qids.contains( qid ) )
     {
-        if ( results.length() > 0 )
+        if ( !results.isEmpty() )
         {
             ResultProvider* resolvedBy = results[0]->resolvedBy();
-
             if ( resolvedBy )
             {
                 tDebug() << "Result arrived too late for:" << qid << "by" << resolvedBy->name();
             }
             else
             {
-            tDebug() << "Result arrived too late for:" << qid;
+                tDebug() << "Result arrived too late for:" << qid;
             }
         }
         return;
