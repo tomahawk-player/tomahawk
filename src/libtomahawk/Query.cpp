@@ -409,16 +409,22 @@ Query::resultSorter( const result_ptr& left, const result_ptr& right )
 
     if ( ls == rs )
     {
-/*        if ( left->collection() && left->collection()->isLocal() )
+        if ( right->purchaseUrl().isEmpty() )
         {
-            return true;
-        }*/
+            return false;
+        }
+
         if ( right->resolvedByCollection() && right->resolvedByCollection()->isLocal() )
         {
             return false;
         }
 
         return true;
+    }
+
+    if ( left->purchaseUrl().isEmpty() != right->purchaseUrl().isEmpty() )
+    {
+        return left->purchaseUrl().isEmpty();
     }
 
     return ls > rs;
