@@ -312,8 +312,8 @@ SourcesModel::appendGroups()
     InboxItem* inbox = new InboxItem( this, m_browse );
     inbox->setSortValue( 4 );
 
-    m_collectionsGroup = new GroupItem( this, m_rootItem, tr( "Friends" ), 4 );
-    m_cloudGroup = new GroupItem( this, m_rootItem, tr( "Cloud Collections" ), 5 );
+    m_cloudGroup = new GroupItem( this, m_rootItem, tr( "Cloud Collections" ), 4 );
+    m_collectionsGroup = new GroupItem( this, m_rootItem, tr( "Friends" ), 5 );
 
     endInsertRows();
 
