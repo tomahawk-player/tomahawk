@@ -368,11 +368,11 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
     connect( checker, SIGNAL( done() ), SLOT( onResultUrlCheckerDone() ) );
 
     addResultsToQuery( q, cleanResults );
-    if ( q->solved() && !q->isFullTextQuery() )
+/*    if ( q->solved() && !q->isFullTextQuery() )
     {
         setQIDState( q, 0 );
         return;
-    }
+    }*/
 
     if ( httpResults.isEmpty() )
         decQIDState( q );
@@ -421,11 +421,11 @@ Pipeline::onResultUrlCheckerDone()
 
     const query_ptr q = checker->query();
     addResultsToQuery( q, checker->validResults() );
-    if ( q && !q->isFullTextQuery() )
+/*    if ( q && !q->isFullTextQuery() )
     {
         setQIDState( q, 0 );
         return;
-    }
+    }*/
 
     decQIDState( q );
 }
