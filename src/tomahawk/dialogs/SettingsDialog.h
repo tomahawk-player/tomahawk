@@ -150,6 +150,7 @@ private:
     bool m_restartRequired;
     Tomahawk::Accounts::AccountModel* m_accountModel;
     Tomahawk::Accounts::AccountModelFilterProxy* m_accountProxy;
+    QHash<QString, QString> m_downloadsFormats;
     AnimatedSpinner* m_sipSpinner;
 };
 

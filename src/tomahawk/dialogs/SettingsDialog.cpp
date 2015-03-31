@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2012-2014, Teo Mrnjavac <teo@kde.org>
@@ -218,6 +218,19 @@ SettingsDialog::SettingsDialog(QObject *parent )
     m_downloadsWidgetUi->downloadsFolder->setText( TomahawkSettings::instance()->downloadsPath() );
     connect( m_downloadsWidgetUi->pickFolderButton, SIGNAL( clicked() ), SLOT( pickDownloadsPath() ) );
 
+    m_downloadsFormats.insert( "MP3", tr( "MP3" ) );
+    m_downloadsFormats.insert( "FLAC", tr( "FLAC" ) );
+    m_downloadsFormats.insert( "M4A", tr( "M4A" ) );
+    m_downloadsFormats.insert( "MP4", tr( "MP4" ) );
+    foreach ( const QString& format, m_downloadsFormats.values() )
+    {
+        m_downloadsWidgetUi->preferredFormatComboBox->addItem( format );
+    }
+    int i = m_downloadsWidgetUi->preferredFormatComboBox->findText( m_downloadsFormats.value( TomahawkSettings::instance()->downloadsPreferredFormat() ) );
+    if ( i < 0 )
+        i = m_downloadsWidgetUi->preferredFormatComboBox->findText( "MP3" );
+    m_downloadsWidgetUi->preferredFormatComboBox->setCurrentIndex( i );
+
 #ifndef Q_OS_MAC
     m_advancedWidget->setMinimumSize( m_advancedWidget->sizeHint() );
     m_accountsWidget->setMinimumWidth( 500 );
@@ -302,6 +315,7 @@ SettingsDialog::saveSettings()
     s->setScannerTime( m_collectionWidgetUi->scannerTimeSpinBox->value() );
     s->setEnableEchonestCatalogs( m_collectionWidgetUi->enableEchonestCatalog->isChecked() );
     s->setDownloadsPath( m_downloadsWidgetUi->downloadsFolder->text() );
+    s->setDownloadsPreferredFormat( m_downloadsFormats.key( m_downloadsWidgetUi->preferredFormatComboBox->currentText() ) );
 
 //         s->setNowPlayingEnabled( ui->checkBoxEnableAdium->isChecked() );
 
