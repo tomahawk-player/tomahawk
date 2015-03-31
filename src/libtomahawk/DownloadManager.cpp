@@ -21,6 +21,7 @@
 #include <QTimer>
 
 #include "TomahawkSettings.h"
+#include "infosystem/InfoSystem.h"
 #include "utils/Logger.h"
 
 DownloadManager* DownloadManager::s_instance = 0;
@@ -158,6 +159,7 @@ DownloadManager::addJob( const downloadjob_ptr& job )
     m_jobs << job;
     emit jobAdded( job );
 
+    connect( job.data(), SIGNAL( finished() ), SLOT( onJobFinished() ) );
     connect( job.data(), SIGNAL( finished() ), SLOT( checkJobs() ) );
     connect( job.data(), SIGNAL( stateChanged( DownloadJob::TrackState, DownloadJob::TrackState ) ), SLOT( checkJobs() ) ) ;
 //    connect( job.data(), SIGNAL( stateChanged( DownloadJob::TrackState, DownloadJob::TrackState ) ), SIGNAL( stateChanged( DownloadJob::TrackState, DownloadJob::TrackState ) ) );
@@ -245,6 +247,18 @@ DownloadManager::checkJobs()
 
         job->download();
     }
+}
+
+
+void
+DownloadManager::onJobFinished()
+{
+    DownloadJob* job = qobject_cast<DownloadJob*>( sender() );
+
+    Tomahawk::InfoSystem::InfoPushData pushData( "DownloadManager", Tomahawk::InfoSystem::InfoNotifyUser,
+                                                 tr( "Tomahawk finished downloading %1 by %2." ).arg( job->track()->track() ).arg( job->track()->artist() ),
+                                                 Tomahawk::InfoSystem::PushNoFlag );
+    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
 }
 
 

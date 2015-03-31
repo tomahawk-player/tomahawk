@@ -63,6 +63,7 @@ signals:
     void stateChanged( DownloadManagerState newState, DownloadManagerState oldState );
 
 private slots:
+    void onJobFinished();
 
 private:
     QList< downloadjob_ptr > m_jobs;
