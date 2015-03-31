@@ -53,6 +53,7 @@ public:
     TrackState state() const { return m_state; }
     unsigned int retries() const { return m_retries; }
 
+    Tomahawk::track_ptr track() const { return m_track; }
     int progressPercentage() const;
     long receivedSize() const { return m_rcvdSize; }
     long fileSize() const { return m_fileSize; }
@@ -84,7 +85,6 @@ private slots:
     void onDownloadError( QNetworkReply::NetworkError code );
     void onDownloadProgress( qint64, qint64 );
     void onDownloadFinished();
-
 
     void onUrlRetrieved( const QVariantMap& data );
 
