@@ -33,6 +33,7 @@
 #include "Pipeline.h"
 #include "PlaylistInterface.h"
 #include "Source.h"
+#include "TomahawkSettings.h"
 #include "Track.h"
 #include "Typedefs.h"
 
@@ -527,6 +528,20 @@ track_ptr
 Result::track() const
 {
     return m_track;
+}
+
+
+void
+Result::setDownloadFormats( const QList<DownloadFormat>& formats )
+{
+    m_formats.clear();
+    foreach ( const DownloadFormat& format, formats )
+    {
+        if ( format.extension.toLower() == TomahawkSettings::instance()->downloadsPreferredFormat().toLower() )
+            m_formats.insert( 0, format );
+        else
+            m_formats << format;
+    }
 }
 
 
