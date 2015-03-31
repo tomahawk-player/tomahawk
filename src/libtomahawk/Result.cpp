@@ -309,21 +309,21 @@ Result::setCollection( const Tomahawk::collection_ptr& collection , bool emitOnl
 
 
 void
-Result::setFriendlySource(const QString& s)
+Result::setFriendlySource( const QString& s )
 {
     m_friendlySource = s;
 }
 
 
 void
-Result::setPurchaseUrl(const QString& u)
+Result::setPurchaseUrl( const QString& u )
 {
     m_purchaseUrl = u;
 }
 
 
 void
-Result::setLinkUrl(const QString& u)
+Result::setLinkUrl( const QString& u )
 {
     m_linkUrl = u;
 }
