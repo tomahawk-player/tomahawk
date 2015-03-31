@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012  Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -56,6 +56,9 @@ public:
     bool hasScannerPaths() const;
     uint scannerTime() const;
     void setScannerTime( uint time );
+
+    QString downloadsPreferredFormat() const;
+    void setDownloadsPreferredFormat( const QString& format );
 
     QString downloadsPath() const;
     void setDownloadsPath( const QString& path );

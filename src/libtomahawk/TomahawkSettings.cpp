@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011  Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -796,6 +796,20 @@ void
 TomahawkSettings::setWatchForChanges( bool watch )
 {
     setValue( "scanner/watchforchanges", watch );
+}
+
+
+QString
+TomahawkSettings::downloadsPreferredFormat() const
+{
+    return value( "downloadmanager/preferredFormat", "MP3" ).toString();
+}
+
+
+void
+TomahawkSettings::setDownloadsPreferredFormat( const QString& format )
+{
+    setValue( "downloadmanager/preferredFormat", format );
 }
 
 
