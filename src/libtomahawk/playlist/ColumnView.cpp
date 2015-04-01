@@ -72,6 +72,7 @@ ColumnView::ColumnView( QWidget* parent )
     setSelectionBehavior( QAbstractItemView::SelectRows );
     setContextMenuPolicy( Qt::CustomContextMenu );
     setProxyModel( new TreeProxyModel( this ) );
+    setEditTriggers( NoEditTriggers );
 
     setPreviewWidget( m_previewWidget );
 

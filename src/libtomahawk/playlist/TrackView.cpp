@@ -80,6 +80,7 @@ TrackView::TrackView( QWidget* parent )
     setUniformRowHeights( true );
     setAlternatingRowColors( m_alternatingRowColors );
     setAutoResize( false );
+    setEditTriggers( NoEditTriggers );
 
     setHeader( m_header );
     setSortingEnabled( true );
