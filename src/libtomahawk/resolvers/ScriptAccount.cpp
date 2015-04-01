@@ -262,10 +262,6 @@ ScriptAccount::parseResultVariantList( const QVariantList& reslist )
     foreach( const QVariant& rv, reslist )
     {
         QVariantMap m = rv.toMap();
-        // TODO we need to handle preview urls separately. they should never trump a real url, and we need to display
-        // the purchaseUrl for the user to upgrade to a full stream.
-        if ( m.value( "preview" ).toBool() == true )
-            continue;
 
         int duration = m.value( "duration", 0 ).toInt();
         if ( duration <= 0 && m.contains( "durationString" ) )
