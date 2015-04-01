@@ -103,6 +103,7 @@ public:
     bool checked() const;
     QString mimetype() const;
     QString friendlySource() const;
+    bool isPreview() const;
     QString purchaseUrl() const;
     QString linkUrl() const;
 
@@ -117,6 +118,7 @@ public:
     void setRID( RID id ) { m_rid = id; }
 
     void setFriendlySource( const QString& s );
+    void setPreview( bool isPreview );
     void setPurchaseUrl( const QString& u );
     void setLinkUrl( const QString& u );
     void setChecked( bool checked );
@@ -162,6 +164,7 @@ private:
     QPointer< Tomahawk::Resolver > m_resolver;
 
     QString m_url;
+    bool m_isPreview;
     QString m_purchaseUrl;
     QString m_linkUrl;
     QString m_mimetype;

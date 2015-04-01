@@ -288,6 +288,7 @@ ScriptAccount::parseResultVariantList( const QVariantList& reslist )
         rp->setBitrate( m.value( "bitrate" ).toUInt() );
         rp->setSize( m.value( "size" ).toUInt() );
         rp->setRID( uuid() );
+        rp->setPreview( m.value( "preview" ).toBool() );
         rp->setPurchaseUrl( m.value( "purchaseUrl" ).toString() );
         rp->setLinkUrl( m.value( "linkUrl" ).toString() );
         rp->setScore( m.value( "score" ).toFloat() );

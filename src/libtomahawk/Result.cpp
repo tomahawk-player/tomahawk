@@ -99,6 +99,7 @@ Result::getCached( const QString& url )
 Result::Result( const QString& url, const track_ptr& track )
     : QObject()
     , m_url( url )
+    , m_isPreview( false )
     , m_checked( false )
     , m_bitrate( 0 )
     , m_size( 0 )
@@ -160,6 +161,13 @@ bool
 Result::checked() const
 {
     return m_checked;
+}
+
+
+bool
+Result::isPreview() const
+{
+    return m_isPreview;
 }
 
 
@@ -231,6 +239,8 @@ Result::toVariant() const
     m.insert( "sid", id() );
     m.insert( "discnumber", m_track->discnumber() );
     m.insert( "albumpos", m_track->albumpos() );
+    m.insert( "preview", isPreview() );
+    m.insert( "purchaseUrl", purchaseUrl() );
 
     if ( !m_track->composer().isEmpty() )
         m.insert( "composer", m_track->composer() );
@@ -316,6 +326,13 @@ void
 Result::setFriendlySource( const QString& s )
 {
     m_friendlySource = s;
+}
+
+
+void
+Result::setPreview( bool isPreview )
+{
+    m_isPreview = isPreview;
 }
 
 
