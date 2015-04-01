@@ -627,6 +627,14 @@ se conecte e faça o stream por você?</translation>
     </message>
 </context>
 <context>
+    <name>DownloadManager</name>
+    <message>
+        <location filename="../src/libtomahawk/DownloadManager.cpp" line="259"/>
+        <source>Tomahawk finished downloading %1 by %2.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>EchonestSteerer</name>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="63"/>
@@ -1660,12 +1668,12 @@ Senha (OTP)</translation>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="252"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="265"/>
         <source>Collection</source>
         <translation>Coleção</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="255"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="268"/>
         <source>Advanced</source>
         <translation>Avançado</translation>
     </message>
@@ -1680,68 +1688,88 @@ Senha (OTP)</translation>
         <translation>Instalar Plug-Ins</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="312"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="326"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation>Algumas configurações não terão efeito até que o Tomahawk seja reiniciado</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="247"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="260"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
         <translation>Configure as contas e serviços usados pelo Tomahawk para pesquisar e obter músicas, encontrar seus amigos e atualizar seu status.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="247"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="221"/>
+        <source>MP3</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="222"/>
+        <source>FLAC</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="223"/>
+        <source>M4A</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="224"/>
+        <source>MP4</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="260"/>
         <source>Plug-Ins</source>
         <translation>Plug-Ins</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="252"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="265"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
         <translation>Gerenciar como o Tomahawk encontra música no seu computador</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="255"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="268"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
         <translation>Configure as configurações avançadas do Tomahawk, incluindo as configurações de conectividade de rede, interação com o navegador e mais.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="260"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="273"/>
         <source>Downloads</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="260"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="273"/>
         <source>Configure Tomahawk&apos;s integrated download manager.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="429"/>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="443"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="457"/>
         <source>Open Directory</source>
         <translation>Abrir Diretório</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="537"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="551"/>
         <source>Install resolver from file</source>
         <translation>Instalar resolvedor via arquivo</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="539"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="553"/>
         <source>Tomahawk Resolvers (*.axe *.js);;All files (*)</source>
         <translation>Tomahawk Resolvers (* .axe * .js);; Todos os arquivos (*)</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="556"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="570"/>
         <source>Delete all Access Control entries?</source>
         <translation>Excluir todas as entradas de controle de acesso?</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="557"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="571"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation>Você realmente quer apagar todas as entradas de controle de acesso? Você será solicitado a tomar uma decisão para cada ponto a que você se conectar.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="312"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="326"/>
         <source>Information</source>
         <translation>Informação</translation>
     </message>
@@ -1883,6 +1911,11 @@ Senha (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="45"/>
         <source>Browse...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="56"/>
+        <source>Preferred download format:</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -2126,7 +2159,7 @@ Senha (OTP)</translation>
         <translation>Estação</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="312"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="311"/>
         <source>Cloud Collections</source>
         <translation>Coleções da Nuvem</translation>
     </message>
@@ -2146,7 +2179,7 @@ Senha (OTP)</translation>
         <translation>Sua Música</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="311"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="312"/>
         <source>Friends</source>
         <translation>Amigos</translation>
     </message>

@@ -628,6 +628,14 @@ connect and stream from you?</source>
     </message>
 </context>
 <context>
+    <name>DownloadManager</name>
+    <message>
+        <location filename="../src/libtomahawk/DownloadManager.cpp" line="259"/>
+        <source>Tomahawk finished downloading %1 by %2.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>EchonestSteerer</name>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="63"/>
@@ -1660,12 +1668,12 @@ Password (OTP)</source>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="252"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="265"/>
         <source>Collection</source>
         <translation>Коллекция</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="255"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="268"/>
         <source>Advanced</source>
         <translation>Дополнительно</translation>
     </message>
@@ -1680,68 +1688,88 @@ Password (OTP)</source>
         <translation>Установить плагин...</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="312"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="326"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation>Некоторые измененные настройки не вступят в силу до перезапуска Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="247"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="260"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
         <translation>Настройка аккаунтов и сервисов используемых Tomahawk для поиска и извлечения музыки, найти друзей и обновить статус.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="247"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="221"/>
+        <source>MP3</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="222"/>
+        <source>FLAC</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="223"/>
+        <source>M4A</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="224"/>
+        <source>MP4</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="260"/>
         <source>Plug-Ins</source>
         <translation>Плагины</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="252"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="265"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
         <translation>Определить где Tomahawk искать музыку на вашем компьютере.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="255"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="268"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
         <translation>Настройка дополнительных возможносте Tomahawk в том числе подключения к сети, интеграцию с браузером, другие.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="260"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="273"/>
         <source>Downloads</source>
         <translation>Загрузки</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="260"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="273"/>
         <source>Configure Tomahawk&apos;s integrated download manager.</source>
         <translation>Настройка встроенного менеджера загрузок</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="429"/>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="443"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="457"/>
         <source>Open Directory</source>
         <translation>Открыть каталог</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="537"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="551"/>
         <source>Install resolver from file</source>
         <translation>Установить интерпретатор (resolver) из файла</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="539"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="553"/>
         <source>Tomahawk Resolvers (*.axe *.js);;All files (*)</source>
         <translation>Интерпретаторы Tomahawk (*.axe *.js);;All files (*)</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="556"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="570"/>
         <source>Delete all Access Control entries?</source>
         <translation>Удаление всех записей контроля доступа?</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="557"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="571"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation>Вы действительно хотите удалить все записи Access Control? Вас заново спросят о каждом соединении к которым вы были подключены.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="312"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="326"/>
         <source>Information</source>
         <translation>Инофрмация</translation>
     </message>
@@ -1887,6 +1915,11 @@ Password (OTP)</source>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="45"/>
         <source>Browse...</source>
         <translation>Обзор...</translation>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="56"/>
+        <source>Preferred download format:</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2129,7 +2162,7 @@ Password (OTP)</source>
         <translation>Станция</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="312"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="311"/>
         <source>Cloud Collections</source>
         <translation>Сборник коллекций</translation>
     </message>
@@ -2149,7 +2182,7 @@ Password (OTP)</source>
         <translation>Ваша музыка</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="311"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="312"/>
         <source>Friends</source>
         <translation>Друзья</translation>
     </message>
