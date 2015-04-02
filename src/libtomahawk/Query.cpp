@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
  *
@@ -409,7 +409,7 @@ Query::resultSorter( const result_ptr& left, const result_ptr& right )
 
     if ( ls == rs )
     {
-        if ( right->purchaseUrl().isEmpty() )
+        if ( !right->isPreview() )
         {
             return false;
         }
@@ -422,9 +422,9 @@ Query::resultSorter( const result_ptr& left, const result_ptr& right )
         return true;
     }
 
-    if ( left->purchaseUrl().isEmpty() != right->purchaseUrl().isEmpty() )
+    if ( left->isPreview() != right->isPreview() )
     {
-        return left->purchaseUrl().isEmpty();
+        return !left->isPreview();
     }
 
     return ls > rs;
