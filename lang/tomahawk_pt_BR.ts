@@ -518,7 +518,7 @@ se conecte e faça o stream por você?</translation>
 <context>
     <name>ColumnView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="290"/>
+        <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="291"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Desculpe, seu filtro &apos;%1&apos; não encontrou nenhum resultado.</translation>
     </message>
@@ -4184,7 +4184,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="689"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="690"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Desculpe, o seu filtro &apos;%1&apos; não encontreou nenhum resultado.</translation>
     </message>

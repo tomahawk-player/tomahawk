@@ -518,7 +518,7 @@ te verbinden en te streamen vanuit jou?</translation>
 <context>
     <name>ColumnView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="290"/>
+        <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="291"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Sorry, je filter &apos;%1&apos; leverde geen overeenkomstige resultaten op.</translation>
     </message>
@@ -4186,7 +4186,7 @@ Probeer om de filters aan te passen om een nieuwe reeks afspeelbare nummers te k
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="689"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="690"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation type="unfinished"/>
     </message>

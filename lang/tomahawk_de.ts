@@ -518,7 +518,7 @@ erlauben sich mit dir zu verbinden und von dir zu streamen?</translation>
 <context>
     <name>ColumnView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="290"/>
+        <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="291"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Sorry, dein Filter &apos;%1&apos; liefert keine Ergebnisse.</translation>
     </message>
@@ -631,7 +631,7 @@ erlauben sich mit dir zu verbinden und von dir zu streamen?</translation>
     <message>
         <location filename="../src/libtomahawk/DownloadManager.cpp" line="259"/>
         <source>Tomahawk finished downloading %1 by %2.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk ist fertig mit dem herunterladen vom %1 von %2.</translation>
     </message>
 </context>
 <context>
@@ -1700,22 +1700,22 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="221"/>
         <source>MP3</source>
-        <translation type="unfinished"/>
+        <translation>MP3</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="222"/>
         <source>FLAC</source>
-        <translation type="unfinished"/>
+        <translation>FLAC</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="223"/>
         <source>M4A</source>
-        <translation type="unfinished"/>
+        <translation>M4A</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="224"/>
         <source>MP4</source>
-        <translation type="unfinished"/>
+        <translation>MP4</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="260"/>
@@ -1916,7 +1916,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="56"/>
         <source>Preferred download format:</source>
-        <translation type="unfinished"/>
+        <translation>Bevorzugtes Downloadformat:</translation>
     </message>
 </context>
 <context>
@@ -4181,7 +4181,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="689"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="690"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Sorry, dein Filter &apos;%1&apos; liefert keine Ergebnisse.</translation>
     </message>
