@@ -77,6 +77,7 @@ GridView::GridView( QWidget* parent )
     setViewMode( IconMode );
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+    setEditTriggers( NoEditTriggers );
 
     setStyleSheet( QString( "QListView { background-color: %1; }" ).arg( TomahawkStyle::PAGE_BACKGROUND.name() ) );
 
