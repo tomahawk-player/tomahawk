@@ -494,7 +494,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="119"/>
         <source>Download All</source>
-        <translation type="unfinished"/>
+        <translation>Lataa kaikki</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="421"/>
@@ -631,7 +631,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/libtomahawk/DownloadManager.cpp" line="259"/>
         <source>Tomahawk finished downloading %1 by %2.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk sai ladattua kappaleen %1 artistilta %2.</translation>
     </message>
 </context>
 <context>
@@ -1295,7 +1295,7 @@ salasana (OTP)</translation>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="394"/>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="409"/>
         <source>View in Finder</source>
-        <translation type="unfinished"/>
+        <translation>Näytä Finderissa</translation>
     </message>
 </context>
 <context>
@@ -1700,22 +1700,22 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="221"/>
         <source>MP3</source>
-        <translation type="unfinished"/>
+        <translation>MP3</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="222"/>
         <source>FLAC</source>
-        <translation type="unfinished"/>
+        <translation>FLAC</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="223"/>
         <source>M4A</source>
-        <translation type="unfinished"/>
+        <translation>M4A</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="224"/>
         <source>MP4</source>
-        <translation type="unfinished"/>
+        <translation>MP4</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="260"/>
@@ -1920,7 +1920,7 @@ asemia sinun henkilökohtaisen musiikkimakuprofiilisi perusteella.</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="56"/>
         <source>Preferred download format:</source>
-        <translation type="unfinished"/>
+        <translation>Ensisijainen latausmuoto:</translation>
     </message>
 </context>
 <context>
