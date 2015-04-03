@@ -286,13 +286,7 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
 
             case Score:
             {
-                float score;
-                if ( query->results().first()->isOnline() )
-                    score = query->results().first()->score();
-                else
-                    score = 0.0;
-
-                return scoreText( score );
+                return scoreText( query->score() );
                 break;
             }
 

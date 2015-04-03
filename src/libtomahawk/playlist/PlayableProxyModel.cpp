@@ -470,7 +470,7 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
         mtime1 = r->modificationTime();
         size1 = r->size();
         year1 = r->track()->year();
-        score1 = r->score();
+        score1 = q1->score();
         origin1 = r->friendlySource().toLower();
     }
     if ( !q2->results().isEmpty() )
@@ -480,7 +480,7 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
         mtime2 = r->modificationTime();
         size2 = r->size();
         year2 = r->track()->year();
-        score2 = r->score();
+        score2 = q2->score();
         origin2 = r->friendlySource().toLower();
     }
 

@@ -324,7 +324,7 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
 
         if ( !found )
         {
-            m_results.insert( query, result->score() );
+            m_results.insert( query, /*FIXME*/ query->score() );
             queries << query;
         }
 
@@ -344,7 +344,7 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
             PlayableItem* item = m_resultsModel->itemFromIndex( m_resultsModel->index( i, 0, QModelIndex() ) );
             if ( item && item->query() && item->query()->numResults( true ) )
             {
-                if ( item->query()->results().first()->score() < q->results().first()->score() )
+                if ( item->query()->score() < q->score() )
                 {
                     m_resultsModel->insertQuery( q, i );
                     done = true;

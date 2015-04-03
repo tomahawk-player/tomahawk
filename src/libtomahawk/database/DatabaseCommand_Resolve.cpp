@@ -283,7 +283,7 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
         {
             if ( trackPairs.at( k ).first == (int)track->trackId() )
             {
-                result->setScore( trackPairs.at( k ).second );
+                //FIXME: result->setScore( trackPairs.at( k ).second );
                 break;
             }
         }

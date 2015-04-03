@@ -323,7 +323,6 @@ Tomahawk::DatabaseImpl::file( int fid )
         r->setMimetype( query.value( 4 ).toString() );
         r->setBitrate( query.value( 6 ).toUInt() );
         r->setResolvedByCollection( s->dbCollection() );
-        r->setScore( 1.0 );
         r->setFileId( fid );
     }
 
@@ -642,7 +641,6 @@ Tomahawk::DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         // Return http resulthint directly
         res = Tomahawk::Result::get( url, track );
         res->setRID( uuid() );
-        res->setScore( 1.0 );
         const QUrl u = QUrl::fromUserInput( url );
         res->setFriendlySource( u.host() );
 
@@ -722,7 +720,6 @@ Tomahawk::DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         res->setSize( query.value( 2 ).toUInt() );
         res->setMimetype( query.value( 4 ).toString() );
         res->setBitrate( query.value( 6 ).toInt() );
-        res->setScore( 1.0 );
         res->setRID( uuid() );
         res->setResolvedByCollection( s->dbCollection() );
     }

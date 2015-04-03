@@ -122,7 +122,6 @@ ScriptCommand_AllTracks::onTracksJobDone( const QVariantMap& result )
     QList< Tomahawk::query_ptr > queries;
     foreach ( const Tomahawk::result_ptr& result, t )
     {
-        result->setScore( 1.0 );
         result->setResolvedByCollection( m_collection );
         queries.append( result->toQuery() );
     }
