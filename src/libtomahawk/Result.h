@@ -89,7 +89,6 @@ public:
      */
     ResultProvider* resolvedBy() const;
 
-    float score() const;
     RID id() const;
     bool isOnline() const;
     bool playable() const;
@@ -112,7 +111,6 @@ public:
     unsigned int size() const;
     unsigned int modificationTime() const;
 
-    void setScore( float score );
     void setFileId( unsigned int id );
     void setRID( RID id ) { m_rid = id; }
 
@@ -174,8 +172,6 @@ private:
     unsigned int m_bitrate;
     unsigned int m_size;
     unsigned int m_modtime;
-    float m_score;
-
     unsigned int m_fileId;
 
     track_ptr m_track;

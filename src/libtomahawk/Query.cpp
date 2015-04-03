@@ -151,6 +151,7 @@ Query::init()
     d->solved = false;
     d->playable = false;
     d->saveResultHint = false;
+    d->score = 0.0;
 }
 
 
@@ -196,7 +197,7 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
         }*/
 
         d->results << newresults;
-        qStableSort( d->results.begin(), d->results.end(), Query::resultSorter );
+        qStableSort( d->results.begin(), d->results.end(), std::bind( &Query::resultSorter, this, std::placeholders::_1, std::placeholders::_2 ) );
 
         // hook up signals, and check solved status
         foreach( const result_ptr& rp, newresults )
@@ -265,8 +266,8 @@ Query::onResultStatusChanged()
     {
         Q_D( Query );
         QMutexLocker lock( &d->mutex );
-        if ( d->results.count() )
-            qStableSort( d->results.begin(), d->results.end(), Query::resultSorter );
+        if ( !d->results.isEmpty() )
+            qStableSort( d->results.begin(), d->results.end(), std::bind( &Query::resultSorter, this, std::placeholders::_1, std::placeholders::_2 ) );
     }
 
     checkResults();
@@ -404,8 +405,8 @@ Query::id() const
 bool
 Query::resultSorter( const result_ptr& left, const result_ptr& right )
 {
-    const float ls = left->isOnline() ? left->score() : 0.0;
-    const float rs = right->isOnline() ? right->score() : 0.0;
+    const float ls = left->isOnline() ? howSimilar( left ) : 0.0;
+    const float rs = right->isOnline() ? howSimilar( right ) : 0.0;
 
     if ( ls == rs )
     {
@@ -509,6 +510,10 @@ void
 Query::checkResults()
 {
     Q_D( Query );
+    if ( !d->results.isEmpty() )
+    {
+        d->score = howSimilar( d->results.first() );
+    }
     bool playable = false;
     bool solved = false;
 
@@ -521,7 +526,7 @@ Query::checkResults()
             if ( rp->playable() )
                 playable = true;
 
-            if ( rp->isOnline() && rp->score() > 0.99 )
+            if ( rp->isOnline() && howSimilar( rp ) > 0.99 )
             {
                 solved = true;
             }
@@ -599,6 +604,14 @@ Query::toString() const
                   .arg( id() )
                   .arg( fullTextQuery() );
     }
+}
+
+
+float
+Query::score() const
+{
+    Q_D( const Query );
+    return d->score;
 }
 
 
@@ -716,4 +729,3 @@ Query::setWeakRef( QWeakPointer<Query> weakRef )
     Q_D( Query );
     d->ownRef = weakRef;
 }
-
