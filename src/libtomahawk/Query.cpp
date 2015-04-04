@@ -515,6 +515,11 @@ Query::checkResults()
     {
         d->score = howSimilar( d->results.first() );
     }
+    else
+    {
+        d->score = 0.0;
+    }
+
     bool playable = false;
     bool solved = false;
 
