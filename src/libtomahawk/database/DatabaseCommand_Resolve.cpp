@@ -83,7 +83,7 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
     // STEP 1
     QList< QPair<int, float> > tracks = lib->search( m_query );
 
-    if ( tracks.length() == 0 )
+    if ( tracks.isEmpty() )
     {
         qDebug() << "No candidates found in first pass, aborting resolve" << m_query->queryTrack()->toString();
         emit results( m_query->id(), res );
@@ -202,7 +202,7 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
         emit albums( m_query->id(), albumList );
     }
 
-    if ( trackPairs.length() == 0 )
+    if ( trackPairs.isEmpty() )
     {
         qDebug() << "No candidates found in first pass, aborting resolve" << m_query->fullTextQuery();
         emit results( m_query->id(), res );
@@ -278,15 +278,6 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
         result->setBitrate( files_query.value( 6 ).toUInt() );
         result->setRID( uuid() );
         result->setResolvedByCollection( s->dbCollection() );
-
-        for ( int k = 0; k < trackPairs.count(); k++ )
-        {
-            if ( trackPairs.at( k ).first == (int)track->trackId() )
-            {
-                //FIXME: result->setScore( trackPairs.at( k ).second );
-                break;
-            }
-        }
 
         res << result;
     }
