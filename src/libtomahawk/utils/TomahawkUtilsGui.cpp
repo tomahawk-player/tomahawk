@@ -835,7 +835,7 @@ prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, Pl
     {
         float opacity = 0.0;
         if ( item->query() && !item->query()->results().isEmpty() && item->query()->results().first()->isOnline() )
-            opacity = item->query()->results().first()->score();
+            opacity = item->query()->score();
 
         opacity = qMax( (float)0.3, opacity );
         QColor textColor = alphaBlend( option->palette.color( QPalette::Text ), option->palette.color( QPalette::BrightText ), opacity );

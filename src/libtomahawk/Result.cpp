@@ -104,7 +104,6 @@ Result::Result( const QString& url, const track_ptr& track )
     , m_bitrate( 0 )
     , m_size( 0 )
     , m_modtime( 0 )
-    , m_score( 0 )
     , m_fileId( 0 )
     , m_track( track )
 {
@@ -178,13 +177,6 @@ Result::mimetype() const
 }
 
 
-float
-Result::score() const
-{
-    return m_score;
-}
-
-
 RID
 Result::id() const
 {
@@ -216,10 +208,8 @@ Result::playable() const
     {
         return resolvedByCollection()->isOnline();
     }
-    else
-    {
-        return score() > 0.0;
-    }
+
+    return true;
 }
 
 
@@ -235,7 +225,7 @@ Result::toVariant() const
     m.insert( "size", size() );
     m.insert( "bitrate", bitrate() );
     m.insert( "duration", m_track->duration() );
-    m.insert( "score", score() );
+//    m.insert( "score", score() );
     m.insert( "sid", id() );
     m.insert( "discnumber", m_track->discnumber() );
     m.insert( "albumpos", m_track->albumpos() );
@@ -254,9 +244,8 @@ Result::toString() const
 {
     if ( m_track )
     {
-        return QString( "Result(%1, score: %2) %3 - %4%5 (%6)" )
+        return QString( "Result(%1) %2 - %3%4 (%5)" )
                   .arg( id() )
-                  .arg( m_score )
                   .arg( m_track->artist() )
                   .arg( m_track->track() )
                   .arg( m_track->album().isEmpty() ? QString() : QString( " on %1" ).arg( m_track->album() ) )
@@ -264,9 +253,8 @@ Result::toString() const
     }
     else
     {
-        return QString( "Result(%1, score: %2) (%3)" )
+        return QString( "Result(%1) (%2)" )
                   .arg( id() )
-                  .arg( m_score )
                   .arg( m_url );
     }
 }
@@ -493,13 +481,6 @@ unsigned int
 Result::modificationTime() const
 {
     return m_modtime;
-}
-
-
-void
-Result::setScore( float score )
-{
-    m_score = score;
 }
 
 

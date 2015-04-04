@@ -79,6 +79,8 @@ public:
     /// true when any result has been found (score may be less than 1.0)
     bool playable() const;
 
+    float score() const;
+
     Tomahawk::Resolver* currentResolver() const;
     QList< QPointer< Tomahawk::Resolver > > resolvedBy() const;
 
@@ -109,7 +111,7 @@ public:
     void setWeakRef( QWeakPointer< Tomahawk::Query > weakRef );
 
     /// sorter for list of results
-    static bool resultSorter( const result_ptr& left, const result_ptr& right );
+    bool resultSorter( const result_ptr& left, const result_ptr& right );
 
 signals:
     void resultsAdded( const QList<Tomahawk::result_ptr>& );

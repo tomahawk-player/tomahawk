@@ -105,7 +105,7 @@ Api_v1_5::playback( QxtWebRequestEvent* event, const QString& command )
             } else {
                 trackInfo.insert( "resolvedBy", "<unknown resolver>" );
             }
-            trackInfo.insert( "score", currentTrack->score() );
+//FIXME?            trackInfo.insert( "score", currentTrack->score() );
             trackInfo.insert( "album", currentTrack->track()->album() );
             trackInfo.insert( "albumpos", currentTrack->track()->albumpos() );
             trackInfo.insert( "artist", currentTrack->track()->artist() );

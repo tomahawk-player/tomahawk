@@ -291,7 +291,7 @@ ScriptAccount::parseResultVariantList( const QVariantList& reslist )
         rp->setPreview( m.value( "preview" ).toBool() );
         rp->setPurchaseUrl( m.value( "purchaseUrl" ).toString() );
         rp->setLinkUrl( m.value( "linkUrl" ).toString() );
-        rp->setScore( m.value( "score" ).toFloat() );
+//FIXME?        rp->setScore( m.value( "score" ).toFloat() );
         rp->setChecked( m.value( "checked" ).toBool() );
 
         //FIXME

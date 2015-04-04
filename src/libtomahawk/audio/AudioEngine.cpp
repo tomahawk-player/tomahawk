@@ -866,7 +866,6 @@ AudioEngine::play( const QUrl& url )
         result->setMimetype( tags["mimetype"].toString() );
     }
 
-    result->setScore( 1.0 );
     result->setResolvedByCollection( SourceList::instance()->getLocal()->collections().first(), false );
 
     //    Tomahawk::query_ptr qry = Tomahawk::Query::get( t );
