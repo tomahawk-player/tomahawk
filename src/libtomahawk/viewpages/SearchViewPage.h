@@ -91,7 +91,7 @@ private:
     PlayableModel* m_resultsModel;
     Tomahawk::playlistinterface_ptr m_plInterface;
 
-    QList< Tomahawk::query_ptr > m_queries;
+    Tomahawk::query_ptr m_query;
     QMap< Tomahawk::artist_ptr, float > m_artists;
     QMap< Tomahawk::album_ptr, float > m_albums;
     QMap< Tomahawk::query_ptr, float > m_results;

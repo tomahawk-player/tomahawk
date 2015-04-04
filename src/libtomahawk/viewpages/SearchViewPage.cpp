@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2012       Leo Franchi            <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -230,15 +230,11 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
     m_albumsModel->startLoading();
     m_resultsModel->startLoading();
 
-    m_queries << Tomahawk::Query::get( search, uuid() );
-
-    foreach ( const Tomahawk::query_ptr& query, m_queries )
-    {
-        connect( query.data(), SIGNAL( artistsAdded( QList<Tomahawk::artist_ptr> ) ), SLOT( onArtistsFound( QList<Tomahawk::artist_ptr> ) ) );
-        connect( query.data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr> ) ), SLOT( onAlbumsFound( QList<Tomahawk::album_ptr> ) ) );
-        connect( query.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ), SLOT( onResultsFound( QList<Tomahawk::result_ptr> ) ) );
-        connect( query.data(), SIGNAL( resolvingFinished( bool ) ), SLOT( onQueryFinished() ) );
-    }
+    m_query = Tomahawk::Query::get( search, uuid() );
+    connect( m_query.data(), SIGNAL( artistsAdded( QList<Tomahawk::artist_ptr> ) ), SLOT( onArtistsFound( QList<Tomahawk::artist_ptr> ) ) );
+    connect( m_query.data(), SIGNAL( albumsAdded( QList<Tomahawk::album_ptr> ) ), SLOT( onAlbumsFound( QList<Tomahawk::album_ptr> ) ) );
+    connect( m_query.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ), SLOT( onResultsFound( QList<Tomahawk::result_ptr> ) ) );
+    connect( m_query.data(), SIGNAL( resolvingFinished( bool ) ), SLOT( onQueryFinished() ) );
 
     TomahawkUtils::fixMargins( this );
 }
@@ -335,7 +331,7 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
     while ( queries.count() )
     {
         query_ptr q = queries.takeFirst();
-        if ( !q->results().count() )
+        if ( q->results().isEmpty() )
             continue;
 
         bool done = false;
@@ -344,7 +340,7 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
             PlayableItem* item = m_resultsModel->itemFromIndex( m_resultsModel->index( i, 0, QModelIndex() ) );
             if ( item && item->query() && item->query()->numResults( true ) )
             {
-                if ( item->query()->score() < q->score() )
+                if ( m_query->howSimilar( item->query()->results().first() ) < m_query->howSimilar( q->results().first() ) )
                 {
                     m_resultsModel->insertQuery( q, i );
                     done = true;
