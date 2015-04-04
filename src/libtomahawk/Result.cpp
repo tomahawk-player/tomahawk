@@ -199,10 +199,8 @@ Result::playable() const
     {
         return resolvedByCollection()->isOnline();
     }
-    else
-    {
-        return true; //FIXME
-    }
+
+    return true;
 }
 
 
