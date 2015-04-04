@@ -80,7 +80,6 @@ public:
     bool playable() const;
 
     float score() const;
-    void setScore( float score );
 
     Tomahawk::Resolver* currentResolver() const;
     QList< QPointer< Tomahawk::Resolver > > resolvedBy() const;
