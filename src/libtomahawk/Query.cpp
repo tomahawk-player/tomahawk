@@ -122,6 +122,7 @@ Query::Query( const track_ptr& track, const result_ptr& result )
     d->results << result;
     d->playable = result->playable();
     d->solved = true;
+    d->score = 1.0;
     connect( result.data(), SIGNAL( statusChanged() ), SLOT( onResultStatusChanged() ) );
 }
 
