@@ -257,7 +257,7 @@ QSize
 AccountsToolButton::sizeHint() const
 {
     QSize size = QToolButton::sizeHint();
-    if ( m_factoryPixmaps.count() == 0 ) //no accounts enabled!
+    if ( m_factoryPixmaps.isEmpty() ) //no accounts enabled!
         return size;
 
     size.rwidth() *= m_factoryPixmaps.count();

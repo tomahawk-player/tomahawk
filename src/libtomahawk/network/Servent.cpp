@@ -423,7 +423,7 @@ Servent::getLocalSipInfos( const QString& nodeid, const QString& key )
         info.setNodeId( nodeid );
         sipInfos.append( info );
     }
-    if ( d_func()->externalHostname.length() > 0)
+    if ( !d_func()->externalHostname.isEmpty() )
     {
         SipInfo info = SipInfo();
         info.setHost( d_func()->externalHostname );
@@ -1047,7 +1047,7 @@ Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString& their
 bool
 Servent::visibleExternally() const
 {
-    return (!d_func()->externalHostname.isNull()) || (d_func()->externalAddresses.length() > 0);
+    return !d_func()->externalHostname.isNull() || !d_func()->externalAddresses.isEmpty();
 }
 
 

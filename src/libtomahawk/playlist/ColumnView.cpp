@@ -328,7 +328,7 @@ ColumnView::startDrag( Qt::DropActions supportedActions )
         }
     }
 
-    if ( indexes.count() == 0 )
+    if ( indexes.isEmpty() )
         return;
 
     tDebug( LOGVERBOSE ) << "Dragging" << indexes.count() << "indexes";

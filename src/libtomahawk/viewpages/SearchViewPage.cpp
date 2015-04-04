@@ -439,7 +439,7 @@ SearchWidget::updateArtists()
 
     qSort( floats.begin(), floats.end() );
 
-    while ( floats.count() > 0 )
+    while ( !floats.isEmpty() )
     {
         float f = floats.takeLast();
         foreach ( const artist_ptr& a, artists )
@@ -469,7 +469,7 @@ SearchWidget::updateAlbums()
 
     qSort( floats.begin(), floats.end() );
 
-    while ( floats.count() > 0 )
+    while ( !floats.isEmpty() )
     {
         float f = floats.takeLast();
         foreach ( const album_ptr& a, albums )

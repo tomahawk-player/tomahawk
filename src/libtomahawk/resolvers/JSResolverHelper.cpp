@@ -507,7 +507,7 @@ JSResolverHelper::addUrlResult( const QString& url, const QVariantMap& result )
         m_pendingAlbum = album;
         connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
                  SLOT( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ) );
-        if ( album->tracks().count() > 0 )
+        if ( !album->tracks().isEmpty() )
         {
             emit m_resolver->informationFound( url, album.objectCast<QObject>() );
         }

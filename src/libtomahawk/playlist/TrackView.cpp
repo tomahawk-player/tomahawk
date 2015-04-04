@@ -719,7 +719,7 @@ TrackView::startDrag( Qt::DropActions supportedActions )
         }
     }
 
-    if ( indexes.count() == 0 )
+    if ( indexes.isEmpty() )
         return;
 
     tDebug() << "Dragging" << indexes.count() << "indexes";

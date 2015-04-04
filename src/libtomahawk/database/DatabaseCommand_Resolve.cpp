@@ -241,7 +241,7 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
                             "track.id = file_join.track AND "
                             "file.id = file_join.file AND "
                             "%1" )
-                        .arg( trksl.length() > 0 ? trksToken : QString( "0" ) );
+                        .arg( !trksl.isEmpty() ? trksToken : QString( "0" ) );
 
     files_query.prepare( sql );
     files_query.exec();

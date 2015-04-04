@@ -337,7 +337,7 @@ DownloadJob::onDownloadProgress( qint64 rcvd, qint64 total )
     }
 
     QByteArray data = m_reply->readAll();
-    if ( data.length() == 0 )
+    if ( data.isEmpty() )
         return;
 
     if ( m_file->write( data ) < 0 )

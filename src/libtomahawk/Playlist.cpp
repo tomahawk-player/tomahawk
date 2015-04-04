@@ -586,7 +586,7 @@ void
 Playlist::setPlaylistRevisionFinished()
 {
     Q_D( Playlist );
-    if ( d->queuedSetPlaylistRevisionCmds.length() > 0 )
+    if ( !d->queuedSetPlaylistRevisionCmds.isEmpty() )
     {
         DatabaseCommand_SetPlaylistRevision* cmd = d->queuedSetPlaylistRevisionCmds.dequeue();
         // Update oldrev to currentRevision so that optimistic locking works correctly.

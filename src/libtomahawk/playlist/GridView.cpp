@@ -386,7 +386,7 @@ GridView::startDrag( Qt::DropActions supportedActions )
         }
     }
 
-    if ( indexes.count() == 0 )
+    if ( indexes.isEmpty() )
         return;
 
     qDebug() << "Dragging" << indexes.count() << "indexes";

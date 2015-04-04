@@ -398,7 +398,7 @@ Source::addCollection( const collection_ptr& c )
 {
     Q_D( Source );
 
-    //Q_ASSERT( m_collections.length() == 0 ); // only 1 source supported atm
+    //Q_ASSERT( m_collections.isEmpty() ); // only 1 source supported atm
     d->collections.append( c );
     emit collectionAdded( c );
 }

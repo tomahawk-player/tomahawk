@@ -80,7 +80,7 @@ ScriptCommandQueue::onCommandDone()
     disconnect( m_timer, SIGNAL( timeout() ),
                 this, SLOT( onTimeout() ) );
 
-    if ( m_queue.count() > 0 )
+    if ( !m_queue.isEmpty() )
         nextCommand();
 }
 
@@ -102,6 +102,6 @@ ScriptCommandQueue::onTimeout()
     disconnect( m_timer, SIGNAL( timeout() ),
                 this, SLOT( onTimeout() ) );
 
-    if ( m_queue.count() > 0 )
+    if ( !m_queue.isEmpty() )
         nextCommand();
 }

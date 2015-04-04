@@ -112,7 +112,7 @@ ScriptCommand_AllAlbums::onAlbumsJobDone(const QVariantMap& result)
     }
 
     QList< Tomahawk::artist_ptr > resultArtists;
-    if ( result["artists"].toList().length() > 0 )
+    if ( !result["artists"].toList().isEmpty() )
     {
         resultArtists = ScriptCommand_AllArtists::parseArtistVariantList( result[ "artists" ].toList() );
     }

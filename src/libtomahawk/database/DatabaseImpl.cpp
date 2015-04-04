@@ -219,7 +219,7 @@ Tomahawk::DatabaseImpl::updateSchema( int oldVersion )
         foreach ( const QString& sl, statements )
         {
             QString s( sl.trimmed() );
-            if ( s.length() == 0 )
+            if ( s.isEmpty() )
                 continue;
 
             tLog() << "Executing:" << s;
