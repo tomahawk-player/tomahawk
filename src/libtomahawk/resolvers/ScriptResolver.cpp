@@ -418,7 +418,7 @@ ScriptResolver::doSetup( const QVariantMap& m )
         m_capabilities = static_cast< Capabilities >( intCap );
 
     QByteArray icoData = m.value( "icon" ).toByteArray();
-    if( compressed )
+    if ( compressed )
         icoData = qUncompress( QByteArray::fromBase64( icoData ) );
     else
         icoData = QByteArray::fromBase64( icoData );
@@ -435,8 +435,12 @@ ScriptResolver::doSetup( const QVariantMap& m )
     // TODO: remove this and publish a definitive api
     if ( !success )
     {
-        QString iconPath = QFileInfo( filePath() ).path() + "/" + m.value( "icon" ).toString();
-        success = m_icon.load( iconPath );
+        const QString iconPath = QFileInfo( filePath() ).path() + "/" + m.value( "icon" ).toString();
+        QPixmap icon;
+        icon.load( iconPath );
+        success = icon.load( iconPath );
+        if ( success )
+            m_icon = icon;
     }
 
     qDebug() << "SCRIPT" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout << "icon received" << success;
