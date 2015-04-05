@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -114,7 +114,7 @@ AlbumModel::addAlbums( const QList<Tomahawk::album_ptr>& albums )
     QList<Tomahawk::album_ptr> trimmedAlbums;
     foreach ( const album_ptr& album, albums )
     {
-        if ( !album.isNull() && album->name().length() )
+        if ( !album.isNull() && !album->name().isEmpty() )
         {
             if ( findItem( album ) || trimmedAlbums.contains( album ) )
                 continue;
@@ -122,7 +122,7 @@ AlbumModel::addAlbums( const QList<Tomahawk::album_ptr>& albums )
         }
     }
 
-    if ( !trimmedAlbums.count() )
+    if ( trimmedAlbums.isEmpty() )
     {
         emit itemCountChanged( rowCount( QModelIndex() ) );
         return;
@@ -159,7 +159,7 @@ AlbumModel::addArtists( const QList<Tomahawk::artist_ptr>& artists )
     QList<Tomahawk::artist_ptr> trimmedArtists;
     foreach ( const artist_ptr& artist, artists )
     {
-        if ( !artist.isNull() && artist->name().length() )
+        if ( !artist.isNull() && !artist->name().isEmpty() )
         {
             if ( findItem( artist ) || trimmedArtists.contains( artist ) )
                 continue;
@@ -167,7 +167,7 @@ AlbumModel::addArtists( const QList<Tomahawk::artist_ptr>& artists )
         }
     }
 
-    if ( !trimmedArtists.count() )
+    if ( trimmedArtists.isEmpty() )
     {
         emit itemCountChanged( rowCount( QModelIndex() ) );
         return;

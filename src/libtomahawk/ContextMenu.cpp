@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -419,15 +419,15 @@ ContextMenu::addToQueue()
 void
 ContextMenu::copyLink()
 {
-    if ( m_queries.count() )
+    if ( !m_queries.isEmpty() )
     {
         Utils::LinkGenerator::instance()->copyOpenLink( m_queries.first() );
     }
-    else if ( m_albums.count() )
+    else if ( !m_albums.isEmpty() )
     {
         Utils::LinkGenerator::instance()->copyOpenLink( m_albums.first() );
     }
-    else if ( m_artists.count() )
+    else if ( !m_artists.isEmpty() )
     {
         Utils::LinkGenerator::instance()->copyOpenLink( m_artists.first() );
     }
@@ -437,7 +437,7 @@ ContextMenu::copyLink()
 void
 ContextMenu::openPage( MenuActions action )
 {
-    if ( m_queries.count() )
+    if ( !m_queries.isEmpty() )
     {
         if ( action == ActionTrackPage )
         {
@@ -455,7 +455,7 @@ ContextMenu::openPage( MenuActions action )
             }
         }
     }
-    else if ( m_albums.count() )
+    else if ( !m_albums.isEmpty() )
     {
         if ( action == ActionArtistPage )
         {
@@ -466,7 +466,7 @@ ContextMenu::openPage( MenuActions action )
             ViewManager::instance()->show( m_albums.first() );
         }
     }
-    else if ( m_artists.count() )
+    else if ( !m_artists.isEmpty() )
     {
         ViewManager::instance()->show( m_artists.first() );
     }

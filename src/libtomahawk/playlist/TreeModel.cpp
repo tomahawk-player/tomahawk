@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2012,      Leo Franchi <lfranchi@kde.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
@@ -182,7 +182,7 @@ void
 TreeModel::addAlbums( const QModelIndex& parent, const QList<Tomahawk::album_ptr>& albums )
 {
     finishLoading();
-    if ( !albums.count() )
+    if ( albums.isEmpty() )
         return;
 
     PlayableItem* parentItem = itemFromIndex( parent );
@@ -291,7 +291,7 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QModel
 {
     finishLoading();
 
-    if ( !tracks.count() )
+    if ( tracks.isEmpty() )
         return;
 
     PlayableItem* parentItem = itemFromIndex( parent );

@@ -194,15 +194,15 @@ downloadjob_ptr
 DownloadManager::currentJob() const
 {
     QList<downloadjob_ptr> j = jobs( DownloadJob::Running );
-    if ( j.count() )
+    if ( !j.isEmpty() )
         return j.first();
 
     j = jobs( DownloadJob::Paused );
-    if ( j.count() )
+    if ( !j.isEmpty() )
         return j.first();
 
     j = jobs( DownloadJob::Waiting );
-    if ( j.count() )
+    if ( !j.isEmpty() )
         return j.first();
 
     return downloadjob_ptr();
@@ -282,7 +282,7 @@ DownloadManager::resume()
 
     m_globalState = true;
 
-    if ( jobs( DownloadJob::Paused ).count() )
+    if ( !jobs( DownloadJob::Paused ).isEmpty() )
     {
         foreach ( const downloadjob_ptr& job, jobs( DownloadJob::Paused ) )
         {

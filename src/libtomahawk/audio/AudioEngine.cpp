@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
@@ -942,7 +942,7 @@ AudioEngine::playItem( const Tomahawk::artist_ptr& artist )
     playlistinterface_ptr pli = artist->playlistInterface( Mixed );
     if ( pli->isFinished() )
     {
-        if ( !pli->tracks().count() )
+        if ( pli->tracks().isEmpty() )
         {
             JobStatusView::instance()->model()->addJob(
                 new ErrorStatusMessage( tr( "Sorry, Tomahawk couldn't find the artist '%1'" ).arg( artist->name() ), 15 ) );
@@ -968,7 +968,7 @@ AudioEngine::playItem( const Tomahawk::album_ptr& album )
     playlistinterface_ptr pli = album->playlistInterface( Mixed );
     if ( pli->isFinished() )
     {
-        if ( !pli->tracks().count() )
+        if ( pli->tracks().isEmpty() )
         {
             JobStatusView::instance()->model()->addJob(
                 new ErrorStatusMessage( tr( "Sorry, Tomahawk couldn't find the album '%1' by %2" ).arg( album->name() ).arg( album->artist()->name() ), 15 ) );

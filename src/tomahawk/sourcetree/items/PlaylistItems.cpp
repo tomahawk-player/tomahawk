@@ -1,7 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
- *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -265,9 +265,9 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 void
 PlaylistItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
 {
-    if ( tracks.count() && m_playlist && m_playlist->author()->isLocal() )
+    if ( !tracks.isEmpty() && m_playlist && m_playlist->author()->isLocal() )
     {
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Adding" << tracks.count() << "tracks on playlist:" << m_playlist->title() << m_playlist->guid() << m_playlist->currentrevision();
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Adding" << tracks.count() << "tracks to playlist:" << m_playlist->title() << m_playlist->guid() << m_playlist->currentrevision();
 
         m_playlist->addEntries( tracks );
     }

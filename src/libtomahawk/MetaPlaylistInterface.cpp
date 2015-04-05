@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2012-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ MetaPlaylistInterface::removeChildInterface( const Tomahawk::playlistinterface_p
 QList< Tomahawk::query_ptr >
 MetaPlaylistInterface::tracks() const
 {
-    if ( m_childInterfaces.count() )
+    if ( !m_childInterfaces.isEmpty() )
         return m_childInterfaces.first()->tracks();
     else
         return QList< Tomahawk::query_ptr >();
@@ -72,7 +72,7 @@ MetaPlaylistInterface::tracks() const
 int
 MetaPlaylistInterface::trackCount() const
 {
-    if ( m_childInterfaces.count() )
+    if ( !m_childInterfaces.isEmpty() )
         return m_childInterfaces.first()->trackCount();
     else
         return 0;
@@ -82,7 +82,7 @@ MetaPlaylistInterface::trackCount() const
 result_ptr
 MetaPlaylistInterface::currentItem() const
 {
-    if ( m_childInterfaces.count() && m_childInterfaces.first() )
+    if ( !m_childInterfaces.isEmpty() && m_childInterfaces.first() )
         return m_childInterfaces.first()->currentItem();
     else
         return Tomahawk::result_ptr();
@@ -92,7 +92,7 @@ MetaPlaylistInterface::currentItem() const
 qint64
 MetaPlaylistInterface::siblingIndex( int itemsAway, qint64 rootIndex ) const
 {
-    if ( m_childInterfaces.count() )
+    if ( !m_childInterfaces.isEmpty() )
         return m_childInterfaces.first()->siblingIndex( itemsAway, rootIndex );
     else
         return -1;
@@ -102,7 +102,7 @@ MetaPlaylistInterface::siblingIndex( int itemsAway, qint64 rootIndex ) const
 Tomahawk::query_ptr
 MetaPlaylistInterface::queryAt( qint64 index ) const
 {
-    if ( m_childInterfaces.count() )
+    if ( !m_childInterfaces.isEmpty() )
         return m_childInterfaces.first()->queryAt( index );
     else
         return Tomahawk::query_ptr();
@@ -112,7 +112,7 @@ MetaPlaylistInterface::queryAt( qint64 index ) const
 Tomahawk::result_ptr
 MetaPlaylistInterface::resultAt( qint64 index ) const
 {
-    if ( m_childInterfaces.count() )
+    if ( !m_childInterfaces.isEmpty() )
         return m_childInterfaces.first()->resultAt( index );
     else
         return Tomahawk::result_ptr();
@@ -122,7 +122,7 @@ MetaPlaylistInterface::resultAt( qint64 index ) const
 qint64
 MetaPlaylistInterface::indexOfResult( const Tomahawk::result_ptr& result ) const
 {
-    if ( m_childInterfaces.count() )
+    if ( !m_childInterfaces.isEmpty() )
         return m_childInterfaces.first()->indexOfResult( result );
     else
         return -1;
@@ -132,7 +132,7 @@ MetaPlaylistInterface::indexOfResult( const Tomahawk::result_ptr& result ) const
 qint64
 MetaPlaylistInterface::indexOfQuery( const Tomahawk::query_ptr& query ) const
 {
-    if ( m_childInterfaces.count() )
+    if ( !m_childInterfaces.isEmpty() )
         return m_childInterfaces.first()->indexOfQuery( query );
     else
         return -1;
@@ -142,7 +142,7 @@ MetaPlaylistInterface::indexOfQuery( const Tomahawk::query_ptr& query ) const
 PlaylistModes::RepeatMode
 MetaPlaylistInterface::repeatMode() const
 {
-    if ( m_childInterfaces.count() )
+    if ( !m_childInterfaces.isEmpty() )
         return m_childInterfaces.first()->repeatMode();
     else
         return PlaylistModes::NoRepeat;
@@ -152,7 +152,7 @@ MetaPlaylistInterface::repeatMode() const
 bool
 MetaPlaylistInterface::shuffled() const
 {
-    if ( m_childInterfaces.count() )
+    if ( !m_childInterfaces.isEmpty() )
         return m_childInterfaces.first()->shuffled();
     else
         return false;
@@ -175,7 +175,7 @@ MetaPlaylistInterface::hasChildInterface( const Tomahawk::playlistinterface_ptr&
 void
 MetaPlaylistInterface::setRepeatMode( PlaylistModes::RepeatMode mode )
 {
-    if ( m_childInterfaces.count() )
+    if ( !m_childInterfaces.isEmpty() )
         return m_childInterfaces.first()->setRepeatMode( mode );
 }
 
@@ -183,6 +183,6 @@ MetaPlaylistInterface::setRepeatMode( PlaylistModes::RepeatMode mode )
 void
 MetaPlaylistInterface::setShuffled( bool enabled )
 {
-    if ( m_childInterfaces.count() )
+    if ( !m_childInterfaces.isEmpty() )
         return m_childInterfaces.first()->setShuffled( enabled );
 }

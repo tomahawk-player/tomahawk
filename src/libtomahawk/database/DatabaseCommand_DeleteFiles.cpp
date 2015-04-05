@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -40,7 +40,7 @@ using namespace Tomahawk;
 void
 DatabaseCommand_DeleteFiles::postCommitHook()
 {
-    if ( !m_idList.count() )
+    if ( m_idList.isEmpty() )
         return;
 
     // make the collection object emit its tracksAdded signal, so the
@@ -135,7 +135,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
         delquery.exec();
     }
 
-    if ( m_idList.count() )
+    if ( !m_idList.isEmpty() )
         source()->updateIndexWhenSynced();
 
     emit done( m_idList, source()->dbCollection() );

@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2014-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -169,7 +169,7 @@ QueueItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 void
 QueueItem::parsedDroppedTracks( const QList< Tomahawk::query_ptr >& tracks )
 {
-    if ( tracks.count() )
+    if ( !tracks.isEmpty() )
     {
         ViewManager::instance()->queue()->view()->trackView()->model()->appendQueries( tracks );
     }

@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -455,7 +455,7 @@ Playlist::setRevision( const QString& rev,
     setBusy( false );
     setLoaded( true );
 
-    if ( d->initEntries.count() && currentrevision().isEmpty() )
+    if ( !d->initEntries.isEmpty() && currentrevision().isEmpty() )
     {
         // add initial tracks
         createNewRevision( uuid(), currentrevision(), d->initEntries );

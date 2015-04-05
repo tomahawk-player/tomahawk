@@ -203,9 +203,9 @@ ConnectionManager::newControlConnection( const Tomahawk::peerinfo_ptr& peerInfo 
     d->controlConnection->addPeerInfo( peerInfo );
     d->controlConnection->setFirstMessage( m );
 
-    if ( peerInfo->id().length() )
+    if ( !peerInfo->id().isEmpty() )
         d->controlConnection->setName( peerInfo->contactId() );
-    if ( peerInfo->nodeId().length() )
+    if ( !peerInfo->nodeId().isEmpty() )
         d->controlConnection->setId( peerInfo->nodeId() );
 
     d->controlConnection->setNodeId( peerInfo->nodeId() );

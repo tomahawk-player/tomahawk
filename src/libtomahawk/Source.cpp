@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
  *
@@ -151,7 +151,7 @@ collection_ptr
 Source::dbCollection() const
 {
     Q_D( const Source );
-    if ( d->collections.length() )
+    if ( !d->collections.isEmpty() )
     {
         foreach ( const collection_ptr& collection, d->collections )
         {
@@ -722,7 +722,7 @@ Source::executeCommands()
         // return here when the last command finished
         connect( cmd.data(), SIGNAL( finished() ), SLOT( executeCommands() ) );
 
-        if ( cmdGroup.count() )
+        if ( !cmdGroup.isEmpty() )
         {
             Database::instance()->enqueue( cmdGroup );
         }

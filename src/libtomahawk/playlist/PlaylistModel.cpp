@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
  *
@@ -268,7 +268,7 @@ void
 PlaylistModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int row, const QModelIndex& parent, const QList< Tomahawk::PlaybackLog >& logs )
 {
     Q_D( PlaylistModel );
-    if ( !entries.count() )
+    if ( entries.isEmpty() )
     {
         emit itemCountChanged( rowCount( QModelIndex() ) );
         finishLoading();
@@ -456,7 +456,7 @@ PlaylistModel::parsedDroppedTracks( QList< query_ptr > tracks )
     else
         beginRow = rowCount( QModelIndex() );
 
-    if ( tracks.count() )
+    if ( !tracks.isEmpty() )
     {
         bool update = ( d->dropStorage.action & Qt::CopyAction || d->dropStorage.action & Qt::MoveAction );
         if ( update )

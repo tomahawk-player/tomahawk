@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2010-2012, Leo Franchi   <lfranchi@kde.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
@@ -348,7 +348,7 @@ ViewManager::showInboxPage()
 void
 ViewManager::historyBack()
 {
-    if ( !m_pageHistoryBack.count() )
+    if ( m_pageHistoryBack.isEmpty() )
         return;
 
     ViewPage* page = m_pageHistoryBack.takeLast();
@@ -367,7 +367,7 @@ ViewManager::historyBack()
 void
 ViewManager::historyForward()
 {
-    if ( !m_pageHistoryFwd.count() )
+    if ( m_pageHistoryFwd.isEmpty() )
         return;
 
     ViewPage* page = m_pageHistoryFwd.takeLast();
@@ -413,8 +413,8 @@ ViewManager::destroyPage( ViewPage* page )
         m_pageHistoryBack.removeAll( page );
         m_pageHistoryFwd.removeAll( page );
 
-        emit historyBackAvailable( m_pageHistoryBack.count() );
-        emit historyForwardAvailable( m_pageHistoryFwd.count() );
+        emit historyBackAvailable( !m_pageHistoryBack.isEmpty() );
+        emit historyForwardAvailable( !m_pageHistoryFwd.isEmpty() );
     }
 
     if ( m_currentPage == page )

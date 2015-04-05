@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
@@ -500,7 +500,7 @@ Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVari
             }
 
             m_albumsLoaded.insert( InfoSystemMode, true );
-            if ( m_officialAlbums.count() )
+            if ( !m_officialAlbums.isEmpty() )
                 emit albumsAdded( albums, InfoSystemMode );
 
             break;
@@ -515,7 +515,7 @@ Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVari
             else if ( output.isValid() )
             {
                 const QByteArray ba = returnedData["imgbytes"].toByteArray();
-                if ( ba.length() )
+                if ( !ba.isEmpty() )
                 {
                     m_coverBuffer = ba;
                 }

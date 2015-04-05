@@ -591,7 +591,7 @@ AtticaManager::resolverDownloadFinished ( QNetworkReply *j )
         doc.setContent( j );
 
        const QDomNodeList nodes = doc.documentElement().elementsByTagName( "downloadlink" );
-       if ( nodes.length() < 1 )
+       if ( nodes.isEmpty() )
        {
            tLog() << "Found no download link for resolver:" << doc.toString();
            return;

@@ -177,7 +177,7 @@ DatabaseGenerator::fetchNext( int /* rating */ )
 QString
 DatabaseGenerator::sentenceSummary()
 {
-    if( m_controls.count() && m_controls.first()->type() == "SQL" )
+    if ( !m_controls.isEmpty() && m_controls.first()->type() == "SQL" )
         return m_controls.first()->summary();
 
     // TODO

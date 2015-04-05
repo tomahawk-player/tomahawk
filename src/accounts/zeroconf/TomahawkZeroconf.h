@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -58,7 +58,7 @@ public slots:
     void resolved( QHostInfo i )
     {
         qDebug() << Q_FUNC_INFO << "zeroconf-derived IP has resolved to name " << i.hostName();
-        if ( i.hostName().length() )
+        if ( !i.hostName().isEmpty() )
             emit tomahawkHostFound( ip, port, i.hostName(), nid );
         else
             emit tomahawkHostFound( ip, port, "Unknown", nid );

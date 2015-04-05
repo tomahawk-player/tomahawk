@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -274,7 +274,7 @@ MusicScanner::postOps()
     foreach ( const QString& s, m_skippedFiles )
         tDebug( LOGEXTRA ) << s;
 
-    if ( m_filesToDelete.length() || m_scannedfiles.length() )
+    if ( !m_filesToDelete.isEmpty() || !m_scannedfiles.isEmpty() )
     {
         if ( !m_dryRun )
         {
@@ -312,13 +312,13 @@ MusicScanner::cleanup()
 void
 MusicScanner::commitBatch( const QVariantList& tracks, const QVariantList& deletethese )
 {
-    if ( deletethese.length() )
+    if ( !deletethese.isEmpty() )
     {
         tDebug( LOGINFO ) << Q_FUNC_INFO << "deleting" << deletethese.length() << "tracks";
         executeCommand( dbcmd_ptr( new DatabaseCommand_DeleteFiles( deletethese, SourceList::instance()->getLocal() ) ) );
     }
 
-    if ( tracks.length() )
+    if ( !tracks.isEmpty() )
     {
         tDebug( LOGINFO ) << Q_FUNC_INFO << "adding" << tracks.length() << "tracks";
         executeCommand( dbcmd_ptr( new DatabaseCommand_AddFiles( tracks, SourceList::instance()->getLocal() ) ) );

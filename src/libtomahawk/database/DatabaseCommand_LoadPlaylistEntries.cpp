@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -104,7 +104,7 @@ DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
 //        qDebug() << "Playlist has no current revision data";
     }
 
-    if ( prevrev.length() )
+    if ( !prevrev.isEmpty() )
     {
         TomahawkSqlQuery query_entries_old = dbi->newquery();
         query_entries_old.prepare( "SELECT entries, "

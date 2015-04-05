@@ -1,7 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2012, Christopher Reichert <creichert07@gmail.com>
- *   Copyright 2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2012-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -186,7 +186,7 @@ MetadataEditor::writeMetadata( bool closeDlg )
     }
     else if ( closeDlg )
     {
-        if ( m_editFiles.count() )
+        if ( !m_editFiles.isEmpty() )
             ScanManager::instance()->runFileScan( m_editFiles, false );
 
         close();

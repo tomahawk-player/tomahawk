@@ -817,7 +817,7 @@ QString
 TomahawkSettings::downloadsPath() const
 {
     QString musicLocation;
-    if ( scannerPaths().count() )
+    if ( !scannerPaths().isEmpty() )
         musicLocation = scannerPaths().first();
 
     return value( "downloadmanager/path", musicLocation ).toString();

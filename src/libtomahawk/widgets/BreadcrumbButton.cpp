@@ -143,7 +143,7 @@ BreadcrumbButton::setParentIndex( const QModelIndex& idx )
         }
     }
 
-    if ( m_combo->count() && list.count() )
+    if ( m_combo->count() && !list.isEmpty() )
     {
         // Check if it's the same, Don't change if it is, as it'll cause flickering
         QStringList old;
