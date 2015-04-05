@@ -387,22 +387,22 @@ connect and stream from you?</source>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="925"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="924"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>نعتذر، لم نستطيع إيجاد الأغنية &apos;%1&apos; ل%2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="949"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="948"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>نعتذر، لم نستطيع إيجاد الفنان &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="975"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="974"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>نعتذر، لم نستطيع إيجاد الألبوم &apos;%1&apos; ل%2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1012"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1011"/>
         <source>Sorry, couldn&apos;t find any playable tracks</source>
         <translation type="unfinished"/>
     </message>
@@ -1227,48 +1227,48 @@ Password (OTP)</source>
         <translation>الدقة</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="902"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="896"/>
         <source>Perfect match</source>
         <translation>تطابق تام</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="903"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="897"/>
         <source>Very good match</source>
         <translation>تطابق جيد جدا</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="904"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="898"/>
         <source>Good match</source>
         <translation>تطابق جيد</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="905"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="899"/>
         <source>Vague match</source>
         <translation>تطابق مبهم</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="906"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="900"/>
         <source>Bad match</source>
         <translation>تطابق سيء</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="907"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="901"/>
         <source>Very bad match</source>
         <translation>تطابق سيء للغاية</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="908"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="902"/>
         <source>Not available</source>
         <translation>غير متوفر</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="909"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="903"/>
         <source>Searching...</source>
         <translation>قيد البحث...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="398"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="392"/>
         <source>Name</source>
         <translation>إسم</translation>
     </message>

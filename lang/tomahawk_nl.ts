@@ -387,22 +387,22 @@ te verbinden en te streamen vanuit jou?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="925"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="924"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Sorry, Tomahawk kon het nummer &apos;%1&apos; van %2 niet vinden</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="949"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="948"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Sorry, Tomahawk kon de artiest &apos;%1&apos; niet vinden</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="975"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="974"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Sorry, Tomahawk kon het album &apos;%1&apos; van %2 niet vinden</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1012"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1011"/>
         <source>Sorry, couldn&apos;t find any playable tracks</source>
         <translation>Excuses, er zijn geen afspeelbare nummers gevonden</translation>
     </message>
@@ -1227,48 +1227,48 @@ opgeven (OTP)</translation>
         <translation>Accuraatheid</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="902"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="896"/>
         <source>Perfect match</source>
         <translation>Perfecte overeenkomst</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="903"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="897"/>
         <source>Very good match</source>
         <translation>Erg goede overeenkomst</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="904"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="898"/>
         <source>Good match</source>
         <translation>Goede overeenkomst</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="905"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="899"/>
         <source>Vague match</source>
         <translation>Vage overeenkomst</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="906"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="900"/>
         <source>Bad match</source>
         <translation>Slechte overeenkomst</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="907"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="901"/>
         <source>Very bad match</source>
         <translation>Erg slechte overeenkomst</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="908"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="902"/>
         <source>Not available</source>
         <translation>Niet beschikbaar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="909"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="903"/>
         <source>Searching...</source>
         <translation>Bezig met zoeken...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="398"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="392"/>
         <source>Name</source>
         <translation>Naam</translation>
     </message>
