@@ -431,6 +431,8 @@ Result::sourceIcon( TomahawkUtils::ImageMode style, const QSize& desiredSize ) c
             if ( !sourceIconCache()->contains( key ) )
             {
                 QPixmap pixmap = resolver->icon( desiredSize );
+                if ( pixmap.isNull() )
+                    return pixmap;
 
                 switch ( style )
                 {
