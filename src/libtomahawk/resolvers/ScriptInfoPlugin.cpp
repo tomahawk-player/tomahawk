@@ -26,6 +26,7 @@
 #include "../utils/Logger.h"
 #include "../utils/Json.h"
 #include "../utils/NetworkAccessManager.h"
+#include "../utils/NetworkReply.h"
 
 using namespace Tomahawk;
 
@@ -163,7 +164,7 @@ ScriptInfoPlugin::onNotInCacheRequestDone( const QVariantMap& result )
         case InfoSystem::InfoAlbumCoverArt:
         {
             QNetworkRequest req( resultData[ "url" ].toUrl() );
-            QNetworkReply* reply = Tomahawk::Utils::nam()->get( req );
+            NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( req ) );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
             reply->setProperty( "criteria", convertInfoStringHashToQVariantMap( criteria ) );
             reply->setProperty( "maxAge", result[ "maxAge" ] );
@@ -184,40 +185,26 @@ ScriptInfoPlugin::onNotInCacheRequestDone( const QVariantMap& result )
 void
 ScriptInfoPlugin::onCoverArtReturned()
 {
-    QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
+    NetworkReply* reply = qobject_cast< NetworkReply* >( sender() );
     reply->deleteLater();
 
-    QUrl redir = reply->attribute( QNetworkRequest::RedirectionTargetAttribute ).toUrl();
-    if ( redir.isEmpty() )
+    Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
+    Tomahawk::InfoSystem::InfoStringHash criteria = convertQVariantMapToInfoStringHash( reply->property( "criteria" ).toMap() );
+
+    QByteArray ba = reply->reply()->readAll();
+    if ( ba.isNull() || ba.isEmpty() )
     {
-        Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
-        Tomahawk::InfoSystem::InfoStringHash criteria = convertQVariantMapToInfoStringHash( reply->property( "criteria" ).toMap() );
-
-        QByteArray ba = reply->readAll();
-        if ( ba.isNull() || ba.isEmpty() )
-        {
-            tLog() << Q_FUNC_INFO << "Null byte array for cover of" << criteria["artist"] << criteria["album"];
-            emit info( requestData, QVariant() );
-            return;
-        }
-
-        QVariantMap returnedData;
-        returnedData["imgbytes"] = ba;
-        returnedData["url"] = reply->url().toString();
-
-        emit info( requestData, returnedData );
-        emit updateCache( criteria, reply->property( "maxAge" ).toLongLong(), requestData.type, returnedData );
+        tLog() << Q_FUNC_INFO << "Null byte array for cover of" << criteria["artist"] << criteria["album"];
+        emit info( requestData, QVariant() );
+        return;
     }
-    else
-    {
-        // Follow HTTP redirect
-        QNetworkRequest req( redir );
-        QNetworkReply* newReply = Tomahawk::Utils::nam()->get( req );
-        newReply->setProperty( "requestData", reply->property( "requestData" ) );
-        newReply->setProperty( "criteria", reply->property( "criteria" ) );
-        newReply->setProperty( "maxAge", reply->property( "maxAge" ) );
-        connect( newReply, SIGNAL( finished() ), SLOT( onCoverArtReturned() ) );
-    }
+
+    QVariantMap returnedData;
+    returnedData["imgbytes"] = ba;
+    returnedData["url"] = reply->reply()->url().toString();
+
+    emit info( requestData, returnedData );
+    emit updateCache( criteria, reply->property( "maxAge" ).toLongLong(), requestData.type, returnedData );
 }
 
 QSet< Tomahawk::InfoSystem::InfoType >
