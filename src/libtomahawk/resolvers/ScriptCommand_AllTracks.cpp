@@ -65,9 +65,16 @@ ScriptCommand_AllTracks::exec()
     }
 
     ScriptJob* job;
+
+    QVariantMap arguments;
+// TODO: implement filter
+//    if ( !m_filter.isEmpty() )
+//    {
+//        arguments[ "filter" ] = m_filter;
+//    }
+
     if( m_album )
     {
-        QVariantMap arguments;
         arguments[ "artist" ] = m_album->artist()->name();
         arguments[ "album" ] = m_album->name();
 
@@ -75,7 +82,7 @@ ScriptCommand_AllTracks::exec()
     }
     else
     {
-        job = collection->scriptObject()->invoke( "tracks" );
+        job = collection->scriptObject()->invoke( "tracks", arguments );
     }
 
 
