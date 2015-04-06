@@ -53,6 +53,7 @@ protected slots:
 
     void onGetInfoRequestDone( const QVariantMap& result );
     void onNotInCacheRequestDone( const QVariantMap& result );
+    void onCoverArtReturned();
 
     // boilerplate: to be removed with Qt5 (can be put into ScriptPlugin)
     void onScriptObjectDeleted();
