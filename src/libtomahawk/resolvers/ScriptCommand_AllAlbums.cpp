@@ -71,18 +71,25 @@ ScriptCommand_AllAlbums::exec()
         return;
     }
 
-    ScriptJob* job;
+    QString methodName;
+    QVariantMap arguments;
+
     if ( m_artist )
     {
-        QVariantMap arguments;
+        methodName = "artistAlbums";
         arguments[ "artist" ] = m_artist->name();
-        job = collection->scriptObject()->invoke( "artistAlbums", arguments );
     }
     else
     {
-        job = collection->scriptObject()->invoke( "albums" );
+        methodName = "albums";
     }
 
+    if ( !m_filter.isEmpty() )
+    {
+        arguments[ "filter" ] = m_filter;
+    }
+
+    ScriptJob* job = collection->scriptObject()->invoke( methodName, arguments );
     connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onAlbumsJobDone( QVariantMap ) ), Qt::QueuedConnection );
     job->start();
 }
