@@ -262,6 +262,7 @@ Album::cover( const QSize& size, bool forceLoad ) const
         requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
         requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
         requestData.customData = QVariantMap();
+        requestData.allSources = true;
 
         connect( Tomahawk::InfoSystem::InfoSystem::instance(),
                 SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
