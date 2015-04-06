@@ -3,6 +3,7 @@
  *   Written by Hugo Lindström <hugolm84@gmail.com>
  *   But based on Leo Franchi's work from spotifyParser
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -128,8 +129,8 @@ ItunesParser::itunesResponseLookupFinished()
 {
     NetworkReply* r = qobject_cast< NetworkReply* >( sender() );
     Q_ASSERT( r );
-    m_queries.remove( r );
     r->deleteLater();
+    m_queries.remove( r );
 
     if ( r->reply()->error() == QNetworkReply::NoError )
     {

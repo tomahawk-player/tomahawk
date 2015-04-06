@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011-2012, Leo Franchi            <lfranchi@kde.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -183,13 +183,13 @@ void
 XSPFLoader::networkLoadFinished()
 {
     NetworkReply* r = qobject_cast<NetworkReply*>( sender() );
+    r->deleteLater();
+
     if ( r->reply()->error() == QNetworkReply::NoError )
     {
         m_body = r->reply()->readAll();
         gotBody();
     }
-
-    r->deleteLater();
 }
 
 

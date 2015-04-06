@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Hugo Lindström <hugolm84@gmail.com>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -196,6 +197,7 @@ SpotifyPlugin::chartTypes()
     /// Get possible chart type for specificSpotifyPlugin: InfoChart types returned chart source
     tDebug() << Q_FUNC_INFO << "Got spotifychart type result";
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    reply->deleteLater();
 
     if ( reply->error() == QNetworkReply::NoError )
     {
@@ -284,6 +286,7 @@ SpotifyPlugin::chartReturned()
 {
     /// Chart request returned something! Woho
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    reply->deleteLater();
     QString url = reply->url().toString();
     QVariantMap returnedData;
     if ( reply->error() == QNetworkReply::NoError )

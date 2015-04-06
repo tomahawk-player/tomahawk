@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -461,6 +462,7 @@ AtticaManager::resolverIconFetched()
 {
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( reply );
+    reply->deleteLater();
 
     const QString resolverId = reply->property( "resolverId" ).toString();
 
@@ -631,6 +633,7 @@ AtticaManager::payloadFetched()
 {
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( reply );
+    reply->deleteLater();
 
     bool installedSuccessfully = false;
     const QString resolverId = reply->property( "resolverId" ).toString();

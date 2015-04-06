@@ -4,6 +4,7 @@
  *   Copyright 2011-2012, Hugo Lindström <hugolm84@gmail.com>
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -290,6 +291,7 @@ ChartsPlugin::chartSourcesList()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Got chart sources list";
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    reply->deleteLater();
 
     if ( reply->error() == QNetworkReply::NoError )
     {
@@ -432,6 +434,7 @@ ChartsPlugin::chartsList()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Got chart list result";
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    reply->deleteLater();
 
     if ( reply->error() == QNetworkReply::NoError )
     {
@@ -623,6 +626,7 @@ ChartsPlugin::chartReturned()
 {
     /// Chart request returned something! Woho
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    reply->deleteLater();
     QVariantMap returnedData;
 
     if ( reply->error() == QNetworkReply::NoError )

@@ -1,7 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -98,6 +98,7 @@ ShortenedLinkParser::lookupFinished( const QUrl& url )
 {
     NetworkReply* r = qobject_cast< NetworkReply* >( sender() );
     Q_ASSERT( r );
+    r->deleteLater();
 
     if ( r->reply()->error() != QNetworkReply::NoError )
         JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Network error parsing shortened link!" ) ) );
@@ -105,7 +106,6 @@ ShortenedLinkParser::lookupFinished( const QUrl& url )
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Got an un-shortened url:" << r->reply()->url().toString();
     m_links << url.toString();
     m_queries.remove( r );
-    r->deleteLater();
 
     checkFinished();
 }

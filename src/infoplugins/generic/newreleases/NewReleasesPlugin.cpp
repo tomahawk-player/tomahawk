@@ -4,6 +4,7 @@
  *   Copyright 2011-2012, Hugo Lindström <hugolm84@gmail.com>
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -295,11 +296,13 @@ NewReleasesPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requ
     }
 }
 
+
 void
 NewReleasesPlugin::nrSourcesList()
 {
     tDebug ( LOGVERBOSE ) << Q_FUNC_INFO << "Got newreleases sources list";
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    reply->deleteLater();
 
     if ( reply->error() == QNetworkReply::NoError )
     {
@@ -434,6 +437,7 @@ NewReleasesPlugin::nrList()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Got newreleases list result";
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    reply->deleteLater();
 
     if ( reply->error() == QNetworkReply::NoError )
     {
@@ -658,13 +662,15 @@ NewReleasesPlugin::getMaxAge( const qlonglong expires ) const
     return 0;
 }
 
+
 void
 NewReleasesPlugin::nrReturned()
 {
     /// Chart request returned something! Woho
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
-    QVariantMap returnedData;
+    reply->deleteLater();
 
+    QVariantMap returnedData;
     if ( reply->error() == QNetworkReply::NoError )
     {
         bool ok;

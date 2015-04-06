@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -125,6 +126,7 @@ EchonestCatalogSynchronizer::catalogDeleted()
 {
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( r );
+    r->deleteLater();
 
     QString toDel = QString( "collection/%1Catalog" ).arg( r->property( "type" ).toString() );
 
@@ -158,6 +160,7 @@ EchonestCatalogSynchronizer::songCreateFinished()
 {
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( r );
+    r->deleteLater();
 
     tDebug() << "Finished creating song catalog, updating data now!!";
     try
@@ -192,6 +195,7 @@ EchonestCatalogSynchronizer::artistCreateFinished()
 {
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( r );
+    r->deleteLater();
 
     // We don't support artist catalogs at the moment
     return;
@@ -275,6 +279,7 @@ EchonestCatalogSynchronizer::songUpdateFinished()
 {
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( r );
+    r->deleteLater();
 
     try
     {
@@ -294,6 +299,7 @@ EchonestCatalogSynchronizer::checkTicket()
 {
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( r );
+    r->deleteLater();
 
     try
     {
