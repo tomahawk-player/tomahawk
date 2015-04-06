@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -293,6 +294,7 @@ EchonestGenerator::staticFinished()
     Q_ASSERT( qobject_cast< QNetworkReply* >( sender() ) );
 
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
+    reply->deleteLater();
 
     Echonest::SongList songs;
     try {
@@ -361,6 +363,7 @@ void
 EchonestGenerator::songLookupFinished()
 {
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
+    r->deleteLater();
 
     if( !m_waiting.contains( r ) ) // another generate/start was begun meanwhile, we're out of date
         return;
@@ -399,6 +402,7 @@ EchonestGenerator::dynamicStarted()
     Q_ASSERT( sender() );
     Q_ASSERT( qobject_cast< QNetworkReply* >( sender() ) );
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
+    reply->deleteLater();
 
     try
     {
@@ -417,6 +421,7 @@ EchonestGenerator::dynamicFetched()
     Q_ASSERT( sender() );
     Q_ASSERT( qobject_cast< QNetworkReply* >( sender() ) );
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
+    reply->deleteLater();
 
     try
     {
@@ -733,6 +738,7 @@ EchonestGenerator::moodsReceived()
 {
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( r );
+    r->deleteLater();
 
     try
     {
@@ -762,6 +768,7 @@ EchonestGenerator::stylesReceived()
 {
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( r );
+    r->deleteLater();
 
     try
     {
@@ -789,6 +796,7 @@ EchonestGenerator::genresReceived()
 {
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( r );
+    r->deleteLater();
 
     try
     {

@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -155,6 +155,7 @@ MusicBrainzPlugin::gotReleaseGroupsSlot()
     QNetworkReply* oldReply = qobject_cast<QNetworkReply*>( sender() );
     if ( !oldReply )
         return; //timeout will handle it
+    oldReply->deleteLater();
 
     QDomDocument doc;
     doc.setContent( oldReply->readAll() );
@@ -213,6 +214,7 @@ MusicBrainzPlugin::gotReleasesSlot()
     QNetworkReply* oldReply = qobject_cast<QNetworkReply*>( sender() );
     if ( !oldReply )
         return; //timeout will handle it
+    oldReply->deleteLater();
 
     QDomDocument doc;
     doc.setContent( oldReply->readAll() );
@@ -260,6 +262,7 @@ MusicBrainzPlugin::gotRecordingsSlot()
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
     if ( !reply )
         return; //timeout will handle it
+    reply->deleteLater();
 
     QDomDocument doc;
     doc.setContent( reply->readAll() );

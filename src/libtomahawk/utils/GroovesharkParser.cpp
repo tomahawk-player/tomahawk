@@ -3,6 +3,7 @@
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2011, Hugo Lindström <hugolm84@gmail.com>
  *   Copyright 2010-2012, Stefan Derkits <stefan@derkits.at>
+ *   Copyright 2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -163,9 +164,9 @@ GroovesharkParser::trackPageFetchFinished()
 {
     NetworkReply* r = qobject_cast< NetworkReply* >( sender() );
     Q_ASSERT( r );
+    r->deleteLater();
 
     m_queries.remove( r );
-    r->deleteLater();
 
     QWebPage page;
     page.settings()->setAttribute( QWebSettings::JavascriptEnabled, false );
@@ -195,9 +196,9 @@ GroovesharkParser::groovesharkLookupFinished()
 {
     NetworkReply* r = qobject_cast< NetworkReply* >( sender() );
     Q_ASSERT( r );
+    r->deleteLater();
 
     m_queries.remove( r );
-    r->deleteLater();
 
     if ( r->reply()->error() == QNetworkReply::NoError )
     {

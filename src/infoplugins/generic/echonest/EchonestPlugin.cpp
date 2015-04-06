@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -177,6 +177,7 @@ void
 EchonestPlugin::getArtistBiographySlot()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    reply->deleteLater();
     Echonest::Artist artist = artistFromReply( reply );
     Echonest::BiographyList biographies = artist.biographies();
     QVariantMap biographyMap;
@@ -192,7 +193,6 @@ EchonestPlugin::getArtistBiographySlot()
     }
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
     emit info( requestData, biographyMap );
-    reply->deleteLater();
 }
 
 
@@ -200,11 +200,11 @@ void
 EchonestPlugin::getArtistFamiliaritySlot()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    reply->deleteLater();
     Echonest::Artist artist = artistFromReply( reply );
     qreal familiarity = artist.familiarity();
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
     emit info( requestData, familiarity );
-    reply->deleteLater();
 }
 
 
@@ -212,11 +212,11 @@ void
 EchonestPlugin::getArtistHotttnesssSlot()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    reply->deleteLater();
     Echonest::Artist artist = artistFromReply( reply );
     qreal hotttnesss = artist.hotttnesss();
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
     emit info( requestData, hotttnesss );
-    reply->deleteLater();
 }
 
 
@@ -224,6 +224,7 @@ void
 EchonestPlugin::getArtistTermsSlot()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    reply->deleteLater();
     Echonest::Artist artist = artistFromReply( reply );
     Echonest::TermList terms = artist.terms();
     QVariantMap termsMap;
@@ -235,7 +236,6 @@ EchonestPlugin::getArtistTermsSlot()
     }
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
     emit info( requestData, termsMap );
-    reply->deleteLater();
 }
 
 
@@ -243,6 +243,7 @@ void
 EchonestPlugin::getMiscTopSlot()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    reply->deleteLater();
     Echonest::TermList terms = Echonest::Artist::parseTopTerms( reply );
     QVariantMap termsMap;
     Q_FOREACH( const Echonest::Term& term, terms ) {
@@ -253,7 +254,6 @@ EchonestPlugin::getMiscTopSlot()
     }
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
     emit info( requestData, termsMap );
-    reply->deleteLater();
 }
 
 

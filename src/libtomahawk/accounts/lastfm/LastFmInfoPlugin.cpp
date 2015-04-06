@@ -550,6 +550,7 @@ void
 LastFmInfoPlugin::similarArtistsReturned()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    reply->deleteLater();
 
     QMap< int, QString > similarArtists = lastfm::Artist::getSimilar( reply );
 
@@ -591,6 +592,7 @@ void
 LastFmInfoPlugin::similarTracksReturned()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    reply->deleteLater();
 
     QMap< int, QPair< QString, QString > > similarTracks = lastfm::Track::getSimilar( reply );
 
@@ -643,6 +645,7 @@ void
 LastFmInfoPlugin::chartReturned()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    reply->deleteLater();
 
     QVariantMap returnedData;
     const QRegExp tracks_rx( "chart\\.\\S+tracks\\S*", Qt::CaseInsensitive );
@@ -689,6 +692,7 @@ void
 LastFmInfoPlugin::topTracksReturned()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    reply->deleteLater();
 
     QStringList topTracks = lastfm::Artist::getTopTracks( reply );
     topTracks.removeDuplicates();
@@ -711,6 +715,7 @@ void
 LastFmInfoPlugin::artistInfoReturned()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    reply->deleteLater();
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
 
     if ( requestData.type == Tomahawk::InfoSystem::InfoArtistBiography )
@@ -771,6 +776,7 @@ void
 LastFmInfoPlugin::albumInfoReturned()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    reply->deleteLater();
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
 
     if ( requestData.type == Tomahawk::InfoSystem::InfoAlbumCoverArt )
@@ -797,6 +803,7 @@ void
 LastFmInfoPlugin::coverArtReturned()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    reply->deleteLater();
     QUrl redir = reply->attribute( QNetworkRequest::RedirectionTargetAttribute ).toUrl();
     if ( redir.isEmpty() )
     {
@@ -836,8 +843,6 @@ LastFmInfoPlugin::coverArtReturned()
         newReply->setProperty( "requestData", reply->property( "requestData" ) );
         connect( newReply, SIGNAL( finished() ), SLOT( coverArtReturned() ) );
     }
-
-    reply->deleteLater();
 }
 
 
@@ -845,6 +850,7 @@ void
 LastFmInfoPlugin::artistImagesReturned()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    reply->deleteLater();
     QUrl redir = reply->attribute( QNetworkRequest::RedirectionTargetAttribute ).toUrl();
     if ( redir.isEmpty() )
     {
@@ -888,8 +894,6 @@ LastFmInfoPlugin::artistImagesReturned()
         newReply->setProperty( "requestData", reply->property( "requestData" ) );
         connect( newReply, SIGNAL( finished() ), SLOT( artistImagesReturned() ) );
     }
-
-    reply->deleteLater();
 }
 
 
@@ -934,7 +938,8 @@ void
 LastFmInfoPlugin::onAuthenticated()
 {
     QNetworkReply* authJob = dynamic_cast<QNetworkReply*>( sender() );
-    if ( !authJob || m_account.isNull() )
+    authJob->deleteLater();
+    if ( m_account.isNull() )
     {
         tLog() << Q_FUNC_INFO << "Help! No longer got a last.fm auth job!";
         return;
@@ -964,8 +969,6 @@ LastFmInfoPlugin::onAuthenticated()
 
         tLog() << Q_FUNC_INFO << error.simplified();
     }
-
-    authJob->deleteLater();
 }
 
 
