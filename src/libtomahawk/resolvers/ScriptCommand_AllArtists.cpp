@@ -64,7 +64,13 @@ ScriptCommand_AllArtists::exec()
     Tomahawk::ScriptCollection* collection = qobject_cast< Tomahawk::ScriptCollection* >( m_collection.data() );
     Q_ASSERT( collection );
 
-    ScriptJob* job = collection->scriptObject()->invoke( "artists" );
+    QVariantMap arguments;
+    if ( !m_filter.isEmpty() )
+    {
+        arguments[ "filter" ] = m_filter;
+    }
+
+    ScriptJob* job = collection->scriptObject()->invoke( "artists", arguments );
     connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onArtistsJobDone( QVariantMap ) ), Qt::QueuedConnection );
     job->start();
 }
