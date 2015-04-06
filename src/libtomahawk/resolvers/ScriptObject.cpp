@@ -23,7 +23,7 @@
 using namespace Tomahawk;
 
 ScriptObject::ScriptObject( const QString& id, ScriptAccount* parent )
-    : QObject( parent )
+    : QObject()
     , d_ptr( new ScriptObjectPrivate( this, id, parent ))
 {
 }
