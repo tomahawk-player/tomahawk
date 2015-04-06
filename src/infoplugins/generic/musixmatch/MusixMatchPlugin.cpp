@@ -80,7 +80,7 @@ bool
 MusixMatchPlugin::isValidTrackData( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     tDebug() << Q_FUNC_INFO;
-    
+
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
         emit info( requestData, QVariant() );

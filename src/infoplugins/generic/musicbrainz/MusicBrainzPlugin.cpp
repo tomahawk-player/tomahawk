@@ -144,8 +144,6 @@ MusicBrainzPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requ
             break;
         }
     }
-
-
 }
 
 
@@ -252,7 +250,6 @@ MusicBrainzPlugin::gotReleasesSlot()
             break;
         }
     }
-
 }
 
 
@@ -273,7 +270,6 @@ MusicBrainzPlugin::gotRecordingsSlot()
         tDebug() << Q_FUNC_INFO << doc.toString();
         return;
     }
-
 
     QDomNodeList tracksNL = mediumList.at(0).toElement().elementsByTagName( "track" );
     QStringList tracksSL;
