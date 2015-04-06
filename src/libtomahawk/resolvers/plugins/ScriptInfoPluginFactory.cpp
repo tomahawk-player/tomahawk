@@ -22,17 +22,22 @@
 
 using namespace Tomahawk;
 
-void ScriptInfoPluginFactory::addPlugin( const QSharedPointer< ScriptInfoPlugin >& infoPlugin ) const
+void
+ScriptInfoPluginFactory::addPlugin( const QSharedPointer< ScriptInfoPlugin >& infoPlugin ) const
 {
     Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin.data() );
 }
 
-void ScriptInfoPluginFactory::removePlugin( const QSharedPointer< ScriptInfoPlugin >& infoPlugin ) const
+
+void
+ScriptInfoPluginFactory::removePlugin( const QSharedPointer< ScriptInfoPlugin >& infoPlugin ) const
 {
     Tomahawk::InfoSystem::InfoSystem::instance()->removeInfoPlugin( infoPlugin.data() );
 }
 
-QSharedPointer< ScriptInfoPlugin > ScriptInfoPluginFactory::createPlugin( const scriptobject_ptr& object, ScriptAccount* scriptAccount )
+
+QSharedPointer< ScriptInfoPlugin >
+ScriptInfoPluginFactory::createPlugin( const scriptobject_ptr& object, ScriptAccount* scriptAccount )
 {
     // create infoplugin instance
     ScriptInfoPlugin* scriptInfoPlugin = new ScriptInfoPlugin( object, scriptAccount->name() );

@@ -118,20 +118,15 @@ void
 ScriptInfoPlugin::onGetInfoRequestDone( const QVariantMap& result )
 {
     Q_ASSERT( QThread::currentThread() == thread() );
-
     Q_D( ScriptInfoPlugin );
 
-
-
     ScriptJob* job = qobject_cast< ScriptJob* >( sender() );
-
     if ( job->error() )
     {
         emit info( d->requestDataCache[ job->id().toInt() ], QVariantMap() );
     }
     else
     {
-
         emit getCachedInfo( convertQVariantMapToInfoStringHash( result[ "criteria" ].toMap() ), result[ "newMaxAge" ].toLongLong(), d->requestDataCache[ job->id().toInt() ] );
     }
 
@@ -158,7 +153,6 @@ ScriptInfoPlugin::onNotInCacheRequestDone( const QVariantMap& result )
     Tomahawk::InfoSystem::InfoStringHash criteria = d->criteriaCache[ job->id().toInt() ];
     d->criteriaCache.remove( job->id().toInt() );
 
-
     QVariantMap resultData = result[ "data" ].toMap();
     switch ( requestData.type )
     {
@@ -180,8 +174,9 @@ ScriptInfoPlugin::onNotInCacheRequestDone( const QVariantMap& result )
             emit updateCache( criteria, result[ "maxAge" ].toLongLong(), requestData.type, resultData );
             break;
         }
-    };
+    }
 }
+
 
 void
 ScriptInfoPlugin::onCoverArtReturned()
@@ -207,6 +202,7 @@ ScriptInfoPlugin::onCoverArtReturned()
     emit info( requestData, returnedData );
     emit updateCache( criteria, reply->property( "maxAge" ).toLongLong(), requestData.type, returnedData );
 }
+
 
 QSet< Tomahawk::InfoSystem::InfoType >
 ScriptInfoPlugin::parseSupportedTypes( const QVariant& variant )

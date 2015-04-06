@@ -82,6 +82,7 @@ NewReleasesPlugin::~NewReleasesPlugin()
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
 }
 
+
 /**
  * @brief NewReleasesPlugin::init
  * Loops through cache expiration timestamps
@@ -120,6 +121,7 @@ NewReleasesPlugin::init()
     }
 }
 
+
 void
 NewReleasesPlugin::dataError( InfoRequestData requestData )
 {
@@ -131,7 +133,6 @@ NewReleasesPlugin::dataError( InfoRequestData requestData )
 void
 NewReleasesPlugin::getInfo( InfoRequestData requestData )
 {
-
     InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     bool foundSource = false;
 
@@ -372,7 +373,6 @@ NewReleasesPlugin::nrSourcesList()
                 tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "MaxAge for " << source << " is  0. Fetching all";
                 reply->setProperty( "only_source_list", false );
             }
-
         }
 
         /**
@@ -390,6 +390,7 @@ NewReleasesPlugin::nrSourcesList()
         }
     }
 }
+
 
 void
 NewReleasesPlugin::fetchAllNRSources()
@@ -530,7 +531,6 @@ NewReleasesPlugin::nrList()
                     if ( isDefault )
                         nr[ "default" ] = "true";
 
-
                     QList< Tomahawk::InfoSystem::InfoStringHash > extraTypeData = extraType[ nrExtraType ][ extra ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
                     extraTypeData.append( nr );
                     extraType[ nrExtraType ][ extra ] = QVariant::fromValue< QList< Tomahawk::InfoSystem::InfoStringHash > >( extraTypeData );
@@ -590,7 +590,6 @@ NewReleasesPlugin::nrList()
                         tLog() << "Unknown newrelease type " << type;
                         continue;
                     }
-
                 }
 
                 foreach ( const QString& c, extraType.keys() )
@@ -637,6 +636,7 @@ NewReleasesPlugin::nrList()
     }
 }
 
+
 qlonglong
 NewReleasesPlugin::getMaxAge( const QByteArray &rawHeader ) const
 {
@@ -648,6 +648,7 @@ NewReleasesPlugin::getMaxAge( const QByteArray &rawHeader ) const
     }
     return 0;
 }
+
 
 qlonglong
 NewReleasesPlugin::getMaxAge( const qlonglong expires ) const

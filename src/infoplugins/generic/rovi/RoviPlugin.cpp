@@ -92,6 +92,7 @@ RoviPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomah
             connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SLOT( albumLookupError( QNetworkReply::NetworkError ) ) );
             break;
         }
+
         default:
         {
             Q_ASSERT( false );
@@ -113,7 +114,6 @@ RoviPlugin::albumLookupError( QNetworkReply::NetworkError error )
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
 
     emit info( requestData, QVariant() );
-
 }
 
 
@@ -156,7 +156,6 @@ RoviPlugin::albumLookupFinished()
         emit info( requestData, QVariant() );
     }
 
-
     QStringList trackNameList;
     foreach ( const QVariant& track, tracks )
     {
@@ -192,7 +191,7 @@ RoviPlugin::makeRequest( QUrl url )
 QByteArray
 RoviPlugin::generateSig() const
 {
-    QByteArray raw = m_apiKey + m_secret + QString::number( QDateTime::currentMSecsSinceEpoch() / 1000 ).toLatin1();
+    const QByteArray raw = m_apiKey + m_secret + QString::number( QDateTime::currentMSecsSinceEpoch() / 1000 ).toLatin1();
     return TomahawkUtils::md5( raw ).toLatin1();
 }
 

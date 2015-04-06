@@ -98,11 +98,9 @@ HypemPlugin::HypemPlugin()
 }
 
 
-
-
 HypemPlugin::~HypemPlugin()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
 }
 
 
@@ -128,11 +126,8 @@ HypemPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     qDebug() << Q_FUNC_INFO << requestData.customData;
 
     InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
-
-
     switch ( requestData.type )
     {
-
         case InfoChart:
             if ( !hash.contains( "chart_source" ) || hash["chart_source"].toLower() != "hype machine" )
             {
@@ -146,15 +141,16 @@ HypemPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
         case InfoChartCapabilities:
             fetchChartCapabilities( requestData );
             break;
+
         default:
             dataError( requestData );
     }
 }
 
+
 void
 HypemPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
         dataError( requestData );
@@ -179,6 +175,7 @@ HypemPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
     emit getCachedInfo( criteria, Q_INT64_C(86400000), requestData );
 }
 
+
 void
 HypemPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
@@ -191,6 +188,7 @@ HypemPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData reque
     Tomahawk::InfoSystem::InfoStringHash criteria;
     emit getCachedInfo( criteria, Q_INT64_C(0), requestData );
 }
+
 
 void
 HypemPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
@@ -209,8 +207,6 @@ HypemPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSys
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
             connect( reply, SIGNAL( finished() ), SLOT( chartReturned() ) );
             return;
-
-
         }
 
         case InfoChartCapabilities:
@@ -244,32 +240,29 @@ HypemPlugin::chartTypes()
     tDebug() << Q_FUNC_INFO << "Got hypem types";
 
     QVariantMap charts;
-
-    foreach(QVariant types, m_types )
+    foreach ( const QVariant& types, m_types )
     {
         QList< InfoStringHash > chart_types;
         QList< InfoStringHash > pop_charts;
         InfoStringHash c;
 
-        if(types.toString() != "Artists")
+        if ( types.toString() != "Artists" )
         {
-
-            if(types.toString() == "Tracks")
+            if ( types.toString() == "Tracks" )
             {
-
-                foreach(QVariant trackType, m_trackTypes)
+                foreach ( const QVariant& trackType, m_trackTypes )
                 {
                     QString typeId;
-                    if(trackType.toString() == "Last 3 Days")
+                    if ( trackType.toString() == "Last 3 Days" )
                         typeId = "popular/3day";
 
-                    if(trackType.toString() == "Last Week")
+                    if ( trackType.toString() == "Last Week" )
                         typeId = "popular/lastweek";
 
-                    if(trackType.toString() == "No Remixes")
+                    if ( trackType.toString() == "No Remixes" )
                         typeId = "popular/noremix";
 
-                    if(trackType.toString() == "On Twitter")
+                    if ( trackType.toString() == "On Twitter" )
                         typeId = "popular/twitter";
 
                     c[ "id" ] = typeId;
@@ -279,22 +272,19 @@ HypemPlugin::chartTypes()
                 }
 
                 chart_types.append( pop_charts );
-
             }
-            else if(types.toString() == "Recent by Tag")
+            else if ( types.toString() == "Recent by Tag" )
             {
-                foreach(QVariant tagTypes, m_byTagTypes)
+                foreach ( const QVariant& tagTypes, m_byTagTypes )
                 {
-
                     c[ "id" ] = "tags/" + tagTypes.toString().toLower();
                     c[ "label" ] = tagTypes.toString();
                     c[ "type" ] = tagTypes.toString();
                     chart_types.append( c );
                 }
-
             }
-
-        }else
+        }
+        else
         {
             InfoStringHash c;
             c[ "id" ] = "popular/artists";
@@ -306,17 +296,14 @@ HypemPlugin::chartTypes()
         charts.insert( types.toString(), QVariant::fromValue<QList< InfoStringHash > >( chart_types ) );
     }
 
-
     m_allChartsMap.insert( "Hype Machine", QVariant::fromValue<QVariantMap>( charts ) );
     qDebug() << "HypemPlugin:Chartstype: " << m_allChartsMap;
-
-
 }
+
 
 void
 HypemPlugin::chartReturned()
 {
-
     /// Chart request returned something! Woho
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
     reply->deleteLater();
@@ -363,7 +350,6 @@ HypemPlugin::chartReturned()
                     top_tracks << pair;
                 }
 
-
                 if ( chartType() == Artist )
                     top_artists << artist;
             }
@@ -376,8 +362,6 @@ HypemPlugin::chartReturned()
             returnedData["type"] = "tracks";
         }
 
-
-
         if ( chartType() == Artist )
         {
             tDebug() << "HypemPlugin:" << "\tgot " << top_artists.size() << " artists";
@@ -386,9 +370,8 @@ HypemPlugin::chartReturned()
         }
 
         Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
-
-
         emit info( requestData, returnedData );
+
         // update cache
         Tomahawk::InfoSystem::InfoStringHash criteria;
         Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
@@ -400,7 +383,6 @@ HypemPlugin::chartReturned()
     }
     else
         qDebug() << "Network error in fetching chart:" << reply->url().toString();
-
 }
 
 }

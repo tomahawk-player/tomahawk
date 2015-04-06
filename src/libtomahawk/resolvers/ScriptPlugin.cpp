@@ -28,7 +28,6 @@ ScriptPlugin::ScriptPlugin( const scriptobject_ptr& object )
 
 ScriptPlugin::~ScriptPlugin()
 {
-
 }
 
 
