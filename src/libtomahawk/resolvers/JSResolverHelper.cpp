@@ -934,6 +934,8 @@ JSResolverHelper::nativeAsyncRequest( const int requestId, const QString& url,
 void
 JSResolverHelper::nativeAsyncRequestDone( int requestId, NetworkReply* reply )
 {
+    reply->deleteLater();
+
     QVariantMap map;
     map["response"] = QString::fromUtf8( reply->reply()->readAll() );
     map["responseText"] = map["response"];
