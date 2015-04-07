@@ -508,7 +508,7 @@ SettingsDialog::openAccountConfig( Account* account, bool showDelete )
 void
 SettingsDialog::installFromFile()
 {
-    const QString resolver = QFileDialog::getOpenFileName( 0, tr( "Install resolver from file" ),
+    const QString resolver = QFileDialog::getOpenFileName( m_accountsWidget, tr( "Install resolver from file" ),
                                                            TomahawkSettings::instance()->scriptDefaultPath(),
                                                            tr( "Tomahawk Resolvers (*.axe *.js);;"
                                                            "All files (*)" ),
