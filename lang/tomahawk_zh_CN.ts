@@ -1464,54 +1464,54 @@ Password (OTP)</source>
         <translation>更新状态</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="543"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="548"/>
         <source>Songs </source>
         <comment>Beginning of a sentence summary</comment>
         <translation>歌曲</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="572"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="577"/>
         <source>No configured filters!</source>
         <translation>没有配置过滤器</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="586"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="591"/>
         <source> and </source>
         <comment>Inserted between items in a list of two</comment>
         <translation>和</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="588"/>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="597"/>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="601"/>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="617"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="593"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="602"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="606"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="622"/>
         <source>, </source>
         <comment>Inserted between items in a list</comment>
         <translation>, </translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="590"/>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="599"/>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="615"/>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="622"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="595"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="604"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="620"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="627"/>
         <source>.</source>
         <comment>Inserted when ending a sentence summary</comment>
         <translation>.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="603"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="608"/>
         <source>, and </source>
         <comment>Inserted between the last two items in a list of more than two</comment>
         <translation>, 和</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="614"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="619"/>
         <source>and </source>
         <comment>Inserted before the last item in a list</comment>
         <translation>和</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="622"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="627"/>
         <source>and </source>
         <comment>Inserted before the sorting summary in a sentence summary</comment>
         <translation>和</translation>
@@ -3328,7 +3328,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::GroovesharkParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/GroovesharkParser.cpp" line="238"/>
+        <location filename="../src/libtomahawk/utils/GroovesharkParser.cpp" line="239"/>
         <source>Error fetching Grooveshark information from the network!</source>
         <translation>从网络获取 Grooveshark 信息时出现错误！</translation>
     </message>
@@ -3336,17 +3336,17 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::ChartsPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="575"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="578"/>
         <source>Artists</source>
         <translation>艺术家</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="577"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="580"/>
         <source>Albums</source>
         <translation>专辑</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="579"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="582"/>
         <source>Tracks</source>
         <translation>歌曲</translation>
     </message>
@@ -3445,7 +3445,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::NewReleasesPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="599"/>
+        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="602"/>
         <source>Albums</source>
         <translation>专辑</translation>
     </message>
@@ -3526,7 +3526,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::ItunesParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="181"/>
+        <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="182"/>
         <source>Error fetching iTunes information from the network!</source>
         <translation>从网络获取 iTunes 信息时出现错误！</translation>
     </message>
@@ -3534,27 +3534,27 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::JSPFLoader</name>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="149"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="150"/>
         <source>New Playlist</source>
         <translation>新播放列表</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="175"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="176"/>
         <source>Failed to save tracks</source>
         <translation>保存歌曲失败</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="175"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="176"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>播放列表中的一些歌曲缺失艺术家和标题。它们将被忽略。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="200"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="201"/>
         <source>XSPF Error</source>
         <translation>XSPF 错误</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="200"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="201"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>这不是一个合法的 XSPF 播放列表。</translation>
     </message>
@@ -3632,7 +3632,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::ShortenedLinkParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="103"/>
+        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="104"/>
         <source>Network error parsing shortened link!</source>
         <translation>解析短链接时出错！</translation>
     </message>
@@ -4207,117 +4207,117 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Type selector</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="75"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="76"/>
         <source>Artist</source>
         <translation>艺术家</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="75"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="76"/>
         <source>Artist Description</source>
         <translation>艺人描述</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="76"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="77"/>
         <source>User Radio</source>
         <translation>用户电台</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="76"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="77"/>
         <source>Song</source>
         <translation>歌曲</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="77"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="78"/>
         <source>Genre</source>
         <translation>风格</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="77"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="78"/>
         <source>Mood</source>
         <translation>气氛</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="78"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="79"/>
         <source>Style</source>
         <translation>风格</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="78"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="79"/>
         <source>Adventurousness</source>
         <translation>新奇度</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="79"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="80"/>
         <source>Variety</source>
         <translation>变种</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="79"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="80"/>
         <source>Tempo</source>
         <translation>节奏</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="80"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="81"/>
         <source>Duration</source>
         <translation>长度</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="80"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="81"/>
         <source>Loudness</source>
         <translation>响度</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="81"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="82"/>
         <source>Danceability</source>
         <translation>舞动指数</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="81"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="82"/>
         <source>Energy</source>
         <translation>力量</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="82"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="83"/>
         <source>Artist Familiarity</source>
         <translation>艺人相似度</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="82"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="83"/>
         <source>Artist Hotttnesss</source>
         <translation>艺人热度</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="83"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="84"/>
         <source>Song Hotttnesss</source>
         <translation>歌曲热度</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="83"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="84"/>
         <source>Longitude</source>
         <translation>经度</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="84"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="85"/>
         <source>Latitude</source>
         <translation>纬度</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="84"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="85"/>
         <source>Mode</source>
         <translation>模式</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="85"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="86"/>
         <source>Key</source>
         <translation>音调</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="85"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="86"/>
         <source>Sorting</source>
         <translation>排序</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="86"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="87"/>
         <source>Song Type</source>
         <translation>歌曲类型</translation>
     </message>
