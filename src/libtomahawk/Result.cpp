@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2015,      Dominik Schmidt <domme@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -538,9 +539,33 @@ Result::setDownloadFormats( const QList<DownloadFormat>& formats )
     foreach ( const DownloadFormat& format, formats )
     {
         if ( format.extension.toLower() == TomahawkSettings::instance()->downloadsPreferredFormat().toLower() )
+        {
             m_formats.insert( 0, format );
+        }
         else
+        {
             m_formats << format;
+        }
+    }
+
+    if ( !m_formats.isEmpty() )
+    {
+        connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ), Qt::UniqueConnection );
+    }
+    else
+    {
+        TomahawkSettings::instance()->disconnect( this );
+    }
+}
+
+
+void
+Result::onSettingsChanged()
+{
+    if ( TomahawkSettings::instance()->downloadsPreferredFormat().toLower() != m_formats.first().extension.toLower() )
+    {
+        setDownloadFormats( downloadFormats() );
+        emit updated();
     }
 }
 

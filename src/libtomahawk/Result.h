@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2015,      Dominik Schmidt <domme@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -151,6 +152,8 @@ private slots:
 
     void onResolverRemoved( Tomahawk::Resolver* resolver );
     void doneEditing();
+
+    void onSettingsChanged();
 
 private:
     // private constructor
