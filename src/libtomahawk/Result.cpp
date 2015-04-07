@@ -550,11 +550,11 @@ Result::setDownloadFormats( const QList<DownloadFormat>& formats )
 
     if ( !m_formats.isEmpty() )
     {
-        connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ), Qt::UniqueConnection );
+        connect( TomahawkSettings::instance(), SIGNAL( changed() ), this, SLOT( onSettingsChanged() ), Qt::UniqueConnection );
     }
     else
     {
-        TomahawkSettings::instance()->disconnect( this );
+        disconnect( TomahawkSettings::instance(), SIGNAL( changed() ), this, SLOT( onSettingsChanged() ) );
     }
 }
 
