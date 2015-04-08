@@ -765,30 +765,21 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
 
         if ( hoveringArtist && m_hoveringOverArtist != index )
         {
-            QPersistentModelIndex ti = m_hoveringOverArtist;
-            m_hoveringOverArtist = index;
-
-            PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( ti ) );
-            item->requestRepaint();
             emit updateIndex( m_hoveringOverArtist );
+            emit updateIndex( index );
+            m_hoveringOverArtist = index;
         }
         if ( !hoveringArtist && m_hoveringOverArtist.isValid() )
         {
-            QPersistentModelIndex ti = m_hoveringOverArtist;
+            emit updateIndex( m_hoveringOverArtist );
             m_hoveringOverArtist = QModelIndex();
-
-            PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( ti ) );
-            item->requestRepaint();
         }
 
         if ( m_hoveringOver != index )
         {
-            QPersistentModelIndex ti = m_hoveringOver;
-            m_hoveringOver = index;
-
-            PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( ti ) );
-            item->requestRepaint();
             emit updateIndex( m_hoveringOver );
+            emit updateIndex( index );
+            m_hoveringOver = index;
         }
 
         // We return false here so the view can still decide to process/trigger things like D&D events
