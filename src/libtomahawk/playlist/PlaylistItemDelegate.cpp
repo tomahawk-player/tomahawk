@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2013-2014, Teo Mrnjavac <teo@kde.org>
  *
@@ -58,8 +58,8 @@ using namespace Tomahawk;
 
 PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, PlayableProxyModel* proxy )
     : QStyledItemDelegate( (QObject*)parent )
-    , m_smallBoldFontMetrics( QFontMetrics( parent->font() ) )
-    , m_bigBoldFontMetrics( QFontMetrics( parent->font() ) )
+    , m_demiBoldFontMetrics( QFontMetrics( parent->font() ) )
+    , m_normalFontMetrics( QFontMetrics( parent->font() ) )
     , m_view( parent )
     , m_model( proxy )
 {
@@ -73,23 +73,15 @@ PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, PlayableProxyMode
     m_centerRightOption = QTextOption( Qt::AlignVCenter | Qt::AlignRight );
     m_centerRightOption.setWrapMode( QTextOption::NoWrap );
 
-    m_bigBoldFont = parent->font();
-    m_bigBoldFont.setPointSize( TomahawkUtils::defaultFontSize() + 2 );
-    m_bigBoldFont.setWeight( 99 );
+    m_demiBoldFont = parent->font();
+    m_demiBoldFont.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
+    m_demiBoldFont.setWeight( QFont::DemiBold );
 
-    m_boldFont = parent->font();
-    m_boldFont.setBold( true );
+    m_normalFont = parent->font();
+    m_normalFont.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
 
-    m_smallBoldFont = parent->font();
-    m_smallBoldFont.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
-    m_smallBoldFont.setBold( true );
-    m_smallBoldFont.setWeight( 60 );
-
-    m_smallFont = parent->font();
-    m_smallFont.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
-
-    m_bigBoldFontMetrics = QFontMetrics( m_bigBoldFont );
-    m_smallBoldFontMetrics = QFontMetrics( m_smallBoldFont );
+    m_normalFontMetrics = QFontMetrics( m_normalFont );
+    m_demiBoldFontMetrics = QFontMetrics( m_demiBoldFont );
 
     connect( this, SIGNAL( updateIndex( QModelIndex ) ), parent, SLOT( update( QModelIndex ) ) );
     connect( proxy, SIGNAL( modelReset() ), SLOT( modelChanged() ) );
@@ -229,100 +221,6 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
             paintDetailed( painter, option, index );
             break;
     }
-}
-
-
-void
-PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
-{
-    PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
-    Q_ASSERT( item );
-
-    QStyleOptionViewItemV4 opt = option;
-    prepareStyleOption( &opt, index, item );
-    opt.text.clear();
-
-    qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
-
-    if ( m_view->header()->visualIndex( index.column() ) > 0 )
-        return;
-
-    const track_ptr track = item->query()->track();
-    QPixmap pixmap;
-    QString upperLeftText, upperRightText, lowerText;
-
-    if ( !item->playbackLog().source )
-    {
-        upperLeftText = track->track();
-        lowerText = track->artist();
-    }
-    else
-    {
-        upperLeftText = track->track();
-        upperRightText = QString( " - %2" ).arg( track->artist() );
-        QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->playbackLog().timestamp ), true );
-
-        if ( item->playbackLog().source->isLocal() )
-            lowerText = QString( tr( "played %1 by you" ) ).arg( playtime );
-        else
-            lowerText = QString( tr( "played %1 by %2" ) ).arg( playtime ).arg( item->playbackLog().source->friendlyName() );
-    }
-
-    painter->save();
-    {
-        QRect r = opt.rect.adjusted( 3, 6, 0, -6 );
-
-        // Paint Now Playing Speaker Icon
-        if ( item->isPlaying() )
-        {
-            const int pixMargin = 2;
-            const int pixHeight = r.height() - pixMargin * 2;
-            const QRect npr = r.adjusted( pixMargin, pixMargin + 1, pixHeight - r.width() + pixMargin, -pixMargin + 1 );
-            painter->drawPixmap( npr, TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeaker, TomahawkUtils::Original, npr.size() ) );
-            r.adjust( pixHeight + 8, 0, 0, 0 );
-        }
-
-        painter->setPen( opt.palette.text().color() );
-
-        QRect ir = r.adjusted( 4, 0, -option.rect.width() + option.rect.height() - 8 + r.left(), 0 );
-        pixmap = item->query()->track()->cover( ir.size() );
-
-        if ( pixmap.isNull() )
-        {
-            pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::RoundedCorners, ir.size() );
-        }
-
-        painter->drawPixmap( ir, pixmap );
-
-        r.adjust( ir.width() + 12, 0, -12, 0 );
-        painter->setFont( m_boldFont );
-        QFontMetrics fm = painter->fontMetrics();
-        QString elided = fm.elidedText( upperLeftText, Qt::ElideRight, r.width() );
-        if ( fm.width( elided ) != fm.width( upperLeftText ) ) //if we had to elide the track title
-        {                                                      //we just paint that and we're done
-            painter->drawText( r.adjusted( 0, 1, 0, 0 ), elided, m_topOption );
-        }
-        else
-        {
-            int remainingSpace = r.width() - fm.width( upperLeftText );
-            elided = fm.elidedText( upperRightText, Qt::ElideRight, remainingSpace );
-            painter->drawText( r.adjusted( 0, 1, -remainingSpace, 0 ), upperLeftText, m_topOption );
-
-            if ( item->query()->numResults( true ) > 0 )
-                painter->setPen( opt.palette.text().color().lighter( 220 ) );
-
-            painter->drawText( r.adjusted( r.width() - remainingSpace, 1, 0, 0 ), elided, m_topOption );
-        }
-
-        painter->setFont( opt.font );
-        if ( !( option.state & QStyle::State_Selected || item->isPlaying() ) )
-            painter->setPen( Qt::gray );
-
-        elided = painter->fontMetrics().elidedText( lowerText, Qt::ElideRight, r.width() );
-        painter->drawText( r.adjusted( 0, 1, 0, 0 ), elided, m_bottomOption );
-    }
-
-    painter->restore();
 }
 
 
@@ -728,14 +626,10 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
     QRect r = rect.adjusted( 32, 6, -32 -rightMargin, -6 );
     const int margin = 8;
 
-    QFont f = painter->font();
-    f.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
-    f.setWeight( QFont::DemiBold );
-    painter->setFont( f );
+    painter->setFont( m_demiBoldFont );
 
-    const QFontMetrics fm = painter->fontMetrics();
-    const int numberWidth = fm.width( "00" ) + 32;
-    const int durationWidth = fm.width( "00:00" ) + 32;
+    const int numberWidth = m_demiBoldFontMetrics.width( "00" ) + 32;
+    const int durationWidth = m_demiBoldFontMetrics.width( "00:00" ) + 32;
     int stateWidth = 0;
 
     QRect numberRect = QRect( r.x(), r.y(), numberWidth, r.height() );
@@ -765,21 +659,19 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
         artistRect.setWidth( artistRect.width() - stateWidth );
     }
 
-    const bool hasOnlineResults = ( item->query()->numResults( true ) > 0 );
     // draw title
     qreal opacityCo = 1.0;
-    if ( !hasOnlineResults )
+    if ( !item->query()->playable() )
         opacityCo = 0.5;
 
     painter->setOpacity( 1.0 * opacityCo );
-    QString text = fm.elidedText( track->track(), Qt::ElideRight, titleRect.width() - margin );
+    QString text = m_demiBoldFontMetrics.elidedText( track->track(), Qt::ElideRight, titleRect.width() - margin );
     painter->drawText( titleRect, text, m_centerOption );
 
     // draw artist
-    f.setWeight( QFont::Normal );
     painter->setOpacity( 0.8 * opacityCo );
-    painter->setFont( f );
-    text = fm.elidedText( track->artist(), Qt::ElideRight, artistRect.width() - margin );
+    painter->setFont( m_normalFont );
+    text = m_normalFontMetrics.elidedText( track->artist(), Qt::ElideRight, artistRect.width() - margin );
 
     painter->save();
     if ( m_hoveringOverArtist == index )
@@ -789,11 +681,11 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
         painter->setFont( f );
     }
     painter->drawText( artistRect, text, m_centerOption );
-    m_artistNameRects[ index ] = painter->fontMetrics().boundingRect( artistRect, Qt::AlignLeft | Qt::AlignVCenter, text );
+    m_artistNameRects[ index ] = m_normalFontMetrics.boundingRect( artistRect, Qt::AlignLeft | Qt::AlignVCenter, text );
     painter->restore();
 
     // draw number or source icon
-    if ( ( option.state & QStyle::State_Selected || hoveringOver() == index ) && hasOnlineResults )
+    if ( ( option.state & QStyle::State_Selected || hoveringOver() == index ) && item->query()->playable() )
     {
         const int iconHeight = numberRect.size().height() / 2;
         const QRect sourceIconRect( numberRect.x(), numberRect.y() + ( numberRect.size().height() - iconHeight ) / 2, iconHeight, iconHeight );

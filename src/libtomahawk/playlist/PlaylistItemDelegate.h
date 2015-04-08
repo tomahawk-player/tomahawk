@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -98,20 +98,17 @@ protected:
     QRect drawTrack( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index, const QRect& rect, PlayableItem* item ) const;
 
     void paintDetailed( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-    void paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
     QTextOption m_topOption;
     QTextOption m_bottomOption;
     QTextOption m_centerOption;
     QTextOption m_centerRightOption;
 
-    QFont m_smallFont;
-    QFont m_smallBoldFont;
-    QFont m_boldFont;
-    QFont m_bigBoldFont;
+    QFont m_demiBoldFont;
+    QFont m_normalFont;
 
-    QFontMetrics m_smallBoldFontMetrics;
-    QFontMetrics m_bigBoldFontMetrics;
+    QFontMetrics m_demiBoldFontMetrics;
+    QFontMetrics m_normalFontMetrics;
 
 protected slots:
     virtual void modelChanged();
