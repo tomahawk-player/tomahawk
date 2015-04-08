@@ -228,7 +228,7 @@ TOMAHAWK_PLUGINS = [
 ]
 
 QT_PLUGINS_SEARCH_PATH=[
-    '/usr/local/Cellar/qt/4.8.7/plugins',
+    '/usr/local/Cellar/qt/HEAD/plugins',
 ]
 
 SNORE_PLUGINS_SEARCH_PATH=[
