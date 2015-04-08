@@ -154,6 +154,7 @@ ShortLinkHelper::shortLinkRequestFinished( const playlist_ptr& playlist )
     d->reply->deleteLater();
 }
 
+
 void
 ShortLinkHelper::shortenLinkRequestFinished()
 {

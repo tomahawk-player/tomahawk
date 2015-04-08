@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
@@ -693,7 +693,7 @@ JSResolverHelper::reportStreamUrl( const QString& qid, const QString& streamUrl 
 }
 
 
-void JSResolverHelper::nativeAssert(bool assertion, const QString& message)
+void JSResolverHelper::nativeAssert( bool assertion, const QString& message )
 {
     if ( !assertion )
     {
@@ -701,7 +701,6 @@ void JSResolverHelper::nativeAssert(bool assertion, const QString& message)
         Q_ASSERT( assertion );
     }
 }
-
 
 
 void
@@ -732,8 +731,7 @@ JSResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr&, const QStr
 
 
 void
-JSResolverHelper::reportStreamUrl( const QString& qid,
-                                         const QString& streamUrl, const QVariantMap& headers )
+JSResolverHelper::reportStreamUrl( const QString& qid, const QString& streamUrl, const QVariantMap& headers )
 {
     if ( !m_streamCallbacks.contains( qid ) )
         return;
@@ -741,9 +739,11 @@ JSResolverHelper::reportStreamUrl( const QString& qid,
     std::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback = m_streamCallbacks.take( qid );
 
     QMap<QString, QString> parsedHeaders;
-    foreach ( const QString& key,  headers.keys()) {
+    foreach ( const QString& key, headers.keys() )
+    {
         Q_ASSERT_X( headers[key].canConvert( QVariant::String ), Q_FUNC_INFO, "Expected a Map of string for additional headers" );
-        if ( headers[key].canConvert( QVariant::String ) ) {
+        if ( headers[key].canConvert( QVariant::String ) )
+        {
             parsedHeaders.insert( key, headers[key].toString() );
         }
     }
@@ -771,14 +771,14 @@ JSResolverHelper::nativeRetrieveMetadata( int metadataId, const QString& url,
         if ( options.contains( "headers" ) && options["headers"].canConvert( QVariant::Map ) )
         {
             const QVariantMap variantHeaders = options["headers"].toMap();
-            foreach ( const QString& key, variantHeaders.keys() ) {
+            foreach ( const QString& key, variantHeaders.keys() )
+            {
                 headers.insert( key, variantHeaders[key].toString() );
             }
         }
 
         // TODO: Add heuristic if size is not defined
-        CloudStream stream( url, sizehint, headers,
-                            Tomahawk::Utils::nam() );
+        CloudStream stream( url, sizehint, headers, Tomahawk::Utils::nam() );
         stream.Precache();
         QScopedPointer<TagLib::File> tag;
         if ( mime_type == "audio/mpeg" )
@@ -897,7 +897,8 @@ JSResolverHelper::nativeAsyncRequest( const int requestId, const QString& url,
                                       const QVariantMap& options )
 {
     QNetworkRequest req( url );
-    foreach ( const QString& key , headers.keys() ) {
+    foreach ( const QString& key, headers.keys() )
+    {
         req.setRawHeader( key.toLatin1(), headers[key].toString().toLatin1() );
     }
 
@@ -915,19 +916,25 @@ JSResolverHelper::nativeAsyncRequest( const int requestId, const QString& url,
     }
 
     NetworkReply* reply = NULL;
-    if ( options.contains( "method") && options["method"].toString().toUpper() == "POST" ) {
+    if ( options.contains( "method") && options["method"].toString().toUpper() == "POST" )
+    {
         QByteArray data;
-        if ( options.contains( "data" ) ) {
+        if ( options.contains( "data" ) )
+        {
             data = options["data"].toString().toLatin1();
         }
         reply = new NetworkReply( Tomahawk::Utils::nam()->post( req, data ) );
-    } else if ( options.contains( "method") && options["method"].toString().toUpper() == "HEAD" ) {
+    }
+    else if ( options.contains( "method") && options["method"].toString().toUpper() == "HEAD" )
+    {
         reply = new NetworkReply( Tomahawk::Utils::nam()->head( req ) );
-    } else {
+    }
+    else
+    {
         reply = new NetworkReply( Tomahawk::Utils::nam()->get( req ) );
     }
 
-    NewClosure( reply , SIGNAL( finished() ), this, SLOT( nativeAsyncRequestDone( int, NetworkReply* ) ), requestId, reply );
+    NewClosure( reply, SIGNAL( finished() ), this, SLOT( nativeAsyncRequestDone( int, NetworkReply* ) ), requestId, reply );
 }
 
 
@@ -1017,7 +1024,7 @@ JSResolverHelper::createFuzzyIndex( const QVariantList& list )
     }
     else
     {
-        m_resolver->d_func()->fuzzyIndex.reset( new FuzzyIndex( m_resolver, accountId() + ".lucene" , true ) );
+        m_resolver->d_func()->fuzzyIndex.reset( new FuzzyIndex( m_resolver, accountId() + ".lucene", true ) );
     }
 
     addToFuzzyIndex( list );
@@ -1038,7 +1045,8 @@ JSResolverHelper::addToFuzzyIndex( const QVariantList& list )
     foreach ( const QVariant& variant, list )
     {
         // Convert each entry to IndexData
-        if ( variant.canConvert( QVariant::Map ) ) {
+        if ( variant.canConvert( QVariant::Map ) )
+        {
             QVariantMap map = variant.toMap();
 
             // Convert each entry and do multiple checks that we have valid data.
@@ -1056,7 +1064,7 @@ JSResolverHelper::addToFuzzyIndex( const QVariantList& list )
 
 
 bool
-cmpTuple ( const QVariant& x, const QVariant& y )
+cmpTuple( const QVariant& x, const QVariant& y )
 {
     return x.toList().at( 1 ).toFloat() < y.toList().at( 1 ).toFloat();
 }
@@ -1071,7 +1079,8 @@ JSResolverHelper::searchInFuzzyIndex( const query_ptr& query )
 
         // Convert map to sorted QVariantList
         QVariantList list;
-        foreach ( int id, map.keys() ) {
+        foreach ( int id, map.keys() )
+        {
             QVariantList innerList;
             innerList.append( QVariant( id ) );
             innerList.append( QVariant( map[id] ) );
@@ -1098,7 +1107,8 @@ JSResolverHelper::resolveFromFuzzyIndex( const QString& artist, const QString& a
 {
     // Important: Do not autoresolve!
     query_ptr query = Query::get( artist, track, album, QString(), false );
-    if ( query.isNull() ) {
+    if ( query.isNull() )
+    {
         tLog() << Q_FUNC_INFO << "Could not create a query for" << artist << "-" << track;
         return QVariantList();
     }
@@ -1140,13 +1150,14 @@ JSResolverHelper::returnStreamUrl( const QString& streamUrl, const QMap<QString,
     {
         QUrl url = QUrl::fromEncoded( streamUrl.toUtf8() );
         QNetworkRequest req( url );
-        foreach ( const QString& key , headers.keys() ) {
+        foreach ( const QString& key, headers.keys() )
+        {
             req.setRawHeader( key.toLatin1(), headers[key].toLatin1() );
         }
         tDebug() << "Creating a QNetowrkReply with url:" << req.url().toString();
         NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( req ) );
 
-        NewClosure( reply , SIGNAL( finalUrlReached() ), this, SLOT( gotStreamUrl( IODeviceCallback, NetworkReply* )), callback, reply );
+        NewClosure( reply, SIGNAL( finalUrlReached() ), this, SLOT( gotStreamUrl( IODeviceCallback, NetworkReply* )), callback, reply );
     }
 }
 

@@ -70,7 +70,6 @@ ScriptInfoPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     Q_D( ScriptInfoPlugin );
 
-
     QVariantMap arguments;
     arguments[ "type" ] = requestData.type;
     arguments[ "data" ] = convertInfoStringHashToQVariantMap( requestData.input.value<Tomahawk::InfoSystem::InfoStringHash>() );

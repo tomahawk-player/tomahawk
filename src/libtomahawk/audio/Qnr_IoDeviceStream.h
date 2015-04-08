@@ -47,7 +47,7 @@ public:
     ~QNR_IODeviceStream();
 
     virtual void seekStream( qint64 offset );
-    virtual qint64 needData ( void** buffer );
+    virtual qint64 needData( void** buffer );
 
 private slots:
     void readyRead();
