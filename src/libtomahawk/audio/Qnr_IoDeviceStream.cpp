@@ -35,7 +35,6 @@ using namespace Tomahawk;
 QNR_IODeviceStream::QNR_IODeviceStream( const QSharedPointer<QNetworkReply>& reply, QObject* parent )
     : MediaStream( parent )
     , m_networkReply( reply )
-    , m_timer( new QTimer( this ) )
 {
     m_type = MediaStream::Stream;
 
@@ -66,9 +65,6 @@ QNR_IODeviceStream::QNR_IODeviceStream( const QSharedPointer<QNetworkReply>& rep
         m_data = m_networkReply->readAll();
         connect( m_networkReply.data(), SIGNAL( readyRead() ), SLOT( readyRead() ) );
     }
-
-    m_timer->setInterval( 0 );
-    connect( m_timer, SIGNAL( timeout() ), SLOT( moreData() ) );
 }
 
 

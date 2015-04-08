@@ -56,7 +56,6 @@ private:
     QMutex m_mutex;
     QByteArray m_data;
     QSharedPointer<QNetworkReply> m_networkReply;
-    QTimer* m_timer;
 };
 
 } // namespace Tomahawk
