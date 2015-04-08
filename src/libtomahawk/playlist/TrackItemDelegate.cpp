@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2014-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@ TrackItemDelegate::TrackItemDelegate( DisplayMode mode, TrackView* parent, Playa
 QSize
 TrackItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    QSize size = QStyledItemDelegate::sizeHint( option, index );
+    QSize size;
 
     PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     Q_ASSERT( item );
@@ -90,6 +90,9 @@ TrackItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelInd
 void
 TrackItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
+    if ( m_view->header()->visualIndex( index.column() ) > 0 )
+        return;
+
     painter->setRenderHint( QPainter::TextAntialiasing );
 
     PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
@@ -97,9 +100,6 @@ TrackItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 
     QStyleOptionViewItemV4 opt = option;
     prepareStyleOption( &opt, index, item );
-
-    if ( m_view->header()->visualIndex( index.column() ) > 0 )
-        return;
 
     if ( item->source() )
     {
