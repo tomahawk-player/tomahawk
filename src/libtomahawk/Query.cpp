@@ -24,18 +24,12 @@
 #include "collection/Collection.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
-#include "database/DatabaseCommand_LogPlayback.h"
-#include "database/DatabaseCommand_LoadPlaylistEntries.h"
-#include "database/DatabaseCommand_LoadSocialActions.h"
-#include "database/DatabaseCommand_SocialAction.h"
-#include "database/DatabaseCommand_TrackStats.h"
 #include "resolvers/Resolver.h"
 #include "utils/Logger.h"
 
 #include "Album.h"
 #include "Pipeline.h"
 #include "Result.h"
-#include "SourceList.h"
 
 #include <QtAlgorithms>
 #include <QDebug>

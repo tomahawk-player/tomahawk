@@ -21,9 +21,6 @@
 
 #include "collection/Collection.h"
 #include "database/Database.h"
-#include "database/DatabaseCommand_Resolve.h"
-#include "database/DatabaseCommand_AllTracks.h"
-#include "database/DatabaseCommand_AddFiles.h"
 #include "filemetadata/MetadataEditor.h"
 #include "resolvers/ExternalResolverGui.h"
 #include "resolvers/Resolver.h"
