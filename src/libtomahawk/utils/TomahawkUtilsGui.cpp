@@ -831,17 +831,6 @@ prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, Pl
         option->palette.setColor( QPalette::Foreground, option->palette.color( QPalette::HighlightedText ) );
         option->palette.setColor( QPalette::Text, option->palette.color( QPalette::HighlightedText ) );
     }
-    else
-    {
-        float opacity = 0.0;
-        if ( item->query() && !item->query()->results().isEmpty() && item->query()->results().first()->isOnline() )
-            opacity = item->query()->score();
-
-        opacity = qMax( (float)0.3, opacity );
-        QColor textColor = alphaBlend( option->palette.color( QPalette::Text ), option->palette.color( QPalette::BrightText ), opacity );
-
-        option->palette.setColor( QPalette::Text, textColor );
-    }
 }
 
 
