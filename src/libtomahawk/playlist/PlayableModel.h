@@ -122,8 +122,8 @@ public:
     virtual void ensureResolved( const QModelIndex& parent = QModelIndex() );
 
     virtual PlayableItem* itemFromIndex( const QModelIndex& index ) const;
-    virtual PlayableItem* itemFromQuery( const Tomahawk::query_ptr& query ) const;
-    virtual PlayableItem* itemFromResult( const Tomahawk::result_ptr& result ) const;
+    virtual PlayableItem* itemFromQuery( const Tomahawk::query_ptr& query, const QModelIndex& parent = QModelIndex() ) const;
+    virtual PlayableItem* itemFromResult( const Tomahawk::result_ptr& result, const QModelIndex& parent = QModelIndex() ) const;
     virtual QModelIndex indexFromSource( const Tomahawk::source_ptr& source ) const;
 
     /// Returns a flat list of all tracks in this model
