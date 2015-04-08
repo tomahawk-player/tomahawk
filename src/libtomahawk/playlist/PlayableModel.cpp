@@ -1199,7 +1199,6 @@ PlayableModel::onQueryBecamePlayable( bool playable )
 
     Tomahawk::query_ptr query = q->weakRef().toStrongRef();
     PlayableItem* item = itemFromQuery( query );
-
     if ( item )
     {
         emit indexPlayable( item->index );
@@ -1221,7 +1220,6 @@ PlayableModel::onQueryResolved( bool hasResults )
 
     Tomahawk::query_ptr query = q->weakRef().toStrongRef();
     PlayableItem* item = itemFromQuery( query );
-
     if ( item )
     {
         emit indexResolved( item->index );
@@ -1230,14 +1228,21 @@ PlayableModel::onQueryResolved( bool hasResults )
 
 
 PlayableItem*
-PlayableModel::itemFromQuery( const Tomahawk::query_ptr& query ) const
+PlayableModel::itemFromQuery( const Tomahawk::query_ptr& query, const QModelIndex& parent ) const
 {
     if ( !query )
         return 0;
 
-    for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
+    for ( int i = 0; i < rowCount( parent ); i++ )
     {
-        QModelIndex idx = index( i, 0, QModelIndex() );
+        QModelIndex idx = index( i, 0, parent );
+        if ( hasChildren( idx ) )
+        {
+            PlayableItem* subItem = itemFromQuery( query, idx );
+            if ( subItem )
+                return subItem;
+        }
+
         PlayableItem* item = itemFromIndex( idx );
         if ( item && item->query() == query )
         {
@@ -1245,20 +1250,29 @@ PlayableModel::itemFromQuery( const Tomahawk::query_ptr& query ) const
         }
     }
 
-    tDebug() << "Could not find item for query:" << query->toString();
+    if ( !parent.isValid() )
+        tDebug() << Q_FUNC_INFO << "Could not find item for query in entire model:" << query->toString();
+
     return 0;
 }
 
 
 PlayableItem*
-PlayableModel::itemFromResult( const Tomahawk::result_ptr& result ) const
+PlayableModel::itemFromResult( const Tomahawk::result_ptr& result, const QModelIndex& parent ) const
 {
     if ( !result )
         return 0;
 
-    for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
+    for ( int i = 0; i < rowCount( parent ); i++ )
     {
-        QModelIndex idx = index( i, 0, QModelIndex() );
+        QModelIndex idx = index( i, 0, parent );
+        if ( hasChildren( idx ) )
+        {
+            PlayableItem* subItem = itemFromResult( result, idx );
+            if ( subItem )
+                return subItem;
+        }
+
         PlayableItem* item = itemFromIndex( idx );
         if ( item && item->result() == result )
         {
@@ -1266,7 +1280,9 @@ PlayableModel::itemFromResult( const Tomahawk::result_ptr& result ) const
         }
     }
 
-    tDebug() << "Could not find item for result:" << result->toString();
+    if ( !parent.isValid() )
+        tDebug() << Q_FUNC_INFO << "Could not find item for result in entire model:" << result->toString();
+
     return 0;
 }
 
@@ -1284,6 +1300,6 @@ PlayableModel::indexFromSource( const Tomahawk::source_ptr& source ) const
         }
     }
 
-    // tDebug() << "Could not find item for source:" << source->friendlyName();
+    // tDebug() << Q_FUNC_INFO << "Could not find item for source:" << source->friendlyName();
     return QModelIndex();
 }
