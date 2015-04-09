@@ -465,7 +465,7 @@ IF( APPLE )
     list(APPEND libSources
       thirdparty/Qocoa/qbutton_mac.mm
       thirdparty/Qocoa/qsearchfield_mac.mm
-      thirdparty/Qocoa/qtoolbartabdialog_mac.mm
+      thirdparty/Qocoa/qtoolbartabdialog.cpp
     )
 
     SET_SOURCE_FILES_PROPERTIES(utils/TomahawkUtils_Mac.mm PROPERTIES COMPILE_FLAGS "-fvisibility=default")

@@ -31,6 +31,8 @@
 #include <QDebug>
 #include <QPointer>
 
+#include "utils/TomahawkUtilsGui.h"
+
 class QToolbarTabDialogPrivate : public QObject {
     Q_OBJECT
 public:
@@ -85,14 +87,16 @@ QToolbarTabDialog::QToolbarTabDialog() :
     QObject(0),
     pimpl(new QToolbarTabDialogPrivate(this))
 {
-    pimpl->dialog = new QDialog;
+    pimpl->dialog = new QDialog();
+#ifndef Q_OS_MAC
     pimpl->dialog.data()->setModal(true);
+#endif
 
     pimpl->toolbar = new QToolBar(pimpl->dialog.data());
     pimpl->toolbar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-#ifdef Q_OS_WIN
+//#ifdef Q_OS_WIN
     pimpl->toolbar->setStyleSheet( "QToolBar { border: 0px; }" );
-#endif
+//#endif
 
     pimpl->stack = new QStackedWidget(pimpl->dialog.data());
 
@@ -120,7 +124,11 @@ QToolbarTabDialog::QToolbarTabDialog() :
     pimpl->rightSpacer =  pimpl->toolbar->addWidget(rightSpacer);
 
     pimpl->layout = new QVBoxLayout;
+
     pimpl->layout->setContentsMargins( 4, 4, 4, 4 );
+#ifdef Q_OS_MAC
+    TomahawkUtils::unmarginLayout( pimpl->layout );
+#endif
     pimpl->layout->addWidget(pimpl->toolbar);
     pimpl->layout->addWidget(pimpl->separator);
     pimpl->layout->addWidget(pimpl->stack);
