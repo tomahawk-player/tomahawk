@@ -1276,24 +1276,14 @@ salasana (OTP)</translation>
 <context>
     <name>PlaylistItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="266"/>
-        <source>played %1 by you</source>
-        <translation>kuuntelit %1</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="268"/>
-        <source>played %1 by %2</source>
-        <translation>%2 kuunteli %1</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="154"/>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="383"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="146"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="281"/>
         <source>Download %1</source>
         <translation>Lataa %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="394"/>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="409"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="292"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="307"/>
         <source>View in Finder</source>
         <translation>Näytä Finderissa</translation>
     </message>
