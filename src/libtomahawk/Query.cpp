@@ -413,6 +413,12 @@ Query::resultSorter( const result_ptr& left, const result_ptr& right )
         {
             return true;
         }*/
+
+        if ( right->purchaseUrl().isEmpty() )
+        {
+            return false;
+        }
+
         if ( right->collection() && right->collection()->source()->isLocal() )
         {
             return false;
