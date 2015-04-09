@@ -10,6 +10,7 @@ Version 0.8.3:
     * Fixed repeat one/all icons.
     * Be more lenient about accepting JSPF and M3U playlists.
     * Improved support for compilation albums.
+    * (OS X) Fixed settings dialog appearance on Yosemite.
     * (OS X) Fixed SSL errors on Yosemite.
 
 Version 0.8.2:
