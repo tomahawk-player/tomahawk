@@ -443,7 +443,7 @@ IF( APPLE )
         list(APPEND libSources
             thirdparty/Qocoa/qbutton_mac.mm
             thirdparty/Qocoa/qsearchfield_mac.mm
-            thirdparty/Qocoa/qtoolbartabdialog_mac.mm
+            thirdparty/Qocoa/qtoolbartabdialog.cpp
         )
     else()
         list(APPEND libSources
