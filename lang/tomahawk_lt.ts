@@ -1568,7 +1568,7 @@ Slaptažodį (VS)</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="48"/>
         <source>Reload Collection</source>
-        <translation type="unfinished"/>
+        <translation>Įkelti Kolekciją iš naujo</translation>
     </message>
 </context>
 <context>
