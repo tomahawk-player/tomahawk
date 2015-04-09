@@ -2,7 +2,15 @@ Version 0.9.0:
     * Resolved playback issues by switching to a new audio engine.
 
 Version 0.8.3:
-    * Support for compilation albums.
+    * Performance improvements for collection browsing.
+    * Improved memory footprint.
+    * Show cloud collections above your friends in the sidebar.
+    * Keep looking for alternative sources even when we found a perfect match.
+    * Fixed crash in network code.
+    * Fixed repeat one/all icons.
+    * Be more lenient about accepting JSPF and M3U playlists.
+    * Improved support for compilation albums.
+    * (OS X) Fixed SSL errors on Yosemite.
 
 Version 0.8.2:
     * Show error message if saving tags failed.
