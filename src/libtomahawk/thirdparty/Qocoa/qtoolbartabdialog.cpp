@@ -108,12 +108,17 @@ QToolbarTabDialog::QToolbarTabDialog() :
 
     connect(pimpl->toolbar, SIGNAL(actionTriggered(QAction*)), pimpl.data(), SLOT(actionTriggered(QAction*)));
 
+#ifndef Q_OS_MAC
     pimpl->buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, pimpl->dialog.data());
     connect(pimpl->buttons, SIGNAL(accepted()), pimpl->dialog.data(), SLOT(accept()));
     connect(pimpl->buttons, SIGNAL(rejected()), pimpl->dialog.data(), SLOT(reject()));
 
     connect(pimpl->dialog.data(), SIGNAL(accepted()), pimpl.data(), SLOT(accepted()));
     connect(pimpl->dialog.data(), SIGNAL(rejected()), pimpl.data(), SLOT(rejected()));
+#else
+    connect(pimpl->dialog.data(), SIGNAL(accepted()), pimpl.data(), SLOT(accepted()));
+    connect(pimpl->dialog.data(), SIGNAL(rejected()), pimpl.data(), SLOT(accepted()));
+#endif
 
     QWidget* leftSpacer = new QWidget(pimpl->toolbar);
     leftSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
@@ -128,6 +133,7 @@ QToolbarTabDialog::QToolbarTabDialog() :
     pimpl->layout->setContentsMargins( 4, 4, 4, 4 );
 #ifdef Q_OS_MAC
     TomahawkUtils::unmarginLayout( pimpl->layout );
+    pimpl->layout->setContentsMargins( 12, 4, 12, 12 );
 #endif
     pimpl->layout->addWidget(pimpl->toolbar);
     pimpl->layout->addWidget(pimpl->separator);
