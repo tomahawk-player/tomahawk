@@ -88,9 +88,11 @@ TrackView::TrackView( QWidget* parent )
     setContextMenuPolicy( Qt::CustomContextMenu );
 
     m_timer.setInterval( SCROLL_TIMEOUT );
-    connect( verticalScrollBar(), SIGNAL( rangeChanged( int, int ) ), SLOT( onViewChanged() ) );
-    connect( verticalScrollBar(), SIGNAL( valueChanged( int ) ), SLOT( onViewChanged() ) );
-    connect( &m_timer, SIGNAL( timeout() ), SLOT( onScrollTimeout() ) );
+
+    // enable those connects if you want to enable lazily loading extra information for visible items
+//    connect( verticalScrollBar(), SIGNAL( rangeChanged( int, int ) ), SLOT( onViewChanged() ) );
+//    connect( verticalScrollBar(), SIGNAL( valueChanged( int ) ), SLOT( onViewChanged() ) );
+//    connect( &m_timer, SIGNAL( timeout() ), SLOT( onScrollTimeout() ) );
 
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
     connect( this, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( onCustomContextMenu( const QPoint& ) ) );
