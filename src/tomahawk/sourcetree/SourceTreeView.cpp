@@ -108,7 +108,10 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setEditTriggers( NoEditTriggers );
     setAutoExpandDelay( 500 );
 
-    TomahawkStyle::styleScrollBar( verticalScrollBar() );
+#ifndef Q_OS_MAC
+    // FIXME: scrollbar width
+    // TomahawkStyle::styleScrollBar( verticalScrollBar() );
+#endif
 
     // TODO animation conflicts with the expanding-playlists-when-collection-is-null
     // so investigate
