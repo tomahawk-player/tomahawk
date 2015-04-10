@@ -699,10 +699,10 @@ PlayableProxyModel::updateDetailedInfo( const QModelIndex& index )
     {
         item->query()->track()->cover( QSize( 0, 0 ) );
 
-        if ( style() == PlayableProxyModel::Fancy )
+/*        if ( style() == PlayableProxyModel::Fancy )
         {
             item->query()->track()->loadSocialActions();
-        }
+        }*/
     }
 }
 
