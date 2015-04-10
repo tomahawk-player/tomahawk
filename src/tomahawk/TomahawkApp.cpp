@@ -194,7 +194,7 @@ TomahawkApp::init()
     f.setPointSize( 10 );
 #endif
 #ifdef Q_OS_MAC
-    f.setPointSize( f.pointSize() - 2 );
+    f.setPointSize( f.pointSize() - 1 );
 #endif
 
     setFont( f );
