@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *   Copyright 2014,      Adrien Aubry <dridri85@gmail.com>
@@ -71,7 +71,7 @@ AudioOutput::AudioOutput( QObject* parent )
     AudioOutput::s_instance = this;
 
     qRegisterMetaType<AudioOutput::AudioState>("AudioOutput::AudioState");
-    
+
     const char* vlcArgs[] = {
         "--ignore-config",
         "--extraintf=logger",
@@ -89,8 +89,10 @@ AudioOutput::AudioOutput( QObject* parent )
 
     // Create and initialize a libvlc instance (it should be done only once)
     m_vlcInstance = libvlc_new( sizeof(vlcArgs) / sizeof(*vlcArgs), vlcArgs );
-    if ( !m_vlcInstance ) {
-        tDebug() << "libVLC: could not initialize";
+    if ( !m_vlcInstance )
+    {
+        tDebug() << Q_FUNC_INFO << "libVLC: could not initialize";
+        //FIXME PANIC, abort
     }
     libvlc_set_user_agent( m_vlcInstance, TOMAHAWK_APPLICATION_NAME,
                            TOMAHAWK_APPLICATION_NAME "/" TOMAHAWK_VERSION );
@@ -98,10 +100,7 @@ AudioOutput::AudioOutput( QObject* parent )
     libvlc_set_app_id( m_vlcInstance, "org.tomahawk-player.desktop",
                        TOMAHAWK_VERSION, "tomahawk" );
 
-
-
     m_vlcPlayer = libvlc_media_player_new( m_vlcInstance );
-
     libvlc_event_manager_t* manager = libvlc_media_player_event_manager( m_vlcPlayer );
     libvlc_event_type_t events[] = {
         libvlc_MediaPlayerMediaChanged,
@@ -125,11 +124,12 @@ AudioOutput::AudioOutput( QObject* parent )
         libvlc_MediaPlayerVout
     };
     const int eventCount = sizeof(events) / sizeof( *events );
-    for ( int i = 0 ; i < eventCount ; i++ ) {
+    for ( int i = 0; i < eventCount; i++ )
+    {
         libvlc_event_attach( manager, events[ i ], &AudioOutput::vlcEventCallback, this );
     }
 
-    tDebug() << "AudioOutput::AudioOutput OK !\n";
+    tDebug() << Q_FUNC_INFO << "Init OK";
 }
 
 
@@ -137,23 +137,26 @@ AudioOutput::~AudioOutput()
 {
     tDebug() << Q_FUNC_INFO;
 
-    if ( m_vlcPlayer != nullptr ) {
+    if ( m_vlcPlayer != nullptr )
+    {
         libvlc_media_player_stop( m_vlcPlayer );
         libvlc_media_player_release( m_vlcPlayer );
         m_vlcPlayer = nullptr;
     }
-    if ( m_vlcMedia != nullptr ) {
+    if ( m_vlcMedia != nullptr )
+    {
         libvlc_media_release( m_vlcMedia );
         m_vlcMedia = nullptr;
     }
-    if ( m_vlcInstance != nullptr ) {
+    if ( m_vlcInstance != nullptr )
+    {
         libvlc_release( m_vlcInstance );
     }
 }
 
 
 void
-AudioOutput::setAutoDelete ( bool ad )
+AudioOutput::setAutoDelete( bool ad )
 {
     m_autoDelete = ad;
 }
@@ -173,7 +176,7 @@ AudioOutput::setCurrentSource( QIODevice* stream )
 }
 
 
-int readCallback ( void* data, const char* cookie, int64_t* dts, int64_t* pts, unsigned* flags, size_t* bufferSize, void** buffer )
+int readCallback( void* data, const char* cookie, int64_t* dts, int64_t* pts, unsigned* flags, size_t* bufferSize, void** buffer )
 {
     MediaStream* mediaStream = static_cast< MediaStream * >( data );
     return mediaStream->readCallback( cookie, dts, pts, flags, bufferSize, buffer );
@@ -181,7 +184,7 @@ int readCallback ( void* data, const char* cookie, int64_t* dts, int64_t* pts, u
 
 
 int
-readDoneCallback ( void *data, const char *cookie, size_t bufferSize, void *buffer )
+readDoneCallback( void* data, const char* cookie, size_t bufferSize, void* buffer )
 {
     MediaStream* mediaStream = static_cast< MediaStream * >( data );
     return mediaStream->readDoneCallback( cookie, bufferSize, buffer );
@@ -193,15 +196,17 @@ AudioOutput::setCurrentSource( MediaStream* stream )
 {
     tDebug() << Q_FUNC_INFO;
 
-    setState(Loading);
+    setState( Loading );
 
-    if ( m_vlcMedia != nullptr ) {
+    if ( m_vlcMedia != nullptr )
+    {
         // Ensure playback is stopped, then release media
         libvlc_media_player_stop( m_vlcPlayer );
         libvlc_media_release( m_vlcMedia );
         m_vlcMedia = nullptr;
     }
-    if ( m_autoDelete && m_currentStream != nullptr ) {
+    if ( m_autoDelete && m_currentStream != nullptr )
+    {
         delete m_currentStream;
     }
 
@@ -212,17 +217,18 @@ AudioOutput::setCurrentSource( MediaStream* stream )
     m_seekable = true;
 
     QByteArray url;
-    switch (stream->type()) {
+    switch ( stream->type() )
+    {
         case MediaStream::Unknown:
-            tDebug() << "MediaStream Type is Invalid:" << stream->type();
+            tDebug() << Q_FUNC_INFO << "MediaStream Type is Invalid:" << stream->type();
             break;
 
         case MediaStream::Empty:
-            tDebug() << "MediaStream is empty.";
+            tDebug() << Q_FUNC_INFO << "MediaStream is empty.";
             break;
 
         case MediaStream::Url:
-            tDebug() << "MediaStream::Url:" << stream->url();
+            tDebug() << Q_FUNC_INFO << "MediaStream::Url:" << stream->url();
             if ( stream->url().scheme().isEmpty() ) {
                 url = "file:///";
                 if ( stream->url().isRelative() ) {
@@ -238,17 +244,16 @@ AudioOutput::setCurrentSource( MediaStream* stream )
             break;
     }
 
-    tDebug() << "MediaStream::Final Url:" << url;
-
+    tDebug() << Q_FUNC_INFO << "MediaStream::Final Url:" << url;
 
     m_vlcMedia = libvlc_media_new_location( m_vlcInstance, url.constData() );
-
     libvlc_event_manager_t* manager = libvlc_media_event_manager( m_vlcMedia );
     libvlc_event_type_t events[] = {
         libvlc_MediaDurationChanged,
     };
     const int eventCount = sizeof(events) / sizeof( *events );
-    for ( int i = 0 ; i < eventCount ; i++ ) {
+    for ( int i = 0; i < eventCount; i++ )
+    {
         libvlc_event_attach( manager, events[ i ], &AudioOutput::vlcEventCallback, this );
     }
 
@@ -272,7 +277,7 @@ AudioOutput::setCurrentSource( MediaStream* stream )
     }
 
     m_aboutToFinish = false;
-    setState(Stopped);
+    setState( Stopped );
 }
 
 
@@ -289,7 +294,7 @@ AudioOutput::setState( AudioState state )
     tDebug() << Q_FUNC_INFO;
     AudioState last = m_currentState;
     m_currentState = state;
-    emit stateChanged ( state, last );
+    emit stateChanged( state, last );
 }
 
 
@@ -305,7 +310,8 @@ AudioOutput::setCurrentTime( qint64 time )
 {
     // FIXME : This is a bit hacky, but m_totalTime is only used to determine
     // if we are about to finish
-    if ( m_totalTime == 0 ) {
+    if ( m_totalTime == 0 )
+    {
         m_totalTime = AudioEngine::instance()->currentTrackTotalTime();
         m_seekable = true;
     }
@@ -313,19 +319,22 @@ AudioOutput::setCurrentTime( qint64 time )
     m_currentTime = time;
     emit tick( time );
 
-//    tDebug() << "Current time : " << m_currentTime << " / " << m_totalTime;
+    //    tDebug() << Q_FUNC_INFO << "Current time : " << m_currentTime << " / " << m_totalTime;
 
     // FIXME pt 2 : we use temporary variable to avoid overriding m_totalTime
     // in the case it is < 0 (which means that the media is not seekable)
     qint64 total = m_totalTime;
-    if ( total <= 0 ) {
+    if ( total <= 0 )
+    {
         total = AudioEngine::instance()->currentTrackTotalTime();
     }
 
-    if ( time < total - ABOUT_TO_FINISH_TIME ) {
+    if ( time < total - ABOUT_TO_FINISH_TIME )
+    {
         m_aboutToFinish = false;
     }
-    if ( !m_aboutToFinish && total > 0 && time >= total - ABOUT_TO_FINISH_TIME ) {
+    if ( !m_aboutToFinish && total > 0 && time >= total - ABOUT_TO_FINISH_TIME )
+    {
         m_aboutToFinish = true;
         emit aboutToFinish();
     }
@@ -342,11 +351,13 @@ AudioOutput::totalTime() const
 void
 AudioOutput::setTotalTime( qint64 time )
 {
-    tDebug() << Q_FUNC_INFO << " " << time;
+    tDebug() << Q_FUNC_INFO << time;
 
-    if ( time <= 0 ) {
+    if ( time <= 0 )
+    {
         m_seekable = false;
-    } else {
+    } else
+    {
         m_totalTime = time;
         m_seekable = true;
         // emit current time to refresh total time
@@ -360,10 +371,13 @@ AudioOutput::play()
 {
     tDebug() << Q_FUNC_INFO;
 
-    if ( libvlc_media_player_is_playing ( m_vlcPlayer ) ) {
-        libvlc_media_player_set_pause ( m_vlcPlayer, 0 );
-    } else {
-        libvlc_media_player_play ( m_vlcPlayer );
+    if ( libvlc_media_player_is_playing( m_vlcPlayer ) )
+    {
+        libvlc_media_player_set_pause( m_vlcPlayer, 0 );
+    }
+    else
+    {
+        libvlc_media_player_play( m_vlcPlayer );
     }
 
     setState( Playing );
@@ -375,8 +389,7 @@ AudioOutput::pause()
 {
     tDebug() << Q_FUNC_INFO;
 
-    libvlc_media_player_set_pause ( m_vlcPlayer, 1 );
-
+    libvlc_media_player_set_pause( m_vlcPlayer, 1 );
     setState( Paused );
 }
 
@@ -385,8 +398,8 @@ void
 AudioOutput::stop()
 {
     tDebug() << Q_FUNC_INFO;
-    libvlc_media_player_stop ( m_vlcPlayer );
 
+    libvlc_media_player_stop( m_vlcPlayer );
     setState( Stopped );
 }
 
@@ -402,7 +415,8 @@ AudioOutput::seek( qint64 milliseconds )
     //     return;
     // }
 
-    switch ( m_currentState ) {
+    switch ( m_currentState )
+    {
         case Playing:
         case Paused:
         case Loading:
@@ -412,10 +426,10 @@ AudioOutput::seek( qint64 milliseconds )
             return;
     }
 
-//    tDebug() << "AudioOutput:: seeking" << milliseconds << "msec";
+    //    tDebug() << Q_FUNC_INFO << "AudioOutput:: seeking" << milliseconds << "msec";
 
     m_justSeeked = true;
-    libvlc_media_player_set_time ( m_vlcPlayer, milliseconds );
+    libvlc_media_player_set_time( m_vlcPlayer, milliseconds );
     setCurrentTime( milliseconds );
 }
 
@@ -435,14 +449,17 @@ AudioOutput::isMuted() const
 
 
 void
-AudioOutput::setMuted(bool m)
+AudioOutput::setMuted( bool m )
 {
     tDebug() << Q_FUNC_INFO;
 
     m_muted = m;
-    if ( m_muted == true ) {
+    if ( m_muted )
+    {
         libvlc_audio_set_volume( m_vlcPlayer, 0 );
-    } else {
+    }
+    else
+    {
         libvlc_audio_set_volume( m_vlcPlayer, m_volume * 100.0 );
     }
 }
@@ -455,13 +472,14 @@ AudioOutput::volume() const
 }
 
 
-void 
-AudioOutput::setVolume(qreal vol)
+void
+AudioOutput::setVolume( qreal vol )
 {
     tDebug() << Q_FUNC_INFO;
 
     m_volume = vol;
-    if ( !m_muted ) {
+    if ( !m_muted )
+    {
         libvlc_audio_set_volume( m_vlcPlayer, m_volume * 100.0 );
     }
 }
@@ -470,7 +488,8 @@ AudioOutput::setVolume(qreal vol)
 void
 AudioOutput::onVlcEvent( const libvlc_event_t* event )
 {
-    switch ( event->type ) {
+    switch ( event->type )
+    {
         case libvlc_MediaPlayerTimeChanged:
             setCurrentTime( event->u.media_player_time_changed.new_time );
             break;
@@ -494,8 +513,9 @@ AudioOutput::onVlcEvent( const libvlc_event_t* event )
             setState( Stopped );
             break;
         case libvlc_MediaPlayerEncounteredError:
-            tDebug() << "LibVLC error : MediaPlayerEncounteredError. Stopping";
-            if ( m_vlcPlayer != nullptr ) {
+            tDebug() << Q_FUNC_INFO << "LibVLC error : MediaPlayerEncounteredError. Stopping";
+            if ( m_vlcPlayer != nullptr )
+            {
                 stop();
             }
             setState( Error );
@@ -533,7 +553,8 @@ AudioOutput::s_dspCallback( int frameNumber, float* samples, int nb_channels, in
 
     int state = AudioOutput::instance()->m_justSeeked ? 1 : 0;
     AudioOutput::instance()->m_justSeeked = false;
-    if ( AudioOutput::instance()->dspPluginCallback ) {
+    if ( AudioOutput::instance()->dspPluginCallback )
+    {
         AudioOutput::instance()->dspPluginCallback( state, frameNumber, samples, nb_channels, nb_samples );
     }
 }
