@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2013-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2014,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -62,9 +62,15 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
 
     m_columnView->proxyModel()->setStyle( PlayableProxyModel::Collection );
 
-    m_trackView->setColumnHidden( PlayableModel::Composer, true );
-    m_trackView->setColumnHidden( PlayableModel::Origin, true );
-    m_trackView->setColumnHidden( PlayableModel::Score, true );
+    if ( collection->backendType() == Collection::ScriptCollectionType )
+    {
+        m_trackView->proxyModel()->setStyle( PlayableProxyModel::Locker );
+    }
+    else
+    {
+        m_trackView->proxyModel()->setStyle( PlayableProxyModel::Collection );
+    }
+
     m_trackView->setGuid( QString( "trackview/flat" ) );
 
     {
