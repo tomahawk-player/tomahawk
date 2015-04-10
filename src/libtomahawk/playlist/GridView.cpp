@@ -248,12 +248,10 @@ GridView::resizeEvent( QResizeEvent* event )
 
 void GridView::wheelEvent( QWheelEvent* e )
 {
-#ifndef Q_WS_MAC
     //HACK: Workaround for QTBUG-7232: Smooth scrolling (scroll per pixel) in ItemViews
     //      does not work as expected.
     verticalScrollBar()->setSingleStep( delegate()->itemSize().height() / 8 );
                                      // ^ scroll step is 1/8 of the estimated row height
-#endif
 
     QListView::wheelEvent( e );
 }
