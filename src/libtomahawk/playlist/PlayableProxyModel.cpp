@@ -49,8 +49,9 @@ PlayableProxyModel::PlayableProxyModel( QObject* parent )
     PlayableProxyModel::setSourcePlayableModel( NULL );
 
     m_headerStyle[ Fancy ]      << PlayableModel::Name;
-    m_headerStyle[ Detailed ]   << PlayableModel::Artist << PlayableModel::Track << PlayableModel::Composer << PlayableModel::Album << PlayableModel::Download << PlayableModel::AlbumPos << PlayableModel::Duration << PlayableModel::Bitrate << PlayableModel::Age << PlayableModel::Year << PlayableModel::Filesize << PlayableModel::Origin << PlayableModel::Score;
-    m_headerStyle[ Collection ] << PlayableModel::Name << PlayableModel::Composer << PlayableModel::Duration << PlayableModel::Bitrate << PlayableModel::Age << PlayableModel::Year << PlayableModel::Filesize << PlayableModel::Origin;
+    m_headerStyle[ Detailed ]   << PlayableModel::Artist << PlayableModel::Track << PlayableModel::Composer << PlayableModel::Album << PlayableModel::AlbumPos << PlayableModel::Duration << PlayableModel::Bitrate << PlayableModel::Age << PlayableModel::Year << PlayableModel::Filesize << PlayableModel::Origin << PlayableModel::Score;
+    m_headerStyle[ Collection ] << PlayableModel::Artist << PlayableModel::Track << PlayableModel::Composer << PlayableModel::Album << PlayableModel::AlbumPos << PlayableModel::Duration << PlayableModel::Bitrate << PlayableModel::Age << PlayableModel::Year << PlayableModel::Filesize;
+    m_headerStyle[ Locker ]     << PlayableModel::Artist << PlayableModel::Track << PlayableModel::Composer << PlayableModel::Album << PlayableModel::Download << PlayableModel::AlbumPos << PlayableModel::Duration << PlayableModel::Bitrate << PlayableModel::Age << PlayableModel::Year << PlayableModel::Filesize;
 }
 
 
@@ -607,12 +608,16 @@ PlayableProxyModel::columnCount( const QModelIndex& parent ) const
             break;
 
         case Collection:
-            return 8;
+            return 10;
+            break;
+
+        case Locker:
+            return 11;
             break;
 
         case Detailed:
         default:
-            return 13;
+            return 12;
             break;
     }
 }
@@ -669,12 +674,16 @@ PlayableProxyModel::columnWeights() const
             break;
 
         case Collection:
-            w << 0.42 << 0.12 << 0.07 << 0.07 << 0.07 << 0.07 << 0.07; // << 0.11;
+            w << 0.16 << 0.17 << 0.15 << 0.15 << 0.06 << 0.06 << 0.06 << 0.06 << 0.06; // << 0.07;
+            break;
+
+        case Locker:
+            w << 0.14 << 0.15 << 0.12 << 0.12 << 0.12 << 0.06 << 0.06 << 0.06 << 0.06 << 0.06; // << 0.05;
             break;
 
         case Detailed:
         default:
-            w << 0.12 << 0.12 << 0.12 << 0.12 << 0.06 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.09; // << 0.03;
+            w << 0.15 << 0.16 << 0.13 << 0.13 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.08; // << 0.05;
             break;
     }
 

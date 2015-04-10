@@ -120,7 +120,7 @@ PlayableModel::columnCount( const QModelIndex& parent ) const
 {
     Q_UNUSED( parent );
 
-    return 12;
+    return 13;
 }
 
 

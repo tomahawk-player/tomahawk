@@ -102,7 +102,7 @@ PlaylistItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModel
     QSize size = QStyledItemDelegate::sizeHint( option, index );
 
     {
-        if ( m_model->style() == PlayableProxyModel::Detailed )
+        if ( m_model->style() != PlayableProxyModel::Fancy )
         {
             int rowHeight = option.fontMetrics.height() * 1.6;
             size.setHeight( rowHeight );
@@ -217,6 +217,8 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
     const int style = index.data( PlayableProxyModel::StyleRole ).toInt();
     switch ( style )
     {
+        case PlayableProxyModel::Collection:
+        case PlayableProxyModel::Locker:
         case PlayableProxyModel::Detailed:
             paintDetailed( painter, option, index );
             break;
@@ -855,7 +857,7 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
         }
         else if ( hoveringInfo )
         {
-            if ( m_model->style() != PlayableProxyModel::Detailed )
+            if ( m_model->style() == PlayableProxyModel::Fancy )
             {
                 if ( item->query() )
                     ViewManager::instance()->show( item->query()->track()->toQuery() );
