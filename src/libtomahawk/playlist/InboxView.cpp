@@ -32,7 +32,7 @@
 InboxView::InboxView( QWidget* parent ) :
     TrackView( parent )
 {
-    proxyModel()->setStyle( PlayableProxyModel::Fancy );
+    proxyModel()->setStyle( PlayableProxyModel::SingleColumn );
 
     TrackView::setGuid( "inbox" );
     setHeaderHidden( true );

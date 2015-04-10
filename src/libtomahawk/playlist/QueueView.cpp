@@ -39,7 +39,7 @@ QueueView::QueueView( QWidget* parent )
     view()->setCaption( tr( "Queue Details" ) );
 
     view()->trackView()->setProxyModel( new QueueProxyModel( view()->trackView() ) );
-    view()->trackView()->proxyModel()->setStyle( PlayableProxyModel::Fancy );
+    view()->trackView()->proxyModel()->setStyle( PlayableProxyModel::SingleColumn );
     view()->trackView()->setHeaderHidden( true );
     view()->trackView()->setUniformRowHeights( false );
 

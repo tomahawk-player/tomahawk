@@ -47,7 +47,7 @@ ContextView::ContextView( QWidget* parent, const QString& caption )
 {
     TrackItemDelegate* del = new TrackItemDelegate( TrackItemDelegate::LovedTracks, m_trackView, m_trackView->proxyModel() );
     m_trackView->setPlaylistItemDelegate( del );
-    m_trackView->proxyModel()->setStyle( PlayableProxyModel::Fancy );
+    m_trackView->proxyModel()->setStyle( PlayableProxyModel::SingleColumn );
     m_trackView->setStyleSheet( QString( "QTreeView { background-color: %1; }" ).arg( TomahawkStyle::PAGE_BACKGROUND.name() ) );
     TomahawkStyle::styleScrollBar( m_trackView->verticalScrollBar() );
 

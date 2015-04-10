@@ -102,7 +102,7 @@ PlaylistItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModel
     QSize size = QStyledItemDelegate::sizeHint( option, index );
 
     {
-        if ( m_model->style() != PlayableProxyModel::Fancy )
+        if ( m_model->style() != PlayableProxyModel::SingleColumn )
         {
             int rowHeight = option.fontMetrics.height() * 1.6;
             size.setHeight( rowHeight );
@@ -857,7 +857,7 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
         }
         else if ( hoveringInfo )
         {
-            if ( m_model->style() == PlayableProxyModel::Fancy )
+            if ( m_model->style() == PlayableProxyModel::SingleColumn )
             {
                 if ( item->query() )
                     ViewManager::instance()->show( item->query()->track()->toQuery() );

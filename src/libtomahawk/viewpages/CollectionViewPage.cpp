@@ -60,7 +60,7 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
     m_header->setBackground( ImageRegistry::instance()->pixmap( RESPATH "images/collection_background.png", QSize( 0, 0 ) ), false );
     setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultCollection, TomahawkUtils::Original, QSize( 256, 256 ) ) );
 
-    m_columnView->proxyModel()->setStyle( PlayableProxyModel::Collection );
+    m_columnView->proxyModel()->setStyle( PlayableProxyModel::SingleColumn );
 
     if ( collection->backendType() == Collection::ScriptCollectionType )
     {
