@@ -97,8 +97,10 @@ AudioOutput::AudioOutput( QObject* parent )
     libvlc_set_user_agent( m_vlcInstance, TOMAHAWK_APPLICATION_NAME,
                            TOMAHAWK_APPLICATION_NAME "/" TOMAHAWK_VERSION );
     // FIXME: icon is named tomahawk, so we need the lowercase application name
+#if (LIBVLC_VERSION_INT >= LIBVLC_VERSION(2, 1, 0, 0))
     libvlc_set_app_id( m_vlcInstance, "org.tomahawk-player.desktop",
                        TOMAHAWK_VERSION, "tomahawk" );
+#endif
 
     m_vlcPlayer = libvlc_media_player_new( m_vlcInstance );
     libvlc_event_manager_t* manager = libvlc_media_player_event_manager( m_vlcPlayer );
