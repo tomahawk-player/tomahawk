@@ -338,12 +338,10 @@ Artist::id() const
 //        qDebug() << Q_FUNC_INFO << "Asked for artist ID and NOT loaded yet" << m_name << m_idFuture.isFinished();
         m_idFuture.waitForFinished();
 //        qDebug() << "DONE WAITING:" << m_idFuture.resultCount() << m_idFuture.isResultReadyAt( 0 ) << m_idFuture.isCanceled() << m_idFuture.isFinished() << m_idFuture.isPaused() << m_idFuture.isRunning() << m_idFuture.isStarted();
-        unsigned int finalid = m_idFuture.result();
-
 //        qDebug() << Q_FUNC_INFO << "Got loaded artist:" << m_name << finalid;
 
         s_idMutex.lockForWrite();
-        m_id = finalid;
+        m_id = m_idFuture.result();
         m_waitingForFuture = false;
 
         if ( m_id > 0 )

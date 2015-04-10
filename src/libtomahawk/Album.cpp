@@ -201,15 +201,14 @@ Album::id() const
     Q_D( const Album );
     s_idMutex.lockForRead();
     const bool waiting = d->waitingForId;
-    unsigned int finalId = d->id;
     s_idMutex.unlock();
 
     if ( waiting )
     {
-        finalId = d->idFuture.result();
+        d->idFuture.waitForFinished();
 
         s_idMutex.lockForWrite();
-        d->id = finalId;
+        d->id = d->idFuture.result();
         d->waitingForId = false;
 
         if ( d->id > 0 )
@@ -218,7 +217,7 @@ Album::id() const
         s_idMutex.unlock();
     }
 
-    return finalId;
+    return d->id;
 }
 
 
