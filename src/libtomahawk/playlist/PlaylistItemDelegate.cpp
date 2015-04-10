@@ -273,7 +273,7 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
         painter->drawRect( fillR );
     }
     else */
-    if ( index.column() == PlayableModel::Download )
+    if ( m_view->proxyModel()->style() == PlayableProxyModel::Locker && index.column() == PlayableModel::Download )
     {
         if ( item->result() && !item->result()->downloadFormats().isEmpty() )
         {
@@ -889,7 +889,7 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
                 }
             }
         }
-        else if ( index.column() == PlayableModel::Download )
+        else if ( m_view->proxyModel()->style() == PlayableProxyModel::Locker && index.column() == PlayableModel::Download )
         {
             m_view->edit( index );
             return true;
