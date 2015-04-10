@@ -135,14 +135,7 @@ ColumnView::setTreeModel( TreeModel* model )
 
     guid(); // this will set the guid on the header
 
-    if ( m_proxyModel->style() == PlayableProxyModel::SingleColumn )
-    {
-        setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    }
-    else
-    {
-        setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
-    }
+    setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
 
     connect( model, SIGNAL( changed() ), this, SIGNAL( modelChanged() ) );
     emit modelChanged();
