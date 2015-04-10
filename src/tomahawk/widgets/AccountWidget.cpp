@@ -128,7 +128,7 @@ AccountWidget::AccountWidget( QWidget* parent )
 
     m_inviteButton = new QPushButton( this );
     m_inviteButton->setMinimumWidth( m_inviteButton->logicalDpiX() * 0.8 );
-    m_inviteButton->setText( tr( "Invite" ) );
+    m_inviteButton->setText( AccountWidget::tr( "Invite" ) );
     m_inviteButton->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
     vLayout->addWidget( m_inviteButton, 1, 1 );
     vLayout->setColumnStretch( 0, 1 );

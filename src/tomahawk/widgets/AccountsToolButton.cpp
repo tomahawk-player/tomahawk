@@ -87,7 +87,7 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
 
     QPushButton *settingsButton = new QPushButton( w );
     settingsButton->setIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::AccountSettings ) );
-    settingsButton->setText( tr( "Configure Accounts" ) );
+    settingsButton->setText( AccountsToolButton::tr( "Configure Accounts" ) );
     connect( settingsButton, SIGNAL( clicked() ), window(), SLOT( showSettingsDialog() ) );
 
     QHBoxLayout *bottomLayout = new QHBoxLayout();
