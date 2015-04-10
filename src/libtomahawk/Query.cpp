@@ -559,17 +559,19 @@ Query::checkResults()
 bool
 Query::equals( const Tomahawk::query_ptr& other, bool ignoreCase, bool ignoreAlbum ) const
 {
-    if ( other.isNull() )
+    if ( !other )
         return false;
 
     if ( ignoreCase )
+    {
         return ( queryTrack()->artist().toLower() == other->queryTrack()->artist().toLower() &&
                  ( ignoreAlbum || queryTrack()->album().toLower() == other->queryTrack()->album().toLower() ) &&
-                 queryTrack()->track().toLower() == other->queryTrack()->track().toLower() );
-    else
-        return ( queryTrack()->artist() == other->queryTrack()->artist() &&
-                 ( ignoreAlbum || queryTrack()->album() == other->queryTrack()->album() ) &&
-                 queryTrack()->track() == other->queryTrack()->track() );
+                   queryTrack()->track().toLower() == other->queryTrack()->track().toLower() );
+    }
+
+    return ( queryTrack()->artist() == other->queryTrack()->artist() &&
+             ( ignoreAlbum || queryTrack()->album() == other->queryTrack()->album() ) &&
+               queryTrack()->track() == other->queryTrack()->track() );
 }
 
 
@@ -622,9 +624,8 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
     Q_D( Query );
     // result values
     const QString& rArtistname = r->track()->artistSortname();
-    const QString rAlbumname  = r->track()->albumSortname();
+    const QString& rAlbumname  = r->track()->albumSortname();
     const QString& rTrackname  = r->track()->trackSortname();
-
     QString qArtistname;
     QString qAlbumname;
     QString qTrackname;
@@ -643,42 +644,41 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
     }
 
     // normal edit distance
-    int artdist = TomahawkUtils::levenshtein( qArtistname, rArtistname );
-    int albdist = TomahawkUtils::levenshtein( qAlbumname, rAlbumname );
-    int trkdist = TomahawkUtils::levenshtein( qTrackname, rTrackname );
+    const int artdist = TomahawkUtils::levenshtein( qArtistname, rArtistname );
+    const int trkdist = TomahawkUtils::levenshtein( qTrackname, rTrackname );
 
     // max length of name
-    int mlart = qMax( qArtistname.length(), rArtistname.length() );
-    int mlalb = qMax( qAlbumname.length(), rAlbumname.length() );
-    int mltrk = qMax( qTrackname.length(), rTrackname.length() );
+    const int mlart = qMax( qArtistname.length(), rArtistname.length() );
+    const int mltrk = qMax( qTrackname.length(), rTrackname.length() );
 
     // distance scores
-    float dcart = (float)( mlart - artdist ) / mlart;
-    float dcalb = (float)( mlalb - albdist ) / mlalb;
-    float dctrk = (float)( mltrk - trkdist ) / mltrk;
+    const float dcart = (float)( mlart - artdist ) / mlart;
+    const float dctrk = (float)( mltrk - trkdist ) / mltrk;
+
+    // don't penalize for missing album name
+    float dcalb = 1.0;
+    if ( !qAlbumname.isEmpty() )
+    {
+        const int albdist = TomahawkUtils::levenshtein( qAlbumname, rAlbumname );
+        const int mlalb = qMax( qAlbumname.length(), rAlbumname.length() );
+        dcalb = (float)( mlalb - albdist ) / mlalb;
+    }
 
     if ( isFullTextQuery() )
     {
         const QString artistTrackname = DatabaseImpl::sortname( fullTextQuery() );
-        const QString rArtistTrackname  = DatabaseImpl::sortname( r->track()->artist() + " " + r->track()->track() );
+        const QString rArtistTrackname = DatabaseImpl::sortname( r->track()->artist() + " " + r->track()->track() );
 
-        int atrdist = TomahawkUtils::levenshtein( artistTrackname, rArtistTrackname );
-        int mlatr = qMax( artistTrackname.length(), rArtistTrackname.length() );
-        float dcatr = (float)( mlatr - atrdist ) / mlatr;
+        const int atrdist = TomahawkUtils::levenshtein( artistTrackname, rArtistTrackname );
+        const int mlatr = qMax( artistTrackname.length(), rArtistTrackname.length() );
+        const float dcatr = (float)( mlatr - atrdist ) / mlatr;
 
-        float res = qMax( dcart, dcalb );
-        res = qMax( res, dcatr );
-        return qMax( res, dctrk );
+        return qMax( dctrk, qMax( dcatr, qMax( dcart, dcalb ) ) );
     }
     else
     {
-        // don't penalize for missing album name
-        if ( queryTrack()->albumSortname().isEmpty() )
-            dcalb = 1.0;
-
         // weighted, so album match is worth less than track title
-        float combined = ( dcart * 4 + dcalb + dctrk * 5 ) / 10;
-        return combined;
+        return ( dcart * 4 + dcalb + dctrk * 5 ) / 10;
     }
 }
 
