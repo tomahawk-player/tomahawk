@@ -107,7 +107,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 
     // TODO animation conflicts with the expanding-playlists-when-collection-is-null
     // so investigate
-//     setAnimated( true );
+    setAnimated( false );
 
     m_delegate = new SourceDelegate( this );
     connect( m_delegate, SIGNAL( latchOn( Tomahawk::source_ptr ) ), SLOT( latchOnOrCatchUp( Tomahawk::source_ptr ) ) );
