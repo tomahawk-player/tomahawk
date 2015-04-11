@@ -874,6 +874,18 @@ SourceTreeView::dropEvent( QDropEvent* event )
     const QPoint pos = event->pos();
     const QModelIndex index = indexAt( pos );
 
+    // Need to fake the dropevent because the treeview would reject it if it is outside the item (on the tree)
+    if ( pos.x() < 96 )
+    {
+        event->ignore();
+
+        QDropEvent* newEvent = new QDropEvent( pos + QPoint( 96, 0 ), event->possibleActions(), event->mimeData(), event->mouseButtons(), event->keyboardModifiers(), event->type() );
+        QTreeView::dropEvent( newEvent );
+        delete newEvent;
+
+        return;
+    }
+
     // if it's a playlist drop, accept it anywhere in the sourcetree by manually parsing it.
     if ( DropJob::isDropType( DropJob::Playlist, event->mimeData() ) )
     {
@@ -883,19 +895,13 @@ SourceTreeView::dropEvent( QDropEvent* event )
         dropThis->parseMimeData( event->mimeData() );
 
         // Don't add it to the playlist under drop, it's a new playlist now
+        event->acceptProposedAction();
         return;
     }
 
-    // Need to fake the dropevent because the treeview would reject it if it is outside the item (on the tree)
-    if ( pos.x() < 100 )
+    if ( model()->dropMimeData( event->mimeData(), event->proposedAction(), index.row(), 0, index.parent() ) )
     {
-        QDropEvent* newEvent = new QDropEvent( pos + QPoint( 100, 0 ), event->possibleActions(), event->mimeData(), event->mouseButtons(), event->keyboardModifiers(), event->type() );
-        QTreeView::dropEvent( newEvent );
-        delete newEvent;
-    }
-    else
-    {
-        QTreeView::dropEvent( event );
+        event->acceptProposedAction();
     }
 
     m_dragging = false;
