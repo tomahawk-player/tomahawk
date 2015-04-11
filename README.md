@@ -72,26 +72,25 @@ You can download one of our nightly or stable builds:
 
 Required dependencies:
 
-* [CMake 2.8.6](http://www.cmake.org/)
+* [CMake 3](http://www.cmake.org/)
 * [Qt 5.4.0](http://qt-project.org/)
 * [VLC 2.1.0](https://videolan.org/vlc/)
-* [QJson 0.8.1](http://qjson.sourceforge.net/)
 * [SQLite 3.6.22](http://www.sqlite.org/)
 * [TagLib 1.8](http://developer.kde.org/~wheeler/taglib.html)
 * [Boost 1.3](http://www.boost.org/)
 * [Lucene++ 3.0.6](https://github.com/luceneplusplus/LucenePlusPlus/)
-* [libechonest 2.2.0](http://projects.kde.org/projects/playground/libs/libechonest/)
-* [Attica 0.4.0](http://ftp.kde.org/stable/attica/)
+* [libechonest 2.3.1](http://projects.kde.org/projects/playground/libs/libechonest/)
+* [Attica 5.6.0](http://ftp.kde.org/stable/attica/)
 * [QuaZip 0.4.3](http://quazip.sourceforge.net/)
-* [liblastfm 1.0.1](https://github.com/lastfm/liblastfm/)
+* [liblastfm 1.0.9](https://github.com/lastfm/liblastfm/)
 * [QtKeychain 0.1](https://github.com/frankosterfeld/qtkeychain/)
 * [Sparsehash](https://code.google.com/p/sparsehash/)
 * [GnuTLS](http://gnutls.org/)
 
 The following dependencies are optional (but *recommended*):
 
-* [Jreen 1.0.5](http://qutim.org/jreen/) (1.1.0 will fail, 1.1.1 is fine)
-* [Snorenotify](https://github.com/Snorenotify/Snorenotify/)
+* [Jreen 1.1.1](http://qutim.org/jreen/)
+* [Snorenotify 0.5.2](https://github.com/Snorenotify/Snorenotify/)
 
 Third party libraries that we ship with our source:
 
