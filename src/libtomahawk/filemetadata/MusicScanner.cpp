@@ -60,10 +60,10 @@ DirLister::scanDir( QDir dir, int depth )
         return;
     }
 
-    tDebug( LOGVERBOSE ) << "DirLister::scanDir scanning:" << dir.canonicalPath();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "scanning:" << dir.canonicalPath();
     if ( !dir.exists() || m_processedDirs.contains( dir.canonicalPath() ) )
     {
-        tDebug( LOGVERBOSE ) << "Dir no longer exists or already scanned, ignoring";
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Dir no longer exists or already scanned, ignoring";
 
         m_opcount--;
         if ( m_opcount == 0 )
@@ -191,7 +191,7 @@ MusicScanner::verbose()
 void
 MusicScanner::startScan()
 {
-    tDebug( LOGVERBOSE ) << "Loading mtimes...";
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Loading mtimes...";
     m_scanned = m_skipped = m_cmdQueue = 0;
     m_skippedFiles.clear();
 
@@ -222,7 +222,7 @@ MusicScanner::setFileMtimes( const QMap< QString, QMap< unsigned int, unsigned i
 void
 MusicScanner::scan()
 {
-    tDebug( LOGVERBOSE ) << "Num saved file mtimes from last scan:" << m_filemtimes.size();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Num saved file mtimes from last scan:" << m_filemtimes.size();
 
     connect( this, SIGNAL( batchReady( QVariantList, QVariantList ) ),
                      SLOT( commitBatch( QVariantList, QVariantList ) ), Qt::DirectConnection );
@@ -269,10 +269,10 @@ MusicScanner::postOps()
         }
     }
 
-    tDebug( LOGINFO ) << "Scanning complete, saving to database. ( deleted" << m_filesToDelete.count() << "- scanned" << m_scanned << "- skipped" << m_skipped << ")";
-    tDebug( LOGEXTRA ) << "Skipped the following files (no tags / no valid audio):";
+    tDebug( LOGINFO ) << Q_FUNC_INFO << "Scanning complete, saving to database. ( deleted" << m_filesToDelete.count() << "- scanned" << m_scanned << "- skipped" << m_skipped << ")";
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO << "Skipped the following files (no tags / no valid audio):";
     foreach ( const QString& s, m_skippedFiles )
-        tDebug( LOGEXTRA ) << s;
+        tDebug( LOGEXTRA ) << Q_FUNC_INFO << s;
 
     if ( !m_filesToDelete.isEmpty() || !m_scannedfiles.isEmpty() )
     {
@@ -370,7 +370,6 @@ MusicScanner::scanFile( const QFileInfo& fi )
         m_filemtimes.remove( "file://" + fi.canonicalFilePath() );
     }
 
-    //tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Scanning file:" << fi.canonicalFilePath();
     QVariant m = readFile( fi );
     if ( m.toMap().isEmpty() )
         return;
@@ -458,7 +457,7 @@ MusicScanner::readFile( const QFileInfo& fi )
             emit progress( m_scanned );
 
     if ( m_scanned % 100 == 0 || m_verbose )
-      tDebug( LOGINFO ) << "Scanning file:" << m_scanned << fi.canonicalFilePath();
+        tDebug( LOGINFO ) << Q_FUNC_INFO << "Scanning file:" << m_scanned << fi.canonicalFilePath();
 
     if ( m.toMap().isEmpty() )
     {

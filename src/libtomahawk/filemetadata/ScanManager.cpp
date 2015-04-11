@@ -55,6 +55,8 @@ void
 MusicScannerThreadController::run()
 {
     m_musicScanner = QPointer< MusicScanner >( new MusicScanner( m_mode, m_paths, m_bs ) );
+    m_musicScanner->setVerbose( qApp->arguments().contains( "--verbose" ) );
+
     connect( m_musicScanner.data(), SIGNAL( finished() ), parent(), SLOT( scannerFinished() ), Qt::QueuedConnection );
     connect( m_musicScanner.data(), SIGNAL( progress( unsigned int ) ), parent(), SIGNAL( progress( unsigned int ) ), Qt::QueuedConnection );
     QMetaObject::invokeMethod( m_musicScanner.data(), "startScan", Qt::QueuedConnection );
@@ -196,7 +198,7 @@ ScanManager::runNormalScan( bool manualFull )
     {
         if ( m_queuedScanType != MusicScanner::Full )
             m_queuedScanType = manualFull ? MusicScanner::Full : MusicScanner::Normal;
-        tDebug( LOGVERBOSE ) << "Could not run dir scan, old scan still running";
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Could not run dir scan, old scan still running";
         return;
     }
 
@@ -243,7 +245,7 @@ ScanManager::runFileScan( const QStringList& paths, bool updateGUI )
     {
         if ( m_queuedScanType == MusicScanner::None )
             m_queuedScanType = MusicScanner::File;
-        tDebug( LOGVERBOSE ) << "Could not run file scan, old scan still running";
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Could not run file scan, old scan still running";
         return;
     }
 
