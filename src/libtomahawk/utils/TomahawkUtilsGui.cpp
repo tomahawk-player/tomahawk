@@ -358,7 +358,9 @@ bringToFront()
             return;
 
         // "Unminimize" first, otherwise the entry in the taskbar will only flash but the window won't come to front
-        widget->windowHandle()->showNormal();
+        widget->show();
+        // widget->windowHandle()->showNormal(); // this is fucked: https://bugreports.qt.io/browse/QTBUG-31117
+
         widget->windowHandle()->requestActivate();
 
         #ifdef HAVE_X11
