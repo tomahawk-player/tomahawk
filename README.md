@@ -6,8 +6,7 @@ Tomahawk is a free multi-source and cross-platform music player. An application 
 
 ## HOW TOMAHAWK WORKS
 
-Tomahawk is basically a **player for music metadata**.  At its core it decouples the metadata about a song from the source and reassembles it for each user based on their individual music accessibility and rights.  
-In short, given the name of a song and artist, Tomahawk will find the right source, for the right user at the right time.  This fundamentally different approach to music enables a range of new music consumption and sharing experiences previously not possible.
+Tomahawk is basically a **player for music metadata**. At its core it decouples the metadata about a song from the source and reassembles it for each user based on their individual music accessibility and rights. In short, given the name of a song and artist, Tomahawk will find the right source, for the right user at the right time.  This fundamentally different approach to music enables a range of new music consumption and sharing experiences previously not possible.
 
 ## MUSIC SOURCES
 
