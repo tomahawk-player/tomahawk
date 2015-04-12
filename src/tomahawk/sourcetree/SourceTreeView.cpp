@@ -852,16 +852,15 @@ SourceTreeView::dropEvent( QDropEvent* event )
     const QModelIndex index = indexAt( pos );
 
     // Need to fake the dropevent because the treeview would reject it if it is outside the item (on the tree)
-    if ( pos.x() < 96 )
+/*    if ( pos.x() < 32 )
     {
-        event->ignore();
-
-        QDropEvent* newEvent = new QDropEvent( pos + QPoint( 96, 0 ), event->possibleActions(), event->mimeData(), event->mouseButtons(), event->keyboardModifiers(), event->type() );
+        QDropEvent* newEvent = new QDropEvent( pos + QPoint( 32, 0 ), event->possibleActions(), event->mimeData(), event->mouseButtons(), event->keyboardModifiers(), event->type() );
+        event->acceptProposedAction();
         QTreeView::dropEvent( newEvent );
         delete newEvent;
 
         return;
-    }
+    }*/
 
     // if it's a playlist drop, accept it anywhere in the sourcetree by manually parsing it.
     if ( DropJob::isDropType( DropJob::Playlist, event->mimeData() ) )
