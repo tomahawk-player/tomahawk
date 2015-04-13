@@ -114,6 +114,7 @@ TreeProxyModel::setFilter( const QString& pattern )
         disconnect( dynamic_cast< QObject* >( m_artistsFilterCmd ), SIGNAL( artists( QList<Tomahawk::artist_ptr> ) ),
                     this, SLOT( onFilterArtists( QList<Tomahawk::artist_ptr> ) ) );
 
+        delete m_artistsFilterCmd;
         m_artistsFilterCmd = 0;
     }
 
@@ -190,7 +191,14 @@ TreeProxyModel::onFilterAlbums( const QList<Tomahawk::album_ptr>& albums )
 void
 TreeProxyModel::filterFinished()
 {
-    m_artistsFilterCmd = 0;
+    if ( m_artistsFilterCmd )
+    {
+        disconnect( dynamic_cast< QObject* >( m_artistsFilterCmd ), SIGNAL( artists( QList<Tomahawk::artist_ptr> ) ),
+                    this, SLOT( onFilterArtists( QList<Tomahawk::artist_ptr> ) ) );
+
+        delete m_artistsFilterCmd;
+        m_artistsFilterCmd = 0;
+    }
 
     setFilterRegExp( m_filter );
     emit filterChanged( m_filter );
