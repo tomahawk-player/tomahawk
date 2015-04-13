@@ -1,3 +1,7 @@
+Version 0.8.4:
+    * Fixed drag & drop issues on sidebar.
+    * Update column view when collection changes.
+
 Version 0.8.3:
     * Performance improvements for collection browsing.
     * Improved memory footprint.
