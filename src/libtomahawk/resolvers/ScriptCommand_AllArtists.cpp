@@ -98,22 +98,7 @@ ScriptCommand_AllArtists::onArtistsJobDone( const QVariantMap& result )
     }
 
     QList< Tomahawk::artist_ptr > a = parseArtistVariantList( result[ "artists" ].toList() );
-
-    if ( m_filter.isEmpty() )
-    {
-        emit artists( a );
-    }
-    else
-    {
-        QList< Tomahawk::artist_ptr > filtered;
-        foreach( const Tomahawk::artist_ptr& artist, a )
-        {
-            if ( artist->name().contains( m_filter ) )
-                filtered.append( artist );
-        }
-        emit artists( a );
-    }
-
+    emit artists( a );
     emit done();
 
     job->deleteLater();

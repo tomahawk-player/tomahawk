@@ -107,7 +107,7 @@ ScriptCommand_AllAlbums::reportFailure()
 
 
 void
-ScriptCommand_AllAlbums::onAlbumsJobDone(const QVariantMap& result)
+ScriptCommand_AllAlbums::onAlbumsJobDone( const QVariantMap& result )
 {
     ScriptJob* job = qobject_cast< ScriptJob* >( sender() );
     Q_ASSERT( job );
@@ -129,19 +129,7 @@ ScriptCommand_AllAlbums::onAlbumsJobDone(const QVariantMap& result)
     }
 
     QList< Tomahawk::album_ptr > a = parseAlbumVariantList( resultArtists, result[ "albums" ].toList() );
-    if ( m_filter.isEmpty() )
-        emit albums( a );
-    else
-    {
-        QList< Tomahawk::album_ptr > filtered;
-        foreach( const Tomahawk::album_ptr& album, a )
-        {
-            if( album->name().toLower().contains( m_filter.toLower() ) ||
-                album->artist()->name().toLower().contains( m_filter.toLower() ) )
-                filtered.append( album );
-        }
-        emit albums( filtered );
-    }
+    emit albums( a );
     emit done();
 
     job->deleteLater();
