@@ -20,6 +20,7 @@
 
 #include <QTimer>
 
+#include "filemetadata/ScanManager.h"
 #include "TomahawkSettings.h"
 #include "infosystem/InfoSystem.h"
 #include "utils/Logger.h"
@@ -254,6 +255,10 @@ void
 DownloadManager::onJobFinished()
 {
     DownloadJob* job = qobject_cast<DownloadJob*>( sender() );
+
+    QStringList files;
+    files << job->localFile();
+    ScanManager::instance()->runFileScan( files, true );
 
     Tomahawk::InfoSystem::InfoPushData pushData( "DownloadManager", Tomahawk::InfoSystem::InfoNotifyUser,
                                                  tr( "Tomahawk finished downloading %1 by %2." ).arg( job->track()->track() ).arg( job->track()->artist() ),
