@@ -205,6 +205,7 @@ namespace Tomahawk
             InfoAlbumGenre = 47,
             InfoAlbumComposer = 48,
             InfoAlbumSongs = 49,
+            InfoAlbumPurchaseUrl = 50,
 
             /** \var Tomahawk::InfoSystem::InfoType Tomahawk::InfoSystem::InfoType::InfoChartCapabilities
             * Documentation for InfoChartCapabilities
@@ -212,36 +213,36 @@ namespace Tomahawk
             * Clients of this InfoType expect a QVariant
             *
             */
-            InfoChartCapabilities = 50,
+            InfoChartCapabilities = 60,
             /**
             * Documentation for InfoChartArtists
             */
-            InfoChart = 51,
+            InfoChart = 61,
 
-            InfoNewReleaseCapabilities = 52,
-            InfoNewRelease = 53,
+            InfoNewReleaseCapabilities = 62,
+            InfoNewRelease = 63,
 
-            InfoMiscTopHotttness = 60,
-            InfoMiscTopTerms = 61,
+            InfoMiscTopHotttness = 70,
+            InfoMiscTopTerms = 71,
 
-            InfoSubmitNowPlaying = 70,
-            InfoSubmitScrobble = 71,
+            InfoSubmitNowPlaying = 80,
+            InfoSubmitScrobble = 81,
 
-            InfoNowPlaying = 80,
-            InfoNowPaused = 81,
-            InfoNowResumed = 82,
-            InfoNowStopped = 83,
-            InfoTrackUnresolved = 84,
+            InfoNowPlaying = 90,
+            InfoNowPaused = 91,
+            InfoNowResumed = 92,
+            InfoNowStopped = 93,
+            InfoTrackUnresolved = 94,
 
-            InfoLove = 90,
-            InfoUnLove = 91,
-            InfoShareTrack = 92,
+            InfoLove = 100,
+            InfoUnLove = 101,
+            InfoShareTrack = 102,
 
-            InfoNotifyUser = 100,
+            InfoNotifyUser = 110,
 
-            InfoInboxReceived = 101,
+            InfoInboxReceived = 111,
 
-            InfoLastInfo = 102 //WARNING: *ALWAYS* keep this last!
+            InfoLastInfo = 112 //WARNING: *ALWAYS* keep this last!
         };
 
         class InfoPlugin;

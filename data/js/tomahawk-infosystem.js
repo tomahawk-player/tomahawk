@@ -52,35 +52,36 @@ Tomahawk.InfoSystem.InfoType.InfoAlbumDate = 46;
 Tomahawk.InfoSystem.InfoType.InfoAlbumGenre = 47;
 Tomahawk.InfoSystem.InfoType.InfoAlbumComposer = 48;
 Tomahawk.InfoSystem.InfoType.InfoAlbumSongs = 49;
+Tomahawk.InfoSystem.InfoType.InfoAlbumPurchaseUrl = 50;
 
-Tomahawk.InfoSystem.InfoType.InfoChartCapabilities = 50;
+Tomahawk.InfoSystem.InfoType.InfoChartCapabilities = 60;
 
-Tomahawk.InfoSystem.InfoType.InfoChart = 51;
+Tomahawk.InfoSystem.InfoType.InfoChart = 61;
 
-Tomahawk.InfoSystem.InfoType.InfoNewReleaseCapabilities = 52;
-Tomahawk.InfoSystem.InfoType.InfoNewRelease = 53;
+Tomahawk.InfoSystem.InfoType.InfoNewReleaseCapabilities = 62;
+Tomahawk.InfoSystem.InfoType.InfoNewRelease = 63;
 
-Tomahawk.InfoSystem.InfoType.InfoMiscTopHotttness = 60;
-Tomahawk.InfoSystem.InfoType.InfoMiscTopTerms = 61;
+Tomahawk.InfoSystem.InfoType.InfoMiscTopHotttness = 70;
+Tomahawk.InfoSystem.InfoType.InfoMiscTopTerms = 71;
 
-Tomahawk.InfoSystem.InfoType.InfoSubmitNowPlaying = 70;
-Tomahawk.InfoSystem.InfoType.InfoSubmitScrobble = 71;
+Tomahawk.InfoSystem.InfoType.InfoSubmitNowPlaying = 80;
+Tomahawk.InfoSystem.InfoType.InfoSubmitScrobble = 81;
 
-Tomahawk.InfoSystem.InfoType.InfoNowPlaying = 80;
-Tomahawk.InfoSystem.InfoType.InfoNowPaused = 81;
-Tomahawk.InfoSystem.InfoType.InfoNowResumed = 82;
-Tomahawk.InfoSystem.InfoType.InfoNowStopped = 83;
-Tomahawk.InfoSystem.InfoType.InfoTrackUnresolved = 84;
+Tomahawk.InfoSystem.InfoType.InfoNowPlaying = 90;
+Tomahawk.InfoSystem.InfoType.InfoNowPaused = 91;
+Tomahawk.InfoSystem.InfoType.InfoNowResumed = 92;
+Tomahawk.InfoSystem.InfoType.InfoNowStopped = 93;
+Tomahawk.InfoSystem.InfoType.InfoTrackUnresolved = 94;
 
-Tomahawk.InfoSystem.InfoType.InfoLove = 90;
-Tomahawk.InfoSystem.InfoType.InfoUnLove = 91;
-Tomahawk.InfoSystem.InfoType.InfoShareTrack = 92;
+Tomahawk.InfoSystem.InfoType.InfoLove = 100;
+Tomahawk.InfoSystem.InfoType.InfoUnLove = 101;
+Tomahawk.InfoSystem.InfoType.InfoShareTrack = 102;
 
-Tomahawk.InfoSystem.InfoType.InfoNotifyUser = 100;
+Tomahawk.InfoSystem.InfoType.InfoNotifyUser = 110;
 
-Tomahawk.InfoSystem.InfoType.InfoInboxReceived = 101;
+Tomahawk.InfoSystem.InfoType.InfoInboxReceived = 111;
 
-Tomahawk.InfoSystem.InfoType.InfoLastInfo = 102; //WARNING: *ALWAYS* keep this last!
+Tomahawk.InfoSystem.InfoType.InfoLastInfo = 112; //WARNING: *ALWAYS* keep this last!
 
 // PushInfoFlags
 Tomahawk.InfoSystem.PushInfoFlags = Object.create(null);
