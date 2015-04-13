@@ -1,5 +1,9 @@
 Version 0.9.0:
-    * Resolved playback issues by switching to a new audio engine.
+    * Resolved various playback issues by switching to a new audio engine.
+
+Version 0.8.4:
+    * Fixed drag & drop issues on sidebar.
+    * Update column view when collection changes.
 
 Version 0.8.3:
     * Performance improvements for collection browsing.
