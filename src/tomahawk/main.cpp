@@ -43,6 +43,30 @@
 #endif
 
 #include <exception>
+#include <boost/filesystem/path.hpp>
+
+
+void
+checkLocales()
+{
+#if !defined(WIN32) && !defined(MAC_OSX) && !defined(__FreeBSD__) && !defined(__OpenBSD__)
+    std::locale l( "C" );
+    try
+    {
+        // Check if env's locale is valid
+        l = std::locale( "" );
+    }
+    catch ( const std::runtime_error& )
+    {
+        // env's locale is invalid. Prevent boost from throwing an exception
+        setenv( "LC_ALL", "C", 1 );
+    }
+
+    // Needs be set by main thread
+    boost::filesystem::path::imbue( l );
+#endif
+}
+
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -131,6 +155,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine
 int
 main( int argc, char *argv[] )
 {
+    checkLocales();
+
     QCA::Initializer init;
     Q_UNUSED( init )
 
