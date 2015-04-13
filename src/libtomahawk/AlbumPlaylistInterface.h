@@ -69,6 +69,8 @@ private slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( const QString& infoId );
 
+    void onCollectionChanged();
+
 private:
     QList< Tomahawk::query_ptr > m_queries;
     mutable result_ptr m_currentItem;

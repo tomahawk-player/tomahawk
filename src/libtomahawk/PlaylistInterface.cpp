@@ -250,6 +250,19 @@ PlaylistInterface::setCurrentIndex( qint64 index )
 
 
 void
+PlaylistInterface::startLoading()
+{
+    foreach ( const Tomahawk::query_ptr& query, tracks() )
+    {
+        disconnect( query.data(), SIGNAL( playableStateChanged( bool ) ), this, SLOT( onItemsChanged() ) );
+        disconnect( query.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( onQueryResolved() ) );
+    }
+
+    m_finished = false;
+}
+
+
+void
 PlaylistInterface::finishLoading()
 {
     foreach ( const Tomahawk::query_ptr& query, tracks() )
