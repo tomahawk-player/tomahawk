@@ -108,6 +108,7 @@ signals:
 
 protected slots:
     virtual void onItemsChanged();
+    void startLoading();
     void finishLoading();
     void onQueryResolved();
 

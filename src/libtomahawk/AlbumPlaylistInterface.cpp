@@ -49,6 +49,10 @@ AlbumPlaylistInterface::AlbumPlaylistInterface( Tomahawk::Album* album, Tomahawk
     , m_album( QPointer< Tomahawk::Album >( album ) )
     , m_lastQueryTimestamp( 0 )
 {
+    if ( m_collection )
+    {
+        connect( collection.data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
+    }
 }
 
 
@@ -281,6 +285,19 @@ AlbumPlaylistInterface::onTracksLoaded( const QList< query_ptr >& tracks )
 
     finishLoading();
     emit tracksLoaded( m_mode, m_collection );
+}
+
+
+void
+AlbumPlaylistInterface::onCollectionChanged()
+{
+//    tDebug() << Q_FUNC_INFO << m_album->name();
+    if ( m_mode == Tomahawk::DatabaseMode )
+    {
+        startLoading();
+        m_databaseLoaded = false;
+        m_queries.clear();
+    }
 }
 
 
