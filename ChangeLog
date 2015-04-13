@@ -5,6 +5,7 @@ Version 0.8.4:
     * Fixed drag & drop issues on sidebar.
     * Fixed starting Tomahawk with a filename as parameter.
     * Update column view when collection changes.
+    * (Linux) Don't crash on environments with invalid locales.
 
 Version 0.8.3:
     * Performance improvements for collection browsing.
