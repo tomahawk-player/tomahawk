@@ -157,13 +157,12 @@ TreeProxyModel::onFilterArtists( const QList<Tomahawk::artist_ptr>& artists )
 
     foreach ( const Tomahawk::artist_ptr& artist, artists )
     {
-        QModelIndex idx = m_model->indexFromArtist( artist );
+        const QModelIndex idx = m_model->indexFromArtist( artist );
         if ( m_model->rowCount( idx ) )
         {
             finished = false;
 
             Tomahawk::AlbumsRequest* cmd = m_model->collection()->requestAlbums( artist );
-
             cmd->setFilter( m_filter );
 
             connect( dynamic_cast< QObject* >( cmd ), SIGNAL( albums( QList<Tomahawk::album_ptr> ) ),
@@ -182,7 +181,9 @@ void
 TreeProxyModel::onFilterAlbums( const QList<Tomahawk::album_ptr>& albums )
 {
     foreach ( const Tomahawk::album_ptr& album, albums )
-        m_albumsFilter << album->id();
+    {
+        m_albumsFilter << album;
+    }
 
     filterFinished();
 }
@@ -212,9 +213,10 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
     PlayableItem* item = sourceModel()->itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
     Q_ASSERT( item );
 
-    if ( m_model->mode() == Tomahawk::DatabaseMode && !item->query().isNull() )
+    //FIXME: m_cache lookup is broken
+    if ( /*m_model->mode() == Tomahawk::DatabaseMode &&*/ !item->query().isNull() )
     {
-        QList< Tomahawk::query_ptr > rl = m_cache.values( sourceParent );
+/*        QList< Tomahawk::query_ptr > rl = m_cache.values( sourceParent );
         foreach ( const Tomahawk::query_ptr& cachedQuery, rl )
         {
             if ( cachedQuery.isNull() )
@@ -225,7 +227,7 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
             {
                 return ( cachedQuery.data() == item->query().data() );
             }
-        }
+        }*/
 
         for ( int i = 0; i < sourceModel()->rowCount( sourceParent ); i++ )
         {
@@ -233,7 +235,6 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
                 continue;
 
             PlayableItem* ti = sourceModel()->itemFromIndex( sourceModel()->index( i, 0, sourceParent ) );
-
             if ( ti && ti->name() == item->name() && !ti->query().isNull() )
             {
                 if ( ti->query()->track()->albumpos() == item->query()->track()->albumpos() || ti->query()->track()->albumpos() == 0 || item->query()->track()->albumpos() == 0 )
@@ -263,7 +264,7 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
     else if ( !item->artist().isNull() )
         accepted = m_artistsFilter.contains( item->artist() );
     else if ( !item->album().isNull() )
-        accepted = m_albumsFilter.contains( item->album()->id() );
+        accepted = m_albumsFilter.contains( item->album() );
 
     if ( !accepted )
     {
