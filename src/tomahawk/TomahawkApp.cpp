@@ -694,7 +694,7 @@ TomahawkApp::onInfoSystemReady()
     QNetworkRequest request( QUrl( SPOTIFY_PLAYLIST_API_URL "/pong" ) );
 
     QByteArray userAgent = TomahawkUtils::userAgentString( TOMAHAWK_APPLICATION_NAME, TOMAHAWK_VERSION ).toUtf8();
-    tLog() << "User-Agent: " << userAgent;
+    tLog() << "User-Agent:" << userAgent;
     request.setRawHeader( "User-Agent", userAgent );
 
     QNetworkReply* r = Tomahawk::Utils::nam()->get( request );
@@ -706,6 +706,10 @@ TomahawkApp::onInfoSystemReady()
 #endif
 
     initEnergyEventHandler();
+
+    if ( arguments().count() > 1 )
+        loadUrl( arguments().last() );
+
     emit tomahawkLoaded();
 }
 
@@ -879,35 +883,31 @@ TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
     tDebug( LOGINFO ) << "Instance started!" << instance.pid() << instance.arguments();
     const QStringList arguments = instance.arguments();
 
-    if ( arguments.size() < 2 )
+    if ( arguments.count() > 1 )
     {
-        activate();
-        return;
+        if ( loadUrl( arguments.last() ) )
+        {
+            activate();
+        }
+        else if ( arguments.contains( "--next" ) )
+            AudioEngine::instance()->next();
+        else if ( arguments.contains( "--prev" ) )
+            AudioEngine::instance()->previous();
+        else if ( arguments.contains( "--playpause" ) )
+            AudioEngine::instance()->playPause();
+        else if ( arguments.contains( "--play" ) )
+            AudioEngine::instance()->play();
+        else if ( arguments.contains( "--pause" ) )
+            AudioEngine::instance()->pause();
+        else if ( arguments.contains( "--stop" ) )
+            AudioEngine::instance()->stop();
+        else if ( arguments.contains( "--voldown" ) )
+            AudioEngine::instance()->lowerVolume();
+        else if ( arguments.contains( "--volup" ) )
+            AudioEngine::instance()->raiseVolume();
+        else
+            activate();
     }
-
-    QString lastArg = arguments[ arguments.size() - 1 ];
-    if ( loadUrl( lastArg ) )
-    {
-        activate();
-        return;
-    }
-
-    if ( arguments.contains( "--next" ) )
-        AudioEngine::instance()->next();
-    else if ( arguments.contains( "--prev" ) )
-        AudioEngine::instance()->previous();
-    else if ( arguments.contains( "--playpause" ) )
-        AudioEngine::instance()->playPause();
-    else if ( arguments.contains( "--play" ) )
-        AudioEngine::instance()->play();
-    else if ( arguments.contains( "--pause" ) )
-        AudioEngine::instance()->pause();
-    else if ( arguments.contains( "--stop" ) )
-        AudioEngine::instance()->stop();
-    else if ( arguments.contains( "--voldown" ) )
-        AudioEngine::instance()->lowerVolume();
-    else if ( arguments.contains( "--volup" ) )
-        AudioEngine::instance()->raiseVolume();
     else
         activate();
 }
