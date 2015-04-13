@@ -321,7 +321,7 @@ AudioOutput::setCurrentTime( qint64 time )
     m_currentTime = time;
     emit tick( time );
 
-    //    tDebug() << Q_FUNC_INFO << "Current time : " << m_currentTime << " / " << m_totalTime;
+    //    tDebug() << Q_FUNC_INFO << "Current time:" << m_currentTime << "/" << m_totalTime;
 
     // FIXME pt 2 : we use temporary variable to avoid overriding m_totalTime
     // in the case it is < 0 (which means that the media is not seekable)
@@ -353,7 +353,7 @@ AudioOutput::totalTime() const
 void
 AudioOutput::setTotalTime( qint64 time )
 {
-    tDebug() << Q_FUNC_INFO << time;
+//    tDebug() << Q_FUNC_INFO << time;
 
     if ( time <= 0 )
     {
