@@ -50,7 +50,7 @@ You can download one of our nightly or stable builds:
 | *BUILD* | MAC / OSX | WINDOWS | LINUX |
 |:-------:|:---------:|:-------:|:-----:|
 |**NIGHTLY** | [**latest**](http://download.tomahawk-player.org/nightly/mac/Tomahawk-latest.dmg) | [**latest**](http://download.tomahawk-player.org/nightly/windows/tomahawk-latest.exe) | [**latest**](https://launchpad.net/~tomahawk/+archive/ubuntu/nightly) (Ubuntu) |
-|**STABLE** | [**0.8**](http://download.tomahawk-player.org/Tomahawk-0.8.0.dmg) | [**0.8**](http://download.tomahawk-player.org/tomahawk-0.8.0.exe) | [**0.8**](http://www.tomahawk-player.org/#page-about) (various distros) |
+|**STABLE** | [**0.8.3**](http://download.tomahawk-player.org/Tomahawk-0.8.3.dmg) | [**0.8.3**](http://download.tomahawk-player.org/tomahawk-0.8.3.exe) | [**0.8.3**](http://www.tomahawk-player.org/#page-about) (various distros) |
 
 ## BUILD TOMAHAWK
 
