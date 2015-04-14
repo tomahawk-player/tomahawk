@@ -645,7 +645,7 @@ erlauben sich mit dir zu verbinden und von dir zu streamen?</translation>
 <context>
     <name>DownloadManager</name>
     <message>
-        <location filename="../src/libtomahawk/DownloadManager.cpp" line="259"/>
+        <location filename="../src/libtomahawk/DownloadManager.cpp" line="264"/>
         <source>Tomahawk finished downloading %1 by %2.</source>
         <translation>Tomahawk ist fertig mit dem herunterladen vom %1 von %2.</translation>
     </message>
@@ -3875,21 +3875,21 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
         <translation>Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="723"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="727"/>
         <source>Updating database
 </source>
         <translation>Aktualisiere Datenbank
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="730"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="734"/>
         <source>Updating database
 %1</source>
         <translation>Aktualisiere Datenbank
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="780"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="784"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Automatisches Erkennen externer IP fehlgeschlagen.</translation>
     </message>

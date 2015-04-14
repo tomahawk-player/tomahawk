@@ -645,7 +645,7 @@ lidhuni dhe transmeto nga ju?</translation>
 <context>
     <name>DownloadManager</name>
     <message>
-        <location filename="../src/libtomahawk/DownloadManager.cpp" line="259"/>
+        <location filename="../src/libtomahawk/DownloadManager.cpp" line="264"/>
         <source>Tomahawk finished downloading %1 by %2.</source>
         <translation type="unfinished"/>
     </message>
@@ -3871,19 +3871,19 @@ Try tweaking the filters for a new set of songs to play.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="723"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="727"/>
         <source>Updating database
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="730"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="734"/>
         <source>Updating database
 %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="780"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="784"/>
         <source>Automatically detecting external IP failed.</source>
         <translation type="unfinished"/>
     </message>
