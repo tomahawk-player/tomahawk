@@ -46,6 +46,10 @@ public slots:
     virtual void setCaption( const QString& s );
     virtual void setDescription( const QString& s );
     virtual void setPixmap( const QPixmap& p, bool tinted = true );
+    virtual void setRefreshVisible( bool visible );
+
+signals:
+    void refresh();
 
 protected:
     virtual void resizeEvent( QResizeEvent* event );

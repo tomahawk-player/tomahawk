@@ -124,6 +124,9 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
     {
         QAbstractButton* downloadButton = m_header->addButton( tr( "Download All" ) );
         connect( downloadButton, SIGNAL( clicked() ), SLOT( onDownloadAll() ) );
+
+        m_header->setRefreshVisible( true );
+        connect( m_header, SIGNAL( refresh() ), SLOT( onCollectionChanged() ) );
     }
 
     layout()->addWidget( m_header );

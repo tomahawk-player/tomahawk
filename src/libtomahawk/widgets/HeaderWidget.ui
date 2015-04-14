@@ -68,9 +68,19 @@
       </widget>
      </item>
      <item>
+      <widget class="ImageButton" name="refreshButton">
+       <property name="text">
+        <string>Refresh</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::MinimumExpanding</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -199,6 +209,11 @@
    <class>ClickableLabel</class>
    <extends>QLabel</extends>
    <header>widgets/ClickableLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ImageButton</class>
+   <extends>QPushButton</extends>
+   <header>widgets/ImageButton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

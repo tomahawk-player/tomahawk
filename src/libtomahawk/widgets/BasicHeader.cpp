@@ -20,6 +20,7 @@
 #include "BasicHeader.h"
 
 #include "ElidedLabel.h"
+#include "utils/ImageRegistry.h"
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
@@ -42,6 +43,10 @@ BasicHeader::BasicHeader( QWidget* parent )
     ui->setupUi( this );
     setAutoFillBackground( false );
     BackgroundWidget::setBackgroundColor( TomahawkStyle::HEADER_BACKGROUND );
+
+    ui->refreshButton->setPixmap( ImageRegistry::instance()->pixmap( RESPATH "images/refresh.svg", QSize( ui->captionLabel->height() - 8, ui->captionLabel->height() - 8 ) ) );
+    connect( ui->refreshButton, SIGNAL( clicked() ), SIGNAL( refresh() ) );
+    setRefreshVisible( false );
 
     {
         QFont f = ui->captionLabel->font();
@@ -105,6 +110,13 @@ BasicHeader::setDescription( const QString& /* s */ )
 
 
 void
+BasicHeader::setRefreshVisible( bool visible )
+{
+    ui->refreshButton->setVisible( visible );
+}
+
+
+void
 BasicHeader::setPixmap( const QPixmap& pixmap, bool tinted )
 {
     QFontMetrics fm( ui->captionLabel->font() );
@@ -136,6 +148,7 @@ BasicHeader::resizeEvent( QResizeEvent* event )
 {
     BackgroundWidget::resizeEvent( event );
 
-    ui->captionLabel->setFixedWidth( width() * 0.33 );
+    QFontMetrics fm( ui->captionLabel->font() );
+    ui->captionLabel->setFixedWidth( qMin( fm.width( ui->captionLabel->text() ) + 8, int( width() * 0.33 ) ) );
     ui->balanceSpacer->changeSize( ui->captionLabel->width(), 1, QSizePolicy::Expanding, QSizePolicy::Fixed );
 }
