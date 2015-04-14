@@ -3801,21 +3801,21 @@ kappaleen %2%4 %3.</translation>
         <translation>Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="716"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="720"/>
         <source>Updating database
 </source>
         <translation>Päivitetään tietokantaa
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="723"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="727"/>
         <source>Updating database
 %1</source>
         <translation>Päivitetään tietokantaa
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="773"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="777"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Ulkoisen IP-osoitteen automaattinen tunnistus epäonnistui.</translation>
     </message>

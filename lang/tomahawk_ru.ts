@@ -3799,20 +3799,20 @@ Try tweaking the filters for a new set of songs to play.</source>
         <translation>Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="716"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="720"/>
         <source>Updating database
 </source>
         <translation>Обновление базы данных</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="723"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="727"/>
         <source>Updating database
 %1</source>
         <translation>Обновление базы данных
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="773"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="777"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Не удалось автоматически определить внешний IP.</translation>
     </message>
