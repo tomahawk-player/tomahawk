@@ -169,7 +169,7 @@ ScriptInfoPlugin::onNotInCacheRequestDone( const QVariantMap& result )
 
         default:
         {
-            emit info( requestData, result[ "data" ].toMap() );
+            emit info( requestData, resultData );
             emit updateCache( criteria, result[ "maxAge" ].toLongLong(), requestData.type, resultData );
             break;
         }

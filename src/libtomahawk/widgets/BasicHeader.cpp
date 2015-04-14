@@ -124,6 +124,12 @@ QAbstractButton*
 BasicHeader::addButton( const QString& text )
 {
     QPushButton* button = new QPushButton( this );
+
+    button->setStyleSheet( "QPushButton:hover { font-size: 12px; color: #2b2b2b; background: #f8f8f8; border-style: outset; border-width: 2px; border-color: #2b2b2b; }"
+                           "QPushButton { font-size: 12px; color: #ffffff; background-color: #ed0677; border-width: 0px; }" );
+    button->setMinimumHeight( 30 );
+    button->setMinimumWidth( 132 );
+
     button->setText( text );
     ui->horizontalLayout->addWidget( button );
 

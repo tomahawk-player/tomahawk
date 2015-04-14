@@ -67,6 +67,9 @@ private:
 
     artist_ptr artist;
 
+    mutable bool purchaseUrlLoaded;
+    mutable QString purchaseUrl;
+
     mutable bool coverLoaded;
     mutable bool coverLoading;
     mutable QString uuid;

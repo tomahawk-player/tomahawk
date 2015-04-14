@@ -30,6 +30,7 @@ class CaptionLabel;
 class PlayableCover;
 class QueryLabel;
 class QScrollArea;
+class QPushButton;
 
 class DLLEXPORT TrackDetailView : public QWidget, private TomahawkUtils::DpiScaler
 {
@@ -50,9 +51,11 @@ protected:
 protected slots:
 
 private slots:
+    void onAlbumUpdated();
     void onCoverUpdated();
     void onSocialActionsLoaded();
     void onResultsChanged();
+    void onBuyButtonClicked();
 
 private:
     void setSocialActions();
@@ -65,6 +68,7 @@ private:
     QLabel* m_lovedIcon;
     QLabel* m_lovedLabel;
     CaptionLabel* m_resultsBoxLabel;
+    QPushButton* m_buyButton;
 
     QWidget* m_infoBox;
     QWidget* m_resultsBox;

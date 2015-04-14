@@ -19,6 +19,8 @@
 #include "TrackDetailView.h"
 
 #include <QLabel>
+#include <QDesktopServices>
+#include <QPushButton>
 #include <QScrollArea>
 #include <QSizePolicy>
 #include <QVBoxLayout>
@@ -118,11 +120,21 @@ TrackDetailView::TrackDetailView( QWidget* parent )
     TomahawkStyle::styleScrollBar( m_resultsScrollArea->verticalScrollBar() );
     m_resultsScrollArea->hide();
 
+    m_buyButton = new QPushButton;
+    m_buyButton->setStyleSheet( "QPushButton:hover { font-size: 12px; color: #2b2b2b; background: #f8f8f8; border-style: outset; border-width: 2px; border-color: #2b2b2b; }"
+                                "QPushButton { font-size: 12px; color: #ffffff; background-color: #ed0677; border-width: 0px; }" );
+    m_buyButton->setMinimumHeight( 30 );
+    m_buyButton->setText( tr( "BUY ALBUM" ) );
+    m_buyButton->setVisible( false );
+    connect( m_buyButton, SIGNAL( clicked() ), SLOT( onBuyButtonClicked() ) );
+
     QVBoxLayout* layout = new QVBoxLayout;
     TomahawkUtils::unmarginLayout( layout );
     layout->addWidget( m_playableCover );
     layout->addSpacerItem( new QSpacerItem( 0, 8, QSizePolicy::Minimum, QSizePolicy::Fixed ) );
     layout->addWidget( m_nameLabel );
+    layout->addSpacerItem( new QSpacerItem( 0, 4, QSizePolicy::Minimum, QSizePolicy::Fixed ) );
+    layout->addWidget( m_buyButton );
     layout->addWidget( m_dateLabel );
     layout->addWidget( m_infoBox );
     layout->addSpacerItem( new QSpacerItem( 0, 32, QSizePolicy::Minimum, QSizePolicy::Fixed ) );
@@ -154,6 +166,10 @@ TrackDetailView::setQuery( const Tomahawk::query_ptr& query )
 {
     if ( m_query )
     {
+        if ( m_query->track()->albumPtr() && !m_query->track()->albumPtr()->name().isEmpty() )
+        {
+            disconnect( m_query->track()->albumPtr().data(), SIGNAL( updated() ), this, SLOT( onAlbumUpdated() ) );
+        }
         disconnect( m_query->track().data(), SIGNAL( updated() ), this, SLOT( onCoverUpdated() ) );
         disconnect( m_query->track().data(), SIGNAL( socialActionsLoaded() ), this, SLOT( onSocialActionsLoaded() ) );
         disconnect( m_query.data(), SIGNAL( resultsChanged() ), this, SLOT( onResultsChanged() ) );
@@ -176,6 +192,9 @@ TrackDetailView::setQuery( const Tomahawk::query_ptr& query )
 
     if ( m_query->track()->albumPtr() && !m_query->track()->albumPtr()->name().isEmpty() )
     {
+        connect( m_query->track()->albumPtr().data(), SIGNAL( updated() ), SLOT( onAlbumUpdated() ) );
+        onAlbumUpdated();
+
         m_nameLabel->setType( QueryLabel::Album );
         m_nameLabel->setAlbum( m_query->track()->albumPtr() );
     }
@@ -188,6 +207,28 @@ TrackDetailView::setQuery( const Tomahawk::query_ptr& query )
     connect( m_query->track().data(), SIGNAL( updated() ), SLOT( onCoverUpdated() ) );
     connect( m_query->track().data(), SIGNAL( socialActionsLoaded() ), SLOT( onSocialActionsLoaded() ) );
     connect( m_query.data(), SIGNAL( resultsChanged() ), SLOT( onResultsChanged() ) );
+}
+
+
+void
+TrackDetailView::onAlbumUpdated()
+{
+    if ( m_query && m_query->track()->albumPtr() )
+    {
+        m_buyButton->setVisible( !m_query->track()->albumPtr()->purchaseUrl().isEmpty() );
+    }
+    else
+        m_buyButton->setVisible( false );
+}
+
+
+void
+TrackDetailView::onBuyButtonClicked()
+{
+    if ( m_query && m_query->track()->albumPtr() )
+    {
+        QDesktopServices::openUrl( QUrl( m_query->track()->albumPtr()->purchaseUrl() ) );
+    }
 }
 
 

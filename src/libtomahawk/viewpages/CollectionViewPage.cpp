@@ -122,7 +122,7 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
 
     if ( collection->backendType() == Collection::ScriptCollectionType )
     {
-        QAbstractButton* downloadButton = m_header->addButton( tr( "Download All" ) );
+        QAbstractButton* downloadButton = m_header->addButton( tr( "DOWNLOAD ALL" ) );
         connect( downloadButton, SIGNAL( clicked() ), SLOT( onDownloadAll() ) );
     }
 

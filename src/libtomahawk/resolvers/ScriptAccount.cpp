@@ -156,7 +156,6 @@ ScriptAccount::reportScriptJobResult( const QVariantMap& result )
     if ( result[ "error"].isNull() )
     {
         const QVariantMap data = result[ "data" ].toMap();
-
         job->reportResults( data );
     }
     else
