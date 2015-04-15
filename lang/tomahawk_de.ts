@@ -4053,7 +4053,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1428"/>
         <source>Copyright 2010 - 2015</source>
-        <translation>Copyright 2010 - 2015 {2010 ?}</translation>
+        <translation>Copyright 2010 - 2015</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1429"/>
