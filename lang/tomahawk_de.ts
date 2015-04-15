@@ -513,12 +513,12 @@ erlauben sich mit dir zu verbinden und von dir zu streamen?</translation>
         <translation>Alles herunterladen</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="427"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="430"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>Nachdem  deine Sammlung durchsucht wurde, findest du hier deine Lieder.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="430"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="433"/>
         <source>This collection is empty.</source>
         <translation>Diese Sammlung ist leer.</translation>
     </message>
@@ -817,6 +817,14 @@ Password (OTP)</source>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="154"/>
         <source>Login</source>
         <translation>Anmelden</translation>
+    </message>
+</context>
+<context>
+    <name>HeaderWidget</name>
+    <message>
+        <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="73"/>
+        <source>Refresh</source>
+        <translation>Aktualisieren</translation>
     </message>
 </context>
 <context>

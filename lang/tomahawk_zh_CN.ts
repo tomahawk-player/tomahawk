@@ -512,12 +512,12 @@ connect and stream from you?</source>
         <translation>下载所有</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="427"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="430"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>在扫描完音乐收藏后，你将可以在这里找到你的音乐。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="430"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="433"/>
         <source>This collection is empty.</source>
         <translation>收藏为空。</translation>
     </message>
@@ -816,6 +816,14 @@ Password (OTP)</source>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="154"/>
         <source>Login</source>
         <translation>登录</translation>
+    </message>
+</context>
+<context>
+    <name>HeaderWidget</name>
+    <message>
+        <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="73"/>
+        <source>Refresh</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

@@ -513,12 +513,12 @@ połączyć się i strumieniować od ciebie?</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="427"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="430"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>Po zeskanowaniu swojej kolekcji muzycznej znajdziesz utwory właśnie tutaj.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="430"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="433"/>
         <source>This collection is empty.</source>
         <translation>Ta kolekcja jest pusta.</translation>
     </message>
@@ -817,6 +817,14 @@ jednorazowe (OTP)</translation>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="154"/>
         <source>Login</source>
         <translation>Login</translation>
+    </message>
+</context>
+<context>
+    <name>HeaderWidget</name>
+    <message>
+        <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="73"/>
+        <source>Refresh</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

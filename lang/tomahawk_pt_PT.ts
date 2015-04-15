@@ -512,12 +512,12 @@ connect and stream from you?</source>
         <translation>Transferir Tudo</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="427"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="430"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>Depois de ter pesquisado a sua coleção de música, encontrará as suas faixas aqui.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="430"/>
+        <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="433"/>
         <source>This collection is empty.</source>
         <translation>Esta coleção está vazia.</translation>
     </message>
@@ -816,6 +816,14 @@ Descartável (OTP)</translation>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="154"/>
         <source>Login</source>
         <translation>Login</translation>
+    </message>
+</context>
+<context>
+    <name>HeaderWidget</name>
+    <message>
+        <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="73"/>
+        <source>Refresh</source>
+        <translation>Recarregar</translation>
     </message>
 </context>
 <context>
