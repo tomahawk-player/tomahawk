@@ -37,7 +37,7 @@
 #include <vlc/libvlc_events.h>
 #include <vlc/libvlc_version.h>
 
-static const int ABOUT_TO_FINISH_TIME = 2000;
+static const float ABOUT_TO_FINISH_POS = 0.95f;
 
 AudioOutput* AudioOutput::s_instance = 0;
 
@@ -53,8 +53,8 @@ AudioOutput::AudioOutput( QObject* parent )
     : QObject( parent )
     , m_currentState( Stopped )
     , m_currentStream( nullptr )
-    , m_seekable( true )
     , m_muted( false )
+    , m_seekable( true )
     , m_autoDelete ( true )
     , m_volume( 1.0 )
     , m_currentTime( 0 )
@@ -306,6 +306,22 @@ AudioOutput::currentTime() const
     return m_currentTime;
 }
 
+void
+AudioOutput::setCurrentPosition( float position )
+{
+    //tDebug() << Q_FUNC_INFO << position;
+    AudioEngine::instance()->positionChanged(position);
+    m_havePosition = position > 0.0;
+    if ( position < ABOUT_TO_FINISH_POS )
+    {
+        m_aboutToFinish = false;
+    }
+    else if ( !m_aboutToFinish )
+    {
+        m_aboutToFinish = true;
+        emit aboutToFinish();
+    }
+}
 
 void
 AudioOutput::setCurrentTime( qint64 time )
@@ -315,7 +331,6 @@ AudioOutput::setCurrentTime( qint64 time )
     if ( m_totalTime == 0 )
     {
         m_totalTime = AudioEngine::instance()->currentTrackTotalTime();
-        m_seekable = true;
     }
 
     m_currentTime = time;
@@ -331,14 +346,24 @@ AudioOutput::setCurrentTime( qint64 time )
         total = AudioEngine::instance()->currentTrackTotalTime();
     }
 
-    if ( time < total - ABOUT_TO_FINISH_TIME )
+    if ( time <= 0 )
     {
-        m_aboutToFinish = false;
+        m_seekable = false;
+    } else {
+        m_seekable = true;
     }
-    if ( !m_aboutToFinish && total > 0 && time >= total - ABOUT_TO_FINISH_TIME )
+
+    if ( !m_havePosition )
     {
-        m_aboutToFinish = true;
-        emit aboutToFinish();
+        if ( time < ABOUT_TO_FINISH_POS * total )
+        {
+            m_aboutToFinish = false;
+        }
+        else if ( !m_aboutToFinish )
+        {
+            m_aboutToFinish = true;
+            emit aboutToFinish();
+        }
     }
 }
 
@@ -355,13 +380,9 @@ AudioOutput::setTotalTime( qint64 time )
 {
 //    tDebug() << Q_FUNC_INFO << time;
 
-    if ( time <= 0 )
-    {
-        m_seekable = false;
-    } else
+    if ( time > 0 )
     {
         m_totalTime = time;
-        m_seekable = true;
         // emit current time to refresh total time
         emit tick( time );
     }
@@ -411,12 +432,6 @@ AudioOutput::seek( qint64 milliseconds )
 {
     tDebug() << Q_FUNC_INFO;
 
-    // Even seek if reported as not seekable. VLC can seek in some cases where
-    // it tells us it can't.
-    // if ( !seekable ) {
-    //     return;
-    // }
-
     switch ( m_currentState )
     {
         case Playing:
@@ -428,18 +443,29 @@ AudioOutput::seek( qint64 milliseconds )
             return;
     }
 
-    //    tDebug() << Q_FUNC_INFO << "AudioOutput:: seeking" << milliseconds << "msec";
+    if ( m_seekable )
+    {
 
+        //    tDebug() << Q_FUNC_INFO << "AudioOutput:: seeking" << milliseconds << "msec";
+        libvlc_media_player_set_time( m_vlcPlayer, milliseconds );
+        setCurrentTime( milliseconds );
+    }
+    else
+    {
+        qint64 duration = AudioEngine::instance()->currentTrackTotalTime();
+        float position = float(float(milliseconds) / duration);
+        libvlc_media_player_set_position(m_vlcPlayer, position);
+        tDebug() << Q_FUNC_INFO << "AudioOutput:: seeking via position" << position << "pos";
+    }
     m_justSeeked = true;
-    libvlc_media_player_set_time( m_vlcPlayer, milliseconds );
-    setCurrentTime( milliseconds );
 }
 
 
 bool
 AudioOutput::isSeekable() const
 {
-    return m_seekable;
+    tDebug() << Q_FUNC_INFO << m_seekable << m_havePosition << m_totalTime << libvlc_media_player_is_seekable( m_vlcPlayer );
+    return !m_havePosition || (libvlc_media_player_is_seekable( m_vlcPlayer ) && m_totalTime > 0);
 }
 
 
@@ -495,6 +521,9 @@ AudioOutput::onVlcEvent( const libvlc_event_t* event )
         case libvlc_MediaPlayerTimeChanged:
             setCurrentTime( event->u.media_player_time_changed.new_time );
             break;
+        case libvlc_MediaPlayerPositionChanged:
+            setCurrentPosition(event->u.media_player_position_changed.new_position); 
+            break;
         case libvlc_MediaPlayerSeekableChanged:
          //   tDebug() << Q_FUNC_INFO << " : seekable changed : " << event->u.media_player_seekable_changed.new_seekable;
             break;
@@ -526,7 +555,6 @@ AudioOutput::onVlcEvent( const libvlc_event_t* event )
         case libvlc_MediaPlayerMediaChanged:
         case libvlc_MediaPlayerForward:
         case libvlc_MediaPlayerBackward:
-        case libvlc_MediaPlayerPositionChanged:
         case libvlc_MediaPlayerPausableChanged:
         case libvlc_MediaPlayerTitleChanged:
         case libvlc_MediaPlayerSnapshotTaken:

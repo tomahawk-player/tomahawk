@@ -56,6 +56,7 @@ AudioControls::AudioControls( QWidget* parent )
     , ui( new Ui::AudioControls )
     , m_repeatMode( PlaylistModes::NoRepeat )
     , m_shuffled( false )
+    , m_haveTiming ( false )
     , m_lastSliderCheck( 0 )
     , m_parent( parent )
 {
@@ -166,6 +167,7 @@ AudioControls::AudioControls( QWidget* parent )
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ) );
     connect( AudioEngine::instance(), SIGNAL( seeked( qint64 ) ), SLOT( onPlaybackSeeked( qint64 ) ) );
     connect( AudioEngine::instance(), SIGNAL( timerMilliSeconds( qint64 ) ), SLOT( onPlaybackTimer( qint64 ) ) );
+    connect( AudioEngine::instance(), SIGNAL( trackPosition( float ) ), SLOT( onTrackPosition( float ) ) );
     connect( AudioEngine::instance(), SIGNAL( volumeChanged( int ) ), SLOT( onVolumeChanged( int ) ) );
     connect( AudioEngine::instance(), SIGNAL( mutedChanged( bool ) ), SLOT( onMutedChanged( bool ) ) );
     connect( AudioEngine::instance(), SIGNAL( controlStateChanged() ), SLOT( onControlStateChanged() ) );
@@ -469,7 +471,10 @@ AudioControls::onPlaybackSeeked( qint64 msec )
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     m_seeked = true;
-    onPlaybackTimer( msec );
+    if ( m_haveTiming )
+    {
+        onPlaybackTimer( msec );
+    }
 }
 
 
@@ -517,6 +522,20 @@ AudioControls::onPlaybackStopped()
 }
 
 
+void 
+AudioControls::onTrackPosition( float position )
+{
+    if (!m_haveTiming)
+    {
+        qint64 duration = AudioEngine::instance()->currentTrackTotalTime();
+        ui->seekSlider->blockSignals( true );
+        ui->seekSlider->setSliderPosition( position * duration );
+        ui->seekSlider->blockSignals( false );
+        m_sliderTimeLine.stop();
+    }
+}
+
+
 void
 AudioControls::onPlaybackTimer( qint64 msElapsed )
 {
@@ -541,7 +560,11 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
     m_phononTickCheckTimer.start( 500 );
 
     if ( msElapsed == 0 )
+    {
+        m_haveTiming = false;
         return;
+    }
+    m_haveTiming = true;
 
     int currentTime = m_sliderTimeLine.currentTime();
     //tDebug( LOGEXTRA ) << Q_FUNC_INFO << "msElapsed =" << msElapsed << "and timer current time =" << currentTime << "and audio engine state is" << (int)AudioEngine::instance()->state();

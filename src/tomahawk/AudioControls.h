@@ -75,6 +75,7 @@ private slots:
     void onPlaybackStopped();
 
     void onPlaybackTimer( qint64 msElapsed );
+    void onTrackPosition( float position );
     void onVolumeChanged( int volume );
     void onMutedChanged( bool muted );
     void onControlStateChanged();
@@ -111,6 +112,7 @@ private:
     QTimer m_phononTickCheckTimer;
     QTimeLine m_sliderTimeLine;
     bool m_seeked;
+    bool m_haveTiming;
     qint64 m_lastSliderCheck;
     qint64 m_lastTextSecondShown;
 

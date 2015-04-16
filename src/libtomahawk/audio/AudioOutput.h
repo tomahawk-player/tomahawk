@@ -79,6 +79,7 @@ signals:
 private:
     void setState( AudioState state );
     void setCurrentTime( qint64 time );
+    void setCurrentPosition( float position );
     void setTotalTime( qint64 time );
 
     void onVlcEvent( const libvlc_event_t* event );
@@ -91,6 +92,8 @@ private:
     bool m_seekable;
     bool m_muted;
     bool m_autoDelete;
+    bool m_havePosition;
+    bool m_haveTiming;
     qreal m_volume;
     qint64 m_currentTime;
     qint64 m_totalTime;

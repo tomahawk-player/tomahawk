@@ -401,10 +401,6 @@ AudioEngine::canSeek()
 {
     Q_D( AudioEngine );
 
-    if ( !d->audioOutput->isSeekable() ) {
-        return false;
-    }
-
     return !d->playlist.isNull() && ( d->playlist.data()->seekRestrictions() != PlaylistModes::NoSeek );
 }
 
@@ -604,6 +600,11 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
         QSharedPointer< QIODevice > io;
         performLoadTrack( result, result->url(), io );
     }
+}
+
+void AudioEngine::positionChanged(float new_position)
+{
+    emit trackPosition( new_position );
 }
 
 
