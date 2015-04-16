@@ -977,7 +977,7 @@ heslo</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.cpp" line="56"/>
         <source>Playlists (*.xspf *.m3u *.jspf)</source>
-        <translation type="unfinished"/>
+        <translation>Seznamy skladeb (*.xspf *.m3u *.jspf)</translation>
     </message>
 </context>
 <context>
@@ -3977,7 +3977,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1258"/>
         <source>Failed to load JSPF playlist</source>
-        <translation type="unfinished"/>
+        <translation>Nepodařilo se nahrát seznam skladeb JSPF</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1266"/>
@@ -4056,7 +4056,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1428"/>
         <source>Copyright 2010 - 2015</source>
-        <translation type="unfinished"/>
+        <translation>Autorské právo 2010 - 2015</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1429"/>
