@@ -55,7 +55,7 @@ static QString s_aeInfoIdentifier = QString( "AUDIOENGINE" );
 void
 AudioEnginePrivate::onStateChanged( AudioOutput::AudioState newState, AudioOutput::AudioState oldState )
 {
-    tDebug() << Q_FUNC_INFO << oldState << newState << expectStop << q_ptr->state();
+    tDebug() << Q_FUNC_INFO << oldState << newState << q_ptr->state();
 
     if ( newState == AudioOutput::Loading )
     {
@@ -127,9 +127,8 @@ AudioEnginePrivate::onStateChanged( AudioOutput::AudioState newState, AudioOutpu
                 break;
         }
 
-        if ( stopped && expectStop )
+        if ( stopped )
         {
-            expectStop = false;
             tDebug() << "Finding next track.";
             if ( q_ptr->canGoNext() )
             {
@@ -143,6 +142,8 @@ AudioEnginePrivate::onStateChanged( AudioOutput::AudioState newState, AudioOutpu
                 q_ptr->stop();
             }
         }
+#if 0
+        //This is obsolete, we always expect stop
         else if ( stopped )
         {
             // We did not expect a Stop here, so do not go to the next track
@@ -152,6 +153,7 @@ AudioEnginePrivate::onStateChanged( AudioOutput::AudioState newState, AudioOutpu
             // an stream that cannot be paused.
             q_ptr->setState( AudioEngine::Stopped );
         }
+#endif
     }
 }
 
@@ -173,7 +175,6 @@ AudioEngine::AudioEngine()
     Q_D( AudioEngine );
 
     d->timeElapsed = 0;
-    d->expectStop = false;
     d->waitingOnNewTrack = false;
     d->state = Stopped;
     d->coverTempFile = 0;
@@ -185,7 +186,6 @@ AudioEngine::AudioEngine()
 
     connect( d->audioOutput, SIGNAL( stateChanged( AudioOutput::AudioState, AudioOutput::AudioState ) ), d_func(), SLOT( onStateChanged( AudioOutput::AudioState, AudioOutput::AudioState ) ) );
     connect( d->audioOutput, SIGNAL( tick( qint64 ) ), SLOT( timerTriggered( qint64 ) ) );
-    connect( d->audioOutput, SIGNAL( aboutToFinish() ), SLOT( onAboutToFinish() ) );
 
     setVolume( TomahawkSettings::instance()->volume() );
 
@@ -1037,13 +1037,6 @@ AudioEngine::onPlaylistNextTrackAvailable()
     }
 }
 
-
-void
-AudioEngine::onAboutToFinish()
-{
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
-    d_func()->expectStop = true;
-}
 
 void
 AudioEngine::timerTriggered( qint64 time )

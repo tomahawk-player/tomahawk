@@ -74,7 +74,6 @@ public slots:
 signals:
     void stateChanged( AudioOutput::AudioState, AudioOutput::AudioState );
     void tick( qint64 );
-    void aboutToFinish();
 
 private:
     void setState( AudioState state );
@@ -97,7 +96,6 @@ private:
     qreal m_volume;
     qint64 m_currentTime;
     qint64 m_totalTime;
-    bool m_aboutToFinish;
     bool m_justSeeked;
 
     std::function< void( int state, int frameNumber, float* samples, int nb_channels, int nb_samples ) > dspPluginCallback;

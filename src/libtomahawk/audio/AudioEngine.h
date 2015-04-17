@@ -187,7 +187,6 @@ private slots:
     void loadPreviousTrack();
     void loadNextTrack();
 
-    void onAboutToFinish();
     void onVolumeChanged( qreal volume );
     void timerTriggered( qint64 time );
 

@@ -37,7 +37,6 @@ private:
     AudioOutput* audioOutput;
 
     unsigned int timeElapsed;
-    bool expectStop;
     bool waitingOnNewTrack;
 
     AudioState state;

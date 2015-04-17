@@ -37,8 +37,6 @@
 #include <vlc/libvlc_events.h>
 #include <vlc/libvlc_version.h>
 
-static const float ABOUT_TO_FINISH_POS = 0.95f;
-
 AudioOutput* AudioOutput::s_instance = 0;
 
 
@@ -59,7 +57,6 @@ AudioOutput::AudioOutput( QObject* parent )
     , m_volume( 1.0 )
     , m_currentTime( 0 )
     , m_totalTime( 0 )
-    , m_aboutToFinish( false )
     , m_justSeeked( false )
     , dspPluginCallback( nullptr )
     , m_vlcInstance( nullptr )
@@ -278,7 +275,6 @@ AudioOutput::setCurrentSource( MediaStream* stream )
         libvlc_media_add_option_flag(m_vlcMedia, imemSeek, libvlc_media_option_trusted);
     }
 
-    m_aboutToFinish = false;
     setState( Stopped );
 }
 
@@ -312,15 +308,6 @@ AudioOutput::setCurrentPosition( float position )
     //tDebug() << Q_FUNC_INFO << position;
     AudioEngine::instance()->positionChanged(position);
     m_havePosition = position > 0.0;
-    if ( position < ABOUT_TO_FINISH_POS )
-    {
-        m_aboutToFinish = false;
-    }
-    else if ( !m_aboutToFinish )
-    {
-        m_aboutToFinish = true;
-        emit aboutToFinish();
-    }
 }
 
 void
@@ -351,19 +338,6 @@ AudioOutput::setCurrentTime( qint64 time )
         m_seekable = false;
     } else {
         m_seekable = true;
-    }
-
-    if ( !m_havePosition )
-    {
-        if ( time < ABOUT_TO_FINISH_POS * total )
-        {
-            m_aboutToFinish = false;
-        }
-        else if ( !m_aboutToFinish )
-        {
-            m_aboutToFinish = true;
-            emit aboutToFinish();
-        }
     }
 }
 
