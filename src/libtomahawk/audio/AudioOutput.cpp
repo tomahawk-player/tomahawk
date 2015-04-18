@@ -228,9 +228,11 @@ AudioOutput::setCurrentSource( MediaStream* stream )
 
         case MediaStream::Url:
             tDebug() << Q_FUNC_INFO << "MediaStream::Url:" << stream->url();
-            if ( stream->url().scheme().isEmpty() ) {
+            if ( stream->url().scheme().isEmpty() )
+            {
                 url = "file:///";
-                if ( stream->url().isRelative() ) {
+                if ( stream->url().isRelative() )
+                {
                     url.append( QFile::encodeName( QDir::currentPath() ) + '/' );
                 }
             }

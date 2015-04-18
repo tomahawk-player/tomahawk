@@ -644,13 +644,13 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString 
         if ( !( TomahawkUtils::isLocalResult( url ) || TomahawkUtils::isHttpResult( url ) || TomahawkUtils::isRtmpResult( url )  )
              && ( !io || io.isNull() ) )
         {
-            tLog() << "Error getting iodevice for" << result->url();
+            tLog() << Q_FUNC_INFO << "Error getting iodevice for" << result->url();
             err = true;
         }
 
         if ( !err )
         {
-            tLog() << "Starting new song:" << url;
+            tLog() << Q_FUNC_INFO << "Starting new song:" << url;
             d->state = Loading;
             emit loading( d->currentTrack );
 
@@ -666,7 +666,7 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString 
                     // and AudioOutput handles the deletion of the
                     // QNR_IODeviceStream object
                     ioToKeep.clear();
-                   d->audioOutput->setAutoDelete( true );
+                    d->audioOutput->setAutoDelete( true );
                 }
                 else
                 {
@@ -690,7 +690,7 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString 
                         TomahawkUtils::urlSetQuery( furl, QString( url.mid( url.indexOf( '?' ) + 1 ) ) );
                     }
 
-                    tLog( LOGVERBOSE ) << "Passing to VLC:" << furl;
+                    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Passing to VLC:" << furl;
                     d->audioOutput->setCurrentSource( furl );
                 }
                 else
@@ -699,7 +699,7 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString 
                     if ( furl.startsWith( "file://" ) )
                         furl = furl.right( furl.length() - 7 );
 
-                    tLog( LOGVERBOSE ) << "Passing to VLC:" << QUrl::fromLocalFile( furl );
+                    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Passing to VLC:" << QUrl::fromLocalFile( furl );
                     d->audioOutput->setCurrentSource( QUrl::fromLocalFile( furl ) );
                 }
 
@@ -760,7 +760,7 @@ AudioEngine::loadPreviousTrack()
         setCurrentTrackPlaylist( d->playlist );
     }
 
-    if ( !result.isNull() )
+    if ( result )
         loadTrack( result );
     else
         stop();
@@ -810,7 +810,7 @@ AudioEngine::loadNextTrack()
         }
     }
 
-    if ( !result.isNull() )
+    if ( result )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Got next item, loading track";
         loadTrack( result );
@@ -873,7 +873,7 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
 
     setPlaylist( playlist );
 
-    if ( playlist.isNull() && !fromQuery.isNull() )
+    if ( !playlist && fromQuery )
     {
         setCurrentTrackPlaylist( playlistinterface_ptr( new SingleTrackPlaylistInterface( fromQuery ) ) );
     }
@@ -882,7 +882,7 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
         setCurrentTrackPlaylist( playlist );
     }
 
-    if ( !result.isNull() )
+    if ( result )
     {
         loadTrack( result );
     }
