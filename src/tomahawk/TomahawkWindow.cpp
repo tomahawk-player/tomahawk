@@ -118,7 +118,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     , ui( new Ui::TomahawkWindow )
     , m_searchWidget( 0 )
     , m_trayIcon( 0 )
-    , m_audioRetryCounter( 0 )
 {
 #ifndef Q_OS_MAC
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
@@ -1257,23 +1256,20 @@ TomahawkWindow::onXSPFError( XSPFLoader::XSPFErrorCode error )
     JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( msg, 15 ) );
 }
 
+
 void
-TomahawkWindow::onJSPFError() {
+TomahawkWindow::onJSPFError()
+{
     JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Failed to load JSPF playlist"), 15 ) );
 }
+
 
 void
 TomahawkWindow::onAudioEngineError( AudioEngine::AudioErrorCode /* error */ )
 {
     QString msg = tr( "Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped." );
-
     tLog() << msg;
-
     JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( msg, 15 ) );
-
-    if ( m_audioRetryCounter < 3 )
-        AudioEngine::instance()->play();
-    m_audioRetryCounter++;
 }
 
 
@@ -1347,8 +1343,6 @@ TomahawkWindow::createPlaylist()
 void
 TomahawkWindow::audioStarted()
 {
-    m_audioRetryCounter = 0;
-
     ActionCollection::instance()->getAction( "playPause" )->setIcon( ImageRegistry::instance()->icon( RESPATH "images/pause.svg" ) );
     ActionCollection::instance()->getAction( "playPause" )->setText( tr( "Pause" ) );
     ActionCollection::instance()->getAction( "stop" )->setEnabled( true );

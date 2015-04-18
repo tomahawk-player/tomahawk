@@ -209,7 +209,6 @@ private:
 
     Tomahawk::result_ptr m_currentTrack;
     QString m_windowTitle;
-    int m_audioRetryCounter;
 };
 
 #endif // TOMAHAWKWINDOW_H
