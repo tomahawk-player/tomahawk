@@ -315,32 +315,17 @@ AudioOutput::setCurrentPosition( float position )
 void
 AudioOutput::setCurrentTime( qint64 time )
 {
-    // FIXME : This is a bit hacky, but m_totalTime is only used to determine
-    // if we are about to finish
+    // FIXME This is a bit hacky, but m_totalTime is only used to determine if we are about to finish
     if ( m_totalTime == 0 )
     {
         m_totalTime = AudioEngine::instance()->currentTrackTotalTime();
     }
 
     m_currentTime = time;
+    m_seekable = ( time > 0 );
     emit tick( time );
 
-    //    tDebug() << Q_FUNC_INFO << "Current time:" << m_currentTime << "/" << m_totalTime;
-
-    // FIXME pt 2 : we use temporary variable to avoid overriding m_totalTime
-    // in the case it is < 0 (which means that the media is not seekable)
-    qint64 total = m_totalTime;
-    if ( total <= 0 )
-    {
-        total = AudioEngine::instance()->currentTrackTotalTime();
-    }
-
-    if ( time <= 0 )
-    {
-        m_seekable = false;
-    } else {
-        m_seekable = true;
-    }
+    // tDebug() << Q_FUNC_INFO << "Current time:" << m_currentTime << "/" << m_totalTime;
 }
 
 
