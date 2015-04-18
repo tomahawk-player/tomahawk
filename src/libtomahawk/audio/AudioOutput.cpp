@@ -345,7 +345,7 @@ AudioOutput::setTotalTime( qint64 time )
     {
         m_totalTime = time;
         // emit current time to refresh total time
-        emit tick( time );
+        emit tick( m_currentTime );
     }
 }
 
