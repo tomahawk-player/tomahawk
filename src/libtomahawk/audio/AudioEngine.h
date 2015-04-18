@@ -147,8 +147,6 @@ public slots:
     void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode );
     void setShuffled( bool enabled );
 
-    void positionChanged(float new_position);
-
 signals:
     void loading( const Tomahawk::result_ptr track );
     void started( const Tomahawk::result_ptr track );
@@ -189,6 +187,7 @@ private slots:
 
     void onVolumeChanged( qreal volume );
     void timerTriggered( qint64 time );
+    void onPositionChanged( float new_position );
 
     void setCurrentTrack( const Tomahawk::result_ptr& result );
     void onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type );

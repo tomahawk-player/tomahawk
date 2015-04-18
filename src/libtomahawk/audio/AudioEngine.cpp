@@ -184,6 +184,7 @@ AudioEngine::AudioEngine()
 
     connect( d->audioOutput, SIGNAL( stateChanged( AudioOutput::AudioState, AudioOutput::AudioState ) ), d_func(), SLOT( onStateChanged( AudioOutput::AudioState, AudioOutput::AudioState ) ) );
     connect( d->audioOutput, SIGNAL( tick( qint64 ) ), SLOT( timerTriggered( qint64 ) ) );
+    connect( d->audioOutput, SIGNAL( positionChanged( float ) ), SLOT( onPositionChanged( float ) ) );
 
     setVolume( TomahawkSettings::instance()->volume() );
 
@@ -600,7 +601,9 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
     }
 }
 
-void AudioEngine::positionChanged(float new_position)
+
+void
+AudioEngine::onPositionChanged( float new_position )
 {
     emit trackPosition( new_position );
 }

@@ -74,6 +74,7 @@ public slots:
 signals:
     void stateChanged( AudioOutput::AudioState, AudioOutput::AudioState );
     void tick( qint64 );
+    void positionChanged( float );
 
 private:
     void setState( AudioState state );

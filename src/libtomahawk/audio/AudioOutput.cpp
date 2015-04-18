@@ -302,13 +302,15 @@ AudioOutput::currentTime() const
     return m_currentTime;
 }
 
+
 void
 AudioOutput::setCurrentPosition( float position )
 {
     //tDebug() << Q_FUNC_INFO << position;
-    AudioEngine::instance()->positionChanged(position);
+    emit positionChanged( position );
     m_havePosition = position > 0.0;
 }
+
 
 void
 AudioOutput::setCurrentTime( qint64 time )
