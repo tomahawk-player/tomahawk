@@ -275,7 +275,7 @@ AudioOutput::setCurrentSource( MediaStream* stream )
         libvlc_media_add_option_flag(m_vlcMedia, imemSeek, libvlc_media_option_trusted);
     }
 
-    setState( Stopped );
+//    setState( Stopped );
 }
 
 
@@ -353,18 +353,17 @@ AudioOutput::setTotalTime( qint64 time )
 void
 AudioOutput::play()
 {
-    tDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO << state();
 
-    if ( libvlc_media_player_is_playing( m_vlcPlayer ) )
+    if ( state() == Paused )
     {
         libvlc_media_player_set_pause( m_vlcPlayer, 0 );
     }
     else
     {
+        setState( Loading );
         libvlc_media_player_play( m_vlcPlayer );
     }
-
-    setState( Playing );
 }
 
 
@@ -374,7 +373,7 @@ AudioOutput::pause()
     tDebug() << Q_FUNC_INFO;
 
     libvlc_media_player_set_pause( m_vlcPlayer, 1 );
-    setState( Paused );
+//    setState( Paused );
 }
 
 
@@ -494,12 +493,11 @@ AudioOutput::onVlcEvent( const libvlc_event_t* event )
         case libvlc_MediaPlayerLengthChanged:
         //    tDebug() << Q_FUNC_INFO << " : length changed : " << event->u.media_player_length_changed.new_length;
             break;
-        case libvlc_MediaPlayerNothingSpecial:
-        case libvlc_MediaPlayerOpening:
-        case libvlc_MediaPlayerBuffering:
         case libvlc_MediaPlayerPlaying:
+            setState( Playing );
+            break;
         case libvlc_MediaPlayerPaused:
-        case libvlc_MediaPlayerStopped:
+            setState( Paused );
             break;
         case libvlc_MediaPlayerEndReached:
             setState( Stopped );
@@ -509,6 +507,10 @@ AudioOutput::onVlcEvent( const libvlc_event_t* event )
             // Don't call stop() here - it will deadlock libvlc
             setState( Error );
             break;
+        case libvlc_MediaPlayerNothingSpecial:
+        case libvlc_MediaPlayerOpening:
+        case libvlc_MediaPlayerBuffering:
+        case libvlc_MediaPlayerStopped:
         case libvlc_MediaPlayerVout:
         case libvlc_MediaPlayerMediaChanged:
         case libvlc_MediaPlayerForward:
