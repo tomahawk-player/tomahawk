@@ -522,10 +522,10 @@ AudioControls::onPlaybackStopped()
 }
 
 
-void 
+void
 AudioControls::onTrackPosition( float position )
 {
-    if (!m_haveTiming)
+    if ( !m_haveTiming )
     {
         qint64 duration = AudioEngine::instance()->currentTrackTotalTime();
         ui->seekSlider->blockSignals( true );

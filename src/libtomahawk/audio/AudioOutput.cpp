@@ -483,7 +483,7 @@ AudioOutput::onVlcEvent( const libvlc_event_t* event )
             setCurrentTime( event->u.media_player_time_changed.new_time );
             break;
         case libvlc_MediaPlayerPositionChanged:
-            setCurrentPosition(event->u.media_player_position_changed.new_position); 
+            setCurrentPosition( event->u.media_player_position_changed.new_position );
             break;
         case libvlc_MediaPlayerSeekableChanged:
          //   tDebug() << Q_FUNC_INFO << " : seekable changed : " << event->u.media_player_seekable_changed.new_seekable;
