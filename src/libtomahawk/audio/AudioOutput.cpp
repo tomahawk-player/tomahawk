@@ -385,6 +385,7 @@ AudioOutput::stop()
     tDebug() << Q_FUNC_INFO;
 
     libvlc_media_player_stop( m_vlcPlayer );
+    m_currentTime = 0;
     setState( Stopped );
 }
 
