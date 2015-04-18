@@ -77,7 +77,7 @@ conectarse y transmitir música por usted?</translation>
     <message>
         <location filename="../src/tomahawk/widgets/AccountWidget.cpp" line="131"/>
         <source>Invite</source>
-        <translation type="unfinished"/>
+        <translation>Invitar</translation>
     </message>
 </context>
 <context>
@@ -85,7 +85,7 @@ conectarse y transmitir música por usted?</translation>
     <message>
         <location filename="../src/tomahawk/widgets/AccountsToolButton.cpp" line="90"/>
         <source>Configure Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Configurar cuentas</translation>
     </message>
 </context>
 <context>
@@ -510,7 +510,7 @@ conectarse y transmitir música por usted?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="125"/>
         <source>Download All</source>
-        <translation type="unfinished"/>
+        <translation>Descargar todo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="430"/>
@@ -647,7 +647,7 @@ conectarse y transmitir música por usted?</translation>
     <message>
         <location filename="../src/libtomahawk/DownloadManager.cpp" line="264"/>
         <source>Tomahawk finished downloading %1 by %2.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk terminó de descargar %1 de %2.</translation>
     </message>
 </context>
 <context>
@@ -824,7 +824,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="73"/>
         <source>Refresh</source>
-        <translation type="unfinished"/>
+        <translation>Actualizar</translation>
     </message>
 </context>
 <context>
@@ -1309,7 +1309,7 @@ de un solo uso (OTP)</translation>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="294"/>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="309"/>
         <source>View in Finder</source>
-        <translation type="unfinished"/>
+        <translation>Ver en Finder</translation>
     </message>
 </context>
 <context>
@@ -1714,22 +1714,22 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="221"/>
         <source>MP3</source>
-        <translation type="unfinished"/>
+        <translation>MP3</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="222"/>
         <source>FLAC</source>
-        <translation type="unfinished"/>
+        <translation>FLAC</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="223"/>
         <source>M4A</source>
-        <translation type="unfinished"/>
+        <translation>M4A</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="224"/>
         <source>MP4</source>
-        <translation type="unfinished"/>
+        <translation>MP4</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="260"/>
@@ -1793,7 +1793,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Accounts.ui" line="57"/>
         <source>Filter by Capability:</source>
-        <translation>Filtrar por Capacidad:</translation>
+        <translation>Filtrar por capacidad:</translation>
     </message>
 </context>
 <context>
@@ -1933,7 +1933,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="56"/>
         <source>Preferred download format:</source>
-        <translation type="unfinished"/>
+        <translation>Formato de descarga preferido:</translation>
     </message>
 </context>
 <context>
@@ -2578,7 +2578,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="202"/>
         <source>Logging in...</source>
-        <translation>Iniciando sesión…</translation>
+        <translation>Accediendo…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="239"/>
@@ -2628,7 +2628,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/accounts/xmpp/XmppAccount.h" line="53"/>
         <source>Login to connect to your Jabber/XMPP contacts that also use Tomahawk.</source>
-        <translation>Logéate para conectar tus contactos de Jabber/XMPP que también usan Tomahawk.</translation>
+        <translation>Acceda para conectar con sus contactos en Jabber/XMPP que también usen Tomahawk.</translation>
     </message>
 </context>
 <context>
@@ -2641,7 +2641,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="157"/>
         <source>You forgot to enter your username!</source>
-        <translation>Olvidó introducir su nombre de usuario.</translation>
+        <translation>Olvidó proporcionar su nombre de usuario.</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="165"/>
@@ -4131,7 +4131,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1427"/>
         <source>Copyright 2010 - 2015</source>
-        <translation type="unfinished"/>
+        <translation>© 2010–2015</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1428"/>
