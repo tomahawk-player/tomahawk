@@ -67,7 +67,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     ui->topHitsLabel->setVisible( false );
 
     {
-        QScrollArea* area = new QScrollArea();
+/*        QScrollArea* area = new QScrollArea();
         area->setWidgetResizable( true );
         area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         area->setWidget( widget );
@@ -77,11 +77,11 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
         area->setPalette( pal );
         area->setAutoFillBackground( true );
         area->setFrameShape( QFrame::NoFrame );
-        area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+        area->setAttribute( Qt::WA_MacShowFocusRect, 0 );*/
 
         QVBoxLayout* layout = new QVBoxLayout();
         layout->addWidget( m_headerWidget );
-        layout->addWidget( area );
+        layout->addWidget( widget );
         setLayout( layout );
         TomahawkUtils::unmarginLayout( layout );
     }
