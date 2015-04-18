@@ -56,13 +56,14 @@ void
 AudioEnginePrivate::onStateChanged( AudioOutput::AudioState newState, AudioOutput::AudioState oldState )
 {
     tDebug() << Q_FUNC_INFO << oldState << newState << q_ptr->state();
+    AudioEngine::AudioState previousState = q_ptr->state();
 
     if ( newState == AudioOutput::Loading )
     {
         // We don't emit this state to listeners - yet.
         state = AudioEngine::Loading;
     }
-    if ( newState == AudioOutput::Buffering )
+    else if ( newState == AudioOutput::Buffering )
     {
         if ( underrunCount > UNDERRUNTHRESHOLD && !underrunNotified )
         {
@@ -72,14 +73,14 @@ AudioEnginePrivate::onStateChanged( AudioOutput::AudioState newState, AudioOutpu
         else
             underrunCount++;
     }
-    if ( newState == AudioOutput::Error )
+    else if ( newState == AudioOutput::Error )
     {
-        q_ptr->stop( AudioEngine::UnknownError );
-        tDebug() << "AudioOutput Error";
+        q_ptr->setState( AudioEngine::Stopped );
+        tDebug() << Q_FUNC_INFO << "AudioOutput Error";
         emit q_ptr->error( AudioEngine::UnknownError );
         q_ptr->setState( AudioEngine::Error );
     }
-    if ( newState == AudioOutput::Playing )
+    else if ( newState == AudioOutput::Playing )
     {
         bool emitSignal = false;
         if ( q_ptr->state() != AudioEngine::Paused && q_ptr->state() != AudioEngine::Playing )
@@ -89,47 +90,38 @@ AudioEnginePrivate::onStateChanged( AudioOutput::AudioState newState, AudioOutpu
             emitSignal = true;
         }
         q_ptr->setState( AudioEngine::Playing );
+        audioRetryCounter = 0;
 
         if ( emitSignal )
             emit q_ptr->started( currentTrack );
     }
-    if ( newState == AudioOutput::Stopped && oldState == AudioOutput::Paused )
+    else if ( newState == AudioOutput::Paused )
+    {
+        q_ptr->setState( AudioEngine::Paused );
+    }
+    else if ( newState == AudioOutput::Stopped )
     {
         q_ptr->setState( AudioEngine::Stopped );
     }
 
-    if ( oldState == AudioOutput::Playing )
+    if ( previousState != AudioEngine::Stopped &&
+         ( oldState == AudioOutput::Playing || oldState == AudioOutput::Loading ) )
     {
-        bool stopped = false;
-        switch ( newState )
+        bool retry = false;
+        if ( newState == AudioOutput::Error )
         {
-            case AudioOutput::Paused:
-            {
-                if ( audioOutput && currentTrack )
-                {
-                    qint64 duration = audioOutput->totalTime() > 0 ? audioOutput->totalTime() : currentTrack->track()->duration() * 1000;
-                    stopped = ( duration - 1000 < audioOutput->currentTime() );
-                }
-                else
-                    stopped = true;
+            retry = ( audioRetryCounter < 2 );
+            audioRetryCounter++;
 
-                if ( !stopped )
-                    q_ptr->setState( AudioEngine::Paused );
-
-                break;
-            }
-            case AudioOutput::Stopped:
+            if ( !retry )
             {
-                stopped = true;
-                break;
+                q_ptr->stop( AudioEngine::UnknownError );
             }
-            default:
-                break;
         }
 
-        if ( stopped )
+        if ( newState == AudioOutput::Stopped || retry )
         {
-            tDebug() << "Finding next track.";
+            tDebug() << Q_FUNC_INFO << "Finding next track." << oldState << newState;
             if ( q_ptr->canGoNext() )
             {
                 q_ptr->loadNextTrack();
@@ -142,16 +134,6 @@ AudioEnginePrivate::onStateChanged( AudioOutput::AudioState newState, AudioOutpu
                 q_ptr->stop();
             }
         }
-        /* This is obsolete, we always expect stop
-        else if ( stopped )
-        {
-            // We did not expect a Stop here, so do not go to the next track
-            // but change the AudioEngine state
-            //
-            // A possible scenario where we can reach this is point if we pause
-            // an stream that cannot be paused.
-            q_ptr->setState( AudioEngine::Stopped );
-        }*/
     }
 }
 
@@ -211,7 +193,6 @@ AudioEngine::playPause()
         QMetaObject::invokeMethod( this, "playPause", Qt::QueuedConnection );
         return;
     }
-
 
     if ( isPlaying() )
         pause();
@@ -284,9 +265,6 @@ AudioEngine::stop( AudioErrorCode errorCode )
     Q_D( AudioEngine );
 
     tDebug() << Q_FUNC_INFO << errorCode << isStopped();
-
-    if ( isStopped() )
-        return;
 
     if ( errorCode == NoError )
         setState( Stopped );
@@ -605,6 +583,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 void
 AudioEngine::onPositionChanged( float new_position )
 {
+//    tDebug() << Q_FUNC_INFO << new_position << state();
     emit trackPosition( new_position );
 }
 

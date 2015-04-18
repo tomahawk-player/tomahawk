@@ -14,6 +14,7 @@ Q_OBJECT
 public:
     AudioEnginePrivate( AudioEngine* q )
         : q_ptr ( q )
+        , audioRetryCounter( 0 )
         , underrunCount( 0 )
         , underrunNotified( false )
     {
@@ -43,6 +44,7 @@ private:
     QQueue< AudioState > stateQueue;
     QTimer stateQueueTimer;
 
+    int audioRetryCounter;
     quint8 underrunCount;
     bool underrunNotified;
 
