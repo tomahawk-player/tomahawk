@@ -505,11 +505,8 @@ AudioOutput::onVlcEvent( const libvlc_event_t* event )
             setState( Stopped );
             break;
         case libvlc_MediaPlayerEncounteredError:
-            tDebug() << Q_FUNC_INFO << "LibVLC error : MediaPlayerEncounteredError. Stopping";
-            if ( m_vlcPlayer != nullptr )
-            {
-                stop();
-            }
+            tDebug() << Q_FUNC_INFO << "LibVLC error: MediaPlayerEncounteredError. Stopping";
+            // Don't call stop() here - it will deadlock libvlc
             setState( Error );
             break;
         case libvlc_MediaPlayerVout:
