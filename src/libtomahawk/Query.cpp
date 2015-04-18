@@ -249,12 +249,6 @@ Query::refreshResults()
 }
 
 
-Query::Query()
-    : d_ptr( new QueryPrivate( this ) )
-{
-}
-
-
 void
 Query::onResultStatusChanged()
 {

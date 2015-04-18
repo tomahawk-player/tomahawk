@@ -144,7 +144,6 @@ private slots:
     void refreshResults();
 
 private:
-    Query();
     explicit Query( const track_ptr& track, const QID& qid, bool autoResolve );
     /**
      * Respective constructor for getFixed
