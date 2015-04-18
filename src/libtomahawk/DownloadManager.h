@@ -59,8 +59,7 @@ public slots:
 signals:
     void jobAdded( const downloadjob_ptr& job );
     void jobRemoved( const downloadjob_ptr& job );
-
-    void stateChanged( DownloadManagerState newState, DownloadManagerState oldState );
+    void jobFinished();
 
 private slots:
     void onJobFinished();

@@ -162,8 +162,8 @@ DownloadManager::addJob( const downloadjob_ptr& job )
 
     connect( job.data(), SIGNAL( finished() ), SLOT( onJobFinished() ) );
     connect( job.data(), SIGNAL( finished() ), SLOT( checkJobs() ) );
+    connect( job.data(), SIGNAL( finished() ), SIGNAL( jobFinished() ) );
     connect( job.data(), SIGNAL( stateChanged( DownloadJob::TrackState, DownloadJob::TrackState ) ), SLOT( checkJobs() ) ) ;
-//    connect( job.data(), SIGNAL( stateChanged( DownloadJob::TrackState, DownloadJob::TrackState ) ), SIGNAL( stateChanged( DownloadJob::TrackState, DownloadJob::TrackState ) ) );
 
     checkJobs();
     return true;
@@ -242,10 +242,6 @@ DownloadManager::checkJobs()
     if ( state() == DownloadManager::Waiting && !currentJob().isNull() )
     {
         downloadjob_ptr job = currentJob();
-/*        connect( job.data(), SIGNAL( finished() ), SLOT( checkJobs() ) );
-        connect( job.data(), SIGNAL( stateChanged( DownloadJob::TrackState, DownloadJob::TrackState ) ), SLOT( checkJobs() ) ) ;
-        connect( job.data(), SIGNAL( stateChanged( DownloadJob::TrackState, DownloadJob::TrackState ) ), SIGNAL( stateChanged( Track::TrackState, Track::TrackState ) ) );*/
-
         job->download();
     }
 }
