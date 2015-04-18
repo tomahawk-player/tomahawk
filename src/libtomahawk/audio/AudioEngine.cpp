@@ -559,11 +559,18 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
     Q_D( AudioEngine );
     tDebug( LOGEXTRA ) << Q_FUNC_INFO << ( result.isNull() ? QString() : result->url() );
 
-    if ( result.isNull() )
+    if ( !result )
     {
         stop();
         return;
     }
+
+    // We do this to stop the audio as soon as a user activated another track
+    // If we don't block the audioOutput signals, the state change will trigger
+    // loading yet another track
+    d->audioOutput->blockSignals( true );
+    d->audioOutput->stop();
+    d->audioOutput->blockSignals( false );
 
     setCurrentTrack( result );
 
