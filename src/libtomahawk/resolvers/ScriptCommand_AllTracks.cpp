@@ -68,6 +68,7 @@ ScriptCommand_AllTracks::exec()
 
     if ( m_album )
     {
+        QVariantMap arguments;
         arguments[ "artist" ] = m_album->artist()->name();
         arguments[ "album" ] = m_album->name();
 
@@ -75,7 +76,7 @@ ScriptCommand_AllTracks::exec()
     }
     else
     {
-        job = collection->scriptObject()->invoke( "tracks", arguments );
+        job = collection->scriptObject()->invoke( "tracks" );
     }
 
 
