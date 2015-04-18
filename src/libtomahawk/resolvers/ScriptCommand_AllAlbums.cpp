@@ -141,7 +141,7 @@ ScriptCommand_AllAlbums::parseAlbumVariantList( const QList< Tomahawk::artist_pt
 {
     QList< Tomahawk::album_ptr > results;
 
-    if (artists.length() != 1 && reslist.length() != artists.length())
+    if ( artists.length() != 1 && reslist.length() != artists.length() )
     {
         tLog() << "artists" << artists.length();
         tLog() << "albums" << reslist.length();
@@ -151,7 +151,7 @@ ScriptCommand_AllAlbums::parseAlbumVariantList( const QList< Tomahawk::artist_pt
     }
 
     bool useArtistList = ( artists.length() > 1 );
-    for( int i=0; i<reslist.length(); i++ )
+    for( int i = 0; i < reslist.length(); i++ )
     {
         const QString val = reslist[ i ].toString();
         if ( val.trimmed().isEmpty() )

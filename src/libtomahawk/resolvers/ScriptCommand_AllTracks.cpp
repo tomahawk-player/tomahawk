@@ -66,14 +66,7 @@ ScriptCommand_AllTracks::exec()
 
     ScriptJob* job;
 
-    QVariantMap arguments;
-// TODO: implement filter
-//    if ( !m_filter.isEmpty() )
-//    {
-//        arguments[ "filter" ] = m_filter;
-//    }
-
-    if( m_album )
+    if ( m_album )
     {
         arguments[ "artist" ] = m_album->artist()->name();
         arguments[ "album" ] = m_album->name();
@@ -95,9 +88,9 @@ void
 ScriptCommand_AllTracks::reportFailure()
 {
     if ( m_album && m_collection )
-        tDebug() << Q_FUNC_INFO << "for collection" << m_collection->name() << " artist" << m_album->artist()->name() << " album" << m_album->name();
+        tDebug() << Q_FUNC_INFO << "for collection" << m_collection->name() << "artist" << m_album->artist()->name() << "album" << m_album->name();
     else if ( m_collection )
-        tDebug() << Q_FUNC_INFO << "for collection" << m_collection->name() << " (no more information available)";
+        tDebug() << Q_FUNC_INFO << "for collection" << m_collection->name() << "(no more information available)";
     else
         tDebug() << Q_FUNC_INFO;
 
