@@ -61,10 +61,10 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     ui->albumView->trackView()->setPlayableModel( m_tracksModel );
     ui->albumView->setCaption( tr( "Album Details" ) );
 
-    ui->topHits->setStyleSheet( QString( "QListView { background-color: %1; }" ).arg( TomahawkStyle::PAGE_BACKGROUND.name() ) );
+/*    ui->topHits->setStyleSheet( QString( "QListView { background-color: %1; }" ).arg( TomahawkStyle::PAGE_BACKGROUND.name() ) );
     TomahawkStyle::stylePageFrame( ui->trackFrame );
     ui->topHits->setVisible( false );
-    ui->topHitsLabel->setVisible( false );
+    ui->topHitsLabel->setVisible( false );*/
 
     {
 /*        QScrollArea* area = new QScrollArea();
@@ -87,7 +87,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     }
 
     MetaPlaylistInterface* mpl = new MetaPlaylistInterface();
-    mpl->addChildInterface( ui->topHits->playlistInterface() );
+//    mpl->addChildInterface( ui->topHits->playlistInterface() );
     mpl->addChildInterface( ui->albumView->playlistInterface() );
     m_playlistInterface = playlistinterface_ptr( mpl );
 
@@ -115,8 +115,8 @@ AlbumInfoWidget::isBeingPlayed() const
     if ( ui->albumView && ui->albumView->isBeingPlayed() )
         return true;
 
-    if ( ui->topHits && ui->topHits->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
-        return true;
+/*    if ( ui->topHits && ui->topHits->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+        return true;*/
 
     return false;
 }
