@@ -142,8 +142,7 @@ AudioEnginePrivate::onStateChanged( AudioOutput::AudioState newState, AudioOutpu
                 q_ptr->stop();
             }
         }
-#if 0
-        //This is obsolete, we always expect stop
+        /* This is obsolete, we always expect stop
         else if ( stopped )
         {
             // We did not expect a Stop here, so do not go to the next track
@@ -152,8 +151,7 @@ AudioEnginePrivate::onStateChanged( AudioOutput::AudioState newState, AudioOutpu
             // A possible scenario where we can reach this is point if we pause
             // an stream that cannot be paused.
             q_ptr->setState( AudioEngine::Stopped );
-        }
-#endif
+        }*/
     }
 }
 
