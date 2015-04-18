@@ -425,8 +425,8 @@ AudioOutput::seek( qint64 milliseconds )
 bool
 AudioOutput::isSeekable() const
 {
-    tDebug() << Q_FUNC_INFO << m_seekable << m_havePosition << m_totalTime << libvlc_media_player_is_seekable( m_vlcPlayer );
-    return !m_havePosition || (libvlc_media_player_is_seekable( m_vlcPlayer ) && m_totalTime > 0);
+    // tDebug() << Q_FUNC_INFO << m_seekable << m_havePosition << m_totalTime << libvlc_media_player_is_seekable( m_vlcPlayer );
+    return m_havePosition || (libvlc_media_player_is_seekable( m_vlcPlayer ) && m_totalTime > 0 );
 }
 
 
