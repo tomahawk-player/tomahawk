@@ -276,6 +276,27 @@ AudioOutput::setCurrentSource( MediaStream* stream )
         const char* imemSeek = QString( "imem-seek=%1" ).arg( (uintptr_t)&MediaStream::seekCallback ).toLatin1().constData();
         libvlc_media_add_option_flag(m_vlcMedia, imemSeek, libvlc_media_option_trusted);
     }
+    if ( qApp->arguments().contains( "--chromecast-ip" ) )
+    {
+        // This is very basic chromecast support through VLC 3+.
+        // Totally unstable, unusable and will suck more CPU than you can think of.
+        // If you want to improve this, please talk to the guys in #videolan and
+        // support them.
+        //
+        // Knonw problems:
+        // 1. It does not work eventhough the IP is correct.
+        //    -> Open vlc with the same commandline and accept the Certificate in the VLC UI.
+        if ( qApp->arguments().length() > qApp->arguments().indexOf( "--chromecast-ip" ) + 1 )
+        {
+            QString castIP = qApp->arguments().at( qApp->arguments().indexOf( "--chromecast-ip" ) + 1 );
+            QString sout( ":sout=#transcode{vcodec=none,acodec=vorb,ab=320,channels=2,samplerate=44100}:chromecast{ip=%1,mux=webm}" );
+            libvlc_media_add_option( m_vlcMedia, sout.arg( castIP ).toLatin1().constData() );
+        }
+        else
+        {
+            tLog() << Q_FUNC_INFO << "Chromecast option but no IP supplied.";
+        }
+    }
 
 //    setState( Stopped );
 }
