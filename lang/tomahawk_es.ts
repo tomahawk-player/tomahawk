@@ -285,11 +285,6 @@ conectarse y transmitir música por usted?</translation>
 <context>
     <name>AlbumInfoWidget</name>
     <message>
-        <location filename="../src/libtomahawk/viewpages/AlbumViewPage.ui" line="60"/>
-        <source>Top Hits</source>
-        <translation>Mejores éxitos</translation>
-    </message>
-    <message>
         <location filename="../src/libtomahawk/viewpages/AlbumViewPage.cpp" line="62"/>
         <source>Album Details</source>
         <translation>Detalles del álbum</translation>
@@ -373,29 +368,29 @@ conectarse y transmitir música por usted?</translation>
 <context>
     <name>AudioControls</name>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="108"/>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="339"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="109"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="341"/>
         <source>Shuffle</source>
         <translation>Aleatorio</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="109"/>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="340"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="110"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="342"/>
         <source>Repeat</source>
         <translation>Repetir</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="337"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="339"/>
         <source>Time Elapsed</source>
         <translation>Tiempo transcurrido</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="338"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="340"/>
         <source>Time Remaining</source>
         <translation>Tiempo restante</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="343"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="345"/>
         <source>Playing from %1</source>
         <translation>Reproduciendo de %1</translation>
     </message>
@@ -403,22 +398,22 @@ conectarse y transmitir música por usted?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="924"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="912"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Tomahawk no pudo encontrar la pista «%1» de %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="948"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="936"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Tomahawk no pudo encontrar el artista «%1»</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="974"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="962"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Tomahawk no pudo encontrar el álbum «%1» de %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1011"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="999"/>
         <source>Sorry, couldn&apos;t find any playable tracks</source>
         <translation>No se encontraron pistas que se puedan reproducir</translation>
     </message>
@@ -645,7 +640,7 @@ conectarse y transmitir música por usted?</translation>
 <context>
     <name>DownloadManager</name>
     <message>
-        <location filename="../src/libtomahawk/DownloadManager.cpp" line="264"/>
+        <location filename="../src/libtomahawk/DownloadManager.cpp" line="260"/>
         <source>Tomahawk finished downloading %1 by %2.</source>
         <translation>Tomahawk terminó de descargar %1 de %2.</translation>
     </message>
@@ -3973,173 +3968,173 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
         <translation>Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="308"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="602"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="307"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="601"/>
         <source>Back</source>
         <translation>Atrás</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="311"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="310"/>
         <source>Go back one page</source>
         <translation>Ir una página hacia atrás</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="318"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="317"/>
         <source>Forward</source>
         <translation>Adelante</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="321"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="320"/>
         <source>Go forward one page</source>
         <translation>Ir una página hacia adelante</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="238"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1539"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="237"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1533"/>
         <source>Hide Menu Bar</source>
         <translation>Ocultar barra de menús</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="238"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1533"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="237"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1527"/>
         <source>Show Menu Bar</source>
         <translation>Mostrar barra de menús</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="361"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="360"/>
         <source>&amp;Main Menu</source>
         <translation>&amp;Menú principal</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="609"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="959"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="971"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="608"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="958"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="970"/>
         <source>Play</source>
         <translation>Reproducir</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="615"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="614"/>
         <source>Next</source>
         <translation>Siguiente</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="628"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1020"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1027"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="627"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1019"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1026"/>
         <source>Love</source>
         <translation>Favorito</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1015"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1014"/>
         <source>Unlove</source>
         <translation>Quitar de favoritos</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1151"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1150"/>
         <source>Exit Full Screen</source>
         <translation>Salir de pantalla completa</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1169"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1168"/>
         <source>Enter Full Screen</source>
         <translation>Modo a pantalla completa</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1248"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1247"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>Esta no es una lista de reproducción XSPF válida.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1252"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1251"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>Algunas pistas en la lista de reproducción no contienen artista ni título. Éstas se ignorarán.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1262"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1263"/>
         <source>Failed to load JSPF playlist</source>
         <translation>Falló la carga de la lista de reproducción JSPF</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1268"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1270"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
         <translation>Se ha producido un error al acceder al dispostivo de audio o a la pista deseado y se va saltar.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1283"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1279"/>
         <source>Station</source>
         <translation>Estación</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1285"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1281"/>
         <source>Create New Station</source>
         <translation>Crear estación nueva</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1285"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1320"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1281"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1316"/>
         <source>Name:</source>
         <translation>Nombre:</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1318"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1314"/>
         <source>Playlist</source>
         <translation>Lista de reproducción</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1320"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1316"/>
         <source>Create New Playlist</source>
         <translation>Crear lista de reproducción</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="950"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1353"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="949"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1347"/>
         <source>Pause</source>
         <translation>Pausar</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="338"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="337"/>
         <source>Search</source>
         <translation>Buscar</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1375"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1369"/>
         <source>&amp;Play</source>
         <translation>&amp;Reproducir</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1407"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1401"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
         <translation>%1 por %2</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1408"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1402"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1419"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1413"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1423"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1417"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1427"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1421"/>
         <source>Copyright 2010 - 2015</source>
         <translation>© 2010–2015</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1428"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1422"/>
         <source>Thanks to:</source>
         <translation>Agradecimientos:</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1435"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1429"/>
         <source>About Tomahawk</source>
         <translation>Acerca de Tomahawk</translation>
     </message>
