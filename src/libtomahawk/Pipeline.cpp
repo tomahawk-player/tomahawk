@@ -354,7 +354,7 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
     QList< result_ptr > httpResults;
     foreach ( const result_ptr& r, results )
     {
-        if ( r.isNull() )
+        if ( !r )
             continue;
 
         if ( !r->checked() && ( r->url().startsWith( "http" ) && !r->url().startsWith( "http://localhost" ) ) )
@@ -363,8 +363,11 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
             cleanResults << r;
     }
 
-    const ResultUrlChecker* checker = new ResultUrlChecker( q, httpResults );
-    connect( checker, SIGNAL( done() ), SLOT( onResultUrlCheckerDone() ) );
+    if ( !httpResults.isEmpty() )
+    {
+        const ResultUrlChecker* checker = new ResultUrlChecker( q, httpResults );
+        connect( checker, SIGNAL( done() ), SLOT( onResultUrlCheckerDone() ) );
+    }
 
     addResultsToQuery( q, cleanResults );
 /*    if ( q->solved() && !q->isFullTextQuery() )
