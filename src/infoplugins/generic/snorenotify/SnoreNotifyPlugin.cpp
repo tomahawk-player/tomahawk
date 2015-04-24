@@ -281,7 +281,7 @@ SnoreNotifyPlugin::inboxReceived( const QVariant& input )
     }
 
     Snore::Icon icon( RESPATH "images/inbox-512x512.png" );
-    notifyUser( Tomahawk::InfoSystem::InfoNowPlaying, messageText, icon );
+    notifyUser( Tomahawk::InfoSystem::InfoInboxReceived, messageText, icon );
 }
 
 
