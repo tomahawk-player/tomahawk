@@ -363,21 +363,22 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
             cleanResults << r;
     }
 
+    addResultsToQuery( q, cleanResults );
     if ( !httpResults.isEmpty() )
     {
         const ResultUrlChecker* checker = new ResultUrlChecker( q, httpResults );
         connect( checker, SIGNAL( done() ), SLOT( onResultUrlCheckerDone() ) );
     }
+    else
+    {
+        decQIDState( q );
+    }
 
-    addResultsToQuery( q, cleanResults );
 /*    if ( q->solved() && !q->isFullTextQuery() )
     {
         setQIDState( q, 0 );
         return;
     }*/
-
-    if ( httpResults.isEmpty() )
-        decQIDState( q );
 }
 
 
