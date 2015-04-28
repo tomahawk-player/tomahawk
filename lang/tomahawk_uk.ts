@@ -85,7 +85,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/tomahawk/widgets/AccountsToolButton.cpp" line="90"/>
         <source>Configure Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Налаштувати Облікові записи</translation>
     </message>
 </context>
 <context>
@@ -819,7 +819,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="73"/>
         <source>Refresh</source>
-        <translation type="unfinished"/>
+        <translation>Оновити</translation>
     </message>
 </context>
 <context>
@@ -1709,22 +1709,22 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="221"/>
         <source>MP3</source>
-        <translation type="unfinished"/>
+        <translation>MP3</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="222"/>
         <source>FLAC</source>
-        <translation type="unfinished"/>
+        <translation>FLAC</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="223"/>
         <source>M4A</source>
-        <translation type="unfinished"/>
+        <translation>M4A</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="224"/>
         <source>MP4</source>
-        <translation type="unfinished"/>
+        <translation>MP4</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="260"/>
@@ -4126,7 +4126,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1421"/>
         <source>Copyright 2010 - 2015</source>
-        <translation type="unfinished"/>
+        <translation>Авторське право 2010 - 2015</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1422"/>
