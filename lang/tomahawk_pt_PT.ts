@@ -726,7 +726,7 @@ e transmita a partir de si?</translation>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="189"/>
         <source>Resolver installation from file %1 failed.</source>
-        <translation type="unfinished"/>
+        <translation>Instalação do Resolver a partir do ficheiro %1 falhou.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="197"/>
@@ -736,7 +736,7 @@ e transmita a partir de si?</translation>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="198"/>
         <source>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;by &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;You are attempting to install a Tomahawk plug-in from an unknown source. Plug-ins from untrusted sources may put your data at risk.&lt;br/&gt;Do you want to install this plug-in?</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;by &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Está a tentar instalar um plug-in Tomahawk a partir de uma fonte desconhecida. Plug-ins de fontes desconhecidas podem colocar os seus dados em risco.&lt;br/&gt;Quer instalar este plug-in?</translation>
     </message>
 </context>
 <context>
@@ -749,13 +749,14 @@ e transmita a partir de si?</translation>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="43"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;http://blog.hatchet.is&quot;&gt;Learn More&lt;/a&gt; and/or &lt;a href=&quot;http://hatchet.is/register&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Create Account&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;http://blog.hatchet.is&quot;&gt;Saiba Mais&lt;/a&gt; e/ou &lt;a href=&quot;http://hatchet.is/register&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Criar Conta&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="78"/>
         <source>Enter One-time
 Password (OTP)</source>
-        <translation type="unfinished"/>
+        <translation>Introduza uma Palavra-passe
+Descartável (OTP)</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="86"/>
@@ -816,17 +817,17 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="35"/>
         <source>Configure your external IP address or host name here. Make sure to manually forward the selected port to this host on your router.</source>
-        <translation type="unfinished"/>
+        <translation>Configure o seu endereço IP externo ou nome de anfitrião. Certifique-se  de reencaminhar manualmente o porto selecionado para este anfitrião no seu router.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="53"/>
         <source>Static Host Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nome Estático de Anfitrião:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="69"/>
         <source>Static Port:</source>
-        <translation type="unfinished"/>
+        <translation>Porto Estático:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="106"/>
@@ -865,7 +866,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="93"/>
         <source>Your friends have not shared any recommendations with you yet. Connect with them and share your musical gems!</source>
-        <translation type="unfinished"/>
+        <translation>Os seus amigos ainda não partilharam qualquer recomendação consigo. Ligue-se com eles e partilhe as suas pérolas musicais!</translation>
     </message>
 </context>
 <context>
@@ -884,7 +885,7 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="424"/>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="486"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
-        <translation type="unfinished"/>
+        <translation>Aviso Script Resolver: chamada API %1 devolveu dados sincronizados.</translation>
     </message>
 </context>
 <context>
@@ -925,7 +926,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/jobview/LatchedStatusItem.cpp" line="33"/>
         <source>%1 is listening along with you!</source>
-        <translation type="unfinished"/>
+        <translation>%1 está a ouvir consigo!</translation>
     </message>
 </context>
 <context>
@@ -938,7 +939,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="20"/>
         <source>Enter the URL of the hosted playlist (e.g. .xspf format) or click the button to select a local M3U of XSPF playlist to import.</source>
-        <translation type="unfinished"/>
+        <translation>Introduza o URL da lista de reprodução anfitriã (ex. formato . xspf) ou clique no botão para selecionar um M3U local de lista de reprodução XSPF para importar.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="35"/>
@@ -994,12 +995,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="86"/>
         <source>Sorry, we could not find any of your Favorites!</source>
-        <translation type="unfinished"/>
+        <translation>Desculpe, não encontrámos nenhum dos seus Favoritos!</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="89"/>
         <source>The most loved tracks from all your friends</source>
-        <translation type="unfinished"/>
+        <translation>As faixas de que todos os seus amigos mais gostam</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="95"/>
@@ -1576,7 +1577,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="66"/>
         <source>Resolver Error: %1:%2 %3</source>
-        <translation type="unfinished"/>
+        <translation>Erro Resolver: %1:%2 %3</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="85"/>
@@ -1586,12 +1587,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="86"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
-        <translation type="unfinished"/>
+        <translation>Pediu ao Tomahawk para se ligar de forma segura a &lt;b&gt;%1&lt;/b&gt;, mas não conseguimos confirmar se a sua ligação é segura:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Quer confiar nesta ligação?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="93"/>
         <source>Trust certificate</source>
-        <translation type="unfinished"/>
+        <translation>Certificado de confiança</translation>
     </message>
 </context>
 <context>

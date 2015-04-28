@@ -4059,7 +4059,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1428"/>
         <source>Copyright 2010 - 2015</source>
-        <translation type="unfinished"/>
+        <translation>Copyright 2010 - 2015</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1429"/>
