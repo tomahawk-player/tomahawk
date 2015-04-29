@@ -77,7 +77,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/tomahawk/widgets/AccountWidget.cpp" line="131"/>
         <source>Invite</source>
-        <translation type="unfinished"/>
+        <translation>Пригласить</translation>
     </message>
 </context>
 <context>
@@ -85,7 +85,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/tomahawk/widgets/AccountsToolButton.cpp" line="90"/>
         <source>Configure Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Настройка аккаунтов</translation>
     </message>
 </context>
 <context>
@@ -643,7 +643,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/DownloadManager.cpp" line="260"/>
         <source>Tomahawk finished downloading %1 by %2.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk закончил скачивание %1 - %2.</translation>
     </message>
 </context>
 <context>
@@ -819,7 +819,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="73"/>
         <source>Refresh</source>
-        <translation type="unfinished"/>
+        <translation>Обновить</translation>
     </message>
 </context>
 <context>
@@ -1928,7 +1928,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="56"/>
         <source>Preferred download format:</source>
-        <translation type="unfinished"/>
+        <translation>Предпочтительный формат загрузки:</translation>
     </message>
 </context>
 <context>
