@@ -1917,16 +1917,21 @@ en stations gebaseerd op uw persoonlijke smaakprofiel.</translation>
     <name>Settings_Downloads</name>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="26"/>
+        <source>Some Plug-Ins enable you to purchase and/or download music directly in Tomahawk.  Set your preferences for the download format and location:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="49"/>
         <source>Folder to download music to:</source>
         <translation>Map om muziek naar te downloaden:</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="45"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="68"/>
         <source>Browse...</source>
         <translation>Bladeren...</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="56"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="79"/>
         <source>Preferred download format:</source>
         <translation type="unfinished"/>
     </message>

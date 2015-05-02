@@ -1918,16 +1918,21 @@ asemia sinun henkilökohtaisen musiikkimakuprofiilisi perusteella.</translation>
     <name>Settings_Downloads</name>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="26"/>
+        <source>Some Plug-Ins enable you to purchase and/or download music directly in Tomahawk.  Set your preferences for the download format and location:</source>
+        <translation>Jotkin liitännäiset mahdollistavat musiikin ostamisen ja/tai lataamisen suoraan Tomahawkissa. Aseta haluamasi latausmuoto ja -sijainti:</translation>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="49"/>
         <source>Folder to download music to:</source>
         <translation>Kansio, johon musiikki ladataan:</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="45"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="68"/>
         <source>Browse...</source>
         <translation>Selaa…</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="56"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="79"/>
         <source>Preferred download format:</source>
         <translation>Ensisijainen latausmuoto:</translation>
     </message>
