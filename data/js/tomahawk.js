@@ -494,6 +494,7 @@ Tomahawk.ajax = function(url, settings) {
 
     settings.type = settings.type || settings.method || 'get';
     settings.method = settings.type;
+    settings.dataFormat = settings.dataFormat || 'form';
 
     if (settings.data) {
         var formEncode = function(obj) {
@@ -508,14 +509,28 @@ Tomahawk.ajax = function(url, settings) {
 
             return str.join("&");
         };
+        if (typeof settings.data === 'object') {
+            if (settings.dataFormat == 'form') {
+                settings.data = formEncode(settings.data);
+                settings.contentType = settings.contentType || 'application/x-www-form-urlencoded';
+            } else if (settings.dataFormat == 'json') {
+                settings.data = JSON.stringify(settings.data);
+                settings.contentType = settings.contentType || 'application/json';
+            } else {
+                throw new Error("Tomahawk.ajax: unknown dataFormat requested: " + settings.dataFormat);
+            }
+        } else {
+            throw new Error("Tomahawk.ajax: data should be either object or string");
+        }
 
         if (settings.type.toLowerCase() === 'get') {
-            settings.url += '?' + formEncode(settings.data);
+            settings.url += '?' + settings.data;
             delete settings.data;
         } else {
             settings.headers = settings.headers || {};
-            settings.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-            settings.data = formEncode(settings.data);
+            if (!settings.headers.hasOwnProperty('Content-Type')) {
+                settings.headers['Content-Type'] = settings.contentType;
+            }
         }
     }
 
