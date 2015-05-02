@@ -494,7 +494,7 @@ Tomahawk.ajax = function(url, settings) {
 
     settings.type = settings.type || settings.method || 'get';
     settings.method = settings.type;
-    settings.dataEncodingFormat = settings.dataEncodingFormat || 'form';
+    settings.dataFormat = settings.dataFormat || 'form';
 
     if (settings.data) {
         var formEncode = function(obj) {
@@ -510,14 +510,14 @@ Tomahawk.ajax = function(url, settings) {
             return str.join("&");
         };
         if (typeof settings.data === 'object') {
-            if (settings.dataEncodingFormat == 'form') {
+            if (settings.dataFormat == 'form') {
                 settings.data = formEncode(settings.data);
                 settings.contentType = settings.contentType || 'application/x-www-form-urlencoded';
-            } else if (settings.dataEncodingFormat == 'json') {
+            } else if (settings.dataFormat == 'json') {
                 settings.data = JSON.stringify(settings.data);
                 settings.contentType = settings.contentType || 'application/json';
             } else {
-                throw new Error("Tomahawk.ajax: unknown dataEncodingFormat requested: " + settings.dataEncodingFormat);
+                throw new Error("Tomahawk.ajax: unknown dataFormat requested: " + settings.dataFormat);
             }
         } else {
             throw new Error("Tomahawk.ajax: data should be either object or string");
