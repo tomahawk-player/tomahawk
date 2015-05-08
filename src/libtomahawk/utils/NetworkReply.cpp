@@ -90,7 +90,14 @@ NetworkReply::metaDataChanged()
             else
             {
                 disconnectReplySignals();
-                load( redir.toUrl() );
+                if( redir.toUrl().isRelative() )
+                {
+                    load( m_url.resolved( redir.toUrl() ) );
+                }
+                else
+                {
+                    load( redir.toUrl() );
+                }
                 emit redirected();
             }
         }
