@@ -1913,7 +1913,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="26"/>
         <source>Some Plug-Ins enable you to purchase and/or download music directly in Tomahawk.  Set your preferences for the download format and location:</source>
-        <translation type="unfinished"/>
+        <translation>Ορισμένες προσθήκες σας επιτρέπουν να αγοράσετε ή/και να κατεβάσετε μουσική απευθείας στο Tomahawk. Καθορίστε τις προτιμήσεις σας για την λήψη και την τοποθεσία:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="49"/>

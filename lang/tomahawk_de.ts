@@ -1915,7 +1915,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="26"/>
         <source>Some Plug-Ins enable you to purchase and/or download music directly in Tomahawk.  Set your preferences for the download format and location:</source>
-        <translation type="unfinished"/>
+        <translation>Einige Plug-Ins aktivieren, für den Kauf und/oder den Download von Musik direkt im Tomahawk. Festlegen der Voreinstellungen für das Download-Format und den Speicherort:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="49"/>
