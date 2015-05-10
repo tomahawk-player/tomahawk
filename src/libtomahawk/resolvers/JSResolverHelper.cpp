@@ -1154,7 +1154,7 @@ JSResolverHelper::returnStreamUrl( const QString& streamUrl, const QMap<QString,
         {
             req.setRawHeader( key.toLatin1(), headers[key].toLatin1() );
         }
-        tDebug() << "Creating a QNetowrkReply with url:" << req.url().toString();
+        tDebug() << "Creating a QNetworkReply with url:" << req.url().toString();
         NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( req ) );
 
         NewClosure( reply, SIGNAL( finalUrlReached() ), this, SLOT( gotStreamUrl( IODeviceCallback, NetworkReply* )), callback, reply );
