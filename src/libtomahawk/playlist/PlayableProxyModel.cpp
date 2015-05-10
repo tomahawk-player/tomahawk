@@ -585,7 +585,8 @@ PlayableProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right 
 
     if ( p1->query() && p2->query() )
     {
-        return lessThan( left.column(), p1->query(), p2->query() );
+        PlayableModel::Columns col = m_headerStyle[ m_style ].at( left.column() );
+        return lessThan( col, p1->query(), p2->query() );
     }
     if ( p1->album() && p2->album() )
     {
