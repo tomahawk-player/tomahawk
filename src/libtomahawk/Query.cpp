@@ -399,12 +399,11 @@ Query::resultSorter( const result_ptr& left, const result_ptr& right )
 
     if ( ls == rs )
     {
-        if ( !right->isPreview() )
+        if ( right->resolvedByCollection() && right->resolvedByCollection()->isLocal() )
         {
             return false;
         }
-
-        if ( right->resolvedByCollection() && right->resolvedByCollection()->isLocal() )
+        if ( !right->isPreview() )
         {
             return false;
         }
