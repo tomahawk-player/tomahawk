@@ -818,7 +818,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="73"/>
         <source>Refresh</source>
-        <translation type="unfinished"/>
+        <translation>刷新</translation>
     </message>
 </context>
 <context>
@@ -1916,7 +1916,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="26"/>
         <source>Some Plug-Ins enable you to purchase and/or download music directly in Tomahawk.  Set your preferences for the download format and location:</source>
-        <translation type="unfinished"/>
+        <translation>某些插件允许你直接通过 Tomahawk 购买和下载音乐。请在首选项中设置下载格式和位置：</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="49"/>
