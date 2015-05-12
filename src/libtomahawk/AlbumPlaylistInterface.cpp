@@ -222,7 +222,7 @@ AlbumPlaylistInterface::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData re
 
                         track = Tomahawk::Track::get( m.value( "artist" ).toString(),
                                                       m.value( "track" ).toString(),
-                                                      m.value( "album" ).toString(),
+                                                      inputInfo[ "album" ],
                                                       inputInfo[ "artist" ],
                                                       duration,
                                                       QString(),
