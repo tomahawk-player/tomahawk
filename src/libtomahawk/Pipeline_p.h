@@ -45,7 +45,7 @@ private:
     QList< Resolver* > resolvers;
     QList< QPointer<Tomahawk::ExternalResolver> > scriptResolvers;
     QList< ResolverFactoryFunc > resolverFactories;
-    QMap< QID, bool > qidsTimeout;
+    QMap< QID, unsigned int > qidsTimeout;
     QMap< QID, unsigned int > qidsState;
     QMap< QID, query_ptr > qids;
     QMap< RID, result_ptr > rids;

@@ -539,7 +539,11 @@ Pipeline::timeoutShunt( const query_ptr& q )
     // are we still waiting for a timeout?
     if ( d->qidsTimeout.contains( q->id() ) )
     {
-        decQIDState( q );
+        if ( --d->qidsTimeout[q->id()] == 0 )
+        {
+            d->qidsTimeout.remove( q->id() );
+            setQIDState( q, 0 );
+        }
     }
 }
 
@@ -557,7 +561,7 @@ Pipeline::shunt( const query_ptr& q )
 
     if ( r )
     {
-        tLog( LOGVERBOSE ) << "Dispatching to resolver" << r->name() << q->toString() << q->solved() << q->id();
+        tLog( LOGVERBOSE ) << "Dispatching to resolver" << r->name() << r->timeout() << q->toString() << q->solved() << q->id();
 
         q->setCurrentResolver( r );
         r->resolve( q );
@@ -565,7 +569,7 @@ Pipeline::shunt( const query_ptr& q )
 
         if ( r->timeout() > 0 )
         {
-            d->qidsTimeout.insert( q->id(), true );
+            d->qidsTimeout[q->id()]++;
             new FuncTimeout( r->timeout(), std::bind( &Pipeline::timeoutShunt, this, q ), this );
         }
     }
@@ -610,9 +614,6 @@ Pipeline::setQIDState( const Tomahawk::query_ptr& query, int state )
 {
     Q_D( Pipeline );
     QMutexLocker lock( &d->mut );
-
-    if ( d->qidsTimeout.contains( query->id() ) )
-        d->qidsTimeout.remove( query->id() );
 
     if ( state > 0 )
     {
