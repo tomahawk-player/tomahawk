@@ -54,7 +54,7 @@ public:
     unsigned int pendingQueryCount() const;
     unsigned int activeQueryCount() const;
 
-    void reportResults( QID qid, const QList< result_ptr >& results );
+    void reportResults( QID qid, Tomahawk::Resolver* r, const QList< result_ptr >& results );
     void reportAlbums( QID qid, const QList< album_ptr >& albums );
     void reportArtists( QID qid, const QList< artist_ptr >& artists );
 
@@ -94,12 +94,12 @@ protected:
     QScopedPointer<PipelinePrivate> d_ptr;
 
 private slots:
-    void timeoutShunt( const query_ptr& q );
+    void timeoutShunt( const query_ptr& q, Tomahawk::Resolver* r );
     void shunt( const query_ptr& q );
     void shuntNext();
 
     void onTemporaryQueryTimer();
-    void onResultUrlCheckerDone();
+    void onResultUrlCheckerDone( );
 
 private:
     Q_DECLARE_PRIVATE( Pipeline )
@@ -107,9 +107,9 @@ private:
     void addResultsToQuery( const query_ptr& query, const QList< result_ptr >& results );
     Tomahawk::Resolver* nextResolver( const Tomahawk::query_ptr& query ) const;
 
-    void setQIDState( const Tomahawk::query_ptr& query, int state );
-    int incQIDState( const Tomahawk::query_ptr& query );
-    int decQIDState( const Tomahawk::query_ptr& query );
+    void checkQIDState( const Tomahawk::query_ptr& query );
+    void incQIDState( const Tomahawk::query_ptr& query, Tomahawk::Resolver* );
+    void decQIDState( const Tomahawk::query_ptr& query, Tomahawk::Resolver* );
 };
 
 } // Tomahawk

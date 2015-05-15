@@ -59,7 +59,7 @@ DatabaseResolver::gotResults( const Tomahawk::QID qid, QList< Tomahawk::result_p
     foreach ( const Tomahawk::result_ptr& r, results )
         r->setResolvedByResolver( this );
 
-    Tomahawk::Pipeline::instance()->reportResults( qid, results );
+    Tomahawk::Pipeline::instance()->reportResults( qid, this, results );
 }
 
 

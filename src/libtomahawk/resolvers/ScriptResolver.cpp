@@ -331,7 +331,7 @@ ScriptResolver::handleMsg( const QByteArray& msg )
             results << rp;
         }
 
-        Tomahawk::Pipeline::instance()->reportResults( qid, results );
+        Tomahawk::Pipeline::instance()->reportResults( qid, this, results );
     }
     else
     {

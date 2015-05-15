@@ -36,6 +36,7 @@
 #define MAX_CONCURRENT_QUERIES 16
 #define CLEANUP_TIMEOUT 5 * 60 * 1000
 #define MINSCORE 0.5
+#define DEFAULT_RESOLVER_TIMEOUT 5000 //5 seconds
 
 using namespace Tomahawk;
 
@@ -99,7 +100,7 @@ unsigned int
 Pipeline::activeQueryCount() const
 {
     Q_D( const Pipeline );
-    return d->qidsState.count();
+    return d->qidsState.uniqueKeys().count();
 }
 
 
@@ -323,7 +324,7 @@ Pipeline::resolve( QID qid, bool prioritized, bool temporaryQuery )
 
 
 void
-Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
+Pipeline::reportResults( QID qid, Tomahawk::Resolver* r, const QList< result_ptr >& results )
 {
     Q_D( Pipeline );
     if ( !d->running )
@@ -366,17 +367,17 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
     addResultsToQuery( q, cleanResults );
     if ( !httpResults.isEmpty() )
     {
-        const ResultUrlChecker* checker = new ResultUrlChecker( q, httpResults );
+        const ResultUrlChecker* checker = new ResultUrlChecker( q, r, httpResults );
         connect( checker, SIGNAL( done() ), SLOT( onResultUrlCheckerDone() ) );
     }
     else
     {
-        decQIDState( q );
+        decQIDState( q, r );
     }
 
 /*    if ( q->solved() && !q->isFullTextQuery() )
     {
-        setQIDState( q, 0 );
+        checkQIDState( q, 0 );
         return;
     }*/
 }
@@ -413,7 +414,7 @@ Pipeline::addResultsToQuery( const query_ptr& query, const QList< result_ptr >& 
 
 
 void
-Pipeline::onResultUrlCheckerDone()
+Pipeline::onResultUrlCheckerDone( )
 {
     ResultUrlChecker* checker = qobject_cast< ResultUrlChecker* >( sender() );
     if ( !checker )
@@ -425,11 +426,11 @@ Pipeline::onResultUrlCheckerDone()
     addResultsToQuery( q, checker->validResults() );
 /*    if ( q && !q->isFullTextQuery() )
     {
-        setQIDState( q, 0 );
+        checkQIDState( q, 0 );
         return;
     }*/
 
-    decQIDState( q );
+    decQIDState( q, reinterpret_cast<Tomahawk::Resolver*>( checker->resolver() ) );
 }
 
 
@@ -525,26 +526,22 @@ Pipeline::shuntNext()
         q->setCurrentResolver( 0 );
     }
 
-    setQIDState( q, rc );
+    foreach ( Resolver* r, d->resolvers )
+    {
+        incQIDState( q, r );
+    }
+    checkQIDState( q );
 }
 
 
 void
-Pipeline::timeoutShunt( const query_ptr& q )
+Pipeline::timeoutShunt( const query_ptr& q, Tomahawk::Resolver* r )
 {
     Q_D( Pipeline );
     if ( !d->running )
         return;
 
-    // are we still waiting for a timeout?
-    if ( d->qidsTimeout.contains( q->id() ) )
-    {
-        if ( --d->qidsTimeout[q->id()] == 0 )
-        {
-            d->qidsTimeout.remove( q->id() );
-            setQIDState( q, 0 );
-        }
-    }
+    decQIDState( q, r );
 }
 
 
@@ -567,16 +564,15 @@ Pipeline::shunt( const query_ptr& q )
         r->resolve( q );
         emit resolving( q );
 
-        if ( r->timeout() > 0 )
-        {
-            d->qidsTimeout[q->id()]++;
-            new FuncTimeout( r->timeout(), std::bind( &Pipeline::timeoutShunt, this, q ), this );
-        }
+        auto timeout = r->timeout();
+        if ( timeout == 0 )
+            timeout = DEFAULT_RESOLVER_TIMEOUT;
+        new FuncTimeout( r->timeout(), std::bind( &Pipeline::timeoutShunt, this, q, r ), this );
     }
     else
     {
         // we get here if we disable a resolver while a query is resolving
-        setQIDState( q, 0 );
+        decQIDState(q, r);
         return;
     }
 
@@ -610,15 +606,15 @@ Pipeline::nextResolver( const Tomahawk::query_ptr& query ) const
 
 
 void
-Pipeline::setQIDState( const Tomahawk::query_ptr& query, int state )
+Pipeline::checkQIDState( const Tomahawk::query_ptr& query )
 {
     Q_D( Pipeline );
     QMutexLocker lock( &d->mut );
 
-    if ( state > 0 )
-    {
-        d->qidsState.insert( query->id(), state );
+    tDebug() << Q_FUNC_INFO << " " << query->id() << " " << d->qidsState.count( query->id() );
 
+    if ( d->qidsState.contains( query->id() ) )
+    {
         new FuncTimeout( 0, std::bind( &Pipeline::shunt, this, query ), this );
     }
     else
@@ -634,39 +630,27 @@ Pipeline::setQIDState( const Tomahawk::query_ptr& query, int state )
 }
 
 
-int
-Pipeline::incQIDState( const Tomahawk::query_ptr& query )
+void
+Pipeline::incQIDState( const Tomahawk::query_ptr& query, Tomahawk::Resolver* r )
 {
     Q_D( Pipeline );
     QMutexLocker lock( &d->mut );
 
-    int state = 1;
-    if ( d->qidsState.contains( query->id() ) )
-    {
-        state = d->qidsState.value( query->id() ) + 1;
-    }
-    d->qidsState.insert( query->id(), state );
-
-    return state;
+    d->qidsState.insert( query->id(), r );
 }
 
 
-int
-Pipeline::decQIDState( const Tomahawk::query_ptr& query )
+void
+Pipeline::decQIDState( const Tomahawk::query_ptr& query, Tomahawk::Resolver* r )
 {
     Q_D( Pipeline );
-    int state = 0;
-    {
-        QMutexLocker lock( &d->mut );
 
-        if ( !d->qidsState.contains( query->id() ) )
-            return 0;
+    if ( r )
+        d->qidsState.remove( query->id(), r );//Removes all matching pairs
+    else
+        d->qidsState.remove( query->id() );//Will clear
 
-        state = d->qidsState.value( query->id() ) - 1;
-    }
-
-    setQIDState( query, state );
-    return state;
+    checkQIDState( query );
 }
 
 
