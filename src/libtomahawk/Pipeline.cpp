@@ -430,7 +430,7 @@ Pipeline::onResultUrlCheckerDone( )
         return;
     }*/
 
-    decQIDState( q, reinterpret_cast<Tomahawk::Resolver*>( checker->resolver() ) );
+    decQIDState( q, reinterpret_cast<Tomahawk::Resolver*>( checker->userData() ) );
 }
 
 
@@ -567,12 +567,13 @@ Pipeline::shunt( const query_ptr& q )
         auto timeout = r->timeout();
         if ( timeout == 0 )
             timeout = DEFAULT_RESOLVER_TIMEOUT;
-        new FuncTimeout( r->timeout(), std::bind( &Pipeline::timeoutShunt, this, q, r ), this );
+
+        new FuncTimeout( timeout, std::bind( &Pipeline::timeoutShunt, this, q, r ), this );
     }
     else
     {
         // we get here if we disable a resolver while a query is resolving
-        decQIDState(q, r);
+        // OR we are just out of resolvers while query is still resolving
         return;
     }
 

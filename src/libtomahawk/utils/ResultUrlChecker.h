@@ -33,11 +33,11 @@ class ResultUrlChecker : public QObject
 {
     Q_OBJECT
 public:
-    ResultUrlChecker( const query_ptr& query, void* r, const QList< result_ptr >& results );
+    ResultUrlChecker( const query_ptr& query, QObject* userData, const QList< result_ptr >& results );
     virtual ~ResultUrlChecker();
 
     query_ptr query() const { return m_query; }
-    void* resolver() const { return m_resolver; }
+    void* userData() const { return m_userData; }
     QList< result_ptr > results() const { return m_results; }
     QList< result_ptr > validResults() const { return m_validResults; }
 
@@ -50,7 +50,7 @@ private slots:
 
 private:
     query_ptr m_query;
-    void* m_resolver;
+    QObject* m_userData;
     QList< result_ptr > m_results;
     QList< result_ptr > m_validResults;
     QHash< NetworkReply*, Tomahawk::result_ptr > m_replies;
