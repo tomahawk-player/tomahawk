@@ -37,7 +37,7 @@ public:
     virtual ~ResultUrlChecker();
 
     query_ptr query() const { return m_query; }
-    void* userData() const { return m_userData; }
+    QObject* userData() const { return m_userData; }
     QList< result_ptr > results() const { return m_results; }
     QList< result_ptr > validResults() const { return m_validResults; }
 
