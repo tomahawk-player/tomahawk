@@ -114,7 +114,7 @@ TrackDetailView::TrackDetailView( QWidget* parent )
     m_resultsScrollArea->setFrameShape( QFrame::NoFrame );
     m_resultsScrollArea->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     m_resultsScrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    m_resultsScrollArea->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
+    m_resultsScrollArea->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
     TomahawkStyle::styleScrollBar( m_resultsScrollArea->verticalScrollBar() );
     m_resultsScrollArea->hide();
 
