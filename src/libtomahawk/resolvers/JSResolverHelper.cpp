@@ -155,7 +155,7 @@ JSResolverHelper::addTrackResults( const QVariantMap& results )
 
     QString qid = results.value("qid").toString();
 
-    Tomahawk::Pipeline::instance()->reportResults( qid, tracks );
+    Tomahawk::Pipeline::instance()->reportResults( qid, m_resolver, tracks );
 }
 
 

@@ -32,9 +32,11 @@
 using namespace Tomahawk;
 
 
-ResultUrlChecker::ResultUrlChecker( const query_ptr& query, const QList< result_ptr >& results )
+ResultUrlChecker::ResultUrlChecker( const query_ptr& query, QObject* userData,
+        const QList< result_ptr >& results )
     : QObject( 0 )
     , m_query( query )
+    , m_userData( userData )
     , m_results( results )
 {
     check();

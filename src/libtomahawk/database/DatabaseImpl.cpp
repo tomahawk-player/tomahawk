@@ -644,7 +644,7 @@ Tomahawk::DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         const QUrl u = QUrl::fromUserInput( url );
         res->setFriendlySource( u.host() );
 
-        ResultUrlChecker* checker = new ResultUrlChecker( origquery, QList< result_ptr >() << res );
+        ResultUrlChecker* checker = new ResultUrlChecker( origquery, nullptr, QList< result_ptr >() << res );
         QEventLoop loop;
         connect( checker, SIGNAL( done() ), &loop, SLOT( quit() ) );
         loop.exec();
