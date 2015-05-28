@@ -515,7 +515,7 @@ Pipeline::shuntNext()
         }
 
         // Check if we are ready to dispatch more queries
-        if ( d->qidsState.count() >= d->maxConcurrentQueries )
+        if ( activeQueryCount() >= d->maxConcurrentQueries )
             return;
 
         /*
