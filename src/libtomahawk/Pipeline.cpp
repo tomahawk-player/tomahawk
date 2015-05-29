@@ -563,7 +563,7 @@ Pipeline::shunt( const query_ptr& q )
     {
         tLog( LOGVERBOSE ) << "Dispatching to resolver" << r->name() << r->timeout() << q->toString() << q->solved() << q->id();
 
-        incQIDState(q, r);
+        incQIDState( q, r );
         q->setCurrentResolver( r );
         r->resolve( q );
         emit resolving( q );
