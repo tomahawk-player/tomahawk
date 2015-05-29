@@ -628,7 +628,6 @@ Pipeline::checkQIDState( const Tomahawk::query_ptr& query )
     }
     else
     {
-        d->qidsState.remove( query->id() );
         query->onResolvingFinished();
 
         if ( !d->queries_temporary.contains( query ) )
@@ -654,12 +653,15 @@ Pipeline::decQIDState( const Tomahawk::query_ptr& query, Tomahawk::Resolver* r )
 {
     Q_D( Pipeline );
 
+    if ( d->qidsState.contains( query->id(), r ) )
     {
-        QMutexLocker lock( &d->mut );
-        d->qidsState.remove( query->id(), r );//Removes all matching pairs
-    }
+        {
+            QMutexLocker lock( &d->mut );
+            d->qidsState.remove( query->id(), r );//Removes all matching pairs
+        }
 
-    checkQIDState( query );
+        checkQIDState( query );
+    }
 }
 
 
