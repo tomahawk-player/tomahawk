@@ -582,8 +582,6 @@ Pipeline::shunt( const query_ptr& q )
         //since we seem to at least tried to kick off all of the resolvers,
         //remove the '.keep' entry
         decQIDState( q, nullptr );
-        //daaaaad, are we there yet?
-        checkQIDState( q );
         return;
     }
 
@@ -656,10 +654,10 @@ Pipeline::decQIDState( const Tomahawk::query_ptr& query, Tomahawk::Resolver* r )
 {
     Q_D( Pipeline );
 
-    if ( r )
+    {
+        QMutexLocker lock( &d->mut );
         d->qidsState.remove( query->id(), r );//Removes all matching pairs
-    else
-        d->qidsState.remove( query->id() );//Will clear
+    }
 
     checkQIDState( query );
 }
