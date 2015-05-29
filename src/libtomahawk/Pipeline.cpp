@@ -526,10 +526,13 @@ Pipeline::shuntNext()
         q->setCurrentResolver( 0 );
     }
 
-    foreach ( Resolver* r, d->resolvers )
-    {
-        incQIDState( q, r );
-    }
+    //Zero-patient, a stub so that query is not resolved until we go through
+    //all resolvers
+    //As query considered as 'finished trying to resolve' when there are no
+    //more qid entries in qidsState we'll put one as sort of 'keep this until
+    //we kick off all our resolvers' entry
+    //once we kick off all resolvers we'll remove this entry
+    incQIDState( q, nullptr );
     checkQIDState( q );
 }
 
@@ -560,6 +563,7 @@ Pipeline::shunt( const query_ptr& q )
     {
         tLog( LOGVERBOSE ) << "Dispatching to resolver" << r->name() << r->timeout() << q->toString() << q->solved() << q->id();
 
+        incQIDState( q, r );
         q->setCurrentResolver( r );
         r->resolve( q );
         emit resolving( q );
@@ -574,6 +578,12 @@ Pipeline::shunt( const query_ptr& q )
     {
         // we get here if we disable a resolver while a query is resolving
         // OR we are just out of resolvers while query is still resolving
+
+        //since we seem to at least tried to kick off all of the resolvers,
+        //remove the '.keep' entry
+        decQIDState( q, nullptr );
+        //daaaaad, are we there yet?
+        checkQIDState( q );
         return;
     }
 
