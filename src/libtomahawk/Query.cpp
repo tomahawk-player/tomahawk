@@ -34,6 +34,8 @@
 #include <QtAlgorithms>
 #include <QDebug>
 
+#include <libfuzzymatch/levenshtein.h>
+
 using namespace Tomahawk;
 
 
@@ -637,8 +639,8 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
     }
 
     // normal edit distance
-    const int artdist = TomahawkUtils::levenshtein( qArtistname, rArtistname );
-    const int trkdist = TomahawkUtils::levenshtein( qTrackname, rTrackname );
+    const int artdist = levenshteinStatic( qArtistname.toUcs4(), rArtistname.toUcs4() );
+    const int trkdist = levenshteinStatic( qTrackname.toUcs4(), rTrackname.toUcs4() );
 
     // max length of name
     const int mlart = qMax( qArtistname.length(), rArtistname.length() );
@@ -652,7 +654,7 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
     float dcalb = 1.0;
     if ( !qAlbumname.isEmpty() )
     {
-        const int albdist = TomahawkUtils::levenshtein( qAlbumname, rAlbumname );
+        const int albdist = levenshteinStatic( qAlbumname.toUcs4(), rAlbumname.toUcs4() );
         const int mlalb = qMax( qAlbumname.length(), rAlbumname.length() );
         dcalb = (float)( mlalb - albdist ) / mlalb;
     }
@@ -662,7 +664,7 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
         const QString artistTrackname = DatabaseImpl::sortname( fullTextQuery() );
         const QString rArtistTrackname = DatabaseImpl::sortname( r->track()->artist() + " " + r->track()->track() );
 
-        const int atrdist = TomahawkUtils::levenshtein( artistTrackname, rArtistTrackname );
+        const int atrdist = levenshteinStatic( artistTrackname.toUcs4(), rArtistTrackname.toUcs4() );
         const int mlatr = qMax( artistTrackname.length(), rArtistTrackname.length() );
         const float dcatr = (float)( mlatr - atrdist ) / mlatr;
 
