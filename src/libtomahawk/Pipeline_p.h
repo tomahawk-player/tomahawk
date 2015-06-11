@@ -45,9 +45,9 @@ private:
     QList< Resolver* > resolvers;
     QList< QPointer<Tomahawk::ExternalResolver> > scriptResolvers;
     QList< ResolverFactoryFunc > resolverFactories;
-    QMultiHash< QID, Tomahawk::Resolver* > qidsState;
-    QHash< QID, query_ptr > qids;
-    QHash< RID, result_ptr > rids;
+    QMultiMap< QID, Tomahawk::Resolver* > qidsState;
+    QMap< QID, query_ptr > qids;
+    QMap< RID, result_ptr > rids;
 
     QMutex mut; // for m_qids, m_rids
 
