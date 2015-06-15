@@ -98,7 +98,7 @@ MusicBrainzPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requ
         case InfoArtistReleases:
         {
             querySt.append( QString( "artist:\"%1\"" ).arg(criteria["artist"]) );
-            querySt.append( " AND (type:album OR type:ep)" );
+            querySt.append( " AND (type:album OR type:ep OR type:remix)" );
             querySt.append( " AND status:official" );
             querySt.append( " AND NOT secondarytype:live" );
             querySt.append( " AND NOT secondarytype:compilation" );
