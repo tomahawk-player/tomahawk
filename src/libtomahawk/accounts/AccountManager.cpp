@@ -510,13 +510,19 @@ AccountManager::onError( int code, const QString& msg )
     if ( code == Account::AuthError )
     {
         statusMessage = new SipStatusMessage( SipStatusMessage::SipLoginFailure, account->accountFriendlyName() );
-        JobStatusView::instance()->model()->addJob( statusMessage );
+        if ( !TomahawkUtils::headless() )
+        {
+            JobStatusView::instance()->model()->addJob( statusMessage );
+        }
     }
     else
     {
-        statusMessage = new SipStatusMessage(SipStatusMessage::SipConnectionFailure, account->accountFriendlyName(), msg );
-        JobStatusView::instance()->model()->addJob( statusMessage );
         QTimer::singleShot( 10000, account, SLOT( authenticate() ) );
+        if ( !TomahawkUtils::headless() )
+        {
+            statusMessage = new SipStatusMessage(SipStatusMessage::SipConnectionFailure, account->accountFriendlyName(), msg );
+            JobStatusView::instance()->model()->addJob( statusMessage );
+        }
     }
 }
 
