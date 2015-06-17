@@ -243,7 +243,7 @@ połączyć się i strumieniować od ciebie?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="146"/>
         <source>Get Support</source>
-        <translation type="unfinished"/>
+        <translation>Wsparcie</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="147"/>
@@ -819,7 +819,7 @@ jednorazowe (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="73"/>
         <source>Refresh</source>
-        <translation type="unfinished"/>
+        <translation>Odświerz</translation>
     </message>
 </context>
 <context>
@@ -961,7 +961,7 @@ jednorazowe (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="14"/>
         <source>Load Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Laduję playlistę</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="20"/>
@@ -971,12 +971,12 @@ jednorazowe (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="35"/>
         <source>Playlist URL</source>
-        <translation type="unfinished"/>
+        <translation>Adres URL playlisty</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="42"/>
         <source>Enter URL...</source>
-        <translation type="unfinished"/>
+        <translation>Podaj adres URL...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="55"/>
@@ -1169,7 +1169,7 @@ jednorazowe (OTP)</translation>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="79"/>
         <source>Hot Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Gorące playlisty</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="113"/>
@@ -1212,7 +1212,7 @@ jednorazowe (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Download</source>
-        <translation type="unfinished"/>
+        <translation>Pobierz</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
@@ -1708,22 +1708,22 @@ jednorazowe (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="221"/>
         <source>MP3</source>
-        <translation type="unfinished"/>
+        <translation>MP3</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="222"/>
         <source>FLAC</source>
-        <translation type="unfinished"/>
+        <translation>FLAC</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="223"/>
         <source>M4A</source>
-        <translation type="unfinished"/>
+        <translation>M4A</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="224"/>
         <source>MP4</source>
-        <translation type="unfinished"/>
+        <translation>MP4</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="260"/>
@@ -1743,7 +1743,7 @@ jednorazowe (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="273"/>
         <source>Downloads</source>
-        <translation type="unfinished"/>
+        <translation>Pobrane</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="273"/>
@@ -3396,7 +3396,7 @@ Spróbuj poprawić filtry aby uzyskać nowy zestaw piosenek do odtworzenia.</tra
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="138"/>
         <source>Tomahawk is stopped.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk jest zatrzymany</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="211"/>
@@ -3497,7 +3497,7 @@ wysłane przez %1.</translation>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="202"/>
         <source>on</source>
         <comment>'on' is followed by an album name</comment>
-        <translation type="unfinished"/>
+        <translation>na</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="204"/>
@@ -3632,7 +3632,7 @@ wysłane przez %1.</translation>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="110"/>
         <source>SSL Error</source>
-        <translation type="unfinished"/>
+        <translation>Błąd SSL</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="111"/>
@@ -4131,7 +4131,7 @@ wysłane przez %1.</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1421"/>
         <source>Copyright 2010 - 2015</source>
-        <translation type="unfinished"/>
+        <translation>Prawa autorskie 2010 - 2015</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1422"/>
