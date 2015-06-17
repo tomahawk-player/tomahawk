@@ -109,6 +109,12 @@ Tomahawk.timestamp = function () {
     return Math.round(new Date() / 1000);
 };
 
+Tomahawk.htmlDecode = function (encoded) {
+    var div = document.createElement('div');
+    div.innerHTML = encoded;
+    return div.innerText
+};
+
 Tomahawk.dumpResult = function (result) {
     var results = result.results,
         i = 0;
