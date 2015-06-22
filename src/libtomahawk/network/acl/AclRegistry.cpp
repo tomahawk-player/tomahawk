@@ -21,6 +21,7 @@
 
 #include <QThread>
 #include <QVariant>
+#include <QDataStream>
 
 #include "utils/Logger.h"
 
