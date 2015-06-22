@@ -27,6 +27,7 @@
 #include <QObject>
 #include <QTimer>
 #include <QDir>
+#include <QDataStream>
 
 namespace TomahawkUtils
 {
