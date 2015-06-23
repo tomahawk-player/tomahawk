@@ -137,6 +137,8 @@ BasicHeader::addButton( const QString& text )
 {
     QPushButton* button = new QPushButton( this );
     button->setText( text );
+
+    ui->horizontalLayout->addSpacing( 8 );
     ui->horizontalLayout->addWidget( button );
 
     return button;
