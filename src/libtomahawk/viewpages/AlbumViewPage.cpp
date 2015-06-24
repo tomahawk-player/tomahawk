@@ -144,7 +144,6 @@ AlbumInfoWidget::load( const album_ptr& album )
 
     m_headerWidget->setCaption( album->artist()->name() );
 
-    m_tracksModel->startLoading();
     m_tracksModel->addTracks( album, QModelIndex() );
 
     onAlbumImageUpdated();
