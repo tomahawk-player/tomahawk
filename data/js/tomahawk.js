@@ -109,11 +109,24 @@ Tomahawk.timestamp = function () {
     return Math.round(new Date() / 1000);
 };
 
-Tomahawk.htmlDecode = function (encoded) {
-    var div = document.createElement('div');
-    div.innerHTML = encoded;
-    return div.innerText
-};
+Tomahawk.htmlDecode = (function() {
+  // this prevents any overhead from creating the object each time
+  var element = document.createElement('textarea');
+
+  function decodeHTMLEntities (str) {
+    if(str && typeof str === 'string') {
+      str = str.replace(/</g,"&lt;");
+      str = str.replace(/>/g,"&gt;");
+      element.innerHTML = str;
+      str = element.textContent;
+      element.textContent = '';
+    }
+
+    return str;
+  }
+
+  return decodeHTMLEntities;
+})();
 
 Tomahawk.dumpResult = function (result) {
     var results = result.results,
