@@ -3194,43 +3194,43 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="519"/>
         <source>Focused</source>
         <comment>Distribution: Songs that are tightly clustered around the seeds</comment>
-        <translation type="unfinished"/>
+        <translation>Focalisée</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="520"/>
         <source>Wandering</source>
         <comment>Distribution: Songs from a broader range of artists</comment>
-        <translation type="unfinished"/>
+        <translation>Large spectre</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="536"/>
         <source>Classics</source>
         <comment>Genre preset: songs intended to introduce the genre to a novice listener</comment>
-        <translation type="unfinished"/>
+        <translation>Classiques</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="537"/>
         <source>Popular</source>
         <comment>Genre preset: most popular songs being played in the genre today</comment>
-        <translation type="unfinished"/>
+        <translation>En vogue</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="538"/>
         <source>Emerging</source>
         <comment>Genre preset: songs that are more popular than expected, but which are unfamiliar to most listeners</comment>
-        <translation type="unfinished"/>
+        <translation>Nouveaux talents</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="541"/>
         <source>Best</source>
         <comment>Genre preset: optimal collection of songs</comment>
-        <translation type="unfinished"/>
+        <translation>Meilleur</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="542"/>
         <source>Mix</source>
         <comment>Genre preset: a varying collection of songs</comment>
-        <translation type="unfinished"/>
+        <translation>Mix</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="569"/>
@@ -3382,37 +3382,37 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1088"/>
         <source>with a %1 distribution</source>
-        <translation type="unfinished"/>
+        <translation>avec une distribution %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1100"/>
         <source>preset to %1 collection of %2 genre songs</source>
-        <translation type="unfinished"/>
+        <translation>présélection %1 de morceaux %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1102"/>
         <source>an optimal</source>
-        <translation type="unfinished"/>
+        <translation>optimale</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1104"/>
         <source>a mixed</source>
-        <translation type="unfinished"/>
+        <translation>mixte</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1108"/>
         <source>classic</source>
-        <translation type="unfinished"/>
+        <translation>classiques</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1113"/>
         <source>popular</source>
-        <translation type="unfinished"/>
+        <translation>en vogue</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1115"/>
         <source>emerging</source>
-        <translation type="unfinished"/>
+        <translation>de nouveaux talents</translation>
     </message>
 </context>
 <context>
@@ -4402,12 +4402,12 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="88"/>
         <source>Distribution</source>
-        <translation type="unfinished"/>
+        <translation>Distribution</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="89"/>
         <source>Genre Preset</source>
-        <translation type="unfinished"/>
+        <translation>Présélection de genre</translation>
     </message>
 </context>
 <context>
