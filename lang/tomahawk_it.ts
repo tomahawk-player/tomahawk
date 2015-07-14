@@ -77,7 +77,7 @@ connettersi e condividere la tua musica?</translation>
     <message>
         <location filename="../src/tomahawk/widgets/AccountWidget.cpp" line="131"/>
         <source>Invite</source>
-        <translation type="unfinished"/>
+        <translation>Invita</translation>
     </message>
 </context>
 <context>
@@ -85,7 +85,7 @@ connettersi e condividere la tua musica?</translation>
     <message>
         <location filename="../src/tomahawk/widgets/AccountsToolButton.cpp" line="90"/>
         <source>Configure Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Configura gli account</translation>
     </message>
 </context>
 <context>
@@ -243,7 +243,7 @@ connettersi e condividere la tua musica?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="146"/>
         <source>Get Support</source>
-        <translation type="unfinished"/>
+        <translation>Ottieni Supporto</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="147"/>
@@ -505,7 +505,7 @@ connettersi e condividere la tua musica?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="125"/>
         <source>Download All</source>
-        <translation type="unfinished"/>
+        <translation>Scarica tutto</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="430"/>
@@ -582,7 +582,7 @@ connettersi e condividere la tua musica?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="246"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
-        <translation type="unfinished"/>
+        <translation>Questa playlist è attualmente vuota. Aggiungi qualche canzone e divertiti ad ascoltare!</translation>
     </message>
 </context>
 <context>
@@ -591,7 +591,7 @@ connettersi e condividere la tua musica?</translation>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="39"/>
         <source>%1 Config</source>
         <comment>Window title for account config windows</comment>
-        <translation type="unfinished"/>
+        <translation>%1 Configura</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="60"/>
@@ -616,7 +616,7 @@ connettersi e condividere la tua musica?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="230"/>
         <source>Your config is invalid.</source>
-        <translation type="unfinished"/>
+        <translation>La tua configurazione non è valida.</translation>
     </message>
 </context>
 <context>
@@ -642,7 +642,7 @@ connettersi e condividere la tua musica?</translation>
     <message>
         <location filename="../src/libtomahawk/DownloadManager.cpp" line="260"/>
         <source>Tomahawk finished downloading %1 by %2.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk ha terminato il download %1 di %2.</translation>
     </message>
 </context>
 <context>
@@ -766,7 +766,7 @@ connettersi e condividere la tua musica?</translation>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="136"/>
         <source>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;by &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;You are attempting to install a Tomahawk plug-in from an unknown source. Plug-ins from untrusted sources may put your data at risk.&lt;br/&gt;Do you want to install this plug-in?</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;di &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Si sta tentando di installare un plug-in di Tomahawk da una fonte sconosciuta. Plug-in provenienti da fonti non attendibili possono mettere a rischio i propri dati.&lt;br/&gt;Si vuole realmente installare questo plug-in?</translation>
     </message>
 </context>
 <context>
@@ -779,7 +779,7 @@ connettersi e condividere la tua musica?</translation>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="43"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;http://blog.hatchet.is&quot;&gt;Learn More&lt;/a&gt; and/or &lt;a href=&quot;http://hatchet.is/register&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Create Account&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;http://blog.hatchet.is&quot;&gt;Più informazioni&lt;/a&gt; and/or &lt;a href=&quot;http://hatchet.is/register&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Crea Account&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="78"/>
@@ -819,7 +819,7 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/HeaderWidget.ui" line="73"/>
         <source>Refresh</source>
-        <translation type="unfinished"/>
+        <translation>Aggiorna</translation>
     </message>
 </context>
 <context>
@@ -850,27 +850,27 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="17"/>
         <source>Host Settings</source>
-        <translation type="unfinished"/>
+        <translation>Impostazioni dell&apos;host</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="35"/>
         <source>Configure your external IP address or host name here. Make sure to manually forward the selected port to this host on your router.</source>
-        <translation type="unfinished"/>
+        <translation>Configurare qui il proprio indirizzo IP esterno o nome host. Assicurarsi di impostare manualmente la porta selezionata verso questo host sul proprio router..</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="53"/>
         <source>Static Host Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nome host statico:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="69"/>
         <source>Static Port:</source>
-        <translation type="unfinished"/>
+        <translation>Porta statica:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="106"/>
         <source>Automatically detect external IP address</source>
-        <translation type="unfinished"/>
+        <translation>Rileva automaticamente l&apos;indirizzo IP esterno</translation>
     </message>
 </context>
 <context>
@@ -899,12 +899,12 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="84"/>
         <source>Inbox Details</source>
-        <translation type="unfinished"/>
+        <translation>Dettagli Inbox</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="93"/>
         <source>Your friends have not shared any recommendations with you yet. Connect with them and share your musical gems!</source>
-        <translation type="unfinished"/>
+        <translation>I tuoi amici non hanno ancora condiviso canzoni preferite con te. Connettiti con loro e condividi le tue perle di musica!</translation>
     </message>
 </context>
 <context>
@@ -912,7 +912,7 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/IndexingJobItem.cpp" line="33"/>
         <source>Indexing Music Library</source>
-        <translation type="unfinished"/>
+        <translation>Indicizzazione della libreria musicale</translation>
     </message>
 </context>
 <context>
@@ -961,37 +961,37 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="14"/>
         <source>Load Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Carica Playlist</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="20"/>
         <source>Enter the URL of the hosted playlist (e.g. .xspf format) or click the button to select a local M3U of XSPF playlist to import.</source>
-        <translation type="unfinished"/>
+        <translation>Inserire l&apos;URL della playlist ospitata (es. formato .xspf) o clicca per selezionare un fìle M3U contenente playlist XSPF da importare.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="35"/>
         <source>Playlist URL</source>
-        <translation type="unfinished"/>
+        <translation>URL della playlist</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="42"/>
         <source>Enter URL...</source>
-        <translation type="unfinished"/>
+        <translation>Inserire l&apos;URL...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="55"/>
         <source>...</source>
-        <translation type="unfinished"/>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="64"/>
         <source>Automatically Update (upon changes to hosted playlist)</source>
-        <translation type="unfinished"/>
+        <translation>Aggiorna automaticamente (quando cambia la playlist ospitata)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="79"/>
         <source>To import a playlist from Spotify, Rdio, Beats, etc. - simply drag the link into Tomahawk.</source>
-        <translation type="unfinished"/>
+        <translation>Per importare una playlist da Spotify, Rdio, Beats, ecc. - trascina semplicemente il link in Tomahawk.</translation>
     </message>
 </context>
 <context>
@@ -999,12 +999,12 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.cpp" line="56"/>
         <source>Load Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Carica la playlist</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.cpp" line="56"/>
         <source>Playlists (*.xspf *.m3u *.jspf)</source>
-        <translation type="unfinished"/>
+        <translation>Playlist (*.xspf *.m3u *.jspf)</translation>
     </message>
 </context>
 <context>
@@ -1017,12 +1017,12 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="60"/>
         <source>Favorites</source>
-        <translation type="unfinished"/>
+        <translation>Favoriti</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="86"/>
         <source>Sorry, we could not find any of your Favorites!</source>
-        <translation type="unfinished"/>
+        <translation>Spiacenti, non troviamo nessuno dei tuoi preferiti!</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="89"/>
@@ -1145,13 +1145,14 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="185"/>
         <source>Error</source>
-        <translation type="unfinished"/>
+        <translation>Errore</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="185"/>
         <source>Could not write tags to file:
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Impossibile scrivere i tag nel file:
+%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="396"/>
@@ -1164,17 +1165,17 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="39"/>
         <source>Trending Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Brani di tendenza</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="79"/>
         <source>Hot Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Playlist Hot</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="113"/>
         <source>Trending Artists</source>
-        <translation type="unfinished"/>
+        <translation>Artisti di tendenza</translation>
     </message>
 </context>
 <context>
@@ -1212,7 +1213,7 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Download</source>
-        <translation type="unfinished"/>
+        <translation>Scarica</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
@@ -1297,13 +1298,13 @@ temporanea (OTP)</translation>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="146"/>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="283"/>
         <source>Download %1</source>
-        <translation type="unfinished"/>
+        <translation>Scarica %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="294"/>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="309"/>
         <source>View in Finder</source>
-        <translation type="unfinished"/>
+        <translation>Vedi nella funzione di ricerca</translation>
     </message>
 </context>
 <context>
@@ -1504,7 +1505,7 @@ temporanea (OTP)</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="629"/>
         <source>.</source>
         <comment>Inserted when ending a sentence summary</comment>
-        <translation type="unfinished"/>
+        <translation>.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="610"/>
@@ -1543,7 +1544,7 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/QueueItem.cpp" line="39"/>
         <source>Queue</source>
-        <translation type="unfinished"/>
+        <translation>Coda</translation>
     </message>
 </context>
 <context>
@@ -1556,17 +1557,17 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="39"/>
         <source>Queue Details</source>
-        <translation type="unfinished"/>
+        <translation>Dettagli della coda</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="49"/>
         <source>Queue</source>
-        <translation type="unfinished"/>
+        <translation>Coda</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="53"/>
         <source>The queue is currently empty. Drop something to enqueue it!</source>
-        <translation type="unfinished"/>
+        <translation>La coda è al moneto vuota. Rilascia qualcosa per aggiungerla!</translation>
     </message>
 </context>
 <context>
@@ -1587,7 +1588,7 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/ScannerStatusItem.cpp" line="55"/>
         <source>Scanning Collection</source>
-        <translation type="unfinished"/>
+        <translation>Scansione della collezione</translation>
     </message>
 </context>
 <context>
@@ -1646,17 +1647,17 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="65"/>
         <source>Sorry, we could not find any artists!</source>
-        <translation type="unfinished"/>
+        <translation>Spiacenti, non troviamo nessun artista!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="86"/>
         <source>Sorry, we could not find any albums!</source>
-        <translation type="unfinished"/>
+        <translation>Spiacenti, non troviamo nessun album!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="108"/>
         <source>Sorry, we could not find any songs!</source>
-        <translation type="unfinished"/>
+        <translation>Spiacenti, non troviamo nessuna canzone!</translation>
     </message>
 </context>
 <context>
@@ -1664,12 +1665,12 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/network/Servent.cpp" line="1003"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
-        <translation type="unfinished"/>
+        <translation>Rilevamento automatico dell&apos;IP esterno fallito: Impossibile fare il parsing della risposta JSON.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/network/Servent.cpp" line="1016"/>
         <source>Automatically detecting external IP failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Rilevamento automatico dell&apos;IP esterno fallito: %1</translation>
     </message>
 </context>
 <context>
@@ -1707,22 +1708,22 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="221"/>
         <source>MP3</source>
-        <translation type="unfinished"/>
+        <translation>MP3</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="222"/>
         <source>FLAC</source>
-        <translation type="unfinished"/>
+        <translation>FLAC</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="223"/>
         <source>M4A</source>
-        <translation type="unfinished"/>
+        <translation>M4A</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="224"/>
         <source>MP4</source>
-        <translation type="unfinished"/>
+        <translation>MP4</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="260"/>
@@ -1742,18 +1743,18 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="273"/>
         <source>Downloads</source>
-        <translation type="unfinished"/>
+        <translation>Scaricamenti</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="273"/>
         <source>Configure Tomahawk&apos;s integrated download manager.</source>
-        <translation type="unfinished"/>
+        <translation>Configura il downloader integrato di Tomahawk.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="443"/>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="457"/>
         <source>Open Directory</source>
-        <translation type="unfinished"/>
+        <translation>Apri la cartella</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="551"/>
@@ -1786,7 +1787,7 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Accounts.ui" line="57"/>
         <source>Filter by Capability:</source>
-        <translation type="unfinished"/>
+        <translation>Filtra per capacità:</translation>
     </message>
 </context>
 <context>
@@ -1804,17 +1805,17 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="51"/>
         <source>UPnP / Automatic Port Forwarding (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>UPnP / Port forwarding automatico (raccomandato)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="69"/>
         <source>Manual Port Forwarding</source>
-        <translation type="unfinished"/>
+        <translation>Port forwarding manuale</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="82"/>
         <source>Host Settings...</source>
-        <translation type="unfinished"/>
+        <translation>Impostazioni dell&apos;host...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="110"/>
@@ -1844,7 +1845,7 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="193"/>
         <source>Allow other computers to interact with Tomahawk (not recommended yet)</source>
-        <translation type="unfinished"/>
+        <translation>Permetti ad altri computer di interagire con Tomahawk (non ancora raccomandato)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="206"/>
@@ -1854,7 +1855,7 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="216"/>
         <source>Show Notifications on song change</source>
-        <translation type="unfinished"/>
+        <translation>Mostra notifiche quando cambiano le canzoni.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="244"/>
@@ -1867,12 +1868,12 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="38"/>
         <source>Folders to scan for music:</source>
-        <translation type="unfinished"/>
+        <translation>Cartelle da scansioanre per la musica:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="53"/>
         <source>Due to the unique way Tomahawk works, your music files must at least have Artist &amp; Title metadata/ID3 tags to be added to your Collection.</source>
-        <translation type="unfinished"/>
+        <translation>Per come funziona Tomahawk, i file musicali devono avere almeno i metadati/tag ID3 Artista e Titolo per essere aggiunti alla tua collezione.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="76"/>
@@ -1895,17 +1896,17 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="115"/>
         <source>Upload Collection info to enable personalized &quot;User Radio&quot;</source>
-        <translation type="unfinished"/>
+        <translation>Carica le informazioni della collezione per abilitare la &quot;Radio Utente&quot;</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="128"/>
         <source>Watch for changes (automatically update Collection)</source>
-        <translation type="unfinished"/>
+        <translation>Controlla i cambiamenti (aggiorna automaticamente la collezione)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="137"/>
         <source>Time between scans (in seconds):</source>
-        <translation type="unfinished"/>
+        <translation>Tempo tra ogni scansione (in secondi):</translation>
     </message>
 </context>
 <context>
@@ -1913,22 +1914,22 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="26"/>
         <source>Some Plug-Ins enable you to purchase and/or download music directly in Tomahawk.  Set your preferences for the download format and location:</source>
-        <translation type="unfinished"/>
+        <translation>Alcuni Plug-in ti permettono di acquistare e/o scaricare musica direttamente in Tomahawk. Imposta le preferenze per il formato del download e la locazione:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="49"/>
         <source>Folder to download music to:</source>
-        <translation type="unfinished"/>
+        <translation>Cartella in cui scaricare la musica:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="68"/>
         <source>Browse...</source>
-        <translation type="unfinished"/>
+        <translation>Esplora...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="79"/>
         <source>Preferred download format:</source>
-        <translation type="unfinished"/>
+        <translation>Formato di download preferito:</translation>
     </message>
 </context>
 <context>
@@ -2046,7 +2047,7 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="85"/>
         <source>History</source>
-        <translation type="unfinished"/>
+        <translation>Cronologia</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="149"/>
@@ -2173,22 +2174,22 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="311"/>
         <source>Cloud Collections</source>
-        <translation type="unfinished"/>
+        <translation>Collezioni nella cloud</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="300"/>
         <source>Discover</source>
-        <translation type="unfinished"/>
+        <translation>Scopri</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="301"/>
         <source>Open Pages</source>
-        <translation type="unfinished"/>
+        <translation>Apri pagine</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="303"/>
         <source>Your Music</source>
-        <translation type="unfinished"/>
+        <translation>La tua musica</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="312"/>
@@ -2363,7 +2364,7 @@ temporanea (OTP)</translation>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="101"/>
         <source>You may need to change your %1Google Account Settings%2 to login.</source>
         <comment>%1 is &lt;a href&gt;, %2 is &lt;/a&gt;</comment>
-        <translation type="unfinished"/>
+        <translation>Forse devi cambiare le %1Impostazioni del tuo account google%2 per accedere.</translation>
     </message>
 </context>
 <context>
@@ -2371,7 +2372,7 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.h" line="44"/>
         <source>Login to directly connect to your Google Talk contacts that also use Tomahawk.</source>
-        <translation type="unfinished"/>
+        <translation>Accedi per connetterti direttamente ai tuoi contatti di Google Talk che usano Tomahawk.</translation>
     </message>
 </context>
 <context>
@@ -2420,7 +2421,7 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccount.h" line="51"/>
         <source>Connect to Hatchet to capture your playback data, sync your playlists to Android and more.</source>
-        <translation type="unfinished"/>
+        <translation>Connettersi ad Hatchet per ottenere i propri dati di playback, per sincronizzare le proprie playlist su Android e altro.</translation>
     </message>
 </context>
 <context>
@@ -2610,12 +2611,12 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="79"/>
         <source>the KDE instant messaging framework</source>
-        <translation type="unfinished"/>
+        <translation>il framework di KDE per i messaggi istantanei</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="96"/>
         <source>KDE Instant Messaging Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Gli account KDE per i messaggi istantanei</translation>
     </message>
 </context>
 <context>
@@ -2623,7 +2624,7 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/accounts/xmpp/XmppAccount.h" line="53"/>
         <source>Login to connect to your Jabber/XMPP contacts that also use Tomahawk.</source>
-        <translation type="unfinished"/>
+        <translation>Accedi per connetterti ai tuoi contatti Jabber/XMPP che usano Tomahawk.</translation>
     </message>
 </context>
 <context>
@@ -2671,7 +2672,7 @@ username@jabber.org</source>
     <message>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="46"/>
         <source>Automatically connect to Tomahawk users on the same local network.</source>
-        <translation type="unfinished"/>
+        <translation>Connettiti automaticamente agli utenti di Tomahawk sulla stessa rete locale.</translation>
     </message>
 </context>
 <context>
@@ -2726,7 +2727,7 @@ username@jabber.org</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="199"/>
         <source>View Similar Tracks to &quot;%1&quot;</source>
-        <translation type="unfinished"/>
+        <translation>Vedi canzoni simili a &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="278"/>
@@ -2828,7 +2829,7 @@ username@jabber.org</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicControlList.cpp" line="84"/>
         <source>Save Settings</source>
-        <translation type="unfinished"/>
+        <translation>Salva le impostazioni</translation>
     </message>
 </context>
 <context>
@@ -2898,7 +2899,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="166"/>
         <source>Limit To</source>
-        <translation type="unfinished"/>
+        <translation>Limita a</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="170"/>
@@ -2994,13 +2995,13 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="362"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="369"/>
         <source>-180%1</source>
-        <translation type="unfinished"/>
+        <translation>-180%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="362"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="369"/>
         <source>180%1</source>
-        <translation type="unfinished"/>
+        <translation>180%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="378"/>
@@ -3186,43 +3187,43 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="519"/>
         <source>Focused</source>
         <comment>Distribution: Songs that are tightly clustered around the seeds</comment>
-        <translation type="unfinished"/>
+        <translation>Focalizzato</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="520"/>
         <source>Wandering</source>
         <comment>Distribution: Songs from a broader range of artists</comment>
-        <translation type="unfinished"/>
+        <translation>Meravigliato</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="536"/>
         <source>Classics</source>
         <comment>Genre preset: songs intended to introduce the genre to a novice listener</comment>
-        <translation type="unfinished"/>
+        <translation>Classica</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="537"/>
         <source>Popular</source>
         <comment>Genre preset: most popular songs being played in the genre today</comment>
-        <translation type="unfinished"/>
+        <translation>Popolare</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="538"/>
         <source>Emerging</source>
         <comment>Genre preset: songs that are more popular than expected, but which are unfamiliar to most listeners</comment>
-        <translation type="unfinished"/>
+        <translation>Emergente</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="541"/>
         <source>Best</source>
         <comment>Genre preset: optimal collection of songs</comment>
-        <translation type="unfinished"/>
+        <translation>Migliore</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="542"/>
         <source>Mix</source>
         <comment>Genre preset: a varying collection of songs</comment>
-        <translation type="unfinished"/>
+        <translation>Mix</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="569"/>
@@ -3374,37 +3375,37 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1088"/>
         <source>with a %1 distribution</source>
-        <translation type="unfinished"/>
+        <translation>Con una distribuzione %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1100"/>
         <source>preset to %1 collection of %2 genre songs</source>
-        <translation type="unfinished"/>
+        <translation>Preimpostare alla collezione %1 delle canzoni di genere %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1102"/>
         <source>an optimal</source>
-        <translation type="unfinished"/>
+        <translation>un ottimale</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1104"/>
         <source>a mixed</source>
-        <translation type="unfinished"/>
+        <translation>un mixato</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1108"/>
         <source>classic</source>
-        <translation type="unfinished"/>
+        <translation>classico</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1113"/>
         <source>popular</source>
-        <translation type="unfinished"/>
+        <translation>popolare</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1115"/>
         <source>emerging</source>
-        <translation type="unfinished"/>
+        <translation>emergente</translation>
     </message>
 </context>
 <context>
@@ -3457,12 +3458,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="130"/>
         <source>The current track could not be resolved. Tomahawk will pick back up with the next resolvable track from this source.</source>
-        <translation type="unfinished"/>
+        <translation>La traccia corrente potrebbe non essere raggiungibile. Tomahawk leggerà la prossima traccia disponibile da questa sorgente.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="138"/>
         <source>Tomahawk is stopped.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk si è interrotto.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="211"/>
@@ -3493,7 +3494,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="314"/>
         <source>Tomahawk - Now Playing</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk - In esecuzione</translation>
     </message>
 </context>
 <context>
@@ -3537,7 +3538,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="87"/>
         <source>Notify User</source>
-        <translation type="unfinished"/>
+        <translation>Notifica l&apos;utente</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="88"/>
