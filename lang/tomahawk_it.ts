@@ -3543,66 +3543,67 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="88"/>
         <source>Now Playing</source>
-        <translation type="unfinished"/>
+        <translation>In esecuzione</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="89"/>
         <source>Unresolved track</source>
-        <translation type="unfinished"/>
+        <translation>Traccia non raggiungibile</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="90"/>
         <source>Playback Stopped</source>
-        <translation type="unfinished"/>
+        <translation>Riproduzione interrotta</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="91"/>
         <source>You received a Song recommendation</source>
-        <translation type="unfinished"/>
+        <translation>Hai ricevuto un raccomandazione per una canzone</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="202"/>
         <source>on</source>
         <comment>'on' is followed by an album name</comment>
-        <translation type="unfinished"/>
+        <translation>su</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="204"/>
         <source>%1%4 %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist ('by' in english)</comment>
-        <translation type="unfinished"/>
+        <translation>%1%4 %2%3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="208"/>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="270"/>
         <source>by</source>
         <comment>preposition to link track and artist</comment>
-        <translation type="unfinished"/>
+        <translation>da</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="217"/>
         <source>on &quot;%1&quot;</source>
         <comment>%1 is an album name</comment>
-        <translation type="unfinished"/>
+        <translation>su &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="219"/>
         <source>&quot;%1&quot; by %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing</comment>
-        <translation type="unfinished"/>
+        <translation>&quot;%1&quot; di %2%3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="266"/>
         <source>%1 sent you
 %2%4 %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist ('by' in english)</comment>
-        <translation type="unfinished"/>
+        <translation>%1 ti ha inviato
+%2%4 %3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="277"/>
         <source>%1 sent you &quot;%2&quot; by %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist</comment>
-        <translation type="unfinished"/>
+        <translation>%1 ti ha inviato &quot;%2&quot; by %3.</translation>
     </message>
 </context>
 <context>
@@ -3646,7 +3647,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="373"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
-        <translation type="unfinished"/>
+        <translation>Avviso dello script resolver: chiamata API %1 ha restituito dati sincroni.</translation>
     </message>
 </context>
 <context>
@@ -3668,7 +3669,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="42"/>
         <source>Your Collection</source>
-        <translation type="unfinished"/>
+        <translation>La tua collezione</translation>
     </message>
 </context>
 <context>
@@ -3685,7 +3686,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="78"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a script pluginsc, e.g. Subsonic Collection</comment>
-        <translation type="unfinished"/>
+        <translation>Collezione %1</translation>
     </message>
 </context>
 <context>
@@ -3693,22 +3694,22 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="92"/>
         <source>Resolver Error: %1:%2 %3</source>
-        <translation type="unfinished"/>
+        <translation>Errore del resolver: %1:%2 %3</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="110"/>
         <source>SSL Error</source>
-        <translation type="unfinished"/>
+        <translation>Errore SSL</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="111"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
-        <translation type="unfinished"/>
+        <translation>Hai chiesto a Tomahawk di connettersi in modo sicuro a &lt;b&gt;%1&lt;/b&gt; ma non possiamo garantire che la conessione sia sicura: &lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Sei sicuro di voler connetterti?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="118"/>
         <source>Trust certificate</source>
-        <translation type="unfinished"/>
+        <translation>Certificato di trust</translation>
     </message>
 </context>
 <context>
@@ -3813,7 +3814,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/charts/ChartsWidget.h" line="130"/>
         <source>Charts</source>
-        <translation type="unfinished"/>
+        <translation>Classifiche</translation>
     </message>
 </context>
 <context>
@@ -3826,7 +3827,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.h" line="97"/>
         <source>An overview of your friends&apos; recent activity</source>
-        <translation type="unfinished"/>
+        <translation>Una panoramica sulle attività recenti dei tuoi amici</translation>
     </message>
 </context>
 <context>
@@ -3847,12 +3848,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="57"/>
         <source>Trending</source>
-        <translation type="unfinished"/>
+        <translation>Tendenza</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="58"/>
         <source>What&apos;s hot amongst your friends</source>
-        <translation type="unfinished"/>
+        <translation>Cose interessanti tra i tuoi amici</translation>
     </message>
 </context>
 <context>
@@ -3885,12 +3886,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="108"/>
         <source>Sorry, we are still loading the charts.</source>
-        <translation type="unfinished"/>
+        <translation>Spiacenti, stiamo ancora caricando le classifiche.</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="131"/>
         <source>Sorry, we couldn&apos;t find any trending tracks.</source>
-        <translation type="unfinished"/>
+        <translation>Spiacenti, non riusciamo a trovare canzoni di tendenza.</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="79"/>
@@ -3926,7 +3927,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNew_0_8.h" line="90"/>
         <source>An overview of the changes and additions since 0.7.</source>
-        <translation type="unfinished"/>
+        <translation>Una panoramica sui cambiamenti e le le funzionalità aggiunte dalla versione 0.7.</translation>
     </message>
 </context>
 <context>
@@ -3947,7 +3948,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="609"/>
         <source>Tomahawk is updating the database. Please wait, this may take a minute!</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk sta aggiornando il database. Attendere prego, ci vorrà qualche minuto!</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="616"/>
@@ -3958,18 +3959,20 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="727"/>
         <source>Updating database
 </source>
-        <translation type="unfinished"/>
+        <translation>Aggiornamento del database
+</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="734"/>
         <source>Updating database
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Aggiornamento del database
+%1</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="784"/>
         <source>Automatically detecting external IP failed.</source>
-        <translation type="unfinished"/>
+        <translation>Rilevazione automatica dell&apos;indirizzo IP esterno fallita.</translation>
     </message>
 </context>
 <context>
@@ -4084,7 +4087,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="614"/>
         <source>Next</source>
-        <translation type="unfinished"/>
+        <translation>Avanti</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="627"/>
@@ -4121,7 +4124,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1263"/>
         <source>Failed to load JSPF playlist</source>
-        <translation type="unfinished"/>
+        <translation>Impossibile caricare la playlist JSPF</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1270"/>
@@ -4195,7 +4198,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1421"/>
         <source>Copyright 2010 - 2015</source>
-        <translation type="unfinished"/>
+        <translation>Copyright 2010 - 2015</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1422"/>
@@ -4223,12 +4226,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="175"/>
         <source>Unknown Release-Date</source>
-        <translation type="unfinished"/>
+        <translation>Data di rilascio sconosciuta</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackDetailView.cpp" line="266"/>
         <source>on %1</source>
-        <translation type="unfinished"/>
+        <translation>su %1</translation>
     </message>
 </context>
 <context>
@@ -4392,12 +4395,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="88"/>
         <source>Distribution</source>
-        <translation type="unfinished"/>
+        <translation>Distribuzione</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="89"/>
         <source>Genre Preset</source>
-        <translation type="unfinished"/>
+        <translation>Preimpostazione del genere musicale</translation>
     </message>
 </context>
 <context>
@@ -4423,7 +4426,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="96"/>
         <source>If you are reading this it likely means you have already noticed the biggest change since our last release - a shiny new interface and design. New views, fonts, icons, header images and animations at every turn. Below you can find an overview of the functional changes and additions since 0.7 too:</source>
-        <translation type="unfinished"/>
+        <translation>Se leggi questa notifica probbabilmente avrai già notato i cambiamenti più importanti dell&apos;ultima versione - Un nuovo design e una nuova interfaccia. Nuove viste, font, icone, immagini di testata e animazioni ovunque. Di seguito trovate una panoramica dei cambiamenti funzionali e delle aggiunte inserite a partire dalla versione 0.7:</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="174"/>
@@ -4433,17 +4436,17 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="213"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Send tracks to your friends just by dragging it onto their avatar in the Tomahawk sidebar. Check out what your friends think you should listen to in your inbox.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Invia canzoni ai tuoi amici trascinandole col mouse sulle loro foto, nella barra laterale di Tomahawk. Controlla ciò che i tuoi amici ti consigliano di ascoltare, nella tua inbox.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="230"/>
         <source>Universal Link Support</source>
-        <translation type="unfinished"/>
+        <translation>Supporto ai link universali</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="253"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Love that your friends and influencers are posting music links  but hate that they are links for music services you don&apos;t use? Just drag Rdio, Deezer, Beats or other music service URLs into your Tomahawk queue or playlists and have them automatically play from your preferred source.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ti piacciono i link musicali che gli amici e influencer condividono ma odi che questi link appartengono a servizi che non usi? Trascina gli URL di Rdio, Deezer, Beats o altro servizo musicale nella tua coda di Tomahawk o nelle tue playlist per riprodurli dalla tua fonte preferita.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="270"/>
@@ -4453,7 +4456,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="296"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beats Music (recently aquired by Apple) is now supported. This means that Beats Music subscribers can also benefit by resolving other music service links so they stream from their Beats Music account. Welcome aboard!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beats Music (acquistato di recente da Apple) adesso è supportato. Ciò significa che gli utenti di Beats Music possono anche trarre vantaggio dalla risoluzione dei link appartenenti ad altri servizi musicali per condividere il loro stream musicale dall&apos;account di Beat Music. Benvenuti a bordo!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="313"/>
@@ -4463,22 +4466,22 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="336"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Google Music is another of our latest supported services - both for the music you&apos;ve uploaded to Google Music as well as their full streaming catalog for Google Play Music All Access subscribers. Not only is all of your Google Play Music a potential source for streaming - your entire online collection is browseable too.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Google Music è un altro dei nostri servizi supportati di recente - sia per la musica caricata su Google Music che per il catalogo di Google Play Music All Access. Non solo la musica di Google Music diventa una potenziale fonte per lo streaming, ma la vostra intera collezione online è anche navigabile e consultabile.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="376"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk for Android is now in beta! The majority of the same resolvers are supported in the Android app - plus a couple of additional ones in Rdio &amp;amp; Deezer. &lt;a href=&quot;http://hatchet.is/register&quot;&gt;Create a Hatchet account&lt;/a&gt; to sync all of your playlists from your desktop to your mobile. Find current and future music influencers and follow them to discover and hear what they love. Just like on the desktop, Tomahawk on Android can open other music service links and play them from yours. Even when you are listening to other music apps, Tomahawk can capture all of that playback data and add it to your Hatchet profile.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk per Android adesso è in beta! La maggior parte dei resolver è supportata dall&apos;app - più un paio di resolver aggiuntivi in Rdio &amp; Deezer. &lt;a href=&quot;http://hatchet.is/register&quot;&gt;Crea un account Hatcher&lt;/a&gt; per sincronizzare tutte le tue playlist dal desktop al tuo dispositivo mobile. Cerca influencer musicali di oggi e di domani e seguili per scoprire ed ascoltare ciò che più gli piace. Proprio come sul desktop, Tomahawk per Android può aprire link di altri servizi musicali e riprodurli dai tuoi servizi. Anche quando stai ascoltando musica da altre applicazioni, Tomahawk può catturare tutti i dati di playback e aggiungerli al tuo profilo Hatchet.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="396"/>
         <source>Connectivity</source>
-        <translation type="unfinished"/>
+        <translation>Connettività</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="419"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk now supports IPv6 and multiple local IP addresses. This improves the discoverability and connection between Tomahawk users - particularly large local networks often found in work and university settings. The more friends, the more music, the more playlists and the more curation from those people whose musical tastes you value. Sit back and just Listen Along!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tomahawk adesso supporta IPv6 e indirizzi IP locali multipli. Questo migliora la reperibilità e la connessione tra gli utenti Tomahawk - in particolare nelle grandi reti locali spesso presenti a lavoro o nelle università. Più amici, più musica, più playlist e più attenzione per le persone che hanno gusti musicali a cui dai valore. Siediti e ascolta per quanto tempo vuoi!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="353"/>
@@ -4646,17 +4649,17 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="58"/>
         <source>Configure this Jabber/XMPP account</source>
-        <translation type="unfinished"/>
+        <translation>Configura questo account Jabber/XMPP</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="104"/>
         <source>Enter your XMPP login to connect with your friends using Tomahawk!</source>
-        <translation type="unfinished"/>
+        <translation>Inserire la propria utenza XMPP per connettersi con i propri amici usando Tomahawk!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="231"/>
         <source>XMPP ID:</source>
-        <translation type="unfinished"/>
+        <translation>XMPP ID:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="247"/>
@@ -4696,7 +4699,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="402"/>
         <source>Display currently playing track</source>
-        <translation type="unfinished"/>
+        <translation>Mostra la canzone in riproduzione</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="409"/>

@@ -77,7 +77,7 @@ se conecte e faça o stream por você?</translation>
     <message>
         <location filename="../src/tomahawk/widgets/AccountWidget.cpp" line="131"/>
         <source>Invite</source>
-        <translation type="unfinished"/>
+        <translation>Convidar</translation>
     </message>
 </context>
 <context>
@@ -85,7 +85,7 @@ se conecte e faça o stream por você?</translation>
     <message>
         <location filename="../src/tomahawk/widgets/AccountsToolButton.cpp" line="90"/>
         <source>Configure Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Configurar Contas</translation>
     </message>
 </context>
 <context>
@@ -505,7 +505,7 @@ se conecte e faça o stream por você?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="125"/>
         <source>Download All</source>
-        <translation type="unfinished"/>
+        <translation>Baixar Tudo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="430"/>
@@ -591,7 +591,7 @@ se conecte e faça o stream por você?</translation>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="39"/>
         <source>%1 Config</source>
         <comment>Window title for account config windows</comment>
-        <translation type="unfinished"/>
+        <translation>Configuração de %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="60"/>
@@ -616,7 +616,7 @@ se conecte e faça o stream por você?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="230"/>
         <source>Your config is invalid.</source>
-        <translation type="unfinished"/>
+        <translation>Sua configuração é inválida.</translation>
     </message>
 </context>
 <context>
@@ -642,7 +642,7 @@ se conecte e faça o stream por você?</translation>
     <message>
         <location filename="../src/libtomahawk/DownloadManager.cpp" line="260"/>
         <source>Tomahawk finished downloading %1 by %2.</source>
-        <translation type="unfinished"/>
+        <translation>O Tomahawk acabou de baixar %1 por %2</translation>
     </message>
 </context>
 <context>
@@ -1213,7 +1213,7 @@ Senha (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Download</source>
-        <translation type="unfinished"/>
+        <translation>Baixar</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
@@ -1298,13 +1298,13 @@ Senha (OTP)</translation>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="146"/>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="283"/>
         <source>Download %1</source>
-        <translation type="unfinished"/>
+        <translation>Baixar %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="294"/>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="309"/>
         <source>View in Finder</source>
-        <translation type="unfinished"/>
+        <translation>Ver no Finder</translation>
     </message>
 </context>
 <context>
@@ -1744,12 +1744,12 @@ Senha (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="273"/>
         <source>Downloads</source>
-        <translation type="unfinished"/>
+        <translation>Downloads</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="273"/>
         <source>Configure Tomahawk&apos;s integrated download manager.</source>
-        <translation type="unfinished"/>
+        <translation>Configurar o gerenciador de downloads integrado do Tomahawk.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="443"/>
@@ -1915,22 +1915,22 @@ Senha (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="26"/>
         <source>Some Plug-Ins enable you to purchase and/or download music directly in Tomahawk.  Set your preferences for the download format and location:</source>
-        <translation type="unfinished"/>
+        <translation>Alguns Plugins permitem que você compre ou/e baixe músicas diretamente no Tomahawk. Mude suas preferências de formato e localização dos downloads:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="49"/>
         <source>Folder to download music to:</source>
-        <translation type="unfinished"/>
+        <translation>Pasta para salvar músicas baixadas:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="68"/>
         <source>Browse...</source>
-        <translation type="unfinished"/>
+        <translation>Procurar...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="79"/>
         <source>Preferred download format:</source>
-        <translation type="unfinished"/>
+        <translation>Formato preferido de download:</translation>
     </message>
 </context>
 <context>
@@ -3195,43 +3195,43 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="519"/>
         <source>Focused</source>
         <comment>Distribution: Songs that are tightly clustered around the seeds</comment>
-        <translation type="unfinished"/>
+        <translation>Focado</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="520"/>
         <source>Wandering</source>
         <comment>Distribution: Songs from a broader range of artists</comment>
-        <translation type="unfinished"/>
+        <translation>Variando</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="536"/>
         <source>Classics</source>
         <comment>Genre preset: songs intended to introduce the genre to a novice listener</comment>
-        <translation type="unfinished"/>
+        <translation>Clássicos</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="537"/>
         <source>Popular</source>
         <comment>Genre preset: most popular songs being played in the genre today</comment>
-        <translation type="unfinished"/>
+        <translation>Popular</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="538"/>
         <source>Emerging</source>
         <comment>Genre preset: songs that are more popular than expected, but which are unfamiliar to most listeners</comment>
-        <translation type="unfinished"/>
+        <translation>Emergindo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="541"/>
         <source>Best</source>
         <comment>Genre preset: optimal collection of songs</comment>
-        <translation type="unfinished"/>
+        <translation>Melhor</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="542"/>
         <source>Mix</source>
         <comment>Genre preset: a varying collection of songs</comment>
-        <translation type="unfinished"/>
+        <translation>Mix</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="569"/>
@@ -3383,7 +3383,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1088"/>
         <source>with a %1 distribution</source>
-        <translation type="unfinished"/>
+        <translation>com uma distribuição %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1100"/>
@@ -3393,27 +3393,27 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1102"/>
         <source>an optimal</source>
-        <translation type="unfinished"/>
+        <translation>uma otimizada</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1104"/>
         <source>a mixed</source>
-        <translation type="unfinished"/>
+        <translation>um mix</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1108"/>
         <source>classic</source>
-        <translation type="unfinished"/>
+        <translation>clássico</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1113"/>
         <source>popular</source>
-        <translation type="unfinished"/>
+        <translation>popular</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1115"/>
         <source>emerging</source>
-        <translation type="unfinished"/>
+        <translation>emergindo</translation>
     </message>
 </context>
 <context>
@@ -4403,7 +4403,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="88"/>
         <source>Distribution</source>
-        <translation type="unfinished"/>
+        <translation>Distribuição</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="89"/>
