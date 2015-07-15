@@ -4266,7 +4266,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="96"/>
         <source>If you are reading this it likely means you have already noticed the biggest change since our last release - a shiny new interface and design. New views, fonts, icons, header images and animations at every turn. Below you can find an overview of the functional changes and additions since 0.7 too:</source>
-        <translation>Se leggi questa notifica probbabilmente avete già notato i cambiamenti più importanti dell&apos;ultima versione - Un nuovo design e una nuova interfaccia. Nuove viste, font, icone, immagini di testata e animazioni ovunque. Di seguito trovate una panoramica dei cambiamenti funzionali e delle aggiunte inserite a partire dalla versione 0.7:</translation>
+        <translation>Se leggi questa notifica probbabilmente avrai già notato i cambiamenti più importanti dell&apos;ultima versione - Un nuovo design e una nuova interfaccia. Nuove viste, font, icone, immagini di testata e animazioni ovunque. Di seguito trovate una panoramica dei cambiamenti funzionali e delle aggiunte inserite a partire dalla versione 0.7:</translation>
     </message>
     <message>
         <location filename="../src/viewpages/whatsnew_0_8/WhatsNewWidget_0_8.ui" line="174"/>

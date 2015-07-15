@@ -3187,7 +3187,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="913"/>
         <source>Adventurousness</source>
-        <translation>Adventurousness</translation>
+        <translation>Aventureiro</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="919"/>
