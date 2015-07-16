@@ -19,7 +19,6 @@ Tomahawk is basically a **player for music metadata**. At its core it decouples 
 * Beats Music
 * Google Play Music (on-demand streaming and music locker)
 * TIDAL
-* Grooveshark
 * Rdio (Android only)
 * Deezer (Android only)
 
