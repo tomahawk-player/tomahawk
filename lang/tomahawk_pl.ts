@@ -85,7 +85,7 @@ połączyć się i strumieniować od ciebie?</translation>
     <message>
         <location filename="../src/tomahawk/widgets/AccountsToolButton.cpp" line="90"/>
         <source>Configure Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Konfiguruj konta</translation>
     </message>
 </context>
 <context>
@@ -505,7 +505,7 @@ połączyć się i strumieniować od ciebie?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="125"/>
         <source>Download All</source>
-        <translation type="unfinished"/>
+        <translation>Pobierz wszystko</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="430"/>
@@ -1297,7 +1297,7 @@ jednorazowe (OTP)</translation>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="146"/>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="283"/>
         <source>Download %1</source>
-        <translation type="unfinished"/>
+        <translation>Pobierz %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="294"/>
@@ -1928,7 +1928,7 @@ indywidualnego profilu gustu.</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="68"/>
         <source>Browse...</source>
-        <translation type="unfinished"/>
+        <translation>Przeglądaj...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="79"/>
@@ -3228,7 +3228,7 @@ Spróbuj poprawić filtry aby uzyskać nowy zestaw piosenek do odtworzenia.</tra
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="541"/>
         <source>Best</source>
         <comment>Genre preset: optimal collection of songs</comment>
-        <translation type="unfinished"/>
+        <translation>Najlepsze</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="542"/>
