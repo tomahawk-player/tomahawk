@@ -150,7 +150,7 @@ MediaStream::readDoneCallback ( const char *cookie, size_t bufferSize, void *buf
     Q_UNUSED(bufferSize);
 
     if ( ( m_type == Stream ) && buffer != nullptr && bufferSize > 0 ) {
-        delete static_cast< char* >( buffer );
+        delete[] reinterpret_cast< char* >( buffer );
     }
 
     return 0;

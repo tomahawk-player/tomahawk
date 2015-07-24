@@ -95,8 +95,11 @@ QNR_IODeviceStream::needData( void** buffer )
         return 0;
     }
 
-    *buffer = new char[data.size()];
-    memcpy(*buffer, data.data(), data.size());
+    if ( data.size() > 0 ) 
+    {
+        *buffer = new char[data.size()];
+        memcpy(*buffer, data.data(), data.size());
+    }
     return data.size();
 }
 
