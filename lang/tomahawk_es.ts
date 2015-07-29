@@ -3210,7 +3210,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="536"/>
         <source>Classics</source>
         <comment>Genre preset: songs intended to introduce the genre to a novice listener</comment>
-        <translation type="unfinished"/>
+        <translation>Clásicos</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="537"/>
@@ -3411,7 +3411,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1113"/>
         <source>popular</source>
-        <translation type="unfinished"/>
+        <translation>popular</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1115"/>
