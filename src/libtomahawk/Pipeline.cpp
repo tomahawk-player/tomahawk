@@ -57,7 +57,7 @@ Pipeline::Pipeline( QObject* parent )
     Q_D( Pipeline );
     PipelinePrivate::s_instance = this;
 
-    d->maxConcurrentQueries = qBound( DEFAULT_CONCURRENT_QUERIES, QThread::idealThreadCount(), MAX_CONCURRENT_QUERIES );
+    d->maxConcurrentQueries = 24;
     tDebug() << Q_FUNC_INFO << "Using" << d->maxConcurrentQueries << "threads";
 
     d->temporaryQueryTimer.setInterval( CLEANUP_TIMEOUT );
