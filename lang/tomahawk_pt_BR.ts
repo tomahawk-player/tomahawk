@@ -3388,7 +3388,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1100"/>
         <source>preset to %1 collection of %2 genre songs</source>
-        <translation type="unfinished"/>
+        <translation>predefinição para coleção %1 de músicas do gênero %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1102"/>
@@ -3694,7 +3694,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="78"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a script pluginsc, e.g. Subsonic Collection</comment>
-        <translation type="unfinished"/>
+        <translation>Coleção %1 </translation>
     </message>
 </context>
 <context>
@@ -4408,7 +4408,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="89"/>
         <source>Genre Preset</source>
-        <translation type="unfinished"/>
+        <translation>Predefinição do Gênero</translation>
     </message>
 </context>
 <context>
