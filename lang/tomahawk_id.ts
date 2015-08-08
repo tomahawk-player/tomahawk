@@ -5,13 +5,13 @@
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="67"/>
         <source>Allow %1 to
 connect and stream from you?</source>
-        <translation>Bolehkan %1 untuk
-terhubung dan memutar secara langsung?</translation>
+        <translation>Izinkan %1 untuk
+terhubung dan strim dari Anda?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="83"/>
         <source>Allow Streaming</source>
-        <translation>Bolehkan memutar secara langsung</translation>
+        <translation>Izinkan Strim</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="86"/>
@@ -24,7 +24,7 @@ terhubung dan memutar secara langsung?</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="185"/>
         <source>Tomahawk needs you to decide whether %1 is allowed to connect.</source>
-        <translation>Tomahawk memerlukan anda untuk menentukan apakah %1 diizinkan untuk terhubung.</translation>
+        <translation>Tomahawk memerlukan Anda untuk memutuskan apakah %1 diizinkan untuk terhubung.</translation>
     </message>
 </context>
 <context>
@@ -45,7 +45,7 @@ terhubung dan memutar secara langsung?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="108"/>
         <source>Connecting...</source>
-        <translation>menyambungkan...</translation>
+        <translation>Menyambungkan...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="113"/>
@@ -64,12 +64,12 @@ terhubung dan memutar secara langsung?</translation>
         <location filename="../src/tomahawk/widgets/AccountListWidget.cpp" line="72"/>
         <location filename="../src/tomahawk/widgets/AccountListWidget.cpp" line="243"/>
         <source>Connect &amp;All</source>
-        <translation>Koneksi &amp;All</translation>
+        <translation>Sambung &amp;Semua</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/AccountListWidget.cpp" line="242"/>
         <source>Disconnect &amp;All</source>
-        <translation>Disconnect &amp;All</translation>
+        <translation>Putuskan &amp;Semua</translation>
     </message>
 </context>
 <context>
@@ -77,22 +77,22 @@ terhubung dan memutar secara langsung?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="65"/>
         <source>&amp;Listen Along</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Dengarkan</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="68"/>
         <source>Stop &amp;Listening Along</source>
-        <translation type="unfinished"/>
+        <translation>Berhenti Men&amp;dengarkan</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="72"/>
         <source>&amp;Follow in Real-Time</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Ikuti dalam Waktu-Nyata</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
         <source>&amp;Listen Privately</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Dengarkan secara Privat</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="82"/>
