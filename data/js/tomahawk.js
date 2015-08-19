@@ -564,7 +564,7 @@ Tomahawk.ajax = function(url, settings) {
             contentType = 'application/json';
         } else if (contentType === 'xml') {
             contentType = 'text/xml';
-        } else if (xhr.hasOwnProperty('getResponseHeader')) {
+        } else if (typeof xhr.getResponseHeader !== 'undefined') {
             contentType = xhr.getResponseHeader('Content-Type');
         } else if (xhr.hasOwnProperty('contentType')) {
             contentType = xhr['contentType'];
