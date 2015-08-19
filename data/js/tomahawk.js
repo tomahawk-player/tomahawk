@@ -431,7 +431,7 @@ Tomahawk.nativeAsyncRequestDone = function (reqId, xhr) {
         if (Tomahawk.asyncRequestCallbacks[reqId].callback) {
             Tomahawk.asyncRequestCallbacks[reqId].callback(xhr);
         }
-    } else if (xmlHttpRequest.readyState === 4) {
+    } else if (xhr.readyState === 4) {
         Tomahawk.log("Failed to do nativeAsyncRequest");
         Tomahawk.log("Status Code was: " + xhr.status);
         if (Tomahawk.asyncRequestCallbacks[reqId].errorHandler) {
@@ -500,7 +500,8 @@ Tomahawk.asyncRequest = function (url, callback, extraHeaders, options) {
  */
 var shouldDoNativeRequest = function (url, callback, extraHeaders, options) {
     return (extraHeaders && (extraHeaders.hasOwnProperty("Referer")
-        || extraHeaders.hasOwnProperty("referer")));
+        || extraHeaders.hasOwnProperty("referer")
+        || extraHeaders.hasOwnProperty("User-Agent")));
 };
 
 Tomahawk.ajax = function(url, settings) {
@@ -563,8 +564,12 @@ Tomahawk.ajax = function(url, settings) {
             contentType = 'application/json';
         } else if (contentType === 'xml') {
             contentType = 'text/xml';
-        } else {
+        } else if (xhr.hasOwnProperty('getResponseHeader')) {
             contentType = xhr.getResponseHeader('Content-Type');
+        } else if (xhr.hasOwnProperty('contentType')) {
+            contentType = xhr['contentType'];
+        } else {
+            contentType = 'text/html';
         }
 
         if (~contentType.indexOf('application/json')) {
