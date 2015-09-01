@@ -951,6 +951,8 @@ JSResolverHelper::nativeAsyncRequestDone( int requestId, NetworkReply* reply )
     map["status"] = reply->reply()->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
     map["statusText"] = QString("%1 %2").arg( map["status"].toString() )
             .arg( reply->reply()->attribute( QNetworkRequest::HttpReasonPhraseAttribute ).toString() );
+    if (reply->reply()->hasRawHeader( "Content-Type" ))
+        map["contentType"] = reply->reply()->rawHeader( "Content-Type" );
 
     bool ok = false;
     QString json = QString::fromUtf8( TomahawkUtils::toJson( map, &ok ) );

@@ -148,6 +148,12 @@ NetworkReply::load( const QUrl& url )
     m_formerUrls << url.toString();
     QNetworkRequest request( url );
 
+    //Carryover User-Agent
+    if ( m_reply->request().hasRawHeader( "User-Agent" ))
+    {
+        request.setRawHeader( "User-Agent", m_reply->request().rawHeader( "User-Agent" ) );
+    }
+
     Q_ASSERT( Tomahawk::Utils::nam() != 0 );
 
     QNetworkAccessManager::Operation op = m_reply->operation();
