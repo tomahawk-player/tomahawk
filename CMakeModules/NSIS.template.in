@@ -35,14 +35,6 @@
 
 !define NSI_PATH "${SOURCE_PATH}/admin/win/nsi"
 
-;define app id needed for Windows 8 notifications
-!define AppUserModelId org.tomahawk-player.Tomahawk
-
-!define SnoreToastExe "$INSTDIR\SnoreToast.exe"
-!macro SnoreShortcut path exe appID
-    nsExec::ExecToLog '"${SnoreToastExe}" -install "${path}" "${exe}" "${appID}"'
-!macroend
-
 ;-----------------------------------------------------------------------------
 ; Installer version
 ;-----------------------------------------------------------------------------
@@ -85,7 +77,7 @@ ReserveFile "${NSISDIR}\Plugins\InstallOptions.dll"
 !include MUI2.nsh ;Used by APPDATA uninstaller.
 !include InstallOptions.nsh ;Required by MUI2 to support old MUI_INSTALLOPTIONS.
 !include Memento.nsh ;Remember user selections.
-!include WinVer.nsh ;Windows version detection.
+!include ${NSI_PATH}\WinVer.nsh ;Windows version detection. Use different version than shipped with nsis 2 to add Windows 8 detection.
 !include WordFunc.nsh  ;Used by VersionCompare macro function.
 !include UAC.nsh ;Used by the UAC elevation to install as user or admin.
 
@@ -94,6 +86,20 @@ ReserveFile "${NSISDIR}\Plugins\InstallOptions.dll"
 ;-----------------------------------------------------------------------------
 !define MEMENTO_REGISTRY_ROOT HKLM
 !define MEMENTO_REGISTRY_KEY Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk
+
+;-----------------------------------------------------------------------------
+; Setup macros for the creation of a shortcut supporting Windows 8 notifications.
+;-----------------------------------------------------------------------------
+!define AppUserModelId org.tomahawk-player.Tomahawk
+
+!define SnoreToastExe "$INSTDIR\SnoreToast.exe"
+!macro SnoreShortcut path exe appID
+    ${If} ${AtLeastWin8}
+        nsExec::ExecToLog '"${SnoreToastExe}" -install "${path}" "${exe}" "${appID}"'
+    ${Else}
+        CreateShortCut "${path}" "${exe}"
+    ${EndIf}
+!macroend
 
 ;-----------------------------------------------------------------------------
 ; Modern User Interface (MUI) defintions and setup.
