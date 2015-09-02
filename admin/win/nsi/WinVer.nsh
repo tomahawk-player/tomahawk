@@ -160,7 +160,10 @@
 # use this to make all nt > 9x
 
 !ifdef WINVER_NT4_OVER_W95
-  !define /redef /math WINVER_NT4 ${WINVER_NT4} | ${_WINVER_VERXBIT}
+  !define __WINVERTMP ${WINVER_NT4}
+  !undef WINVER_NT4
+  !define /math WINVER_NT4 ${__WINVERTMP} | ${_WINVER_VERXBIT}
+  !undef __WINVERTMP
 !endif
 
 # some definitions from header files
@@ -221,14 +224,6 @@
   Push $3 ;bld
   Push $R0 ;temp
 
-  # a plugin call will lock the Unicode mode, it is now safe to set the struct size
-  !ifdef NSIS_UNICODE
-  !define /redef OSVERSIONINFO_SIZE ${OSVERSIONINFOW_SIZE}
-  !define /redef OSVERSIONINFOEX_SIZE ${OSVERSIONINFOEXW_SIZE}
-  !else
-  !define /redef OSVERSIONINFO_SIZE ${OSVERSIONINFOA_SIZE}
-  !define /redef OSVERSIONINFOEX_SIZE ${OSVERSIONINFOEXA_SIZE}
-  !endif
 
   # allocate memory
   System::Call '*(&i${OSVERSIONINFOEX_SIZE})p.r0'
