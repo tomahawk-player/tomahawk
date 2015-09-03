@@ -921,7 +921,7 @@ JSResolverHelper::nativeAsyncRequest( const int requestId, const QString& url,
         QByteArray data;
         if ( options.contains( "data" ) )
         {
-            data = options["data"].toString().toLatin1();
+            data = options["data"].toString().toUtf8();
         }
         reply = new NetworkReply( Tomahawk::Utils::nam()->post( req, data ) );
     }
