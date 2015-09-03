@@ -336,7 +336,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
     File "${QT_DLL_PATH}\libxslt-1.dll"
     File "${QT_DLL_PATH}\libEGL.dll"
     File "${QT_DLL_PATH}\libGLESv2.dll"
-    File "${QT_DLL_PATH}\libwebp-4.dll"
+    File "${QT_DLL_PATH}\libwebp-5.dll"
 
    ;Boost fnord
     File "${QT_DLL_PATH}\icuuc53.dll"
