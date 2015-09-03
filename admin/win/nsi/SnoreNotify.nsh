@@ -1,5 +1,5 @@
 !include LogicLib.nsh
-!include TextFunc.nsh
+!include WordFunc.nsh
 
 Function SnoreWinVer
     ReadRegStr $R0 HKLM "SOFTWARE\Microsoft\Windows NT\CurrentVersion" CurrentVersion
