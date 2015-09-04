@@ -31,6 +31,7 @@ FIND_LIBRARY(ECHONEST_LIBRARIES NAMES echonest${LIBECHONEST_SUFFIX}
 
 IF(ECHONEST_LIBRARIES AND ECHONEST_INCLUDE_DIR AND NOT PC_ECHONEST_VERSION)
     MESSAGE(WARNING "You don't have pkg-config and so the libechonest version check does not work!")
+    set(PC_ECHONEST_VERSION "999.9.9")
 ENDIF()
 
 INCLUDE(FindPackageHandleStandardArgs)
