@@ -109,13 +109,6 @@ INCLUDE_DIRECTORIES(
 
 SET( OS_SPECIFIC_LINK_LIBRARIES "" )
 
-IF( WIN32 )
-  INCLUDE( "CMakeLists.win32.cmake" )
-ENDIF( WIN32 )
-IF( UNIX )
-  INCLUDE( "CMakeLists.unix.cmake" )
-ENDIF( UNIX )
-
 IF( APPLE )
     SET( CMAKE_LINKER_FLAGS "-headerpad_max_install_names ${CMAKE_LINKER_FLAGS}" )
 
@@ -129,12 +122,6 @@ IF( QCA2_FOUND )
 ENDIF( QCA2_FOUND )
 
 INCLUDE(GNUInstallDirs)
-
-# currently only in libtomahawk, we might want to properly split what's in which config file
-# configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.h.in
-#                ${CMAKE_CURRENT_BINARY_DIR}/config.h)
-# configure_file(${CMAKE_CURRENT_SOURCE_DIR}/TomahawkVersion.h.in
-#                ${CMAKE_CURRENT_BINARY_DIR}/TomahawkVersion.h)
 
 # translations
 include( ${CMAKE_SOURCE_DIR}/lang/translations.cmake )

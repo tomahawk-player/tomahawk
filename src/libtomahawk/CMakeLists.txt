@@ -6,9 +6,16 @@ add_definitions( -DDLLEXPORT_PRO )
 add_definitions( -DQT_SHAREDPOINTER_TRACK_POINTERS )
 add_definitions( -DPORTFWDDLLEXPORT_STATIC )
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../tomahawk/Config.h.in
+IF( WIN32 )
+  INCLUDE( "CMakeLists.win32.cmake" )
+ENDIF( WIN32 )
+IF( UNIX )
+  INCLUDE( "CMakeLists.unix.cmake" )
+ENDIF( UNIX )
+
+configure_file(Config.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/config.h)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../tomahawk/TomahawkVersion.h.in
+configure_file(TomahawkVersion.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/TomahawkVersion.h)
 
 set( libGuiSources

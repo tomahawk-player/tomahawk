@@ -15,16 +15,18 @@
 
 #cmakedefine WITH_CRASHREPORTER
 #cmakedefine WITH_BINARY_ATTICA
-#cmakedefine WITH_QtSparkle
 #cmakedefine WITH_UPOWER
 #cmakedefine WITH_GNOMESHORTCUTHANDLER
 
 #cmakedefine LIBLASTFM_FOUND
 #cmakedefine QCA2_FOUND
+#cmakedefine QTSPARKLE_FOUND
 
 #cmakedefine TOMAHAWK_FINEGRAINED_MESSAGES
 #cmakedefine COMPLEX_TAGLIB_FILENAME
 #cmakedefine HAVE_VLC_ALBUMARTIST
 #cmakedefine HAVE_X11
+
+#cmakedefine OFSTREAM_CAN_OPEN_WCHAR_FILE_NAMES
 
 #endif // CONFIG_H_IN
