@@ -15,12 +15,12 @@
 
 #cmakedefine WITH_CRASHREPORTER
 #cmakedefine WITH_BINARY_ATTICA
-#cmakedefine WITH_QtSparkle
 #cmakedefine WITH_UPOWER
 #cmakedefine WITH_GNOMESHORTCUTHANDLER
 
 #cmakedefine LIBLASTFM_FOUND
 #cmakedefine QCA2_FOUND
+#cmakedefine QtSparkle_FOUND
 
 #cmakedefine TOMAHAWK_FINEGRAINED_MESSAGES
 #cmakedefine COMPLEX_TAGLIB_FILENAME
