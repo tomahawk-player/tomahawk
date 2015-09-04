@@ -23,6 +23,7 @@
 #include "config.h"
 #include "TomahawkWindow.h"
 #include "audio/AudioEngine.h"
+#include "utils/Logger.h"
 
 #import <Cocoa/Cocoa.h>
 
