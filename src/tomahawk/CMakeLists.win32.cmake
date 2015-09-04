@@ -27,7 +27,7 @@ include(CheckCXXSourceCompiles)
 
 check_cxx_source_compiles( "#include <fstream>
                             int main(){
-                                ofstream stream(L\"Test\");
+                                std::ofstream stream(L\"Test\");
                                 return 0;
                             }"
                             OFSTREAM_CAN_OPEN_WCHAR_FILE_NAMES)
