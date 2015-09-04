@@ -27,4 +27,6 @@
 #cmakedefine HAVE_VLC_ALBUMARTIST
 #cmakedefine HAVE_X11
 
+#cmakedefine OFSTREAM_CAN_OPEN_WCHAR_FILE_NAMES
+
 #endif // CONFIG_H_IN

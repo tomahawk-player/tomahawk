@@ -1,5 +1,5 @@
-ADD_DEFINITIONS( /DNOMINMAX )
-ADD_DEFINITIONS( /DWIN32_LEAN_AND_MEAN )
+ADD_DEFINITIONS( -DNOMINMAX )
+ADD_DEFINITIONS( -DWIN32_LEAN_AND_MEAN )
 ADD_DEFINITIONS( -static-libgcc )
 ADD_DEFINITIONS( -DUNICODE )
 
@@ -21,3 +21,13 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 if(QTSPARKLE_FOUND)
     list(APPEND OS_SPECIFIC_LINK_LIBRARIES ${QTSPARKLE_LIBRARIES})
 endif()
+
+
+include(CheckCXXSourceCompiles)
+
+check_cxx_source_compiles( "#include <fstream>
+                            int main(){
+                                ofstream stream(L\"Test\");
+                                return 0;
+                            }"
+                            OFSTREAM_CAN_OPEN_WCHAR_FILE_NAMES)
