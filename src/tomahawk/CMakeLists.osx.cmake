@@ -42,7 +42,7 @@ if( APPLE )
 
 # Use two different sparkle update tracks for debug and release
 # We have to change the URL in the Info.plist file :-/
-  set(TOMAHAWK_SPARKLE_UPDATE_URL "http://download.tomahawk-player.org/sparkle")
+  set(TOMAHAWK_SPARKLE_UPDATE_URL "http://download.tomahawk-player.org/sparkle/update.php")
 
 # Disable non-release sparkle for now. We haven't used it yet.
 #  IF( NOT CMAKE_BUILD_TYPE STREQUAL "Release" )
