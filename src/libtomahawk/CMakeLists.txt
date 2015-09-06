@@ -376,6 +376,7 @@ list(APPEND libSources
     utils/GuiHelpers.cpp
     utils/WeakObjectHash.cpp
     utils/WeakObjectList.cpp
+    utils/WebPopup.cpp
     utils/PluginLoader.cpp
 )
 
@@ -417,14 +418,14 @@ include_directories(
     ${Boost_INCLUDE_DIR}
 
     ${LIBPORTFWD_INCLUDE_DIR}
-    ${QUAZIP_INCLUDE_DIR}
+    ${QuaZip_INCLUDE_DIR}
     ${QTKEYCHAIN_INCLUDE_DIRS}
 )
 
 IF(LIBATTICA_FOUND)
     SET( libGuiSources ${libGuiSources} AtticaManager.cpp )
     INCLUDE_DIRECTORIES( ${LIBATTICA_INCLUDE_DIR} )
-    LIST(APPEND PRIVATE_LINK_LIBRARIES ${LIBATTICA_LIBRARIES} ${LibAttica_LIBRARIES} ${QUAZIP_LIBRARIES} )
+    LIST(APPEND PRIVATE_LINK_LIBRARIES ${LIBATTICA_LIBRARIES} ${LibAttica_LIBRARIES} ${QuaZip_LIBRARIES})
     IF( TOMAHAWK_QT5 )
         LIST(APPEND LINK_LIBRARIES KF5::Attica )
     ENDIF( TOMAHAWK_QT5 )
@@ -444,7 +445,7 @@ IF( WIN32 )
         "dsound.dll"
         "winmm.dll"
         "advapi32.dll"
-	"shlwapi.dll"
+        "shlwapi.dll"
     )
 ENDIF( WIN32 )
 
@@ -493,21 +494,22 @@ qt_wrap_ui(libUI_H ${libUI})
 
 SET( libSources ${libSources} ${libUI_H} )
 
-add_library( tomahawklib SHARED ${libSources})
+add_library( ${TOMAHAWK_LIBRARY} SHARED ${libSources})
 set_target_properties(
-    tomahawklib
+    ${TOMAHAWK_LIBRARY}
         PROPERTIES
             AUTOMOC TRUE
             VERSION ${TOMAHAWK_VERSION_SHORT}
             SOVERSION ${TOMAHAWK_VERSION_SHORT}
-            OUTPUT_NAME "tomahawk"
+            OUTPUT_NAME ${TOMAHAWK_TARGET_NAME}
 )
 
 
-qt5_use_modules(tomahawklib Widgets Network Sql WebKitWidgets Concurrent Xml UiTools Svg)
+qt5_use_modules(${TOMAHAWK_LIBRARY} Widgets Network Sql WebKitWidgets Concurrent Xml UiTools Svg)
 IF(APPLE)
-	qt5_use_modules(tomahawklib MacExtras)
+       qt5_use_modules(${TOMAHAWK_LIBRARY} MacExtras)
 ENDIF()
+
 
 IF(QCA2_FOUND)
     INCLUDE_DIRECTORIES( ${QCA2_INCLUDE_DIR} )
@@ -516,10 +518,10 @@ ENDIF(QCA2_FOUND)
 
 IF( UNIX AND NOT APPLE )
     LIST(APPEND LINK_LIBRARIES ${QT_QTDBUS_LIBRARIES} )
-    qt5_use_modules(tomahawklib DBus)
+    qt5_use_modules(${TOMAHAWK_LIBRARY} DBus)
 ENDIF( UNIX AND NOT APPLE )
 
-TARGET_LINK_LIBRARIES( tomahawklib
+TARGET_LINK_LIBRARIES( ${TOMAHAWK_LIBRARY}
     LINK_PRIVATE
     ${LIBVLC_LIBRARY}
     ${LIBVLCCORE_LIBRARY}
@@ -549,7 +551,7 @@ TARGET_LINK_LIBRARIES( tomahawklib
     ${LINK_LIBRARIES}
 )
 
-INSTALL( TARGETS tomahawklib
+INSTALL( TARGETS ${TOMAHAWK_LIBRARY}
     EXPORT TomahawkLibraryDepends
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

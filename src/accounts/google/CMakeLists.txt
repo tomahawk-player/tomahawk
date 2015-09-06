@@ -10,5 +10,5 @@ tomahawk_add_plugin(google
     SOURCES
         GoogleWrapper.cpp
     LINK_LIBRARIES
-        tomahawk_account_xmpp
+        ${TOMAHAWK_TARGET_NAME}_account_xmpp
 )

@@ -153,6 +153,8 @@ private slots:
     void onResolverRemoved( Tomahawk::Resolver* resolver );
     void doneEditing();
 
+    void onDownloadJobStateChanged( DownloadJob::TrackState newState, DownloadJob::TrackState oldState );
+
     void onSettingsChanged();
 
 private:

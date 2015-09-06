@@ -135,7 +135,7 @@ GlobalActionManager::installResolverFromFile( const QString& resolverPath )
                                         tr( "Install plug-in" ),
                                         tr( "<b>%1</b> %2<br/>"
                                             "by <b>%3</b><br/><br/>"
-                                            "You are attempting to install a Tomahawk "
+                                            "You are attempting to install a %applicationName "
                                             "plug-in from an unknown source. Plug-ins from "
                                             "untrusted sources may put your data at risk.<br/>"
                                             "Do you want to install this plug-in?" )

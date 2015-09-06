@@ -473,6 +473,22 @@ AccountManager::localConfigStorage()
 }
 
 
+Account*
+AccountManager::accountByFriendlyName( const QString& friendlyName ) const
+{
+    foreach( Tomahawk::Accounts::Account* curAccount, m_accounts )
+    {
+        // GAH, friendlyname is uservisible and no id ... :-/
+        if ( curAccount->accountFriendlyName() == friendlyName )
+        {
+            return curAccount;
+        }
+    }
+
+    return nullptr;
+}
+
+
 void
 AccountManager::hookupAccount( Account* account ) const
 {

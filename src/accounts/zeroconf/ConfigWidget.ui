@@ -74,14 +74,14 @@
    <item>
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>This plugin will automatically find other users running Tomahawk on your local network</string>
+      <string>This plugin will automatically find other users running %applicationName on your local network</string>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QCheckBox" name="autoConnectCheckbox">
      <property name="text">
-      <string>Connect automatically when Tomahawk starts</string>
+      <string>Connect automatically when %applicationName starts</string>
      </property>
     </widget>
    </item>
@@ -101,7 +101,6 @@
   </layout>
  </widget>
  <resources>
-  <include location="../jreen/resources.qrc"/>
   <include location="resources.qrc"/>
   <include location="resources.qrc"/>
  </resources>

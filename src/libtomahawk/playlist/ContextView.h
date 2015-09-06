@@ -51,6 +51,7 @@ public:
 
     void setTrackView( TrackView* view );
     TrackView* trackView() const { return m_trackView; }
+    TrackDetailView* trackDetailView() const;
 
     void setCaption( const QString& caption );
     void setGuid( const QString& guid );
@@ -72,6 +73,9 @@ private slots:
 
     void onQuerySelected( const Tomahawk::query_ptr& query );
     void onCoverUpdated();
+
+    void onDownloadAll();
+    void onDownloadCancel();
 
 private:
     CaptionLabel* m_captionLabel;

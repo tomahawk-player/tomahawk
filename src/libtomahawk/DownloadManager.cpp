@@ -88,18 +88,28 @@ DownloadManager::localFileForDownload( const QString& url ) const
 void
 DownloadManager::storeJobs( const QList<downloadjob_ptr>& jobs )
 {
+    tDebug() << Q_FUNC_INFO;
     QVariantList downloads = TomahawkSettings::instance()->downloadStates();
     foreach ( const downloadjob_ptr& job, jobs )
     {
         if ( job->state() != DownloadJob::Finished )
             continue;
-        tDebug() << "Storing job:" << job->format().url << job->localFile();
+        tDebug() << Q_FUNC_INFO << "Storing job:" << job->format().url << job->localFile();
         QVariantMap map;
         map[ "url" ] = job->format().url;
         map[ "localfile" ] = job->localFile();
 
         m_downloadStates[ map[ "url" ].toString() ] = map;
-        downloads << map;
+
+        bool dupe = false;
+        foreach ( const QVariant& m, downloads )
+        {
+            if ( m.toMap()[ "url" ] == map[ "url" ] )
+                dupe = true;
+        }
+
+        if ( !dupe )
+            downloads << map;
     }
 
     TomahawkSettings::instance()->setDownloadStates( downloads );
@@ -162,8 +172,8 @@ DownloadManager::addJob( const downloadjob_ptr& job )
 
     connect( job.data(), SIGNAL( finished() ), SLOT( onJobFinished() ) );
     connect( job.data(), SIGNAL( finished() ), SLOT( checkJobs() ) );
-    connect( job.data(), SIGNAL( finished() ), SIGNAL( jobFinished() ) );
     connect( job.data(), SIGNAL( stateChanged( DownloadJob::TrackState, DownloadJob::TrackState ) ), SLOT( checkJobs() ) ) ;
+//    connect( job.data(), SIGNAL( stateChanged( DownloadJob::TrackState, DownloadJob::TrackState ) ), SIGNAL( stateChanged( DownloadJob::TrackState, DownloadJob::TrackState ) ) );
 
     checkJobs();
     return true;
@@ -226,6 +236,9 @@ DownloadManager::state() const
 
             case DownloadJob::Running:
                 return DownloadManager::Running;
+
+            default:
+                break;
         }
     }
 
@@ -239,10 +252,23 @@ DownloadManager::checkJobs()
     if ( !m_globalState )
         return;
 
-    if ( state() == DownloadManager::Waiting && !currentJob().isNull() )
+    if ( state() == DownloadManager::Waiting )
     {
-        downloadjob_ptr job = currentJob();
-        job->download();
+        if ( !currentJob().isNull() )
+        {
+            downloadjob_ptr job = currentJob();
+    /*        connect( job.data(), SIGNAL( finished() ), SLOT( checkJobs() ) );
+            connect( job.data(), SIGNAL( stateChanged( DownloadJob::TrackState, DownloadJob::TrackState ) ), SLOT( checkJobs() ) ) ;
+            connect( job.data(), SIGNAL( stateChanged( DownloadJob::TrackState, DownloadJob::TrackState ) ), SIGNAL( stateChanged( Track::TrackState, Track::TrackState ) ) );*/
+
+            job->download();
+
+            emit stateChanged( DownloadManager::Running, DownloadManager::Waiting );
+        }
+        else
+        {
+            emit stateChanged( DownloadManager::Waiting , DownloadManager::Running );
+        }
     }
 }
 
@@ -257,9 +283,25 @@ DownloadManager::onJobFinished()
     ScanManager::instance()->runFileScan( files, true );
 
     Tomahawk::InfoSystem::InfoPushData pushData( "DownloadManager", Tomahawk::InfoSystem::InfoNotifyUser,
-                                                 tr( "Tomahawk finished downloading %1 by %2." ).arg( job->track()->track() ).arg( job->track()->artist() ),
+                                                 tr( "%applicationName finished downloading %1 by %2." ).arg( job->track()->track() ).arg( job->track()->artist() ),
                                                  Tomahawk::InfoSystem::PushNoFlag );
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
+
+    storeJobs( jobs( DownloadJob::Finished ) );
+}
+
+
+void
+DownloadManager::cancelAll()
+{
+    foreach ( const downloadjob_ptr& job, jobs( DownloadJob::Waiting ) )
+    {
+        removeJob( job );
+    }
+    foreach ( const downloadjob_ptr& job, jobs( DownloadJob::Running ) )
+    {
+        job->abort();
+    }
 }
 
 

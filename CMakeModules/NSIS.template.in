@@ -18,6 +18,11 @@
 !ifndef MING_PATH
     !define MING_PATH "/usr/i686-w64-mingw32/sys-root/mingw"
 !endif
+!define APPLICATION_NAME "Tomahawk"
+!define TARGET_NAME "tomahawk"
+;define app id needed for Windows 8 notifications
+!define AppUserModelId @TOMAHAWK_APPLICATION_PACKAGE_NAME@
+
 !define MING_BIN "${MING_PATH}/bin"
 !define MING_LIB "${MING_PATH}/lib"
 !define BUILD_PATH "@CMAKE_BINARY_DIR@"
@@ -25,7 +30,6 @@
 !define QT_DLL_PATH "${MING_BIN}"
 !define SQLITE_DLL_PATH "${MING_LIB}/qt5/plugins/sqldrivers"
 !define IMAGEFORMATS_DLL_PATH "${MING_LIB}/qt5/plugins/imageformats"
-
 
 ; We use official release plugins
 ; mingw32-vlc from obs misses a lot and has even broken ones probably
@@ -53,11 +57,11 @@
 ; Initial installer setup and definitions.
 ;-----------------------------------------------------------------------------
 Name "@CPACK_NSIS_PACKAGE_NAME@"
-Caption "Tomahawk Installer"
-BrandingText "Tomahawk ${VERSION}  -- ${BUILD_TIME}"
+Caption "${APPLICATION_NAME} Installer"
+BrandingText "${APPLICATION_NAME} ${VERSION}  -- ${BUILD_TIME}"
 OutFile "@CPACK_TOPLEVEL_DIRECTORY@/@CPACK_OUTPUT_FILE_NAME@"
 InstallDir "$PROGRAMFILES\@CPACK_PACKAGE_INSTALL_DIRECTORY@"
-InstallDirRegKey HKCU "Software\Tomahawk" ""
+InstallDirRegKey HKCU "Software\{APPLICATION_NAME}" ""
 InstType Standard
 InstType Full
 InstType Minimal
@@ -82,17 +86,15 @@ ReserveFile "${NSISDIR}\Plugins\InstallOptions.dll"
 !include UAC.nsh ;Used by the UAC elevation to install as user or admin.
 !include ${NSI_PATH}\SnoreNotify.nsh ; Macro for creation of a shortcut with a AppUserModelId.
 
-
 ;-----------------------------------------------------------------------------
 ; Memento selections stored in registry.
 ;-----------------------------------------------------------------------------
 !define MEMENTO_REGISTRY_ROOT HKLM
-!define MEMENTO_REGISTRY_KEY Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk
+!define MEMENTO_REGISTRY_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPLICATION_NAME}"
 
 ;-----------------------------------------------------------------------------
 ; Setup macros for the creation of a shortcut supporting Windows 8 notifications.
 ;-----------------------------------------------------------------------------
-!define AppUserModelId org.tomahawk-player.Tomahawk
 !define SnoreToastExe "$INSTDIR\SnoreToast.exe"
 
 ;-----------------------------------------------------------------------------
@@ -156,7 +158,7 @@ Function LaunchTomahawk
 FunctionEnd
 
 Function LaunchTomahawkAsUser
-   Exec "$INSTDIR\tomahawk.exe"
+   Exec "$INSTDIR\${APPLICATION_NAME}.exe"
 FunctionEnd
 
 ##############################################################################
@@ -166,31 +168,31 @@ FunctionEnd
 ##############################################################################
 
 !macro CheckForProcess processName gotoWhenFound gotoWhenNotFound
-   Processes::FindProcess ${processName}
-   StrCmp $R0 "0" ${gotoWhenNotFound} ${gotoWhenFound}
+   Processes::FindProcess "${processName}"
+   StrCmp $R0 "0" "${gotoWhenNotFound}" "${gotoWhenFound}"
 !macroend
 
-!macro ConfirmEndProcess processName
+!macro ConfirmEndProcess processTitle processName
    MessageBox MB_YESNO|MB_ICONEXCLAMATION \
      "Found ${processName} process(s) which need to be stopped.$\nDo you want the installer to stop these for you?" \
-     IDYES process_${processName}_kill IDNO process_${processName}_ended
-   process_${processName}_kill:
+     IDYES "process_${processTitle}_kill" IDNO "process_${processTitle}_ended"
+   process_${processTitle}_kill:
       DetailPrint "Killing ${processName} processes."
-      Processes::KillProcess ${processName}
+      Processes::KillProcess "${processName}"
       Sleep 1500
-      StrCmp $R0 "1" process_${processName}_ended
+      StrCmp $R0 "1" "process_${processTitle}_ended"
       DetailPrint "Process to kill not found!"
-   process_${processName}_ended:
+   process_${processTitle}_ended:
 !macroend
 
-!macro CheckAndConfirmEndProcess processName
-   !insertmacro CheckForProcess ${processName} 0 no_process_${processName}_to_end
-   !insertmacro ConfirmEndProcess ${processName}
-   no_process_${processName}_to_end:
+!macro CheckAndConfirmEndProcess processTitle processName
+   !insertmacro CheckForProcess "${processName}" 0 "no_process_${processTitle}_to_end"
+   !insertmacro ConfirmEndProcess "${processTitle}" "${processName}"
+   no_process_${processTitle}_to_end:
 !macroend
 
 Function EnsureTomahawkShutdown
-   !insertmacro CheckAndConfirmEndProcess "tomahawk.exe"
+   !insertmacro CheckAndConfirmEndProcess "${TARGET_NAME}" "${APPLICATION_NAME}.exe"
 FunctionEnd
 
 ##############################################################################
@@ -200,40 +202,40 @@ FunctionEnd
 ##############################################################################
 
 Function PageReinstall
-   ReadRegStr $R0 HKLM "Software\Tomahawk" ""
+   ReadRegStr $R0 HKLM "Software\${APPLICATION_NAME}" ""
    StrCmp $R0 "" 0 +2
    Abort
 
    ;Detect version
-   ReadRegDWORD $R0 HKLM "Software\Tomahawk" "VersionMajor"
+   ReadRegDWORD $R0 HKLM "Software\${APPLICATION_NAME}" "VersionMajor"
    IntCmp $R0 ${VER_MAJOR} minor_check new_version older_version
    minor_check:
-      ReadRegDWORD $R0 HKLM "Software\Tomahawk" "VersionMinor"
+      ReadRegDWORD $R0 HKLM "Software\${APPLICATION_NAME}" "VersionMinor"
       IntCmp $R0 ${VER_MINOR} build_check new_version older_version
    build_check:
-      ReadRegDWORD $R0 HKLM "Software\Tomahawk" "VersionBuild"
+      ReadRegDWORD $R0 HKLM "Software\${APPLICATION_NAME}" "VersionBuild"
       IntCmp $R0 ${VER_BUILD} same_version new_version older_version
 
    new_version:
-      !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 1" "Text" "An older version of Tomahawk is installed on your system. It is recommended that you uninstall the current version before installing. Select the operation you want to perform and click Next to continue."
+      !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 1" "Text" "An older version of ${APPLICATION_NAME} is installed on your system. It is recommended that you uninstall the current version before installing. Select the operation you want to perform and click Next to continue."
       !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 2" "Text" "Uninstall before installing"
       !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 3" "Text" "Do not uninstall"
-      !insertmacro MUI_HEADER_TEXT "Already Installed" "Choose how you want to install Tomahawk."
+      !insertmacro MUI_HEADER_TEXT "Already Installed" "Choose how you want to install ${APPLICATION_NAME}."
       StrCpy $R0 "1"
       Goto reinst_start
 
    older_version:
-      !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 1" "Text" "A newer version of Tomahawk is already installed! It is not recommended that you install an older version. If you really want to install this older version, it is better to uninstall the current version first. Select the operation you want to perform and click Next to continue."
+      !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 1" "Text" "A newer version of ${APPLICATION_NAME} is already installed! It is not recommended that you install an older version. If you really want to install this older version, it is better to uninstall the current version first. Select the operation you want to perform and click Next to continue."
       !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 2" "Text" "Uninstall before installing"
       !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 3" "Text" "Do not uninstall"
-      !insertmacro MUI_HEADER_TEXT "Already Installed" "Choose how you want to install Tomahawk."
+      !insertmacro MUI_HEADER_TEXT "Already Installed" "Choose how you want to install ${APPLICATION_NAME}."
       StrCpy $R0 "1"
       Goto reinst_start
 
    same_version:
-      !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 1" "Text" "Tomahawk ${VERSION} is already installed.\r\nSelect the operation you want to perform and click Next to continue."
+      !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 1" "Text" "${APPLICATION_NAME} ${VERSION} is already installed.\r\nSelect the operation you want to perform and click Next to continue."
       !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 2" "Text" "Add/Reinstall components"
-      !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 3" "Text" "Uninstall Tomahawk"
+      !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 3" "Text" "Uninstall ${APPLICATION_NAME}"
       !insertmacro MUI_HEADER_TEXT "Already Installed" "Choose the maintenance option to perform."
       StrCpy $R0 "2"
 
@@ -248,12 +250,12 @@ Function PageLeaveReinstall
    StrCmp $R0 "2" 0 +3
    StrCmp $R1 "1" reinst_done reinst_uninstall
    reinst_uninstall:
-      ReadRegStr $R1 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "UninstallString"
+      ReadRegStr $R1 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPLICATION_NAME}" "UninstallString"
       HideWindow
       ClearErrors
       ExecWait '$R1 _?=$INSTDIR'
       IfErrors no_remove_uninstaller
-      IfFileExists "$INSTDIR\tomahawk.exe" no_remove_uninstaller
+      IfFileExists "$INSTDIR\${APPLICATION_NAME}.exe" no_remove_uninstaller
       Delete $R1
       RMDir $INSTDIR
    no_remove_uninstaller:
@@ -269,40 +271,40 @@ FunctionEnd
 #   INSTALLER SECTIONS                                                       #
 #                                                                            #
 ##############################################################################
-Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
+Section "${APPLICATION_NAME}" SEC_TOMAHAWK_PLAYER
    SectionIn 1 2 3 RO
    SetDetailsPrint listonly
 
    SetDetailsPrint textonly
-   DetailPrint "Installing Tomahawk Player essentials."
+   DetailPrint "Installing ${APPLICATION_NAME} essentials."
    SetDetailsPrint listonly
    SetOutPath "$INSTDIR"
 
    !ifdef INSTALL_PATH
         ;Main executable.
-        File "${INSTALL_PATH}\bin\tomahawk.exe"
+        File "${INSTALL_PATH}\bin\${APPLICATION_NAME}.exe"
 
-        File "${INSTALL_PATH}\bin\tomahawk_crash_reporter.exe"
+        File "${INSTALL_PATH}\bin\${TARGET_NAME}_crash_reporter.exe"
 
-        File "${INSTALL_PATH}\bin\libtomahawk.dll"
-        File "${INSTALL_PATH}\bin\libtomahawk-widgets.dll"
-        File "${INSTALL_PATH}\bin\libtomahawk-playdarapi.dll"
+        File "${INSTALL_PATH}\bin\lib${TARGET_NAME}.dll"
+        File "${INSTALL_PATH}\bin\lib${TARGET_NAME}-widgets.dll"
+        File "${INSTALL_PATH}\bin\lib${TARGET_NAME}-playdarapi.dll"
 
         ; plugins
-        File "${INSTALL_PATH}\lib\libtomahawk_*_*.dll"
+        File "${INSTALL_PATH}\lib\lib${TARGET_NAME}_*_*.dll"
    !endif
    !ifndef INSTALL_PATH
         ;Main executable.
-        File "${BUILD_PATH}\tomahawk.exe"
+        File "${BUILD_PATH}\${APPLICATION_NAME}.exe"
 
-        File "${BUILD_PATH}\tomahawk_crash_reporter.exe"
+        File "${BUILD_PATH}\${TARGET_NAME}_crash_reporter.exe"
 
-        File "${BUILD_PATH}\libtomahawk.dll"
-        File "${BUILD_PATH}\libtomahawk-widgets.dll"
-        File "${BUILD_PATH}\libtomahawk-playdarapi.dll"
+        File "${BUILD_PATH}\lib${TARGET_NAME}.dll"
+        File "${BUILD_PATH}\lib${TARGET_NAME}-widgets.dll"
+        File "${BUILD_PATH}\lib${TARGET_NAME}-playdarapi.dll"
 
         ; plugins
-        File "${BUILD_PATH}\libtomahawk_*_*.dll"
+        File "${BUILD_PATH}\lib${TARGET_NAME}_*_*.dll"
    !endif
 
    ;License & release notes.
@@ -338,7 +340,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
     File "${QT_DLL_PATH}\libGLESv2.dll"
     File "${QT_DLL_PATH}\libwebp-5.dll"
 
-   ;Boost fnord
+    ;Boost fnord
     File "${QT_DLL_PATH}\icuuc53.dll"
     File "${QT_DLL_PATH}\icudata53.dll"
     File "${QT_DLL_PATH}\icui18n53.dll"
@@ -350,7 +352,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_BIN}\libsqlite3-0.dll"
 
    ;Qt platform plugins
-    SetOutPath "$INSTDIR\platforms"
+   SetOutPath "$INSTDIR\platforms"
     File "${MING_LIB}/qt5/plugins/platforms/qwindows.dll"
    SetOutPath "$INSTDIR"
 
@@ -435,15 +437,16 @@ SectionGroup "Shortcuts"
    ${MementoSection} "Start Menu Program Group" SEC_START_MENU
       SectionIn 1 2
       SetDetailsPrint textonly
-      DetailPrint "Adding shortcuts for the Tomahawk program group to the Start Menu."
+      DetailPrint "Adding shortcuts for the ${APPLICATION_NAME} program group to the Start Menu."
       SetDetailsPrint listonly
       SetShellVarContext all
-      RMDir /r "$SMPROGRAMS\Tomahawk"
-      CreateDirectory "$SMPROGRAMS\Tomahawk"
-      CreateShortCut "$SMPROGRAMS\Tomahawk\LICENSE.lnk" "$INSTDIR\LICENSE.txt"
-      !insertmacro SnoreShortcut "$SMPROGRAMS\Tomahawk\Tomahawk.lnk" "$INSTDIR\tomahawk.exe" "${AppUserModelId}"
-      CreateShortCut "$SMPROGRAMS\Tomahawk\Release notes.lnk" "$INSTDIR\NOTES.txt"
-      CreateShortCut "$SMPROGRAMS\Tomahawk\Uninstall.lnk" "$INSTDIR\uninstall.exe"
+      RMDir /r "$SMPROGRAMS\${APPLICATION_NAME}"
+      CreateDirectory "$SMPROGRAMS\${APPLICATION_NAME}"
+      CreateShortCut "$SMPROGRAMS\${APPLICATION_NAME}\LICENSE.lnk" "$INSTDIR\LICENSE.txt"
+      CreateShortCut "$SMPROGRAMS\${APPLICATION_NAME}\${APPLICATION_NAME}.lnk" "$INSTDIR\${APPLICATION_NAME}.exe"
+      !insertmacro SnoreShortcut "$SMPROGRAMS\${APPLICATION_NAME}\${APPLICATION_NAME}.lnk" "$INSTDIR\${APPLICATION_NAME}.exe" "${AppUserModelId}"
+      CreateShortCut "$SMPROGRAMS\${APPLICATION_NAME}\Release notes.lnk" "$INSTDIR\NOTES.txt"
+      CreateShortCut "$SMPROGRAMS\${APPLICATION_NAME}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
       SetShellVarContext current
    ${MementoSectionEnd}
 !endif
@@ -454,7 +457,7 @@ SectionGroup "Shortcuts"
       SetDetailsPrint textonly
       DetailPrint "Creating Desktop Shortcuts"
       SetDetailsPrint listonly
-      CreateShortCut "$DESKTOP\Tomahawk.lnk" "$INSTDIR\tomahawk.exe"
+      CreateShortCut "$DESKTOP\${APPLICATION_NAME}.lnk" "$INSTDIR\${APPLICATION_NAME}.exe"
    ${MementoSectionEnd}
 !endif
 
@@ -464,7 +467,7 @@ SectionGroup "Shortcuts"
       SetDetailsPrint textonly
       DetailPrint "Creating Quick Launch Shortcut"
       SetDetailsPrint listonly
-      CreateShortCut "$QUICKLAUNCH\Tomahawk.lnk" "$INSTDIR\tomahawk.exe"
+      CreateShortCut "$QUICKLAUNCH\${APPLICATION_NAME}.lnk" "$INSTDIR\${APPLICATION_NAME}.exe"
    ${MementoSectionEnd}
 !endif
 
@@ -475,10 +478,10 @@ ${MementoSectionDone}
 ; Installer section descriptions
 ;--------------------------------
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC_TOMAHAWK_PLAYER} "Tomahawk player essentials."
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC_START_MENU} "Tomahawk program group."
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC_DESKTOP} "Desktop shortcut for Tomahawk."
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC_QUICK_LAUNCH} "Quick Launch shortcut for Tomahawk."
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_TOMAHAWK_PLAYER} "${APPLICATION_NAME} essentials."
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_START_MENU} "${APPLICATION_NAME} program group."
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_DESKTOP} "Desktop shortcut for ${APPLICATION_NAME}."
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_QUICK_LAUNCH} "Quick Launch shortcut for ${APPLICATION_NAME}."
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Section -post
@@ -495,98 +498,98 @@ Section -post
    SetDetailsPrint listonly
 
    ;Version numbers used to detect existing installation version for comparisson.
-   WriteRegStr HKLM "Software\Tomahawk" "" $INSTDIR
-   WriteRegDWORD HKLM "Software\Tomahawk" "VersionMajor" "${VER_MAJOR}"
-   WriteRegDWORD HKLM "Software\Tomahawk" "VersionMinor" "${VER_MINOR}"
-   WriteRegDWORD HKLM "Software\Tomahawk" "VersionRevision" "${REVISION}"
-   WriteRegDWORD HKLM "Software\Tomahawk" "VersionBuild" "${VER_BUILD}"
+   WriteRegStr HKLM "Software\${APPLICATION_NAME}" "" $INSTDIR
+   WriteRegDWORD HKLM "Software\${APPLICATION_NAME}" "VersionMajor" "${VER_MAJOR}"
+   WriteRegDWORD HKLM "Software\${APPLICATION_NAME}" "VersionMinor" "${VER_MINOR}"
+   WriteRegDWORD HKLM "Software\${APPLICATION_NAME}" "VersionRevision" "${REVISION}"
+   WriteRegDWORD HKLM "Software\${APPLICATION_NAME}" "VersionBuild" "${VER_BUILD}"
 
    ;Add or Remove Programs entry.
-   WriteRegExpandStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "UninstallString" '"$INSTDIR\Uninstall.exe"'
-   WriteRegExpandStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "InstallLocation" "$INSTDIR"
-   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "DisplayName" "Tomahawk"
-   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "Publisher" "Tomahawk-player.org"
-   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "DisplayIcon" "$INSTDIR\Uninstall.exe,0"
-   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "DisplayVersion" "${VERSION}"
-   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "VersionMajor" "${VER_MAJOR}"
-   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "VersionMinor" "${VER_MINOR}.${REVISION}"
-   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "URLInfoAbout" "http://tomahawk-player.org/"
-   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "HelpLink" "http://tomahawk-player.org/"
-   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "NoModify" "1"
-   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "NoRepair" "1"
+   WriteRegExpandStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPLICATION_NAME}" "UninstallString" '"$INSTDIR\Uninstall.exe"'
+   WriteRegExpandStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPLICATION_NAME}" "InstallLocation" "$INSTDIR"
+   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPLICATION_NAME}" "DisplayName" "${APPLICATION_NAME}"
+   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPLICATION_NAME}" "Publisher" "@TOMAHAWK_ORGANIZATION_DOMAIN@"
+   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPLICATION_NAME}" "DisplayIcon" "$INSTDIR\Uninstall.exe,0"
+   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPLICATION_NAME}" "DisplayVersion" "${VERSION}"
+   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPLICATION_NAME}" "VersionMajor" "${VER_MAJOR}"
+   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPLICATION_NAME}" "VersionMinor" "${VER_MINOR}.${REVISION}"
+   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPLICATION_NAME}" "URLInfoAbout" "http://@TOMAHAWK_ORGANIZATION_DOMAIN@/"
+   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPLICATION_NAME}" "HelpLink" "http://@TOMAHAWK_ORGANIZATION_DOMAIN@/"
+   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPLICATION_NAME}" "NoModify" "1"
+   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPLICATION_NAME}" "NoRepair" "1"
 
    ; Register tomahawk:// protocol handler
    WriteRegStr HKCR "tomahawk" "" "URL:Tomahawk Protocol"
    WriteRegStr HKCR "tomahawk" "URL Protocol" ""
-   WriteRegStr HKCR "tomahawk\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR "tomahawk\DefaultIcon" "" "$INSTDIR\${APPLICATION_NAME}.exe,1"
    WriteRegStr HKCR "tomahawk\shell" "" "open"
-   WriteRegStr HKCR "tomahawk\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+   WriteRegStr HKCR "tomahawk\shell\open\command" "" '"$INSTDIR\${APPLICATION_NAME}.exe" "%1"'
 
    ; Register file associations
    WriteRegStr HKCR ".mp3" "" "MPEG Audio Layer 3"
-   WriteRegStr HKCR ".mp3\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".mp3\DefaultIcon" "" "$INSTDIR\${APPLICATION_NAME}.exe,1"
    WriteRegStr HKCR ".mp3\shell" "" "open"
-   WriteRegStr HKCR ".mp3\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+   WriteRegStr HKCR ".mp3\shell\open\command" "" '"$INSTDIR\${APPLICATION_NAME}.exe" "%1"'
 
    WriteRegStr HKCR ".oga" "" "Ogg Audio File"
-   WriteRegStr HKCR ".oga\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".oga\DefaultIcon" "" "$INSTDIR\${APPLICATION_NAME}.exe,1"
    WriteRegStr HKCR ".oga\shell" "" "open"
-   WriteRegStr HKCR ".oga\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+   WriteRegStr HKCR ".oga\shell\open\command" "" '"$INSTDIR\${APPLICATION_NAME}.exe" "%1"'
 
    WriteRegStr HKCR ".ogg" "" "Ogg Audio File"
-   WriteRegStr HKCR ".ogg\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".ogg\DefaultIcon" "" "$INSTDIR\${APPLICATION_NAME}.exe,1"
    WriteRegStr HKCR ".ogg\shell" "" "open"
-   WriteRegStr HKCR ".ogg\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+   WriteRegStr HKCR ".ogg\shell\open\command" "" '"$INSTDIR\${APPLICATION_NAME}.exe" "%1"'
 
    WriteRegStr HKCR ".opus" "" "OPUS File"
-   WriteRegStr HKCR ".opus\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".opus\DefaultIcon" "" "$INSTDIR\${APPLICATION_NAME}.exe,1"
    WriteRegStr HKCR ".opus\shell" "" "open"
-   WriteRegStr HKCR ".opus\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+   WriteRegStr HKCR ".opus\shell\open\command" "" '"$INSTDIR\${APPLICATION_NAME}.exe" "%1"'
 
    WriteRegStr HKCR ".mp4" "" "AAC File"
-   WriteRegStr HKCR ".mp4\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".mp4\DefaultIcon" "" "$INSTDIR\${APPLICATION_NAME}.exe,1"
    WriteRegStr HKCR ".mp4\shell" "" "open"
-   WriteRegStr HKCR ".mp4\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+   WriteRegStr HKCR ".mp4\shell\open\command" "" '"$INSTDIR\${APPLICATION_NAME}.exe" "%1"'
 
    WriteRegStr HKCR ".aac" "" "AAC File"
-   WriteRegStr HKCR ".aac\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".aac\DefaultIcon" "" "$INSTDIR\${APPLICATION_NAME}.exe,1"
    WriteRegStr HKCR ".aac\shell" "" "open"
-   WriteRegStr HKCR ".aac\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+   WriteRegStr HKCR ".aac\shell\open\command" "" '"$INSTDIR\${APPLICATION_NAME}.exe" "%1"'
 
    WriteRegStr HKCR ".m4a" "" "AAC File"
-   WriteRegStr HKCR ".m4a\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".m4a\DefaultIcon" "" "$INSTDIR\${APPLICATION_NAME}.exe,1"
    WriteRegStr HKCR ".m4a\shell" "" "open"
-   WriteRegStr HKCR ".m4a\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+   WriteRegStr HKCR ".m4a\shell\open\command" "" '"$INSTDIR\${APPLICATION_NAME}.exe" "%1"'
 
    WriteRegStr HKCR ".mpc" "" "Musepack Audio File"
-   WriteRegStr HKCR ".mpc\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".mpc\DefaultIcon" "" "$INSTDIR\${APPLICATION_NAME}.exe,1"
    WriteRegStr HKCR ".mpc\shell" "" "open"
-   WriteRegStr HKCR ".mpc\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+   WriteRegStr HKCR ".mpc\shell\open\command" "" '"$INSTDIR\${APPLICATION_NAME}.exe" "%1"'
 
    WriteRegStr HKCR ".wma" "" "Windows Media Audio"
-   WriteRegStr HKCR ".wma\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".wma\DefaultIcon" "" "$INSTDIR\${APPLICATION_NAME}.exe,1"
    WriteRegStr HKCR ".wma\shell" "" "open"
-   WriteRegStr HKCR ".wma\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+   WriteRegStr HKCR ".wma\shell\open\command" "" '"$INSTDIR\${APPLICATION_NAME}.exe" "%1"'
 
    WriteRegStr HKCR ".aiff" "" "AIFF File"
-   WriteRegStr HKCR ".aiff\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".aiff\DefaultIcon" "" "$INSTDIR\${APPLICATION_NAME}.exe,1"
    WriteRegStr HKCR ".aiff\shell" "" "open"
-   WriteRegStr HKCR ".aiff\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+   WriteRegStr HKCR ".aiff\shell\open\command" "" '"$INSTDIR\${APPLICATION_NAME}.exe" "%1"'
 
    WriteRegStr HKCR ".aif" "" "AIFF File"
-   WriteRegStr HKCR ".aif\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".aif\DefaultIcon" "" "$INSTDIR\${APPLICATION_NAME}.exe,1"
    WriteRegStr HKCR ".aif\shell" "" "open"
-   WriteRegStr HKCR ".aif\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+   WriteRegStr HKCR ".aif\shell\open\command" "" '"$INSTDIR\${APPLICATION_NAME}.exe" "%1"'
 
    WriteRegStr HKCR ".wv" "" "WavePack Audio File"
-   WriteRegStr HKCR ".wv\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".wv\DefaultIcon" "" "$INSTDIR\${APPLICATION_NAME}.exe,1"
    WriteRegStr HKCR ".wv\shell" "" "open"
-   WriteRegStr HKCR ".wv\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+   WriteRegStr HKCR ".wv\shell\open\command" "" '"$INSTDIR\${APPLICATION_NAME}.exe" "%1"'
 
    WriteRegStr HKCR ".flac" "" "FLAC Audio File"
-   WriteRegStr HKCR ".flac\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR ".flac\DefaultIcon" "" "$INSTDIR\${APPLICATION_NAME}.exe,1"
    WriteRegStr HKCR ".flac\shell" "" "open"
-   WriteRegStr HKCR ".flac\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+   WriteRegStr HKCR ".flac\shell\open\command" "" '"$INSTDIR\${APPLICATION_NAME}.exe" "%1"'
 
    SetDetailsPrint textonly
    DetailPrint "Finsihed."
@@ -604,7 +607,7 @@ Var UnPageUserAppDataCheckbox_State
 Var UnPageUserAppDataEditBox
 
 Function un.UnPageUserAppData
-   !insertmacro MUI_HEADER_TEXT "Uninstall Tomahawk" "Remove Tomahawk's data folder from your computer."
+   !insertmacro MUI_HEADER_TEXT "Uninstall ${APPLICATION_NAME}" "Remove ${APPLICATION_NAME}'s data folder from your computer."
    nsDialogs::Create /NOUNLOAD 1018
    Pop $UnPageUserAppDataDialog
 
@@ -612,10 +615,10 @@ Function un.UnPageUserAppData
       Abort
    ${EndIf}
 
-   ${NSD_CreateLabel} 0 0 100% 12u "Do you want to delete Tomahawk's data folder?"
+   ${NSD_CreateLabel} 0 0 100% 12u "Do you want to delete ${APPLICATION_NAME}'s data folder?"
    Pop $0
 
-   ${NSD_CreateText} 0 13u 100% 12u "$LOCALAPPDATA\Tomahawk"
+   ${NSD_CreateText} 0 13u 100% 12u "$LOCALAPPDATA\${APPLICATION_NAME}"
    Pop $UnPageUserAppDataEditBox
    SendMessage $UnPageUserAppDataEditBox ${EM_SETREADONLY} 1 0
 
@@ -633,41 +636,41 @@ Function un.UnPageUserAppDataLeave
 FunctionEnd
 
 Section Uninstall
-   IfFileExists "$INSTDIR\tomahawk.exe" tomahawk_installed
-      MessageBox MB_YESNO "It does not appear that Tomahawk is installed in the directory '$INSTDIR'.$\r$\nContinue anyway (not recommended)?" IDYES tomahawk_installed
+   IfFileExists "$INSTDIR\${APPLICATION_NAME}.exe" tomahawk_installed
+      MessageBox MB_YESNO "It does not appear that ${APPLICATION_NAME} is installed in the directory '$INSTDIR'.$\r$\nContinue anyway (not recommended)?" IDYES tomahawk_installed
       Abort "Uninstall aborted by user"
    tomahawk_installed:
 
    ;Delete registry keys.
-   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk"
-   DeleteRegValue HKLM "Software\Tomahawk" "VersionBuild"
-   DeleteRegValue HKLM "Software\Tomahawk" "VersionMajor"
-   DeleteRegValue HKLM "Software\Tomahawk" "VersionMinor"
-   DeleteRegValue HKLM "Software\Tomahawk" "VersionRevision"
-   DeleteRegValue HKLM "Software\Tomahawk" ""
-   DeleteRegKey HKLM "Software\Tomahawk"
+   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPLICATION_NAME}"
+   DeleteRegValue HKLM "Software\${APPLICATION_NAME}" "VersionBuild"
+   DeleteRegValue HKLM "Software\${APPLICATION_NAME}" "VersionMajor"
+   DeleteRegValue HKLM "Software\${APPLICATION_NAME}" "VersionMinor"
+   DeleteRegValue HKLM "Software\${APPLICATION_NAME}" "VersionRevision"
+   DeleteRegValue HKLM "Software\${APPLICATION_NAME}" ""
+   DeleteRegKey HKLM "Software\${APPLICATION_NAME}"
 
-   ;DeleteRegKey HKCR "Software\Tomahawk"
-   ;DeleteRegKey HKCR "Software\TomahawkSpotify"
-   DeleteRegKey HKCR "tomahawk"
+   ;DeleteRegKey HKCR "Software\${APPLICATION_NAME}"
+   ;DeleteRegKey HKCR "Software\${APPLICATION_NAME}Spotify"
+   DeleteRegKey HKCR "${APPLICATION_NAME}"
 
    ;Start menu shortcuts.
    !ifdef OPTION_SECTION_SC_START_MENU
       SetShellVarContext all
-      RMDir /r "$SMPROGRAMS\Tomahawk"
+      RMDir /r "$SMPROGRAMS\${APPLICATION_NAME}"
       SetShellVarContext current
    !endif
 
    ;Desktop shortcut.
    !ifdef OPTION_SECTION_SC_DESKTOP
-      IfFileExists "$DESKTOP\Tomahawk.lnk" 0 +2
-         Delete "$DESKTOP\Tomahawk.lnk"
+      IfFileExists "$DESKTOP\${APPLICATION_NAME}.lnk" 0 +2
+         Delete "$DESKTOP\${APPLICATION_NAME}.lnk"
    !endif
 
    ;Quick Launch shortcut.
    !ifdef OPTION_SECTION_SC_QUICK_LAUNCH
-      IfFileExists "$QUICKLAUNCH\Tomahawk.lnk" 0 +2
-         Delete "$QUICKLAUNCH\Tomahawk.lnk"
+      IfFileExists "$QUICKLAUNCH\${APPLICATION_NAME}.lnk" 0 +2
+         Delete "$QUICKLAUNCH\${APPLICATION_NAME}.lnk"
    !endif
 
    ;Remove all the Program Files.
@@ -675,7 +678,7 @@ Section Uninstall
 
    ;Uninstall User Data if option is checked, otherwise skip.
    ${If} $UnPageUserAppDataCheckbox_State == ${BST_CHECKED}
-      RMDir /r "$LOCALAPPDATA\Tomahawk"
+      RMDir /r "$LOCALAPPDATA\${APPLICATION_NAME}"
    ${EndIf}
 
    SetDetailsPrint textonly
@@ -729,7 +732,7 @@ Function .onInit
 
    ;Use available InstallLocation when possible. This is useful in the uninstaller
    ;via re-install, which would otherwise use a default location - a bug.
-   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "InstallLocation"
+   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPLICATION_NAME}" "InstallLocation"
    StrCmp $R0 "" SkipSetInstDir
    StrCpy $INSTDIR $R0
    SkipSetInstDir:

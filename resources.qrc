@@ -166,5 +166,6 @@
         <file>data/images/repeat-all.svg</file>
         <file>data/images/repeat-one.svg</file>
         <file>data/images/downloads.svg</file>
+        <file>data/images/downloadbutton.svg</file>
     </qresource>
 </RCC>

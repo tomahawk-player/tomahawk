@@ -51,6 +51,7 @@ public slots:
     bool removeJob( const downloadjob_ptr& job );
     void checkJobs();
 
+    void cancelAll();
     void pause();
     void resume();
 
@@ -59,7 +60,8 @@ public slots:
 signals:
     void jobAdded( const downloadjob_ptr& job );
     void jobRemoved( const downloadjob_ptr& job );
-    void jobFinished();
+
+    void stateChanged( DownloadManager::DownloadManagerState newState, DownloadManager::DownloadManagerState oldState );
 
 private slots:
     void onJobFinished();

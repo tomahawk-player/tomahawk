@@ -98,6 +98,9 @@ public:
     ConfigStorage* configStorageForAccount( const QString& accountId );
     ConfigStorage* localConfigStorage();
 
+
+    Account* accountByFriendlyName( const QString& friendlyName ) const;
+
 public slots:
     void connectAll();
     void disconnectAll();

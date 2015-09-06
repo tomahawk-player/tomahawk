@@ -909,7 +909,7 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
         }
 
         JobStatusView::instance()->model()->addJob(
-            new ErrorStatusMessage( tr( "Sorry, Tomahawk couldn't find the track '%1' by %2" ).arg( query->queryTrack()->track() ).arg( query->queryTrack()->artist() ), 15 ) );
+            new ErrorStatusMessage( tr( "Sorry, %applicationName couldn't find the track '%1' by %2" ).arg( query->queryTrack()->track() ).arg( query->queryTrack()->artist() ), 15 ) );
 
         if ( isStopped() )
             emit stopped(); // we do this so the original caller knows we couldn't find this track
@@ -933,7 +933,7 @@ AudioEngine::playItem( const Tomahawk::artist_ptr& artist )
         if ( pli->tracks().isEmpty() )
         {
             JobStatusView::instance()->model()->addJob(
-                new ErrorStatusMessage( tr( "Sorry, Tomahawk couldn't find the artist '%1'" ).arg( artist->name() ), 15 ) );
+                new ErrorStatusMessage( tr( "Sorry, %applicationName couldn't find the artist '%1'" ).arg( artist->name() ), 15 ) );
 
             if ( isStopped() )
                 emit stopped(); // we do this so the original caller knows we couldn't find this track
@@ -959,7 +959,7 @@ AudioEngine::playItem( const Tomahawk::album_ptr& album )
         if ( pli->tracks().isEmpty() )
         {
             JobStatusView::instance()->model()->addJob(
-                new ErrorStatusMessage( tr( "Sorry, Tomahawk couldn't find the album '%1' by %2" ).arg( album->name() ).arg( album->artist()->name() ), 15 ) );
+                new ErrorStatusMessage( tr( "Sorry, %applicationName couldn't find the album '%1' by %2" ).arg( album->name() ).arg( album->artist()->name() ), 15 ) );
 
             if ( isStopped() )
                 emit stopped(); // we do this so the original caller knows we couldn't find this track
