@@ -228,6 +228,9 @@ var TomahawkResolver = {
     collection: function () {
         return {};
     },
+    getStreamUrl: function(params) {
+        Tomahawk.reportStreamUrl(params.qid, params.url);
+    },
     _testConfig: function (config) {
         return Promise.resolve(this.testConfig(config)).then(function() {
             return { result: Tomahawk.ConfigTestResultType.Success };
@@ -243,6 +246,17 @@ Tomahawk.Resolver = Tomahawk.extend(TomahawkResolver, {
         window.localStorage[this.scriptPath()] = JSON.stringify(Tomahawk.resolverData().config);
         this.newConfigSaved(Tomahawk.resolverData().config);
     },
+
+    _convertUrls: function(results) {
+        var that = this;
+        return results.map(function(r){
+            if(r.url) {
+                r.url = that._urlProtocol + '://' + r.url;
+            }
+            return r;
+        });
+    },
+
     _adapter_resolve: function (qid, artist, album, title) {
         var that = this;
         var collectionPromises = [];
@@ -257,13 +271,22 @@ Tomahawk.Resolver = Tomahawk.extend(TomahawkResolver, {
             Promise.resolve(that.resolve({artist: artist, album: album, track:title})).then(function(results){
                 Tomahawk.addTrackResults({
                     'qid': qid,
-                    'results': results.concat(collectionResults)
+                    'results': that._convertUrls(results.concat(collectionResults)) 
                 });
             });
         });
     },
 
+    _adapter_init: function ()
+    {
+        this._urlProtocol = this.settings.name.replace(/\s+/g, '').toLowerCase();
+        Tomahawk.addCustomUrlHandler( this._urlProtocol, 'getStreamUrl', true );
+        Tomahawk.log('Registered custom url handler for protocol "' + this._urlProtocol + '"');
+        this.init();
+    },
+
     _adapter_getStreamUrl: function (params) {
+        params.url = params.url.slice(this._urlProtocol.length + 3);
         Promise.resolve(this.getStreamUrl(params)).then(function(result){
             Tomahawk.reportStreamUrl(params.qid, result.url, result.headers);
         });
@@ -271,13 +294,15 @@ Tomahawk.Resolver = Tomahawk.extend(TomahawkResolver, {
 
     _adapter_search: function (qid, query)
     {
+        var that = this;
         Promise.resolve(this.search({query:query})).then(function(results){
             Tomahawk.addTrackResults({
                 'qid': qid,
-                'results': results
+                'results': that._convertUrls(results)
             });
         });
     },
+
     _adapter_testConfig: function (config) {
         return Promise.resolve(this.testConfig(config)).then(function() {
             return { result: Tomahawk.ConfigTestResultType.Success };
@@ -1337,6 +1362,7 @@ Tomahawk.Collection = {
 
     },
     addTracks: function (params) {
+        var that = this;
         var id = params.id;
         var tracks = params.tracks;
 
@@ -1639,7 +1665,7 @@ Tomahawk.Collection = {
             );
             return t.execDefferedStatements();
         }).then(function (results) {
-            return {results: results[0]};
+            return {results: Tomahawk.resolver.instance._convertUrls(results[0])};
         });
     },
 
