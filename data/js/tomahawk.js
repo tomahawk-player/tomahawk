@@ -1496,6 +1496,7 @@ Tomahawk.Collection = {
             t.sqlSelect("tracks", resultMap, ["_id", "artistId", "albumId", "track"]);
             return t.execDefferedStatements();
         }).then(function (results) {
+            that._trackCount = results[0].length;
             Tomahawk.log("Added " + results[0].length + " tracks to collection '" + id + "'");
             // Add the db ids together with the basic metadata to the fuzzy index list
             var fuzzyIndexList = [];
@@ -1788,6 +1789,9 @@ Tomahawk.Collection = {
     },
 
     collection: function () {
+        this.settings.trackcount = this._trackCount;
+        if(! this.settings.description)
+            this.settings.description = this.settings.prettyname;
         return this.settings;
     }
 };
