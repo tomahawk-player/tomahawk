@@ -49,6 +49,8 @@ ScriptEngine::ScriptEngine( JSAccount* parent )
     settings()->setAttribute( QWebSettings::LocalStorageDatabaseEnabled, true );
     settings()->setAttribute( QWebSettings::LocalContentCanAccessFileUrls, true );
     settings()->setAttribute( QWebSettings::LocalContentCanAccessRemoteUrls, true );
+    settings()->setOfflineStorageDefaultQuota(100 * 1024 * 1024 /* 100 Mb */);
+    settings()->setOfflineWebApplicationCacheQuota(100 * 1024 * 1024 /* 100 Mb */);
 
     // HACK
     QStringList cmdArgs = QCoreApplication::instance()->arguments();

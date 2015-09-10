@@ -106,7 +106,7 @@ ScriptCommand_AllTracks::onTracksJobDone( const QVariantMap& result )
     ScriptJob* job = qobject_cast< ScriptJob* >( sender() );
     Q_ASSERT( job );
 
-    qDebug() << "Resolver reporting album tracks:" << result;
+    //qDebug() << "Resolver reporting album tracks:" << result;
 
     if ( job->error() )
     {
