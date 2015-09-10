@@ -173,7 +173,7 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="111"/>
         <source>Import Playlist...</source>
-        <translation>Impor Daftar Putar</translation>
+        <translation>Impor Daftar Putar...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="114"/>
@@ -223,12 +223,12 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="136"/>
         <source>&amp;View Logfile</source>
-        <translation>&amp;Tilik Berkas Log</translation>
+        <translation>&amp;Lihat Berkas Log</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="139"/>
         <source>Check For Updates...</source>
-        <translation>Periksa Pemutakhiran</translation>
+        <translation>Periksa Pemutakhiran...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="143"/>
@@ -269,7 +269,7 @@ terhubung dan strim dari Anda?</translation>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="188"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="258"/>
         <source>What&apos;s New in ...</source>
-        <translation>Apa Yang Baru Di ...</translation>
+        <translation>Apa Yang Baru di ...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="214"/>
@@ -531,7 +531,7 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="284"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
-        <translation>Maaf, filter &apos;%1&apos; tidak cocok dengan hasil apapun.</translation>
+        <translation>Maaf, filter &apos;%1&apos; tidak menampilkan hasil apapun.</translation>
     </message>
 </context>
 <context>
@@ -582,7 +582,7 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="246"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
-        <translation>Daftar putar saat ini sedang kosong. Tambah beberapa trek musik dan nikmatilah!</translation>
+        <translation>Daftar putar saat ini sedang kosong. Tambahkan beberapa trek musik dan nikmatilah!</translation>
     </message>
 </context>
 <context>
@@ -685,7 +685,7 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="92"/>
         <source>Much more</source>
-        <translation>Sangat</translation>
+        <translation>Sangat banyak</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="95"/>
@@ -1248,32 +1248,32 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="896"/>
         <source>Perfect match</source>
-        <translation type="unfinished"/>
+        <translation>Sangat cocok sekali</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="897"/>
         <source>Very good match</source>
-        <translation type="unfinished"/>
+        <translation>Sangat cocok</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="898"/>
         <source>Good match</source>
-        <translation type="unfinished"/>
+        <translation>Cocok</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="899"/>
         <source>Vague match</source>
-        <translation type="unfinished"/>
+        <translation>Agak cocok</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="900"/>
         <source>Bad match</source>
-        <translation type="unfinished"/>
+        <translation>Tidak cocok</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="901"/>
         <source>Very bad match</source>
-        <translation type="unfinished"/>
+        <translation>Sangat tidak cocok</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="902"/>
@@ -1378,7 +1378,7 @@ Sekali Pakai (OTP)</translation>
         <source>No Proxy Hosts:
 (Overrides system proxy)</source>
         <translation>Tidak Ada Proksi:
-(Ditimpa oleh proksi sistem)</translation>
+(Menimpa proksi sistem)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="110"/>
@@ -1618,7 +1618,7 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.h" line="55"/>
         <source>Results for &apos;%1&apos;</source>
-        <translation>Hasil dari &apos;%1&apos;</translation>
+        <translation>Hasil untuk &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.ui" line="41"/>
@@ -1648,17 +1648,17 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="65"/>
         <source>Sorry, we could not find any artists!</source>
-        <translation type="unfinished"/>
+        <translation>Maaf, kami tidak bisa menemukan artis!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="86"/>
         <source>Sorry, we could not find any albums!</source>
-        <translation type="unfinished"/>
+        <translation>Maaf, kami tidak bisa menemukan album apapun!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="108"/>
         <source>Sorry, we could not find any songs!</source>
-        <translation type="unfinished"/>
+        <translation>Maaf, kami tidak bisa menemukan lagu apapun!</translation>
     </message>
 </context>
 <context>
@@ -1666,7 +1666,7 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/network/Servent.cpp" line="1003"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
-        <translation>Gagal otomatis mendeteksi IP eksternal: Tidak bisa mengurai respon JSON</translation>
+        <translation>Gagal otomatis mendeteksi IP eksternal: Tidak bisa mengurai respons JSON</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/network/Servent.cpp" line="1016"/>
@@ -1704,7 +1704,7 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="260"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
-        <translation type="unfinished"/>
+        <translation>Konfigurasikan akun dan layanan yang digunakan Tomahawk untuk mencari dan mengambil musik, menemukan teman Anda dan memperbarui status Anda.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="221"/>
@@ -1770,12 +1770,12 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="570"/>
         <source>Delete all Access Control entries?</source>
-        <translation>Hapus semua entri Akses Kontrol?</translation>
+        <translation>Hapus semua entri Kontrol Akses?</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="571"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
-        <translation type="unfinished"/>
+        <translation>Apakah Anda benar-benar ingin menghapus semua entri Kontrol Akses? Anda akan ditanyakan lagi untuk setiap peer yang Anda terhubung dengannya.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="326"/>
@@ -1816,7 +1816,7 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="82"/>
         <source>Host Settings...</source>
-        <translation>Pengaturan Port...</translation>
+        <translation>Pengaturan Hos...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="110"/>
@@ -1892,7 +1892,11 @@ Sekali Pakai (OTP)</translation>
  and using it to craft personalized radios. Enabling this option
  will allow you (and all your friends) to create automatic playlists
  and stations based on your personal taste profile.</source>
-        <translation type="unfinished"/>
+        <translation>Echo Nest mendukung pelacakan katalog metadata Anda
+dan menggunakannya untuk menyusun radio yang lebih personal.
+Memfungsikan opsi ini akan memungkinkan Anda (dan semua teman Anda)
+untuk membuat daftar putar dan stasiun otomatis berdasarkan profil
+kesukaan personal Anda.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="115"/>
@@ -1902,7 +1906,7 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="128"/>
         <source>Watch for changes (automatically update Collection)</source>
-        <translation type="unfinished"/>
+        <translation>Monitor perubahan (secara otomatis memperbarui Koleksi)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="137"/>
@@ -2034,7 +2038,7 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/SourceViewPage.cpp" line="77"/>
         <source>Recent activity from %1</source>
-        <translation type="unfinished"/>
+        <translation>Aktivitas %1 baru-baru ini</translation>
     </message>
 </context>
 <context>
@@ -2053,22 +2057,22 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="149"/>
         <source>SuperCollection</source>
-        <translation>SuperKoleksi</translation>
+        <translation>KoleksiSuper</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="589"/>
         <source>Latest additions to your collection</source>
-        <translation type="unfinished"/>
+        <translation>Tambahan terbaru koleksi Anda</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="591"/>
         <source>Latest additions to %1&apos;s collection</source>
-        <translation type="unfinished"/>
+        <translation>Tambahan terbaru koleksi %1</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="595"/>
         <source>Sorry, we could not find any recent additions!</source>
-        <translation type="unfinished"/>
+        <translation>Maaf, kami tidak bisa menemukan tambahan terbaru apapun!</translation>
     </message>
 </context>
 <context>
@@ -2248,22 +2252,22 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="146"/>
         <source>Spotify playlists to keep in sync:</source>
-        <translation type="unfinished"/>
+        <translation>Daftar putar Spotify untuk tetap tersonkronisasi:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="189"/>
         <source>Delete Tomahawk playlist when removing synchronization</source>
-        <translation type="unfinished"/>
+        <translation>Hapus daftar putar Tomahawk ketika membuang sinkronisasi</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="91"/>
         <source>Username:</source>
-        <translation type="unfinished"/>
+        <translation>Nama Pengguna:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="108"/>
         <source>Password:</source>
-        <translation type="unfinished"/>
+        <translation>Sandi:</translation>
     </message>
 </context>
 <context>
@@ -2271,7 +2275,7 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="351"/>
         <source>Delete associated Spotify playlist?</source>
-        <translation type="unfinished"/>
+        <translation>Hapus daftar putar Spotify terkait?</translation>
     </message>
 </context>
 <context>
@@ -2279,17 +2283,17 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/TemporaryPageItem.cpp" line="54"/>
         <source>Copy Artist Link</source>
-        <translation type="unfinished"/>
+        <translation>Salin Tautan Artis</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/TemporaryPageItem.cpp" line="61"/>
         <source>Copy Album Link</source>
-        <translation type="unfinished"/>
+        <translation>Salin Tautan Album</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/TemporaryPageItem.cpp" line="68"/>
         <source>Copy Track Link</source>
-        <translation type="unfinished"/>
+        <translation>Salin Tautan Trek</translation>
     </message>
 </context>
 <context>
@@ -2297,33 +2301,33 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="199"/>
         <source>Add Account</source>
-        <translation type="unfinished"/>
+        <translation>Tambah Akun</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="249"/>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="666"/>
         <source>Remove</source>
-        <translation type="unfinished"/>
+        <translation>Buang</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="363"/>
         <source>%1 downloads</source>
-        <translation type="unfinished"/>
+        <translation>%1 unduhan</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="567"/>
         <source>Online</source>
-        <translation type="unfinished"/>
+        <translation>Daring</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="572"/>
         <source>Connecting...</source>
-        <translation type="unfinished"/>
+        <translation>Menyambungkan...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="577"/>
         <source>Offline</source>
-        <translation type="unfinished"/>
+        <translation>Luring</translation>
     </message>
 </context>
 <context>
@@ -2331,7 +2335,7 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="564"/>
         <source>Manual Install Required</source>
-        <translation type="unfinished"/>
+        <translation>Membutuhkan Pemasangan secara Manual</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="567"/>
@@ -2344,28 +2348,28 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="91"/>
         <source>Configure this Google Account</source>
-        <translation type="unfinished"/>
+        <translation>Konfigurasi Akun Google ini</translation>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="92"/>
         <source>Google Address:</source>
-        <translation type="unfinished"/>
+        <translation>Alamat Google:</translation>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="93"/>
         <source>Enter your Google login to connect with your friends using Tomahawk!</source>
-        <translation type="unfinished"/>
+        <translation>Masukkan akun Google Anda untuk terhubung dengan teman-teman Anda menggunakan Tomahawk!</translation>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="94"/>
         <source>username@gmail.com</source>
-        <translation type="unfinished"/>
+        <translation>namapengguna@gmail.com</translation>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="101"/>
         <source>You may need to change your %1Google Account Settings%2 to login.</source>
         <comment>%1 is &lt;a href&gt;, %2 is &lt;/a&gt;</comment>
-        <translation type="unfinished"/>
+        <translation>Anda mungkin perlu mengubah %1Pengaturan Akun Google%2 Anda untuk masuk.</translation>
     </message>
 </context>
 <context>
@@ -2373,7 +2377,7 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.h" line="44"/>
         <source>Login to directly connect to your Google Talk contacts that also use Tomahawk.</source>
-        <translation type="unfinished"/>
+        <translation>Masuk untuk langsung terhubung dengan kontak Google Talk Anda yang juga menggunakan Tomahawk.</translation>
     </message>
 </context>
 <context>
@@ -2381,17 +2385,17 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="61"/>
         <source>Enter Google Address</source>
-        <translation type="unfinished"/>
+        <translation>Masukkan Alamat Google</translation>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="69"/>
         <source>Add Friend</source>
-        <translation type="unfinished"/>
+        <translation>Tambah Teman</translation>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="70"/>
         <source>Enter Google Address:</source>
-        <translation type="unfinished"/>
+        <translation>Masukkan Alamat Google:</translation>
     </message>
 </context>
 <context>
@@ -2399,22 +2403,22 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="128"/>
         <source>Logged in as: %1</source>
-        <translation type="unfinished"/>
+        <translation>Masuk sebagai: %1</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="134"/>
         <source>Log out</source>
-        <translation type="unfinished"/>
+        <translation>Keluar</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="156"/>
         <source>Log in</source>
-        <translation type="unfinished"/>
+        <translation>Masuk</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="181"/>
         <source>Continue</source>
-        <translation type="unfinished"/>
+        <translation>Lanjutkan</translation>
     </message>
 </context>
 <context>

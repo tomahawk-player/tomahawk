@@ -912,7 +912,7 @@ jednorazowe (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/IndexingJobItem.cpp" line="33"/>
         <source>Indexing Music Library</source>
-        <translation type="unfinished"/>
+        <translation>Indeksowanie bibioteki</translation>
     </message>
 </context>
 <context>
@@ -1303,7 +1303,7 @@ jednorazowe (OTP)</translation>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="294"/>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="309"/>
         <source>View in Finder</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż w folderze</translation>
     </message>
 </context>
 <context>
@@ -1748,7 +1748,7 @@ jednorazowe (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="273"/>
         <source>Configure Tomahawk&apos;s integrated download manager.</source>
-        <translation type="unfinished"/>
+        <translation>Skonfiguruj wbudowany menedżer pobierania Tomahowka</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="443"/>
