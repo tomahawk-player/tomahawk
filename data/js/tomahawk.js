@@ -1282,7 +1282,6 @@ Tomahawk.Collection = {
                                         {
                                             var map = that.statements[originalI].map;
                                             that.results[originalI] = [];
-                                            Tomahawk.log('originalI ' + originalI);
                                             for (var ii = 0; ii < results.rows.length; ii++) {
                                                 that.results[originalI].push(map(
                                                         results.rows.item(ii)
@@ -1295,7 +1294,6 @@ Tomahawk.Collection = {
                                         if(that.stmtsToResolve == 0)
                                         {
                                             that.statements = [];
-                                            Tomahawk.log(JSON.stringify(that.results));
                                             resolve(that.results);
                                         }
                                     };
@@ -1695,40 +1693,43 @@ Tomahawk.Collection = {
         });
     },
 
-    //albums: function (params, where) {
-        ////TODO filter/where support
-        //var id = params.id;
-        //if(typeof id === 'undefined')
-            //id = this.settings.id;
+    albums: function (params, where) {
+        //TODO filter/where support
+        var id = params.id;
+        if(typeof id === 'undefined')
+            id = this.settings.id;
 
-        //var t = new Tomahawk.Collection.Transaction(this, id);
-        //return t.beginTransaction().then(function () {
-            //var mapFn = function(row) {
-                //return {
-                    //albumArtist: row.artist,
-                    //albumArtistDisambiguation: row.artistDisambiguation,
-                    //album: row.album
-                //};
-            //};
-            //t.sqlSelect("albums",mapFn,
-                //["album", "artist", "artistDisambiguation"],
-                //where, [
-                    //{
-                        //table: "artists",
-                        //conditions: {
-                            //albumArtistId: "_id"
-                        //}
-                    //}
-                //]
-            //);
-            //return t.execDefferedStatements();
-        //}).then(function (results) {
-            //return {
-                //artists: results[0].map(function(i){ return i.albumArtist;}),
-                //albums: results[0].map(function(i){ return i.album;})
-            //};
-        //});
-    //},
+        var t = new Tomahawk.Collection.Transaction(this, id);
+        return t.beginTransaction().then(function () {
+            var mapFn = function(row) {
+                return {
+                    albumArtist: row.artist,
+                    albumArtistDisambiguation: row.artistDisambiguation,
+                    album: row.album
+                };
+            };
+            t.sqlSelect("albums",mapFn,
+                ["album", "artist", "artistDisambiguation"],
+                where, [
+                    {
+                        table: "artists",
+                        conditions: {
+                            albumArtistId: "_id"
+                        }
+                    }
+                ]
+            );
+            return t.execDefferedStatements();
+        }).then(function (results) {
+            results = results[0].filter(function(e){
+                return (e.albumArtist != '' && e.album != '');
+            });
+            return  {
+                artists: results.map(function(i){ return i.albumArtist;}),
+                albums: results.map(function(i){ return i.album;})
+            };
+        });
+    },
 
     artists: function (params) {
         //TODO filter/where support
