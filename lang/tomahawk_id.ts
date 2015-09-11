@@ -2426,7 +2426,7 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccount.h" line="51"/>
         <source>Connect to Hatchet to capture your playback data, sync your playlists to Android and more.</source>
-        <translation type="unfinished"/>
+        <translation>Sambung ke Hatchet untuk menyimpan data pemutaran, sinkronisasi daftar putar ke Android dan lebih banyak lagi.</translation>
     </message>
 </context>
 <context>
@@ -2434,7 +2434,7 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmAccount.h" line="52"/>
         <source>Scrobble your tracks to last.fm, and find freely downloadable tracks to play</source>
-        <translation type="unfinished"/>
+        <translation>Skrobel trek Anda ke last.fm, dan temukan trek bebas unduh yang bisa diputar</translation>
     </message>
 </context>
 <context>
@@ -2442,23 +2442,23 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="99"/>
         <source>Testing...</source>
-        <translation type="unfinished"/>
+        <translation>Menguji coba...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="121"/>
         <source>Test Login</source>
-        <translation type="unfinished"/>
+        <translation>Percobaan Masuk</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="131"/>
         <source>Importing %1</source>
         <comment>e.g. Importing 2012/01/01</comment>
-        <translation type="unfinished"/>
+        <translation>Mengimpor %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="134"/>
         <source>Importing History...</source>
-        <translation type="unfinished"/>
+        <translation>Mengimpor Riwayat...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="203"/>
