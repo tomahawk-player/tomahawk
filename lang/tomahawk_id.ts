@@ -2375,7 +2375,7 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmAccount.h" line="52"/>
         <source>Scrobble your tracks to last.fm, and find freely downloadable tracks to play</source>
-        <translation type="unfinished"/>
+        <translation>Skrobel trek Anda ke last.fm, dan temukan trek bebas unduh yang bisa diputar</translation>
     </message>
 </context>
 <context>
@@ -2426,17 +2426,17 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="248"/>
         <source>Could not contact server</source>
-        <translation type="unfinished"/>
+        <translation>Tidak bisa mengubungi server</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="262"/>
         <source>Synchronizing...</source>
-        <translation type="unfinished"/>
+        <translation>Menyinkronisasi...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="420"/>
         <source>Synchronization Finished</source>
-        <translation type="unfinished"/>
+        <translation>Sinkronisasi Selesai</translation>
     </message>
 </context>
 <context>
