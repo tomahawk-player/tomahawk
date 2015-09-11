@@ -250,7 +250,7 @@ Tomahawk.Resolver = Tomahawk.extend(TomahawkResolver, {
     _convertUrls: function(results) {
         var that = this;
         return results.map(function(r){
-            if(r.url) {
+            if(r && r.url) {
                 r.url = that._urlProtocol + '://' + r.url;
             }
             return r;
@@ -295,10 +295,22 @@ Tomahawk.Resolver = Tomahawk.extend(TomahawkResolver, {
     _adapter_search: function (qid, query)
     {
         var that = this;
-        Promise.resolve(this.search({query:query})).then(function(results){
-            Tomahawk.addTrackResults({
-                'qid': qid,
-                'results': that._convertUrls(results)
+        var collectionPromises = [];
+        Tomahawk.collections.forEach(function(col) {
+            if(col.search)
+                collectionPromises.push(col.search({query: query}));
+        });
+        Promise.all(collectionPromises).then(function(collectionResults){
+            var merged = [];
+            return merged.concat.apply(merged,collectionResults);
+        }).then(function(collectionResults) {
+            Promise.resolve(that.search({query:query})).then(function(results){
+                Tomahawk.log(JSON.stringify(results));
+                Tomahawk.log(JSON.stringify(collectionResults));
+                Tomahawk.addTrackResults({
+                    'qid': qid,
+                    'results': that._convertUrls(results.concat(collectionResults)) 
+                });
             });
         });
     },
@@ -1260,28 +1272,34 @@ Tomahawk.Collection = {
                         for (var i = 0; i < that.statements.length; ++i)
                         {
                             var stmt = that.statements[i];
-                            var originalI = i;
                             tx.executeSql(stmt.statement, stmt.args,
-                                function (tx, results) {
-                                    that.stmtsToResolve--;
-                                    if (typeof that.statements[originalI].map !== 'undefined')
-                                    {
-                                        var map = that.statements[originalI].map;
-                                        that.results[originalI] = [];
-                                        for (var ii = 0; ii < results.rows.length; ii++) {
-                                            that.results[originalI].push(map(
-                                                    results.rows.item(ii)
-                                                    ));
+                                (function () {
+                                    //A function returning a function to
+                                    //capture value of i
+                                    var originalI = i;
+                                    return function (tx, results) {
+                                        if (typeof that.statements[originalI].map !== 'undefined')
+                                        {
+                                            var map = that.statements[originalI].map;
+                                            that.results[originalI] = [];
+                                            Tomahawk.log('originalI ' + originalI);
+                                            for (var ii = 0; ii < results.rows.length; ii++) {
+                                                that.results[originalI].push(map(
+                                                        results.rows.item(ii)
+                                                        ));
+                                            }
                                         }
-                                    }
-                                    else
-                                        that.results[originalI] = results;
-                                    if(that.stmtsToResolve == 0)
-                                    {
-                                        that.statements = [];
-                                        resolve(that.results);
-                                    }
-                                }, function (tx, error) {
+                                        else
+                                            that.results[originalI] = results;
+                                        that.stmtsToResolve--;
+                                        if(that.stmtsToResolve == 0)
+                                        {
+                                            that.statements = [];
+                                            Tomahawk.log(JSON.stringify(that.results));
+                                            resolve(that.results);
+                                        }
+                                    };
+                                })(), function (tx, error) {
                                     Tomahawk.log("Error in tx.executeSql: " + error.code + " - "
                                         + error.message);
                                     that.statements = [];
@@ -1570,12 +1588,10 @@ Tomahawk.Collection = {
         });
     },
 
-    resolve: function(params) {
-        var id = params.id;
+    _fuzzyIndexIdsToTracks: function(resultIds, id) {
+        var that = this;
         if(typeof id === 'undefined')
             id = this.settings.id;
-        Tomahawk.log('called resolve');
-        var resultIds = Tomahawk.resolveFromFuzzyIndex(params.artist, params.album, params.track);
         var t = new Tomahawk.Collection.Transaction(this, id);
         return t.beginTransaction().then(function () {
             var mapFn = function(row) {
@@ -1619,12 +1635,22 @@ Tomahawk.Collection = {
                     return e[0];
             }));
         });
-        return this.tracks({});
     },
 
-    search: function() {
-        //TODO
-        Tomahawk.log('called search');
+    resolve: function(params) {
+        var id = params.id;
+        if(typeof id === 'undefined')
+            id = this.settings.id;
+        var resultIds = Tomahawk.resolveFromFuzzyIndex(params.artist, params.album, params.track);
+        return this._fuzzyIndexIdsToTracks(resultIds);
+    },
+
+    search: function(params) {
+        var id = params.id;
+        if(typeof id === 'undefined')
+            id = this.settings.id;
+        var resultIds = Tomahawk.searchFuzzyIndex(params.query);
+        return this._fuzzyIndexIdsToTracks(resultIds);
     },
 
     tracks: function (params, where) {
