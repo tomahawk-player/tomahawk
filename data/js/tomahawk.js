@@ -1845,6 +1845,8 @@ Tomahawk.Collection = {
         this.settings.trackcount = this._trackCount;
         if(! this.settings.description)
             this.settings.description = this.settings.prettyname;
+        this.settings.capabilities = [Tomahawk.Collection.BrowseCapability.Artists, 
+            Tomahawk.Collection.BrowseCapability.Albums, Tomahawk.Collection.BrowseCapability.Tracks];
         return this.settings;
     }
 };
