@@ -288,8 +288,6 @@ ScriptCollection::parseMetaData( const QVariantMap& metadata )
     else
     {
         m_browseCapabilities << CapabilityBrowseArtists;
-        m_browseCapabilities << CapabilityBrowseAlbums;
-        m_browseCapabilities << CapabilityBrowseTracks;
     }
 }
 
