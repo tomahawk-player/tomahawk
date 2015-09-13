@@ -30,6 +30,12 @@
 
 #ifdef Q_OS_MAC
     #include "TomahawkApp_Mac.h"
+#endif
+
+#ifdef Q_OS_MAC64
+    #include <Carbon/Carbon.h>
+    static pascal OSErr appleEventHandler( const AppleEvent*, AppleEvent*, void* );
+#elif defined Q_OS_MAC32
     #include </System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/Headers/AppleEvents.h>
     static pascal OSErr appleEventHandler( const AppleEvent*, AppleEvent*, long );
 #endif
@@ -250,8 +256,11 @@ main( int argc, char *argv[] )
 
 
 #ifdef Q_OS_MAC
-static pascal OSErr
-appleEventHandler( const AppleEvent* e, AppleEvent*, long )
+#ifdef Q_OS_MAC64
+static pascal OSErr appleEventHandler( const AppleEvent* e, AppleEvent*, void* )
+#elif defined Q_OS_MAC32
+static pascal OSErr appleEventHandler( const AppleEvent* e, AppleEvent*, long )
+#endif //Q_OS_MAC64/32
 {
     OSType id = typeWildCard;
     AEGetAttributePtr( e, keyEventIDAttr, typeType, 0, &id, sizeof( id ), 0 );
