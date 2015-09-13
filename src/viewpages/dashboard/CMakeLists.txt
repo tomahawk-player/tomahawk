@@ -1,3 +1,5 @@
+include_directories(${LIBATTICA_INCLUDE_DIR})
+
 tomahawk_add_plugin(dashboard
     TYPE viewpage
     EXPORT_MACRO TOMAHAWK_VIEWPAGE_EXPORT_PRO

@@ -1,3 +1,5 @@
+include_directories(${LIBATTICA_INCLUDE_DIR})
+
 set(adium_srcs
     adium/AdiumPlugin.cpp
     adium/Adium.mm

@@ -1,3 +1,4 @@
+include_directories(${LIBATTICA_INCLUDE_DIR})
 
 tomahawk_add_plugin(zeroconf
     TYPE account

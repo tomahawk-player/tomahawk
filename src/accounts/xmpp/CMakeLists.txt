@@ -1,4 +1,4 @@
-include_directories(${JREEN_INCLUDE_DIR})
+include_directories(${JREEN_INCLUDE_DIR} ${LIBATTICA_INCLUDE_DIR})
 
 tomahawk_add_plugin(xmpp
     TYPE account

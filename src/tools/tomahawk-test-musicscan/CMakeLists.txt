@@ -1,3 +1,5 @@
+include_directories(${LIBATTICA_INCLUDE_DIR} ${TAGLIB_INCLUDE_DIR} ${TAGLIB_INCLUDE_DIR}/..)
+
 set( tomahawk_test_musicscan_src
     main.cpp
 )

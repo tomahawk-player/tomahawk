@@ -13,6 +13,7 @@ list(APPEND ${TOMAHAWK_PLAYDARAPI_LIBRARY_TARGET}_UI
 
 include_directories(
     ${QXTWEB_INCLUDE_DIRS}
+    ${LIBATTICA_INCLUDE_DIR}
     ${THIRDPARTY_DIR}/qt-certificate-addon/src/
     )
 
