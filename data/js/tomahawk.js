@@ -268,7 +268,8 @@ Tomahawk.Resolver = Tomahawk.extend(TomahawkResolver, {
             var merged = [];
             return merged.concat.apply(merged,collectionResults);
         }).then(function(collectionResults) {
-            Promise.resolve(that.resolve({artist: artist, album: album, track:title})).then(function(results){
+                if(typeof results === 'undefined')
+                    results = [];
                 Tomahawk.addTrackResults({
                     'qid': qid,
                     'results': that._convertUrls(results.concat(collectionResults)) 
@@ -279,7 +280,7 @@ Tomahawk.Resolver = Tomahawk.extend(TomahawkResolver, {
 
     _adapter_init: function ()
     {
-        this._urlProtocol = this.settings.name.replace(/\s+/g, '').toLowerCase();
+        this._urlProtocol = this.settings.name.replace(/[^a-zA-Z]/g, '').toLowerCase();
         Tomahawk.addCustomUrlHandler( this._urlProtocol, 'getStreamUrl', true );
         Tomahawk.log('Registered custom url handler for protocol "' + this._urlProtocol + '"');
         this.init();
