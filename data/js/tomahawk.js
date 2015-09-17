@@ -1238,6 +1238,8 @@ Tomahawk.Collection = {
                             "duration INTEGER," +
                             "albumPos INTEGER," +
                             "linkUrl TEXT," +
+                            'releaseyear INTEGER,' +
+                            'bitrate INTEGER,' +
                             "UNIQUE (track, artistId, albumId) ON CONFLICT IGNORE," +
                             "FOREIGN KEY(artistId) REFERENCES artists(_id)," +
                             "FOREIGN KEY(albumId) REFERENCES albums(_id))", []);
@@ -1312,17 +1314,6 @@ Tomahawk.Collection = {
 
         this.sql = function (sqlStatement, sqlArgs, mapFunction) {
             this.statements.push({statement: sqlStatement, args: sqlArgs, map: mapFunction});
-            //var that = this;
-            //return new RSVP.Promise(function (resolve, reject) {
-                //that.tx.executeSql(sqlStatement, sqlArgs,
-                    //function (tx, results) {
-                        //resolve(results);
-                    //}, function (tx, error) {
-                        //Tomahawk.log("Error in tx.executeSql: " + error.code + " - "
-                            //+ error.message);
-                        //reject(error);
-                    //});
-            //})
         };
 
         this.sqlSelect = function (table, mapResults, fields, where, join) {
@@ -1520,7 +1511,9 @@ Tomahawk.Collection = {
                         url: track.url,
                         duration: track.duration,
                         linkUrl: track.linkUrl,
-                        albumPos: track.albumPos
+                        releaseyear: track.releaseyear,
+                        bitrate: track.bitrate,
+                        albumPos: track.albumpos
                     });
                 })(tracks[i]);
             }
@@ -1601,14 +1594,16 @@ Tomahawk.Collection = {
                     duration: row.duration,
                     url: row.url,
                     linkUrl: row.linkUrl,
-                    albumPos: row.albumPos
+                    releaseyear: row.releaseyear,
+                    bitrate: row.bitrate,
+                    albumpos: row.albumPos
                 };
             };
             for (var idx = 0; resultIds && idx < resultIds.length; idx++) {
                 var trackid = resultIds[idx][0];
                 var where = { _id : trackid };
                 t.sqlSelect("tracks",mapFn, 
-                    ["artist", "artistDisambiguation", "album", "track", "duration", "url", "linkUrl"],
+                    [],
                     where, [
                         {
                             table: "artists",
@@ -1668,11 +1663,13 @@ Tomahawk.Collection = {
                     duration: row.duration,
                     url: row.url,
                     linkUrl: row.linkUrl,
-                    albumPos: row.albumPos
+                    releaseyear: row.releaseyear,
+                    bitrate: row.bitrate,
+                    albumpos: row.albumPos
                 };
             };
             t.sqlSelect("tracks",mapFn, 
-                ["artist", "artistDisambiguation", "album", "track", "duration", "url", "linkUrl"],
+                [],
                 where, [
                     {
                         table: "artists",
