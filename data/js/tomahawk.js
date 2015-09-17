@@ -268,8 +268,7 @@ Tomahawk.Resolver = Tomahawk.extend(TomahawkResolver, {
             var merged = [];
             return merged.concat.apply(merged,collectionResults);
         }).then(function(collectionResults) {
-                if(typeof results === 'undefined')
-                    results = [];
+            Promise.resolve(that.resolve({artist: artist, album: album, track:title})).then(function(results){
                 Tomahawk.addTrackResults({
                     'qid': qid,
                     'results': that._convertUrls(results.concat(collectionResults)) 
