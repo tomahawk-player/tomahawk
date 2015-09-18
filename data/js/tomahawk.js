@@ -805,9 +805,15 @@ Tomahawk.removeDiacritics = function (str) {
 };
 
 Tomahawk.localStorage = Tomahawk.localStorage || {
-    setItem: function() {},
-    getItem: function() {},
-    removeItem: function() {}
+    setItem: function(key, value) {
+        window.localStorage[key] = value;
+    },
+    getItem: function(key) {
+        return window.localStorage[key];
+    },
+    removeItem: function(key) {
+        delete window.localStorage[key];
+    }
 };
 
 // some aliases
