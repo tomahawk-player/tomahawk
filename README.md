@@ -76,7 +76,7 @@ Required dependencies:
 * [Qt 5.4.0](http://qt-project.org/)
 * [VLC 2.1.0](https://videolan.org/vlc/)
 * [SQLite 3.6.22](http://www.sqlite.org/)
-* [TagLib 1.8](http://developer.kde.org/~wheeler/taglib.html)
+* [TagLib 1.8](https://taglib.github.io/)
 * [Boost 1.3](http://www.boost.org/)
 * [Lucene++ 3.0.6](https://github.com/luceneplusplus/LucenePlusPlus/)
 * [libechonest 2.3.1](http://projects.kde.org/projects/playground/libs/libechonest/)
