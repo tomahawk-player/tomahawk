@@ -1,22 +1,21 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="id" version="2.0">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="he" version="2.0">
 <context>
     <name>ACLJobDelegate</name>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="67"/>
         <source>Allow %1 to
 connect and stream from you?</source>
-        <translation>Izinkan %1 untuk
-terhubung dan strim dari Anda?</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="83"/>
         <source>Allow Streaming</source>
-        <translation>Izinkan Strim</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="86"/>
         <source>Deny Access</source>
-        <translation>Tolak Akses</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -24,7 +23,7 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="185"/>
         <source>Tomahawk needs you to decide whether %1 is allowed to connect.</source>
-        <translation>Tomahawk memerlukan Anda untuk memutuskan apakah %1 diizinkan untuk terhubung.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -32,7 +31,7 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapper.cpp" line="42"/>
         <source>Add Account</source>
-        <translation>Tambah Akun</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -40,17 +39,17 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="103"/>
         <source>Online</source>
-        <translation>Daring</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="108"/>
         <source>Connecting...</source>
-        <translation>Menyambungkan...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="113"/>
         <source>Offline</source>
-        <translation>Luring</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -58,18 +57,18 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/tomahawk/widgets/AccountListWidget.cpp" line="64"/>
         <source>Connections</source>
-        <translation>Koneksi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/AccountListWidget.cpp" line="72"/>
         <location filename="../src/tomahawk/widgets/AccountListWidget.cpp" line="243"/>
         <source>Connect &amp;All</source>
-        <translation>Sambung &amp;Semua</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/AccountListWidget.cpp" line="242"/>
         <source>Disconnect &amp;All</source>
-        <translation>Putuskan &amp;Semua</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -77,193 +76,193 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="65"/>
         <source>&amp;Listen Along</source>
-        <translation>&amp;Dengarkan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="68"/>
         <source>Stop &amp;Listening Along</source>
-        <translation>Berhenti Men&amp;dengarkan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="72"/>
         <source>&amp;Follow in Real-Time</source>
-        <translation>&amp;Ikuti dalam Waktu-Nyata</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
         <source>&amp;Listen Privately</source>
-        <translation>&amp;Dengarkan secara Privat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="82"/>
         <source>&amp;Load Playlist</source>
-        <translation>&amp;Muat Daftar Putar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="83"/>
         <source>&amp;Load Station</source>
-        <translation>&amp;Muat Stasiun</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="84"/>
         <source>&amp;Rename Playlist</source>
-        <translation>&amp;Ubah Nama Daftar Putar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="85"/>
         <source>&amp;Rename Station</source>
-        <translation>&amp;Ubah Nama Stasiun</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="86"/>
         <source>&amp;Copy Playlist Link</source>
-        <translation>&amp;Salin Tautan Daftar Putar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="87"/>
         <source>&amp;Play</source>
-        <translation>&amp;Putar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="91"/>
         <source>&amp;Stop</source>
-        <translation>&amp;Setop</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="92"/>
         <source>&amp;Previous Track</source>
-        <translation>Trek Se&amp;belumnya</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="95"/>
         <source>&amp;Next Track</source>
-        <translation>Trek Se&amp;lanjutnya</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="98"/>
         <source>&amp;Quit</source>
-        <translation>&amp;Keluar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="112"/>
         <source>U&amp;pdate Collection</source>
-        <translation>&amp;Perbarui Koleksi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="113"/>
         <source>Fully &amp;Rescan Collection</source>
-        <translation>&amp;Pindai Ulang Seluruh Koleksi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="111"/>
         <source>Import Playlist...</source>
-        <translation>Impor Daftar Putar...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="114"/>
         <source>Show Offline Friends</source>
-        <translation>Tampilkan Teman Luring</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="116"/>
         <source>&amp;Configure Tomahawk...</source>
-        <translation>&amp;Konfigurasi Tomahawk...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="119"/>
         <source>Minimize</source>
-        <translation>Minimalkan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="121"/>
         <source>Zoom</source>
-        <translation>Zum</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="123"/>
         <source>Enter Full Screen</source>
-        <translation>Masuki Layar Penuh</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="126"/>
         <source>Hide Menu Bar</source>
-        <translation>Sembunyikan Bilah Menu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="130"/>
         <source>Diagnostics...</source>
-        <translation>Diagnosa...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="132"/>
         <source>About &amp;Tomahawk...</source>
-        <translation>Tentang &amp;Tomahawk...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="134"/>
         <source>&amp;Legal Information...</source>
-        <translation>Informasi &amp;Hukum...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="136"/>
         <source>&amp;View Logfile</source>
-        <translation>&amp;Lihat Berkas Log</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="139"/>
         <source>Check For Updates...</source>
-        <translation>Periksa Pemutakhiran...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="143"/>
         <source>0.8</source>
-        <translation>0.8</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="145"/>
         <source>Report a Bug</source>
-        <translation>Laporkan Kutu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="146"/>
         <source>Get Support</source>
-        <translation>Dapatkan Dukungan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="147"/>
         <source>Help Us Translate</source>
-        <translation>Bantu Kami Menerjemahkan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="157"/>
         <source>&amp;Controls</source>
-        <translation>&amp;Kontrol</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="172"/>
         <source>&amp;Settings</source>
-        <translation>&amp;Pengaturan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="179"/>
         <source>&amp;Help</source>
-        <translation>&amp;Bantuan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="188"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="258"/>
         <source>What&apos;s New in ...</source>
-        <translation>Apa Yang Baru di ...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="214"/>
         <source>&amp;Window</source>
-        <translation>&amp;Jendela</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="231"/>
         <source>Main Menu</source>
-        <translation>Menu Utama</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -271,12 +270,12 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/AlbumViewPage.ui" line="60"/>
         <source>Top Hits</source>
-        <translation>Lagu Unggulan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/AlbumViewPage.cpp" line="62"/>
         <source>Album Details</source>
-        <translation>Detail Album</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -285,12 +284,12 @@ terhubung dan strim dari Anda?</translation>
         <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="65"/>
         <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="107"/>
         <source>All albums from %1</source>
-        <translation>Semua album dari %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="109"/>
         <source>All albums</source>
-        <translation>Semua album</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -298,60 +297,60 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.ui" line="50"/>
         <source>Top Albums</source>
-        <translation>Album Unggulan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.ui" line="110"/>
         <source>Top Hits</source>
-        <translation>Lagu Unggulan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.ui" line="76"/>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.ui" line="136"/>
         <source>Show More</source>
-        <translation>Lebih Banyak</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.ui" line="173"/>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="147"/>
         <source>Biography</source>
-        <translation>Biografi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.ui" line="267"/>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="148"/>
         <source>Related Artists</source>
-        <translation>Artis Terkait</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="94"/>
         <source>Sorry, we could not find any albums for this artist!</source>
-        <translation>Maaf, kami tidak bisa menemukan album apapun untuk artis ini!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="73"/>
         <source>Sorry, we could not find any related artists!</source>
-        <translation>Maaf, kami tidak bisa menemukan artis terkait!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="115"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
-        <translation>Maaf, kami tidak bisa menemukan lagu unggulan artis ini!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="146"/>
         <source>Music</source>
-        <translation>Musik</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="185"/>
         <source>Songs</source>
-        <translation>Lagu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/ArtistViewPage.cpp" line="201"/>
         <source>Albums</source>
-        <translation>Album</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -360,28 +359,28 @@ terhubung dan strim dari Anda?</translation>
         <location filename="../src/tomahawk/AudioControls.cpp" line="108"/>
         <location filename="../src/tomahawk/AudioControls.cpp" line="340"/>
         <source>Shuffle</source>
-        <translation>Karau</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="109"/>
         <location filename="../src/tomahawk/AudioControls.cpp" line="341"/>
         <source>Repeat</source>
-        <translation>Ulang</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="338"/>
         <source>Time Elapsed</source>
-        <translation>Waktu Berjalan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="339"/>
         <source>Time Remaining</source>
-        <translation>Waktu Tersisa</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="344"/>
         <source>Playing from %1</source>
-        <translation>Memutar dari %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -389,22 +388,22 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1019"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
-        <translation>Maaf, Tomahawk tidak bisa menemukan trek &apos;%1&apos; oleh %2</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1043"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
-        <translation>Maaf, Tomahawk tidak bisa menemukan artis &apos;%1&apos;</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1069"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
-        <translation>Maaf, Tomahawk tidak bisa menemukan album &apos;%1&apos; dari %2</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="1106"/>
         <source>Sorry, couldn&apos;t find any playable tracks</source>
-        <translation>Maaf, tidak bisa menemukan trek yang dapat diputar</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -412,7 +411,7 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/CaptionLabel.cpp" line="71"/>
         <source>Close</source>
-        <translation>Tutup</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -420,24 +419,24 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="61"/>
         <source>Create new Playlist</source>
-        <translation>Buat Daftar Putar baru</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="64"/>
         <source>Create new Station</source>
-        <translation>Buat Stasiun baru</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="182"/>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="291"/>
         <source>New Station</source>
-        <translation>Stasiun Baru</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="182"/>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="291"/>
         <source>%1 Station</source>
-        <translation>Stasiun %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -445,12 +444,12 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="387"/>
         <source>Playlists</source>
-        <translation>Daftar Putar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="389"/>
         <source>Stations</source>
-        <translation>Stasiun</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -458,7 +457,7 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/searchlineedit/ClearButton.cpp" line="38"/>
         <source>Clear</source>
-        <translation>Bersihkan</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -466,7 +465,7 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CollectionItem.cpp" line="37"/>
         <source>Collection</source>
-        <translation>Koleksi</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -474,37 +473,37 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="74"/>
         <source>Sorry, there are no albums in this collection!</source>
-        <translation>Maaf, tidak ada album di dalam koleksi ini!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="86"/>
         <source>Artists</source>
-        <translation>Artis</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="87"/>
         <source>Albums</source>
-        <translation>Album</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="88"/>
         <source>Songs</source>
-        <translation>Lagu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="379"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation>Setelah Anda memindai koleksi musik Anda, Anda akan menemukan seluruh trek Anda di sini.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="382"/>
         <source>This collection is empty.</source>
-        <translation>Koleksi ini kosong.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/CollectionViewPage.cpp" line="385"/>
         <source>Cloud collections aren&apos;t supported in the flat view yet. We will have them covered soon. Switch to another view to navigate them.</source>
-        <translation>Koleksi awan belum didukung pada tilikan rata. Kami akan segera mengimplementasikannya. Alihkan ke tilikan lainnya untuk melihat mereka.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -512,7 +511,7 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnItemDelegate.cpp" line="191"/>
         <source>Unknown</source>
-        <translation>Tidak Diketahui</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -520,7 +519,7 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="284"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
-        <translation>Maaf, filter &apos;%1&apos; tidak menampilkan hasil apapun.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -528,32 +527,32 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="111"/>
         <source>Composer:</source>
-        <translation>Penyusun:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="118"/>
         <source>Duration:</source>
-        <translation>Durasi:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="125"/>
         <source>Bitrate:</source>
-        <translation>Laju Bit:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="132"/>
         <source>Year:</source>
-        <translation>Tahun:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="139"/>
         <source>Age:</source>
-        <translation>Umur:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="217"/>
         <source>%1 kbps</source>
-        <translation>%1 kbps</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -561,17 +560,17 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="137"/>
         <source>Playlist Details</source>
-        <translation>Detail Daftar Putar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="244"/>
         <source>This playlist is currently empty.</source>
-        <translation>Daftar putar saat ini sedang kosong.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="246"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
-        <translation>Daftar putar saat ini sedang kosong. Tambahkan beberapa trek musik dan nikmatilah!</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -579,22 +578,22 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="51"/>
         <source>About</source>
-        <translation>Tentang</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="78"/>
         <source>Delete Account</source>
-        <translation>Hapus Akun</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="108"/>
         <source>Config Error</source>
-        <translation>Galat Konfigurasi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="160"/>
         <source>About this Account</source>
-        <translation>Tentang Akun ini</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -602,17 +601,17 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/DiagnosticsDialog.ui" line="20"/>
         <source>Tomahawk Diagnostics</source>
-        <translation>Diagnosa Tomahawk</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/DiagnosticsDialog.ui" line="42"/>
         <source>&amp;Copy to Clipboard</source>
-        <translation>&amp;Salin ke Papan Klip</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/DiagnosticsDialog.ui" line="49"/>
         <source>Open &amp;Log-file</source>
-        <translation>Buka Berkas &amp;Log</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -620,22 +619,22 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="59"/>
         <source>Steer this station:</source>
-        <translation>Kendalikan stasiun ini:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="82"/>
         <source>Much less</source>
-        <translation>Sangat sedikit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="83"/>
         <source>Less</source>
-        <translation>Sedikit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="84"/>
         <source>A bit less</source>
-        <translation>Agak sedikit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="85"/>
@@ -645,27 +644,27 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="86"/>
         <source>A bit more</source>
-        <translation>Agak banyak</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="87"/>
         <source>More</source>
-        <translation>Banyak</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="88"/>
         <source>Much more</source>
-        <translation>Sangat banyak</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="91"/>
         <source>Tempo</source>
-        <translation>Tempo</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="92"/>
         <source>Loudness</source>
-        <translation>Kekerasan Suara</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="93"/>
@@ -695,12 +694,12 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="98"/>
         <source>By Description</source>
-        <translation>Berdasarkan Deskripsi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="106"/>
         <source>Enter a description</source>
-        <translation>Masukkan deskripsi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="113"/>
@@ -718,7 +717,7 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/FilterHeader.cpp" line="29"/>
         <source>Filter...</source>
-        <translation>Filter...</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -731,12 +730,12 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="197"/>
         <source>Install plug-in</source>
-        <translation>Pasang Pengaya</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="198"/>
         <source>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;by &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;You are attempting to install a Tomahawk plug-in from an unknown source. Plug-ins from untrusted sources may put your data at risk.&lt;br/&gt;Do you want to install this plug-in?</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;oleh&lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Anda mencoba memasang pengaya Tomahawk dari sumber tidak dikenal. Pengaya dari sumber tidak dikenal dapat membahayakan data Anda.&lt;br/&gt;Apakah Anda ingin memasang pengaya ini?</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -744,44 +743,43 @@ terhubung dan strim dari Anda?</translation>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="33"/>
         <source>Connect to your Hatchet account</source>
-        <translation>Sambungkan ke akun Hatchet Anda</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="43"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;http://blog.hatchet.is&quot;&gt;Learn More&lt;/a&gt; and/or &lt;a href=&quot;http://hatchet.is/register&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Create Account&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;http://blog.hatchet.is&quot;&gt;Pelajari Lebih Lanjut&lt;/a&gt; dan/atau &lt;a href=&quot;http://hatchet.is/register&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Buat Akun&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="78"/>
         <source>Enter One-time
 Password (OTP)</source>
-        <translation>Masukkan Sandi
-Sekali Pakai (OTP)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="86"/>
         <source>Username</source>
-        <translation>Nama Pengguna</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="93"/>
         <source>Hatchet username</source>
-        <translation>Nama Pengguna Hatchet</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="100"/>
         <source>Password:</source>
-        <translation>Sandi:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="113"/>
         <source>Hatchet password</source>
-        <translation>Sandi Hatchet</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="154"/>
         <source>Login</source>
-        <translation>Masuk</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -789,22 +787,22 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="46"/>
         <source>Recently Played Tracks</source>
-        <translation>Trek Diputar Baru-baru Ini</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="49"/>
         <source>Your recently played tracks</source>
-        <translation>Trek Anda yang baru-baru ini diputar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="51"/>
         <source>%1&apos;s recently played tracks</source>
-        <translation>Trek %1 yang baru-baru ini diputar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="57"/>
         <source>Sorry, we could not find any recent plays!</source>
-        <translation>Maaf, kami tidak bisa menemukan trek yang baru-baru ini diputar!</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -812,27 +810,27 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="17"/>
         <source>Host Settings</source>
-        <translation>Pengaturan Hos</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="35"/>
         <source>Configure your external IP address or host name here. Make sure to manually forward the selected port to this host on your router.</source>
-        <translation>Konfigurasikan alamat IP eksternal atau nama hos Anda di sini. Pastikan teruskan port ke hos ini secara manual pada router Anda.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="53"/>
         <source>Static Host Name:</source>
-        <translation>Nama Hos Statis:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="69"/>
         <source>Static Port:</source>
-        <translation>Port Statis:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="106"/>
         <source>Automatically detect external IP address</source>
-        <translation>Secara otomatis mendeteksi alamat IP eksternal</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -840,7 +838,7 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/InboxItem.cpp" line="35"/>
         <source>Inbox</source>
-        <translation>Kotak Masuk</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -848,12 +846,12 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="67"/>
         <source>Sent %1 by %2 to %3.</source>
-        <translation>Mengirim %1 oleh %2 ke %3.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="72"/>
         <source>%1 sent you %2 by %3.</source>
-        <translation>%1 mengirimkan %2 kepada Anda oleh %3.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -861,12 +859,12 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="84"/>
         <source>Inbox Details</source>
-        <translation>Detail Kotak Masuk</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="93"/>
         <source>Your friends have not shared any recommendations with you yet. Connect with them and share your musical gems!</source>
-        <translation>Teman Anda belum berbagi rekomendasi apapun dengan Anda. Terhubung dengan mereka dan bagi musik kesukaan Anda!</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -874,7 +872,7 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/IndexingJobItem.cpp" line="33"/>
         <source>Indexing Music Library</source>
-        <translation>Memindai Pustaka Musik</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -893,32 +891,32 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="38"/>
         <source>Scrobble tracks to Last.fm</source>
-        <translation>Skrobel trek ke Last.fm</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="47"/>
         <source>Username:</source>
-        <translation>Nama Pengguna:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="57"/>
         <source>Password:</source>
-        <translation>Sandi:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="73"/>
         <source>Test Login</source>
-        <translation>Percobaan Masuk</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="80"/>
         <source>Import Playback History</source>
-        <translation>Impor Riwayat Pemutaran</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="87"/>
         <source>Synchronize Loved Tracks</source>
-        <translation>Sinkronisasi Trek yang Disuka</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -926,7 +924,7 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/LatchedStatusItem.cpp" line="33"/>
         <source>%1 is listening along with you!</source>
-        <translation>%1 mendengarkan bersama Anda!</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -934,37 +932,37 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="14"/>
         <source>Load Playlist</source>
-        <translation>Muat Daftar Putar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="20"/>
         <source>Enter the URL of the hosted playlist (e.g. .xspf format) or click the button to select a local M3U of XSPF playlist to import.</source>
-        <translation>Masukkan URL daftar putar yang dihos (mis. format .xspf) atau klik tombol untuk memilih dan mengimpor daftar putar M3U atau XSPF lokal.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="35"/>
         <source>Playlist URL</source>
-        <translation>URL Daftar Putar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="42"/>
         <source>Enter URL...</source>
-        <translation>Masukkan URL...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="55"/>
         <source>...</source>
-        <translation>...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="64"/>
         <source>Automatically Update (upon changes to hosted playlist)</source>
-        <translation>Otomatis Memperbarui (saat ada perubahan daftar putar yang dihos)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="79"/>
         <source>To import a playlist from Spotify, Rdio, Beats, etc. - simply drag the link into Tomahawk.</source>
-        <translation>Untuk mengimpor daftar putar dari Spotify, Rdio, Beats, dll. - cukup seret tautan ke dalam Tomahawk.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -972,12 +970,12 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.cpp" line="56"/>
         <source>Load Playlist</source>
-        <translation>Muat Daftar Putar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.cpp" line="56"/>
         <source>Playlists (*.xspf *.m3u *.jspf)</source>
-        <translation>Daftar Putar (*.xspf *.m3u *.jspf)</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -985,32 +983,32 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="58"/>
         <source>Top Loved Tracks</source>
-        <translation>Trek yang Disuka Unggulan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="60"/>
         <source>Favorites</source>
-        <translation>Favorit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="86"/>
         <source>Sorry, we could not find any of your Favorites!</source>
-        <translation>Maaf, kami tidak bisa menemukan Favorit Anda!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="89"/>
         <source>The most loved tracks from all your friends</source>
-        <translation>Trek paling banyak disuka dari semua teman Anda</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="95"/>
         <source>All of your loved tracks</source>
-        <translation>Semua trek yang Anda suka</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="97"/>
         <source>All of %1&apos;s loved tracks</source>
-        <translation>Semua trek yang %1 suka</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1018,119 +1016,118 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="30"/>
         <source>Tags</source>
-        <translation>Label</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="39"/>
         <source>Title:</source>
-        <translation>Judul:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="49"/>
         <source>Title...</source>
-        <translation>Judul...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="56"/>
         <source>Artist:</source>
-        <translation>Artis:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="66"/>
         <source>Artist...</source>
-        <translation>Artis...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="73"/>
         <source>Album:</source>
-        <translation>Album:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="83"/>
         <source>Album...</source>
-        <translation>Album...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="90"/>
         <source>Track Number:</source>
-        <translation>Nomor Trek:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="119"/>
         <source>Duration:</source>
-        <translation>Durasi:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="129"/>
         <source>00.00</source>
-        <translation>00.00</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="136"/>
         <source>Year:</source>
-        <translation>Tahun:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="162"/>
         <source>Bitrate:</source>
-        <translation>Laju Bit:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="183"/>
         <source>File</source>
-        <translation>Berkas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="189"/>
         <source>File Name:</source>
-        <translation>Nama Berkas:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="199"/>
         <source>File Name...</source>
-        <translation>Nama Berkas...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="206"/>
         <source>File Size...</source>
-        <translation>Ukuran Berkas...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="212"/>
         <source>File size...</source>
-        <translation>Ukuran berkas...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="219"/>
         <source>File Size:</source>
-        <translation>Ukuran Berkas:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="235"/>
         <source>Back</source>
-        <translation>Sebelumnya</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="245"/>
         <source>Forward</source>
-        <translation>Selanjutnya</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="185"/>
         <source>Error</source>
-        <translation>Galat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="185"/>
         <source>Could not write tags to file:
 %1</source>
-        <translation>Tidak bisa menulis label ke berkas:
-%1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="396"/>
         <source>Properties</source>
-        <translation>Properti</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1138,7 +1135,7 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="39"/>
         <source>Trending Tracks</source>
-        <translation>Trek Ngetren</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="79"/>
@@ -1148,7 +1145,7 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="113"/>
         <source>Trending Artists</source>
-        <translation>Artis Ngetren</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1156,108 +1153,108 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Artist</source>
-        <translation>Artis</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Title</source>
-        <translation>Judul</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Composer</source>
-        <translation>Penyusun</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Album</source>
-        <translation>Album</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Track</source>
-        <translation>Trek</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Duration</source>
-        <translation>Durasi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Bitrate</source>
-        <translation>Laju Bit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Age</source>
-        <translation>Umur</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Year</source>
-        <translation>Tahun</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Size</source>
-        <translation>Ukuran</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Origin</source>
-        <translation>Asal</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Accuracy</source>
-        <translation>Akurasi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="893"/>
         <source>Perfect match</source>
-        <translation>Sangat cocok sekali</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="894"/>
         <source>Very good match</source>
-        <translation>Sangat cocok</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="895"/>
         <source>Good match</source>
-        <translation>Cocok</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="896"/>
         <source>Vague match</source>
-        <translation>Agak cocok</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="897"/>
         <source>Bad match</source>
-        <translation>Tidak cocok</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="898"/>
         <source>Very bad match</source>
-        <translation>Sangat tidak cocok</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="899"/>
         <source>Not available</source>
-        <translation>Tidak tersedia</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="900"/>
         <source>Searching...</source>
-        <translation>Mencari...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="398"/>
         <source>Name</source>
-        <translation>Nama</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1265,12 +1262,12 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="173"/>
         <source>played %1 by you</source>
-        <translation>%1 diputar oleh Anda</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="175"/>
         <source>played %1 by %2</source>
-        <translation>%1 diputar oleh %2</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1278,23 +1275,23 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="144"/>
         <source>A playlist you created %1.</source>
-        <translation>Daftar putar yang Anda buat %1.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="149"/>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="156"/>
         <source>A playlist by %1, created %2.</source>
-        <translation>Daftar putar oleh %1, dibuat %2.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="205"/>
         <source>All tracks by %1 on album %2</source>
-        <translation>Semua trek oleh %1 pada album %2</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="232"/>
         <source>All tracks by %1</source>
-        <translation>Semua trek oleh %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1302,59 +1299,58 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="17"/>
         <source>Proxy Settings</source>
-        <translation>Pengaturan Proksi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="37"/>
         <source>Hostname of proxy server</source>
-        <translation>Nama hos dari server proksi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="44"/>
         <source>Host</source>
-        <translation>Hos</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="51"/>
         <source>Port</source>
-        <translation>Port</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="71"/>
         <source>Proxy login</source>
-        <translation>Masuk proksi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="78"/>
         <source>User</source>
-        <translation>Pengguna</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="85"/>
         <source>Password</source>
-        <translation>Sandi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="95"/>
         <source>Proxy password</source>
-        <translation>Sandi proksi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="102"/>
         <source>No Proxy Hosts:
 (Overrides system proxy)</source>
-        <translation>Tidak Ada Proksi:
-(Menimpa proksi sistem)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="110"/>
         <source>localhost *.example.com (space separated)</source>
-        <translation>localhost *.contoh.com (dipisahkan spasi)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="127"/>
         <source>Use proxy for DNS lookups?</source>
-        <translation>Gunakan proksi untuk penilik DNS?</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1362,105 +1358,105 @@ Sekali Pakai (OTP)</translation>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="254"/>
         <source>%n year(s) ago</source>
-        <translation><numerusform>%n tahun yang lalu</numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="256"/>
         <source>%n year(s)</source>
-        <translation><numerusform>%n tahun</numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="262"/>
         <source>%n month(s) ago</source>
-        <translation><numerusform>%n bulan yang lalu</numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="264"/>
         <source>%n month(s)</source>
-        <translation><numerusform>%n bulan</numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="270"/>
         <source>%n week(s) ago</source>
-        <translation><numerusform>%n minggu yang lalu</numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="272"/>
         <source>%n week(s)</source>
-        <translation><numerusform>%n minggu</numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="278"/>
         <source>%n day(s) ago</source>
-        <translation><numerusform>%n hari yang lalu</numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="280"/>
         <source>%n day(s)</source>
-        <translation><numerusform>%n hari</numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="286"/>
         <source>%n hour(s) ago</source>
-        <translation><numerusform>%n jam yang lalu</numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="288"/>
         <source>%n hour(s)</source>
-        <translation><numerusform>%n jam</numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="294"/>
         <source>%1 minutes ago</source>
-        <translation>%1 menit yang lalu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="296"/>
         <source>%1 minutes</source>
-        <translation>%1 menit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="300"/>
         <source>just now</source>
-        <translation>baru saja</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="38"/>
         <source>Friend Finders</source>
-        <translation>Pencari Teman</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="40"/>
         <source>Music Finders</source>
-        <translation>Pencari Musik</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="43"/>
         <source>Status Updaters</source>
-        <translation>Pembaru Status</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/GuiHelpers.cpp" line="114"/>
         <location filename="../src/libtomahawk/utils/GuiHelpers.cpp" line="143"/>
         <source>%1 Config</source>
-        <translation>Konfigurasi %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="548"/>
         <source>Songs </source>
         <comment>Beginning of a sentence summary</comment>
-        <translation>Lagu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="577"/>
         <source>No configured filters!</source>
-        <translation>Filter tidak terkonfigurasi!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="591"/>
         <source> and </source>
         <comment>Inserted between items in a list of two</comment>
-        <translation>dan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="593"/>
@@ -1469,7 +1465,7 @@ Sekali Pakai (OTP)</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="622"/>
         <source>, </source>
         <comment>Inserted between items in a list</comment>
-        <translation>, </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="595"/>
@@ -1478,25 +1474,25 @@ Sekali Pakai (OTP)</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="627"/>
         <source>.</source>
         <comment>Inserted when ending a sentence summary</comment>
-        <translation>.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="608"/>
         <source>, and </source>
         <comment>Inserted between the last two items in a list of more than two</comment>
-        <translation>, dan </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="619"/>
         <source>and </source>
         <comment>Inserted before the last item in a list</comment>
-        <translation>dan </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="627"/>
         <source>and </source>
         <comment>Inserted before the sorting summary in a sentence summary</comment>
-        <translation>dan </translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1504,12 +1500,12 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="91"/>
         <source>No query</source>
-        <translation>Tidak ada kueri</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="92"/>
         <source>Parameter count mismatch</source>
-        <translation>Jumlah parameter tidak cocok</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1517,7 +1513,7 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/QueueItem.cpp" line="39"/>
         <source>Queue</source>
-        <translation>Antrean</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1525,22 +1521,22 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.ui" line="41"/>
         <source>Open Queue</source>
-        <translation>Buka Antrean</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="39"/>
         <source>Queue Details</source>
-        <translation>Detail Antrean</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="49"/>
         <source>Queue</source>
-        <translation>Antrean</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="53"/>
         <source>The queue is currently empty. Drop something to enqueue it!</source>
-        <translation>Antrean sedang kosong. Jatuhkan sesuatu untuk menambahkan!</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1548,12 +1544,12 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/ResolverConfigDelegate.cpp" line="111"/>
         <source>Not found: %1</source>
-        <translation>Tidak ditemukan: %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/ResolverConfigDelegate.cpp" line="114"/>
         <source>Failed to load: %1</source>
-        <translation>Gagal memuat: %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1561,7 +1557,7 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/ScannerStatusItem.cpp" line="55"/>
         <source>Scanning Collection</source>
-        <translation>Memindai Koleksi</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1569,7 +1565,7 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="48"/>
         <source>Reload Collection</source>
-        <translation>Memuat Ulang Koleksi</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1582,17 +1578,17 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="85"/>
         <source>SSL Error</source>
-        <translation>Galat SSL</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="86"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
-        <translation>Anda telah meminta Tomahawk menyambung dengan aman ke &lt;b&gt;%1&lt;/b&gt;, tetapi kami tidak bisa mengonfirmasi sambungan Anda aman:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Apakah Anda mempercayai sambungan ini?</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="93"/>
         <source>Trust certificate</source>
-        <translation>Sertifikat kepercayaan</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1600,7 +1596,7 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/searchlineedit/SearchLineEdit.cpp" line="58"/>
         <source>Search</source>
-        <translation>Cari</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1608,52 +1604,52 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.h" line="54"/>
         <source>Search: %1</source>
-        <translation>Cari: %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.h" line="55"/>
         <source>Results for &apos;%1&apos;</source>
-        <translation>Hasil untuk &apos;%1&apos;</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.ui" line="41"/>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="146"/>
         <source>Songs</source>
-        <translation>Lagu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.ui" line="67"/>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.ui" line="127"/>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.ui" line="187"/>
         <source>Show More</source>
-        <translation>Lebih Banyak</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.ui" line="101"/>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="158"/>
         <source>Artists</source>
-        <translation>Artis</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.ui" line="161"/>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="188"/>
         <source>Albums</source>
-        <translation>Album</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="65"/>
         <source>Sorry, we could not find any artists!</source>
-        <translation>Maaf, kami tidak bisa menemukan artis!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="86"/>
         <source>Sorry, we could not find any albums!</source>
-        <translation>Maaf, kami tidak bisa menemukan album apapun!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SearchViewPage.cpp" line="108"/>
         <source>Sorry, we could not find any songs!</source>
-        <translation>Maaf, kami tidak bisa menemukan lagu apapun!</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1661,12 +1657,12 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/network/Servent.cpp" line="1001"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
-        <translation>Gagal otomatis mendeteksi IP eksternal: Tidak bisa mengurai respons JSON</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/network/Servent.cpp" line="1014"/>
         <source>Automatically detecting external IP failed: %1</source>
-        <translation>Gagal otomatis mendeteksi IP eksternal: %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1674,52 +1670,52 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="244"/>
         <source>Collection</source>
-        <translation>Koleksi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="247"/>
         <source>Advanced</source>
-        <translation>Lanjutan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="160"/>
         <source>All</source>
-        <translation>Semua</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="133"/>
         <source>Install Plug-In...</source>
-        <translation>Pasang Pengaya...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="300"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
-        <translation>Beberapa ubahan pengaturan tidak akan terdampak sampai Tomahawk dimulai ulang</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="239"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
-        <translation>Konfigurasikan akun dan layanan yang digunakan Tomahawk untuk mencari dan mengambil musik, menemukan teman Anda dan memperbarui status Anda.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="239"/>
         <source>Plug-Ins</source>
-        <translation>Pengaya</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="244"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
-        <translation>Kelola cara Tomahawk menemukan musik di komputer Anda.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="247"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
-        <translation>Konfigurasi pengaturan lanjutan Tomahawk, termasuk konektivitas jaringan, interaksi peramban dan lainnya.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="417"/>
         <source>Open Directory</source>
-        <translation>Buka Direktori</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="511"/>
@@ -1734,17 +1730,17 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="530"/>
         <source>Delete all Access Control entries?</source>
-        <translation>Hapus semua entri Kontrol Akses?</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="531"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
-        <translation>Apakah Anda benar-benar ingin menghapus semua entri Kontrol Akses? Anda akan ditanyakan lagi untuk setiap peer yang Anda terhubung dengannya.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="300"/>
         <source>Information</source>
-        <translation>Informasi</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1752,7 +1748,7 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Accounts.ui" line="57"/>
         <source>Filter by Capability:</source>
-        <translation>Filter berdasarkan Kapabilitas:</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1760,72 +1756,72 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="38"/>
         <source>Remote Peer Connection Method</source>
-        <translation>Metode Koneksi Peer Jauh</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="44"/>
         <source>Active (your host needs to be directly reachable)</source>
-        <translation>Aktif (hos Anda perlu secara langsung dapat dijangkau)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="51"/>
         <source>UPnP / Automatic Port Forwarding (recommended)</source>
-        <translation>UPnP / Penerusan Port Otomatis (disarankan)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="69"/>
         <source>Manual Port Forwarding</source>
-        <translation>Penerusan Port Manual</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="82"/>
         <source>Host Settings...</source>
-        <translation>Pengaturan Hos...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="110"/>
         <source>SOCKS Proxy</source>
-        <translation>Proksi SOCKS</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="116"/>
         <source>Use SOCKS Proxy</source>
-        <translation>Gunakan Proksi SOCKS</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="145"/>
         <source>Proxy Settings...</source>
-        <translation>Pengaturan Proksi...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="171"/>
         <source>Other Settings</source>
-        <translation>Pengaturan Lainnya</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="180"/>
         <source>Allow web browsers to interact with Tomahawk (recommended)</source>
-        <translation>Izinkan peramban web berinteraksi dengan Tomahawk (disarankan)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="193"/>
         <source>Allow other computers to interact with Tomahawk (not recommended yet)</source>
-        <translation>Izinkan komputer lain berinteraksi dengan Tomahawk (tidak/belum disarankan)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="206"/>
         <source>Send Tomahawk Crash Reports</source>
-        <translation>Kirim Laporan Tumbukan Tomahawk</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="216"/>
         <source>Show Notifications on song change</source>
-        <translation>Tampilkan Notifikasi saat lagu berubah</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="244"/>
         <source>Clear All Access Control Entries</source>
-        <translation>Kosongkan Semua Entri Kontrol Akses</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1833,22 +1829,22 @@ Sekali Pakai (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="38"/>
         <source>Folders to scan for music:</source>
-        <translation>Folder musik untuk dipindai:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="53"/>
         <source>Due to the unique way Tomahawk works, your music files must at least have Artist &amp; Title metadata/ID3 tags to be added to your Collection.</source>
-        <translation>Karena cara kerja Tomahawk yang unik, berkas musik Anda paling tidak harus memiliki tag metadata/ID3 Artis &amp; Judul agar dapat ditambahkan ke Koleksi Anda.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="76"/>
         <source>+</source>
-        <translation>+</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="83"/>
         <source>-</source>
-        <translation>-</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="109"/>
@@ -1856,26 +1852,22 @@ Sekali Pakai (OTP)</translation>
  and using it to craft personalized radios. Enabling this option
  will allow you (and all your friends) to create automatic playlists
  and stations based on your personal taste profile.</source>
-        <translation>Echo Nest mendukung pelacakan katalog metadata Anda
-dan menggunakannya untuk menyusun radio yang lebih personal.
-Memfungsikan opsi ini akan memungkinkan Anda (dan semua teman Anda)
-untuk membuat daftar putar dan stasiun otomatis berdasarkan profil
-kesukaan personal Anda.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="115"/>
         <source>Upload Collection info to enable personalized &quot;User Radio&quot;</source>
-        <translation>Unggah info Koleksi untuk memfungsikan &quot;Radio Pengguna&quot; yang dipersonalisasikan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="128"/>
         <source>Watch for changes (automatically update Collection)</source>
-        <translation>Monitor perubahan (secara otomatis memperbarui Koleksi)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="137"/>
         <source>Time between scans (in seconds):</source>
-        <translation>Waktu jeda pemindaian (dalam detik):</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1883,12 +1875,12 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/tomahawk/widgets/SlideSwitchButton.cpp" line="46"/>
         <source>On</source>
-        <translation>Nyala</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/SlideSwitchButton.cpp" line="47"/>
         <source>Off</source>
-        <translation>Mati</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1896,32 +1888,32 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/tomahawk/widgets/SocialWidget.ui" line="28"/>
         <source>Facebook</source>
-        <translation>Facebook</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/SocialWidget.ui" line="38"/>
         <source>Twitter</source>
-        <translation>Twitter</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/SocialWidget.cpp" line="71"/>
         <source>Tweet</source>
-        <translation>Tweet</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/SocialWidget.cpp" line="169"/>
         <source>Listening to &quot;%1&quot; by %2. %3</source>
-        <translation>Mendengarkan &quot;%1&quot; oleh %2. %3</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/SocialWidget.cpp" line="171"/>
         <source>Listening to &quot;%1&quot; by %2 on &quot;%3&quot;. %4</source>
-        <translation>Mendengarkan &quot;%1&quot; oleh %2 pada &quot;%3&quot;. %4</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/SocialWidget.cpp" line="192"/>
         <source>%1 characters left</source>
-        <translation>%1 karakter tersisa</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1929,24 +1921,24 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="231"/>
         <source>All available tracks</source>
-        <translation>Semua trek yang tersedia</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="339"/>
         <source>Drop to send tracks</source>
-        <translation>Jatuhkan untuk mengirim trek</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="402"/>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="430"/>
         <source>Show</source>
-        <translation>Tampilkan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="404"/>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="432"/>
         <source>Hide</source>
-        <translation>Sembunyikan</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1954,32 +1946,32 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/SourceViewPage.ui" line="30"/>
         <source>Recent Albums</source>
-        <translation>Album Baru-baru Ini</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SourceViewPage.ui" line="74"/>
         <source>Latest Additions</source>
-        <translation>Tambahan Terbaru</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SourceViewPage.ui" line="88"/>
         <source>Recently Played Tracks</source>
-        <translation>Trek Diputar Baru-baru Ini</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SourceViewPage.cpp" line="70"/>
         <source>New Additions</source>
-        <translation>Tambahan Baru</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SourceViewPage.cpp" line="73"/>
         <source>My recent activity</source>
-        <translation>Aktivitas saya baru-baru ini</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SourceViewPage.cpp" line="77"/>
         <source>Recent activity from %1</source>
-        <translation>Aktivitas %1 baru-baru ini</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1988,32 +1980,32 @@ kesukaan personal Anda.</translation>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="80"/>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="584"/>
         <source>Latest Additions</source>
-        <translation>Tambahan Terbaru</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="84"/>
         <source>History</source>
-        <translation>Riwayat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="147"/>
         <source>SuperCollection</source>
-        <translation>KoleksiSuper</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="587"/>
         <source>Latest additions to your collection</source>
-        <translation>Tambahan terbaru koleksi Anda</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="589"/>
         <source>Latest additions to %1&apos;s collection</source>
-        <translation>Tambahan terbaru koleksi %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="593"/>
         <source>Sorry, we could not find any recent additions!</source>
-        <translation>Maaf, kami tidak bisa menemukan tambahan terbaru apapun!</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2021,68 +2013,68 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="237"/>
         <source>&amp;Copy Link</source>
-        <translation>&amp;Salin Tautan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="245"/>
         <source>&amp;Delete %1</source>
-        <translation>&amp;Hapus %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="249"/>
         <source>Add to my Playlists</source>
-        <translation>Tambahkan ke Daftar Putar saya</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="251"/>
         <source>Add to my Automatic Playlists</source>
-        <translation>Tambahkan ke Daftar Putar Otomatis saya</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="253"/>
         <source>Add to my Stations</source>
-        <translation>Tambahkan ke Stasiun saya</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="241"/>
         <source>&amp;Export Playlist</source>
-        <translation>&amp;Ekspor Daftar Putar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="395"/>
         <source>playlist</source>
-        <translation>daftar putar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="399"/>
         <source>automatic playlist</source>
-        <translation>daftar putar otomatis</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="403"/>
         <source>station</source>
-        <translation>stasiun</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="432"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
-        <translation>Apakah Anda ingin menghapus %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="434"/>
         <source>Delete</source>
-        <translation>Hapus</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="539"/>
         <source>Save XSPF</source>
-        <translation>Simpan XSPF</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="540"/>
         <source>Playlists (*.xspf)</source>
-        <translation>Daftar Putar (*.xspf)</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2090,57 +2082,57 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="100"/>
         <source>Group</source>
-        <translation>Grup</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="103"/>
         <source>Source</source>
-        <translation>Sumber</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="106"/>
         <source>Collection</source>
-        <translation>Koleksi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="109"/>
         <source>Playlist</source>
-        <translation>Daftar Putar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="112"/>
         <source>Automatic Playlist</source>
-        <translation>Daftar Putar Otomatis</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="115"/>
         <source>Station</source>
-        <translation>Stasiun</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="315"/>
         <source>Cloud Collections</source>
-        <translation>Koleksi Awan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="304"/>
         <source>Discover</source>
-        <translation>Temukan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="305"/>
         <source>Open Pages</source>
-        <translation>Buka Halaman</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="307"/>
         <source>Your Music</source>
-        <translation>Musik Anda</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="316"/>
         <source>Friends</source>
-        <translation>Teman</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2148,67 +2140,67 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="69"/>
         <source>Configure your Spotify account</source>
-        <translation>Konfigurasi akun Spotify Anda</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="101"/>
         <source>Username or Facebook Email</source>
-        <translation>Nama Penguna atau Surel Facebook</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="129"/>
         <source>Log In</source>
-        <translation>Masuk</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="136"/>
         <source>Right click on any Tomahawk playlist to sync it to Spotify.</source>
-        <translation>Klik kanan daftar putar Tomahawk untuk sinkronisasi ke Spotify.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="153"/>
         <source>Select All</source>
-        <translation>Pilih Semua</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="166"/>
         <source>Sync Starred tracks to Loved tracks</source>
-        <translation>Sinkronisasi trek Berbintang ke trek yang Disuka</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="179"/>
         <source>High Quality Streams</source>
-        <translation>Strim Kualitas Tinggi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="196"/>
         <source>Use this to force Spotify to never announce listening data to Social Networks</source>
-        <translation>Gunakan ini untuk mencegah Spotify mengumumkan data pemutaran ke Jejaring Sosial</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="199"/>
         <source>Always run in Private Mode</source>
-        <translation>Selalu jalankan dalam Mode Privat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="146"/>
         <source>Spotify playlists to keep in sync:</source>
-        <translation>Daftar putar Spotify untuk tetap tersonkronisasi:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="189"/>
         <source>Delete Tomahawk playlist when removing synchronization</source>
-        <translation>Hapus daftar putar Tomahawk ketika membuang sinkronisasi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="91"/>
         <source>Username:</source>
-        <translation>Nama Pengguna:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="108"/>
         <source>Password:</source>
-        <translation>Sandi:</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2216,7 +2208,7 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="351"/>
         <source>Delete associated Spotify playlist?</source>
-        <translation>Hapus daftar putar Spotify terkait?</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2224,17 +2216,17 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/TemporaryPageItem.cpp" line="54"/>
         <source>Copy Artist Link</source>
-        <translation>Salin Tautan Artis</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/TemporaryPageItem.cpp" line="61"/>
         <source>Copy Album Link</source>
-        <translation>Salin Tautan Album</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/TemporaryPageItem.cpp" line="68"/>
         <source>Copy Track Link</source>
-        <translation>Salin Tautan Trek</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2242,33 +2234,33 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="201"/>
         <source>Add Account</source>
-        <translation>Tambah Akun</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="251"/>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="668"/>
         <source>Remove</source>
-        <translation>Buang</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="365"/>
         <source>%1 downloads</source>
-        <translation>%1 unduhan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="569"/>
         <source>Online</source>
-        <translation>Daring</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="574"/>
         <source>Connecting...</source>
-        <translation>Menyambungkan...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="579"/>
         <source>Offline</source>
-        <translation>Luring</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2276,7 +2268,7 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="564"/>
         <source>Manual Install Required</source>
-        <translation>Membutuhkan Pemasangan secara Manual</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="567"/>
@@ -2289,28 +2281,28 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="91"/>
         <source>Configure this Google Account</source>
-        <translation>Konfigurasi Akun Google ini</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="92"/>
         <source>Google Address:</source>
-        <translation>Alamat Google:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="93"/>
         <source>Enter your Google login to connect with your friends using Tomahawk!</source>
-        <translation>Masukkan akun Google Anda untuk terhubung dengan teman-teman Anda menggunakan Tomahawk!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="94"/>
         <source>username@gmail.com</source>
-        <translation>namapengguna@gmail.com</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="101"/>
         <source>You may need to change your %1Google Account Settings%2 to login.</source>
         <comment>%1 is &lt;a href&gt;, %2 is &lt;/a&gt;</comment>
-        <translation>Anda mungkin perlu mengubah %1Pengaturan Akun Google%2 Anda untuk masuk.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2318,7 +2310,7 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.h" line="44"/>
         <source>Login to directly connect to your Google Talk contacts that also use Tomahawk.</source>
-        <translation>Masuk untuk langsung terhubung dengan kontak Google Talk Anda yang juga menggunakan Tomahawk.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2326,17 +2318,17 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="61"/>
         <source>Enter Google Address</source>
-        <translation>Masukkan Alamat Google</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="69"/>
         <source>Add Friend</source>
-        <translation>Tambah Teman</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="70"/>
         <source>Enter Google Address:</source>
-        <translation>Masukkan Alamat Google:</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2344,22 +2336,22 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="128"/>
         <source>Logged in as: %1</source>
-        <translation>Masuk sebagai: %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="134"/>
         <source>Log out</source>
-        <translation>Keluar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="156"/>
         <source>Log in</source>
-        <translation>Masuk</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="181"/>
         <source>Continue</source>
-        <translation>Lanjutkan</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2375,7 +2367,7 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmAccount.h" line="52"/>
         <source>Scrobble your tracks to last.fm, and find freely downloadable tracks to play</source>
-        <translation>Skrobel trek Anda ke last.fm, dan temukan trek bebas unduh yang bisa diputar</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2383,60 +2375,60 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="94"/>
         <source>Testing...</source>
-        <translation>Menguji-coba...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="116"/>
         <source>Test Login</source>
-        <translation>Percobaan Masuk</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="126"/>
         <source>Importing %1</source>
         <comment>e.g. Importing 2012/01/01</comment>
-        <translation>Mengimpor %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="129"/>
         <source>Importing History...</source>
-        <translation>Mengimpor Riwayat...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="198"/>
         <source>History Incomplete. Resume</source>
         <extracomment>Text on a button that resumes import</extracomment>
-        <translation>Riwayat Belum Lengkap. Melanjutkan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="203"/>
         <source>Playback History Imported</source>
-        <translation>Riwayat Pemutaran Diimpor</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="226"/>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="242"/>
         <source>Failed</source>
-        <translation>Gagal</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="231"/>
         <source>Success</source>
-        <translation>Sukses</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="248"/>
         <source>Could not contact server</source>
-        <translation>Tidak bisa mengubungi server</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="262"/>
         <source>Synchronizing...</source>
-        <translation>Menyinkronisasi...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="420"/>
         <source>Synchronization Finished</source>
-        <translation>Sinkronisasi Selesai</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2472,47 +2464,47 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="520"/>
         <source>Sync with Spotify</source>
-        <translation>Sinkronisasi dengan Spotify</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="524"/>
         <source>Re-enable syncing with Spotify</source>
-        <translation>Fungsikan lagi sinkronisasi dengan Spotify</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="532"/>
         <source>Create local copy</source>
-        <translation>Buat salinan lokal</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="548"/>
         <source>Subscribe to playlist changes</source>
-        <translation>Berlangganan untuk perubahan daftar putar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="552"/>
         <source>Re-enable playlist subscription</source>
-        <translation>Fungsikan lagi langganan daftar putar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="556"/>
         <source>Stop subscribing to changes</source>
-        <translation>Berhenti berlangganan untuk perubahan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="576"/>
         <source>Enable Spotify collaborations</source>
-        <translation>Fungsikan kolaborasi Spotify</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="578"/>
         <source>Disable Spotify collaborations</source>
-        <translation>Nonfungsikan kolaborasi Spotify</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="534"/>
         <source>Stop syncing with Spotify</source>
-        <translation>Berhenti sinkronisasi dengan Spotify</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2520,28 +2512,28 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="202"/>
         <source>Logging in...</source>
-        <translation>Sedang masuk...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="239"/>
         <source>Failed: %1</source>
-        <translation>Gagal: %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="282"/>
         <source>Logged in as %1</source>
-        <translation>Masuk sebagai %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="284"/>
         <source>Log Out</source>
-        <translation>Keluar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="302"/>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="314"/>
         <source>Log In</source>
-        <translation>Masuk</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2549,7 +2541,7 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.h" line="72"/>
         <source>Play music from and sync your playlists with Spotify Premium</source>
-        <translation>Putar musik dari dan sinkronisasi daftar putar Anda dengan Spotify Premium</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2557,12 +2549,12 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="79"/>
         <source>the KDE instant messaging framework</source>
-        <translation>Framework perpesanan instan KDE</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="96"/>
         <source>KDE Instant Messaging Accounts</source>
-        <translation>Akun Perpesanan Instan KDE</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2570,7 +2562,7 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/accounts/xmpp/XmppAccount.h" line="53"/>
         <source>Login to connect to your Jabber/XMPP contacts that also use Tomahawk.</source>
-        <translation>Masuk untuk terhubung ke kontak Jabber/XMPP Anda yang juga menggunakan Tomahawk.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2578,17 +2570,17 @@ kesukaan personal Anda.</translation>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="73"/>
         <source>Account provided by %1.</source>
-        <translation>Akun disediakan oleh %1.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="157"/>
         <source>You forgot to enter your username!</source>
-        <translation>Anda lupa memasukkan nama pengguna Anda!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="165"/>
         <source>Your Xmpp Id should look like an email address</source>
-        <translation>ID XMPP Anda seharusnya terlihat seperti alamat surel</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="171"/>
@@ -2596,10 +2588,7 @@ kesukaan personal Anda.</translation>
 
 Example:
 username@jabber.org</source>
-        <translation>
-
-Contoh:
-namapengguna@jabber.org</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2608,7 +2597,7 @@ namapengguna@jabber.org</translation>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="63"/>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="64"/>
         <source>Local Network</source>
-        <translation>Jaringan Lokal</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2616,12 +2605,12 @@ namapengguna@jabber.org</translation>
     <message>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="45"/>
         <source>Local Network</source>
-        <translation>Jaringan Lokal</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="46"/>
         <source>Automatically connect to Tomahawk users on the same local network.</source>
-        <translation>Otomatis terhubung ke pengguna Tomahawk lainnya di jaringan lokal yang sama.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2630,7 +2619,7 @@ namapengguna@jabber.org</translation>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="66"/>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="80"/>
         <source>Collection</source>
-        <translation>Koleksi</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2638,98 +2627,98 @@ namapengguna@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="125"/>
         <source>&amp;Play</source>
-        <translation>&amp;Putar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="128"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="270"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="321"/>
         <source>Add to &amp;Queue</source>
-        <translation>Tambahkan ke &amp;Antrean</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="141"/>
         <source>Add to &amp;Playlist</source>
-        <translation>Tambahkan ke &amp;Daftar Putar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="162"/>
         <source>Send to &amp;Friend</source>
-        <translation>Kirim ke &amp;Teman</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="176"/>
         <source>Continue Playback after this &amp;Track</source>
-        <translation>Lanjutkan Pemutaran setelah &amp;Trek ini</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="178"/>
         <source>Stop Playback after this &amp;Track</source>
-        <translation>Hentikan Pemutaran setelah &amp;Trek ini</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="185"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="489"/>
         <source>&amp;Love</source>
-        <translation>&amp;Suka</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="199"/>
         <source>View Similar Tracks to &quot;%1&quot;</source>
-        <translation>Lihat Trek yang Serupa dengan &quot;%1&quot;</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="278"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="329"/>
         <source>&amp;Go to &quot;%1&quot;</source>
-        <translation>&amp;Ke &quot;%1&quot;</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="204"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="208"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="281"/>
         <source>Go to &quot;%1&quot;</source>
-        <translation>Ke &quot;%1&quot;</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="214"/>
         <source>&amp;Copy Track Link</source>
-        <translation>&amp;Salin Tautan Trek</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="234"/>
         <source>Mark as &amp;Listened</source>
-        <translation>Tandai sudah Di&amp;dengarkan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="238"/>
         <source>&amp;Remove Items</source>
-        <translation>&amp;Buang Item</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="238"/>
         <source>&amp;Remove Item</source>
-        <translation>&amp;Buang Item</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="289"/>
         <source>Copy Album &amp;Link</source>
-        <translation>Salin &amp;Tautan Album</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="337"/>
         <source>Copy Artist &amp;Link</source>
-        <translation>Salin &amp;Tautan Artis</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="484"/>
         <source>Un-&amp;Love</source>
-        <translation>Batal &amp;Suka</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="217"/>
         <source>Properties...</source>
-        <translation>Properti...</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2737,7 +2726,7 @@ namapengguna@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="119"/>
         <source>Unknown</source>
-        <translation>Tidak Diketahui</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2745,32 +2734,32 @@ namapengguna@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="73"/>
         <source>playlist</source>
-        <translation>daftar putar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="76"/>
         <source>artist</source>
-        <translation>artis</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="79"/>
         <source>track</source>
-        <translation>trek</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="82"/>
         <source>album</source>
-        <translation>album</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="105"/>
         <source>Fetching %1 from database</source>
-        <translation>Mengambil %1 dari basis data</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="109"/>
         <source>Parsing %1 %2</source>
-        <translation>Mengurai %1 %2</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2778,7 +2767,7 @@ namapengguna@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicControlList.cpp" line="84"/>
         <source>Save Settings</source>
-        <translation>Simpan Pengaturan</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2789,14 +2778,12 @@ namapengguna@jabber.org</translation>
         <source>Could not find a playable track.
 
 Please change the filters or try again.</source>
-        <translation>Tidak bisa menemukan trek yang bisa diputar.
-
-Harap ubah filter atau coba lagi.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/DynamicModel.cpp" line="231"/>
         <source>Failed to generate preview with the desired filters</source>
-        <translation>Gagal untuk membuat pratinjau menggunakan filter yang dikehendaki</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2804,12 +2791,12 @@ Harap ubah filter atau coba lagi.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicSetupWidget.cpp" line="53"/>
         <source>Type:</source>
-        <translation>Tipe:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicSetupWidget.cpp" line="67"/>
         <source>Generate</source>
-        <translation>Buat</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2817,17 +2804,17 @@ Harap ubah filter atau coba lagi.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="146"/>
         <source>Add some filters above to seed this station!</source>
-        <translation>Tambahkan beberapa filter di atas untuk membibit stasiun ini!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="151"/>
         <source>Press Generate to get started!</source>
-        <translation>Tekan Buat untuk memulai!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="153"/>
         <source>Add some filters above, and press Generate to get started!</source>
-        <translation>Tambahkan beberapa filter di atas, dan tekan Buat untuk memulai!</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2837,9 +2824,7 @@ Harap ubah filter atau coba lagi.</translation>
         <source>Station ran out of tracks!
 
 Try tweaking the filters for a new set of songs to play.</source>
-        <translation>Stasiun hampir kehabisan trek lagu!
-
-Coba rekayasa filternya untuk set lagu baru untuk diputar.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2847,17 +2832,17 @@ Coba rekayasa filternya untuk set lagu baru untuk diputar.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="165"/>
         <source>Similar To</source>
-        <translation>Serupa Dengan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="166"/>
         <source>Limit To</source>
-        <translation>Batasi Untuk</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="170"/>
         <source>Artist name</source>
-        <translation>Nama artis</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="193"/>
@@ -2868,28 +2853,28 @@ Coba rekayasa filternya untuk set lagu baru untuk diputar.</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="468"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="491"/>
         <source>is</source>
-        <translation>adalah</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="214"/>
         <source>from user</source>
-        <translation>dari pengguna</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="223"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="698"/>
         <source>No users with Echo Nest Catalogs enabled. Try enabling option in Collection settings</source>
-        <translation>Tidak ada pengguna yang memfungsikan Katalog Echo Nest. Coba fungsikan opsinya di pengaturan Koleksi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="244"/>
         <source>similar to</source>
-        <translation>serupa dengan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="246"/>
         <source>Enter any combination of song name and artist here...</source>
-        <translation>Masukkan kombinasi nama lagu dan artis di sini...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="267"/>
@@ -2900,7 +2885,7 @@ Coba rekayasa filternya untuk set lagu baru untuk diputar.</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="350"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="356"/>
         <source>Less</source>
-        <translation>Sedikit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="267"/>
@@ -2911,119 +2896,119 @@ Coba rekayasa filternya untuk set lagu baru untuk diputar.</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="350"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="356"/>
         <source>More</source>
-        <translation>Banyak</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="313"/>
         <source>0 BPM</source>
-        <translation>0 BPM</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="313"/>
         <source>500 BPM</source>
-        <translation>500 BPM</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="319"/>
         <source>0 secs</source>
-        <translation>0 dtk</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="319"/>
         <source>3600 secs</source>
-        <translation>3600 dtk</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="325"/>
         <source>-100 dB</source>
-        <translation>-100 dB</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="325"/>
         <source>100 dB</source>
-        <translation>100 dB</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="362"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="369"/>
         <source>-180%1</source>
-        <translation>-180%1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="362"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="369"/>
         <source>180%1</source>
-        <translation>180%1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="378"/>
         <source>Major</source>
-        <translation>Mayor</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="379"/>
         <source>Minor</source>
-        <translation>Minor</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="399"/>
         <source>C</source>
-        <translation>C</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="400"/>
         <source>C Sharp</source>
-        <translation>C ♯</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="401"/>
         <source>D</source>
-        <translation>D</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="402"/>
         <source>E Flat</source>
-        <translation>E ♭</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="403"/>
         <source>E</source>
-        <translation>E</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="404"/>
         <source>F</source>
-        <translation>F</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="405"/>
         <source>F Sharp</source>
-        <translation>F ♮</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="406"/>
         <source>G</source>
-        <translation>G</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="407"/>
         <source>A Flat</source>
-        <translation>A ♭</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="408"/>
         <source>A</source>
-        <translation>A</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="409"/>
         <source>B Flat</source>
-        <translation>B ♭</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="410"/>
         <source>B</source>
-        <translation>B</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="429"/>
@@ -3038,17 +3023,17 @@ Coba rekayasa filternya untuk set lagu baru untuk diputar.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="433"/>
         <source>Tempo</source>
-        <translation>Tempo</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="434"/>
         <source>Duration</source>
-        <translation>Durasi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="435"/>
         <source>Loudness</source>
-        <translation>Kekerasan Suara</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="436"/>
@@ -3081,12 +3066,12 @@ Coba rekayasa filternya untuk set lagu baru untuk diputar.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="441"/>
         <source>Mode</source>
-        <translation>Mode</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="442"/>
         <source>Key</source>
-        <translation>Kunci</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="443"/>
@@ -3109,78 +3094,78 @@ Coba rekayasa filternya untuk set lagu baru untuk diputar.</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="495"/>
         <source>Studio</source>
         <comment>Song type: The song was recorded in a studio.</comment>
-        <translation>Studio</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="496"/>
         <source>Live</source>
         <comment>Song type: The song was a life performance.</comment>
-        <translation>Live</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="497"/>
         <source>Acoustic</source>
         <comment>Song type</comment>
-        <translation>Akustik</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="498"/>
         <source>Electric</source>
         <comment>Song type</comment>
-        <translation>Elektrik</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="499"/>
         <source>Christmas</source>
         <comment>Song type: A christmas song</comment>
-        <translation>Natal</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="526"/>
         <source>At Least</source>
-        <translation>Minimal</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="527"/>
         <source>At Most</source>
-        <translation>Maksimal</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="879"/>
         <source>only by ~%1</source>
-        <translation>hanya berdasarkan ~%1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="881"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="908"/>
         <source>similar to ~%1</source>
-        <translation>serupa dengan ~%1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="885"/>
         <source>with genre ~%1</source>
-        <translation>dengan genre ~%1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="893"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="904"/>
         <source>from no one</source>
-        <translation>tidak dari siapapun</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="897"/>
         <source>You</source>
-        <translation>Anda</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="898"/>
         <source>from my radio</source>
-        <translation>dari radio saya</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="900"/>
         <source>from %1 radio</source>
-        <translation>dari radio %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="910"/>
@@ -3195,47 +3180,47 @@ Coba rekayasa filternya untuk set lagu baru untuk diputar.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="919"/>
         <source>very low</source>
-        <translation>sangat rendah</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="921"/>
         <source>low</source>
-        <translation>rendah</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="923"/>
         <source>moderate</source>
-        <translation>sedang</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="925"/>
         <source>high</source>
-        <translation>tinggi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="927"/>
         <source>very high</source>
-        <translation>sangat tinggi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="928"/>
         <source>with %1 %2</source>
-        <translation>dengan %1 %2</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="932"/>
         <source>about %1 BPM</source>
-        <translation>sekitar %1 BPM</translation>
+        <translation type="unfinished"/>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="936"/>
         <source>about %n minute(s) long</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="940"/>
         <source>about %1 dB</source>
-        <translation>sekitar %1 dB</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="944"/>
@@ -3296,17 +3281,17 @@ Coba rekayasa filternya untuk set lagu baru untuk diputar.</translation>
     <message>
         <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="578"/>
         <source>Artists</source>
-        <translation>Artis</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="580"/>
         <source>Albums</source>
-        <translation>Album</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="582"/>
         <source>Tracks</source>
-        <translation>Trek</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3315,20 +3300,20 @@ Coba rekayasa filternya untuk set lagu baru untuk diputar.</translation>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="271"/>
         <source>on</source>
         <comment>'on' is followed by an album name</comment>
-        <translation>pada</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="274"/>
         <source>%1%4 %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist ('by' in english)</comment>
-        <translation>%1%4 %2%3.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="215"/>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="278"/>
         <source>by</source>
         <comment>preposition to link track and artist</comment>
-        <translation>oleh</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="130"/>
@@ -3412,12 +3397,12 @@ Coba rekayasa filternya untuk set lagu baru untuk diputar.</translation>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="87"/>
         <source>Notify User</source>
-        <translation>Beritahu Pengguna</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="88"/>
         <source>Now Playing</source>
-        <translation>Sedang Memutar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="89"/>
@@ -3427,7 +3412,7 @@ Coba rekayasa filternya untuk set lagu baru untuk diputar.</translation>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="90"/>
         <source>Playback Stopped</source>
-        <translation>Pemutaran Dihentikan.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="91"/>
@@ -3451,7 +3436,7 @@ Coba rekayasa filternya untuk set lagu baru untuk diputar.</translation>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="270"/>
         <source>by</source>
         <comment>preposition to link track and artist</comment>
-        <translation>oleh</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="217"/>
@@ -3633,12 +3618,12 @@ Coba rekayasa filternya untuk set lagu baru untuk diputar.</translation>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Track.cpp" line="581"/>
         <source>%n other(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Track.cpp" line="584"/>
         <source>%n people</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="588"/>
@@ -3935,24 +3920,24 @@ Coba rekayasa filternya untuk set lagu baru untuk diputar.</translation>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="955"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="967"/>
         <source>Play</source>
-        <translation>Putar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="611"/>
         <source>Next</source>
-        <translation>Lanjut</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="624"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1016"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1023"/>
         <source>Love</source>
-        <translation>Sukai</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1011"/>
         <source>Unlove</source>
-        <translation>Tidak Sukai</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1147"/>
@@ -4188,37 +4173,37 @@ Coba rekayasa filternya untuk set lagu baru untuk diputar.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="81"/>
         <source>Duration</source>
-        <translation>Durasi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="81"/>
         <source>Loudness</source>
-        <translation>Kekerasan Suara</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="82"/>
         <source>Danceability</source>
-        <translation>Kemampuan Menari</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="82"/>
         <source>Energy</source>
-        <translation>Tenaga</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="83"/>
         <source>Artist Familiarity</source>
-        <translation>Kemiripan Artis</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="83"/>
         <source>Artist Hotttnesss</source>
-        <translation>Keseksian Artis</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="84"/>
         <source>Song Hotttnesss</source>
-        <translation>Keseksian Lagu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="84"/>
@@ -4233,22 +4218,22 @@ Coba rekayasa filternya untuk set lagu baru untuk diputar.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="85"/>
         <source>Mode</source>
-        <translation>Mode</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="86"/>
         <source>Key</source>
-        <translation>Kunci</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="86"/>
         <source>Sorting</source>
-        <translation>Mengurutkan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestGenerator.cpp" line="87"/>
         <source>Song Type</source>
-        <translation>Tipe Lagu</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
