@@ -39,6 +39,9 @@ if ((typeof Tomahawk === "undefined") || (Tomahawk === null)) {
 
 Tomahawk.apiVersion = "0.2.2";
 
+//Statuses considered a success for HTTP request
+var httpSuccessStatuses = [200, 201];
+
 // install RSVP.Promise as global Promise
 if(window.Promise === undefined) {
     window.Promise = window.RSVP.Promise;
@@ -337,7 +340,7 @@ Tomahawk.syncRequest = function (url, extraHeaders, options) {
         }
     }
     xmlHttpRequest.send(null);
-    if (xmlHttpRequest.status == 200) {
+    if (httpSuccessStatuses.indexOf(xmlHttpRequest.status) != -1) {
         return xmlHttpRequest.responseText;
     } else {
         Tomahawk.log("Failed to do GET request: to: " + url);
@@ -426,7 +429,7 @@ Tomahawk.nativeAsyncRequestDone = function (reqId, xhr) {
     }
 
     // Call the real callback
-    if (xhr.readyState == 4 && xhr.status == 200) {
+    if (xhr.readyState == 4 && httpSuccessStatuses.indexOf(xhr.status) != -1) {
         // Call the real callback
         if (Tomahawk.asyncRequestCallbacks[reqId].callback) {
             Tomahawk.asyncRequestCallbacks[reqId].callback(xhr);
@@ -477,7 +480,7 @@ Tomahawk.asyncRequest = function (url, callback, extraHeaders, options) {
             }
         }
         xmlHttpRequest.onreadystatechange = function () {
-            if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200) {
+            if (xmlHttpRequest.readyState == 4 && httpSuccessStatuses.indexOf(xmlHttpRequest.status) != -1) {
                 callback.call(window, xmlHttpRequest);
             } else if (xmlHttpRequest.readyState === 4) {
                 Tomahawk.log("Failed to do " + method + " request: to: " + url);
