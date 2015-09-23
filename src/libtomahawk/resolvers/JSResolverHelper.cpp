@@ -711,7 +711,13 @@ JSResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr&, const QStr
     if ( m_urlCallbackIsAsync )
     {
         QString qid = uuid();
-        QString getUrl = QString( "Tomahawk.resolver.instance.%1( '%2', '%3' );" ).arg( m_urlCallback )
+        QString getUrl = QString( 
+                "if(Tomahawk.resolver.instance['_adapter_%1']) {"
+                "    Tomahawk.resolver.instance._adapter_%1( {qid: '%2', url: '%3'} );"
+                "} else {"
+                "    Tomahawk.resolver.instance.%1( {qid: '%2', url: '%3'} );"
+                "}"
+                ).arg( m_urlCallback )
                                                                                   .arg( qid )
                                                                                   .arg( url );
 

@@ -252,6 +252,20 @@ ScriptCollection::parseMetaData( const QVariantMap& metadata )
         bool ok = iconPixmap.load( iconPath );
         if ( ok && !iconPixmap.isNull() )
             setIcon( iconPixmap );
+        else
+        {
+            //see if it is a new way of specifying path
+            //like "contents/images/icon.png"
+            iconPath = QFileInfo( scriptAccount()->filePath() ).path();
+            for(int i = 0; i < 3 && !ok ; ++i)
+            {
+                iconPath += "/../";
+                ok = iconPixmap.load(iconPath + metadata.value("iconfile").toString());
+            }
+
+            if ( ok && !iconPixmap.isNull() )
+                setIcon( iconPixmap );
+        }
 
         fetchIcon( metadata.value( "iconurl" ).toString() );
     }

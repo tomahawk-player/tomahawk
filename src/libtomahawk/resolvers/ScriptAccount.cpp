@@ -145,7 +145,7 @@ ScriptAccount::invoke( const scriptobject_ptr& scriptObject, const QString& meth
 void
 ScriptAccount::reportScriptJobResult( const QVariantMap& result )
 {
-    tLog() << Q_FUNC_INFO << result;
+    //tLog() << Q_FUNC_INFO << result;
     const QString requestId = result[ "requestId" ].toString();
     Q_ASSERT( !requestId.isEmpty() );
 
