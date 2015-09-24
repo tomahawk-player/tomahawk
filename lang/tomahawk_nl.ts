@@ -3702,22 +3702,22 @@ Probeer om de filters aan te passen om een nieuwe reeks afspeelbare nummers te k
 <context>
     <name>Tomahawk::ScriptEngine</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="92"/>
+        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="94"/>
         <source>Resolver Error: %1:%2 %3</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="110"/>
+        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="112"/>
         <source>SSL Error</source>
         <translation>SSL-fout</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="111"/>
+        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="113"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
         <translation>U heeft Tomahawk gevraagd om beveiligd te verbinden met &lt;b&gt;%1&lt;/b&gt; maar we kunnen niet bevestigen dat uw verbinding beveiligd is::&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Wilt u deze verbinding vertrouwen?</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="118"/>
+        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="120"/>
         <source>Trust certificate</source>
         <translation>Certificaat vertrouwen</translation>
     </message>
@@ -3951,36 +3951,36 @@ Probeer om de filters aan te passen om een nieuwe reeks afspeelbare nummers te k
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="521"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="525"/>
         <source>You</source>
         <translation>U</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="609"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="613"/>
         <source>Tomahawk is updating the database. Please wait, this may take a minute!</source>
         <translation>Tomahawk is bezig met het bijwerken van de database. Even geduld, dit kan een minuut duren!</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="616"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="620"/>
         <source>Tomahawk</source>
         <translation>Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="727"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="731"/>
         <source>Updating database
 </source>
         <translation>Bezig met bijwerken van database
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="734"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="738"/>
         <source>Updating database
 %1</source>
         <translation>Bezig met bijwerken van database
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="784"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="788"/>
         <source>Automatically detecting external IP failed.</source>
         <translation type="unfinished"/>
     </message>
