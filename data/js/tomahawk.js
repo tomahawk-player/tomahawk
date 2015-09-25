@@ -308,8 +308,6 @@ Tomahawk.Resolver = Tomahawk.extend(TomahawkResolver, {
             return merged.concat.apply(merged,collectionResults);
         }).then(function(collectionResults) {
             Promise.resolve(that.search({query:query})).then(function(results){
-                Tomahawk.log(JSON.stringify(results));
-                Tomahawk.log(JSON.stringify(collectionResults));
                 Tomahawk.addTrackResults({
                     'qid': qid,
                     'results': that._convertUrls(results.concat(collectionResults)) 
@@ -855,9 +853,6 @@ Tomahawk.PluginManager = {
 
     resolve: [],
     invokeSync: function (requestId, objectId, methodName, params) {
-        Tomahawk.log('invokeSync ' + methodName);
-        Tomahawk.log('invokeSync params ' + JSON.stringify(params));
-        Tomahawk.log(Tomahawk.resolver.instance.appVersion);
         if (!Tomahawk.resolver.instance.apiVersion || Tomahawk.resolver.instance.apiVersion < 0.9) {
             if (methodName === 'artistAlbums') {
                 methodName = 'albums';
@@ -895,8 +890,6 @@ Tomahawk.PluginManager = {
                 }
             }
 
-            Tomahawk.log(methodName);
-            Tomahawk.log(JSON.stringify(params));
             return this.objects[objectId][methodName](params);
         }
 
@@ -904,8 +897,6 @@ Tomahawk.PluginManager = {
     },
 
     invoke: function (requestId, objectId, methodName, params ) {
-        Tomahawk.log('invoke ' + methodName);
-        Tomahawk.log('invoke params ' + JSON.stringify(params));
         Promise.resolve(this.invokeSync(requestId, objectId, methodName, params)).then(function (result) {
             if (typeof result === 'object') {
                 Tomahawk.reportScriptJobResults({
