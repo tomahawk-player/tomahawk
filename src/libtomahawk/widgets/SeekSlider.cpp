@@ -33,6 +33,7 @@ SeekSlider::SeekSlider( QWidget* parent )
     , TomahawkUtils::DpiScaler( this )
     , m_timeLine( 0 )
     , m_acceptWheelEvents( true )
+    , m_isScrubbing( false )
 {
     setStyleSheet( QString(
                    "QSlider::groove:horizontal {"
@@ -72,6 +73,8 @@ SeekSlider::mousePressEvent( QMouseEvent* event )
 {
     if ( event->button() == Qt::LeftButton )
     {
+        m_isScrubbing = true;
+
         QMouseEvent eventSwap( QEvent::MouseButtonRelease, event->pos(), event->globalPos(), Qt::MidButton, Qt::MidButton, event->modifiers() );
         QSlider::mousePressEvent( &eventSwap );
     }
@@ -106,4 +109,21 @@ SeekSlider::wheelEvent( QWheelEvent* event )
         return;
     }
     event->ignore();
+}
+
+
+void
+SeekSlider::mouseMoveEvent( QMouseEvent* event )
+{
+    if (!m_isScrubbing)
+        return;
+
+    // disable further scrubbing when we're past the slider's right margin
+    if (event->pos().x() > width())
+    {
+        m_isScrubbing = false;
+        return;
+    }
+
+    QSlider::mouseMoveEvent(event);
 }

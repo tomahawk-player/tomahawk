@@ -44,11 +44,13 @@ public slots:
 
 protected:
     void mousePressEvent( QMouseEvent* event );
+    void mouseMoveEvent( QMouseEvent* event );
     void wheelEvent( QWheelEvent* event );
 
 private:
     QTimeLine* m_timeLine;
     bool m_acceptWheelEvents;
+    bool m_isScrubbing;
 };
 
 #endif // SEEKSLIDER_H
