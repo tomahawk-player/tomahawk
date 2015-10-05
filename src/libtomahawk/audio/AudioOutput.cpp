@@ -431,6 +431,11 @@ AudioOutput::seek( qint64 milliseconds )
     {
 
         //    tDebug() << Q_FUNC_INFO << "AudioOutput:: seeking" << milliseconds << "msec";
+
+        // for some tracks, seeking to an end seems not to work correctly with libvlc
+        // (tracks enter a random and infinite loop) - this is a temporary fix for that
+        if (milliseconds == libvlc_media_player_get_length(m_vlcPlayer) && milliseconds > 0)
+            milliseconds -= 1;
         libvlc_media_player_set_time( m_vlcPlayer, milliseconds );
         setCurrentTime( milliseconds );
     }
