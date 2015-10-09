@@ -191,7 +191,7 @@ void QxtHttpServerConnector::writeHeaders(QIODevice* device, const QHttpResponse
     device->write(header.toString().toUtf8());
 }
 
-#if defined(QT_SECURETRANSPORT) || defined(QT_OPENSSL)
+#if defined(QT_SECURETRANSPORT) || !defined(QT_NO_OPENSSL)
 /*!
  * Creates a QxtHttpsServerConnector with the given \a parent.
  */
