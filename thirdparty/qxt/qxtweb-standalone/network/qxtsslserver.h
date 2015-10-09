@@ -35,7 +35,7 @@
 #include "qxtglobal.h"
 #include <QTcpServer>
 
-#ifndef QT_NO_OPENSSL
+#if defined(QT_SECURETRANSPORT) || defined(QT_OPENSSL)
 #include <QSslSocket>
 
 class QxtSslServerPrivate;

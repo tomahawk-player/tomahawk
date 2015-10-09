@@ -41,7 +41,7 @@
 #include <QMultiHash>
 #include <QDateTime>
 #include <QHostAddress>
-#ifndef QT_NO_OPENSSL
+#if defined(QT_SECURETRANSPORT) || defined(QT_OPENSSL)
 #include <QSslCertificate>
 #endif
 QT_FORWARD_DECLARE_CLASS(QIODevice)
@@ -89,7 +89,7 @@ public:
     QString method;
     QHostAddress remoteAddress;
     bool isSecure;
-#ifndef QT_NO_OPENSSL
+#if defined(QT_SECURETRANSPORT) || defined(QT_OPENSSL)
     QSslCertificate clientCertificate;
 #endif
 

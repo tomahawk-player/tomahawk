@@ -68,7 +68,7 @@ posting events. It is reentrant for all other functionality.
 #include <QThread>
 #include <qxtmetaobject.h>
 #include <QTcpSocket>
-#ifndef QT_NO_OPENSSL
+#if defined(QT_SECURETRANSPORT) || defined(QT_OPENSSL)
 #include <QSslSocket>
 #endif
 
@@ -437,7 +437,7 @@ void QxtHttpSessionManager::incomingRequest(quint32 requestID, const QHttpReques
     if (socket)
     {
         event->remoteAddress = socket->peerAddress();
-#ifndef QT_NO_OPENSSL
+#if defined(QT_SECURETRANSPORT) || defined(QT_OPENSSL)
         QSslSocket* sslSocket = qobject_cast<QSslSocket*>(socket);
         if(sslSocket) {
             event->isSecure = true;
