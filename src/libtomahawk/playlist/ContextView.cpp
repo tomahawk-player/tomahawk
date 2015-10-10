@@ -22,6 +22,8 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
+#include "DownloadManager.h"
+#include "Result.h"
 #include "audio/AudioEngine.h"
 #include "widgets/CaptionLabel.h"
 #include "playlist/PlayableModel.h"
@@ -141,6 +143,32 @@ ContextView::setCaption( const QString& caption )
 
 
 void
+ContextView::onDownloadAll()
+{
+    for ( int i = 0; i < m_trackView->proxyModel()->rowCount( QModelIndex() ); i++ )
+    {
+        PlayableItem* item = m_trackView->proxyModel()->itemFromIndex( m_trackView->proxyModel()->mapToSource( m_trackView->proxyModel()->index( i, 0, QModelIndex() ) ) );
+        if ( !item || !item->query() || !item->query()->results().count() )
+            continue;
+        if ( !item->query()->results().first()->downloadFormats().count() )
+            continue;
+
+        if ( !DownloadManager::instance()->localFileForDownload( item->query()->results().first()->downloadFormats().first().url.toString() ).isEmpty() )
+            continue;
+        if ( !item->result()->downloadFormats().isEmpty() )
+            DownloadManager::instance()->addJob( item->result()->toDownloadJob( item->result()->downloadFormats().first() ) );
+    }
+}
+
+
+void
+ContextView::onDownloadCancel()
+{
+    DownloadManager::instance()->cancelAll();
+}
+
+
+void
 ContextView::onQuerySelected( const Tomahawk::query_ptr& query )
 {
     if ( m_query )
@@ -149,6 +177,7 @@ ContextView::onQuerySelected( const Tomahawk::query_ptr& query )
     }
 
     m_query = query;
+    m_detailView->setQuery( m_query );
 
     if ( m_query )
     {
@@ -291,4 +320,11 @@ void
 ContextView::setShowCloseButton( bool b )
 {
     m_captionLabel->setShowCloseButton( b );
+}
+
+
+TrackDetailView*
+ContextView::trackDetailView() const
+{
+    return m_detailView;
 }

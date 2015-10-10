@@ -101,7 +101,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Enter your XMPP login to connect with your friends using Tomahawk!</string>
+        <string>Enter your XMPP login to connect with your friends using %applicationName!</string>
        </property>
        <property name="wordWrap">
         <bool>false</bool>

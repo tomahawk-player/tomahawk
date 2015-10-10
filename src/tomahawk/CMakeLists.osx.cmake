@@ -42,26 +42,21 @@ if( APPLE )
 
 # Use two different sparkle update tracks for debug and release
 # We have to change the URL in the Info.plist file :-/
-  FILE(READ ${CMAKE_SOURCE_DIR}/admin/mac/Info.plist plist)
-  STRING( REPLACE "TOMAHAWK_VERSION"
-              ${TOMAHAWK_VERSION}
-              edited_plist # save in this variable
-              "${plist}" # from the contents of this var
-          )
-  # Disable non-release sparkle for now. We haven't used it yet.
+  set(TOMAHAWK_SPARKLE_UPDATE_URL "http://download.tomahawk-player.org/sparkle/update.php")
+
+# Disable non-release sparkle for now. We haven't used it yet.
 #  IF( NOT CMAKE_BUILD_TYPE STREQUAL "Release" )
-#    STRING( REPLACE "http://download.tomahawk-player.org/sparkle" # match this
-#              "http://download.tomahawk-player.org/sparkle-debug"  #replace with debug url
-#              edited_plist # save in this variable
-#              "${edited_plist}" # from the contents of this var
-#          )
+#      set(TOMAHAWK_SPARKLE_UPDATE_URL "http://download.tomahawk-player.org/sparkle-debug")
 #  ENDIF()
-  FILE( WRITE ${CMAKE_BINARY_DIR}/Info.plist "${edited_plist}" )
+
+  configure_file(${CMAKE_SOURCE_DIR}/admin/mac/Info.plist ${CMAKE_BINARY_DIR}/Info.plist)
+
 
   FILE(COPY ${CMAKE_SOURCE_DIR}/admin/mac/sparkle_pub.pem
-    DESTINATION "${CMAKE_BINARY_DIR}/Tomahawk.app/Contents/Resources")
+    DESTINATION "${CMAKE_BINARY_DIR}/${TOMAHAWK_APPLICATION_NAME}.app/Contents/Resources")
 
-  FILE(COPY /usr/bin/SetFile DESTINATION "${CMAKE_BINARY_DIR}/Tomahawk.app/Contents/MacOS")
-  FILE(COPY /usr/bin/GetFileInfo DESTINATION "${CMAKE_BINARY_DIR}/Tomahawk.app/Contents/MacOS")
+  FILE(COPY /usr/bin/SetFile DESTINATION "${CMAKE_BINARY_DIR}/${TOMAHAWK_APPLICATION_NAME}.app/Contents/MacOS")
+  FILE(COPY /usr/bin/GetFileInfo DESTINATION "${CMAKE_BINARY_DIR}/${TOMAHAWK_APPLICATION_NAME}.app/Contents/MacOS")
+
 
 endif (APPLE)

@@ -68,6 +68,8 @@ ContextMenu::clear()
     m_queries.clear();
     m_albums.clear();
     m_artists.clear();
+
+    m_supportedActions = ActionPlay | ActionQueue | ActionPlaylist | ActionCopyLink | ActionLove | ActionStopAfter | ActionPage | ActionEditMetadata | ActionSend;
 }
 
 
@@ -123,6 +125,9 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
 
     if ( m_supportedActions & ActionPlay && itemCount() == 1 )
         m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/play.svg" ), tr( "&Play" ) ), ActionPlay );
+
+    if ( m_supportedActions & ActionDownload )
+        m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/downloads.svg" ), tr( "Download" ) ), ActionDownload );
 
     if ( m_supportedActions & ActionQueue )
         m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/queue.svg" ), tr( "Add to &Queue" ) ), ActionQueue );

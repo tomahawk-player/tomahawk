@@ -149,11 +149,11 @@ appConfigDir()
 #else
     if ( getenv( "XDG_CONFIG_HOME" ) )
     {
-        ret = QDir( QString( "%1/Tomahawk" ).arg( getenv( "XDG_CONFIG_HOME" ) ) );
+        ret = QDir( QString( "%1/" TOMAHAWK_APPLICATION_NAME ).arg( getenv( "XDG_CONFIG_HOME" ) ) );
     }
     else if ( getenv( "HOME" ) )
     {
-        ret = QDir( QString( "%1/.config/Tomahawk" ).arg( getenv( "HOME" ) ) );
+        ret = QDir( QString( "%1/.config/" TOMAHAWK_APPLICATION_NAME ).arg( getenv( "HOME" ) ) );
     }
     else
     {
@@ -219,7 +219,7 @@ appLogDir()
 const QString
 logFilePath()
 {
-    return TomahawkUtils::appLogDir().filePath( "Tomahawk.log" );
+    return TomahawkUtils::appLogDir().filePath( TOMAHAWK_APPLICATION_NAME ".log" );
 }
 
 QString
@@ -651,6 +651,8 @@ operatingSystemVersionDetail()
     version.append( QString( " %1.%2" ).arg( osvi.dwMajorVersion ).arg( osvi.dwMinorVersion ) );
 
     return version;
+#elif defined ( Q_OS_MAC )
+    return "OS X";
 #else
     return "Unknown";
 #endif
@@ -667,6 +669,39 @@ userAgentString( const QString& applicationName, const QString& applicationVersi
 }
 
 
+class TomahawkTranslator : public QTranslator
+{
+public:
+    TomahawkTranslator( QObject* parent ) : QTranslator( parent )
+    {
+    };
+
+    #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+    QString translate( const char * context, const char * sourceText, const char * disambiguation = 0 ) const Q_DECL_OVERRIDE
+    {
+        QString translation = QTranslator::translate( context, sourceText, disambiguation );
+        #else
+        QString translate( const char * context, const char * sourceText, const char * disambiguation = 0, int n = -1) const Q_DECL_OVERRIDE
+        {
+            QString translation = QTranslator::translate( context, sourceText, disambiguation, n );
+            #endif
+            if( translation.isEmpty() )
+            {
+                translation = QString::fromUtf8( sourceText );
+            }
+
+            //         // lowercase all strings not on whats new page ...
+            //         // TODO: rather scan disambiguation for nolowercase, but too lazy for that right now
+            //         if( strcmp( context, "WhatsNewWidget_0_8" ) )
+            //         {
+            //             translation = translation.toLower();
+            //         }
+
+            return translation.replace( "%applicationName", TOMAHAWK_APPLICATION_NAME, Qt::CaseInsensitive );
+        }
+};
+
+
 void
 installTranslator( QObject* parent )
 {
@@ -679,7 +714,7 @@ installTranslator( QObject* parent )
         locale = "en";
 
     // Tomahawk translations
-    QTranslator* translator = new QTranslator( parent );
+    QTranslator* translator = new TomahawkTranslator( parent );
     if ( translator->load( QString( ":/lang/tomahawk_" ) + locale ) )
     {
         qDebug() << "Translation: Tomahawk: Using system locale:" << locale;

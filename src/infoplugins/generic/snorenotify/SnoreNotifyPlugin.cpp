@@ -20,12 +20,12 @@
 
 #include "SnoreNotifyPlugin.h"
 
-
 #include "TomahawkSettings.h"
-
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "utils/TomahawkUtilsGui.h"
+
+#include "TomahawkVersion.h"
 
 #include <snore/core/application.h>
 #include <snore/core/notification/icon.h>
@@ -81,8 +81,8 @@ SnoreNotifyPlugin::SnoreNotifyPlugin()
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << m_snore->primaryNotificationBackend();
 
     m_application = Snore::Application( qApp->applicationName(), m_defaultIcon );
-    m_application.hints().setValue( "windows_app_id", "org.tomahawk-player.Tomahawk" );
-    m_application.hints().setValue( "desktop-entry", "tomahawk" );
+    m_application.hints().setValue( "windows_app_id", TOMAHAWK_APPLICATION_PACKAGE_NAME );
+    m_application.hints().setValue( "desktop-entry", TOMAHAWK_APPLICATION_NAME );
 
     addAlert( InfoNotifyUser, tr( "Notify User" ) );
     addAlert( InfoNowPlaying, tr( "Now Playing" ) );
@@ -121,7 +121,7 @@ SnoreNotifyPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
     switch ( pushData.type )
     {
         case Tomahawk::InfoSystem::InfoTrackUnresolved:
-            notifyUser( Tomahawk::InfoSystem::InfoTrackUnresolved,"The current track could not be resolved. Tomahawk will pick back up with the next resolvable track from this source." );
+            notifyUser( Tomahawk::InfoSystem::InfoTrackUnresolved, tr( "The current track could not be resolved. %applicationName will pick back up with the next resolvable track from this source." ) );
             return;
 
         case Tomahawk::InfoSystem::InfoNotifyUser:
@@ -129,7 +129,7 @@ SnoreNotifyPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
             return;
 
         case Tomahawk::InfoSystem::InfoNowStopped:
-            notifyUser( Tomahawk::InfoSystem::InfoNowStopped, "Tomahawk stopped playback." );
+            notifyUser( Tomahawk::InfoSystem::InfoNowStopped, tr( "%applicationName stopped playback." ) );
             return;
 
         case Tomahawk::InfoSystem::InfoNowPlaying:

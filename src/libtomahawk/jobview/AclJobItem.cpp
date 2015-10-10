@@ -182,7 +182,7 @@ ACLJobItem::createDelegate( QObject* parent )
 
     m_delegate = new ACLJobDelegate( parent );
 
-    Tomahawk::InfoSystem::InfoPushData pushData( "ACLJobItem", Tomahawk::InfoSystem::InfoNotifyUser, tr( "Tomahawk needs you to decide whether %1 is allowed to connect." ).arg( m_username ), Tomahawk::InfoSystem::PushNoFlag );
+    Tomahawk::InfoSystem::InfoPushData pushData( "ACLJobItem", Tomahawk::InfoSystem::InfoNotifyUser, tr( "%applicationName needs you to decide whether %1 is allowed to connect." ).arg( m_username ), Tomahawk::InfoSystem::PushNoFlag );
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
 }
 

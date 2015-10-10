@@ -44,13 +44,14 @@ public:
         ActionLove =         16,
         ActionStopAfter =    32,
         ActionPage =         64,
-        ActionTrackPage =    65,
-        ActionArtistPage =   66,
-        ActionAlbumPage =    67,
-        ActionEditMetadata = 128,
-        ActionPlaylist =     256,
-        ActionSend =         512,
-        ActionMarkListened = 1024
+        ActionTrackPage =    128,
+        ActionArtistPage =   256,
+        ActionAlbumPage =    512,
+        ActionEditMetadata = 1024,
+        ActionPlaylist =     2048,
+        ActionSend =         4096,
+        ActionMarkListened = 8192,
+        ActionDownload =     16384
     };
 
     explicit ContextMenu( QWidget* parent = 0 );

@@ -414,7 +414,7 @@ Pipeline::addResultsToQuery( const query_ptr& query, const QList< result_ptr >& 
 
 
 void
-Pipeline::onResultUrlCheckerDone( )
+Pipeline::onResultUrlCheckerDone()
 {
     ResultUrlChecker* checker = qobject_cast< ResultUrlChecker* >( sender() );
     if ( !checker )

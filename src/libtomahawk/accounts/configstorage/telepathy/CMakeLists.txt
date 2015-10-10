@@ -20,7 +20,7 @@ if( KDE4_FOUND )
         SOURCES
             KdeTelepathyConfigWidget.cpp
         LINK_LIBRARIES
-            tomahawk_configstorage_telepathy
+            ${TOMAHAWK_TARGET_NAME}_configstorage_telepathy
             ${KDE4_KCMUTILS_LIBS}
     )
 endif()

@@ -237,6 +237,46 @@ Album::sortname() const
 }
 
 
+QString
+Album::purchaseUrl() const
+{
+    Q_D( const Album );
+    if ( !d->purchaseUrlLoaded )
+    {
+        Tomahawk::InfoSystem::InfoStringHash albumInfo;
+        albumInfo["artist"] = d->artist->name();
+        albumInfo["album"] = d->name;
+
+        Tomahawk::InfoSystem::InfoRequestData requestData;
+        requestData.caller = infoid();
+        requestData.type = Tomahawk::InfoSystem::InfoAlbumPurchaseUrl;
+        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( albumInfo );
+        requestData.customData = QVariantMap();
+        requestData.allSources = true;
+
+        connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+                SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+                SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
+
+        connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+                SIGNAL( finished( QString ) ),
+                SLOT( infoSystemFinished( QString ) ) );
+
+        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+    }
+
+    return d->purchaseUrl;
+}
+
+
+bool
+Album::purchased() const
+{
+    Q_D( const Album );
+    return d->purchased;
+}
+
+
 QPixmap
 Album::cover( const QSize& size, bool forceLoad ) const
 {
@@ -318,8 +358,20 @@ void
 Album::infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData, const QVariant& output )
 {
     Q_D( Album );
-    if ( requestData.caller != infoid() ||
-         requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
+    if ( requestData.caller != infoid() )
+        return;
+
+    if ( requestData.type == Tomahawk::InfoSystem::InfoAlbumPurchaseUrl && output.isValid() )
+    {
+        QVariantMap returnedData = output.value< QVariantMap >();
+        d->purchaseUrlLoaded = true;
+        d->purchaseUrl = returnedData["url"].toString();
+        d->purchased = returnedData["purchased"].toBool();
+        emit updated();
+        return;
+    }
+
+    if ( requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
     {
         return;
     }

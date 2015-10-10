@@ -532,6 +532,9 @@ Result::track() const
 void
 Result::setDownloadFormats( const QList<DownloadFormat>& formats )
 {
+    if ( formats.isEmpty() )
+        return;
+
     m_formats.clear();
     foreach ( const DownloadFormat& format, formats )
     {
@@ -574,9 +577,22 @@ Result::toDownloadJob( const DownloadFormat& format )
     {
         m_downloadJob = downloadjob_ptr( new DownloadJob( weakRef().toStrongRef(), format ) );
         connect( m_downloadJob.data(), SIGNAL( progress( int ) ), SIGNAL( updated() ) );
+        connect( m_downloadJob.data(), SIGNAL( stateChanged( DownloadJob::TrackState, DownloadJob::TrackState ) ),
+                                         SLOT( onDownloadJobStateChanged( DownloadJob::TrackState, DownloadJob::TrackState ) ) );
     }
 
     return m_downloadJob;
+}
+
+
+void
+Result::onDownloadJobStateChanged( DownloadJob::TrackState newState, DownloadJob::TrackState oldState )
+{
+    if ( newState == DownloadJob::Aborted )
+    {
+        m_downloadJob.clear();
+        emit updated();
+    }
 }
 
 

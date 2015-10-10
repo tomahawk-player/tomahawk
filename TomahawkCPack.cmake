@@ -2,7 +2,7 @@ INCLUDE( InstallRequiredSystemLibraries )
 
 SET( CPACK_PACKAGE_CONTACT  "Dominik Schmidt <domme@tomahawk-player.org>" )
 
-SET( CPACK_PACKAGE_FILE_NAME  tomahawk-${TOMAHAWK_VERSION} )    # Package file name without extension. Also a directory of installer  cmake-2.5.0-Linux-i686
+SET( CPACK_PACKAGE_FILE_NAME  "${TOMAHAWK_APPLICATION_NAME}-${TOMAHAWK_VERSION}" )    # Package file name without extension. Also a directory of installer  cmake-2.5.0-Linux-i686
 
 # CPACK_GENERATOR   CPack generator to be used  STGZ;TGZ;TZ
 # CPACK_INCLUDE_TOPLEVEL_DIRECTORY    Controls whether CPack adds a top-level directory, usually of the form ProjectName-Version-OS, to the top of package tree.  0 to disable, 1 to enable
@@ -22,7 +22,7 @@ SET( CPACK_PACKAGE_VERSION_PATCH  ${TOMAHAWK_VERSION_PATCH} )
 
 SET( CPACK_SOURCE_GENERATOR TGZ )
 SET( CPACK_SOURCE_IGNORE_FILES "/\\\\.git/" ".*~$" ".kate-swp$" "/build_dir/" "/clang/" "/gcc/" "/build/" "/win/" ) # Pattern of files in the source tree that won't be packaged
-SET( CPACK_SOURCE_PACKAGE_FILE_NAME tomahawk-${TOMAHAWK_VERSION} ) # Name of the source package
+SET( CPACK_SOURCE_PACKAGE_FILE_NAME ${TOMAHAWK_APPLICATION_NAME}-${TOMAHAWK_VERSION} ) # Name of the source package
 # CPACK_SOURCE_STRIP_FILES    List of files in the source tree that will be stripped. Starting with CMake 2.6.0 CPACK_SOURCE_STRIP_FILES will be a boolean variable which enables stripping of all files (a list of files evaluates to TRUE in CMake, so this change is compatible).
 # CPACK_STRIP_FILES   List of files to be stripped. Starting with CMake 2.6.0 CPACK_STRIP_FILES will be a boolean variable which enables stripping of all files (a list of files evaluates to TRUE in CMake, so this change is compatible).   bin/ccmake;bin/cmake;bin/cpack;bin/ctest
 # CPACK_SYSTEM_NAME   System name, defaults to the value of ${CMAKE_SYSTEM_NAME}.     Linux-i686

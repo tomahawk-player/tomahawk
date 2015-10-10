@@ -50,7 +50,7 @@ public:
     virtual ~XmppAccountFactory() {}
 
     QString prettyName() const { return "Jabber (XMPP)"; }
-    QString description() const { return tr( "Login to connect to your Jabber/XMPP contacts that also use Tomahawk." ); }
+    QString description() const { return tr( "Login to connect to your Jabber/XMPP contacts that also use %applicationName." ); }
     QString factoryId() const { return "xmppaccount"; }
     QPixmap icon() const { return QPixmap( ":/xmpp-account/xmpp-icon.png" ); }
     AccountTypes types() const { return AccountTypes( SipType | StatusPushType ); }

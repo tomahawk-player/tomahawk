@@ -36,6 +36,8 @@ public:
         , id( _id )
         , name( _name )
         , artist( _artist )
+        , purchaseUrlLoaded( false )
+        , purchased( false )
         , coverLoaded( false )
         , coverLoading( false )
         , cover( 0 )
@@ -49,6 +51,8 @@ public:
         , id( 0 )
         , name( _name )
         , artist( _artist )
+        , purchaseUrlLoaded( false )
+        , purchased( false )
         , coverLoaded( false )
         , coverLoading( false )
         , cover( 0 )
@@ -66,6 +70,10 @@ private:
     QString sortname;
 
     artist_ptr artist;
+
+    mutable bool purchaseUrlLoaded;
+    mutable bool purchased;
+    mutable QString purchaseUrl;
 
     mutable bool coverLoaded;
     mutable bool coverLoading;

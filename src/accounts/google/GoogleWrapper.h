@@ -41,7 +41,7 @@ public:
 
     virtual QString prettyName() const { return "Google"; }
     virtual QString factoryId() const { return "googleaccount"; }
-    QString description() const { return tr( "Login to directly connect to your Google Talk contacts that also use Tomahawk." ); }
+    QString description() const { return tr( "Login to directly connect to your Google Talk contacts that also use %applicationName." ); }
     virtual QPixmap icon() const;
     virtual Account* createAccount( const QString& pluginId );
 };

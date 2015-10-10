@@ -32,7 +32,6 @@
 
 #include "infosystem/InfoSystem.h"
 #include "DllMacro.h"
-#include "Query.h"
 #include "Typedefs.h"
 
 
@@ -61,6 +60,8 @@ public:
     artist_ptr artist() const;
     QPixmap cover( const QSize& size, bool forceLoad = true ) const;
     bool coverLoaded() const;
+    QString purchaseUrl() const;
+    bool purchased() const;
 
     QList<Tomahawk::query_ptr> tracks( ModelMode mode = Mixed, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() );
     Tomahawk::playlistinterface_ptr playlistInterface( ModelMode mode, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() );

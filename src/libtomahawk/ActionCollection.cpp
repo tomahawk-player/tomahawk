@@ -113,7 +113,7 @@ ActionCollection::initActions()
     m_actionCollection[ "rescanCollection" ] = new QAction( tr( "Fully &Rescan Collection" ), this );
     m_actionCollection[ "showOfflineSources" ] = new QAction( tr( "Show Offline Friends" ), this );
     m_actionCollection[ "showOfflineSources" ]->setCheckable( true );
-    m_actionCollection[ "preferences" ] = new QAction( tr( "&Configure Tomahawk..." ), this );
+    m_actionCollection[ "preferences" ] = new QAction( tr( "&Configure %applicationName..." ), this );
     m_actionCollection[ "preferences" ]->setMenuRole( QAction::PreferencesRole );
 #ifdef Q_OS_MAC
     m_actionCollection[ "minimize" ] = new QAction( tr( "Minimize" ), this );
@@ -129,7 +129,7 @@ ActionCollection::initActions()
 #endif
     m_actionCollection[ "diagnostics" ] = new QAction( tr( "Diagnostics..." ), this );
     m_actionCollection[ "diagnostics" ]->setMenuRole( QAction::ApplicationSpecificRole );
-    m_actionCollection[ "aboutTomahawk" ] = new QAction( tr( "About &Tomahawk..." ), this );
+    m_actionCollection[ "aboutTomahawk" ] = new QAction( tr( "About &%applicationName..." ), this );
     m_actionCollection[ "aboutTomahawk" ]->setMenuRole( QAction::AboutRole );
     m_actionCollection[ "legalInfo" ] = new QAction( tr( "&Legal Information..." ), this );
     m_actionCollection[ "legalInfo" ]->setMenuRole( QAction::ApplicationSpecificRole );
@@ -140,7 +140,7 @@ ActionCollection::initActions()
     m_actionCollection[ "checkForUpdates" ]->setMenuRole( QAction::ApplicationSpecificRole );
 #endif
     m_actionCollection[ "crashNow" ] = new QAction( "Crash now...", this );
-    m_actionCollection[ "whatsnew_0_8" ] = new QAction( tr( "0.8" ) , this );
+    m_actionCollection[ "whatsnew_0_8" ] = new QAction( tr( "%applicationName 0.8" ) , this );
     m_actionCollection[ "whatsnew_0_8" ]->setMenuRole( QAction::ApplicationSpecificRole );
     m_actionCollection[ "reportBug" ] = new QAction( tr( "Report a Bug" ) , this );
     m_actionCollection[ "getSupport" ] = new QAction( tr( "Get Support" ) , this );

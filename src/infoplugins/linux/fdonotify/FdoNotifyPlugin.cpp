@@ -127,7 +127,7 @@ FdoNotifyPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
     switch ( pushData.type )
     {
         case Tomahawk::InfoSystem::InfoTrackUnresolved:
-            notifyUser( tr( "The current track could not be resolved. Tomahawk will pick back up with the next resolvable track from this source." ) );
+            notifyUser( tr( "The current track could not be resolved. %applicationName will pick back up with the next resolvable track from this source." ) );
             return;
 
         case Tomahawk::InfoSystem::InfoNotifyUser:
@@ -135,7 +135,7 @@ FdoNotifyPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
             return;
 
         case Tomahawk::InfoSystem::InfoNowStopped:
-            notifyUser( tr( "Tomahawk is stopped." ) );
+            notifyUser( tr( "%applicationName is stopped." ) );
             return;
 
         case Tomahawk::InfoSystem::InfoNowPlaying:
@@ -311,7 +311,7 @@ FdoNotifyPlugin::nowPlaying( const QVariant& input )
         TOMAHAWK_APPLICATION_NAME,      // app_name
         m_nowPlayingId,                 // notification_id
         "",                             // app_icon
-        tr( "Tomahawk - Now Playing" ), // summary
+        tr( "%applicationName - Now Playing" ), // summary
         messageText,                    // body
         QStringList(),                  // actions
         hints,                          // hints

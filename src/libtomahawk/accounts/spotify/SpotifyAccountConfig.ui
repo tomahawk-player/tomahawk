@@ -133,7 +133,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Right click on any Tomahawk playlist to sync it to Spotify.</string>
+      <string>Right click on any %applicationNames playlist to sync it to Spotify.</string>
      </property>
      <property name="margin">
       <number>0</number>
@@ -186,7 +186,7 @@
    <item>
     <widget class="QCheckBox" name="deleteOnUnsync">
      <property name="text">
-      <string>Delete Tomahawk playlist when removing synchronization</string>
+      <string>Delete %applicationName playlist when removing synchronization</string>
      </property>
     </widget>
    </item>
