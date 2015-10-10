@@ -1,7 +1,7 @@
 PROJECT( CrashReporter )
 cmake_policy(SET CMP0017 NEW)
 
-set(TOMAHAWK_CRASH_REPORTER_TARGET ${TOMAHAWK_TARGET_NAME}_crash_reporter)
+set(TOMAHAWK_CRASH_REPORTER_TARGET ${TOMAHAWK_BASE_TARGET_NAME}_crash_reporter)
 
 setup_qt()
 

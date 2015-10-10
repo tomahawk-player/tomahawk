@@ -19,7 +19,7 @@ function(tomahawk_add_plugin)
 #     message("NO_INSTALL: ${PLUGIN_NO_INSTALL}")
 
     # create target name once for convenience
-    set(target "${TOMAHAWK_TARGET_NAME}_${PLUGIN_TYPE}_${PLUGIN_NAME}")
+    set(target "${TOMAHAWK_BASE_TARGET_NAME}_${PLUGIN_TYPE}_${PLUGIN_NAME}")
 
     # create option to disable plugins
     string(TOUPPER "${PLUGIN_TYPE}" PLUGIN_TYPE_UPPER)
