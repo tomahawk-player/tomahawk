@@ -158,6 +158,7 @@ Tomahawk.extend = function (object, members) {
     return newObject;
 };
 
+//Deprecated for 0.9 resolvers. Reporting resolver capabilities is no longer necessary.
 var TomahawkResolverCapability = {
     NullCapability: 0,
     Browsable:      1,
@@ -166,6 +167,7 @@ var TomahawkResolverCapability = {
     UrlLookup:      8
 };
 
+//Deprecated for 0.9 resolvers. Use Tomahawk.UrlType instead.
 var TomahawkUrlType = {
     Any: 0,
     Playlist: 1,
@@ -174,6 +176,7 @@ var TomahawkUrlType = {
     Artist: 8
 };
 
+//Deprecated for 0.9 resolvers. Use Tomahawk.ConfigTestResultType instead.
 var TomahawkConfigTestResultType = {
     Other: 0,
     Success: 1,
