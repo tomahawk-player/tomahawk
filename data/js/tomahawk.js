@@ -1338,7 +1338,7 @@ Tomahawk.Collection = {
             });
         };
 
-        this.execDefferedStatements = function (resolve, reject) {
+        this.execDeferredStatements = function (resolve, reject) {
             var that = this;
             that.stmtsToResolve = that.statements.length;
             that.results = that.statements.slice();
@@ -1481,7 +1481,7 @@ Tomahawk.Collection = {
                     });
                 })(tracks[i]);
             }
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function () {
             // Get all artists' and albumArtists' db ids
             t.sqlSelect("albumArtists", function (r) {
@@ -1498,7 +1498,7 @@ Tomahawk.Collection = {
                     _id: r._id
                 };
             });
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function (resultsArray) {
             // Store the db ids in a map
             var i, row, albumArtists = {};
@@ -1543,7 +1543,7 @@ Tomahawk.Collection = {
                     });
                 })(tracks[i]);
             }
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function () {
             // Get the albums' db ids
             t.sqlSelect("albums", function (r) {
@@ -1553,7 +1553,7 @@ Tomahawk.Collection = {
                     _id: r._id
                 };
             });
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function (results) {
             // Store the db ids in a map
             results = results[0];
@@ -1592,7 +1592,7 @@ Tomahawk.Collection = {
                     });
                 })(tracks[i]);
             }
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function () {
             var resultMap = function (r) {
                 return {
@@ -1604,7 +1604,7 @@ Tomahawk.Collection = {
             };
             // Get the tracks' db ids
             t.sqlSelect("tracks", resultMap, ["_id", "artistId", "albumId", "track"]);
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function (results) {
             that._trackCount = results[0].length;
             Tomahawk.log("Added " + results[0].length + " tracks to collection '" + id + "'");
@@ -1635,7 +1635,7 @@ Tomahawk.Collection = {
             t.sqlDrop("albums");
             t.sqlDrop("artistAlbums");
             t.sqlDrop("tracks");
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function () {
             return new RSVP.Promise(function (resolve, reject) {
                 that.cachedDbs[id].changeVersion(that.cachedDbs[id].version, "", null,
@@ -1694,7 +1694,7 @@ Tomahawk.Collection = {
                     ]
                 );
             }
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function (results) {
             var merged = [];
             return merged.concat.apply(merged,
@@ -1754,7 +1754,7 @@ Tomahawk.Collection = {
                     }
                 ]
             );
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function (results) {
             return {results: Tomahawk.resolver.instance._convertUrls(results[0])};
         });
@@ -1787,7 +1787,7 @@ Tomahawk.Collection = {
                     }
                 ]
             );
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function (results) {
             results = results[0].filter(function (e) {
                 return (e.albumArtist != '' && e.album != '');
@@ -1816,7 +1816,7 @@ Tomahawk.Collection = {
                 return r.artist;
             };
             t.sqlSelect("artists", mapFn, ["artist", "artistDisambiguation"]);
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function (artists) {
             return {artists: artists[0]};
         });
@@ -1835,7 +1835,7 @@ Tomahawk.Collection = {
     //};
     //};
     //t.sqlSelect("albumArtists", ["albumArtist", "albumArtistDisambiguation"]);
-    //return t.execDefferedStatements();
+    //return t.execDeferredStatements();
     //}).then(function (results) {
     //return results[0];
     //});
@@ -1859,7 +1859,7 @@ Tomahawk.Collection = {
                 artist: artist
                 //artistDisambiguation: artistDisambiguation
             });
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function (results) {
             var artistId = results[0][0];
             t.sqlSelect("artistAlbums", function (r) {
@@ -1874,7 +1874,7 @@ Tomahawk.Collection = {
                     }
                 }
             ]);
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function (results) {
             return {
                 artist: artist,
@@ -1903,7 +1903,7 @@ Tomahawk.Collection = {
                 artist: albumArtist
                 //artistDisambiguation: albumArtistDisambiguation
             });
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function (results) {
             var albumArtistId = results[0][0];
             t.sqlSelect("albums", function (r) {
@@ -1912,7 +1912,7 @@ Tomahawk.Collection = {
                 album: album,
                 albumArtistId: albumArtistId
             });
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function (results) {
             var albumId = results[0][0];
             return that.tracks(params, {
