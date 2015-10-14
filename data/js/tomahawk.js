@@ -42,17 +42,18 @@ Tomahawk.apiVersion = "0.2.2";
 //Statuses considered a success for HTTP request
 var httpSuccessStatuses = [200, 201];
 
-// install RSVP.Promise as global Promise
-if(window.Promise === undefined) {
-    window.Promise = window.RSVP.Promise;
-    window.RSVP.on('error', function(reason) {
-        if (reason) {
-            console.error(reason.message, reason);
-        } else {
-            console.error('Error: error thrown from RSVP but it was empty');
-        }
-    });
-}
+// install RSVP error handler for uncaught(!) errors
+RSVP.on('error', function (reason) {
+    var resolverName = "";
+    if (Tomahawk.resolver.instance) {
+        resolverName = Tomahawk.resolver.instance.settings.name + " - ";
+    }
+    if (reason) {
+        console.error(resolverName + 'Uncaught error:' + JSON.stringify(reason));
+    } else {
+        console.error(resolverName + 'Uncaught error: error thrown from RSVP but it was empty');
+    }
+});
 
 /**
  * Compares versions strings
@@ -61,8 +62,12 @@ if(window.Promise === undefined) {
  * (version1 > version2) == 1
  */
 Tomahawk.versionCompare = function (version1, version2) {
-    var v1 = version1.split('.').map(function (item) { return parseInt(item); });
-    var v2 = version2.split('.').map(function (item) { return parseInt(item); });
+    var v1 = version1.split('.').map(function (item) {
+        return parseInt(item);
+    });
+    var v2 = version2.split('.').map(function (item) {
+        return parseInt(item);
+    });
     var length = Math.max(v1.length, v2.length);
     var i = 0;
 
@@ -78,7 +83,7 @@ Tomahawk.versionCompare = function (version1, version2) {
                 return -1;
             }
         } else if (typeof v2[i] == "undefined" || v2[i] === null) {
-            if ( v1[i] === 0 ) {
+            if (v1[i] === 0) {
                 continue;
             } else {
                 // v1 > v2
@@ -103,7 +108,6 @@ Tomahawk.atLeastVersion = function (version) {
     return (Tomahawk.versionCompare(Tomahawk.apiVersion, version) >= 0);
 };
 
-
 Tomahawk.resolver = {
     scriptPath: Tomahawk.resolverData().scriptPath
 };
@@ -112,30 +116,29 @@ Tomahawk.timestamp = function () {
     return Math.round(new Date() / 1000);
 };
 
-Tomahawk.htmlDecode = (function() {
-  // this prevents any overhead from creating the object each time
-  var element = document.createElement('textarea');
+Tomahawk.htmlDecode = (function () {
+    // this prevents any overhead from creating the object each time
+    var element = document.createElement('textarea');
 
-  function decodeHTMLEntities (str) {
-    if(str && typeof str === 'string') {
-      str = str.replace(/</g,"&lt;");
-      str = str.replace(/>/g,"&gt;");
-      element.innerHTML = str;
-      str = element.textContent;
-      element.textContent = '';
+    function decodeHTMLEntities(str) {
+        if (str && typeof str === 'string') {
+            str = str.replace(/</g, "&lt;");
+            str = str.replace(/>/g, "&gt;");
+            element.innerHTML = str;
+            str = element.textContent;
+            element.textContent = '';
+        }
+
+        return str;
     }
 
-    return str;
-  }
-
-  return decodeHTMLEntities;
+    return decodeHTMLEntities;
 })();
 
 Tomahawk.dumpResult = function (result) {
-    var results = result.results,
-        i = 0;
+    var results = result.results;
     Tomahawk.log("Dumping " + results.length + " results for query " + result.qid + "...");
-    for (i = 0; i < results.length; i++) {
+    for (var i = 0; i < results.length; i++) {
         Tomahawk.log(results[i].artist + " - " + results[i].track + " | " + results[i].url);
     }
 
@@ -155,7 +158,7 @@ Tomahawk.extend = function (object, members) {
     return newObject;
 };
 
-
+//Deprecated for 0.9 resolvers. Reporting resolver capabilities is no longer necessary.
 var TomahawkResolverCapability = {
     NullCapability: 0,
     Browsable:      1,
@@ -164,6 +167,7 @@ var TomahawkResolverCapability = {
     UrlLookup:      8
 };
 
+//Deprecated for 0.9 resolvers. Use Tomahawk.UrlType instead.
 var TomahawkUrlType = {
     Any: 0,
     Playlist: 1,
@@ -172,6 +176,7 @@ var TomahawkUrlType = {
     Artist: 8
 };
 
+//Deprecated for 0.9 resolvers. Use Tomahawk.ConfigTestResultType instead.
 var TomahawkConfigTestResultType = {
     Other: 0,
     Success: 1,
@@ -187,7 +192,7 @@ var TomahawkConfigTestResultType = {
  * Resolver BaseObject, inherit it to implement your own resolver.
  */
 var TomahawkResolver = {
-    init: function() {
+    init: function () {
     },
     scriptPath: function () {
         return Tomahawk.resolverData().scriptPath;
@@ -200,7 +205,7 @@ var TomahawkResolver = {
     },
     saveUserConfig: function () {
         var configJson = JSON.stringify(Tomahawk.resolverData().config);
-        window.localStorage[ this.scriptPath() ] = configJson;
+        window.localStorage[this.scriptPath()] = configJson;
         this.newConfigSaved();
     },
     newConfigSaved: function () {
@@ -211,7 +216,7 @@ var TomahawkResolver = {
         };
     },
     search: function (qid, searchString) {
-        return this.resolve( qid, "", "", searchString );
+        return this.resolve(qid, "", "", searchString);
     },
     artists: function (qid) {
         return {
@@ -231,29 +236,45 @@ var TomahawkResolver = {
     collection: function () {
         return {};
     },
-    getStreamUrl: function(params) {
-        Tomahawk.reportStreamUrl(params.qid, params.url);
-    },
     _testConfig: function (config) {
-        return Promise.resolve(this.testConfig(config)).then(function() {
-            return { result: Tomahawk.ConfigTestResultType.Success };
+        return RSVP.Promise.resolve(this.testConfig(config)).then(function () {
+            return {result: Tomahawk.ConfigTestResultType.Success};
         });
     },
     testConfig: function () {
+        this.configTest();
+    },
+    getStreamUrl: function (qid, url) {
+        Tomahawk.reportStreamUrl(qid, url);
     }
 };
 
-
-Tomahawk.Resolver = Tomahawk.extend(TomahawkResolver, {
+Tomahawk.Resolver = {
+    init: function () {
+    },
+    scriptPath: function () {
+        return Tomahawk.resolverData().scriptPath;
+    },
+    getConfigUi: function () {
+        return {};
+    },
+    getUserConfig: function () {
+        return JSON.parse(window.localStorage[this.scriptPath()] || "{}");
+    },
     saveUserConfig: function () {
         window.localStorage[this.scriptPath()] = JSON.stringify(Tomahawk.resolverData().config);
         this.newConfigSaved(Tomahawk.resolverData().config);
     },
+    newConfigSaved: function () {
+    },
+    getStreamUrl: function (params) {
+        return params;
+    },
 
-    _convertUrls: function(results) {
+    _convertUrls: function (results) {
         var that = this;
-        return results.map(function(r){
-            if(r && r.url) {
+        return results.map(function (r) {
+            if (r && r.url) {
                 r.url = that._urlProtocol + '://' + r.url;
             }
             return r;
@@ -263,110 +284,69 @@ Tomahawk.Resolver = Tomahawk.extend(TomahawkResolver, {
     _adapter_resolve: function (qid, artist, album, title) {
         var that = this;
         var collectionPromises = [];
-        Tomahawk.collections.forEach(function(col) {
-            if(col.resolve)
-                collectionPromises.push(col.resolve({artist: artist, album: album, track:title}));
+        Tomahawk.collections.forEach(function (col) {
+            if (col.resolve) {
+                collectionPromises.push(col.resolve({artist: artist, album: album, track: title}));
+            }
         });
-        Promise.all(collectionPromises).then(function(collectionResults){
+        RSVP.Promise.all(collectionPromises).then(function (collectionResults) {
             var merged = [];
-            return merged.concat.apply(merged,collectionResults);
-        }).then(function(collectionResults) {
-            Promise.resolve(that.resolve({artist: artist, album: album, track:title})).then(function(results){
+            return merged.concat.apply(merged, collectionResults);
+        }).then(function (collectionResults) {
+            RSVP.Promise.resolve(that.resolve({
+                artist: artist,
+                album: album,
+                track: title
+            })).then(function (results) {
                 Tomahawk.addTrackResults({
                     'qid': qid,
-                    'results': that._convertUrls(results.concat(collectionResults)) 
+                    'results': that._convertUrls(results.concat(collectionResults))
                 });
             });
         });
     },
 
-    _adapter_init: function ()
-    {
+    _adapter_init: function () {
         this._urlProtocol = this.settings.name.replace(/[^a-zA-Z]/g, '').toLowerCase();
-        Tomahawk.addCustomUrlHandler( this._urlProtocol, 'getStreamUrl', true );
+        Tomahawk.addCustomUrlHandler(this._urlProtocol, 'getStreamUrl', true);
         Tomahawk.log('Registered custom url handler for protocol "' + this._urlProtocol + '"');
         this.init();
     },
 
     _adapter_getStreamUrl: function (params) {
         params.url = params.url.slice(this._urlProtocol.length + 3);
-        Promise.resolve(this.getStreamUrl(params)).then(function(result){
+        RSVP.Promise.resolve(this.getStreamUrl(params)).then(function (result) {
             Tomahawk.reportStreamUrl(params.qid, result.url, result.headers);
         });
     },
 
-    _adapter_search: function (qid, query)
-    {
+    _adapter_search: function (qid, query) {
         var that = this;
         var collectionPromises = [];
-        Tomahawk.collections.forEach(function(col) {
-            if(col.search)
+        Tomahawk.collections.forEach(function (col) {
+            if (col.search) {
                 collectionPromises.push(col.search({query: query}));
+            }
         });
-        Promise.all(collectionPromises).then(function(collectionResults){
+        RSVP.Promise.all(collectionPromises).then(function (collectionResults) {
             var merged = [];
-            return merged.concat.apply(merged,collectionResults);
-        }).then(function(collectionResults) {
-            Promise.resolve(that.search({query:query})).then(function(results){
+            return merged.concat.apply(merged, collectionResults);
+        }).then(function (collectionResults) {
+            RSVP.Promise.resolve(that.search({query: query})).then(function (results) {
                 Tomahawk.addTrackResults({
                     'qid': qid,
-                    'results': that._convertUrls(results.concat(collectionResults)) 
+                    'results': that._convertUrls(results.concat(collectionResults))
                 });
             });
         });
     },
 
     _adapter_testConfig: function (config) {
-        return Promise.resolve(this.testConfig(config)).then(function() {
-            return { result: Tomahawk.ConfigTestResultType.Success };
+        return RSVP.Promise.resolve(this.testConfig(config)).then(function () {
+            return {result: Tomahawk.ConfigTestResultType.Success};
         });
     }
-});
-
-/**** begin example implementation of a resolver ****/
-
-
-// implement the resolver
-/*
- *    var DemoResolver = Tomahawk.extend(TomahawkResolver,
- *    {
- *        getSettings: function()
- *        {
- *            return {
- *                name: "Demo Resolver",
- *                weigth: 95,
- *                timeout: 5,
- *                limit: 10
- };
- },
- resolve: function( qid, artist, album, track )
- {
-     return {
-         qid: qid,
-         results: [
-         {
-             artist: "Mokele",
-             album: "You Yourself are Me Myself and I am in Love",
-             track: "Hiding In Your Insides (php)",
-             source: "Mokele.co.uk",
-             url: "http://play.mokele.co.uk/music/Hiding%20In%20Your%20Insides.mp3",
-             bitrate: 160,
-             duration: 248,
-             size: 4971780,
-             score: 1.0,
-             extension: "mp3",
-             mimetype: "audio/mpeg"
- }
- ]
- };
- }
- }
- );
-
- // register the resolver
- Tomahawk.resolver.instance = DemoResolver;*/
-
-/**** end example implementation of a resolver ****/
+};
 
 
 // help functions
@@ -452,7 +432,7 @@ Tomahawk.retrieveMetadata = function (url, mimetype, sizehint, options, callback
  *
  * Internal use only!
  */
-Tomahawk.retrievedMetadata = function(metadataId, metadata, error) {
+Tomahawk.retrievedMetadata = function (metadataId, metadata, error) {
     // Check that we have a matching callback stored.
     if (!Tomahawk.retrieveMetadataCallbacks.hasOwnProperty(metadataId)) {
         return;
@@ -478,7 +458,7 @@ Tomahawk.asyncRequestIdCounter = 0;
 Tomahawk.asyncRequestCallbacks = {};
 
 /**
- * Pass the natively retrived reply back to the javascript callback
+ * Pass the natively retrieved reply back to the javascript callback
  * and augment the fake XMLHttpRequest object.
  *
  * Internal use only!
@@ -541,7 +521,8 @@ Tomahawk.asyncRequest = function (url, callback, extraHeaders, options) {
             }
         }
         xmlHttpRequest.onreadystatechange = function () {
-            if (xmlHttpRequest.readyState == 4 && httpSuccessStatuses.indexOf(xmlHttpRequest.status) != -1) {
+            if (xmlHttpRequest.readyState == 4
+                && httpSuccessStatuses.indexOf(xmlHttpRequest.status) != -1) {
                 callback.call(window, xmlHttpRequest);
             } else if (xmlHttpRequest.readyState === 4) {
                 Tomahawk.log("Failed to do " + method + " request: to: " + url);
@@ -564,11 +545,11 @@ Tomahawk.asyncRequest = function (url, callback, extraHeaders, options) {
  */
 var shouldDoNativeRequest = function (url, callback, extraHeaders, options) {
     return (extraHeaders && (extraHeaders.hasOwnProperty("Referer")
-        || extraHeaders.hasOwnProperty("referer")
-        || extraHeaders.hasOwnProperty("User-Agent")));
+    || extraHeaders.hasOwnProperty("referer")
+    || extraHeaders.hasOwnProperty("User-Agent")));
 };
 
-Tomahawk.ajax = function(url, settings) {
+Tomahawk.ajax = function (url, settings) {
     if (typeof url === "object") {
         settings = url;
     } else {
@@ -581,11 +562,17 @@ Tomahawk.ajax = function(url, settings) {
     settings.dataFormat = settings.dataFormat || 'form';
 
     if (settings.data) {
-        var formEncode = function(obj) {
+        var formEncode = function (obj) {
             var str = [];
-            for(var p in obj) {
-                if(obj[p] !== undefined) {
-                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+            for (var p in obj) {
+                if (obj[p] !== undefined) {
+                    if (Array.isArray(obj[p])) {
+                        for (var i = 0; i < obj[p].length; i++) {
+                            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p][i]));
+                        }
+                    } else {
+                        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                    }
                 }
             }
 
@@ -601,7 +588,8 @@ Tomahawk.ajax = function(url, settings) {
                 settings.data = JSON.stringify(settings.data);
                 settings.contentType = settings.contentType || 'application/json';
             } else {
-                throw new Error("Tomahawk.ajax: unknown dataFormat requested: " + settings.dataFormat);
+                throw new Error("Tomahawk.ajax: unknown dataFormat requested: "
+                    + settings.dataFormat);
             }
         } else {
             throw new Error("Tomahawk.ajax: data should be either object or string");
@@ -618,41 +606,41 @@ Tomahawk.ajax = function(url, settings) {
         }
     }
 
-    return new Promise(function (resolve, reject) {
+    return new RSVP.Promise(function (resolve, reject) {
         settings.errorHandler = reject;
         Tomahawk.asyncRequest(settings.url, resolve, settings.headers, settings);
-    }).then(function(xhr) {
-        if (settings.rawResponse) {
-            return xhr;
-        }
-        var responseText = xhr.responseText;
-        var contentType;
-        if (settings.dataType === 'json') {
-            contentType = 'application/json';
-        } else if (contentType === 'xml') {
-            contentType = 'text/xml';
-        } else if (typeof xhr.getResponseHeader !== 'undefined') {
-            contentType = xhr.getResponseHeader('Content-Type');
-        } else if (xhr.hasOwnProperty('contentType')) {
-            contentType = xhr['contentType'];
-        } else {
-            contentType = 'text/html';
-        }
+    }).then(function (xhr) {
+            if (settings.rawResponse) {
+                return xhr;
+            }
+            var responseText = xhr.responseText;
+            var contentType;
+            if (settings.dataType === 'json') {
+                contentType = 'application/json';
+            } else if (settings.dataType === 'xml') {
+                contentType = 'text/xml';
+            } else if (typeof xhr.getResponseHeader !== 'undefined') {
+                contentType = xhr.getResponseHeader('Content-Type');
+            } else if (xhr.hasOwnProperty('contentType')) {
+                contentType = xhr['contentType'];
+            } else {
+                contentType = 'text/html';
+            }
 
-        if (~contentType.indexOf('application/json')) {
-            return JSON.parse(responseText);
-        }
+            if (~contentType.indexOf('application/json')) {
+                return JSON.parse(responseText);
+            }
 
-        if (~contentType.indexOf('text/xml')) {
-            var domParser = new DOMParser();
-            return domParser.parseFromString(responseText, "text/xml");
-        }
+            if (~contentType.indexOf('text/xml')) {
+                var domParser = new DOMParser();
+                return domParser.parseFromString(responseText, "text/xml");
+            }
 
-        return xhr.responseText;
-    });
+            return xhr.responseText;
+        });
 };
 
-Tomahawk.post = function(url, settings) {
+Tomahawk.post = function (url, settings) {
     if (typeof url === "object") {
         settings = url;
     } else {
@@ -665,7 +653,7 @@ Tomahawk.post = function(url, settings) {
     return Tomahawk.ajax(settings);
 };
 
-Tomahawk.get = function(url, settings) {
+Tomahawk.get = function (url, settings) {
     return Tomahawk.ajax(url, settings);
 };
 
@@ -673,12 +661,12 @@ Tomahawk.assert = function (assertion, message) {
     Tomahawk.nativeAssert(assertion, message);
 };
 
-Tomahawk.sha256 = Tomahawk.sha256 || function(message) {
-  return CryptoJS.SHA256(message).toString(CryptoJS.enc.Hex);
-};
-Tomahawk.md5 = Tomahawk.md5 || function(message) {
-  return CryptoJS.MD5(message).toString(CryptoJS.enc.Hex);
-};
+Tomahawk.sha256 = Tomahawk.sha256 || function (message) {
+        return CryptoJS.SHA256(message).toString(CryptoJS.enc.Hex);
+    };
+Tomahawk.md5 = Tomahawk.md5 || function (message) {
+        return CryptoJS.MD5(message).toString(CryptoJS.enc.Hex);
+    };
 // Return a HMAC (md5) signature of the input text with the desired key
 Tomahawk.hmac = function (key, message) {
     return CryptoJS.HmacMD5(message, key).toString(CryptoJS.enc.Hex);
@@ -800,34 +788,38 @@ Tomahawk.hmac = function (key, message) {
 })();
 
 Tomahawk.removeDiacritics = function (str) {
-    return str.replace(/[^\u0000-\u007E]/g, function(c) {
+    return str.replace(/[^\u0000-\u007E]/g, function (c) {
         return Tomahawk.diacriticsMap[c] || c;
     });
 };
 
 Tomahawk.localStorage = Tomahawk.localStorage || {
-    setItem: function(key, value) {
-        window.localStorage[key] = value;
-    },
-    getItem: function(key) {
-        return window.localStorage[key];
-    },
-    removeItem: function(key) {
-        delete window.localStorage[key];
-    }
-};
+        setItem: function (key, value) {
+            window.localStorage[key] = value;
+        },
+        getItem: function (key) {
+            return window.localStorage[key];
+        },
+        removeItem: function (key) {
+            delete window.localStorage[key];
+        }
+    };
 
 // some aliases
 Tomahawk.setTimeout = Tomahawk.setTimeout || window.setTimeout;
 Tomahawk.setInterval = Tomahawk.setInterval || window.setInterval;
-Tomahawk.base64Decode = function(a) { return window.atob(a); };
-Tomahawk.base64Encode = function(b) { return window.btoa(b); };
+Tomahawk.base64Decode = function (a) {
+    return window.atob(a);
+};
+Tomahawk.base64Encode = function (b) {
+    return window.btoa(b);
+};
 
 Tomahawk.PluginManager = {
     objects: {},
     objectCounter: 0,
     identifyObject: function (object) {
-        if( !object.hasOwnProperty('id') ) {
+        if (!object.hasOwnProperty('id')) {
             object.id = this.objectCounter++;
         }
 
@@ -835,8 +827,7 @@ Tomahawk.PluginManager = {
     },
     registerPlugin: function (type, object) {
         this.objects[this.identifyObject(object)] = object;
-        if (type === 'collection')
-        {
+        if (type === 'collection') {
             Tomahawk.collections.push(object);
         }
 
@@ -844,7 +835,7 @@ Tomahawk.PluginManager = {
         Tomahawk.registerScriptPlugin(type, object.id);
     },
 
-    unregisterPlugin: function(type, object) {
+    unregisterPlugin: function (type, object) {
         this.objects[this.identifyObject(object)] = object;
 
         Tomahawk.log("unregisterPlugin: " + type + " id: " + object.id);
@@ -856,7 +847,7 @@ Tomahawk.PluginManager = {
         if (!Tomahawk.resolver.instance.apiVersion || Tomahawk.resolver.instance.apiVersion < 0.9) {
             if (methodName === 'artistAlbums') {
                 methodName = 'albums';
-            } else if ( methodName === 'albumTracks' ) {
+            } else if (methodName === 'albumTracks') {
                 methodName = 'tracks';
             }
         }
@@ -871,21 +862,43 @@ Tomahawk.PluginManager = {
         }
 
         if (typeof this.objects[objectId][methodName] === 'function') {
-            if (!Tomahawk.resolver.instance.apiVersion || Tomahawk.resolver.instance.apiVersion < 0.9) {
+            if (!Tomahawk.resolver.instance.apiVersion
+                || Tomahawk.resolver.instance.apiVersion < 0.9) {
                 if (methodName == 'artists') {
-                    return new Promise(function (resolve, reject) {
+                    return new RSVP.Promise(function (resolve, reject) {
                         pluginManager.resolve[requestId] = resolve;
                         Tomahawk.resolver.instance.artists(requestId);
                     });
                 } else if (methodName == 'albums') {
-                    return new Promise(function (resolve, reject) {
+                    return new RSVP.Promise(function (resolve, reject) {
                         pluginManager.resolve[requestId] = resolve;
                         Tomahawk.resolver.instance.albums(requestId, params.artist);
                     });
                 } else if (methodName == 'tracks') {
-                    return new Promise(function (resolve, reject) {
+                    return new RSVP.Promise(function (resolve, reject) {
                         pluginManager.resolve[requestId] = resolve;
                         Tomahawk.resolver.instance.tracks(requestId, params.artist, params.album);
+                    });
+                } else if (methodName == 'lookupUrl') {
+                    return new RSVP.Promise(function (resolve, reject) {
+                        pluginManager.resolve[params.url] = resolve;
+                        Tomahawk.resolver.instance.lookupUrl(params.url);
+                    });
+                } else if (methodName == 'getStreamUrl') {
+                    return new RSVP.Promise(function (resolve, reject) {
+                        pluginManager.resolve[requestId] = resolve;
+                        Tomahawk.resolver.instance.getStreamUrl(requestId, params.url);
+                    });
+                } else if (methodName == 'resolve') {
+                    return new RSVP.Promise(function (resolve, reject) {
+                        pluginManager.resolve[requestId] = resolve;
+                        Tomahawk.resolver.instance.resolve(requestId, params.artist,
+                            params.album, params.track);
+                    });
+                } else if (methodName == 'search') {
+                    return new RSVP.Promise(function (resolve, reject) {
+                        pluginManager.resolve[requestId] = resolve;
+                        Tomahawk.resolver.instance.search(requestId, params.query);
                     });
                 }
             }
@@ -896,28 +909,48 @@ Tomahawk.PluginManager = {
         return this.objects[objectId][methodName];
     },
 
-    invoke: function (requestId, objectId, methodName, params ) {
-        Promise.resolve(this.invokeSync(requestId, objectId, methodName, params)).then(function (result) {
-            if (typeof result === 'object') {
+    invoke: function (requestId, objectId, methodName, params) {
+        RSVP.Promise.resolve(this.invokeSync(requestId, objectId, methodName, params))
+            .then(function (result) {
                 Tomahawk.reportScriptJobResults({
                     requestId: requestId,
                     data: result
                 });
-            } else {
+            }, function (error) {
                 Tomahawk.reportScriptJobResults({
                     requestId: requestId,
-                    error: "Scripts need to return objects for requests: methodName: " + methodName + " params: " + JSON.stringify(params)
+                    error: error
                 });
-            }
-        }, function (error) {
-            Tomahawk.reportScriptJobResults({
-                requestId: requestId,
-                error: error
             });
-        });
     }
 };
 
+Tomahawk.NativeScriptJobManager = {
+    idCounter: 0,
+    deferreds: {},
+    invoke: function (methodName, params) {
+        var requestId = this.idCounter++;
+        Tomahawk.invokeNativeScriptJob(requestId, methodName, JSON.stringify(params));
+        this.deferreds[requestId] = RSVP.defer();
+        return this.deferreds[requestId].promise;
+    },
+    reportNativeScriptJobResult: function (requestId, result) {
+        var deferred = this.deferreds[requestId];
+        if (!deferred) {
+            Tomahawk.log("Deferred object with the given requestId is not present!");
+        }
+        deferred.resolve(result);
+    }
+};
+
+Tomahawk.UrlType = {
+    Any: 0,
+    Playlist: 1,
+    Track: 2,
+    Album: 3,
+    Artist: 4,
+    XspfPlaylist: 5
+};
 
 Tomahawk.ConfigTestResultType = {
     Other: 0,
@@ -1191,11 +1224,9 @@ Tomahawk.Collection = {
 
     cachedDbs: {},
 
-        Transaction: function (collection, id) {
+    Transaction: function (collection, id) {
 
         this.ensureDb = function () {
-            var that = this;
-
             return new RSVP.Promise(function (resolve, reject) {
                 if (!collection.cachedDbs.hasOwnProperty(id)) {
                     Tomahawk.log("Opening database");
@@ -1244,7 +1275,11 @@ Tomahawk.Collection = {
                             "FOREIGN KEY(artistId) REFERENCES artists(_id)," +
                             "FOREIGN KEY(albumId) REFERENCES albums(_id))", []);
                     });
+                    //m.migration(2, function (tx) {
+                    //    //Tomahawk.log("Migrating to db version 2");
+                    //});
 
+                    m.execute();
                 }
                 resolve(collection.cachedDbs[id]);
             });
@@ -1261,18 +1296,18 @@ Tomahawk.Collection = {
             });
         };
 
-        this.execDefferedStatements = function (resolve, reject) {
+        this.execDeferredStatements = function (resolve, reject) {
             var that = this;
             that.stmtsToResolve = that.statements.length;
             that.results = that.statements.slice();
-            Tomahawk.log('Executing ' + that.stmtsToResolve + ' deffered SQL statements in transaction');
-            return new Promise(function (resolve, reject) {
-                if (that.statements.length == 0)
+            Tomahawk.log('Executing ' + that.stmtsToResolve
+                + ' deferred SQL statements in transaction');
+            return new RSVP.Promise(function (resolve, reject) {
+                if (that.statements.length == 0) {
                     resolve([]);
-                else{
+                } else {
                     that.db.transaction(function (tx) {
-                        for (var i = 0; i < that.statements.length; ++i)
-                        {
+                        for (var i = 0; i < that.statements.length; ++i) {
                             var stmt = that.statements[i];
                             tx.executeSql(stmt.statement, stmt.args,
                                 (function () {
@@ -1280,21 +1315,20 @@ Tomahawk.Collection = {
                                     //capture value of i
                                     var originalI = i;
                                     return function (tx, results) {
-                                        if (typeof that.statements[originalI].map !== 'undefined')
-                                        {
+                                        if (typeof that.statements[originalI].map !== 'undefined') {
                                             var map = that.statements[originalI].map;
                                             that.results[originalI] = [];
                                             for (var ii = 0; ii < results.rows.length; ii++) {
                                                 that.results[originalI].push(map(
-                                                        results.rows.item(ii)
-                                                        ));
+                                                    results.rows.item(ii)
+                                                ));
                                             }
                                         }
-                                        else
+                                        else {
                                             that.results[originalI] = results;
+                                        }
                                         that.stmtsToResolve--;
-                                        if(that.stmtsToResolve == 0)
-                                        {
+                                        if (that.stmtsToResolve == 0) {
                                             that.statements = [];
                                             resolve(that.results);
                                         }
@@ -1310,7 +1344,7 @@ Tomahawk.Collection = {
                     });
                 }
             });
-        },
+        };
 
         this.sql = function (sqlStatement, sqlArgs, mapFunction) {
             this.statements.push({statement: sqlStatement, args: sqlArgs, map: mapFunction});
@@ -1368,6 +1402,7 @@ Tomahawk.Collection = {
         };
 
     },
+
     addTracks: function (params) {
         var that = this;
         var id = params.id;
@@ -1394,34 +1429,34 @@ Tomahawk.Collection = {
                 tracks[i].albumArtist = tracks[i].albumArtist || "";
                 tracks[i].albumArtistDisambiguation = tracks[i].albumArtistDisambiguation || "";
                 (function (track) {
-                        t.sqlInsert("artists", {
-                            artist: track.artist,
-                            artistDisambiguation: track.artistDisambiguation
-                        });
-                        t.sqlInsert("albumArtists", {
-                            albumArtist: track.albumArtist,
-                            albumArtistDisambiguation: track.albumArtistDisambiguation
-                        });
+                    t.sqlInsert("artists", {
+                        artist: track.artist,
+                        artistDisambiguation: track.artistDisambiguation
+                    });
+                    t.sqlInsert("albumArtists", {
+                        albumArtist: track.albumArtist,
+                        albumArtistDisambiguation: track.albumArtistDisambiguation
+                    });
                 })(tracks[i]);
             }
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function () {
             // Get all artists' and albumArtists' db ids
-            t.sqlSelect("albumArtists", function(r) {
+            t.sqlSelect("albumArtists", function (r) {
                 return {
                     albumArtist: r.albumArtist,
                     albumArtistDisambiguation: r.albumArtistDisambiguation,
                     _id: r._id
                 };
             });
-            t.sqlSelect("artists", function(r) {
+            t.sqlSelect("artists", function (r) {
                 return {
                     artist: r.artist,
                     artistDisambiguation: r.artistDisambiguation,
                     _id: r._id
                 };
             });
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function (resultsArray) {
             // Store the db ids in a map
             var i, row, albumArtists = {};
@@ -1457,7 +1492,6 @@ Tomahawk.Collection = {
             }
         }).then(function () {
             // Insert all albums
-            var promises = [];
             for (var i = 0; i < tracks.length; i++) {
                 (function (track) {
                     var albumArtistId = cachedAlbumArtists[track.album].albumArtistId;
@@ -1467,17 +1501,17 @@ Tomahawk.Collection = {
                     });
                 })(tracks[i]);
             }
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function () {
             // Get the albums' db ids
-            t.sqlSelect("albums", function(r) {
+            t.sqlSelect("albums", function (r) {
                 return {
                     album: r.album,
                     albumArtistId: r.albumArtistId,
                     _id: r._id
                 };
             });
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function (results) {
             // Store the db ids in a map
             results = results[0];
@@ -1491,7 +1525,6 @@ Tomahawk.Collection = {
             }
         }).then(function () {
             // Now we are ready to insert the tracks
-            var promises = [];
             for (var i = 0; i < tracks.length; i++) {
                 (function (track) {
                     // Get all relevant ids that we stored in the previous steps
@@ -1517,11 +1550,11 @@ Tomahawk.Collection = {
                     });
                 })(tracks[i]);
             }
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function () {
             var resultMap = function (r) {
                 return {
-                    _id : r._id,
+                    _id: r._id,
                     artistId: r.artistId,
                     albumId: r.albumId,
                     track: r.track
@@ -1529,7 +1562,7 @@ Tomahawk.Collection = {
             };
             // Get the tracks' db ids
             t.sqlSelect("tracks", resultMap, ["_id", "artistId", "albumId", "track"]);
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function (results) {
             that._trackCount = results[0].length;
             Tomahawk.log("Added " + results[0].length + " tracks to collection '" + id + "'");
@@ -1560,9 +1593,9 @@ Tomahawk.Collection = {
             t.sqlDrop("albums");
             t.sqlDrop("artistAlbums");
             t.sqlDrop("tracks");
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function () {
-            return new Promise(function (resolve, reject) {
+            return new RSVP.Promise(function (resolve, reject) {
                 that.cachedDbs[id].changeVersion(that.cachedDbs[id].version, "", null,
                     function (err) {
                         if (console.error) {
@@ -1579,13 +1612,13 @@ Tomahawk.Collection = {
         });
     },
 
-    _fuzzyIndexIdsToTracks: function(resultIds, id) {
-        var that = this;
-        if(typeof id === 'undefined')
+    _fuzzyIndexIdsToTracks: function (resultIds, id) {
+        if (typeof id === 'undefined') {
             id = this.settings.id;
+        }
         var t = new Tomahawk.Collection.Transaction(this, id);
         return t.beginTransaction().then(function () {
-            var mapFn = function(row) {
+            var mapFn = function (row) {
                 return {
                     artist: row.artist,
                     artistDisambiguation: row.artistDisambiguation,
@@ -1601,8 +1634,8 @@ Tomahawk.Collection = {
             };
             for (var idx = 0; resultIds && idx < resultIds.length; idx++) {
                 var trackid = resultIds[idx][0];
-                var where = { _id : trackid };
-                t.sqlSelect("tracks",mapFn, 
+                var where = {_id: trackid};
+                t.sqlSelect("tracks", mapFn,
                     [],
                     where, [
                         {
@@ -1619,29 +1652,23 @@ Tomahawk.Collection = {
                     ]
                 );
             }
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function (results) {
             var merged = [];
             return merged.concat.apply(merged,
-                results.map(function(e){
+                results.map(function (e) {
                     //every result has one track
                     return e[0];
-            }));
+                }));
         });
     },
 
-    resolve: function(params) {
-        var id = params.id;
-        if(typeof id === 'undefined')
-            id = this.settings.id;
+    resolve: function (params) {
         var resultIds = Tomahawk.resolveFromFuzzyIndex(params.artist, params.album, params.track);
         return this._fuzzyIndexIdsToTracks(resultIds);
     },
 
-    search: function(params) {
-        var id = params.id;
-        if(typeof id === 'undefined')
-            id = this.settings.id;
+    search: function (params) {
         var resultIds = Tomahawk.searchFuzzyIndex(params.query);
         return this._fuzzyIndexIdsToTracks(resultIds);
     },
@@ -1649,12 +1676,13 @@ Tomahawk.Collection = {
     tracks: function (params, where) {
         //TODO filter/where support
         var id = params.id;
-        if(typeof id === 'undefined')
+        if (typeof id === 'undefined') {
             id = this.settings.id;
+        }
 
         var t = new Tomahawk.Collection.Transaction(this, id);
         return t.beginTransaction().then(function () {
-            var mapFn = function(row) {
+            var mapFn = function (row) {
                 return {
                     artist: row.artist,
                     artistDisambiguation: row.artistDisambiguation,
@@ -1668,7 +1696,7 @@ Tomahawk.Collection = {
                     albumpos: row.albumPos
                 };
             };
-            t.sqlSelect("tracks",mapFn, 
+            t.sqlSelect("tracks", mapFn,
                 [],
                 where, [
                     {
@@ -1684,7 +1712,7 @@ Tomahawk.Collection = {
                     }
                 ]
             );
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function (results) {
             return {results: Tomahawk.resolver.instance._convertUrls(results[0])};
         });
@@ -1693,19 +1721,20 @@ Tomahawk.Collection = {
     albums: function (params, where) {
         //TODO filter/where support
         var id = params.id;
-        if(typeof id === 'undefined')
+        if (typeof id === 'undefined') {
             id = this.settings.id;
+        }
 
         var t = new Tomahawk.Collection.Transaction(this, id);
         return t.beginTransaction().then(function () {
-            var mapFn = function(row) {
+            var mapFn = function (row) {
                 return {
                     albumArtist: row.artist,
                     albumArtistDisambiguation: row.artistDisambiguation,
                     album: row.album
                 };
             };
-            t.sqlSelect("albums",mapFn,
+            t.sqlSelect("albums", mapFn,
                 ["album", "artist", "artistDisambiguation"],
                 where, [
                     {
@@ -1716,14 +1745,18 @@ Tomahawk.Collection = {
                     }
                 ]
             );
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function (results) {
-            results = results[0].filter(function(e){
+            results = results[0].filter(function (e) {
                 return (e.albumArtist != '' && e.album != '');
             });
-            return  {
-                artists: results.map(function(i){ return i.albumArtist;}),
-                albums: results.map(function(i){ return i.album;})
+            return {
+                artists: results.map(function (i) {
+                    return i.albumArtist;
+                }),
+                albums: results.map(function (i) {
+                    return i.album;
+                })
             };
         });
     },
@@ -1731,17 +1764,17 @@ Tomahawk.Collection = {
     artists: function (params) {
         //TODO filter/where support
         var id = params.id;
-        if(typeof id === 'undefined')
+        if (typeof id === 'undefined') {
             id = this.settings.id;
+        }
 
         var t = new Tomahawk.Collection.Transaction(this, id);
         return t.beginTransaction().then(function () {
-            var mapFn = function(r)
-            {
+            var mapFn = function (r) {
                 return r.artist;
             };
             t.sqlSelect("artists", mapFn, ["artist", "artistDisambiguation"]);
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function (artists) {
             return {artists: artists[0]};
         });
@@ -1749,54 +1782,57 @@ Tomahawk.Collection = {
 
     //TODO: not exactly sure how is this one supposed to work
     //albumArtists: function (params) {
-        //var id = params.id;
+    //var id = params.id;
 
-        //var t = new Tomahawk.Collection.Transaction(this, id);
-        //return t.beginTransaction().then(function () {
-            //var mapFn = function(row) {
-                //return {
-                    //albumArtist: row.albumArtist,
-                    //albumArtistDisambiguation: row.albumArtistDisambiguation
-                //};
-            //};
-            //t.sqlSelect("albumArtists", ["albumArtist", "albumArtistDisambiguation"]);
-            //return t.execDefferedStatements();
-        //}).then(function (results) {
-            //return results[0];
-        //});
+    //var t = new Tomahawk.Collection.Transaction(this, id);
+    //return t.beginTransaction().then(function () {
+    //var mapFn = function(row) {
+    //return {
+    //albumArtist: row.albumArtist,
+    //albumArtistDisambiguation: row.albumArtistDisambiguation
+    //};
+    //};
+    //t.sqlSelect("albumArtists", ["albumArtist", "albumArtistDisambiguation"]);
+    //return t.execDeferredStatements();
+    //}).then(function (results) {
+    //return results[0];
+    //});
     //},
 
     artistAlbums: function (params) {
         //TODO filter/where support
         var id = params.id;
-        if(typeof id === 'undefined')
+        if (typeof id === 'undefined') {
             id = this.settings.id;
+        }
         var artist = params.artist;
         //var artistDisambiguation = params.artistDisambiguation;
-
-        var that = this;
 
         var t = new Tomahawk.Collection.Transaction(this, id);
         return t.beginTransaction().then(function () {
 
-            t.sqlSelect("artists",function(r){return r._id;}, ["_id"], {
+            t.sqlSelect("artists", function (r) {
+                return r._id;
+            }, ["_id"], {
                 artist: artist
                 //artistDisambiguation: artistDisambiguation
             });
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function (results) {
             var artistId = results[0][0];
-            t.sqlSelect("artistAlbums",function(r){return r.album;}, ["albumId", 'album'], {
+            t.sqlSelect("artistAlbums", function (r) {
+                return r.album;
+            }, ["albumId", 'album'], {
                 artistId: artistId
-            },[
-                    {
-                        table: "albums",
-                        conditions: {
-                            albumId: "_id"
-                        }
+            }, [
+                {
+                    table: "albums",
+                    conditions: {
+                        albumId: "_id"
                     }
-                ]);
-            return t.execDefferedStatements();
+                }
+            ]);
+            return t.execDeferredStatements();
         }).then(function (results) {
             return {
                 artist: artist,
@@ -1808,8 +1844,9 @@ Tomahawk.Collection = {
     albumTracks: function (params) {
         //TODO filter/where support
         var id = params.id;
-        if(typeof id === 'undefined')
+        if (typeof id === 'undefined') {
             id = this.settings.id;
+        }
         var albumArtist = params.artist;
         //var albumArtistDisambiguation = params.albumArtistDisambiguation;
         var album = params.album;
@@ -1818,18 +1855,22 @@ Tomahawk.Collection = {
 
         var t = new Tomahawk.Collection.Transaction(this, id);
         return t.beginTransaction().then(function () {
-            t.sqlSelect("artists", function(r){return r._id;},["_id"], {
-                artist: albumArtist,
+            t.sqlSelect("artists", function (r) {
+                return r._id;
+            }, ["_id"], {
+                artist: albumArtist
                 //artistDisambiguation: albumArtistDisambiguation
             });
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function (results) {
             var albumArtistId = results[0][0];
-            t.sqlSelect("albums",function(r){return r._id;}, ["_id"], {
+            t.sqlSelect("albums", function (r) {
+                return r._id;
+            }, ["_id"], {
                 album: album,
                 albumArtistId: albumArtistId
             });
-            return t.execDefferedStatements();
+            return t.execDeferredStatements();
         }).then(function (results) {
             var albumId = results[0][0];
             return that.tracks(params, {
@@ -1840,14 +1881,15 @@ Tomahawk.Collection = {
 
     collection: function () {
         this.settings.trackcount = this._trackCount;
-        if(! this.settings.description)
+        if (!this.settings.description) {
             this.settings.description = this.settings.prettyname;
-        this.settings.capabilities = [Tomahawk.Collection.BrowseCapability.Artists, 
-            Tomahawk.Collection.BrowseCapability.Albums, Tomahawk.Collection.BrowseCapability.Tracks];
+        }
+        this.settings.capabilities = [Tomahawk.Collection.BrowseCapability.Artists,
+            Tomahawk.Collection.BrowseCapability.Albums,
+            Tomahawk.Collection.BrowseCapability.Tracks];
         return this.settings;
     }
 };
-
 
 // Legacy compability for 0.8 and before
 Tomahawk.reportCapabilities = function (capabilities) {
@@ -1858,7 +1900,59 @@ Tomahawk.reportCapabilities = function (capabilities) {
     Tomahawk.nativeReportCapabilities(capabilities);
 };
 
-Tomahawk.addArtistResults = Tomahawk.addAlbumResults = Tomahawk.addAlbumTrackResults = function (result) {
+Tomahawk.addArtistResults = Tomahawk.addAlbumResults = Tomahawk.addAlbumTrackResults
+    = function (result) {
     Tomahawk.PluginManager.resolve[result.qid](result);
     delete Tomahawk.PluginManager.resolve[result.qid];
+};
+
+Tomahawk.addTrackResults = function (result) {
+    Tomahawk.PluginManager.resolve[result.qid](result.results);
+    delete Tomahawk.PluginManager.resolve[result.qid];
+};
+
+Tomahawk.reportStreamUrl = function (qid, streamUrl, headers) {
+    Tomahawk.PluginManager.resolve[qid]({
+        url: streamUrl,
+        headers: headers
+    });
+    delete Tomahawk.PluginManager.resolve[qid];
+};
+
+Tomahawk.addUrlResult = function (url, result) {
+    /* Merge the whole mess into one consistent result which is independent of type
+     var cleanResult = {
+     type: result.type,
+     guid: result.guid,
+     info: result.info,
+     creator: result.creator,
+     linkUrl: result.url
+     };
+     if (cleanResult.type == "track") {
+     cleanResult.track = result.title;
+     cleanResult.artist = result.artist;
+     } else if (cleanResult.type == "artist") {
+     cleanResult.artist = result.name;
+     } else if (cleanResult.type == "album") {
+     cleanResult.album = result.name;
+     cleanResult.artist = result.artist;
+     } else if (cleanResult.type == "playlist") {
+     cleanResult.title = result.title;
+     } else if (cleanResult.type == "xspf-url") {
+     cleanResult.url = result.url;
+     }
+     if (result.tracks) {
+     cleanResult.tracks = [];
+     var i;
+     for (i=0;i<result.tracks.length;i++) {
+     var cleanTrack = {
+     track: result.tracks[i].title,
+     artist: result.tracks[i].artist
+     };
+     cleanResult.push(cleanTrack)
+     }
+     Tomahawk.PluginManager.resolve[url](cleanResult);
+     */
+    Tomahawk.PluginManager.resolve[url](result);
+    delete Tomahawk.PluginManager.resolve[url];
 };
