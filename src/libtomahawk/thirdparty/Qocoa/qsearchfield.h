@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QPointer>
+#include <QMenu>
 
 #include "DllMacro.h"
 
@@ -10,12 +11,17 @@ class QSearchFieldPrivate;
 class DLLEXPORT QSearchField : public QWidget
 {
     Q_OBJECT
+
+    Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged USER true);
+    Q_PROPERTY(QString placeholderText READ placeholderText WRITE setPlaceholderText);
+
 public:
     explicit QSearchField(QWidget *parent);
 
     QString text() const;
     QString placeholderText() const;
-    void setFocus(Qt::FocusReason reason);
+    void setFocus(Qt::FocusReason);
+    void setMenu(QMenu *menu);
 
 public slots:
     void setText(const QString &text);
@@ -29,15 +35,16 @@ signals:
     void editingFinished();
     void returnPressed();
 
+private slots:
+    void popupMenu();
+
 protected:
+    void changeEvent(QEvent*);
     void resizeEvent(QResizeEvent*);
-    bool eventFilter(QObject*, QEvent*);
 
 private:
     friend class QSearchFieldPrivate;
     QPointer <QSearchFieldPrivate> pimpl;
-
-    Q_PROPERTY(QString placeholderText READ placeholderText WRITE setPlaceholderText);
 };
 
 #endif // QSEARCHFIELD_H

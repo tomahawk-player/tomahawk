@@ -138,16 +138,14 @@ void QSearchField::setFocus(Qt::FocusReason reason)
     pimpl.data()->lineEdit->setFocus(reason);
 }
 
+void QSearchField::setMenu(QMenu *menu)
+{
+    //FIXME nop
+}
 
 void QSearchField::resizeEvent(QResizeEvent* e)
 {
     QWidget::resizeEvent(e);
-}
-
-
-bool QSearchField::eventFilter(QObject *o, QEvent *e)
-{
-    return QWidget::eventFilter(o, e);
 }
 
 #include "qsearchfield.moc"

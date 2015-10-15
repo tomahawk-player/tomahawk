@@ -24,13 +24,13 @@ THE SOFTWARE.
 #include "moc_qsearchfield.cpp"
 
 #include "qocoa_mac.h"
-#include "utils/Logger.h"
 
 #import "Foundation/NSAutoreleasePool.h"
 #import "Foundation/NSNotification.h"
 #import "AppKit/NSSearchField.h"
 
 #include <QApplication>
+#include <QKeyEvent>
 #include <QClipboard>
 
 class QSearchFieldPrivate : public QObject
@@ -53,8 +53,27 @@ public:
 
     void returnPressed()
     {
-        if (qSearchField)
+        if (qSearchField) {
             emit qSearchField->returnPressed();
+            QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier);
+            QApplication::postEvent(qSearchField, event);
+        }
+    }
+
+    void keyDownPressed()
+    {
+        if (qSearchField) {
+            QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Down, Qt::NoModifier);
+            QApplication::postEvent(qSearchField, event);
+        }
+    }
+
+    void keyUpPressed()
+    {
+        if (qSearchField) {
+            QKeyEvent* event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Up, Qt::NoModifier);
+            QApplication::postEvent(qSearchField, event);
+        }
     }
 
     QPointer<QSearchField> qSearchField;
@@ -78,6 +97,7 @@ public:
 }
 
 -(void)controlTextDidEndEditing:(NSNotification*)notification {
+    Q_UNUSED(notification);
     // No Q_ASSERT here as it is called on destruction.
     if (pimpl)
         pimpl->textDidEndEditing();
@@ -85,16 +105,24 @@ public:
     if ([[[notification userInfo] objectForKey:@"NSTextMovement"] intValue] == NSReturnTextMovement)
         pimpl->returnPressed();
 }
+
+-(BOOL)control: (NSControl *)control textView:
+        (NSTextView *)textView doCommandBySelector:
+        (SEL)commandSelector {
+    Q_ASSERT(pimpl);
+    if (!pimpl) return NO;
+
+    if (commandSelector == @selector(moveDown:)) {
+        pimpl->keyDownPressed();
+        return YES;
+    } else if (commandSelector == @selector(moveUp:)) {
+        pimpl->keyUpPressed();
+        return YES;
+    }
+    return NO;
+}
+
 @end
-
-namespace {
-
-static const unsigned short kKeycodeA = 0;
-static const unsigned short kKeycodeX = 7;
-static const unsigned short kKeycodeC = 8;
-static const unsigned short kKeycodeV = 9;
-
-}  // namespace
 
 @interface QocoaSearchField : NSSearchField
 -(BOOL)performKeyEquivalent:(NSEvent*)event;
@@ -102,32 +130,35 @@ static const unsigned short kKeycodeV = 9;
 
 @implementation QocoaSearchField
 -(BOOL)performKeyEquivalent:(NSEvent*)event {
-    if ([event type] == NSKeyDown && [event modifierFlags] & NSCommandKeyMask)
-    {
-        const unsigned short keyCode = [event keyCode];
-/*        if (keyCode == kKeycodeA)  // Cmd+a
+    // First, check if we have the focus.
+    // If no, it probably means this event isn't for us.
+    NSResponder* firstResponder = [[NSApp keyWindow] firstResponder];
+    if ([firstResponder isKindOfClass:[NSText class]] &&
+            [(NSText*)firstResponder delegate] == self) {
+
+        if ([event type] == NSKeyDown && [event modifierFlags] & NSCommandKeyMask)
         {
-            [self performSelector:@selector(selectText:)];
-            return YES;
-        }
-        else*/ if (keyCode == kKeycodeC)  // Cmd+c
-        {
-            QClipboard* clipboard = QApplication::clipboard();
-            clipboard->setText(toQString([self stringValue]));
-            return YES;
-        }
-        else if (keyCode == kKeycodeV)  // Cmd+v
-        {
-            QClipboard* clipboard = QApplication::clipboard();
-            [self setStringValue:fromQString(clipboard->text())];
-            return YES;
-        }
-        else if (keyCode == kKeycodeX)  // Cmd+x
-        {
-            QClipboard* clipboard = QApplication::clipboard();
-            clipboard->setText(toQString([self stringValue]));
-            [self setStringValue:@""];
-            return YES;
+            QString keyString = toQString([event characters]);
+            if (keyString == "a")  // Cmd+a
+            {
+                [self performSelector:@selector(selectText:)];
+                return YES;
+            }
+            else if (keyString == "c")  // Cmd+c
+            {
+                [[self currentEditor] copy: nil];
+                return YES;
+            }
+            else if (keyString == "v")  // Cmd+v
+            {
+                [[self currentEditor] paste: nil];
+                return YES;
+            }
+            else if (keyString == "x")  // Cmd+x
+            {
+                [[self currentEditor] cut: nil];
+                return YES;
+            }
         }
     }
 
@@ -155,6 +186,25 @@ QSearchField::QSearchField(QWidget *parent) : QWidget(parent)
     [pool drain];
 }
 
+void QSearchField::setMenu(QMenu *menu)
+{
+    Q_ASSERT(pimpl);
+    if (!pimpl)
+        return;
+
+#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
+    NSMenu *nsMenu = menu->macMenu();
+#else
+    NSMenu *nsMenu = menu->toNSMenu();
+#endif
+
+    [[pimpl->nsSearchField cell] setSearchMenuTemplate:nsMenu];
+}
+
+void QSearchField::popupMenu()
+{
+}
+
 void QSearchField::setText(const QString &text)
 {
     Q_ASSERT(pimpl);
@@ -175,27 +225,6 @@ void QSearchField::setPlaceholderText(const QString &text)
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     [[pimpl->nsSearchField cell] setPlaceholderString:fromQString(text)];
     [pool drain];
-}
-
-QString QSearchField::placeholderText() const {
-    Q_ASSERT(pimpl);
-    NSString* placeholder = [[pimpl->nsSearchField cell] placeholderString];
-    return toQString(placeholder);
-}
-
-void QSearchField::setFocus(Qt::FocusReason reason)
-{
-    Q_ASSERT(pimpl);
-    if (!pimpl)
-        return;
-
-    if ([pimpl->nsSearchField acceptsFirstResponder])
-        [[pimpl->nsSearchField window] makeFirstResponder: pimpl->nsSearchField];
-}
-
-void QSearchField::setFocus()
-{
-    setFocus(Qt::OtherFocusReason);
 }
 
 void QSearchField::clear()
@@ -226,12 +255,44 @@ QString QSearchField::text() const
     return toQString([pimpl->nsSearchField stringValue]);
 }
 
+QString QSearchField::placeholderText() const
+{
+    Q_ASSERT(pimpl);
+    if (!pimpl)
+        return QString();
+
+    return toQString([[pimpl->nsSearchField cell] placeholderString]);
+}
+
+void QSearchField::setFocus(Qt::FocusReason)
+{
+    Q_ASSERT(pimpl);
+    if (!pimpl)
+        return;
+
+    if ([pimpl->nsSearchField acceptsFirstResponder])
+        [[pimpl->nsSearchField window] makeFirstResponder: pimpl->nsSearchField];
+}
+
+void QSearchField::setFocus()
+{
+    setFocus(Qt::OtherFocusReason);
+}
+
+void QSearchField::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::EnabledChange) {
+        Q_ASSERT(pimpl);
+        if (!pimpl)
+            return;
+
+        const bool enabled = isEnabled();
+        [pimpl->nsSearchField setEnabled: enabled];
+    }
+    QWidget::changeEvent(event);
+}
+
 void QSearchField::resizeEvent(QResizeEvent *resizeEvent)
 {
     QWidget::resizeEvent(resizeEvent);
-}
-
-bool QSearchField::eventFilter(QObject *o, QEvent *e)
-{
-    return QWidget::eventFilter(o, e);
 }
