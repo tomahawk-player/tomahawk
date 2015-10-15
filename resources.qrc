@@ -50,12 +50,12 @@
         <file>data/images/starred.svg</file>
         <file>data/images/star-unstarred.svg</file>
         <file>data/images/apply-check.svg</file>
-        <file>data/icons/tomahawk-icon-16x16.png</file>
-        <file>data/icons/tomahawk-icon-32x32.png</file>
-        <file>data/icons/tomahawk-icon-64x64.png</file>
-        <file>data/icons/tomahawk-icon-128x128.png</file>
-        <file>data/icons/tomahawk-icon-256x256.png</file>
-        <file>data/icons/tomahawk-icon-512x512.png</file>
+        <file alias="data/icons/tomahawk-icon-16x16.png">data/icons/16x16-tomahawk-icon.png</file>
+        <file alias="data/icons/tomahawk-icon-32x32.png">data/icons/32x32-tomahawk-icon.png</file>
+        <file alias="data/icons/tomahawk-icon-64x64.png">data/icons/64x64-tomahawk-icon.png</file>
+        <file alias="data/icons/tomahawk-icon-128x128.png">data/icons/128x128-tomahawk-icon.png</file>
+        <file alias="data/icons/tomahawk-icon-256x256.png">data/icons/256x256-tomahawk-icon.png</file>
+        <file alias="data/icons/tomahawk-icon-512x512.png">data/icons/512x512-tomahawk-icon.png</file>
         <file>data/sql/dbmigrate-22_to_23.sql</file>
         <file>data/sql/dbmigrate-23_to_24.sql</file>
         <file>data/sql/dbmigrate-24_to_25.sql</file>
@@ -85,7 +85,7 @@
         <file>data/images/spotifycore-logo.png</file>
         <file>data/images/share.svg</file>
         <file>data/images/process-stop.svg</file>
-        <file>data/icons/tomahawk-grayscale-icon-128x128.png</file>
+        <file alias="data/icons/tomahawk-grayscale-icon-128x128.png">data/icons/128x128-tomahawk-grayscale-icon.png</file>
         <file>data/images/collection.svg</file>
         <file>data/misc/tomahawk_pubkey.pem</file>
         <file>data/images/jump-link.svg</file>
@@ -160,9 +160,9 @@
         <file>data/images/ipv6-logo.svg</file>
         <file>data/images/whatsnew.svg</file>
         <file>data/images/copy.svg</file>
-        <file>data/icons/tomahawk-icon-1024x1024.png</file>
+        <file alias="data/icons/tomahawk-icon-1024x1024.png">data/icons/1024x1024-tomahawk-icon.png</file>
         <file>data/images/plugins.svg</file>
-        <file>data/icons/tomahawk-white-icon-128x128.png</file>
+        <file alias="data/icons/tomahawk-white-icon-128x128.png">data/icons/128x128-tomahawk-white-icon.png</file>
         <file>data/images/repeat-all.svg</file>
         <file>data/images/repeat-one.svg</file>
         <file>data/images/downloads.svg</file>
