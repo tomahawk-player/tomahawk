@@ -183,7 +183,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="143"/>
         <source>%applicationName 0.8</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName 0.8</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="111"/>

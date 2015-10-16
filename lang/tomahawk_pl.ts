@@ -24,7 +24,7 @@ połączyć się i strumieniować od ciebie?</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="185"/>
         <source>%applicationName needs you to decide whether %1 is allowed to connect.</source>
-        <translation type="unfinished"/>
+        <translation>Musisz zdecydować, czy %applicationName ma pozwolić %1 na połączenie.</translation>
     </message>
 </context>
 <context>
@@ -183,7 +183,7 @@ połączyć się i strumieniować od ciebie?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="143"/>
         <source>%applicationName 0.8</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName 0.8</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="111"/>
@@ -400,17 +400,17 @@ połączyć się i strumieniować od ciebie?</translation>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="912"/>
         <source>Sorry, %applicationName couldn&apos;t find the track &apos;%1&apos; by %2</source>
-        <translation type="unfinished"/>
+        <translation>Przepraszamy, %applicationName nie mógł znaleźć utworu &apos;%1&apos; wykonawcy %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="936"/>
         <source>Sorry, %applicationName couldn&apos;t find the artist &apos;%1&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Przepraszamy, %applicationName nie mógł znaleźć wykonawcy &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="962"/>
         <source>Sorry, %applicationName couldn&apos;t find the album &apos;%1&apos; by %2</source>
-        <translation type="unfinished"/>
+        <translation>Przepraszamy, %applicationName nie mógł znaleźć albumu &apos;%1&apos; wykonawcy %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="999"/>
@@ -642,7 +642,7 @@ połączyć się i strumieniować od ciebie?</translation>
     <message>
         <location filename="../src/libtomahawk/DownloadManager.cpp" line="286"/>
         <source>%applicationName finished downloading %1 by %2.</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName skończył pobieranie %1 wykonawcy %2. </translation>
     </message>
 </context>
 <context>
@@ -904,7 +904,7 @@ jednorazowe (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/InboxView.cpp" line="93"/>
         <source>Your friends have not shared any recommendations with you yet. Connect with them and share your musical gems!</source>
-        <translation type="unfinished"/>
+        <translation>Twoi znajomi jeszcze nie podzielili się z tobą żadnymi rekomendacjami. Połącz się z nimi i udostępnij swoje muzyczne gemy.</translation>
     </message>
 </context>
 <context>
@@ -991,7 +991,7 @@ jednorazowe (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadPlaylistDialog.ui" line="79"/>
         <source>To import a playlist from Spotify, Rdio, Beats, etc. - simply drag the link into Tomahawk.</source>
-        <translation type="unfinished"/>
+        <translation>By zaimportować playlistę z Spotify, Rdio, Beats, itd. - po prostu przeciągnij link do Tomahawka.</translation>
     </message>
 </context>
 <context>
@@ -1151,7 +1151,8 @@ jednorazowe (OTP)</translation>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="185"/>
         <source>Could not write tags to file:
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Nie można zapisać tagów do pliku:
+%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="396"/>
@@ -1164,7 +1165,7 @@ jednorazowe (OTP)</translation>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="39"/>
         <source>Trending Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Utwory na topie</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="79"/>
@@ -1174,7 +1175,7 @@ jednorazowe (OTP)</translation>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="113"/>
         <source>Trending Artists</source>
-        <translation type="unfinished"/>
+        <translation>Wykonawcy na topie</translation>
     </message>
 </context>
 <context>
@@ -1855,7 +1856,7 @@ jednorazowe (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="216"/>
         <source>Show Notifications on song change</source>
-        <translation type="unfinished"/>
+        <translation>Wysyłaj powiadomienia o zmianie utworu</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="244"/>
@@ -1933,7 +1934,7 @@ indywidualnego profilu gustu.</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Downloads.ui" line="79"/>
         <source>Preferred download format:</source>
-        <translation type="unfinished"/>
+        <translation>Preferowany format do pobrania:</translation>
     </message>
 </context>
 <context>
@@ -2701,7 +2702,7 @@ uzytkownik@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="130"/>
         <source>Download</source>
-        <translation type="unfinished"/>
+        <translation>Pobierz</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="133"/>
@@ -3215,13 +3216,13 @@ Spróbuj poprawić filtry aby uzyskać nowy zestaw piosenek do odtworzenia.</tra
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="536"/>
         <source>Classics</source>
         <comment>Genre preset: songs intended to introduce the genre to a novice listener</comment>
-        <translation type="unfinished"/>
+        <translation>Klasyki</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="537"/>
         <source>Popular</source>
         <comment>Genre preset: most popular songs being played in the genre today</comment>
-        <translation type="unfinished"/>
+        <translation>Popularne</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="538"/>
@@ -3239,7 +3240,7 @@ Spróbuj poprawić filtry aby uzyskać nowy zestaw piosenek do odtworzenia.</tra
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="542"/>
         <source>Mix</source>
         <comment>Genre preset: a varying collection of songs</comment>
-        <translation type="unfinished"/>
+        <translation>Mix</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="569"/>
@@ -3411,12 +3412,12 @@ Spróbuj poprawić filtry aby uzyskać nowy zestaw piosenek do odtworzenia.</tra
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1108"/>
         <source>classic</source>
-        <translation type="unfinished"/>
+        <translation>Klasyczne</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1113"/>
         <source>popular</source>
-        <translation type="unfinished"/>
+        <translation>Popularne</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1115"/>
@@ -3479,7 +3480,7 @@ Spróbuj poprawić filtry aby uzyskać nowy zestaw piosenek do odtworzenia.</tra
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="138"/>
         <source>%applicationName is stopped.</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName został zatrzymany.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="211"/>
