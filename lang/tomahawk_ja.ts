@@ -23,7 +23,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="185"/>
         <source>%applicationName needs you to decide whether %1 is allowed to connect.</source>
-        <translation type="unfinished"/>
+        <translation>%applicationNameは%1からの接続を許可することが必要です。</translation>
     </message>
 </context>
 <context>
@@ -172,17 +172,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="116"/>
         <source>&amp;Configure %applicationName...</source>
-        <translation type="unfinished"/>
+        <translation>%applicationNameを設定...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="132"/>
         <source>About &amp;%applicationName...</source>
-        <translation type="unfinished"/>
+        <translation>%applicationNameについて...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="143"/>
         <source>%applicationName 0.8</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName 0.8</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="111"/>
@@ -399,17 +399,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="912"/>
         <source>Sorry, %applicationName couldn&apos;t find the track &apos;%1&apos; by %2</source>
-        <translation type="unfinished"/>
+        <translation>%applicationNameは%2のトラック%1が見つかりませんでした</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="936"/>
         <source>Sorry, %applicationName couldn&apos;t find the artist &apos;%1&apos;</source>
-        <translation type="unfinished"/>
+        <translation>%applicationNameはアーティスト&apos;%1&apos;が見つかりませんでした</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="962"/>
         <source>Sorry, %applicationName couldn&apos;t find the album &apos;%1&apos; by %2</source>
-        <translation type="unfinished"/>
+        <translation>%applicationNameは%2のアルバム&apos;%1&apos;が見つかりませんでした</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="999"/>
@@ -641,7 +641,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/DownloadManager.cpp" line="286"/>
         <source>%applicationName finished downloading %1 by %2.</source>
-        <translation type="unfinished"/>
+        <translation>%applicationNameは%2の%1のダウンロードが完了しました。</translation>
     </message>
 </context>
 <context>
@@ -765,7 +765,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="136"/>
         <source>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;by &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;You are attempting to install a %applicationName plug-in from an unknown source. Plug-ins from untrusted sources may put your data at risk.&lt;br/&gt;Do you want to install this plug-in?</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;%3&lt;/b&gt;の&lt;br/&gt;&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;&lt;br/&gt;不明なソースから%applicationNameのプラグインをインストールしようとしています。信頼出来ないソースのプラグインはデータを危険にさらすことがあります。&lt;br/&gt;プラグインをインストールしますか？</translation>
     </message>
 </context>
 <context>
@@ -2220,7 +2220,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="136"/>
         <source>Right click on any %applicationNames playlist to sync it to Spotify.</source>
-        <translation type="unfinished"/>
+        <translation>%applicationNamesのプレイリストを右クリックすると、Spotifyに同期することができます。</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="153"/>
@@ -2240,7 +2240,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="189"/>
         <source>Delete %applicationName playlist when removing synchronization</source>
-        <translation type="unfinished"/>
+        <translation>同期を無効にするとき、%applicationNameのプレイリストを削除</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="196"/>
@@ -2356,7 +2356,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="93"/>
         <source>Enter your Google login to connect with your friends using %applicationName!</source>
-        <translation type="unfinished"/>
+        <translation>Googleのログイン情報を入力して、%applicationNameで友達と音楽を共有しましょう！</translation>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="94"/>
@@ -2375,7 +2375,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.h" line="44"/>
         <source>Login to directly connect to your Google Talk contacts that also use %applicationName.</source>
-        <translation type="unfinished"/>
+        <translation>ログインして、%applicationNameを使用しているGoogleトークの連絡先に直接接続します。</translation>
     </message>
 </context>
 <context>
@@ -2627,7 +2627,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/xmpp/XmppAccount.h" line="53"/>
         <source>Login to connect to your Jabber/XMPP contacts that also use %applicationName.</source>
-        <translation type="unfinished"/>
+        <translation>ログインして、%applicationNameを使用しているJabber/XMPPの連絡先に接続します。</translation>
     </message>
 </context>
 <context>
@@ -2700,7 +2700,7 @@ username@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="130"/>
         <source>Download</source>
-        <translation type="unfinished"/>
+        <translation>ダウンロード</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="133"/>
@@ -3473,12 +3473,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="130"/>
         <source>The current track could not be resolved. %applicationName will pick back up with the next resolvable track from this source.</source>
-        <translation type="unfinished"/>
+        <translation>現在のトラックを解決できませんでした。%applicationNameはこのソースで次の解決可能なトラックをバックアップとして選択します。</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="138"/>
         <source>%applicationName is stopped.</source>
-        <translation type="unfinished"/>
+        <translation>%applicationNameは停止しました。</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="211"/>
@@ -3509,7 +3509,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="314"/>
         <source>%applicationName - Now Playing</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName - 再生中</translation>
     </message>
 </context>
 <context>
@@ -3578,12 +3578,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="124"/>
         <source>The current track could not be resolved. %applicationName will pick back up with the next resolvable track from this source.</source>
-        <translation type="unfinished"/>
+        <translation>現在のトラックを解決できませんでした。%applicationNameはこのソースで次の解決可能なトラックをバックアップとして選択します。</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="132"/>
         <source>%applicationName stopped playback.</source>
-        <translation type="unfinished"/>
+        <translation>%applicationNameは再生を停止しました。</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="202"/>
@@ -4674,7 +4674,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="104"/>
         <source>Enter your XMPP login to connect with your friends using %applicationName!</source>
-        <translation type="unfinished"/>
+        <translation>XMPPログインを入力して、%applicationNameを使っている友達に接続しましょう!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="196"/>
@@ -4865,12 +4865,12 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="77"/>
         <source>This plugin will automatically find other users running %applicationName on your local network</source>
-        <translation type="unfinished"/>
+        <translation>このプラグインはローカルネットワークの%applicationNameユーザーを自動的に見つけます</translation>
     </message>
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="84"/>
         <source>Connect automatically when %applicationName starts</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawkの起動時に、自動的に接続する</translation>
     </message>
 </context>
 </TS>
