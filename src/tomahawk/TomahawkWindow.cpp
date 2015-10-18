@@ -689,6 +689,8 @@ TomahawkWindow::setupSignals()
     connect( ac->getAction( "aboutTomahawk" ), SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ac->getAction( "quit" ), SIGNAL( triggered() ), qApp, SLOT( quit() ) );
     connect( ac->getAction( "showOfflineSources" ), SIGNAL( triggered() ), SLOT( showOfflineSources() ) );
+    connect( ac->getAction( "createPlaylist" ), SIGNAL( triggered() ), SLOT( createPlaylist() ) );
+    connect( ac->getAction( "createStation" ), SIGNAL( triggered() ), SLOT( createStation() ) );
 
 #if defined( Q_OS_MAC )
     connect( ac->getAction( "minimize" ), SIGNAL( triggered() ), SLOT( minimize() ) );
