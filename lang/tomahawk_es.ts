@@ -24,7 +24,7 @@ conectarse y transmitir música por usted?</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="185"/>
         <source>%applicationName needs you to decide whether %1 is allowed to connect.</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName necesita que decida si %1 está autorizado a conectarse.</translation>
     </message>
 </context>
 <context>
@@ -173,17 +173,27 @@ conectarse y transmitir música por usted?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="116"/>
         <source>&amp;Configure %applicationName...</source>
+        <translation>&amp;Configurar %applicationName…</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="118"/>
+        <source>Create Playlist</source>
+        <translation>Crear Lista de Reproducción</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="121"/>
+        <source>Create Station</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="132"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="138"/>
         <source>About &amp;%applicationName...</source>
-        <translation type="unfinished"/>
+        <translation>Acerca de &amp;%applicationName…</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="143"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="149"/>
         <source>%applicationName 0.8</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName 0.8</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="111"/>
@@ -196,88 +206,88 @@ conectarse y transmitir música por usted?</translation>
         <translation>Mostrar amigos desconectados</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="119"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="125"/>
         <source>Minimize</source>
         <translation>Minimizar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="121"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="127"/>
         <source>Zoom</source>
         <translation>Escala</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="123"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="129"/>
         <source>Enter Full Screen</source>
         <translation>Modo a pantalla completa</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="126"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="132"/>
         <source>Hide Menu Bar</source>
         <translation>Ocultar barra de menús</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="130"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="136"/>
         <source>Diagnostics...</source>
         <translation>Diagnósticos…</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="134"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="140"/>
         <source>&amp;Legal Information...</source>
         <translation>Información &amp;legal...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="136"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="142"/>
         <source>&amp;View Logfile</source>
         <translation>&amp;Ver archivo de registro</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="139"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="145"/>
         <source>Check For Updates...</source>
         <translation>Buscar actualizaciones…</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="145"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="151"/>
         <source>Report a Bug</source>
         <translation>Informar de un error</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="146"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="152"/>
         <source>Get Support</source>
         <translation>Obtener asistencia</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="147"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="153"/>
         <source>Help Us Translate</source>
         <translation>Ayúdenos a traducir</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="157"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="163"/>
         <source>&amp;Controls</source>
         <translation>&amp;Controles</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="172"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="180"/>
         <source>&amp;Settings</source>
         <translation>&amp;Configuración</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="179"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="187"/>
         <source>&amp;Help</source>
         <translation>Ay&amp;uda</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="188"/>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="258"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="196"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="266"/>
         <source>What&apos;s New in ...</source>
         <translation>Qué hay de nuevo en…</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="214"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="222"/>
         <source>&amp;Window</source>
         <translation>&amp;Ventana</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="231"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="239"/>
         <source>Main Menu</source>
         <translation>Menú principal</translation>
     </message>
@@ -400,17 +410,17 @@ conectarse y transmitir música por usted?</translation>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="912"/>
         <source>Sorry, %applicationName couldn&apos;t find the track &apos;%1&apos; by %2</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName no pudo encontrar la pista «%1» de %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="936"/>
         <source>Sorry, %applicationName couldn&apos;t find the artist &apos;%1&apos;</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName no pudo encontrar el artista «%1»</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="962"/>
         <source>Sorry, %applicationName couldn&apos;t find the album &apos;%1&apos; by %2</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName no pudo encontrar el álbum «%1» de %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="999"/>
@@ -642,7 +652,7 @@ conectarse y transmitir música por usted?</translation>
     <message>
         <location filename="../src/libtomahawk/DownloadManager.cpp" line="286"/>
         <source>%applicationName finished downloading %1 by %2.</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName terminó de descargar %1 de %2.</translation>
     </message>
 </context>
 <context>
@@ -766,7 +776,7 @@ conectarse y transmitir música por usted?</translation>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="136"/>
         <source>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;by &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;You are attempting to install a %applicationName plug-in from an unknown source. Plug-ins from untrusted sources may put your data at risk.&lt;br/&gt;Do you want to install this plug-in?</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;by &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Está a punto de instalar un complemento de %applicationName que proviene de un origen desconocido. Los complementos de orígenes desconocidos no confiables y pueden poner sus datos en riesgo.&lt;br/&gt;¿Quiere instalar este complemento?</translation>
     </message>
 </context>
 <context>
@@ -1589,7 +1599,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/ScannerStatusItem.cpp" line="55"/>
         <source>Scanning Collection</source>
-        <translation>Escaneando la colección</translation>
+        <translation>Analizando la colección</translation>
     </message>
 </context>
 <context>
@@ -1597,7 +1607,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="48"/>
         <source>Reload Collection</source>
-        <translation>Recargar la colección</translation>
+        <translation>Volver a cargar la colección</translation>
     </message>
 </context>
 <context>
@@ -1765,7 +1775,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="553"/>
         <source>Tomahawk Resolvers (*.axe *.js);;All files (*)</source>
-        <translation>Servicios de Tomahawk (*.axe *.js);;Todos los archivos (*)</translation>
+        <translation>Servicios para Tomahawk (*.axe *.js);;Todos los archivos (*)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="570"/>
@@ -1905,7 +1915,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="128"/>
         <source>Watch for changes (automatically update Collection)</source>
-        <translation>Cuidado con los cambios (la Colección se actualiza automáticamente)</translation>
+        <translation>Monitorizar cambios (actualizar la colección automáticamente)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="137"/>
@@ -1992,7 +2002,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="340"/>
         <source>Drop to send tracks</source>
-        <translation>Suelte para enviar pistas</translation>
+        <translation>Suelte pistas para enviarlas</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="403"/>
@@ -2221,7 +2231,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="136"/>
         <source>Right click on any %applicationNames playlist to sync it to Spotify.</source>
-        <translation type="unfinished"/>
+        <translation>Pulse con el botón secundario del ratón en cualquier lista de %applicationName para sincronizarla con Spotify.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="153"/>
@@ -2241,7 +2251,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="189"/>
         <source>Delete %applicationName playlist when removing synchronization</source>
-        <translation type="unfinished"/>
+        <translation>Eliminar la lista de %applicationName al desactivar la sincronización</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="196"/>
@@ -2357,7 +2367,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="93"/>
         <source>Enter your Google login to connect with your friends using %applicationName!</source>
-        <translation type="unfinished"/>
+        <translation>Escriba sus datos de acceso de Google para conectarse con sus amigos usuarios de %applicationName.</translation>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="94"/>
@@ -2425,7 +2435,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccount.h" line="51"/>
         <source>Connect to Hatchet to capture your playback data, sync your playlists to Android and more.</source>
-        <translation>Conéctate a Hatchet para capturar tus datos de reproducción, sincronizar tus listas de reproducción a Android y más.</translation>
+        <translation>Conéctese con Hatchet para capturar sus datos de reproducción, sincronizar sus listas de reproducción a Android y más.</translation>
     </message>
 </context>
 <context>
@@ -2433,7 +2443,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmAccount.h" line="52"/>
         <source>Scrobble your tracks to last.fm, and find freely downloadable tracks to play</source>
-        <translation>Haga «scrobbling» de sus pistas a Last.fm, y encuentre pistas gratuitas para reproducir</translation>
+        <translation>Haga «scrobbling» de sus pistas y encuentre pistas gratuitas para reproducir en Last.fm</translation>
     </message>
 </context>
 <context>
@@ -2701,7 +2711,7 @@ usuario@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="130"/>
         <source>Download</source>
-        <translation type="unfinished"/>
+        <translation>Descargar</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="133"/>
@@ -3162,7 +3172,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="444"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="984"/>
         <source>Danceability</source>
-        <translation>Bailable</translation>
+        <translation>Bailabilidad</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="492"/>
@@ -3401,7 +3411,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1102"/>
         <source>an optimal</source>
-        <translation type="unfinished"/>
+        <translation>un óptimo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1104"/>
@@ -3429,7 +3439,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/utils/GroovesharkParser.cpp" line="239"/>
         <source>Error fetching Grooveshark information from the network!</source>
-        <translation>¡Error al obtener la información de Grooveshark en la red!</translation>
+        <translation>Se produjo un error de red al recuperar información de Grooveshark.</translation>
     </message>
 </context>
 <context>
@@ -3474,12 +3484,12 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="130"/>
         <source>The current track could not be resolved. %applicationName will pick back up with the next resolvable track from this source.</source>
-        <translation type="unfinished"/>
+        <translation>No se pudo reproducir esta pista. %applicationName reanudará la reproducción con la pista siguiente de este origen.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="138"/>
         <source>%applicationName is stopped.</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName está detenido.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="211"/>
@@ -3510,7 +3520,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="314"/>
         <source>%applicationName - Now Playing</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName: Ahora en reproducción</translation>
     </message>
 </context>
 <context>
@@ -3579,12 +3589,12 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="124"/>
         <source>The current track could not be resolved. %applicationName will pick back up with the next resolvable track from this source.</source>
-        <translation type="unfinished"/>
+        <translation>No se pudo reproducir esta pista. %applicationName reanudará la reproducción con la pista siguiente de este origen.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="132"/>
         <source>%applicationName stopped playback.</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName detuvo la reproducción.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="202"/>
@@ -3637,7 +3647,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="182"/>
         <source>Error fetching iTunes information from the network!</source>
-        <translation>¡Error al obtener la información de iTunes en la red!</translation>
+        <translation>Se produjo un error de red al recuperar información de iTunes.</translation>
     </message>
 </context>
 <context>
@@ -3645,12 +3655,12 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="150"/>
         <source>New Playlist</source>
-        <translation>Lista de reproducción nueva</translation>
+        <translation>Lista nueva</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="176"/>
         <source>Failed to save tracks</source>
-        <translation>Fallo al guardar pistas</translation>
+        <translation>No se pudieron guardar las pistas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="176"/>
@@ -3743,7 +3753,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="104"/>
         <source>Network error parsing shortened link!</source>
-        <translation>¡Error en la red al analizar el enlace acortado!</translation>
+        <translation>Se produjo un error de red al analizar el enlace acortado.</translation>
     </message>
 </context>
 <context>
@@ -3751,7 +3761,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="550"/>
         <source>Scanning (%L1 tracks)</source>
-        <translation>Escaneando (%L1 pistas)</translation>
+        <translation>Analizando (%L1 pistas)</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="535"/>
@@ -3789,7 +3799,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="280"/>
         <source>Error fetching Spotify information from the network!</source>
-        <translation>¡Error al obtener la información de Spotify en la red!</translation>
+        <translation>Se produjo un error de red al recuperar información de Spotify.</translation>
     </message>
 </context>
 <context>
@@ -3802,12 +3812,12 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="566"/>
         <source>You</source>
-        <translation>Tú</translation>
+        <translation>Usted</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="568"/>
         <source>you</source>
-        <translation>tú</translation>
+        <translation>usted</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="581"/>
@@ -4088,13 +4098,13 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="237"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1533"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1535"/>
         <source>Hide Menu Bar</source>
         <translation>Ocultar barra de menús</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="237"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1527"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1529"/>
         <source>Show Menu Bar</source>
         <translation>Mostrar barra de menús</translation>
     </message>
@@ -4105,8 +4115,8 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="608"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="958"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="970"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="960"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="972"/>
         <source>Play</source>
         <translation>Reproducir</translation>
     </message>
@@ -4117,75 +4127,75 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="627"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1019"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1026"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1021"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1028"/>
         <source>Love</source>
         <translation>Favorito</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1014"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1016"/>
         <source>Unlove</source>
         <translation>Quitar de favoritos</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1150"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1152"/>
         <source>Exit Full Screen</source>
         <translation>Salir de pantalla completa</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1168"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1170"/>
         <source>Enter Full Screen</source>
-        <translation>Modo a pantalla completa</translation>
+        <translation>Modo de pantalla completa</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1247"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1249"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>Esta no es una lista de reproducción XSPF válida.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1251"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1253"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>Algunas pistas en la lista de reproducción no contienen artista ni título. Éstas se ignorarán.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1263"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1265"/>
         <source>Failed to load JSPF playlist</source>
         <translation>Falló la carga de la lista de reproducción JSPF</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1270"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1272"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
         <translation>Se ha producido un error al acceder al dispostivo de audio o a la pista deseado y se va saltar.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1279"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1281"/>
         <source>Station</source>
         <translation>Estación</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1281"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1283"/>
         <source>Create New Station</source>
         <translation>Crear estación nueva</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1281"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1316"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1283"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1318"/>
         <source>Name:</source>
         <translation>Nombre:</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1314"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1316"/>
         <source>Playlist</source>
         <translation>Lista de reproducción</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1316"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1318"/>
         <source>Create New Playlist</source>
         <translation>Crear lista de reproducción</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="949"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1347"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="951"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1349"/>
         <source>Pause</source>
         <translation>Pausar</translation>
     </message>
@@ -4195,44 +4205,44 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
         <translation>Buscar</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1369"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1371"/>
         <source>&amp;Play</source>
         <translation>&amp;Reproducir</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1401"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1403"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
         <translation>%1 por %2</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1402"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1404"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1413"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1415"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1417"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1419"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1421"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1423"/>
         <source>Copyright 2010 - 2015</source>
         <translation>© 2010–2015</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1422"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1424"/>
         <source>Thanks to:</source>
         <translation>Agradecimientos:</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1429"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1431"/>
         <source>About Tomahawk</source>
         <translation>Acerca de Tomahawk</translation>
     </message>
@@ -4674,7 +4684,7 @@ Letras de «%1» por %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="104"/>
         <source>Enter your XMPP login to connect with your friends using %applicationName!</source>
-        <translation type="unfinished"/>
+        <translation>Escriba sus datos de acceso de XMPP para conectarse con sus amigos usuarios de %applicationName.</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="196"/>
