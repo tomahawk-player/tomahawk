@@ -177,12 +177,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="118"/>
         <source>Create Playlist</source>
-        <translation type="unfinished"/>
+        <translation>プレイリストを作成</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="121"/>
         <source>Create Station</source>
-        <translation type="unfinished"/>
+        <translation>ステーションを作成</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="138"/>

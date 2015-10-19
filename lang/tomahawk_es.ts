@@ -178,12 +178,12 @@ conectarse y transmitir música por usted?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="118"/>
         <source>Create Playlist</source>
-        <translation>Crear Lista de Reproducción</translation>
+        <translation>Crear una lista de reproducción</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="121"/>
         <source>Create Station</source>
-        <translation type="unfinished"/>
+        <translation>Crear una estación</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="138"/>
@@ -4875,12 +4875,12 @@ Letras de «%1» por %2:
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="77"/>
         <source>This plugin will automatically find other users running %applicationName on your local network</source>
-        <translation type="unfinished"/>
+        <translation>Esta extensión encontrará automáticamente a otros usuarios que estén usando %applicationName en su red local</translation>
     </message>
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="84"/>
         <source>Connect automatically when %applicationName starts</source>
-        <translation type="unfinished"/>
+        <translation>Conectarse automáticamente cuando se inicie %applicationName</translation>
     </message>
 </context>
 </TS>

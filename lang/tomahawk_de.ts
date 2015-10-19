@@ -24,7 +24,7 @@ erlauben sich mit dir zu verbinden und von dir zu streamen?</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="185"/>
         <source>%applicationName needs you to decide whether %1 is allowed to connect.</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName will wissen, ob du dich mit %1 verbinden möchtest.</translation>
     </message>
 </context>
 <context>
@@ -178,12 +178,12 @@ erlauben sich mit dir zu verbinden und von dir zu streamen?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="118"/>
         <source>Create Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Playlist erstellen</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="121"/>
         <source>Create Station</source>
-        <translation type="unfinished"/>
+        <translation>Station erstellen</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="138"/>
@@ -776,7 +776,7 @@ erlauben sich mit dir zu verbinden und von dir zu streamen?</translation>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="136"/>
         <source>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;by &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;You are attempting to install a %applicationName plug-in from an unknown source. Plug-ins from untrusted sources may put your data at risk.&lt;br/&gt;Do you want to install this plug-in?</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;von &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Du bist dabei ein %applicationName Plug-in von einer unbekannten Quelle zu installieren. Plug-ins von einer nicht vertrauenswürdigen Quelle könnten so deine Daten gefährden. &lt;br/&gt;Möchtest du wirklich dieses Plug-in installieren?</translation>
     </message>
 </context>
 <context>
@@ -2228,7 +2228,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="136"/>
         <source>Right click on any %applicationNames playlist to sync it to Spotify.</source>
-        <translation type="unfinished"/>
+        <translation>Klicke rechts auf eine %applicationNames Playlist, um sie mit Spotify zu synchronisieren.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="153"/>
@@ -2248,7 +2248,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="189"/>
         <source>Delete %applicationName playlist when removing synchronization</source>
-        <translation type="unfinished"/>
+        <translation>Playlist in %applicationName löschen, wenn die Synchronisierung entfernt wird</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="196"/>
@@ -2364,7 +2364,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="93"/>
         <source>Enter your Google login to connect with your friends using %applicationName!</source>
-        <translation type="unfinished"/>
+        <translation>Gib deinen Google-Login an und verbinde %applicationName mit deinen Freunden!</translation>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="94"/>
@@ -2383,7 +2383,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.h" line="44"/>
         <source>Login to directly connect to your Google Talk contacts that also use %applicationName.</source>
-        <translation type="unfinished"/>
+        <translation>Anmelden, um dich direkt mit deinen Google-Talk-Kontakten zu verbinden, die auch %applicationName nutzen.</translation>
     </message>
 </context>
 <context>
@@ -2635,7 +2635,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/xmpp/XmppAccount.h" line="53"/>
         <source>Login to connect to your Jabber/XMPP contacts that also use %applicationName.</source>
-        <translation type="unfinished"/>
+        <translation>Anmelden, um dich mit deinen Jabber/XMPP-Kontakten zu verbinden, die auch %applicationName nutzen.</translation>
     </message>
 </context>
 <context>
@@ -3213,13 +3213,13 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="520"/>
         <source>Wandering</source>
         <comment>Distribution: Songs from a broader range of artists</comment>
-        <translation type="unfinished"/>
+        <translation>Wanderschaft</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="536"/>
         <source>Classics</source>
         <comment>Genre preset: songs intended to introduce the genre to a novice listener</comment>
-        <translation type="unfinished"/>
+        <translation>Klassiker</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="537"/>
@@ -3231,7 +3231,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="538"/>
         <source>Emerging</source>
         <comment>Genre preset: songs that are more popular than expected, but which are unfamiliar to most listeners</comment>
-        <translation type="unfinished"/>
+        <translation>Aufstrebend</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="541"/>
@@ -3400,22 +3400,22 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1100"/>
         <source>preset to %1 collection of %2 genre songs</source>
-        <translation type="unfinished"/>
+        <translation>Zeige %1 die Sammlung von Liedern des %2 Genre</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1102"/>
         <source>an optimal</source>
-        <translation type="unfinished"/>
+        <translation>ein optimales</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1104"/>
         <source>a mixed</source>
-        <translation type="unfinished"/>
+        <translation>eine gemischte</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1108"/>
         <source>classic</source>
-        <translation type="unfinished"/>
+        <translation>klassisch</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1113"/>
@@ -3425,7 +3425,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1115"/>
         <source>emerging</source>
-        <translation type="unfinished"/>
+        <translation>aufstrebend</translation>
     </message>
 </context>
 <context>
@@ -3478,7 +3478,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="130"/>
         <source>The current track could not be resolved. %applicationName will pick back up with the next resolvable track from this source.</source>
-        <translation type="unfinished"/>
+        <translation>Das aktuelle Lied konnte nicht gefunden werden. %applicationName setzt die Wiedergabe beim nächsten gefundenen Lied fort.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="138"/>
@@ -3583,7 +3583,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="124"/>
         <source>The current track could not be resolved. %applicationName will pick back up with the next resolvable track from this source.</source>
-        <translation type="unfinished"/>
+        <translation>Das aktuelle Lied konnte nicht gefunden werden. %applicationName setzt die Wiedergabe beim nächsten gefundenen Lied fort.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="132"/>
@@ -4676,7 +4676,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="104"/>
         <source>Enter your XMPP login to connect with your friends using %applicationName!</source>
-        <translation type="unfinished"/>
+        <translation>Gib deinen XMPP-Login an und verbinde %applicationName mit deinen Freunden!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="196"/>
@@ -4867,7 +4867,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="77"/>
         <source>This plugin will automatically find other users running %applicationName on your local network</source>
-        <translation type="unfinished"/>
+        <translation>Diese Erweiterung findet automatisch andere %applicationName  Nutzer in deinem lokalen Netzwerk</translation>
     </message>
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="84"/>
