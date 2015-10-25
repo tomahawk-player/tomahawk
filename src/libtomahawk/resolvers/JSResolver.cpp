@@ -209,49 +209,17 @@ JSResolver::init()
     }
     const QByteArray scriptContents = scriptFile.readAll();
 
-    // tomahawk.js
-    {
-        // add c++ part of tomahawk javascript library
-        d->scriptAccount->addToJavaScriptWindowObject( "Tomahawk", d->resolverHelper );
-
-        // load es6-promises shim
-        d->scriptAccount->loadScript( RESPATH "js/rsvp-latest.min.js" );
-
-
-        // Load CrytoJS core
-        d->scriptAccount->loadScript( RESPATH "js/cryptojs-core.js" );
-
-        // Load CryptoJS modules
-        QStringList jsfiles;
-        jsfiles << "*.js";
-        QDir cryptojs( RESPATH "js/cryptojs" );
-        foreach ( QString jsfile, cryptojs.entryList( jsfiles ) )
-        {
-            d->scriptAccount->loadScript( RESPATH "js/cryptojs/" +  jsfile );
-        }
-
-        // Load tomahawk.js
-        d->scriptAccount->loadScript( RESPATH "js/tomahawk.js" );
-    }
-
-    // tomahawk-infosystem.js
-    {
-        // TODO: be smarter about this, only include this if the resolver supports infoplugins
-
-        // add deps
-        d->scriptAccount->loadScript( RESPATH "js/tomahawk-infosystem.js" );
-    }
-
-    // add resolver dependencies, if any
-    d->scriptAccount->loadScripts( d->requiredScriptPaths );
-
+    d->scriptAccount->addToJavaScriptWindowObject( "Tomahawk", d->resolverHelper );
 
     // add resolver
     d->scriptAccount->loadScript( filePath() );
 
     // HACK: register resolver object
-    d->scriptAccount->evaluateJavaScript( "Tomahawk.PluginManager.registerPlugin('resolver', Tomahawk.resolver.instance);" )
-;
+    d->scriptAccount->evaluateJavaScript(
+        "var resolverInstance = new (require('main').default);"
+        "Tomahawk.PluginManager.registerPlugin('resolver', resolverInstance);"
+    );
+
     // init resolver
     resolverInit();
 
@@ -545,10 +513,10 @@ JSResolver::callOnResolver( const QString& scriptSource )
     QString propertyName = scriptSource.split('(').first();
 
     return d->scriptAccount->evaluateJavaScriptWithResult( QString(
-        "if(Tomahawk.resolver.instance['_adapter_%1']) {"
-        "    Tomahawk.resolver.instance._adapter_%2;"
+        "if(resolverInstance['_adapter_%1']) {"
+        "    resolverInstance._adapter_%2;"
         "} else {"
-        "    Tomahawk.resolver.instance.%2"
+        "    resolverInstance.%2;"
         "}"
     ).arg( propertyName ).arg( scriptSource ) );
 }

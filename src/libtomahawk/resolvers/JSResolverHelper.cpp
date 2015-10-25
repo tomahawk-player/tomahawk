@@ -712,10 +712,10 @@ JSResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr&, const QStr
     {
         QString qid = uuid();
         QString getUrl = QString( 
-                "if(Tomahawk.resolver.instance['_adapter_%1']) {"
-                "    Tomahawk.resolver.instance._adapter_%1( {qid: '%2', url: '%3'} );"
+                "if(resolverInstance['_adapter_%1']) {"
+                "    resolverInstance._adapter_%1( {qid: '%2', url: '%3'} );"
                 "} else {"
-                "    Tomahawk.resolver.instance.%1( {qid: '%2', url: '%3'} );"
+                "    resolverInstance.%1( {qid: '%2', url: '%3'} );"
                 "}"
                 ).arg( m_urlCallback )
                                                                                   .arg( qid )
@@ -726,7 +726,7 @@ JSResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr&, const QStr
     }
     else
     {
-        QString getUrl = QString( "Tomahawk.resolver.instance.%1( '%2' );" ).arg( m_urlCallback )
+        QString getUrl = QString( "resolverInstance.%1( '%2' );" ).arg( m_urlCallback )
                                                                             .arg( url );
 
         QString urlStr = m_resolver->d_func()->scriptAccount->evaluateJavaScriptWithResult( getUrl ).toString();
