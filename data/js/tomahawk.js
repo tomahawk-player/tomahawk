@@ -1275,11 +1275,6 @@ Tomahawk.Collection = {
                             "FOREIGN KEY(artistId) REFERENCES artists(_id)," +
                             "FOREIGN KEY(albumId) REFERENCES albums(_id))", []);
                     });
-                    //m.migration(2, function (tx) {
-                    //    //Tomahawk.log("Migrating to db version 2");
-                    //});
-
-                    m.execute();
                 }
                 resolve(collection.cachedDbs[id]);
             });
