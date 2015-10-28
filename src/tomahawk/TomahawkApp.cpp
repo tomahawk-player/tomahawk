@@ -174,12 +174,10 @@ TomahawkApp::init()
     QWebSettings::globalSettings()->setAttribute(QWebSettings::OfflineStorageDatabaseEnabled, true);
     //QWebSettings::setOfflineStoragePath(QLatin1String("/tmp"));
 
-
-    m_headless = true;
     m_headless = arguments().contains( "--headless" );
-    setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
 
 #ifndef Q_OS_MAC
+    setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
     setQuitOnLastWindowClosed( false );
 #endif
 

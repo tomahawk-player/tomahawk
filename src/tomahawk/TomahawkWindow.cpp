@@ -270,7 +270,6 @@ TomahawkWindow::applyPlatformTweaks()
     qApp->setStyle( new ProxyStyle( isQtCurve ) );
 
 #ifdef Q_OS_MAC
-    setUnifiedTitleAndToolBarOnMac( true );
     delete ui->hline1;
     delete ui->hline2;
 #else
