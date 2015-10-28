@@ -1694,57 +1694,57 @@ pasahitza (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="300"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
-        <translation type="unfinished"/>
+        <translation>Aldatutako zenbait ezarpenek ez du eraginik izango Tomahawk berrabiarazi arte</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="239"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
-        <translation type="unfinished"/>
+        <translation>Konfiguratu Tomahawkek musika bilatzeko zein eskuratzeko, lagunak bilatzeko eta zure egoera eguneratzeko erabiliko dituen kontuak eta zerbitzuak.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="239"/>
         <source>Plug-Ins</source>
-        <translation type="unfinished"/>
+        <translation>Gehigarriak</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="244"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
-        <translation type="unfinished"/>
+        <translation>Kudeatu Tomahawkek nola bilatuko duen musika zure ordenagailuan</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="247"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
-        <translation type="unfinished"/>
+        <translation>Konfiguratu Tomahawkeko ezarpen aurreratuak, besteak beste, sare konektibitate ezarpenak, nabigatzailearekiko elkarrekintza eta antzekoak</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="417"/>
         <source>Open Directory</source>
-        <translation type="unfinished"/>
+        <translation>Ireki direktorioa</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="511"/>
         <source>Install resolver from file</source>
-        <translation type="unfinished"/>
+        <translation>Zerbitzua fitxategi batetik instalatu</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="513"/>
         <source>Tomahawk Resolvers (*.axe *.js);;All files (*)</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk zerbitzuak (*.axe *.js);; Fitxategi guztiak (*)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="530"/>
         <source>Delete all Access Control entries?</source>
-        <translation type="unfinished"/>
+        <translation>Atzipen-kontrol iturri guztiak ezabatu?</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="531"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
-        <translation type="unfinished"/>
+        <translation>Benetan ezabatu nahi dituzu Atzipen-Kontrol sarrera guztiak? Konexio berri bakoitzean berriz galdetuko zaizu erabakia har dezazun.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="300"/>
         <source>Information</source>
-        <translation type="unfinished"/>
+        <translation>informazioa</translation>
     </message>
 </context>
 <context>
@@ -1752,7 +1752,7 @@ pasahitza (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Accounts.ui" line="57"/>
         <source>Filter by Capability:</source>
-        <translation type="unfinished"/>
+        <translation>Kapazitatearen arabera iragazi:</translation>
     </message>
 </context>
 <context>
@@ -1760,72 +1760,72 @@ pasahitza (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="38"/>
         <source>Remote Peer Connection Method</source>
-        <translation type="unfinished"/>
+        <translation>Urruneko parekatze-konexio metodoa</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="44"/>
         <source>Active (your host needs to be directly reachable)</source>
-        <translation type="unfinished"/>
+        <translation>Aktibo (ostalariak zuzenean atzigarri izan behar du)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="51"/>
         <source>UPnP / Automatic Port Forwarding (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>UPnP / Ataka bideratzaile automatikoa (gomendatua)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="69"/>
         <source>Manual Port Forwarding</source>
-        <translation type="unfinished"/>
+        <translation>Eskuzko ataka-bideratzea</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="82"/>
         <source>Host Settings...</source>
-        <translation type="unfinished"/>
+        <translation>Ostalariaren ezarpenak...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="110"/>
         <source>SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>SOCKS Proxy-a</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="116"/>
         <source>Use SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>Erabili SOCKS Proxy-a</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="145"/>
         <source>Proxy Settings...</source>
-        <translation type="unfinished"/>
+        <translation>Proxyaren ezarpenak...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="171"/>
         <source>Other Settings</source>
-        <translation type="unfinished"/>
+        <translation>Bestelako ezarpenak</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="180"/>
         <source>Allow web browsers to interact with Tomahawk (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>Onetsi nabigatzaileak Tomahawkekin elkarrekintzan ari daitezen (gomendatua)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="193"/>
         <source>Allow other computers to interact with Tomahawk (not recommended yet)</source>
-        <translation type="unfinished"/>
+        <translation>Onetsi beste ordenagailuak Tomahawkekin elkarrekintzan ari daitezen (gomendatua)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="206"/>
         <source>Send Tomahawk Crash Reports</source>
-        <translation type="unfinished"/>
+        <translation>Bidali Tomahawken hutsegite txostenak</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="216"/>
         <source>Show Notifications on song change</source>
-        <translation type="unfinished"/>
+        <translation>Abestiz aldatzerakoan erakutsi jakinarazpena</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="244"/>
         <source>Clear All Access Control Entries</source>
-        <translation type="unfinished"/>
+        <translation>Atzipen-kontrol iturri guztiak garbitu</translation>
     </message>
 </context>
 <context>
@@ -1833,22 +1833,22 @@ pasahitza (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="38"/>
         <source>Folders to scan for music:</source>
-        <translation type="unfinished"/>
+        <translation>Musika bila aztertu beharreko karpetak:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="53"/>
         <source>Due to the unique way Tomahawk works, your music files must at least have Artist &amp; Title metadata/ID3 tags to be added to your Collection.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawken lan egiteko era bakana dela eta, zure musika fitxategiek gutxienez Artista eta Izenburu metadata/ID3 etiketa izan behar dute bildumara gehituko badira.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="76"/>
         <source>+</source>
-        <translation type="unfinished"/>
+        <translation>+</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="83"/>
         <source>-</source>
-        <translation type="unfinished"/>
+        <translation>-</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="109"/>
@@ -1856,22 +1856,25 @@ pasahitza (OTP)</translation>
  and using it to craft personalized radios. Enabling this option
  will allow you (and all your friends) to create automatic playlists
  and stations based on your personal taste profile.</source>
-        <translation type="unfinished"/>
+        <translation>The Echo Nest-ek zure bildumako metadataren jarraipena egin dezake
+eta zuri egokitutako irrati-kateak osatzeko erabil ditzake. Aukera hau gaitzeak
+zuri (eta zure lagunei) erreprodukzio-automatikoak sortzea ahalbidetuko dizue
+eta baita norbere gustuen araberako irrati-kateak eratzea ere.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="115"/>
         <source>Upload Collection info to enable personalized &quot;User Radio&quot;</source>
-        <translation type="unfinished"/>
+        <translation>Kargatu bildumaren informazioa &quot;Erabiltzailearen irrati-kate&quot; pertsonalizatua gaitze aldera</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="128"/>
         <source>Watch for changes (automatically update Collection)</source>
-        <translation type="unfinished"/>
+        <translation>Aldaketen jarraipena egin (Bilduma automatikoki eguneratu)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="137"/>
         <source>Time between scans (in seconds):</source>
-        <translation type="unfinished"/>
+        <translation>Arakatzeen arteko denbora tartea (segundutan):</translation>
     </message>
 </context>
 <context>
@@ -1879,12 +1882,12 @@ pasahitza (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/widgets/SlideSwitchButton.cpp" line="46"/>
         <source>On</source>
-        <translation type="unfinished"/>
+        <translation>Piztuta</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/SlideSwitchButton.cpp" line="47"/>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Itzalita</translation>
     </message>
 </context>
 <context>
@@ -1892,32 +1895,32 @@ pasahitza (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/widgets/SocialWidget.ui" line="28"/>
         <source>Facebook</source>
-        <translation type="unfinished"/>
+        <translation>Facebook</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/SocialWidget.ui" line="38"/>
         <source>Twitter</source>
-        <translation type="unfinished"/>
+        <translation>Twitter</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/SocialWidget.cpp" line="71"/>
         <source>Tweet</source>
-        <translation type="unfinished"/>
+        <translation>Txiokatu</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/SocialWidget.cpp" line="169"/>
         <source>Listening to &quot;%1&quot; by %2. %3</source>
-        <translation type="unfinished"/>
+        <translation>%2-(r)en &quot;%1&quot; entzuten. %3</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/SocialWidget.cpp" line="171"/>
         <source>Listening to &quot;%1&quot; by %2 on &quot;%3&quot;. %4</source>
-        <translation type="unfinished"/>
+        <translation>%2-(r)en &quot;%1&quot; entzuten &quot;%3&quot;-n. %4</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/SocialWidget.cpp" line="192"/>
         <source>%1 characters left</source>
-        <translation type="unfinished"/>
+        <translation>%1 karaktere geratzen dira</translation>
     </message>
 </context>
 <context>
@@ -1925,24 +1928,24 @@ pasahitza (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="231"/>
         <source>All available tracks</source>
-        <translation type="unfinished"/>
+        <translation>Eskuragarri dauden pista guztiak</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="339"/>
         <source>Drop to send tracks</source>
-        <translation type="unfinished"/>
+        <translation>Arrastatu pistak bidaltzeko</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="402"/>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="430"/>
         <source>Show</source>
-        <translation type="unfinished"/>
+        <translation>Erakutsi</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="404"/>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="432"/>
         <source>Hide</source>
-        <translation type="unfinished"/>
+        <translation>Ezkutatu</translation>
     </message>
 </context>
 <context>
@@ -1950,12 +1953,12 @@ pasahitza (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/SourceViewPage.ui" line="30"/>
         <source>Recent Albums</source>
-        <translation type="unfinished"/>
+        <translation>Azken Albumak</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SourceViewPage.ui" line="74"/>
         <source>Latest Additions</source>
-        <translation type="unfinished"/>
+        <translation>Berriki gehituak</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SourceViewPage.ui" line="88"/>
@@ -1965,17 +1968,17 @@ pasahitza (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/viewpages/SourceViewPage.cpp" line="70"/>
         <source>New Additions</source>
-        <translation type="unfinished"/>
+        <translation>Berriki gehituak</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SourceViewPage.cpp" line="73"/>
         <source>My recent activity</source>
-        <translation type="unfinished"/>
+        <translation>Nire azken jarduerak</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/viewpages/SourceViewPage.cpp" line="77"/>
         <source>Recent activity from %1</source>
-        <translation type="unfinished"/>
+        <translation>%1 -en azken jarduerak</translation>
     </message>
 </context>
 <context>
@@ -1984,32 +1987,32 @@ pasahitza (OTP)</translation>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="80"/>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="584"/>
         <source>Latest Additions</source>
-        <translation type="unfinished"/>
+        <translation>Berriki gehituak</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="84"/>
         <source>History</source>
-        <translation type="unfinished"/>
+        <translation>Historia</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="147"/>
         <source>SuperCollection</source>
-        <translation type="unfinished"/>
+        <translation>SuperBilduma</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="587"/>
         <source>Latest additions to your collection</source>
-        <translation type="unfinished"/>
+        <translation>Bildumara azkena gehituak </translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="589"/>
         <source>Latest additions to %1&apos;s collection</source>
-        <translation type="unfinished"/>
+        <translation>%1 -(r)en bildumara azkena gehituak</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="593"/>
         <source>Sorry, we could not find any recent additions!</source>
-        <translation type="unfinished"/>
+        <translation>Barkatu, ezin izan dugu berriki gehitutakorik aurkitu!</translation>
     </message>
 </context>
 <context>
@@ -2017,47 +2020,47 @@ pasahitza (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="237"/>
         <source>&amp;Copy Link</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Kopiatu esteka</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="245"/>
         <source>&amp;Delete %1</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Ezabatu %1</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="249"/>
         <source>Add to my Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Nire erreprodukzio-zerrendetara gehitu</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="251"/>
         <source>Add to my Automatic Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Nire erreprodukzio-zerrenda automatikoetara gehitu</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="253"/>
         <source>Add to my Stations</source>
-        <translation type="unfinished"/>
+        <translation>Nire irrati-kateetara gehitu</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="241"/>
         <source>&amp;Export Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Erreprodukzio zerrenda &amp;Esportatu</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="395"/>
         <source>playlist</source>
-        <translation type="unfinished"/>
+        <translation>erreprodukzio-zerrenda</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="399"/>
         <source>automatic playlist</source>
-        <translation type="unfinished"/>
+        <translation>erreprodukzio-zerrenda automatikoa</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="403"/>
         <source>station</source>
-        <translation type="unfinished"/>
+        <translation>irrati-katea</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="432"/>
@@ -2738,7 +2741,7 @@ username@jabber.org</source>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="73"/>
         <source>playlist</source>
-        <translation type="unfinished"/>
+        <translation>erreprodukzio-zerrenda</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="76"/>
