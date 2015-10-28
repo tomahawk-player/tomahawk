@@ -114,6 +114,9 @@ public slots:
     void fullScreenEntered();
     void fullScreenExited();
 
+signals:
+    void searchEdited( const QString& text );
+
 private slots:
     void onHistoryBackAvailable( bool avail );
     void onHistoryForwardAvailable( bool avail );

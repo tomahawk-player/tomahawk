@@ -282,15 +282,19 @@ TomahawkWindow::applyPlatformTweaks()
 void
 TomahawkWindow::setupToolBar()
 {
+#ifdef Q_OS_MAC
+    Tomahawk::setupToolBarMac( this );
+
+    m_backAction = new QAction( this );
+    m_forwardAction = new QAction( this );
+
+    connect( this, SIGNAL( searchEdited( QString ) ), SLOT( onSearch( QString ) ) );
+#else
     m_toolbar = addToolBar( "TomahawkToolbar" );
     m_toolbar->setObjectName( "TomahawkToolbar" );
     m_toolbar->setMovable( false );
     m_toolbar->setFloatable( false );
-#ifdef Q_OS_MAC
-    m_toolbar->setIconSize( QSize( 22, 22 ) );
-#else
     m_toolbar->setIconSize( scaled( 22, 22 ) );
-#endif
     m_toolbar->setToolButtonStyle( Qt::ToolButtonIconOnly );
     m_toolbar->setStyleSheet( "border-bottom: 0px" );
     // If the toolbar is hidden accidentally it causes trouble on Unity because the user can't
@@ -298,30 +302,14 @@ TomahawkWindow::setupToolBar()
     // This should not affect Mac users.
     m_toolbar->setContextMenuPolicy( Qt::PreventContextMenu );
 
-#ifdef Q_OS_MAC
-    m_toolbar->installEventFilter( new WidgetDragFilter( m_toolbar ) );
-#endif
-
     m_backAction = m_toolbar->addAction( ImageRegistry::instance()->pixmap( RESPATH "images/back.svg", m_toolbar->iconSize() ),
                                          tr( "Back" ),
                                          ViewManager::instance(),
                                          SLOT( historyBack() ) );
-    m_backAction->setToolTip( tr( "Go back one page" ) );
-#ifdef Q_OS_MAC
-    m_backAction->setShortcut( QKeySequence( "Ctrl+Left" ) );
-#else
-    m_backAction->setShortcut( QKeySequence( "Alt+Left" ) );
-#endif
     m_forwardAction = m_toolbar->addAction( ImageRegistry::instance()->pixmap( RESPATH "images/forward.svg", m_toolbar->iconSize() ),
                                             tr( "Forward" ),
                                             ViewManager::instance(),
                                             SLOT( historyForward() ) );
-    m_forwardAction->setToolTip( tr( "Go forward one page" ) );
-#ifdef Q_OS_MAC
-    m_forwardAction->setShortcut( QKeySequence( "Ctrl+Right" ) );
-#else
-    m_forwardAction->setShortcut( QKeySequence( "Alt+Right" ) );
-#endif
 
     m_toolbarLeftBalancer = new QWidget( this );
     m_toolbarLeftBalancer->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
@@ -353,7 +341,6 @@ TomahawkWindow::setupToolBar()
     m_toolbar->addWidget( m_accountsButton );
     connect( m_accountsButton, SIGNAL( widthChanged() ), SLOT( balanceToolbar() ) );
 
-#ifndef Q_OS_MAC
     ContainedMenuButton* compactMenuButton = new ContainedMenuButton( m_toolbar );
     compactMenuButton->setIcon( ImageRegistry::instance()->pixmap( RESPATH "images/configure.svg", m_toolbar->iconSize() ) );
     compactMenuButton->setText( tr( "&Main Menu" ) );
@@ -367,12 +354,22 @@ TomahawkWindow::setupToolBar()
     addAction( ActionCollection::instance()->getAction( "playPause" ) );
     addAction( ActionCollection::instance()->getAction( "toggleMenuBar" ) );
     addAction( ActionCollection::instance()->getAction( "quit" ) );
+
+    balanceToolbar();
+#endif
+
+    m_backAction->setToolTip( tr( "Go back one page" ) );
+    m_forwardAction->setToolTip( tr( "Go forward one page" ) );
+#ifdef Q_OS_MAC
+    m_backAction->setShortcut( QKeySequence( "Ctrl+Left" ) );
+    m_forwardAction->setShortcut( QKeySequence( "Ctrl+Right" ) );
+#else
+    m_backAction->setShortcut( QKeySequence( "Alt+Left" ) );
+    m_forwardAction->setShortcut( QKeySequence( "Alt+Right" ) );
 #endif
 
     onHistoryBackAvailable( false );
     onHistoryForwardAvailable( false );
-
-    balanceToolbar();
 }
 
 
@@ -1506,7 +1503,7 @@ TomahawkWindow::toggleFullscreen()
     tDebug() << Q_FUNC_INFO;
 
 #if defined( Q_OS_MAC )
-   Tomahawk::toggleFullscreen();
+    Tomahawk::toggleFullscreen();
 #endif
 }
 
