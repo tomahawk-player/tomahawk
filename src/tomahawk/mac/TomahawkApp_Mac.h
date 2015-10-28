@@ -24,6 +24,7 @@
 
 class QString;
 class QObject;
+class TomahawkWindow;
 
 namespace Tomahawk {
 
@@ -48,6 +49,8 @@ void checkForUpdates();
 // Pass in a QObject with slots "fullScreenEntered() and fullScreenExited() in order to be notified
 void toggleFullscreen();
 void enableFullscreen( QObject* notifier );
+
+void setupToolBarMac( TomahawkWindow* parent );
 
 };
 

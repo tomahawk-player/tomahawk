@@ -23,6 +23,8 @@
 #include "config.h"
 #include "TomahawkWindow.h"
 #include "audio/AudioEngine.h"
+#include "ViewManager.h"
+#include "utils/ImageRegistry.h"
 #include "utils/Logger.h"
 
 #import <Cocoa/Cocoa.h>
@@ -34,6 +36,7 @@
 #include <QDebug>
 #include <QApplication>
 #include <QObject>
+#include <QMacToolBar>
 #include <QMetaObject>
 
 @interface MacApplication :NSApplication {
@@ -310,4 +313,82 @@ void Tomahawk::enableFullscreen( QObject* receiver )
             }
         }
     }
+}
+
+
+@interface MacSearchField : NSSearchField
+{
+@public
+    TomahawkWindow* parent;
+    NSString* itemIdentifier;
+}
+@end
+
+@implementation MacSearchField
+
+- (void)dealloc
+{
+    [super dealloc];
+}
+
+- (NSString *)itemIdentifier
+{
+    return self->itemIdentifier;
+}
+
+- (void)textDidChange:(NSNotification *)obj
+{
+/*    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    NSString* nsText = [self stringValue];
+    QString result = QString::fromNSString( nsText );
+    [pool release];
+    [super textDidChange: obj];*/
+}
+
+- (void)textDidEndEditing:(NSNotification *)obj
+{
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    NSString* nsText = [self stringValue];
+    QString result = QString::fromNSString( nsText );
+    emit parent->searchEdited( result );
+    [self setStringValue:@""];
+    [pool release];
+    [super textDidEndEditing: obj];
+}
+
+@end
+
+
+void
+Tomahawk::setupToolBarMac( TomahawkWindow* parent )
+{
+    QMacToolBar* toolbar = new QMacToolBar( parent );
+    [toolbar->nativeToolbar() setDisplayMode: NSToolbarDisplayModeIconOnly];
+    [toolbar->nativeToolbar() setSizeMode: NSToolbarSizeModeSmall];
+
+    QMacToolBarItem* backItem = toolbar->addItem( ImageRegistry::instance()->pixmap( RESPATH "images/back.svg", QSize( 32, 32 ) ), QString( "Back" ) );
+    QMacToolBarItem* forwardItem = toolbar->addItem( ImageRegistry::instance()->pixmap( RESPATH "images/forward.svg", QSize( 32, 32 ) ), QString( "Forward" ) );
+
+    QObject::connect( backItem, SIGNAL( activated() ), ViewManager::instance(), SLOT( historyBack() ) );
+    QObject::connect( forwardItem, SIGNAL( activated() ), ViewManager::instance(), SLOT( historyForward() ) );
+
+    QMacToolBarItem* spacerItem = toolbar->addItem( QIcon(), QString() );
+    spacerItem->setStandardItem( QMacToolBarItem::FlexibleSpace );
+
+    QMacToolBarItem* searchItem = toolbar->addItem( QIcon(), QString() );
+    MacSearchField* searchField = [[MacSearchField alloc] init];
+    searchField->itemIdentifier = [searchItem->nativeToolBarItem() itemIdentifier];
+    searchField->parent = parent;
+    [searchItem->nativeToolBarItem() setView: searchField];
+
+    QMacToolBarItem* spacerRightItem = toolbar->addItem( QIcon(), QString() );
+    spacerRightItem->setStandardItem( QMacToolBarItem::FlexibleSpace );
+
+    parent->window()->winId(); // create window->windowhandle()
+    toolbar->attachToWindow( parent->window()->windowHandle() );
+
+    NSView *nsview = (NSView *)parent->window()->winId();
+    NSWindow *nswindow = [nsview window];
+    if ([nswindow respondsToSelector:@selector(setTitleVisibility:)])
+            nswindow.titleVisibility = NSWindowTitleHidden;
 }
