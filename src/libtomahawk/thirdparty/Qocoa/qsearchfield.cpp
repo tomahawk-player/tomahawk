@@ -23,11 +23,12 @@ THE SOFTWARE.
 
 #include "qsearchfield.h"
 
-#include <QLineEdit>
-#include <QVBoxLayout>
-
 #include "widgets/searchlineedit/SearchLineEdit.h"
 #include "utils/TomahawkUtilsGui.h"
+
+#include <QLineEdit>
+#include <QVBoxLayout>
+#include <QEvent>
 
 class DLLEXPORT QSearchFieldPrivate : public QObject
 {
@@ -141,6 +142,24 @@ void QSearchField::setFocus(Qt::FocusReason reason)
 void QSearchField::setMenu(QMenu *menu)
 {
     //FIXME nop
+}
+
+void QSearchField::popupMenu()
+{
+    // noop
+}
+
+void QSearchField::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::EnabledChange) {
+        Q_ASSERT(pimpl);
+        if (!pimpl)
+            return;
+
+        const bool enabled = isEnabled();
+        pimpl->lineEdit->setEnabled(enabled);
+    }
+    QWidget::changeEvent(event);
 }
 
 void QSearchField::resizeEvent(QResizeEvent* e)
