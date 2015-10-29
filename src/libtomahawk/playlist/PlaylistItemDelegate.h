@@ -107,9 +107,6 @@ protected:
     QFont m_demiBoldFont;
     QFont m_normalFont;
 
-    QFontMetrics m_demiBoldFontMetrics;
-    QFontMetrics m_normalFontMetrics;
-
 protected slots:
     virtual void modelChanged();
     virtual void onAudioEngineTick( qint64 ms );

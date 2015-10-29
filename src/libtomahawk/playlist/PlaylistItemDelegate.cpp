@@ -58,8 +58,6 @@ using namespace Tomahawk;
 
 PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, PlayableProxyModel* proxy )
     : QStyledItemDelegate( (QObject*)parent )
-    , m_demiBoldFontMetrics( QFontMetrics( parent->font() ) )
-    , m_normalFontMetrics( QFontMetrics( parent->font() ) )
     , m_view( parent )
     , m_model( proxy )
 {
@@ -79,9 +77,6 @@ PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, PlayableProxyMode
 
     m_normalFont = parent->font();
     m_normalFont.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
-
-    m_normalFontMetrics = QFontMetrics( m_normalFont );
-    m_demiBoldFontMetrics = QFontMetrics( m_demiBoldFont );
 
     connect( this, SIGNAL( updateIndex( QModelIndex ) ), parent, SLOT( update( QModelIndex ) ) );
     connect( proxy, SIGNAL( modelReset() ), SLOT( modelChanged() ) );
@@ -624,14 +619,13 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
         painter->drawRect( rect.adjusted( 0, 4, -rightMargin, -4 ) );
     }
     painter->setPen( TomahawkStyle::SELECTION_FOREGROUND );
+    painter->setFont( m_demiBoldFont );
 
     QRect r = rect.adjusted( 32, 6, -32 -rightMargin, -6 );
     const int margin = 8;
 
-    painter->setFont( m_demiBoldFont );
-
-    const int numberWidth = m_demiBoldFontMetrics.width( "00" ) + 32;
-    const int durationWidth = m_demiBoldFontMetrics.width( "00:00" ) + 32;
+    const int numberWidth = painter->fontMetrics().width( "00" ) + 32;
+    const int durationWidth = painter->fontMetrics().width( "00:00" ) + 32;
     int stateWidth = 0;
 
     QRect numberRect = QRect( r.x(), r.y(), numberWidth, r.height() );
@@ -667,13 +661,13 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
         opacityCo = 0.5;
 
     painter->setOpacity( 1.0 * opacityCo );
-    QString text = m_demiBoldFontMetrics.elidedText( track->track(), Qt::ElideRight, titleRect.width() - margin );
+    QString text = painter->fontMetrics().elidedText( track->track(), Qt::ElideRight, titleRect.width() - margin );
     painter->drawText( titleRect, text, m_centerOption );
 
     // draw artist
     painter->setOpacity( 0.8 * opacityCo );
     painter->setFont( m_normalFont );
-    text = m_normalFontMetrics.elidedText( track->artist(), Qt::ElideRight, artistRect.width() - margin );
+    text = painter->fontMetrics().elidedText( track->artist(), Qt::ElideRight, artistRect.width() - margin );
 
     painter->save();
     if ( m_hoveringOverArtist == index )
@@ -683,7 +677,7 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
         painter->setFont( f );
     }
     painter->drawText( artistRect, text, m_centerOption );
-    m_artistNameRects[ index ] = m_normalFontMetrics.boundingRect( artistRect, Qt::AlignLeft | Qt::AlignVCenter, text );
+    m_artistNameRects[ index ] = painter->fontMetrics().boundingRect( artistRect, Qt::AlignLeft | Qt::AlignVCenter, text );
     painter->restore();
 
     // draw number or source icon
