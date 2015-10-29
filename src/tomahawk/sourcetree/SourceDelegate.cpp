@@ -187,6 +187,9 @@ SourceDelegate::paintSource( QPainter* painter, const QStyleOptionViewItem& opti
 {
     painter->save();
     painter->setPen( Qt::black );
+    QFont font = painter->font();
+    font.setPointSize( TomahawkUtils::defaultFontSize() );
+    painter->setFont( font );
 
     SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
     SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
