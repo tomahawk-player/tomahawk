@@ -51,7 +51,9 @@ ContextView::ContextView( QWidget* parent, const QString& caption )
     m_trackView->setPlaylistItemDelegate( del );
     m_trackView->proxyModel()->setStyle( PlayableProxyModel::SingleColumn );
     m_trackView->setStyleSheet( QString( "QTreeView { background-color: %1; }" ).arg( TomahawkStyle::PAGE_BACKGROUND.name() ) );
+#ifndef Q_OS_MAC
     TomahawkStyle::styleScrollBar( m_trackView->verticalScrollBar() );
+#endif
 
     setLayout( new QVBoxLayout() );
     TomahawkUtils::unmarginLayout( layout() );
@@ -122,7 +124,9 @@ ContextView::setTrackView( TrackView* view )
 
     m_trackView = view;
     m_trackView->setStyleSheet( QString( "QTreeView { background-color: %1; }" ).arg( TomahawkStyle::PAGE_BACKGROUND.name() ) );
+#ifndef Q_OS_MAC
     TomahawkStyle::styleScrollBar( m_trackView->verticalScrollBar() );
+#endif
 
     m_innerLayout->insertWidget( 0, view, 1 );
 
