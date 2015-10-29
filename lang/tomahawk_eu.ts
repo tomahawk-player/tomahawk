@@ -2066,22 +2066,22 @@ eta baita norbere gustuen araberako irrati-kateak eratzea ere.</translation>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="432"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;&quot;%2&quot;&lt;/b&gt; %1 ezabatu nahi al duzu?</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="434"/>
         <source>Delete</source>
-        <translation type="unfinished"/>
+        <translation>Ezabatu</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="539"/>
         <source>Save XSPF</source>
-        <translation type="unfinished"/>
+        <translation>Gorde XSPFa</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="540"/>
         <source>Playlists (*.xspf)</source>
-        <translation type="unfinished"/>
+        <translation>Erreprodukzio-zerrendak (*.xspf)</translation>
     </message>
 </context>
 <context>
@@ -2089,12 +2089,12 @@ eta baita norbere gustuen araberako irrati-kateak eratzea ere.</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="100"/>
         <source>Group</source>
-        <translation type="unfinished"/>
+        <translation>Taldea</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="103"/>
         <source>Source</source>
-        <translation type="unfinished"/>
+        <translation>Iturria</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="106"/>
@@ -2104,42 +2104,42 @@ eta baita norbere gustuen araberako irrati-kateak eratzea ere.</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="109"/>
         <source>Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Erreprodukzio-zerrenda</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="112"/>
         <source>Automatic Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Erreprodukzio-zerrenda automatikoa</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="115"/>
         <source>Station</source>
-        <translation type="unfinished"/>
+        <translation>Irrati-katea</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="315"/>
         <source>Cloud Collections</source>
-        <translation type="unfinished"/>
+        <translation>Lainoko bildumak</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="304"/>
         <source>Discover</source>
-        <translation type="unfinished"/>
+        <translation>Aurkitu</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="305"/>
         <source>Open Pages</source>
-        <translation type="unfinished"/>
+        <translation>Irekitako orriak</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="307"/>
         <source>Your Music</source>
-        <translation type="unfinished"/>
+        <translation>Zure musika</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="316"/>
         <source>Friends</source>
-        <translation type="unfinished"/>
+        <translation>Lagunak</translation>
     </message>
 </context>
 <context>
@@ -2147,17 +2147,17 @@ eta baita norbere gustuen araberako irrati-kateak eratzea ere.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="69"/>
         <source>Configure your Spotify account</source>
-        <translation type="unfinished"/>
+        <translation>Zure Spotify kontua konfiguratu</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="101"/>
         <source>Username or Facebook Email</source>
-        <translation type="unfinished"/>
+        <translation>Erabiltzaile izena edo Facebook-eko posta elektronikoa</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="129"/>
         <source>Log In</source>
-        <translation type="unfinished"/>
+        <translation>Hasi saioa</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="136"/>
@@ -2167,17 +2167,17 @@ eta baita norbere gustuen araberako irrati-kateak eratzea ere.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="153"/>
         <source>Select All</source>
-        <translation type="unfinished"/>
+        <translation>Denak aukeratu</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="166"/>
         <source>Sync Starred tracks to Loved tracks</source>
-        <translation type="unfinished"/>
+        <translation>Uztartu izardun pistak zure kuttunekin</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="179"/>
         <source>High Quality Streams</source>
-        <translation type="unfinished"/>
+        <translation>Kalitate handiko jarioak</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="196"/>
@@ -2540,7 +2540,7 @@ eta baita norbere gustuen araberako irrati-kateak eratzea ere.</translation>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="302"/>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="314"/>
         <source>Log In</source>
-        <translation type="unfinished"/>
+        <translation>Hasi saioa</translation>
     </message>
 </context>
 <context>
@@ -3984,7 +3984,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1284"/>
         <source>Station</source>
-        <translation type="unfinished"/>
+        <translation>Irrati-katea</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1286"/>
@@ -4000,7 +4000,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1319"/>
         <source>Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Erreprodukzio-zerrenda</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1321"/>
