@@ -579,17 +579,17 @@ connect and stream from you?</source>
 <context>
     <name>ContextView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="139"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="143"/>
         <source>Playlist Details</source>
         <translation>播放列表详情</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="273"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="277"/>
         <source>This playlist is currently empty.</source>
         <translation>当前播放列表为空。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="275"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="279"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation>该播放列表现在为空。请添加一些歌曲享受吧！</translation>
     </message>
@@ -1304,14 +1304,14 @@ Password (OTP)</source>
 <context>
     <name>PlaylistItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="146"/>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="283"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="141"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="278"/>
         <source>Download %1</source>
         <translation>下载 %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="294"/>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="309"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="289"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="304"/>
         <source>View in Finder</source>
         <translation>在 Finder 中显示</translation>
     </message>
@@ -1993,24 +1993,24 @@ Password (OTP)</source>
 <context>
     <name>SourceDelegate</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="232"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="235"/>
         <source>All available tracks</source>
         <translation>所有可用的歌曲</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="340"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="343"/>
         <source>Drop to send tracks</source>
         <translation>拖到此处发送歌曲</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="403"/>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="431"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="406"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="434"/>
         <source>Show</source>
         <translation>显示</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="405"/>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="433"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="408"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="436"/>
         <source>Hide</source>
         <translation>隐藏 </translation>
     </message>

@@ -580,17 +580,17 @@ connettersi e condividere la tua musica?</translation>
 <context>
     <name>ContextView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="139"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="143"/>
         <source>Playlist Details</source>
         <translation>Dettagli della playlist</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="273"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="277"/>
         <source>This playlist is currently empty.</source>
         <translation>Questa playlist è vuota.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="275"/>
+        <location filename="../src/libtomahawk/playlist/ContextView.cpp" line="279"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation>Questa playlist è attualmente vuota. Aggiungi qualche canzone e divertiti ad ascoltare!</translation>
     </message>
@@ -1305,14 +1305,14 @@ temporanea (OTP)</translation>
 <context>
     <name>PlaylistItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="146"/>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="283"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="141"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="278"/>
         <source>Download %1</source>
         <translation>Scarica %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="294"/>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="309"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="289"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="304"/>
         <source>View in Finder</source>
         <translation>Vedi nella funzione di ricerca</translation>
     </message>
@@ -1991,24 +1991,24 @@ temporanea (OTP)</translation>
 <context>
     <name>SourceDelegate</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="232"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="235"/>
         <source>All available tracks</source>
         <translation>Tutte le tracce disponibili</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="340"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="343"/>
         <source>Drop to send tracks</source>
         <translation>Lascia cadere per spedire le tracce</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="403"/>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="431"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="406"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="434"/>
         <source>Show</source>
         <translation>Mostra</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="405"/>
-        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="433"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="408"/>
+        <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="436"/>
         <source>Hide</source>
         <translation>Nascondi</translation>
     </message>
