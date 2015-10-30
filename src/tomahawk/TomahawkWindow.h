@@ -37,10 +37,8 @@
 #include <QToolButton>
 #ifdef Q_OS_WIN
     #include <shobjidl.h>
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 2, 0 )
     #include <QWinThumbnailToolBar>
     #include <QWinThumbnailToolButton>
-#endif
 #endif
 
 namespace Tomahawk
@@ -91,10 +89,6 @@ protected:
     void keyPressEvent( QKeyEvent* e );
 
     bool eventFilter( QObject* obj, QEvent* event );
-
-#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK( 5, 2, 0 )
-    bool winEvent( MSG* message, long* result );
-#endif
 
 public slots:
     void createStation();
@@ -173,16 +167,9 @@ private:
     void importPlaylist( const QString& url, bool autoUpdate );
 
 #ifdef Q_OS_WIN
-    bool setupWindowsButtons();
-#if QT_VERSION < QT_VERSION_CHECK( 5, 2, 0 )
-    const unsigned int m_buttonCreatedID;
-    HICON thumbIcon(TomahawkUtils::ImageType type);
-    ITaskbarList3* m_taskbarList;
-    THUMBBUTTON m_thumbButtons[5];
-#else
+    void setupWindowsButtons();
     QIcon thumbIcon(TomahawkUtils::ImageType type);
     QWinThumbnailToolBar *m_taskbarList;
-#endif
     enum TB_STATES{ TP_PREVIOUS = 0,TP_PLAY_PAUSE = 1,TP_NEXT = 2, TP_SPACE = 3, TP_LOVE = 4 };
 #endif
 
