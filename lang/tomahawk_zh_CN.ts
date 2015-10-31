@@ -23,7 +23,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="185"/>
         <source>%applicationName needs you to decide whether %1 is allowed to connect.</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName 需要你决定是否允许 %1 连接。</translation>
     </message>
 </context>
 <context>
@@ -172,27 +172,27 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="116"/>
         <source>&amp;Configure %applicationName...</source>
-        <translation type="unfinished"/>
+        <translation>配置 %applicationName...（&amp;C）</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="118"/>
         <source>Create Playlist</source>
-        <translation type="unfinished"/>
+        <translation>创建播放列表</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="121"/>
         <source>Create Station</source>
-        <translation type="unfinished"/>
+        <translation>创建电台</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="138"/>
         <source>About &amp;%applicationName...</source>
-        <translation type="unfinished"/>
+        <translation>关于 %applicationName...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="149"/>
         <source>%applicationName 0.8</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName 0.8</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="111"/>
@@ -409,17 +409,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="912"/>
         <source>Sorry, %applicationName couldn&apos;t find the track &apos;%1&apos; by %2</source>
-        <translation type="unfinished"/>
+        <translation>抱歉，%applicationName 无法找到曲目 %2 - &apos;%1 &apos;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="936"/>
         <source>Sorry, %applicationName couldn&apos;t find the artist &apos;%1&apos;</source>
-        <translation type="unfinished"/>
+        <translation>抱歉，%applicationName 无法找到艺术家 &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="962"/>
         <source>Sorry, %applicationName couldn&apos;t find the album &apos;%1&apos; by %2</source>
-        <translation type="unfinished"/>
+        <translation>抱歉，%applicationName 无法找到专辑 %2 - ‘%1’</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="999"/>
@@ -651,7 +651,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/DownloadManager.cpp" line="286"/>
         <source>%applicationName finished downloading %1 by %2.</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName 已经完成下载 %2 - %1 .</translation>
     </message>
 </context>
 <context>
@@ -775,7 +775,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/GlobalActionManager.cpp" line="136"/>
         <source>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;by &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;You are attempting to install a %applicationName plug-in from an unknown source. Plug-ins from untrusted sources may put your data at risk.&lt;br/&gt;Do you want to install this plug-in?</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;%1&lt;/b&gt; %2&lt;br/&gt;- &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;您在试图安装一个未知来源的 %applicationName 插件。未知来源的插件可能导致您的数据不安全。&lt;br/&gt;确定想安装此插件吗？</translation>
     </message>
 </context>
 <context>
@@ -2229,7 +2229,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="136"/>
         <source>Right click on any %applicationNames playlist to sync it to Spotify.</source>
-        <translation type="unfinished"/>
+        <translation>右键点击任何 %applicationName 播放列表将其同步到 Spotify。</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="153"/>
@@ -2249,7 +2249,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="189"/>
         <source>Delete %applicationName playlist when removing synchronization</source>
-        <translation type="unfinished"/>
+        <translation>移除同步时删除 %applicationName 播放列表</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="196"/>
@@ -2365,7 +2365,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="93"/>
         <source>Enter your Google login to connect with your friends using %applicationName!</source>
-        <translation type="unfinished"/>
+        <translation>使用 %applicationName 登入您的Google账户， 发现您的好友！</translation>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="94"/>
@@ -2384,7 +2384,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.h" line="44"/>
         <source>Login to directly connect to your Google Talk contacts that also use %applicationName.</source>
-        <translation type="unfinished"/>
+        <translation>登陆到 Google Talk 以便和其他使用 %applicationName 的用户联系。</translation>
     </message>
 </context>
 <context>
@@ -2636,7 +2636,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/xmpp/XmppAccount.h" line="53"/>
         <source>Login to connect to your Jabber/XMPP contacts that also use %applicationName.</source>
-        <translation type="unfinished"/>
+        <translation>登陆到 Jabber/XMPP 以便和其他使用 %applicationName 的用户联系。</translation>
     </message>
 </context>
 <context>
@@ -2709,7 +2709,7 @@ username@jabber.org</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="130"/>
         <source>Download</source>
-        <translation type="unfinished"/>
+        <translation>下载</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="133"/>
@@ -3482,12 +3482,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="130"/>
         <source>The current track could not be resolved. %applicationName will pick back up with the next resolvable track from this source.</source>
-        <translation type="unfinished"/>
+        <translation>无法解析当前曲目。%applicationName 将会从本源选取下一个可解析的曲目。</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="138"/>
         <source>%applicationName is stopped.</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName 已停止。</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="211"/>
@@ -3518,7 +3518,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="314"/>
         <source>%applicationName - Now Playing</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName - 正在播放</translation>
     </message>
 </context>
 <context>
@@ -3587,12 +3587,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="124"/>
         <source>The current track could not be resolved. %applicationName will pick back up with the next resolvable track from this source.</source>
-        <translation type="unfinished"/>
+        <translation>无法解析当前曲目。%applicationName 将会从本源选取下一个可解析的曲目。</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="132"/>
         <source>%applicationName stopped playback.</source>
-        <translation type="unfinished"/>
+        <translation>%applicationName 已停止播放。</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/snorenotify/SnoreNotifyPlugin.cpp" line="202"/>
@@ -4680,7 +4680,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="104"/>
         <source>Enter your XMPP login to connect with your friends using %applicationName!</source>
-        <translation type="unfinished"/>
+        <translation>登录 XMPP 以便和其他使用 %applicationName 的好友联系！</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="196"/>
@@ -4871,12 +4871,12 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="77"/>
         <source>This plugin will automatically find other users running %applicationName on your local network</source>
-        <translation type="unfinished"/>
+        <translation>这个插件将自动寻找本地网络中运行 %applicationName 的人</translation>
     </message>
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="84"/>
         <source>Connect automatically when %applicationName starts</source>
-        <translation type="unfinished"/>
+        <translation>在 %applicationName 启动后自动连接</translation>
     </message>
 </context>
 </TS>
