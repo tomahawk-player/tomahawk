@@ -149,7 +149,11 @@ private slots:
     void toggleLoved();
 
     void audioStateChanged( AudioState newState, AudioState oldState );
+    
+#ifdef Q_OS_WIN
     void updateWindowsLoveButton();
+    void updatePreview();
+#endif
 
 private:
     void loadSettings();

@@ -96,12 +96,6 @@
         #endif
     #endif
     #include <shellapi.h>
-    #if QT_VERSION < QT_VERSION_CHECK(5,2,0)
-        #include <windows.h>
-        #ifndef THBN_CLICKED
-            #define THBN_CLICKED    0x1800
-        #endif
-    #endif
 #endif
 
 using namespace Tomahawk;
@@ -536,6 +530,9 @@ TomahawkWindow::setupWindowsButtons()
 {
     m_taskbarList = new QWinThumbnailToolBar( this );
     m_taskbarList->setWindow( this->windowHandle() );
+    m_taskbarList->setIconicPixmapNotificationsEnabled( true );
+    connect( m_taskbarList , &QWinThumbnailToolBar::iconicThumbnailPixmapRequested , this , &TomahawkWindow::updatePreview);
+    connect( m_taskbarList , &QWinThumbnailToolBar::iconicLivePreviewPixmapRequested , this , &TomahawkWindow::updatePreview);
 
     QWinThumbnailToolButton *back = new QWinThumbnailToolButton( m_taskbarList );
     back->setToolTip( tr( "Back" ) );
@@ -569,6 +566,64 @@ TomahawkWindow::setupWindowsButtons()
     love->setInteractive( false );
     connect( love , SIGNAL( clicked() ) , this , SLOT( toggleLoved() ) );
     m_taskbarList->addButton(love);
+}
+
+void
+TomahawkWindow::updatePreview()
+{
+    qDebug() << "Update cover";
+    const QSize coverSize( 500 , 500 );
+    const QSize size(900,600);
+    QPixmap cover;
+    
+    if ( !AudioEngine::instance()->currentTrack().isNull() ) {
+        cover = AudioEngine::instance()->currentTrack()->track()->albumPtr()->cover( coverSize , false );
+    }
+    if ( cover.isNull() ) {
+        cover = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover , TomahawkUtils::Original, coverSize );
+    }
+
+    QPixmap thumb(size);
+    thumb.fill(Qt::white);
+
+    QPainter paint(&thumb);
+    paint.drawPixmap((size.width() - coverSize.width())/2 ,0, coverSize.width(), coverSize.height(), cover);
+
+    QFont font = paint.font();
+    font.setPointSize(40);
+    paint.setFont(font);
+    paint.setPen(Qt::black);
+    paint.drawText(QRect(0,coverSize.height(),size.width(),size.height() - coverSize.height()),windowTitle());
+
+    m_taskbarList->setIconicThumbnailPixmap( thumb );
+    m_taskbarList->setIconicLivePreviewPixmap( thumb );
+}
+
+void
+TomahawkWindow::updateWindowsLoveButton()
+{
+    QWinThumbnailToolButton *love = m_taskbarList->buttons()[ TP_LOVE ];
+
+    if ( !AudioEngine::instance()->currentTrack().isNull() )
+    {
+        love->setInteractive(true);
+        if ( AudioEngine::instance()->currentTrack()->track()->loved() )
+        {
+            love->setIcon(thumbIcon(TomahawkUtils::Loved));
+            love->setToolTip( tr( "Unlove" ) );
+        }
+        else
+        {
+            love->setIcon( thumbIcon(TomahawkUtils::NotLoved) );
+            love->setToolTip( tr( "Love" ) );
+        }
+    }
+    else
+    {
+        love->setInteractive(false);
+        love->setIcon( thumbIcon(TomahawkUtils::NotLoved) );
+        love->setToolTip( tr( "Love" ) );
+    }
 }
 
 QIcon
@@ -774,6 +829,8 @@ TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
 #ifndef Q_OS_WIN
     Q_UNUSED(newState);
 #else
+    updatePreview();
+        
     QWinThumbnailToolButton *play = m_taskbarList->buttons()[ TP_PLAY_PAUSE ];
     switch ( newState )
     {
@@ -782,7 +839,6 @@ TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
         play->setIcon( thumbIcon(TomahawkUtils::PauseButton) );
         play->setToolTip( tr( "Pause" ) );
         updateWindowsLoveButton();
-
     }
         break;
 
@@ -814,37 +870,6 @@ TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
     }
 #endif//Q_OS_WIN
 }
-
-
-void
-TomahawkWindow::updateWindowsLoveButton()
-{
-#if defined(Q_OS_WIN)
-    QWinThumbnailToolButton *love = m_taskbarList->buttons()[ TP_LOVE ];
-
-    if ( !AudioEngine::instance()->currentTrack().isNull() )
-    {
-        love->setInteractive(true);
-        if ( AudioEngine::instance()->currentTrack()->track()->loved() )
-        {
-            love->setIcon(thumbIcon(TomahawkUtils::Loved));
-            love->setToolTip( tr( "Unlove" ) );
-        }
-        else
-        {
-            love->setIcon( thumbIcon(TomahawkUtils::NotLoved) );
-            love->setToolTip( tr( "Love" ) );
-        }
-    }
-    else
-    {
-        love->setInteractive(false);
-        love->setIcon( thumbIcon(TomahawkUtils::NotLoved) );
-        love->setToolTip( tr( "Love" ) );
-    }
-#endif//defined(Q_OS_WIN)
-}
-
 
 void
 TomahawkWindow::onHistoryBackAvailable( bool avail )
