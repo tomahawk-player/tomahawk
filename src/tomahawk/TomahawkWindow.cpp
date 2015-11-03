@@ -530,9 +530,7 @@ TomahawkWindow::setupWindowsButtons()
 {
     m_taskbarList = new QWinThumbnailToolBar( this );
     m_taskbarList->setWindow( this->windowHandle() );
-    m_taskbarList->setIconicPixmapNotificationsEnabled( true );
-    connect( m_taskbarList , &QWinThumbnailToolBar::iconicThumbnailPixmapRequested , this , &TomahawkWindow::updatePreview);
-    connect( m_taskbarList , &QWinThumbnailToolBar::iconicLivePreviewPixmapRequested , this , &TomahawkWindow::updatePreview);
+    updatePreview();
 
     QWinThumbnailToolButton *back = new QWinThumbnailToolButton( m_taskbarList );
     back->setToolTip( tr( "Back" ) );
@@ -571,11 +569,10 @@ TomahawkWindow::setupWindowsButtons()
 void
 TomahawkWindow::updatePreview()
 {
-    qDebug() << "Update cover";
-    const QSize coverSize( 500 , 500 );
-    const QSize size(900,600);
+    const QSize size = QDesktopWidget().availableGeometry().size();
+    const QSize coverSize( size.height() * 0.75 , size.height() * 0.75 );
+
     QPixmap cover;
-    
     if ( !AudioEngine::instance()->currentTrack().isNull() ) {
         cover = AudioEngine::instance()->currentTrack()->track()->albumPtr()->cover( coverSize , false );
     }
@@ -583,17 +580,17 @@ TomahawkWindow::updatePreview()
         cover = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover , TomahawkUtils::Original, coverSize );
     }
 
-    QPixmap thumb(size);
-    thumb.fill(Qt::white);
+    QPixmap thumb( size );
+    thumb.fill( Qt::white );
 
     QPainter paint(&thumb);
-    paint.drawPixmap((size.width() - coverSize.width())/2 ,0, coverSize.width(), coverSize.height(), cover);
+    paint.drawPixmap((size.width() - coverSize.width()) / 2 ,0, coverSize.width(), coverSize.height(), cover);
 
     QFont font = paint.font();
-    font.setPointSize(40);
-    paint.setFont(font);
-    paint.setPen(Qt::black);
-    paint.drawText(QRect(0,coverSize.height(),size.width(),size.height() - coverSize.height()),windowTitle());
+    font.setPixelSize( size.height() * 0.1 );
+    paint.setFont( font );
+    paint.setPen( Qt::black );
+    paint.drawText( QRect( 0 , coverSize.height() , size.width() , size.height() - coverSize.height() ) , windowTitle() , QTextOption( Qt::AlignCenter ) );
 
     m_taskbarList->setIconicThumbnailPixmap( thumb );
     m_taskbarList->setIconicLivePreviewPixmap( thumb );
