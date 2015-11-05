@@ -1,6 +1,3 @@
-PROJECT( tomahawk )
-CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
-
 set(TOMAHAWK_APPLICATION_TARGET "tomahahawk-bin")
 
 include( ECMAddAppIcon )
