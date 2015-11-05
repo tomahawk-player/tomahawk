@@ -334,6 +334,7 @@ Section "${APPLICATION_NAME}" SEC_TOMAHAWK_PLAYER
     File "${QT_DLL_PATH}\Qt5WebKitWidgets.dll"
     File "${QT_DLL_PATH}\Qt5Multimedia.dll"
     File "${QT_DLL_PATH}\Qt5MultimediaWidgets.dll"
+    File "${QT_DLL_PATH}\Qt5Positioning.dll"
 
     ;Qt deps
     File "${QT_DLL_PATH}\libpcre16-0.dll"
@@ -342,11 +343,9 @@ Section "${APPLICATION_NAME}" SEC_TOMAHAWK_PLAYER
     File "${QT_DLL_PATH}\libEGL.dll"
     File "${QT_DLL_PATH}\libGLESv2.dll"
     File "${QT_DLL_PATH}\libwebp-5.dll"
-
-    ;Boost fnord
-    File "${QT_DLL_PATH}\icuuc53.dll"
-    File "${QT_DLL_PATH}\icudata53.dll"
-    File "${QT_DLL_PATH}\icui18n53.dll"
+    File "${QT_DLL_PATH}\icuuc56.dll"
+    File "${QT_DLL_PATH}\icudata56.dll"
+    File "${QT_DLL_PATH}\icui18n56.dll"
 
    ;SQLite driver
    SetOutPath "$INSTDIR\sqldrivers"
@@ -366,6 +365,13 @@ Section "${APPLICATION_NAME}" SEC_TOMAHAWK_PLAYER
    File "${IMAGEFORMATS_DLL_PATH}\qsvg.dll"
    SetOutPath "$INSTDIR"
 
+   ;Qt qml plugins
+   SetOutPath "$INSTDIR\QtQuick.2"
+   File /r /x *.debug "${QT_QML_PATH}\QtQuick.2\*"
+   SetOutPath "$INSTDIR\QtQuick\Window.2"
+   File /r /x *.debug "${QT_QML_PATH}\QtQuick\Window.2\*"
+   SetOutPath "$INSTDIR"
+
    ;Cygwin/c++ stuff
    File "${MINGW_BIN}\libgcc_s_sjlj-1.dll"
    File "${MINGW_BIN}\libstdc++-6.dll"
@@ -382,6 +388,9 @@ Section "${APPLICATION_NAME}" SEC_TOMAHAWK_PLAYER
    File "${MINGW_BIN}\libpng16-16.dll"
    File "${MINGW_BIN}\libjpeg-8.dll"
    File "${MINGW_BIN}\zlib1.dll"
+   File "${MINGW_BIN}\libfreetype-6.dll"
+   File "${MINGW_BIN}\libglib-2.0-0.dll"
+   File "${MINGW_BIN}\libharfbuzz-0.dll"
 
    File "${MINGW_BIN}\libechonest5.dll"
    File "${MINGW_BIN}\liblastfm5.dll"
