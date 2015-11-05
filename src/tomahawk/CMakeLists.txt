@@ -1,9 +1,6 @@
-PROJECT( tomahawk )
-CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
-
 set(TOMAHAWK_APPLICATION_TARGET "tomahahawk-bin")
 
-include( AddAppIconMacro )
+include( ECMAddAppIcon )
 
 # SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 # SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
@@ -148,7 +145,10 @@ IF( BUILD_GUI )
     qt_wrap_ui( tomahawkUI_H ${tomahawkUI} )
 ENDIF()
 
-tomahawk_add_app_icon( tomahawkSources Tomahawk "${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon-*.png" )
+file( GLOB_RECURSE TOMAHAWK_ICONS "${CMAKE_SOURCE_DIR}/data/icons/*-tomahawk-icon.png" )
+
+ecm_add_app_icon( tomahawkSources ICONS ${TOMAHAWK_ICONS} )
+
 qt_add_resources( RC_SRCS "../../resources.qrc" )
 
 SET( final_src ${final_src} ${tomahawkUI_H} ${tomahawkMoc} ${tomahawkSources} ${RC_SRCS} )

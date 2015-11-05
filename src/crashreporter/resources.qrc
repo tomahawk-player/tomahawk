@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file alias="tomahawk-icon.png">../../data/icons/tomahawk-icon-128x128.png</file>
+        <file alias="tomahawk-icon.png">../../data/icons/128x128-tomahawk-icon.png</file>
     </qresource>
 </RCC>

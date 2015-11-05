@@ -1,15 +1,20 @@
 PROJECT( tomahawk )
-CMAKE_MINIMUM_REQUIRED( VERSION 2.8.6 )
-SET( CMAKE_MODULE_PATH  "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules" )
+CMAKE_MINIMUM_REQUIRED( VERSION 2.8.12 )
 CMAKE_POLICY(SET CMP0017 NEW)
-
-IF ( CMAKE_VERSION VERSION_EQUAL 2.8.12 OR CMAKE_VERSION VERSION_GREATER 2.8.12 )
 CMAKE_POLICY(SET CMP0022 NEW)
 
 # TODO:
-# Update to NEW and fix things up when we can depend on 2.8.12
+# Update to NEW and fix things up
 CMAKE_POLICY(SET CMP0023 OLD)
-ENDIF()
+
+# TODO:
+# Disable automatic qtmain linking
+CMAKE_POLICY(SET CMP0020 OLD)
+
+find_package(ECM 1.7.0 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules" )
+
+
 
 INCLUDE(CMakeDependentOption)
 
@@ -64,8 +69,11 @@ macro(tomahawk_add_c_flags FLAGS)
     set( TOMAHAWK_C_FLAGS "${TOMAHAWK_C_FLAGS} ${FLAGS}")
 endmacro()
 
-# enforce proper symbol exporting on all platforms
-tomahawk_add_definitions( "-fvisibility=hidden" )
+if(NOT WIN32)
+    # enforce proper symbol exporting on all platforms but Windows
+    tomahawk_add_c_flags( "-fvisibility=hidden" )
+endif()
+
 # enforce using constBegin, constEnd for const-iterators
 tomahawk_add_definitions( "-DQT_STRICT_ITERATORS" )
 
@@ -162,7 +170,7 @@ if( NOT BUILD_WITH_QT4 )
         find_package(Qt5WebKitWidgets REQUIRED)
         find_package(Qt5Widgets REQUIRED)
         find_package(Qt5Xml REQUIRED)
-        find_package(Qt5X11Extras NO_MODULE)
+        find_package(Qt5X11Extras NO_MODULE QUIET)
 
         if(Qt5X11Extras_FOUND)
             set(HAVE_X11 TRUE)
