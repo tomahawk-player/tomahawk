@@ -1419,7 +1419,7 @@ TomahawkWindow::showAboutTomahawk()
     const QString copyright( tr( "Copyright 2010 - 2015" ) );
     const QString thanksto( tr( "Thanks to:" ) );
 
-    desc = QString( "%1<br/>Christian Muehlhaeuser &lt;muesli@tomahawk-player.org&gt;<br/><br/>"
+    desc = QString( "https://tomahawk-player.org<br/><br/>%1<br/><br/>Christian Muehlhaeuser &lt;muesli@tomahawk-player.org&gt;<br/><br/>"
     "%2 Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Hugo Lindstr&ouml;m, Michael Zanetti, Teo Mrnjavac, Christopher Reichert, Uwe L. Korn, Patrick von Reth, Harald Sitter, Syd Lawrence, Jordi Verd&uacute; Orts" )
               .arg( copyright )
               .arg( thanksto );
