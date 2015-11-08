@@ -71,7 +71,7 @@ endmacro()
 
 if(NOT WIN32)
     # enforce proper symbol exporting on all platforms but Windows
-    tomahawk_add_c_flags( "-fvisibility=hidden" )
+    tomahawk_add_definitions( "-fvisibility=hidden" )
 endif()
 
 # enforce using constBegin, constEnd for const-iterators
