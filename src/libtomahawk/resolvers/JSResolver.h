@@ -89,6 +89,9 @@ signals:
 protected:
     QVariant callOnResolver( const QString& scriptSource );
 
+private slots:
+    void onResolveRequestDone(const QVariantMap& data);
+
 private:
     void init();
 

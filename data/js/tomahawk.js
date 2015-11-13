@@ -281,27 +281,23 @@ Tomahawk.Resolver = {
         });
     },
 
-    _adapter_resolve: function (qid, artist, album, title) {
+    _adapter_resolve: function (params) {
         var that = this;
         var collectionPromises = [];
         Tomahawk.collections.forEach(function (col) {
             if (col.resolve) {
-                collectionPromises.push(col.resolve({artist: artist, album: album, track: title}));
+                collectionPromises.push(col.resolve(params));
             }
         });
-        RSVP.Promise.all(collectionPromises).then(function (collectionResults) {
+
+        return RSVP.Promise.all(collectionPromises).then(function (collectionResults) {
             var merged = [];
             return merged.concat.apply(merged, collectionResults);
         }).then(function (collectionResults) {
-            RSVP.Promise.resolve(that.resolve({
-                artist: artist,
-                album: album,
-                track: title
-            })).then(function (results) {
-                Tomahawk.addTrackResults({
-                    'qid': qid,
+            return RSVP.Promise.resolve(that.resolve(params)).then(function (results) {
+                return {
                     'results': that._convertUrls(results.concat(collectionResults))
-                });
+                };
             });
         });
     },
@@ -320,23 +316,22 @@ Tomahawk.Resolver = {
         });
     },
 
-    _adapter_search: function (qid, query) {
+    _adapter_search: function (params) {
         var that = this;
         var collectionPromises = [];
         Tomahawk.collections.forEach(function (col) {
             if (col.search) {
-                collectionPromises.push(col.search({query: query}));
+                collectionPromises.push(col.search(params));
             }
         });
-        RSVP.Promise.all(collectionPromises).then(function (collectionResults) {
+        return RSVP.Promise.all(collectionPromises).then(function (collectionResults) {
             var merged = [];
             return merged.concat.apply(merged, collectionResults);
         }).then(function (collectionResults) {
-            RSVP.Promise.resolve(that.search({query: query})).then(function (results) {
-                Tomahawk.addTrackResults({
-                    'qid': qid,
+            return RSVP.Promise.resolve(that.search(params)).then(function (results) {
+                return {
                     'results': that._convertUrls(results.concat(collectionResults))
-                });
+                };
             });
         });
     },
@@ -815,7 +810,9 @@ Tomahawk.base64Encode = function (b) {
     return window.btoa(b);
 };
 
+
 Tomahawk.PluginManager = {
+    wrapperPrefix: '_adapter_',
     objects: {},
     objectCounter: 0,
     identifyObject: function (object) {
@@ -851,6 +848,12 @@ Tomahawk.PluginManager = {
                 methodName = 'tracks';
             }
         }
+
+
+        if (this.objects[objectId][this.wrapperPrefix + methodName]) {
+            methodName = this.wrapperPrefix + methodName;
+        }
+
 
         var pluginManager = this;
         if (!this.objects[objectId]) {

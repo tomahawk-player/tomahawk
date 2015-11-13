@@ -44,6 +44,7 @@
 #include "Track.h"
 #include "ScriptInfoPlugin.h"
 #include "JSAccount.h"
+#include "ScriptJob.h"
 
 #include <QDir>
 #include <QFile>
@@ -250,8 +251,7 @@ JSResolver::init()
     d->scriptAccount->loadScript( filePath() );
 
     // HACK: register resolver object
-    d->scriptAccount->evaluateJavaScript( "Tomahawk.PluginManager.registerPlugin('resolver', Tomahawk.resolver.instance);" )
-;
+    d->scriptAccount->evaluateJavaScript( "Tomahawk.PluginManager.registerPlugin('resolver', Tomahawk.resolver.instance);" );
     // init resolver
     resolverInit();
 
@@ -394,23 +394,28 @@ JSResolver::resolve( const Tomahawk::query_ptr& query )
         return;
     }
 
-    QString eval;
+    ScriptJob* job = nullptr;
     if ( !query->isFullTextQuery() )
     {
-        eval = QString( "resolve( '%1', '%2', '%3', '%4' )" )
-                  .arg( JSAccount::escape( query->id() ) )
-                  .arg( JSAccount::escape( query->queryTrack()->artist() ) )
-                  .arg( JSAccount::escape( query->queryTrack()->album() ) )
-                  .arg( JSAccount::escape( query->queryTrack()->track() ) );
+        QVariantMap arguments;
+        arguments["artist"] = query->queryTrack()->artist();
+        arguments["album"] = query->queryTrack()->album();
+        arguments["track"] = query->queryTrack()->track();
+
+        job = scriptObject()->invoke( "resolve", arguments );
     }
     else
     {
-        eval = QString( "search( '%1', '%2' )" )
-                  .arg( JSAccount::escape( query->id() ) )
-                  .arg( JSAccount::escape( query->fullTextQuery() ) );
+        QVariantMap arguments;
+        arguments["query"] = query->fullTextQuery();
+        job = scriptObject()->invoke( "search", arguments );
     }
 
-    QVariantMap m = callOnResolver( eval ).toMap();
+
+    job->setProperty( "qid", query->id() );
+    connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onResolveRequestDone( QVariantMap ) ) );
+
+    job->start();
 }
 
 
@@ -551,4 +556,33 @@ JSResolver::callOnResolver( const QString& scriptSource )
         "    Tomahawk.resolver.instance.%2"
         "}"
     ).arg( propertyName ).arg( scriptSource ) );
+}
+
+
+void
+JSResolver::onResolveRequestDone( const QVariantMap& data )
+{
+    Q_ASSERT( QThread::currentThread() == thread() );
+    Q_D( JSResolver );
+
+    ScriptJob* job = qobject_cast< ScriptJob* >( sender() );
+    if ( job->error() )
+    {
+        // what do here?!
+    }
+    else
+    {
+
+        QList< Tomahawk::result_ptr > results = scriptAccount()->parseResultVariantList( data.value( "results" ).toList() );
+
+        foreach( const result_ptr& result, results )
+        {
+            result->setResolvedByResolver( this );
+            result->setFriendlySource( name() );
+        }
+
+        Tomahawk::Pipeline::instance()->reportResults( job->property( "qid" ).toString(), this, results );
+    }
+
+    sender()->deleteLater();
 }

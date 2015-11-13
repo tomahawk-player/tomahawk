@@ -140,25 +140,6 @@ JSResolverHelper::log( const QString& message )
 }
 
 
-void
-JSResolverHelper::addTrackResults( const QVariantMap& results )
-{
-    Q_ASSERT( results["results"].toMap().isEmpty() );
-
-    QList< Tomahawk::result_ptr > tracks = m_resolver->scriptAccount()->parseResultVariantList( results.value( "results" ).toList() );
-
-    foreach( const result_ptr& track, tracks )
-    {
-        track->setResolvedByResolver( m_resolver );
-        track->setFriendlySource( m_resolver->name() );
-    }
-
-    QString qid = results.value("qid").toString();
-
-    Tomahawk::Pipeline::instance()->reportResults( qid, m_resolver, tracks );
-}
-
-
 query_ptr
 JSResolverHelper::parseTrack( const QVariantMap& track )
 {

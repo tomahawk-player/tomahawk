@@ -142,8 +142,6 @@ public slots:
     void log( const QString& message );
     bool fakeEnv() { return false; }
 
-    void addTrackResults( const QVariantMap& results );
-
     void addUrlResult( const QString& url, const QVariantMap& result );
 
     void nativeReportCapabilities( const QVariant& capabilities );
