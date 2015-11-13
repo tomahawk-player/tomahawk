@@ -566,9 +566,12 @@ JSResolver::onResolveRequestDone( const QVariantMap& data )
     Q_D( JSResolver );
 
     ScriptJob* job = qobject_cast< ScriptJob* >( sender() );
+
+    QID qid = job->property( "qid" ).toString();
+
     if ( job->error() )
     {
-        // what do here?!
+        Tomahawk::Pipeline::instance()->reportError( qid, this );
     }
     else
     {
@@ -581,7 +584,7 @@ JSResolver::onResolveRequestDone( const QVariantMap& data )
             result->setFriendlySource( name() );
         }
 
-        Tomahawk::Pipeline::instance()->reportResults( job->property( "qid" ).toString(), this, results );
+        Tomahawk::Pipeline::instance()->reportResults( qid, this, results );
     }
 
     sender()->deleteLater();

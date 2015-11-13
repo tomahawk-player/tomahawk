@@ -54,6 +54,7 @@ public:
     unsigned int pendingQueryCount() const;
     unsigned int activeQueryCount() const;
 
+    void reportError( QID qid, Tomahawk::Resolver* r );
     void reportResults( QID qid, Tomahawk::Resolver* r, const QList< result_ptr >& results );
     void reportAlbums( QID qid, const QList< album_ptr >& albums );
     void reportArtists( QID qid, const QList< artist_ptr >& artists );

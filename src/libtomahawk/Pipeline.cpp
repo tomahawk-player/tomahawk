@@ -324,6 +324,13 @@ Pipeline::resolve( QID qid, bool prioritized, bool temporaryQuery )
 
 
 void
+Pipeline::reportError( QID qid, Tomahawk::Resolver* r )
+{
+    reportResults( qid, r, QList< result_ptr>() );
+}
+
+
+void
 Pipeline::reportResults( QID qid, Tomahawk::Resolver* r, const QList< result_ptr >& results )
 {
     Q_D( Pipeline );
