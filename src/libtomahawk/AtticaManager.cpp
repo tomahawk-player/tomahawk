@@ -116,7 +116,7 @@ AtticaManager::fetchMissingIcons()
 QString
 AtticaManager::hostname() const
 {
-    return "http://bakery.tomahawk-player.org";
+    return "http://v09.bakery.tomahawk-player.org";
 }
 
 
