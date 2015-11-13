@@ -267,6 +267,8 @@ Tomahawk.Resolver = {
     },
     newConfigSaved: function () {
     },
+    testConfig: function () {
+    },
     getStreamUrl: function (params) {
         return params;
     },
