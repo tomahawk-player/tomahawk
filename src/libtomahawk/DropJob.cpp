@@ -175,7 +175,7 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
         // Check Scriptresolvers
         foreach ( QPointer<ExternalResolver> resolver, Pipeline::instance()->scriptResolvers() )
         {
-            if ( resolver->canParseUrl( url, ExternalResolver::Playlist ) )
+            if ( resolver->canParseUrl( url, ExternalResolver::UrlTypePlaylist ) )
                 return true;
         }
     }
@@ -201,7 +201,7 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
         // Check Scriptresolvers
         foreach ( QPointer<ExternalResolver> resolver, Pipeline::instance()->scriptResolvers() )
         {
-            if ( resolver->canParseUrl( url, ExternalResolver::Track ) )
+            if ( resolver->canParseUrl( url, ExternalResolver::UrlTypeTrack ) )
                 return true;
         }
     }
@@ -218,7 +218,7 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
         // Check Scriptresolvers
         foreach ( QPointer<ExternalResolver> resolver, Pipeline::instance()->scriptResolvers() )
         {
-            if ( resolver->canParseUrl( url, ExternalResolver::Album ) )
+            if ( resolver->canParseUrl( url, ExternalResolver::UrlTypeAlbum ) )
                 return true;
         }
     }
@@ -235,7 +235,7 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
         // Check Scriptresolvers
         foreach ( QPointer<ExternalResolver> resolver, Pipeline::instance()->scriptResolvers() )
         {
-            if ( resolver->canParseUrl( url, ExternalResolver::Artist ) )
+            if ( resolver->canParseUrl( url, ExternalResolver::UrlTypeArtist ) )
                 return true;
         }
     }
@@ -306,7 +306,7 @@ DropJob::isDropType( DropJob::DropType desired, const QMimeData* data )
         // Check Scriptresolvers
         foreach ( QPointer<ExternalResolver> resolver, Pipeline::instance()->scriptResolvers() )
         {
-            if ( resolver->canParseUrl( url, ExternalResolver::Playlist ) )
+            if ( resolver->canParseUrl( url, ExternalResolver::UrlTypePlaylist ) )
             {
                 tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Accepting current drop as a playlist" << resolver->name();
                 return true;
@@ -763,7 +763,7 @@ DropJob::handleTrackUrls( const QString& urls )
         {
             foreach ( QPointer<ExternalResolver> resolver, Pipeline::instance()->scriptResolvers() )
             {
-                if ( resolver->canParseUrl( track, ExternalResolver::Any ) )
+                if ( resolver->canParseUrl( track, ExternalResolver::UrlTypeAny ) )
                 {
                     ScriptCommand_LookupUrl* cmd = new ScriptCommand_LookupUrl( resolver, track );
                     connect( cmd, SIGNAL( information( QString, QSharedPointer<QObject> ) ), this, SLOT( informationForUrl( QString, QSharedPointer<QObject> ) ) );

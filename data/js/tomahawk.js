@@ -173,7 +173,8 @@ var TomahawkUrlType = {
     Playlist: 1,
     Track: 2,
     Album: 4,
-    Artist: 8
+    Artist: 8,
+    Xspf: 16
 };
 
 //Deprecated for 0.9 resolvers. Use Tomahawk.ConfigTestResultType instead.

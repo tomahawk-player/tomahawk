@@ -68,11 +68,12 @@ public:
 
     enum UrlType
     {
-        Any =       0x00,
-        Playlist =  0x01,
-        Track =     0x02,
-        Album =     0x04,
-        Artist =    0x08
+        UrlTypeAny =       0x00,
+        UrlTypePlaylist =  0x01,
+        UrlTypeTrack =     0x02,
+        UrlTypeAlbum =     0x04,
+        UrlTypeArtist =    0x08,
+        UrlTypeXspf =      0x10
     };
     Q_DECLARE_FLAGS( UrlTypes, UrlType )
     Q_FLAGS( UrlTypes )

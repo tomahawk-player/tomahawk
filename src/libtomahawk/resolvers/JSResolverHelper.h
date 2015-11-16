@@ -133,7 +133,6 @@ public slots:
     QByteArray readRaw( const QString& fileName );
     QString readBase64( const QString& fileName );
     QString readCompressed( const QString& fileName );
-    QString instanceUUID();
     QString uuid() const;
     int currentCountry() const;
     QString compress( const QString& data );
@@ -141,8 +140,6 @@ public slots:
 
     void log( const QString& message );
     bool fakeEnv() { return false; }
-
-    void addUrlResult( const QString& url, const QVariantMap& result );
 
     void nativeReportCapabilities( const QVariant& capabilities );
 
@@ -153,12 +150,9 @@ public slots:
 
 private slots:
     void gotStreamUrl( IODeviceCallback callback, NetworkReply* reply );
-    void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::ModelMode, const Tomahawk::collection_ptr& collection );
-    void pltemplateTracksLoadedForUrl( const QString& url, const Tomahawk::playlisttemplate_ptr& pltemplate );
     void nativeAsyncRequestDone( int requestId, NetworkReply* reply );
 
 private:
-    Tomahawk::query_ptr parseTrack( const QVariantMap& track );
     void returnStreamUrl( const QString& streamUrl, const QMap<QString, QString>& headers,
                           std::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback );
 
@@ -171,8 +165,6 @@ private:
     QHash< QString, std::function< void( const QString&, QSharedPointer< QIODevice >& ) > > m_streamCallbacks;
     QHash< QString, std::function< void( const QString& ) > > m_translatorCallbacks;
     bool m_urlCallbackIsAsync;
-    QString m_pendingUrl;
-    Tomahawk::album_ptr m_pendingAlbum;
 };
 
 } // ns: Tomahawk

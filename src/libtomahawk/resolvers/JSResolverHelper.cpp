@@ -21,10 +21,6 @@
 
 #include "JSResolverHelper.h"
 
-#include "database/Database.h"
-#include "database/DatabaseImpl.h"
-#include "playlist/PlaylistTemplate.h"
-#include "playlist/XspfPlaylistTemplate.h"
 #include "resolvers/ScriptEngine.h"
 #include "network/Servent.h"
 #include "utils/Closure.h"
@@ -137,36 +133,6 @@ void
 JSResolverHelper::log( const QString& message )
 {
     tLog() << "JAVASCRIPT:" << m_scriptPath << ":" << message;
-}
-
-
-query_ptr
-JSResolverHelper::parseTrack( const QVariantMap& track )
-{
-    QString title = track.value( "title" ).toString();
-    QString artist = track.value( "artist" ).toString();
-    QString album = track.value( "album" ).toString();
-    if ( title.isEmpty() || artist.isEmpty() )
-    {
-        return query_ptr();
-    }
-
-    Tomahawk::query_ptr query = Tomahawk::Query::get( artist, title, album );
-    QString resultHint = track.value( "hint" ).toString();
-    if ( !resultHint.isEmpty() )
-    {
-        query->setResultHint( resultHint );
-        query->setSaveHTTPResultHint( true );
-    }
-
-    return query;
-}
-
-
-QString
-JSResolverHelper::instanceUUID()
-{
-    return Tomahawk::Database::instance()->impl()->dbid();
 }
 
 
@@ -465,120 +431,6 @@ JSResolverHelper::currentCountry() const
 
 
 void
-JSResolverHelper::addUrlResult( const QString& url, const QVariantMap& result )
-{
-    // It may seem a bit weird, but currently no slot should do anything
-    // more as we starting on a new URL and not task are waiting for it yet.
-    m_pendingUrl = QString();
-    m_pendingAlbum = album_ptr();
-
-    QString type = result.value( "type" ).toString();
-    if ( type == "artist" )
-    {
-        QString name = result.value( "name" ).toString();
-        Q_ASSERT( !name.isEmpty() );
-        emit m_resolver->informationFound( url, Artist::get( name, true ).objectCast<QObject>() );
-    }
-    else if ( type == "album" )
-    {
-        QString name = result.value( "name" ).toString();
-        QString artist = result.value( "artist" ).toString();
-        album_ptr album = Album::get( Artist::get( artist, true ), name );
-        m_pendingUrl = url;
-        m_pendingAlbum = album;
-        connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
-                 SLOT( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ) );
-        if ( !album->tracks().isEmpty() )
-        {
-            emit m_resolver->informationFound( url, album.objectCast<QObject>() );
-        }
-    }
-    else if ( type == "track" )
-    {
-        Tomahawk::query_ptr query = parseTrack( result );
-        if ( query.isNull() )
-        {
-            // A valid track result shoud have non-empty title and artist.
-            tLog() << Q_FUNC_INFO << m_resolver->name() << "Got empty track information for " << url;
-            emit m_resolver->informationFound( url, QSharedPointer<QObject>() );
-        }
-        else
-        {
-            emit m_resolver->informationFound( url, query.objectCast<QObject>() );
-        }
-    }
-    else if ( type == "playlist" )
-    {
-        QString guid = result.value( "guid" ).toString();
-        Q_ASSERT( !guid.isEmpty() );
-        // Append nodeid to guid to make it globally unique.
-        guid += instanceUUID();
-
-        // Do we already have this playlist loaded?
-        {
-            playlist_ptr playlist = Playlist::get( guid );
-            if ( !playlist.isNull() )
-            {
-                emit m_resolver->informationFound( url, playlist.objectCast<QObject>() );
-                return;
-            }
-        }
-
-        // Get all information to build a new playlist but do not build it until we know,
-        // if it is really handled as a playlist and not as a set of tracks.
-        Tomahawk::source_ptr source = SourceList::instance()->getLocal();
-        const QString title = result.value( "title" ).toString();
-        const QString info = result.value( "info" ).toString();
-        const QString creator = result.value( "creator" ).toString();
-        QList<query_ptr> queries;
-        foreach( QVariant track, result.value( "tracks" ).toList() )
-        {
-            query_ptr query = parseTrack( track.toMap() );
-            if ( !query.isNull() )
-            {
-                queries << query;
-            }
-        }
-        tLog( LOGVERBOSE ) << Q_FUNC_INFO << m_resolver->name() << "Got playlist for " << url;
-        playlisttemplate_ptr pltemplate( new PlaylistTemplate( source, guid, title, info, creator, false, queries ) );
-        emit m_resolver->informationFound( url, pltemplate.objectCast<QObject>() );
-    }
-    else if ( type == "xspf-url" )
-    {
-        QString xspfUrl = result.value( "url" ).toString();
-        Q_ASSERT( !xspfUrl.isEmpty() );
-        QString guid = QString( "xspf-%1-%2" ).arg( xspfUrl.toUtf8().toBase64().constData() ).arg( instanceUUID() );
-
-        // Do we already have this playlist loaded?
-        {
-            playlist_ptr playlist = Playlist::get( guid );
-            if ( !playlist.isNull() )
-            {
-                emit m_resolver->informationFound( url, playlist.objectCast<QObject>() );
-                return;
-            }
-        }
-
-
-        // Get all information to build a new playlist but do not build it until we know,
-        // if it is really handled as a playlist and not as a set of tracks.
-        Tomahawk::source_ptr source = SourceList::instance()->getLocal();
-        QSharedPointer<XspfPlaylistTemplate> pltemplate( new XspfPlaylistTemplate( xspfUrl, source, guid ) );
-        NewClosure( pltemplate, SIGNAL( tracksLoaded( QList< Tomahawk::query_ptr > ) ),
-                    this, SLOT( pltemplateTracksLoadedForUrl( QString, Tomahawk::playlisttemplate_ptr ) ),
-                    url, pltemplate.objectCast<Tomahawk::PlaylistTemplate>() );
-        tLog( LOGVERBOSE ) << Q_FUNC_INFO << m_resolver->name() << "Got playlist for " << url;
-        pltemplate->load();
-    }
-    else
-    {
-        tLog( LOGVERBOSE ) << Q_FUNC_INFO << m_resolver->name() << "No usable information found for " << url;
-        emit m_resolver->informationFound( url, QSharedPointer<QObject>() );
-    }
-}
-
-
-void
 JSResolverHelper::nativeReportCapabilities( const QVariant& v )
 {
     bool ok;
@@ -611,27 +463,6 @@ void
 JSResolverHelper::unregisterScriptPlugin( const QString& type, const QString& objectId )
 {
     m_resolver->d_func()->scriptAccount->unregisterScriptPlugin( type, objectId );
-}
-
-
-void
-JSResolverHelper::tracksAdded( const QList<query_ptr>&, const ModelMode, const collection_ptr&)
-{
-    // Check if we still are actively waiting
-    if ( m_pendingAlbum.isNull() || m_pendingUrl.isNull() )
-        return;
-
-    emit m_resolver->informationFound( m_pendingUrl, m_pendingAlbum.objectCast<QObject>() );
-    m_pendingAlbum = album_ptr();
-    m_pendingUrl = QString();
-}
-
-
-void
-JSResolverHelper::pltemplateTracksLoadedForUrl( const QString& url, const playlisttemplate_ptr& pltemplate )
-{
-    tLog() << Q_FUNC_INFO;
-    emit m_resolver->informationFound( url, pltemplate.objectCast<QObject>() );
 }
 
 

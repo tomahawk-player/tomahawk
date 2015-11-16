@@ -167,7 +167,7 @@ GlobalActionManager::openUrl( const QString& url )
     QList< QPointer< ExternalResolver > > possibleResolvers;
     foreach ( QPointer<ExternalResolver> resolver, Pipeline::instance()->scriptResolvers() )
     {
-        if ( resolver->canParseUrl( url, ExternalResolver::Any ) )
+        if ( resolver->canParseUrl( url, ExternalResolver::UrlTypeAny ) )
         {
             canParse = true;
             possibleResolvers << resolver;
