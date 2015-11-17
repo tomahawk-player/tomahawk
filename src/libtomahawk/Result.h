@@ -21,7 +21,6 @@
 #ifndef RESULT_H
 #define RESULT_H
 
-#include "ResultProvider.h"
 #include "DownloadJob.h"
 #include "utils/TomahawkUtils.h"
 #include "Typedefs.h"
@@ -38,6 +37,7 @@ class MetadataEditor;
 namespace Tomahawk
 {
 
+class ResultProvider;
 class Resolver;
 
 class DLLEXPORT Result : public QObject
