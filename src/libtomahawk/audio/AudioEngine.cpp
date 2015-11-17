@@ -40,6 +40,7 @@
 #include "SourceList.h"
 #include "TomahawkSettings.h"
 #include "UrlHandler.h"
+#include "resolvers/ScriptJob.h"
 
 #include <QDir>
 
@@ -574,10 +575,21 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 
     setCurrentTrack( result );
 
-    if ( !TomahawkUtils::isLocalResult( d->currentTrack->url() ) && !TomahawkUtils::isHttpResult( d->currentTrack->url() )
-         && !TomahawkUtils::isRtmpResult( d->currentTrack->url() ) )
+    ScriptJob* job = result->resolvedBy()->getStreamUrl( result );
+    connect( job, SIGNAL( done( QVariantMap ) ), SLOT( gotStreamUrl( QVariantMap ) ) );
+    job->start();
+}
+
+void
+AudioEngine::gotStreamUrl( const QVariantMap& data )
+{
+    QString url = data[ "url" ].toString();
+    result_ptr result = data[ "result" ].value<result_ptr>();
+
+    if ( !TomahawkUtils::isLocalResult( url ) && !TomahawkUtils::isHttpResult( url )
+         && !TomahawkUtils::isRtmpResult( url ) )
     {
-        performLoadIODevice( d->currentTrack, d->currentTrack->url() );
+        performLoadIODevice( result, url );
     }
     else
     {

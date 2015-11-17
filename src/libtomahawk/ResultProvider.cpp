@@ -17,8 +17,24 @@
  */
 #include "ResultProvider.h"
 
+#include "Result.h"
+#include "resolvers/SyncScriptJob.h"
+
 using namespace Tomahawk;
 
 ResultProvider::~ResultProvider()
 {
+}
+
+
+ScriptJob*
+ResultProvider::getStreamUrl( const result_ptr& result )
+{
+    QUrl url = result->url();
+
+    QVariantMap data;
+    data[ "result" ] = QVariant::fromValue( result );
+    data[ "url" ] = url;
+
+    return new SyncScriptJob( data );
 }

@@ -20,6 +20,7 @@
 #define TOMAHAWK_RESULTPROVIDER_H
 
 #include "DllMacro.h"
+#include "Typedefs.h"
 
 class QPixmap;
 class QString;
@@ -27,6 +28,7 @@ class QSize;
 
 namespace Tomahawk
 {
+class ScriptJob;
 
 class DLLEXPORT ResultProvider
 {
@@ -35,6 +37,8 @@ public:
 
     virtual QString name() const = 0;
     virtual QPixmap icon( const QSize& size ) const = 0;
+
+    virtual ScriptJob* getStreamUrl( const result_ptr& result );
 };
 
 }
