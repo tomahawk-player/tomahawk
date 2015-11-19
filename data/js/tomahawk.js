@@ -886,9 +886,10 @@ Tomahawk.NativeScriptJobManager = {
     deferreds: {},
     invoke: function (methodName, params) {
         var requestId = this.idCounter++;
-        Tomahawk.invokeNativeScriptJob(requestId, methodName, encodeParamsToNativeFunctions(params));
-        this.deferreds[requestId] = RSVP.defer();
-        return this.deferreds[requestId].promise;
+        var deferred = RSVP.defer();
+        this.deferreds[requestId] = deferred;
+        Tomahawk.invokeNativeScriptJob(requestId, methodName, encodeParamsToNativeFunctions(params));;
+        return deferred.promise;
     },
     reportNativeScriptJobResult: function (requestId, result) {
         var deferred = this.deferreds[requestId];
