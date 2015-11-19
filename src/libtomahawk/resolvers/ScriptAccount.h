@@ -72,6 +72,7 @@ public:
     void unregisterScriptPlugin( const QString& type, const QString& objectId );
 
     virtual void reportNativeScriptJobResult( int resultId, const QVariantMap& result ) = 0;
+    virtual void reportNativeScriptJobError( int resultId, const QVariantMap& error ) = 0;
 
     virtual void scriptPluginFactory( const QString& type, const scriptobject_ptr& object );
 

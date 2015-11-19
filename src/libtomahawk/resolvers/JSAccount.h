@@ -72,6 +72,7 @@ public:
     static QString serializeQVariantMap(const QVariantMap& map);
 
     void reportNativeScriptJobResult( int resultId, const QVariantMap& result ) override;
+    void reportNativeScriptJobError( int resultId, const QVariantMap& error ) override;
 
 private:
     /**

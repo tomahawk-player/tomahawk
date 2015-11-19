@@ -893,12 +893,20 @@ Tomahawk.NativeScriptJobManager = {
         Tomahawk.invokeNativeScriptJob(requestId, methodName, encodeParamsToNativeFunctions(params));;
         return deferred.promise;
     },
-    reportNativeScriptJobResult: function (requestId, result) {
+    reportNativeScriptJobResult: function(requestId, result) {
         var deferred = this.deferreds[requestId];
         if (!deferred) {
             Tomahawk.log("Deferred object with the given requestId is not present!");
         }
         deferred.resolve(result);
+        delete this.deferreds[requestId];
+    },
+    reportNativeScriptJobError: function(requestId, error) {
+        var deferred = this.deferreds[requestId];
+        if (!deferred) {
+            console.log("Deferred object with the given requestId is not present!");
+        }
+        deferred.reject(error);
         delete this.deferreds[requestId];
     }
 };

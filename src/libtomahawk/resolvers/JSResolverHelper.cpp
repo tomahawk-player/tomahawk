@@ -635,8 +635,11 @@ JSResolverHelper::invokeNativeScriptJob( int requestId, const QString& methodNam
     if ( methodName == "httpRequest" ) {
         nativeAsyncRequest( requestId, params );
     } else {
-        // TODO: make promise reject instead
-        Q_ASSERT_X(false, "invokeNativeScriptJob", "NativeScriptJob methodName was not found");
+        QVariantMap error;
+        error["message"] = "NativeScriptJob methodName was not found";
+        error["name"] = "method_was_not_found";
+
+        m_resolver->d_func()->scriptAccount->reportNativeScriptJobError( requestId, error );
     }
 }
 
