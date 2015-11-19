@@ -47,6 +47,8 @@
 #include <QMap>
 #include <QWebFrame>
 #include <QLocale>
+#include <QNetworkReply>
+
 #include <taglib/asffile.h>
 #include <taglib/flacfile.h>
 #include <taglib/id3v2framefactory.h>
@@ -627,12 +629,24 @@ JSResolverHelper::nativeRetrieveMetadata( int metadataId, const QString& url,
     }
 }
 
+void
+JSResolverHelper::invokeNativeScriptJob( int requestId, const QString& methodName, const QVariantMap& params )
+{
+    if ( methodName == "httpRequest" ) {
+        nativeAsyncRequest( requestId, params );
+    } else {
+        // TODO: make promise reject instead
+        Q_ASSERT_X(false, "invokeNativeScriptJob", "NativeScriptJob methodName was not found");
+    }
+}
+
 
 void
-JSResolverHelper::nativeAsyncRequest( const int requestId, const QString& url,
-                                      const QVariantMap& headers,
-                                      const QVariantMap& options )
+JSResolverHelper::nativeAsyncRequest( const int requestId, const QVariantMap& options )
 {
+    QString url = options[ "url" ].toString();
+    QVariantMap headers = options[ "headers" ].toMap();
+
     QNetworkRequest req( url );
     foreach ( const QString& key, headers.keys() )
     {
@@ -688,17 +702,16 @@ JSResolverHelper::nativeAsyncRequestDone( int requestId, NetworkReply* reply )
     map["status"] = reply->reply()->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
     map["statusText"] = QString("%1 %2").arg( map["status"].toString() )
             .arg( reply->reply()->attribute( QNetworkRequest::HttpReasonPhraseAttribute ).toString() );
-    if (reply->reply()->hasRawHeader( "Content-Type" ))
-        map["contentType"] = reply->reply()->rawHeader( "Content-Type" );
 
-    bool ok = false;
-    QString json = QString::fromUtf8( TomahawkUtils::toJson( map, &ok ) );
-    Q_ASSERT( ok );
 
-    QString javascript = QString( "Tomahawk.nativeAsyncRequestDone( %1, %2 );" )
-            .arg( QString::number( requestId ) )
-            .arg( json );
-    m_resolver->d_func()->scriptAccount->evaluateJavaScript( javascript );
+    QVariantMap responseHeaders;
+    foreach( const QNetworkReply::RawHeaderPair& pair, reply->reply()->rawHeaderPairs() )
+    {
+        responseHeaders[ pair.first ] = pair.second;
+    }
+    map["responseHeaders"] = responseHeaders;
+
+    m_resolver->d_func()->scriptAccount->reportNativeScriptJobResult( requestId, map );
 }
 
 

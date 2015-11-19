@@ -430,6 +430,23 @@ Tomahawk.nativeAsyncRequestDone = function (reqId, xhr) {
     delete Tomahawk.asyncRequestCallbacks[reqId];
 };
 
+
+
+/**
+ * This method is externalized from Tomahawk.asyncRequest, so that other clients
+ * (like tomahawk-android) can inject their own logic that determines whether or not to do a request
+ * natively.
+ *
+ * @returns boolean indicating whether or not to do a request with the given parameters natively
+ */
+var shouldDoNativeRequest = function (options) {
+    var extraHeaders = options.headers;
+    return (extraHeaders && (extraHeaders.hasOwnProperty("Referer")
+        || extraHeaders.hasOwnProperty("referer")
+        || extraHeaders.hasOwnProperty("User-Agent")));
+};
+
+
 /**
  * Possible options:
  *  - method: The HTTP request method (default: GET)
@@ -439,57 +456,43 @@ Tomahawk.nativeAsyncRequestDone = function (reqId, xhr) {
  *  - data: body data included in POST requests
  *  - needCookieHeader: boolean indicating whether or not the request needs to be able to get the
  *                      "Set-Cookie" response header
+ *  - headers: headers set on the request
  */
-Tomahawk.asyncRequest = function (url, callback, extraHeaders, options) {
-    // unpack options
-    var opt = options || {};
-    var method = opt.method || 'GET';
+var doRequest = function(options) {
+    if (shouldDoNativeRequest(options)) {
+        return Tomahawk.NativeScriptJobManager.invoke('httpRequest', options).then(function(xhr) {
+            xhr.responseHeaders = xhr.responseHeaders || {};
+            xhr.getAllResponseHeaders = function() {
+                return this.responseHeaders;
+            };
+            xhr.getResponseHeader = function (header) {
+                return this.responseHeaders[header];
+            };
 
-    if (shouldDoNativeRequest(url, callback, extraHeaders, options)) {
-        // Assign a request Id to the callback so we can use it when we are
-        // returning from the native call.
-        var reqId = Tomahawk.asyncRequestIdCounter;
-        Tomahawk.asyncRequestIdCounter++;
-        Tomahawk.asyncRequestCallbacks[reqId] = {
-            callback: callback,
-            errorHandler: opt.errorHandler
-        };
-        Tomahawk.nativeAsyncRequest(reqId, url, extraHeaders, options);
+            return xhr;
+        });
     } else {
-        var xmlHttpRequest = new XMLHttpRequest();
-        xmlHttpRequest.open(method, url, true, opt.username, opt.password);
-        if (extraHeaders) {
-            for (var headerName in extraHeaders) {
-                xmlHttpRequest.setRequestHeader(headerName, extraHeaders[headerName]);
-            }
-        }
-        xmlHttpRequest.onreadystatechange = function () {
-            if (xmlHttpRequest.readyState == 4
-                && httpSuccessStatuses.indexOf(xmlHttpRequest.status) != -1) {
-                callback.call(window, xmlHttpRequest);
-            } else if (xmlHttpRequest.readyState === 4) {
-                Tomahawk.log("Failed to do " + method + " request: to: " + url);
-                Tomahawk.log("Status Code was: " + xmlHttpRequest.status);
-                if (opt.hasOwnProperty('errorHandler')) {
-                    opt.errorHandler.call(window, xmlHttpRequest);
+        return new RSVP.Promise(function(resolve, reject) {
+            var xmlHttpRequest = new XMLHttpRequest();
+            xmlHttpRequest.open(options.method, options.url, true, options.username, options.password);
+            if (options.headers) {
+                for (var headerName in options.headers) {
+                    xmlHttpRequest.setRequestHeader(headerName, options.headers[headerName]);
                 }
             }
-        };
-        xmlHttpRequest.send(opt.data || null);
+            xmlHttpRequest.onreadystatechange = function () {
+                if (xmlHttpRequest.readyState == 4
+                    && httpSuccessStatuses.indexOf(xmlHttpRequest.status) != -1) {
+                    resolve(xmlHttpRequest);
+                } else if (xmlHttpRequest.readyState === 4) {
+                    Tomahawk.log("Failed to do " + options.method + " request: to: " + options.url);
+                    Tomahawk.log("Status Code was: " + xmlHttpRequest.status);
+                    reject(xmlHttpRequest);
+                }
+            };
+            xmlHttpRequest.send(options.data || null);
+        });
     }
-};
-
-/**
- * This method is externalized from Tomahawk.asyncRequest, so that other clients
- * (like tomahawk-android) can inject their own logic that determines whether or not to do a request
- * natively.
- *
- * @returns boolean indicating whether or not to do a request with the given parameters natively
- */
-var shouldDoNativeRequest = function (url, callback, extraHeaders, options) {
-    return (extraHeaders && (extraHeaders.hasOwnProperty("Referer")
-    || extraHeaders.hasOwnProperty("referer")
-    || extraHeaders.hasOwnProperty("User-Agent")));
 };
 
 Tomahawk.ajax = function (url, settings) {
@@ -549,10 +552,7 @@ Tomahawk.ajax = function (url, settings) {
         }
     }
 
-    return new RSVP.Promise(function (resolve, reject) {
-        settings.errorHandler = reject;
-        Tomahawk.asyncRequest(settings.url, resolve, settings.headers, settings);
-    }).then(function (xhr) {
+    return doRequest(settings).then(function (xhr) {
             if (settings.rawResponse) {
                 return xhr;
             }
@@ -876,12 +876,17 @@ Tomahawk.PluginManager = {
     }
 };
 
+
+var encodeParamsToNativeFunctions = function(param) {
+  return param;
+};
+
 Tomahawk.NativeScriptJobManager = {
     idCounter: 0,
     deferreds: {},
     invoke: function (methodName, params) {
         var requestId = this.idCounter++;
-        Tomahawk.invokeNativeScriptJob(requestId, methodName, JSON.stringify(params));
+        Tomahawk.invokeNativeScriptJob(requestId, methodName, encodeParamsToNativeFunctions(params));
         this.deferreds[requestId] = RSVP.defer();
         return this.deferreds[requestId].promise;
     },
@@ -891,6 +896,7 @@ Tomahawk.NativeScriptJobManager = {
             Tomahawk.log("Deferred object with the given requestId is not present!");
         }
         deferred.resolve(result);
+        delete this.deferreds[requestId];
     }
 };
 

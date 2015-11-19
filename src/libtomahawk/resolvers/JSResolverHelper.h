@@ -86,20 +86,9 @@ public:
                                              int sizehint,
                                              const QVariantMap& options );
 
-    /**
-     * Native handler for asynchronous HTTP requests.
-     *
-     * This handler shall only be used if we cannot achieve the request with
-     * XMLHttpRequest as that would be more efficient.
-     * Use cases are:
-     *  * Referer header: Stripped on MacOS and the specification says it
-     *    should be stripped
-     *
-     * INTERNAL USE ONLY!
-     */
-    Q_INVOKABLE void nativeAsyncRequest( int requestId, const QString& url,
-                                         const QVariantMap& headers,
-                                         const QVariantMap& options );
+    Q_INVOKABLE void invokeNativeScriptJob( int requestId,
+                                        const QString& methodName,
+                                        const QVariantMap& params );
 
     /**
      * Lucene++ indices for JS resolvers
@@ -144,6 +133,10 @@ private slots:
 private:
     bool indexDataFromVariant( const QVariantMap& map, struct Tomahawk::IndexData& indexData );
     QVariantList searchInFuzzyIndex( const Tomahawk::query_ptr& query );
+
+    // native script jobs
+    void nativeAsyncRequest( int requestId, const QVariantMap& options );
+
 
     QVariantMap m_resolverConfig;
     JSResolver* m_resolver;
