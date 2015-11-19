@@ -336,34 +336,6 @@ Tomahawk.valueForSubNode = function (node, tag) {
 };
 
 /**
- * Do a synchronous HTTP(S) request. For further options see
- * Tomahawk.asyncRequest
- */
-Tomahawk.syncRequest = function (url, extraHeaders, options) {
-    // unpack options
-    var opt = options || {};
-    var method = opt.method || 'GET';
-
-    var xmlHttpRequest = new XMLHttpRequest();
-    xmlHttpRequest.open(method, url, false, opt.username, opt.password);
-    if (extraHeaders) {
-        for (var headerName in extraHeaders) {
-            xmlHttpRequest.setRequestHeader(headerName, extraHeaders[headerName]);
-        }
-    }
-    xmlHttpRequest.send(null);
-    if (httpSuccessStatuses.indexOf(xmlHttpRequest.status) != -1) {
-        return xmlHttpRequest.responseText;
-    } else {
-        Tomahawk.log("Failed to do GET request: to: " + url);
-        Tomahawk.log("Status Code was: " + xmlHttpRequest.status);
-        if (opt.hasOwnProperty('errorHandler')) {
-            opt.errorHandler.call(window, xmlHttpRequest);
-        }
-    }
-};
-
-/**
  * Internal counter used to identify retrievedMetadata call back from native
  * code.
  */
