@@ -72,7 +72,6 @@ JSResolverHelper::JSResolverHelper( const QString& scriptPath, JSResolver* paren
     : QObject( parent )
     , m_resolver( parent )
     , m_scriptPath( scriptPath )
-    , m_urlCallbackIsAsync( false )
 {
 }
 
@@ -480,31 +479,6 @@ JSResolverHelper::accountId()
 }
 
 
-void
-JSResolverHelper::addCustomUrlHandler( const QString& protocol,
-                                             const QString& callbackFuncName,
-                                             const QString& isAsynchronous )
-{
-    m_urlCallbackIsAsync = ( isAsynchronous.toLower() == "true" );
-
-    std::function< void( const Tomahawk::result_ptr&, const QString&,
-                           std::function< void( const QString&, QSharedPointer< QIODevice >& ) > )> fac =
-            std::bind( &JSResolverHelper::customIODeviceFactory, this,
-                       std::placeholders::_1, std::placeholders::_2,
-                       std::placeholders::_3 );
-    Tomahawk::UrlHandler::registerIODeviceFactory( protocol, fac );
-
-    m_urlCallback = callbackFuncName;
-}
-
-
-void
-JSResolverHelper::reportStreamUrl( const QString& qid, const QString& streamUrl )
-{
-    reportStreamUrl( qid, streamUrl, QVariantMap() );
-}
-
-
 void JSResolverHelper::nativeAssert( bool assertion, const QString& message )
 {
     if ( !assertion )
@@ -512,61 +486,6 @@ void JSResolverHelper::nativeAssert( bool assertion, const QString& message )
         tLog() << "Assertion failed" << message;
         Q_ASSERT( assertion );
     }
-}
-
-
-void
-JSResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
-                                               std::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback )
-{
-    //can be sync or async
-    if ( m_urlCallbackIsAsync )
-    {
-        QString qid = uuid();
-        QString getUrl = QString( 
-                "if(Tomahawk.resolver.instance['_adapter_%1']) {"
-                "    Tomahawk.resolver.instance._adapter_%1( {qid: '%2', url: '%3'} );"
-                "} else {"
-                "    Tomahawk.resolver.instance.%1( {qid: '%2', url: '%3'} );"
-                "}"
-                ).arg( m_urlCallback )
-                                                                                  .arg( qid )
-                                                                                  .arg( url );
-
-        m_streamCallbacks.insert( qid, callback );
-        m_resolver->d_func()->scriptAccount->evaluateJavaScript( getUrl );
-    }
-    else
-    {
-        QString getUrl = QString( "Tomahawk.resolver.instance.%1( '%2' );" ).arg( m_urlCallback )
-                                                                            .arg( url );
-
-        QString urlStr = m_resolver->d_func()->scriptAccount->evaluateJavaScriptWithResult( getUrl ).toString();
-
-        returnStreamUrl( urlStr, QMap<QString, QString>(), callback );
-    }
-}
-
-
-void
-JSResolverHelper::reportStreamUrl( const QString& qid, const QString& streamUrl, const QVariantMap& headers )
-{
-    if ( !m_streamCallbacks.contains( qid ) )
-        return;
-
-    std::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback = m_streamCallbacks.take( qid );
-
-    QMap<QString, QString> parsedHeaders;
-    foreach ( const QString& key, headers.keys() )
-    {
-        Q_ASSERT_X( headers[key].canConvert( QVariant::String ), Q_FUNC_INFO, "Expected a Map of string for additional headers" );
-        if ( headers[key].canConvert( QVariant::String ) )
-        {
-            parsedHeaders.insert( key, headers[key].toString() );
-        }
-    }
-
-    returnStreamUrl( streamUrl, parsedHeaders, callback );
 }
 
 
@@ -955,43 +874,3 @@ JSResolverHelper::readdResolver()
     Pipeline::instance()->addResolver( m_resolver );
 }
 
-
-void
-JSResolverHelper::returnStreamUrl( const QString& streamUrl, const QMap<QString, QString>& headers,
-                                   std::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback )
-{
-    if ( streamUrl.isEmpty() || !( TomahawkUtils::isHttpResult( streamUrl ) || TomahawkUtils::isHttpsResult( streamUrl ) ) )
-    {
-        // Not an https? URL, so let Phonon handle it
-        QSharedPointer< QIODevice > sp;
-        callback( streamUrl, sp );
-    }
-    else
-    {
-        QUrl url = QUrl::fromEncoded( streamUrl.toUtf8() );
-        QNetworkRequest req( url );
-        foreach ( const QString& key, headers.keys() )
-        {
-            req.setRawHeader( key.toLatin1(), headers[key].toLatin1() );
-        }
-        tDebug() << "Creating a QNetworkReply with url:" << req.url().toString();
-        NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( req ) );
-
-        NewClosure( reply, SIGNAL( finalUrlReached() ), this, SLOT( gotStreamUrl( IODeviceCallback, NetworkReply* )), callback, reply );
-    }
-}
-
-
-Q_DECLARE_METATYPE( IODeviceCallback )
-
-void
-JSResolverHelper::gotStreamUrl( std::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback, NetworkReply* reply )
-{
-    // std::functions cannot accept temporaries as parameters
-    QSharedPointer< QIODevice > sp ( reply->reply(), &QObject::deleteLater );
-    QString url = reply->reply()->url().toString();
-    reply->disconnectFromReply();
-    reply->deleteLater();
-
-    callback( url, sp );
-}

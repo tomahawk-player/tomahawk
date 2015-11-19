@@ -91,6 +91,8 @@ public:
     void parseMetaData();
     void parseMetaData( const QVariantMap& metadata );
 
+    ScriptJob* getStreamUrl( const result_ptr& result ) override;
+
 private slots:
     void onIconFetched();
 

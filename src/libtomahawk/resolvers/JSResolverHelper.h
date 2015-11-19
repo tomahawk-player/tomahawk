@@ -61,9 +61,6 @@ public:
      */
     Q_INVOKABLE QString accountId();
 
-    Q_INVOKABLE void addCustomUrlHandler( const QString& protocol, const QString& callbackFuncName, const QString& isAsynchronous = "false" );
-    Q_INVOKABLE void reportStreamUrl( const QString& qid, const QString& streamUrl );
-    Q_INVOKABLE void reportStreamUrl( const QString& qid, const QString& streamUrl, const QVariantMap& headers );
 
     /**
      * Make Tomahawk assert the assertion is true, probably not to be used by resolvers directly
@@ -122,13 +119,6 @@ public:
     Q_INVOKABLE void readdResolver();
 
 
-    /**
-     * INTERNAL USE ONLY!
-     */
-    void customIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
-                                std::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback ); // async
-
-
 public slots:
     QByteArray readRaw( const QString& fileName );
     QString readBase64( const QString& fileName );
@@ -149,22 +139,15 @@ public slots:
     void unregisterScriptPlugin( const QString& type, const QString& objectId );
 
 private slots:
-    void gotStreamUrl( IODeviceCallback callback, NetworkReply* reply );
     void nativeAsyncRequestDone( int requestId, NetworkReply* reply );
 
 private:
-    void returnStreamUrl( const QString& streamUrl, const QMap<QString, QString>& headers,
-                          std::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback );
-
     bool indexDataFromVariant( const QVariantMap& map, struct Tomahawk::IndexData& indexData );
     QVariantList searchInFuzzyIndex( const Tomahawk::query_ptr& query );
 
     QVariantMap m_resolverConfig;
     JSResolver* m_resolver;
-    QString m_scriptPath, m_urlCallback, m_urlTranslator;
-    QHash< QString, std::function< void( const QString&, QSharedPointer< QIODevice >& ) > > m_streamCallbacks;
-    QHash< QString, std::function< void( const QString& ) > > m_translatorCallbacks;
-    bool m_urlCallbackIsAsync;
+    QString m_scriptPath;
 };
 
 } // ns: Tomahawk

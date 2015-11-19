@@ -30,11 +30,8 @@ ResultProvider::~ResultProvider()
 ScriptJob*
 ResultProvider::getStreamUrl( const result_ptr& result )
 {
-    QUrl url = result->url();
-
     QVariantMap data;
-    data[ "result" ] = QVariant::fromValue( result );
-    data[ "url" ] = url;
+    data[ "url" ] = result->url();
 
     return new SyncScriptJob( data );
 }

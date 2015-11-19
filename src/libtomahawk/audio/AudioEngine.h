@@ -28,6 +28,7 @@
 
 #include "DllMacro.h"
 
+class NetworkReply;
 class AudioEnginePrivate;
 
 class DLLEXPORT AudioEngine : public QObject
@@ -181,6 +182,9 @@ signals:
 private slots:
     void loadTrack( const Tomahawk::result_ptr& result ); //async!
     void gotStreamUrl( const QVariantMap& data );
+    void gotRedirectedStreamUrl( const Tomahawk::result_ptr& result, NetworkReply* reply );
+
+
     void performLoadIODevice( const Tomahawk::result_ptr& result, const QString& url ); //only call from loadTrack kthxbi
     void performLoadTrack( const Tomahawk::result_ptr result, const QString url, QSharedPointer< QIODevice > io ); //only call from loadTrack or performLoadIODevice kthxbi
     void loadPreviousTrack();

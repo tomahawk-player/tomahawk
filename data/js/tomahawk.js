@@ -271,17 +271,6 @@ Tomahawk.Resolver = {
     getStreamUrl: function (params) {
         return params;
     },
-
-    _convertUrls: function (results) {
-        var that = this;
-        return results.map(function (r) {
-            if (r && r.url) {
-                r.url = that._urlProtocol + '://' + r.url;
-            }
-            return r;
-        });
-    },
-
     _adapter_resolve: function (params) {
         var that = this;
         var collectionPromises = [];
@@ -297,23 +286,9 @@ Tomahawk.Resolver = {
         }).then(function (collectionResults) {
             return RSVP.Promise.resolve(that.resolve(params)).then(function (results) {
                 return {
-                    'results': that._convertUrls(results.concat(collectionResults))
+                    'results': results.concat(collectionResults)
                 };
             });
-        });
-    },
-
-    _adapter_init: function () {
-        this._urlProtocol = this.settings.name.replace(/[^a-zA-Z]/g, '').toLowerCase();
-        Tomahawk.addCustomUrlHandler(this._urlProtocol, '_adapter_getStreamUrl', true);
-        Tomahawk.log('Registered custom url handler for protocol "' + this._urlProtocol + '"');
-        this.init();
-    },
-
-    _adapter_getStreamUrl: function (params) {
-        params.url = params.url.slice(this._urlProtocol.length + 3);
-        RSVP.Promise.resolve(this.getStreamUrl(params)).then(function (result) {
-            Tomahawk.reportStreamUrl(params.qid, result.url, result.headers);
         });
     },
 
@@ -331,7 +306,7 @@ Tomahawk.Resolver = {
         }).then(function (collectionResults) {
             return RSVP.Promise.resolve(that.search(params)).then(function (results) {
                 return {
-                    'results': that._convertUrls(results.concat(collectionResults))
+                    'results': results.concat(collectionResults)
                 };
             });
         });
@@ -1713,7 +1688,7 @@ Tomahawk.Collection = {
             );
             return t.execDeferredStatements();
         }).then(function (results) {
-            return {results: Tomahawk.resolver.instance._convertUrls(results[0])};
+            return {results: results[0]};
         });
     },
 
@@ -1887,6 +1862,14 @@ Tomahawk.Collection = {
             Tomahawk.Collection.BrowseCapability.Albums,
             Tomahawk.Collection.BrowseCapability.Tracks];
         return this.settings;
+    },
+
+    getStreamUrl: function(params) {
+        if(this.resolver) {
+          return this.resolver.getStreamUrl(params);
+        }
+
+        return params;
     }
 };
 
@@ -1908,14 +1891,6 @@ Tomahawk.addArtistResults = Tomahawk.addAlbumResults = Tomahawk.addAlbumTrackRes
 Tomahawk.addTrackResults = function (result) {
     Tomahawk.PluginManager.resolve[result.qid](result.results);
     delete Tomahawk.PluginManager.resolve[result.qid];
-};
-
-Tomahawk.reportStreamUrl = function (qid, streamUrl, headers) {
-    Tomahawk.PluginManager.resolve[qid]({
-        url: streamUrl,
-        headers: headers
-    });
-    delete Tomahawk.PluginManager.resolve[qid];
 };
 
 Tomahawk.addUrlResult = function (url, result) {

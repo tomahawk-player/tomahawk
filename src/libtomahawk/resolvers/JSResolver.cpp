@@ -538,12 +538,6 @@ JSResolver::error() const
 void
 JSResolver::resolve( const Tomahawk::query_ptr& query )
 {
-    if ( QThread::currentThread() != thread() )
-    {
-        QMetaObject::invokeMethod( this, "resolve", Qt::QueuedConnection, Q_ARG(Tomahawk::query_ptr, query) );
-        return;
-    }
-
     ScriptJob* job = nullptr;
     if ( !query->isFullTextQuery() )
     {
@@ -745,4 +739,14 @@ QString
 JSResolver::instanceUUID()
 {
     return Tomahawk::Database::instance()->impl()->dbid();
+}
+
+
+ScriptJob*
+JSResolver::getStreamUrl( const result_ptr& result )
+{
+    QVariantMap arguments;
+    arguments["url"] = result->url();
+
+    return scriptObject()->invoke( "getStreamUrl", arguments );
 }

@@ -27,6 +27,7 @@
 #include "resolvers/ScriptCommand_AllAlbums.h"
 #include "resolvers/ScriptCommand_AllTracks.h"
 #include "ScriptAccount.h"
+#include "Result.h"
 
 #include <QImageReader>
 #include <QPainter>
@@ -221,6 +222,15 @@ ScriptCollection::readMetaData()
 void ScriptCollection::parseMetaData()
 {
     return parseMetaData( readMetaData() );
+}
+
+ScriptJob*
+ScriptCollection::getStreamUrl( const result_ptr& result )
+{
+    QVariantMap arguments;
+    arguments["url"] = result->url();
+
+    return scriptObject()->invoke( "getStreamUrl", arguments );
 }
 
 
