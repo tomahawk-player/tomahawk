@@ -812,52 +812,11 @@ Tomahawk.PluginManager = {
             }
         }
 
-        if (typeof this.objects[objectId][methodName] === 'function') {
-            if (!Tomahawk.resolver.instance.apiVersion
-                || Tomahawk.resolver.instance.apiVersion < 0.9) {
-                if (methodName == 'artists') {
-                    return new RSVP.Promise(function (resolve, reject) {
-                        pluginManager.resolve[requestId] = resolve;
-                        Tomahawk.resolver.instance.artists(requestId);
-                    });
-                } else if (methodName == 'albums') {
-                    return new RSVP.Promise(function (resolve, reject) {
-                        pluginManager.resolve[requestId] = resolve;
-                        Tomahawk.resolver.instance.albums(requestId, params.artist);
-                    });
-                } else if (methodName == 'tracks') {
-                    return new RSVP.Promise(function (resolve, reject) {
-                        pluginManager.resolve[requestId] = resolve;
-                        Tomahawk.resolver.instance.tracks(requestId, params.artist, params.album);
-                    });
-                } else if (methodName == 'lookupUrl') {
-                    return new RSVP.Promise(function (resolve, reject) {
-                        pluginManager.resolve[params.url] = resolve;
-                        Tomahawk.resolver.instance.lookupUrl(params.url);
-                    });
-                } else if (methodName == 'getStreamUrl') {
-                    return new RSVP.Promise(function (resolve, reject) {
-                        pluginManager.resolve[requestId] = resolve;
-                        Tomahawk.resolver.instance.getStreamUrl(requestId, params.url);
-                    });
-                } else if (methodName == 'resolve') {
-                    return new RSVP.Promise(function (resolve, reject) {
-                        pluginManager.resolve[requestId] = resolve;
-                        Tomahawk.resolver.instance.resolve(requestId, params.artist,
-                            params.album, params.track);
-                    });
-                } else if (methodName == 'search') {
-                    return new RSVP.Promise(function (resolve, reject) {
-                        pluginManager.resolve[requestId] = resolve;
-                        Tomahawk.resolver.instance.search(requestId, params.query);
-                    });
-                }
-            }
-
-            return this.objects[objectId][methodName](params);
+        if (typeof this.objects[objectId][methodName] !== 'function') {
+            throw new Error('\'' + methodName + '\' on ScriptObject ' + objectId + ' is not a function', typeof this.objects[objectId][methodName]);
         }
 
-        return this.objects[objectId][methodName];
+        return this.objects[objectId][methodName](params);
     },
 
     invoke: function (requestId, objectId, methodName, params) {
