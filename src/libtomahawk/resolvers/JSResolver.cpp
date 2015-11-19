@@ -259,9 +259,9 @@ JSResolver::init()
     // HACK: register resolver object
     d->scriptAccount->evaluateJavaScript( "Tomahawk.PluginManager.registerPlugin('resolver', Tomahawk.resolver.instance);" );
     // init resolver
-    resolverInit();
+    scriptObject()->syncInvoke( "init" );
 
-    QVariantMap m = resolverSettings();
+    QVariantMap m = scriptObject()->syncInvoke( "settings" ).toMap();
     d->name    = m.value( "name" ).toString();
     d->weight  = m.value( "weight", 0 ).toUInt();
     d->timeout = m.value( "timeout", 25 ).toUInt() * 1000;
@@ -582,7 +582,7 @@ JSResolver::loadUi()
 {
     Q_D( JSResolver );
 
-    QVariantMap m = callOnResolver( "getConfigUi()" ).toMap();
+    QVariantMap m = scriptObject()->syncInvoke( "getConfigUi" ).toMap();
 
     bool compressed = m.value( "compressed", "false" ).toBool();
     qDebug() << "Resolver has a preferences widget! compressed?" << compressed;
@@ -634,7 +634,7 @@ JSResolver::saveConfig()
 //    qDebug() << Q_FUNC_INFO << saveData;
 
     d->resolverHelper->setResolverConfig( saveData.toMap() );
-    callOnResolver( "saveUserConfig()" );
+    scriptObject()->syncInvoke( "saveUserConfig" );
 }
 
 
@@ -666,40 +666,9 @@ JSResolver::onCapabilitiesChanged( Tomahawk::ExternalResolver::Capabilities capa
 
 
 QVariantMap
-JSResolver::resolverSettings()
-{
-    return callOnResolver( "settings" ).toMap();
-}
-
-
-QVariantMap
 JSResolver::resolverUserConfig()
 {
-    return callOnResolver( "getUserConfig()" ).toMap();
-}
-
-
-QVariantMap
-JSResolver::resolverInit()
-{
-    return callOnResolver( "init()" ).toMap();
-}
-
-
-QVariant
-JSResolver::callOnResolver( const QString& scriptSource )
-{
-    Q_D( JSResolver );
-
-    QString propertyName = scriptSource.split('(').first();
-
-    return d->scriptAccount->evaluateJavaScriptWithResult( QString(
-        "if(Tomahawk.resolver.instance['_adapter_%1']) {"
-        "    Tomahawk.resolver.instance._adapter_%2;"
-        "} else {"
-        "    Tomahawk.resolver.instance.%2"
-        "}"
-    ).arg( propertyName ).arg( scriptSource ) );
+    return scriptObject()->syncInvoke( "getUserConfig" ).toMap();
 }
 
 

@@ -102,9 +102,7 @@ private:
     void onCapabilitiesChanged( Capabilities capabilities );
 
     // encapsulate javascript calls
-    QVariantMap resolverSettings();
     QVariantMap resolverUserConfig();
-    QVariantMap resolverInit();
 
     Q_DECLARE_PRIVATE( JSResolver )
     QScopedPointer<JSResolverPrivate> d_ptr;
