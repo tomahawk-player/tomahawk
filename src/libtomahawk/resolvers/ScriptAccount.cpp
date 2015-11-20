@@ -326,32 +326,10 @@ ScriptAccount::parseResultVariantList( const QVariantList& reslist )
         }
         rp->setDownloadFormats( fl );
 
-        // find collection
-        const QString collectionId = m.value( "collectionId" ).toString();
-        if ( !collectionId.isEmpty() )
-        {
-            if ( scriptCollection( collectionId ).isNull() )
-            {
-                tLog() << "Resolver returned invalid collection id";
-                Q_ASSERT( false );
-            }
-            else
-            {
-                rp->setResolvedByCollection( scriptCollection( collectionId ) );
-            }
-        }
-
         results << rp;
     }
 
     return results;
-}
-
-
-QSharedPointer< ScriptCollection >
-ScriptAccount::scriptCollection( const QString& id ) const
-{
-    return m_collectionFactory->scriptPlugins().value( id );
 }
 
 

@@ -1497,7 +1497,6 @@ Tomahawk.Collection = {
     },
 
     _fuzzyIndexIdsToTracks: function (resultIds, id) {
-        var collection = this;
         if (typeof id === 'undefined') {
             id = this.settings.id;
         }
@@ -1514,8 +1513,7 @@ Tomahawk.Collection = {
                     linkUrl: row.linkUrl,
                     releaseyear: row.releaseyear,
                     bitrate: row.bitrate,
-                    albumpos: row.albumPos,
-                    collectionId: collection.id
+                    albumpos: row.albumPos
                 };
             };
             for (var idx = 0; resultIds && idx < resultIds.length; idx++) {
@@ -1573,8 +1571,6 @@ Tomahawk.Collection = {
     },
 
     tracks: function (params, where) {
-        var collection = this;
-
         //TODO filter/where support
         var id = params.id;
         if (typeof id === 'undefined') {
@@ -1594,8 +1590,7 @@ Tomahawk.Collection = {
                     linkUrl: row.linkUrl,
                     releaseyear: row.releaseyear,
                     bitrate: row.bitrate,
-                    albumpos: row.albumPos,
-                    collectionId: collection.id
+                    albumpos: row.albumPos
                 };
             };
             t.sqlSelect("tracks", mapFn,
