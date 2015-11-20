@@ -576,30 +576,37 @@ TomahawkWindow::updatePreview()
     QString title( "Tomahawk" );
     if ( !m_currentTrack.isNull() ) {
         cover = m_currentTrack->track()->albumPtr()->cover( coverSize , false );
-        title = tr( "%1<br><br><br><b>%2</b>", "artist name, track" ).arg( m_currentTrack->track()->artist(), m_currentTrack->track()->track() );
+        title = tr( "%1<br><br><br>%2</b>", "artist name, track" ).arg( m_currentTrack->track()->artist(), m_currentTrack->track()->track() );
     }
     if ( cover.isNull() ) {
         cover = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover , TomahawkUtils::Original, coverSize );
     }
 
     QPixmap thumb( size );
-    thumb.fill( QColor("#FF004C") );
+    thumb.fill( QColor( "#FF004C" ) );
 
-    QPainter paint(&thumb);
-    paint.drawPixmap(margin , margin, coverSize.width(), coverSize.height(), cover);
+    QPainter paint( &thumb );
+
+    QPen pen = paint.pen();
+    pen.setColor( Qt::white );
+    pen.setWidth( size.height() * 0.01 );
+    paint.setPen( pen );
+
+    paint.drawPixmap(margin , margin , coverSize.width() , coverSize.height() , cover );
+    paint.drawRect( margin , margin , coverSize.width() , coverSize.height() );
+    paint.drawRect( 0 , 0 , size.width() , size.height() );
 
     QTextDocument doc;
 
     QFont font = paint.font();
     font.setPixelSize( size.height() * 0.1 );
-    doc.setDefaultFont(font);
+    doc.setDefaultFont( font );
 
-    doc.setPageSize( QSize(size.width() - 2 * margin - coverSize.width() , size.height() - 2* margin));
-    doc.setHtml( title );
-
+    doc.setPageSize( QSize( size.width() - 2 * margin - coverSize.width() , size.height() - 2 * margin ) );
+    doc.setHtml( QString( "<font color=\"white\">%1</font>" ).arg( title ));
 
     paint.save();
-    paint.translate(coverSize.width() + 2 * margin ,  (size.height() - doc.size().height() )/ 2);
+    paint.translate( coverSize.width() + 2 * margin , ( size.height() - doc.size().height() ) / 2);
 
     doc.drawContents( &paint );
 
