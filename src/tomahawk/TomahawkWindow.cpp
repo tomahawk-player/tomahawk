@@ -570,27 +570,40 @@ void
 TomahawkWindow::updatePreview()
 {
     const QSize size = QDesktopWidget().availableGeometry().size();
-    const QSize coverSize( size.height() * 0.75 , size.height() * 0.75 );
-
+    const qreal margin = size.height() * 0.05;
+    const QSize coverSize( size.height() - 2 * margin , size.height() - 2 * margin);
     QPixmap cover;
-    if ( !AudioEngine::instance()->currentTrack().isNull() ) {
-        cover = AudioEngine::instance()->currentTrack()->track()->albumPtr()->cover( coverSize , false );
+    QString title( "Tomahawk" );
+    if ( !m_currentTrack.isNull() ) {
+        cover = m_currentTrack->track()->albumPtr()->cover( coverSize , false );
+        title = tr( "%1<br><br><br><b>%2</b>", "artist name, track" ).arg( m_currentTrack->track()->artist(), m_currentTrack->track()->track() );
     }
     if ( cover.isNull() ) {
         cover = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover , TomahawkUtils::Original, coverSize );
     }
 
     QPixmap thumb( size );
-    thumb.fill( Qt::white );
+    thumb.fill( QColor("#FF004C") );
 
     QPainter paint(&thumb);
-    paint.drawPixmap((size.width() - coverSize.width()) / 2 ,0, coverSize.width(), coverSize.height(), cover);
+    paint.drawPixmap(margin , margin, coverSize.width(), coverSize.height(), cover);
+
+    QTextDocument doc;
 
     QFont font = paint.font();
     font.setPixelSize( size.height() * 0.1 );
-    paint.setFont( font );
-    paint.setPen( Qt::black );
-    paint.drawText( QRect( 0 , coverSize.height() , size.width() , size.height() - coverSize.height() ) , windowTitle() , QTextOption( Qt::AlignCenter ) );
+    doc.setDefaultFont(font);
+
+    doc.setPageSize( QSize(size.width() - 2 * margin - coverSize.width() , size.height() - 2* margin));
+    doc.setHtml( title );
+
+
+    paint.save();
+    paint.translate(coverSize.width() + 2 * margin ,  (size.height() - doc.size().height() )/ 2);
+
+    doc.drawContents( &paint );
+
+    paint.restore();
 
     m_taskbarList->setIconicThumbnailPixmap( thumb );
     m_taskbarList->setIconicLivePreviewPixmap( thumb );
