@@ -37,7 +37,6 @@ class MetadataEditor;
 namespace Tomahawk
 {
 
-class ResultProvider;
 class Resolver;
 
 class DLLEXPORT Result : public QObject
@@ -86,9 +85,9 @@ public:
     void setResolvedByResolver( Tomahawk::Resolver* resolver );
 
     /**
-     *  This is very bad. ResultProvider is not a QObject and thus can not be tracked by a qt smart pointer ... :-(
+     *  TODO: Make this a smart pointer
      */
-    ResultProvider* resolvedBy() const;
+    Resolver* resolvedBy() const;
 
     RID id() const;
     bool isOnline() const;

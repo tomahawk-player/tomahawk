@@ -76,9 +76,12 @@ public:
 
     virtual void scriptPluginFactory( const QString& type, const scriptobject_ptr& object );
 
-    QList< Tomahawk::result_ptr > parseResultVariantList( const QVariantList& reslist );
-
     QSharedPointer< ScriptCollection > scriptCollection( const QString& id ) const;
+
+
+    // helpers
+    QList< Tomahawk::result_ptr > parseResultVariantList( const QVariantList& reslist );
+    ScriptJob* resolve( const scriptobject_ptr& scriptObject, const query_ptr& query );
 
 private slots:
     void onJobDeleted( const QString& jobId );

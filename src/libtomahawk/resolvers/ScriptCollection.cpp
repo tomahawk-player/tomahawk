@@ -26,8 +26,10 @@
 #include "resolvers/ScriptCommand_AllArtists.h"
 #include "resolvers/ScriptCommand_AllAlbums.h"
 #include "resolvers/ScriptCommand_AllTracks.h"
+#include "resolvers/ScriptJob.h"
 #include "ScriptAccount.h"
 #include "Result.h"
+#include "Pipeline.h"
 
 #include <QImageReader>
 #include <QPainter>
@@ -335,4 +337,59 @@ ScriptCollection::onIconFetched()
 
         reply->deleteLater();
     }
+}
+
+
+unsigned int
+ScriptCollection::timeout() const
+{
+    return 0;
+}
+
+
+unsigned int
+ScriptCollection::weight() const
+{
+    return 0;
+}
+
+
+void
+ScriptCollection::resolve( const Tomahawk::query_ptr& query )
+{
+    ScriptJob* job = scriptAccount()->resolve( scriptObject(), query );
+
+    connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onResolveRequestDone( QVariantMap ) ) );
+
+    job->start();
+}
+
+
+void
+ScriptCollection::onResolveRequestDone( const QVariantMap& data )
+{
+    Q_ASSERT( QThread::currentThread() == thread() );
+
+    ScriptJob* job = qobject_cast< ScriptJob* >( sender() );
+
+    QID qid = job->property( "qid" ).toString();
+
+    if ( job->error() )
+    {
+        Tomahawk::Pipeline::instance()->reportError( qid, this );
+    }
+    else
+    {
+        QList< Tomahawk::result_ptr > results = scriptAccount()->parseResultVariantList( data.value( "results" ).toList() );
+
+        foreach( const result_ptr& result, results )
+        {
+            result->setResolvedByCollection( weakRef().toStrongRef() );
+            result->setFriendlySource( name() );
+        }
+
+        Tomahawk::Pipeline::instance()->reportResults( qid, this, results );
+    }
+
+    sender()->deleteLater();
 }

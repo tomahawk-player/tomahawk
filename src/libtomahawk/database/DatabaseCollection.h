@@ -65,6 +65,11 @@ public:
     int trackCount() const override;
     QPixmap icon( const QSize& size ) const override;
 
+    // Resolver interface
+    unsigned int weight() const override;
+    unsigned int timeout() const override;
+    void resolve( const Tomahawk::query_ptr& query ) override;
+
 public slots:
     virtual void addTracks( const QList<QVariant>& newitems );
     virtual void removeTracks( const QDir& dir );

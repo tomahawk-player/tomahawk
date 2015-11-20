@@ -91,10 +91,15 @@ public:
     void parseMetaData();
     void parseMetaData( const QVariantMap& metadata );
 
+    // Resolver interface
+    unsigned int weight() const override;
+    unsigned int timeout() const override;
+    void resolve( const Tomahawk::query_ptr& query ) override;
     ScriptJob* getStreamUrl( const result_ptr& result ) override;
 
 private slots:
     void onIconFetched();
+    void onResolveRequestDone( const QVariantMap& data );
 
 private:
     ScriptAccount* m_scriptAccount;

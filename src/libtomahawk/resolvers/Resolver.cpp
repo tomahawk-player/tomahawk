@@ -17,10 +17,31 @@
  */
 #include "Resolver.h"
 
+#include "../resolvers/SyncScriptJob.h"
+#include "../Result.h"
+
 #include <QPixmap>
+
+
+Tomahawk::Resolver::Resolver( QObject* parent )
+    : QObject( parent )
+{
+}
+
 
 QPixmap
 Tomahawk::Resolver::icon( const QSize& ) const
 {
+    Q_ASSERT(false);
     return QPixmap();
+}
+
+
+Tomahawk::ScriptJob*
+Tomahawk::Resolver::getStreamUrl( const result_ptr& result )
+{
+    QVariantMap data;
+    data[ "url" ] = result->url();
+
+    return new SyncScriptJob( data );
 }

@@ -538,30 +538,43 @@ JSResolver::error() const
 void
 JSResolver::resolve( const Tomahawk::query_ptr& query )
 {
-    ScriptJob* job = nullptr;
-    if ( !query->isFullTextQuery() )
-    {
-        QVariantMap arguments;
-        arguments["artist"] = query->queryTrack()->artist();
-        arguments["album"] = query->queryTrack()->album();
-        arguments["track"] = query->queryTrack()->track();
+    ScriptJob* job = scriptAccount()->resolve( scriptObject(), query );
 
-        job = scriptObject()->invoke( "resolve", arguments );
-    }
-    else
-    {
-        QVariantMap arguments;
-        arguments["query"] = query->fullTextQuery();
-        job = scriptObject()->invoke( "search", arguments );
-    }
-
-
-    job->setProperty( "qid", query->id() );
     connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onResolveRequestDone( QVariantMap ) ) );
 
     job->start();
 }
 
+void
+JSResolver::onResolveRequestDone( const QVariantMap& data )
+{
+    Q_ASSERT( QThread::currentThread() == thread() );
+    Q_D( JSResolver );
+
+    ScriptJob* job = qobject_cast< ScriptJob* >( sender() );
+
+    QID qid = job->property( "qid" ).toString();
+
+    if ( job->error() )
+    {
+        Tomahawk::Pipeline::instance()->reportError( qid, this );
+    }
+    else
+    {
+
+        QList< Tomahawk::result_ptr > results = scriptAccount()->parseResultVariantList( data.value( "results" ).toList() );
+
+        foreach( const result_ptr& result, results )
+        {
+            result->setResolvedByResolver( this );
+            result->setFriendlySource( name() );
+        }
+
+        Tomahawk::Pipeline::instance()->reportResults( qid, this, results );
+    }
+
+    sender()->deleteLater();
+}
 
 void
 JSResolver::stop()
@@ -669,38 +682,6 @@ QVariantMap
 JSResolver::resolverUserConfig()
 {
     return scriptObject()->syncInvoke( "getUserConfig" ).toMap();
-}
-
-
-void
-JSResolver::onResolveRequestDone( const QVariantMap& data )
-{
-    Q_ASSERT( QThread::currentThread() == thread() );
-    Q_D( JSResolver );
-
-    ScriptJob* job = qobject_cast< ScriptJob* >( sender() );
-
-    QID qid = job->property( "qid" ).toString();
-
-    if ( job->error() )
-    {
-        Tomahawk::Pipeline::instance()->reportError( qid, this );
-    }
-    else
-    {
-
-        QList< Tomahawk::result_ptr > results = scriptAccount()->parseResultVariantList( data.value( "results" ).toList() );
-
-        foreach( const result_ptr& result, results )
-        {
-            result->setResolvedByResolver( this );
-            result->setFriendlySource( name() );
-        }
-
-        Tomahawk::Pipeline::instance()->reportResults( qid, this, results );
-    }
-
-    sender()->deleteLater();
 }
 
 

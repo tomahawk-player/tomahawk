@@ -272,43 +272,18 @@ Tomahawk.Resolver = {
         return params;
     },
     _adapter_resolve: function (params) {
-        var that = this;
-        var collectionPromises = [];
-        Tomahawk.collections.forEach(function (col) {
-            if (col.resolve) {
-                collectionPromises.push(col.resolve(params));
-            }
-        });
-
-        return RSVP.Promise.all(collectionPromises).then(function (collectionResults) {
-            var merged = [];
-            return merged.concat.apply(merged, collectionResults);
-        }).then(function (collectionResults) {
-            return RSVP.Promise.resolve(that.resolve(params)).then(function (results) {
-                return {
-                    'results': results.concat(collectionResults)
-                };
-            });
+        return RSVP.Promise.resolve(this.resolve(params)).then(function (results) {
+            return {
+                'results': results
+            };
         });
     },
 
     _adapter_search: function (params) {
-        var that = this;
-        var collectionPromises = [];
-        Tomahawk.collections.forEach(function (col) {
-            if (col.search) {
-                collectionPromises.push(col.search(params));
-            }
-        });
-        return RSVP.Promise.all(collectionPromises).then(function (collectionResults) {
-            var merged = [];
-            return merged.concat.apply(merged, collectionResults);
-        }).then(function (collectionResults) {
-            return RSVP.Promise.resolve(that.search(params)).then(function (results) {
-                return {
-                    'results': results.concat(collectionResults)
-                };
-            });
+        return RSVP.Promise.resolve(this.search(params)).then(function (results) {
+            return {
+                'results': results
+            };
         });
     },
 
@@ -1587,9 +1562,25 @@ Tomahawk.Collection = {
         });
     },
 
+    _adapter_resolve: function (params) {
+        return RSVP.Promise.resolve(this.resolve(params)).then(function (results) {
+            return {
+                'results': results
+            };
+        });
+    },
+
     resolve: function (params) {
         var resultIds = Tomahawk.resolveFromFuzzyIndex(params.artist, params.album, params.track);
         return this._fuzzyIndexIdsToTracks(resultIds);
+    },
+
+    _adapter_search: function (params) {
+        return RSVP.Promise.resolve(this.search(params)).then(function (results) {
+            return {
+                'results': results
+            };
+        });
     },
 
     search: function (params) {

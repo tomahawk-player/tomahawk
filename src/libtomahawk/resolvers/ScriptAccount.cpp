@@ -353,3 +353,29 @@ ScriptAccount::scriptCollection( const QString& id ) const
 {
     return m_collectionFactory->scriptPlugins().value( id );
 }
+
+
+ScriptJob*
+ScriptAccount::resolve( const scriptobject_ptr& scriptObject, const query_ptr& query )
+{
+    ScriptJob* job = nullptr;
+    if ( !query->isFullTextQuery() )
+    {
+        QVariantMap arguments;
+        arguments["artist"] = query->queryTrack()->artist();
+        arguments["album"] = query->queryTrack()->album();
+        arguments["track"] = query->queryTrack()->track();
+
+        job = scriptObject->invoke( "resolve", arguments );
+    }
+    else
+    {
+        QVariantMap arguments;
+        arguments["query"] = query->fullTextQuery();
+        job = scriptObject->invoke( "search", arguments );
+    }
+
+    job->setProperty( "qid", query->id() );
+
+    return job;
+}

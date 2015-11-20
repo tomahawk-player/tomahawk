@@ -340,7 +340,7 @@ Pipeline::reportResults( QID qid, Tomahawk::Resolver* r, const QList< result_ptr
     {
         if ( !results.isEmpty() )
         {
-            ResultProvider* resolvedBy = results[0]->resolvedBy();
+            Resolver* resolvedBy = results[0]->resolvedBy();
             if ( resolvedBy )
             {
                 tDebug() << "Result arrived too late for:" << qid << "by" << resolvedBy->name();

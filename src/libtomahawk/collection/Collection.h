@@ -33,7 +33,7 @@
 #include "collection/ArtistsRequest.h"
 #include "collection/AlbumsRequest.h"
 #include "collection/TracksRequest.h"
-#include "../ResultProvider.h"
+#include "../resolvers/Resolver.h"
 
 #include "DllMacro.h"
 
@@ -46,7 +46,7 @@
 namespace Tomahawk
 {
 
-class DLLEXPORT Collection : public QObject, public ResultProvider
+class DLLEXPORT Collection : public Resolver
 {
 Q_OBJECT
 
