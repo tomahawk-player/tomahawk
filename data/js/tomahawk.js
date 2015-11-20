@@ -274,7 +274,7 @@ Tomahawk.Resolver = {
     _adapter_resolve: function (params) {
         return RSVP.Promise.resolve(this.resolve(params)).then(function (results) {
             return {
-                'results': results
+                'tracks': results
             };
         });
     },
@@ -282,7 +282,7 @@ Tomahawk.Resolver = {
     _adapter_search: function (params) {
         return RSVP.Promise.resolve(this.search(params)).then(function (results) {
             return {
-                'results': results
+                'tracks': results
             };
         });
     },
@@ -1558,7 +1558,7 @@ Tomahawk.Collection = {
     _adapter_resolve: function (params) {
         return RSVP.Promise.resolve(this.resolve(params)).then(function (results) {
             return {
-                'results': results
+                'tracks': results
             };
         });
     },
@@ -1568,17 +1568,14 @@ Tomahawk.Collection = {
         return this._fuzzyIndexIdsToTracks(resultIds);
     },
 
-    _adapter_search: function (params) {
-        return RSVP.Promise.resolve(this.search(params)).then(function (results) {
-            return {
-                'results': results
-            };
-        });
-    },
-
     search: function (params) {
         var resultIds = Tomahawk.searchFuzzyIndex(params.query);
-        return this._fuzzyIndexIdsToTracks(resultIds);
+
+        return this._fuzzyIndexIdsToTracks(resultIds).then(function(tracks) {
+            return {
+                tracks: tracks
+            };
+        });
     },
 
     tracks: function (params, where) {
@@ -1625,7 +1622,7 @@ Tomahawk.Collection = {
             );
             return t.execDeferredStatements();
         }).then(function (results) {
-            return {results: results[0]};
+            return {tracks: results[0]};
         });
     },
 

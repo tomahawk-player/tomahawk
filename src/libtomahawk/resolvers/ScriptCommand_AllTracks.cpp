@@ -117,7 +117,7 @@ ScriptCommand_AllTracks::onTracksJobDone( const QVariantMap& result )
     QSharedPointer< ScriptCollection > collection = m_collection.objectCast< ScriptCollection >();
     Q_ASSERT( !collection.isNull() );
 
-    QList< Tomahawk::result_ptr > t = collection->scriptAccount()->parseResultVariantList( result[ "results"].toList() );
+    QList< Tomahawk::result_ptr > t = collection->scriptAccount()->parseResultVariantList( result[ "tracks" ].toList() );
 
 
     QList< Tomahawk::query_ptr > queries;

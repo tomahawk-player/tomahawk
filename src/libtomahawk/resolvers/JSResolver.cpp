@@ -562,7 +562,7 @@ JSResolver::onResolveRequestDone( const QVariantMap& data )
     else
     {
 
-        QList< Tomahawk::result_ptr > results = scriptAccount()->parseResultVariantList( data.value( "results" ).toList() );
+        QList< Tomahawk::result_ptr > results = scriptAccount()->parseResultVariantList( data.value( "tracks" ).toList() );
 
         foreach( const result_ptr& result, results )
         {
