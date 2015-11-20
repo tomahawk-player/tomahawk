@@ -747,10 +747,6 @@ Tomahawk.PluginManager = {
     },
     registerPlugin: function (type, object) {
         this.objects[this.identifyObject(object)] = object;
-        if (type === 'collection') {
-            Tomahawk.collections.push(object);
-        }
-
         Tomahawk.log("registerPlugin: " + type + " id: " + object.id);
         Tomahawk.registerScriptPlugin(type, object.id);
     },
@@ -1107,8 +1103,6 @@ Tomahawk.Country = {
     SaintMartin: 245,
     LatinAmericaAndTheCaribbean: 246
 };
-
-Tomahawk.collections = [];
 
 Tomahawk.Collection = {
     BrowseCapability: {
