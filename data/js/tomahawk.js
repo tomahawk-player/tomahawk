@@ -764,15 +764,6 @@ Tomahawk.PluginManager = {
 
     resolve: [],
     invokeSync: function (requestId, objectId, methodName, params) {
-        if (!Tomahawk.resolver.instance.apiVersion || Tomahawk.resolver.instance.apiVersion < 0.9) {
-            if (methodName === 'artistAlbums') {
-                methodName = 'albums';
-            } else if (methodName === 'albumTracks') {
-                methodName = 'tracks';
-            }
-        }
-
-
         if (this.objects[objectId][this.wrapperPrefix + methodName]) {
             methodName = this.wrapperPrefix + methodName;
         }
