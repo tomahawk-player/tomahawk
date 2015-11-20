@@ -49,7 +49,7 @@ RSVP.on('error', function (reason) {
         resolverName = Tomahawk.resolver.instance.settings.name + " - ";
     }
     if (reason) {
-        console.error(resolverName + 'Uncaught error:' + JSON.stringify(reason));
+        console.error(resolverName + 'Uncaught error:', reason);
     } else {
         console.error(resolverName + 'Uncaught error: error thrown from RSVP but it was empty');
     }
