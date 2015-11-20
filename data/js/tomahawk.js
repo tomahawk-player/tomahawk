@@ -778,7 +778,9 @@ Tomahawk.PluginManager = {
             }
         }
 
-        if (typeof this.objects[objectId][methodName] !== 'function') {
+        if (typeof this.objects[objectId][methodName] !== 'function' && this.objects[objectId][methodName]) {
+            return this.objects[objectId][methodName];
+        } else if (typeof this.objects[objectId][methodName] !== 'function') {
             throw new Error('\'' + methodName + '\' on ScriptObject ' + objectId + ' is not a function', typeof this.objects[objectId][methodName]);
         }
 
