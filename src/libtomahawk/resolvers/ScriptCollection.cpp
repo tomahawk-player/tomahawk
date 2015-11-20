@@ -385,7 +385,7 @@ ScriptCollection::onResolveRequestDone( const QVariantMap& data )
         foreach( const result_ptr& result, results )
         {
             result->setResolvedByCollection( weakRef().toStrongRef() );
-            result->setFriendlySource( name() );
+            result->setFriendlySource( prettyName() );
         }
 
         Tomahawk::Pipeline::instance()->reportResults( qid, this, results );
