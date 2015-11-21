@@ -603,7 +603,7 @@ TomahawkWindow::updatePreview()
     doc.setDefaultFont( font );
 
     doc.setPageSize( QSize( size.width() - 2 * margin - coverSize.width() , size.height() - 2 * margin ) );
-    doc.setHtml( QString( "<font color=\"white\">%1</font>" ).arg( title ));
+    doc.setHtml( QString( "<center><font color=\"white\">%1</font></center>" ).arg( title ));
 
     paint.save();
     paint.translate( coverSize.width() + 2 * margin , ( size.height() - doc.size().height() ) / 2);
