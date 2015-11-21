@@ -576,7 +576,7 @@ TomahawkWindow::updatePreview()
     QString title( "Tomahawk" );
     if ( !m_currentTrack.isNull() ) {
         cover = m_currentTrack->track()->albumPtr()->cover( coverSize , false );
-        title = tr( "%1<br><br><br>%2</b>", "artist name, track" ).arg( m_currentTrack->track()->artist(), m_currentTrack->track()->track() );
+        title = tr( "%1<br><br><br><b>%2</b>", "track, artist name" ).arg( m_currentTrack->track()->track(), m_currentTrack->track()->artist() );
     }
     if ( cover.isNull() ) {
         cover = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover , TomahawkUtils::Original, coverSize );
