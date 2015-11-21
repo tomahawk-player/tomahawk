@@ -573,7 +573,7 @@ TomahawkWindow::updatePreview()
     const qreal margin = size.height() * 0.05;
     const QSize coverSize( size.height() - 2 * margin , size.height() - 2 * margin);
     QPixmap cover;
-    QString title( "Tomahawk" );
+    QString title( qApp->applicationName() );
     if ( !m_currentTrack.isNull() ) {
         cover = m_currentTrack->track()->albumPtr()->cover( coverSize , false );
         title = tr( "%1<br><br><b>%2</b>", "track, artist name" ).arg( m_currentTrack->track()->track(), m_currentTrack->track()->artist() );
