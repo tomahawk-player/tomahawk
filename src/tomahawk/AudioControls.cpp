@@ -310,8 +310,9 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr result )
     connect( m_currentTrack->track().data(), SIGNAL( coverChanged() ), SLOT( onCoverUpdated() ) );
     connect( m_currentTrack->track().data(), SIGNAL( socialActionsLoaded() ), SLOT( onSocialActionsLoaded() ) );
 
-    ui->artistLabel->setResult( result );
+    setUpdatesEnabled( false );
     ui->trackLabel->setResult( result );
+    ui->artistLabel->setResult( result );
 
     const QString duration = TomahawkUtils::timeToString( result.data()->track()->duration() );
     ui->timeLabel->setFixedWidth( ui->timeLabel->fontMetrics().width( QString( duration.length(), QChar( '0' ) ) ) );
@@ -370,6 +371,7 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr result )
 
     setCover();
     setSocialActions();
+    setUpdatesEnabled( true );
 }
 
 
