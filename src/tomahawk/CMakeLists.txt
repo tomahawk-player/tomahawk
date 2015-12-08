@@ -1,4 +1,4 @@
-set(TOMAHAWK_APPLICATION_TARGET "tomahahawk-bin")
+set(TOMAHAWK_APPLICATION_TARGET "tomahawk-bin")
 
 include( ECMAddAppIcon )
 
