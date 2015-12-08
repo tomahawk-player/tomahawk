@@ -14,11 +14,6 @@ find_library(LIBVLC_LIBRARY NAMES vlc libvlc
         ${PC_LIBVLC_LIBRARY_DIRS}
 )
 
-find_library(LIBVLCCORE_LIBRARY NAMES vlccore libvlccore
-    HINTS
-        ${PC_LIBVLC_LIBDIR}
-        ${PC_LIBVLC_LIBRARY_DIRS}
-)
 
 set(LIBVLC_VERSION ${PC_LIBVLC_VERSION})
 
@@ -32,8 +27,6 @@ int main(int argc, char *argv[]) {
 HAVE_VLC_ALBUMARTIST)
 
 find_package_handle_standard_args(LibVLC
-    REQUIRED_VARS LIBVLC_LIBRARY LIBVLCCORE_LIBRARY LIBVLC_INCLUDE_DIR
+    REQUIRED_VARS LIBVLC_LIBRARY LIBVLC_INCLUDE_DIR
     VERSION_VAR LIBVLC_VERSION
 )
-
- 
