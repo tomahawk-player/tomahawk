@@ -6,12 +6,14 @@ find_path(LIBVLC_INCLUDE_DIR vlc/vlc.h
     HINTS
         ${PC_LIBVLC_INCLUDEDIR}
         ${PC_LIBVLC_INCLUDE_DIRS}
+        /usr/local/opt/vlc/include
 )
 
 find_library(LIBVLC_LIBRARY NAMES vlc libvlc
     HINTS
         ${PC_LIBVLC_LIBDIR}
         ${PC_LIBVLC_LIBRARY_DIRS}
+        /usr/local/opt/vlc/lib
 )
 
 
