@@ -186,7 +186,7 @@ VLC_PLUGINS=[
 ]
 
 VLC_SEARCH_PATH=[
-    '/usr/local/lib/vlc/plugins/',
+    '/usr/local/opt/vlc/lib/vlc/plugins/',
 ]
 
 QT_PLUGINS = [
