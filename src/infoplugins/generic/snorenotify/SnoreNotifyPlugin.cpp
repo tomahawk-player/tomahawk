@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2013-2014, Patrick von Reth <vonreth@kde.org>
+ *   Copyright 2013-2015, Hannah von Reth <vonreth@kde.org>
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -27,12 +27,13 @@
 
 #include "TomahawkVersion.h"
 
-#include <snore/core/application.h>
-#include <snore/core/notification/icon.h>
+#include <libsnore/application.h>
+#include <libsnore/notification/icon.h>
 
 #include <QApplication>
 
 #include <QImage>
+#include <QPixmap>
 
 
 #if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
@@ -61,27 +62,13 @@ SnoreNotifyPlugin::SnoreNotifyPlugin()
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     m_supportedPushTypes << InfoNotifyUser << InfoNowPlaying << InfoTrackUnresolved << InfoNowStopped << InfoInboxReceived;
 
-    m_snore = new Snore::SnoreCore();
-    m_snore->loadPlugins( Snore::SnorePlugin::BACKEND );
-    QString backend = qgetenv( "SNORE_BACKEND" ).constData();
-
-    if( backend.isEmpty() )
-    {
-        m_snore->setPrimaryNotificationBackend();
-    }
-    else
-    {
-        if( !m_snore->setPrimaryNotificationBackend( backend ) )
-        {
-            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Ivalid or unavailible Snore backend: " << backend << " availible backens: " << m_snore->notificationBackends();
-            m_snore->setPrimaryNotificationBackend();
-        }
-    }
-
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << m_snore->primaryNotificationBackend();
+    Snore::SnoreCore &snore = Snore::SnoreCore::instance();
+    snore.loadPlugins( Snore::SnorePlugin::BACKEND | Snore::SnorePlugin::SECONDARY_BACKEND );
+    snore.setDefaultSettingsValue("Silent", true, Snore::LOCAL_SETTING);
 
     m_application = Snore::Application( qApp->applicationName(), m_defaultIcon );
-    m_application.hints().setValue( "windows_app_id", TOMAHAWK_APPLICATION_PACKAGE_NAME );
+    m_application.hints().setValue( "use-markup", true );
+    m_application.hints().setValue( "windows-app-id", TOMAHAWK_APPLICATION_PACKAGE_NAME );
     m_application.hints().setValue( "desktop-entry", TOMAHAWK_APPLICATION_NAME );
 
     addAlert( InfoNotifyUser, tr( "Notify User" ) );
@@ -90,9 +77,10 @@ SnoreNotifyPlugin::SnoreNotifyPlugin()
     addAlert( InfoNowStopped, tr( "Playback Stopped" ) );
     addAlert( InfoInboxReceived, tr( "You received a Song recommendation" ) );
 
-    m_snore->registerApplication( m_application );
+    snore.registerApplication( m_application );
+    snore.setDefaultApplication( m_application );
 
-    connect( m_snore, SIGNAL( actionInvoked( Snore::Notification ) ), this, SLOT( slotActionInvoked( Snore::Notification ) ) );
+    connect( &snore, SIGNAL( actionInvoked( Snore::Notification ) ), this, SLOT( slotActionInvoked( Snore::Notification ) ) );
 }
 
 
@@ -100,8 +88,7 @@ SnoreNotifyPlugin::~SnoreNotifyPlugin()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
 
-    m_snore->deregisterApplication( m_application );
-    m_snore->deleteLater();
+    Snore::SnoreCore::instance().deregisterApplication( m_application );
 }
 
 void
@@ -111,25 +98,19 @@ SnoreNotifyPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
     if ( !TomahawkSettings::instance()->songChangeNotificationEnabled() )
         return;
 
-    if( m_snore->primaryNotificationBackend().isNull() )
-    {
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "no notification backend set";
-        return;
-    }
-
 
     switch ( pushData.type )
     {
         case Tomahawk::InfoSystem::InfoTrackUnresolved:
-            notifyUser( Tomahawk::InfoSystem::InfoTrackUnresolved, tr( "The current track could not be resolved. %applicationName will pick back up with the next resolvable track from this source." ) );
+            notifyUser( Tomahawk::InfoSystem::InfoTrackUnresolved, tr( "The current track could not be resolved. %applicationName will pick back up with the next resolvable track from this source." ), m_defaultIcon );
             return;
 
         case Tomahawk::InfoSystem::InfoNotifyUser:
-            notifyUser( Tomahawk::InfoSystem::InfoNotifyUser,pushData.infoPair.second.toString() );
+            notifyUser( Tomahawk::InfoSystem::InfoNotifyUser,pushData.infoPair.second.toString(), m_defaultIcon );
             return;
 
         case Tomahawk::InfoSystem::InfoNowStopped:
-            notifyUser( Tomahawk::InfoSystem::InfoNowStopped, tr( "%applicationName stopped playback." ) );
+            notifyUser( Tomahawk::InfoSystem::InfoNowStopped, tr( "%applicationName stopped playback." ), m_defaultIcon );
             return;
 
         case Tomahawk::InfoSystem::InfoNowPlaying:
@@ -157,15 +138,10 @@ SnoreNotifyPlugin::slotActionInvoked( Snore::Notification n )
 void
 SnoreNotifyPlugin::notifyUser( Tomahawk::InfoSystem::InfoType type, const QString& messageText, Snore::Icon icon  )
 {
-    if(!icon.isValid())
-    {
-        icon = m_defaultIcon;
-    }
     const Snore::Alert &alert = m_alerts[ type ];
     Snore::Notification n( m_application , alert, alert.name(), messageText, icon );
-    m_snore->broadcastNotification( n );
+    Snore::SnoreCore::instance().broadcastNotification( n );
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "showing notification:" << messageText;
-
 }
 
 void
@@ -194,41 +170,28 @@ SnoreNotifyPlugin::nowPlaying( const QVariant& input )
 
     QString messageText;
     // If the window manager supports notification styling then use it.
-    if ( m_snore->primaryBackendSupportsRichtext() )
-    {
-        // Remark: If using xml-based markup in notifications, the supplied strings need to be escaped.
-        QString album;
-        if ( !hash[ "album" ].isEmpty() )
-            album = QString( "<br><i>%1</i> %2" ).arg( tr( "on", "'on' is followed by an album name" ) ).arg( Qt::escape( hash[ "album" ] ) );
 
-        messageText = tr( "%1%4 %2%3.", "%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist ('by' in english)" )
-                .arg( Qt::escape( hash[ "title" ] ) )
-                .arg( Qt::escape( hash[ "artist" ] ) )
-                .arg( album )
-                .arg( QString( "<br><i>%1</i>" ).arg( tr( "by", "preposition to link track and artist" ) ) );
+    // Remark: If using xml-based markup in notifications, the supplied strings need to be escaped.
+    QString album;
+    if ( !hash[ "album" ].isEmpty() )
+        album = QString( "<br><i>%1</i> %2" ).arg( tr( "on", "'on' is followed by an album name" ) ).arg( Qt::escape( hash[ "album" ] ) );
 
-        // Dirty hack(TM) so that KNotify/QLabel recognizes the message as Rich Text
-        messageText = QString( "<i></i>%1" ).arg( messageText );
-    }
-    else
-    {
-        QString album;
-        if ( !hash[ "album" ].isEmpty() )
-            album = QString( " %1" ).arg( tr( "on \"%1\"", "%1 is an album name" ).arg( hash[ "album" ] ) );
+    messageText = tr( "%1%4 %2%3.", "%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist ('by' in english)" )
+            .arg( Qt::escape( hash[ "title" ] ) )
+            .arg( Qt::escape( hash[ "artist" ] ) )
+            .arg( album )
+            .arg( QString( "<br><i>%1</i>" ).arg( tr( "by", "preposition to link track and artist" ) ) );
 
-        messageText = tr( "\"%1\" by %2%3.", "%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing" )
-                .arg( hash[ "title" ] )
-                .arg( hash[ "artist" ] )
-                .arg( album );
-    }
+    // Dirty hack(TM) so that KNotify/QLabel recognizes the message as Rich Text
+    messageText = QString( "<i></i>%1" ).arg( messageText );
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "sending message" << messageText;
 
     // If there is a cover availble use it, else use Tomahawk logo as default.
-    Snore::Icon image;
+    Snore::Icon image = m_defaultIcon;
     if ( map.contains( "cover" ) && map[ "cover" ].canConvert< QImage >() )
     {
-        image = Snore::Icon( map[ "cover" ].value< QImage >() );
+        image = Snore::Icon( QPixmap::fromImage( map[ "cover" ].value< QImage >() ) );
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << image;
     }
     notifyUser( InfoNowPlaying, messageText, image );
@@ -259,26 +222,15 @@ SnoreNotifyPlugin::inboxReceived( const QVariant& input )
         return;
 
     QString messageText;
-    // If the window manager supports notification styling then use it.
-    if ( m_snore->primaryBackendSupportsRichtext() )
-    {
-        // Remark: If using xml-based markup in notifications, the supplied strings need to be escaped.
-        messageText = tr( "%1 sent you\n%2%4 %3.", "%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist ('by' in english)" )
-                .arg( Qt::escape( src["friendlyname"] ) )
-                .arg( Qt::escape( hash[ "title" ] ) )
-                .arg( Qt::escape( hash[ "artist" ] ) )
-                .arg( QString( "\n<i>%1</i>" ).arg( tr( "by", "preposition to link track and artist" ) ) );
+    // Remark: If using xml-based markup in notifications, the supplied strings need to be escaped.
+    messageText = tr( "%1 sent you\n%2%4 %3.", "%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist ('by' in english)" )
+            .arg( Qt::escape( src["friendlyname"] ) )
+            .arg( Qt::escape( hash[ "title" ] ) )
+            .arg( Qt::escape( hash[ "artist" ] ) )
+            .arg( QString( "\n<i>%1</i>" ).arg( tr( "by", "preposition to link track and artist" ) ) );
 
-        // Dirty hack(TM) so that KNotify/QLabel recognizes the message as Rich Text
-        messageText = QString( "<i></i>%1" ).arg( messageText );
-    }
-    else
-    {
-        messageText = tr( "%1 sent you \"%2\" by %3.", "%1 is a nickname, %2 is a title, %3 is an artist" )
-                .arg( src["friendlyname"] )
-                .arg( hash[ "title" ] )
-                .arg( hash[ "artist" ] );
-    }
+    // Dirty hack(TM) so that KNotify/QLabel recognizes the message as Rich Text
+    messageText = QString( "<i></i>%1" ).arg( messageText );
 
     Snore::Icon icon( RESPATH "images/inbox-512x512.png" );
     notifyUser( Tomahawk::InfoSystem::InfoInboxReceived, messageText, icon );
