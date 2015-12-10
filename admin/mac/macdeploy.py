@@ -201,8 +201,8 @@ QT_PLUGINS = [
 ]
 
 SNORE_PLUGINS = [
-#    'libsnore_backend_growl.so',
-#    'libsnore_backend_osxnotificationcenter.so',
+    'libsnore_backend_growl.so',
+    'libsnore_backend_osxnotificationcenter.so',
 ]
 
 TOMAHAWK_PLUGINS = [
@@ -219,7 +219,7 @@ TOMAHAWK_PLUGINS = [
   'libtomahawk_infoplugin_musixmatch.so',
   'libtomahawk_infoplugin_newreleases.so',
   'libtomahawk_infoplugin_rovi.so',
-#  'libtomahawk_infoplugin_snorenotify.so',
+  'libtomahawk_infoplugin_snorenotify.so',
   'libtomahawk_infoplugin_spotify.so',
   'libtomahawk_viewpage_dashboard.so',
 #  'libtomahawk_viewpage_networkactivity.so',
@@ -233,7 +233,7 @@ QT_PLUGINS_SEARCH_PATH=[
 ]
 
 SNORE_PLUGINS_SEARCH_PATH=[
-    '/usr/local/opt/snorenotify/lib/libsnore',
+    '/usr/local/opt/snorenotify/lib/plugins/libsnore-qt5',
 ]
 
 class Error(Exception):
@@ -576,7 +576,7 @@ for plugin in TOMAHAWK_PLUGINS:
   FixPlugin(plugin, '../MacOS')
 
 for plugin in SNORE_PLUGINS:
-  FixPlugin(FindSnorePlugin(plugin), '../MacOS/libsnore')
+  FixPlugin(FindSnorePlugin(plugin), '../lib/plugins/libsnore-qt5')
 
 try:
   FixPlugin('tomahawk_crash_reporter', '../MacOS')
