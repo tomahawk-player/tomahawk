@@ -233,7 +233,7 @@ QT_PLUGINS_SEARCH_PATH=[
 ]
 
 SNORE_PLUGINS_SEARCH_PATH=[
-    '/usr/local/Cellar/snorenotify/HEAD/lib/libsnore',
+    '/usr/local/opt/snorenotify/lib/libsnore',
 ]
 
 class Error(Exception):
