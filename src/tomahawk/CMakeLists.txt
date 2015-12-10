@@ -151,7 +151,14 @@ if(APPLE)
 endif()
 
 
-ecm_add_app_icon( tomahawkSources ICONS ${TOMAHAWK_ICONS} )
+if(APPLE)
+    # OUTFILE is currently only supported in my branch, see https://git.reviewboard.kde.org/r/126303/
+    # once merged (and released), we can remove this conditional usage
+    ecm_add_app_icon(tomahawkSources ICONS ${TOMAHAWK_ICONS} OUTFILE "${TOMAHAWK_APPLICATION_NAME}")
+else()
+    ecm_add_app_icon(tomahawkSources ICONS ${TOMAHAWK_ICONS})
+endif()
+
 
 qt_add_resources( RC_SRCS "../../resources.qrc" )
 
