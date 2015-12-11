@@ -1609,6 +1609,9 @@ Tomahawk.Collection = {
         });
     },
 
+    revision: function (params) {
+    },
+
     _fuzzyIndexIdsToTracks: function (resultIds, id) {
         if (typeof id === 'undefined') {
             id = this.settings.id;
