@@ -1610,6 +1610,7 @@ Tomahawk.Collection = {
     },
 
     revision: function (params) {
+        return RSVP.resolve();
     },
 
     _fuzzyIndexIdsToTracks: function (resultIds, id) {
