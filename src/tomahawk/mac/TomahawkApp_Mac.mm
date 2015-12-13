@@ -381,6 +381,12 @@ Tomahawk::setupToolBarMac( TomahawkWindow* parent )
     searchField->parent = parent;
     [searchItem->nativeToolBarItem() setView: searchField];
 
+    NSSize nsirect = [searchField frame].size;
+    nsirect.width = 250;
+    [searchItem->nativeToolBarItem() setMinSize: nsirect];
+    nsirect.width = 450;
+    [searchItem->nativeToolBarItem() setMaxSize: nsirect];
+
     QMacToolBarItem* spacerRightItem = toolbar->addItem( QIcon(), QString() );
     spacerRightItem->setStandardItem( QMacToolBarItem::FlexibleSpace );
 
