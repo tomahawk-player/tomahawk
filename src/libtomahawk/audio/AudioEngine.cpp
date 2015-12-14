@@ -621,6 +621,8 @@ AudioEngine::gotStreamUrl( const QVariantMap& data )
         NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( req ) );
         NewClosure( reply, SIGNAL( finalUrlReached() ), this, SLOT( gotRedirectedStreamUrl( Tomahawk::result_ptr, NetworkReply* )), result, reply );
     }
+
+    sender()->deleteLater();
 }
 
 void
