@@ -44,6 +44,13 @@
 #include "Track.h"
 #include "ScriptInfoPlugin.h"
 #include "JSAccount.h"
+#include "ScriptJob.h"
+
+// lookupUrl stuff
+#include "playlist/PlaylistTemplate.h"
+#include "playlist/XspfPlaylistTemplate.h"
+#include "database/Database.h"
+#include "database/DatabaseImpl.h"
 
 #include <QDir>
 #include <QFile>
@@ -250,12 +257,11 @@ JSResolver::init()
     d->scriptAccount->loadScript( filePath() );
 
     // HACK: register resolver object
-    d->scriptAccount->evaluateJavaScript( "Tomahawk.PluginManager.registerPlugin('resolver', Tomahawk.resolver.instance);" )
-;
+    d->scriptAccount->evaluateJavaScript( "Tomahawk.PluginManager.registerPlugin('resolver', Tomahawk.resolver.instance);" );
     // init resolver
-    resolverInit();
+    scriptObject()->syncInvoke( "init" );
 
-    QVariantMap m = resolverSettings();
+    QVariantMap m = scriptObject()->syncInvoke( "settings" ).toMap();
     d->name    = m.value( "name" ).toString();
     d->weight  = m.value( "weight", 0 ).toUInt();
     d->timeout = m.value( "timeout", 25 ).toUInt() * 1000;
@@ -319,20 +325,13 @@ JSResolver::canParseUrl( const QString& url, UrlType type )
 {
     Q_D( const JSResolver );
 
-    // FIXME: How can we do this?
-    /*if ( QThread::currentThread() != thread() )
-    {
-        QMetaObject::invokeMethod( this, "canParseUrl", Qt::QueuedConnection,
-                                   Q_ARG( QString, url ) );
-        return;
-    }*/
-
     if ( d->capabilities.testFlag( UrlLookup ) )
     {
-        QString eval = QString( "canParseUrl( '%1', %2 )" )
-                       .arg( JSAccount::escape( QString( url ) ) )
-                       .arg( (int) type );
-        return callOnResolver( eval ).toBool();
+        QVariantMap arguments;
+        arguments["url"] = url;
+        arguments["type"] = (int) type;
+
+        return scriptObject()->syncInvoke( "canParseUrl", arguments ).toBool();
     }
     else
     {
@@ -345,14 +344,8 @@ JSResolver::canParseUrl( const QString& url, UrlType type )
 void
 JSResolver::lookupUrl( const QString& url )
 {
-    if ( QThread::currentThread() != thread() )
-    {
-        QMetaObject::invokeMethod( this, "lookupUrl", Qt::QueuedConnection,
-                                   Q_ARG( QString, url ) );
-        return;
-    }
-
     Q_D( const JSResolver );
+
 
     if ( !d->capabilities.testFlag( UrlLookup ) )
     {
@@ -360,19 +353,176 @@ JSResolver::lookupUrl( const QString& url )
         return;
     }
 
-    QString eval = QString( "lookupUrl( '%1' )" )
-                   .arg( JSAccount::escape( QString( url ) ) );
+    QVariantMap arguments;
+    arguments["url"] = url;
+    Tomahawk::ScriptJob* job = scriptObject()->invoke( "lookupUrl", arguments );
+    connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onLookupUrlRequestDone( QVariantMap ) ) );
+    job->setProperty( "url", url );
+    job->start();
+}
 
-    QVariantMap m = callOnResolver( eval ).toMap();
-    if ( m.isEmpty() )
+
+void
+JSResolver::onLookupUrlRequestDone( const QVariantMap& result )
+{
+    sender()->deleteLater();
+
+    QString url = sender()->property( "url" ).toString();
+
+    tLog() << "ON LOOKUP URL REQUEST DONE" << url << result;
+
+    // It may seem a bit weird, but currently no slot should do anything
+    // more as we starting on a new URL and not task are waiting for it yet.
+    m_pendingUrl = QString();
+    m_pendingAlbum = album_ptr();
+
+    UrlTypes type = (UrlTypes) result.value( "type" ).toInt();
+    if ( type == UrlTypeArtist )
     {
-        // if the resolver doesn't return anything, async api is used
-        return;
+        QString name = result.value( "name" ).toString();
+        Q_ASSERT( !name.isEmpty() );
+        emit informationFound( url, Artist::get( name, true ).objectCast<QObject>() );
+    }
+    else if ( type == UrlTypeAlbum )
+    {
+        QString name = result.value( "name" ).toString();
+        QString artist = result.value( "artist" ).toString();
+        album_ptr album = Album::get( Artist::get( artist, true ), name );
+        m_pendingUrl = url;
+        m_pendingAlbum = album;
+        connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
+                 SLOT( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ) );
+        if ( !album->tracks().isEmpty() )
+        {
+            emit informationFound( url, album.objectCast<QObject>() );
+        }
+    }
+    else if ( type == UrlTypeTrack )
+    {
+        Tomahawk::query_ptr query = parseTrack( result );
+        if ( query.isNull() )
+        {
+            // A valid track result shoud have non-empty title and artist.
+            tLog() << Q_FUNC_INFO << name() << "Got empty track information for " << url;
+            emit informationFound( url, QSharedPointer<QObject>() );
+        }
+        else
+        {
+            emit informationFound( url, query.objectCast<QObject>() );
+        }
+    }
+    else if ( type == UrlTypePlaylist )
+    {
+        QString guid = result.value( "guid" ).toString();
+        Q_ASSERT( !guid.isEmpty() );
+        // Append nodeid to guid to make it globally unique.
+        guid += instanceUUID();
+
+        // Do we already have this playlist loaded?
+        {
+            playlist_ptr playlist = Playlist::get( guid );
+            if ( !playlist.isNull() )
+            {
+                emit informationFound( url, playlist.objectCast<QObject>() );
+                return;
+            }
+        }
+
+        // Get all information to build a new playlist but do not build it until we know,
+        // if it is really handled as a playlist and not as a set of tracks.
+        Tomahawk::source_ptr source = SourceList::instance()->getLocal();
+        const QString title = result.value( "title" ).toString();
+        const QString info = result.value( "info" ).toString();
+        const QString creator = result.value( "creator" ).toString();
+        QList<query_ptr> queries;
+        foreach( QVariant track, result.value( "tracks" ).toList() )
+        {
+            query_ptr query = parseTrack( track.toMap() );
+            if ( !query.isNull() )
+            {
+                queries << query;
+            }
+        }
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << name() << "Got playlist for " << url;
+        playlisttemplate_ptr pltemplate( new PlaylistTemplate( source, guid, title, info, creator, false, queries ) );
+        emit informationFound( url, pltemplate.objectCast<QObject>() );
+    }
+    else if ( type == UrlTypeXspf )
+    {
+        QString xspfUrl = result.value( "url" ).toString();
+        Q_ASSERT( !xspfUrl.isEmpty() );
+        QString guid = QString( "xspf-%1-%2" ).arg( xspfUrl.toUtf8().toBase64().constData() ).arg( instanceUUID() );
+
+        // Do we already have this playlist loaded?
+        {
+            playlist_ptr playlist = Playlist::get( guid );
+            if ( !playlist.isNull() )
+            {
+                emit informationFound( url, playlist.objectCast<QObject>() );
+                return;
+            }
+        }
+
+
+        // Get all information to build a new playlist but do not build it until we know,
+        // if it is really handled as a playlist and not as a set of tracks.
+        Tomahawk::source_ptr source = SourceList::instance()->getLocal();
+        QSharedPointer<XspfPlaylistTemplate> pltemplate( new XspfPlaylistTemplate( xspfUrl, source, guid ) );
+        NewClosure( pltemplate, SIGNAL( tracksLoaded( QList< Tomahawk::query_ptr > ) ),
+                    this, SLOT( pltemplateTracksLoadedForUrl( QString, Tomahawk::playlisttemplate_ptr ) ),
+                    url, pltemplate.objectCast<Tomahawk::PlaylistTemplate>() );
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << name() << "Got playlist for " << url;
+        pltemplate->load();
+    }
+    else
+    {
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << name() << "No usable information found for " << url;
+        emit informationFound( url, QSharedPointer<QObject>() );
+    }
+}
+
+
+query_ptr
+JSResolver::parseTrack( const QVariantMap& track )
+{
+    QString title = track.value( "track" ).toString();
+    QString artist = track.value( "artist" ).toString();
+    QString album = track.value( "album" ).toString();
+    if ( title.isEmpty() || artist.isEmpty() )
+    {
+        return query_ptr();
     }
 
-    QString errorMessage = tr( "Script Resolver Warning: API call %1 returned data synchronously." ).arg( eval );
-    JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( errorMessage ) );
-    tDebug() << errorMessage << m;
+    Tomahawk::query_ptr query = Tomahawk::Query::get( artist, title, album );
+    QString resultHint = track.value( "hint" ).toString();
+    if ( !resultHint.isEmpty() )
+    {
+        query->setResultHint( resultHint );
+        query->setSaveHTTPResultHint( true );
+    }
+
+    return query;
+}
+
+
+void
+JSResolver::tracksAdded( const QList<query_ptr>&, const ModelMode, const collection_ptr&)
+{
+    // Check if we still are actively waiting
+    if ( m_pendingAlbum.isNull() || m_pendingUrl.isNull() )
+        return;
+
+    emit informationFound( m_pendingUrl, m_pendingAlbum.objectCast<QObject>() );
+    m_pendingAlbum = album_ptr();
+    m_pendingUrl = QString();
+}
+
+
+void
+JSResolver::pltemplateTracksLoadedForUrl( const QString& url, const playlisttemplate_ptr& pltemplate )
+{
+    tLog() << Q_FUNC_INFO;
+    emit informationFound( url, pltemplate.objectCast<QObject>() );
 }
 
 
@@ -388,31 +538,43 @@ JSResolver::error() const
 void
 JSResolver::resolve( const Tomahawk::query_ptr& query )
 {
-    if ( QThread::currentThread() != thread() )
-    {
-        QMetaObject::invokeMethod( this, "resolve", Qt::QueuedConnection, Q_ARG(Tomahawk::query_ptr, query) );
-        return;
-    }
+    ScriptJob* job = scriptAccount()->resolve( scriptObject(), query );
 
-    QString eval;
-    if ( !query->isFullTextQuery() )
+    connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onResolveRequestDone( QVariantMap ) ) );
+
+    job->start();
+}
+
+void
+JSResolver::onResolveRequestDone( const QVariantMap& data )
+{
+    Q_ASSERT( QThread::currentThread() == thread() );
+    Q_D( JSResolver );
+
+    ScriptJob* job = qobject_cast< ScriptJob* >( sender() );
+
+    QID qid = job->property( "qid" ).toString();
+
+    if ( job->error() )
     {
-        eval = QString( "resolve( '%1', '%2', '%3', '%4' )" )
-                  .arg( JSAccount::escape( query->id() ) )
-                  .arg( JSAccount::escape( query->queryTrack()->artist() ) )
-                  .arg( JSAccount::escape( query->queryTrack()->album() ) )
-                  .arg( JSAccount::escape( query->queryTrack()->track() ) );
+        Tomahawk::Pipeline::instance()->reportError( qid, this );
     }
     else
     {
-        eval = QString( "search( '%1', '%2' )" )
-                  .arg( JSAccount::escape( query->id() ) )
-                  .arg( JSAccount::escape( query->fullTextQuery() ) );
+
+        QList< Tomahawk::result_ptr > results = scriptAccount()->parseResultVariantList( data.value( "tracks" ).toList() );
+
+        foreach( const result_ptr& result, results )
+        {
+            result->setResolvedByResolver( this );
+            result->setFriendlySource( name() );
+        }
+
+        Tomahawk::Pipeline::instance()->reportResults( qid, this, results );
     }
 
-    QVariantMap m = callOnResolver( eval ).toMap();
+    sender()->deleteLater();
 }
-
 
 void
 JSResolver::stop()
@@ -433,7 +595,7 @@ JSResolver::loadUi()
 {
     Q_D( JSResolver );
 
-    QVariantMap m = callOnResolver( "getConfigUi()" ).toMap();
+    QVariantMap m = scriptObject()->syncInvoke( "getConfigUi" ).toMap();
 
     bool compressed = m.value( "compressed", "false" ).toBool();
     qDebug() << "Resolver has a preferences widget! compressed?" << compressed;
@@ -485,7 +647,7 @@ JSResolver::saveConfig()
 //    qDebug() << Q_FUNC_INFO << saveData;
 
     d->resolverHelper->setResolverConfig( saveData.toMap() );
-    callOnResolver( "saveUserConfig()" );
+    scriptObject()->syncInvoke( "saveUserConfig" );
 }
 
 
@@ -517,38 +679,24 @@ JSResolver::onCapabilitiesChanged( Tomahawk::ExternalResolver::Capabilities capa
 
 
 QVariantMap
-JSResolver::resolverSettings()
-{
-    return callOnResolver( "settings" ).toMap();
-}
-
-
-QVariantMap
 JSResolver::resolverUserConfig()
 {
-    return callOnResolver( "getUserConfig()" ).toMap();
+    return scriptObject()->syncInvoke( "getUserConfig" ).toMap();
 }
 
 
-QVariantMap
-JSResolver::resolverInit()
+QString
+JSResolver::instanceUUID()
 {
-    return callOnResolver( "init()" ).toMap();
+    return Tomahawk::Database::instance()->impl()->dbid();
 }
 
 
-QVariant
-JSResolver::callOnResolver( const QString& scriptSource )
+ScriptJob*
+JSResolver::getStreamUrl( const result_ptr& result )
 {
-    Q_D( JSResolver );
+    QVariantMap arguments;
+    arguments["url"] = result->url();
 
-    QString propertyName = scriptSource.split('(').first();
-
-    return d->scriptAccount->evaluateJavaScriptWithResult( QString(
-        "if(Tomahawk.resolver.instance['_adapter_%1']) {"
-        "    Tomahawk.resolver.instance._adapter_%2;"
-        "} else {"
-        "    Tomahawk.resolver.instance.%2"
-        "}"
-    ).arg( propertyName ).arg( scriptSource ) );
+    return scriptObject()->invoke( "getStreamUrl", arguments );
 }

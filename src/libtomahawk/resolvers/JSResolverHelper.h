@@ -61,9 +61,6 @@ public:
      */
     Q_INVOKABLE QString accountId();
 
-    Q_INVOKABLE void addCustomUrlHandler( const QString& protocol, const QString& callbackFuncName, const QString& isAsynchronous = "false" );
-    Q_INVOKABLE void reportStreamUrl( const QString& qid, const QString& streamUrl );
-    Q_INVOKABLE void reportStreamUrl( const QString& qid, const QString& streamUrl, const QVariantMap& headers );
 
     /**
      * Make Tomahawk assert the assertion is true, probably not to be used by resolvers directly
@@ -89,20 +86,9 @@ public:
                                              int sizehint,
                                              const QVariantMap& options );
 
-    /**
-     * Native handler for asynchronous HTTP requests.
-     *
-     * This handler shall only be used if we cannot achieve the request with
-     * XMLHttpRequest as that would be more efficient.
-     * Use cases are:
-     *  * Referer header: Stripped on MacOS and the specification says it
-     *    should be stripped
-     *
-     * INTERNAL USE ONLY!
-     */
-    Q_INVOKABLE void nativeAsyncRequest( int requestId, const QString& url,
-                                         const QVariantMap& headers,
-                                         const QVariantMap& options );
+    Q_INVOKABLE void invokeNativeScriptJob( int requestId,
+                                        const QString& methodName,
+                                        const QVariantMap& params );
 
     /**
      * Lucene++ indices for JS resolvers
@@ -122,18 +108,10 @@ public:
     Q_INVOKABLE void readdResolver();
 
 
-    /**
-     * INTERNAL USE ONLY!
-     */
-    void customIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
-                                std::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback ); // async
-
-
 public slots:
     QByteArray readRaw( const QString& fileName );
     QString readBase64( const QString& fileName );
     QString readCompressed( const QString& fileName );
-    QString instanceUUID();
     QString uuid() const;
     int currentCountry() const;
     QString compress( const QString& data );
@@ -141,10 +119,6 @@ public slots:
 
     void log( const QString& message );
     bool fakeEnv() { return false; }
-
-    void addTrackResults( const QVariantMap& results );
-
-    void addUrlResult( const QString& url, const QVariantMap& result );
 
     void nativeReportCapabilities( const QVariant& capabilities );
 
@@ -154,27 +128,19 @@ public slots:
     void unregisterScriptPlugin( const QString& type, const QString& objectId );
 
 private slots:
-    void gotStreamUrl( IODeviceCallback callback, NetworkReply* reply );
-    void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::ModelMode, const Tomahawk::collection_ptr& collection );
-    void pltemplateTracksLoadedForUrl( const QString& url, const Tomahawk::playlisttemplate_ptr& pltemplate );
     void nativeAsyncRequestDone( int requestId, NetworkReply* reply );
 
 private:
-    Tomahawk::query_ptr parseTrack( const QVariantMap& track );
-    void returnStreamUrl( const QString& streamUrl, const QMap<QString, QString>& headers,
-                          std::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback );
-
     bool indexDataFromVariant( const QVariantMap& map, struct Tomahawk::IndexData& indexData );
     QVariantList searchInFuzzyIndex( const Tomahawk::query_ptr& query );
 
+    // native script jobs
+    void nativeAsyncRequest( int requestId, const QVariantMap& options );
+
+
     QVariantMap m_resolverConfig;
     JSResolver* m_resolver;
-    QString m_scriptPath, m_urlCallback, m_urlTranslator;
-    QHash< QString, std::function< void( const QString&, QSharedPointer< QIODevice >& ) > > m_streamCallbacks;
-    QHash< QString, std::function< void( const QString& ) > > m_translatorCallbacks;
-    bool m_urlCallbackIsAsync;
-    QString m_pendingUrl;
-    Tomahawk::album_ptr m_pendingAlbum;
+    QString m_scriptPath;
 };
 
 } // ns: Tomahawk

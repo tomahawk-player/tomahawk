@@ -71,6 +71,9 @@ public:
 
     static QString serializeQVariantMap(const QVariantMap& map);
 
+    void reportNativeScriptJobResult( int resultId, const QVariantMap& result ) override;
+    void reportNativeScriptJobError( int resultId, const QVariantMap& error ) override;
+
 private:
     /**
         * Wrap the pure evaluateJavaScript call in here, while the threadings guards are in public methods

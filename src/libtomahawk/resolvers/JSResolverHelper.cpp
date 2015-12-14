@@ -21,10 +21,6 @@
 
 #include "JSResolverHelper.h"
 
-#include "database/Database.h"
-#include "database/DatabaseImpl.h"
-#include "playlist/PlaylistTemplate.h"
-#include "playlist/XspfPlaylistTemplate.h"
 #include "resolvers/ScriptEngine.h"
 #include "network/Servent.h"
 #include "utils/Closure.h"
@@ -51,6 +47,8 @@
 #include <QMap>
 #include <QWebFrame>
 #include <QLocale>
+#include <QNetworkReply>
+
 #include <taglib/asffile.h>
 #include <taglib/flacfile.h>
 #include <taglib/id3v2framefactory.h>
@@ -76,7 +74,6 @@ JSResolverHelper::JSResolverHelper( const QString& scriptPath, JSResolver* paren
     : QObject( parent )
     , m_resolver( parent )
     , m_scriptPath( scriptPath )
-    , m_urlCallbackIsAsync( false )
 {
 }
 
@@ -137,55 +134,6 @@ void
 JSResolverHelper::log( const QString& message )
 {
     tLog() << "JAVASCRIPT:" << m_scriptPath << ":" << message;
-}
-
-
-void
-JSResolverHelper::addTrackResults( const QVariantMap& results )
-{
-    Q_ASSERT( results["results"].toMap().isEmpty() );
-
-    QList< Tomahawk::result_ptr > tracks = m_resolver->scriptAccount()->parseResultVariantList( results.value( "results" ).toList() );
-
-    foreach( const result_ptr& track, tracks )
-    {
-        track->setResolvedByResolver( m_resolver );
-        track->setFriendlySource( m_resolver->name() );
-    }
-
-    QString qid = results.value("qid").toString();
-
-    Tomahawk::Pipeline::instance()->reportResults( qid, m_resolver, tracks );
-}
-
-
-query_ptr
-JSResolverHelper::parseTrack( const QVariantMap& track )
-{
-    QString title = track.value( "title" ).toString();
-    QString artist = track.value( "artist" ).toString();
-    QString album = track.value( "album" ).toString();
-    if ( title.isEmpty() || artist.isEmpty() )
-    {
-        return query_ptr();
-    }
-
-    Tomahawk::query_ptr query = Tomahawk::Query::get( artist, title, album );
-    QString resultHint = track.value( "hint" ).toString();
-    if ( !resultHint.isEmpty() )
-    {
-        query->setResultHint( resultHint );
-        query->setSaveHTTPResultHint( true );
-    }
-
-    return query;
-}
-
-
-QString
-JSResolverHelper::instanceUUID()
-{
-    return Tomahawk::Database::instance()->impl()->dbid();
 }
 
 
@@ -484,120 +432,6 @@ JSResolverHelper::currentCountry() const
 
 
 void
-JSResolverHelper::addUrlResult( const QString& url, const QVariantMap& result )
-{
-    // It may seem a bit weird, but currently no slot should do anything
-    // more as we starting on a new URL and not task are waiting for it yet.
-    m_pendingUrl = QString();
-    m_pendingAlbum = album_ptr();
-
-    QString type = result.value( "type" ).toString();
-    if ( type == "artist" )
-    {
-        QString name = result.value( "name" ).toString();
-        Q_ASSERT( !name.isEmpty() );
-        emit m_resolver->informationFound( url, Artist::get( name, true ).objectCast<QObject>() );
-    }
-    else if ( type == "album" )
-    {
-        QString name = result.value( "name" ).toString();
-        QString artist = result.value( "artist" ).toString();
-        album_ptr album = Album::get( Artist::get( artist, true ), name );
-        m_pendingUrl = url;
-        m_pendingAlbum = album;
-        connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
-                 SLOT( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ) );
-        if ( !album->tracks().isEmpty() )
-        {
-            emit m_resolver->informationFound( url, album.objectCast<QObject>() );
-        }
-    }
-    else if ( type == "track" )
-    {
-        Tomahawk::query_ptr query = parseTrack( result );
-        if ( query.isNull() )
-        {
-            // A valid track result shoud have non-empty title and artist.
-            tLog() << Q_FUNC_INFO << m_resolver->name() << "Got empty track information for " << url;
-            emit m_resolver->informationFound( url, QSharedPointer<QObject>() );
-        }
-        else
-        {
-            emit m_resolver->informationFound( url, query.objectCast<QObject>() );
-        }
-    }
-    else if ( type == "playlist" )
-    {
-        QString guid = result.value( "guid" ).toString();
-        Q_ASSERT( !guid.isEmpty() );
-        // Append nodeid to guid to make it globally unique.
-        guid += instanceUUID();
-
-        // Do we already have this playlist loaded?
-        {
-            playlist_ptr playlist = Playlist::get( guid );
-            if ( !playlist.isNull() )
-            {
-                emit m_resolver->informationFound( url, playlist.objectCast<QObject>() );
-                return;
-            }
-        }
-
-        // Get all information to build a new playlist but do not build it until we know,
-        // if it is really handled as a playlist and not as a set of tracks.
-        Tomahawk::source_ptr source = SourceList::instance()->getLocal();
-        const QString title = result.value( "title" ).toString();
-        const QString info = result.value( "info" ).toString();
-        const QString creator = result.value( "creator" ).toString();
-        QList<query_ptr> queries;
-        foreach( QVariant track, result.value( "tracks" ).toList() )
-        {
-            query_ptr query = parseTrack( track.toMap() );
-            if ( !query.isNull() )
-            {
-                queries << query;
-            }
-        }
-        tLog( LOGVERBOSE ) << Q_FUNC_INFO << m_resolver->name() << "Got playlist for " << url;
-        playlisttemplate_ptr pltemplate( new PlaylistTemplate( source, guid, title, info, creator, false, queries ) );
-        emit m_resolver->informationFound( url, pltemplate.objectCast<QObject>() );
-    }
-    else if ( type == "xspf-url" )
-    {
-        QString xspfUrl = result.value( "url" ).toString();
-        Q_ASSERT( !xspfUrl.isEmpty() );
-        QString guid = QString( "xspf-%1-%2" ).arg( xspfUrl.toUtf8().toBase64().constData() ).arg( instanceUUID() );
-
-        // Do we already have this playlist loaded?
-        {
-            playlist_ptr playlist = Playlist::get( guid );
-            if ( !playlist.isNull() )
-            {
-                emit m_resolver->informationFound( url, playlist.objectCast<QObject>() );
-                return;
-            }
-        }
-
-
-        // Get all information to build a new playlist but do not build it until we know,
-        // if it is really handled as a playlist and not as a set of tracks.
-        Tomahawk::source_ptr source = SourceList::instance()->getLocal();
-        QSharedPointer<XspfPlaylistTemplate> pltemplate( new XspfPlaylistTemplate( xspfUrl, source, guid ) );
-        NewClosure( pltemplate, SIGNAL( tracksLoaded( QList< Tomahawk::query_ptr > ) ),
-                    this, SLOT( pltemplateTracksLoadedForUrl( QString, Tomahawk::playlisttemplate_ptr ) ),
-                    url, pltemplate.objectCast<Tomahawk::PlaylistTemplate>() );
-        tLog( LOGVERBOSE ) << Q_FUNC_INFO << m_resolver->name() << "Got playlist for " << url;
-        pltemplate->load();
-    }
-    else
-    {
-        tLog( LOGVERBOSE ) << Q_FUNC_INFO << m_resolver->name() << "No usable information found for " << url;
-        emit m_resolver->informationFound( url, QSharedPointer<QObject>() );
-    }
-}
-
-
-void
 JSResolverHelper::nativeReportCapabilities( const QVariant& v )
 {
     bool ok;
@@ -634,27 +468,6 @@ JSResolverHelper::unregisterScriptPlugin( const QString& type, const QString& ob
 
 
 void
-JSResolverHelper::tracksAdded( const QList<query_ptr>&, const ModelMode, const collection_ptr&)
-{
-    // Check if we still are actively waiting
-    if ( m_pendingAlbum.isNull() || m_pendingUrl.isNull() )
-        return;
-
-    emit m_resolver->informationFound( m_pendingUrl, m_pendingAlbum.objectCast<QObject>() );
-    m_pendingAlbum = album_ptr();
-    m_pendingUrl = QString();
-}
-
-
-void
-JSResolverHelper::pltemplateTracksLoadedForUrl( const QString& url, const playlisttemplate_ptr& pltemplate )
-{
-    tLog() << Q_FUNC_INFO;
-    emit m_resolver->informationFound( url, pltemplate.objectCast<QObject>() );
-}
-
-
-void
 JSResolverHelper::setResolverConfig( const QVariantMap& config )
 {
     m_resolverConfig = config;
@@ -668,31 +481,6 @@ JSResolverHelper::accountId()
 }
 
 
-void
-JSResolverHelper::addCustomUrlHandler( const QString& protocol,
-                                             const QString& callbackFuncName,
-                                             const QString& isAsynchronous )
-{
-    m_urlCallbackIsAsync = ( isAsynchronous.toLower() == "true" );
-
-    std::function< void( const Tomahawk::result_ptr&, const QString&,
-                           std::function< void( const QString&, QSharedPointer< QIODevice >& ) > )> fac =
-            std::bind( &JSResolverHelper::customIODeviceFactory, this,
-                       std::placeholders::_1, std::placeholders::_2,
-                       std::placeholders::_3 );
-    Tomahawk::UrlHandler::registerIODeviceFactory( protocol, fac );
-
-    m_urlCallback = callbackFuncName;
-}
-
-
-void
-JSResolverHelper::reportStreamUrl( const QString& qid, const QString& streamUrl )
-{
-    reportStreamUrl( qid, streamUrl, QVariantMap() );
-}
-
-
 void JSResolverHelper::nativeAssert( bool assertion, const QString& message )
 {
     if ( !assertion )
@@ -700,61 +488,6 @@ void JSResolverHelper::nativeAssert( bool assertion, const QString& message )
         tLog() << "Assertion failed" << message;
         Q_ASSERT( assertion );
     }
-}
-
-
-void
-JSResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
-                                               std::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback )
-{
-    //can be sync or async
-    if ( m_urlCallbackIsAsync )
-    {
-        QString qid = uuid();
-        QString getUrl = QString( 
-                "if(Tomahawk.resolver.instance['_adapter_%1']) {"
-                "    Tomahawk.resolver.instance._adapter_%1( {qid: '%2', url: '%3'} );"
-                "} else {"
-                "    Tomahawk.resolver.instance.%1( {qid: '%2', url: '%3'} );"
-                "}"
-                ).arg( m_urlCallback )
-                                                                                  .arg( qid )
-                                                                                  .arg( url );
-
-        m_streamCallbacks.insert( qid, callback );
-        m_resolver->d_func()->scriptAccount->evaluateJavaScript( getUrl );
-    }
-    else
-    {
-        QString getUrl = QString( "Tomahawk.resolver.instance.%1( '%2' );" ).arg( m_urlCallback )
-                                                                            .arg( url );
-
-        QString urlStr = m_resolver->d_func()->scriptAccount->evaluateJavaScriptWithResult( getUrl ).toString();
-
-        returnStreamUrl( urlStr, QMap<QString, QString>(), callback );
-    }
-}
-
-
-void
-JSResolverHelper::reportStreamUrl( const QString& qid, const QString& streamUrl, const QVariantMap& headers )
-{
-    if ( !m_streamCallbacks.contains( qid ) )
-        return;
-
-    std::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback = m_streamCallbacks.take( qid );
-
-    QMap<QString, QString> parsedHeaders;
-    foreach ( const QString& key, headers.keys() )
-    {
-        Q_ASSERT_X( headers[key].canConvert( QVariant::String ), Q_FUNC_INFO, "Expected a Map of string for additional headers" );
-        if ( headers[key].canConvert( QVariant::String ) )
-        {
-            parsedHeaders.insert( key, headers[key].toString() );
-        }
-    }
-
-    returnStreamUrl( streamUrl, parsedHeaders, callback );
 }
 
 
@@ -896,12 +629,27 @@ JSResolverHelper::nativeRetrieveMetadata( int metadataId, const QString& url,
     }
 }
 
+void
+JSResolverHelper::invokeNativeScriptJob( int requestId, const QString& methodName, const QVariantMap& params )
+{
+    if ( methodName == "httpRequest" ) {
+        nativeAsyncRequest( requestId, params );
+    } else {
+        QVariantMap error;
+        error["message"] = "NativeScriptJob methodName was not found";
+        error["name"] = "method_was_not_found";
+
+        m_resolver->d_func()->scriptAccount->reportNativeScriptJobError( requestId, error );
+    }
+}
+
 
 void
-JSResolverHelper::nativeAsyncRequest( const int requestId, const QString& url,
-                                      const QVariantMap& headers,
-                                      const QVariantMap& options )
+JSResolverHelper::nativeAsyncRequest( const int requestId, const QVariantMap& options )
 {
+    QString url = options[ "url" ].toString();
+    QVariantMap headers = options[ "headers" ].toMap();
+
     QNetworkRequest req( url );
     foreach ( const QString& key, headers.keys() )
     {
@@ -957,17 +705,16 @@ JSResolverHelper::nativeAsyncRequestDone( int requestId, NetworkReply* reply )
     map["status"] = reply->reply()->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
     map["statusText"] = QString("%1 %2").arg( map["status"].toString() )
             .arg( reply->reply()->attribute( QNetworkRequest::HttpReasonPhraseAttribute ).toString() );
-    if (reply->reply()->hasRawHeader( "Content-Type" ))
-        map["contentType"] = reply->reply()->rawHeader( "Content-Type" );
 
-    bool ok = false;
-    QString json = QString::fromUtf8( TomahawkUtils::toJson( map, &ok ) );
-    Q_ASSERT( ok );
 
-    QString javascript = QString( "Tomahawk.nativeAsyncRequestDone( %1, %2 );" )
-            .arg( QString::number( requestId ) )
-            .arg( json );
-    m_resolver->d_func()->scriptAccount->evaluateJavaScript( javascript );
+    QVariantMap responseHeaders;
+    foreach( const QNetworkReply::RawHeaderPair& pair, reply->reply()->rawHeaderPairs() )
+    {
+        responseHeaders[ pair.first ] = pair.second;
+    }
+    map["responseHeaders"] = responseHeaders;
+
+    m_resolver->d_func()->scriptAccount->reportNativeScriptJobResult( requestId, map );
 }
 
 
@@ -1143,43 +890,3 @@ JSResolverHelper::readdResolver()
     Pipeline::instance()->addResolver( m_resolver );
 }
 
-
-void
-JSResolverHelper::returnStreamUrl( const QString& streamUrl, const QMap<QString, QString>& headers,
-                                   std::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback )
-{
-    if ( streamUrl.isEmpty() || !( TomahawkUtils::isHttpResult( streamUrl ) || TomahawkUtils::isHttpsResult( streamUrl ) ) )
-    {
-        // Not an https? URL, so let Phonon handle it
-        QSharedPointer< QIODevice > sp;
-        callback( streamUrl, sp );
-    }
-    else
-    {
-        QUrl url = QUrl::fromEncoded( streamUrl.toUtf8() );
-        QNetworkRequest req( url );
-        foreach ( const QString& key, headers.keys() )
-        {
-            req.setRawHeader( key.toLatin1(), headers[key].toLatin1() );
-        }
-        tDebug() << "Creating a QNetworkReply with url:" << req.url().toString();
-        NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( req ) );
-
-        NewClosure( reply, SIGNAL( finalUrlReached() ), this, SLOT( gotStreamUrl( IODeviceCallback, NetworkReply* )), callback, reply );
-    }
-}
-
-
-Q_DECLARE_METATYPE( IODeviceCallback )
-
-void
-JSResolverHelper::gotStreamUrl( std::function< void( const QString&, QSharedPointer< QIODevice >& ) > callback, NetworkReply* reply )
-{
-    // std::functions cannot accept temporaries as parameters
-    QSharedPointer< QIODevice > sp ( reply->reply(), &QObject::deleteLater );
-    QString url = reply->reply()->url().toString();
-    reply->disconnectFromReply();
-    reply->deleteLater();
-
-    callback( url, sp );
-}

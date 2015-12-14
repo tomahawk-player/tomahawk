@@ -491,7 +491,7 @@ Result::setFileId( unsigned int id )
 }
 
 
-Tomahawk::ResultProvider*
+Tomahawk::Resolver*
 Result::resolvedBy() const
 {
     if ( !m_collection.isNull() )

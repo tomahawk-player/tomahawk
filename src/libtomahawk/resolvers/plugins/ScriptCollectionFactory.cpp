@@ -19,6 +19,7 @@
 
 #include "SourceList.h"
 #include "../ScriptAccount.h"
+#include "../../Pipeline.h"
 
 using namespace Tomahawk;
 
@@ -29,12 +30,14 @@ void ScriptCollectionFactory::addPlugin( const QSharedPointer<ScriptCollection>&
 
     collection->setOnline( true );
     SourceList::instance()->addScriptCollection( collection );
+    Pipeline::instance()->addResolver( collection.data() );
 }
 
 void ScriptCollectionFactory::removePlugin( const QSharedPointer<ScriptCollection>& collection ) const
 {
     collection->setOnline( false );
     SourceList::instance()->removeScriptCollection( collection );
+    Pipeline::instance()->removeResolver( collection.data() );
 }
 
 QSharedPointer< ScriptCollection > ScriptCollectionFactory::createPlugin( const scriptobject_ptr& object, ScriptAccount* scriptAccount )

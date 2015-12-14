@@ -65,18 +65,20 @@ public:
 
     ScriptJob* invoke( const scriptobject_ptr& scriptObject, const QString& methodName, const QVariantMap& arguments );
     virtual QVariant syncInvoke( const scriptobject_ptr& scriptObject, const QString& methodName, const QVariantMap& arguments ) = 0;
-
     virtual void startJob( ScriptJob* scriptJob ) = 0;
 
     void reportScriptJobResult( const QVariantMap& result );
     void registerScriptPlugin( const QString& type, const QString& objectId );
     void unregisterScriptPlugin( const QString& type, const QString& objectId );
 
+    virtual void reportNativeScriptJobResult( int resultId, const QVariantMap& result ) = 0;
+    virtual void reportNativeScriptJobError( int resultId, const QVariantMap& error ) = 0;
+
     virtual void scriptPluginFactory( const QString& type, const scriptobject_ptr& object );
 
+    // helpers
     QList< Tomahawk::result_ptr > parseResultVariantList( const QVariantList& reslist );
-
-    QSharedPointer< ScriptCollection > scriptCollection( const QString& id ) const;
+    ScriptJob* resolve( const scriptobject_ptr& scriptObject, const query_ptr& query );
 
 private slots:
     void onJobDeleted( const QString& jobId );

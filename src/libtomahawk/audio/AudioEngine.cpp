@@ -32,6 +32,8 @@
 #include "playlist/SingleTrackPlaylistInterface.h"
 #include "utils/Closure.h"
 #include "utils/Logger.h"
+#include "utils/NetworkReply.h"
+#include "utils/NetworkAccessManager.h"
 
 #include "Album.h"
 #include "Artist.h"
@@ -40,6 +42,7 @@
 #include "SourceList.h"
 #include "TomahawkSettings.h"
 #include "UrlHandler.h"
+#include "resolvers/ScriptJob.h"
 
 #include <QDir>
 
@@ -574,16 +577,64 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 
     setCurrentTrack( result );
 
-    if ( !TomahawkUtils::isLocalResult( d->currentTrack->url() ) && !TomahawkUtils::isHttpResult( d->currentTrack->url() )
-         && !TomahawkUtils::isRtmpResult( d->currentTrack->url() ) )
+    ScriptJob* job = result->resolvedBy()->getStreamUrl( result );
+    connect( job, SIGNAL( done( QVariantMap ) ), SLOT( gotStreamUrl( QVariantMap ) ) );
+    job->setProperty( "result", QVariant::fromValue( result ) );
+    job->start();
+}
+
+void
+AudioEngine::gotStreamUrl( const QVariantMap& data )
+{
+    QString streamUrl = data[ "url" ].toString();
+    QVariantMap headers = data[ "headers" ].toMap();
+    Tomahawk::result_ptr result = sender()->property( "result" ).value<result_ptr>();
+
+    if ( streamUrl.isEmpty() || !( TomahawkUtils::isHttpResult( streamUrl ) || TomahawkUtils::isHttpsResult( streamUrl ) || TomahawkUtils::isRtmpResult( streamUrl ) ) )
     {
-        performLoadIODevice( d->currentTrack, d->currentTrack->url() );
+        // Not an http(s) or RTMP URL, get IO device
+        QSharedPointer< QIODevice > sp;
+        performLoadIODevice( result, streamUrl );
     }
     else
     {
-        QSharedPointer< QIODevice > io;
-        performLoadTrack( result, result->url(), io );
+        // TODO: just make this part of the http(s) IoDeviceFactory (?)
+        QUrl url = QUrl::fromEncoded( streamUrl.toUtf8() );
+        QNetworkRequest req( url );
+
+        QMap<QString, QString> parsedHeaders;
+        foreach ( const QString& key, headers.keys() )
+        {
+            Q_ASSERT_X( headers[key].canConvert( QVariant::String ), Q_FUNC_INFO, "Expected a Map of string for additional headers" );
+            if ( headers[key].canConvert( QVariant::String ) )
+            {
+                parsedHeaders.insert( key, headers[key].toString() );
+            }
+        }
+
+        foreach ( const QString& key, parsedHeaders.keys() )
+        {
+            req.setRawHeader( key.toLatin1(), parsedHeaders[key].toLatin1() );
+        }
+
+        tDebug() << "Creating a QNetworkReply with url:" << req.url().toString();
+        NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( req ) );
+        NewClosure( reply, SIGNAL( finalUrlReached() ), this, SLOT( gotRedirectedStreamUrl( Tomahawk::result_ptr, NetworkReply* )), result, reply );
     }
+
+    sender()->deleteLater();
+}
+
+void
+AudioEngine::gotRedirectedStreamUrl( const Tomahawk::result_ptr& result, NetworkReply* reply )
+{
+    // std::functions cannot accept temporaries as parameters
+    QSharedPointer< QIODevice > sp ( reply->reply(), &QObject::deleteLater );
+    QString url = reply->reply()->url().toString();
+    reply->disconnectFromReply();
+    reply->deleteLater();
+
+    performLoadTrack( result, url, sp );
 }
 
 

@@ -524,7 +524,7 @@ void ResolverAccount::testConfig()
     if ( resolver )
     {
         QVariantMap data = resolver->loadDataFromWidgets();
-        ScriptJob* job = resolver->scriptObject()->invoke( "_testConfig", data );
+        ScriptJob* job = resolver->scriptObject()->invoke( "testConfig", data );
         connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onTestConfig( QVariantMap ) ) );
         job->start();
     }

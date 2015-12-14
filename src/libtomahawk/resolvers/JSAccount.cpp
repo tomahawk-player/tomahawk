@@ -170,6 +170,41 @@ JSAccount::syncInvoke( const scriptobject_ptr& scriptObject, const QString& meth
     return evaluateJavaScriptWithResult( eval );
 }
 
+void
+JSAccount::reportNativeScriptJobResult( int resultId, const QVariantMap& result )
+{
+    QString eval = QString(
+        "Tomahawk.NativeScriptJobManager.reportNativeScriptJobResult("
+        "%1," // requestId
+        "%2"    // results
+        ");"
+    ).arg( resultId )
+    .arg( serializeQVariantMap( result ) );
+
+    // Remove when new scripting api turned out to work reliably
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << eval;
+
+    evaluateJavaScript( eval );
+}
+
+
+void
+JSAccount::reportNativeScriptJobError( int resultId, const QVariantMap& error )
+{
+    QString eval = QString(
+        "Tomahawk.NativeScriptJobManager.reportNativeScriptJobError("
+        "%1," // requestId
+        "%2"    // results
+        ");"
+    ).arg( resultId )
+    .arg( serializeQVariantMap( error ) );
+
+    // Remove when new scripting api turned out to work reliably
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << eval;
+
+    evaluateJavaScript( eval );
+}
+
 
 QVariant
 JSAccount::evaluateJavaScriptInternal( const QString& scriptSource )

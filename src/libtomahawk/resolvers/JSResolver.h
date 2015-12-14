@@ -75,6 +75,8 @@ public:
 
     ScriptAccount* scriptAccount() const;
 
+    ScriptJob* getStreamUrl( const result_ptr& result ) override;
+
 public slots:
     void resolve( const Tomahawk::query_ptr& query ) override;
     void stop() override;
@@ -89,6 +91,10 @@ signals:
 protected:
     QVariant callOnResolver( const QString& scriptSource );
 
+private slots:
+    void onResolveRequestDone(const QVariantMap& data);
+    void onLookupUrlRequestDone(const QVariantMap& data);
+
 private:
     void init();
 
@@ -96,12 +102,20 @@ private:
     void onCapabilitiesChanged( Capabilities capabilities );
 
     // encapsulate javascript calls
-    QVariantMap resolverSettings();
     QVariantMap resolverUserConfig();
-    QVariantMap resolverInit();
 
     Q_DECLARE_PRIVATE( JSResolver )
     QScopedPointer<JSResolverPrivate> d_ptr;
+
+
+// TODO: move lookupUrl stuff to its own plugin type
+    QString instanceUUID();
+    static Tomahawk::query_ptr parseTrack( const QVariantMap& track );
+    QString m_pendingUrl;
+    Tomahawk::album_ptr m_pendingAlbum;
+private slots:
+    void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::ModelMode, const Tomahawk::collection_ptr& collection );
+    void pltemplateTracksLoadedForUrl( const QString& url, const Tomahawk::playlisttemplate_ptr& pltemplate );
 };
 
 } // ns: Tomahawk

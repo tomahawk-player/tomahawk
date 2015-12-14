@@ -35,7 +35,7 @@ using namespace Tomahawk;
 
 
 Collection::Collection( const source_ptr& source, const QString& name, QObject* parent )
-    : QObject( parent )
+    : Resolver( parent )
     , m_name( name )
     , m_lastmodified( 0 )
     , m_changed( false )

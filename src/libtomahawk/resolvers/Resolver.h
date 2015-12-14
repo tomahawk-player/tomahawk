@@ -19,7 +19,6 @@
 #ifndef RESOLVER_H
 #define RESOLVER_H
 
-#include "../ResultProvider.h"
 #include "Typedefs.h"
 #include "DllMacro.h"
 
@@ -36,21 +35,23 @@
 
 namespace Tomahawk
 {
+class ScriptJob;
 
-class DLLEXPORT Resolver : public QObject, public ResultProvider
+class DLLEXPORT Resolver : public QObject
 {
 Q_OBJECT
 
 public:
-    Resolver() {}
+    Resolver( QObject* parent = nullptr );
+
+    virtual QString name() const = 0;
+    virtual QPixmap icon( const QSize& size ) const;
 
     virtual unsigned int weight() const = 0;
     virtual unsigned int timeout() const = 0;
 
-    virtual QPixmap icon( const QSize& size ) const override;
-
-public slots:
     virtual void resolve( const Tomahawk::query_ptr& query ) = 0;
+    virtual ScriptJob* getStreamUrl( const result_ptr& result );
 };
 
 } //ns

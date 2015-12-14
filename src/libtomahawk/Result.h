@@ -21,7 +21,6 @@
 #ifndef RESULT_H
 #define RESULT_H
 
-#include "ResultProvider.h"
 #include "DownloadJob.h"
 #include "utils/TomahawkUtils.h"
 #include "Typedefs.h"
@@ -86,9 +85,9 @@ public:
     void setResolvedByResolver( Tomahawk::Resolver* resolver );
 
     /**
-     *  This is very bad. ResultProvider is not a QObject and thus can not be tracked by a qt smart pointer ... :-(
+     *  TODO: Make this a smart pointer
      */
-    ResultProvider* resolvedBy() const;
+    Resolver* resolvedBy() const;
 
     RID id() const;
     bool isOnline() const;

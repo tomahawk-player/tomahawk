@@ -326,21 +326,6 @@ ScriptAccount::parseResultVariantList( const QVariantList& reslist )
         }
         rp->setDownloadFormats( fl );
 
-        // find collection
-        const QString collectionId = m.value( "collectionId" ).toString();
-        if ( !collectionId.isEmpty() )
-        {
-            if ( scriptCollection( collectionId ).isNull() )
-            {
-                tLog() << "Resolver returned invalid collection id";
-                Q_ASSERT( false );
-            }
-            else
-            {
-                rp->setResolvedByCollection( scriptCollection( collectionId ) );
-            }
-        }
-
         results << rp;
     }
 
@@ -348,8 +333,27 @@ ScriptAccount::parseResultVariantList( const QVariantList& reslist )
 }
 
 
-QSharedPointer< ScriptCollection >
-ScriptAccount::scriptCollection( const QString& id ) const
+ScriptJob*
+ScriptAccount::resolve( const scriptobject_ptr& scriptObject, const query_ptr& query )
 {
-    return m_collectionFactory->scriptPlugins().value( id );
+    ScriptJob* job = nullptr;
+    if ( !query->isFullTextQuery() )
+    {
+        QVariantMap arguments;
+        arguments["artist"] = query->queryTrack()->artist();
+        arguments["album"] = query->queryTrack()->album();
+        arguments["track"] = query->queryTrack()->track();
+
+        job = scriptObject->invoke( "resolve", arguments );
+    }
+    else
+    {
+        QVariantMap arguments;
+        arguments["query"] = query->fullTextQuery();
+        job = scriptObject->invoke( "search", arguments );
+    }
+
+    job->setProperty( "qid", query->id() );
+
+    return job;
 }

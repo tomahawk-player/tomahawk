@@ -251,3 +251,32 @@ DatabaseCollection::stationCreated( const source_ptr& source, const QVariantList
 }
 
 
+
+/*
+ * Resolver interface
+ *
+ * We implement searching the database in the DatabaseResolver which avoids a n+1 query here.
+ * We can't simply let ScriptCollection inherit Collection and Resolver because both are QObjects,
+ * although Resolver doesn't need to be a QObject atm, blocking adding signals/slots to Resolver
+ * in future seems to me worse than violating Liskov's law here. ~ domme
+ */
+unsigned int
+DatabaseCollection::timeout() const
+{
+    return 0;
+}
+
+
+unsigned int
+DatabaseCollection::weight() const
+{
+    return 0;
+}
+
+
+void
+DatabaseCollection::resolve( const Tomahawk::query_ptr& query )
+{
+    Q_UNUSED( query );
+    Q_ASSERT(false);
+}
