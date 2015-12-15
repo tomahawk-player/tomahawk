@@ -102,7 +102,7 @@ Tomahawk.InfoSystem.InfoPlugin = {
     notInCache: function (infoType, criteria) {
         var requestMethod = 'request' + this.infoTypeString(infoType);
 
-        return Promise.resolve(this[requestMethod](criteria));
+        return RSVP.Promise.resolve(this[requestMethod](criteria));
     },
     pushInfo: function (pushData) {
         var pushMethod = 'push' + this.infoTypeString(pushData.type);
@@ -114,6 +114,6 @@ Tomahawk.InfoSystem.InfoPlugin = {
     getInfo: function (type, infoHash) {
         var getInfoMethod = 'get' + this.infoTypeString(type);
 
-        return Promise.resolve(this[getInfoMethod](infoHash));
+        return RSVP.Promise.resolve(this[getInfoMethod](infoHash));
     }
 };

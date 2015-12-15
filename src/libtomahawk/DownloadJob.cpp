@@ -217,7 +217,7 @@ DownloadJob::download()
             arguments[ "url" ] = m_format.url;
 
             // HACK: *shrug* WIP.
-            Tomahawk::ScriptJob* job = collection->scriptObject()->invoke( "getStreamUrlPromise", arguments );
+            Tomahawk::ScriptJob* job = collection->scriptObject()->invoke( "getStreamUrl", arguments );
             connect( job, SIGNAL( done(QVariantMap) ), SLOT( onUrlRetrieved(QVariantMap) ) );
             job->start();
         }

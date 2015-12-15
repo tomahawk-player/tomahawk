@@ -237,7 +237,7 @@ var TomahawkResolver = {
     collection: function () {
         return {};
     },
-    _testConfig: function (config) {
+    _adapter_testConfig: function (config) {
         return RSVP.Promise.resolve(this.testConfig(config)).then(function () {
             return {result: Tomahawk.ConfigTestResultType.Success};
         });
@@ -289,7 +289,7 @@ Tomahawk.Resolver = {
         });
     },
 
-    _testConfig: function (config) {
+    _adapter_testConfig: function (config) {
         return RSVP.Promise.resolve(this.testConfig(config)).then(function () {
             return {result: Tomahawk.ConfigTestResultType.Success};
         });
