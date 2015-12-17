@@ -95,9 +95,11 @@ Tomahawk::ExternalResolverGui::setupClickHandlerOnUrlButtons( QObject* widget )
         QPushButton* button = qobject_cast< QPushButton* >( widget );
         Q_ASSERT( button );
 
+        #if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
         connect( button, &QPushButton::clicked, [=]() {
             QDesktopServices::openUrl( widget->property( "url" ).toUrl() );
         });
+        #endif
     }
 
     // and recurse
