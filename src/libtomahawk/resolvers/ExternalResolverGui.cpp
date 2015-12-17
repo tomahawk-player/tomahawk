@@ -30,6 +30,8 @@
 #include <QWidget>
 #include <QUiLoader>
 #include <QBoxLayout>
+#include <QPushButton>
+#include <QDesktopServices>
 
 Tomahawk::ExternalResolverGui::ExternalResolverGui(const QString& filePath)
     : Tomahawk::ExternalResolver(filePath)
@@ -82,6 +84,28 @@ Tomahawk::ExternalResolverGui::addChildProperties( QObject* widget, QVariantMap&
 }
 
 
+void
+Tomahawk::ExternalResolverGui::setupClickHandlerOnUrlButtons( QObject* widget )
+{
+    if( !widget || !widget->isWidgetType() )
+        return;
+
+    if( qstrcmp( widget->metaObject()->className(), "QPushButton" ) == 0 && !widget->property( "url" ).isNull() )
+    {
+        QPushButton* button = qobject_cast< QPushButton* >( widget );
+        Q_ASSERT( button );
+
+        connect( button, &QPushButton::clicked, [=]() {
+            QDesktopServices::openUrl( widget->property( "url" ).toUrl() );
+        });
+    }
+
+    // and recurse
+    foreach( QObject* child, widget->children() )
+        setupClickHandlerOnUrlButtons( child );
+}
+
+
 AccountConfigWidget*
 Tomahawk::ExternalResolverGui::widgetFromData( QByteArray& data, QWidget* parent )
 {
@@ -93,6 +117,8 @@ Tomahawk::ExternalResolverGui::widgetFromData( QByteArray& data, QWidget* parent
     QUiLoader l;
     QBuffer b( &data );
     QWidget* w = l.load( &b, configWidget );
+
+    setupClickHandlerOnUrlButtons( w );
 
     // HACK: proper way would be to create a designer plugin for this widget type
     configWidget->setLayout( new QBoxLayout( QBoxLayout::TopToBottom ) );

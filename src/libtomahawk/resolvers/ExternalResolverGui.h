@@ -50,7 +50,8 @@ protected:
     QByteArray fixDataImagePaths( const QByteArray& data, bool compressed, const QVariantMap& images );
 
 private:
-    void addChildProperties( QObject* parent, QVariantMap& m );
+    void addChildProperties( QObject* widget, QVariantMap& m );
+    void setupClickHandlerOnUrlButtons( QObject* widget );
 };
 
 }; //ns
