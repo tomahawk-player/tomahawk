@@ -15,11 +15,11 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "portfwd/portfwd.h"
+#include "../include/portfwd/portfwd.h"
 
-#include "miniwget.h"
-#include "miniupnpc.h"
-#include "upnpcommands.h"
+#include "miniupnpc/miniwget.h"
+#include "miniupnpc/miniupnpc.h"
+#include "miniupnpc/upnpcommands.h"
 
 #ifdef WIN32
     #include <winsock2.h>
@@ -68,7 +68,7 @@ Portfwd::init( unsigned int timeout )
     memset( m_urls, 0, sizeof( struct UPNPUrls ) );
     memset( m_data, 0, sizeof( struct IGDdatas ) );
 
-    devlist = upnpDiscover( timeout, NULL, NULL, 0, 0, &error );
+    devlist = upnpDiscover( timeout, NULL, NULL, 0, 0, 2, &error );
     if ( devlist )
     {
         dev = devlist;
@@ -106,14 +106,14 @@ Portfwd::init( unsigned int timeout )
                 " desc: %s\n st: %s\n",
                 dev->descURL, dev->st );
 
-       descXML = (char*)miniwget( dev->descURL, &descXMLsize );
+       descXML = (char*)miniwget( dev->descURL, &descXMLsize, dev->scope_id );
        if ( descXML )
        {
            parserootdesc( descXML, descXMLsize, m_data );
            free( descXML );
            descXML = 0;
 
-           GetUPNPUrls( m_urls, m_data, dev->descURL );
+           GetUPNPUrls( m_urls, m_data, dev->descURL, dev->scope_id );
        }
        else
        {

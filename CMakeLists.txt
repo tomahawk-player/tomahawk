@@ -338,6 +338,12 @@ macro_log_feature(SPARSEHASH_FOUND "Sparsehash"
     "Sparsehash is needed for reading metadata of mediastreams and fast
     forward/backward seeking in HTTP streams")
 
+macro_optional_find_package(MiniUPnPc)
+macro_log_feature(LIBMINIUPNPC_FOUND "MiniUPnPc"
+    " The aim of the MiniUPnP project is to bring a free software solution to support the \"Internet Gateway Device\" part of the protocol."
+    "http://miniupnp.free.fr/" TRUE ""
+    "MiniUPnPc is used to setup portforwarding automatically")
+
 macro_optional_find_package(GnuTLS)
 macro_log_feature(GNUTLS_FOUND "GnuTLS"
     "GnuTLS is a secure communications library implementing the SSL, TLS and DTLS protocols and technologies around them."

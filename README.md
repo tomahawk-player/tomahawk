@@ -86,6 +86,7 @@ Required dependencies:
 * [QtKeychain 0.1](https://github.com/frankosterfeld/qtkeychain/)
 * [Sparsehash](https://code.google.com/p/sparsehash/)
 * [GnuTLS](http://gnutls.org/)
+* [MiniUPnP 1.6](http://miniupnp.free.fr/)
 
 The following dependencies are optional (but *recommended*):
 
@@ -94,7 +95,6 @@ The following dependencies are optional (but *recommended*):
 
 Third party libraries that we ship with our source:
 
-* [MiniUPnP 1.6](http://miniupnp.free.fr/)
 * [Qocoa](https://github.com/mikemcquaid/Qocoa/)
 * [libqnetwm](https://code.google.com/p/libqnetwm/)
 * [libqxt](http://libqxt.org/) (QxtWeb module)
