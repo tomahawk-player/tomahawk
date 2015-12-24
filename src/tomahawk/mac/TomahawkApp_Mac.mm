@@ -366,8 +366,8 @@ Tomahawk::setupToolBarMac( TomahawkWindow* parent )
     [toolbar->nativeToolbar() setDisplayMode: NSToolbarDisplayModeIconOnly];
     [toolbar->nativeToolbar() setSizeMode: NSToolbarSizeModeSmall];
 
-    QMacToolBarItem* backItem = toolbar->addItem( ImageRegistry::instance()->pixmap( RESPATH "images/back.svg", QSize( 32, 32 ) ), QString( "Back" ) );
-    QMacToolBarItem* forwardItem = toolbar->addItem( ImageRegistry::instance()->pixmap( RESPATH "images/forward.svg", QSize( 32, 32 ) ), QString( "Forward" ) );
+    QMacToolBarItem* backItem = toolbar->addItem( ImageRegistry::instance()->pixmap( RESPATH "images/nav-back.svg", QSize( 32, 32 ) ), QString( "Back" ) );
+    QMacToolBarItem* forwardItem = toolbar->addItem( ImageRegistry::instance()->pixmap( RESPATH "images/nav-forward.svg", QSize( 32, 32 ) ), QString( "Forward" ) );
 
     QObject::connect( backItem, SIGNAL( activated() ), ViewManager::instance(), SLOT( historyBack() ) );
     QObject::connect( forwardItem, SIGNAL( activated() ), ViewManager::instance(), SLOT( historyForward() ) );
