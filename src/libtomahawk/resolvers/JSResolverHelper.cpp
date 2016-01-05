@@ -74,7 +74,22 @@ JSResolverHelper::JSResolverHelper( const QString& scriptPath, JSResolver* paren
     : QObject( parent )
     , m_resolver( parent )
     , m_scriptPath( scriptPath )
+    , m_stopped( false )
 {
+}
+
+
+void
+JSResolverHelper::start()
+{
+    m_stopped = false;
+}
+
+
+void
+JSResolverHelper::stop()
+{
+    m_stopped = true;
 }
 
 
@@ -434,6 +449,10 @@ JSResolverHelper::currentCountry() const
 void
 JSResolverHelper::nativeReportCapabilities( const QVariant& v )
 {
+    if( m_stopped )
+        return;
+
+
     bool ok;
     int intCap = v.toInt( &ok );
     Tomahawk::ExternalResolver::Capabilities capabilities;
@@ -449,6 +468,9 @@ JSResolverHelper::nativeReportCapabilities( const QVariant& v )
 void
 JSResolverHelper::reportScriptJobResults( const QVariantMap& result )
 {
+    if( m_stopped )
+        return;
+
     m_resolver->d_func()->scriptAccount->reportScriptJobResult( result );
 }
 
@@ -456,6 +478,9 @@ JSResolverHelper::reportScriptJobResults( const QVariantMap& result )
 void
 JSResolverHelper::registerScriptPlugin( const QString& type, const QString& objectId )
 {
+    if( m_stopped )
+        return;
+
     m_resolver->d_func()->scriptAccount->registerScriptPlugin( type, objectId );
 }
 
@@ -463,6 +488,9 @@ JSResolverHelper::registerScriptPlugin( const QString& type, const QString& obje
 void
 JSResolverHelper::unregisterScriptPlugin( const QString& type, const QString& objectId )
 {
+    if( m_stopped )
+        return;
+
     m_resolver->d_func()->scriptAccount->unregisterScriptPlugin( type, objectId );
 }
 

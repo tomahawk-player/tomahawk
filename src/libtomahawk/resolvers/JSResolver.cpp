@@ -311,6 +311,8 @@ JSResolver::start()
     Q_D( JSResolver );
 
     d->stopped = false;
+    d->resolverHelper->start();
+
     if ( d->ready )
         Tomahawk::Pipeline::instance()->addResolver( this );
     else
@@ -582,6 +584,7 @@ JSResolver::stop()
     Q_D( JSResolver );
 
     d->stopped = true;
+    d->resolverHelper->stop();
 
     scriptAccount()->stop();
 

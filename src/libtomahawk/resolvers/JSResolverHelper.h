@@ -54,6 +54,9 @@ public:
      */
     void setResolverConfig( const QVariantMap& config );
 
+    void start();
+    void stop();
+
     /**
      * Get the instance unique account id for this resolver.
      *
@@ -141,6 +144,7 @@ private:
     QVariantMap m_resolverConfig;
     JSResolver* m_resolver;
     QString m_scriptPath;
+    bool m_stopped;
 };
 
 } // ns: Tomahawk
