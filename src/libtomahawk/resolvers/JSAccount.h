@@ -80,7 +80,7 @@ private:
         */
     QVariant evaluateJavaScriptInternal( const QString& scriptSource );
 
-    std::unique_ptr<ScriptEngine> m_engine;
+    ScriptEngine* m_engine;
     // HACK: the order of initializen is flawed, tbr
     JSResolver* m_resolver;
 };
