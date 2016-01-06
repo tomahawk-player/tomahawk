@@ -62,6 +62,8 @@ ActionCollection::~ActionCollection()
 void
 ActionCollection::initActions()
 {
+    // ATTENTION: Don't set ApplicationSpecificRole for submenu actions: they won't show up on OS X (Qt 5.5)
+
     QAction *latchOn = new QAction( tr( "&Listen Along" ), this );
     latchOn->setIcon( ImageRegistry::instance()->icon( RESPATH "images/headphones.svg" ) );
     m_actionCollection[ "latchOn" ] = latchOn;
@@ -147,7 +149,6 @@ ActionCollection::initActions()
 #endif
     m_actionCollection[ "crashNow" ] = new QAction( "Crash now...", this );
     m_actionCollection[ "whatsnew_0_8" ] = new QAction( tr( "%applicationName 0.8" ) , this );
-    m_actionCollection[ "whatsnew_0_8" ]->setMenuRole( QAction::ApplicationSpecificRole );
     m_actionCollection[ "reportBug" ] = new QAction( tr( "Report a Bug" ) , this );
     m_actionCollection[ "getSupport" ] = new QAction( tr( "Get Support" ) , this );
     m_actionCollection[ "helpTranslate" ] = new QAction( tr( "Help Us Translate" ) , this );
