@@ -149,6 +149,15 @@ Pipeline::removeResolver( Resolver* r )
 }
 
 
+QList< Tomahawk::Resolver* >
+Pipeline::resolvers() const
+{
+    Q_D( const Pipeline );
+
+    return d->resolvers;
+}
+
+
 void
 Pipeline::addResolver( Resolver* r )
 {

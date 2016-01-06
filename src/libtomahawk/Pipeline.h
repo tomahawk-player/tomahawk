@@ -66,6 +66,7 @@ public:
     QList< QPointer< ExternalResolver > > scriptResolvers() const;
     Tomahawk::ExternalResolver* resolverForPath( const QString& scriptPath );
 
+    QList< Resolver* > resolvers() const;
     void addResolver( Resolver* r );
     void removeResolver( Resolver* r );
 

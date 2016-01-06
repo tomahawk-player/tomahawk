@@ -37,6 +37,7 @@
 #include "sip/SipPlugin.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "Pipeline.h"
 
 #include <QApplication>
 #include <QClipboard>
@@ -121,6 +122,20 @@ DiagnosticsDialog::updateLogView()
         connect( account->sipPlugin(), SIGNAL( peerStatusChanged( Tomahawk::peerinfo_ptr ) ), SLOT( updateLogView() ), Qt::UniqueConnection );
 
         log.append( accountLog( account ) + "\n" );
+    }
+
+
+    log.append( "RESOLVERS:\n" );
+
+
+    connect( Tomahawk::Pipeline::instance(), SIGNAL( resolverAdded( Tomahawk::Resolver* ) ), SLOT( updateLogView() ), Qt::UniqueConnection );
+    connect( Tomahawk::Pipeline::instance(), SIGNAL( resolverRemoved( Tomahawk::Resolver* ) ), SLOT( updateLogView() ), Qt::UniqueConnection );
+
+    const QList< Tomahawk::Resolver* > resolvers = Tomahawk::Pipeline::instance()->resolvers();
+    foreach ( Tomahawk::Resolver* resolver, resolvers )
+    {
+
+        log.append( resolver->name() + "\n" );
     }
 
     ui->text->setText( log );
