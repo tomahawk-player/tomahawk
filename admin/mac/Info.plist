@@ -5,23 +5,23 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>Tomahawk</string>
+	<string>@TOMAHAWK_APPLICATION_NAME@</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.tomahawk-player.Tomahawk</string>
+	<string>@TOMAHAWK_APPLICATION_PACKAGE_NAME@</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleVersion</key>
-	<string>TOMAHAWK_VERSION</string>
+	<string>@TOMAHAWK_VERSION@</string>
 	<key>CFBundleShortVersionString</key>
-	<string>TOMAHAWK_VERSION</string>
+	<string>@TOMAHAWK_VERSION@</string>
 	<key>CFBundleSignature</key>
-	<string>tomahawk</string>
+	<string>@TOMAHAWK_BASE_TARGET_NAME@</string>
 	<key>CFBundleIconFile</key>
-	<string>Tomahawk.icns</string>
+	<string>@TOMAHAWK_APPLICATION_NAME@.icns</string>
 	<key>CFBundleName</key>
-	<string>Tomahawk</string>
+	<string>@TOMAHAWK_APPLICATION_NAME@</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>10.7.0</string>
 	<key>NSPrincipalClass</key>
@@ -29,7 +29,7 @@
 	<key>NSHighResolutionCapable</key>
 	<true />
 	<key>SUFeedURL</key>
-	<string>http://download.tomahawk-player.org/sparkle/update.php</string>
+	<string>@TOMAHAWK_SPARKLE_UPDATE_URL@</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>sparkle_pub.pem</string>
 	<key>SUEnableSystemProfiling</key>

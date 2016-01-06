@@ -22,6 +22,8 @@ import commands
 import sys
 import glob
 
+TARGET_NAME="tomahawk"
+
 FRAMEWORK_SEARCH_PATH=[
     '/Library/Frameworks',
     os.path.join(os.environ['HOME'], 'Library/Frameworks')
@@ -206,26 +208,26 @@ SNORE_PLUGINS = [
 ]
 
 TOMAHAWK_PLUGINS = [
-  'libtomahawk_account_xmpp.dylib',
-  'libtomahawk_account_google.so',
-  'libtomahawk_account_zeroconf.so',
-  'libtomahawk_account_hatchet.so',
-  'libtomahawk_infoplugin_adium.so',
-  'libtomahawk_infoplugin_charts.so',
-  'libtomahawk_infoplugin_discogs.so',
-  'libtomahawk_infoplugin_echonest.so',
-  'libtomahawk_infoplugin_hypem.so',
-  'libtomahawk_infoplugin_musicbrainz.so',
-  'libtomahawk_infoplugin_musixmatch.so',
-  'libtomahawk_infoplugin_newreleases.so',
-  'libtomahawk_infoplugin_rovi.so',
-  'libtomahawk_infoplugin_snorenotify.so',
-  'libtomahawk_infoplugin_spotify.so',
-  'libtomahawk_viewpage_dashboard.so',
-#  'libtomahawk_viewpage_networkactivity.so',
-  'libtomahawk_viewpage_charts.so',
-  'libtomahawk_viewpage_newreleases.so',
-  'libtomahawk_viewpage_whatsnew_0_8.so',
+  #'lib%s_account_xmpp.dylib' % TARGET_NAME,
+  #'lib%s_account_google.so' % TARGET_NAME,
+  'lib%s_account_zeroconf.so' % TARGET_NAME,
+  'lib%s_account_hatchet.so' % TARGET_NAME,
+  'lib%s_infoplugin_adium.so' % TARGET_NAME,
+  'lib%s_infoplugin_charts.so' % TARGET_NAME,
+#  'lib%s_infoplugin_discogs.so' % TARGET_NAME,
+  'lib%s_infoplugin_echonest.so' % TARGET_NAME,
+  'lib%s_infoplugin_hypem.so' % TARGET_NAME,
+#  'lib%s_infoplugin_musicbrainz.so' % TARGET_NAME,
+  'lib%s_infoplugin_musixmatch.so' % TARGET_NAME,
+  'lib%s_infoplugin_newreleases.so' % TARGET_NAME,
+#  'lib%s_infoplugin_rovi.so' % TARGET_NAME,
+  'lib%s_infoplugin_snorenotify.so' % TARGET_NAME,
+  'lib%s_infoplugin_spotify.so' % TARGET_NAME,
+  #'lib%s_viewpage_dashboard.so' % TARGET_NAME,
+#  'lib%s_viewpage_networkactivity.so' % TARGET_NAME,
+  #'lib%s_viewpage_charts.so' % TARGET_NAME,
+  #'lib%s_viewpage_newreleases.so' % TARGET_NAME,
+  'lib%s_viewpage_whatsnew_0_8.so' % TARGET_NAME,
 ]
 
 QT_PLUGINS_SEARCH_PATH=[
@@ -247,6 +249,8 @@ class CouldNotFindQtPluginErrorFindFrameworkError(Error):
 class InstallNameToolError(Error):
   pass
 
+class CouldNotFindFrameworkError(Error):
+  pass
 
 class CouldNotFindQtPluginError(Error):
   pass
@@ -331,6 +335,11 @@ def FindFramework(path):
     abs_path = os.path.join(search_path, path)
     if os.path.exists(abs_path):
       return abs_path
+
+  # replace rpath with /Library/Frameworks for Sparkle
+  abs_path = path.replace("@rpath/", "/Library/Frameworks/")
+  if os.path.exists(abs_path):
+    return abs_path
 
   raise CouldNotFindFrameworkError(path)
 
@@ -579,9 +588,9 @@ for plugin in SNORE_PLUGINS:
   FixPlugin(FindSnorePlugin(plugin), '../lib/plugins/libsnore-qt5')
 
 try:
-  FixPlugin('tomahawk_crash_reporter', '../MacOS')
+  FixPlugin('%s_crash_reporter' % TARGET_NAME, '../MacOS')
 except:
-  print 'Failed to find tomahawk_crash_reporter'
+  print 'Failed to find %s_crash_reporter' % TARGET_NAME
 
 for plugin in QT_PLUGINS:
   FixPlugin(FindQtPlugin(plugin), os.path.dirname(plugin))

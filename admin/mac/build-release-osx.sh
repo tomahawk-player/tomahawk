@@ -4,8 +4,9 @@
 #
 ################################################################################
 
-set -e
+TARGET_NAME="Tomahawk"
 
+set -e
 
 function header {
     echo -e "\033[0;34m==>\033[0;0;1m $1 \033[0;0m"
@@ -31,30 +32,28 @@ CERT_SIGNER=$2
 ################################################################################
 
     header "Fixing and copying libraries"
-    $ROOT/../admin/mac/macdeploy.py Tomahawk.app quiet
+    $ROOT/../admin/mac/macdeploy.py "${TARGET_NAME}.app" quiet
 
-    cd Tomahawk.app
+    cd "${TARGET_NAME}.app"
 
     cp $ROOT/../admin/mac/qt.conf Contents/Resources/qt.conf
 
-#    header "Copying Sparkle framework"
-#    cp -R /Library/Frameworks/Sparkle.framework Contents/Frameworks
-
-    header "Creating DMG"
-    cd ..
+    header "Fixing fonts"
+    mkdir "${ROOT}/${TARGET_NAME}.app/Contents/Resources/Fonts"
+    cp -R $ROOT/../data/fonts/*.ttf "${ROOT}/${TARGET_NAME}.app/Contents/Resources/Fonts"
 
     header "Signing bundle"
-#    codesign -s "Developer ID Application: $CERT_SIGNER" -f -v ./Tomahawk.app
-
+    cd ..
     if [ -f ~/sign_step.sh ];
     then
-        ~/sign_step.sh "$CERT_SIGNER" "Tomahawk.app" || true
+        ~/sign_step.sh "$CERT_SIGNER" "${TARGET_NAME}.app" || true
     fi
 
-    $ROOT/../admin/mac/create-dmg.sh Tomahawk.app
-    mv Tomahawk.dmg Tomahawk-$VERSION.dmg
+    header "Creating DMG"
+    $ROOT/../admin/mac/create-dmg.sh "${TARGET_NAME}.app"
+    mv "${TARGET_NAME}.dmg" "${TARGET_NAME}-$VERSION.dmg"
 
     header "Creating signed Sparkle update"
-    $ROOT/../admin/mac/sign_bundle.rb $VERSION ~/tomahawk_sparkle_privkey.pem
+#     $ROOT/../admin/mac/sign_bundle.rb "${TARGET_NAME}" $VERSION ~/tomahawk_sparkle_privkey.pem
 
     header "Done!"

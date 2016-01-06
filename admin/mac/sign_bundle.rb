@@ -6,9 +6,9 @@ if ARGV.length < 2
   exit
 end
 
-tarball = "tomahawk-#{ARGV[0]}.tar.bz2"
+tarball = "#{ARGV[0].downcase}-#{ARGV[1]}.tar.bz2"
 puts "Zipping: #{tarball}..."
-`tar jcvf "#{tarball}" Tomahawk.app`
+`tar jcvf "#{tarball}" #{ARGV[0]}.app`
 
 puts "Signing..."
-puts `openssl dgst -sha1 -binary < "#{tarball}" | openssl dgst -dss1 -sign "#{ARGV[1]}" | openssl enc -base64`
+puts `openssl dgst -sha1 -binary < "#{tarball}" | openssl dgst -dss1 -sign "#{ARGV[2]}" | openssl enc -base64`
