@@ -334,7 +334,15 @@ SourcesModel::appendPageItem( const QString& name, ViewPage* page, int sortValue
                                                      page->pixmap(),
                                                      std::bind( &ViewManager::showDynamicPage, ViewManager::instance(), name ),
                                                      std::bind( &ViewManager::dynamicPageWidget, ViewManager::instance(), name ) );
-    pageItem->setDeletable( page->isDeletable() );
+
+    if ( page->isDeletable() )
+    {
+        pageItem->setDeletable( true );
+    }
+    else
+    {
+        pageItem->setRemovable( page->isRemovable() );
+    }
 
     if ( sortValue )
     {

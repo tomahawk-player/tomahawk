@@ -91,7 +91,8 @@ public:
     const QString pixmapPath() const { return ( RESPATH "images/whatsnew.svg" ); }
 
     bool addPageItem() const;
-    bool isDeletable() const { return true; }
+    bool isRemovable() const override { return true; }
+    bool isDeletable() const override { return false; }
     void onItemDeleted();
 
     int sortValue() { return 1; }

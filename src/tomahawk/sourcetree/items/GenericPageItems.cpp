@@ -132,6 +132,18 @@ GenericPageItem::setDeletable( bool deletable )
     }
 }
 
+void
+GenericPageItem::setRemovable( bool removable )
+{
+    if ( removable )
+    {
+        setRowType( SourcesModel::RemovablePage );
+    }
+    else
+    {
+        setRowType( SourcesModel::GenericPage );
+    }
+}
 
 int
 GenericPageItem::peerSortValue() const

@@ -76,6 +76,8 @@ public:
      */
     virtual bool addPageItem() const;
 
+    virtual bool isRemovable() const { return false; }
+
     /**
      * This page is actually a constant page that will be shown on every
      * restart of Tomahawk until the user selects it to be removed.
