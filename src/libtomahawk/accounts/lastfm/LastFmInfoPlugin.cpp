@@ -65,13 +65,6 @@ LastFmInfoPlugin::init()
         return;
     }
 
-    lastfm::ws::ApiKey = "7194b85b6d1f424fe1668173a78c0c4a";
-    lastfm::ws::SharedSecret = "ba80f1df6d27ae63e9cb1d33ccf2052f";
-    lastfm::ws::Username = m_account.data()->username();
-    lastfm::setNetworkAccessManager( Tomahawk::Utils::nam() );
-
-    m_pw = m_account.data()->password();
-
     //HACK work around a bug in liblastfm---it doesn't create its config dir, so when it
     // tries to write the track cache, it fails silently. until we have a fixed version, do this
     // code taken from Amarok (src/services/lastfm/ScrobblerAdapter.cpp)
@@ -85,6 +78,17 @@ LastFmInfoPlugin::init()
 #endif
 
     m_badUrls << QUrl( "http://cdn.last.fm/flatness/catalogue/noimage" );
+
+
+    lastfm::ws::ApiKey = "7194b85b6d1f424fe1668173a78c0c4a";
+    lastfm::ws::SharedSecret = "ba80f1df6d27ae63e9cb1d33ccf2052f";
+    lastfm::setNetworkAccessManager( Tomahawk::Utils::nam() );
+
+    if ( !m_account.isNull() )
+    {
+        lastfm::ws::Username = m_account->username();
+        m_pw = m_account->password();
+    }
 
     QTimer::singleShot( 0, this, SLOT( settingsChanged() ) );
 }
