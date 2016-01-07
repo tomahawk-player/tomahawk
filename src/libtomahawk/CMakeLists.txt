@@ -500,7 +500,7 @@ set_target_properties(
             AUTOMOC TRUE
             VERSION ${TOMAHAWK_VERSION_SHORT}
             SOVERSION ${TOMAHAWK_VERSION_SHORT}
-            OUTPUT_NAME ${TOMAHAWK_TARGET_NAME}
+            OUTPUT_NAME ${TOMAHAWK_BASE_TARGET_NAME}
 )
 
 
