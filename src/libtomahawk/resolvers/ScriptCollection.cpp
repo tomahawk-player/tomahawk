@@ -357,7 +357,7 @@ ScriptCollection::weight() const
 void
 ScriptCollection::resolve( const Tomahawk::query_ptr& query )
 {
-    ScriptJob* job = scriptAccount()->resolve( scriptObject(), query );
+    ScriptJob* job = scriptAccount()->resolve( scriptObject(), query, "collection" );
 
     connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onResolveRequestDone( QVariantMap ) ) );
 

@@ -334,7 +334,7 @@ ScriptAccount::parseResultVariantList( const QVariantList& reslist )
 
 
 ScriptJob*
-ScriptAccount::resolve( const scriptobject_ptr& scriptObject, const query_ptr& query )
+ScriptAccount::resolve( const scriptobject_ptr& scriptObject, const query_ptr& query, const QString& resolveType )
 {
     ScriptJob* job = nullptr;
     if ( !query->isFullTextQuery() )
@@ -343,6 +343,7 @@ ScriptAccount::resolve( const scriptobject_ptr& scriptObject, const query_ptr& q
         arguments["artist"] = query->queryTrack()->artist();
         arguments["album"] = query->queryTrack()->album();
         arguments["track"] = query->queryTrack()->track();
+        arguments["type"] = resolveType;
 
         job = scriptObject->invoke( "resolve", arguments );
     }
@@ -350,6 +351,7 @@ ScriptAccount::resolve( const scriptobject_ptr& scriptObject, const query_ptr& q
     {
         QVariantMap arguments;
         arguments["query"] = query->fullTextQuery();
+        arguments["type"] = resolveType;
         job = scriptObject->invoke( "search", arguments );
     }
 

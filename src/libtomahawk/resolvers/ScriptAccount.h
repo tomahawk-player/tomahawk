@@ -78,7 +78,7 @@ public:
 
     // helpers
     QList< Tomahawk::result_ptr > parseResultVariantList( const QVariantList& reslist );
-    ScriptJob* resolve( const scriptobject_ptr& scriptObject, const query_ptr& query );
+    ScriptJob* resolve( const scriptobject_ptr& scriptObject, const query_ptr& query, const QString& resolveType );
 
 private slots:
     void onJobDeleted( const QString& jobId );

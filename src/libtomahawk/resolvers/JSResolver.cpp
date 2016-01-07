@@ -540,7 +540,7 @@ JSResolver::error() const
 void
 JSResolver::resolve( const Tomahawk::query_ptr& query )
 {
-    ScriptJob* job = scriptAccount()->resolve( scriptObject(), query );
+    ScriptJob* job = scriptAccount()->resolve( scriptObject(), query, "resolver" );
 
     connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onResolveRequestDone( QVariantMap ) ) );
 
