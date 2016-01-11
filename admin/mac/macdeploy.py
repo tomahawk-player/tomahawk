@@ -37,6 +37,7 @@ VLC_PLUGINS=[
   #'libaccess_fake_plugin.dylib',
   'libftp_plugin.dylib',
   'libhttp_plugin.dylib',
+  'libhttplive_plugin.dylib',
   'libimem_plugin.dylib',
   #'libaccess_mmap_plugin.dylib',
   'libaccess_mms_plugin.dylib',
@@ -48,11 +49,6 @@ VLC_PLUGINS=[
   'libqtcapture_plugin.dylib',
   'librtp_plugin.dylib',
   'libzip_plugin.dylib',
-  'libaccess_output_dummy_plugin.dylib',
-  'libaccess_output_file_plugin.dylib',
-  'libaccess_output_http_plugin.dylib',
-  'libaccess_output_shout_plugin.dylib',
-  'libaccess_output_udp_plugin.dylib',
   'liba52tofloat32_plugin.dylib',
   'liba52tospdif_plugin.dylib',
   'libaudio_format_plugin.dylib',
@@ -185,6 +181,7 @@ VLC_PLUGINS=[
   #'libstream_filter_rar_plugin.dylib',
   'librecord_plugin.dylib',
   #'libvisual_plugin.dylib',
+  'libsecuretransport_plugin.dylib'
 ]
 
 VLC_SEARCH_PATH=[
