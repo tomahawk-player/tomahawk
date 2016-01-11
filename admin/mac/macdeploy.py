@@ -208,8 +208,8 @@ SNORE_PLUGINS = [
 ]
 
 TOMAHAWK_PLUGINS = [
-  #'lib%s_account_xmpp.dylib' % TARGET_NAME,
-  #'lib%s_account_google.so' % TARGET_NAME,
+  'lib%s_account_xmpp.dylib' % TARGET_NAME,
+  'lib%s_account_google.so' % TARGET_NAME,
   'lib%s_account_zeroconf.so' % TARGET_NAME,
   'lib%s_account_hatchet.so' % TARGET_NAME,
   'lib%s_infoplugin_adium.so' % TARGET_NAME,
@@ -223,10 +223,10 @@ TOMAHAWK_PLUGINS = [
 #  'lib%s_infoplugin_rovi.so' % TARGET_NAME,
   'lib%s_infoplugin_snorenotify.so' % TARGET_NAME,
   'lib%s_infoplugin_spotify.so' % TARGET_NAME,
-  #'lib%s_viewpage_dashboard.so' % TARGET_NAME,
+  'lib%s_viewpage_dashboard.so' % TARGET_NAME,
 #  'lib%s_viewpage_networkactivity.so' % TARGET_NAME,
-  #'lib%s_viewpage_charts.so' % TARGET_NAME,
-  #'lib%s_viewpage_newreleases.so' % TARGET_NAME,
+  'lib%s_viewpage_charts.so' % TARGET_NAME,
+  'lib%s_viewpage_newreleases.so' % TARGET_NAME,
   'lib%s_viewpage_whatsnew_0_8.so' % TARGET_NAME,
 ]
 
