@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
+ *   Copyright 2016, Dominik Schmidt <domme@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,33 +17,33 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SCRIPTCOMMAND_LOOKUPURL_P_H
-#define SCRIPTCOMMAND_LOOKUPURL_P_H
+#ifndef TOMAHAWK_SCRIPTLINKGENERATORPLUGIN_P_H
+#define TOMAHAWK_SCRIPTLINKGENERATORPLUGIN_P_H
 
-#include "ScriptCommand_LookupUrl.h"
+#include "ScriptLinkParserPlugin.h"
 
-#include "ExternalResolver.h"
-
-namespace Tomahawk
+namespace  Tomahawk
 {
 
-class ScriptCommand_LookupUrlPrivate
+class ScriptLinkParserPluginPrivate
 {
 public:
-    ScriptCommand_LookupUrlPrivate( ScriptCommand_LookupUrl* q, Tomahawk::ExternalResolver* _resolver, const QString& _url )
+    ScriptLinkParserPluginPrivate( ScriptLinkParserPlugin* q, const scriptobject_ptr& scriptObject, ScriptAccount* scriptAccount )
         : q_ptr ( q )
-        , url( _url )
-        , resolver( _resolver )
+        , scriptObject( scriptObject )
+        , scriptAccount( scriptAccount )
     {
     }
-    ScriptCommand_LookupUrl* q_ptr;
-    Q_DECLARE_PUBLIC ( ScriptCommand_LookupUrl )
+    ScriptLinkParserPlugin* q_ptr;
+    Q_DECLARE_PUBLIC ( ScriptLinkParserPlugin )
 
 private:
-    QString url;
-    Tomahawk::ExternalResolver* resolver;
+    scriptobject_ptr scriptObject;
+    ScriptAccount* scriptAccount;
+    QString pendingUrl;
+    album_ptr pendingAlbum;
 };
 
 } // ns: Tomahawk
 
-#endif // SCRIPTCOMMAND_LOOKUPURL_P_H
+#endif // TOMAHAWK_SCRIPTLINKGENERATORPLUGIN_P_H

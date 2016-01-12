@@ -1,7 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright (C) 2011  Leo Franchi <lfranchi@kde.org>
- *   Copyright (C) 2014  Dominik Schmidt <domme@tomahawk-player.org>
+ *   Copyright (C) 2014-2016,  Dominik Schmidt <domme@tomahawk-player.org>
  *   Copyright (C) 2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -23,6 +23,7 @@
 #include "../utils/Logger.h"
 #include "../Typedefs.h"
 
+#include "plugins/ScriptLinkParserPluginFactory.h"
 #include "plugins/ScriptCollectionFactory.h"
 #include "plugins/ScriptInfoPluginFactory.h"
 
@@ -44,6 +45,7 @@ ScriptAccount::ScriptAccount( const QString& name )
     : QObject()
     , m_name( name )
     , m_stopped( true )
+    , m_linkParserPluginFactory( new ScriptLinkParserPluginFactory() )
     , m_collectionFactory( new ScriptCollectionFactory() )
     , m_infoPluginFactory( new ScriptInfoPluginFactory() )
 {
@@ -52,6 +54,7 @@ ScriptAccount::ScriptAccount( const QString& name )
 
 ScriptAccount::~ScriptAccount()
 {
+    delete m_linkParserPluginFactory;
     delete m_collectionFactory;
     delete m_infoPluginFactory;
 }
@@ -62,6 +65,7 @@ ScriptAccount::start()
 {
     m_stopped = false;
 
+    m_linkParserPluginFactory->addAllPlugins();
     m_collectionFactory->addAllPlugins();
     m_infoPluginFactory->addAllPlugins();
 }
@@ -72,6 +76,7 @@ ScriptAccount::stop()
 {
     m_stopped = true;
 
+    m_linkParserPluginFactory->removeAllPlugins();
     m_collectionFactory->removeAllPlugins();
     m_infoPluginFactory->removeAllPlugins();
 }
@@ -193,7 +198,11 @@ ScriptAccount::unregisterScriptPlugin( const QString& type, const QString& objec
         return;
     }
 
-    if ( type == "collection" )
+    if( type == "linkParser" )
+    {
+        m_linkParserPluginFactory->unregisterPlugin( object );
+    }
+    else if ( type == "collection" )
     {
         m_collectionFactory->unregisterPlugin( object );
     }
@@ -230,6 +239,10 @@ ScriptAccount::scriptPluginFactory( const QString& type, const scriptobject_ptr&
     {
         ScriptLinkGeneratorPlugin* lgp = new ScriptLinkGeneratorPlugin( object );
         Utils::LinkGenerator::instance()->addPlugin( lgp );
+    }
+    else if( type == "linkParser" )
+    {
+        m_linkParserPluginFactory->registerPlugin( object, this );
     }
     else if ( type == "infoPlugin" )
     {

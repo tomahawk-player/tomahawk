@@ -5,6 +5,7 @@
  *   Copyright (C) 2011-2014, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright (C) 2013, Uwe L. Korn <uwelk@xhochy.com>
  *   Copyright (C) 2013, Teo Mrnjavac <teo@kde.org>
+ *   Copyright (C) 2016, Dominik Schmidt <domme@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -35,13 +36,13 @@
 #include "playlist/TrackView.h"
 #include "playlist/PlayableModel.h"
 #include "resolvers/ExternalResolver.h"
-#include "resolvers/ScriptCommand_LookupUrl.h"
 #include "utils/JspfLoader.h"
 #include "utils/Logger.h"
 #include "utils/SpotifyParser.h"
 #include "utils/XspfLoader.h"
 #include "utils/XspfGenerator.h"
 #include "viewpages/SearchViewPage.h"
+#include "utils/LinkParser.h"
 
 #include "Pipeline.h"
 #include "TomahawkSettings.h"
@@ -162,27 +163,12 @@ GlobalActionManager::openUrl( const QString& url )
     else if ( url.contains( "open.spotify.com" ) || url.startsWith( "spotify:" ) )
         return openSpotifyLink( url );
 
-    // Can we parse the Url using a ScriptResolver?
-    bool canParse = false;
-    QList< QPointer< ExternalResolver > > possibleResolvers;
-    foreach ( QPointer<ExternalResolver> resolver, Pipeline::instance()->scriptResolvers() )
+    // Can we parse the Url using LinkParser?
+    QList< QSharedPointer< Utils::LinkParserPlugin > > parserPlugins = Utils::LinkParser::instance()->parserPluginsForUrl( url, Utils::UrlTypeAny );
+    if( !parserPlugins.isEmpty() )
     {
-        if ( resolver->canParseUrl( url, ExternalResolver::UrlTypeAny ) )
-        {
-            canParse = true;
-            possibleResolvers << resolver;
-        }
-    }
-    if ( canParse )
-    {
-        m_queuedUrl = url;
-        foreach ( QPointer<ExternalResolver> resolver, possibleResolvers )
-        {
-            ScriptCommand_LookupUrl* cmd = new ScriptCommand_LookupUrl( resolver, url );
-            connect( cmd, SIGNAL( information( QString, QSharedPointer<QObject> ) ), this, SLOT( informationForUrl( QString, QSharedPointer<QObject> ) ) );
-            cmd->enqueue();
-        }
-
+        Tomahawk::Utils::LinkParser::instance()->lookupUrl( url, parserPlugins );
+        connect( Tomahawk::Utils::LinkParser::instance(), SIGNAL( informationFound( QString, QSharedPointer<QObject> ) ), this, SLOT( informationForUrl( QString, QSharedPointer<QObject> ) ), Qt::UniqueConnection );
         return true;
     }
 

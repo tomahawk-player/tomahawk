@@ -4,6 +4,7 @@
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2011-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2011-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2016, Dominik Schmidt <domme@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -35,6 +36,7 @@
 #include "utils/Logger.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/XspfLoader.h"
+#include "utils/LinkParser.h"
 
 #include "Artist.h"
 #include "Album.h"
@@ -172,12 +174,7 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
         if ( url.contains( "grooveshark.com" ) && url.contains( "playlist" ) )
             return true;
 
-        // Check Scriptresolvers
-        foreach ( QPointer<ExternalResolver> resolver, Pipeline::instance()->scriptResolvers() )
-        {
-            if ( resolver->canParseUrl( url, ExternalResolver::UrlTypePlaylist ) )
-                return true;
-        }
+        return Tomahawk::Utils::LinkParser::instance()->canParseUrl( url, Tomahawk::Utils::UrlTypePlaylist );
     }
 
     if ( acceptedType.testFlag( Track ) )
@@ -198,12 +195,7 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
                                                || url.contains( "playlists" )  ) ) )
             return true;
 
-        // Check Scriptresolvers
-        foreach ( QPointer<ExternalResolver> resolver, Pipeline::instance()->scriptResolvers() )
-        {
-            if ( resolver->canParseUrl( url, ExternalResolver::UrlTypeTrack ) )
-                return true;
-        }
+        return Tomahawk::Utils::LinkParser::instance()->canParseUrl( url, Tomahawk::Utils::UrlTypeTrack );
     }
 
     if ( acceptedType.testFlag( Album ) )
@@ -215,12 +207,7 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
         if ( url.contains( "rdio.com" ) && ( url.contains( "artist" ) && url.contains( "album" ) && !url.contains( "track" ) )  )
             return true;
 
-        // Check Scriptresolvers
-        foreach ( QPointer<ExternalResolver> resolver, Pipeline::instance()->scriptResolvers() )
-        {
-            if ( resolver->canParseUrl( url, ExternalResolver::UrlTypeAlbum ) )
-                return true;
-        }
+        return Tomahawk::Utils::LinkParser::instance()->canParseUrl( url, Tomahawk::Utils::UrlTypeAlbum );
     }
 
     if ( acceptedType.testFlag( Artist ) )
@@ -232,12 +219,7 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
         if ( url.contains( "rdio.com" ) && ( url.contains( "artist" ) && !url.contains( "album" ) && !url.contains( "track" ) )  )
             return true;
 
-        // Check Scriptresolvers
-        foreach ( QPointer<ExternalResolver> resolver, Pipeline::instance()->scriptResolvers() )
-        {
-            if ( resolver->canParseUrl( url, ExternalResolver::UrlTypeArtist ) )
-                return true;
-        }
+        return Tomahawk::Utils::LinkParser::instance()->canParseUrl( url, Tomahawk::Utils::UrlTypeArtist );
     }
 
     // We whitelist certain url-shorteners since they do some link checking. Often playable (e.g. spotify) links hide behind them,
@@ -303,15 +285,7 @@ DropJob::isDropType( DropJob::DropType desired, const QMimeData* data )
         if ( ShortenedLinkParser::handlesUrl( url ) )
             return true;
 
-        // Check Scriptresolvers
-        foreach ( QPointer<ExternalResolver> resolver, Pipeline::instance()->scriptResolvers() )
-        {
-            if ( resolver->canParseUrl( url, ExternalResolver::UrlTypePlaylist ) )
-            {
-                tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Accepting current drop as a playlist" << resolver->name();
-                return true;
-            }
-        }
+        return Tomahawk::Utils::LinkParser::instance()->canParseUrl( url, Tomahawk::Utils::UrlTypePlaylist );
 
     }
 
@@ -761,16 +735,12 @@ DropJob::handleTrackUrls( const QString& urls )
 
         foreach ( QString track, tracks )
         {
-            foreach ( QPointer<ExternalResolver> resolver, Pipeline::instance()->scriptResolvers() )
+            QList< QSharedPointer< Utils::LinkParserPlugin > > parserPlugins = Utils::LinkParser::instance()->parserPluginsForUrl( track, Utils::UrlTypeAny );
+            if( !parserPlugins.isEmpty() )
             {
-                if ( resolver->canParseUrl( track, ExternalResolver::UrlTypeAny ) )
-                {
-                    ScriptCommand_LookupUrl* cmd = new ScriptCommand_LookupUrl( resolver, track );
-                    connect( cmd, SIGNAL( information( QString, QSharedPointer<QObject> ) ), this, SLOT( informationForUrl( QString, QSharedPointer<QObject> ) ) );
-                    cmd->enqueue();
-                    m_queryCount++;
-                    break;
-                }
+                Tomahawk::Utils::LinkParser::instance()->lookupUrl( track, parserPlugins );
+                connect( Tomahawk::Utils::LinkParser::instance(), SIGNAL( informationFound( QString, QSharedPointer<QObject> ) ), this, SLOT( informationForUrl( QString, QSharedPointer<QObject> ) ) );
+                m_queryCount++;
             }
         }
     }

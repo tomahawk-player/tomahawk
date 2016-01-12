@@ -1,7 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright (C) 2011  Leo Franchi <lfranchi@kde.org>
- *   Copyright (C) 2014  Dominik Schmidt <domme@tomahawk-player.org>
+ *   Copyright (C) 2014-2016,  Dominik Schmidt <domme@tomahawk-player.org>
  *   Copyright (C) 2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -39,6 +39,7 @@ namespace Tomahawk {
 
 class ScriptObject;
 class ScriptJob;
+class ScriptLinkParserPluginFactory;
 class ScriptCollectionFactory;
 class ScriptInfoPluginFactory;
 
@@ -94,6 +95,7 @@ private: // TODO: pimple, might be renamed before tho
     QHash< QString, scriptobject_ptr > m_objects;
 
     // port to QScopedPointer when pimple'd
+    ScriptLinkParserPluginFactory* m_linkParserPluginFactory;
     ScriptCollectionFactory* m_collectionFactory;
     ScriptInfoPluginFactory* m_infoPluginFactory;
 };

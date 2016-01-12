@@ -126,6 +126,8 @@ set( libGuiSources
     utils/LinkGenerator.cpp
     utils/LinkGeneratorPlugin.cpp
     utils/TomaHkLinkGeneratorPlugin.cpp
+    utils/LinkParser.cpp
+    utils/LinkParserPlugin.cpp
 
     viewpages/SearchViewPage.cpp
     viewpages/SourceViewPage.cpp
@@ -350,8 +352,6 @@ list(APPEND libSources
     resolvers/ScriptCommand_AllArtists.cpp
     resolvers/ScriptCommand_AllAlbums.cpp
     resolvers/ScriptCommand_AllTracks.cpp
-    resolvers/ScriptCommand_LookupUrl.cpp
-    resolvers/ScriptCommandQueue.cpp
     resolvers/ScriptPluginFactory.cpp
 
     # ScriptPlugins
@@ -359,6 +359,8 @@ list(APPEND libSources
     resolvers/plugins/ScriptCollectionFactory.cpp
     resolvers/ScriptInfoPlugin.cpp
     resolvers/plugins/ScriptInfoPluginFactory.cpp
+    resolvers/plugins/ScriptLinkParserPlugin.cpp
+    resolvers/plugins/ScriptLinkParserPluginFactory.cpp
 
 
     sip/SipPlugin.cpp
@@ -366,6 +368,7 @@ list(APPEND libSources
     sip/PeerInfo.cpp
     sip/SipStatusMessage.cpp
 
+    utils/UrlType.cpp
     utils/Cloudstream.cpp
     utils/Json.cpp
     utils/TomahawkUtils.cpp

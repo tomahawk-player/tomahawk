@@ -4,6 +4,7 @@
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
+ *   Copyright 2016,      Dominik Schmidt <domme@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -69,8 +70,6 @@ public:
 
     void setIcon( const QPixmap& icon ) override;
 
-    bool canParseUrl( const QString& url, UrlType type ) override;
-
     QVariantMap loadDataFromWidgets();
 
     ScriptAccount* scriptAccount() const;
@@ -82,9 +81,6 @@ public slots:
     void stop() override;
     void start() override;
 
-    // For UrlLookup
-    void lookupUrl( const QString& url ) override;
-
 signals:
     void stopped();
 
@@ -93,7 +89,6 @@ protected:
 
 private slots:
     void onResolveRequestDone(const QVariantMap& data);
-    void onLookupUrlRequestDone(const QVariantMap& data);
 
 private:
     void init();
@@ -107,15 +102,11 @@ private:
     Q_DECLARE_PRIVATE( JSResolver )
     QScopedPointer<JSResolverPrivate> d_ptr;
 
-
-// TODO: move lookupUrl stuff to its own plugin type
-    QString instanceUUID();
-    static Tomahawk::query_ptr parseTrack( const QVariantMap& track );
+    // TODO: collection stuff, get rid of collection scriptcommands
     QString m_pendingUrl;
     Tomahawk::album_ptr m_pendingAlbum;
 private slots:
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::ModelMode, const Tomahawk::collection_ptr& collection );
-    void pltemplateTracksLoadedForUrl( const QString& url, const Tomahawk::playlisttemplate_ptr& pltemplate );
 };
 
 } // ns: Tomahawk

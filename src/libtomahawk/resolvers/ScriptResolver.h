@@ -3,6 +3,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi            <lfranchi@kde.org>
  *   Copyright 2013,      Teo Mrnjavac           <teo@kde.org>
+ *   Copyright 2016,      Dominik Schmidt <domme@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -63,8 +64,6 @@ public:
 
     void sendMessage( const QVariantMap& map );
 
-    bool canParseUrl( const QString&, UrlType ) Q_DECL_OVERRIDE { return false; }
-
 signals:
     void terminated();
     void customMessage( const QString& msgType, const QVariantMap& msg );
@@ -73,9 +72,6 @@ public slots:
     void stop() Q_DECL_OVERRIDE;
     void resolve( const Tomahawk::query_ptr& query ) Q_DECL_OVERRIDE;
     void start() Q_DECL_OVERRIDE;
-
-    void lookupUrl( const QString&  ) Q_DECL_OVERRIDE {}
-
 
 private slots:
     void readStderr();

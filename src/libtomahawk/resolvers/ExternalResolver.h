@@ -3,6 +3,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2016,      Dominik Schmidt <domme@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -24,8 +25,6 @@
 #include "Source.h"
 #include "DllMacro.h"
 #include "Resolver.h"
-#include "ScriptCommandQueue.h"
-#include "ScriptCommand_LookupUrl.h"
 #include "Typedefs.h"
 
 #include <QObject>
@@ -45,7 +44,6 @@ class DLLEXPORT ExternalResolver : public Resolver
 {
 Q_OBJECT
 
-    friend class ScriptCommandQueue;
     friend class ScriptCommand_LookupUrl;
 
 public:
@@ -61,26 +59,13 @@ public:
         Browsable = 0x1,        // can be represented in one or more collection tree views
         PlaylistSync = 0x2,     // can sync playlists
         AccountFactory = 0x4,   // can configure multiple accounts at the same time
-        UrlLookup = 0x8         // can be queried for information on an Url
     };
     Q_DECLARE_FLAGS( Capabilities, Capability )
     Q_FLAGS( Capabilities )
 
-    enum UrlType
-    {
-        UrlTypeAny =       0x00,
-        UrlTypePlaylist =  0x01,
-        UrlTypeTrack =     0x02,
-        UrlTypeAlbum =     0x04,
-        UrlTypeArtist =    0x08,
-        UrlTypeXspf =      0x10
-    };
-    Q_DECLARE_FLAGS( UrlTypes, UrlType )
-    Q_FLAGS( UrlTypes )
-
     ExternalResolver( const QString& filePath )
-        : m_commandQueue( new ScriptCommandQueue( this ) )
-    { m_filePath = filePath; }
+        : m_filePath( filePath )
+    {}
 
     QString filePath() const { return m_filePath; }
     virtual void setIcon( const QPixmap& ) {}
@@ -91,12 +76,6 @@ public:
     virtual ErrorState error() const;
     virtual bool running() const = 0;
     virtual Capabilities capabilities() const = 0;
-
-    // UrlLookup, sync call
-    virtual bool canParseUrl( const QString& url, UrlType type ) = 0;
-
-    virtual void enqueue( const QSharedPointer< ScriptCommand >& req )
-    { m_commandQueue->enqueue( req ); }
 
 public slots:
     virtual void start() = 0;
@@ -112,11 +91,6 @@ signals:
 
 protected:
     void setFilePath( const QString& path ) { m_filePath = path; }
-    ScriptCommandQueue* m_commandQueue;
-
-    // Should only be called by ScriptCommands
-    // UrlLookup
-    virtual void lookupUrl( const QString& url ) = 0;
 
 private:
     QString m_filePath;
