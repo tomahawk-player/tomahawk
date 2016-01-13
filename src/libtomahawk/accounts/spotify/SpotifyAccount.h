@@ -172,7 +172,7 @@ private:
     QPointer<ScriptResolver> m_spotifyResolver;
     QPointer< InfoSystem::SpotifyInfoPlugin > m_infoPlugin;
 
-    QMap<QString, QPair<QObject*, QString> > m_qidToSlotMap;
+    QMap<QString, QPair< QPointer< QObject >, QString> > m_qidToSlotMap;
     QMap<QString, QVariant > m_qidToExtraData;
 
     // List of synced spotify playlists in config UI

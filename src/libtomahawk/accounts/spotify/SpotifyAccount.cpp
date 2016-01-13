@@ -842,15 +842,28 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
     const QString qid = msg.value( "qid" ).toString();
     if ( m_qidToSlotMap.contains( qid ) )
     {
-        QObject* receiver = m_qidToSlotMap[ qid ].first;
+        QPointer< QObject > receiver = m_qidToSlotMap[ qid ].first;
         QString slot = m_qidToSlotMap[ qid ].second;
         m_qidToSlotMap.remove( qid );
+
 
         QVariant extraData;
         if ( m_qidToExtraData.contains( qid ) )
             extraData = m_qidToExtraData.take( qid );
 
-        QMetaObject::invokeMethod( receiver, slot.toLatin1(), Q_ARG( QString, msgType ), Q_ARG( QVariantMap, msg ), Q_ARG( QVariant, extraData ) );
+        // FIXME: SpotifyParser is sometimes a dangling pointer, haven't found a real way to reproduce: happens sometimes when dropping a playlist url onto the sidebar
+        //Q_ASSERT( !receiver.isNull() );
+
+        if ( !receiver.isNull() )
+        {
+            QMetaObject::invokeMethod( receiver, slot.toLatin1(), Q_ARG( QString, msgType ), Q_ARG( QVariantMap, msg ), Q_ARG( QVariant, extraData ) );
+        }
+        else
+        {
+            JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
+                tr( "Spotify account could not finish action. Try again." )
+            ) );
+        }
     }
     else if ( msgType == "allPlaylists" )
     {
