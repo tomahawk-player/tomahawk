@@ -102,6 +102,7 @@ namespace TomahawkStyle
 
     static const QColor PLAYLIST_BUTTON_BACKGROUND = QColor( "#111111" );
     static const QColor PLAYLIST_BUTTON_FOREGROUND = QColor( "#ffffff" );
+    static const QColor PLAYLIST_BUTTON_HOVER_BACKGROUND = QColor( "#111111" );
 
     static const QColor PLAYLIST_PROGRESS_BACKGROUND = QColor( "#ffffff" );
     static const QColor PLAYLIST_PROGRESS_FOREGROUND = QColor( "#E61878" );

@@ -84,6 +84,8 @@
 #include "dialogs/LoadPlaylistDialog.h"
 #include "utils/ImageRegistry.h"
 #include "utils/Logger.h"
+#include "utils/GuiHelpers.h"
+#include "libtomahawk/widgets/ImageButton.h"
 
 #include "config.h"
 
@@ -1269,11 +1271,11 @@ TomahawkWindow::showAboutTomahawk()
     QString head, desc;
 
 #ifdef QT_DEBUG
-    head = tr( "<h2><b>Tomahawk %1<br/>(%2)</h2>" )
+    head = tr( "<h2><b>%applicationName %1<br/>(%2)</h2>" )
          .arg( TomahawkUtils::appFriendlyVersion() )
          .arg( qApp->applicationVersion() );
 #else
-    head = tr( "<h2><b>Tomahawk %1</h2>" )
+    head = tr( "<h2><b>%applicationName %1</h2>" )
          .arg( TomahawkUtils::appFriendlyVersion() );
 #endif
 
@@ -1285,7 +1287,7 @@ TomahawkWindow::showAboutTomahawk()
               .arg( copyright )
               .arg( thanksto );
 
-    QMessageBox::about( this, tr( "About Tomahawk" ), head + desc );
+    QMessageBox::about( this, tr( "About %applicationName" ), head + desc );
 }
 
 

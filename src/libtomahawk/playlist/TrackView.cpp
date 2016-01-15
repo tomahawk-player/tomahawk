@@ -23,7 +23,9 @@
 #include "PlayableModel.h"
 #include "PlayableProxyModel.h"
 #include "PlayableItem.h"
+#include "DownloadManager.h"
 #include "DropJob.h"
+#include "Result.h"
 #include "Source.h"
 #include "TomahawkSettings.h"
 #include "audio/AudioEngine.h"
@@ -773,6 +775,26 @@ TrackView::onCustomContextMenu( const QPoint& pos )
         m_contextMenu->setSupportedActions( m_contextMenu->supportedActions() | ContextMenu::ActionMarkListened
                                                                               | ContextMenu::ActionDelete );
 
+    if ( proxyModel()->style() == PlayableProxyModel::Locker )
+    {
+        bool allDownloaded = true;
+        foreach ( const QModelIndex& index, selectedIndexes() )
+        {
+            if ( index.column() )
+                continue;
+
+            PlayableItem* item = proxyModel()->itemFromIndex( proxyModel()->mapToSource( index ) );
+            if ( DownloadManager::instance()->localFileForDownload( item->query()->results().first()->downloadFormats().first().url.toString() ).isEmpty() )
+            {
+                allDownloaded = false;
+                break;
+            }
+        }
+
+        if ( !allDownloaded )
+            m_contextMenu->setSupportedActions( m_contextMenu->supportedActions() | ContextMenu::ActionDownload );
+    }
+
     QList<query_ptr> queries;
     foreach ( const QModelIndex& index, selectedIndexes() )
     {
@@ -802,6 +824,10 @@ TrackView::onMenuTriggered( int action )
 
         case ContextMenu::ActionDelete:
             deleteSelectedItems();
+            break;
+
+        case ContextMenu::ActionDownload:
+            downloadSelectedItems();
             break;
 
         default:
@@ -875,6 +901,27 @@ TrackView::deleteSelectedItems()
     else
     {
         tDebug() << Q_FUNC_INFO << "Error: Model is read-only!";
+    }
+}
+
+
+void
+TrackView::downloadSelectedItems()
+{
+    foreach ( const QModelIndex& index, selectedIndexes() )
+    {
+        if ( index.column() )
+            continue;
+
+        PlayableItem* item = proxyModel()->itemFromIndex( proxyModel()->mapToSource( index ) );
+
+        if ( !DownloadManager::instance()->localFileForDownload( item->query()->results().first()->downloadFormats().first().url.toString() ).isEmpty() )
+            continue;
+        if ( !item )
+            continue;
+
+        if ( !item->result()->downloadFormats().isEmpty() )
+            DownloadManager::instance()->addJob( item->result()->toDownloadJob( item->result()->downloadFormats().first() ) );
     }
 }
 

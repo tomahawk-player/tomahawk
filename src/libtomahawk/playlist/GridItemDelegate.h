@@ -48,6 +48,7 @@ public:
 
     QSize itemSize() const;
     void setItemWidth( int width ) { m_itemWidth = width; }
+    void setShowBuyButtons( bool enabled ) { m_showBuyButtons = enabled; }
 
 public slots:
     void resetHoverIndex();
@@ -60,6 +61,10 @@ protected:
 
     bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
     bool eventFilter( QObject* obj, QEvent* event );
+
+    QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    void updateEditorGeometry( QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    void setModelData( QWidget* editor, QAbstractItemModel* model, const QModelIndex& index ) const;
 
 signals:
     void updateIndex( const QModelIndex& idx );
@@ -82,6 +87,9 @@ private slots:
     void fadingFrameChanged( const QPersistentModelIndex& );
     void fadingFrameFinished( const QPersistentModelIndex& );
 
+    void closeEditor( const QModelIndex& index, QWidget* editor );
+    void addDownloadJob( const QModelIndex& index, QWidget* editor );
+
 private:
     QTimeLine* createTimeline( QTimeLine::Direction direction, int startFrame = 0 );
     void clearButtons();
@@ -90,15 +98,19 @@ private:
     PlayableProxyModel* m_model;
     int m_itemWidth;
     bool m_showPosition;
+    bool m_showBuyButtons;
     bool m_wordWrapping;
 
     mutable QHash< QPersistentModelIndex, QRect > m_artistNameRects;
     mutable QHash< QPersistentModelIndex, QRect > m_albumNameRects;
+    mutable QHash< QPersistentModelIndex, QRect > m_buyButtonRects;
+    mutable QHash< QPersistentModelIndex, QRect > m_downloadDropDownRects;
     mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_covers;
 
     QPersistentModelIndex m_hoverIndex;
     QPersistentModelIndex m_hoveringOverArtist;
     QPersistentModelIndex m_hoveringOverAlbum;
+    QPersistentModelIndex m_hoveringOverBuyButton;
 
     mutable QHash< QPersistentModelIndex, QWidget* > m_spinner;
     mutable QHash< QPersistentModelIndex, HoverControls* > m_hoverControls;

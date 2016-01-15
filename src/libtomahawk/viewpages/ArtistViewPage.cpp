@@ -107,6 +107,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         ui->topHits->setItemWidth( scaledX( 140 ) );
         ui->topHits->proxyModel()->setHideDupeItems( true );
         ui->topHits->delegate()->setWordWrapping( true );
+        ui->topHits->delegate()->setShowBuyButtons( true );
         ui->topHits->setFixedHeight( ui->topHits->itemSize().height() + ui->topHits->spacing() * 2 );
 
         m_topHitsModel = new PlayableModel( ui->topHits );

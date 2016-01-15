@@ -99,7 +99,7 @@ ScriptEngine::sslErrorHandler( QNetworkReply* qnr, const QList<QSslError>& errli
 
         QMessageBox question( TomahawkUtils::tomahawkWindow() );
         question.setWindowTitle( tr( "SSL Error" ) );
-        question.setText( tr( "You have asked Tomahawk to connect securely to <b>%1</b>, but we can't confirm that your connection is secure:<br><br>"
+        question.setText( tr( "You have asked %applicationName to connect securely to <b>%1</b>, but we can't confirm that your connection is secure:<br><br>"
                             "<b>%2</b><br><br>"
                             "Do you want to trust this connection?" )
                             .arg( qnr->url().host() )

@@ -418,7 +418,7 @@ include_directories(
     ${Boost_INCLUDE_DIR}
 
     ${LIBPORTFWD_INCLUDE_DIR}
-    ${QUAZIP_INCLUDE_DIR}
+    ${QUAZIP_INCLUDE_DIRS}
     ${QTKEYCHAIN_INCLUDE_DIRS}
 )
 

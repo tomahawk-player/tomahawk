@@ -267,20 +267,20 @@ SettingsDialog::SettingsDialog(QObject *parent )
 // #endif
 
     m_dialog->addTab( m_accountsWidget, TomahawkUtils::defaultPixmap( TomahawkUtils::AccountSettings ),
-                      tr( "Plug-Ins" ), tr( "Configure the accounts and services used by Tomahawk "
+                      tr( "Plug-Ins" ), tr( "Configure the accounts and services used by %applicationName "
                                              "to search and retrieve music, find your friends and "
                                              "update your status." ) );
 
     m_dialog->addTab( m_collectionWidget, TomahawkUtils::defaultPixmap( TomahawkUtils::MusicSettings ),
-                      tr( "Collection" ), tr( "Manage how Tomahawk finds music on your computer." ) );
+                      tr( "Collection" ), tr( "Manage how %applicationName finds music on your computer." ) );
 
     m_dialog->addTab( m_advancedWidget, TomahawkUtils::defaultPixmap( TomahawkUtils::AdvancedSettings ),
-                      tr( "Advanced" ), tr( "Configure Tomahawk's advanced settings, including "
+                      tr( "Advanced" ), tr( "Configure %applicationName advanced settings, including "
                                             "network connectivity settings, browser interaction "
                                             "and more." ) );
 
     m_dialog->addTab( m_downloadsWidget, TomahawkUtils::defaultPixmap( TomahawkUtils::DownloadsSettings ),
-                      tr( "Downloads" ), tr( "Configure Tomahawk's integrated download manager." ) );
+                      tr( "Downloads" ), tr( "Configure %applicationName's integrated download manager." ) );
 
     m_dialog->setCurrentIndex( 0 );
 
@@ -333,7 +333,7 @@ SettingsDialog::saveSettings()
     s->sync();
 
     if ( m_restartRequired )
-        QMessageBox::information( 0, tr( "Information" ), tr( "Some changed settings will not take effect until Tomahawk is restarted" ) );
+        QMessageBox::information( 0, tr( "Information" ), tr( "Some changed settings will not take effect until %applicationName is restarted" ) );
 
 //    m_collectionWidgetUi->dirTree->cleanup();
 
@@ -586,9 +586,9 @@ SettingsDialog::openAccountConfig( Account* account, bool showDelete )
 void
 SettingsDialog::installFromFile()
 {
-    const QString resolver = QFileDialog::getOpenFileName( m_accountsWidget, tr( "Install resolver from file" ),
+    const QString resolver = QFileDialog::getOpenFileName( m_accountsWidget, tr( "Install plug-in from file" ),
                                                            TomahawkSettings::instance()->scriptDefaultPath(),
-                                                           tr( "Tomahawk Resolvers (*.axe *.js);;"
+                                                           tr( "%applicationName Plug-Ins (*.axe *.js);;"
                                                            "All files (*)" ),
                                                            0,
                                                            QFileDialog::ReadOnly );

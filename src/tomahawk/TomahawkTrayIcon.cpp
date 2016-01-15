@@ -67,13 +67,15 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     m_contextMenu->addSeparator();
     m_contextMenu->addAction( ac->getAction( "previousTrack" ) );
     m_contextMenu->addAction( ac->getAction( "nextTrack" ) );
+    /*
     m_contextMenu->addSeparator();
     m_contextMenu->addAction( ActionCollection::instance()->getAction( "togglePrivacy" ) );
+    */
 
 #ifdef Q_OS_MAC
     // On mac you can close the windows while leaving the app open. We then need a way to show the main window again
     m_contextMenu->addSeparator();
-    m_showWindowAction = m_contextMenu->addAction( tr( "Hide Tomahawk Window" ) );
+    m_showWindowAction = m_contextMenu->addAction( tr( "Hide %applicationName Window" ) );
     m_showWindowAction->setData( true );
     connect( m_showWindowAction, SIGNAL( triggered() ), this, SLOT( showWindow() ) );
 
@@ -112,12 +114,12 @@ TomahawkTrayIcon::setShowHideWindow( bool show )
 {
     if ( show )
     {
-        m_showWindowAction->setText( tr( "Hide Tomahawk Window" ) );
+        m_showWindowAction->setText( tr( "Hide %applicationName Window" ) );
         m_showWindowAction->setData( show );
     }
     else
     {
-        m_showWindowAction->setText( tr( "Show Tomahawk Window" ) );
+        m_showWindowAction->setText( tr( "Show %applicationName Window" ) );
     }
 
     m_showWindowAction->setData( show );

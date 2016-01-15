@@ -89,6 +89,7 @@ public:
 public slots:
     virtual void onItemActivated( const QModelIndex& index );
 
+    virtual void downloadSelectedItems();
     virtual void deleteSelectedItems();
 
     void playItem();

@@ -1,5 +1,3 @@
-set(TOMAHAWK_APPLICATION_TARGET "tomahawk-bin")
-
 include( ECMAddAppIcon )
 
 # SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
@@ -8,6 +6,8 @@ include( ECMAddAppIcon )
 IF( NOT CMAKE_BUILD_TYPE STREQUAL "Release" AND NOT CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
     MESSAGE( "Building in debug mode, enabling all debug updates" )
 ENDIF()
+
+set(TOMAHAWK_APPLICATION_TARGET ${TOMAHAWK_TARGET_NAME}-bin)
 
 # build plugins
 # use glob, but hardcoded list for now:
@@ -154,19 +154,18 @@ else()
     ecm_add_app_icon(tomahawkSources ICONS ${TOMAHAWK_ICONS})
 endif()
 
-
 qt_add_resources( RC_SRCS "../../resources.qrc" )
 
 SET( final_src ${final_src} ${tomahawkUI_H} ${tomahawkMoc} ${tomahawkSources} ${RC_SRCS} )
 
-if(APPLE)
-    set(TOMAHAWK_RUNTIME_OUTPUT_NAME "Tomahawk")
+if(APPLE OR WIN32)
+    set(TOMAHAWK_RUNTIME_OUTPUT_NAME "${TOMAHAWK_APPLICATION_NAME}")
 else()
-    set(TOMAHAWK_RUNTIME_OUTPUT_NAME "tomahawk")
+    set(TOMAHAWK_RUNTIME_OUTPUT_NAME "${TOMAHAWK_TARGET_NAME}")
 endif()
 
 ADD_EXECUTABLE( ${TOMAHAWK_APPLICATION_TARGET} WIN32 MACOSX_BUNDLE ${final_src} )
-SET_TARGET_PROPERTIES(${TOMAHAWK_APPLICATION_TARGET}
+SET_TARGET_PROPERTIES( ${TOMAHAWK_APPLICATION_TARGET}
     PROPERTIES
         AUTOMOC TRUE
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_BINARY_DIR}/Info.plist"
@@ -210,8 +209,7 @@ TARGET_LINK_LIBRARIES( ${TOMAHAWK_APPLICATION_TARGET}
 IF( APPLE )
   IF( HAVE_SPARKLE )
     MESSAGE("Sparkle Found, installing framekwork in bundle")
-    INSTALL(DIRECTORY "${SPARKLE}/Versions/Current/Resources" DESTINATION "${CMAKE_BINARY_DIR}/Tomahawk.app/Contents/Frameworks/Sparkle.framework")
-
+    INSTALL(DIRECTORY "${SPARKLE}/Versions/Current/Resources" DESTINATION "${CMAKE_BINARY_DIR}/${TOMAHAWK_APPLICATION_NAME}.app/Contents/Frameworks/Sparkle.framework")
   ENDIF( HAVE_SPARKLE )
 ENDIF( APPLE )
 

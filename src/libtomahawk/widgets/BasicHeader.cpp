@@ -132,10 +132,16 @@ BasicHeader::setPixmap( const QPixmap& pixmap, bool tinted )
 }
 
 
-QAbstractButton*
+QPushButton*
 BasicHeader::addButton( const QString& text )
 {
     QPushButton* button = new QPushButton( this );
+
+    button->setStyleSheet( "QPushButton:hover { font-size: 12px; color: #2b2b2b; background: #f8f8f8; border-style: solid; border-radius: 0px; border-width: 2px; border-color: #2b2b2b; }"
+                           "QPushButton { font-size: 12px; color: #ffffff; background-color: #000000; border-style: solid; border-radius: 0px; border-width: 0px; }" );
+    button->setMinimumHeight( 30 );
+    button->setMinimumWidth( 132 );
+
     button->setText( text );
 
     ui->horizontalLayout->addSpacing( 8 );

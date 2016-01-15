@@ -68,7 +68,7 @@ DiagnosticsDialog::updateLogView()
 {
     QString log;
 
-    log.append( QString( "TOMAHAWK DIAGNOSTICS LOG -%1 \n\n" ).arg( QDateTime::currentDateTime().toString() ) );
+    log.append( QString( "%applicationName DIAGNOSTICS LOG -%1 \n\n" ).arg( QDateTime::currentDateTime().toString() ) );
     log.append( "TOMAHAWK-VERSION: " TOMAHAWK_VERSION "\n" );
     log.append( "PLATFORM: " TOMAHAWK_SYSTEM "\n");
     log.append( QString( "DBID: %1\n\n" ).arg( Tomahawk::Database::instance()->impl()->dbid() ) );

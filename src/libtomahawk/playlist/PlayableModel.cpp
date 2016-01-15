@@ -1027,7 +1027,7 @@ PlayableModel::appendAlbums( const QList< Tomahawk::album_ptr >& albums )
 void
 PlayableModel::appendAlbums( const Tomahawk::collection_ptr& collection )
 {
-    emit loadingStarted();
+    startLoading();
     insertAlbums( collection, rowCount( QModelIndex() ) );
 }
 
@@ -1042,7 +1042,7 @@ PlayableModel::appendQueries( const QList< Tomahawk::query_ptr >& queries )
 void
 PlayableModel::appendTracks( const QList< Tomahawk::track_ptr >& tracks, const QList< Tomahawk::PlaybackLog >& logs )
 {
-    emit loadingStarted();
+    startLoading();
     QList< Tomahawk::query_ptr > queries;
     foreach ( const track_ptr& track, tracks )
     {
@@ -1056,7 +1056,7 @@ PlayableModel::appendTracks( const QList< Tomahawk::track_ptr >& tracks, const Q
 void
 PlayableModel::appendTracks( const Tomahawk::collection_ptr& collection )
 {
-    emit loadingStarted();
+    startLoading();
     insertTracks( collection, rowCount( QModelIndex() ) );
 }
 

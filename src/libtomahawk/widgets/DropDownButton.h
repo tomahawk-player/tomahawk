@@ -32,7 +32,7 @@ public:
     explicit DropDownButton( QWidget* parent = 0 );
     virtual ~DropDownButton();
 
-    static void drawPrimitive( QPainter* p, const QRect& rect, const QString& text );
+    static void drawPrimitive( QPainter* p, const QRect& rect, const QString& text, bool hovering, bool itemsAvailable );
 
 public slots:
 

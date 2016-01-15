@@ -177,7 +177,7 @@
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="text">
-         <string>Allow web browsers to interact with Tomahawk (recommended)</string>
+         <string>Allow web browsers to interact with %applicationName (recommended)</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -190,7 +190,7 @@
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="text">
-         <string>Allow other computers to interact with Tomahawk (not recommended yet)</string>
+         <string>Allow other computers to interact with %applicationName (not recommended yet)</string>
         </property>
         <property name="checked">
          <bool>false</bool>
@@ -203,7 +203,7 @@
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="text">
-         <string>Send Tomahawk Crash Reports</string>
+         <string>Send %applicationName Crash Reports</string>
         </property>
         <property name="checked">
          <bool>true</bool>
