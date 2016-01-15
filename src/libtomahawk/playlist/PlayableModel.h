@@ -96,6 +96,11 @@ public:
     virtual QPixmap icon() const;
     virtual void setIcon( const QPixmap& pixmap );
 
+
+    // HACK: we need to set column 0 editable for DropDownButton in TrackView
+    void setAllColumnsEditable( bool editable );
+    bool areAllColumnsEditable() const;
+
     virtual int trackCount() const;
     virtual int itemCount() const;
 

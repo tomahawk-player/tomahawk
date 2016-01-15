@@ -885,7 +885,9 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
         }
         else if ( m_view->proxyModel()->style() == PlayableProxyModel::Locker && index.column() == PlayableModel::Download )
         {
+            m_model->sourceModel()->setAllColumnsEditable( true );
             m_view->edit( index );
+            m_model->sourceModel()->setAllColumnsEditable( false );
             return true;
         }
 
