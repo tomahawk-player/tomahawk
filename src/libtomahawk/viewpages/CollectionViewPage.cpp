@@ -462,7 +462,9 @@ CollectionViewPage::onDownloadAll()
             PlayableItem* item = m_trackView->proxyModel()->itemFromIndex( m_trackView->proxyModel()->mapToSource( m_trackView->proxyModel()->index( i, 0, QModelIndex() ) ) );
             if ( !item )
                 continue;
-            if ( !DownloadManager::instance()->localFileForDownload( item->query()->results().first()->downloadFormats().first().url.toString() ).isEmpty() )
+
+            QList< DownloadFormat > formats = item->query()->results().first()->downloadFormats();
+            if ( formats.isEmpty() || !DownloadManager::instance()->localFileForDownload( formats.first().url.toString() ).isEmpty() )
                 continue;
 
             if ( !item->result()->downloadFormats().isEmpty() )
