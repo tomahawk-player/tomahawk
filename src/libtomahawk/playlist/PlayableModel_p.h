@@ -38,6 +38,7 @@ public:
         , rootItem( new PlayableItem( 0 ) )
         , readOnly( true )
         , loading( _loading )
+        , areAllColumnsEditable( false )
     {
     }
 
@@ -58,6 +59,7 @@ private:
     QStringList header;
 
     bool loading;
+    bool areAllColumnsEditable;
 };
 
 #endif // PLAYABLEMODEL_P_H

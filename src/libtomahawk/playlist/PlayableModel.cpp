@@ -444,14 +444,21 @@ PlayableModel::flags( const QModelIndex& index ) const
 
     if ( index.isValid() )
     {
+        Qt::ItemFlags returnFlags = defaultFlags;
         if ( index.column() == 0 )
         {
-            return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
+            returnFlags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         }
         else if ( index.column() == PlayableModel::Download )
         {
-            return Qt::ItemIsEditable | defaultFlags;
+            returnFlags |= Qt::ItemIsEditable | defaultFlags;
         }
+
+        if ( areAllColumnsEditable() ) {
+            returnFlags |= Qt::ItemIsEditable;
+        }
+
+        return returnFlags;
     }
 
     return Qt::ItemIsDropEnabled | defaultFlags;
@@ -1168,6 +1175,22 @@ PlayableModel::setIcon( const QPixmap& pixmap )
     Q_D( PlayableModel );
     d->icon = pixmap;
     emit changed();
+}
+
+
+void
+PlayableModel::setAllColumnsEditable( bool editable )
+{
+    Q_D( PlayableModel );
+    d->areAllColumnsEditable = editable;
+}
+
+
+bool
+PlayableModel::areAllColumnsEditable() const
+{
+    Q_D( const PlayableModel );
+    return d->areAllColumnsEditable;
 }
 
 
