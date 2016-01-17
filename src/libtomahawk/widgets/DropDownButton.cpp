@@ -46,6 +46,9 @@ DropDownButton::paintEvent( QPaintEvent* event )
 {
     //    QComboBox::paintEvent( event );
     QPainter p( this );
+
+    setupPainter( &p );
+
     drawPrimitive( &p, contentsRect(), currentText(), true, true );
 }
 
@@ -54,8 +57,8 @@ void
 DropDownButton::drawPrimitive( QPainter* p, const QRect& rect, const QString& text, bool hovering, bool itemsAvailable )
 {
     p->save();
-    QFont f = p->font();
-    f.setPointSize( 8 );
+
+    setupPainter( p );
 
     p->setRenderHint( QPainter::TextAntialiasing );
     QRect r = rect.adjusted( 2, 2, -2, -2 );
@@ -112,4 +115,14 @@ DropDownButton::mousePressEvent( QMouseEvent* event )
 
     event->accept();
     emit clicked();
+}
+
+
+void
+DropDownButton::setupPainter( QPainter* p )
+{
+    QFont f = p->font();
+    f.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
+    f.setBold( true );
+    p->setFont( f );
 }

@@ -46,6 +46,7 @@ protected:
 private slots:
 
 private:
+    static void setupPainter( QPainter* p );
 };
 
 #endif // DROPDOWNBUTTON_H
