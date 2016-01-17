@@ -121,7 +121,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         ui->biography->setObjectName( "biography" );
         ui->biography->setContentsMargins( 0, 0, 0, 0 );
         ui->biography->page()->mainFrame()->setScrollBarPolicy( Qt::Horizontal, Qt::ScrollBarAlwaysOff );
-        ui->biography->page()->mainFrame()->setScrollBarPolicy( Qt::Vertical, Qt::ScrollBarAlwaysOff );
+        ui->biography->page()->mainFrame()->setScrollBarPolicy( Qt::Vertical, Qt::ScrollBarAsNeeded );
         ui->biography->page()->setLinkDelegationPolicy( QWebPage::DelegateAllLinks );
         ui->biography->installEventFilter( this );
 
