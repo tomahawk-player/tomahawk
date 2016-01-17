@@ -34,7 +34,9 @@
 // TODO:
 #include "../Result.h"
 #include "../Track.h"
+
 #include <QTime>
+#include <QCoreApplication>
 
 
 using namespace Tomahawk;
@@ -261,6 +263,8 @@ ScriptAccount::parseResultVariantList( const QVariantList& reslist )
 
     foreach( const QVariant& rv, reslist )
     {
+        QCoreApplication::processEvents();
+
         QVariantMap m = rv.toMap();
 
         int duration = m.value( "duration", 0 ).toInt();

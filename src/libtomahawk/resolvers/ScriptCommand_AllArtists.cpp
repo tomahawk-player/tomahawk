@@ -27,6 +27,8 @@
 #include "utils/Logger.h"
 #include "../Typedefs.h"
 
+#include <QCoreApplication>
+
 using namespace Tomahawk;
 
 ScriptCommand_AllArtists::ScriptCommand_AllArtists( const Tomahawk::collection_ptr& collection,
@@ -112,6 +114,8 @@ ScriptCommand_AllArtists::parseArtistVariantList( const QVariantList& reslist )
 
     foreach( const QVariant& rv, reslist )
     {
+        QCoreApplication::processEvents();
+
         const QString val = rv.toString();
         if ( val.trimmed().isEmpty() )
             continue;
