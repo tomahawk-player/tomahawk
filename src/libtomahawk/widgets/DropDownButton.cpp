@@ -32,7 +32,9 @@ using namespace Tomahawk;
 
 DropDownButton::DropDownButton( QWidget* parent )
     : QComboBox( parent )
+    , m_hovering( false )
 {
+    setAttribute( Qt::WA_Hover, true );
 }
 
 
@@ -49,7 +51,7 @@ DropDownButton::paintEvent( QPaintEvent* event )
 
     setupPainter( &p );
 
-    drawPrimitive( &p, contentsRect(), currentText(), true, true );
+    drawPrimitive( &p, contentsRect(), currentText(), m_hovering, true );
 }
 
 
@@ -115,6 +117,22 @@ DropDownButton::mousePressEvent( QMouseEvent* event )
 
     event->accept();
     emit clicked();
+}
+
+
+void
+DropDownButton::enterEvent( QEvent * event )
+{
+    m_hovering = true;
+    QWidget::enterEvent(event);
+}
+
+
+void
+DropDownButton::leaveEvent( QEvent* event )
+{
+    m_hovering = false;
+    QWidget::leaveEvent(event);
 }
 
 

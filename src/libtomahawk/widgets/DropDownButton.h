@@ -42,11 +42,15 @@ signals:
 protected:
     void paintEvent( QPaintEvent* event );
     void mousePressEvent( QMouseEvent* event );
+    void enterEvent( QEvent* event );
+    void leaveEvent( QEvent* event );
 
 private slots:
 
 private:
     static void setupPainter( QPainter* p );
+
+    bool m_hovering;
 };
 
 #endif // DROPDOWNBUTTON_H
