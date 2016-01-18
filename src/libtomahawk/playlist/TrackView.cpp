@@ -45,6 +45,9 @@
 #include <QScrollBar>
 #include <QDrag>
 
+// HACK
+#include <QTableView>
+
 #define SCROLL_TIMEOUT 280
 
 using namespace Tomahawk;
@@ -83,6 +86,13 @@ TrackView::TrackView( QWidget* parent )
     setEditTriggers( NoEditTriggers );
 
     setHeader( m_header );
+
+    // HACK: enable moving of first column: QTBUG-33974 / https://github.com/qtproject/qtbase/commit/e0fc088c0c8bc61dbcaf5928b24986cd61a22777
+    QTableView unused;
+    unused.setVerticalHeader( header() );
+    header()->setParent( this );
+    unused.setVerticalHeader( new QHeaderView( Qt::Horizontal, &unused ) );
+
     setSortingEnabled( true );
     sortByColumn( -1 );
     setContextMenuPolicy( Qt::CustomContextMenu );
