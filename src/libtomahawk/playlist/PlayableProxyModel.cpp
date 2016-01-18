@@ -607,25 +607,7 @@ PlayableProxyModel::columnCount( const QModelIndex& parent ) const
 {
     Q_UNUSED( parent );
 
-    switch ( m_style )
-    {
-        case SingleColumn:
-            return 1;
-            break;
-
-        case Collection:
-            return m_headerStyle[ Collection ].length();
-            break;
-
-        case Locker:
-            return m_headerStyle[ Locker ].length();
-            break;
-
-        case Detailed:
-        default:
-            return 12;
-            break;
-    }
+    return m_headerStyle[ m_style ].length();
 }
 
 
