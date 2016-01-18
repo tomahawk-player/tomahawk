@@ -62,6 +62,8 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
 
     m_columnView->proxyModel()->setStyle( PlayableProxyModel::SingleColumn );
 
+
+    PlayableProxyModel* trackViewProxyModel = m_trackView->proxyModel();
     if ( collection->backendType() == Collection::ScriptCollectionType )
     {
         m_trackView->proxyModel()->setStyle( PlayableProxyModel::Locker );
@@ -70,6 +72,12 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
     {
         m_trackView->proxyModel()->setStyle( PlayableProxyModel::Collection );
     }
+    // mapSourceColumnToColumn depends on the just set PlayableProxyModel::PlayableItemStyle
+    m_trackView->setColumnHidden( trackViewProxyModel->mapSourceColumnToColumn( PlayableModel::Composer ), true );
+    m_trackView->setColumnHidden( trackViewProxyModel->mapSourceColumnToColumn( PlayableModel::Origin ), true );
+    m_trackView->setColumnHidden( trackViewProxyModel->mapSourceColumnToColumn( PlayableModel::Score ), true );
+    m_trackView->setColumnHidden( trackViewProxyModel->mapSourceColumnToColumn( PlayableModel::Bitrate ), true );
+
 
     m_trackView->setGuid( QString( "trackview/flat" ) );
 

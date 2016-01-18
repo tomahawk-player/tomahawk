@@ -119,8 +119,9 @@ int
 PlayableModel::columnCount( const QModelIndex& parent ) const
 {
     Q_UNUSED( parent );
+    Q_D( const PlayableModel );
 
-    return 13;
+    return d->header.length();
 }
 
 

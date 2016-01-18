@@ -614,11 +614,11 @@ PlayableProxyModel::columnCount( const QModelIndex& parent ) const
             break;
 
         case Collection:
-            return 10;
+            return m_headerStyle[ Collection ].length();
             break;
 
         case Locker:
-            return 11;
+            return m_headerStyle[ Locker ].length();
             break;
 
         case Detailed:
@@ -730,6 +730,13 @@ PlayableProxyModel::setFilter( const QString& pattern )
         setFilterRegExp( pattern );
         emit filterChanged( pattern );
     }
+}
+
+
+int
+PlayableProxyModel::mapSourceColumnToColumn( PlayableModel::Columns column )
+{
+    return m_headerStyle[ m_style ].indexOf( column );
 }
 
 

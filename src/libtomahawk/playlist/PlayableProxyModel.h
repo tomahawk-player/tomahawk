@@ -98,6 +98,8 @@ public:
     virtual void setFilter( const QString& pattern );
     virtual void updateDetailedInfo( const QModelIndex& index );
 
+    int mapSourceColumnToColumn( PlayableModel::Columns column );
+
 signals:
     void filterChanged( const QString& filter );
 
