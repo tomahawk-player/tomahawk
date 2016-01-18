@@ -118,6 +118,10 @@ ColumnView::setModel( QAbstractItemModel* model )
 void
 ColumnView::setTreeModel( TreeModel* model )
 {
+    // HACK: without setting a new preview widget, the old preview widget is shown in the first column while loading the artists.
+    m_previewWidget = new ColumnViewPreviewWidget( this );
+    setPreviewWidget( m_previewWidget );
+
     m_model = model;
 
     if ( m_proxyModel )
