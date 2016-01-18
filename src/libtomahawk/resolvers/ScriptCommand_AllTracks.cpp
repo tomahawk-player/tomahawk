@@ -28,6 +28,8 @@
 #include "utils/Logger.h"
 #include "../Result.h"
 
+#include <QtConcurrentRun>
+
 using namespace Tomahawk;
 
 ScriptCommand_AllTracks::ScriptCommand_AllTracks( const Tomahawk::collection_ptr& collection,
@@ -117,20 +119,22 @@ ScriptCommand_AllTracks::onTracksJobDone( const QVariantMap& result )
     QSharedPointer< ScriptCollection > collection = m_collection.objectCast< ScriptCollection >();
     Q_ASSERT( !collection.isNull() );
 
-    QList< Tomahawk::result_ptr > t = collection->scriptAccount()->parseResultVariantList( result[ "tracks" ].toList() );
-
-
-    QList< Tomahawk::query_ptr > queries;
-    foreach ( const Tomahawk::result_ptr& result, t )
+    QtConcurrent::run( [] ( ScriptCommand_AllTracks* t, ScriptJob* job, const QVariantMap& result, const QSharedPointer< ScriptCollection >& collection )
     {
-        result->setResolvedByCollection( m_collection );
-        queries.append( result->toQuery() );
-    }
+        QList< Tomahawk::result_ptr > results = collection->scriptAccount()->parseResultVariantList( result[ "tracks" ].toList() );
 
-    tDebug() << Q_FUNC_INFO << "about to push" << queries.count() << "tracks";
+        QList< Tomahawk::query_ptr > queries;
+        foreach ( const Tomahawk::result_ptr& result, results )
+        {
+            result->setResolvedByCollection( collection );
+            queries.append( result->toQuery() );
+        }
 
-    emit tracks( queries );
-    emit done();
+        tDebug() << Q_FUNC_INFO << "about to push" << queries.count() << "tracks";
 
-    job->deleteLater();
+        emit t->tracks( queries );
+        emit t->done();
+
+        job->deleteLater();
+    }, this, job, result, collection );
 }
