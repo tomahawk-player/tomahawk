@@ -636,7 +636,7 @@ Pipeline::checkQIDState( const Tomahawk::query_ptr& query )
     Q_D( Pipeline );
     QMutexLocker lock( &d->mut );
 
-    tDebug() << Q_FUNC_INFO << " " << query->id() << " " << d->qidsState.count( query->id() );
+    tDebug() << Q_FUNC_INFO << query->id() << d->qidsState.count( query->id() );
 
     if ( d->qidsState.contains( query->id() ) )
     {
