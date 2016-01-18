@@ -85,7 +85,7 @@ ImageButton::paintEvent( QPaintEvent* event )
     p.setClipRect( event->rect() );
 
     QIcon::Mode mode = isDown()
-        ? QIcon::Active
+        ? QIcon::Selected
         : QIcon::Normal;
 
     QIcon::State state = isChecked()
