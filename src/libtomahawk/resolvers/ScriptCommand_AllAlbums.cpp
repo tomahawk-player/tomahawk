@@ -28,8 +28,6 @@
 #include "ScriptJob.h"
 #include "ScriptCommand_AllArtists.h"
 
-#include <QCoreApplication>
-
 using namespace Tomahawk;
 
 ScriptCommand_AllAlbums::ScriptCommand_AllAlbums( const Tomahawk::collection_ptr& collection,
@@ -155,8 +153,6 @@ ScriptCommand_AllAlbums::parseAlbumVariantList( const QList< Tomahawk::artist_pt
     bool useArtistList = ( artists.length() > 1 );
     for( int i = 0; i < reslist.length(); i++ )
     {
-        QCoreApplication::processEvents();
-
         const QString val = reslist[ i ].toString();
         if ( val.trimmed().isEmpty() )
             continue;
