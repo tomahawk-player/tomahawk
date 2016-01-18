@@ -79,8 +79,9 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
     m_trackView->setColumnHidden( trackViewProxyModel->mapSourceColumnToColumn( PlayableModel::Score ), true );
     m_trackView->setColumnHidden( trackViewProxyModel->mapSourceColumnToColumn( PlayableModel::Bitrate ), true );
 
-
     m_trackView->setGuid( QString( "trackview/flat" ) );
+    m_trackView->setSortingEnabled( true );
+    m_trackView->sortByColumn( 0, Qt::AscendingOrder );
 
     {
         m_albumView->setAutoResize( false );
@@ -204,8 +205,6 @@ CollectionViewPage::setFlatModel( PlayableModel* model )
 
     m_flatModel = model;
     m_trackView->setPlayableModel( model );
-    m_trackView->setSortingEnabled( true );
-    m_trackView->sortByColumn( 0, Qt::AscendingOrder );
 
     if ( oldModel )
     {
