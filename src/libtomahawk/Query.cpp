@@ -403,12 +403,12 @@ Query::resultSorter( const result_ptr& left, const result_ptr& right )
         {
             return false;
         }
-        if ( !right->isPreview() )
+        if ( left->isPreview() != right->isPreview() )
         {
-            return false;
+            return !left->isPreview();
         }
 
-        return right->resolvedBy()->weight() > left->resolvedBy()->weight();
+        return right->resolvedBy()->weight() < left->resolvedBy()->weight();
     }
 
     if ( left->isPreview() != right->isPreview() )
