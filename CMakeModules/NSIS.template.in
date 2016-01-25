@@ -347,105 +347,105 @@ Section "${APPLICATION_NAME}" SEC_TOMAHAWK_PLAYER
     File "${QT_DLL_PATH}\icudata56.dll"
     File "${QT_DLL_PATH}\icui18n56.dll"
 
-   ;SQLite driver
-   SetOutPath "$INSTDIR\sqldrivers"
-   File "${SQLITE_DLL_PATH}\qsqlite.dll"
-   SetOutPath "$INSTDIR"
-   File "${MINGW_BIN}\libsqlite3-0.dll"
+    ;SQLite driver
+    SetOutPath "$INSTDIR\sqldrivers"
+    File "${SQLITE_DLL_PATH}\qsqlite.dll"
+    SetOutPath "$INSTDIR"
+    File "${MINGW_BIN}\libsqlite3-0.dll"
 
-   ;Qt platform plugins
-   SetOutPath "$INSTDIR\platforms"
-    File "${MINGW_LIB}/qt5/plugins/platforms/qwindows.dll"
-   SetOutPath "$INSTDIR"
+    ;Qt platform plugins
+    SetOutPath "$INSTDIR\platforms"
+     File "${MINGW_LIB}/qt5/plugins/platforms/qwindows.dll"
+    SetOutPath "$INSTDIR"
 
-   ;Image plugins
-   SetOutPath "$INSTDIR\imageformats"
-   File "${IMAGEFORMATS_DLL_PATH}\qgif.dll"
-   File "${IMAGEFORMATS_DLL_PATH}\qjpeg.dll"
-   File "${IMAGEFORMATS_DLL_PATH}\qsvg.dll"
-   SetOutPath "$INSTDIR"
+    ;Image plugins
+    SetOutPath "$INSTDIR\imageformats"
+    File "${IMAGEFORMATS_DLL_PATH}\qgif.dll"
+    File "${IMAGEFORMATS_DLL_PATH}\qjpeg.dll"
+    File "${IMAGEFORMATS_DLL_PATH}\qsvg.dll"
+    SetOutPath "$INSTDIR"
 
-   ;Qt qml plugins
-   SetOutPath "$INSTDIR\QtQuick.2"
-   File /r /x *.debug "${QT_QML_PATH}\QtQuick.2\*"
-   SetOutPath "$INSTDIR\QtQuick\Window.2"
-   File /r /x *.debug "${QT_QML_PATH}\QtQuick\Window.2\*"
-   SetOutPath "$INSTDIR"
+    ;Qt qml plugins
+    SetOutPath "$INSTDIR\QtQuick.2"
+    File /r /x *.debug "${QT_QML_PATH}\QtQuick.2\*"
+    SetOutPath "$INSTDIR\QtQuick\Window.2"
+    File /r /x *.debug "${QT_QML_PATH}\QtQuick\Window.2\*"
+    SetOutPath "$INSTDIR"
 
-   ;Cygwin/c++ stuff
-   File "${MINGW_BIN}\libgcc_s_sjlj-1.dll"
-   File "${MINGW_BIN}\libstdc++-6.dll"
+    ;Cygwin/c++ stuff
+    File "${MINGW_BIN}\libgcc_s_sjlj-1.dll"
+    File "${MINGW_BIN}\libstdc++-6.dll"
 
-   ;VLC
-   File "${VLC_BIN}\libvlc.dll"
-   File "${VLC_BIN}\libvlccore.dll"
-   SetOutPath "$INSTDIR\plugins"
-   File /r "${VLC_PLUGIN_PATH}\*.dll"
-   SetOutPath "$INSTDIR"
+    ;VLC
+    File "${VLC_BIN}\libvlc.dll"
+    File "${VLC_BIN}\libvlccore.dll"
+    SetOutPath "$INSTDIR\plugins"
+    File /r "${VLC_PLUGIN_PATH}\*.dll"
+    SetOutPath "$INSTDIR"
 
-   ; Other
-   File "${MINGW_BIN}\libtag.dll"
-   File "${MINGW_BIN}\libpng16-16.dll"
-   File "${MINGW_BIN}\libjpeg-8.dll"
-   File "${MINGW_BIN}\zlib1.dll"
-   File "${MINGW_BIN}\libfreetype-6.dll"
-   File "${MINGW_BIN}\libglib-2.0-0.dll"
-   File "${MINGW_BIN}\libharfbuzz-0.dll"
+    ; Other
+    File "${MINGW_BIN}\libtag.dll"
+    File "${MINGW_BIN}\libpng16-16.dll"
+    File "${MINGW_BIN}\libjpeg-8.dll"
+    File "${MINGW_BIN}\zlib1.dll"
+    File "${MINGW_BIN}\libfreetype-6.dll"
+    File "${MINGW_BIN}\libglib-2.0-0.dll"
+    File "${MINGW_BIN}\libharfbuzz-0.dll"
 
-   File "${MINGW_BIN}\libechonest5.dll"
-   File "${MINGW_BIN}\liblastfm5.dll"
-   File "${MINGW_BIN}\libquazip5.dll"
-   File "${MINGW_BIN}\libqt5keychain.dll"
+    File "${MINGW_BIN}\libechonest5.dll"
+    File "${MINGW_BIN}\liblastfm5.dll"
+    File "${MINGW_BIN}\libquazip5.dll"
+    File "${MINGW_BIN}\libqt5keychain.dll"
 
-   ; GnuTLS
-   File "${MINGW_BIN}\libgnutls-28.dll"
-   File "${MINGW_BIN}\libtasn1-6.dll"
-   File "${MINGW_BIN}\libgmp-10.dll"
-   File "${MINGW_BIN}\libhogweed-2-4.dll"
-   File "${MINGW_BIN}\libintl-8.dll"
-   File "${MINGW_BIN}\libnettle-4-6.dll"
-   File "${MINGW_BIN}\libp11-kit-0.dll"
-   File "${MINGW_BIN}\libffi-6.dll"
+    ; GnuTLS
+    File "${MINGW_BIN}\libgnutls-28.dll"
+    File "${MINGW_BIN}\libtasn1-6.dll"
+    File "${MINGW_BIN}\libgmp-10.dll"
+    File "${MINGW_BIN}\libhogweed-2-4.dll"
+    File "${MINGW_BIN}\libintl-8.dll"
+    File "${MINGW_BIN}\libnettle-4-6.dll"
+    File "${MINGW_BIN}\libp11-kit-0.dll"
+    File "${MINGW_BIN}\libffi-6.dll"
 
-   ; Snorenotify
-   File "${MINGW_BIN}\SnoreToast.exe"
-   File "${MINGW_BIN}\libsnore-qt5.dll"
-   File "${MINGW_BIN}\libsnoresettings-qt5.dll"
-   File "${MINGW_BIN}\snoresettings.exe"
-   File "${MINGW_LIB}\plugins\libsnore-qt5\libsnore_backend_growl.dll"
-   File "${MINGW_LIB}\plugins\libsnore-qt5\libsnore_settings_backend_growl.dll"
-   File "${MINGW_LIB}\plugins\libsnore-qt5\libsnore_backend_snarl.dll"
-   File "${MINGW_LIB}\plugins\libsnore-qt5\libsnore_settings_backend_snarl.dll"
-   File "${MINGW_LIB}\plugins\libsnore-qt5\libsnore_backend_snore.dll"
-   File "${MINGW_LIB}\plugins\libsnore-qt5\libsnore_settings_backend_snore.dll"
-   File "${MINGW_LIB}\plugins\libsnore-qt5\libsnore_backend_windowstoast.dll"
+    ; Snorenotify
+    File "${MINGW_BIN}\SnoreToast.exe"
+    File "${MINGW_BIN}\libsnore-qt5.dll"
+    File "${MINGW_BIN}\libsnoresettings-qt5.dll"
+    File "${MINGW_BIN}\snoresettings.exe"
+    File "${MINGW_LIB}\plugins\libsnore-qt5\libsnore_backend_growl.dll"
+    File "${MINGW_LIB}\plugins\libsnore-qt5\libsnore_settings_backend_growl.dll"
+    File "${MINGW_LIB}\plugins\libsnore-qt5\libsnore_backend_snarl.dll"
+    File "${MINGW_LIB}\plugins\libsnore-qt5\libsnore_settings_backend_snarl.dll"
+    File "${MINGW_LIB}\plugins\libsnore-qt5\libsnore_backend_snore.dll"
+    File "${MINGW_LIB}\plugins\libsnore-qt5\libsnore_settings_backend_snore.dll"
+    File "${MINGW_LIB}\plugins\libsnore-qt5\libsnore_backend_windowstoast.dll"
 
-   ; Snoregrowl
-   File "${MINGW_BIN}\libsnoregrowl++.dll"
-   File "${MINGW_BIN}\libsnoregrowl.dll"
+    ; Snoregrowl
+    File "${MINGW_BIN}\libsnoregrowl++.dll"
+    File "${MINGW_BIN}\libsnoregrowl.dll"
 
    ; Jabber
-   File "${MINGW_BIN}\libjreen-qt5.dll"
-   File "${MINGW_BIN}\libidn-11.dll"
-   File "${MINGW_BIN}\libgsasl-7.dll"
-   File "${MINGW_BIN}\libqca-qt5.dll"
-   SetOutPath "$INSTDIR\crypto"
-   File "${MINGW_LIB}\qca-qt5\crypto\libqca-ossl.dll"
-   SetOutPath "$INSTDIR"
-   File "${MINGW_BIN}\libssl-10.dll"
-   File "${MINGW_BIN}\libcrypto-10.dll"
+    File "${MINGW_BIN}\libjreen-qt5.dll"
+    File "${MINGW_BIN}\libidn-11.dll"
+    File "${MINGW_BIN}\libgsasl-7.dll"
+    File "${MINGW_BIN}\libqca-qt5.dll"
+    SetOutPath "$INSTDIR\crypto"
+    File "${MINGW_LIB}\qca-qt5\crypto\libqca-ossl.dll"
+    SetOutPath "$INSTDIR"
+    File "${MINGW_BIN}\libssl-10.dll"
+    File "${MINGW_BIN}\libcrypto-10.dll"
 
-   ; LucenePlusPlus
-   File "${MINGW_BIN}\liblucene++.dll"
-   File "${MINGW_BIN}\libboost_system-mt.dll"
-   File "${MINGW_BIN}\libboost_filesystem-mt.dll"
-   File "${MINGW_BIN}\libboost_iostreams-mt.dll"
-   File "${MINGW_BIN}\libboost_regex-mt.dll"
-   File "${MINGW_BIN}\libboost_thread-mt.dll"
-   File "${MINGW_BIN}\libbz2-1.dll"
+    ; LucenePlusPlus
+    File "${MINGW_BIN}\liblucene++.dll"
+    File "${MINGW_BIN}\libboost_system-mt.dll"
+    File "${MINGW_BIN}\libboost_filesystem-mt.dll"
+    File "${MINGW_BIN}\libboost_iostreams-mt.dll"
+    File "${MINGW_BIN}\libboost_regex-mt.dll"
+    File "${MINGW_BIN}\libboost_thread-mt.dll"
+    File "${MINGW_BIN}\libbz2-1.dll"
 
-   File "${MINGW_BIN}\libqtsparkle-qt5.dll"
-   File "${MINGW_BIN}\libKF5Attica.dll"
+    File "${MINGW_BIN}\libqtsparkle-qt5.dll"
+    File "${MINGW_BIN}\libKF5Attica.dll"
 SectionEnd
 
 SectionGroup "Shortcuts"
