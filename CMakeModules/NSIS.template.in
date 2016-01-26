@@ -401,9 +401,9 @@ Section "${APPLICATION_NAME}" SEC_TOMAHAWK_PLAYER
     File "${MINGW_BIN}\libgnutls-28.dll"
     File "${MINGW_BIN}\libtasn1-6.dll"
     File "${MINGW_BIN}\libgmp-10.dll"
-    File "${MINGW_BIN}\libhogweed-2-4.dll"
+    File "${MINGW_BIN}\libhogweed-4-1.dll"
     File "${MINGW_BIN}\libintl-8.dll"
-    File "${MINGW_BIN}\libnettle-4-6.dll"
+    File "${MINGW_BIN}\libnettle-6-1.dll"
     File "${MINGW_BIN}\libp11-kit-0.dll"
     File "${MINGW_BIN}\libffi-6.dll"
 
