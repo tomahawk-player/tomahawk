@@ -2,7 +2,7 @@ INCLUDE( InstallRequiredSystemLibraries )
 
 SET( CPACK_PACKAGE_CONTACT  "Dominik Schmidt <domme@tomahawk-player.org>" )
 
-SET( CPACK_PACKAGE_FILE_NAME  "${TOMAHAWK_APPLICATION_NAME}-${TOMAHAWK_VERSION}" )    # Package file name without extension. Also a directory of installer  cmake-2.5.0-Linux-i686
+SET( CPACK_PACKAGE_FILE_NAME  "${TOMAHAWK_TARGET_NAME}-${TOMAHAWK_VERSION}" )    # Package file name without extension. Also a directory of installer  cmake-2.5.0-Linux-i686
 
 # CPACK_GENERATOR   CPack generator to be used  STGZ;TGZ;TZ
 # CPACK_INCLUDE_TOPLEVEL_DIRECTORY    Controls whether CPack adds a top-level directory, usually of the form ProjectName-Version-OS, to the top of package tree.  0 to disable, 1 to enable
