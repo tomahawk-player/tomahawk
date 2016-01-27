@@ -67,7 +67,7 @@ AtticaManager::AtticaManager( QObject* parent )
     connect( &m_manager, SIGNAL( providerAdded( Attica::Provider ) ), this, SLOT( providerAdded( Attica::Provider ) ) );
 
     // resolvers
-//    m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org/resolvers/providers.xml" ) );
+//    m_manager.addProviderFile( QUrl( "http://v09.bakery.tomahawk-player.org/resolvers/providers.xml" ) );
 
     const QString url = QString( "%1/resolvers/providers.xml?version=%2" ).arg( hostname() ).arg( TomahawkUtils::appFriendlyVersion() );
     QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( QUrl( url ) ) );
@@ -116,7 +116,7 @@ AtticaManager::fetchMissingIcons()
 QString
 AtticaManager::hostname() const
 {
-    return "http://bakery.tomahawk-player.org";
+    return "http://v09.bakery.tomahawk-player.org";
 }
 
 
