@@ -259,9 +259,19 @@ ScriptAccount::parseResultVariantList( const QVariantList& reslist )
 {
     QList< Tomahawk::result_ptr > results;
 
+
     foreach( const QVariant& rv, reslist )
     {
         QVariantMap m = rv.toMap();
+
+        const QString artistString = m.value("artist").toString().trimmed();
+        const QString trackString = m.value("track").toString().trimmed();
+
+        if ( artistString.isEmpty() || trackString.isEmpty() )
+        {
+            tLog() << Q_FUNC_INFO << "Could not parse Track" << m;
+            continue;
+        }
 
         int duration = m.value( "duration", 0 ).toInt();
         if ( duration <= 0 && m.contains( "durationString" ) )
@@ -270,8 +280,8 @@ ScriptAccount::parseResultVariantList( const QVariantList& reslist )
             duration = time.secsTo( QTime( 0, 0 ) ) * -1;
         }
 
-        Tomahawk::track_ptr track = Tomahawk::Track::get( m.value( "artist" ).toString(),
-                                                          m.value( "track" ).toString(),
+        Tomahawk::track_ptr track = Tomahawk::Track::get( artistString,
+                                                          trackString,
                                                           m.value( "album" ).toString(),
                                                           m.value( "albumArtist" ).toString(),
                                                           duration,
