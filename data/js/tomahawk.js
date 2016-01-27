@@ -273,6 +273,8 @@ Tomahawk.Resolver = {
     getStreamUrl: function (params) {
         return params;
     },
+    resolve: function() {
+    },
     _adapter_resolve: function (params) {
         return RSVP.Promise.resolve(this.resolve(params)).then(function (results) {
             return {
