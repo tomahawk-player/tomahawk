@@ -392,6 +392,9 @@ Section "${APPLICATION_NAME}" SEC_TOMAHAWK_PLAYER
     File "${MINGW_BIN}\libglib-2.0-0.dll"
     File "${MINGW_BIN}\libharfbuzz-0.dll"
 
+    ; ANGLE
+    File "${MINGW_BIN}\D3DCompiler_43.dll"
+
     File "${MINGW_BIN}\libechonest5.dll"
     File "${MINGW_BIN}\liblastfm5.dll"
     File "${MINGW_BIN}\libquazip5.dll"
