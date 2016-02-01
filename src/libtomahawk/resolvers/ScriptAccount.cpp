@@ -201,6 +201,10 @@ ScriptAccount::unregisterScriptPlugin( const QString& type, const QString& objec
     {
         m_infoPluginFactory->unregisterPlugin( object );
     }
+    else if( type == "linkParser" )
+    {
+        // TODO
+    }
     else
     {
         tLog() << "This plugin type is not handled by Tomahawk or simply cannot be removed yet";
@@ -230,6 +234,10 @@ ScriptAccount::scriptPluginFactory( const QString& type, const scriptobject_ptr&
     {
         ScriptLinkGeneratorPlugin* lgp = new ScriptLinkGeneratorPlugin( object );
         Utils::LinkGenerator::instance()->addPlugin( lgp );
+    }
+    else if( type == "linkParser" )
+    {
+        tLog() << "Plugin registered linkParser, which is not implemented yet. UrlLookup won't work";
     }
     else if ( type == "infoPlugin" )
     {
