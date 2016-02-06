@@ -595,8 +595,8 @@ Pipeline::shunt( const query_ptr& q )
         // we get here if we disable a resolver while a query is resolving
         // OR we are just out of resolvers while query is still resolving
 
-        //since we seem to at least tried to kick off all of the resolvers,
-        //remove the '.keep' entry
+        // since we seem to at least tried to kick off all of the resolvers,
+        // remove the '.keep' entry
         decQIDState( q, nullptr );
         return;
     }
