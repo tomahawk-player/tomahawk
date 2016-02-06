@@ -412,6 +412,8 @@ Query::resultSorter( const result_ptr& left, const result_ptr& right )
         {
             return left->resolvedBy()->weight() > right->resolvedBy()->weight();
         }
+
+        return left->id() > right->id();
     }
 
     if ( left->isPreview() != right->isPreview() )
