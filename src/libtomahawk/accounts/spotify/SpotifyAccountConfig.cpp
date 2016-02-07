@@ -277,7 +277,7 @@ SpotifyAccountConfig::showLoggedIn()
         m_ui->verticalLayout->insertWidget( 1, m_loggedInUser, 0, Qt::AlignCenter );
     }
 
-    qDebug() << "Showing logged in withuserame:" << m_verifiedUsername;
+    qDebug() << "Showing logged in with username:" << m_verifiedUsername;
     m_loggedInUser->show();
     m_loggedInUser->setText( tr( "Logged in as %1" ).arg( m_verifiedUsername ) );
 
