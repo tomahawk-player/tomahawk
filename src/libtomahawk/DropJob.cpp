@@ -263,9 +263,14 @@ bool
 DropJob::validateLocalFiles(const QString &paths, const QString &suffix)
 {
     QStringList filePaths = paths.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
-    for ( QStringList::iterator it = filePaths.begin(); it != filePaths.end(); ++it )
+    QStringList::iterator it = filePaths.begin();
+    while ( it != filePaths.end() )
+    {
         if ( !validateLocalFile( *it, suffix ) )
-            filePaths.erase( it );
+            it = filePaths.erase( it );
+        else
+            ++it;
+    }
     return !filePaths.isEmpty();
 }
 
