@@ -131,7 +131,7 @@ public:
 
     track_ptr track() const;
 
-    QList<DownloadFormat> downloadFormats() const { return m_formats; }
+    QList< DownloadFormat > downloadFormats() const;
     void setDownloadFormats( const QList<DownloadFormat>& formats );
 
     downloadjob_ptr downloadJob() const { return m_downloadJob; }

@@ -529,11 +529,22 @@ Result::track() const
 }
 
 
+QList< DownloadFormat >
+Result::downloadFormats() const
+{
+    QMutexLocker lock( &s_mutex );
+
+    return m_formats;
+}
+
+
 void
 Result::setDownloadFormats( const QList<DownloadFormat>& formats )
 {
     if ( formats.isEmpty() )
         return;
+
+    QMutexLocker lock( &s_mutex );
 
     m_formats.clear();
     foreach ( const DownloadFormat& format, formats )
@@ -562,7 +573,7 @@ Result::setDownloadFormats( const QList<DownloadFormat>& formats )
 void
 Result::onSettingsChanged()
 {
-    if ( TomahawkSettings::instance()->downloadsPreferredFormat().toLower() != m_formats.first().extension.toLower() )
+    if ( TomahawkSettings::instance()->downloadsPreferredFormat().toLower() != downloadFormats().first().extension.toLower() )
     {
         setDownloadFormats( downloadFormats() );
         emit updated();
