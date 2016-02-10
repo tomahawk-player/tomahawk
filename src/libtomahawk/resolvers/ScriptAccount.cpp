@@ -370,11 +370,17 @@ ScriptAccount::parseResultVariantList( const QVariantList& reslist )
 //            rp->track()->setAttributes( attr );
         }
 
-        rp->setMimetype( m.value( "mimetype" ).toString() );
-        if ( rp->mimetype().isEmpty() )
+
+        QString mimetype = m.value( "mimetype" ).toString();
+        if ( mimetype.isEmpty() )
         {
-            rp->setMimetype( TomahawkUtils::extensionToMimetype( m.value( "extension" ).toString() ) );
-            Q_ASSERT( !rp->mimetype().isEmpty() );
+            mimetype = TomahawkUtils::extensionToMimetype( m.value( "extension" ).toString() );
+        }
+        Q_ASSERT( !mimetype.isEmpty() );
+
+        if ( !mimetype.isEmpty() )
+        {
+            rp->setMimetype( mimetype );
         }
 
         rp->setFriendlySource( name() );
