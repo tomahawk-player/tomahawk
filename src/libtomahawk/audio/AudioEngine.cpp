@@ -669,7 +669,7 @@ AudioEngine::performLoadIODevice( const result_ptr& result, const QString& url )
 
 
 void
-AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString url, QSharedPointer< QIODevice > io )
+AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString& url, QSharedPointer< QIODevice > io )
 {
     if ( QThread::currentThread() != thread() )
     {
