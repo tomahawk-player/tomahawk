@@ -71,7 +71,7 @@ LastFmAccount::LastFmAccount( const QString& accountId )
 
     if ( infoPlugin() && Tomahawk::InfoSystem::InfoSystem::instance()->workerThread() )
     {
-        infoPlugin().data()->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
+        infoPlugin()->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
         Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin() );
     }
 }
@@ -82,7 +82,6 @@ LastFmAccount::~LastFmAccount()
     if ( m_infoPlugin )
     {
         Tomahawk::InfoSystem::InfoSystem::instance()->removeInfoPlugin( infoPlugin() );
-        delete m_infoPlugin;
     }
 
     delete m_resolver.data();
@@ -168,9 +167,11 @@ InfoPluginPtr
 LastFmAccount::infoPlugin()
 {
     if ( m_infoPlugin.isNull() )
-        m_infoPlugin = QPointer< LastFmInfoPlugin >( new LastFmInfoPlugin( this ) );
+    {
+        m_infoPlugin = QSharedPointer< LastFmInfoPlugin>( new LastFmInfoPlugin( this ) );
+    }
 
-    return InfoPluginPtr( m_infoPlugin.data() );
+    return m_infoPlugin;
 }
 
 bool

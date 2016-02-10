@@ -105,7 +105,7 @@ private:
     void hookupResolver();
 
     QPointer<Tomahawk::ExternalResolverGui> m_resolver;
-    QPointer<Tomahawk::InfoSystem::LastFmInfoPlugin> m_infoPlugin;
+    QSharedPointer<Tomahawk::InfoSystem::LastFmInfoPlugin> m_infoPlugin;
     QPointer<LastFmConfig> m_configWidget;
 };
 

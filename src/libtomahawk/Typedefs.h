@@ -253,7 +253,7 @@ namespace Tomahawk
         typedef QHash< QString, QString > InfoStringHash;
         typedef QPair< QVariantMap, QVariant > PushInfoPair;
 
-        typedef QPointer< InfoPlugin > InfoPluginPtr;
+        typedef QSharedPointer< InfoPlugin > InfoPluginPtr;
     }
 
     namespace Network

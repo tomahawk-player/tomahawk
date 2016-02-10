@@ -25,14 +25,14 @@ using namespace Tomahawk;
 void
 ScriptInfoPluginFactory::addPlugin( const QSharedPointer< ScriptInfoPlugin >& infoPlugin ) const
 {
-    Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin.data() );
+    Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin );
 }
 
 
 void
 ScriptInfoPluginFactory::removePlugin( const QSharedPointer< ScriptInfoPlugin >& infoPlugin ) const
 {
-    Tomahawk::InfoSystem::InfoSystem::instance()->removeInfoPlugin( infoPlugin.data() );
+    Tomahawk::InfoSystem::InfoSystem::instance()->removeInfoPlugin( infoPlugin );
 }
 
 
@@ -42,10 +42,10 @@ ScriptInfoPluginFactory::createPlugin( const scriptobject_ptr& object, ScriptAcc
     // create infoplugin instance
     ScriptInfoPlugin* scriptInfoPlugin = new ScriptInfoPlugin( object, scriptAccount->name() );
 
-    Tomahawk::InfoSystem::InfoPluginPtr infoPlugin( scriptInfoPlugin );
+    QSharedPointer< ScriptInfoPlugin > infoPlugin( scriptInfoPlugin );
 
     // move it to infosystem thread
     infoPlugin->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
 
-    return QSharedPointer< ScriptInfoPlugin >( scriptInfoPlugin );
+    return infoPlugin;
 }

@@ -135,7 +135,7 @@ SpotifyAccount::init()
 
     if ( infoPlugin() && Tomahawk::InfoSystem::InfoSystem::instance()->workerThread() )
     {
-        infoPlugin().data()->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
+        infoPlugin()->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
         Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin() );
     }
 
@@ -366,10 +366,10 @@ SpotifyAccount::infoPlugin()
 {
     if ( m_infoPlugin.isNull() )
     {
-        m_infoPlugin = QPointer< InfoSystem::SpotifyInfoPlugin >( new InfoSystem::SpotifyInfoPlugin( this ) );
+        m_infoPlugin = QSharedPointer< InfoSystem::SpotifyInfoPlugin >( new InfoSystem::SpotifyInfoPlugin( this ) );
     }
 
-    return InfoSystem::InfoPluginPtr( m_infoPlugin.data() );
+    return m_infoPlugin;
 }
 
 

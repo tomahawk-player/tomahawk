@@ -72,7 +72,6 @@ public slots:
 
 private slots:
     void checkTimeoutsTimerFired();
-    void onInfoPluginDeleted();
 
 private:
     void registerInfoTypes( const InfoPluginPtr &plugin, const QSet< InfoType > &getTypes, const QSet< InfoType > &pushTypes );

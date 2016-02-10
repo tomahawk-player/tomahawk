@@ -58,13 +58,7 @@ InfoSystemWorker::InfoSystemWorker()
 
 InfoSystemWorker::~InfoSystemWorker()
 {
-    tDebug() << Q_FUNC_INFO << " beginning";
-    Q_FOREACH( InfoPluginPtr plugin, m_plugins )
-    {
-        if( plugin )
-            delete plugin.data();
-    }
-    tDebug() << Q_FUNC_INFO << " finished";
+    tDebug() << Q_FUNC_INFO;
 }
 
 
@@ -136,29 +130,6 @@ InfoSystemWorker::addInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
 
     emit updatedSupportedGetTypes( QSet< InfoType >::fromList( m_infoGetMap.keys() ) );
     emit updatedSupportedPushTypes( QSet< InfoType >::fromList( m_infoPushMap.keys() ) );
-
-    connect( plugin.data(), SIGNAL( destroyed( QObject* ) ), SLOT( onInfoPluginDeleted() ) );
-}
-
-
-void
-InfoSystemWorker::onInfoPluginDeleted()
-{
-    foreach( const InfoPluginPtr& plugin, m_plugins )
-    {
-        if ( plugin.isNull() )
-        {
-            m_plugins.removeOne( plugin );
-            foreach( InfoType type, m_infoGetMap.keys() )
-            {
-                m_infoGetMap[type].removeOne( plugin );
-            }
-            foreach( InfoType type, m_infoPushMap.keys() )
-            {
-                m_infoPushMap[type].removeOne( plugin );
-            }
-        }
-    }
 }
 
 
