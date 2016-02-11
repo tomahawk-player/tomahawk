@@ -31,6 +31,7 @@
 #include <QPixmap>
 #include <QPointer>
 #include <QVariant>
+#include <QMutex>
 
 class MetadataEditor;
 
@@ -160,6 +161,8 @@ private:
     // private constructor
     explicit Result( const QString& url, const Tomahawk::track_ptr& track );
     explicit Result();
+
+    mutable QMutex m_mutex;
 
     mutable RID m_rid;
     collection_wptr m_collection;

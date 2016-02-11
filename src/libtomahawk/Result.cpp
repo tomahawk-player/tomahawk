@@ -132,6 +132,8 @@ Result::deleteLater()
 void
 Result::onResolverRemoved( Tomahawk::Resolver* resolver )
 {
+    QMutexLocker lock( &m_mutex );
+
     if ( m_resolver.data() == resolver )
     {
         m_resolver = 0;
@@ -143,6 +145,8 @@ Result::onResolverRemoved( Tomahawk::Resolver* resolver )
 collection_ptr
 Result::resolvedByCollection() const
 {
+    QMutexLocker lock( &m_mutex );
+
     return m_collection;
 }
 
@@ -150,6 +154,8 @@ Result::resolvedByCollection() const
 QString
 Result::url() const
 {
+    QMutexLocker lock( &m_mutex );
+
     return m_url;
 }
 
@@ -157,6 +163,8 @@ Result::url() const
 bool
 Result::checked() const
 {
+    QMutexLocker lock( &m_mutex );
+
     return m_checked;
 }
 
@@ -164,6 +172,8 @@ Result::checked() const
 bool
 Result::isPreview() const
 {
+    QMutexLocker lock( &m_mutex );
+
     return m_isPreview;
 }
 
@@ -171,6 +181,8 @@ Result::isPreview() const
 QString
 Result::mimetype() const
 {
+    QMutexLocker lock( &m_mutex );
+
     return m_mimetype;
 }
 
@@ -178,6 +190,8 @@ Result::mimetype() const
 RID
 Result::id() const
 {
+    QMutexLocker lock( &m_mutex );
+
     if ( m_rid.isEmpty() )
         m_rid = uuid();
 
@@ -194,6 +208,8 @@ Result::isOnline() const
     }
     else
     {
+        QMutexLocker lock( &m_mutex );
+
         return !m_resolver.isNull();
     }
 }
@@ -214,24 +230,26 @@ Result::playable() const
 QVariant
 Result::toVariant() const
 {
+    track_ptr t = track();
+
     QVariantMap m;
-    m.insert( "artist", m_track->artist() );
-    m.insert( "album", m_track->album() );
-    m.insert( "track", m_track->track() );
+    m.insert( "artist", t->artist() );
+    m.insert( "album", t->album() );
+    m.insert( "track", t->track() );
     m.insert( "source", friendlySource() );
     m.insert( "mimetype", mimetype() );
     m.insert( "size", size() );
     m.insert( "bitrate", bitrate() );
-    m.insert( "duration", m_track->duration() );
+    m.insert( "duration", t->duration() );
 //    m.insert( "score", score() );
     m.insert( "sid", id() );
-    m.insert( "discnumber", m_track->discnumber() );
-    m.insert( "albumpos", m_track->albumpos() );
+    m.insert( "discnumber", t->discnumber() );
+    m.insert( "albumpos", t->albumpos() );
     m.insert( "preview", isPreview() );
     m.insert( "purchaseUrl", purchaseUrl() );
 
-    if ( !m_track->composer().isEmpty() )
-        m.insert( "composer", m_track->composer() );
+    if ( !t->composer().isEmpty() )
+        m.insert( "composer", t->composer() );
 
     return m;
 }
@@ -240,20 +258,25 @@ Result::toVariant() const
 QString
 Result::toString() const
 {
-    if ( m_track )
+    m_mutex.lock();
+    track_ptr track = m_track;
+    QString url = m_url;
+    m_mutex.unlock();
+
+    if ( track )
     {
         return QString( "Result(%1) %2 - %3%4 (%5)" )
                   .arg( id() )
-                  .arg( m_track->artist() )
-                  .arg( m_track->track() )
-                  .arg( m_track->album().isEmpty() ? QString() : QString( " on %1" ).arg( m_track->album() ) )
-                  .arg( m_url );
+                  .arg( track->artist() )
+                  .arg( track->track() )
+                  .arg( track->album().isEmpty() ? QString() : QString( " on %1" ).arg( track->album() ) )
+                  .arg( url );
     }
     else
     {
         return QString( "Result(%1) (%2)" )
                   .arg( id() )
-                  .arg( m_url );
+                  .arg( url );
     }
 }
 
@@ -261,6 +284,8 @@ Result::toString() const
 Tomahawk::query_ptr
 Result::toQuery()
 {
+    QMutexLocker l( &m_mutex );
+
     if ( m_query.isNull() )
     {
         query_ptr query = Tomahawk::Query::get( m_track );
@@ -270,11 +295,14 @@ Result::toQuery()
         m_query = query->weakRef();
 
         QList<Tomahawk::result_ptr> rl;
-        rl << weakRef().toStrongRef();
+        rl << m_ownRef.toStrongRef();
+        m_mutex.unlock();
         query->addResults( rl );
+        m_mutex.lock();
         query->setResolveFinished( true );
         return query;
     }
+
 
     return m_query.toStrongRef();
 }
@@ -297,7 +325,10 @@ Result::onOffline()
 void
 Result::setResolvedByCollection( const Tomahawk::collection_ptr& collection , bool emitOnlineEvents )
 {
+    m_mutex.lock();
     m_collection = collection;
+    m_mutex.unlock();
+
     if ( emitOnlineEvents )
     {
         Q_ASSERT( !collection.isNull() );
@@ -311,6 +342,8 @@ Result::setResolvedByCollection( const Tomahawk::collection_ptr& collection , bo
 void
 Result::setFriendlySource( const QString& s )
 {
+    QMutexLocker lock( &m_mutex );
+
     m_friendlySource = s;
 }
 
@@ -318,6 +351,8 @@ Result::setFriendlySource( const QString& s )
 void
 Result::setPreview( bool isPreview )
 {
+    QMutexLocker lock( &m_mutex );
+
     m_isPreview = isPreview;
 }
 
@@ -325,6 +360,8 @@ Result::setPreview( bool isPreview )
 void
 Result::setPurchaseUrl( const QString& u )
 {
+    QMutexLocker lock( &m_mutex );
+
     m_purchaseUrl = u;
 }
 
@@ -332,6 +369,8 @@ Result::setPurchaseUrl( const QString& u )
 void
 Result::setLinkUrl( const QString& u )
 {
+    QMutexLocker lock( &m_mutex );
+
     m_linkUrl = u;
 }
 
@@ -339,6 +378,8 @@ Result::setLinkUrl( const QString& u )
 void
 Result::setChecked( bool checked )
 {
+    QMutexLocker lock( &m_mutex );
+
     m_checked = checked;
 }
 
@@ -346,6 +387,8 @@ Result::setChecked( bool checked )
 void
 Result::setMimetype( const QString& mimetype )
 {
+    QMutexLocker lock( &m_mutex );
+
     m_mimetype = mimetype;
 }
 
@@ -353,6 +396,8 @@ Result::setMimetype( const QString& mimetype )
 void
 Result::setBitrate( unsigned int bitrate )
 {
+    QMutexLocker lock( &m_mutex );
+
     m_bitrate = bitrate;
 }
 
@@ -360,6 +405,8 @@ Result::setBitrate( unsigned int bitrate )
 void
 Result::setSize( unsigned int size )
 {
+    QMutexLocker lock( &m_mutex );
+
     m_size = size;
 }
 
@@ -367,6 +414,8 @@ Result::setSize( unsigned int size )
 void
 Result::setModificationTime( unsigned int modtime )
 {
+    QMutexLocker lock( &m_mutex );
+
     m_modtime = modtime;
 }
 
@@ -374,6 +423,8 @@ Result::setModificationTime( unsigned int modtime )
 void
 Result::setTrack( const track_ptr& track )
 {
+    QMutexLocker lock( &m_mutex );
+
     m_track = track;
 }
 
@@ -381,6 +432,8 @@ Result::setTrack( const track_ptr& track )
 unsigned int
 Result::fileId() const
 {
+    QMutexLocker lock( &m_mutex );
+
     return m_fileId;
 }
 
@@ -390,6 +443,8 @@ Result::friendlySource() const
 {
     if ( resolvedByCollection().isNull() )
     {
+        QMutexLocker lock( &m_mutex );
+
         return m_friendlySource;
     }
     else
@@ -400,6 +455,8 @@ Result::friendlySource() const
 QString
 Result::purchaseUrl() const
 {
+    QMutexLocker lock( &m_mutex );
+
     return m_purchaseUrl;
 }
 
@@ -407,6 +464,8 @@ Result::purchaseUrl() const
 QString
 Result::linkUrl() const
 {
+    QMutexLocker lock( &m_mutex );
+
     return m_linkUrl;
 }
 
@@ -416,6 +475,8 @@ Result::sourceIcon( TomahawkUtils::ImageMode style, const QSize& desiredSize ) c
 {
     if ( resolvedByCollection().isNull() )
     {
+        //QMutexLocker lock( &m_mutex );
+
         const ExternalResolver* resolver = qobject_cast< ExternalResolver* >( m_resolver.data() );
         if ( !resolver )
         {
@@ -466,6 +527,8 @@ Result::sourceIcon( TomahawkUtils::ImageMode style, const QSize& desiredSize ) c
 unsigned int
 Result::bitrate() const
 {
+    QMutexLocker lock( &m_mutex );
+
     return m_bitrate;
 }
 
@@ -473,6 +536,8 @@ Result::bitrate() const
 unsigned int
 Result::size() const
 {
+    QMutexLocker lock( &m_mutex );
+
     return m_size;
 }
 
@@ -480,6 +545,8 @@ Result::size() const
 unsigned int
 Result::modificationTime() const
 {
+    QMutexLocker lock( &m_mutex );
+
     return m_modtime;
 }
 
@@ -487,6 +554,8 @@ Result::modificationTime() const
 void
 Result::setFileId( unsigned int id )
 {
+    QMutexLocker lock( &m_mutex );
+
     m_fileId = id;
 }
 
@@ -494,6 +563,8 @@ Result::setFileId( unsigned int id )
 Tomahawk::Resolver*
 Result::resolvedBy() const
 {
+    QMutexLocker lock( &m_mutex );
+
     if ( !m_collection.isNull() )
         return m_collection.data();
 
@@ -504,12 +575,16 @@ Result::resolvedBy() const
 void
 Result::setResolvedByResolver( Tomahawk::Resolver* resolver )
 {
+    QMutexLocker lock( &m_mutex );
+
     m_resolver = QPointer< Tomahawk::Resolver >( resolver );
 }
 
 
 QPointer< Resolver > Result::resolvedByResolver() const
 {
+    QMutexLocker lock( &m_mutex );
+
     return m_resolver;
 }
 
@@ -525,6 +600,8 @@ Result::doneEditing()
 track_ptr
 Result::track() const
 {
+    QMutexLocker lock( &m_mutex );
+
     return m_track;
 }
 
@@ -532,7 +609,7 @@ Result::track() const
 QList< DownloadFormat >
 Result::downloadFormats() const
 {
-    QMutexLocker lock( &s_mutex );
+    QMutexLocker lock( &m_mutex );
 
     return m_formats;
 }
@@ -544,7 +621,7 @@ Result::setDownloadFormats( const QList<DownloadFormat>& formats )
     if ( formats.isEmpty() )
         return;
 
-    QMutexLocker lock( &s_mutex );
+    QMutexLocker lock( &m_mutex );
 
     m_formats.clear();
     foreach ( const DownloadFormat& format, formats )
@@ -610,6 +687,8 @@ Result::onDownloadJobStateChanged( DownloadJob::TrackState newState, DownloadJob
 QWeakPointer<Result>
 Result::weakRef()
 {
+    QMutexLocker lock( &m_mutex );
+
     return m_ownRef;
 }
 
@@ -617,5 +696,7 @@ Result::weakRef()
 void
 Result::setWeakRef( QWeakPointer<Result> weakRef )
 {
+    QMutexLocker lock( &m_mutex );
+
     m_ownRef = weakRef;
 }
