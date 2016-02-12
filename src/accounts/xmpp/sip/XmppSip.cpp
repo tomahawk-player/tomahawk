@@ -194,9 +194,9 @@ InfoSystem::InfoPluginPtr
 XmppSipPlugin::infoPlugin()
 {
     if ( m_infoPlugin.isNull() )
-        m_infoPlugin = QPointer< Tomahawk::InfoSystem::XmppInfoPlugin >( new Tomahawk::InfoSystem::XmppInfoPlugin( this ) );
+        m_infoPlugin = QSharedPointer< Tomahawk::InfoSystem::XmppInfoPlugin >( new Tomahawk::InfoSystem::XmppInfoPlugin( this ) );
 
-    return InfoSystem::InfoPluginPtr( m_infoPlugin.data() );
+    return m_infoPlugin;
 }
 
 
@@ -285,7 +285,7 @@ XmppSipPlugin::onConnect()
     // load XmppInfoPlugin
     if ( infoPlugin() && Tomahawk::InfoSystem::InfoSystem::instance()->workerThread() )
     {
-        infoPlugin().data()->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
+        infoPlugin()->moveToThread( Tomahawk::InfoSystem::InfoSystem::instance()->workerThread().data() );
         Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin() );
     }
 
@@ -359,7 +359,6 @@ XmppSipPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
     if ( !m_infoPlugin.isNull() )
     {
         Tomahawk::InfoSystem::InfoSystem::instance()->removeInfoPlugin( infoPlugin() );
-        delete m_infoPlugin;
     }
 }
 

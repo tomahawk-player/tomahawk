@@ -128,7 +128,7 @@ private:
     int m_currentPort;
     QString m_currentResource;
 
-    QPointer< Tomahawk::InfoSystem::XmppInfoPlugin > m_infoPlugin;
+    QSharedPointer< Tomahawk::InfoSystem::XmppInfoPlugin > m_infoPlugin;
     Tomahawk::Accounts::Account::ConnectionState m_state;
 
     // sort out
