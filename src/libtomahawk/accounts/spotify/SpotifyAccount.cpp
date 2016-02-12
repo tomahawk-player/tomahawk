@@ -116,6 +116,12 @@ SpotifyAccount::~SpotifyAccount()
 {
     clearUser();
 
+    if ( m_infoPlugin )
+    {
+        Tomahawk::InfoSystem::InfoSystem::instance()->removeInfoPlugin( infoPlugin() );
+    }
+
+
     if ( m_spotifyResolver.isNull() )
         return;
 
