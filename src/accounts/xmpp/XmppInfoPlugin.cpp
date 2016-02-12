@@ -69,6 +69,13 @@ Tomahawk::InfoSystem::XmppInfoPlugin::init()
 }
 
 
+const QString
+Tomahawk::InfoSystem::XmppInfoPlugin::friendlyName() const
+{
+    return "xmpp";
+}
+
+
 void
 Tomahawk::InfoSystem::XmppInfoPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 {

@@ -38,6 +38,8 @@ namespace Tomahawk {
             XmppInfoPlugin(XmppSipPlugin* parent);
             virtual ~XmppInfoPlugin();
 
+            const QString friendlyName() const override;
+
         signals:
             void publishTune( QUrl url, Tomahawk::InfoSystem::InfoStringHash trackInfo );
 
