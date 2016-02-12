@@ -277,8 +277,8 @@ InfoSystem::addInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
 
     if ( plugin.data()->thread() != m_infoSystemWorkerThreadController->worker()->thread() )
     {
+        tLog() << Q_FUNC_INFO << "The object must be moved to the worker thread first, see InfoSystem::workerThread(): " << plugin->friendlyName();
         Q_ASSERT( false );
-        tDebug() << Q_FUNC_INFO << "The object must be moved to the worker thread first, see InfoSystem::workerThread()";
         return;
     }
 
