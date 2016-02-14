@@ -69,6 +69,8 @@ public:
     void setResolver( JSResolver* resolver );
     void scriptPluginFactory( const QString& type, const scriptobject_ptr& object ) override;
 
+    void showDebugger() override;
+
     static QString serializeQVariantMap(const QVariantMap& map);
 
     void reportNativeScriptJobResult( int resultId, const QVariantMap& result ) override;

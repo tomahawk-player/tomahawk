@@ -37,6 +37,7 @@ set( libGuiSources
     jobview/ErrorStatusMessage.cpp
     jobview/IndexingJobItem.cpp
     jobview/InboxJobItem.cpp
+    jobview/ScriptErrorStatusMessage.cpp
 
     playlist/InboxModel.cpp
     playlist/InboxView.cpp
