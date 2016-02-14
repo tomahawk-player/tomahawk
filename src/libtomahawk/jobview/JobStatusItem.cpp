@@ -33,6 +33,12 @@ JobStatusItem::~JobStatusItem()
 }
 
 
+void
+JobStatusItem::activated()
+{
+}
+
+
 bool
 JobStatusItem::allowMultiLine() const
 {

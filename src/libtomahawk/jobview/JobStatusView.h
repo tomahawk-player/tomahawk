@@ -59,6 +59,7 @@ private slots:
     void customDelegateJobInserted( int row, JobStatusItem* item );
     void customDelegateJobRemoved( int row );
     void refreshDelegates();
+    void onItemActivated( const QModelIndex& index );
 
 private:
     QListView* m_view;
