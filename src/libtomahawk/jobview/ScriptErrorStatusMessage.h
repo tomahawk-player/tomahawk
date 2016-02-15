@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2016, Dominik Schmidt <domme@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,67 +16,24 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef SCRIPTERRORSTATUSMESSAGE_H
+#define SCRIPTERRORSTATUSMESSAGE_H
 
-#include "JobStatusItem.h"
-#include <QTime>
+#include "ErrorStatusMessage.h"
+#include "../resolvers/ScriptAccount.h"
 
+#include "DllMacro.h"
 
-JobStatusItem::JobStatusItem()
-    : QObject()
-    , m_createdOn( QDateTime::currentMSecsSinceEpoch() )
+class DLLEXPORT ScriptErrorStatusMessage : public ErrorStatusMessage
 {
-}
+    Q_OBJECT
+public:
+    explicit ScriptErrorStatusMessage( const QString& scriptErrorMessage, Tomahawk::ScriptAccount* );
 
+    void activated() override;
 
-JobStatusItem::~JobStatusItem()
-{
-}
+private:
+    QPointer< Tomahawk::ScriptAccount > m_account;
+};
 
-
-void
-JobStatusItem::activated()
-{
-}
-
-
-bool
-JobStatusItem::allowMultiLine() const
-{
-    return false;
-}
-
-
-bool
-JobStatusItem::collapseItem() const
-{
-    return false;
-}
-
-
-int
-JobStatusItem::concurrentJobLimit() const
-{
-    return 0;
-}
-
-
-bool
-JobStatusItem::hasCustomDelegate() const
-{
-    return false;
-}
-
-
-void
-JobStatusItem::createDelegate( QObject* parent )
-{
-    Q_UNUSED( parent );
-    return;
-}
-
-
-QStyledItemDelegate*
-JobStatusItem::customDelegate() const
-{
-    return 0;
-}
+#endif // SCRIPTERRORSTATUSMESSAGE_H

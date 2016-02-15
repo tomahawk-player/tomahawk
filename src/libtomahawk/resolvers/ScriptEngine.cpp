@@ -21,7 +21,7 @@
 
 #include "ScriptEngine.h"
 
-#include "jobview/ErrorStatusMessage.h"
+#include "jobview/ScriptErrorStatusMessage.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/JobStatusView.h"
 #include "utils/Logger.h"
@@ -51,13 +51,13 @@ ScriptEngine::ScriptEngine( JSAccount* parent )
     settings()->setAttribute( QWebSettings::LocalContentCanAccessRemoteUrls, true );
     settings()->setOfflineStorageDefaultQuota(100 * 1024 * 1024 /* 100 Mb */);
     settings()->setOfflineWebApplicationCacheQuota(100 * 1024 * 1024 /* 100 Mb */);
+    settings()->setAttribute( QWebSettings::DeveloperExtrasEnabled, true );
 
     // HACK
     QStringList cmdArgs = QCoreApplication::instance()->arguments();
     int position = cmdArgs.indexOf( "--show-inspector" ) + 1;
     if ( position > 0 &&  !cmdArgs.at( position ).isEmpty() && parent->name().contains( cmdArgs.at( position ), Qt::CaseInsensitive ) ) {
-        settings()->setAttribute( QWebSettings::DeveloperExtrasEnabled, true );
-        QMetaObject::invokeMethod( this, "initWebInspector", Qt::QueuedConnection );
+        QMetaObject::invokeMethod( this, "showWebInspector", Qt::QueuedConnection );
     }
 
     // Tomahawk is not a user agent
@@ -75,23 +75,12 @@ ScriptEngine::ScriptEngine( JSAccount* parent )
 
 
 void
-ScriptEngine::initWebInspector()
-{
-    m_webInspector.reset( new QWebInspector() );
-    m_webInspector->setPage( this );
-    m_webInspector->setMinimumWidth( 800 );
-    m_webInspector->setMinimumHeight( 600 );
-    m_webInspector->show();
-}
-
-
-void
 ScriptEngine::javaScriptConsoleMessage( const QString& message, int lineNumber, const QString& sourceID )
 {
     tLog() << "JAVASCRIPT:" << QString( "%1:%2" ).arg( m_scriptPath ).arg( lineNumber ) << message << sourceID;
     #ifdef QT_DEBUG
     QFileInfo scriptPath( m_scriptPath );
-    JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Resolver Error: %1:%2 %3" ).arg( scriptPath.fileName() ).arg( lineNumber ).arg( message ) ) );
+    JobStatusView::instance()->model()->addJob( new ScriptErrorStatusMessage( tr( "%1:%2 %3" ).arg( scriptPath.fileName() ).arg( lineNumber ).arg( message ), m_parent ) );
     #endif
 }
 
@@ -145,6 +134,21 @@ void
 ScriptEngine::setScriptPath( const QString& scriptPath )
 {
     m_scriptPath = scriptPath;
+}
+
+
+void
+ScriptEngine::showWebInspector()
+{
+    if ( m_webInspector.isNull() )
+    {
+        m_webInspector.reset( new QWebInspector() );
+        m_webInspector->setPage( this );
+        m_webInspector->setMinimumWidth( 800 );
+        m_webInspector->setMinimumHeight( 600 );
+    }
+
+    m_webInspector->show();
 }
 
 

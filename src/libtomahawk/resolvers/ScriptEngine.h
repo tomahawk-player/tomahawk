@@ -49,13 +49,13 @@ public:
 
 public slots:
     bool shouldInterruptJavaScript();
+    void showWebInspector();
 
 protected:
     virtual void javaScriptConsoleMessage( const QString& message, int lineNumber, const QString& sourceID );
 
 private slots:
     void sslErrorHandler( QNetworkReply* qnr, const QList<QSslError>& errlist );
-    void initWebInspector();
 
 private:
     JSAccount* m_parent;

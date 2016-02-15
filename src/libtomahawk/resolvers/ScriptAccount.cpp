@@ -256,6 +256,12 @@ ScriptAccount::scriptPluginFactory( const QString& type, const scriptobject_ptr&
 
 
 void
+ScriptAccount::showDebugger()
+{
+}
+
+
+void
 ScriptAccount::onJobDeleted( const QString& jobId )
 {
     m_jobs.remove( jobId );

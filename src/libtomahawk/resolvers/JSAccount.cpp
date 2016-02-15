@@ -67,6 +67,14 @@ JSAccount::scriptPluginFactory( const QString& type, const scriptobject_ptr& obj
 }
 
 
+void
+JSAccount::showDebugger()
+{
+    tLog() << Q_FUNC_INFO << name() << "Show debugger";
+    m_engine->showWebInspector();
+}
+
+
 QString
 JSAccount::serializeQVariantMap( const QVariantMap& map )
 {

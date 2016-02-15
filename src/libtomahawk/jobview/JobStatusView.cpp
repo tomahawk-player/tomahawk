@@ -118,6 +118,7 @@ JobStatusView::setModel( JobStatusSortModel* m )
     connect( m_view->model(), SIGNAL( customDelegateJobInserted( int, JobStatusItem* ) ), this, SLOT( customDelegateJobInserted( int, JobStatusItem* ) ) );
     connect( m_view->model(), SIGNAL( customDelegateJobRemoved( int ) ), this, SLOT( customDelegateJobRemoved( int ) ) );
     connect( m_view->model(), SIGNAL( refreshDelegates() ), this, SLOT( refreshDelegates() ) );
+    connect( m_view, SIGNAL( activated( QModelIndex ) ), this, SLOT( onItemActivated( QModelIndex ) ) );
 
     foreach ( const QPointer<JobStatusItem> item, s_jobItems )
     {
@@ -181,6 +182,21 @@ JobStatusView::refreshDelegates()
     }
 
     checkCount();
+}
+
+
+void
+JobStatusView::onItemActivated( const QModelIndex& index )
+{
+    QVariant itemVar = index.data( JobStatusModel::JobDataRole );
+    if ( !itemVar.canConvert< JobStatusItem* >() || !itemVar.value< JobStatusItem* >() )
+    {
+        tLog() << Q_FUNC_INFO << "unable to fetch JobStatusItem*";
+        return;
+    }
+
+    JobStatusItem* item = itemVar.value< JobStatusItem* >();
+    item->activated();
 }
 
 

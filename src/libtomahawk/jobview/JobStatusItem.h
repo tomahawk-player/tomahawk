@@ -53,6 +53,8 @@ public:
     virtual QString mainText() const = 0;
     virtual QString rightColumnText() const { return QString(); };
 
+    virtual void activated();
+
     /**
      * If collapse item is true, sending multiple items of the same type will "collapse" them into one
      * instead of showing each individually. In this case, the right column from the item will be ignored
