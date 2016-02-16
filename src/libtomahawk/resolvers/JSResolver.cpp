@@ -541,8 +541,12 @@ void
 JSResolver::resolve( const Tomahawk::query_ptr& query )
 {
     ScriptJob* job = scriptAccount()->resolve( scriptObject(), query, "resolver" );
-
     connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onResolveRequestDone( QVariantMap ) ) );
+
+    if ( query->isFullTextQuery() )
+    {
+        job->setProperty( "isFullTextQuery", true );
+    }
 
     job->start();
 }
@@ -563,11 +567,14 @@ JSResolver::onResolveRequestDone( const QVariantMap& data )
     }
     else
     {
-        QList< artist_ptr > artists = scriptAccount()->parseArtistVariantList( data.value( "artists" ).toList() );
-        Tomahawk::Pipeline::instance()->reportArtists( qid, artists );
+        if ( job->property( "isFullTextQuery" ).toBool() )
+        {
+            QList< artist_ptr > artists = scriptAccount()->parseArtistVariantList( data.value( "artists" ).toList() );
+            Tomahawk::Pipeline::instance()->reportArtists( qid, artists );
 
-        QList< album_ptr > albums = scriptAccount()->parseAlbumVariantList( data.value( "albums" ).toList() );
-        Tomahawk::Pipeline::instance()->reportAlbums( qid, albums );
+            QList< album_ptr > albums = scriptAccount()->parseAlbumVariantList( data.value( "albums" ).toList() );
+            Tomahawk::Pipeline::instance()->reportAlbums( qid, albums );
+        }
 
         QList< Tomahawk::result_ptr > results = scriptAccount()->parseResultVariantList( data.value( "tracks" ).toList() );
         foreach( const result_ptr& result, results )
