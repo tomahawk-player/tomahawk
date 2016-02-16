@@ -320,11 +320,11 @@ filesizeToString( unsigned int size )
 
     if ( mb )
     {
-        return QString( "%1.%2 Mb" ).arg( mb ).arg( int( ( kb % 1024 ) / 102.4 ) );
+        return QString( "%1.%2 MB" ).arg( mb ).arg( int( ( kb % 1024 ) / 102.4 ) );
     }
     else if ( kb )
     {
-        return QString( "%1 Kb" ).arg( kb );
+        return QString( "%1 KB" ).arg( kb );
     }
     else
         return QString::number( size );
