@@ -543,11 +543,6 @@ JSResolver::resolve( const Tomahawk::query_ptr& query )
     ScriptJob* job = scriptAccount()->resolve( scriptObject(), query, "resolver" );
     connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onResolveRequestDone( QVariantMap ) ) );
 
-    if ( query->isFullTextQuery() )
-    {
-        job->setProperty( "isFullTextQuery", true );
-    }
-
     job->start();
 }
 
@@ -567,11 +562,14 @@ JSResolver::onResolveRequestDone( const QVariantMap& data )
     }
     else
     {
-        if ( job->property( "isFullTextQuery" ).toBool() )
+        if ( !data.value( "artists" ).isNull() )
         {
             QList< artist_ptr > artists = scriptAccount()->parseArtistVariantList( data.value( "artists" ).toList() );
             Tomahawk::Pipeline::instance()->reportArtists( qid, artists );
+        }
 
+        if ( !data.value( "albums" ).isNull() )
+        {
             QList< album_ptr > albums = scriptAccount()->parseAlbumVariantList( data.value( "albums" ).toList() );
             Tomahawk::Pipeline::instance()->reportAlbums( qid, albums );
         }
