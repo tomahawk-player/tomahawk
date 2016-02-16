@@ -32,6 +32,8 @@
 #include "ScriptInfoPlugin.h"
 
 // TODO:
+#include "../Artist.h"
+#include "../Album.h"
 #include "../Result.h"
 #include "../Track.h"
 #include <QTime>
@@ -265,6 +267,48 @@ void
 ScriptAccount::onJobDeleted( const QString& jobId )
 {
     m_jobs.remove( jobId );
+}
+
+
+QList< Tomahawk::artist_ptr >
+ScriptAccount::parseArtistVariantList( const QVariantList& artistList )
+{
+    QList< Tomahawk::artist_ptr > artists;
+
+    QString artist;
+    foreach( const QVariant& a, artistList )
+    {
+        artist = a.toString().trimmed();
+        if ( artist.isEmpty() )
+            continue;
+
+        artists << Tomahawk::Artist::get( artist );
+    }
+
+    return artists;
+}
+
+
+QList< Tomahawk::album_ptr >
+ScriptAccount::parseAlbumVariantList( const QVariantList& albumList )
+{
+    QList< Tomahawk::album_ptr > albums;
+
+    QString artistString;
+    QString albumString;
+    foreach( const QVariant& av, albumList )
+    {
+        QVariantMap m = av.toMap();
+
+        artistString = m.value( "artist" ).toString().trimmed();
+        albumString = m.value( "album" ).toString().trimmed();
+        if ( artistString.isEmpty() || albumString.isEmpty() )
+            continue;
+
+        albums << Tomahawk::Album::get( Tomahawk::Artist::get( artistString ), albumString );
+    }
+
+    return albums;
 }
 
 

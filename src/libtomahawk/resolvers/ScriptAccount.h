@@ -79,6 +79,8 @@ public:
     virtual void showDebugger();
 
     // helpers
+    QList< Tomahawk::artist_ptr > parseArtistVariantList( const QVariantList& artistList );
+    QList< Tomahawk::album_ptr > parseAlbumVariantList( const QVariantList& albumList );
     QList< Tomahawk::result_ptr > parseResultVariantList( const QVariantList& reslist );
     ScriptJob* resolve( const scriptobject_ptr& scriptObject, const query_ptr& query, const QString& resolveType );
 

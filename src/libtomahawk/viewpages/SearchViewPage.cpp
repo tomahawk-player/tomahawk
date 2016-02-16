@@ -372,13 +372,18 @@ SearchWidget::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums )
 
         int distance = TomahawkUtils::levenshtein( m_search, album->name() );
         int maxlen = qMax( m_search.length(), album->name().length() );
-        float score = (float)( maxlen - distance ) / maxlen;
+        float scoreAlbum = (float)( maxlen - distance ) / maxlen;
 
-        if ( score <= 0.1 )
+        distance = TomahawkUtils::levenshtein( m_search, album->artist()->name() );
+        maxlen = qMax( m_search.length(), album->artist()->name().length() );
+        float scoreArtist = (float)( maxlen - distance ) / maxlen;
+
+        float scoreMax = qMax( scoreAlbum, scoreArtist );
+        if ( scoreMax <= 0.1 )
             continue;
 
-        m_albums.insert( album, score );
-//        tDebug() << Q_FUNC_INFO << "found album:" << album->name() << "score:" << score;
+        m_albums.insert( album, scoreMax );
+//        tDebug() << Q_FUNC_INFO << "found album:" << album->name() << "scoreMax:" << scoreMax;
     }
 
 //    updateAlbums();
