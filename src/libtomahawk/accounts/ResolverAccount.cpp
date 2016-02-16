@@ -517,7 +517,8 @@ ResolverAccount::removeBundle()
 }
 
 
-void ResolverAccount::testConfig()
+void
+ResolverAccount::testConfig()
 {
     // HACK: move to JSAccount once we have that properly
     JSResolver* resolver = qobject_cast< Tomahawk::JSResolver* >( m_resolver );
@@ -532,6 +533,13 @@ void ResolverAccount::testConfig()
     {
         emit configTestResult( Accounts::ConfigTestResultSuccess );
     }
+}
+
+
+ExternalResolverGui*
+ResolverAccount::resolver() const
+{
+    return m_resolver;
 }
 
 
