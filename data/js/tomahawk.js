@@ -277,17 +277,25 @@ Tomahawk.Resolver = {
     },
     _adapter_resolve: function (params) {
         return RSVP.Promise.resolve(this.resolve(params)).then(function (results) {
-            return {
-                'tracks': results
-            };
+            if(Array.isArray(results)) {
+                return {
+                    'tracks': results
+                };
+            }
+
+            return results;
         });
     },
 
     _adapter_search: function (params) {
         return RSVP.Promise.resolve(this.search(params)).then(function (results) {
-            return {
-                'tracks': results
-            };
+            if(Array.isArray(results)) {
+                return {
+                    'tracks': results
+                };
+            }
+
+            return results;
         });
     },
 
