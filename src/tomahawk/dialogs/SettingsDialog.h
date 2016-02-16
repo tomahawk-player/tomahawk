@@ -37,6 +37,7 @@ class SipPlugin;
 class ResolversModel;
 class QNetworkReply;
 class QToolbarTabDialog;
+class QMenu;
 
 namespace Ui
 {
@@ -130,6 +131,9 @@ private slots:
     void saveSettings();
     void onRejected();
 
+    void onCustomContextMenu( const QPoint& point );
+    void onShowDebuggerForSelectedAccount();
+
 private:
     Ui_Settings_Accounts* m_accountsWidgetUi;
     QWidget* m_accountsWidget;
@@ -152,6 +156,7 @@ private:
     Tomahawk::Accounts::AccountModelFilterProxy* m_accountProxy;
     QHash<QString, QString> m_downloadsFormats;
     AnimatedSpinner* m_sipSpinner;
+    QMenu* m_contextMenu;
 };
 
 #endif // SETTINGSDIALOG_H

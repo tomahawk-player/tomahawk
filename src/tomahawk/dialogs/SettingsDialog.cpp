@@ -59,6 +59,8 @@
 #include "jobview/ErrorStatusMessage.h"
 #include "utils/NetworkAccessManager.h"
 #include "utils/NetworkProxyFactory.h"
+#include "resolvers/JSAccount.h"
+#include "resolvers/JSResolver.h"
 
 #include <QDesktopServices>
 #include <QFileDialog>
@@ -68,6 +70,7 @@
 #include <QVBoxLayout>
 #include <QSizeGrip>
 #include <QToolBar>
+#include <QMenu>
 
 using namespace Tomahawk;
 using namespace Accounts;
@@ -87,6 +90,7 @@ SettingsDialog::SettingsDialog(QObject *parent )
     , m_restartRequired( false )
     , m_accountModel( 0 )
     , m_sipSpinner( 0 )
+    , m_contextMenu( 0 )
 {
     m_accountsWidget->setFont( TomahawkUtils::systemFont() );
     m_collectionWidget->setFont( TomahawkUtils::systemFont() );
@@ -143,6 +147,12 @@ SettingsDialog::SettingsDialog(QObject *parent )
     m_accountsWidgetUi->accountsView->setContextMenuPolicy( Qt::CustomContextMenu );
     m_accountsWidgetUi->accountsView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     m_accountsWidgetUi->accountsView->setMouseTracking( true );
+
+    m_contextMenu = new QMenu( m_accountsWidgetUi->accountsView );
+    m_contextMenu->setFont( TomahawkUtils::systemFont() );
+    connect( m_accountsWidgetUi->accountsView, SIGNAL( customContextMenuRequested( QPoint ) ), SLOT( onCustomContextMenu( QPoint ) ) );
+    QAction* showDebuggerAction = m_contextMenu->addAction( tr( "Open Account &Debugger..." ) );
+    connect( showDebuggerAction, SIGNAL( triggered(bool) ), SLOT( onShowDebuggerForSelectedAccount() ) );
 
     connect( accountDelegate, SIGNAL( openConfig( Tomahawk::Accounts::Account* ) ), SLOT( openAccountConfig( Tomahawk::Accounts::Account* ) ) );
     connect( accountDelegate, SIGNAL( openConfig( Tomahawk::Accounts::AccountFactory* ) ), SLOT( openAccountFactoryConfig( Tomahawk::Accounts::AccountFactory* ) ) );
@@ -377,6 +387,34 @@ void
 SettingsDialog::onRejected()
 {
     emit finished( false );
+}
+
+
+void
+SettingsDialog::onCustomContextMenu( const QPoint& point )
+{
+    QModelIndex index = m_accountsWidgetUi->accountsView->indexAt( point );
+    if ( !index.isValid() )
+        return;
+
+    // HACK until there is a proper ScriptAccount
+    ResolverAccount* account = qobject_cast< ResolverAccount* >( m_accountProxy->data( index, AccountModel::AccountData ).value< Tomahawk::Accounts::Account* >() );
+    if ( !account )
+        return;
+    Tomahawk::JSResolver* jsResolver = qobject_cast< Tomahawk::JSResolver* >( account->resolver() );
+    if ( !jsResolver )
+        return;
+
+    m_contextMenu->exec( m_accountsWidgetUi->accountsView->mapToGlobal( point ) );
+}
+
+
+void
+SettingsDialog::onShowDebuggerForSelectedAccount()
+{
+    ResolverAccount* account = m_accountProxy->data( m_accountsWidgetUi->accountsView->currentIndex(), AccountModel::AccountData ).value< ResolverAccount* >();
+    Tomahawk::JSResolver* jsResolver = qobject_cast< Tomahawk::JSResolver* >( account->resolver() );
+    jsResolver->scriptAccount()->showDebugger();
 }
 
 

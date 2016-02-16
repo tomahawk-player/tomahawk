@@ -101,6 +101,8 @@ public:
 
     void testConfig() override;
 
+    ExternalResolverGui* resolver() const;
+
 private slots:
     void resolverChanged();
     void onTestConfig( const QVariantMap& result );
