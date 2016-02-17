@@ -211,11 +211,19 @@ TomahawkStyle::styleScrollBar( QScrollBar* scrollBar )
 void
 TomahawkStyle::loadFonts()
 {
+#ifdef Q_OS_MAC
+    QDir dir( QCoreApplication::applicationDirPath() + "/../Resources/Fonts" );
+#else
     QDir dir( ":/data/fonts" );
+#endif
     foreach ( const QString& fileName, dir.entryList() )
     {
-        tDebug( LOGVERBOSE ) << "Trying to add font resource:" << fileName;
+        tDebug( LOGVERBOSE ) << "Trying to add font resource:" << dir.absolutePath() << fileName;
+#ifdef Q_OS_MAC
+        const int id = QFontDatabase::addApplicationFont( dir.absolutePath() + "/" + fileName );
+#else
         const int id = QFontDatabase::addApplicationFont( ":/data/fonts/" + fileName );
+#endif
         if ( id >= 0 )
         {
             tDebug( LOGVERBOSE ) << "Added font:" << id << QFontDatabase::applicationFontFamilies( id ).first();

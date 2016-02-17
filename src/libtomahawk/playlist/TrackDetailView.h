@@ -23,6 +23,7 @@
 
 #include "Query.h"
 #include "utils/DpiScaler.h"
+#include "DownloadManager.h"
 #include "DllMacro.h"
 
 class QLabel;
@@ -30,6 +31,7 @@ class CaptionLabel;
 class PlayableCover;
 class QueryLabel;
 class QScrollArea;
+class QPushButton;
 
 class DLLEXPORT TrackDetailView : public QWidget, private TomahawkUtils::DpiScaler
 {
@@ -39,20 +41,28 @@ public:
     explicit TrackDetailView( QWidget* parent = 0 );
     ~TrackDetailView();
 
+    void setBuyButtonVisible( bool visible );
+
 public slots:
     virtual void setQuery( const Tomahawk::query_ptr& query );
     void setPlaylistInterface( const Tomahawk::playlistinterface_ptr& playlistInterface );
 
 signals:
+    void downloadAll();
+    void downloadCancel();
 
 protected:
 
 protected slots:
 
 private slots:
+    void onAlbumUpdated();
     void onCoverUpdated();
     void onSocialActionsLoaded();
     void onResultsChanged();
+
+    void onBuyButtonClicked();
+    void onDownloadManagerStateChanged( DownloadManager::DownloadManagerState newState, DownloadManager::DownloadManagerState oldState );
 
 private:
     void setSocialActions();
@@ -65,6 +75,8 @@ private:
     QLabel* m_lovedIcon;
     QLabel* m_lovedLabel;
     CaptionLabel* m_resultsBoxLabel;
+    QPushButton* m_buyButton;
+    bool m_buyButtonVisible;
 
     QWidget* m_infoBox;
     QWidget* m_resultsBox;

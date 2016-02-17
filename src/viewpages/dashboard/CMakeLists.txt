@@ -6,5 +6,5 @@ tomahawk_add_plugin(dashboard
     UI
         DashboardWidget.ui
     LINK_LIBRARIES
-        tomahawk-widgets
+        ${TOMAHAWK_WIDGETS_LIBRARIES}
 )

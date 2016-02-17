@@ -23,7 +23,9 @@
 #include "PlayableModel.h"
 #include "PlayableProxyModel.h"
 #include "PlayableItem.h"
+#include "DownloadManager.h"
 #include "DropJob.h"
+#include "Result.h"
 #include "Source.h"
 #include "TomahawkSettings.h"
 #include "audio/AudioEngine.h"
@@ -773,6 +775,44 @@ TrackView::onCustomContextMenu( const QPoint& pos )
         m_contextMenu->setSupportedActions( m_contextMenu->supportedActions() | ContextMenu::ActionMarkListened
                                                                               | ContextMenu::ActionDelete );
 
+    if ( proxyModel()->style() != PlayableProxyModel::Collection )
+    {
+        bool allDownloaded = true;
+        bool noneDownloadable = true;
+        bool downloadable = false;
+        foreach ( const QModelIndex& index, selectedIndexes() )
+        {
+            if ( index.column() )
+                continue;
+
+            PlayableItem* item = proxyModel()->itemFromIndex( proxyModel()->mapToSource( index ) );
+
+            if( item->query()->results().isEmpty() )
+                continue;
+
+            downloadable = !item->query()->results().first()->downloadFormats().isEmpty();
+            if ( downloadable )
+            {
+                noneDownloadable = false;
+            }
+
+            if ( downloadable && DownloadManager::instance()->localFileForDownload( item->query()->results().first()->downloadFormats().first().url.toString() ).isEmpty() )
+            {
+                allDownloaded = false;
+            }
+
+            if ( !allDownloaded || !noneDownloadable )
+            {
+                break;
+            }
+        }
+
+        if ( !allDownloaded || !noneDownloadable )
+        {
+            m_contextMenu->setSupportedActions( m_contextMenu->supportedActions() | ContextMenu::ActionDownload );
+        }
+    }
+
     QList<query_ptr> queries;
     foreach ( const QModelIndex& index, selectedIndexes() )
     {
@@ -802,6 +842,10 @@ TrackView::onMenuTriggered( int action )
 
         case ContextMenu::ActionDelete:
             deleteSelectedItems();
+            break;
+
+        case ContextMenu::ActionDownload:
+            downloadSelectedItems();
             break;
 
         default:
@@ -875,6 +919,30 @@ TrackView::deleteSelectedItems()
     else
     {
         tDebug() << Q_FUNC_INFO << "Error: Model is read-only!";
+    }
+}
+
+
+void
+TrackView::downloadSelectedItems()
+{
+    foreach ( const QModelIndex& index, selectedIndexes() )
+    {
+        if ( index.column() )
+            continue;
+
+        PlayableItem* item = proxyModel()->itemFromIndex( proxyModel()->mapToSource( index ) );
+
+        if ( !item )
+            continue;
+
+        if ( item->query()->results().isEmpty() || item->query()->results().first()->downloadFormats().isEmpty() )
+            continue;
+
+        if ( !DownloadManager::instance()->localFileForDownload( item->query()->results().first()->downloadFormats().first().url.toString() ).isEmpty() )
+            continue;
+
+        DownloadManager::instance()->addJob( item->result()->toDownloadJob( item->result()->downloadFormats().first() ) );
     }
 }
 

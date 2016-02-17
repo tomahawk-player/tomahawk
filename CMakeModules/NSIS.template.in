@@ -18,11 +18,10 @@
 !ifndef MINGW_ROOT
     !define MINGW_ROOT "/usr/i686-w64-mingw32/sys-root/mingw"
 !endif
-
-!define APPLICATION_NAME "Tomahawk"
-!define TARGET_NAME "tomahawk"
+!define APPLICATION_NAME "@CPACK_PACKAGE_NAME@"
+!define TARGET_NAME "@CPACK_PACKAGE_TARGET_NAME@"
 ;define app id needed for Windows 8 notifications
-!define AppUserModelId @TOMAHAWK_APPLICATION_PACKAGE_NAME@
+!define AppUserModelId "@TOMAHAWK_APPLICATION_PACKAGE_NAME@"
 
 !define MINGW_BIN "${MINGW_ROOT}/bin"
 !define MINGW_LIB "${MINGW_ROOT}/lib"

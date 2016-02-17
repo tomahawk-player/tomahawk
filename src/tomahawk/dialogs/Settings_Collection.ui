@@ -50,7 +50,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Due to the unique way Tomahawk works, your music files must at least have Artist &amp; Title metadata/ID3 tags to be added to your Collection.</string>
+      <string>Due to the unique way %applicationName works, your music files must at least have Artist &amp; Title metadata/ID3 tags to be added to your Collection.</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>

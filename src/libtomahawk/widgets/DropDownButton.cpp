@@ -32,7 +32,9 @@ using namespace Tomahawk;
 
 DropDownButton::DropDownButton( QWidget* parent )
     : QComboBox( parent )
+    , m_hovering( false )
 {
+    setAttribute( Qt::WA_Hover, true );
 }
 
 
@@ -46,44 +48,59 @@ DropDownButton::paintEvent( QPaintEvent* event )
 {
     //    QComboBox::paintEvent( event );
     QPainter p( this );
-    drawPrimitive( &p, contentsRect(), currentText() );
+
+    setupPainter( &p );
+
+    drawPrimitive( &p, contentsRect(), currentText(), m_hovering, true );
 }
 
 
 void
-DropDownButton::drawPrimitive( QPainter* p, const QRect& rect, const QString& text )
+DropDownButton::drawPrimitive( QPainter* p, const QRect& rect, const QString& text, bool hovering, bool itemsAvailable )
 {
     p->save();
+
+    setupPainter( p );
 
     p->setRenderHint( QPainter::TextAntialiasing );
     QRect r = rect.adjusted( 2, 2, -2, -2 );
 
-    p->setPen( TomahawkStyle::PLAYLIST_BUTTON_BACKGROUND.darker() );
-    p->setBrush( TomahawkStyle::PLAYLIST_BUTTON_BACKGROUND );
+    QColor bgColor = hovering ? TomahawkStyle::PLAYLIST_BUTTON_HOVER_BACKGROUND : TomahawkStyle::PLAYLIST_BUTTON_BACKGROUND;
+
+    p->setOpacity( 1.0 );
+    p->setPen( bgColor );
+    p->setBrush( bgColor );
     p->drawRect( r );
-
-    // paint divider
     p->setPen( TomahawkStyle::PLAYLIST_BUTTON_FOREGROUND );
-    p->drawLine( QPoint( r.right() - 24, r.top() + 3 ), QPoint( r.right() - 24, r.bottom() - 3 ) );
+    
+    int dropdownWidth = 0;
 
-    // paint drop-down arrow
-    p->save();
-    QPainterPath dropPath;
-    dropPath.moveTo( QPointF( r.right() - 14, float(r.top()) + float(r.height()) * 0.5 - 1.5 ) );
-    QPointF currentPosition = dropPath.currentPosition();
-    dropPath.lineTo( currentPosition.x() + 6, currentPosition.y() );
-    dropPath.lineTo( currentPosition.x() + 3, currentPosition.y() + 3 );
-    dropPath.closeSubpath();
-    p->setPen( TomahawkStyle::PLAYLIST_BUTTON_FOREGROUND );
-    p->setBrush( TomahawkStyle::PLAYLIST_BUTTON_FOREGROUND );
-    p->setRenderHint( QPainter::Antialiasing, false );
-    p->drawPath( dropPath );
-    p->restore();
+    if ( itemsAvailable )
+    {
+        // paint divider
+        p->drawLine( QPoint( r.right() - 24, r.top() + 3 ), QPoint( r.right() - 24, r.bottom() - 3 ) );
+
+        // paint drop-down arrow
+        p->save();
+        QPainterPath dropPath;
+        dropPath.moveTo( QPointF( r.right() - 14, float(r.top()) + float(r.height()) * 0.5 - 1.5 ) );
+        QPointF currentPosition = dropPath.currentPosition();
+        dropPath.lineTo( currentPosition.x() + 6, currentPosition.y() );
+        dropPath.lineTo( currentPosition.x() + 3, currentPosition.y() + 3 );
+        dropPath.closeSubpath();
+        p->setPen( TomahawkStyle::PLAYLIST_BUTTON_FOREGROUND );
+        p->setBrush( TomahawkStyle::PLAYLIST_BUTTON_FOREGROUND );
+        p->setRenderHint( QPainter::Antialiasing, false );
+        p->drawPath( dropPath );
+        p->restore();
+
+        dropdownWidth = 24;
+    }
 
     // paint label
     const QFontMetrics fm( p->font() );
-    r.adjust( 0, 0, -24, 0 ); // center-align left of the divider
-    p->drawText( r, Qt::AlignCenter, fm.elidedText( text, Qt::ElideRight, r.width() ) );
+    r.adjust( 0, 0, -dropdownWidth, 0 ); // center-align left of the divider
+    p->drawText( r, Qt::AlignCenter, fm.elidedText( text.toUpper(), Qt::ElideRight, r.width() ) );
 
     p->restore();
 }
@@ -100,4 +117,30 @@ DropDownButton::mousePressEvent( QMouseEvent* event )
 
     event->accept();
     emit clicked();
+}
+
+
+void
+DropDownButton::enterEvent( QEvent * event )
+{
+    m_hovering = true;
+    QWidget::enterEvent(event);
+}
+
+
+void
+DropDownButton::leaveEvent( QEvent* event )
+{
+    m_hovering = false;
+    QWidget::leaveEvent(event);
+}
+
+
+void
+DropDownButton::setupPainter( QPainter* p )
+{
+    QFont f = p->font();
+    f.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
+    f.setBold( true );
+    p->setFont( f );
 }

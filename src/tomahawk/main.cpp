@@ -41,6 +41,7 @@
 #endif
 
 #ifdef WITH_CRASHREPORTER
+    #include "TomahawkVersion.h"
     #include "libcrashreporter-handler/Handler.h"
 #endif
 
@@ -186,7 +187,7 @@ main( int argc, char *argv[] )
     TomahawkApp a( argc, argv );
 
     #ifdef WITH_CRASHREPORTER
-    CrashReporter::Handler* handler = new CrashReporter::Handler( QDir::tempPath(), !TomahawkUtils::headless(), "tomahawk_crash_reporter" );
+    CrashReporter::Handler* handler = new CrashReporter::Handler( QDir::tempPath(), !TomahawkUtils::headless(), TOMAHAWK_TARGET_NAME "_crash_reporter" );
     #endif
 
     // MUST register StateHash ****before*** initing TomahawkSettingsGui as constructor of settings does upgrade before Gui subclass registers type

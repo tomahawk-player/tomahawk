@@ -24,6 +24,7 @@
 #include "PluginLoader_p.h"
 
 #include "config.h"
+#include "TomahawkVersion.h"
 
 #include "utils/Logger.h"
 
@@ -153,7 +154,7 @@ PluginLoader::pluginFilenames( const QString& name ) const
     QStringList fileNames;
     foreach( const QString& extension, extensions )
     {
-        fileNames << QString("libtomahawk_%1_%2.%3")
+        fileNames << QString("lib" TOMAHAWK_TARGET_NAME "_%1_%2.%3")
                      .arg( d_ptr->type )
                      .arg( name )
                      .arg( extension );
@@ -174,12 +175,8 @@ PluginLoader::pluginPaths( const QString& name ) const
         tDebug() << Q_FUNC_INFO << "Checking directory for" << type << "plugins:" << pluginDir.absolutePath();
         foreach ( QString fileName, pluginDir.entryList( pluginFilenames( name ), QDir::Files ) )
         {
-            //TODO: do we really need to check this?!
-            if ( fileName.startsWith( QString( "libtomahawk_%1" ).arg( type ) ) )
-            {
-                const QString path = pluginDir.absoluteFilePath( fileName );
-                paths << path;
-            }
+            const QString path = pluginDir.absoluteFilePath( fileName );
+            paths << path;
         }
     }
 

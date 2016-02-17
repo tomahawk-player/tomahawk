@@ -20,6 +20,7 @@
 #include "CollectionViewPage.h"
 
 #include <QRadioButton>
+#include <QPushButton>
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
@@ -32,7 +33,6 @@
 #include "playlist/GridView.h"
 #include "playlist/PlayableProxyModelPlaylistInterface.h"
 #include "resolvers/ScriptCollection.h"
-#include "DownloadManager.h"
 #include "TomahawkSettings.h"
 #include "utils/ImageRegistry.h"
 #include "utils/TomahawkStyle.h"
@@ -58,6 +58,7 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
     qRegisterMetaType< CollectionViewPageMode >( "CollectionViewPageMode" );
 
     m_header->setBackground( ImageRegistry::instance()->pixmap( RESPATH "images/collection_background.png", QSize( 0, 0 ) ), false );
+
     setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultCollection, TomahawkUtils::Original, QSize( 256, 256 ) ) );
 
     m_columnView->proxyModel()->setStyle( PlayableProxyModel::SingleColumn );
@@ -78,8 +79,9 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
     m_trackView->setColumnHidden( trackViewProxyModel->mapSourceColumnToColumn( PlayableModel::Score ), true );
     m_trackView->setColumnHidden( trackViewProxyModel->mapSourceColumnToColumn( PlayableModel::Bitrate ), true );
 
-
     m_trackView->setGuid( QString( "trackview/flat" ) );
+    m_trackView->setSortingEnabled( true );
+    m_trackView->sortByColumn( 0, Qt::AscendingOrder );
 
     {
         m_albumView->setAutoResize( false );
@@ -130,8 +132,11 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
 
     if ( collection->backendType() == Collection::ScriptCollectionType )
     {
-        QAbstractButton* downloadButton = m_header->addButton( tr( "Download All" ) );
-        connect( downloadButton, SIGNAL( clicked() ), SLOT( onDownloadAll() ) );
+        m_downloadAllButton = m_header->addButton( tr( "Download All" ) );
+        connect( m_downloadAllButton, SIGNAL( clicked() ), SLOT( onDownloadAll() ) );
+
+        connect( DownloadManager::instance(), SIGNAL( stateChanged( DownloadManager::DownloadManagerState, DownloadManager::DownloadManagerState ) ),
+                                                SLOT( onDownloadManagerStateChanged( DownloadManager::DownloadManagerState, DownloadManager::DownloadManagerState ) ) );
 
         m_header->setRefreshVisible( true );
         connect( m_header, SIGNAL( refresh() ), SLOT( onCollectionChanged() ) );
@@ -200,8 +205,6 @@ CollectionViewPage::setFlatModel( PlayableModel* model )
 
     m_flatModel = model;
     m_trackView->setPlayableModel( model );
-    m_trackView->setSortingEnabled( true );
-    m_trackView->sortByColumn( 0, Qt::AscendingOrder );
 
     if ( oldModel )
     {
@@ -389,6 +392,8 @@ CollectionViewPage::restoreViewMode()
     } else {
         setCurrentMode( mode );
     }
+
+    onCollectionChanged();
 }
 
 
@@ -445,14 +450,40 @@ CollectionViewPage::onCollectionChanged()
 void
 CollectionViewPage::onDownloadAll()
 {
-    for ( int i = 0; i < m_flatModel->rowCount( QModelIndex() ); i++ )
+    if ( DownloadManager::instance()->state() == DownloadManager::Running )
     {
-        PlayableItem* item = m_flatModel->itemFromIndex( m_flatModel->index( i, 0, QModelIndex() ) );
-        if ( !item )
-            continue;
+        DownloadManager::instance()->cancelAll();
+    }
+    else
+    {
+        for ( int i = 0; i < m_trackView->proxyModel()->rowCount( QModelIndex() ); i++ )
+        {
+            PlayableItem* item = m_trackView->proxyModel()->itemFromIndex( m_trackView->proxyModel()->mapToSource( m_trackView->proxyModel()->index( i, 0, QModelIndex() ) ) );
+            if ( !item )
+                continue;
 
-        if ( !item->result()->downloadFormats().isEmpty() )
-            DownloadManager::instance()->addJob( item->result()->toDownloadJob( item->result()->downloadFormats().first() ) );
+            QList< DownloadFormat > formats = item->query()->results().first()->downloadFormats();
+            if ( formats.isEmpty() || !DownloadManager::instance()->localFileForDownload( formats.first().url.toString() ).isEmpty() )
+                continue;
+
+            if ( !item->result()->downloadFormats().isEmpty() )
+                DownloadManager::instance()->addJob( item->result()->toDownloadJob( item->result()->downloadFormats().first() ) );
+        }
+    }
+}
+
+
+void
+CollectionViewPage::onDownloadManagerStateChanged( DownloadManager::DownloadManagerState newState, DownloadManager::DownloadManagerState oldState )
+{
+    tDebug() << Q_FUNC_INFO;
+    if ( newState == DownloadManager::Running )
+    {
+        m_downloadAllButton->setText( tr( "Cancel Download" ) );
+    }
+    else
+    {
+        m_downloadAllButton->setText( tr( "Download All" ) );
     }
 }
 
@@ -467,5 +498,14 @@ CollectionViewPage::isTemporaryPage() const
 bool
 CollectionViewPage::isBeingPlayed() const
 {
-    return m_playlistInterface->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() );
+    if ( !playlistInterface() )
+        return false;
+
+    if ( playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+        return true;
+
+    if ( playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
+        return true;
+
+    return false;
 }

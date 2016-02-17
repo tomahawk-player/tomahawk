@@ -1,40 +1,21 @@
+set(TOMAHAWK_TOOL_DB_LIST_ARTISTS_TARGET ${TOMAHAWK_TARGET_NAME}-db-list-artists)
+
 set( tomahawk_db_list_artists_src
     listartists.cpp
 )
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-add_executable( tomahawk_db_list_artists_bin WIN32 MACOSX_BUNDLE
+add_executable( ${TOMAHAWK_TOOL_DB_LIST_ARTISTS_TARGET} WIN32 MACOSX_BUNDLE
     ${tomahawk_db_list_artists_src} )
-set_target_properties( tomahawk_db_list_artists_bin
+set_target_properties( ${TOMAHAWK_TOOL_DB_LIST_ARTISTS_TARGET}
     PROPERTIES
         AUTOMOC TRUE
-        RUNTIME_OUTPUT_NAME tomahawk-db-list-artists
 )
-target_link_libraries( tomahawk_db_list_artists_bin
+target_link_libraries( ${TOMAHAWK_TOOL_DB_LIST_ARTISTS_TARGET}
     ${TOMAHAWK_LIBRARIES}
 )
 
-qt5_use_modules(tomahawk_db_list_artists_bin Core)
-install( TARGETS tomahawk_db_list_artists_bin BUNDLE DESTINATION . RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} )
-
-set( tomahawk_db_fuzzysearch_src
-    fuzzysearch.cpp
-)
-
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
-
-add_executable( tomahawk_db_fuzzysearch_bin WIN32 MACOSX_BUNDLE
-    ${tomahawk_db_fuzzysearch_src} )
-set_target_properties( tomahawk_db_fuzzysearch_bin
-    PROPERTIES
-        AUTOMOC TRUE
-        RUNTIME_OUTPUT_NAME tomahawk-db-fuzzysearch
-)
-target_link_libraries( tomahawk_db_fuzzysearch_bin
-    ${TOMAHAWK_LIBRARIES}
-)
-
-qt5_use_modules(tomahawk_db_list_artists_bin Core)
-install( TARGETS tomahawk_db_list_artists_bin BUNDLE DESTINATION . RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} )
+qt5_use_modules(${TOMAHAWK_TOOL_DB_LIST_ARTISTS_TARGET} Core)
+install( TARGETS ${TOMAHAWK_TOOL_DB_LIST_ARTISTS_TARGET} BUNDLE DESTINATION . RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} )
 

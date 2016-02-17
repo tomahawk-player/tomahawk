@@ -608,14 +608,14 @@ TomahawkApp::initSIP()
 void
 TomahawkApp::onShutdownDelayed()
 {
-    QProgressDialog* d = new QProgressDialog( tr( "Tomahawk is updating the database. Please wait, this may take a minute!" ), QString(),
+    QProgressDialog* d = new QProgressDialog( tr( "%applicationName is updating the database. Please wait, this may take a minute!" ), QString(),
                                               0, 0, 0, Qt::Tool
                                               | Qt::WindowTitleHint
                                               | Qt::CustomizeWindowHint );
     d->setModal( true );
     d->setAutoClose( false );
     d->setAutoReset( false );
-    d->setWindowTitle( tr( "Tomahawk" ) );
+    d->setWindowTitle( tr( "%applicationName" ) );
 
 #ifdef Q_OS_MAC
     d->setAttribute( Qt::WA_MacAlwaysShowToolWindow );
@@ -642,7 +642,7 @@ TomahawkApp::onInfoSystemReady()
     {
         tDebug() << "Init MainWindow.";
         m_mainwindow = new TomahawkWindow();
-        m_mainwindow->setWindowTitle( "Tomahawk" );
+        m_mainwindow->setWindowTitle( tr( "%applicationName" ) );
         m_mainwindow->setObjectName( "TH_Main_Window" );
         if ( !arguments().contains( "--hide" ) )
         {

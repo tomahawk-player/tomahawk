@@ -79,7 +79,7 @@ ResolverAccountFactory::createFromPath( const QString& path )
 }
 
 
-Account*
+ResolverAccount*
 ResolverAccountFactory::createFromPath( const QString& path, const QString& factory,  bool isAttica )
 {
     qDebug() << "Creating ResolverAccount from path:" << path << "is attica" << isAttica;
@@ -110,57 +110,8 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
 
         if ( pathInfo.suffix() == "axe" )
         {
-            QString uniqueName = uuid();
-            QDir dir( TomahawkUtils::extractScriptPayload( pathInfo.filePath(),
-                                                           uniqueName,
-                                                           MANUALRESOLVERS_DIR ) );
-            if ( !( dir.exists() && dir.isReadable() ) ) //decompression fubar
+            if ( !installAxe( realPath, configuration ) )
             {
-                displayError( tr( "Resolver installation error: cannot open bundle." ) );
-                return 0;
-            }
-
-            if ( !dir.cd( "content" ) ) //more fubar
-            {
-                displayError( tr( "Resolver installation error: incomplete bundle." ) );
-                return 0;
-            }
-
-            QString metadataFilePath = dir.absoluteFilePath( "metadata.json" );
-            configuration = metadataFromJsonFile( metadataFilePath );
-
-            configuration[ "bundleDir" ] = uniqueName;
-
-            if ( !configuration[ "pluginName" ].isNull() && !configuration[ "pluginName" ].toString().isEmpty() )
-            {
-                dir.cdUp();
-                if ( !dir.cdUp() ) //we're in MANUALRESOLVERS_DIR
-                    return 0;
-
-                QString name = configuration[ "pluginName" ].toString();
-
-                QString namePath = dir.absoluteFilePath( name );
-                QFileInfo npI( namePath );
-
-                if ( npI.exists() && npI.isDir() )
-                {
-                    TomahawkUtils::removeDirectory( namePath );
-                }
-
-                dir.rename( uniqueName, name );
-
-                configuration[ "bundleDir" ] = name;
-
-                if ( !dir.cd( QString( "%1/content" ).arg( name ) ) ) //should work if it worked once
-                    return 0;
-            }
-
-            expandPaths( dir, configuration );
-
-            realPath = configuration[ "path" ].toString();
-            if ( realPath.isEmpty() )
-            {
-                displayError( tr( "Resolver installation error: bad metadata in bundle." ) );
                 return 0;
             }
         }
@@ -218,6 +169,71 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
 
         return new ResolverAccount( generateId( factory ), realPath, configuration );
     }
+}
+
+
+bool
+ResolverAccountFactory::installAxe( QString& realPath, QVariantHash& configuration )
+{
+    const QFileInfo pathInfo( realPath );
+    QString uniqueName = uuid();
+    QDir dir( TomahawkUtils::extractScriptPayload( pathInfo.filePath(),
+                                                    uniqueName,
+                                                    MANUALRESOLVERS_DIR ) );
+    if ( !( dir.exists() && dir.isReadable() ) ) //decompression fubar
+    {
+        JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
+                                tr( "Resolver installation error: cannot open bundle." ) ) );
+        return 0;
+    }
+
+    if ( !dir.cd( "content" ) ) //more fubar
+    {
+        JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
+                                tr( "Resolver installation error: incomplete bundle." ) ) );
+        return 0;
+    }
+
+    QString metadataFilePath = dir.absoluteFilePath( "metadata.json" );
+    configuration = metadataFromJsonFile( metadataFilePath );
+
+    configuration[ "bundleDir" ] = uniqueName;
+
+    if ( !configuration[ "pluginName" ].isNull() && !configuration[ "pluginName" ].toString().isEmpty() )
+    {
+        dir.cdUp();
+        if ( !dir.cdUp() ) //we're in MANUALRESOLVERS_DIR
+            return 0;
+
+        QString name = configuration[ "pluginName" ].toString();
+
+        QString namePath = dir.absoluteFilePath( name );
+        QFileInfo npI( namePath );
+
+        if ( npI.exists() && npI.isDir() )
+        {
+            TomahawkUtils::removeDirectory( namePath );
+        }
+
+        dir.rename( uniqueName, name );
+
+        configuration[ "bundleDir" ] = name;
+
+        if ( !dir.cd( QString( "%1/content" ).arg( name ) ) ) //should work if it worked once
+            return 0;
+    }
+
+    expandPaths( dir, configuration );
+
+    realPath = configuration[ "path" ].toString();
+    if ( realPath.isEmpty() )
+    {
+        JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
+                                tr( "Resolver installation error: bad metadata in bundle." ) ) );
+        return 0;
+    }
+
+    return true;
 }
 
 

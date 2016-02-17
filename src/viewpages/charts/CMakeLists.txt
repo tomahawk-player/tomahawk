@@ -6,5 +6,5 @@ tomahawk_add_plugin(charts
     UI
         ChartsWidget.ui
     LINK_LIBRARIES
-        tomahawk-widgets
+        ${TOMAHAWK_WIDGETS_LIBRARIES}
 )

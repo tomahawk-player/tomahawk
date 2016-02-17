@@ -6,5 +6,5 @@ tomahawk_add_plugin(whatsnew_0_8
     UI
       WhatsNewWidget_0_8.ui
     LINK_LIBRARIES
-        tomahawk-widgets
+        ${TOMAHAWK_WIDGETS_LIBRARIES}
 )

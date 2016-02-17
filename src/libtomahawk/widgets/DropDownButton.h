@@ -32,7 +32,7 @@ public:
     explicit DropDownButton( QWidget* parent = 0 );
     virtual ~DropDownButton();
 
-    static void drawPrimitive( QPainter* p, const QRect& rect, const QString& text );
+    static void drawPrimitive( QPainter* p, const QRect& rect, const QString& text, bool hovering, bool itemsAvailable );
 
 public slots:
 
@@ -42,10 +42,15 @@ signals:
 protected:
     void paintEvent( QPaintEvent* event );
     void mousePressEvent( QMouseEvent* event );
+    void enterEvent( QEvent* event );
+    void leaveEvent( QEvent* event );
 
 private slots:
 
 private:
+    static void setupPainter( QPainter* p );
+
+    bool m_hovering;
 };
 
 #endif // DROPDOWNBUTTON_H

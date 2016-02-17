@@ -24,13 +24,6 @@ include_directories(
 
 add_definitions(-D_WEBSOCKETPP_CPP11_STL_)
 
-if(APPLE)
-    # http://stackoverflow.com/questions/7226753/osx-lion-xcode-4-1-how-do-i-setup-a-c0x-project/7236451#7236451
-    add_definitions(-std=c++11 -stdlib=libc++ -U__STRICT_ANSI__)
-    set(PLATFORM_SPECIFIC_LINK_LIBRARIES "/usr/lib/libc++.dylib")
-else()
-    add_definitions(-std=c++0x)
-endif()
 
 tomahawk_add_plugin(hatchet
     TYPE account

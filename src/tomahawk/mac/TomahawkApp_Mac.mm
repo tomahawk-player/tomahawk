@@ -211,7 +211,7 @@
 #ifdef HAVE_SPARKLE
 - (void)updater:(SUUpdater *)updater willInstallUpdate:(SUAppcastItem *)update
 {
-    tLog() << "NSApp in willInstallUpdate, deleting Phonon objects";
+//    tLog() << "NSApp in willInstallUpdate, deleting Phonon objects";
     AudioEngine::instance()->stop();
     delete AudioEngine::instance();
 }

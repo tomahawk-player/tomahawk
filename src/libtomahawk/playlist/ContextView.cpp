@@ -96,8 +96,10 @@ ContextView::ContextView( QWidget* parent, const QString& caption )
 
     connect( m_captionLabel, SIGNAL( clicked() ), SIGNAL( closeClicked() ) );
     connect( m_trackView, SIGNAL( querySelected( Tomahawk::query_ptr ) ), SLOT( onQuerySelected( Tomahawk::query_ptr ) ) );
-    connect( m_trackView, SIGNAL( querySelected( Tomahawk::query_ptr ) ), m_detailView, SLOT( setQuery( Tomahawk::query_ptr ) ) );
     connect( m_trackView, SIGNAL( modelChanged() ), SLOT( onModelChanged() ) );
+    connect( m_trackView, SIGNAL( querySelected( Tomahawk::query_ptr ) ), m_detailView, SLOT( setQuery( Tomahawk::query_ptr ) ) );
+    connect( m_detailView, SIGNAL( downloadAll() ), SLOT( onDownloadAll() ) );
+    connect( m_detailView, SIGNAL( downloadCancel() ), SLOT( onDownloadCancel() ) );
 
     TomahawkUtils::fixMargins( this );
 }

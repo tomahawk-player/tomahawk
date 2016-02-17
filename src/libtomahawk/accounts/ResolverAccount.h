@@ -33,6 +33,8 @@ class ExternalResolverGui;
 
 namespace Accounts {
 
+class ResolverAccount;
+
 class DLLEXPORT ResolverAccountFactory : public AccountFactory
 {
     Q_OBJECT
@@ -53,7 +55,10 @@ public:
     Account* createFromPath( const QString& path ) override;
 
     // Internal use
-    static Account* createFromPath( const QString& path, const QString& factoryId, bool isAttica );
+    static ResolverAccount* createFromPath( const QString& path, const QString& factoryId, bool isAttica );
+    // YES, non const parameters!
+    static bool installAxe( QString& realPath, QVariantHash& configuration );
+
 
 private:
     static void displayError( const QString& error );

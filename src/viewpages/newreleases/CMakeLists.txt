@@ -6,5 +6,5 @@ tomahawk_add_plugin(newreleases
     UI
         NewReleasesWidget.ui
     LINK_LIBRARIES
-        tomahawk-widgets
+        ${TOMAHAWK_WIDGETS_LIBRARIES}
 )

@@ -22,8 +22,10 @@
 
 #include "ViewPage.h"
 #include "PlaylistInterface.h"
+#include "DownloadManager.h"
 #include "DllMacro.h"
 
+class QPushButton;
 class QStackedWidget;
 
 class GridView;
@@ -83,10 +85,12 @@ private slots:
     void onCollectionChanged();
 
     void onDownloadAll();
+    void onDownloadManagerStateChanged( DownloadManager::DownloadManagerState newState, DownloadManager::DownloadManagerState oldState );
 
 private:
     FilterHeader* m_header;
     QPixmap m_pixmap;
+    QPushButton* m_downloadAllButton;
 
     ColumnView* m_columnView;
     TrackView* m_trackView;

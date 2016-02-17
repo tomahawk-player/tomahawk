@@ -29,6 +29,7 @@
 #include "Source.h"
 #include "MetaPlaylistInterface.h"
 #include "playlist/TrackView.h"
+#include "playlist/TrackDetailView.h"
 #include "widgets/BasicHeader.h"
 
 #include "database/DatabaseCommand_AllTracks.h"
@@ -58,6 +59,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     m_tracksModel->setMode( Mixed );
 
     // We need to set the model on the view before loading the playlist, so spinners & co are connected
+    ui->albumView->trackDetailView()->setBuyButtonVisible( true );
     ui->albumView->trackView()->setPlayableModel( m_tracksModel );
     ui->albumView->setCaption( tr( "Album Details" ) );
 

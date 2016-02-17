@@ -26,6 +26,7 @@
 #include "widgets/BackgroundWidget.h"
 #include "DllMacro.h"
 
+class QPushButton;
 class QLabel;
 class ElidedLabel;
 class QPaintEvent;
@@ -40,7 +41,7 @@ public:
 
     QScopedPointer<Ui::HeaderWidget> ui;
 
-    QAbstractButton* addButton( const QString& text );
+    QPushButton* addButton( const QString& text );
 
 public slots:
     virtual void setCaption( const QString& s );

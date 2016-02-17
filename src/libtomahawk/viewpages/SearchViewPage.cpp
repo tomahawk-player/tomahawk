@@ -100,6 +100,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
         ui->tracks->setItemWidth( TomahawkUtils::DpiScaler::scaledX( this, 140 ) );
 //        ui->tracks->proxyModel()->setHideDupeItems( true );
         ui->tracks->delegate()->setWordWrapping( true );
+        ui->tracks->delegate()->setShowBuyButtons( true );
         ui->tracks->setFixedHeight( ui->tracks->itemSize().height() + ui->tracks->spacing() * 2 );
 
         m_resultsModel = new PlayableModel( ui->tracks );
