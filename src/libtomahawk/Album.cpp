@@ -33,6 +33,7 @@
 
 #include <QReadWriteLock>
 #include <QPixmapCache>
+#include <QCoreApplication>
 
 using namespace Tomahawk;
 
@@ -75,6 +76,7 @@ Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCr
     }
 
     album_ptr album = album_ptr( new Album( name, artist ), &Album::deleteLater );
+    album->moveToThread( QCoreApplication::instance()->thread() );
     album->setWeakRef( album.toWeakRef() );
     album->loadId( autoCreate );
     s_albumsByName.insert( key, album );

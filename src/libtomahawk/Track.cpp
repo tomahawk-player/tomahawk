@@ -37,6 +37,7 @@
 #include <QtAlgorithms>
 #include <QDateTime>
 #include <QReadWriteLock>
+#include <QCoreApplication>
 
 
 using namespace Tomahawk;
@@ -92,6 +93,7 @@ Track::get( const QString& artist, const QString& track, const QString& album, c
     }
 
     track_ptr t = track_ptr( new Track( artist, track, album, albumArtist, duration, composer, albumpos, discnumber ), &Track::deleteLater );
+    t->moveToThread( QCoreApplication::instance()->thread() );
     t->setWeakRef( t.toWeakRef() );
     s_tracksByName.insert( key, t );
 
