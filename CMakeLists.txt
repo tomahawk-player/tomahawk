@@ -403,7 +403,7 @@ if( WIN32 )
 endif( WIN32 )
 
 if( WIN32 OR APPLE )
-    macro_optional_find_package(LibsnoreQt5 0.5.70 QUIET)
+    macro_optional_find_package(LibsnoreQt5 0.6.0 QUIET)
     macro_log_feature(LibsnoreQt5_FOUND "Libsnore" "Library for notifications" "https://projects.kde.org/projects/playground/libs/snorenotify" FALSE "" "")
 endif()
 
