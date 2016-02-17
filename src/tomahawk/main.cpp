@@ -171,10 +171,6 @@ main( int argc, char *argv[] )
     // This must go before QApplication initialisation.
     Tomahawk::macMain();
 
-    // Fixes focus issue with NSSearchField, see QTBUG-11401
-    // code taken from clementine:main.cpp:336
-    QCoreApplication::setAttribute( Qt::AA_NativeWindows, true );
-
     // used for url handler
     AEEventHandlerUPP h = AEEventHandlerUPP( appleEventHandler );
     AEInstallEventHandler( 'GURL', 'GURL', h, 0, false );
