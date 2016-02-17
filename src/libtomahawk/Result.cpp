@@ -35,6 +35,8 @@
 #include "Track.h"
 #include "Typedefs.h"
 
+#include <QCoreApplication>
+
 using namespace Tomahawk;
 
 static QHash< QString, result_wptr > s_results;
@@ -69,6 +71,7 @@ Result::get( const QString& url, const track_ptr& track )
     }
 
     result_ptr r = result_ptr( new Result( url, track ), &Result::deleteLater );
+    r->moveToThread( QCoreApplication::instance()->thread() );
     r->setWeakRef( r.toWeakRef() );
     s_results.insert( url, r );
 
@@ -132,12 +135,18 @@ Result::deleteLater()
 void
 Result::onResolverRemoved( Tomahawk::Resolver* resolver )
 {
-    QMutexLocker lock( &m_mutex );
+    m_mutex.lock();
 
     if ( m_resolver.data() == resolver )
     {
         m_resolver = 0;
+        m_mutex.unlock();
+
         emit statusChanged();
+    }
+    else
+    {
+        m_mutex.unlock();
     }
 }
 
@@ -145,8 +154,6 @@ Result::onResolverRemoved( Tomahawk::Resolver* resolver )
 collection_ptr
 Result::resolvedByCollection() const
 {
-    QMutexLocker lock( &m_mutex );
-
     return m_collection;
 }
 
@@ -323,11 +330,9 @@ Result::onOffline()
 
 
 void
-Result::setResolvedByCollection( const Tomahawk::collection_ptr& collection , bool emitOnlineEvents )
+Result::setResolvedByCollection( const Tomahawk::collection_ptr& collection, bool emitOnlineEvents )
 {
-    m_mutex.lock();
     m_collection = collection;
-    m_mutex.unlock();
 
     if ( emitOnlineEvents )
     {

@@ -19,8 +19,7 @@
 
 #include "TrackData.h"
 
-#include <QtAlgorithms>
-#include <QReadWriteLock>
+
 
 #include "audio/AudioEngine.h"
 #include "collection/Collection.h"
@@ -40,6 +39,10 @@
 #include "Album.h"
 #include "PlaylistEntry.h"
 #include "SourceList.h"
+
+#include <QtAlgorithms>
+#include <QReadWriteLock>
+#include <QCoreApplication>
 
 using namespace Tomahawk;
 
@@ -84,6 +87,7 @@ TrackData::get( unsigned int id, const QString& artist, const QString& track )
     }
 
     trackdata_ptr t = trackdata_ptr( new TrackData( id, artist, track ), &TrackData::deleteLater );
+    t->moveToThread( QCoreApplication::instance()->thread() );
     t->setWeakRef( t.toWeakRef() );
     s_trackDatasByName.insert( key, t );
 

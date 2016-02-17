@@ -36,6 +36,7 @@
 
 #include <QReadWriteLock>
 #include <QPixmapCache>
+#include <QCoreApplication>
 
 using namespace Tomahawk;
 
@@ -109,6 +110,7 @@ Artist::get( unsigned int id, const QString& name )
     }
 
     artist_ptr a = artist_ptr( new Artist( id, name ), &Artist::deleteLater );
+    a->moveToThread( QCoreApplication::instance()->thread() );
     a->setWeakRef( a.toWeakRef() );
     s_artistsByName.insert( key, a );
 

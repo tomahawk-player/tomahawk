@@ -33,6 +33,7 @@
 
 #include <QtAlgorithms>
 #include <QDebug>
+#include <QCoreApplication>
 
 using namespace Tomahawk;
 
@@ -47,6 +48,7 @@ Query::get( const QString& artist, const QString& track, const QString& album, c
         autoResolve = false;
 
     query_ptr q = query_ptr( new Query( Track::get( artist, track, album ), qid, autoResolve ), &QObject::deleteLater );
+    q->moveToThread( QCoreApplication::instance()->thread() );
     q->setWeakRef( q.toWeakRef() );
 
     if ( autoResolve )
