@@ -255,6 +255,8 @@ void GridView::wheelEvent( QWheelEvent* e )
                                      // ^ scroll step is 1/8 of the estimated row height
 
     QListView::wheelEvent( e );
+
+    m_delegate->resetHoverIndex();
 }
 
 
