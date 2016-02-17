@@ -687,7 +687,6 @@ TrackView::wheelEvent( QWheelEvent* event )
     QTreeView::wheelEvent( event );
 
     m_delegate->resetHoverIndex();
-    repaint();
 }
 
 

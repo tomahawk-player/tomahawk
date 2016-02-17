@@ -902,7 +902,7 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
 void
 PlaylistItemDelegate::resetHoverIndex()
 {
-    if ( !m_model )
+    if ( !m_model || !m_hoveringOver.isValid() )
         return;
 
     QPersistentModelIndex idx = m_hoveringOver;
@@ -922,7 +922,6 @@ PlaylistItemDelegate::resetHoverIndex()
     }
 
     emit updateIndex( idx );
-    m_view->repaint();
 }
 
 
