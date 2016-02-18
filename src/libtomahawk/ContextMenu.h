@@ -37,21 +37,22 @@ Q_OBJECT
 public:
     enum MenuActions
     {
-        ActionPlay =         1,
-        ActionQueue =        2,
-        ActionDelete =       4,
-        ActionCopyLink =     8,
-        ActionLove =         16,
-        ActionStopAfter =    32,
-        ActionPage =         64,
-        ActionTrackPage =    128,
-        ActionArtistPage =   256,
-        ActionAlbumPage =    512,
-        ActionEditMetadata = 1024,
-        ActionPlaylist =     2048,
-        ActionSend =         4096,
-        ActionMarkListened = 8192,
-        ActionDownload =     16384
+        ActionPlay =            1,
+        ActionQueue =           2,
+        ActionDelete =          4,
+        ActionCopyLink =        8,
+        ActionLove =            16,
+        ActionStopAfter =       32,
+        ActionPage =            64,
+        ActionTrackPage =       128,
+        ActionArtistPage =      256,
+        ActionAlbumPage =       512,
+        ActionEditMetadata =    1024,
+        ActionPlaylist =        2048,
+        ActionSend =            4096,
+        ActionMarkListened =    8192,
+        ActionDownload =        16384,
+        ActionOpenFileManager = 32768
     };
 
     explicit ContextMenu( QWidget* parent = 0 );
