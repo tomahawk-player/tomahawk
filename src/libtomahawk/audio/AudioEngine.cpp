@@ -969,7 +969,7 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
     {
         Pipeline::instance()->resolve( query );
 
-        NewClosure( query.data(), SIGNAL( resolvingFinished( bool ) ),
+        NewClosure( query.data(), SIGNAL( resultsChanged() ),
                     const_cast<AudioEngine*>(this), SLOT( playItem( Tomahawk::playlistinterface_ptr, Tomahawk::query_ptr ) ), playlist, query );
     }
 }
