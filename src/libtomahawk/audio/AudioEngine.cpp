@@ -951,9 +951,9 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
 void
 AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::query_ptr& query )
 {
-    if ( query->resolvingFinished() )
+    if ( query->resolvingFinished() || query->numResults( true ) )
     {
-        if ( query->numResults() && query->results().first()->isOnline() )
+        if ( query->numResults( true ) )
         {
             playItem( playlist, query->results().first(), query );
             return;
