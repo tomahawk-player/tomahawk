@@ -42,7 +42,7 @@ ScriptJob*
 ScriptLinkGeneratorPlugin::openLink( const QString& title, const QString& artist, const QString& album ) const
 {
     QVariantMap arguments;
-    arguments[ "title" ] = QVariant( title );
+    arguments[ "track" ] = QVariant( title );
     arguments[ "artist" ] = QVariant( artist );
     arguments[ "album" ] = QVariant( album );
 
