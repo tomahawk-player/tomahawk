@@ -37,6 +37,9 @@
 #include "utils/ImageRegistry.h"
 #include "utils/Logger.h"
 
+#include <QDesktopServices>
+#include <QFileInfo>
+
 using namespace Tomahawk;
 
 
@@ -51,7 +54,7 @@ ContextMenu::ContextMenu( QWidget* parent )
     m_sigmap = new QSignalMapper( this );
     connect( m_sigmap, SIGNAL( mapped( int ) ), SLOT( onTriggered( int ) ) );
 
-    m_supportedActions = ActionPlay | ActionQueue | ActionPlaylist | ActionCopyLink | ActionLove | ActionStopAfter | ActionPage | ActionEditMetadata | ActionSend;
+    clear();
 }
 
 
@@ -69,7 +72,7 @@ ContextMenu::clear()
     m_albums.clear();
     m_artists.clear();
 
-    m_supportedActions = ActionPlay | ActionQueue | ActionPlaylist | ActionCopyLink | ActionLove | ActionStopAfter | ActionPage | ActionEditMetadata | ActionSend;
+    m_supportedActions = ActionPlay | ActionQueue | ActionPlaylist | ActionCopyLink | ActionLove | ActionStopAfter | ActionPage | ActionEditMetadata | ActionSend | ActionOpenFileManager;
 }
 
 
@@ -239,6 +242,13 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
             m_sigmap->setMapping( addAction( tr( "Mark as &Listened" ) ), ActionMarkListened );
     }
 
+    addSeparator();
+
+    if ( m_supportedActions & ActionOpenFileManager && queries.length() == 1 && m_queries.first()->results().first()->resolvedByCollection()->isLocal() )
+    {
+        m_sigmap->setMapping( addAction( tr( "Open Folder in File Manager..." ) ), ActionOpenFileManager );
+    }
+
     if ( m_supportedActions & ActionDelete )
         m_sigmap->setMapping( addAction( queries.count() > 1 ? tr( "&Remove Items" ) : tr( "&Remove Item" ) ), ActionDelete );
 
@@ -391,6 +401,15 @@ ContextMenu::onTriggered( int action )
             {
                 MetadataEditor* d = new MetadataEditor( m_queries.first(), m_interface, this );
                 d->show();
+            }
+            break;
+
+        case ActionOpenFileManager:
+            {
+                result_ptr result = m_queries.first()->results().first();
+                QString path = QFileInfo( result->url() ).path();
+                tLog() << Q_FUNC_INFO << "open directory" << path;
+                QDesktopServices::openUrl( path );
             }
             break;
 
