@@ -219,10 +219,21 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
     addSeparator();
 
     if ( m_supportedActions & ActionCopyLink && itemCount() == 1 )
+    {
         m_sigmap->setMapping( addAction( tr( "&Copy Track Link" ) ), ActionCopyLink );
+    }
+
+    if ( m_supportedActions & ActionOpenFileManager && queries.length() == 1 &&
+         queries.first()->numResults() &&
+         queries.first()->results().first()->resolvedByCollection()->isLocal() )
+    {
+        m_sigmap->setMapping( addAction( tr( "Open Folder in File Manager..." ) ), ActionOpenFileManager );
+    }
 
     if ( m_supportedActions & ActionEditMetadata && itemCount() == 1 )
+    {
         m_sigmap->setMapping( addAction( tr( "Properties..." ) ), ActionEditMetadata );
+    }
 
     addSeparator();
 
@@ -243,11 +254,6 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
     }
 
     addSeparator();
-
-    if ( m_supportedActions & ActionOpenFileManager && queries.length() == 1 && m_queries.first()->results().first()->resolvedByCollection()->isLocal() )
-    {
-        m_sigmap->setMapping( addAction( tr( "Open Folder in File Manager..." ) ), ActionOpenFileManager );
-    }
 
     if ( m_supportedActions & ActionDelete )
         m_sigmap->setMapping( addAction( queries.count() > 1 ? tr( "&Remove Items" ) : tr( "&Remove Item" ) ), ActionDelete );
