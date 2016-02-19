@@ -165,7 +165,7 @@ AudioEngine::AudioEngine()
     d->s_instance = this;
     tDebug() << "Init AudioEngine";
 
-    d->audioOutput = new AudioOutput(this);
+    d->audioOutput = new AudioOutput( this );
 
     connect( d->audioOutput, SIGNAL( stateChanged( AudioOutput::AudioState, AudioOutput::AudioState ) ), d_func(), SLOT( onStateChanged( AudioOutput::AudioState, AudioOutput::AudioState ) ) );
     connect( d->audioOutput, SIGNAL( tick( qint64 ) ), SLOT( timerTriggered( qint64 ) ) );
@@ -455,6 +455,8 @@ AudioEngine::mute()
 {
     Q_D( AudioEngine );
     d->audioOutput->setMuted( true );
+
+    emit volumeChanged( volume() );
 }
 
 
@@ -463,6 +465,8 @@ AudioEngine::toggleMute()
 {
     Q_D( AudioEngine );
     d->audioOutput->setMuted( !d->audioOutput->isMuted() );
+
+    emit volumeChanged( volume() );
 }
 
 

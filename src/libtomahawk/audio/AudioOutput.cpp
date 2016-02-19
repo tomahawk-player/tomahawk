@@ -128,6 +128,7 @@ AudioOutput::AudioOutput( QObject* parent )
         libvlc_event_attach( manager, events[ i ], &AudioOutput::vlcEventCallback, this );
     }
 
+    m_muted = isMuted();
     tDebug() << Q_FUNC_INFO << "Init OK";
 }
 
@@ -456,7 +457,7 @@ AudioOutput::isSeekable() const
 bool
 AudioOutput::isMuted() const
 {
-    return m_muted;
+    return libvlc_audio_get_mute( m_vlcPlayer );
 }
 
 
@@ -466,11 +467,9 @@ AudioOutput::setMuted( bool m )
     tDebug() << Q_FUNC_INFO;
 
     m_muted = m;
-    if ( m_muted )
-    {
-        libvlc_audio_set_volume( m_vlcPlayer, 0 );
-    }
-    else
+    libvlc_audio_set_mute( m_vlcPlayer, m );
+
+    if ( !m_muted )
     {
         libvlc_audio_set_volume( m_vlcPlayer, m_volume * 100.0 );
     }
@@ -487,7 +486,7 @@ AudioOutput::volume() const
 void
 AudioOutput::setVolume( qreal vol )
 {
-    tDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO << vol << m_muted;
 
     m_volume = vol;
     if ( !m_muted )
