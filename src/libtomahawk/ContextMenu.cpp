@@ -227,7 +227,8 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
          queries.first()->numResults() &&
          queries.first()->results().first()->resolvedByCollection()->isLocal() )
     {
-        m_sigmap->setMapping( addAction( tr( "Open Folder in File Manager..." ) ), ActionOpenFileManager );
+        m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/folder.svg" ),
+                                         tr( "Open Folder in File Manager..." ) ), ActionOpenFileManager );
     }
 
     if ( m_supportedActions & ActionEditMetadata && itemCount() == 1 )
