@@ -123,6 +123,7 @@ AudioOutput::AudioOutput( QObject* parent )
         libvlc_MediaPlayerTitleChanged,
         libvlc_MediaPlayerSnapshotTaken,
         //libvlc_MediaPlayerLengthChanged,
+        libvlc_MediaPlayerAudioVolume,
         libvlc_MediaPlayerVout
     };
     const int eventCount = sizeof(events) / sizeof( *events );
@@ -578,6 +579,9 @@ AudioOutput::onVlcEvent( const libvlc_event_t* event )
             tDebug() << Q_FUNC_INFO << "LibVLC error: MediaPlayerEncounteredError. Stopping";
             // Don't call stop() here - it will deadlock libvlc
             setState( Error );
+            break;
+        case libvlc_MediaPlayerAudioVolume:
+            emit volumeChanged( event->u.media_player_audio_volume.volume );
             break;
         case libvlc_MediaPlayerNothingSpecial:
         case libvlc_MediaPlayerOpening:

@@ -79,6 +79,7 @@ signals:
     void stateChanged( AudioOutput::AudioState, AudioOutput::AudioState );
     void tick( qint64 );
     void positionChanged( float );
+    void volumeChanged( qreal volume );
 
 private:
     void onInitVlcEvent( const libvlc_event_t* event );
