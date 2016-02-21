@@ -42,7 +42,7 @@ public:
 
     MediaStream( QObject* parent = nullptr );
     explicit MediaStream( const QUrl &url );
-    explicit MediaStream( QIODevice* device );
+    explicit MediaStream( QIODevice* device, bool bufferingFinished = false );
     virtual ~MediaStream();
 
     MediaType type() const;
