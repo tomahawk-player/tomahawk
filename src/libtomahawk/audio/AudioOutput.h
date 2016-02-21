@@ -25,6 +25,8 @@
 #include "DllMacro.h"
 #include "Typedefs.h"
 
+#include <QFile>
+
 #include <functional>
 
 struct libvlc_instance_t;
@@ -44,6 +46,7 @@ public:
     explicit AudioOutput( QObject* parent = nullptr );
     ~AudioOutput();
 
+    bool isInitialized() const;
     AudioState state() const;
 
     void setCurrentSource( const QUrl& stream );
@@ -72,11 +75,14 @@ public:
 public slots:
 
 signals:
+    void initialized();
     void stateChanged( AudioOutput::AudioState, AudioOutput::AudioState );
     void tick( qint64 );
     void positionChanged( float );
 
 private:
+    void onInitVlcEvent( const libvlc_event_t* event );
+
     void setState( AudioState state );
     void setCurrentTime( qint64 time );
     void setCurrentPosition( float position );
@@ -98,6 +104,9 @@ private:
     qint64 m_currentTime;
     qint64 m_totalTime;
     bool m_justSeeked;
+
+    bool m_initialized;
+    QFile m_silenceFile;
 
     std::function< void( int state, int frameNumber, float* samples, int nb_channels, int nb_samples ) > dspPluginCallback;
 

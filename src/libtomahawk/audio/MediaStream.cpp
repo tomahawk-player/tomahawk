@@ -41,12 +41,16 @@ MediaStream::MediaStream( const QUrl &url )
 }
 
 
-MediaStream::MediaStream( QIODevice* device )
+MediaStream::MediaStream( QIODevice* device, bool bufferingFinished )
     : QObject( nullptr )
     , m_type( IODevice )
     , m_ioDevice ( device )
+    , m_bufferingFinished( bufferingFinished )
 {
-    QObject::connect( m_ioDevice, SIGNAL( readChannelFinished() ), this, SLOT( bufferingFinished() ) );
+    if ( !bufferingFinished )
+    {
+        QObject::connect( m_ioDevice, SIGNAL( readChannelFinished() ), this, SLOT( bufferingFinished() ) );
+    }
 }
 
 

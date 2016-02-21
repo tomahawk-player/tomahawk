@@ -149,6 +149,8 @@ public slots:
     void setShuffled( bool enabled );
 
 signals:
+    void initialized();
+
     void loading( const Tomahawk::result_ptr track );
     void started( const Tomahawk::result_ptr track );
     void finished( const Tomahawk::result_ptr track );
