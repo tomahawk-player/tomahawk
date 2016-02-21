@@ -412,7 +412,7 @@ SettingsDialog::onCustomContextMenu( const QPoint& point )
 void
 SettingsDialog::onShowDebuggerForSelectedAccount()
 {
-    ResolverAccount* account = m_accountProxy->data( m_accountsWidgetUi->accountsView->currentIndex(), AccountModel::AccountData ).value< ResolverAccount* >();
+    ResolverAccount* account = qobject_cast< ResolverAccount* >( m_accountProxy->data( m_accountsWidgetUi->accountsView->currentIndex(), AccountModel::AccountData ).value< Tomahawk::Accounts::Account* >() );
     Tomahawk::JSResolver* jsResolver = qobject_cast< Tomahawk::JSResolver* >( account->resolver() );
     jsResolver->scriptAccount()->showDebugger();
 }
