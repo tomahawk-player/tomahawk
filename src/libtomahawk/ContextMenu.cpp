@@ -223,8 +223,10 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
         m_sigmap->setMapping( addAction( tr( "&Copy Track Link" ) ), ActionCopyLink );
     }
 
-    if ( m_supportedActions & ActionOpenFileManager && queries.length() == 1 &&
+    if ( m_supportedActions & ActionOpenFileManager &&
+         queries.length() == 1 &&
          queries.first()->numResults() &&
+         queries.first()->results().first()->resolvedByCollection() &&
          queries.first()->results().first()->resolvedByCollection()->isLocal() )
     {
         m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/folder.svg" ),
