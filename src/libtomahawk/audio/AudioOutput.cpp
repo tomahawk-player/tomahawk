@@ -583,7 +583,8 @@ AudioOutput::onVlcEvent( const libvlc_event_t* event )
             setState( Error );
             break;
         case libvlc_MediaPlayerAudioVolume:
-            emit volumeChanged( event->u.media_player_audio_volume.volume );
+            m_volume = event->u.media_player_audio_volume.volume;
+            emit volumeChanged( volume() );
             break;
         case libvlc_MediaPlayerMuted:
             m_muted = true;
