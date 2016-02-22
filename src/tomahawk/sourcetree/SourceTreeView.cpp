@@ -447,7 +447,6 @@ SourceTreeView::deletePlaylist( const QModelIndex& idxIn )
 
     m_popupDialog.data()->move( rightCenter.x() - m_popupDialog.data()->offset(), rightCenter.y() - m_popupDialog.data()->sizeHint().height() / 2. );
     m_popupDialog.data()->show();
-
 }
 
 
