@@ -107,6 +107,9 @@ public:
     unsigned int volume() const;
     void setVolume( unsigned int volume );
 
+    bool muted() const;
+    void setMuted( bool muted );
+
     /// Playlist stuff
     QByteArray playlistColumnSizes( const QString& playlistid ) const;
     void setPlaylistColumnSizes( const QString& playlistid, const QByteArray& state );

@@ -174,6 +174,10 @@ AudioEngine::AudioEngine()
     connect( d->audioOutput, SIGNAL( volumeChanged( qreal ) ), SLOT( onVolumeChanged( qreal ) ) );
     connect( d->audioOutput, SIGNAL( mutedChanged( bool ) ), SIGNAL( mutedChanged( bool ) ) );
 
+    if ( TomahawkSettings::instance()->muted() )
+    {
+        mute();
+    }
     setVolume( TomahawkSettings::instance()->volume() );
 
     qRegisterMetaType< AudioErrorCode >("AudioErrorCode");
@@ -186,6 +190,7 @@ AudioEngine::~AudioEngine()
     tDebug() << Q_FUNC_INFO;
 
     TomahawkSettings::instance()->setVolume( volume() );
+    TomahawkSettings::instance()->setMuted( isMuted() );
 
     delete d_ptr;
 }
