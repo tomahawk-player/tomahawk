@@ -80,6 +80,7 @@ signals:
     void tick( qint64 );
     void positionChanged( float );
     void volumeChanged( qreal volume );
+    void mutedChanged( bool );
 
 private:
     void onInitVlcEvent( const libvlc_event_t* event );

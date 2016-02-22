@@ -172,6 +172,7 @@ AudioEngine::AudioEngine()
     connect( d->audioOutput, SIGNAL( tick( qint64 ) ), SLOT( timerTriggered( qint64 ) ) );
     connect( d->audioOutput, SIGNAL( positionChanged( float ) ), SLOT( onPositionChanged( float ) ) );
     connect( d->audioOutput, SIGNAL( volumeChanged( qreal ) ), SLOT( onVolumeChanged( qreal ) ) );
+    connect( d->audioOutput, SIGNAL( mutedChanged( bool ) ), SIGNAL( mutedChanged( bool ) ) );
 
     setVolume( TomahawkSettings::instance()->volume() );
 

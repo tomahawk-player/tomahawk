@@ -124,6 +124,8 @@ AudioOutput::AudioOutput( QObject* parent )
         libvlc_MediaPlayerSnapshotTaken,
         //libvlc_MediaPlayerLengthChanged,
         libvlc_MediaPlayerAudioVolume,
+        libvlc_MediaPlayerMuted,
+        libvlc_MediaPlayerUnmuted,
         libvlc_MediaPlayerVout
     };
     const int eventCount = sizeof(events) / sizeof( *events );
@@ -582,6 +584,14 @@ AudioOutput::onVlcEvent( const libvlc_event_t* event )
             break;
         case libvlc_MediaPlayerAudioVolume:
             emit volumeChanged( event->u.media_player_audio_volume.volume );
+            break;
+        case libvlc_MediaPlayerMuted:
+            m_muted = true;
+            emit mutedChanged( true );
+            break;
+        case libvlc_MediaPlayerUnmuted:
+            m_muted = false;
+            emit mutedChanged( false );
             break;
         case libvlc_MediaPlayerNothingSpecial:
         case libvlc_MediaPlayerOpening:
