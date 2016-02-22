@@ -134,8 +134,6 @@ AudioOutput::AudioOutput( QObject* parent )
         libvlc_event_attach( manager, events[ i ], &AudioOutput::vlcEventCallback, this );
     }
 
-    m_muted = isMuted();
-
     // HACK: play silent ogg file and set volume on that to workaround vlc not allowing to set volume before a file is played
     m_silenceFile.setFileName( RESPATH "sounds/silence.ogg" );
     Q_ASSERT( m_silenceFile.exists() );
@@ -186,6 +184,7 @@ AudioOutput::onInitVlcEvent( const libvlc_event_t* event )
     {
         case libvlc_MediaPlayerTimeChanged:
             setVolume( volume() );
+            setMuted( isMuted() );
 
             m_initialized = true;
             m_silenceFile.close();
@@ -509,7 +508,7 @@ AudioOutput::isSeekable() const
 bool
 AudioOutput::isMuted() const
 {
-    return libvlc_audio_get_mute( m_vlcPlayer );
+    return m_muted;
 }
 
 
