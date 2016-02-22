@@ -796,20 +796,21 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
 {
     QTreeView::dragMoveEvent( event );
 
+    bool accept = false;
     if ( DropJob::isDropType( DropJob::Playlist, event->mimeData() ) )
     {
         // Don't highlight the drop for a playlist, as it won't get added to the playlist but created generally
         event->setDropAction( Qt::CopyAction );
-        event->accept();
+        accept = true;
     }
     else if ( DropJob::acceptsMimeData( event->mimeData(), DropJob::Track, DropJob::Append ) )
     {
-        bool accept = false;
         setDirtyRegion( m_dropRect );
         const QPoint pos = event->pos();
         const QModelIndex index = indexAt( pos );
-        dataChanged( m_dropIndex, m_dropIndex );
-        m_dropIndex = QPersistentModelIndex( index );
+
+        if ( index != m_dropIndex )
+            dataChanged( m_dropIndex, m_dropIndex );
 
         if ( index.isValid() )
         {
@@ -828,7 +829,8 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
                     case SourcesModel::CategoryAdd:
                     case SourcesModel::Source: //drop to send tracks to peers
                         m_delegate->hovered( index, event->mimeData() );
-                        dataChanged( index, index );
+                        if ( index != m_dropIndex )
+                            dataChanged( index, index );
                         break;
 
                     default:
@@ -844,23 +846,27 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
             m_dropRect = QRect();
         }
 
-        if ( accept || DropJob::isDropType( DropJob::Playlist, event->mimeData() ) )
+        if ( accept )
         {
             // Playlists are accepted always since they can be dropped anywhere
             //tDebug() << Q_FUNC_INFO << "Accepting";
             event->setDropAction( Qt::CopyAction );
-            event->accept();
         }
-        else
-        {
-//             tDebug() << Q_FUNC_INFO << "Ignoring";
-            event->ignore();
-        }
+        m_dropIndex = QPersistentModelIndex( index );
     }
     else if ( DropJob::acceptsMimeData( event->mimeData(), DropJob::Playlist | DropJob::Artist | DropJob::Album, DropJob::Create ) )
     {
         event->setDropAction( Qt::CopyAction );
+        accept = true;
+    }
+
+    if ( accept )
+    {
         event->accept();
+    }
+    else
+    {
+        event->ignore();
     }
 
     setDirtyRegion( m_dropRect );
