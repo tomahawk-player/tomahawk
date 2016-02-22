@@ -1,6 +1,7 @@
 Version 0.9.0:
     * Resolved various playback issues by switching to a new audio engine.
     * Fixed collection sorting.
+    * Fixed volume/mute state not being reset correctly on startup.
 
 Version 0.8.4:
     * Fixed drag & drop issues on sidebar.
