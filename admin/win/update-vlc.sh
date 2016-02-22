@@ -72,7 +72,9 @@ rm -rvf \
     **/libi420* \
     **/libi422* \
     mux/ \
-    stream_filter/ \
+    stream_filter/*dash* \
+    stream_filter/*smooth* \
+    stream_filter/*record* \
     **/libtheora_plugin* \
     **/liblibbluray_plugin* \
     **/libdtv_plugin* \
