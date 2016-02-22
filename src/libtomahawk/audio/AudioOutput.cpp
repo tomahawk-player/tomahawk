@@ -25,11 +25,13 @@
 
 #include "audio/MediaStream.h"
 #include "utils/Logger.h"
+#include "utils/TomahawkUtils.h"
 
 #include <QApplication>
 #include <QVarLengthArray>
 #include <QFile>
 #include <QDir>
+#include <QTimer>
 
 #include <vlc/libvlc.h>
 #include <vlc/libvlc_media.h>
@@ -58,6 +60,7 @@ AudioOutput::AudioOutput( QObject* parent )
     , m_currentTime( 0 )
     , m_totalTime( 0 )
     , m_justSeeked( false )
+    , m_initialized( false )
     , dspPluginCallback( nullptr )
     , m_vlcInstance( nullptr )
     , m_vlcPlayer( nullptr )
@@ -120,6 +123,11 @@ AudioOutput::AudioOutput( QObject* parent )
         libvlc_MediaPlayerTitleChanged,
         libvlc_MediaPlayerSnapshotTaken,
         //libvlc_MediaPlayerLengthChanged,
+#if (LIBVLC_VERSION_INT >= LIBVLC_VERSION(2, 2, 2, 0))
+        libvlc_MediaPlayerAudioVolume,
+        libvlc_MediaPlayerMuted,
+        libvlc_MediaPlayerUnmuted,
+#endif
         libvlc_MediaPlayerVout
     };
     const int eventCount = sizeof(events) / sizeof( *events );
@@ -128,8 +136,24 @@ AudioOutput::AudioOutput( QObject* parent )
         libvlc_event_attach( manager, events[ i ], &AudioOutput::vlcEventCallback, this );
     }
 
-    m_muted = isMuted();
-    tDebug() << Q_FUNC_INFO << "Init OK";
+    // HACK: play silent ogg file and set volume on that to workaround vlc not allowing to set volume before a file is played
+    m_silenceFile.setFileName( RESPATH "sounds/silence.ogg" );
+    Q_ASSERT( m_silenceFile.exists() );
+    Q_ASSERT( m_silenceFile.open( QIODevice::ReadOnly ) );
+
+    setCurrentSource( new MediaStream( &m_silenceFile, true ) );
+    libvlc_media_player_play( m_vlcPlayer );
+
+    #if QT_VERSION >= QT_VERSION_CHECK(5,4,0)
+    // if the silence file did not play for 15 secs, we pretend the AudioOutput is initialized, to allow proper error reporting
+    QTimer::singleShot( 15000, [&]()
+    {
+        if ( !m_initialized ) {
+            m_initialized = true;
+            emit initialized();
+        }
+    } );
+    #endif
 }
 
 
@@ -151,6 +175,28 @@ AudioOutput::~AudioOutput()
     if ( m_vlcInstance != nullptr )
     {
         libvlc_release( m_vlcInstance );
+    }
+}
+
+
+void
+AudioOutput::onInitVlcEvent( const libvlc_event_t* event )
+{
+    switch ( event->type )
+    {
+        case libvlc_MediaPlayerTimeChanged:
+            setVolume( volume() );
+            setMuted( isMuted() );
+
+            m_initialized = true;
+            m_silenceFile.close();
+
+            tDebug() << Q_FUNC_INFO << "Init OK";
+            emit initialized();
+            break;
+
+        default:
+            break;
     }
 }
 
@@ -300,6 +346,13 @@ AudioOutput::setCurrentSource( MediaStream* stream )
     }
 
 //    setState( Stopped );
+}
+
+
+bool
+AudioOutput::isInitialized() const
+{
+    return m_initialized;
 }
 
 
@@ -457,7 +510,7 @@ AudioOutput::isSeekable() const
 bool
 AudioOutput::isMuted() const
 {
-    return libvlc_audio_get_mute( m_vlcPlayer );
+    return m_muted;
 }
 
 
@@ -530,6 +583,20 @@ AudioOutput::onVlcEvent( const libvlc_event_t* event )
             // Don't call stop() here - it will deadlock libvlc
             setState( Error );
             break;
+#if (LIBVLC_VERSION_INT >= LIBVLC_VERSION(2, 2, 2, 0))
+        case libvlc_MediaPlayerAudioVolume:
+            m_volume = event->u.media_player_audio_volume.volume;
+            emit volumeChanged( volume() );
+            break;
+        case libvlc_MediaPlayerMuted:
+            m_muted = true;
+            emit mutedChanged( true );
+            break;
+        case libvlc_MediaPlayerUnmuted:
+            m_muted = false;
+            emit mutedChanged( false );
+            break;
+#endif
         case libvlc_MediaPlayerNothingSpecial:
         case libvlc_MediaPlayerOpening:
         case libvlc_MediaPlayerBuffering:
@@ -555,7 +622,14 @@ AudioOutput::vlcEventCallback( const libvlc_event_t* event, void* opaque )
     AudioOutput* that = reinterpret_cast < AudioOutput * > ( opaque );
     Q_ASSERT( that );
 
-    that->onVlcEvent( event );
+    if ( !that->isInitialized() )
+    {
+        that->onInitVlcEvent( event );
+    }
+    else
+    {
+        that->onVlcEvent( event );
+    }
 }
 
 

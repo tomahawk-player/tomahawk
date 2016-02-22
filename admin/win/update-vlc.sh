@@ -9,19 +9,20 @@ fi
 
 rm -rvf vlc/
 
+VLC_TARBALL="vlc-2.2.3.tar.bz2"
 
 echo "Download phonon archive..."
 # wget -c "http://downloads.sourceforge.net/project/vlc/1.1.9/win32/vlc-1.1.9-win32.7z?r=http%3A%2F%2Fwww.videolan.org%2Fvlc%2Fdownload-windows.html&ts=1306272584&use_mirror=leaseweb"
 # wget -c "http://download.tomahawk-player.org/tomahawk-vlc-0.1.zip"
 # wget -c http://people.videolan.org/~jb/phonon/phonon-vlc-last.7z
 # wget -c http://people.videolan.org/~jb/phonon/phonon_phonon-vlc_20111128.7z
-wget -c http://download.tomahawk-player.org/test/vlc.tar.bz2
+wget -c "http://download.tomahawk-player.org/test/$VLC_TARBALL"
 
 echo "Extract binary..."
 # 7z x phonon*.7z
 # mv -v vlc-*/ vlc/
 # unzip tomahawk-vlc-0.1.zip
-tar xvjf vlc.tar.bz2
+tar xvjf "$VLC_TARBALL"
 
 # echo "Download phonon_vlc_no_video.dll..."
 # wget -c http://people.videolan.org/~jb/phonon/phonon_vlc_no_video.dll

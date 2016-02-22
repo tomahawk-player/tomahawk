@@ -170,5 +170,6 @@
         <file>data/images/downloadbutton.svg</file>
         <file>data/images/nav-back.svg</file>
         <file>data/images/nav-forward.svg</file>
+        <file>data/sounds/silence.ogg</file>
     </qresource>
 </RCC>

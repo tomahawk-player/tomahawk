@@ -167,10 +167,17 @@ AudioEngine::AudioEngine()
 
     d->audioOutput = new AudioOutput( this );
 
+    connect( d->audioOutput, SIGNAL( initialized() ), this, SIGNAL( initialized() ) );
     connect( d->audioOutput, SIGNAL( stateChanged( AudioOutput::AudioState, AudioOutput::AudioState ) ), d_func(), SLOT( onStateChanged( AudioOutput::AudioState, AudioOutput::AudioState ) ) );
     connect( d->audioOutput, SIGNAL( tick( qint64 ) ), SLOT( timerTriggered( qint64 ) ) );
     connect( d->audioOutput, SIGNAL( positionChanged( float ) ), SLOT( onPositionChanged( float ) ) );
+    connect( d->audioOutput, SIGNAL( volumeChanged( qreal ) ), SLOT( onVolumeChanged( qreal ) ) );
+    connect( d->audioOutput, SIGNAL( mutedChanged( bool ) ), SIGNAL( mutedChanged( bool ) ) );
 
+    if ( TomahawkSettings::instance()->muted() )
+    {
+        mute();
+    }
     setVolume( TomahawkSettings::instance()->volume() );
 
     qRegisterMetaType< AudioErrorCode >("AudioErrorCode");
@@ -183,6 +190,7 @@ AudioEngine::~AudioEngine()
     tDebug() << Q_FUNC_INFO;
 
     TomahawkSettings::instance()->setVolume( volume() );
+    TomahawkSettings::instance()->setMuted( isMuted() );
 
     delete d_ptr;
 }
@@ -289,8 +297,11 @@ AudioEngine::stop( AudioErrorCode errorCode )
     if ( d->waitingOnNewTrack )
         sendWaitingNotification();
 
-    Tomahawk::InfoSystem::InfoPushData pushData( s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowStopped, QVariant(), Tomahawk::InfoSystem::PushNoFlag );
-    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
+    if ( d->audioOutput->isInitialized() )
+    {
+        Tomahawk::InfoSystem::InfoPushData pushData( s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowStopped, QVariant(), Tomahawk::InfoSystem::PushNoFlag );
+        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
+    }
 }
 
 
@@ -565,6 +576,12 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 {
     Q_D( AudioEngine );
     tDebug( LOGEXTRA ) << Q_FUNC_INFO << ( result.isNull() ? QString() : result->url() );
+
+
+    if ( !d->audioOutput->isInitialized() )
+    {
+        return;
+    }
 
     if ( !result )
     {

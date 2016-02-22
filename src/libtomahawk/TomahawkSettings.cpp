@@ -929,6 +929,20 @@ TomahawkSettings::setVolume( unsigned int volume )
 }
 
 
+bool
+TomahawkSettings::muted() const
+{
+    return value( "audio/muted" ).toBool();
+}
+
+
+void
+TomahawkSettings::setMuted( bool muted )
+{
+    setValue( "audio/muted", muted );
+}
+
+
 QString
 TomahawkSettings::proxyHost() const
 {
