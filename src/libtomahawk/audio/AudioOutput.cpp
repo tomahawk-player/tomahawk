@@ -123,9 +123,11 @@ AudioOutput::AudioOutput( QObject* parent )
         libvlc_MediaPlayerTitleChanged,
         libvlc_MediaPlayerSnapshotTaken,
         //libvlc_MediaPlayerLengthChanged,
+#if (LIBVLC_VERSION_INT >= LIBVLC_VERSION(2, 2, 2, 0))
         libvlc_MediaPlayerAudioVolume,
         libvlc_MediaPlayerMuted,
         libvlc_MediaPlayerUnmuted,
+#endif
         libvlc_MediaPlayerVout
     };
     const int eventCount = sizeof(events) / sizeof( *events );
@@ -581,6 +583,7 @@ AudioOutput::onVlcEvent( const libvlc_event_t* event )
             // Don't call stop() here - it will deadlock libvlc
             setState( Error );
             break;
+#if (LIBVLC_VERSION_INT >= LIBVLC_VERSION(2, 2, 2, 0))
         case libvlc_MediaPlayerAudioVolume:
             m_volume = event->u.media_player_audio_volume.volume;
             emit volumeChanged( volume() );
@@ -593,6 +596,7 @@ AudioOutput::onVlcEvent( const libvlc_event_t* event )
             m_muted = false;
             emit mutedChanged( false );
             break;
+#endif
         case libvlc_MediaPlayerNothingSpecial:
         case libvlc_MediaPlayerOpening:
         case libvlc_MediaPlayerBuffering:
