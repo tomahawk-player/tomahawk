@@ -167,7 +167,7 @@ main( int argc, char *argv[] )
     QCA::Initializer init;
     Q_UNUSED( init )
 
-#ifdef Q_OS_MAC
+    #ifdef Q_OS_MAC
     // Do Mac specific startup to get media keys working.
     // This must go before QApplication initialisation.
     Tomahawk::macMain();
@@ -253,11 +253,11 @@ main( int argc, char *argv[] )
 
 
 #ifdef Q_OS_MAC
-#ifdef Q_OS_MAC64
+    #ifdef Q_OS_MAC64
 static pascal OSErr appleEventHandler( const AppleEvent* e, AppleEvent*, void* )
-#elif defined Q_OS_MAC32
+    #elif defined Q_OS_MAC32
 static pascal OSErr appleEventHandler( const AppleEvent* e, AppleEvent*, long )
-#endif //Q_OS_MAC64/32
+    #endif //Q_OS_MAC64/32
 {
     OSType id = typeWildCard;
     AEGetAttributePtr( e, keyEventIDAttr, typeType, 0, &id, sizeof( id ), 0 );
