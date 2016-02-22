@@ -156,6 +156,7 @@ XspfUpdater::setAutoUpdate( bool autoUpdate )
     emit changed();
 }
 
+
 void
 XspfUpdater::setInterval( int intervalMsecs )
 {
