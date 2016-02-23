@@ -1371,8 +1371,7 @@ Servent::isIPWhitelisted( QHostAddress ip )
         }
     }
 
-#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    // Qt4 cannot cope correctly with IPv4 addresses mapped into the IPv6
+    // Qt cannot cope correctly with IPv4 addresses mapped into the IPv6
     // address space
     if ( ip.protocol() == QAbstractSocket::IPv6Protocol )
     {
@@ -1397,7 +1396,6 @@ Servent::isIPWhitelisted( QHostAddress ip )
             return isIPWhitelisted( addr );
         }
     }
-#endif
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "failure";
     return false;
