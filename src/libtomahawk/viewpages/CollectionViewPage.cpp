@@ -57,7 +57,7 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
 {
     qRegisterMetaType< CollectionViewPageMode >( "CollectionViewPageMode" );
 
-    m_header->setBackground( ImageRegistry::instance()->pixmap( RESPATH "images/collection_background.png", QSize( 0, 0 ) ), false );
+    m_header->setBackground( ImageRegistry::instance()->pixmap( RESPATH "images/collection_background.png", QSize( 0, 0 ) ), true );
 
     setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultCollection, TomahawkUtils::Original, QSize( 256, 256 ) ) );
 
