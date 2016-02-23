@@ -63,7 +63,6 @@ CollectionViewPage::CollectionViewPage( const Tomahawk::collection_ptr& collecti
 
     m_columnView->proxyModel()->setStyle( PlayableProxyModel::SingleColumn );
 
-
     PlayableProxyModel* trackViewProxyModel = m_trackView->proxyModel();
     if ( collection->backendType() == Collection::ScriptCollectionType )
     {
