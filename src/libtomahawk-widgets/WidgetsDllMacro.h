@@ -23,7 +23,7 @@
 #include <QtCore/qglobal.h>
 
 #ifndef TOMAHAWK_WIDGETS_EXPORT
-# if defined (tomahawk_widgets_EXPORTS)
+# if defined (TOMAHAWK_WIDGETS_EXPORT_PRO)
 #  define TOMAHAWK_WIDGETS_EXPORT Q_DECL_EXPORT
 # else
 #  define TOMAHAWK_WIDGETS_EXPORT Q_DECL_IMPORT

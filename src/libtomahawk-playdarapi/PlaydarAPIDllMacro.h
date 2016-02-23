@@ -23,7 +23,7 @@
 #include <QtCore/qglobal.h>
 
 #ifndef TOMAHAWK_PLAYDARAPI_EXPORT
-# if defined (tomahawk_playdarapi_EXPORTS)
+# if defined (TOMAHAWK_WIDGETS_EXPORT_PRO)
 #  define TOMAHAWK_PLAYDARAPI_EXPORT Q_DECL_EXPORT
 # else
 #  define TOMAHAWK_PLAYDARAPI_EXPORT Q_DECL_IMPORT

@@ -24,6 +24,7 @@ tomahawk_add_library(${TOMAHAWK_PLAYDARAPI_LIBRARY_TARGET}
         qtcertificateaddon
         ${GNUTLS_LIBRARIES}
     EXPORT TomahawkLibraryDepends
+    EXPORT_MACRO TOMAHAWK_WIDGETS_EXPORT_PRO
     VERSION ${TOMAHAWK_VERSION_SHORT}
     )
 
