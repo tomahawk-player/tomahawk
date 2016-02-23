@@ -970,13 +970,6 @@ SourceTreeView::paintEvent( QPaintEvent* event )
 
 
 void
-SourceTreeView::drawRow( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
-{
-    QTreeView::drawRow( painter, option, index );
-}
-
-
-void
 SourceTreeView::drawBranches( QPainter* /* painter */, const QRect& /* rect */, const QModelIndex& /* index */ ) const
 {
     return;
