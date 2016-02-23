@@ -570,7 +570,7 @@ SourceTreeView::addToLocal()
         // copy to a link and then generate a new playlist from that
         // this way we cheaply regenerate the needed controls
         ScriptJob* job = Utils::LinkGenerator::instance()->openLink( playlist );
-        if( !job )
+        if ( !job )
         {
             // No supported generator
             return;
@@ -585,7 +585,7 @@ SourceTreeView::addToLocal()
 
         // just create the new playlist with the same values
         QList< query_ptr > queries;
-        foreach( const plentry_ptr& e, playlist->entries() )
+        foreach ( const plentry_ptr& e, playlist->entries() )
             queries << e->query();
 
         playlist_ptr newpl = Playlist::create( SourceList::instance()->getLocal(), uuid(), playlist->title(), playlist->info(), playlist->creator(), playlist->shared(), queries );
@@ -658,7 +658,6 @@ SourceTreeView::latchOff( const Tomahawk::source_ptr& source )
 void
 SourceTreeView::latchModeToggled( bool checked )
 {
-    tDebug() << Q_FUNC_INFO << checked;
     disconnect( this, SLOT( latchOff() ) );
     if ( !m_contextMenuIndex.isValid() )
         return;
@@ -755,7 +754,7 @@ SourceTreeView::onCustomContextMenu( const QPoint& pos )
         customMenu.addActions( customActions );
         customMenu.exec( mapToGlobal( pos ) );
     }
-    m_contextMenuIndex = QModelIndex(); //we invalidate it because there's no active context menu
+    m_contextMenuIndex = QModelIndex(); // we invalidate it because there's no active context menu
 }
 
 
