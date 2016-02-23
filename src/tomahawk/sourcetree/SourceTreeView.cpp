@@ -892,26 +892,25 @@ SourceTreeView::dropEvent( QDropEvent* event )
     }*/
 
     QTreeView::dropEvent( event );
-    if ( event->isAccepted() )
+    if ( !event->isAccepted() )
     {
-        tDebug() << Q_FUNC_INFO << "Ignoring accepted event!";
-    }
-    // if it's a playlist drop, accept it anywhere in the sourcetree by manually parsing it.
-    else if ( DropJob::isDropType( DropJob::Playlist, event->mimeData() ) )
-    {
-        DropJob* dropThis = new DropJob;
-        dropThis->setDropTypes( DropJob::Playlist );
-        dropThis->setDropAction( DropJob::Create );
-        dropThis->parseMimeData( event->mimeData() );
+        // if it's a playlist drop, accept it anywhere in the sourcetree by manually parsing it.
+        if ( DropJob::isDropType( DropJob::Playlist, event->mimeData() ) )
+        {
+            DropJob* dropThis = new DropJob;
+            dropThis->setDropTypes( DropJob::Playlist );
+            dropThis->setDropAction( DropJob::Create );
+            dropThis->parseMimeData( event->mimeData() );
 
-        // Don't add it to the playlist under drop, it's a new playlist now
-        event->acceptProposedAction();
-        event->accept();
-    }
-    else if ( model()->dropMimeData( event->mimeData(), event->proposedAction(), index.row(), 0, index.parent() ) )
-    {
-        event->acceptProposedAction();
-        event->accept();
+            // Don't add it to the playlist under drop, it's a new playlist now
+            event->acceptProposedAction();
+            event->accept();
+        }
+        else if ( model()->dropMimeData( event->mimeData(), event->proposedAction(), index.row(), 0, index.parent() ) )
+        {
+            event->acceptProposedAction();
+            event->accept();
+        }
     }
 
     m_dragging = false;
