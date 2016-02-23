@@ -827,7 +827,7 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
                 {
                     case SourcesModel::StaticPlaylist:
                     case SourcesModel::CategoryAdd:
-                    case SourcesModel::Source: //drop to send tracks to peers
+                    case SourcesModel::Source: // drop to send tracks to peers
                         m_delegate->hovered( index, event->mimeData() );
                         if ( index != m_dropIndex )
                             dataChanged( index, index );
@@ -851,8 +851,10 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
             // Playlists are accepted always since they can be dropped anywhere
             //tDebug() << Q_FUNC_INFO << "Accepting";
             event->setDropAction( Qt::CopyAction );
+            m_dropIndex = QPersistentModelIndex( index );
         }
-        m_dropIndex = QPersistentModelIndex( index );
+        else
+            m_dropIndex = QPersistentModelIndex();
     }
     else if ( DropJob::acceptsMimeData( event->mimeData(), DropJob::Playlist | DropJob::Artist | DropJob::Album, DropJob::Create ) )
     {
@@ -949,7 +951,8 @@ SourceTreeView::keyPressEvent( QKeyEvent* event )
 void
 SourceTreeView::paintEvent( QPaintEvent* event )
 {
-    if ( m_dragging && !m_dropRect.isEmpty() )
+    /* Draw drag & drop hover background */
+    if ( m_dragging && !m_dropRect.isEmpty() && m_dropIndex.isValid() )
     {
         QPainter painter( viewport() );
         const QRect itemRect = visualRect( m_dropIndex );
