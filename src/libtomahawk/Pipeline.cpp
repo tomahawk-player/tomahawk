@@ -36,7 +36,7 @@
 #define MAX_CONCURRENT_QUERIES 16
 #define CLEANUP_TIMEOUT 5 * 60 * 1000
 #define MINSCORE 0.5
-#define DEFAULT_RESOLVER_TIMEOUT 5000 //5 seconds
+#define DEFAULT_RESOLVER_TIMEOUT 5000 // 5 seconds
 
 using namespace Tomahawk;
 
@@ -542,12 +542,12 @@ Pipeline::shuntNext()
         q->setCurrentResolver( 0 );
     }
 
-    //Zero-patient, a stub so that query is not resolved until we go through
-    //all resolvers
-    //As query considered as 'finished trying to resolve' when there are no
-    //more qid entries in qidsState we'll put one as sort of 'keep this until
-    //we kick off all our resolvers' entry
-    //once we kick off all resolvers we'll remove this entry
+    // Zero-patient, a stub so that query is not resolved until we go through
+    // all resolvers
+    // As query considered as 'finished trying to resolve' when there are no
+    // more qid entries in qidsState we'll put one as sort of 'keep this until
+    // we kick off all our resolvers' entry
+    // once we kick off all resolvers we'll remove this entry
     incQIDState( q, nullptr );
     checkQIDState( q );
 }
@@ -673,7 +673,7 @@ Pipeline::decQIDState( const Tomahawk::query_ptr& query, Tomahawk::Resolver* r )
     {
         {
             QMutexLocker lock( &d->mut );
-            d->qidsState.remove( query->id(), r );//Removes all matching pairs
+            d->qidsState.remove( query->id(), r ); // Removes all matching pairs
         }
 
         checkQIDState( query );
