@@ -46,7 +46,7 @@ CERT_SIGNER=$2
     cd ..
     if [ -f ~/sign_step.sh ];
     then
-        ~/sign_step.sh "$CERT_SIGNER" "${TARGET_NAME}.app" || true
+        ~/sign_step.sh "$CERT_SIGNER" "${TARGET_NAME}.app"
     fi
 
     header "Creating DMG"
