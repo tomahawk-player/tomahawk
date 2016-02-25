@@ -9,7 +9,7 @@ fi
 
 rm -rvf vlc/
 
-VLC_TARBALL="vlc-2.2.3.tar.bz2"
+VLC_TARBALL="vlc.tar.bz2"
 
 echo "Download phonon archive..."
 # wget -c "http://downloads.sourceforge.net/project/vlc/1.1.9/win32/vlc-1.1.9-win32.7z?r=http%3A%2F%2Fwww.videolan.org%2Fvlc%2Fdownload-windows.html&ts=1306272584&use_mirror=leaseweb"
