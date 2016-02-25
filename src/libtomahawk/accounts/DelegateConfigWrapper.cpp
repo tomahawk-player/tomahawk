@@ -68,6 +68,7 @@ DelegateConfigWrapper::DelegateConfigWrapper( Tomahawk::Accounts::Account* accou
         h->setContentsMargins( m_widget->contentsMargins() );
 
     m_errorLabel->setAlignment( Qt::AlignCenter );
+    m_errorLabel->setWordWrap( true );
     v->addWidget( m_errorLabel );
 
     v->addLayout( h );
