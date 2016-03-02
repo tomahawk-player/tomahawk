@@ -65,8 +65,7 @@ protected:
     bool m_error;
     QString m_id;
     scriptobject_ptr m_scriptObject;
-    QVariantMap m_data;
-    QVariant m_data_primitive;
+    QVariant m_data;
     QString m_methodName;
     QVariantMap m_arguments;
 };

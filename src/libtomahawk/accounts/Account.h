@@ -167,7 +167,7 @@ signals:
     void connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState state );
 
     void configurationChanged();
-    void configTestResult( int, const QString& );
+    void configTestResult( int, const QString& = QString() );
 
 protected:
     virtual void loadFromConfig( const QString &accountId );

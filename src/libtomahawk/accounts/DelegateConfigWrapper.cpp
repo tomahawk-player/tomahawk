@@ -227,12 +227,7 @@ DelegateConfigWrapper::onConfigTestResult( int code, const QString& message )
 
         m_invalidData = m_widget->readData();
 
-	QString msg;
-	if (message.isEmpty()){
-	    msg = getTestConfigMessage(code);
-	} else {
-	    msg = message;
-	}
+	QString msg = !message.isEmpty() ? message : getTestConfigMessage( code );
         m_errorLabel->setText( QString( "<font color='red'>%1</font>" ).arg( msg ) );
     }
 }
@@ -242,15 +237,15 @@ DelegateConfigWrapper::getTestConfigMessage( int code )
 {
     switch(code) {
 	case Tomahawk::Accounts::ConfigTestResultCommunicationError:
-	    return QObject::tr( "Unable to authenticate. Please check your connection." );
+	    return tr( "Unable to authenticate. Please check your connection." );
 	case Tomahawk::Accounts::ConfigTestResultInvalidCredentials:
-	    return QObject::tr( "Username or password incorrect." );
+	    return tr( "Username or password incorrect." );
 	case Tomahawk::Accounts::ConfigTestResultInvalidAccount:
-	    return QObject::tr( "Account rejected by server." );
+	    return tr( "Account rejected by server." );
 	case Tomahawk::Accounts::ConfigTestResultPlayingElsewhere:
-	    return QObject::tr( "Action not allowed, account is in use elsewhere." );
+	    return tr( "Action not allowed, account is in use elsewhere." );
 	case Tomahawk::Accounts::ConfigTestResultAccountExpired:
-	    return QObject::tr( "Your account has expired." );
+	    return tr( "Your account has expired." );
     }
 }
 

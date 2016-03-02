@@ -547,7 +547,7 @@ ResolverAccount::testConfig()
     }
     else
     {
-        emit configTestResult( Accounts::ConfigTestResultSuccess, "" );
+        emit configTestResult( Accounts::ConfigTestResultSuccess );
     }
 }
 
@@ -564,13 +564,13 @@ ResolverAccount::onTestConfig( const QVariant& result )
 {
     tLog() << Q_FUNC_INFO << result;
 
-    if (result.type() == QMetaType::QString)
+    if ( result.type() == QMetaType::QString )
     {
         emit configTestResult( Accounts::ConfigTestResultOther, result.toString() ); 
     }
     else
     {
-        emit configTestResult( result.toInt(), "" );       
+        emit configTestResult( result.toInt() );       
     }
 
     sender()->deleteLater();
