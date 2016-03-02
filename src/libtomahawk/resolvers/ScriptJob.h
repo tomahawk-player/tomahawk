@@ -49,11 +49,13 @@ public:
     QVariantMap arguments() const;
 
 public slots:
-    void reportResults( const QVariantMap& data = QVariantMap() );
+    void reportResultsMap( const QVariantMap& data = QVariantMap() );
+    void reportResults( const QVariant& data = QVariant() );
     void reportFailure( const QString& errorMessage );
 
 signals:
     void done( const QVariantMap& result );
+    void done( const QVariant& result );
     void error( const QString& errorMessage );
 
     void destroyed( const QString& id );
@@ -64,6 +66,7 @@ protected:
     QString m_id;
     scriptobject_ptr m_scriptObject;
     QVariantMap m_data;
+    QVariant m_data_primitive;
     QString m_methodName;
     QVariantMap m_arguments;
 };

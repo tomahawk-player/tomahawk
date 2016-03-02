@@ -542,12 +542,12 @@ ResolverAccount::testConfig()
     {
         QVariantMap data = resolver->loadDataFromWidgets();
         ScriptJob* job = resolver->scriptObject()->invoke( "testConfig", data );
-        connect( job, SIGNAL( done( QVariantMap ) ), SLOT( onTestConfig( QVariantMap ) ) );
+        connect( job, SIGNAL( done( QVariant ) ), SLOT( onTestConfig( QVariant ) ) );
         job->start();
     }
     else
     {
-        emit configTestResult( Accounts::ConfigTestResultSuccess );
+        emit configTestResult( Accounts::ConfigTestResultSuccess, "" );
     }
 }
 
@@ -560,18 +560,17 @@ ResolverAccount::resolver() const
 
 
 void
-ResolverAccount::onTestConfig( const QVariantMap& result )
+ResolverAccount::onTestConfig( const QVariant& result )
 {
     tLog() << Q_FUNC_INFO << result;
 
-    int resultCode = result[ "result" ].toInt();
-    if ( resultCode == 1 )
+    if (result.type() == QMetaType::QString)
     {
-        emit configTestResult( Accounts::ConfigTestResultSuccess );
+        emit configTestResult( Accounts::ConfigTestResultOther, result.toString() ); 
     }
     else
     {
-        emit configTestResult( Accounts::ConfigTestResultOther );
+        emit configTestResult( result.toInt(), "" );       
     }
 
     sender()->deleteLater();

@@ -82,9 +82,17 @@ ScriptJob::arguments() const
 
 
 void
-ScriptJob::reportResults( const QVariantMap& data )
+ScriptJob::reportResultsMap( const QVariantMap& data )
 {
     m_data = data;
+    emit done( data );
+}
+
+
+void
+ScriptJob::reportResults( const QVariant& data )
+{
+    m_data_primitive = data;
     emit done( data );
 }
 
@@ -94,5 +102,5 @@ ScriptJob::reportFailure( const QString& errorMessage )
 {
     emit error( errorMessage );
 
-    reportResults( QVariantMap() );
+    reportResultsMap( QVariantMap() );
 }

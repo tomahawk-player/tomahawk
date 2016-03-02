@@ -157,9 +157,15 @@ ScriptAccount::reportScriptJobResult( const QVariantMap& result )
     // got a successful job result
     if ( result[ "error"].isNull() )
     {
-        const QVariantMap data = result[ "data" ].toMap();
-
-        job->reportResults( data );
+	if (result[ "data" ].type() == QMetaType::QVariantMap)
+	{
+	    const QVariantMap data = result[ "data" ].toMap();
+	    job->reportResultsMap( data );
+	}
+	else
+	{
+	    job->reportResults( result[ "data" ] );
+	}
     }
     else
     {

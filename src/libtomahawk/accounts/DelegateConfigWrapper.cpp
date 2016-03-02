@@ -82,7 +82,7 @@ DelegateConfigWrapper::DelegateConfigWrapper( Tomahawk::Accounts::Account* accou
     if ( m_widget->metaObject()->indexOfSignal( "sizeHintChanged()" ) > -1 )
         connect( m_widget, SIGNAL( sizeHintChanged() ), this, SLOT( updateSizeHint() ) );
 
-    connect( m_account, SIGNAL( configTestResult( Tomahawk::Accounts::ConfigTestResultType ) ), SLOT( onConfigTestResult( Tomahawk::Accounts::ConfigTestResultType ) ) );
+    connect( m_account, SIGNAL( configTestResult( int, const QString& ) ), SLOT( onConfigTestResult( int, const QString& ) ) );
 }
 
 
@@ -193,11 +193,11 @@ DelegateConfigWrapper::aboutClicked( bool )
 
 
 void
-DelegateConfigWrapper::onConfigTestResult( Tomahawk::Accounts::ConfigTestResultType result )
+DelegateConfigWrapper::onConfigTestResult( int code, const QString& message )
 {
-    tLog() << Q_FUNC_INFO << result;
+    tLog() << Q_FUNC_INFO << code << ": " << message;
 
-    if( result == Tomahawk::Accounts::ConfigTestResultSuccess )
+    if( code == Tomahawk::Accounts::ConfigTestResultSuccess )
     {
         m_invalidData = QVariantMap();
         closeDialog( QDialog::Accepted );
@@ -227,8 +227,30 @@ DelegateConfigWrapper::onConfigTestResult( Tomahawk::Accounts::ConfigTestResultT
 
         m_invalidData = m_widget->readData();
 
-        // TODO: generate message based on status code
-        m_errorLabel->setText( QString( "<font color='red'>%1</font>" ).arg( tr( "Your config is invalid." ) ) );
+	QString msg;
+	if (message.isEmpty()){
+	    msg = getTestConfigMessage(code);
+	} else {
+	    msg = message;
+	}
+        m_errorLabel->setText( QString( "<font color='red'>%1</font>" ).arg( msg ) );
+    }
+}
+
+QString
+DelegateConfigWrapper::getTestConfigMessage( int code )
+{
+    switch(code) {
+	case Tomahawk::Accounts::ConfigTestResultCommunicationError:
+	    return QObject::tr( "Unable to authenticate. Please check your connection." );
+	case Tomahawk::Accounts::ConfigTestResultInvalidCredentials:
+	    return QObject::tr( "Username or password incorrect." );
+	case Tomahawk::Accounts::ConfigTestResultInvalidAccount:
+	    return QObject::tr( "Account rejected by server." );
+	case Tomahawk::Accounts::ConfigTestResultPlayingElsewhere:
+	    return QObject::tr( "Action not allowed, account is in use elsewhere." );
+	case Tomahawk::Accounts::ConfigTestResultAccountExpired:
+	    return QObject::tr( "Your account has expired." );
     }
 }
 

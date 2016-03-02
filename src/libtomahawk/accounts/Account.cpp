@@ -153,7 +153,7 @@ Account::removeFromConfig()
 void
 Account::testConfig()
 {
-    emit configTestResult( ConfigTestResultSuccess );
+    emit configTestResult( ConfigTestResultSuccess, "" );
 }
 
 

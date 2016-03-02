@@ -60,10 +60,11 @@ protected:
 
 private slots:
     void aboutClicked( bool );
-    void onConfigTestResult( Tomahawk::Accounts::ConfigTestResultType );
+    void onConfigTestResult( int, const QString& );
 
 private:
     void closeDialog( QDialog::DialogCode code );
+    QString getTestConfigMessage( int code );
 
     Tomahawk::Accounts::Account* m_account;
     AccountConfigWidget* m_widget;

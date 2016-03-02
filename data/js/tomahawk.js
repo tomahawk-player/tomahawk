@@ -300,8 +300,9 @@ Tomahawk.Resolver = {
     },
 
     _adapter_testConfig: function (config) {
-        return RSVP.Promise.resolve(this.testConfig(config)).then(function () {
-            return {result: Tomahawk.ConfigTestResultType.Success};
+        return RSVP.Promise.resolve(this.testConfig(config)).then(function (results) {
+            results = results || Tomahawk.ConfigTestResultType.Success;
+            return results;
         });
     }
 };
