@@ -240,7 +240,7 @@ MetadataEditor::loadResult( const Tomahawk::result_ptr& result )
         return;
 
     m_result = result;
-    setEditable( result->resolvedByCollection() && result->resolvedByCollection()->isLocal() );
+    setEditable( result->isLocal() );
 
     setTitle( result->track()->track() );
     setArtist( result->track()->artist() );
@@ -250,7 +250,7 @@ MetadataEditor::loadResult( const Tomahawk::result_ptr& result )
     setYear( result->track()->year() );
     setBitrate( result->bitrate() );
 
-    if ( result->resolvedByCollection() && result->resolvedByCollection()->isLocal() )
+    if ( result->isLocal() )
     {
         QString furl = m_result->url();
         if ( furl.startsWith( "file://" ) )
