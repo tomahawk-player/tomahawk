@@ -234,6 +234,13 @@ Result::playable() const
 }
 
 
+bool
+Result::isLocal() const
+{
+    return resolvedByCollection().isNull() ? false : resolvedByCollection()->isLocal();
+}
+
+
 QVariant
 Result::toVariant() const
 {

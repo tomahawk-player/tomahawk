@@ -94,6 +94,12 @@ public:
     bool isOnline() const;
     bool playable() const;
 
+    /**
+     * @brief whether this result isLocal, i.e. resolved by a local collection
+     * @return isLocal
+     */
+    bool isLocal() const;
+
     QString url() const;
     /**
      * Has the given url been checked that it is accessible/valid.
