@@ -125,6 +125,14 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         ui->biography->page()->mainFrame()->setScrollBarPolicy( Qt::Vertical, Qt::ScrollBarAsNeeded );
         ui->biography->page()->setLinkDelegationPolicy( QWebPage::DelegateAllLinks );
         ui->biography->setTextSizeMultiplier( DpiScaler::ratioFromFontHeight() );
+        ui->biography->settings()->setFontFamily( QWebSettings::StandardFont,
+                                                  ui->biography->settings()->
+                                                  fontFamily( QWebSettings::SansSerifFont ) );
+        ui->biography->setRenderHints( QPainter::Antialiasing |
+                                       QPainter::TextAntialiasing |
+                                       QPainter::HighQualityAntialiasing |
+                                       QPainter::SmoothPixmapTransform |
+                                       QPainter::NonCosmeticDefaultPen );
         ui->biography->installEventFilter( this );
 
         TomahawkStyle::stylePageWidget( ui->biography );
