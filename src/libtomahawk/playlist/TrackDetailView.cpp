@@ -18,12 +18,6 @@
 
 #include "TrackDetailView.h"
 
-#include <QLabel>
-#include <QPushButton>
-#include <QScrollArea>
-#include <QSizePolicy>
-#include <QVBoxLayout>
-
 #include "Album.h"
 #include "Track.h"
 #include "audio/AudioEngine.h"
@@ -38,6 +32,13 @@
 #include "utils/Closure.h"
 #include "utils/WebPopup.h"
 #include "utils/Logger.h"
+
+#include <QLabel>
+#include <QPushButton>
+#include <QScrollArea>
+#include <QSizePolicy>
+#include <QVBoxLayout>
+#include <QDesktopServices>
 
 using namespace Tomahawk;
 
@@ -219,8 +220,44 @@ TrackDetailView::onAlbumUpdated()
         {
             if ( m_query->track()->albumPtr()->purchased() )
             {
-                m_buyButton->setText( tr( "Download Album" ) );
-                m_buyButton->setVisible( true );
+                m_allTracksAvailableLocally = true;
+                foreach( const query_ptr& currentQuery, m_playlistInterface->tracks() )
+                {
+                    if ( currentQuery->results().isEmpty() )
+                    {
+                        m_allTracksAvailableLocally = false;
+                        break;
+                    }
+                    else
+                    {
+                        m_allTracksAvailableLocally = false;
+                        foreach ( const result_ptr& currentResult, currentQuery->results() )
+                        {
+                            QList< DownloadFormat > formats = currentResult->downloadFormats();
+                            bool isDownloaded = formats.isEmpty() ? false : !DownloadManager::instance()->localFileForDownload( currentResult->downloadFormats().first().url.toString() ).isEmpty();
+                            if ( currentResult->isLocal() || isDownloaded )
+                            {
+                                m_allTracksAvailableLocally = true;
+                                break;
+                            }
+                        }
+                        if ( !m_allTracksAvailableLocally )
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                if ( m_allTracksAvailableLocally )
+                {
+                    m_buyButton->setText( tr( "View in Folder" ) );
+                    m_buyButton->setVisible( true );
+                }
+                else
+                {
+                    m_buyButton->setText( tr( "Download Album" ) );
+                    m_buyButton->setVisible( true );
+                }
             }
             else
             {
@@ -251,7 +288,32 @@ TrackDetailView::onBuyButtonClicked()
     {
         if ( m_query->track()->albumPtr()->purchased() )
         {
-            emit downloadAll();
+            if ( m_allTracksAvailableLocally )
+            {
+                QString path;
+                foreach( const result_ptr& currentResult, m_query->results() ) {
+                    if ( !currentResult->downloadFormats().isEmpty() )
+                    {
+                        path = DownloadManager::instance()->localFileForDownload( currentResult->downloadFormats().first().url.toString() );
+
+                    }
+
+                    if ( path.isEmpty() && currentResult->isLocal() )
+                    {
+                        path = currentResult->url();
+                    }
+
+                    if ( !path.isEmpty() )
+                    {
+                        QDesktopServices::openUrl( QFileInfo( path ).dir().path() );
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                emit downloadAll();
+            }
         }
         else
         {
