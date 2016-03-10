@@ -77,6 +77,7 @@ private:
     CaptionLabel* m_resultsBoxLabel;
     QPushButton* m_buyButton;
     bool m_buyButtonVisible;
+    bool m_allTracksAvailableLocally;
 
     QWidget* m_infoBox;
     QWidget* m_resultsBox;

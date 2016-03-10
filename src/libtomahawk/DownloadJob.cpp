@@ -118,7 +118,7 @@ DownloadJob::localFile() const
 
 
 QString
-DownloadJob::localPath() const
+DownloadJob::localPath( const Tomahawk::album_ptr& album )
 {
     QDir dir = TomahawkSettings::instance()->downloadsPath();
 
@@ -127,7 +127,7 @@ DownloadJob::localPath() const
         dir.mkpath( "." );
     }
 
-    QString path = QString( "%1/%2" ).arg( safeEncode( m_track->artist(), true ) ).arg( safeEncode( m_track->album(), true ) );
+    QString path = QString( "%1/%2" ).arg( safeEncode( album->artist()->name(), true ) ).arg( safeEncode( album->name(), true ) );
     dir.mkpath( path );
 
     return QString( dir.path() + "/" + path ).replace( "//", "/" );
@@ -138,7 +138,7 @@ QUrl
 DownloadJob::prepareFilename()
 {
     QString filename = QString( "%1. %2.%3" ).arg( m_track->albumpos() ).arg( safeEncode( m_track->track() ) ).arg( m_format.extension );
-    QString path = localPath();
+    QString path = localPath( m_track->albumPtr() );
     QString localFile = QString( path + "/" + filename );
 
     if ( !m_tryResuming )
@@ -444,7 +444,7 @@ DownloadJob::checkForResumedFile()
 
 
 QString
-DownloadJob::safeEncode( const QString& filename, bool removeTrailingDots ) const
+DownloadJob::safeEncode( const QString& filename, bool removeTrailingDots )
 {
     //FIXME: make it a regexp
     QString res = QString( filename ).toLatin1().replace( "/", "_" ).replace( "\\", "_" )

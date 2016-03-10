@@ -58,7 +58,7 @@ public:
     long receivedSize() const { return m_rcvdSize; }
     long fileSize() const { return m_fileSize; }
 
-    QString localPath() const;
+    static QString localPath( const Tomahawk::album_ptr& album );
     QString localFile() const;
     DownloadFormat format() const;
 
@@ -90,7 +90,7 @@ private slots:
 
 private:
     void storeState();
-    QString safeEncode( const QString& filename, bool removeTrailingDots = false ) const;
+    static QString safeEncode( const QString& filename, bool removeTrailingDots = false );
     bool checkForResumedFile();
     QUrl prepareFilename();
 
