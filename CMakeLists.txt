@@ -228,6 +228,10 @@ endif()
 if( NOT Qt5Core_DIR )
     message(STATUS "Could not find Qt5, searching for Qt4 instead...")
 
+    if(NOT FORCE_QT4)
+        message(FATAL_ERROR "Qt4 support is broken, if you plan to fix it, add -DFORCE_QT4=ON to your cmake arguments otherwise you should compile Tomahawk with Qt5")
+    endif()
+
     set(NEEDED_QT4_COMPONENTS "QtCore" "QtXml" "QtNetwork")
     if( BUILD_GUI )
         list(APPEND NEEDED_QT4_COMPONENTS "QtGui" "QtWebkit" "QtUiTools" "QtSvg")
