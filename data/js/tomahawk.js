@@ -42,6 +42,8 @@ Tomahawk.apiVersion = "0.2.2";
 //Statuses considered a success for HTTP request
 var httpSuccessStatuses = [200, 201];
 
+Tomahawk.error = console.error;
+
 // install RSVP error handler for uncaught(!) errors
 RSVP.on('error', function (reason) {
     var resolverName = "";
@@ -49,9 +51,9 @@ RSVP.on('error', function (reason) {
         resolverName = Tomahawk.resolver.instance.settings.name + " - ";
     }
     if (reason) {
-        console.error(resolverName + 'Uncaught error:', reason);
+        Tomahawk.error(resolverName + 'Uncaught error:', reason);
     } else {
-        console.error(resolverName + 'Uncaught error: error thrown from RSVP but it was empty');
+        Tomahawk.error(resolverName + 'Uncaught error: error thrown from RSVP but it was empty');
     }
 });
 
@@ -303,10 +305,11 @@ Tomahawk.Resolver = {
         return RSVP.Promise.resolve(this.testConfig(config)).then(function (results) {
             results = results || Tomahawk.ConfigTestResultType.Success;
             return results;
+        }, function (error) {
+            return error;
         });
     }
 };
-
 
 // help functions
 
@@ -379,48 +382,6 @@ Tomahawk.retrievedMetadata = function (metadataId, metadata, error) {
 };
 
 /**
- * Internal counter used to identify asyncRequest callback from native code.
- */
-Tomahawk.asyncRequestIdCounter = 0;
-/**
- * Internal map used to map asyncRequestIds to the respective javascript
- * callback functions.
- */
-Tomahawk.asyncRequestCallbacks = {};
-
-/**
- * Pass the natively retrieved reply back to the javascript callback
- * and augment the fake XMLHttpRequest object.
- *
- * Internal use only!
- */
-Tomahawk.nativeAsyncRequestDone = function (reqId, xhr) {
-    // Check that we have a matching callback stored.
-    if (!Tomahawk.asyncRequestCallbacks.hasOwnProperty(reqId)) {
-        return;
-    }
-
-    // Call the real callback
-    if (xhr.readyState == 4 && httpSuccessStatuses.indexOf(xhr.status) != -1) {
-        // Call the real callback
-        if (Tomahawk.asyncRequestCallbacks[reqId].callback) {
-            Tomahawk.asyncRequestCallbacks[reqId].callback(xhr);
-        }
-    } else if (xhr.readyState === 4) {
-        Tomahawk.log("Failed to do nativeAsyncRequest");
-        Tomahawk.log("Status Code was: " + xhr.status);
-        if (Tomahawk.asyncRequestCallbacks[reqId].errorHandler) {
-            Tomahawk.asyncRequestCallbacks[reqId].errorHandler(xhr);
-        }
-    }
-
-    // Callbacks are only used once.
-    delete Tomahawk.asyncRequestCallbacks[reqId];
-};
-
-
-
-/**
  * This method is externalized from Tomahawk.asyncRequest, so that other clients
  * (like tomahawk-android) can inject their own logic that determines whether or not to do a request
  * natively.
@@ -434,9 +395,9 @@ var shouldDoNativeRequest = function (options) {
         || extraHeaders.hasOwnProperty("User-Agent")));
 };
 
-
 /**
  * Possible options:
+ *  - url: The URL to call
  *  - method: The HTTP request method (default: GET)
  *  - username: The username for HTTP Basic Auth
  *  - password: The password for HTTP Basic Auth
@@ -454,7 +415,7 @@ var doRequest = function(options) {
                 return this.responseHeaders;
             };
             xhr.getResponseHeader = function (header) {
-                return this.responseHeaders[header];
+                return this.responseHeaders[header.toLowerCase()];
             };
 
             return xhr;
@@ -746,7 +707,6 @@ Tomahawk.base64Encode = function (b) {
     return window.btoa(b);
 };
 
-
 Tomahawk.PluginManager = {
     wrapperPrefix: '_adapter_',
     objects: {},
@@ -777,8 +737,6 @@ Tomahawk.PluginManager = {
             methodName = this.wrapperPrefix + methodName;
         }
 
-
-        var pluginManager = this;
         if (!this.objects[objectId]) {
             Tomahawk.log("Object not found! objectId: " + objectId + " methodName: " + methodName);
         } else {
@@ -799,19 +757,20 @@ Tomahawk.PluginManager = {
     invoke: function (requestId, objectId, methodName, params) {
         RSVP.Promise.resolve(this.invokeSync(requestId, objectId, methodName, params))
             .then(function (result) {
-                Tomahawk.reportScriptJobResults({
+                var params = {
                     requestId: requestId,
                     data: result
-                });
+                };
+                Tomahawk.reportScriptJobResults(encodeParamsToNativeFunctions(params));
             }, function (error) {
-                Tomahawk.reportScriptJobResults({
+                var params = {
                     requestId: requestId,
                     error: error
-                });
+                };
+                Tomahawk.reportScriptJobResults(encodeParamsToNativeFunctions(params));
             });
     }
 };
-
 
 var encodeParamsToNativeFunctions = function(param) {
   return param;
@@ -826,7 +785,7 @@ Tomahawk.NativeScriptJobManager = {
         var requestId = this.idCounter++;
         var deferred = RSVP.defer();
         this.deferreds[requestId] = deferred;
-        Tomahawk.invokeNativeScriptJob(requestId, methodName, encodeParamsToNativeFunctions(params));;
+        Tomahawk.invokeNativeScriptJob(requestId, methodName, encodeParamsToNativeFunctions(params));
         return deferred.promise;
     },
     reportNativeScriptJobResult: function(requestId, result) {
@@ -1495,9 +1454,7 @@ Tomahawk.Collection = {
             return new RSVP.Promise(function (resolve, reject) {
                 that.cachedDbs[id].changeVersion(that.cachedDbs[id].version, "", null,
                     function (err) {
-                        if (console.error) {
-                            console.error("Error!: %o", err);
-                        }
+                        Tomahawk.error("Error trying to change db version!", err);
                         reject();
                     }, function () {
                         delete that.cachedDbs[id];
