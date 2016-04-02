@@ -290,7 +290,7 @@ TrackDetailView::onBuyButtonClicked()
         {
             if ( m_allTracksAvailableLocally )
             {
-                QDesktopServices::openUrl( DownloadJob::localPath( m_query->track()->albumPtr() ) );
+                QDesktopServices::openUrl( QUrl::fromLocalFile( DownloadJob::localPath( m_query->track()->albumPtr() ) ) );
             }
             else
             {
