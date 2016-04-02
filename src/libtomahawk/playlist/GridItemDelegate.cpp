@@ -347,6 +347,8 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
             {
                 if ( !text.isEmpty() )
                     DropDownButton::drawPrimitive( painter, r, text, m_hoveringOverBuyButton == index, false );
+                else
+                    m_buyButtonRects.remove( index );
             }
             else
             {
