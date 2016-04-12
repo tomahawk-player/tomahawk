@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2016, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
@@ -105,7 +105,7 @@ SeekSlider::wheelEvent( QWheelEvent* event )
 {
     if ( m_acceptWheelEvents )
     {
-        QAbstractSlider::wheelEvent(event);
+        QAbstractSlider::wheelEvent( event );
         return;
     }
     event->ignore();
@@ -115,15 +115,15 @@ SeekSlider::wheelEvent( QWheelEvent* event )
 void
 SeekSlider::mouseMoveEvent( QMouseEvent* event )
 {
-    if (!m_isScrubbing)
+    if ( !m_isScrubbing )
         return;
 
     // disable further scrubbing when we're past the slider's right margin
-    if (event->pos().x() > width())
+    if ( event->pos().x() > width() )
     {
         m_isScrubbing = false;
         return;
     }
 
-    QSlider::mouseMoveEvent(event);
+    QSlider::mouseMoveEvent( event );
 }
