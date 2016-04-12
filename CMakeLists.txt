@@ -179,7 +179,7 @@ if( NOT BUILD_WITH_QT4 )
             set(HAVE_X11 FALSE)
         endif()
 
-        message(STATUS "Found Qt5! Be aware that Qt5-support is still experimental and not officially supported!")
+        message(STATUS "Found Qt5!")
 
         if( UNIX AND NOT APPLE )
             # We need this to find the paths to qdbusxml2cpp and co

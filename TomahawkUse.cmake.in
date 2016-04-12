@@ -3,8 +3,6 @@
 set( TOMAHAWK_QT5 @TOMAHAWK_QT5@ )
 
 if(TOMAHAWK_QT5)
-    message(STATUS "Found Qt5! Be aware that Qt5-support is still experimental and not officially supported!")
-
     # CMAKE 2.8.13+/3.0.0+ requires these for IMPORTed targets
     find_package(Qt5Core REQUIRED)
     find_package(Qt5Concurrent REQUIRED)
