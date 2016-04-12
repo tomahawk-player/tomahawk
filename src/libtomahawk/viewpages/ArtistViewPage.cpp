@@ -367,7 +367,7 @@ ArtistInfoWidget::onTracksFound( const QList<Tomahawk::query_ptr>& queries, Mode
     Q_UNUSED( mode );
 
     m_topHitsModel->finishLoading();
-    m_topHitsModel->appendQueries( queries.mid( 0, 20 ) );
+    m_topHitsModel->appendQueries( queries.mid( 0, 50 ) );
     m_topHitsModel->ensureResolved();
 }
 

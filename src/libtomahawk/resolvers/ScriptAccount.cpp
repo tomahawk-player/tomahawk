@@ -155,7 +155,7 @@ ScriptAccount::reportScriptJobResult( const QVariantMap& result )
     Q_ASSERT( job );
 
     // got a successful job result
-    if ( result[ "error"].isNull() )
+    if ( result[ "error" ].isNull() )
     {
 	if ( result[ "data" ].type() == QVariant::Map )
 	{
