@@ -564,7 +564,7 @@ ResolverAccount::onTestConfig( const QVariant& result )
 {
     tLog() << Q_FUNC_INFO << result;
 
-    if ( result.type() == QMetaType::QString )
+    if ( result.type() == QVariant::String )
     {
         emit configTestResult( Accounts::ConfigTestResultOther, result.toString() ); 
     }
@@ -588,6 +588,7 @@ AtticaResolverAccount::AtticaResolverAccount( const QString& accountId )
     m_atticaId = configuration().value( "atticaId" ).toString();
 
 }
+
 
 AtticaResolverAccount::AtticaResolverAccount( const QString& accountId, const QString& path, const QString& atticaId, const QVariantHash& initialConfiguration )
     : ResolverAccount( accountId, path, initialConfiguration )
@@ -618,8 +619,6 @@ AtticaResolverAccount::init()
         loadIcon();
     else
         connect( AtticaManager::instance(), SIGNAL( resolversLoaded( Attica::Content::List ) ), this, SLOT( loadIcon() ) );
-
-
 }
 
 
