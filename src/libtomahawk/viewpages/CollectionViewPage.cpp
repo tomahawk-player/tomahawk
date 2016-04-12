@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2013-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013-2016, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2014,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -382,17 +382,22 @@ CollectionViewPage::restoreViewMode()
             setCurrentMode( CollectionViewPage::Flat );
         else
             setCurrentMode( CollectionViewPage::Columns );
-    } else if ( mode == CollectionViewPage::Flat && !m_collection->browseCapabilities().contains( Collection::CapabilityBrowseTracks ) )
+    }
+    else if ( mode == CollectionViewPage::Flat && !m_collection->browseCapabilities().contains( Collection::CapabilityBrowseTracks ) )
     {
         if ( m_collection->browseCapabilities().contains( Collection::CapabilityBrowseArtists ) )
             setCurrentMode( CollectionViewPage::Columns );
         else if ( m_collection->browseCapabilities().contains( Collection::CapabilityBrowseAlbums ) )
             setCurrentMode( CollectionViewPage::Albums );
-    } else {
+    }
+    else
+    {
         setCurrentMode( mode );
     }
 
-    onCollectionChanged();
+    // We should think about auto-refreshing only locker collections here. Disabled for now,
+    // as we don't want the local collection to reload every single time you show it.
+//    onCollectionChanged();
 }
 
 
