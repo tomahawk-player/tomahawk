@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2016, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
@@ -604,6 +604,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
     job->start();
 }
 
+
 void
 AudioEngine::gotStreamUrl( const QVariantMap& data )
 {
@@ -611,14 +612,17 @@ AudioEngine::gotStreamUrl( const QVariantMap& data )
     QVariantMap headers = data[ "headers" ].toMap();
     Tomahawk::result_ptr result = sender()->property( "result" ).value<result_ptr>();
 
-    if ( streamUrl.isEmpty() || !( TomahawkUtils::isHttpResult( streamUrl ) || TomahawkUtils::isHttpsResult( streamUrl ) ) )
+    if ( streamUrl.isEmpty() || headers.isEmpty() ||
+         !( TomahawkUtils::isHttpResult( streamUrl ) || TomahawkUtils::isHttpsResult( streamUrl ) ) )
     {
-        // Not an http(s) or RTMP URL, get IO device
+        // We can't supply custom headers to VLC - but prefer using its HTTP streaming due to improved seeking ability
+        // Not an RTMP or HTTP-with-headers URL, get IO device
         QSharedPointer< QIODevice > sp;
         performLoadIODevice( result, streamUrl );
     }
     else
     {
+        // We need our own QIODevice for streaming
         // TODO: just make this part of the http(s) IoDeviceFactory (?)
         QUrl url = QUrl::fromEncoded( streamUrl.toUtf8() );
         QNetworkRequest req( url );
@@ -640,11 +644,12 @@ AudioEngine::gotStreamUrl( const QVariantMap& data )
 
         tDebug() << "Creating a QNetworkReply with url:" << req.url().toString();
         NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( req ) );
-        NewClosure( reply, SIGNAL( finalUrlReached() ), this, SLOT( gotRedirectedStreamUrl( Tomahawk::result_ptr, NetworkReply* )), result, reply );
+        NewClosure( reply, SIGNAL( finalUrlReached() ), this, SLOT( gotRedirectedStreamUrl( Tomahawk::result_ptr, NetworkReply* ) ), result, reply );
     }
 
     sender()->deleteLater();
 }
+
 
 void
 AudioEngine::gotRedirectedStreamUrl( const Tomahawk::result_ptr& result, NetworkReply* reply )
