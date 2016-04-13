@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2016, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2012,      Teo Mrnjavac <teo@kde.org>
@@ -722,11 +722,13 @@ TomahawkWindow::eventFilter( QObject* obj, QEvent* event )
         {
             case Qt::XButton1:
                 m_backAction->trigger();
-                break;
+                event->accept();
+                return true;
 
             case Qt::XButton2:
                 m_forwardAction->trigger();
-                break;
+                event->accept();
+                return true;
 
             default:
                 break;
@@ -889,6 +891,7 @@ TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
     }
 #endif//Q_OS_WIN
 }
+
 
 void
 TomahawkWindow::onHistoryBackAvailable( bool avail )
