@@ -415,7 +415,7 @@ var doRequest = function(options) {
                 return this.responseHeaders;
             };
             xhr.getResponseHeader = function (header) {
-                return this.responseHeaders[header.toLowerCase()];
+                return this.responseHeaders[header];
             };
 
             return xhr;
