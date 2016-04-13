@@ -611,7 +611,7 @@ AudioEngine::gotStreamUrl( const QVariantMap& data )
     QVariantMap headers = data[ "headers" ].toMap();
     Tomahawk::result_ptr result = sender()->property( "result" ).value<result_ptr>();
 
-    if ( streamUrl.isEmpty() || !( TomahawkUtils::isHttpResult( streamUrl ) || TomahawkUtils::isHttpsResult( streamUrl ) || TomahawkUtils::isRtmpResult( streamUrl ) ) )
+    if ( streamUrl.isEmpty() || !( TomahawkUtils::isHttpResult( streamUrl ) || TomahawkUtils::isHttpsResult( streamUrl ) ) )
     {
         // Not an http(s) or RTMP URL, get IO device
         QSharedPointer< QIODevice > sp;
