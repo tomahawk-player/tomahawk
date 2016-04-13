@@ -1,12 +1,12 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright (C) 2011  Leo Franchi <lfranchi@kde.org>
- *   Copyright (C) 2014  Dominik Schmidt <domme@tomahawk-player.org>
- *   Copyright (C) 2015, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011,      Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2014,      Dominik Schmidt <domme@tomahawk-player.org>
+ *   Copyright 2015-2016, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 2 of the License, or
+ *   the Free Software Foundation, either version 3 of the License, or
  *   (at your option) any later version.
  *
  *   Tomahawk is distributed in the hope that it will be useful,
