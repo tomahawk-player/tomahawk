@@ -629,7 +629,9 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
 
             if ( item->query() && item->query()->numResults( true ) && !item->query()->results().first()->downloadFormats().isEmpty() )
             {
+                m_model->sourceModel()->setAllColumnsEditable( true );
                 m_view->edit( index );
+                m_model->sourceModel()->setAllColumnsEditable( false );
                 return true;
             }
             else
