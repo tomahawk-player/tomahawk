@@ -328,6 +328,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
             m_buyButtonRects[ index ] = r;
 
             QString text;
+            bool itemsAvailable = false;
             if ( item->result() &&
                ( ( !item->result()->downloadFormats().isEmpty() && !DownloadManager::instance()->localFileForDownload( item->result()->downloadFormats().first().url.toString() ).isEmpty() ) ||
                  ( item->result()->downloadJob() && item->result()->downloadJob()->state() == DownloadJob::Finished ) ) )
@@ -337,6 +338,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
             else if ( item->query() && item->query()->numResults( true ) && !item->query()->results().first()->downloadFormats().isEmpty() )
             {
                 text = tr( "Download %1" ).arg( item->query()->results().first()->downloadFormats().first().extension.toUpper() );
+                itemsAvailable = true;
             }
             else if ( item->query()->numResults( true ) && !item->query()->results().first()->purchaseUrl().isEmpty() )
             {
@@ -346,7 +348,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
             if ( !item->result() || !item->result()->downloadJob() || item->result()->downloadJob()->state() == DownloadJob::Finished )
             {
                 if ( !text.isEmpty() )
-                    DropDownButton::drawPrimitive( painter, r, text, m_hoveringOverBuyButton == index, false );
+                    DropDownButton::drawPrimitive( painter, r, text, m_hoveringOverBuyButton == index, itemsAvailable );
                 else
                     m_buyButtonRects.remove( index );
             }
