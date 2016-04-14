@@ -940,9 +940,9 @@ GridItemDelegate::updateEditorGeometry( QWidget* editor, const QStyleOptionViewI
     comboBox->resize( option.rect.size() - QSize( 8, 0 ) );
     comboBox->move( option.rect.x() + 4, option.rect.y() );
 
-    if ( m_downloadDropDownRects.contains( index ) )
+    if ( m_buyButtonRects.contains( index ) )
     {
-        editor->setGeometry( m_downloadDropDownRects.value( index ) );
+        editor->setGeometry( m_buyButtonRects.value( index ) );
     }
 
     if ( !comboBox->property( "shownPopup" ).toBool() )

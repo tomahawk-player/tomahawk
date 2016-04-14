@@ -104,7 +104,6 @@ private:
     mutable QHash< QPersistentModelIndex, QRect > m_artistNameRects;
     mutable QHash< QPersistentModelIndex, QRect > m_albumNameRects;
     mutable QHash< QPersistentModelIndex, QRect > m_buyButtonRects;
-    mutable QHash< QPersistentModelIndex, QRect > m_downloadDropDownRects;
     mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_covers;
 
     QPersistentModelIndex m_hoverIndex;
