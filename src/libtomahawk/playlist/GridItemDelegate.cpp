@@ -343,7 +343,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
                 text = tr( "Buy" );
             }
 
-            if ( !item->result() || !item->result()->downloadJob() )
+            if ( !item->result() || !item->result()->downloadJob() || item->result()->downloadJob()->state() == DownloadJob::Finished )
             {
                 if ( !text.isEmpty() )
                     DropDownButton::drawPrimitive( painter, r, text, m_hoveringOverBuyButton == index, false );
