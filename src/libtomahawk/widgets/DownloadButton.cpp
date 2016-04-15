@@ -37,22 +37,25 @@ using namespace Tomahawk;
 
 DownloadButton::DownloadButton( const Tomahawk::query_ptr& query, QWidget* parent, QAbstractItemView* view, const QModelIndex& index )
     : DropDownButton( parent )
-    , m_query( query )
     , m_view( view )
     , m_index( index )
 {
-    Tomahawk::result_ptr result = query->numResults( true ) ? query->results().first() : Tomahawk::result_ptr();
-    if ( result.isNull() )
-        return;
+    init();
 
-    QStringList formats;
-    foreach ( const DownloadFormat& format, result->downloadFormats() )
-    {
-        formats << QObject::tr( "Download %1" ).arg( format.extension.toUpper() );
-    }
+    setQuery( query );
+}
 
-    addItems( formats );
 
+DownloadButton::DownloadButton( QWidget* parent )
+    : DropDownButton( parent )
+{
+    init();
+}
+
+
+void
+DownloadButton::init()
+{
     connect( this, SIGNAL( clicked() ), this, SLOT( addDownloadJob() ) );
     connect( this, SIGNAL( activated( int ) ), this, SLOT( addDownloadJob() ) );
 }
@@ -64,30 +67,63 @@ DownloadButton::~DownloadButton()
 
 
 void
+DownloadButton::setQuery( const query_ptr& query )
+{
+    if ( !m_query.isNull() )
+    {
+        m_query->disconnect( this );
+    }
+    if ( !m_result.isNull() )
+    {
+        m_result->disconnect( this );
+    }
+
+    clear();
+    m_result.clear();
+
+    m_query = query;
+
+    if ( query.isNull() )
+        return;
+
+    Tomahawk::result_ptr result = query->numResults( true ) ? query->results().first() : Tomahawk::result_ptr();
+    if ( result.isNull() )
+        return;
+
+    QStringList formats;
+    foreach ( const DownloadFormat& format, result->downloadFormats() )
+    {
+        formats << QObject::tr( "Download %1" ).arg( format.extension.toUpper() );
+    }
+
+    addItems( formats );
+}
+
+void
 DownloadButton::addDownloadJob()
 {
+    if ( m_query.isNull() )
+        return;
+
     Tomahawk::result_ptr result = m_query->numResults( true ) ? m_query->results().first() : Tomahawk::result_ptr();
     if ( result.isNull() )
         return;
 
-    if ( m_view && m_index.isValid() )
-    {
-        m_view->closePersistentEditor( m_index );
-    }
-
     if ( !result->downloadFormats().isEmpty() )
+    {
+        if ( m_view && m_index.isValid() )
+        {
+            m_view->closePersistentEditor( m_index );
+        }
+        else
+        {
+            m_result = result;
+            connect( result.data(), SIGNAL( updated() ), SLOT( update() ) );
+            connect( m_query.data(), SIGNAL( resultsChanged() ), SLOT( update() ) );
+        }
+
         DownloadManager::instance()->addJob( result->toDownloadJob( result->downloadFormats().at( currentIndex() ) ) );
-}
-
-
-bool
-DownloadButton::shouldShowButton( const Tomahawk::query_ptr& query )
-{
-    Tomahawk::result_ptr result = query->numResults( true ) ? query->results().first() : Tomahawk::result_ptr();
-    if ( result.isNull() )
-        return false;
-
-    return result && !result->downloadFormats().isEmpty() && !result->downloadJob();
+    }
 }
 
 
@@ -97,18 +133,22 @@ DownloadButton::paintEvent( QPaintEvent* event )
     QPainter p( this );
     setupPainter( &p );
 
-    DownloadButton::drawPrimitive( &p, contentsRect(), m_query, m_hovering );
+    if ( DownloadButton::drawPrimitive( &p, contentsRect(), m_query, m_hovering ) )
+        setCursor( Qt::PointingHandCursor );
+    else
+        setCursor( Qt::ArrowCursor );
 }
 
 
 bool
 DownloadButton::drawPrimitive( QPainter* painter, const QRect& rect, const Tomahawk::query_ptr& query, bool hovering )
 {
+    if ( query.isNull() )
+        return false;
+
     Tomahawk::result_ptr result = query->numResults( true ) ? query->results().first() : Tomahawk::result_ptr();
     if ( result.isNull() )
-    {
         return false;
-    }
 
     if ( result->downloadJob() && result->downloadJob()->state() != DownloadJob::Finished )
     {

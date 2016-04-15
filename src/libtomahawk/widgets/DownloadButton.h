@@ -32,9 +32,11 @@ Q_OBJECT
 
 public:
     explicit DownloadButton( const Tomahawk::query_ptr& query, QWidget* parent = nullptr, QAbstractItemView* view = nullptr, const QModelIndex& index = QModelIndex() );
+    explicit DownloadButton( QWidget* parent = nullptr );
     virtual ~DownloadButton();
 
-    static bool shouldShowButton( const Tomahawk::query_ptr& query );
+    void setQuery( const Tomahawk::query_ptr& query );
+
     static bool drawPrimitive( QPainter* p, const QRect& rect, const Tomahawk::query_ptr& query, bool hovering );
     static bool handleEditorEvent( QEvent* event, QAbstractItemView* view, PlayableProxyModel* model, const QModelIndex& index );
     static QWidget* handleCreateEditor( QWidget* parent, const Tomahawk::query_ptr& query , QAbstractItemView* view, const QModelIndex& index );
@@ -46,7 +48,10 @@ private slots:
     void addDownloadJob();
 
 private:
+    void init();
+
     Tomahawk::query_ptr m_query;
+    Tomahawk::result_ptr m_result;
     QAbstractItemView* m_view;
     QModelIndex m_index;
 };
