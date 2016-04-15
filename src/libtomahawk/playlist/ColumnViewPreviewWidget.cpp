@@ -28,6 +28,7 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/DpiScaler.h"
 #include "ViewManager.h"
+#include "widgets/DownloadButton.h"
 
 #include <QLabel>
 #include <QVBoxLayout>
@@ -164,6 +165,10 @@ ColumnViewPreviewWidget::ColumnViewPreviewWidget( ColumnView* parent )
     m_ageValue->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
     gridLayout->addWidget( m_ageValue, 4, 1 );
 
+
+    m_downloadButton = new DownloadButton( this );
+    mainLayout->addWidget( m_downloadButton );
+
     mainLayout->addStretch();
 
     TomahawkUtils::unmarginLayout( mainLayout );
@@ -217,6 +222,7 @@ ColumnViewPreviewWidget::setQuery( const Tomahawk::query_ptr& query )
         m_bitrateValue->setText( tr( "%1 kbps" ).arg( query->results().first()->bitrate() ) );
         m_durationValue->setText( TomahawkUtils::timeToString( query->track()->duration() ) );
         m_ageValue->setText( TomahawkUtils::ageToString( QDateTime::fromTime_t( query->results().first()->modificationTime() ) ) );
+        m_downloadButton->setQuery( query );
 
         m_yearValue->setVisible( query->track()->year() > 0 );
         m_yearLabel->setVisible( query->track()->year() > 0 );
@@ -226,6 +232,7 @@ ColumnViewPreviewWidget::setQuery( const Tomahawk::query_ptr& query )
         m_durationValue->setVisible( query->track()->duration() > 0 );
         m_ageLabel->setVisible( query->results().first()->modificationTime() > 0 );
         m_ageValue->setVisible( query->results().first()->modificationTime() > 0 );
+        m_downloadButton->setVisible( true );
     }
     else
     {
@@ -237,6 +244,7 @@ ColumnViewPreviewWidget::setQuery( const Tomahawk::query_ptr& query )
         m_durationValue->setVisible( false );
         m_ageLabel->setVisible( false );
         m_ageValue->setVisible( false );
+        m_downloadButton->setVisible( false );
     }
 
     setMinimumHeight( sizeHint().height() );

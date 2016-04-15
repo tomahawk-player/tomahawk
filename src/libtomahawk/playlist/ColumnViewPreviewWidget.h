@@ -30,6 +30,7 @@ class QueryLabel;
 class PlayableCover;
 class QLabel;
 class ScrollingLabel;
+class DownloadButton;
 
 class DLLEXPORT ColumnViewPreviewWidget : public QWidget
 {
@@ -71,6 +72,8 @@ private:
     ScrollingLabel* m_trackLabel;
 
     QueryLabel* m_artistLabel;
+
+    DownloadButton* m_downloadButton;
 };
 
 #endif // COLUMNVIEWPREVIEWWIDGET_H
