@@ -40,6 +40,11 @@ using namespace Tomahawk;
 void
 DirLister::go()
 {
+    if ( m_dirs.isEmpty() )
+    {
+        emit finished();
+        return;
+    }
     foreach ( const QString& dir, m_dirs )
     {
         m_opcount++;
