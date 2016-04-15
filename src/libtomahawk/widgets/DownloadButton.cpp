@@ -109,6 +109,9 @@ DownloadButton::addDownloadJob()
     if ( result.isNull() )
         return;
 
+    if ( handleClickPreDownload( m_query ) )
+        return;
+
     if ( !result->downloadFormats().isEmpty() )
     {
         if ( m_view && m_index.isValid() )
@@ -123,6 +126,10 @@ DownloadButton::addDownloadJob()
         }
 
         DownloadManager::instance()->addJob( result->toDownloadJob( result->downloadFormats().at( currentIndex() ) ) );
+    }
+    else
+    {
+        handleClickPostDownload( m_query );
     }
 }
 
@@ -202,21 +209,59 @@ DownloadButton::handleEditorEvent(QEvent* event , QAbstractItemView* view, Playa
     if ( event->type() == QEvent::MouseButtonRelease )
     {
         PlayableItem* item = model->sourceModel()->itemFromIndex( model->mapToSource( index ) );
-        if ( !item )
+        if ( !item  && ! item->query() )
             return false;
 
-        if ( item->query() && item->query()->numResults( true ) && !item->query()->results().first()->downloadFormats().isEmpty() )
+        if ( handleClickPreDownload( item->query() ) )
+            return true;
+
+        if( item->query()->numResults( true ) && !item->query()->results().first()->downloadFormats().isEmpty() )
         {
             model->sourceModel()->setAllColumnsEditable( true );
             view->edit( index );
             model->sourceModel()->setAllColumnsEditable( false );
             return true;
         }
-        else
-        {
-            WebPopup* popup = new WebPopup( item->query()->results().first()->purchaseUrl(), QSize( 400, 800 ) );
-            connect( item->query()->results().first().data(), SIGNAL( destroyed() ), popup, SLOT( close() ) );
-        }
+
+        return handleClickPostDownload( item->query() );
+    }
+
+    return false;
+}
+
+
+bool
+DownloadButton::handleClickPreDownload( const Tomahawk::query_ptr& query )
+{
+    // view in folder
+    if ( !DownloadManager::instance()->localUrlForDownload( query ).isEmpty() )
+    {
+        QDesktopServices::openUrl( DownloadManager::instance()->localUrlForDownload( query ) );
+        return true;
+    }
+
+    // download in progress
+    Tomahawk::result_ptr result = query->numResults( true ) ? query->results().first() : Tomahawk::result_ptr();
+    if ( result && result->downloadJob() && result->downloadJob()->state() != DownloadJob::Finished )
+    {
+        // do nothing, handled
+        return true;
+    }
+
+    return false;
+}
+
+
+bool
+DownloadButton::handleClickPostDownload( const Tomahawk::query_ptr& query )
+{
+    // handle buy click
+    Tomahawk::result_ptr result = query->numResults( true ) ? query->results().first() : Tomahawk::result_ptr();
+    if ( result && !result->purchaseUrl().isEmpty() )
+    {
+        WebPopup* popup = new WebPopup( result->purchaseUrl(), QSize( 400, 800 ) );
+        connect( result.data(), SIGNAL( destroyed() ), popup, SLOT( close() ) );
+        return true;
     }
 
     return false;
@@ -227,18 +272,7 @@ QWidget*
 DownloadButton::handleCreateEditor( QWidget* parent, const query_ptr& query, QAbstractItemView* view, const QModelIndex& index )
 {
     Tomahawk::result_ptr result = query->numResults( true ) ? query->results().first() : Tomahawk::result_ptr();
-
-    if ( result && !result->downloadFormats().isEmpty() &&
-        !DownloadManager::instance()->localFileForDownload( result->downloadFormats().first().url.toString() ).isEmpty() )
-    {
-        QDesktopServices::openUrl( QUrl::fromLocalFile( QFileInfo( DownloadManager::instance()->localFileForDownload( result->downloadFormats().first().url.toString() ) ).absolutePath() ) );
-    }
-    else if ( result && result->downloadJob() && result->downloadJob()->state() == DownloadJob::Finished )
-    {
-        QDesktopServices::openUrl( QUrl::fromLocalFile( QFileInfo( result->downloadJob()->localFile() ).absolutePath() ) );
-    }
-    else if ( result &&
-        !result->downloadFormats().isEmpty() && !result->downloadJob() )
+    if ( result && !result->downloadFormats().isEmpty() && !result->downloadJob() )
     {
         return new DownloadButton( query, parent, view, index );
     }

@@ -48,6 +48,8 @@ private slots:
     void addDownloadJob();
 
 private:
+    static bool handleClickPreDownload( const Tomahawk::query_ptr& query );
+    static bool handleClickPostDownload( const Tomahawk::query_ptr& query );
     void init();
 
     Tomahawk::query_ptr m_query;
