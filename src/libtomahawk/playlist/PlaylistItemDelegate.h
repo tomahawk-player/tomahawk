@@ -57,8 +57,6 @@ signals:
 
 private slots:
     void doUpdateIndex( const QPersistentModelIndex& index );
-    void closeEditor( const QModelIndex& index, QWidget* editor );
-    void addDownloadJob( const QModelIndex& index, QWidget* editor );
 
 protected:
     void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const;
@@ -116,13 +114,12 @@ private:
     mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_pixmaps;
     mutable QHash< QPersistentModelIndex, QRect > m_infoButtonRects;
     mutable QHash< QPersistentModelIndex, QRect > m_loveButtonRects;
-    mutable QHash< QPersistentModelIndex, QRect > m_buyButtonRects;
     mutable QHash< QPersistentModelIndex, QRect > m_downloadDropDownRects;
     mutable QHash< QPersistentModelIndex, QRect > m_artistNameRects;
     mutable QHash< QPersistentModelIndex, QHash< Tomahawk::source_ptr, QRect > > m_avatarBoxRects;
     QPersistentModelIndex m_hoveringOver;
     QPersistentModelIndex m_hoveringOverArtist;
-    QPersistentModelIndex m_hoveringOverBuyButton;
+    QPersistentModelIndex m_hoveringOverDownloadButton;
     mutable QPersistentModelIndex m_nowPlaying;
 
     TrackView* m_view;

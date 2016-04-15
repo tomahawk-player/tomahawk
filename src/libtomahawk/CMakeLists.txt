@@ -146,6 +146,7 @@ set( libGuiSources
     widgets/ClickableLabel.cpp
     widgets/ComboBox.cpp
     widgets/DropDownButton.cpp
+    widgets/DownloadButton.cpp
     widgets/ElidedLabel.cpp
     widgets/FilterHeader.cpp
     widgets/CaptionLabel.cpp

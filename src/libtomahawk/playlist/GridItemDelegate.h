@@ -87,9 +87,6 @@ private slots:
     void fadingFrameChanged( const QPersistentModelIndex& );
     void fadingFrameFinished( const QPersistentModelIndex& );
 
-    void closeEditor( const QModelIndex& index, QWidget* editor );
-    void addDownloadJob( const QModelIndex& index, QWidget* editor );
-
 private:
     QTimeLine* createTimeline( QTimeLine::Direction direction, int startFrame = 0 );
     void clearButtons();

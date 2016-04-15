@@ -47,7 +47,7 @@ protected:
 
 private slots:
 
-private:
+protected:
     static void setupPainter( QPainter* p );
 
     bool m_hovering;

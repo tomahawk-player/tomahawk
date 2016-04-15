@@ -19,16 +19,6 @@
 
 #include "GridItemDelegate.h"
 
-#include <QApplication>
-#include <QDesktopServices>
-#include <QPainter>
-#include <QAbstractItemView>
-#include <QMouseEvent>
-#include <QTimeLine>
-
-#include "DownloadManager.h"
-#include "DownloadJob.h"
-
 #include "Artist.h"
 #include "Query.h"
 #include "Result.h"
@@ -39,16 +29,21 @@
 #include "playlist/PlayableItem.h"
 #include "playlist/PlayableProxyModel.h"
 #include "widgets/HoverControls.h"
-#include "widgets/DropDownButton.h"
+#include "widgets/DownloadButton.h"
 #include "widgets/ImageButton.h"
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/PixmapDelegateFader.h"
 #include "utils/Closure.h"
 #include "utils/AnimatedSpinner.h"
-#include "utils/WebPopup.h"
 #include "utils/DpiScaler.h"
 #include "utils/Logger.h"
+
+#include <QApplication>
+#include <QPainter>
+#include <QAbstractItemView>
+#include <QMouseEvent>
+#include <QTimeLine>
 
 namespace {
     static const int FADE_DURATION = 400;
@@ -325,43 +320,10 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
             QRect r = textRect;
             r.setY( textRect.y() + textRect.height() + 8 );
             r.setHeight( 32 );
-            m_buyButtonRects[ index ] = r;
 
-            QString text;
-            bool itemsAvailable = false;
-            if ( item->result() &&
-               ( ( !item->result()->downloadFormats().isEmpty() && !DownloadManager::instance()->localFileForDownload( item->result()->downloadFormats().first().url.toString() ).isEmpty() ) ||
-                 ( item->result()->downloadJob() && item->result()->downloadJob()->state() == DownloadJob::Finished ) ) )
+            if( DownloadButton::drawPrimitive(painter, r, item->query(), m_hoveringOverBuyButton == index ) )
             {
-                text = tr( "View in Finder" );
-            }
-            else if ( item->query() && item->query()->numResults( true ) && !item->query()->results().first()->downloadFormats().isEmpty() )
-            {
-                text = tr( "Download %1" ).arg( item->query()->results().first()->downloadFormats().first().extension.toUpper() );
-                itemsAvailable = true;
-            }
-            else if ( item->query()->numResults( true ) && !item->query()->results().first()->purchaseUrl().isEmpty() )
-            {
-                text = tr( "Buy" );
-            }
-
-            if ( !item->result() || !item->result()->downloadJob() || item->result()->downloadJob()->state() == DownloadJob::Finished )
-            {
-                if ( !text.isEmpty() )
-                    DropDownButton::drawPrimitive( painter, r, text, m_hoveringOverBuyButton == index, itemsAvailable );
-                else
-                    m_buyButtonRects.remove( index );
-            }
-            else
-            {
-                painter->setPen( TomahawkStyle::PLAYLIST_PROGRESS_FOREGROUND.darker() );
-                painter->setBrush( TomahawkStyle::PLAYLIST_PROGRESS_BACKGROUND );
-                painter->drawRect( r.adjusted( 2, 2, -2, -2 ) );
-                painter->setPen( TomahawkStyle::PLAYLIST_PROGRESS_FOREGROUND );
-                painter->setBrush( TomahawkStyle::PLAYLIST_PROGRESS_FOREGROUND );
-                QRect fillp = r.adjusted( 3, 3, -3, -3 );
-                fillp.setWidth( float(fillp.width()) * ( float(item->result()->downloadJob()->progressPercentage()) / 100.0 ) );
-                painter->drawRect( fillp );
+                m_buyButtonRects[ index ] = r;
             }
         }
     }
@@ -623,25 +585,7 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
 
     if ( hoveringBuyButton )
     {
-        if ( event->type() == QEvent::MouseButtonRelease )
-        {
-            PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
-            if ( !item )
-                return false;
-
-            if ( item->query() && item->query()->numResults( true ) && !item->query()->results().first()->downloadFormats().isEmpty() )
-            {
-                m_model->sourceModel()->setAllColumnsEditable( true );
-                m_view->edit( index );
-                m_model->sourceModel()->setAllColumnsEditable( false );
-                return true;
-            }
-            else
-            {
-                WebPopup* popup = new WebPopup( item->query()->results().first()->purchaseUrl(), QSize( 400, 800 ) );
-                connect( item->query()->results().first().data(), SIGNAL( destroyed() ), popup, SLOT( close() ) );
-            }
-        }
+        return DownloadButton::handleEditorEvent( event, m_view, m_model, index );
     }
 
     return false;
@@ -871,63 +815,7 @@ GridItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem& opt
     PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     Q_ASSERT( item );
 
-    if ( item->result() && !item->result()->downloadFormats().isEmpty() &&
-        !DownloadManager::instance()->localFileForDownload( item->result()->downloadFormats().first().url.toString() ).isEmpty() )
-    {
-        QDesktopServices::openUrl( QUrl::fromLocalFile( QFileInfo( DownloadManager::instance()->localFileForDownload( item->result()->downloadFormats().first().url.toString() ) ).absolutePath() ) );
-    }
-    else if ( item->result() && item->result()->downloadJob() && item->result()->downloadJob()->state() == DownloadJob::Finished )
-    {
-        QDesktopServices::openUrl( QUrl::fromLocalFile( QFileInfo( item->result()->downloadJob()->localFile() ).absolutePath() ) );
-    }
-    else if ( item->result() &&
-        !item->result()->downloadFormats().isEmpty() && !item->result()->downloadJob() )
-    {
-        QStringList formats;
-        foreach ( const DownloadFormat& format, item->result()->downloadFormats() )
-        {
-            formats << tr( "Download %1" ).arg( format.extension.toUpper() );
-        }
-
-        DropDownButton* editor = new DropDownButton( parent );
-        editor->addItems( formats );
-
-        NewClosure( editor, SIGNAL( clicked() ),
-                    const_cast<GridItemDelegate*>(this), SLOT( addDownloadJob( const QModelIndex&, QWidget* ) ), index, (QWidget*)editor );
-
-        NewClosure( editor, SIGNAL( activated( int ) ),
-                    const_cast<GridItemDelegate*>(this), SLOT( addDownloadJob( const QModelIndex&, QWidget* ) ), index, (QWidget*)editor );
-        return editor;
-    }
-
-    return 0;
-}
-
-
-void
-GridItemDelegate::addDownloadJob( const QModelIndex& index, QWidget* editor )
-{
-    PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
-    Q_ASSERT( item );
-
-    m_view->closePersistentEditor( index );
-
-    DropDownButton* cb = static_cast< DropDownButton* >(editor);
-    if ( !item->result()->downloadFormats().isEmpty() )
-        DownloadManager::instance()->addJob( item->result()->toDownloadJob( item->result()->downloadFormats().at( cb->currentIndex() ) ) );
-}
-
-
-void
-GridItemDelegate::closeEditor( const QModelIndex& index, QWidget* editor )
-{
-    PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
-    Q_ASSERT( item );
-
-    m_view->closePersistentEditor( index );
-
-    DropDownButton* cb = static_cast< DropDownButton* >(editor);
-    editor->deleteLater();
+    return DownloadButton::handleCreateEditor( parent, item->query(), m_view, index );
 }
 
 
@@ -936,7 +824,7 @@ GridItemDelegate::updateEditorGeometry( QWidget* editor, const QStyleOptionViewI
 {
     QStyledItemDelegate::updateEditorGeometry( editor, option, index );
 
-    DropDownButton* comboBox = static_cast<DropDownButton*>(editor);
+    DownloadButton* comboBox = static_cast<DownloadButton*>(editor);
     comboBox->resize( option.rect.size() - QSize( 8, 0 ) );
     comboBox->move( option.rect.x() + 4, option.rect.y() );
 
