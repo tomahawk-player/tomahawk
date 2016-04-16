@@ -194,7 +194,7 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
         }*/
 
         d->results << newresults;
-        qStableSort( d->results.begin(), d->results.end(), std::bind( &Query::resultSorter, this, std::placeholders::_1, std::placeholders::_2 ) );
+        sortResults();
 
         // hook up signals, and check solved status
         foreach( const result_ptr& rp, newresults )
@@ -258,7 +258,7 @@ Query::onResultStatusChanged()
         Q_D( Query );
         QMutexLocker lock( &d->mutex );
         if ( !d->results.isEmpty() )
-            qStableSort( d->results.begin(), d->results.end(), std::bind( &Query::resultSorter, this, std::placeholders::_1, std::placeholders::_2 ) );
+            sortResults();
     }
 
     checkResults();
@@ -273,6 +273,11 @@ Query::removeResult( const Tomahawk::result_ptr& result )
         Q_D( Query );
         QMutexLocker lock( &d->mutex );
         d->results.removeAll( result );
+        if ( d->preferredResult == result )
+        {
+            d->preferredResult.clear();
+        }
+        sortResults();
     }
 
     emit resultsRemoved( result );
@@ -396,6 +401,15 @@ Query::id() const
 bool
 Query::resultSorter( const result_ptr& left, const result_ptr& right )
 {
+    Q_D( Query );
+    if ( !d->preferredResult.isNull() )
+    {
+        if ( d->preferredResult == left )
+            return true;
+        if ( d->preferredResult == right )
+            return false;
+    }
+
     const float ls = left->isOnline() ? howSimilar( left ) : 0.0;
     const float rs = right->isOnline() ? howSimilar( right ) : 0.0;
 
@@ -424,6 +438,30 @@ Query::resultSorter( const result_ptr& left, const result_ptr& right )
     }
 
     return ls > rs;
+}
+
+
+result_ptr
+Query::preferredResult() const
+{
+    Q_D( const Query );
+    return d->preferredResult;
+}
+
+
+void
+Query::setPreferredResult( const result_ptr& result )
+{
+    {
+        Q_D( Query );
+        QMutexLocker lock( &d->mutex );
+
+        Q_ASSERT( d->results.contains( result ) );
+        d->preferredResult = result;
+        sortResults();
+    }
+
+    emit resultsChanged();
 }
 
 
@@ -733,4 +771,12 @@ Query::setWeakRef( QWeakPointer<Query> weakRef )
 {
     Q_D( Query );
     d->ownRef = weakRef;
+}
+
+
+void
+Query::sortResults()
+{
+    Q_D( Query );
+    qStableSort( d->results.begin(), d->results.end(), std::bind( &Query::resultSorter, this, std::placeholders::_1, std::placeholders::_2 ) );
 }

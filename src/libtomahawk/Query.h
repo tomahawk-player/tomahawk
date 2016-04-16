@@ -112,6 +112,8 @@ public:
 
     /// sorter for list of results
     bool resultSorter( const result_ptr& left, const result_ptr& right );
+    result_ptr preferredResult() const;
+    void setPreferredResult( const result_ptr& result );
 
 signals:
     void resultsAdded( const QList<Tomahawk::result_ptr>& );
@@ -158,6 +160,7 @@ private:
     void setCurrentResolver( Tomahawk::Resolver* resolver );
     void clearResults();
     void checkResults();
+    void sortResults();
 };
 
 } //ns

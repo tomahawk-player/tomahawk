@@ -64,6 +64,8 @@ private slots:
     void onBuyButtonClicked();
     void onDownloadManagerStateChanged( DownloadManager::DownloadManagerState newState, DownloadManager::DownloadManagerState oldState );
 
+    void onResultClicked( const Tomahawk::playlistinterface_ptr& playlist, const Tomahawk::result_ptr& result, const Tomahawk::query_ptr& fromQuery );
+
 private:
     void setSocialActions();
 
