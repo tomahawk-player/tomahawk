@@ -295,33 +295,22 @@ AudioOutput::setCurrentSource( MediaStream* stream )
     tDebug() << Q_FUNC_INFO << "MediaStream::Final Url:" << url;
 
     m_vlcMedia = libvlc_media_new_location( m_vlcInstance, url.constData() );
-    libvlc_event_manager_t* manager = libvlc_media_event_manager( m_vlcMedia );
-    libvlc_event_type_t events[] = {
-        libvlc_MediaDurationChanged,
-    };
-    const int eventCount = sizeof(events) / sizeof( *events );
-    for ( int i = 0; i < eventCount; i++ )
-    {
-        libvlc_event_attach( manager, events[ i ], &AudioOutput::vlcEventCallback, this );
-    }
-
-    libvlc_media_player_set_media( m_vlcPlayer, m_vlcMedia );
-
     if ( stream->type() == MediaStream::Url )
     {
         m_totalTime = libvlc_media_get_duration( m_vlcMedia );
     }
     else if ( stream->type() == MediaStream::Stream || stream->type() == MediaStream::IODevice )
     {
+        QString tempString;
         libvlc_media_add_option_flag(m_vlcMedia, "imem-cat=4", libvlc_media_option_trusted);
-        const char* imemData = QString( "imem-data=%1" ).arg( (uintptr_t)stream ).toLatin1().constData();
-        libvlc_media_add_option_flag(m_vlcMedia, imemData, libvlc_media_option_trusted);
-        const char* imemGet = QString( "imem-get=%1" ).arg( (uintptr_t)&readCallback ).toLatin1().constData();
-        libvlc_media_add_option_flag(m_vlcMedia, imemGet, libvlc_media_option_trusted);
-        const char* imemRelease = QString( "imem-release=%1" ).arg( (uintptr_t)&readDoneCallback ).toLatin1().constData();
-        libvlc_media_add_option_flag(m_vlcMedia, imemRelease, libvlc_media_option_trusted);
-        const char* imemSeek = QString( "imem-seek=%1" ).arg( (uintptr_t)&MediaStream::seekCallback ).toLatin1().constData();
-        libvlc_media_add_option_flag(m_vlcMedia, imemSeek, libvlc_media_option_trusted);
+        tempString = QString( "imem-data=%1" ).arg( (uintptr_t)stream );
+        libvlc_media_add_option_flag(m_vlcMedia, tempString.toLatin1().constData(), libvlc_media_option_trusted);
+        tempString = QString( "imem-get=%1" ).arg( (uintptr_t)&readCallback );
+        libvlc_media_add_option_flag(m_vlcMedia, tempString.toLatin1().constData(), libvlc_media_option_trusted);
+        tempString = QString( "imem-release=%1" ).arg( (uintptr_t)&readDoneCallback );
+        libvlc_media_add_option_flag(m_vlcMedia, tempString.toLatin1().constData(), libvlc_media_option_trusted);
+        tempString = QString( "imem-seek=%1" ).arg( (uintptr_t)&MediaStream::seekCallback );
+        libvlc_media_add_option_flag(m_vlcMedia, tempString.toLatin1().constData(), libvlc_media_option_trusted);
     }
     if ( qApp->arguments().contains( "--chromecast-ip" ) )
     {
@@ -344,6 +333,18 @@ AudioOutput::setCurrentSource( MediaStream* stream )
             tLog() << Q_FUNC_INFO << "Chromecast option but no IP supplied.";
         }
     }
+
+    libvlc_event_manager_t* manager = libvlc_media_event_manager( m_vlcMedia );
+    libvlc_event_type_t events[] = {
+        libvlc_MediaDurationChanged,
+    };
+    const int eventCount = sizeof(events) / sizeof( *events );
+    for ( int i = 0; i < eventCount; i++ )
+    {
+        libvlc_event_attach( manager, events[ i ], &AudioOutput::vlcEventCallback, this );
+    }
+
+    libvlc_media_player_set_media( m_vlcPlayer, m_vlcMedia );
 
 //    setState( Stopped );
 }
