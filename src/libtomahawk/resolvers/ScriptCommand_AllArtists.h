@@ -42,8 +42,8 @@ public:
     void setFilter( const QString& filter ) override;
 
 signals:
-    void artists( const QList< Tomahawk::artist_ptr >& );
-    void done();
+    void artists( const QList< Tomahawk::artist_ptr >& ) override;
+    void done() override;
 
 protected:
     void exec() override;

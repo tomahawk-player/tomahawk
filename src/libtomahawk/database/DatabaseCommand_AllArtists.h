@@ -59,10 +59,10 @@ public:
     void setLimit( unsigned int amount ) { m_amount = amount; }
     void setSortOrder( DatabaseCommand_AllArtists::SortOrder order ) { m_sortOrder = order; }
     void setSortDescending( bool descending ) { m_sortDescending = descending; }
-    void setFilter( const QString& filter ) { m_filter = filter; }
+    void setFilter( const QString& filter ) override { m_filter = filter; }
 
 signals:
-    void artists( const QList<Tomahawk::artist_ptr>& );
+    void artists( const QList<Tomahawk::artist_ptr>& ) override;
     void done();
 
 private:

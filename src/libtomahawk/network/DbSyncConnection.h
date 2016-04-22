@@ -42,8 +42,8 @@ public:
     explicit DBSyncConnection( Servent* s, const Tomahawk::source_ptr& src );
     virtual ~DBSyncConnection();
 
-    void setup();
-    Connection* clone();
+    void setup() override;
+    Connection* clone() override;
 
 signals:
     void stateChanged( Tomahawk::DBSyncConnectionState newstate, Tomahawk::DBSyncConnectionState oldstate, const QString& info );

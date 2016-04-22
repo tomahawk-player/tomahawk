@@ -59,7 +59,7 @@ public:
 
     PlayableModel* sourceModel() const { return m_model; }
     virtual void setSourcePlayableModel( PlayableModel* sourceModel );
-    virtual void setSourceModel( QAbstractItemModel* model );
+    virtual void setSourceModel( QAbstractItemModel* model ) override;
 
     virtual bool isLoading() const;
 
@@ -91,9 +91,9 @@ public:
 
     QList< double > columnWeights() const;
 
-    virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-    virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
+    virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const override;
+    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const override;
+    virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const override;
 
     virtual void setFilter( const QString& pattern );
     virtual void updateDetailedInfo( const QModelIndex& index );
@@ -120,7 +120,7 @@ signals:
 
 protected:
     bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const Q_DECL_OVERRIDE;
-    virtual bool lessThan( const QModelIndex& left, const QModelIndex& right ) const;
+    virtual bool lessThan( const QModelIndex& left, const QModelIndex& right ) const override;
 
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 

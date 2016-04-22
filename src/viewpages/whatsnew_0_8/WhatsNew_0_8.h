@@ -85,17 +85,17 @@ public:
     WhatsNew_0_8( QWidget* parent = 0 );
     virtual ~WhatsNew_0_8();
 
-    const QString defaultName() { return WHATSNEW_0_8_VIEWPAGE_NAME; }
-    QString title() const { return tr( "What's new in 0.8?" ); }
-    QString description() const { return tr( "An overview of the changes and additions since 0.7." ); }
-    const QString pixmapPath() const { return ( RESPATH "images/whatsnew.svg" ); }
+    const QString defaultName() override { return WHATSNEW_0_8_VIEWPAGE_NAME; }
+    QString title() const override { return tr( "What's new in 0.8?" ); }
+    QString description() const override { return tr( "An overview of the changes and additions since 0.7." ); }
+    const QString pixmapPath() const override { return ( RESPATH "images/whatsnew.svg" ); }
 
-    bool addPageItem() const;
+    bool addPageItem() const override;
     bool isRemovable() const override { return true; }
     bool isDeletable() const override { return false; }
-    void onItemDeleted();
+    void onItemDeleted() override;
 
-    int sortValue() { return 1; }
+    int sortValue() override { return 1; }
 };
 
 

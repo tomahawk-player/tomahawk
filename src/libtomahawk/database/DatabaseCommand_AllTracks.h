@@ -74,7 +74,7 @@ public:
 
 signals:
     void tracks( const QList<Tomahawk::query_ptr>&, const QVariant& data );
-    void tracks( const QList<Tomahawk::query_ptr>& );
+    void tracks( const QList<Tomahawk::query_ptr>& ) override;
     void done( const Tomahawk::collection_ptr& );
 
 private:

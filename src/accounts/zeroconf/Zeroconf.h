@@ -54,14 +54,14 @@ public:
     Account::ConnectionState connectionState() const;
 
 public slots:
-    void connectPlugin();
-    void disconnectPlugin();
+    void connectPlugin() override;
+    void disconnectPlugin() override;
 
     void advertise();
 
-    virtual void sendSipInfos( const Tomahawk::peerinfo_ptr& /* receiver */, const QList<SipInfo>& /* info */ ) {}
+    virtual void sendSipInfos( const Tomahawk::peerinfo_ptr& /* receiver */, const QList<SipInfo>& /* info */ ) override {}
     void broadcastMsg( const QString& ) {}
-    bool addContact( const QString&, AddContactOptions, const QString& ) { return false; }
+    bool addContact( const QString&, AddContactOptions, const QString& ) override { return false; }
 
 private slots:
     void lanHostFound( const QString& host, int port, const QString& name, const QString& nodeid );

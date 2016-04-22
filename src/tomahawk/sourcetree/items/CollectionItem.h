@@ -30,9 +30,9 @@ public:
     explicit CollectionItem( SourcesModel* model, SourceTreeItem* parent, const Tomahawk::collection_ptr& collection );
     virtual ~CollectionItem();
 
-    virtual QString text() const;
-    virtual QIcon icon() const;
-    virtual int peerSortValue() const;
+    virtual QString text() const override;
+    virtual QIcon icon() const override;
+    virtual int peerSortValue() const override;
     void setSortValue( int value );
 
     bool isBeingPlayed() const override;
@@ -40,7 +40,7 @@ public:
     int trackCount() const;
 
 public slots:
-    virtual void activate();
+    virtual void activate() override;
 
 private:
     int m_sortValue;

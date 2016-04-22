@@ -34,11 +34,11 @@ public:
     explicit DatabaseResolver( int weight );
 
     QString name() const override;
-    virtual unsigned int weight() const { return m_weight; }
-    virtual unsigned int timeout() const { return 0; }
+    virtual unsigned int weight() const override{ return m_weight; }
+    virtual unsigned int timeout() const override{ return 0; }
 
 public slots:
-    virtual void resolve( const Tomahawk::query_ptr& query );
+    virtual void resolve( const Tomahawk::query_ptr& query ) override;
 
 private slots:
     void gotResults( const Tomahawk::QID qid, QList< Tomahawk::result_ptr> results );

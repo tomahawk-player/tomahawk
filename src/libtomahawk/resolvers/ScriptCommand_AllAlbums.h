@@ -41,12 +41,12 @@ public:
     void setFilter( const QString& filter ) override;
 
 signals:
-    void albums( const QList< Tomahawk::album_ptr >& );
-    void done();
+    void albums( const QList< Tomahawk::album_ptr >& ) override;
+    void done() override;
 
 protected:
-    virtual void exec();
-    virtual void reportFailure();
+    virtual void exec() override;
+    virtual void reportFailure() override;
 
 private slots:
     void onAlbumsJobDone( const QVariantMap& result );

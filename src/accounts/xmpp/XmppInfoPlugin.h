@@ -44,12 +44,12 @@ namespace Tomahawk {
             void publishTune( QUrl url, Tomahawk::InfoSystem::InfoStringHash trackInfo );
 
         public slots:
-            void notInCacheSlot( const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
+            void notInCacheSlot( const Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData ) override;
 
         protected slots:
-            void init();
-            void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData );
-            void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
+            void init() override;
+            void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData ) override;
+            void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData ) override;
 
         private slots:
             void audioStarted( const Tomahawk::InfoSystem::PushInfoPair& pushInfoPair );

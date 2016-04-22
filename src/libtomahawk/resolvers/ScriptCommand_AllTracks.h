@@ -39,8 +39,8 @@ public:
     void enqueue() override;
 
 signals:
-    void tracks( const QList< Tomahawk::query_ptr >& );
-    void done();
+    void tracks( const QList< Tomahawk::query_ptr >& ) override;
+    void done() override;
 
 protected:
     Q_INVOKABLE void exec() override;
