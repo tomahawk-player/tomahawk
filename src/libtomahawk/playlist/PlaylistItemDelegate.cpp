@@ -20,15 +20,6 @@
 
 #include "PlaylistItemDelegate.h"
 
-#include <QAbstractTextDocumentLayout>
-#include <QApplication>
-#include <QDateTime>
-#include <QDesktopServices>
-#include <QMouseEvent>
-#include <QPainter>
-#include <QDesktopServices>
-#include <QToolTip>
-
 #include "Query.h"
 #include "Result.h"
 #include "Artist.h"
@@ -36,8 +27,6 @@
 #include "Source.h"
 #include "SourceList.h"
 
-#include "DownloadManager.h"
-#include "DownloadJob.h"
 #include "PlayableModel.h"
 #include "PlayableItem.h"
 #include "PlayableProxyModel.h"
@@ -45,15 +34,21 @@
 #include "ViewHeader.h"
 #include "ViewManager.h"
 
-#include "widgets/DropDownButton.h"
+#include "widgets/DownloadButton.h"
 #include "audio/AudioEngine.h"
 #include "utils/ImageRegistry.h"
 #include "utils/PixmapDelegateFader.h"
 #include "utils/Closure.h"
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
-#include "utils/WebPopup.h"
 #include "utils/Logger.h"
+
+#include <QAbstractTextDocumentLayout>
+#include <QApplication>
+#include <QDateTime>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QToolTip>
 
 using namespace Tomahawk;
 
@@ -125,63 +120,7 @@ PlaylistItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem&
     PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     Q_ASSERT( item );
 
-    if ( /*index.column() == PlayableModel::Download &&*/ item->result() && !item->result()->downloadFormats().isEmpty() &&
-         !DownloadManager::instance()->localFileForDownload( item->result()->downloadFormats().first().url.toString() ).isEmpty() )
-    {
-        QDesktopServices::openUrl( QUrl::fromLocalFile( QFileInfo( DownloadManager::instance()->localFileForDownload( item->result()->downloadFormats().first().url.toString() ) ).absolutePath() ) );
-    }
-    else if ( /*index.column() == PlayableModel::Download &&*/ item->result() && item->result()->downloadJob() && item->result()->downloadJob()->state() == DownloadJob::Finished )
-    {
-        QDesktopServices::openUrl( QUrl::fromLocalFile( QFileInfo( item->result()->downloadJob()->localFile() ).absolutePath() ) );
-    }
-    else if ( /*index.column() == PlayableModel::Download &&*/ item->result() &&
-              !item->result()->downloadFormats().isEmpty() && !item->result()->downloadJob() )
-    {
-        QStringList formats;
-        foreach ( const DownloadFormat& format, item->result()->downloadFormats() )
-        {
-            formats << tr( "Download %1" ).arg( format.extension );
-        }
-
-        DropDownButton* editor = new DropDownButton( parent );
-        editor->addItems( formats );
-
-        NewClosure( editor, SIGNAL( clicked() ),
-                    const_cast<PlaylistItemDelegate*>(this), SLOT( addDownloadJob( const QModelIndex&, QWidget* ) ), index, (QWidget*)editor );
-
-        NewClosure( editor, SIGNAL( activated( int ) ),
-                    const_cast<PlaylistItemDelegate*>(this), SLOT( addDownloadJob( const QModelIndex&, QWidget* ) ), index, (QWidget*)editor );
-        return editor;
-    }
-
-    return 0;
-}
-
-
-void
-PlaylistItemDelegate::addDownloadJob( const QModelIndex& index, QWidget* editor )
-{
-    PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
-    Q_ASSERT( item );
-
-    m_view->closePersistentEditor( index );
-
-    DropDownButton* cb = static_cast< DropDownButton* >(editor);
-    if ( !item->result()->downloadFormats().isEmpty() )
-        DownloadManager::instance()->addJob( item->result()->toDownloadJob( item->result()->downloadFormats().at( cb->currentIndex() ) ) );
-}
-
-
-void
-PlaylistItemDelegate::closeEditor( const QModelIndex& index, QWidget* editor )
-{
-    PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
-    Q_ASSERT( item );
-
-    m_view->closePersistentEditor( index );
-
-    DropDownButton* cb = static_cast< DropDownButton* >(editor);
-    editor->deleteLater();
+    return DownloadButton::handleCreateEditor( parent, item->query(), m_view, index );
 }
 
 
@@ -190,7 +129,7 @@ PlaylistItemDelegate::updateEditorGeometry( QWidget* editor, const QStyleOptionV
 {
     QStyledItemDelegate::updateEditorGeometry( editor, option, index );
 
-    DropDownButton* comboBox = static_cast<DropDownButton*>(editor);
+    DownloadButton* comboBox = static_cast<DownloadButton*>(editor);
     comboBox->resize( option.rect.size() - QSize( 8, 0 ) );
     comboBox->move( option.rect.x() + 4, option.rect.y() );
 
@@ -277,69 +216,7 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
     else */
     if ( m_view->proxyModel()->style() == PlayableProxyModel::Locker && index.column() == PlayableModel::Download )
     {
-        if ( item->result() && !item->result()->downloadFormats().isEmpty() )
-        {
-            QStyleOptionComboBox optc;
-            optc.rect = opt.rect.adjusted( 4, 0, -4, 0 );
-            optc.editable = false;
-            optc.currentText = tr( "Download %1" ).arg( item->result()->downloadFormats().first().extension );
-            optc.palette = m_view->palette();
-
-            if ( option.state & QStyle::State_Selected && option.state & QStyle::State_Active )
-                optc.state = QStyle::State_Active | QStyle::State_Selected | QStyle::State_Enabled;
-            else
-                optc.state = QStyle::State_Active | QStyle::State_Enabled;
-
-            if ( !DownloadManager::instance()->localFileForDownload( item->result()->downloadFormats().first().url.toString() ).isEmpty() )
-            {
-                painter->setPen( opt.palette.text().color() );
-                const QString text = painter->fontMetrics().elidedText( tr( "View in Finder" ), Qt::ElideRight, opt.rect.width() - 3 );
-                painter->drawText( opt.rect, text, textOption );
-            }
-            else if ( !item->result()->downloadJob() )
-            {
-                DropDownButton::drawPrimitive( painter, optc.rect, optc.currentText, hoveringOver() == index, true );
-
-/*                QApplication::style()->drawComplexControl( QStyle::CC_ComboBox, &optc, painter, 0 );
-                optc.rect.adjust( 4, 0, 0, 0 );
-                QApplication::style()->drawControl( QStyle::CE_ComboBoxLabel, &optc, painter, 0 );*/
-            }
-            else
-            {
-                if ( item->result()->downloadJob()->state() == DownloadJob::Finished )
-                {
-                    painter->setPen( opt.palette.text().color() );
-                    const QString text = painter->fontMetrics().elidedText( tr( "View in Finder" ), Qt::ElideRight, opt.rect.width() - 3 );
-                    painter->drawText( opt.rect, text, textOption );
-                }
-                else
-                {
-                    painter->setPen( TomahawkStyle::PLAYLIST_PROGRESS_FOREGROUND.darker() );
-                    painter->setBrush( TomahawkStyle::PLAYLIST_PROGRESS_BACKGROUND );
-                    painter->drawRect( optc.rect.adjusted( 2, 2, -2, -2 ) );
-                    painter->setPen( TomahawkStyle::PLAYLIST_PROGRESS_FOREGROUND );
-                    painter->setBrush( TomahawkStyle::PLAYLIST_PROGRESS_FOREGROUND );
-                    QRect fillp = optc.rect.adjusted( 3, 3, -3, -3 );
-                    fillp.setWidth( float(fillp.width()) * ( float(item->result()->downloadJob()->progressPercentage()) / 100.0 ) );
-                    painter->drawRect( fillp );
-
-/*                    QStyleOptionProgressBarV2 optp;
-                    optp.rect = optc.rect;
-                    optp.minimum = 0;
-                    optp.maximum = 100;
-                    optp.progress = item->result()->downloadJob()->progressPercentage();
-                    optp.palette = m_view->palette();
-                    optp.palette.setColor( QPalette::Highlight, QColor( "#E61878" ) );
-
-                    if ( option.state & QStyle::State_Selected && option.state & QStyle::State_Active )
-                        optp.state = QStyle::State_Active | QStyle::State_Selected | QStyle::State_Enabled;
-                    else
-                        optp.state = QStyle::State_Active | QStyle::State_Enabled;
-
-                    QApplication::style()->drawControl( QStyle::CE_ProgressBar, &optp, painter, 0 );*/
-                }
-            }
-        }
+        DownloadButton::drawPrimitive( painter, opt.rect.adjusted( 4, 0, -4, 0 ), item->query(), hoveringOver() == index );
     }
     else if ( item->isPlaying() )
     {
@@ -657,67 +534,14 @@ PlaylistItemDelegate::drawTrack( QPainter* painter, const QStyleOptionViewItem& 
 
             stateWidth += r.width() + 16;
         }
-
-        if ( hasOnlineResults && !item->query()->results().first()->purchaseUrl().isEmpty() )
-        {
-            QRect r = stateRect.adjusted( -stateWidth -144, 6, 0, -6 );
-            r.setWidth( 144 );
-            DropDownButton::drawPrimitive( painter, r, tr( "Buy" ), m_hoveringOverBuyButton == index, false );
-
-            m_buyButtonRects[ index ] = r;
-
-            stateWidth += r.width() + 16;
-        }
     }
 
-    if ( hasOnlineResults && !item->query()->results().first()->downloadFormats().isEmpty() )
+    QRect downloadButtonRect = stateRect.adjusted( -stateWidth -144, 6, 0, -6 );
+    downloadButtonRect.setWidth( 144 );
+    stateWidth += downloadButtonRect.width() + 16;
+    if ( DownloadButton::drawPrimitive( painter, downloadButtonRect, item->query(), m_hoveringOverDownloadButton == index ) )
     {
-        painter->save();
-        QStyleOptionComboBox optc;
-        optc.rect = stateRect.adjusted( -stateWidth -144, 6, 0, -6 );
-        optc.rect.setWidth( 144 );
-        m_downloadDropDownRects[ index ] = optc.rect;
-        stateWidth += optc.rect.width() + 16;
-        optc.editable = false;
-        optc.currentText = tr( "Download %1" ).arg( item->query()->results().first()->downloadFormats().first().extension.toUpper() );
-        optc.palette = m_view->palette();
-
-        if ( option.state & QStyle::State_Selected && option.state & QStyle::State_Active )
-            optc.state = QStyle::State_Active | QStyle::State_Selected | QStyle::State_Enabled;
-        else
-            optc.state = QStyle::State_Active | QStyle::State_Enabled;
-
-        if ( !DownloadManager::instance()->localFileForDownload( item->query()->results().first()->downloadFormats().first().url.toString() ).isEmpty() )
-        {
-            painter->setPen( optc.palette.text().color() );
-            const QString text = painter->fontMetrics().elidedText( tr( "View in Finder" ), Qt::ElideRight, optc.rect.width() - 3 );
-            painter->drawText( optc.rect, text, QTextOption( Qt::AlignCenter ) );
-        }
-        else if ( !item->query()->results().first()->downloadJob() )
-        {
-            DropDownButton::drawPrimitive( painter, optc.rect, optc.currentText, hoveringOver() == index, true );
-        }
-        else
-        {
-            if ( item->query()->results().first()->downloadJob()->state() == DownloadJob::Finished )
-            {
-                painter->setPen( optc.palette.text().color() );
-                const QString text = painter->fontMetrics().elidedText( tr( "View in Finder" ), Qt::ElideRight, optc.rect.width() - 3 );
-                painter->drawText( optc.rect, text, QTextOption( Qt::AlignCenter ) );
-            }
-            else
-            {
-                painter->setPen( TomahawkStyle::PLAYLIST_PROGRESS_FOREGROUND.darker() );
-                painter->setBrush( TomahawkStyle::PLAYLIST_PROGRESS_BACKGROUND );
-                painter->drawRect( optc.rect.adjusted( 2, 2, -2, -2 ) );
-                painter->setPen( TomahawkStyle::PLAYLIST_PROGRESS_FOREGROUND );
-                painter->setBrush( TomahawkStyle::PLAYLIST_PROGRESS_FOREGROUND );
-                QRect fillp = optc.rect.adjusted( 3, 3, -3, -3 );
-                fillp.setWidth( float(fillp.width()) * ( float(item->query()->results().first()->downloadJob()->progressPercentage()) / 100.0 ) );
-                painter->drawRect( fillp );
-            }
-        }
-        painter->restore();
+        m_downloadDropDownRects[ index ] = downloadButtonRect;
     }
 
     const int remWidth = r.width() - numberWidth - durationWidth;
@@ -835,7 +659,6 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
     bool hoveringArtist = false;
     bool hoveringInfo = false;
     bool hoveringLove = false;
-    bool hoveringBuy = false;
     bool hoveringDownloadDropDown = false;
     Tomahawk::source_ptr hoveredAvatar;
     QRect hoveredAvatarRect;
@@ -857,12 +680,6 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
         const QRect loveRect = m_loveButtonRects[ index ];
         const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
         hoveringLove = loveRect.contains( ev->pos() );
-    }
-    if ( m_buyButtonRects.contains( index ) )
-    {
-        const QRect buyRect = m_buyButtonRects[ index ];
-        const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
-        hoveringBuy = buyRect.contains( ev->pos() );
     }
     if ( m_downloadDropDownRects.contains( index ) )
     {
@@ -887,7 +704,7 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
 
     if ( event->type() == QEvent::MouseMove )
     {
-        if ( hoveringInfo || hoveringLove || hoveringArtist || hoveringBuy )
+        if ( hoveringInfo || hoveringLove || hoveringArtist || hoveringDownloadDropDown )
             m_view->setCursor( Qt::PointingHandCursor );
         else
             m_view->setCursor( Qt::ArrowCursor );
@@ -911,19 +728,19 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
             emit updateIndex( m_hoveringOverArtist );
             m_hoveringOverArtist = QModelIndex();
         }
-        if ( hoveringBuy && m_hoveringOverBuyButton != index )
+        if ( hoveringDownloadDropDown && m_hoveringOverDownloadButton != index )
         {
-            QPersistentModelIndex ti = m_hoveringOverBuyButton;
-            m_hoveringOverBuyButton = index;
+            QPersistentModelIndex ti = m_hoveringOverDownloadButton;
+            m_hoveringOverDownloadButton = index;
 
             PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( ti ) );
             item->requestRepaint();
-            emit updateIndex( m_hoveringOverBuyButton );
+            emit updateIndex( m_hoveringOverDownloadButton );
         }
-        if ( !hoveringBuy && m_hoveringOverBuyButton.isValid() )
+        if ( !hoveringDownloadDropDown && m_hoveringOverDownloadButton.isValid() )
         {
-            QPersistentModelIndex ti = m_hoveringOverBuyButton;
-            m_hoveringOverBuyButton = QModelIndex();
+            QPersistentModelIndex ti = m_hoveringOverDownloadButton;
+            m_hoveringOverDownloadButton = QModelIndex();
 
             PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( ti ) );
             item->requestRepaint();
@@ -957,10 +774,10 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
         {
             item->query()->queryTrack()->setLoved( !item->query()->queryTrack()->loved() );
         }
-        else if ( hoveringBuy )
+        else if ( hoveringDownloadDropDown || ( m_view->proxyModel()->style() == PlayableProxyModel::Locker && index.column() == PlayableModel::Download ) )
         {
-            WebPopup* popup = new WebPopup( item->query()->results().first()->purchaseUrl(), QSize( 400, 800 ) );
-            connect( item->query()->results().first().data(), SIGNAL( destroyed() ), popup, SLOT( close() ) );
+            if ( DownloadButton::handleEditorEvent( event , m_view, m_model, index ) )
+                return true;
         }
         else if ( hoveringInfo )
         {
@@ -996,13 +813,6 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
                 }
             }
         }
-        else if ( ( m_view->proxyModel()->style() == PlayableProxyModel::Locker && index.column() == PlayableModel::Download ) || hoveringDownloadDropDown )
-        {
-            m_model->sourceModel()->setAllColumnsEditable( true );
-            m_view->edit( index );
-            m_model->sourceModel()->setAllColumnsEditable( false );
-            return true;
-        }
 
         event->accept();
         return true;
@@ -1022,10 +832,9 @@ PlaylistItemDelegate::resetHoverIndex()
 
     m_hoveringOver = QModelIndex();
     m_hoveringOverArtist = QModelIndex();
-    m_hoveringOverBuyButton = QModelIndex();
+    m_hoveringOverDownloadButton = QModelIndex();
     m_infoButtonRects.clear();
     m_loveButtonRects.clear();
-    m_buyButtonRects.clear();
     m_artistNameRects.clear();
 
     QModelIndex itemIdx = m_model->mapToSource( idx );

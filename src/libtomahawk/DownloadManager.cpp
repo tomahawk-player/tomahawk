@@ -24,6 +24,8 @@
 #include "TomahawkSettings.h"
 #include "infosystem/InfoSystem.h"
 #include "utils/Logger.h"
+#include "Result.h"
+#include "Query.h"
 
 DownloadManager* DownloadManager::s_instance = 0;
 
@@ -82,6 +84,36 @@ DownloadManager::localFileForDownload( const QString& url ) const
     }
 
     return QString();
+}
+
+
+QUrl
+DownloadManager::localUrlForDownload( const Tomahawk::query_ptr& query ) const
+{
+    Tomahawk::result_ptr result = query->numResults( true ) ? query->results().first() : Tomahawk::result_ptr();
+    if ( result )
+    {
+        return localUrlForDownload( result );
+    }
+
+    return QUrl();
+}
+
+
+QUrl
+DownloadManager::localUrlForDownload( const Tomahawk::result_ptr& result ) const
+{
+    if ( result && !result->downloadFormats().isEmpty() &&
+        !localFileForDownload( result->downloadFormats().first().url.toString() ).isEmpty() )
+    {
+        return QUrl::fromLocalFile( QFileInfo( DownloadManager::instance()->localFileForDownload( result->downloadFormats().first().url.toString() ) ).absolutePath() );
+    }
+    else if ( result && result->downloadJob() && result->downloadJob()->state() == DownloadJob::Finished )
+    {
+        return QUrl::fromLocalFile( QFileInfo( result->downloadJob()->localFile() ).absolutePath() );
+    }
+
+    return QUrl();
 }
 
 

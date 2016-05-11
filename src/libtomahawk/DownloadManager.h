@@ -45,6 +45,8 @@ public:
 
     void storeJobs( const QList<downloadjob_ptr>& jobs );
     QString localFileForDownload( const QString& url ) const;
+    QUrl localUrlForDownload( const Tomahawk::result_ptr& result ) const;
+    QUrl localUrlForDownload( const Tomahawk::query_ptr& query ) const;
 
 public slots:
     bool addJob( const downloadjob_ptr& job );
