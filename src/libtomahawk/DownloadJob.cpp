@@ -206,22 +206,13 @@ DownloadJob::download()
 {
     if ( m_state == Running )
         return true;
+
     setState( Running );
 
-    if ( m_result->resolvedByCollection() )
-    {
-        Tomahawk::ScriptCollection* collection = qobject_cast<Tomahawk::ScriptCollection*>( m_result->resolvedByCollection().data() );
-        if ( collection )
-        {
-            QVariantMap arguments;
-            arguments[ "url" ] = m_format.url;
+    Tomahawk::ScriptJob *job = m_result->resolvedBy()->getDownloadUrl( m_result, m_format );
+    connect( job, SIGNAL( done(QVariantMap) ), SLOT( onUrlRetrieved(QVariantMap) ) );
+    job->start();
 
-            // HACK: *shrug* WIP.
-            Tomahawk::ScriptJob* job = collection->scriptObject()->invoke( "getStreamUrl", arguments );
-            connect( job, SIGNAL( done(QVariantMap) ), SLOT( onUrlRetrieved(QVariantMap) ) );
-            job->start();
-        }
-    }
     return true;
 }
 

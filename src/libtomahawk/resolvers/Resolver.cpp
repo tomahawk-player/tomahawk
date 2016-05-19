@@ -45,3 +45,12 @@ Tomahawk::Resolver::getStreamUrl( const result_ptr& result )
 
     return new SyncScriptJob( data );
 }
+
+Tomahawk::ScriptJob*
+Tomahawk::Resolver::getDownloadUrl( const result_ptr& result, const DownloadFormat& format )
+{
+    QVariantMap data;
+    data[ "url" ] = format.url.toString();
+
+    return new SyncScriptJob( data );
+}

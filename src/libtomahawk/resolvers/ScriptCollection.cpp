@@ -235,6 +235,16 @@ ScriptCollection::getStreamUrl( const result_ptr& result )
     return scriptObject()->invoke( "getStreamUrl", arguments );
 }
 
+ScriptJob*
+ScriptCollection::getDownloadUrl( const result_ptr& result, const DownloadFormat& format )
+{
+    QVariantMap arguments;
+    arguments["url"] = format.url.toString();
+    arguments["extension"] = format.extension;
+    arguments["mimetype"] = format.mimetype;
+
+    return scriptObject()->invoke( "getDownloadUrl", arguments );
+}
 
 void
 ScriptCollection::parseMetaData( const QVariantMap& metadata )

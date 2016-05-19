@@ -96,6 +96,7 @@ public:
     unsigned int timeout() const override;
     void resolve( const Tomahawk::query_ptr& query ) override;
     ScriptJob* getStreamUrl( const result_ptr& result ) override;
+    ScriptJob* getDownloadUrl( const result_ptr& result, const DownloadFormat &format ) override;
 
 private slots:
     void onIconFetched();
