@@ -209,9 +209,13 @@ DownloadJob::download()
 
     setState( Running );
 
-    Tomahawk::ScriptJob *job = m_result->resolvedBy()->getDownloadUrl( m_result, m_format );
-    connect( job, SIGNAL( done(QVariantMap) ), SLOT( onUrlRetrieved(QVariantMap) ) );
-    job->start();
+    if (m_result->resolvedBy() != nullptr) {
+        Tomahawk::ScriptJob *job = m_result->resolvedBy()->getDownloadUrl( m_result, m_format );
+        connect( job, SIGNAL( done(QVariantMap) ), SLOT( onUrlRetrieved(QVariantMap) ) );
+        job->start();
+    } else {
+        onUrlRetrieved({{"url", m_format.url}});
+    }
 
     return true;
 }
