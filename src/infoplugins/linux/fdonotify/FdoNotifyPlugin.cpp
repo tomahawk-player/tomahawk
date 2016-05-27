@@ -80,7 +80,7 @@ FdoNotifyPlugin::FdoNotifyPlugin()
     , m_wmSupportsBodyMarkup( false )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
-    m_supportedPushTypes << InfoNotifyUser << InfoNowPlaying << InfoTrackUnresolved << InfoNowStopped << InfoInboxReceived;
+    m_supportedPushTypes << InfoNotifyUser << InfoNowPlaying << InfoNowResumed << InfoTrackUnresolved << InfoNowStopped << InfoInboxReceived;
 
     // Query the window manager for its capabilties in styling notifications.
     notifications_interface = new org::freedesktop::Notifications( "org.freedesktop.Notifications", "/org/freedesktop/Notifications",
@@ -139,6 +139,7 @@ FdoNotifyPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
             return;
 
         case Tomahawk::InfoSystem::InfoNowPlaying:
+        case Tomahawk::InfoSystem::InfoNowResumed:
             nowPlaying( pushData.infoPair.second );
             return;
 
