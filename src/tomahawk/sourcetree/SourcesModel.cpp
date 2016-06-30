@@ -223,7 +223,6 @@ SourcesModel::index( int row, int column, const QModelIndex& parent ) const
     }
 
     return QModelIndex();
-
 }
 
 
