@@ -383,6 +383,8 @@ void
 TrackView::currentChanged( const QModelIndex& current, const QModelIndex& previous )
 {
     QTreeView::currentChanged( current, previous );
+    if ( !m_model )
+        return;
 
     PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
     if ( item && item->query() )
