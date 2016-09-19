@@ -155,14 +155,14 @@ NetworkReply::load( const QUrl& url )
     m_formerUrls << url.toString();
     QNetworkRequest request( url );
 
-    //Carryover User-Agent
-    if ( m_reply->request().hasRawHeader( "User-Agent" ))
+    //Carryover some headers if set
+    static QList<QByteArray> headersToCarroyOver = { "User-Agent", "Accept-Language" };
+    for (auto&& header : headersToCarroyOver)
     {
-        request.setRawHeader( "User-Agent", m_reply->request().rawHeader( "User-Agent" ) );
-    }
-    if ( m_reply->request().hasRawHeader( "Accept-Language" ))
-    {
-        request.setRawHeader( "Accept-Language", m_reply->request().rawHeader( "Accept-Language" ) );
+        if ( m_reply->request().hasRawHeader( header ))
+        {
+            request.setRawHeader( header, m_reply->request().rawHeader( header ) );
+        }
     }
 
     Q_ASSERT( Tomahawk::Utils::nam() != 0 );
