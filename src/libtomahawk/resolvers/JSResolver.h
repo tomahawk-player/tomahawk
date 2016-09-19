@@ -76,6 +76,8 @@ public:
     ScriptAccount* scriptAccount() const;
 
     ScriptJob* getStreamUrl( const result_ptr& result ) override;
+    ScriptJob* getDownloadUrl( const result_ptr& result, const DownloadFormat &format ) override;
+
 
 public slots:
     void resolve( const Tomahawk::query_ptr& query ) override;

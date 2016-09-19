@@ -21,6 +21,7 @@
 
 #include "Typedefs.h"
 #include "DllMacro.h"
+#include "../DownloadJob.h"
 
 #include <QObject>
 
@@ -52,6 +53,7 @@ public:
 
     virtual void resolve( const Tomahawk::query_ptr& query ) = 0;
     virtual ScriptJob* getStreamUrl( const result_ptr& result );
+    virtual ScriptJob* getDownloadUrl( const result_ptr& result, const DownloadFormat& format );
 };
 
 } //ns

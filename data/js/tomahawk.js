@@ -275,6 +275,9 @@ Tomahawk.Resolver = {
     getStreamUrl: function (params) {
         return params;
     },
+    getDownloadUrl: function (params) {
+        return params;
+    },
     resolve: function() {
     },
     _adapter_resolve: function (params) {
@@ -1769,6 +1772,14 @@ Tomahawk.Collection = {
     getStreamUrl: function(params) {
         if(this.resolver) {
           return this.resolver.getStreamUrl(params);
+        }
+
+        return params;
+    },
+
+    getDownloadUrl: function(params) {
+        if(this.resolver) {
+          return this.resolver.getDownloadUrl(params);
         }
 
         return params;
