@@ -96,7 +96,14 @@ NetworkReply::metaDataChanged()
                 }
                 else
                 {
-                    load( redir.toUrl() );
+                    QUrl url = redir.toUrl();
+                    if (url.path().isEmpty())
+                    {
+                        //Default cookie jar gets confused if path is empty
+                        url.setPath("/");
+                    }
+
+                    load( url );
                 }
                 emit redirected();
             }
@@ -148,10 +155,14 @@ NetworkReply::load( const QUrl& url )
     m_formerUrls << url.toString();
     QNetworkRequest request( url );
 
-    //Carryover User-Agent
-    if ( m_reply->request().hasRawHeader( "User-Agent" ))
+    //Carryover some headers if set
+    static QList<QByteArray> headersToCarryOver = { "User-Agent", "Accept-Language" };
+    for (auto&& header : headersToCarryOver)
     {
-        request.setRawHeader( "User-Agent", m_reply->request().rawHeader( "User-Agent" ) );
+        if ( m_reply->request().hasRawHeader( header ))
+        {
+            request.setRawHeader( header, m_reply->request().rawHeader( header ) );
+        }
     }
 
     Q_ASSERT( Tomahawk::Utils::nam() != 0 );
