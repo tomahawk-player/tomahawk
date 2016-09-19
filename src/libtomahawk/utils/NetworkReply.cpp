@@ -156,8 +156,8 @@ NetworkReply::load( const QUrl& url )
     QNetworkRequest request( url );
 
     //Carryover some headers if set
-    static QList<QByteArray> headersToCarroyOver = { "User-Agent", "Accept-Language" };
-    for (auto&& header : headersToCarroyOver)
+    static QList<QByteArray> headersToCarryOver = { "User-Agent", "Accept-Language" };
+    for (auto&& header : headersToCarryOver)
     {
         if ( m_reply->request().hasRawHeader( header ))
         {
