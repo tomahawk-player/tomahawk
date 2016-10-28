@@ -74,9 +74,6 @@ set( libGuiSources
     playlist/dynamic/DynamicPlaylist.cpp
     playlist/dynamic/DynamicView.cpp
     playlist/dynamic/DynamicModel.cpp
-    playlist/dynamic/echonest/EchonestGenerator.cpp
-    playlist/dynamic/echonest/EchonestControl.cpp
-    playlist/dynamic/echonest/EchonestSteerer.cpp
     playlist/dynamic/widgets/DynamicWidget.cpp
     playlist/dynamic/widgets/DynamicControlWrapper.cpp
     playlist/dynamic/widgets/DynamicControlList.cpp
@@ -208,7 +205,6 @@ list(APPEND libSources
     PlaylistInterface.cpp
     UrlHandler.cpp
 
-    EchonestCatalogSynchronizer.cpp
 
     accounts/AccountManager.cpp
     accounts/Account.cpp
@@ -413,7 +409,6 @@ include_directories(
 
     ${QT_INCLUDE_DIR}
     ${QJSON_INCLUDE_DIR}
-    ${ECHONEST_INCLUDE_DIR}
     ${LUCENEPP_INCLUDE_DIRS}
     ${LIBVLC_INCLUDE_DIR}
     ${Boost_INCLUDE_DIR}
@@ -535,7 +530,6 @@ TARGET_LINK_LIBRARIES( ${TOMAHAWK_LIBRARY}
     # External deps
     ${QJSON_LIBRARIES}
     ${LUCENEPP_LIBRARIES}
-    ${ECHONEST_LIBRARIES}
     ${QT_QTSQL_LIBRARY}
     ${QT_QTUITOOLS_LIBRARY}
     ${QT_QTGUI_LIBRARY}
@@ -579,7 +573,7 @@ file( GLOB networkHeaders "network/*.h" )
 file( GLOB playlistHeaders "playlist/*.h" )
 file( GLOB playlistDynamicHeaders "playlist/dynamic/*.h" )
 file( GLOB playlistDynamicDatabaseHeaders "playlist/dynamic/database/*.h" )
-file( GLOB playlistDynamicEchonestHeaders "playlist/dynamic/echonest/*.h" )
+# file( GLOB playlistDynamicEchonestHeaders "playlist/dynamic/echonest/*.h" )
 file( GLOB playlistDynamicWidgetsHeaders "playlist/dynamic/widgets/*.h" )
 file( GLOB resolversHeaders "resolvers/*.h" )
 file( GLOB sipHeaders "sip/*.h" )
@@ -608,7 +602,7 @@ install( FILES ${networkHeaders} DESTINATION include/libtomahawk/network )
 install( FILES ${playlistHeaders} DESTINATION include/libtomahawk/playlist )
 install( FILES ${playlistDynamicHeaders} DESTINATION include/libtomahawk/playlist/dynamic )
 install( FILES ${playlistDynamicDatabaseHeaders} DESTINATION include/libtomahawk/playlist/dynamic/database )
-install( FILES ${playlistDynamicEchonestHeaders} DESTINATION include/libtomahawk/playlist/dynamic/echonest )
+# install( FILES ${playlistDynamicEchonestHeaders} DESTINATION include/libtomahawk/playlist/dynamic/echonest )
 install( FILES ${playlistDynamicWidgetsHeaders} DESTINATION include/libtomahawk/playlist/dynamic/widgets )
 install( FILES ${resolversHeaders} DESTINATION include/libtomahawk/resolvers )
 install( FILES ${sipHeaders} DESTINATION include/libtomahawk/sip )

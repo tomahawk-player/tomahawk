@@ -297,6 +297,9 @@ SettingsDialog::SettingsDialog(QObject *parent )
 
     connect( m_dialog, SIGNAL( accepted() ), SLOT( saveSettings() ) );
     connect( m_dialog, SIGNAL( rejected() ), SLOT( onRejected() ) );
+
+    // Echonest is dead, make catalog upload checkbox invisible
+    m_collectionWidgetUi->enableEchonestCatalog->setVisible( false );
 }
 
 

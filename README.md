@@ -79,7 +79,6 @@ Required dependencies:
 * [TagLib 1.8](https://taglib.github.io/)
 * [Boost 1.3](http://www.boost.org/)
 * [Lucene++ 3.0.6](https://github.com/luceneplusplus/LucenePlusPlus/)
-* [libechonest 2.3.1](http://projects.kde.org/projects/playground/libs/libechonest/)
 * [Attica 5.6.0](http://ftp.kde.org/stable/attica/)
 * [QuaZip 0.4.3](http://quazip.sourceforge.net/)
 * [liblastfm 1.0.9](https://github.com/lastfm/liblastfm/)

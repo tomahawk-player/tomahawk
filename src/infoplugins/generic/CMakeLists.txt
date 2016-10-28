@@ -1,5 +1,4 @@
 include_directories(
-    ${ECHONEST_INCLUDE_DIR}
     ${Boost_INCLUDE_DIR}
 )
 if(WIN32 OR APPLE)
@@ -15,7 +14,6 @@ endif()
 endif(WIN32 OR APPLE)
 
 list(APPEND simple_plugins
-    Echonest
     Charts
     NewReleases
     Spotify

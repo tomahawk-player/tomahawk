@@ -128,10 +128,13 @@ DatabaseCollection::playlists()
 QList< dynplaylist_ptr >
 DatabaseCollection::autoPlaylists()
 {
+    // echonest is dead, disable all echonest code
+    /*
     if ( Collection::autoPlaylists().isEmpty() )
     {
         loadAutoPlaylists();
     }
+    */
 
     return Collection::autoPlaylists();
 }
@@ -140,10 +143,13 @@ DatabaseCollection::autoPlaylists()
 QList< dynplaylist_ptr >
 DatabaseCollection::stations()
 {
+    // echonest is dead, disable all echonest code
+    /*
     if ( Collection::stations().isEmpty() )
     {
         loadStations();
     }
+    */
 
     return Collection::stations();
 }

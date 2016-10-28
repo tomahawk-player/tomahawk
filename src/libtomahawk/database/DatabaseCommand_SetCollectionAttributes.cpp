@@ -21,7 +21,6 @@
 #include "Source.h"
 #include "network/Servent.h"
 #include "SourceList.h"
-#include "EchonestCatalogSynchronizer.h"
 
 namespace Tomahawk
 {
@@ -76,9 +75,11 @@ DatabaseCommand_SetCollectionAttributes::exec( DatabaseImpl *lib )
 void
 DatabaseCommand_SetCollectionAttributes::postCommitHook()
 {
+    /*
     if ( m_type == EchonestSongCatalog ||
          m_type == EchonestArtistCatalog )
         Tomahawk::EchonestCatalogSynchronizer::instance()->knownCatalogsChanged();
+    */
 
     if ( source()->isLocal() )
         Servent::instance()->triggerDBSync();

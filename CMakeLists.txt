@@ -315,9 +315,6 @@ if(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR APPLE) AND LIBCPP_FOUND)
     tomahawk_add_cxx_flags( "-stdlib=libc++" )
 endif()
 
-macro_optional_find_package(Echonest 2.3.0)
-macro_log_feature(ECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest 2.3.0 is needed for dynamic playlists and the infosystem")
-
 find_package(Boost REQUIRED COMPONENTS filesystem system)
 macro_log_feature(Boost_FOUND "Boost" "Provides free peer-reviewed portable C++ source libraries" "http://www.boost.org" TRUE "" "") #FIXME: give useful explanation
 

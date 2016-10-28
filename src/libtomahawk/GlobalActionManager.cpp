@@ -46,12 +46,6 @@
 #include "TomahawkSettings.h"
 #include "ViewManager.h"
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-#include <echonest5/Playlist.h>
-#else
-#include <echonest/Playlist.h>
-#endif
-
 #include <QMessageBox>
 #include <QFileInfo>
 
@@ -912,144 +906,144 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Artist" );
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistRadioType ) );
-                controls << c;
+                // c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistRadioType ) );
+                // controls << c;
             }
             else if ( param.first == "artist_limitto" )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Artist" );
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistType ) );
-                controls << c;
+                // c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistType ) );
+                // controls << c;
             }
             else if ( param.first == "description" )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Artist Description" );
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistDescriptionType ) );
-                controls << c;
+                // c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistDescriptionType ) );
+                // controls << c;
             }
             else if ( param.first == "variety" )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Variety" );
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::Variety ) );
-                controls << c;
+                // c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::Variety ) );
+                // controls << c;
             }
             else if ( param.first.startsWith( "tempo" ) )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Tempo" );
                 int extra = param.first.endsWith( "_max" ) ? -1 : 0;
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::MinTempo + extra ) );
-                controls << c;
+                // c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::MinTempo + extra ) );
+                // controls << c;
             }
             else if ( param.first.startsWith( "duration" ) )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Duration" );
                 int extra = param.first.endsWith( "_max" ) ? -1 : 0;
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::MinDuration + extra ) );
-                controls << c;
+                // c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::MinDuration + extra ) );
+                // controls << c;
             }
             else if ( param.first.startsWith( "loudness" ) )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Loudness" );
                 int extra = param.first.endsWith( "_max" ) ? -1 : 0;
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::MinLoudness + extra ) );
-                controls << c;
+                // c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::MinLoudness + extra ) );
+                // controls << c;
             }
             else if ( param.first.startsWith( "danceability" ) )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Danceability" );
                 int extra = param.first.endsWith( "_max" ) ? 1 : 0;
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::MinDanceability + extra ) );
-                controls << c;
+                // c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::MinDanceability + extra ) );
+                // controls << c;
             }
             else if ( param.first.startsWith( "energy" ) )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Energy" );
                 int extra = param.first.endsWith( "_max" ) ? 1 : 0;
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::MinEnergy + extra ) );
-                controls << c;
+                // c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::MinEnergy + extra ) );
+                // controls << c;
             }
             else if ( param.first.startsWith( "artist_familiarity" ) )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Artist Familiarity" );
                 int extra = param.first.endsWith( "_max" ) ? -1 : 0;
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistMinFamiliarity + extra ) );
-                controls << c;
+                // c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistMinFamiliarity + extra ) );
+                // controls << c;
             }
             else if ( param.first.startsWith( "artist_hotttnesss" ) )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Artist Hotttnesss" );
                 int extra = param.first.endsWith( "_max" ) ? -1 : 0;
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistMinHotttnesss + extra ) );
-                controls << c;
+                // c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistMinHotttnesss + extra ) );
+                // controls << c;
             }
             else if ( param.first.startsWith( "song_hotttnesss" ) )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Song Hotttnesss" );
                 int extra = param.first.endsWith( "_max" ) ? -1 : 0;
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::SongMinHotttnesss + extra ) );
-                controls << c;
+                // c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::SongMinHotttnesss + extra ) );
+                // controls << c;
             }
             else if ( param.first.startsWith( "longitude" ) )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Longitude" );
                 int extra = param.first.endsWith( "_max" ) ? 1 : 0;
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistMinLongitude + extra ) );
-                controls << c;
+                // c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistMinLongitude + extra ) );
+                // controls << c;
             }
             else if ( param.first.startsWith( "latitude" ) )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Latitude" );
                 int extra = param.first.endsWith( "_max" ) ? 1 : 0;
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistMinLatitude + extra ) );
-                controls << c;
+                // c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistMinLatitude + extra ) );
+                // controls << c;
             }
             else if ( param.first == "key" )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Key" );
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::Key ) );
-                controls << c;
+                // c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::Key ) );
+                // controls << c;
             }
             else if ( param.first == "mode" )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Mode" );
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::Mode ) );
-                controls << c;
+                // c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::Mode ) );
+                // controls << c;
             }
             else if ( param.first == "mood" )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Mood" );
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::Mood ) );
-                controls << c;
+                // c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::Mood ) );
+                // controls << c;
             }
             else if ( param.first == "style" )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Style" );
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::Style ) );
-                controls << c;
+                // c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::Style ) );
+                // controls << c;
             }
             else if ( param.first == "song" )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Song" );
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::SongRadioType ) );
-                controls << c;
+                // c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::SongRadioType ) );
+                // controls << c;
             }
         }
 

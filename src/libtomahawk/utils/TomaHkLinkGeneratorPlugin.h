@@ -37,7 +37,8 @@ public:
     ScriptJob* openLink( const QString& title, const QString& artist, const QString& album ) const override;
     ScriptJob* openLink( const Tomahawk::artist_ptr& artist ) const override;
     ScriptJob* openLink( const Tomahawk::album_ptr& album ) const override;
-    ScriptJob* openLink( const Tomahawk::dynplaylist_ptr& playlist ) const override;
+    // echonest is dead, disable all echonest code
+    // ScriptJob* openLink( const Tomahawk::dynplaylist_ptr& playlist ) const override;
 
 private:
     QString hostname() const;

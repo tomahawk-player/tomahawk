@@ -30,7 +30,6 @@
 #include "infosystem/InfoSystem.h"
 #include "infosystem/InfoSystemCache.h"
 #include "playlist/dynamic/GeneratorFactory.h"
-#include "playlist/dynamic/echonest/EchonestGenerator.h"
 #include "playlist/dynamic/database/DatabaseGenerator.h"
 #include "playlist/XspfUpdater.h"
 #include "network/Servent.h"
@@ -45,7 +44,6 @@
 #include "Pipeline.h"
 #include "DropJob.h"
 #include "DownloadManager.h"
-#include "EchonestCatalogSynchronizer.h"
 #include "database/DatabaseImpl.h"
 #include "network/Msg.h"
 #include "utils/NetworkAccessManager.h"
@@ -243,10 +241,13 @@ TomahawkApp::init()
     QByteArray wand = QByteArray::fromBase64( QCoreApplication::applicationName().toLatin1() );
     int length = magic.length(), n2 = wand.length();
     for ( int i = 0; i < length; i++ ) magic[i] = magic[i] ^ wand[i%n2];
+    // echonest is dead, disable all echonest code
+    /*
     Echonest::Config::instance()->setAPIKey( magic );
 
     tDebug() << "Init Echonest Factory.";
     GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
+    */
     tDebug() << "Init Database Factory.";
     GeneratorFactory::registerFactory( "database", new DatabaseFactory );
 
@@ -634,8 +635,11 @@ TomahawkApp::onInfoSystemReady()
 
     TomahawkSettings* s = TomahawkSettings::instance();
 
+    // echonest is dead, disable all echonest code
+    /*
     Echonest::Config::instance()->setNetworkAccessManager( Tomahawk::Utils::nam() );
     EchonestGenerator::setupCatalogs();
+    */
 
     m_scanManager = QPointer<ScanManager>( new ScanManager( this ) );
     if ( !m_headless )
@@ -681,8 +685,11 @@ TomahawkApp::onInfoSystemReady()
     m_scrobbler = new Scrobbler( this );
 #endif
 
+    // echonest is dead, disable all echonest code
+    /*
     // Set up echonest catalog synchronizer
     Tomahawk::EchonestCatalogSynchronizer::instance();
+    */
 
     PlaylistUpdaterInterface::registerUpdaterFactory( new XspfUpdaterFactory );
 //    PlaylistUpdaterInterface::registerUpdaterFactory( new SpotifyUpdaterFactory );

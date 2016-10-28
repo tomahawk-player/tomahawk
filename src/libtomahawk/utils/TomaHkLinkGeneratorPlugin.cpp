@@ -31,12 +31,6 @@
 #include "../resolvers/SyncScriptJob.h"
 #include "../utils/Logger.h"
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-#include <echonest5/Playlist.h>
-#else
-#include <echonest/Playlist.h>
-#endif
-
 QString
 Tomahawk::Utils::TomaHkLinkGeneratorPlugin::hostname() const
 {
@@ -83,6 +77,7 @@ Tomahawk::Utils::TomaHkLinkGeneratorPlugin::openLink( const Tomahawk::album_ptr&
 }
 
 
+/*
 Tomahawk::ScriptJob*
 Tomahawk::Utils::TomaHkLinkGeneratorPlugin::openLink( const Tomahawk::dynplaylist_ptr& playlist ) const
 {
@@ -131,3 +126,4 @@ Tomahawk::Utils::TomaHkLinkGeneratorPlugin::openLink( const Tomahawk::dynplaylis
 
     return new SyncScriptJob( data );
 }
+*/

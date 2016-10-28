@@ -120,9 +120,12 @@ ActionCollection::initActions()
     m_actionCollection[ "createPlaylist" ] = new QAction( tr( "Create Playlist" ), this );
     m_actionCollection[ "createPlaylist" ]->setShortcut( QKeySequence( "Ctrl+N" ) );
     m_actionCollection[ "createPlaylist" ]->setShortcutContext( Qt::ApplicationShortcut );
+    // echonest is dead, disable stations
+    /*
     m_actionCollection[ "createStation" ] = new QAction( tr( "Create Station" ), this );
     m_actionCollection[ "createStation" ]->setShortcut( QKeySequence( "Ctrl+S" ) );
     m_actionCollection[ "createStation" ]->setShortcutContext( Qt::ApplicationShortcut );
+    */
 #ifdef Q_OS_MAC
     m_actionCollection[ "minimize" ] = new QAction( tr( "Minimize" ), this );
     m_actionCollection[ "minimize" ]->setShortcut( QKeySequence( "Ctrl+M" ) );
@@ -171,7 +174,8 @@ ActionCollection::createMenuBar( QWidget *parent )
     controlsMenu->addAction( m_actionCollection[ "showOfflineSources" ] );
     controlsMenu->addSeparator();
     controlsMenu->addAction( m_actionCollection[ "createPlaylist" ] );
-    controlsMenu->addAction( m_actionCollection[ "createStation" ] );
+    // echonest is dead, disable stations
+    // controlsMenu->addAction( m_actionCollection[ "createStation" ] );
     controlsMenu->addAction( m_actionCollection[ "importPlaylist" ] );
     controlsMenu->addAction( m_actionCollection[ "updateCollection" ] );
     controlsMenu->addAction( m_actionCollection[ "rescanCollection" ] );

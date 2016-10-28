@@ -33,12 +33,6 @@
 #include "utils/ImageRegistry.h"
 #include "utils/Logger.h"
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-#include <echonest5/Playlist.h>
-#else
-#include <echonest/Playlist.h>
-#endif
-
 using namespace Tomahawk;
 
 
