@@ -16,11 +16,11 @@ endif(WIN32 OR APPLE)
 list(APPEND simple_plugins
     Charts
     NewReleases
-    Spotify
+    #Spotify
     Hypem
     MusixMatch
     MusicBrainz
-    Rovi
+    #Rovi
     Discogs
 )
 
