@@ -253,6 +253,10 @@ public:
     QByteArray playdarKey() const;
     void setPlaydarKey( const QByteArray& key );
 
+    // VLC Settings
+    QString vlcArguments() const;
+    void setVlcArguments( const QString& arguments );
+
 signals:
     void changed();
     void recentlyPlayedPlaylistAdded( const QString& playlistId, int sourceId );
