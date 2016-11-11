@@ -22,6 +22,7 @@
 #include "AudioEngine.h"
 #include "AudioOutput.h"
 #include "TomahawkVersion.h"
+#include "TomahawkSettings.h"
 
 #include "audio/MediaStream.h"
 #include "utils/Logger.h"
@@ -38,6 +39,8 @@
 #include <vlc/libvlc_events.h>
 #include <vlc/libvlc_media_player.h>
 #include <vlc/libvlc_version.h>
+
+#include <algorithm>
 
 AudioOutput* AudioOutput::s_instance = 0;
 
@@ -72,7 +75,7 @@ AudioOutput::AudioOutput( QObject* parent )
 
     qRegisterMetaType<AudioOutput::AudioState>("AudioOutput::AudioState");
 
-    const char* vlcArgs[] = {
+    QVector<const char*> vlcArgs = {
         "--ignore-config",
         "--extraintf=logger",
         qApp->arguments().contains( "--verbose" ) ? "--verbose=3" : "",
@@ -84,11 +87,28 @@ AudioOutput::AudioOutput( QObject* parent )
         // "--no-snapshot-preview",
         // "--services-discovery=''",
         "--no-video",
+        //"--network-caching=10000",
+        //"--file-caching=10000",
+        //"--clock-synchro=0",
+        //"--cr-average=10000",
+        //"--clock-jitter=1",
         "--no-xlib"
     };
+    TomahawkSettings* s = TomahawkSettings::instance();
+    //Save a list of Latin1 byte arrays for additional args
+    auto additionalVlcArgs = s->vlcArguments().split(",");
+    QVector<QByteArray> additionalArgsChar;
+
+    std::transform(additionalVlcArgs.begin(), additionalVlcArgs.end(),
+            std::back_inserter(additionalArgsChar), [](QString str) { return str.toLatin1(); });
+
+    for (auto&& str : additionalArgsChar)
+    {
+        vlcArgs.append(str.constData());
+    }
 
     // Create and initialize a libvlc instance (it should be done only once)
-    m_vlcInstance = libvlc_new( sizeof(vlcArgs) / sizeof(*vlcArgs), vlcArgs );
+    m_vlcInstance = libvlc_new( vlcArgs.size(), vlcArgs.constData() );
     if ( !m_vlcInstance )
     {
         tDebug() << Q_FUNC_INFO << "libVLC: could not initialize";

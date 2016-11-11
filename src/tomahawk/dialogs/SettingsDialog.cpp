@@ -126,6 +126,8 @@ SettingsDialog::SettingsDialog(QObject *parent )
     m_advancedWidgetUi->enableProxyCheckBox->setChecked( useProxy );
     m_advancedWidgetUi->proxyButton->setEnabled( useProxy );
 
+    m_advancedWidgetUi->vlcArgsLineEdit->setText( s->vlcArguments() );
+
     m_advancedWidgetUi->aclEntryClearButton->setEnabled( TomahawkSettings::instance()->aclEntries().size() > 0 );
     connect( m_advancedWidgetUi->aclEntryClearButton, SIGNAL( clicked( bool ) ), this, SLOT( aclEntryClearButtonClicked() ) );
 
@@ -334,6 +336,9 @@ SettingsDialog::saveSettings()
 
     s->applyChanges();
     s->sync();
+
+    m_restartRequired = m_restartRequired || m_advancedWidgetUi->vlcArgsLineEdit->text() != s->vlcArguments();
+    s->setVlcArguments( m_advancedWidgetUi->vlcArgsLineEdit->text() );
 
     if ( m_restartRequired )
         QMessageBox::information( 0, tr( "Information" ), tr( "Some changed settings will not take effect until %applicationName is restarted" ) );

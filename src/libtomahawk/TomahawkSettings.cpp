@@ -1764,3 +1764,15 @@ TomahawkSettings::setPlaydarKey( const QByteArray& key )
     setValue( "playdar/key", key );
 }
 
+QString
+TomahawkSettings::vlcArguments() const
+{
+    return value( "vlc/cmdline_args" ).value< QString >();
+}
+
+void
+TomahawkSettings::setVlcArguments( const QString& args )
+{
+    setValue( "vlc/cmdline_args", args);
+}
+
