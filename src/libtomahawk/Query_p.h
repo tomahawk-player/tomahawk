@@ -4,6 +4,7 @@
 #include "Query.h"
 
 #include <QMutex>
+#include <map>
 
 namespace Tomahawk
 {
@@ -58,6 +59,8 @@ private:
 
     mutable QMutex mutex;
     QWeakPointer< Tomahawk::Query > ownRef;
+
+    std::map<QString, float> howSimilarCache;
 };
 
 } // Tomahawk

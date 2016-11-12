@@ -622,6 +622,10 @@ float
 Query::howSimilar( const Tomahawk::result_ptr& r )
 {
     Q_D( Query );
+    if (d->howSimilarCache.find(r->id()) != d->howSimilarCache.end())
+    {
+        return d->howSimilarCache[r->id()];
+    }
     // result values
     const QString& rArtistname = r->track()->artistSortname();
     const QString& rAlbumname  = r->track()->albumSortname();
@@ -678,12 +682,16 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
         const int mlatr = qMax( artistTrackname.length(), rArtistTrackname.length() );
         const float dcatr = (float)( mlatr - atrdist ) / mlatr;
 
-        return qMax( dctrk, qMax( dcatr, qMax( dcart, dcalb ) ) );
+        float resultScore = qMax( dctrk, qMax( dcatr, qMax( dcart, dcalb ) ) );
+        d->howSimilarCache[r->id()] =  resultScore;
+        return resultScore;
     }
     else
     {
         // weighted, so album match is worth less than track title
-        return ( dcart * 4 + dcalb + dctrk * 5 ) / 10;
+        float resultScore = ( dcart * 4 + dcalb + dctrk * 5 ) / 10;
+        d->howSimilarCache[r->id()] =  resultScore;
+        return resultScore;
     }
 }
 
