@@ -39,6 +39,7 @@ private:
     QList< Tomahawk::artist_ptr > artists;
     QList< Tomahawk::album_ptr > albums;
     QList< Tomahawk::result_ptr > results;
+    Tomahawk::result_ptr preferredResult;
 
     float score;
     bool solved;

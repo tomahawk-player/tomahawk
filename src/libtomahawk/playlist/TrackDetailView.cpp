@@ -198,7 +198,7 @@ TrackDetailView::setQuery( const Tomahawk::query_ptr& query )
 
     connect( m_query->track().data(), SIGNAL( updated() ), SLOT( onCoverUpdated() ) );
     connect( m_query->track().data(), SIGNAL( socialActionsLoaded() ), SLOT( onSocialActionsLoaded() ) );
-    connect( m_query.data(), SIGNAL( resultsChanged() ), SLOT( onResultsChanged() ) );
+    connect( m_query.data(), SIGNAL( resultsChanged() ), SLOT( onResultsChanged() ), Qt::QueuedConnection );
     connect( m_query.data(), SIGNAL( resultsChanged() ), SLOT( onAlbumUpdated() ) );
 }
 
@@ -388,7 +388,7 @@ TrackDetailView::onResultsChanged()
             resolverIcon->setFixedWidth( 12 );
             resolverIcon->setPixmap( result->sourceIcon( TomahawkUtils::RoundedCorners, QSize( 12, 12 ) ) );
 
-            QLabel* resolverLabel = new ClickableLabel( this );
+            ClickableLabel* resolverLabel = new ClickableLabel( this );
             resolverLabel->setFont( f );
             resolverLabel->setStyleSheet( "QLabel { color: rgba( 0, 0, 0, 50% ) }" );
             resolverLabel->setText( QString( "%1 - %2" ).arg( result->track()->track() ).arg( result->track()->artist() ) );
@@ -403,8 +403,8 @@ TrackDetailView::onResultsChanged()
                                                             ;
             resolverLabel->setFixedWidth( width() - 32 - 4 );
 
-            NewClosure( resolverLabel, SIGNAL( clicked() ), const_cast< AudioEngine* >( AudioEngine::instance() ),
-                                        SLOT( playItem( Tomahawk::playlistinterface_ptr, Tomahawk::result_ptr, Tomahawk::query_ptr ) ),
+            NewClosure( resolverLabel, SIGNAL( clicked() ), const_cast< TrackDetailView* >( this ),
+                                        SLOT( onResultClicked( Tomahawk::playlistinterface_ptr, Tomahawk::result_ptr, Tomahawk::query_ptr ) ),
                                         m_playlistInterface, result, m_query )->setAutoDelete( false );
 
             QWidget* hbox = new QWidget;
@@ -440,4 +440,12 @@ void
 TrackDetailView::setBuyButtonVisible( bool visible )
 {
     m_buyButtonVisible = visible;
+}
+
+
+void
+TrackDetailView::onResultClicked( const Tomahawk::playlistinterface_ptr& playlist, const Tomahawk::result_ptr& result, const Tomahawk::query_ptr& fromQuery )
+{
+    fromQuery->setPreferredResult( result );
+    AudioEngine::instance()->playItem( playlist, result, fromQuery );
 }
