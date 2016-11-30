@@ -107,6 +107,7 @@ private:
     QString m_servicePrettyName;
     QString m_description;
     int m_trackCount;
+    int m_weight;
     QPixmap m_icon;
     bool m_isOnline;
 };
