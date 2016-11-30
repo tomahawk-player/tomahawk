@@ -360,7 +360,7 @@ ScriptCollection::timeout() const
 unsigned int
 ScriptCollection::weight() const
 {
-    return 0;
+    return 100;
 }
 
 
