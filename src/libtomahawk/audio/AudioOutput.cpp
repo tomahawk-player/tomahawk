@@ -56,9 +56,11 @@ AudioOutput::AudioOutput( QObject* parent )
     : QObject( parent )
     , m_currentState( Stopped )
     , m_currentStream( nullptr )
+    , m_preloadedStream( nullptr )
     , m_seekable( true )
     , m_muted( false )
     , m_autoDelete( true )
+    , m_preloadedAutoDelete( true )
     , m_volume( 1.0 )
     , m_currentTime( 0 )
     , m_totalTime( 0 )
@@ -68,6 +70,8 @@ AudioOutput::AudioOutput( QObject* parent )
     , m_vlcInstance( nullptr )
     , m_vlcPlayer( nullptr )
     , m_vlcMedia( nullptr )
+    , m_vlcPreloadedPlayer( nullptr )
+    , m_vlcPreloadedMedia( nullptr )
 {
     tDebug() << Q_FUNC_INFO;
 
@@ -123,37 +127,46 @@ AudioOutput::AudioOutput( QObject* parent )
 #endif
 
     m_vlcPlayer = libvlc_media_player_new( m_vlcInstance );
-    libvlc_event_manager_t* manager = libvlc_media_player_event_manager( m_vlcPlayer );
-    libvlc_event_type_t events[] = {
-        libvlc_MediaPlayerMediaChanged,
-        libvlc_MediaPlayerNothingSpecial,
-        libvlc_MediaPlayerOpening,
-        libvlc_MediaPlayerBuffering,
-        libvlc_MediaPlayerPlaying,
-        libvlc_MediaPlayerPaused,
-        libvlc_MediaPlayerStopped,
-        libvlc_MediaPlayerForward,
-        libvlc_MediaPlayerBackward,
-        libvlc_MediaPlayerEndReached,
-        libvlc_MediaPlayerEncounteredError,
-        libvlc_MediaPlayerTimeChanged,
-        libvlc_MediaPlayerPositionChanged,
-        libvlc_MediaPlayerSeekableChanged,
-        libvlc_MediaPlayerPausableChanged,
-        libvlc_MediaPlayerTitleChanged,
-        libvlc_MediaPlayerSnapshotTaken,
-        //libvlc_MediaPlayerLengthChanged,
-#if (LIBVLC_VERSION_INT >= LIBVLC_VERSION(2, 2, 2, 0))
-        libvlc_MediaPlayerAudioVolume,
-        libvlc_MediaPlayerMuted,
-        libvlc_MediaPlayerUnmuted,
-#endif
-        libvlc_MediaPlayerVout
-    };
-    const int eventCount = sizeof(events) / sizeof( *events );
-    for ( int i = 0; i < eventCount; i++ )
+    m_vlcPreloadedPlayer = libvlc_media_player_new( m_vlcInstance );
+
+    for( auto player : { m_vlcPlayer, m_vlcPreloadedPlayer } ) 
     {
-        libvlc_event_attach( manager, events[ i ], &AudioOutput::vlcEventCallback, this );
+        libvlc_audio_set_mute( player, 0 );
+        {
+            libvlc_event_manager_t* current_manager = libvlc_media_player_event_manager( player );
+            libvlc_event_manager_t* new_manager = libvlc_media_player_event_manager( player );
+            static libvlc_event_type_t events[] = {
+                libvlc_MediaPlayerMediaChanged,
+                libvlc_MediaPlayerNothingSpecial,
+                libvlc_MediaPlayerOpening,
+                libvlc_MediaPlayerBuffering,
+                libvlc_MediaPlayerPlaying,
+                libvlc_MediaPlayerPaused,
+                libvlc_MediaPlayerStopped,
+                libvlc_MediaPlayerForward,
+                libvlc_MediaPlayerBackward,
+                libvlc_MediaPlayerEndReached,
+                libvlc_MediaPlayerEncounteredError,
+                libvlc_MediaPlayerTimeChanged,
+                libvlc_MediaPlayerPositionChanged,
+                libvlc_MediaPlayerSeekableChanged,
+                libvlc_MediaPlayerPausableChanged,
+                libvlc_MediaPlayerTitleChanged,
+                libvlc_MediaPlayerSnapshotTaken,
+                //libvlc_MediaPlayerLengthChanged,
+#if (LIBVLC_VERSION_INT >= LIBVLC_VERSION(2, 2, 2, 0))
+                libvlc_MediaPlayerAudioVolume,
+                libvlc_MediaPlayerMuted,
+                libvlc_MediaPlayerUnmuted,
+#endif
+                libvlc_MediaPlayerVout
+            };
+            const int eventCount = sizeof(events) / sizeof( *events );
+            for ( int i = 0; i < eventCount; i++ )
+            {
+                libvlc_event_attach( new_manager, events[ i ], &AudioOutput::vlcEventCallback, this );
+            }
+        }
     }
 
     // HACK: play silent ogg file and set volume on that to workaround vlc not allowing to set volume before a file is played
@@ -161,7 +174,9 @@ AudioOutput::AudioOutput( QObject* parent )
     Q_ASSERT( m_silenceFile.exists() );
     Q_ASSERT( m_silenceFile.open( QIODevice::ReadOnly ) );
 
-    setCurrentSource( new MediaStream( &m_silenceFile, true ) );
+    setCurrentSource( new MediaStream( &m_silenceFile, true ), false );
+    setCurrentSource( new MediaStream( &m_silenceFile, true ), true );
+
     libvlc_media_player_play( m_vlcPlayer );
 
     #if QT_VERSION >= QT_VERSION_CHECK(5,4,0)
@@ -169,23 +184,70 @@ AudioOutput::AudioOutput( QObject* parent )
     QTimer::singleShot( 15000, [&]()
     {
         if ( !m_initialized ) {
-            m_initialized = true;
+            m_initialized = 2;
             emit initialized();
         }
     } );
     #endif
 }
 
+void AudioOutput::switchToPreloadedMedia( void )
+{
+
+    //Swap
+    auto tempPlayer = m_vlcPreloadedPlayer;
+    m_vlcPreloadedPlayer = m_vlcPlayer;
+    m_vlcPlayer = tempPlayer;
+
+    libvlc_media_player_stop( m_vlcPreloadedPlayer );
+
+    if ( m_vlcMedia != nullptr )
+    {
+        libvlc_media_release( m_vlcMedia );
+    }
+    //Now Media
+    {
+        if ( m_autoDelete && m_currentStream != nullptr )
+        {
+            delete m_currentStream;
+        }
+
+        m_vlcMedia = m_vlcPreloadedMedia;
+        m_vlcPreloadedMedia = nullptr;
+        m_currentStream = m_preloadedStream;
+        m_preloadedStream = nullptr;
+        m_autoDelete = m_preloadedAutoDelete;
+
+        m_totalTime = libvlc_media_get_duration( m_vlcMedia );
+
+        m_currentTime = 0;
+        m_justSeeked = false;
+        m_seekable = true;
+    }
+
+    libvlc_media_player_set_position( m_vlcPlayer, 0.0 );
+}
 
 AudioOutput::~AudioOutput()
 {
     tDebug() << Q_FUNC_INFO;
 
+    if ( m_vlcPreloadedPlayer != nullptr )
+    {
+        libvlc_media_player_stop( m_vlcPreloadedPlayer );
+        libvlc_media_player_release( m_vlcPreloadedPlayer );
+        m_vlcPreloadedPlayer = nullptr;
+    }
     if ( m_vlcPlayer != nullptr )
     {
         libvlc_media_player_stop( m_vlcPlayer );
         libvlc_media_player_release( m_vlcPlayer );
         m_vlcPlayer = nullptr;
+    }
+    if ( m_vlcPreloadedMedia != nullptr )
+    {
+        libvlc_media_release( m_vlcPreloadedMedia );
+        m_vlcPreloadedMedia = nullptr;
     }
     if ( m_vlcMedia != nullptr )
     {
@@ -208,11 +270,19 @@ AudioOutput::onInitVlcEvent( const libvlc_event_t* event )
             setVolume( volume() );
             setMuted( isMuted() );
 
-            m_initialized = true;
-            m_silenceFile.close();
+            m_initialized ++;
 
             tDebug() << Q_FUNC_INFO << "Init OK";
-            emit initialized();
+            if (m_initialized >=2)
+            {
+                m_silenceFile.close();
+                emit initialized();
+            }
+            else
+            {
+                switchToPreloadedMedia();
+                libvlc_media_player_play( m_vlcPlayer );
+            }
             break;
 
         default:
@@ -222,23 +292,26 @@ AudioOutput::onInitVlcEvent( const libvlc_event_t* event )
 
 
 void
-AudioOutput::setAutoDelete( bool ad )
+AudioOutput::setAutoDelete( bool ad, bool preload )
 {
-    m_autoDelete = ad;
+    if (preload)
+        m_preloadedAutoDelete = ad;
+    else
+        m_autoDelete = ad;
 }
 
 
 void
-AudioOutput::setCurrentSource( const QUrl& stream )
+AudioOutput::setCurrentSource( const QUrl& stream, bool preload )
 {
-    setCurrentSource( new MediaStream( stream ) );
+    setCurrentSource( new MediaStream( stream ), preload );
 }
 
 
 void
-AudioOutput::setCurrentSource( QIODevice* stream )
+AudioOutput::setCurrentSource( QIODevice* stream, bool preload )
 {
-    setCurrentSource( new MediaStream( stream ) );
+    setCurrentSource( new MediaStream( stream ), preload );
 }
 
 
@@ -258,29 +331,24 @@ readDoneCallback( void* data, const char* cookie, size_t bufferSize, void* buffe
 
 
 void
-AudioOutput::setCurrentSource( MediaStream* stream )
+AudioOutput::setCurrentSource( MediaStream* stream, bool preload )
 {
-    tDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO << ", preload = " << preload;
 
-    setState( Loading );
+    if ( !preload )
+        setState( Loading );
 
-    if ( m_vlcMedia != nullptr )
-    {
-        // Ensure playback is stopped, then release media
-        libvlc_media_player_stop( m_vlcPlayer );
-        libvlc_media_release( m_vlcMedia );
-        m_vlcMedia = nullptr;
+    if ( m_vlcPreloadedMedia ) {
+        libvlc_media_player_stop( m_vlcPreloadedPlayer );
+        libvlc_media_release( m_vlcPreloadedMedia );
+        m_vlcPreloadedMedia = nullptr;
     }
-    if ( m_autoDelete && m_currentStream != nullptr )
+    if ( m_preloadedAutoDelete && m_preloadedStream != nullptr )
     {
-        delete m_currentStream;
+        delete m_preloadedStream;
     }
 
-    m_currentStream = stream;
-    m_totalTime = 0;
-    m_currentTime = 0;
-    m_justSeeked = false;
-    m_seekable = true;
+    m_preloadedStream = stream;
 
     QByteArray url;
     switch ( stream->type() )
@@ -314,23 +382,19 @@ AudioOutput::setCurrentSource( MediaStream* stream )
 
     tDebug() << Q_FUNC_INFO << "MediaStream::Final Url:" << url;
 
-    m_vlcMedia = libvlc_media_new_location( m_vlcInstance, url.constData() );
-    if ( stream->type() == MediaStream::Url )
-    {
-        m_totalTime = libvlc_media_get_duration( m_vlcMedia );
-    }
-    else if ( stream->type() == MediaStream::Stream || stream->type() == MediaStream::IODevice )
+    m_vlcPreloadedMedia = libvlc_media_new_location( m_vlcInstance, url.constData() );
+    if ( stream->type() == MediaStream::Stream || stream->type() == MediaStream::IODevice )
     {
         QString tempString;
-        libvlc_media_add_option_flag(m_vlcMedia, "imem-cat=4", libvlc_media_option_trusted);
+        libvlc_media_add_option_flag(m_vlcPreloadedMedia, "imem-cat=4", libvlc_media_option_trusted);
         tempString = QString( "imem-data=%1" ).arg( (uintptr_t)stream );
-        libvlc_media_add_option_flag(m_vlcMedia, tempString.toLatin1().constData(), libvlc_media_option_trusted);
+        libvlc_media_add_option_flag(m_vlcPreloadedMedia, tempString.toLatin1().constData(), libvlc_media_option_trusted);
         tempString = QString( "imem-get=%1" ).arg( (uintptr_t)&readCallback );
-        libvlc_media_add_option_flag(m_vlcMedia, tempString.toLatin1().constData(), libvlc_media_option_trusted);
+        libvlc_media_add_option_flag(m_vlcPreloadedMedia, tempString.toLatin1().constData(), libvlc_media_option_trusted);
         tempString = QString( "imem-release=%1" ).arg( (uintptr_t)&readDoneCallback );
-        libvlc_media_add_option_flag(m_vlcMedia, tempString.toLatin1().constData(), libvlc_media_option_trusted);
+        libvlc_media_add_option_flag(m_vlcPreloadedMedia, tempString.toLatin1().constData(), libvlc_media_option_trusted);
         tempString = QString( "imem-seek=%1" ).arg( (uintptr_t)&MediaStream::seekCallback );
-        libvlc_media_add_option_flag(m_vlcMedia, tempString.toLatin1().constData(), libvlc_media_option_trusted);
+        libvlc_media_add_option_flag(m_vlcPreloadedMedia, tempString.toLatin1().constData(), libvlc_media_option_trusted);
     }
     if ( qApp->arguments().contains( "--chromecast-ip" ) )
     {
@@ -346,7 +410,7 @@ AudioOutput::setCurrentSource( MediaStream* stream )
         {
             QString castIP = qApp->arguments().at( qApp->arguments().indexOf( "--chromecast-ip" ) + 1 );
             QString sout( ":sout=#transcode{vcodec=none,acodec=vorb,ab=320,channels=2,samplerate=44100}:chromecast{ip=%1,mux=webm}" );
-            libvlc_media_add_option( m_vlcMedia, sout.arg( castIP ).toLatin1().constData() );
+            libvlc_media_add_option( m_vlcPreloadedMedia, sout.arg( castIP ).toLatin1().constData() );
         }
         else
         {
@@ -354,8 +418,8 @@ AudioOutput::setCurrentSource( MediaStream* stream )
         }
     }
 
-    libvlc_event_manager_t* manager = libvlc_media_event_manager( m_vlcMedia );
-    libvlc_event_type_t events[] = {
+    libvlc_event_manager_t* manager = libvlc_media_event_manager( m_vlcPreloadedMedia );
+    static libvlc_event_type_t events[] = {
         libvlc_MediaDurationChanged,
     };
     const int eventCount = sizeof(events) / sizeof( *events );
@@ -364,7 +428,13 @@ AudioOutput::setCurrentSource( MediaStream* stream )
         libvlc_event_attach( manager, events[ i ], &AudioOutput::vlcEventCallback, this );
     }
 
-    libvlc_media_player_set_media( m_vlcPlayer, m_vlcMedia );
+    libvlc_media_player_set_media( m_vlcPreloadedPlayer, m_vlcPreloadedMedia );
+
+    libvlc_audio_set_volume( m_vlcPreloadedPlayer, 0.0 );
+    libvlc_media_player_play( m_vlcPreloadedPlayer );
+
+    if ( !preload )
+        switchToPreloadedMedia();
 
 //    setState( Stopped );
 }
@@ -373,7 +443,7 @@ AudioOutput::setCurrentSource( MediaStream* stream )
 bool
 AudioOutput::isInitialized() const
 {
-    return m_initialized;
+    return m_initialized > 1;
 }
 
 
@@ -526,7 +596,7 @@ AudioOutput::seek( qint64 milliseconds )
 bool
 AudioOutput::isSeekable() const
 {
-    // tDebug() << Q_FUNC_INFO << m_seekable << m_havePosition << m_totalTime << libvlc_media_player_is_seekable( m_vlcPlayer );
+     tDebug() << Q_FUNC_INFO << m_seekable << m_havePosition << m_totalTime << libvlc_media_player_is_seekable( m_vlcPlayer );
     return m_havePosition || (libvlc_media_player_is_seekable( m_vlcPlayer ) && m_totalTime > 0 );
 }
 
@@ -576,64 +646,107 @@ AudioOutput::setVolume( qreal vol )
 void
 AudioOutput::onVlcEvent( const libvlc_event_t* event )
 {
-    switch ( event->type )
+    if ( event->p_obj == m_vlcPlayer || event->p_obj == m_vlcMedia )
     {
-        case libvlc_MediaPlayerTimeChanged:
-            setCurrentTime( event->u.media_player_time_changed.new_time );
-            break;
-        case libvlc_MediaPlayerPositionChanged:
-            setCurrentPosition( event->u.media_player_position_changed.new_position );
-            break;
-        case libvlc_MediaPlayerSeekableChanged:
-         //   tDebug() << Q_FUNC_INFO << " : seekable changed : " << event->u.media_player_seekable_changed.new_seekable;
-            break;
-        case libvlc_MediaDurationChanged:
-            setTotalTime( event->u.media_duration_changed.new_duration );
-            break;
-        case libvlc_MediaPlayerLengthChanged:
-        //    tDebug() << Q_FUNC_INFO << " : length changed : " << event->u.media_player_length_changed.new_length;
-            break;
-        case libvlc_MediaPlayerPlaying:
-            setState( Playing );
-            break;
-        case libvlc_MediaPlayerPaused:
-            setState( Paused );
-            break;
-        case libvlc_MediaPlayerEndReached:
-            setState( Stopped );
-            break;
-        case libvlc_MediaPlayerEncounteredError:
-            tDebug() << Q_FUNC_INFO << "LibVLC error: MediaPlayerEncounteredError. Stopping";
-            // Don't call stop() here - it will deadlock libvlc
-            setState( Error );
-            break;
+        switch ( event->type )
+        {
+            case libvlc_MediaPlayerTimeChanged:
+                setCurrentTime( event->u.media_player_time_changed.new_time );
+                break;
+            case libvlc_MediaPlayerPositionChanged:
+                setCurrentPosition( event->u.media_player_position_changed.new_position );
+                break;
+            case libvlc_MediaPlayerSeekableChanged:
+                //   tDebug() << Q_FUNC_INFO << " : seekable changed : " << event->u.media_player_seekable_changed.new_seekable;
+                break;
+            case libvlc_MediaDurationChanged:
+                setTotalTime( event->u.media_duration_changed.new_duration );
+                break;
+            case libvlc_MediaPlayerLengthChanged:
+                //    tDebug() << Q_FUNC_INFO << " : length changed : " << event->u.media_player_length_changed.new_length;
+                break;
+            case libvlc_MediaPlayerPlaying:
+                setState( Playing );
+                break;
+            case libvlc_MediaPlayerPaused:
+                setState( Paused );
+                break;
+            case libvlc_MediaPlayerEndReached:
+                setState( Stopped );
+                break;
+            case libvlc_MediaPlayerEncounteredError:
+                tDebug() << Q_FUNC_INFO << "LibVLC error: MediaPlayerEncounteredError. Stopping";
+                // Don't call stop() here - it will deadlock libvlc
+                setState( Error );
+                break;
 #if (LIBVLC_VERSION_INT >= LIBVLC_VERSION(2, 2, 2, 0))
-        case libvlc_MediaPlayerAudioVolume:
-            m_volume = event->u.media_player_audio_volume.volume;
-            emit volumeChanged( volume() );
-            break;
-        case libvlc_MediaPlayerMuted:
-            m_muted = true;
-            emit mutedChanged( true );
-            break;
-        case libvlc_MediaPlayerUnmuted:
-            m_muted = false;
-            emit mutedChanged( false );
-            break;
+            case libvlc_MediaPlayerAudioVolume:
+                m_volume = event->u.media_player_audio_volume.volume;
+                tDebug() << Q_FUNC_INFO << "Got signal in current player that volume changed to:" << m_volume;
+                emit volumeChanged( volume() );
+                break;
+            case libvlc_MediaPlayerMuted:
+                m_muted = true;
+                emit mutedChanged( true );
+                break;
+            case libvlc_MediaPlayerUnmuted:
+                m_muted = false;
+                emit mutedChanged( false );
+                break;
 #endif
-        case libvlc_MediaPlayerNothingSpecial:
-        case libvlc_MediaPlayerOpening:
-        case libvlc_MediaPlayerBuffering:
-        case libvlc_MediaPlayerStopped:
-        case libvlc_MediaPlayerVout:
-        case libvlc_MediaPlayerMediaChanged:
-        case libvlc_MediaPlayerForward:
-        case libvlc_MediaPlayerBackward:
-        case libvlc_MediaPlayerPausableChanged:
-        case libvlc_MediaPlayerTitleChanged:
-        case libvlc_MediaPlayerSnapshotTaken:
-        default:
-            break;
+            case libvlc_MediaPlayerNothingSpecial:
+            case libvlc_MediaPlayerOpening:
+            case libvlc_MediaPlayerBuffering:
+            case libvlc_MediaPlayerStopped:
+            case libvlc_MediaPlayerVout:
+            case libvlc_MediaPlayerMediaChanged:
+            case libvlc_MediaPlayerForward:
+            case libvlc_MediaPlayerBackward:
+            case libvlc_MediaPlayerPausableChanged:
+            case libvlc_MediaPlayerTitleChanged:
+            case libvlc_MediaPlayerSnapshotTaken:
+            default:
+                break;
+        }
+    }
+    else
+    {
+        tDebug() << "Event for preloaded: " << libvlc_event_type_name(event->type);
+        switch ( event->type )
+        {
+            case libvlc_MediaPlayerPausableChanged:
+            case libvlc_MediaPlayerPlaying:
+            case libvlc_MediaPlayerMediaChanged:
+            case libvlc_MediaPlayerTitleChanged:
+            case libvlc_MediaPlayerSeekableChanged:
+            case libvlc_MediaDurationChanged:
+            case libvlc_MediaPlayerPositionChanged:
+            case libvlc_MediaPlayerPaused:
+            case libvlc_MediaPlayerBuffering:
+                libvlc_media_player_set_pause( m_vlcPreloadedPlayer, 1 );
+                libvlc_audio_set_volume( m_vlcPreloadedPlayer, 0.0 );
+                libvlc_media_player_set_position( m_vlcPreloadedPlayer, 0.0 );
+                break;
+            case libvlc_MediaPlayerTimeChanged:
+            case libvlc_MediaPlayerLengthChanged:
+            case libvlc_MediaPlayerOpening:
+            case libvlc_MediaPlayerEndReached:
+            case libvlc_MediaPlayerEncounteredError:
+                //TODO
+#if (LIBVLC_VERSION_INT >= LIBVLC_VERSION(2, 2, 2, 0))
+            case libvlc_MediaPlayerAudioVolume:
+            case libvlc_MediaPlayerMuted:
+            case libvlc_MediaPlayerUnmuted:
+#endif
+            case libvlc_MediaPlayerNothingSpecial:
+            case libvlc_MediaPlayerStopped:
+            case libvlc_MediaPlayerVout:
+            case libvlc_MediaPlayerForward:
+            case libvlc_MediaPlayerBackward:
+            case libvlc_MediaPlayerSnapshotTaken:
+            default:
+                break;
+        }
     }
 }
 

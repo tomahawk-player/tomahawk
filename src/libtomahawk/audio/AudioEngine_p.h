@@ -28,9 +28,11 @@ public slots:
 
 private:
     QSharedPointer<QIODevice> input;
+    QSharedPointer<QIODevice> inputPreloaded;
 
     Tomahawk::query_ptr stopAfterTrack;
     Tomahawk::result_ptr currentTrack;
+    Tomahawk::result_ptr preloadedTrack;
     Tomahawk::playlistinterface_ptr playlist;
     Tomahawk::playlistinterface_ptr currentTrackPlaylist;
     Tomahawk::playlistinterface_ptr queue;

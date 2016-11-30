@@ -572,10 +572,10 @@ AudioEngine::onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type )
 
 
 void
-AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
+AudioEngine::loadTrack( const Tomahawk::result_ptr& result, bool preload )
 {
     Q_D( AudioEngine );
-    tDebug( LOGEXTRA ) << Q_FUNC_INFO << ( result.isNull() ? QString() : result->url() );
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO << ( result.isNull() ? QString() : result->url() ) << " preload:" << preload;
 
 
     if ( !d->audioOutput->isInitialized() )
@@ -589,18 +589,57 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
         return;
     }
 
-    // We do this to stop the audio as soon as a user activated another track
-    // If we don't block the audioOutput signals, the state change will trigger
-    // loading yet another track
-    d->audioOutput->blockSignals( true );
-    d->audioOutput->stop();
-    d->audioOutput->blockSignals( false );
+    if (preload && d->preloadedTrack == result)
+        return;
 
-    setCurrentTrack( result );
+    if (preload) 
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO << "not preloaded yet, preloading";
+
+    if (preload) 
+    {
+        setPreloadTrack( result );
+    }
+    else
+    {
+        // We do this to stop the audio as soon as a user activated another track
+        // If we don't block the audioOutput signals, the state change will trigger
+        // loading yet another track
+        d->audioOutput->blockSignals( true );
+        d->audioOutput->stop();
+        d->audioOutput->blockSignals( false );
+
+        setCurrentTrack( result );
+        if ( result == d->preloadedTrack ) 
+        {
+            setPreloadTrack( Tomahawk::result_ptr(nullptr) );
+            d->state = Loading;
+            emit loading( d->currentTrack );
+            d->audioOutput->switchToPreloadedMedia();
+            if ( !d->input.isNull() )
+            {
+                d->input->close();
+                d->input.clear();
+            }
+            d->input = d->inputPreloaded;
+
+            d->audioOutput->play();
+
+            if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
+            {
+                d->currentTrack->track()->startPlaying();
+            }
+
+            sendNowPlayingNotification( Tomahawk::InfoSystem::InfoNowPlaying );
+            return;
+        }
+        setPreloadTrack( Tomahawk::result_ptr(nullptr) );
+    }
 
     ScriptJob* job = result->resolvedBy()->getStreamUrl( result );
     connect( job, SIGNAL( done( QVariantMap ) ), SLOT( gotStreamUrl( QVariantMap ) ) );
     job->setProperty( "result", QVariant::fromValue( result ) );
+    job->setProperty( "isPreload", QVariant::fromValue(preload) );
+    tDebug() << "preload:" << preload << ", for result:" << result;
     job->start();
 }
 
@@ -611,6 +650,9 @@ AudioEngine::gotStreamUrl( const QVariantMap& data )
     QString streamUrl = data[ "url" ].toString();
     QVariantMap headers = data[ "headers" ].toMap();
     Tomahawk::result_ptr result = sender()->property( "result" ).value<result_ptr>();
+    bool isPreload = sender()->property( "isPreload" ).value<bool>();
+
+    tDebug() << Q_FUNC_INFO << " is preload:" << isPreload << ", for result:" << result;
 
     if ( streamUrl.isEmpty() || headers.isEmpty() ||
          !( TomahawkUtils::isHttpResult( streamUrl ) || TomahawkUtils::isHttpsResult( streamUrl ) ) )
@@ -618,7 +660,7 @@ AudioEngine::gotStreamUrl( const QVariantMap& data )
         // We can't supply custom headers to VLC - but prefer using its HTTP streaming due to improved seeking ability
         // Not an RTMP or HTTP-with-headers URL, get IO device
         QSharedPointer< QIODevice > sp;
-        performLoadIODevice( result, streamUrl );
+        performLoadIODevice( result, streamUrl, isPreload );
     }
     else
     {
@@ -654,26 +696,32 @@ AudioEngine::gotStreamUrl( const QVariantMap& data )
 void
 AudioEngine::gotRedirectedStreamUrl( const Tomahawk::result_ptr& result, NetworkReply* reply )
 {
+    Q_D( AudioEngine );
     // std::functions cannot accept temporaries as parameters
     QSharedPointer< QIODevice > sp ( reply->reply(), &QObject::deleteLater );
     QString url = reply->reply()->url().toString();
     reply->disconnectFromReply();
     reply->deleteLater();
 
-    performLoadTrack( result, url, sp );
+    bool isPreload = result == d->preloadedTrack;
+    tDebug() << Q_FUNC_INFO << " is preload:" << isPreload;
+
+    performLoadTrack( result, url, sp, isPreload );
 }
 
 
 void
 AudioEngine::onPositionChanged( float new_position )
 {
+    if ( new_position >= 0.90 )
+        loadNextTrack(true);
 //    tDebug() << Q_FUNC_INFO << new_position << state();
     emit trackPosition( new_position );
 }
 
 
 void
-AudioEngine::performLoadIODevice( const result_ptr& result, const QString& url )
+AudioEngine::performLoadIODevice( const result_ptr& result, const QString& url, bool preload )
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO << ( result.isNull() ? QString() : url );
 
@@ -683,37 +731,39 @@ AudioEngine::performLoadIODevice( const result_ptr& result, const QString& url )
         std::function< void ( const QString, QSharedPointer< QIODevice > ) > callback =
                 std::bind( &AudioEngine::performLoadTrack, this, result,
                            std::placeholders::_1,
-                           std::placeholders::_2 );
+                           std::placeholders::_2,
+                           preload );
         Tomahawk::UrlHandler::getIODeviceForUrl( result, url, callback );
     }
     else
     {
         QSharedPointer< QIODevice > io;
-        performLoadTrack( result, url, io );
+        performLoadTrack( result, url, io, preload );
     }
 }
 
 
 void
-AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString& url, QSharedPointer< QIODevice > io )
+AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString& url, QSharedPointer< QIODevice > io, bool preload )
 {
     if ( QThread::currentThread() != thread() )
     {
         QMetaObject::invokeMethod( this, "performLoadTrack", Qt::QueuedConnection,
                                    Q_ARG( const Tomahawk::result_ptr, result ),
                                    Q_ARG( const QString, url ),
-                                   Q_ARG( QSharedPointer< QIODevice >, io )
+                                   Q_ARG( QSharedPointer< QIODevice >, io ),
+                                   Q_ARG( bool, preload )
                                    );
         return;
     }
 
     Q_D( AudioEngine );
-    if ( currentTrack() != result )
+    if ( !preload && currentTrack() != result )
     {
         tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Track loaded too late, skip.";
         return;
     }
-    tDebug( LOGEXTRA ) << Q_FUNC_INFO << ( result.isNull() ? QString() : result->url() );
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO << ( result.isNull() ? QString() : result->url() ) << preload;
     QSharedPointer< QIODevice > ioToKeep = io;
 
     bool err = false;
@@ -727,9 +777,16 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString&
 
         if ( !err )
         {
-            tLog() << Q_FUNC_INFO << "Starting new song:" << url;
-            d->state = Loading;
-            emit loading( d->currentTrack );
+            if (preload)
+            {
+                tLog() << Q_FUNC_INFO << "Preloading new song:" << url;
+            }
+            else
+            {
+                tLog() << Q_FUNC_INFO << "Starting new song:" << url;
+                d->state = Loading;
+                emit loading( d->currentTrack );
+            }
 
             if ( !TomahawkUtils::isLocalResult( url )
                  && !( TomahawkUtils::isHttpResult( url ) && io.isNull() )
@@ -738,18 +795,18 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString&
                 QSharedPointer<QNetworkReply> qnr = io.objectCast<QNetworkReply>();
                 if ( !qnr.isNull() )
                 {
-                    d->audioOutput->setCurrentSource( new QNR_IODeviceStream( qnr, this ) );
+                    d->audioOutput->setCurrentSource( new QNR_IODeviceStream( qnr, this ), preload );
                     // We keep track of the QNetworkReply in QNR_IODeviceStream
                     // and AudioOutput handles the deletion of the
                     // QNR_IODeviceStream object
                     ioToKeep.clear();
-                    d->audioOutput->setAutoDelete( true );
+                    d->audioOutput->setAutoDelete( true, preload );
                 }
                 else
                 {
-                    d->audioOutput->setCurrentSource( io.data() );
+                    d->audioOutput->setCurrentSource( io.data(), preload);
                     // We handle the deletion via tracking in d->input
-                    d->audioOutput->setAutoDelete( false );
+                    d->audioOutput->setAutoDelete( false, preload);
                 }
             }
             else
@@ -768,7 +825,7 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString&
                     }
 
                     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Passing to VLC:" << furl;
-                    d->audioOutput->setCurrentSource( furl );
+                    d->audioOutput->setCurrentSource( furl, preload );
                 }
                 else
                 {
@@ -777,26 +834,37 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString&
                         furl = furl.right( furl.length() - 7 );
 
                     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Passing to VLC:" << QUrl::fromLocalFile( furl );
-                    d->audioOutput->setCurrentSource( QUrl::fromLocalFile( furl ) );
+                    d->audioOutput->setCurrentSource( QUrl::fromLocalFile( furl ), preload );
                 }
 
-                d->audioOutput->setAutoDelete( true );
+                d->audioOutput->setAutoDelete( true, preload );
             }
 
-            if ( !d->input.isNull() )
+            if ( preload ) {
+                if ( !d->inputPreloaded.isNull() )
+                {
+                    d->inputPreloaded->close();
+                    d->inputPreloaded.clear();
+                }
+                d->inputPreloaded = ioToKeep;
+            }
+            else
             {
-                d->input->close();
-                d->input.clear();
-            }
-            d->input = ioToKeep;
-            d->audioOutput->play();
+                if ( !d->input.isNull() )
+                {
+                    d->input->close();
+                    d->input.clear();
+                }
+                d->input = ioToKeep;
+                d->audioOutput->play();
 
-            if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
-            {
-                d->currentTrack->track()->startPlaying();
-            }
+                if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
+                {
+                    d->currentTrack->track()->startPlaying();
+                }
 
-            sendNowPlayingNotification( Tomahawk::InfoSystem::InfoNowPlaying );
+                sendNowPlayingNotification( Tomahawk::InfoSystem::InfoNowPlaying );
+            }
         }
     }
 
@@ -806,7 +874,10 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr result, const QString&
         return;
     }
 
-    d->waitingOnNewTrack = false;
+    if ( !preload )
+    {
+        d->waitingOnNewTrack = false;
+    }
     return;
 }
 
@@ -838,18 +909,19 @@ AudioEngine::loadPreviousTrack()
     }
 
     if ( result )
-        loadTrack( result );
+        loadTrack( result, false );
     else
         stop();
 }
 
 
 void
-AudioEngine::loadNextTrack()
+AudioEngine::loadNextTrack( bool preload )
 {
     if ( QThread::currentThread() != thread() )
     {
-        QMetaObject::invokeMethod( this, "loadNextTrack", Qt::QueuedConnection );
+        QMetaObject::invokeMethod( this, "loadNextTrack", Qt::QueuedConnection,
+                Q_ARG( bool, preload ));
         return;
     }
 
@@ -863,8 +935,11 @@ AudioEngine::loadNextTrack()
     {
         if ( d->stopAfterTrack->track()->equals( d->currentTrack->track() ) )
         {
-            d->stopAfterTrack.clear();
-            stop();
+            if ( !preload )
+            {
+                d->stopAfterTrack.clear();
+                stop();
+            }
             return;
         }
     }
@@ -882,17 +957,24 @@ AudioEngine::loadNextTrack()
 
         if ( d->playlist.data()->nextResult() )
         {
-            result = d->playlist.data()->setSiblingResult( 1 );
-            setCurrentTrackPlaylist( d->playlist );
+            if ( preload )
+            {
+                result = d->playlist.data()->nextResult();
+            }
+            else
+            {
+                result = d->playlist.data()->setSiblingResult( 1 );
+                setCurrentTrackPlaylist( d->playlist );
+            }
         }
     }
 
     if ( result )
     {
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Got next item, loading track";
-        loadTrack( result );
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Got next item, loading track, preload:" << preload;
+        loadTrack( result, preload );
     }
-    else
+    else if ( !preload )
     {
         if ( !d->playlist.isNull() && d->playlist.data()->retryMode() == Tomahawk::PlaylistModes::Retry )
             d->waitingOnNewTrack = true;
@@ -961,7 +1043,7 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
 
     if ( result )
     {
-        loadTrack( result );
+        loadTrack( result, false );
     }
     else if ( !d->playlist.isNull() && d->playlist.data()->retryMode() == PlaylistModes::Retry )
     {
@@ -1237,6 +1319,14 @@ AudioEngine::setStopAfterTrack( const query_ptr& query )
 
 
 void
+AudioEngine::setPreloadTrack( const Tomahawk::result_ptr& result )
+{
+    Q_D( AudioEngine );
+
+    d->preloadedTrack = result;
+}
+
+void
 AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
 {
     Q_D( AudioEngine );
@@ -1261,7 +1351,6 @@ AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
         }
     }
 }
-
 
 void
 AudioEngine::setState( AudioState state )

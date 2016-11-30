@@ -190,7 +190,7 @@ JSAccount::reportNativeScriptJobResult( int resultId, const QVariantMap& result 
     .arg( serializeQVariantMap( result ) );
 
     // Remove when new scripting api turned out to work reliably
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << eval;
+    //tDebug( LOGVERBOSE ) << Q_FUNC_INFO << eval;
 
     evaluateJavaScript( eval );
 }

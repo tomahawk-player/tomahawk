@@ -49,9 +49,10 @@ public:
     bool isInitialized() const;
     AudioState state() const;
 
-    void setCurrentSource( const QUrl& stream );
-    void setCurrentSource( QIODevice* stream );
-    void setCurrentSource( MediaStream* stream );
+    void setCurrentSource( const QUrl& stream, bool preload );
+    void setCurrentSource( QIODevice* stream, bool preload );
+    void setCurrentSource( MediaStream* stream, bool preload );
+    void setPreloadedSourceAsCurrent( void );
 
     void play();
     void pause();
@@ -65,12 +66,14 @@ public:
     qreal volume() const;
     qint64 currentTime() const;
     qint64 totalTime() const;
-    void setAutoDelete ( bool ad );
+    void setAutoDelete ( bool ad, bool preload );
 
     void setDspCallback( std::function< void( int, int, float*, int, int ) > cb );
 
     static AudioOutput* instance();
     libvlc_instance_t* vlcInstance() const;
+
+    void switchToPreloadedMedia( void );
 
 public slots:
 
@@ -90,6 +93,7 @@ private:
     void setCurrentPosition( float position );
     void setTotalTime( qint64 time );
 
+
     void onVlcEvent( const libvlc_event_t* event );
     static void vlcEventCallback( const libvlc_event_t* event, void* opaque );
     static void s_dspCallback( int frameNumber, float* samples, int nb_channels, int nb_samples );
@@ -97,9 +101,11 @@ private:
     static AudioOutput* s_instance;
     AudioState m_currentState;
     MediaStream* m_currentStream;
+    MediaStream* m_preloadedStream;
     bool m_seekable;
     bool m_muted;
     bool m_autoDelete;
+    bool m_preloadedAutoDelete;
     bool m_havePosition;
     bool m_haveTiming;
     qreal m_volume;
@@ -107,7 +113,7 @@ private:
     qint64 m_totalTime;
     bool m_justSeeked;
 
-    bool m_initialized;
+    int m_initialized;
     QFile m_silenceFile;
 
     std::function< void( int state, int frameNumber, float* samples, int nb_channels, int nb_samples ) > dspPluginCallback;
@@ -115,6 +121,9 @@ private:
     libvlc_instance_t* m_vlcInstance;
     libvlc_media_player_t* m_vlcPlayer;
     libvlc_media_t* m_vlcMedia;
+    libvlc_media_player_t* m_vlcBackPlayer;
+    libvlc_media_player_t* m_vlcPreloadedPlayer;
+    libvlc_media_t* m_vlcPreloadedMedia;
 };
 
 #endif // AUDIOOUTPUT_H

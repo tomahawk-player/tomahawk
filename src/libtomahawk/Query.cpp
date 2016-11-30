@@ -685,7 +685,7 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
         qTrackname  = queryTrack()->trackSortname();
     }
 
-    static const QRegExp filterOutChars = QRegExp(QString::fromUtf8("[-`´~!@#$%^&*()_—+=|:;<>«»,.?/{}\'\"\\[\\]\\\\]"));
+    static const QRegExp filterOutChars = QRegExp(QString::fromUtf8("[-`´~!@#$%^&*\\(\\)_—+=|:;<>«»,.?/{}\'\"\\[\\]\\\\]"));
 
     //Cleanup symbols for minor naming differences
     qArtistname.remove(filterOutChars);

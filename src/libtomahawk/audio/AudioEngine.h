@@ -135,10 +135,10 @@ public slots:
     void toggleMute();
 
     void play( const QUrl& url );
-    void playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::result_ptr& result, const Tomahawk::query_ptr& fromQuery = Tomahawk::query_ptr() );
-    void playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::query_ptr& query );
-    void playItem( const Tomahawk::artist_ptr& artist );
-    void playItem( const Tomahawk::album_ptr& album );
+    void playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::result_ptr& result, const Tomahawk::query_ptr& fromQuery = Tomahawk::query_ptr());
+    void playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk::query_ptr& query);
+    void playItem( const Tomahawk::artist_ptr& artist);
+    void playItem( const Tomahawk::album_ptr& album);
     void playPlaylistInterface( const Tomahawk::playlistinterface_ptr& playlist );
     void setPlaylist( Tomahawk::playlistinterface_ptr playlist );
     void setQueue( const Tomahawk::playlistinterface_ptr& queue );
@@ -182,21 +182,22 @@ signals:
     void error( AudioEngine::AudioErrorCode errorCode );
 
 private slots:
-    void loadTrack( const Tomahawk::result_ptr& result ); //async!
+    void loadTrack( const Tomahawk::result_ptr& result, bool preload ); //async!
     void gotStreamUrl( const QVariantMap& data );
     void gotRedirectedStreamUrl( const Tomahawk::result_ptr& result, NetworkReply* reply );
 
 
-    void performLoadIODevice( const Tomahawk::result_ptr& result, const QString& url ); //only call from loadTrack kthxbi
-    void performLoadTrack( const Tomahawk::result_ptr result, const QString& url, QSharedPointer< QIODevice > io ); //only call from loadTrack or performLoadIODevice kthxbi
+    void performLoadIODevice( const Tomahawk::result_ptr& result, const QString& url, bool preload ); //only call from loadTrack kthxbi
+    void performLoadTrack( const Tomahawk::result_ptr result, const QString& url, QSharedPointer< QIODevice > io, bool preload ); //only call from loadTrack or performLoadIODevice kthxbi
     void loadPreviousTrack();
-    void loadNextTrack();
+    void loadNextTrack(bool preload = false);
 
     void onVolumeChanged( qreal volume );
     void timerTriggered( qint64 time );
     void onPositionChanged( float new_position );
 
     void setCurrentTrack( const Tomahawk::result_ptr& result );
+    void setPreloadTrack( const Tomahawk::result_ptr& result );
     void onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type );
     void onPlaylistNextTrackAvailable();
 
