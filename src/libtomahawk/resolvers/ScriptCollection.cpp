@@ -53,6 +53,7 @@ ScriptCollection::ScriptCollection( const scriptobject_ptr& scriptObject,
     qDebug() << Q_FUNC_INFO << scriptAccount->name() << Collection::name();
 
     m_servicePrettyName = scriptAccount->name();
+    m_weight  = readMetaData().value( "weight", 99 ).toUInt();
 }
 
 
@@ -360,7 +361,7 @@ ScriptCollection::timeout() const
 unsigned int
 ScriptCollection::weight() const
 {
-    return 100;
+    return m_weight;
 }
 
 
