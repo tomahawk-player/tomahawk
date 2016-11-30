@@ -1766,7 +1766,7 @@ Tomahawk.Collection = {
         this.settings.capabilities = [Tomahawk.Collection.BrowseCapability.Artists,
             Tomahawk.Collection.BrowseCapability.Albums,
             Tomahawk.Collection.BrowseCapability.Tracks];
-        if (!this.settings.weight && this.resolver.settings.weight) {
+        if (!this.settings.weight && this.resolver && this.resolver.settings.weight) {
             this.settings.weight = this.resolver.settings.weight;
         }
         return this.settings;
