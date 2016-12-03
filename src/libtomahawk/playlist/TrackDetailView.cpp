@@ -447,5 +447,7 @@ void
 TrackDetailView::onResultClicked( const Tomahawk::playlistinterface_ptr& playlist, const Tomahawk::result_ptr& result, const Tomahawk::query_ptr& fromQuery )
 {
     fromQuery->setPreferredResult( result );
-    AudioEngine::instance()->playItem( playlist, result, fromQuery );
+    if (AudioEngine::instance()->isPlaying() && fromQuery->results().contains( AudioEngine::instance()->currentTrack() )) {
+        AudioEngine::instance()->playItem( playlist, result, fromQuery );
+    }
 }
