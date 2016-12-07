@@ -685,10 +685,12 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
         qTrackname  = queryTrack()->trackSortname();
     }
 
+    static const QRegExp filterOutChars = QRegExp(QString::fromUtf8("[-`´~!@#$%^&*()_—+=|:;<>«»,.?/{}\'\"\\[\\]\\\\]"));
+
     //Cleanup symbols for minor naming differences
-    qArtistname.remove(QRegExp(QString::fromUtf8("[-`~!@#$%^&*()_—+=|:;<>«»,.?/{}\'\"\\[\\]\\\\]")));
-    qTrackname.remove(QRegExp(QString::fromUtf8("[-`~!@#$%^&*()_—+=|:;<>«»,.?/{}\'\"\\[\\]\\\\]")));
-    qAlbumname.remove(QRegExp(QString::fromUtf8("[-`~!@#$%^&*()_—+=|:;<>«»,.?/{}\'\"\\[\\]\\\\]")));
+    qArtistname.remove(filterOutChars);
+    qTrackname.remove(filterOutChars);
+    qAlbumname.remove(filterOutChars);
 
     // normal edit distance
     const int artdist = TomahawkUtils::levenshtein( qArtistname, rArtistname );
