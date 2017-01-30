@@ -59,6 +59,7 @@ private slots:
     void gotReleaseGroupsSlot();
     void gotReleasesSlot();
     void gotRecordingsSlot();
+    QNetworkReply* getUrl( QUrl url, QVariant requestData );
 };
 
 }

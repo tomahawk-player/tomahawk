@@ -22,6 +22,7 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "utils/NetworkAccessManager.h"
+#include "TomahawkVersion.h"
 
 #include <QNetworkReply>
 #include <QDomDocument>
@@ -88,6 +89,16 @@ MusicBrainzPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     }
 }
 
+QNetworkReply*
+MusicBrainzPlugin::getUrl(QUrl url, QVariant requestData)
+{
+    QNetworkRequest request =  QNetworkRequest( url );
+    QByteArray userAgent = TomahawkUtils::userAgentString( TOMAHAWK_APPLICATION_NAME, TOMAHAWK_VERSION ).toUtf8();
+    request.setRawHeader( "User-Agent", userAgent );
+    QNetworkReply* reply = Tomahawk::Utils::nam()->get( request );
+    reply->setProperty( "requestData", requestData );
+    return reply;
+}
 
 void
 MusicBrainzPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requestData )
@@ -111,8 +122,7 @@ MusicBrainzPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requ
             TomahawkUtils::urlAddQueryItem( url, "limit", "100" );
 
             tDebug() << Q_FUNC_INFO << url.toString();
-            QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
-            reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
+            QNetworkReply* reply = getUrl( url, QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
             connect( reply, SIGNAL( finished() ), SLOT( gotReleaseGroupsSlot() ) );
 
@@ -131,8 +141,7 @@ MusicBrainzPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requ
             TomahawkUtils::urlAddQueryItem( url, "limit", "100" );
 
             tDebug() << Q_FUNC_INFO << url.toString();
-            QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
-            reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
+            QNetworkReply* reply = getUrl( url, QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
             connect( reply, SIGNAL( finished() ), SLOT( gotReleasesSlot() ) );
 
@@ -154,6 +163,7 @@ MusicBrainzPlugin::gotReleaseGroupsSlot()
     if ( !oldReply )
         return; //timeout will handle it
     oldReply->deleteLater();
+    tDebug() << Q_FUNC_INFO << "HTTP response code:" << oldReply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
 
     QDomDocument doc;
     doc.setContent( oldReply->readAll() );
@@ -237,8 +247,7 @@ MusicBrainzPlugin::gotReleasesSlot()
             TomahawkUtils::urlAddQueryItem( url, "inc", "recordings" );
             tDebug() << Q_FUNC_INFO << url.toString();
 
-            QNetworkReply* newReply = Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
-            newReply->setProperty( "requestData", oldReply->property( "requestData" ) );
+            QNetworkReply* newReply = getUrl( url, oldReply->property( "requestData" ) );
             connect( newReply, SIGNAL( finished() ), SLOT( gotRecordingsSlot() ) );
 
             break;
@@ -260,6 +269,8 @@ MusicBrainzPlugin::gotRecordingsSlot()
     if ( !reply )
         return; //timeout will handle it
     reply->deleteLater();
+
+    tDebug() << Q_FUNC_INFO << "HTTP response code:" << reply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
 
     QDomDocument doc;
     doc.setContent( reply->readAll() );
