@@ -1,3 +1,7 @@
+# This project is essentially abandoned
+There is noone working on it.
+There isn't much sense in adding any new issues in the issue tracker unless you want to fix them yourself.
+
 # WHAT TOMAHAWK IS
 
 Tomahawk is a free multi-source and cross-platform music player. An application that can play not only your local files, but also stream from services like Spotify, Beats, SoundCloud, Google Music, YouTube and many others. You can even connect with your friends' Tomahawks, share your musical gems or listen along with them. Let the music play!
