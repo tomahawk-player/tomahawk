@@ -16,8 +16,10 @@ macro(tomahawk_add_test test_class)
         ${QT_QTCORE_LIBRARY}
     )
 
-    add_test(NAME ${TOMAHAWK_TEST_TARGET} COMMAND ${TOMAHAWK_TEST_TARGET})
+    target_link_libraries(${TOMAHAWK_TEST_TARGET}
+        Qt5::Core Qt5::Network Qt5::Widgets Qt5::Sql Qt5::Xml Qt5::Test
+    )
 
-    qt5_use_modules(${TOMAHAWK_TEST_TARGET} Core Network Widgets Sql Xml Test)
+    add_test(NAME ${TOMAHAWK_TEST_TARGET} COMMAND ${TOMAHAWK_TEST_TARGET})
 
 endmacro()

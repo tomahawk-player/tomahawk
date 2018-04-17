@@ -25,6 +25,4 @@ set_target_properties(
         PROPERTIES
             AUTOMOC TRUE
 )
-qt5_use_modules(qtcertificateaddon Core Network)
-
-
+target_link_libraries(qtcertificateaddon Qt5::Core Qt5::Network)

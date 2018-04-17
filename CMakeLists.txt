@@ -243,9 +243,6 @@ if( NOT Qt5Core_DIR )
     macro_optional_find_package(Qt4 4.7.0 COMPONENTS ${NEEDED_QT4_COMPONENTS} )
     macro_log_feature(QT4_FOUND "Qt" "A cross-platform application and UI framework" "http://qt-project.org" TRUE "" "If you see this, although libqt4-devel is installed, check whether the \n     qtwebkit-devel package and whatever contains QtUiTools is installed too")
 
-    macro(qt5_use_modules)
-    endmacro()
-
     macro(qt_wrap_ui)
         qt4_wrap_ui(${ARGN})
     endmacro()

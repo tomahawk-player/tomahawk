@@ -171,13 +171,14 @@ SET_TARGET_PROPERTIES( ${TOMAHAWK_APPLICATION_TARGET}
         RUNTIME_OUTPUT_NAME ${TOMAHAWK_RUNTIME_OUTPUT_NAME}
 )
 
-
-qt5_use_modules(${TOMAHAWK_APPLICATION_TARGET} Core Widgets Network Sql WebKitWidgets)
+target_link_libraries(${TOMAHAWK_APPLICATION_TARGET}
+    Qt5::Core Qt5::Widgets Qt5::Network Qt5::Sql Qt5::WebKitWidgets
+)
 if(APPLE)
-    qt5_use_modules(${TOMAHAWK_APPLICATION_TARGET} MacExtras)
+    target_link_libraries(${TOMAHAWK_APPLICATION_TARGET} Qt5::MacExtras)
 endif()
 if(WIN32)
-    qt5_use_modules(${TOMAHAWK_APPLICATION_TARGET} WinExtras)
+    target_link_libraries(${TOMAHAWK_APPLICATION_TARGET} Qt5::WinExtras)
 endif()
 
 MESSAGE( STATUS "OS_SPECIFIC_LINK_LIBRARIES: ${OS_SPECIFIC_LINK_LIBRARIES}" )

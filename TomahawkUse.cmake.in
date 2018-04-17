@@ -81,9 +81,6 @@ else(TOMAHAWK_QT5)
     find_package(Qt4 4.7.0 COMPONENTS ${NEEDED_QT4_COMPONENTS})
     include( ${QT_USE_FILE} )
 
-    macro(qt5_use_modules)
-    endmacro()
-
     macro(qt_wrap_ui)
         qt4_wrap_ui(${ARGN})
     endmacro()

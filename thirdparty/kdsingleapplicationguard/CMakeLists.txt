@@ -24,4 +24,4 @@ set_target_properties(
         PROPERTIES
             AUTOMOC TRUE
 )
-qt5_use_modules(kdsingleapplicationguard Core)
+target_link_libraries(kdsingleapplicationguard Qt5::Core)

@@ -500,12 +500,15 @@ set_target_properties(
             OUTPUT_NAME ${TOMAHAWK_BASE_TARGET_NAME}
 )
 
-
-qt5_use_modules(${TOMAHAWK_LIBRARY} Widgets Network Sql WebKitWidgets Concurrent Xml UiTools Svg)
-IF(APPLE)
-       qt5_use_modules(${TOMAHAWK_LIBRARY} MacExtras)
-ENDIF()
-
+target_link_libraries(${TOMAHAWK_LIBRARY}
+    Qt5::Widgets Qt5::Network Qt5::Sql Qt5::WebKitWidgets Qt5::Concurrent Qt5::Xml Qt5::UiTools Qt5::Svg
+)
+if(APPLE)
+    target_link_libraries(${TOMAHAWK_LIBRARY} Qt5::MacExtras)
+endif()
+if( UNIX AND NOT APPLE )
+    target_link_libraries(${TOMAHAWK_LIBRARY} Qt5::DBus)
+endif()
 
 IF(QCA2_FOUND)
     INCLUDE_DIRECTORIES( ${QCA2_INCLUDE_DIR} )
@@ -514,7 +517,6 @@ ENDIF(QCA2_FOUND)
 
 IF( UNIX AND NOT APPLE )
     LIST(APPEND LINK_LIBRARIES ${QT_QTDBUS_LIBRARIES} )
-    qt5_use_modules(${TOMAHAWK_LIBRARY} DBus)
 ENDIF( UNIX AND NOT APPLE )
 
 TARGET_LINK_LIBRARIES( ${TOMAHAWK_LIBRARY}
