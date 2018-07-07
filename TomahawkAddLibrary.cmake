@@ -31,7 +31,7 @@ function(tomahawk_add_library)
 
     # add resources from current dir
     if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/resources.qrc")
-        qt_add_resources(LIBRARY_RC_SOURCES "resources.qrc")
+        qt5_add_resources(LIBRARY_RC_SOURCES "resources.qrc")
         list(APPEND LIBRARY_SOURCES ${LIBRARY_RC_SOURCES})
         unset(LIBRARY_RC_SOURCES)
     endif()

@@ -186,10 +186,6 @@ if(WIN32)
     find_package(Qt5WinExtras REQUIRED)
 endif()
 
-macro(qt_add_resources)
-    qt5_add_resources(${ARGN})
-endmacro()
-
 find_package(Qt5LinguistTools REQUIRED)
 macro(qt_add_translation)
     qt5_add_translation(${ARGN})

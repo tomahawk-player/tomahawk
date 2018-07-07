@@ -153,7 +153,7 @@ else()
     ecm_add_app_icon(tomahawkSources ICONS ${TOMAHAWK_ICONS})
 endif()
 
-qt_add_resources( RC_SRCS "../../resources.qrc" )
+qt5_add_resources( RC_SRCS "../../resources.qrc" )
 
 SET( final_src ${final_src} ${tomahawkUI_H} ${tomahawkMoc} ${tomahawkSources} ${RC_SRCS} )
 
