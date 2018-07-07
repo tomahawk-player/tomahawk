@@ -61,7 +61,6 @@ ELSE()
 		tag.h
 		PATH_SUFFIXES taglib
 		PATHS
-		${KDE4_INCLUDE_DIR}
 		${INCLUDE_INSTALL_DIR}
 	  )
 
@@ -69,7 +68,6 @@ ELSE()
 		WIN32_DEBUG_POSTFIX d
 		NAMES tag
 		PATHS
-		${KDE4_LIB_DIR}
 		${LIB_INSTALL_DIR}
 	  )
 	  

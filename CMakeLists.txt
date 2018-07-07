@@ -98,8 +98,6 @@ else()
 endif()
 option(WITH_CRASHREPORTER "Build with CrashReporter" ${CRASHREPORTER_ENABLED_BY_DEFAULT})
 option(WITH_BINARY_ATTICA "Enable support for downloading binary resolvers automatically" ON)
-option(LEGACY_KDE_INTEGRATION "Install tomahawk.protocol file, deprecated since 4.6.0" OFF)
-option(WITH_KDE4 "Build with support for KDE specific stuff" ON)
 
 # build options for development purposes
 option(SANITIZE_ADDRESS "Enable Address Sanitizer for memory error detection" OFF)
@@ -220,7 +218,6 @@ if( Qt5Core_DIR )
 
     set(QT_RCC_EXECUTABLE "${Qt5Core_RCC_EXECUTABLE}")
     #FIXME: CrashReporter depends on deprecated QHttp
-    set(WITH_KDE4 OFF)
 endif()
 
 if( BUILD_GUI AND UNIX AND NOT APPLE )
@@ -343,23 +340,7 @@ add_subdirectory(${THIRDPARTY_DIR}/libportfwd)
 
 #### submodules end
 
-
-if (WITH_KDE4)
-    macro_optional_find_package(KDE4)
-    macro_optional_find_package(KDE4Installed)
-endif(WITH_KDE4)
-macro_log_feature(KDE4_FOUND "KDE4" "Provides support for configuring Telepathy Accounts from inside Tomahawk" "https://www.kde.org" FALSE "" "")
-
-IF( KDE4_FOUND )
-    IF( CMAKE_C_FLAGS )
-        # KDE4 adds and removes some compiler flags that we don't like
-        # (only for gcc not for clang e.g.)
-        STRING( REPLACE "-std=iso9899:1990" "" CLEAN_C_FLAGS ${CMAKE_C_FLAGS} )
-        SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions" )
-    ENDIF()
-ELSE()
-    SET( CLEAN_C_FLAGS ${CMAKE_C_FLAGS} )
-ENDIF()
+SET( CLEAN_C_FLAGS ${CMAKE_C_FLAGS} )
 
 #show dep log
 macro_display_feature_log()
@@ -371,11 +352,6 @@ CONFIGURE_FILE(
   "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
   "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
   IMMEDIATE @ONLY)
-
-# KDE4 defines an uninstall target for us automatically (and at least with Qt4 Phonon does as well no matter if kdelibs was found)
-# IF( NOT KDE4_FOUND )
-#     ADD_CUSTOM_TARGET(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
-# ENDIF()
 
 IF( ( NOT APPLE ) AND ( NOT SANITIZE_ADDRESS ))
     # Make linking as strict on linux as it is on osx. Then we don't break linking on mac so often

@@ -64,7 +64,6 @@ endmacro()
 
 set(QT_RCC_EXECUTABLE "${Qt5Core_RCC_EXECUTABLE}")
 #FIXME: CrashReporter depends on deprecated QHttp
-set(WITH_KDE4 OFF)
 
 if(NOT TOMAHAWK_CMAKE_DIR)
     set(TOMAHAWK_CMAKE_DIR ${CMAKE_CURRENT_LIST_DIR})
