@@ -90,7 +90,6 @@ option(BUILD_GUI "Build Tomahawk with GUI" ON)
 option(BUILD_TESTS "Build Tomahawk with unit tests" ${BUILD_NO_RELEASE})
 option(BUILD_TOOLS "Build Tomahawk helper tools" ${BUILD_NO_RELEASE})
 option(BUILD_HATCHET "Build the Hatchet plugin" ON)
-option(BUILD_WITH_QT4 "Build Tomahawk with Qt4 instead of Qt5" OFF)
 
 if(UNIX AND NOT APPLE)
        set(CRASHREPORTER_ENABLED_BY_DEFAULT OFF)
@@ -161,127 +160,67 @@ INCLUDE( MacroLogFeature )
 
 message( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} ***" )
 
-if( NOT BUILD_WITH_QT4 )
-    find_package(Qt5Core QUIET)
-    if( Qt5Core_DIR )
-        # CMAKE 2.8.13+/3.0.0+ requires these for IMPORTed targets
-        find_package(Qt5Concurrent REQUIRED)
-        find_package(Qt5Svg REQUIRED)
-        find_package(Qt5UiTools REQUIRED)
-        find_package(Qt5WebKitWidgets REQUIRED)
-        find_package(Qt5Widgets REQUIRED)
-        find_package(Qt5Xml REQUIRED)
-        find_package(Qt5X11Extras NO_MODULE QUIET)
+find_package(Qt5Core QUIET)
+if( Qt5Core_DIR )
+    # CMAKE 2.8.13+/3.0.0+ requires these for IMPORTed targets
+    find_package(Qt5Concurrent REQUIRED)
+    find_package(Qt5Svg REQUIRED)
+    find_package(Qt5UiTools REQUIRED)
+    find_package(Qt5WebKitWidgets REQUIRED)
+    find_package(Qt5Widgets REQUIRED)
+    find_package(Qt5Xml REQUIRED)
+    find_package(Qt5X11Extras NO_MODULE QUIET)
 
-        if(Qt5X11Extras_FOUND)
-            set(HAVE_X11 TRUE)
-        else()
-            set(HAVE_X11 FALSE)
-        endif()
-
-        message(STATUS "Found Qt5!")
-
-        if( UNIX AND NOT APPLE )
-            # We need this to find the paths to qdbusxml2cpp and co
-            find_package(Qt5DBus REQUIRED)
-        endif()
-
-        if(APPLE)
-            find_package(Qt5MacExtras REQUIRED)
-        endif()
-
-        if(WIN32)
-            find_package(Qt5WinExtras REQUIRED)
-        endif()
-
-        macro(qt_wrap_ui)
-            qt5_wrap_ui(${ARGN})
-        endmacro()
-
-        macro(qt_add_resources)
-            qt5_add_resources(${ARGN})
-        endmacro()
-
-        find_package(Qt5LinguistTools REQUIRED)
-        macro(qt_add_translation)
-            qt5_add_translation(${ARGN})
-        endmacro()
-
-        if( UNIX AND NOT APPLE )
-            macro(qt_add_dbus_interface)
-                qt5_add_dbus_interface(${ARGN})
-            endmacro()
-
-            macro(qt_add_dbus_adaptor)
-                qt5_add_dbus_adaptor(${ARGN})
-            endmacro()
-        endif()
-
-        macro(setup_qt)
-        endmacro()
-
-        set(QT_RCC_EXECUTABLE "${Qt5Core_RCC_EXECUTABLE}")
-        #FIXME: CrashReporter depends on deprecated QHttp
-        set(WITH_KDE4 OFF)
-    endif()
-endif()
-if( NOT Qt5Core_DIR )
-    message(STATUS "Could not find Qt5, searching for Qt4 instead...")
-
-    if(NOT FORCE_QT4)
-        message(FATAL_ERROR "Qt4 support is broken, if you plan to fix it, add -DFORCE_QT4=ON to your cmake arguments otherwise you should compile Tomahawk with Qt5")
+    if(Qt5X11Extras_FOUND)
+        set(HAVE_X11 TRUE)
+    else()
+        set(HAVE_X11 FALSE)
     endif()
 
-    set(NEEDED_QT4_COMPONENTS "QtCore" "QtXml" "QtNetwork")
-    if( BUILD_GUI )
-        list(APPEND NEEDED_QT4_COMPONENTS "QtGui" "QtWebkit" "QtUiTools" "QtSvg")
-    endif()
-    if( BUILD_TESTS )
-        list(APPEND NEEDED_QT4_COMPONENTS "QtTest")
+    message(STATUS "Found Qt5!")
+
+    if( UNIX AND NOT APPLE )
+        # We need this to find the paths to qdbusxml2cpp and co
+        find_package(Qt5DBus REQUIRED)
     endif()
 
-    macro_optional_find_package(Qt4 4.7.0 COMPONENTS ${NEEDED_QT4_COMPONENTS} )
-    macro_log_feature(QT4_FOUND "Qt" "A cross-platform application and UI framework" "http://qt-project.org" TRUE "" "If you see this, although libqt4-devel is installed, check whether the \n     qtwebkit-devel package and whatever contains QtUiTools is installed too")
+    if(APPLE)
+        find_package(Qt5MacExtras REQUIRED)
+    endif()
+
+    if(WIN32)
+        find_package(Qt5WinExtras REQUIRED)
+    endif()
 
     macro(qt_wrap_ui)
-        qt4_wrap_ui(${ARGN})
+        qt5_wrap_ui(${ARGN})
     endmacro()
 
     macro(qt_add_resources)
-        qt4_add_resources(${ARGN})
+        qt5_add_resources(${ARGN})
     endmacro()
 
+    find_package(Qt5LinguistTools REQUIRED)
     macro(qt_add_translation)
-        qt4_add_translation(${ARGN})
+        qt5_add_translation(${ARGN})
     endmacro()
 
-    macro(qt_add_dbus_interface)
-      qt4_add_dbus_interface(${ARGN})
-    endmacro()
+    if( UNIX AND NOT APPLE )
+        macro(qt_add_dbus_interface)
+            qt5_add_dbus_interface(${ARGN})
+        endmacro()
 
-    macro(qt_add_dbus_adaptor)
-        qt4_add_dbus_adaptor(${ARGN})
-    endmacro()
+        macro(qt_add_dbus_adaptor)
+            qt5_add_dbus_adaptor(${ARGN})
+        endmacro()
+    endif()
 
     macro(setup_qt)
-        if( NOT BUILD_GUI )
-            set(QT_DONT_USE_QTGUI TRUE)
-        endif()
-        if( UNIX AND NOT APPLE )
-            set(QT_USE_QTDBUS TRUE)
-        endif()
-        set(QT_USE_QTSQL TRUE)
-        set(QT_USE_QTNETWORK TRUE)
-        set(QT_USE_QTXML TRUE)
-        set(QT_USE_QTWEBKIT TRUE)
-
-        include( ${QT_USE_FILE} )
     endmacro()
 
-    # Qt5 C++11 Macros not defined within Qt4
-    # TODO: Add C++11 support
-    tomahawk_add_definitions( "-DQ_DECL_FINAL=" )
-    tomahawk_add_definitions( "-DQ_DECL_OVERRIDE=" )
+    set(QT_RCC_EXECUTABLE "${Qt5Core_RCC_EXECUTABLE}")
+    #FIXME: CrashReporter depends on deprecated QHttp
+    set(WITH_KDE4 OFF)
 endif()
 
 if( BUILD_GUI AND UNIX AND NOT APPLE )
