@@ -39,17 +39,9 @@ Tomahawk provides some tools that help highlight where crashes (of course we onl
 
 Build the account plugin for Hatchet (http://hatchet.is). Requires [websocketpp](https://github.com/zaphoyd/websocketpp).
 
-##### ```BUILD_WITH_QT4``` (boolean) (default: ON)
-
-This enforces CMake to link against Qt4 regardless of whether Qt5 was found or not. Currently Qt4 is still our main development target, so this is still recommended. If you feel adventurous or are preparing Qt5 repositories for your distribution, feel free to give ```-DBUILD_WITH_QT4=OFF``` a shot.
-
 ##### ```WITH_CRASHREPORTER``` (boolean) (default: ON)
 
 The crash reporter is built by default if libcrashreporter-qt is available in ```thirdparty/libcrashreporter-qt/``` (for example via git submodule). Usually distributions don't allow packagers to upload debug symbols to the Tomahawk HQ so to give crash reports more meaning for us, that's why we have no standardised submit process in place yet. If you can do that in your distribution, please get in touch with us!
-
-##### ```WITH_KDE``` (boolean) (default: ON)
-
-The KDE Telepathy plugin to configure Telepathy accounts from our Telepathy plugin can be disabled, if for some reason KDE is available in your build environment but you don't need this plugin.
 
 ##### ```WITH_UPOWER``` (boolean) (default on Linux: ON)
 
