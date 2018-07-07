@@ -284,13 +284,6 @@ if( NOT Qt5Core_DIR )
     tomahawk_add_definitions( "-DQ_DECL_OVERRIDE=" )
 endif()
 
-if( Qt5Core_DIR )
-    set( TOMAHAWK_QT5_TMP TRUE)
-else( Qt5Core_DIR )
-    set( TOMAHAWK_QT5_TMP FALSE )
-endif( Qt5Core_DIR )
-set( TOMAHAWK_QT5 ${TOMAHAWK_QT5_TMP} CACHE BOOL "Build Tomahawk with Qt5")
-
 if( BUILD_GUI AND UNIX AND NOT APPLE )
     macro_optional_find_package( X11 )
     macro_log_feature(X11_FOUND "X11" "The Xorg libraries" "http://www.x.org/wiki/" TRUE "" "Xorg libraries are used by libqnetwm to bring windows to front reliably")
@@ -318,11 +311,6 @@ macro_log_feature(Boost_FOUND "Boost" "Provides free peer-reviewed portable C++ 
 macro_optional_find_package(Lucene++ 3.0.0)
 macro_log_feature(LUCENEPP_FOUND "Lucene++" "The open-source, C++ search engine" "https://github.com/luceneplusplus/LucenePlusPlus/" TRUE "" "Lucene++ is used for indexing the collection")
 
-if( NOT TOMAHAWK_QT5 )
-    macro_optional_find_package(QJSON 0.8.1)
-    macro_log_feature(QJSON_FOUND "QJson" "Qt library that maps JSON data to QVariant objects" "http://qjson.sf.net" TRUE "" "libqjson is used for encoding communication between Tomahawk instances")
-ENDIF()
-
 macro_optional_find_package(Taglib 1.8.0)
 macro_log_feature(TAGLIB_FOUND "TagLib" "Audio Meta-Data Library" "http://developer.kde.org/~wheeler/taglib.html" TRUE "" "taglib is needed for reading meta data from audio files")
 include( CheckTagLibFileName )
@@ -341,23 +329,15 @@ macro_log_feature(GNUTLS_FOUND "GnuTLS"
     "http://gnutls.org/" TRUE ""
     "GnuTLS is needed for serving the Playdar/HTTP API via TLS")
 
-if( TOMAHAWK_QT5 )
-  macro_optional_find_package(Qca-qt5)
-  if(Qca-qt5_DIR)
-      set(QCA2_FOUND ON CACHE BOOL "QCA2 was found")
-      set(QCA2_LIBRARIES "qca-qt5" CACHE STRING "QCA2 Qt5 target")
-  endif()
-else()
-  macro_optional_find_package(QCA2)
+macro_optional_find_package(Qca-qt5)
+if(Qca-qt5_DIR)
+    set(QCA2_FOUND ON CACHE BOOL "QCA2 was found")
+    set(QCA2_LIBRARIES "qca-qt5" CACHE STRING "QCA2 Qt5 target")
 endif()
 macro_log_feature(QCA2_FOUND "QCA2" "Provides encryption and signing functions necessary for some resolvers and accounts" "http://delta.affinix.com/qca/" TRUE "" "")
 
-if( TOMAHAWK_QT5 )
-    macro_optional_find_package(KF5Attica 1.0.0)
-    set(LIBATTICA_FOUND ${KF5Attica_FOUND})
-else()
-    macro_optional_find_package(LibAttica 0.4.0)
-endif()
+macro_optional_find_package(KF5Attica 1.0.0)
+set(LIBATTICA_FOUND ${KF5Attica_FOUND})
 macro_log_feature(LIBATTICA_FOUND "libattica" "Provides support for installation of resolvers from the Tomahawk website" "http://download.kde.org/stable/attica/" TRUE "" "")
 
 macro_optional_find_package(QuaZip)
@@ -379,11 +359,7 @@ endif()
 
 if( UNIX AND NOT APPLE )
     macro_optional_find_package(TelepathyQt 0.9.3)
-    if ( TOMAHAWK_QT5 )
-        macro_log_feature(TelepathyQt5_FOUND "Telepathy-Qt" "Telepathy-Qt is a Qt high-level binding for Telepathy, a D-Bus framework for unifying real time communication." FALSE "" "Telepathy-Qt is needed for sharing Jabber/GTalk accounts with Telepathy.\n")
-    else ( TOMAHAWK_QT5)
-        macro_log_feature(TelepathyQt4_FOUND "Telepathy-Qt" "Telepathy-Qt is a Qt high-level binding for Telepathy, a D-Bus framework for unifying real time communication." FALSE "" "Telepathy-Qt is needed for sharing Jabber/GTalk accounts with Telepathy.\n")
-    endif()
+    macro_log_feature(TelepathyQt5_FOUND "Telepathy-Qt" "Telepathy-Qt is a Qt high-level binding for Telepathy, a D-Bus framework for unifying real time communication." FALSE "" "Telepathy-Qt is needed for sharing Jabber/GTalk accounts with Telepathy.\n")
 endif()
 
 # we need pthreads too
