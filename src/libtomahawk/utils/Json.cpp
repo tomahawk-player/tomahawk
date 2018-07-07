@@ -18,16 +18,9 @@
 
 #include "Json.h"
 
-// Qt version specific includes
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-    #include <QJsonDocument>
-    #include <QMetaProperty>
-    #include <QVariantHash>
-#else
-    #include <qjson/parser.h>
-    #include <qjson/qobjecthelper.h>
-    #include <qjson/serializer.h>
-#endif
+#include <QJsonDocument>
+#include <QMetaProperty>
+#include <QVariantHash>
 
 namespace TomahawkUtils
 {
@@ -35,7 +28,6 @@ namespace TomahawkUtils
 QVariantMap
 qobject2qvariant( const QObject* object )
 {
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     QVariantMap map;
     if ( object == NULL )
     {
@@ -52,16 +44,12 @@ qobject2qvariant( const QObject* object )
         }
     }
     return map;
-#else
-    return QJson::QObjectHelper::qobject2qvariant( object );
-#endif
 }
 
 
 void
 qvariant2qobject( const QVariantMap& variant, QObject* object )
 {
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     for ( QVariantMap::const_iterator iter = variant.begin(); iter != variant.end(); ++iter )
     {
         QVariant property = object->property( iter.key().toLatin1() );
@@ -78,16 +66,12 @@ qvariant2qobject( const QVariantMap& variant, QObject* object )
             }
         }
     }
-#else
-    QJson::QObjectHelper::qvariant2qobject( variant, object );
-#endif
 }
 
 
 QVariant
 parseJson( const QByteArray& jsonData, bool* ok )
 {
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     QJsonParseError error;
     QJsonDocument doc = QJsonDocument::fromJson( jsonData, &error );
     if ( ok != NULL )
@@ -95,17 +79,12 @@ parseJson( const QByteArray& jsonData, bool* ok )
         *ok = ( error.error == QJsonParseError::NoError );
     }
     return doc.toVariant();
-#else
-    QJson::Parser p;
-    return p.parse( jsonData, ok );
-#endif
 }
 
 
 QByteArray
 toJson( const QVariant &variant, bool* ok )
 {
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     QVariant _variant = variant;
     if ( variant.type() == QVariant::Hash )
     {
@@ -127,10 +106,6 @@ toJson( const QVariant &variant, bool* ok )
         *ok = !doc.isNull();
     }
     return doc.toJson( QJsonDocument::Compact );
-#else
-    QJson::Serializer serializer;
-    return serializer.serialize( variant, ok );
-#endif
 }
 
 }

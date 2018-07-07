@@ -29,9 +29,7 @@ THE SOFTWARE.
 #include <QVBoxLayout>
 #include <QMacCocoaViewContainer>
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
 #include <qmacfunctions.h>
-#endif
 
 static inline NSString* fromQString(const QString &string)
 {
@@ -49,11 +47,7 @@ static inline QString toQString(NSString *string)
 
 static inline NSImage* fromQPixmap(const QPixmap &pixmap)
 {
-#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
-     CGImageRef cgImage = pixmap.toMacCGImageRef();
-#else
     CGImageRef cgImage = QtMac::toCGImageRef(pixmap);
-#endif
 
     return [[[NSImage alloc] initWithCGImage:cgImage size:NSZeroSize] autorelease];
 }

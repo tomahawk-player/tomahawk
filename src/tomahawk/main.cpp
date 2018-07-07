@@ -45,10 +45,6 @@
     #include "libcrashreporter-handler/Handler.h"
 #endif
 
-#if QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
-    #include <X11/Xlib.h>
-#endif
-
 #include <exception>
 #include <boost/filesystem/path.hpp>
 
@@ -178,11 +174,7 @@ main( int argc, char *argv[] )
     #endif // Q_OS_MAC
 #endif //Q_OS_WIN
 
-    #if QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
-        XInitThreads();
-    #else
         QCoreApplication::setAttribute( Qt::AA_X11InitThreads );
-    #endif
 
     TomahawkApp a( argc, argv );
 

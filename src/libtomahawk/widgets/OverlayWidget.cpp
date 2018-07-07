@@ -26,11 +26,6 @@
 #include <QPainter>
 #include <QPropertyAnimation>
 
-// Forward Declarations breaking QSharedPointer
-#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "Source.h"
-#endif
-
 
 #define CORNER_ROUNDNESS 8.0
 #define FADING_DURATION 500

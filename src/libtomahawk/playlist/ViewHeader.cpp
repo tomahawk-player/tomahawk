@@ -35,13 +35,8 @@ ViewHeader::ViewHeader( QAbstractItemView* parent )
 {
     m_menu->setFont( TomahawkUtils::systemFont() );
 
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     setSectionResizeMode( QHeaderView::Interactive );
     setSectionsMovable( true );
-#else
-    setResizeMode( QHeaderView::Interactive );
-    setMovable( true );
-#endif
     setMinimumSectionSize( 60 );
     setDefaultAlignment( Qt::AlignLeft );
     setStretchLastSection( true );

@@ -576,11 +576,7 @@ Servent::handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo )
 
 
 void
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
 Servent::incomingConnection( qintptr sd )
-#else
-Servent::incomingConnection( int sd )
-#endif
 {
     Q_ASSERT( this->thread() == QThread::currentThread() );
 

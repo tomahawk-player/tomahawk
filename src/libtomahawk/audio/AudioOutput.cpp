@@ -164,7 +164,6 @@ AudioOutput::AudioOutput( QObject* parent )
     setCurrentSource( new MediaStream( &m_silenceFile, true ) );
     libvlc_media_player_play( m_vlcPlayer );
 
-    #if QT_VERSION >= QT_VERSION_CHECK(5,4,0)
     // if the silence file did not play for 15 secs, we pretend the AudioOutput is initialized, to allow proper error reporting
     QTimer::singleShot( 15000, [&]()
     {
@@ -173,7 +172,6 @@ AudioOutput::AudioOutput( QObject* parent )
             emit initialized();
         }
     } );
-    #endif
 }
 
 

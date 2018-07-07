@@ -97,8 +97,3 @@ int main( int argc, char* argv[] )
     thread.wait();
 }
 
-#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    Q_DECLARE_METATYPE( QList< Tomahawk::result_ptr >  )
-    Q_DECLARE_METATYPE( Tomahawk::QID  )
-#endif
-

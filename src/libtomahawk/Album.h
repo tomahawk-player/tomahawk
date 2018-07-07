@@ -25,11 +25,6 @@
 #include <QPixmap>
 #include <QFuture>
 
-// Forward Declarations breaking QSharedPointer
-#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "collection/Collection.h"
-#endif
-
 #include "infosystem/InfoSystem.h"
 #include "DllMacro.h"
 #include "Typedefs.h"

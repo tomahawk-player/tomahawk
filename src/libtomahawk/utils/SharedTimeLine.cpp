@@ -40,7 +40,6 @@ SharedTimeLine::SharedTimeLine()
 void
 SharedTimeLine::connectNotify( const QMetaMethod& signal )
 {
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     if ( signal == QMetaMethod::fromSignal( &SharedTimeLine::frameChanged ) )
     {
         m_refcount++;
@@ -49,10 +48,6 @@ SharedTimeLine::connectNotify( const QMetaMethod& signal )
             m_timeline.start();
         }
     }
-#else
-    Q_UNUSED( signal );
-    Q_ASSERT( false );
-#endif
 }
 
 void
@@ -72,7 +67,6 @@ SharedTimeLine::connectNotify( const char* signal )
 void
 SharedTimeLine::disconnectNotify( const QMetaMethod& signal )
 {
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     if ( signal == QMetaMethod::fromSignal( &SharedTimeLine::frameChanged ) )
     {
         m_refcount--;
@@ -82,10 +76,6 @@ SharedTimeLine::disconnectNotify( const QMetaMethod& signal )
             deleteLater();
         }
     }
-#else
-    Q_UNUSED( signal );
-    Q_ASSERT( false );
-#endif
 }
 
 

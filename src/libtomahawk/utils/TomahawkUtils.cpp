@@ -32,20 +32,11 @@
 #include "Track.h"
 
 #ifdef LIBLASTFM_FOUND
-    #if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-    #include <lastfm5/ws.h>
-    #else
-    #include <lastfm/ws.h>
-    #endif
+#include <lastfm5/ws.h>
 #endif
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
 #include <quazip5/quazip.h>
 #include <quazip5/quazipfile.h>
-#else
-#include <quazip/quazip.h>
-#include <quazip/quazipfile.h>
-#endif
 // We need this for the version info (if available)
 #include <taglib/taglib.h>
 
@@ -62,10 +53,7 @@
 #include <QStringList>
 #include <QTranslator>
 
-// Qt version specific includes
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-    #include <QUrlQuery>
-#endif
+#include <QUrlQuery>
 
 #ifdef Q_OS_WIN
     #include <windows.h>
@@ -545,35 +533,7 @@ mergePlaylistChanges( const QList< Tomahawk::query_ptr >& orig, const QList< Tom
 bool
 removeDirectory( const QString& dir )
 {
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     return QDir( dir ).removeRecursively();
-#else
-    const QDir aDir( dir );
-
-    tLog() << "Deleting DIR:" << dir;
-    bool has_err = false;
-    if ( aDir.exists() )
-    {
-        foreach ( const QFileInfo& entry, aDir.entryInfoList( QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::NoSymLinks ) )
-        {
-            QString path = entry.absoluteFilePath();
-            if ( entry.isDir() )
-            {
-                has_err = !removeDirectory( path ) || has_err;
-            }
-            else if ( !QFile::remove( path ) )
-            {
-                has_err = true;
-            }
-        }
-        if ( !aDir.rmdir( aDir.absolutePath() ) )
-        {
-            has_err = true;
-        }
-    }
-
-    return !has_err;
-#endif
 }
 
 
@@ -676,40 +636,32 @@ public:
     {
     };
 
-    #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    QString translate( const char * context, const char * sourceText, const char * disambiguation = 0 ) const Q_DECL_OVERRIDE
+    QString translate( const char * context, const char * sourceText, const char * disambiguation = 0, int n = -1) const Q_DECL_OVERRIDE
     {
-        QString translation = QTranslator::translate( context, sourceText, disambiguation );
-        #else
-        QString translate( const char * context, const char * sourceText, const char * disambiguation = 0, int n = -1) const Q_DECL_OVERRIDE
+        QString translation = QTranslator::translate( context, sourceText, disambiguation, n );
+
+        if( translation.isEmpty() )
         {
-            QString translation = QTranslator::translate( context, sourceText, disambiguation, n );
-            #endif
-            if( translation.isEmpty() )
-            {
-                translation = QString::fromUtf8( sourceText );
-            }
-
-            //         // lowercase all strings not on whats new page ...
-            //         // TODO: rather scan disambiguation for nolowercase, but too lazy for that right now
-            //         if( strcmp( context, "WhatsNewWidget_0_8" ) )
-            //         {
-            //             translation = translation.toLower();
-            //         }
-
-            return translation.replace( "%applicationName", TOMAHAWK_APPLICATION_NAME, Qt::CaseInsensitive );
+            translation = QString::fromUtf8( sourceText );
         }
+
+        //         // lowercase all strings not on whats new page ...
+        //         // TODO: rather scan disambiguation for nolowercase, but too lazy for that right now
+        //         if( strcmp( context, "WhatsNewWidget_0_8" ) )
+        //         {
+        //             translation = translation.toLower();
+        //         }
+
+        return translation.replace( "%applicationName", TOMAHAWK_APPLICATION_NAME, Qt::CaseInsensitive );
+    }
 };
 
 
 void
 installTranslator( QObject* parent )
 {
-#if QT_VERSION >= 0x040800
     QString locale = QLocale::system().uiLanguages().first().replace( "-", "_" );
-#else
-    QString locale = QLocale::system().name();
-#endif
+
     if ( locale == "C" )
         locale = "en";
 
@@ -970,57 +922,37 @@ compareVersionStrings( const QString& first, const QString& second )
 void
 urlAddQueryItem( QUrl& url, const QString& key, const QString& value )
 {
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     QUrlQuery urlQuery( url );
     urlQuery.addQueryItem( key, value );
     url.setQuery( urlQuery );
-#else
-    url.addQueryItem( key, value );
-#endif
 }
 
 
 QString
 urlQueryItemValue( const QUrl& url, const QString& key )
 {
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     return QUrlQuery( url ).queryItemValue( key ).replace( "+", " " );
-#else
-    return url.queryItemValue( key ).replace( "+", " " );
-#endif
 }
 
 
 bool
 urlHasQueryItem( const QUrl& url, const QString& key )
 {
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     return QUrlQuery( url ).hasQueryItem( key );
-#else
-    return url.hasQueryItem( key );
-#endif
 }
 
 
 QList<QPair<QString, QString> >
 urlQueryItems( const QUrl& url )
 {
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     return QUrlQuery( url ).queryItems();
-#else
-    return url.queryItems();
-#endif
 }
 
 
 void
 urlSetQuery( QUrl& url, const QString& query )
 {
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     url.setQuery( query );
-#else
-    url.setEncodedQuery( query.toLocal8Bit() );
-#endif
 }
 
 
@@ -1046,11 +978,7 @@ QByteArray
 encodedQuery( const QUrl& url )
 {
     QByteArray data;
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     data = url.query(QUrl::FullyEncoded).toUtf8();
-#else
-    data = url.encodedQuery();
-#endif
     // QUrl doesn't encode : or ; which it should, as well as some other things, so be safer here in general.
     data.replace( "'", "%27" );
     data.replace( ".", "%2E" );

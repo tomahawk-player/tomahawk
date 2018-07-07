@@ -76,7 +76,3 @@ int main( int argc, char* argv[] )
     // Wait until the dbcmd was executed.
     thread.wait();
 }
-
-#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    Q_DECLARE_METATYPE( QList< Tomahawk::artist_ptr >  )
-#endif

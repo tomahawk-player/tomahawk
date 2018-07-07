@@ -54,11 +54,7 @@ private:
         *servent = new Servent();
         QVERIFY( *servent != NULL );
 
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
         QHostAddress anyAddress = QHostAddress::Any;
-#else
-        QHostAddress anyAddress = QHostAddress::AnyIPv6;
-#endif
 
         // TODO: Use a random free port for tests
         // With (upnp == false) and (mode ==

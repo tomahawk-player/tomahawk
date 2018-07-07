@@ -34,13 +34,8 @@
 #include "TomahawkSettings.h"
 #include "Track.h"
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
 #include <echonest5/CatalogUpdateEntry.h>
 #include <echonest5/Config.h>
-#else
-#include <echonest/CatalogUpdateEntry.h>
-#include <echonest/Config.h>
-#endif
 
 using namespace Tomahawk;
 

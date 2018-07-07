@@ -157,11 +157,7 @@ signals:
     void ready();
 
 protected:
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     void incomingConnection( qintptr sd ) Q_DECL_OVERRIDE;
-#else
-    void incomingConnection( int sd ) Q_DECL_OVERRIDE;
-#endif
 
 public slots:
     void setExternalAddress( QHostAddress ha, unsigned int port );

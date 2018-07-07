@@ -66,29 +66,6 @@ using namespace Accounts;
 #define TOMAHAWK_CAP_NODE_NAME QLatin1String( "http://tomahawk-player.org/" )
 
 
-#if QT_VERSION <= QT_VERSION_CHECK( 5, 0, 0 )
-void
-JreenMessageHandler( QtMsgType type, const char *msg )
-{
-    switch ( type )
-    {
-        case QtDebugMsg:
-            tDebug( LOGTHIRDPARTY ).nospace() << JREEN_LOG_INFIX << ":" << "Debug:" << msg;
-            break;
-        case QtWarningMsg:
-            tDebug( LOGTHIRDPARTY ).nospace() << JREEN_LOG_INFIX << ":" << "Warning:" << msg;
-            break;
-        case QtCriticalMsg:
-            tDebug( LOGTHIRDPARTY ).nospace() << JREEN_LOG_INFIX << ":" << "Critical:" << msg;
-            break;
-        case QtFatalMsg:
-            tDebug( LOGTHIRDPARTY ).nospace() << JREEN_LOG_INFIX << ":" << "Fatal:" << msg;
-            abort();
-    }
-}
-#endif
-
-
 XmppSipPlugin::XmppSipPlugin( Account* account )
     : SipPlugin( account )
     , m_state( Account::Disconnected )
@@ -96,9 +73,6 @@ XmppSipPlugin::XmppSipPlugin( Account* account )
     , m_xmlConsole( nullptr )
     , m_pubSubManager( nullptr )
 {
-#if QT_VERSION <= QT_VERSION_CHECK( 5, 0, 0 )
-    Jreen::Logger::addHandler( JreenMessageHandler );
-#endif
 
     m_currentUsername = readUsername();
     m_currentServer = readServer();

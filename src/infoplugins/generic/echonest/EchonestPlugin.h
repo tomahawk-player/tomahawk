@@ -25,11 +25,7 @@
 #include "infosystem/InfoSystem.h"
 #include "infosystem/InfoSystemWorker.h"
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
 #include <echonest5/Artist.h>
-#else
-#include <echonest/Artist.h>
-#endif
 
 #include <QObject>
 

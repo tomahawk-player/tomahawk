@@ -40,16 +40,9 @@
 #include <QStyleOption>
 #include <QDesktopServices>
 
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-    #include <QWindow>
-    #ifdef HAVE_X11
-        #include <QX11Info>
-    #endif
-#else
-    #ifdef Q_WS_X11
-        #include <QX11Info>
-        #include <libqnetwm/netwm.h>
-    #endif
+#include <QWindow>
+#ifdef HAVE_X11
+    #include <QX11Info>
 #endif
 
 #ifdef Q_OS_WIN
@@ -324,34 +317,6 @@ bringToFront()
         }
     }
 #else
-#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    {
-        QWidget* widget = tomahawkWindow();
-        if ( !widget )
-            return;
-
-        widget->show();
-        widget->activateWindow();
-        widget->raise();
-
-        WId wid = widget->winId();
-        NETWM::init();
-
-        XEvent e;
-        e.xclient.type = ClientMessage;
-        e.xclient.message_type = NETWM::NET_ACTIVE_WINDOW;
-        e.xclient.display = QX11Info::display();
-        e.xclient.window = wid;
-        e.xclient.format = 32;
-        e.xclient.data.l[0] = 2;
-        e.xclient.data.l[1] = QX11Info::appTime();
-        e.xclient.data.l[2] = 0;
-        e.xclient.data.l[3] = 0l;
-        e.xclient.data.l[4] = 0l;
-
-        XSendEvent( QX11Info::display(), RootWindow( QX11Info::display(), DefaultScreen( QX11Info::display() ) ), False, SubstructureRedirectMask | SubstructureNotifyMask, &e );
-    }
-#else // Qt5
     {
         QWidget* widget = tomahawkWindow();
         if ( !widget )
@@ -370,7 +335,6 @@ bringToFront()
         }
         #endif
     }
-#endif
 #endif
 }
 #endif

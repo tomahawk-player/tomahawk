@@ -43,11 +43,6 @@
 #include "DatabaseCommand_SetCollectionAttributes.h"
 #include "DatabaseCommand_SetTrackAttributes.h"
 
-// Forward Declarations breaking QSharedPointer
-#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "collection/Collection.h"
-#endif
-
 #define DEFAULT_WORKER_THREADS 4
 #define MAX_WORKER_THREADS 16
 

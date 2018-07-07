@@ -25,11 +25,6 @@
 #include "utils/Logger.h"
 #include "TomahawkSettings.h"
 
-// Forward Declarations breaking QSharedPointer
-#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "Source.h"
-#endif
-
 
 // remove now playing status after PAUSE_TIMEOUT seconds
 static const int PAUSE_TIMEOUT = 10;

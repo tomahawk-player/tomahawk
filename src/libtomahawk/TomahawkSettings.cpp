@@ -34,14 +34,8 @@
 #include "PlaylistInterface.h"
 #include "Source.h"
 
-#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
-    #include <qtkeychain/keychain.h>
-    #include <QDesktopServices>
-#else
-    #include <qt5keychain/keychain.h>
-    #include <QStandardPaths>
-#endif
-
+#include <qt5keychain/keychain.h>
+#include <QStandardPaths>
 #include <QDir>
 
 using namespace Tomahawk;
@@ -733,11 +727,7 @@ TomahawkSettings::genericCacheVersion() const
 QString
 TomahawkSettings::storageCacheLocation() const
 {
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     return QStandardPaths::writableLocation( QStandardPaths::CacheLocation );
-#else
-    return QDesktopServices::storageLocation( QDesktopServices::CacheLocation );
-#endif
 }
 
 
@@ -746,11 +736,7 @@ TomahawkSettings::scannerPaths() const
 {
     QString musicLocation;
 
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     musicLocation = QStandardPaths::writableLocation( QStandardPaths::MusicLocation );
-#else
-    musicLocation = QDesktopServices::storageLocation( QDesktopServices::MusicLocation );
-#endif
 
     return value( "scanner/paths", musicLocation ).toStringList();
 }

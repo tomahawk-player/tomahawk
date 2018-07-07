@@ -23,10 +23,6 @@
 
 #include "utils/Logger.h"
 
-#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "Msg.h"
-#endif
-
 void
 QTcpSocketExtra::connectToHost( const QHostAddress& host, quint16 port, OpenMode openMode )
 {

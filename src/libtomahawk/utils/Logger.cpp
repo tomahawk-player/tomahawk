@@ -128,20 +128,12 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
 
 
 void
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
 TomahawkLogHandler( QtMsgType type, const QMessageLogContext& context, const QString& msg )
-#else
-TomahawkLogHandler( QtMsgType type, const char* msg )
-#endif
 {
     static QMutex s_mutex;
 
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     QByteArray ba = msg.toUtf8();
     const char* message = ba.constData();
-#else
-    const char* message = msg;
-#endif
 
     QMutexLocker locker( &s_mutex );
     switch( type )
@@ -196,11 +188,7 @@ setupLogfile( QFile& f )
     logStream.open( f.fileName().toStdString().c_str() );
 #endif
 
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     qInstallMessageHandler( TomahawkLogHandler );
-#else
-    qInstallMsgHandler( TomahawkLogHandler );
-#endif
 }
 
 }

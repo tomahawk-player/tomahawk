@@ -213,19 +213,11 @@ Track::init()
     Q_D( Track );
     updateSortNames();
 
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     QObject::connect( d->trackData.data(), &TrackData::attributesLoaded, this, &Track::attributesLoaded );
     QObject::connect( d->trackData.data(), &TrackData::socialActionsLoaded, this, &Track::socialActionsLoaded );
     QObject::connect( d->trackData.data(), &TrackData::statsLoaded, this, &Track::statsLoaded );
     QObject::connect( d->trackData.data(), &TrackData::similarTracksLoaded, this, &Track::similarTracksLoaded );
     QObject::connect( d->trackData.data(), &TrackData::lyricsLoaded, this, &Track::lyricsLoaded );
-#else
-    connect( d->trackData.data(), SIGNAL( attributesLoaded() ), SIGNAL( attributesLoaded() ) );
-    connect( d->trackData.data(), SIGNAL( socialActionsLoaded() ), SIGNAL( socialActionsLoaded() ) );
-    connect( d->trackData.data(), SIGNAL( statsLoaded() ), SIGNAL( statsLoaded() ) );
-    connect( d->trackData.data(), SIGNAL( similarTracksLoaded() ), SIGNAL( similarTracksLoaded() ) );
-    connect( d->trackData.data(), SIGNAL( lyricsLoaded() ), SIGNAL( lyricsLoaded() ) );
-#endif
 }
 
 

@@ -192,11 +192,7 @@ void QSearchField::setMenu(QMenu *menu)
     if (!pimpl)
         return;
 
-#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
-    NSMenu *nsMenu = menu->macMenu();
-#else
     NSMenu *nsMenu = menu->toNSMenu();
-#endif
 
     [[pimpl->nsSearchField cell] setSearchMenuTemplate:nsMenu];
 }

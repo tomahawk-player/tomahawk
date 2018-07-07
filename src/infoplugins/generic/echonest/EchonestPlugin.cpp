@@ -23,11 +23,7 @@
 #include "utils/Logger.h"
 #include "utils/NetworkAccessManager.h"
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
 #include <echonest5/ArtistTypes.h>
-#else
-#include <echonest/ArtistTypes.h>
-#endif
 
 #include <QNetworkConfiguration>
 

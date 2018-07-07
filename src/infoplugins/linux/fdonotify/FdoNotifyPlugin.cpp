@@ -55,11 +55,6 @@
 #include <QDBusPendingCallWatcher>
 #include <QImage>
 
-#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    // QTextDocument provides Qt::escape()
-    #include <QTextDocument>
-#endif
-
 namespace Tomahawk
 {
 
@@ -67,11 +62,7 @@ namespace InfoSystem
 {
 
 QString escapeHtml( const QString& str ) {
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     return str.toHtmlEscaped();
-#else
-    return Qt::escape( str );
-#endif
 }
 
 FdoNotifyPlugin::FdoNotifyPlugin()

@@ -138,11 +138,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setModel( m_proxyModel );
 
     header()->setStretchLastSection( false );
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     header()->setSectionResizeMode( 0, QHeaderView::Stretch );
-#else
-    header()->setResizeMode( 0, QHeaderView::Stretch );
-#endif
 
     connect( this, SIGNAL( expanded( QModelIndex ) ), SLOT( onItemExpanded( QModelIndex ) ) );
     connect( selectionModel(), SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ), SLOT( onSelectionChanged() ) );

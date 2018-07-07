@@ -24,15 +24,9 @@
 #include "infosystem/InfoSystemWorker.h"
 #include "DllMacro.h"
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
 #include <lastfm5/Track.h>
 #include <lastfm5/Audioscrobbler.h>
 #include <lastfm5/ScrobblePoint.h>
-#else
-#include <lastfm/Track.h>
-#include <lastfm/Audioscrobbler.h>
-#include <lastfm/ScrobblePoint.h>
-#endif
 
 #include <QObject>
 
