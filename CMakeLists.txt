@@ -187,9 +187,6 @@ if(WIN32)
 endif()
 
 find_package(Qt5LinguistTools REQUIRED)
-macro(qt_add_translation)
-    qt5_add_translation(${ARGN})
-endmacro()
 
 if( UNIX AND NOT APPLE )
     macro(qt_add_dbus_interface)
