@@ -7,8 +7,6 @@ IF( ${CMAKE_VERSION} VERSION_GREATER 2.8.3 )
   CMAKE_POLICY(SET CMP0017 NEW)
 ENDIF( ${CMAKE_VERSION} VERSION_GREATER 2.8.3 )
 
-setup_qt()
-
 SET( qxtcore "core" )
 SET( qxtnet "network" )
 SET( qxtweb "web" )

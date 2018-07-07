@@ -1,7 +1,5 @@
 include( ${PROJECT_BINARY_DIR}/TomahawkUse.cmake )
 
-setup_qt()
-
 include_directories( ${CMAKE_CURRENT_BINARY_DIR}/libtomahawk )
 include_directories( ${CMAKE_CURRENT_LIST_DIR}/libtomahawk )
 

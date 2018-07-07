@@ -188,9 +188,6 @@ endif()
 
 find_package(Qt5LinguistTools REQUIRED)
 
-macro(setup_qt)
-endmacro()
-
 set(QT_RCC_EXECUTABLE "${Qt5Core_RCC_EXECUTABLE}")
 # FIXME: CrashReporter depends on deprecated QHttp
 
