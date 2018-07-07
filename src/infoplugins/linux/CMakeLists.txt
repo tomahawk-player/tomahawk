@@ -3,7 +3,7 @@ SET(fdo_srcs
     fdonotify/ImageConverter.cpp
 )
 SET(FDO_LINK_LIBRARIES ${LINK_LIBRARIES})
-qt_add_dbus_interface(fdo_srcs fdonotify/org.freedesktop.Notifications.xml
+qt5_add_dbus_interface(fdo_srcs fdonotify/org.freedesktop.Notifications.xml
                        FreedesktopNotificationsProxy)
 
 tomahawk_add_plugin(fdonotify

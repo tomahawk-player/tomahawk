@@ -189,10 +189,6 @@ endif()
 find_package(Qt5LinguistTools REQUIRED)
 
 if( UNIX AND NOT APPLE )
-    macro(qt_add_dbus_interface)
-        qt5_add_dbus_interface(${ARGN})
-    endmacro()
-
     macro(qt_add_dbus_adaptor)
         qt5_add_dbus_adaptor(${ARGN})
     endmacro()

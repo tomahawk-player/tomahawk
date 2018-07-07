@@ -6,12 +6,12 @@ FOREACH( _file ${_icons} )
 ENDFOREACH( _file )
 
 IF( WITH_UPOWER )
-    qt_add_dbus_interface(tomahawkSources "${CMAKE_CURRENT_SOURCE_DIR}/linux/org.freedesktop.UPower.xml" "UPowerProxy")
+    qt5_add_dbus_interface(tomahawkSources "${CMAKE_CURRENT_SOURCE_DIR}/linux/org.freedesktop.UPower.xml" "UPowerProxy")
     SET( tomahawkSources ${tomahawkSources} linux/UPowerHandler.cpp  )
 ENDIF( WITH_UPOWER )
 
 IF( WITH_GNOMESHORTCUTHANDLER )
-    qt_add_dbus_interface(tomahawkSources "${CMAKE_CURRENT_SOURCE_DIR}/linux/GnomeSettingsDaemonMediaKeys.xml" "GnomeSettingsDaemonMediaKeysProxy")
+    qt5_add_dbus_interface(tomahawkSources "${CMAKE_CURRENT_SOURCE_DIR}/linux/GnomeSettingsDaemonMediaKeys.xml" "GnomeSettingsDaemonMediaKeysProxy")
     SET( tomahawkSources ${tomahawkSources} linux/GnomeShortcutHandler.cpp )
 ENDIF( WITH_GNOMESHORTCUTHANDLER )
 
