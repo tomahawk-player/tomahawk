@@ -8,7 +8,7 @@ setup_qt()
 list(APPEND crashreporter_SOURCES main.cpp)
 list(APPEND crashreporter_RC resources.qrc)
 
-qt_wrap_ui( crashreporter_UI_HEADERS ${crashreporter_UI} )
+qt5_wrap_ui( crashreporter_UI_HEADERS ${crashreporter_UI} )
 qt_add_resources( crashreporter_RC_RCC ${crashreporter_RC} )
 
 

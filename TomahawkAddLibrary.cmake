@@ -25,7 +25,7 @@ function(tomahawk_add_library)
     include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
     if(LIBRARY_UI)
-        qt_wrap_ui(LIBRARY_UI_SOURCES ${LIBRARY_UI})
+        qt5_wrap_ui(LIBRARY_UI_SOURCES ${LIBRARY_UI})
         list(APPEND LIBRARY_SOURCES ${LIBRARY_UI_SOURCES})
     endif()
 

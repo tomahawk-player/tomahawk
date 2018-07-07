@@ -476,7 +476,7 @@ IF(BUILD_GUI)
     LIST(APPEND libSources ${libGuiSources} )
 ENDIF()
 
-qt_wrap_ui(libUI_H ${libUI})
+qt5_wrap_ui(libUI_H ${libUI})
 
 SET( libSources ${libSources} ${libUI_H} )
 

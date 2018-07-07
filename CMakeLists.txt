@@ -186,10 +186,6 @@ if(WIN32)
     find_package(Qt5WinExtras REQUIRED)
 endif()
 
-macro(qt_wrap_ui)
-    qt5_wrap_ui(${ARGN})
-endmacro()
-
 macro(qt_add_resources)
     qt5_add_resources(${ARGN})
 endmacro()

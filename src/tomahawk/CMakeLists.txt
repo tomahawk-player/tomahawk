@@ -141,7 +141,7 @@ SET( final_src ${final_src} ${tomahawkMoc} ${tomahawkSources} ${trans_outfile})
 
 IF( BUILD_GUI )
     LIST(APPEND tomahawkSources ${tomahawkSourcesGui})
-    qt_wrap_ui( tomahawkUI_H ${tomahawkUI} )
+    qt5_wrap_ui( tomahawkUI_H ${tomahawkUI} )
 ENDIF()
 
 file( GLOB_RECURSE TOMAHAWK_ICONS "${CMAKE_SOURCE_DIR}/data/icons/*-tomahawk-icon.png" )
