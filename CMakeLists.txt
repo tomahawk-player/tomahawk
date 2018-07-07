@@ -158,72 +158,62 @@ INCLUDE( MacroLogFeature )
 
 message( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} ***" )
 
-find_package(Qt5Core QUIET)
-if( Qt5Core_DIR )
-    # CMAKE 2.8.13+/3.0.0+ requires these for IMPORTed targets
-    find_package(Qt5Concurrent REQUIRED)
-    find_package(Qt5Svg REQUIRED)
-    find_package(Qt5UiTools REQUIRED)
-    find_package(Qt5WebKitWidgets REQUIRED)
-    find_package(Qt5Widgets REQUIRED)
-    find_package(Qt5Xml REQUIRED)
-    find_package(Qt5X11Extras NO_MODULE QUIET)
+find_package(Qt5Core REQUIRED)
+find_package(Qt5Concurrent REQUIRED)
+find_package(Qt5Svg REQUIRED)
+find_package(Qt5UiTools REQUIRED)
+find_package(Qt5WebKitWidgets REQUIRED)
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Xml REQUIRED)
+find_package(Qt5X11Extras NO_MODULE QUIET)
 
-    if(Qt5X11Extras_FOUND)
-        set(HAVE_X11 TRUE)
-    else()
-        set(HAVE_X11 FALSE)
-    endif()
-
-    message(STATUS "Found Qt5!")
-
-    if( UNIX AND NOT APPLE )
-        # We need this to find the paths to qdbusxml2cpp and co
-        find_package(Qt5DBus REQUIRED)
-    endif()
-
-    if(APPLE)
-        find_package(Qt5MacExtras REQUIRED)
-    endif()
-
-    if(WIN32)
-        find_package(Qt5WinExtras REQUIRED)
-    endif()
-
-    macro(qt_wrap_ui)
-        qt5_wrap_ui(${ARGN})
-    endmacro()
-
-    macro(qt_add_resources)
-        qt5_add_resources(${ARGN})
-    endmacro()
-
-    find_package(Qt5LinguistTools REQUIRED)
-    macro(qt_add_translation)
-        qt5_add_translation(${ARGN})
-    endmacro()
-
-    if( UNIX AND NOT APPLE )
-        macro(qt_add_dbus_interface)
-            qt5_add_dbus_interface(${ARGN})
-        endmacro()
-
-        macro(qt_add_dbus_adaptor)
-            qt5_add_dbus_adaptor(${ARGN})
-        endmacro()
-    endif()
-
-    macro(setup_qt)
-    endmacro()
-
-    set(QT_RCC_EXECUTABLE "${Qt5Core_RCC_EXECUTABLE}")
-    #FIXME: CrashReporter depends on deprecated QHttp
+if(Qt5X11Extras_FOUND)
+    set(HAVE_X11 TRUE)
+else()
+    set(HAVE_X11 FALSE)
 endif()
 
-if( BUILD_GUI AND UNIX AND NOT APPLE )
-    macro_optional_find_package( X11 )
-    macro_log_feature(X11_FOUND "X11" "The Xorg libraries" "http://www.x.org/wiki/" TRUE "" "Xorg libraries are used by libqnetwm to bring windows to front reliably")
+if( UNIX AND NOT APPLE )
+    # We need this to find the paths to qdbusxml2cpp and co
+    find_package(Qt5DBus REQUIRED)
 endif()
+
+if(APPLE)
+    find_package(Qt5MacExtras REQUIRED)
+endif()
+
+if(WIN32)
+    find_package(Qt5WinExtras REQUIRED)
+endif()
+
+macro(qt_wrap_ui)
+    qt5_wrap_ui(${ARGN})
+endmacro()
+
+macro(qt_add_resources)
+    qt5_add_resources(${ARGN})
+endmacro()
+
+find_package(Qt5LinguistTools REQUIRED)
+macro(qt_add_translation)
+    qt5_add_translation(${ARGN})
+endmacro()
+
+if( UNIX AND NOT APPLE )
+    macro(qt_add_dbus_interface)
+        qt5_add_dbus_interface(${ARGN})
+    endmacro()
+
+    macro(qt_add_dbus_adaptor)
+        qt5_add_dbus_adaptor(${ARGN})
+    endmacro()
+endif()
+
+macro(setup_qt)
+endmacro()
+
+set(QT_RCC_EXECUTABLE "${Qt5Core_RCC_EXECUTABLE}")
+# FIXME: CrashReporter depends on deprecated QHttp
 
 include(CheckCXXCompilerFlag)
 check_cxx_compiler_flag( "-std=c++11" CXX11_FOUND )

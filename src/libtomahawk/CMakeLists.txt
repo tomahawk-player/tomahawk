@@ -173,14 +173,6 @@ if(QCA2_FOUND)
     set( libGuiSources ${libGuiSources} utils/GroovesharkParser.cpp )
 endif()
 
-if(UNIX AND NOT APPLE AND NOT Qt5Core_DIR)
-    if(BUILD_GUI AND X11_FOUND)
-        include_directories( ${THIRDPARTY_DIR}/libqnetwm )
-        list(APPEND libSources ${libSources} ${THIRDPARTY_DIR}/libqnetwm/libqnetwm/netwm.cpp)
-        list(APPEND LINK_LIBRARIES ${X11_LIBRARIES})
-    endif()
-endif()
-
 list(APPEND libSources
     TomahawkSettings.cpp
     SourceList.cpp
