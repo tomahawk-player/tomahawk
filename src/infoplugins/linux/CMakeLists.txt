@@ -16,9 +16,9 @@ SET(mpris_srcs
     mpris/MprisPlugin.cpp
     )
 
-qt_add_dbus_adaptor(mpris_srcs mpris/MprisPluginRootAdaptor.xml
+qt5_add_dbus_adaptor(mpris_srcs mpris/MprisPluginRootAdaptor.xml
                      mpris/MprisPlugin.h Tomahawk::InfoSystem::MprisPlugin MprisPluginRootAdaptor MprisPluginRootAdaptor)
-qt_add_dbus_adaptor(mpris_srcs mpris/MprisPluginPlayerAdaptor.xml
+qt5_add_dbus_adaptor(mpris_srcs mpris/MprisPluginPlayerAdaptor.xml
                      mpris/MprisPlugin.h Tomahawk::InfoSystem::MprisPlugin MprisPluginPlayerAdaptor MprisPluginPlayerAdaptor)
 
 tomahawk_add_plugin(mpris
