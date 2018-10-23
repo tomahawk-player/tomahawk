@@ -1,5 +1,5 @@
 # This project is essentially abandoned
-There is noone working on it.
+There is no one working on it.
 There isn't much sense in adding any new issues in the issue tracker unless you want to fix them yourself.
 
 # WHAT TOMAHAWK IS
