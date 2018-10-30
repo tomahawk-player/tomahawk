@@ -142,6 +142,10 @@ TomahawkLogHandler( QtMsgType type, const QMessageLogContext& context, const QSt
             log( message, LOGTHIRDPARTY );
             break;
 
+        case QtInfoMsg:
+            log( message, 0 );
+            break;
+
         case QtCriticalMsg:
             log( message, 0 );
             break;
