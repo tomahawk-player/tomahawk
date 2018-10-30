@@ -92,7 +92,7 @@ endif()
 option(BUILD_GUI "Build Tomahawk with GUI" ON)
 option(BUILD_TESTS "Build Tomahawk with unit tests" ${BUILD_NO_RELEASE})
 option(BUILD_TOOLS "Build Tomahawk helper tools" ${BUILD_NO_RELEASE})
-option(BUILD_HATCHET "Build the Hatchet plugin" ON)
+option(BUILD_HATCHET "Build the Hatchet plugin" OFF)
 
 if(UNIX AND NOT APPLE)
        set(CRASHREPORTER_ENABLED_BY_DEFAULT OFF)
