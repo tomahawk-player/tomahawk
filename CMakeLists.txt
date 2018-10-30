@@ -197,21 +197,9 @@ find_package(Qt5LinguistTools REQUIRED)
 set(QT_RCC_EXECUTABLE "${Qt5Core_RCC_EXECUTABLE}")
 # FIXME: CrashReporter depends on deprecated QHttp
 
-include(CheckCXXCompilerFlag)
-check_cxx_compiler_flag( "-std=c++11" CXX11_FOUND )
-check_cxx_compiler_flag( "-std=c++0x" CXX0X_FOUND )
-check_cxx_compiler_flag( "-stdlib=libc++" LIBCPP_FOUND )
-if(CXX11_FOUND)
-    tomahawk_add_cxx_flags( "-std=c++11" )
-elseif(CXX0X_FOUND)
-    tomahawk_add_cxx_flags( "-std=c++0x" )
-else()
-    message(STATUS "${CMAKE_CXX_COMPILER} does not support C++11, please use a
-    different compiler")
-endif()
-if(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR APPLE) AND LIBCPP_FOUND)
-    tomahawk_add_cxx_flags( "-stdlib=libc++" )
-endif()
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(Boost REQUIRED COMPONENTS filesystem system)
 macro_log_feature(Boost_FOUND "Boost" "Provides free peer-reviewed portable C++ source libraries" "http://www.boost.org" TRUE "" "") #FIXME: give useful explanation
