@@ -71,6 +71,9 @@ ADD_LIBRARY( qxtweb-standalone STATIC
         ${sources}
 )
 
-target_link_libraries( qxtweb-standalone Qt5::Network)
+target_link_libraries( qxtweb-standalone PUBLIC
+    Qt5::Network
+)
+
 
 set_target_properties( qxtweb-standalone PROPERTIES AUTOMOC TRUE )

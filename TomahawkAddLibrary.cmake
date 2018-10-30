@@ -45,9 +45,6 @@ function(tomahawk_add_library)
         add_library(${target} SHARED ${LIBRARY_SOURCES})
     endif()
 
-    # HACK: add qt modules - every lib should define its own set of modules
-    target_link_libraries(${target} Qt5::Core Qt5::Network Qt5::Widgets Qt5::Sql Qt5::Xml)
-
     # definitions - can this be moved into set_target_properties below?
     add_definitions(${QT_DEFINITIONS})
     set_target_properties(${target} PROPERTIES AUTOMOC TRUE)
@@ -70,12 +67,12 @@ function(tomahawk_add_library)
     endif()
 
     # add link targets
-    target_link_libraries(${target} ${TOMAHAWK_LIBRARIES})
+    target_link_libraries(${target} PRIVATE ${TOMAHAWK_LIBRARIES})
     if(LIBRARY_LINK_LIBRARIES)
-        target_link_libraries(${target} ${LIBRARY_LINK_LIBRARIES})
+        target_link_libraries(${target} PUBLIC ${LIBRARY_LINK_LIBRARIES})
     endif()
     if(LIBRARY_LINK_PRIVATE_LIBRARIES)
-        target_link_libraries(${target} LINK_PRIVATE ${LIBRARY_LINK_PRIVATE_LIBRARIES})
+        target_link_libraries(${target} PRIVATE ${LIBRARY_LINK_PRIVATE_LIBRARIES})
     endif()
 
     # add soversion

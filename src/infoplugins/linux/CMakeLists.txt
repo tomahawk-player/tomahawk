@@ -2,13 +2,14 @@ SET(fdo_srcs
     fdonotify/FdoNotifyPlugin.cpp
     fdonotify/ImageConverter.cpp
 )
-SET(FDO_LINK_LIBRARIES ${LINK_LIBRARIES})
+SET(FDO_LINK_LIBRARIES ${LINK_LIBRARIES} Qt5::DBus)
 qt5_add_dbus_interface(fdo_srcs fdonotify/org.freedesktop.Notifications.xml
                        FreedesktopNotificationsProxy)
 
 tomahawk_add_plugin(fdonotify
     TYPE infoplugin EXPORT_MACRO INFOPLUGINDLLEXPORT_PRO
-    SOURCES "${fdo_srcs}" LINK_LIBRARIES "${FDO_LINK_LIBRARIES}"
+    SOURCES "${fdo_srcs}"
+    LINK_LIBRARIES "${FDO_LINK_LIBRARIES}"
 )
 
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} )

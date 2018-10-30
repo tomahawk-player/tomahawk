@@ -490,14 +490,11 @@ set_target_properties(
             OUTPUT_NAME ${TOMAHAWK_BASE_TARGET_NAME}
 )
 
-target_link_libraries(${TOMAHAWK_LIBRARY}
+target_link_libraries(${TOMAHAWK_LIBRARY} PUBLIC
     Qt5::Widgets Qt5::Network Qt5::Sql Qt5::WebKitWidgets Qt5::Concurrent Qt5::Xml Qt5::UiTools Qt5::Svg
 )
 if(APPLE)
     target_link_libraries(${TOMAHAWK_LIBRARY} Qt5::MacExtras)
-endif()
-if( UNIX AND NOT APPLE )
-    target_link_libraries(${TOMAHAWK_LIBRARY} Qt5::DBus)
 endif()
 
 IF(QCA2_FOUND)
@@ -509,8 +506,7 @@ IF( UNIX AND NOT APPLE )
     LIST(APPEND LINK_LIBRARIES ${QT_QTDBUS_LIBRARIES} )
 ENDIF( UNIX AND NOT APPLE )
 
-TARGET_LINK_LIBRARIES( ${TOMAHAWK_LIBRARY}
-    LINK_PRIVATE
+TARGET_LINK_LIBRARIES(${TOMAHAWK_LIBRARY} PRIVATE
     ${LIBVLC_LIBRARY}
 
     # Thirdparty shipped with tomahawk
@@ -518,7 +514,7 @@ TARGET_LINK_LIBRARIES( ${TOMAHAWK_LIBRARY}
     ${QTKEYCHAIN_LIBRARIES}
     ${PRIVATE_LINK_LIBRARIES}
 
-    LINK_PUBLIC
+    PUBLIC
     # External deps
     ${QJSON_LIBRARIES}
     ${LUCENEPP_LIBRARIES}

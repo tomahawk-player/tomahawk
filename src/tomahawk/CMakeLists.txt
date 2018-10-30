@@ -180,6 +180,9 @@ endif()
 if(WIN32)
     target_link_libraries(${TOMAHAWK_APPLICATION_TARGET} Qt5::WinExtras)
 endif()
+if( UNIX AND NOT APPLE )
+    target_link_libraries(${TOMAHAWK_APPLICATION_TARGET} Qt5::DBus)
+endif()
 
 MESSAGE( STATUS "OS_SPECIFIC_LINK_LIBRARIES: ${OS_SPECIFIC_LINK_LIBRARIES}" )
 
