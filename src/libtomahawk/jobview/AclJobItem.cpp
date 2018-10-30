@@ -54,7 +54,7 @@ ACLJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     if ( !item )
         return;
     //tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     initStyleOption( &opt, index );
     QFontMetrics fm( opt.font );
 

@@ -47,7 +47,7 @@ JobStatusDelegate::~JobStatusDelegate()
 void
 JobStatusDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     initStyleOption( &opt, index );
     QFontMetrics fm( painter->font() );
     const bool allowMultiLine = index.data( JobStatusModel::AllowMultiLineRole ).toBool();
@@ -106,7 +106,7 @@ JobStatusDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelInd
         return QSize( QStyledItemDelegate::sizeHint( option, index ).width(), m_cachedMultiLineHeights[ index ] );
 
     // Don't elide, but stretch across as many rows as required
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     initStyleOption( &opt, index );
 
     const QString text = index.data( Qt::DisplayRole ).toString();

@@ -39,7 +39,7 @@ ResolverConfigDelegate::ResolverConfigDelegate( QObject* parent )
 void
 ResolverConfigDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     initStyleOption( &opt, index );
     QRect itemRect = opt.rect;
     int top = itemRect.top();
@@ -124,7 +124,7 @@ ResolverConfigDelegate::paint( QPainter* painter, const QStyleOptionViewItem& op
 QRect
 ResolverConfigDelegate::configRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const
 {
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     initStyleOption( &opt, idx );
     QRect itemRect = opt.rect;
     int top = itemRect.top();
@@ -138,7 +138,7 @@ ResolverConfigDelegate::checkRectForIndex( const QStyleOptionViewItem &option, c
 {
     Q_UNUSED( role );
 
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     initStyleOption( &opt, idx );
     QRect itemRect = opt.rect;
     int top = itemRect.top();

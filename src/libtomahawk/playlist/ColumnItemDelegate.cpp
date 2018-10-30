@@ -108,7 +108,7 @@ ColumnItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option
         QColor textColor = TomahawkUtils::alphaBlend( option.palette.color( QPalette::Foreground ), option.palette.color( QPalette::Background ), opacity );
 
         {
-            QStyleOptionViewItemV4 o = option;
+            QStyleOptionViewItem o = option;
             initStyleOption( &o, QModelIndex() );
 
             painter->save();
@@ -190,7 +190,7 @@ ColumnItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option
     if ( text.trimmed().isEmpty() )
         text = tr( "Unknown" );
 
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     initStyleOption( &opt, QModelIndex() );
 
     const QModelIndex curIndex = m_view->currentIndex();

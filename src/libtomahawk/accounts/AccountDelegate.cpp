@@ -64,7 +64,7 @@ AccountDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex
     if ( m_accountRowHeight < 0 )
     {
         // Haven't calculated normal item height yet, do it once and save it
-        QStyleOptionViewItemV4 opt( option );
+        QStyleOptionViewItem opt( option );
         initStyleOption( &opt, index );
         m_accountRowHeight = ACCOUNT_DELEGATE_ROW_HEIGHT_MULTIPLIER * opt.fontMetrics.height();
     }
@@ -98,7 +98,7 @@ AccountDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex
 void
 AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     initStyleOption( &opt, index );
 
     // draw the background
@@ -139,7 +139,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     // draw checkbox first
     const int checkboxYPos = ( center ) - ( WRENCH_SIZE / 2 );
     QRect checkRect = QRect( leftEdge, checkboxYPos, WRENCH_SIZE, WRENCH_SIZE );
-    QStyleOptionViewItemV4 opt2 = opt;
+    QStyleOptionViewItem opt2 = opt;
     opt2.rect = checkRect;
 
     if ( !m_loadingSpinners.contains( index ) )
@@ -392,7 +392,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
 
 
 int
-AccountDelegate::drawAccountList( QPainter* painter, QStyleOptionViewItemV4& opt, const QList< Account* > accts, int rightEdge ) const
+AccountDelegate::drawAccountList( QPainter* painter, QStyleOptionViewItem& opt, const QList< Account* > accts, int rightEdge ) const
 {
     // list each account name, and show the online, offline icon
     const int textHeight = painter->fontMetrics().height() + 1;
@@ -615,7 +615,7 @@ AccountDelegate::drawStatus( QPainter* painter, const QPointF& rightTopEdge, Acc
 
 
 void
-AccountDelegate::drawCheckBox( QStyleOptionViewItemV4& opt, QPainter* p, const QWidget* w ) const
+AccountDelegate::drawCheckBox( QStyleOptionViewItem& opt, QPainter* p, const QWidget* w ) const
 {
     QStyle* style = w ? w->style() : QApplication::style();
     opt.checkState == Qt::Checked ? opt.state |= QStyle::State_On : opt.state |= QStyle::State_Off;
@@ -624,7 +624,7 @@ AccountDelegate::drawCheckBox( QStyleOptionViewItemV4& opt, QPainter* p, const Q
 
 
 void
-AccountDelegate::drawConfigWrench ( QPainter* painter, QStyleOptionViewItemV4& opt, QStyleOptionToolButton& topt ) const
+AccountDelegate::drawConfigWrench ( QPainter* painter, QStyleOptionViewItem& opt, QStyleOptionToolButton& topt ) const
 {
     const QWidget* w = opt.widget;
     QStyle* style = w ? w->style() : QApplication::style();
@@ -648,7 +648,7 @@ AccountDelegate::drawConfigWrench ( QPainter* painter, QStyleOptionViewItemV4& o
 QRect
 AccountDelegate::checkRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const
 {
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     initStyleOption( &opt, idx );
 
     // Top level item, return the corresponding rect
@@ -661,7 +661,7 @@ AccountDelegate::checkRectForIndex( const QStyleOptionViewItem& option, const QM
 
 
 int
-AccountDelegate::removeBtnWidth( QStyleOptionViewItemV4 opt ) const
+AccountDelegate::removeBtnWidth( QStyleOptionViewItem opt ) const
 {
     const QString btnText = tr( "Remove" );
     QFont font = opt.font;
@@ -674,7 +674,7 @@ void
 AccountDelegate::startInstalling( const QPersistentModelIndex& idx )
 {
     qDebug() << "START INSTALLING:" << idx.data( Qt::DisplayRole ).toString();
-    QStyleOptionViewItemV4 opt;
+    QStyleOptionViewItem opt;
     initStyleOption( &opt, idx );
 
     AnimatedSpinner* anim = new AnimatedSpinner( checkRectForIndex( opt, idx ).size(), true );

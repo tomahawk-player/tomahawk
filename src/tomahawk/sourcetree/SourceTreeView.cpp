@@ -951,7 +951,7 @@ SourceTreeView::paintEvent( QPaintEvent* event )
         QPainter painter( viewport() );
         const QRect itemRect = visualRect( m_dropIndex );
 
-        QStyleOptionViewItemV4 opt;
+        QStyleOptionViewItem opt;
         opt.initFrom( this );
         opt.rect = itemRect;
         opt.state = QStyle::State_Enabled | QStyle::State_Selected;

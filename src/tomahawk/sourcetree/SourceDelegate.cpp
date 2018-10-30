@@ -108,7 +108,7 @@ SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem
         type == SourcesModel::Station ||
         type == SourcesModel::TemporaryPage );
 
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     initStyleOption( &opt, index );
     opt.showDecorationSelected = false;
 
@@ -450,8 +450,8 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     if ( option.rect.height() == 0 )
         return;
 
-    QStyleOptionViewItemV4 optIndentation = option;
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem optIndentation = option;
+    QStyleOptionViewItem opt = option;
 
     painter->save();
     painter->setRenderHint( QPainter::TextAntialiasing );
@@ -673,7 +673,7 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
             SourceTreeItem* gpi = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
             Q_ASSERT( gpi );
 
-            QStyleOptionViewItemV4 o = option;
+            QStyleOptionViewItem o = option;
             initStyleOption( &o, index );
             const int padding = m_margin / 8;
             const QRect r( o.rect.right() - padding - m_iconHeight, padding + o.rect.y(), m_iconHeight, m_iconHeight );

@@ -59,7 +59,7 @@ private slots:
     void doUpdateIndex( const QPersistentModelIndex& index );
 
 protected:
-    void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const;
+    void prepareStyleOption( QStyleOptionViewItem* option, const QModelIndex& index, PlayableItem* item ) const;
 
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;

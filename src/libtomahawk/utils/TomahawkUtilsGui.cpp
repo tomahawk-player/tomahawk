@@ -781,7 +781,7 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
 
 
 void
-prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item )
+prepareStyleOption( QStyleOptionViewItem* option, const QModelIndex& index, PlayableItem* item )
 {
     Q_UNUSED( index );
 

@@ -106,7 +106,7 @@ PlaylistItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModel
 
 
 void
-PlaylistItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const
+PlaylistItemDelegate::prepareStyleOption( QStyleOptionViewItem* option, const QModelIndex& index, PlayableItem* item ) const
 {
     initStyleOption( option, index );
 
@@ -176,7 +176,7 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
     QTextOption textOption( Qt::AlignVCenter | (Qt::Alignment)index.data( Qt::TextAlignmentRole ).toUInt() );
     textOption.setWrapMode( QTextOption::NoWrap );
 
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     prepareStyleOption( &opt, index, item );
     opt.text.clear();
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );

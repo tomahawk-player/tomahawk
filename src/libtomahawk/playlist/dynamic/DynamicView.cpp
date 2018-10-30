@@ -286,7 +286,7 @@ DynamicView::backgroundBetween( QRect rect, int rowStart )
     QPixmap bg = QPixmap( rect.size() );
     bg.fill( Qt::white );
     QPainter p( &bg );
-    QStyleOptionViewItemV4 opt = viewOptions();
+    QStyleOptionViewItem opt = viewOptions();
     // code taken from QTreeViewPrivate::paintAlternatingRowColors
     m_fadebg = !style()->styleHint( QStyle::SH_ItemView_PaintAlternatingRowColorsForEmptyArea, &opt );
     //  qDebug() << "PAINTING ALTERNATING ROW BG!: " << fadingRectViewport;
@@ -299,9 +299,9 @@ DynamicView::backgroundBetween( QRect rect, int rowStart )
         //  qDebug() << "PAINTING BG ROW IN RECT" << y << "to" << y + rowHeight << ":" << opt.rect;
         if ( current & 1 )
         {
-            opt.features |= QStyleOptionViewItemV2::Alternate;
+            opt.features |= QStyleOptionViewItem::Alternate;
         } else {
-            opt.features &= ~QStyleOptionViewItemV2::Alternate;
+            opt.features &= ~QStyleOptionViewItem::Alternate;
         }
         ++current;
         style()->drawPrimitive( QStyle::PE_PanelItemViewRow, &opt, &p );

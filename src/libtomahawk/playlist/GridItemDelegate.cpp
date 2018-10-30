@@ -129,7 +129,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     if ( !item || !index.isValid() )
         return;
 
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     initStyleOption( &opt, QModelIndex() );
 //    qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
 

@@ -44,7 +44,7 @@ AccountFactoryWrapperDelegate::AccountFactoryWrapperDelegate( QObject* parent )
 void
 AccountFactoryWrapperDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     initStyleOption( &opt, index );
 
     const int center = opt.rect.height() / 2 + opt.rect.top();
@@ -61,7 +61,7 @@ AccountFactoryWrapperDelegate::paint(QPainter* painter, const QStyleOptionViewIt
     // Checkbox on left edge, then text
     const QRect checkRect( PADDING/4, PADDING/4 + opt.rect.top(), opt.rect.height() - PADDING/4, opt.rect.height() - PADDING/4 );
     m_cachedCheckRects[ index ] = checkRect;
-    QStyleOptionViewItemV4 opt2 = opt;
+    QStyleOptionViewItem opt2 = opt;
     opt2.rect = checkRect;
     opt.checkState == Qt::Checked ? opt2.state |= QStyle::State_On : opt2.state |= QStyle::State_Off;
     style->drawPrimitive( QStyle::PE_IndicatorViewItemCheck, &opt2, painter, w );

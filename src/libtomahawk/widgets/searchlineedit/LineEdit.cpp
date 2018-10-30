@@ -171,7 +171,7 @@ void LineEdit::updateTextMargins()
 
 void LineEdit::updateSideWidgetLocations()
 {
-    QStyleOptionFrameV2 opt;
+    QStyleOptionFrame opt;
     initStyleOption(&opt);
     QRect textRect = style()->subElementRect(QStyle::SE_LineEditContents, &opt, this);
     int spacing = m_rightLayout->spacing();
@@ -214,7 +214,7 @@ void LineEdit::paintEvent(QPaintEvent *event)
 {
     QLineEdit::paintEvent(event);
     if (text().isEmpty() && !m_inactiveText.isEmpty() && !hasFocus()) {
-        QStyleOptionFrameV2 panel;
+        QStyleOptionFrame panel;
         initStyleOption(&panel);
         QRect textRect = style()->subElementRect(QStyle::SE_LineEditContents, &panel, this);
         int horizontalMargin = 2;

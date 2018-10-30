@@ -71,14 +71,14 @@ private:
     void drawRoundedButton( QPainter* painter, const QRect& buttonRect, bool red = false ) const;
     // Returns new left edge
     int drawStatus( QPainter* painter, const QPointF& rightTopEdge, Account* acct, bool drawText = false ) const;
-    void drawCheckBox( QStyleOptionViewItemV4& opt, QPainter* p, const QWidget* w ) const;
-    void drawConfigWrench( QPainter* painter, QStyleOptionViewItemV4& option, QStyleOptionToolButton& topt ) const;
+    void drawCheckBox( QStyleOptionViewItem& opt, QPainter* p, const QWidget* w ) const;
+    void drawConfigWrench( QPainter* painter, QStyleOptionViewItem& option, QStyleOptionToolButton& topt ) const;
     // returns new left edge
-    int drawAccountList( QPainter* painter, QStyleOptionViewItemV4& option, const QList< Account* > accounts, int rightEdge ) const;
+    int drawAccountList( QPainter* painter, QStyleOptionViewItem& option, const QList< Account* > accounts, int rightEdge ) const;
 
     QRect checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx ) const;
 
-    int removeBtnWidth( QStyleOptionViewItemV4 opt ) const;
+    int removeBtnWidth( QStyleOptionViewItem opt ) const;
 
     int m_hoveringOver;
     QPersistentModelIndex m_hoveringItem, m_configPressed;

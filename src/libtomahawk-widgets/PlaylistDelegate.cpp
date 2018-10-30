@@ -64,7 +64,7 @@ PlaylistDelegate::PlaylistDelegate()
 void
 PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     initStyleOption( &opt, QModelIndex() );
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
 

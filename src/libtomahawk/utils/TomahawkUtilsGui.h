@@ -69,7 +69,7 @@ namespace TomahawkUtils
     DLLEXPORT void setSystemFont( QFont font );
     DLLEXPORT QFont systemFont();
 
-    DLLEXPORT void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item );
+    DLLEXPORT void prepareStyleOption( QStyleOptionViewItem* option, const QModelIndex& index, PlayableItem* item );
 
     DLLEXPORT void drawRoundedButton( QPainter* painter, const QRect& btnRect, const QColor& color, const QColor &gradient1bottom = QColor(), const QColor& gradient2top = QColor(), const QColor& gradient2bottom = QColor() );
 

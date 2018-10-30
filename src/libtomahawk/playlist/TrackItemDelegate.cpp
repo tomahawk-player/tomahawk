@@ -93,7 +93,7 @@ TrackItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     Q_ASSERT( item );
 
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     prepareStyleOption( &opt, index, item );
 
     if ( item->source() )
