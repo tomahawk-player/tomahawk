@@ -385,7 +385,6 @@ SourcesModel::removeItem( const Tomahawk::source_ptr& source )
 {
 //    qDebug() << "Removing source item from SourceTree:" << source->friendlyName();
 
-    QModelIndex idx;
     int rows = rowCount();
     for ( int row = 0; row < rows; row++ )
     {
