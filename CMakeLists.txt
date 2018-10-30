@@ -7,6 +7,9 @@ CMAKE_POLICY(SET CMP0022 NEW)
 # Update to NEW and fix things up
 CMAKE_POLICY(SET CMP0023 OLD)
 
+# Let AUTOMOC and AUTOUIC process generated files
+CMAKE_POLICY(SET CMP0071 NEW)
+
 # TODO:
 # Disable automatic qtmain linking
 CMAKE_POLICY(SET CMP0020 OLD)
