@@ -1,5 +1,7 @@
 # taglib changed filenames to be a char/wchar struct on some platforms, need to check for it
 macro (CHECK_TAGLIB_FILENAME TAGLIB_FILENAME_COMPLEX)
+	CMAKE_POLICY(SET CMP0075 NEW)
+
 	include (CheckCXXSourceCompiles)
 	set (CMAKE_REQUIRED_FLAGS ${TAGLIB_CFLAGS})
 	set (CMAKE_REQUIRED_INCLUDES ${TAGLIB_INCLUDES})
