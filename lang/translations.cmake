@@ -19,7 +19,9 @@ macro(add_tomahawk_translations language)
     set( tomahawk_i18n_qrc_content "${tomahawk_i18n_qrc_content}</qresource>\n" )
     set( tomahawk_i18n_qrc_content "${tomahawk_i18n_qrc_content}</RCC>\n" )
 
-    file( WRITE ${CMAKE_BINARY_DIR}/lang/tomahawk_i18n.qrc "${tomahawk_i18n_qrc_content}" )
+    # Write file and configure it aferwards to make it a BYPRODUCT: https://gitlab.kitware.com/cmake/cmake/issues/16367
+    file( WRITE ${CMAKE_BINARY_DIR}/lang/tomahawk_i18n.qrc.in "${tomahawk_i18n_qrc_content}" )
+    configure_file(${CMAKE_BINARY_DIR}/lang/tomahawk_i18n.qrc.in ${CMAKE_BINARY_DIR}/lang/tomahawk_i18n.qrc COPYONLY)
 
     qt5_add_translation(QM_FILES ${TS_FILES})
 
