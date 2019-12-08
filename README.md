@@ -77,7 +77,7 @@ You can download one of our nightly or stable builds:
 Required dependencies:
 
 * [CMake 3](http://www.cmake.org/)
-* [Qt 5.4.0](http://qt-project.org/)
+* [Qt >= 5.4.0](http://qt-project.org/)
 * [VLC 2.1.0](https://videolan.org/vlc/)
 * [SQLite 3.6.22](http://www.sqlite.org/)
 * [TagLib 1.8](https://taglib.github.io/)
@@ -89,6 +89,10 @@ Required dependencies:
 * [QtKeychain 0.1](https://github.com/frankosterfeld/qtkeychain/)
 * [Sparsehash](https://code.google.com/p/sparsehash/)
 * [GnuTLS](http://gnutls.org/)
+
+If you are using Qt>5.6 you need to build and install QtWebKit
+
+* [QtWebKit](https://github.com/qt/qtwebkit)
 
 The following dependencies are optional (but *recommended*):
 

@@ -494,7 +494,7 @@ target_link_libraries(${TOMAHAWK_LIBRARY} PUBLIC
     Qt5::Widgets Qt5::Network Qt5::Sql Qt5::WebKitWidgets Qt5::Concurrent Qt5::Xml Qt5::UiTools Qt5::Svg
 )
 if(APPLE)
-    target_link_libraries(${TOMAHAWK_LIBRARY} Qt5::MacExtras)
+    target_link_libraries(${TOMAHAWK_LIBRARY} PRIVATE Qt5::MacExtras)
 endif()
 
 IF(QCA2_FOUND)

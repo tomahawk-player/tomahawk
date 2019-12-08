@@ -146,9 +146,7 @@ ENDIF()
 
 file( GLOB_RECURSE TOMAHAWK_ICONS "${CMAKE_SOURCE_DIR}/data/icons/*-tomahawk-icon.png" )
 if(APPLE)
-    # OUTFILE is currently only supported in my branch, see https://git.reviewboard.kde.org/r/126303/
-    # once merged (and released), we can remove this conditional usage
-    ecm_add_app_icon(tomahawkSources ICONS ${TOMAHAWK_ICONS} OUTFILE "${TOMAHAWK_APPLICATION_NAME}")
+    ecm_add_app_icon(tomahawkSources ICONS ${TOMAHAWK_ICONS} SIDEBAR_ICONS ${TOMAHAWK_ICONS} OUTFILE "${TOMAHAWK_APPLICATION_NAME}")
 else()
     ecm_add_app_icon(tomahawkSources ICONS ${TOMAHAWK_ICONS})
 endif()
