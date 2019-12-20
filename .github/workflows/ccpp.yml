@@ -1,0 +1,16 @@
+name: C/C++ CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: tomahawkmusicplayer/ubuntu:latest
+      env:
+        MIX_ENV: test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      - name: Build and test
+        run: /usr/local/bin/build-and-test.sh
