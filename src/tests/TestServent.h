@@ -93,11 +93,8 @@ private slots:
         Servent* servent;
         listenAllBasic( &servent );
 
-        // Check for IPv4 localhost
-        QVERIFY( servent->isIPWhitelisted( QHostAddress::LocalHost ) );
-
-        // Check for IPv6 localhost
-        QVERIFY( servent->isIPWhitelisted( QHostAddress::LocalHostIPv6 ) );
+        // Check for IPv4/v6 localhost
+        QVERIFY( servent->isIPWhitelisted( QHostAddress::LocalHost ) || servent->isIPWhitelisted( QHostAddress::LocalHostIPv6 ) );
 
         // Verify that all interface addresses are whitelisted.
         foreach ( QHostAddress addr, QNetworkInterface::allAddresses() )
