@@ -1,0 +1,18 @@
+name: Docker Image CI
+
+on: [push]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Login to DockerHub Registry
+      run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+    - name: Build the Docker image
+      run: cd Docker && docker build . --file Dockerfile --tag ubuntu:latest
+    - name: Push the latest Docker image
+      run: docker push tomahawkmusicplayer/ubuntu:latest
