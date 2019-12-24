@@ -26,5 +26,7 @@ else
   echo "alias clang-format=clang-format-$CLANG_VERSION" >> $HOME/.bashrc
 fi
 
+export PATH=/opt/mxe/usr/bin:$PATH
+
 # Startup user
 exec gosu "$USER" "$@"
