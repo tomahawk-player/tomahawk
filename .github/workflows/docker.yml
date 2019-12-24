@@ -13,6 +13,6 @@ jobs:
     - name: Login to DockerHub Registry
       run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
     - name: Build the Docker image
-      run: cd Docker && docker build . --file Dockerfile --tag ubuntu:latest
+      run: cd Docker && docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME }}/ubuntu:latest
     - name: Push the latest Docker image
-      run: docker push tomahawkmusicplayer/ubuntu:latest
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/ubuntu:latest
