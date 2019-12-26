@@ -200,7 +200,7 @@ RUN cd $MXE_PATH \
     qtsparkle \
     nsis \
     liblastfm \
-    libgsasl \
+    libgsasl
 
 #RUN cd $MXE_PATH \
 #    && sudo make MXE_TARGETS=$MXE_TOOLCHAIN MXE_PLUGIN_DIRS=$MXE_PLUGINS \
