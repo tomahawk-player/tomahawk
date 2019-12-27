@@ -210,6 +210,57 @@ RUN cd $MXE_PATH \
 ENV PATH=/opt/mxe/usr/bin:$PATH
 RUN sudo chmod -R 777 /opt/mxe/.ccache
 
+RUN git clone --depth 1 https://anongit.kde.org/extra-cmake-modules.git --branch master --single-branch ecm \
+    && mkdir ecm/build && cd ecm/build \
+    && $MXE_CMAKE -DCMAKE_BUILD_TYPE=Release .. \
+    && $MXE_CMAKE  --build . -j 16 --target install \
+    && cd ../.. \
+    && rm -r ecm
+
+RUN git clone  --depth 1 https://github.com/zaphoyd/websocketpp.git --branch master --single-branch websocketpp \
+    && mkdir websocketpp/build && cd websocketpp/build \
+    && $MXE_CMAKE .. \
+    && $MXE_CMAKE  --build . -j 16 --target install \
+    && cd ../.. \
+    && rm -r websocketpp
+
+RUN git clone --depth 1 https://github.com/frankosterfeld/qtkeychain.git --branch master --single-branch qtkeychain \
+    && mkdir qtkeychain/build && cd qtkeychain/build \
+    && $MXE_CMAKE .. \
+    && $MXE_CMAKE --build . -j 16 --target install \
+    && cd ../.. \
+    && rm -r qtkeychain
+
+RUN git clone --depth 1 https://github.com/taglib/taglib.git --branch master --single-branch taglib \
+    && mkdir taglib/build && cd taglib/build \
+    && $MXE_CMAKE -DCMAKE_INSTALL_PREFIX=/opt/mxe/usr \
+      -DCMAKE_BUILD_TYPE=Release  \
+      -DBUILD_SHARED_LIBS=ON .. \
+    && $MXE_CMAKE --build . -j 16 --target install \
+    && cd ../.. \
+    && rm -r taglib
+
+RUN git clone --depth 1 https://github.com/KDE/attica.git --branch master --single-branch attica \
+    && mkdir attica/build && cd attica/build \
+    && $MXE_CMAKE -DCMAKE_BUILD_TYPE=Release .. \
+    && $MXE_CMAKE --build . -j 16 --target install \
+    && cd ../.. \
+    && rm -r attica
+
+RUN git clone --depth 1 https://github.com/stachenov/quazip.git --branch master --single-branch quazip \
+    && mkdir quazip/build && cd quazip/build \
+    && $MXE_CMAKE -DCMAKE_BUILD_TYPE=Release .. \
+    && $MXE_CMAKE --build . -j 16 --target install \
+    && cd ../.. \
+    && rm -r quazip
+
+#RUN git clone --depth 1 https://github.com/euroelessar/jreen.git --branch master --single-branch jreen \
+#    && mkdir jreen/build && cd jreen/build \
+#    && $MXE_CMAKE -DCMAKE_BUILD_TYPE=Release .. \
+#    && $MXE_CMAKE -build . -j 16 --target install \
+#    && cd ../.. \
+#    && rm -r jreen
+
 # Language
 ENV LANG=en_US.UTF-8
 RUN echo "$LANG UTF-8" > /etc/locale.gen && locale-gen $LANG && update-locale LANG=$LANG
