@@ -202,10 +202,10 @@ RUN cd $MXE_PATH \
     liblastfm \
     libgsasl
 
-#RUN cd $MXE_PATH \
-#    && sudo make MXE_TARGETS=$MXE_TOOLCHAIN MXE_PLUGIN_DIRS=$MXE_PLUGINS \
-#    qtwebkit \
-#    sparsehash
+RUN cd $MXE_PATH \
+    && sudo make MXE_TARGETS=$MXE_TOOLCHAIN MXE_PLUGIN_DIRS=$MXE_PLUGINS \
+    qtwebkit \
+    sparsehash
 
 ENV PATH=/opt/mxe/usr/bin:$PATH
 RUN sudo chmod -R 777 /opt/mxe/.ccache
