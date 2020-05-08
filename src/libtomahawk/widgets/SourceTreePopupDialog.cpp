@@ -22,6 +22,7 @@
 #include <QApplication>
 #include <QPaintEvent>
 #include <QPainter>
+#include <QPainterPath>
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 #include <QHBoxLayout>

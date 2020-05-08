@@ -27,6 +27,7 @@
 #include <QPixmap>
 #include <QPaintEvent>
 #include <QPainter>
+#include <QPainterPath>
 
 using namespace Tomahawk;
 
