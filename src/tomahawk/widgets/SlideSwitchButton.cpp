@@ -24,6 +24,7 @@
 
 #include <QMouseEvent>
 #include <QPainter>
+#include <QPainterPath>
 #include <QPropertyAnimation>
 #include <QStyleOptionButton>
 #include <QPixmap>

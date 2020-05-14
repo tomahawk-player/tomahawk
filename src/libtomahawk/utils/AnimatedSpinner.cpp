@@ -28,6 +28,7 @@
 #include <QApplication>
 #include <QHideEvent>
 #include <QPainter>
+#include <QPainterPath>
 #include <QPaintEvent>
 #include <QShowEvent>
 

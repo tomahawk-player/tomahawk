@@ -29,8 +29,9 @@
 #include "Source.h"
 #include "Track.h"
 
-#include <QPainter>
 #include <QDialog>
+#include <QPainter>
+#include <QPainterPath>
 #include <QPropertyAnimation>
 
 #define ARROW_HEIGHT 6

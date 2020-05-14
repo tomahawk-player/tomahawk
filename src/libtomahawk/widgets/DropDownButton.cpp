@@ -19,6 +19,8 @@
 #include "DropDownButton.h"
 
 #include <QMouseEvent>
+#include <QPaintEvent>
+#include <QPainterPath>
 
 #include "Artist.h"
 #include "Album.h"

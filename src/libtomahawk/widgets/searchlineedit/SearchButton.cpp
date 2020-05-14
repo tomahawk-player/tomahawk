@@ -19,10 +19,11 @@
 
 #include "SearchButton.h"
 
-#include <qcompleter.h>
-#include <qevent.h>
-#include <qlineedit.h>
-#include <qpainter.h>
+#include <QCompleter>
+#include <QEvent>
+#include <QLineEdit>
+#include <QPainter>
+#include <QPainterPath>
 
 SearchButton::SearchButton(QWidget *parent)
     : QAbstractButton(parent)
