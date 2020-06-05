@@ -247,6 +247,7 @@ DelegateConfigWrapper::getTestConfigMessage( int code )
 	case Tomahawk::Accounts::ConfigTestResultAccountExpired:
 	    return tr( "Your account has expired." );
     }
+    return QString();
 }
 
 
