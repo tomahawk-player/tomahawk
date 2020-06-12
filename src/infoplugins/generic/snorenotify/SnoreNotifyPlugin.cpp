@@ -51,7 +51,7 @@ SnoreNotifyPlugin::SnoreNotifyPlugin()
 
     Snore::SnoreCore &snore = Snore::SnoreCore::instance();
     snore.loadPlugins( Snore::SnorePlugin::Backend | Snore::SnorePlugin::SecondaryBackend );
-    snore.setDefaultSettingsValue("Silent", true, Snore::LocalSetting );
+    snore.setDefaultSettingsValue( {QStringLiteral("Silent"), Snore::LocalSetting}, true );
 
     m_application = Snore::Application( qApp->applicationName(), m_defaultIcon );
     m_application.hints().setValue( "use-markup", true );
