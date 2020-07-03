@@ -171,6 +171,19 @@
       <string>Other Settings</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+       <widget class="QCheckBox" name="checkBoxExitOnClose">
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="text">
+         <string>Exit on close</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
       <item>
        <widget class="QCheckBox" name="checkBoxHttp">
         <property name="layoutDirection">

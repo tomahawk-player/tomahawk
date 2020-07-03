@@ -756,13 +756,21 @@ TomahawkWindow::changeEvent( QEvent* e )
 void
 TomahawkWindow::closeEvent( QCloseEvent* e )
 {
-#ifndef Q_OS_MAC
-    if ( e->spontaneous() && QSystemTrayIcon::isSystemTrayAvailable() )
-    {
-        hide();
-        e->ignore();
+
+    TomahawkSettings* s = TomahawkSettings::instance();
+
+    if( s->exitOnClose() ){
+        qApp->quit();
         return;
     }
+
+#ifndef Q_OS_MAC
+    else if ( e->spontaneous() && QSystemTrayIcon::isSystemTrayAvailable() )
+        {
+            hide();
+            e->ignore();
+            return;
+        }
 #endif
 
     QMainWindow::closeEvent( e );

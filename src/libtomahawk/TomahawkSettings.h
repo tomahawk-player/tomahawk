@@ -163,6 +163,9 @@ public:
     bool crashReporterEnabled() const; /// true by default
     void setCrashReporterEnabled( bool enable );
 
+    bool exitOnClose() const; /// false by default
+    void setExitOnClose( bool enable );
+
     bool songChangeNotificationEnabled() const; /// true by default
     void setSongChangeNotificationEnabled( bool enable );
 

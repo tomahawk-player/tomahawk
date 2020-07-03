@@ -313,6 +313,7 @@ SettingsDialog::saveSettings()
     TomahawkSettings* s = TomahawkSettings::instance();
 
     s->setCrashReporterEnabled( m_advancedWidgetUi->checkBoxReporter->checkState() == Qt::Checked );
+    s->setExitOnClose( m_advancedWidgetUi->checkBoxExitOnClose->checkState() == Qt::Checked );
     s->setHttpEnabled( m_advancedWidgetUi->checkBoxHttp->checkState() == Qt::Checked );
     s->setHttpBindAll( m_advancedWidgetUi->checkBoxListenApi->checkState() == Qt::Checked );
     s->setSongChangeNotificationEnabled( m_advancedWidgetUi->checkBoxSongChangeNotifications->checkState() == Qt::Checked );
