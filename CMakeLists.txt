@@ -212,8 +212,7 @@ macro_log_feature(Boost_FOUND "Boost" "Provides free peer-reviewed portable C++ 
 macro_optional_find_package(Lucene++ 3.0.0)
 macro_log_feature(LUCENEPP_FOUND "Lucene++" "The open-source, C++ search engine" "https://github.com/luceneplusplus/LucenePlusPlus/" TRUE "" "Lucene++ is used for indexing the collection")
 
-macro_optional_find_package(Taglib 1.8.0)
-macro_log_feature(TAGLIB_FOUND "TagLib" "Audio Meta-Data Library" "http://developer.kde.org/~wheeler/taglib.html" TRUE "" "taglib is needed for reading meta data from audio files")
+find_package(Taglib 1.8.0 REQUIRED)
 include( CheckTagLibFileName )
 check_taglib_filename( COMPLEX_TAGLIB_FILENAME )
 
