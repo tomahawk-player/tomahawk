@@ -213,8 +213,6 @@ macro_optional_find_package(Lucene++ 3.0.0)
 macro_log_feature(LUCENEPP_FOUND "Lucene++" "The open-source, C++ search engine" "https://github.com/luceneplusplus/LucenePlusPlus/" TRUE "" "Lucene++ is used for indexing the collection")
 
 find_package(Taglib 1.8.0 REQUIRED)
-include( CheckTagLibFileName )
-check_taglib_filename( COMPLEX_TAGLIB_FILENAME )
 
 macro_optional_find_package(Sparsehash)
 macro_log_feature(SPARSEHASH_FOUND "Sparsehash"

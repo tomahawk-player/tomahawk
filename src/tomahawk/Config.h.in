@@ -23,7 +23,6 @@
 #cmakedefine QTSPARKLE_FOUND
 
 #cmakedefine TOMAHAWK_FINEGRAINED_MESSAGES
-#cmakedefine COMPLEX_TAGLIB_FILENAME
 #cmakedefine HAVE_VLC_ALBUMARTIST
 #cmakedefine HAVE_X11
 
