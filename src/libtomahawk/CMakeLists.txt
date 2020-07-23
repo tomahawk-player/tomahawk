@@ -534,6 +534,12 @@ TARGET_LINK_LIBRARIES(${TOMAHAWK_LIBRARY} PRIVATE
 
 # TagLib
 target_link_libraries(${TOMAHAWK_LIBRARY} LINK_PUBLIC Taglib::Taglib)
+# Necessary workaround until we can depend on >1.11.1
+if (NOT Taglib_VERSION VERSION_GREATER 1.11.1)
+    if(ZLIB_FOUND)
+        target_link_libraries(${TOMAHAWK_LIBRARY} PUBLIC -lz)
+    endif()
+endif()
 
 INSTALL( TARGETS ${TOMAHAWK_LIBRARY}
     EXPORT TomahawkLibraryDepends
